@@ -43,6 +43,7 @@ import sidebarCommands from './gui/Sidebar/commands/index';
 import appCommands from './commands/index';
 import libCommands from '@joplin/lib/commands/index';
 import { homedir } from 'os';
+import { defaultPlugins, initialSettings } from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
@@ -64,6 +65,7 @@ import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
+import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -261,6 +263,7 @@ class Application extends BaseApplication {
 		const pluginRunner = new PluginRunner();
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 		service.isSafeMode = Setting.value('isSafeMode');
+		const defaultPluginsId = Object.keys(defaultPlugins);
 
 		let pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 		{
@@ -272,11 +275,11 @@ class Application extends BaseApplication {
 			Setting.setValue('plugins.states', newSettings);
 		}
 
-		service.checkPreInstalledDefaultPlugins(pluginSettings);
+		checkPreInstalledDefaultPlugins(defaultPluginsId, pluginSettings);
 
 		try {
 			const pluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
-			pluginSettings = await service.installDefaultPlugins(pluginsDir, pluginSettings);
+			pluginSettings = await installDefaultPlugins(service, pluginsDir, defaultPluginsId, pluginSettings);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
@@ -324,7 +327,7 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				service.setSettingsForDefaultPlugins(service.initialPluginsSettings);
+				setSettingsForDefaultPlugins(initialSettings);
 			}
 		}, 500);
 	}

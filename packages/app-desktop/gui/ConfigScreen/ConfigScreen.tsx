@@ -15,7 +15,9 @@ import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
+import { defaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -61,30 +63,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ settings: this.props.settings });
 	}
 
-	// this function is kept here because we need to pass reference to 'this' ConfigScreen component
-	// in 'shared.updateSettingValue' function to update install states
-	updateDefaultPluginsInstallState(newPluginStates: PluginSettings) {
-		if (Object.keys(newPluginStates).length === 0) return;
-		const key = 'plugins.states';
-		const md = Setting.settingMetadata(key);
-		let newValue = Setting.value('plugins.states');
-		newValue = {
-			...newValue, ...newPluginStates,
-		};
-		shared.updateSettingValue(this, key, newValue);
-
-		if (md.autoSave) {
-			shared.scheduleSaveSettings(this);
-		}
-	}
-
 	componentDidMount() {
 		if (this.props.defaultSection) {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
 				this.switchSection(this.props.defaultSection);
 			});
 		}
-		this.updateDefaultPluginsInstallState(PluginService.instance().getDefaultPluginsInstallState());
+		updateDefaultPluginsInstallState(getDefaultPluginsInstallState(PluginService.instance(), Object.keys(defaultPlugins)), this);
 	}
 
 	private async handleSettingButton(key: string) {

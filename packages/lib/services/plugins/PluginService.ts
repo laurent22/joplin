@@ -9,7 +9,6 @@ import Setting from '../../models/Setting';
 import Logger from '../../Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
-import path = require('path');
 const compareVersions = require('compare-versions');
 const uslug = require('@joplin/fork-uslug');
 
@@ -77,14 +76,6 @@ export default class PluginService extends BaseService {
 		return this.instance_;
 	}
 
-	public defaultPluginsId: string[] = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown'];
-
-	public initialSettings: InitialSettings = {
-		'io.github.jackgruber.backup': {
-			'path': `${Setting.value('profileDir')}`,
-		},
-	};
-
 	private appVersion_: string;
 	private store_: any = null;
 	private platformImplementation_: any = null;
@@ -121,10 +112,6 @@ export default class PluginService extends BaseService {
 			...this.plugins_,
 			[pluginId]: plugin,
 		};
-	}
-
-	public get initialPluginsSettings(): InitialSettings {
-		return this.initialSettings;
 	}
 
 	private deletePluginAt(pluginId: string) {
@@ -455,59 +442,6 @@ export default class PluginService extends BaseService {
 			if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
 			return plugin;
 		} else { return null; }
-	}
-
-	public checkPreInstalledDefaultPlugins(pluginSettings: PluginSettings) {
-		const installedDefaultPlugins: Array<string> = Setting.value('installedDefaultPlugins');
-		for (const pluginId of this.defaultPluginsId) {
-			// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
-			// then its either pre-installed by user or just uninstalled
-			if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) Setting.checkArrayAndUpdate('installedDefaultPlugins', pluginId);
-		}
-	}
-
-	public async installDefaultPlugins(pluginsDir: string, pluginSettings: PluginSettings): Promise<PluginSettings> {
-		const defaultPluginsPaths = await shim.fsDriver().readDirStats(pluginsDir);
-		const installedPlugins = Setting.value('installedDefaultPlugins');
-		console.log('print>>', defaultPluginsPaths, installedPlugins);
-
-		for (let pluginId of defaultPluginsPaths) {
-			pluginId = pluginId.path;
-
-			// if pluginId is present in 'installedDefaultPlugins' array, we won't install it again as default plugin
-			if (installedPlugins.includes(pluginId)) continue;
-			const defaultPluginPath: string = path.join(pluginsDir, pluginId, 'plugin.jpl');
-			await this.installPlugin(defaultPluginPath, false);
-
-			pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
-				draft[pluginId] = defaultPluginSetting();
-			});
-		}
-		return pluginSettings;
-	}
-
-	public getDefaultPluginsInstallState(): PluginSettings {
-		const settings: PluginSettings = {};
-		for (const pluginId of this.defaultPluginsId) {
-			if (!this.pluginIds.includes(pluginId)) continue;
-			if (!Setting.checkArrayAndUpdate('installedDefaultPlugins', pluginId)) {
-				settings[pluginId] = defaultPluginSetting();
-			}
-		}
-		return settings;
-	}
-
-	public setSettingsForDefaultPlugins(initialSettings: InitialSettings) {
-		const installedDefaultPlugins = Setting.value('installedDefaultPlugins');
-
-		// only set initial settings if the plugin is not present in installedDefaultPlugins array
-		for (const pluginId of Object.keys(initialSettings)) {
-			for (const settingName of Object.keys(initialSettings[pluginId])) {
-				if (!installedDefaultPlugins.includes(pluginId)) {
-					Setting.setValue(`plugin-${pluginId}.${settingName}`, initialSettings[pluginId][settingName]);
-				}
-			}
-		}
 	}
 
 	private async pluginPath(pluginId: string) {
