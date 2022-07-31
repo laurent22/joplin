@@ -1921,6 +1921,9 @@ class Setting extends BaseModel {
 		return this.setValue(key, !this.value(key));
 	}
 
+	// this method checks if the 'value' passed is present in the Setting "Array"
+	// If yes, then it just returns 'true'. If its not present then, it will
+	// update it and return 'false'
 	static checkArrayAndUpdate(settingName: string, value: string): boolean {
 		const settingValue: Array<any> = this.value(settingName);
 		if (settingValue.includes(value)) return true;
