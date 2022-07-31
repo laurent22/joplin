@@ -1,7 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
-import MarkdownToolbar from './MarkdownToolbar';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
 
@@ -409,17 +408,6 @@ function NoteEditor(props: Props, ref: any) {
 			<SearchPanel
 				editorSettings={editorSettings}
 				searchControl={editorControl.searchControl}
-				searchState={searchState}
-			/>
-
-			<MarkdownToolbar
-				style={{
-					overflow: 'hidden',
-					flexShrink: 1,
-				}}
-				editorSettings={editorSettings}
-				editorControl={editorControl}
-				selectionState={selectionState}
 				searchState={searchState}
 			/>
 		</View>

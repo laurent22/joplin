@@ -4,6 +4,9 @@ import {
 import { getIndentUnit, syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
 
+// pregQuote escapes text for usage in regular expressions
+const { pregQuote } = require('@joplin/lib/string-utils-common');
+
 // Length of the symbol that starts a block quote
 const blockQuoteStartLen = '> '.length;
 const blockQuoteRegex = /^>\s/;
@@ -63,8 +66,8 @@ export namespace RegionSpec { // eslint-disable-line no-redeclare
 
 	const matcherFromTemplate = (start: string, end: string): RegionMatchSpec => {
 		// See https://stackoverflow.com/a/30851002
-		const escapedStart = regexEscape(start);
-		const escapedEnd = regexEscape(end);
+		const escapedStart = pregQuote(start);
+		const escapedEnd = pregQuote(end);
 
 		return {
 			start: new RegExp(escapedStart, 'g'),
@@ -77,11 +80,6 @@ export enum MatchSide {
 	Start,
 	End,
 }
-
-// Replace all non-alphanumeric characters with escaped versions
-const regexEscape = (text: string) => {
-	return text.replace(/[^a-zA-Z0-9]/g, '\\$&');
-};
 
 // Returns the length of a match for this in the given selection,
 // -1 if no match is found.
