@@ -9,7 +9,7 @@ import {
 import { ListType } from '../types';
 import createEditor from './createEditor';
 
-describe('markdownCommands, toggling lists', () => {
+describe('markdownCommands.toggleList', () => {
 	it('should remove the same type of list', () => {
 		const initialDocText = '- testing\n- this is a test';
 
