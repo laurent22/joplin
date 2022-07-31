@@ -838,6 +838,7 @@ export default class BaseApplication {
 				Setting.setValue('sync.interval', 3600);
 			}
 
+			Setting.setValue('firstStart', 0);
 		} else {
 			Setting.applyDefaultMigrations();
 		}
@@ -851,7 +852,6 @@ export default class BaseApplication {
 			Setting.setValue('sync.10.userContentPath', 'http://joplincloud.local:22300');
 		}
 
-		Setting.setValue('firstStart', 0);
 		// For now always disable fuzzy search due to performance issues:
 		// https://discourse.joplinapp.org/t/1-1-4-keyboard-locks-up-while-typing/11231/11
 		// https://discourse.joplinapp.org/t/serious-lagging-when-there-are-tens-of-thousands-of-notes/11215/23
