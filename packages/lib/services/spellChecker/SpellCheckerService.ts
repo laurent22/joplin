@@ -70,7 +70,7 @@ export default class SpellCheckerService {
 	}
 
 	private applyStateToDriver() {
-		this.driver_.setLanguage(this.enabled ? this.languages : []);
+		this.driver_.setLanguages(this.enabled ? this.languages : []);
 	}
 
 	public setLanguage(language: string) {
@@ -98,8 +98,8 @@ export default class SpellCheckerService {
 		this.applyStateToDriver();
 	}
 
-	private async addToDictionary(word: string, language?: string) {
-		this.driver_.addWordToSpellCheckerDictionary(word, language);
+	private async addToDictionary(language: string, word: string) {
+		this.driver_.addWordToSpellCheckerDictionary(language, word);
 	}
 
 	public contextMenuItems(misspelledWord: string, dictionarySuggestions: string[]): any[] {
@@ -131,7 +131,7 @@ export default class SpellCheckerService {
 		output.push({
 			label: _('Add to dictionary'),
 			click: () => {
-				void this.addToDictionary(misspelledWord);
+				void this.addToDictionary(this.languages[0], misspelledWord);
 			},
 		});
 

@@ -17,7 +17,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 	}
 
 	// Language can be set to [] to disable spell-checking
-	public setLanguage(v: string[]) {
+	public setLanguages(v: string[]) {
 		// If we pass an empty array, it disables spell checking
 		// https://github.com/electron/electron/issues/25228
 		if (v.length === 0) {
@@ -34,7 +34,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		return languages.length ? languages[0] : '';
 	}
 
-	public addWordToSpellCheckerDictionary(word: string, _language?: string) {
+	public addWordToSpellCheckerDictionary(_language: string, word: string) {
 		// Actually on Electron all languages share the same dictionary, or
 		// perhaps it's added to the currently active language.
 		this.session().addWordToSpellCheckerDictionary(word);

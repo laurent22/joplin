@@ -4,7 +4,7 @@ export default class SpellCheckerServiceDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	public setLanguage(_v: any) {
+	public setLanguages(_v: string[]) {
 		throw new Error('Not implemented');
 	}
 
@@ -12,7 +12,7 @@ export default class SpellCheckerServiceDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	public addWordToSpellCheckerDictionary(_word: string, _language?: string) {
+	public addWordToSpellCheckerDictionary(_language: string, _word: string) {
 		throw new Error('Not implemented');
 	}
 
