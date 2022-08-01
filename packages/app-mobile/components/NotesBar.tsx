@@ -6,12 +6,17 @@ const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { _ } = require('@joplin/lib/locale');
 import { Style } from './global-style';
+import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
+import Folder from '@joplin/lib/models/Folder';
 
 interface Props {
     themeId: string;
 	items: any[];
 	todoCheckbox_change: (checked: boolean)=> void;
+	selectedFolderId: any;
+	activeFolderId: any;
+	dispatch: any;
 }
 
 function NotesBarComponent(props: Props) {
@@ -67,6 +72,7 @@ function NotesBarComponent(props: Props) {
 			nativeInput: {
 				fontSize: theme.fontSize,
 				flex: 1,
+				paddingRight: 8,
 			},
 			searchIcon: {
 				fontSize: 22,
@@ -75,7 +81,6 @@ function NotesBarComponent(props: Props) {
 				alignItems: 'center',
 				backgroundColor: theme.backgroundColor,
 				paddingLeft: 8,
-				paddingRight: 8,
 				borderRadius: 4,
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
@@ -123,14 +128,35 @@ function NotesBarComponent(props: Props) {
 		</TouchableOpacity>
 	);
 
-	function renderIconButton(icon: JSX.Element) {
+	function renderIconButton(icon: JSX.Element, onPress: ()=> Promise<void>) {
 		return (
-			<TouchableOpacity style={styles().button} activeOpacity={0.8}>{icon}</TouchableOpacity>
+			<TouchableOpacity style={styles().button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
 		);
 	}
 
-	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />);
-	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />);
+
+	const handleNewNote = async (isTodo: boolean) => {
+		let folderId = props.selectedFolderId != Folder.conflictFolderId() ? props.selectedFolderId : null;
+		if (!folderId) folderId = props.activeFolderId;
+
+		props.dispatch({
+			type: 'NAV_BACK',
+		});
+
+		const newNote = await Note.save({
+			parent_id: folderId,
+			is_todo: isTodo ? 1 : 0,
+		}, { provisional: true });
+
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: newNote.id,
+		});
+	};
+
+	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false));
+	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true));
 
 	const topComp = (
 		<View>
@@ -187,6 +213,8 @@ const NotesBar = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
 		items: state.notes,
+		activeFolderId: state.settings.activeFolderId,
+		selectedFolderId: state.selectedFolderId,
 	};
 })(NotesBarComponent);
 

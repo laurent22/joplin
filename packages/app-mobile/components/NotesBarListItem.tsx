@@ -9,6 +9,7 @@ import { themeStyle } from './global-style';
 const { _ } = require('@joplin/lib/locale');
 import shim from '@joplin/lib/shim';
 
+
 interface NoteListProps {
 	note: any;
     themeId: string;
