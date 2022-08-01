@@ -6,7 +6,7 @@ import { ListType } from '../types';
 import createEditor from './createEditor';
 import { toggleList } from './markdownCommands';
 
-describe('should distinguish between checklists and unordered lists', () => {
+describe('markdownCommands.bulletedVsChecklist', () => {
 	const bulletedListPart = '- Test\n- This is a test.\n- 3\n- 4\n- 5';
 	const checklistPart = '- [ ] This is a checklist\n- [ ] with multiple items.\n- [ ] ☑';
 	const initialDocText = `${bulletedListPart}\n\n${checklistPart}`;

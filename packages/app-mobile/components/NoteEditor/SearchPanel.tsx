@@ -9,8 +9,12 @@ const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommuni
 import { SearchControl, SearchState, EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler } from 'react-native';
+import { Theme } from '@joplin/lib/themes/type';
 
 const buttonSize = 48;
+
+type OnChangeCallback = (text: string)=> void;
+type Callback = ()=> void;
 
 export const defaultSearchState: SearchState = {
 	useRegex: false,
@@ -27,8 +31,15 @@ export interface SearchPanelProps {
     editorSettings: EditorSettings;
 }
 
+interface ActionButtonProps {
+	styles: any;
+	iconName: string;
+	title: string;
+	onPress: Callback;
+}
+
 const ActionButton = (
-	props: { styles: any; iconName: string; title: string; onPress: (()=> void) }
+	props: ActionButtonProps
 ) => {
 	return (
 		<TouchableOpacity
@@ -43,9 +54,14 @@ const ActionButton = (
 	);
 };
 
-const ToggleButton = (
-	props: { styles: any; iconName: string; title: string; active: boolean; onToggle: (()=> void) }
-) => {
+interface ToggleButtonProps {
+	styles: any;
+	iconName: string;
+	title: string;
+	active: boolean;
+	onToggle: Callback;
+}
+const ToggleButton = (props: ToggleButtonProps) => {
 	const active = props.active;
 
 	return (
@@ -70,7 +86,7 @@ const ToggleButton = (
 };
 
 
-const useStyles = (theme: any) => {
+const useStyles = (theme: Theme) => {
 	return useMemo(() => {
 		const buttonStyle = {
 			width: buttonSize,
@@ -135,8 +151,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	// Creates a TextInut with the given parameters
 	const createInput = (
-		{ placeholder, value, onChange, autoFocus = false }:
-			{ placeholder: string; value: string; onChange: (text: string)=> void; autoFocus?: boolean }
+		placeholder: string, value: string, onChange: OnChangeCallback, autoFocus: boolean
 	) => {
 		return (
 			<TextInput
@@ -197,26 +212,31 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		/>
 	);
 
-	const searchTextInput = createInput({
-		placeholder: _('Search for...'),
-		value: state.searchText,
-		onChange: (newText: string) => {
+	const searchTextInput = createInput(
+		_('Search for...'),
+		state.searchText,
+		(newText: string) => {
 			updateSearchState({
 				searchText: newText,
 			});
 		},
-		autoFocus: true,
-	});
 
-	const replaceTextInput = createInput({
-		placeholder: _('Replace with...'),
-		onChange: (newText: string) => {
+		// Autofocus
+		true
+	);
+
+	const replaceTextInput = createInput(
+		_('Replace with...'),
+		state.replaceText,
+		(newText: string) => {
 			updateSearchState({
 				replaceText: newText,
 			});
 		},
-		value: state.replaceText,
-	});
+
+		// Don't autofocus
+		false
+	);
 
 	const labeledSearchInput = (
 		<View style={styles.labeledInput} accessible>
