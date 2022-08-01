@@ -76,12 +76,6 @@
 - Fixed: Fixed Tags Order ([#6136](https://github.com/laurent22/joplin/issues/6136)) ([#5686](https://github.com/laurent22/joplin/issues/5686) by [@OmGole](https://github.com/OmGole))
 - Fixed: Undo and redo on note title did not work in some cases ([#6214](https://github.com/laurent22/joplin/issues/6214))
 
-## [v2.7.14](https://github.com/laurent22/joplin/releases/tag/v2.7.14) - 2022-02-27T11:30:53Z
-
-- Improved: Improve error message when revision metadata cannot be decoded, to improve debugging ([a325bf6](https://github.com/laurent22/joplin/commit/a325bf6))
-- Fixed: Prevent certain errors from stopping the revision service ([#5531](https://github.com/laurent22/joplin/issues/5531))
-- Fixed: Note export could fail in some cases (regression) ([#6203](https://github.com/laurent22/joplin/issues/6203))
-
 ## [v2.7.13](https://github.com/laurent22/joplin/releases/tag/v2.7.13) - 2022-02-24T17:42:12Z
 
 - Fixed: Fixed search marker background color in Markdown editor ([440618e](https://github.com/laurent22/joplin/commit/440618e))
@@ -267,6 +261,10 @@ Important: If you use custom notebook icons and sync with the mobile app, make s
 ## [v2.4.12](https://github.com/laurent22/joplin/releases/tag/v2.4.12) - 2021-10-13T17:24:34Z
 
 - Fixed: Fixed running out of memory when importing large ENEX files ([#5543](https://github.com/laurent22/joplin/issues/5543))
+
+## [v2.5.1](https://github.com/laurent22/joplin/releases/tag/v2.5.1) (Pre-release) - 2021-10-02T09:51:58Z
+
+- Improved: Upgrade Electron from v10 to v14 ([4a7746b](https://github.com/laurent22/joplin/commit/4a7746b))
 
 ## [v2.5.1](https://github.com/laurent22/joplin/releases/tag/v2.5.1) (Pre-release) - 2021-10-02T09:51:58Z
 
