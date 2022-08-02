@@ -1,5 +1,5 @@
 import * as React from 'react';
-const { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } = require('react-native');
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { themeStyle } from './global-style';
 const { connect } = require('react-redux');
@@ -17,14 +17,15 @@ interface Props {
 	selectedFolderId: string;
 	activeFolderId: string;
 	dispatch: any;
+	selectedNoteId: string;
 }
 
 function NotesBarComponent(props: Props) {
 
-	function styles() {
-		const themeId = props.themeId;
-		const theme = themeStyle(themeId);
+	const themeId = props.themeId;
+	const theme = themeStyle(themeId);
 
+	function styles() {
 		let styles: Style = {
 			container: {
 				width: 250,
@@ -186,6 +187,8 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
+	let flatListRef: any = React.useRef(null);
+
 	const NotesBarListComp = (
 		<FlatList
 			data={props.items}
@@ -197,8 +200,22 @@ function NotesBarComponent(props: Props) {
 				}
 			}}
 			keyExtractor={(item: any) => item.id}
+			getItemLayout={(data, index) => (
+				{
+					length: data.length,
+					offset: (theme.fontSize + styles().padding.paddingTop + styles().padding.paddingBottom) * index,
+					viewOffset: (theme.fontSize + styles().padding.paddingTop + styles().padding.paddingBottom),
+					index,
+				}
+			)}
+			ref={(ref: any) => { flatListRef = ref; }}
 		/>
 	);
+
+	React.useEffect(() => {
+		const selectedItemIndex = props.items.findIndex(item => item.id === props.selectedNoteId);
+		flatListRef.scrollToIndex({ index: selectedItemIndex });
+	}, []);
 
 	return (
 		<View style={styles().container}>
@@ -215,6 +232,7 @@ const NotesBar = connect((state: State) => {
 		items: state.notes,
 		activeFolderId: state.settings.activeFolderId,
 		selectedFolderId: state.selectedFolderId,
+		selectedNoteId: state.selectedNoteIds[0],
 	};
 })(NotesBarComponent);
 
