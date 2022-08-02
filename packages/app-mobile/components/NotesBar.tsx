@@ -14,8 +14,8 @@ interface Props {
     themeId: string;
 	items: any[];
 	todoCheckbox_change: (checked: boolean)=> void;
-	selectedFolderId: any;
-	activeFolderId: any;
+	selectedFolderId: string;
+	activeFolderId: string;
 	dispatch: any;
 }
 

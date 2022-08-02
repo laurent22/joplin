@@ -15,6 +15,7 @@ interface NoteListProps {
     themeId: string;
 	todoCheckbox_change: (checked: boolean)=> void;
 	dispatch: Function;
+	selectedNoteId: string;
 }
 
 const NotesBarListItemComponent = function(props: NoteListProps) {
@@ -34,11 +35,6 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 				paddingRight: theme.marginRight,
 				paddingTop: 12,
 				paddingBottom: 12,
-			},
-			divider: {
-				backgroundColor: theme.dividerColor,
-				height: 1,
-				width: '100%',
 			},
 			button: {
 				height: 42,
@@ -62,16 +58,19 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 				paddingTop: 12,
 				paddingBottom: 12,
 			},
+			selectedItem: props.selectedNoteId === note.id ? {
+				backgroundColor: theme.dividerColor,
+			} : null,
+			item: {
+				borderBottomWidth: 1,
+				borderColor: theme.dividerColor,
+			},
 		};
 
 		styles = StyleSheet.create(styles);
 
 		return styles;
 	}
-
-	const dividerComp = (
-		<View style={styles().divider}></View>
-	);
 
 	const onTodoCheckboxChange = async (checked: boolean) => {
 		await props.todoCheckbox_change(checked);
@@ -100,7 +99,7 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 	if (isTodo) {
 		item = (
 			<View>
-				<TouchableOpacity style={styles().horizontalFlex} onPress={onPress}>
+				<TouchableOpacity style={[styles().horizontalFlex, styles().item, styles().selectedItem]} onPress={onPress}>
 					<Checkbox
 						style={styles().checkbox}
 						checked={!!Number(note.todo_completed)}
@@ -109,16 +108,14 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 					/>
 					<Text style={styles().itemText}>{noteTitle}</Text>
 				</TouchableOpacity>
-				{dividerComp}
 			</View>
 		);
 	} else {
 		item = (
 			<View>
-				<TouchableOpacity onPress={onPress}>
+				<TouchableOpacity onPress={onPress} style={[styles().selectedItem, styles().item]}>
 					<Text style={[styles().itemText, styles().padding]}>{noteTitle}</Text>
 				</TouchableOpacity>
-				{dividerComp}
 			</View>
 		);
 	}
@@ -129,6 +126,7 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 const NotesBarListItem = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
+		selectedNoteId: state.selectedNoteIds[0],
 	};
 })(NotesBarListItemComponent);
 
