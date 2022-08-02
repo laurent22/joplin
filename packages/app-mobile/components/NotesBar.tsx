@@ -28,8 +28,8 @@ function NotesBarComponent(props: Props) {
 	function styles() {
 		let styles: Style = {
 			container: {
-				width: 250,
-				backgroundColor: theme.tableBackgroundColor,
+				width: '100%',
+				backgroundColor: theme.backgroundColor3,
 			},
 			horizontalFlex: {
 				flexDirection: 'row',

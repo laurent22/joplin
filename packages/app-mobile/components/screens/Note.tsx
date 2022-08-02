@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated } = require('react-native');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -391,6 +391,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		styles.noteMainComp = {
 			flex: 1,
 			flexDirection: 'row',
+			position: 'relative',
+		};
+
+		styles.notesBarContainer = {
+			width: 250,
+			position: 'relative',
+			left: this.notesBarPosition,
+			top: 0,
+		};
+
+		styles.noteEditor = {
+			flex: 1,
+			position: 'relative',
+			top: 0,
+			left: this.noteEditorPosition,
 		};
 
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
@@ -441,7 +456,26 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// has already been granted, it doesn't slow down opening the note. If it hasn't
 		// been granted, the popup will open anyway.
 		void this.requestGeoLocationPermissions();
+
 	}
+
+	private animateNotesBarOpen_ = () => {
+		Animated.timing(
+			this.notesBarPosition,
+			{
+				toValue: 0,
+				duration: 2250,
+			}
+		).start();
+
+		Animated.timing(
+			this.noteEditorPosition,
+			{
+				toValue: 0,
+				duration: 2250,
+			}
+		).start();
+	};
 
 	onMarkForDownload(event: any) {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
@@ -476,6 +510,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
 		// componentWillUnmount, but with React Native the impossible often becomes possible.
 		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
+	}
+
+	componentWillMount() {
+		this.notesBarPosition = new Animated.Value(-250);
+		this.noteEditorPosition = new Animated.Value(-250);
 	}
 
 	title_changeText(text: string) {
@@ -1201,11 +1240,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
-				<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
-				<View style={{ flex: 1 }}>
+				<Animated.View style={this.styles().notesBarContainer}>
+					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
+				</Animated.View>
+				<Animated.View style={this.styles().noteEditor}>
 					{titleComp}
 					{bodyComponent}
-				</View>
+				</Animated.View>
 			</View>
 		);
 		return (
