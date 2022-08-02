@@ -16,6 +16,7 @@ const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
 const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
+import ButtonWithTooltip from './ButtonWithTooltip';
 
 Icon.loadFont();
 
@@ -223,6 +224,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	render() {
+		const themeId = Setting.value('theme');
 		function sideMenuButton(styles, onPress) {
 			return (
 				<TouchableOpacity
@@ -283,20 +285,24 @@ class ScreenHeaderComponent extends React.PureComponent {
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
 
 			return (
-				<TouchableOpacity
-					onPress={options.onPress}
+				<ButtonWithTooltip
+					onClick={options.onClick}
 					style={{ padding: 0 }}
+					themeId={themeId}
 					disabled={!!options.disabled}
-					accessibilityRole="button">
-					<View style={viewStyle}>{icon}</View>
-				</TouchableOpacity>
+					description={options.description}
+					contentStyle={viewStyle}
+				>
+					{icon}
+				</ButtonWithTooltip>
 			);
 		};
 
 		const renderUndoButton = () => {
 			return renderTopButton({
 				iconName: 'arrow-undo-circle-sharp',
-				onPress: this.props.onUndoButtonPress,
+				description: _('Undo'),
+				onClick: this.props.onUndoButtonPress,
 				visible: this.props.showUndoButton,
 				disabled: this.props.undoButtonDisabled,
 			});
@@ -305,72 +311,73 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const renderRedoButton = () => {
 			return renderTopButton({
 				iconName: 'arrow-redo-circle-sharp',
-				onPress: this.props.onRedoButtonPress,
+				description: _('Redo'),
+				onClick: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
 			});
 		};
 
-		function selectAllButton(styles, onPress) {
+		function selectAllButton(styles, onClick) {
 			return (
-				<TouchableOpacity
-					onPress={onPress}
+				<ButtonWithTooltip
+					onClick={onClick}
 
-					accessibilityLabel={_('Select all')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					themeId={themeId}
+					description={_('Select all')}
+					contentStyle={styles.iconButton}
+				>
+					<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
+				</ButtonWithTooltip>
 			);
 		}
 
-		function searchButton(styles, onPress) {
+		function searchButton(styles, onClick) {
 			return (
-				<TouchableOpacity
-					onPress={onPress}
+				<ButtonWithTooltip
+					onClick={onClick}
 
-					accessibilityLabel={_('Search')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="md-search" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					description={_('Search')}
+					themeId={themeId}
+					contentStyle={styles.iconButton}
+				>
+					<Icon name="md-search" style={styles.topIcon} />
+				</ButtonWithTooltip>
 			);
 		}
 
-		function deleteButton(styles, onPress, disabled) {
+		function deleteButton(styles, onClick, disabled) {
 			return (
-				<TouchableOpacity
-					onPress={onPress}
+				<ButtonWithTooltip
+					onClick={onClick}
 					disabled={disabled}
 
-					accessibilityLabel={_('Delete')}
+					themeId={themeId}
+					description={_('Delete')}
 					accessibilityHint={
 						disabled ? null : _('Delete selected notes')
 					}
-					accessibilityRole="button">
-					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
-						<Icon name="md-trash" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+				>
+					<Icon name="md-trash" style={styles.topIcon} />
+				</ButtonWithTooltip>
 			);
 		}
 
-		function duplicateButton(styles, onPress, disabled) {
+		function duplicateButton(styles, onClick, disabled) {
 			return (
-				<TouchableOpacity
-					onPress={onPress}
+				<ButtonWithTooltip
+					onClick={onClick}
 					disabled={disabled}
 
-					accessibilityLabel={_('Duplicate')}
+					themeId={themeId}
+					description={_('Duplicate')}
 					accessibilityHint={
 						disabled ? null : _('Duplicate selected notes')
 					}
-					accessibilityRole="button">
-					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
-						<Icon name="md-copy" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+				>
+					<Icon name="md-copy" style={styles.topIcon} />
+				</ButtonWithTooltip>
 			);
 		}
 
@@ -424,7 +431,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 		}
 
 		const createTitleComponent = (disabled) => {
-			const themeId = Setting.value('theme');
 			const theme = themeStyle(themeId);
 			const folderPickerOptions = this.props.folderPickerOptions;
 
