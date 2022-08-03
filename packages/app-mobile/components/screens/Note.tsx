@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated } = require('react-native');
+const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions } = require('react-native');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -49,6 +49,7 @@ import NotesBar from '../NotesBar';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
+const Icon = require('react-native-vector-icons/Feather').default;
 
 const emptyArray: any[] = [];
 
@@ -88,6 +89,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
+
+			isNotesBarOpen: false,
 		};
 
 		this.saveActionQueues_ = {};
@@ -395,17 +398,60 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		styles.notesBarContainer = {
-			width: 250,
 			position: 'relative',
 			left: this.notesBarPosition,
 			top: 0,
+			width: 250,
 		};
 
-		styles.noteEditor = {
-			flex: 1,
+		styles.noteComp = {
 			position: 'relative',
 			top: 0,
-			left: this.noteEditorPosition,
+			left: this.notePosition,
+			width: this.noteWidth,
+		};
+
+		styles.noteActionButton = {
+			width: 54,
+			height: 54,
+			backgroundColor: theme.backgroundColor3,
+			borderWidth: 1,
+			borderColor: theme.dividerColor,
+			alignItems: 'center',
+			justifyContent: 'center',
+		};
+
+		styles.noteActionButtonActive = {
+			...styles.noteActionButton,
+			borderWidth: 0,
+			backgroundColor: theme.color4,
+		};
+
+		styles.noteActionButton1 = {
+			borderBottomWidth: 0,
+			borderTopLeftRadius: 8,
+			borderTopRightRadius: 8,
+		};
+
+		styles.noteActionButton2 = {
+			borderBottomLeftRadius: 8,
+			borderBottomRightRadius: 8,
+		};
+
+		styles.noteActionButtonIcon = {
+			fontSize: 30,
+			color: theme.color,
+		};
+
+		styles.noteActionButtonIconActive = {
+			...styles.noteActionButtonIcon,
+			color: theme.backgroundColor,
+		};
+
+		styles.noteActionButtonGroup = {
+			position: 'absolute',
+			top: '8%',
+			right: '3%',
 		};
 
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
@@ -459,22 +505,32 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	}
 
-	private animateNotesBarOpen_ = () => {
-		Animated.timing(
-			this.notesBarPosition,
-			{
-				toValue: 0,
-				duration: 2250,
-			}
-		).start();
+	private handleNotesBarOpen_ = async () => {
+		await this.setState({ isNotesBarOpen: true });
 
-		Animated.timing(
-			this.noteEditorPosition,
-			{
-				toValue: 0,
-				duration: 2250,
-			}
-		).start();
+		Animated.parallel([
+			Animated.spring(
+				this.notesBarPosition,
+				{
+					toValue: 0,
+					duration: 1500,
+				}
+			),
+			Animated.spring(
+				this.notePosition,
+				{
+					toValue: 0,
+					duration: 1500,
+				}
+			),
+			Animated.spring(
+				this.noteWidth,
+				{
+					toValue: Dimensions.get('window').width - 250,
+					duration: 1500,
+				}
+			),
+		]).start();
 	};
 
 	onMarkForDownload(event: any) {
@@ -514,7 +570,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	componentWillMount() {
 		this.notesBarPosition = new Animated.Value(-250);
-		this.noteEditorPosition = new Animated.Value(-250);
+		this.notePosition = new Animated.Value(-250);
+		this.noteWidth = new Animated.Value(Dimensions.get('window').width);
 	}
 
 	title_changeText(text: string) {
@@ -1238,15 +1295,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const noteActionButtonGroup = (
+			<View style={this.styles().noteActionButtonGroup}>
+				<TouchableOpacity style={[this.styles().noteActionButtonActive, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.handleNotesBarOpen_}>
+					<Icon name="columns" style={this.styles().noteActionButtonIconActive} />
+				</TouchableOpacity>
+				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton2]} activeOpacity={0.7}>
+					<Icon name="list" style={this.styles().noteActionButtonIcon} />
+				</TouchableOpacity>
+			</View>
+		);
+
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
 				<Animated.View style={this.styles().notesBarContainer}>
 					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
 				</Animated.View>
-				<Animated.View style={this.styles().noteEditor}>
+				<Animated.View style={this.styles().noteComp}>
 					{titleComp}
 					{bodyComponent}
 				</Animated.View>
+				{ noteActionButtonGroup }
 			</View>
 		);
 		return (
