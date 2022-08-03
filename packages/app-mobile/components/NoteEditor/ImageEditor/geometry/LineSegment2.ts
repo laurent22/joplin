@@ -8,7 +8,7 @@ interface IntersectionResult {
 
 export default class LineSegment2 {
 	private readonly direction: Vec2;
-	private readonly length: number;
+	public readonly length: number;
 	public readonly bbox;
 
 	public constructor(

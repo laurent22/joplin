@@ -117,10 +117,17 @@ export default class StrokeBuilder {
 			throw new Error('ERR');
 		}
 
-		const halfVec = startVec.lerp(endVec, 0.5);
 		const startPt = Vec2.ofXY(this.currentCurve.get(0));
 		const endPt = Vec2.ofXY(this.currentCurve.get(1));
 		const controlPoint = Vec2.ofXY(this.currentCurve.points[1]);
+
+		// Approximate the normal at the location of the control point
+		const projectionT = this.currentCurve.project(controlPoint.xy).t;
+		const halfVec = Vec2.ofXY(this.currentCurve.normal(projectionT))
+			.normalized().times(
+				this.curveStartWidth / 2 * projectionT
+				+ this.curveEndWidth / 2 * (1 - projectionT)
+			);
 
 		const pathCommands: PathCommand[] = [
 			{
@@ -181,6 +188,7 @@ export default class StrokeBuilder {
 
 		this.buffer.push(newPoint.pos);
 		const pointRadius = newPoint.width / 2;
+		const prevEndWidth = this.curveEndWidth;
 		this.curveEndWidth = pointRadius;
 
 		// recompute bbox
@@ -195,30 +203,7 @@ export default class StrokeBuilder {
 			this.currentCurve = new Bezier(
 				p1.xy, p2.xy, p3.xy,
 			);
-			this.curveStartWidth = this.lastPoint.width / 2;
-		}
-
-		// Should we start making a new curve? Check whether all buffer points are within
-		// ±strokeWidth of the curve.
-		const curveMatchesPoints = (curve: Bezier): boolean => {
-			for (const point of this.buffer) {
-				const proj =
-					Vec2.ofXY(curve.project(point.xy));
-				const dist = proj.minus(point).magnitude();
-
-				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth)) {
-					return false;
-				}
-			}
-			return true;
-		};
-
-		if (this.buffer.length > 3) {
-			if (!curveMatchesPoints(this.currentCurve)) {
-				// Reset the last point -- the current point was not added to the curve.
-				this.lastPoint = lastPoint;
-				this.finalizeCurrentCurve(newPoint);
-			}
+			this.curveStartWidth = lastPoint.width / 2;
 		}
 
 		if (!this.lastExitingVec) {
@@ -229,7 +214,7 @@ export default class StrokeBuilder {
 		let exitingVec = this.computeExitingVec();
 
 		// Find the intersection between the entering vector and the exiting vector
-		const maxRelativeLength = 1;
+		const maxRelativeLength = 0.5;
 		const segmentStart = this.buffer[0];
 		const segmentEnd = newPoint.pos;
 		const startEndDist = segmentEnd.minus(segmentStart).magnitude();
@@ -266,6 +251,37 @@ export default class StrokeBuilder {
 			console.error('controlPoint is NaN', intersection, 'Start:', segmentStart, 'End:', segmentEnd, 'in:', enteringVec, 'out:', exitingVec);
 		}
 
+		const prevCurve = this.currentCurve;
 		this.currentCurve = new Bezier(segmentStart.xy, controlPoint.xy, segmentEnd.xy);
+
+
+		// Should we start making a new curve? Check whether all buffer points are within
+		// ±strokeWidth of the curve.
+		const curveMatchesPoints = (curve: Bezier): boolean => {
+			for (const point of this.buffer) {
+				const proj =
+					Vec2.ofXY(curve.project(point.xy));
+				const dist = proj.minus(point).magnitude();
+
+				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth) / 2) {
+					return false;
+				}
+			}
+			return true;
+		};
+
+		if (this.buffer.length > 3) {
+			if (!curveMatchesPoints(this.currentCurve)) {
+				// Use a curve that better fits the points
+				this.currentCurve = prevCurve;
+				this.curveEndWidth = prevEndWidth;
+
+				// Reset the last point -- the current point was not added to the curve.
+				this.lastPoint = lastPoint;
+
+				this.finalizeCurrentCurve(lastPoint);
+				return;
+			}
+		}
 	}
 }

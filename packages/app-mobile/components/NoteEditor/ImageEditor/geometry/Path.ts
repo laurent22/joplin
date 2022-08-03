@@ -130,12 +130,20 @@ export default class Path {
 						t = parseFloat(t);
 					}
 
+					const point = Vec2.ofXY(part.get(t));
+
+					// Ensure that the intersection is on the line
+					if (point.minus(line.p1).magnitude() > line.length
+							|| point.minus(line.p2).magnitude() > line.length) {
+						return null;
+					}
+
 					return {
-						point: Vec2.ofXY(part.get(t)),
+						point,
 						parameterValue: t,
 						curve: part,
 					};
-				});
+				}).filter(entry => entry !== null);
 				result.push(...intersectionPoints);
 			}
 		}

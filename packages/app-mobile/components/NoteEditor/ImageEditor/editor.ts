@@ -86,6 +86,10 @@ export class ImageEditor {
 			return res;
 		};
 
+		// May be required to prevent text selection on iOS/Safari:
+		// See https://stackoverflow.com/a/70992717/17055750
+		this.renderingRegion.addEventListener('touchstart', evt => evt.preventDefault());
+
 		this.renderingRegion.addEventListener('pointerdown', evt => {
 			const pointer = pointerFor(evt, true);
 			pointers[pointer.id] = pointer;
