@@ -12,7 +12,7 @@ export default class CanvasRenderer extends AbstractRenderer {
 	public displaySize(): Vec2 {
 		return Vec2.of(
 			this.ctx.canvas.clientWidth,
-			this.ctx.canvas.clientHeight,
+			this.ctx.canvas.clientHeight
 		);
 	}
 
@@ -34,7 +34,12 @@ export default class CanvasRenderer extends AbstractRenderer {
 
 	protected fill(style: FillStyle): void {
 		this.ctx.fillStyle = style.color.toHexString();
-		this.ctx.strokeStyle = style.color.toHexString();
+
+		const debugShowStrokes = false;
+		if (debugShowStrokes) {
+			this.ctx.strokeStyle = style.color.toHexString();
+			this.ctx.stroke();
+		}
 
 		this.ctx.fill();
 	}
@@ -59,7 +64,7 @@ export default class CanvasRenderer extends AbstractRenderer {
 			controlPoint.x, controlPoint.y, endPoint.x, endPoint.y
 		);
 	}
-	
+
 	public drawPoints(...points: Point2[]): void {
 		const pointRadius = 10;
 

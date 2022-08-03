@@ -1,11 +1,11 @@
-import Color4 from "./Color4";
+import Color4 from './Color4';
 import { Bezier } from 'bezier-js';
-import { FillStyle, RenderablePathSpec } from "./rendering/AbstractRenderer";
-import { Point2, Vec2 } from "./geometry/Vec2";
-import Rect2 from "./geometry/Rect2";
-import { PathCommand, PathCommandType } from "./geometry/Path";
-import LineSegment2 from "./geometry/LineSegment2";
-import Stroke from "./components/Stroke";
+import { FillStyle, RenderablePathSpec } from './rendering/AbstractRenderer';
+import { Point2, Vec2 } from './geometry/Vec2';
+import Rect2 from './geometry/Rect2';
+import { PathCommand, PathCommandType } from './geometry/Path';
+import LineSegment2 from './geometry/LineSegment2';
+import Stroke from './components/Stroke';
 
 export interface StrokeDataPoint {
 	pos: Point2;
@@ -34,7 +34,7 @@ export default class StrokeBuilder {
 	) {
 		this.lastPoint = startPoint;
 		this.segments = [];
-		this.buffer = [ startPoint.pos ];
+		this.buffer = [startPoint.pos];
 		this.momentum = Vec2.zero;
 		this.currentCurve = null;
 
@@ -61,7 +61,7 @@ export default class StrokeBuilder {
 			this.finalizeCurrentCurve(this.lastPoint);
 		}
 		return new Stroke(
-			this.segments,
+			this.segments
 		);
 	}
 
@@ -86,7 +86,7 @@ export default class StrokeBuilder {
 					},
 				],
 				fill: fillStyle,
-			})
+			});
 			return;
 		}
 
@@ -157,7 +157,7 @@ export default class StrokeBuilder {
 			startPoint: startPt.plus(startVec),
 			commands: pathCommands,
 			fill: fillStyle,
-		}
+		};
 	}
 
 	// Compute the direction of the velocity at the end of this.buffer
@@ -179,7 +179,7 @@ export default class StrokeBuilder {
 				return;
 			}
 
-			const velocity = newPoint.pos.minus(this.lastPoint.pos).times(1/(deltaTime) * 1000);
+			const velocity = newPoint.pos.minus(this.lastPoint.pos).times(1 / (deltaTime) * 1000);
 			this.momentum = this.momentum.lerp(velocity, 0.8);
 		}
 
@@ -201,7 +201,7 @@ export default class StrokeBuilder {
 
 			// Quadratic Bézier curve
 			this.currentCurve = new Bezier(
-				p1.xy, p2.xy, p3.xy,
+				p1.xy, p2.xy, p3.xy
 			);
 			this.curveStartWidth = lastPoint.width / 2;
 		}
@@ -214,7 +214,7 @@ export default class StrokeBuilder {
 		let exitingVec = this.computeExitingVec();
 
 		// Find the intersection between the entering vector and the exiting vector
-		const maxRelativeLength = 0.5;
+		const maxRelativeLength = 0.9;
 		const segmentStart = this.buffer[0];
 		const segmentEnd = newPoint.pos;
 		const startEndDist = segmentEnd.minus(segmentStart).magnitude();
@@ -230,11 +230,11 @@ export default class StrokeBuilder {
 
 		const lineFromStart = new LineSegment2(
 			segmentStart,
-			segmentStart.minus(enteringVec.times(maxControlPointDist)),
+			segmentStart.minus(enteringVec.times(maxControlPointDist))
 		);
 		const lineFromEnd = new LineSegment2(
 			segmentEnd.minus(exitingVec.times(maxControlPointDist)),
-			segmentEnd.plus(exitingVec.times(maxControlPointDist)),
+			segmentEnd.plus(exitingVec.times(maxControlPointDist))
 		);
 		const intersection = lineFromEnd.intersection(lineFromStart);
 
@@ -243,8 +243,9 @@ export default class StrokeBuilder {
 		if (intersection) {
 			controlPoint = intersection.point;
 		} else {
-			// Position the control point in between
-			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 2));
+			// Position the control point close to the first -- the connecting
+			// segment will be roughly a line.
+			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 5));
 		}
 
 		if (isNaN(controlPoint.magnitude())) {
@@ -263,7 +264,7 @@ export default class StrokeBuilder {
 					Vec2.ofXY(curve.project(point.xy));
 				const dist = proj.minus(point).magnitude();
 
-				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth) / 2) {
+				if (dist > Math.min(this.curveStartWidth, this.curveEndWidth)) {
 					return false;
 				}
 			}

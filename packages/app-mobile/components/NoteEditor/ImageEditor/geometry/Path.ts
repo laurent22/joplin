@@ -1,16 +1,16 @@
-import { Bezier } from "bezier-js";
-import { RenderablePathSpec } from "../rendering/AbstractRenderer";
-import LineSegment2 from "./LineSegment2";
-import Mat33 from "./Mat33";
-import Rect2 from "./Rect2";
-import { Point2, Vec2 } from "./Vec2";
+import { Bezier } from 'bezier-js';
+import { RenderablePathSpec } from '../rendering/AbstractRenderer';
+import LineSegment2 from './LineSegment2';
+import Mat33 from './Mat33';
+import Rect2 from './Rect2';
+import { Point2, Vec2 } from './Vec2';
 
 export enum PathCommandType {
 	LineTo,
 	MoveTo,
 	CubicBezierTo,
 	QuadraticBezierTo,
-};
+}
 
 export interface CubicBezierPathCommand {
 	kind: PathCommandType.CubicBezierTo;
@@ -51,44 +51,45 @@ export default class Path {
 		this.geometry = [];
 
 		// Initial bounding box contains one point: the start point.
-		this.bbox = Rect2.bboxOf([ startPoint ]);
+		this.bbox = Rect2.bboxOf([startPoint]);
 
 		// Convert into a representation of the geometry (cache for faster intersection
 		// calculation)
 		for (const part of parts) {
 			this.bbox = this.bbox.union(Path.computeBBoxForSegment(startPoint, part));
 			switch (part.kind) {
-				case PathCommandType.CubicBezierTo:
-					this.geometry.push(
-						new Bezier(
-							startPoint.xy, part.controlPoint1.xy, part.controlPoint2.xy, part.endPoint.xy
-						),
-					);
-					startPoint = part.endPoint;
-					break;
-				case PathCommandType.QuadraticBezierTo:
-					this.geometry.push(
-						new Bezier(
-							startPoint.xy, part.controlPoint.xy, part.endPoint.xy,
-						),
-					);
-					startPoint = part.endPoint;
-					break;
-				case PathCommandType.LineTo:
-					this.geometry.push(
-						new LineSegment2(startPoint, part.point)
-					);
-					startPoint = part.point;
-					break;
-				case PathCommandType.MoveTo:
-					startPoint = part.point;
-					break;
+			case PathCommandType.CubicBezierTo:
+				this.geometry.push(
+					new Bezier(
+						startPoint.xy, part.controlPoint1.xy, part.controlPoint2.xy, part.endPoint.xy
+					)
+				);
+				startPoint = part.endPoint;
+				break;
+			case PathCommandType.QuadraticBezierTo:
+				this.geometry.push(
+					new Bezier(
+						startPoint.xy, part.controlPoint.xy, part.endPoint.xy
+					)
+				);
+				startPoint = part.endPoint;
+				break;
+			case PathCommandType.LineTo:
+				this.geometry.push(
+					new LineSegment2(startPoint, part.point)
+				);
+				startPoint = part.point;
+				break;
+			case PathCommandType.MoveTo:
+				startPoint = part.point;
+				break;
 			}
 		}
 	}
 
 	public static computeBBoxForSegment(startPoint: Point2, part: PathCommand): Rect2 {
-		const points = [ startPoint ];
+		const points = [startPoint];
+		let exhaustivenessCheck: never;
 		switch (part.kind) {
 		case PathCommandType.MoveTo:
 		case PathCommandType.LineTo:
@@ -101,10 +102,10 @@ export default class Path {
 			points.push(part.controlPoint, part.endPoint);
 			break;
 		default:
-			const exhaustivenessCheck: never = part;
+			exhaustivenessCheck = part;
 			return exhaustivenessCheck;
 		}
-	
+
 		return Rect2.bboxOf(points);
 	}
 
@@ -155,6 +156,7 @@ export default class Path {
 		const startPoint = affineTransfm.transformVec2(this.startPoint);
 		const newParts: PathCommand[] = [];
 
+		let exhaustivenessCheck: never;
 		for (const part of this.parts) {
 			switch (part.kind) {
 			case PathCommandType.MoveTo:
@@ -180,11 +182,11 @@ export default class Path {
 				});
 				break;
 			default:
-				const exhaustivenessCheck: never = part;
+				exhaustivenessCheck = part;
 				return exhaustivenessCheck;
 			}
 		}
-	
+
 		return new Path(startPoint, newParts);
 	}
 
@@ -206,6 +208,39 @@ export default class Path {
 
 	public static fromRenderable(renderable: RenderablePathSpec): Path {
 		return new Path(renderable.startPoint, renderable.commands);
+	}
+
+	public toString(): string {
+		const result: string[] = [];
+
+		const addCommand = (command: string, ...points: Point2[]) => {
+			const pointString = points.map(point => `${point.x},${point.y}`).join(' ');
+			result.push(`${command}${pointString}`);
+		};
+
+		addCommand('M', this.startPoint);
+		let exhaustivenessCheck: never;
+		for (const part of this.parts) {
+			switch (part.kind) {
+			case PathCommandType.MoveTo:
+				addCommand('M', part.point);
+				break;
+			case PathCommandType.LineTo:
+				addCommand('L', part.point);
+				break;
+			case PathCommandType.CubicBezierTo:
+				addCommand('C', part.controlPoint1, part.controlPoint2, part.endPoint);
+				break;
+			case PathCommandType.QuadraticBezierTo:
+				addCommand('Q', part.controlPoint, part.endPoint);
+				break;
+			default:
+				exhaustivenessCheck = part;
+				return exhaustivenessCheck;
+			}
+		}
+
+		return result.join('');
 	}
 
 	// Create a Path from a SVG path specification.
@@ -252,14 +287,14 @@ export default class Path {
 				controlPoint,
 				endPoint,
 			});
-		}
+		};
 
 		// Each command: Command character followed by anything that isn't a command character
 		const commandExp = /([MmZzLlHhVvCcSsQqTtAa])\s*([^a-zA-Z]*)/g;
 		let current;
 		while ((current = commandExp.exec(pathString)) !== null) {
 			const commandChar = current[1];
-			const argParts = current[2].trim().split(/[^0-9\.\-]/);
+			const argParts = current[2].trim().split(/[^0-9.-]/);
 
 			// Convert arguments to points
 			const args = argParts.filter(
@@ -289,29 +324,29 @@ export default class Path {
 			let expectedArgsCount;
 
 			switch (commandChar.toLowerCase()) {
-				case 'm':
-					expectedArgsCount = 1;
-					moveTo(args[0]);
-					break;
-				case 'l':
-					expectedArgsCount = 1;
-					lineTo(args[0]);
-					break;
-				case 'z':
-					expectedArgsCount = 0;
-					lineTo(firstPos);
-					// TODO: Consider case where firstPos is null
-					break;
-				case 'c':
-					expectedArgsCount = 3;
-					cubicBezierTo(args[0], args[1], args[2]);
-					break;
-				case 'q':
-					expectedArgsCount = 2;
-					quadraticBeierTo(args[0], args[1]);
-					break;
-				default:
-					throw new Error('Unknown path command ' + commandChar);
+			case 'm':
+				expectedArgsCount = 1;
+				moveTo(args[0]);
+				break;
+			case 'l':
+				expectedArgsCount = 1;
+				lineTo(args[0]);
+				break;
+			case 'z':
+				expectedArgsCount = 0;
+				lineTo(firstPos);
+				// TODO: Consider case where firstPos is null
+				break;
+			case 'c':
+				expectedArgsCount = 3;
+				cubicBezierTo(args[0], args[1], args[2]);
+				break;
+			case 'q':
+				expectedArgsCount = 2;
+				quadraticBeierTo(args[0], args[1]);
+				break;
+			default:
+				throw new Error(`Unknown path command ${commandChar}`);
 			}
 
 			if (args.length !== expectedArgsCount) {
