@@ -60,7 +60,7 @@ export default class Stroke extends AbstractComponent {
 		this.geometry = Path.fromString(pathString);
 		this.parts = [];
 		
-		this.parts = path.parts;
+		//this.parts = pathString.parts;
 
 		return true;
 	}

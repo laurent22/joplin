@@ -6,7 +6,7 @@ import { Pointer, PointerDevice, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 
-const pressureToWidthMultiplier = 4.0;
+const pressureToWidthMultiplier = 16.0;
 
 export default class Pen extends BaseTool {
 	private builder: StrokeBuilder;
@@ -22,7 +22,8 @@ export default class Pen extends BaseTool {
 	}
 
 	private getStrokePoint(pointer: Pointer) {
-		const pressure = pointer.pressure ?? 1.0;
+		const minPressure = 0.3;
+		const pressure = Math.max(pointer.pressure ?? 1.0, minPressure);
 		return {
 			pos: pointer.canvasPos,
 			width: pressure * this.getPressureMultiplier(),
@@ -70,5 +71,4 @@ export default class Pen extends BaseTool {
 	public onGestureCancel(): void {
 		this.editor.clearWetInk();
 	}
-
 }

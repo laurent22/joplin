@@ -1,3 +1,4 @@
+import Command from "../commands/Command";
 import AbstractComponent from "../components/AbstractComponent";
 import ImageEditor from "../editor";
 import Mat33 from "../geometry/Mat33";
@@ -24,14 +25,14 @@ const styles = `
 `;
 
 type DragCallback = (delta: Vec2)=>void;
+type DragEndCallback = ()=>void;
 
-const makeDraggable = (element: HTMLElement, onDrag: DragCallback) => {
+const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: DragEndCallback) => {
 	element.style.touchAction = 'none';
 	let down = false;
 	element.addEventListener('pointerdown', event => {
 		if (event.isPrimary) {
 			down = true;
-			event.preventDefault();
 			element.setPointerCapture(event.pointerId);
 			return true;
 		}
@@ -48,6 +49,7 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback) => {
 	const onPointerEnd = (event: PointerEvent) => {
 		if (event.isPrimary) {
 			down = false;
+			onDragEnd();
 			return true;
 		}
 		return false;
@@ -75,18 +77,53 @@ class Selection {
 		this.backgroundBox = document.createElement('div');
 		this.backgroundBox.classList.add('selectionBox');
 
+		let transformationCommands: Command[] = [];
+		let transform = Mat33.identity;
 		makeDraggable(this.backgroundBox, (deltaPosition: Vec2) => {
 			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
 				deltaPosition,
 			);
 			// TODO: Make transform undo-able
 			this.region = this.region.translatedBy(deltaPosition);
-			for (const elem of this.selectedElems) {
-				elem.transformBy(
-					Mat33.translation(deltaPosition),
-				).apply(this.editor);
-			}
+			transform = transform.rightMul(Mat33.translation(deltaPosition));
+
+			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
+			transformationCommands = this.selectedElems.map(elem => {
+				return elem.transformBy(transform);
+			});
+			transformationCommands.forEach(cmd => cmd.apply(this.editor));
+
 			this.updateUI();
+		}, () => {
+			transformationCommands.forEach(cmd => {
+				cmd.unapply(this.editor);
+			});
+
+			const fullTransform = transform;
+			const inverseTransform = transform.inverse();
+
+			// Reset for the next drag
+			transform = Mat33.identity;
+			transformationCommands = [];
+			this.region = this.region.transformedBoundingBox(inverseTransform);
+
+			const elems = this.selectedElems;
+			this.editor.dispatch({
+				apply: (editor) => {
+					elems.forEach(elem => {
+						elem.transformBy(fullTransform).apply(editor);
+					});
+					this.region = this.region.transformedBoundingBox(fullTransform);
+					this.updateUI();
+				},
+				unapply: (editor) => {
+					elems.forEach(elem => {
+						elem.transformBy(inverseTransform).apply(editor);
+					});
+					this.region = this.region.transformedBoundingBox(inverseTransform);
+					this.updateUI();
+				},
+			});
 		});
 	}
 
@@ -98,8 +135,8 @@ class Selection {
 		elem.appendChild(this.backgroundBox);
 	}
 
-	public expandToPoint(point: Point2) {
-		this.region = this.region.grownToPoint(point);
+	public setToPoint(point: Point2) {
+		this.region = Rect2.fromCorners(point, this.startPoint);
 		this.updateUI();
 	}
 
@@ -200,11 +237,11 @@ export default class SelectionTool extends BaseTool {
 	}
 
 	public onPointerMove(event: PointerEvt): void {
-		this.selectionBox.expandToPoint(event.current.canvasPos);
+		this.selectionBox.setToPoint(event.current.canvasPos);
 	}
 
 	public onPointerUp(event: PointerEvt): void {
-		this.selectionBox.expandToPoint(event.current.canvasPos);
+		this.selectionBox.setToPoint(event.current.canvasPos);
 
 		// Expand/shrink the selection rectangle, if applicable
 		this.selectionBox.resolveToObjects();

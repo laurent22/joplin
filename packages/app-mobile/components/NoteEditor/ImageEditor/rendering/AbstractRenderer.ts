@@ -27,7 +27,7 @@ export default abstract class AbstractRenderer {
 	protected abstract endPath(style: FillStyle): void;
 	protected abstract lineTo(point: Point2): void;
 	protected abstract traceCubicBezierCurve(
-		p1: Point2, p2: Point2, p3: Point2
+		p1: Point2, p2: Point2, p3: Point2,
 	): void;
 	protected abstract traceQuadraticBezierCurve(
 		controlPoint: Point2, endPoint: Point2,

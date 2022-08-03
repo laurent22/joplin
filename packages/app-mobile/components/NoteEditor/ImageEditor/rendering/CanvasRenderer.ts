@@ -36,10 +36,6 @@ export default class CanvasRenderer extends AbstractRenderer {
 		this.ctx.fillStyle = style.color.toHexString();
 		this.ctx.strokeStyle = style.color.toHexString();
 
-		// Ensure the filled region overlaps slightly with neighboring
-		// regions.
-		this.ctx.lineWidth = 2;
-		this.ctx.stroke();
 		this.ctx.fill();
 	}
 

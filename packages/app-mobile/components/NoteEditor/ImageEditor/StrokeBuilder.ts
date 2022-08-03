@@ -82,7 +82,7 @@ export default class StrokeBuilder {
 		// Use the last two points to start a new curve (the last point isn't used
 		// in the current curve and we want connected curves to share end points)
 		this.buffer = [
-			this.buffer[this.buffer.length - 2], lastPoint
+			this.buffer[this.buffer.length - 2], lastPoint,
 		];
 		this.currentCurve = null;
 	}
