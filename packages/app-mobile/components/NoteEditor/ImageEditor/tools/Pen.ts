@@ -33,10 +33,10 @@ export default class Pen extends BaseTool {
 	}
 
 	private addPointToStroke(pointer: Pointer) {
+		this.builder.addPoint(this.getStrokePoint(pointer));
+
 		this.editor.clearWetInk();
 		this.editor.drawWetInk(...this.builder.preview());
-
-		this.builder.addPoint(this.getStrokePoint(pointer));
 	}
 
 	public onPointerDown({ current, allPointers }: PointerEvt): boolean {
@@ -60,6 +60,10 @@ export default class Pen extends BaseTool {
 		this.addPointToStroke(current);
 		if (this.builder && current.isPrimary) {
 			const stroke = this.builder.build();
+
+			this.editor.clearWetInk();
+			this.editor.drawWetInk(...this.builder.preview());
+
 			const canFlatten = true;
 			const action = new EditorImage.AddElementCommand(stroke, canFlatten);
 			this.editor.dispatch(action);

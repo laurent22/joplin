@@ -30,15 +30,13 @@ export default class StrokeBuilder {
 	private bbox: Rect2;
 
 	public constructor(
-		startPoint: StrokeDataPoint
+		private startPoint: StrokeDataPoint
 	) {
 		this.lastPoint = startPoint;
 		this.segments = [];
-		this.buffer = [];
+		this.buffer = [ startPoint.pos ];
 		this.momentum = Vec2.zero;
 		this.currentCurve = null;
-
-		console.log('start', startPoint.pos);
 
 		this.bbox = new Rect2(startPoint.pos.x, startPoint.pos.y, 0, 0);
 		this.addPoint(startPoint);
@@ -48,7 +46,7 @@ export default class StrokeBuilder {
 		return this.bbox;
 	}
 
-
+	// Get the segments that make up this' path. Can be called after calling build()
 	public preview(): RenderablePathSpec[] {
 		if (this.currentCurve && this.lastPoint) {
 			const currentPath = this.currentSegmentToPath(this.lastPoint);
@@ -68,8 +66,27 @@ export default class StrokeBuilder {
 	}
 
 	private finalizeCurrentCurve(fillStyle: FillStyle) {
+		// Case where no points have been added
 		if (!this.currentCurve) {
-			console.warn('Ending without current!');
+			const width = this.startPoint.width / 2;
+
+			// Draw a circle-ish shape around the start point
+			this.segments.push({
+				startPoint: this.startPoint.pos.plus(Vec2.of(width, 0)),
+				commands: [
+					{
+						kind: PathCommandType.QuadraticBezierTo,
+						controlPoint: this.startPoint.pos.plus(Vec2.of(0, -width)),
+						endPoint: this.startPoint.pos.plus(Vec2.of(-width, 0)),
+					},
+					{
+						kind: PathCommandType.QuadraticBezierTo,
+						controlPoint: this.startPoint.pos.plus(Vec2.of(0, width)),
+						endPoint: this.startPoint.pos.plus(Vec2.of(width, 0)),
+					},
+				],
+				fill: fillStyle,
+			})
 			return;
 		}
 
@@ -90,11 +107,6 @@ export default class StrokeBuilder {
 	private currentSegmentToPath(fillStyle: FillStyle): RenderablePathSpec {
 		let startVec = Vec2.ofXY(this.currentCurve.normal(0)).normalized();
 		let endVec = Vec2.ofXY(this.currentCurve.normal(1)).normalized();
-		
-		// Ensure startVec and endVec are in roughly the same direction
-		if (startVec.dot(endVec) < 0) {
-			endVec = endVec.times(-1);
-		}
 
 		startVec = startVec.times(this.curveStartWidth / 2);
 		endVec = endVec.times(this.curveEndWidth / 2);
@@ -194,7 +206,7 @@ export default class StrokeBuilder {
 					Vec2.ofXY(curve.project(point.xy));
 				const dist = proj.minus(point).magnitude();
 
-				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth) * 2) {
+				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth)) {
 					return false;
 				}
 			}
