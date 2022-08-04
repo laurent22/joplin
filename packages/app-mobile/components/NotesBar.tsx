@@ -28,6 +28,7 @@ function NotesBarComponent(props: Props) {
 	function styles() {
 		let styles: Style = {
 			container: {
+				flex: 1,
 				width: '100%',
 				backgroundColor: theme.backgroundColor3,
 			},
