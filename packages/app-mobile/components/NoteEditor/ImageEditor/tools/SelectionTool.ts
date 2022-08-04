@@ -30,18 +30,30 @@ type DragEndCallback = ()=>void;
 const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: DragEndCallback) => {
 	element.style.touchAction = 'none';
 	let down = false;
+
+	// Work around a Safari bug
+	element.addEventListener('touchstart', evt => evt.preventDefault());
+
+	let lastX: number;
+	let lastY: number;
 	element.addEventListener('pointerdown', event => {
 		if (event.isPrimary) {
 			down = true;
 			element.setPointerCapture(event.pointerId);
+			lastX = event.pageX;
+			lastY = event.pageY;
 			return true;
 		}
 		return false;
 	});
 	element.addEventListener('pointermove', event => {
 		if (event.isPrimary && down) {
-			const delta = Vec2.of(event.movementX, event.movementY);
+			// Safari/iOS doesn't seem to support movementX/movementY on pointer events.
+			// Calculate manually:
+			const delta = Vec2.of(event.pageX - lastX, event.pageY - lastY);
 			onDrag(delta);
+			lastX = event.pageX;
+			lastY = event.pageY;
 			return true;
 		}
 		return false;

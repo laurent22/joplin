@@ -1,0 +1,21 @@
+
+:root {
+    --primary-background-color: white;
+    --primary-foreground-color: black;
+}
+
+.toolbar-root {
+    background-color: var(--primary-background-color);
+    border: 1px solid gray;
+    border-radius: 2px;
+    width: 100vw;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

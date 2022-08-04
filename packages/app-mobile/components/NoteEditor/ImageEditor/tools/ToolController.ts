@@ -54,7 +54,7 @@ export default class ToolController {
 	 *              are dispatched to the active tool.
 	 * @return true iff the event was handled.
 	 */
-	dispatchEvent(event: InputEvt): boolean {
+	public dispatchInputEvent(event: InputEvt): boolean {
 		let handled;
 		if (event.kind === InputEvtType.PointerDownEvt) {
 			for (const tool of this.tools) {
@@ -98,6 +98,18 @@ export default class ToolController {
 		}
 
 		return handled;
+	}
+
+	// Returns the enabled Pen tool, if such a tool exists.
+	public getCurrentPen(): Pen {
+		for (const tool of this.tools) {
+			if (
+				tool.kind === ToolType.Pen && tool instanceof Pen && tool.isEnabled()
+			) {
+				return tool;
+			}
+		}
+		return null;
 	}
 
 	#setToolEnabled(kind: ToolType, enabled: boolean) {

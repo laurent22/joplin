@@ -64,7 +64,7 @@ export class ImageEditor {
 			const device = pointerTypeToDevice[evt.pointerType] ?? PointerDevice.Other;
 
 			return {
-				timeStamp: evt.timeStamp,
+				timeStamp: (new Date()).getTime(),
 				isPrimary: evt.isPrimary,
 				down: isDown,
 				id: evt.pointerId,
@@ -77,9 +77,12 @@ export class ImageEditor {
 
 		const pointers: Record<number, Pointer> = {};
 		const getPointerList = () => {
+			const nowTime = (new Date()).getTime();
+
 			const res = [];
 			for (const id in pointers) {
-				if (pointers[id]) {
+				const maxUnupdatedTime = 2000; // Maximum time without a pointer update (ms)
+				if (pointers[id] && (nowTime - pointers[id].timeStamp) < maxUnupdatedTime) {
 					res.push(pointers[id]);
 				}
 			}
@@ -100,7 +103,7 @@ export class ImageEditor {
 				current: pointer,
 				allPointers: getPointerList(),
 			};
-			if (this.toolController.dispatchEvent(event)) {
+			if (this.toolController.dispatchInputEvent(event)) {
 				evt.preventDefault();
 			}
 
@@ -112,7 +115,7 @@ export class ImageEditor {
 			if (pointer.down) {
 				pointers[pointer.id] = pointer;
 
-				if (this.toolController.dispatchEvent({
+				if (this.toolController.dispatchInputEvent({
 					kind: InputEvtType.PointerMoveEvt,
 					current: pointer,
 					allPointers: getPointerList(),
@@ -130,7 +133,7 @@ export class ImageEditor {
 
 			pointers[pointer.id] = pointer;
 			this.renderingRegion.releasePointerCapture(pointer.id);
-			if (this.toolController.dispatchEvent({
+			if (this.toolController.dispatchInputEvent({
 				kind: InputEvtType.PointerUpEvt,
 				current: pointer,
 				allPointers: getPointerList(),
@@ -162,7 +165,7 @@ export class ImageEditor {
 			}
 
 			const pos = Vec2.of(evt.clientX, evt.clientY);
-			if (this.toolController.dispatchEvent({
+			if (this.toolController.dispatchInputEvent({
 				kind: InputEvtType.WheelEvt,
 				delta,
 				screenPos: pos,

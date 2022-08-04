@@ -2,10 +2,22 @@ import ImageEditor from "../editor";
 import ToolController, { ToolType } from "../tools/ToolController";
 import { EditorEventDataType, EditorEventType } from "../types";
 
+import './toolbar.css';
+import "@melloware/coloris/dist/coloris.css";
+import { coloris, init as colorisInit } from "@melloware/coloris";
+import Color4 from "../Color4";
+
 interface HTMLToolButton {
 	onToolEnabled(): void;
 	onToolDisabled(): void;
 }
+
+// WidgetBuilder
+//  → build()
+//  → withIcon(...)
+//  → withTitle(...)
+
+const toolbarClassPrefix = 'toolbar-';
 
 /**
  * An HTML implementation of the toolbar. This implementation is primarially intended for
@@ -22,9 +34,24 @@ export default class HTMLToolbar {
         editor.notifier.on(EditorEventType.ToolDisabled, (tool) => this.onToolDisabled(tool));
 
 		this.container = document.createElement('div');
-		this.container.classList.add('toolbar');
+		this.container.classList.add(`${toolbarClassPrefix}root`);
 		this.addElements();
 		parent.appendChild(this.container);
+
+		// Initialize color choosers
+		colorisInit();
+		coloris({
+			el: '.coloris_input',
+			format: 'hex',
+			theme: 'polaroid',
+			swatches: [
+				Color4.red.toHexString(),
+				Color4.purple.toHexString(),
+				Color4.yellow.toHexString(),
+				Color4.black.toHexString(),
+				Color4.white.toHexString(),
+			],
+		});
     }
 
     private onToolEnabled(toolEvent: EditorEventDataType): void {
@@ -100,5 +127,33 @@ export default class HTMLToolbar {
 		this.addActionButton('Redo', () => {
 			this.editor.history.redo();
 		});
+
+		const thicknessInput = document.createElement('input');
+		thicknessInput.type = 'range';
+		thicknessInput.min = '1';
+		thicknessInput.max = '61';
+		thicknessInput.step = '5';
+		thicknessInput.oninput = () => {
+			const penTool = this.editor.toolController.getCurrentPen();
+			if (penTool) {
+				penTool.setThickness(parseFloat(thicknessInput.value));
+			}
+		};
+		thicknessInput.ariaLabel = 'Thickness';
+		
+		const colorInput = document.createElement('input');
+		colorInput.className = 'coloris_input';
+		colorInput.type = 'text';
+		colorInput.value = Color4.black.toHexString();
+		colorInput.oninput = () => {
+			const penTool = this.editor.toolController.getCurrentPen();
+			if (penTool) {
+				penTool.setColor(Color4.fromHex(colorInput.value));
+			}
+		};
+		this.container.appendChild(colorInput);
+		this.container.appendChild(thicknessInput);
+		// TODO: @melloware/coloris colorpicker
+		// https://yarnpkg.com/package/@melloware/coloris
 	}
 }

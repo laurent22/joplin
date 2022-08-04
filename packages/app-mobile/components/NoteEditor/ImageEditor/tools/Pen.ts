@@ -6,11 +6,10 @@ import { Pointer, PointerDevice, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 
-const pressureToWidthMultiplier = 16.0;
-
 export default class Pen extends BaseTool {
 	private builder: StrokeBuilder;
 	private color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.5, 0.3);
+	private thickness: number = 16.0;
 	public readonly kind: ToolType = ToolType.Pen;
 
 	public constructor(private editor: ImageEditor) {
@@ -18,7 +17,7 @@ export default class Pen extends BaseTool {
 	}
 
 	private getPressureMultiplier() {
-		return 1 / this.editor.viewport.getScaleFactor() * pressureToWidthMultiplier;
+		return 1 / this.editor.viewport.getScaleFactor() * this.thickness;
 	}
 
 	private getStrokePoint(pointer: Pointer) {
@@ -74,5 +73,13 @@ export default class Pen extends BaseTool {
 
 	public onGestureCancel(): void {
 		this.editor.clearWetInk();
+	}
+
+	public setColor(color: Color4): void {
+		this.color = color;
+	}
+
+	public setThickness(thickness: number) {
+		this.thickness = thickness;
 	}
 }

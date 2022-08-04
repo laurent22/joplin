@@ -5,6 +5,7 @@
 
 import { mkdirp, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
+import TerserPlugin from 'terser-webpack-plugin';
 const execa = require('execa');
 
 import webpack from 'webpack';
@@ -59,10 +60,23 @@ class BundledFile {
 				rules: [
 					{
 						// Include .tsx to include react components
-						test: /\.tsx?$/,
+						test: /\.tsx?$/i,
 						use: 'ts-loader',
 						exclude: /node_modules/,
 					},
+					{
+						test: /\.css$/i,
+						use: ['style-loader', 'css-loader'],
+					},
+				],
+			},
+			optimization: {
+				minimizer: [
+					// Don't create separate files for comments.
+					// See https://stackoverflow.com/a/65650316/17055750
+					new TerserPlugin({
+						extractComments: false,
+					}),
 				],
 			},
 			// Increase the minimum size required

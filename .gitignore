@@ -969,6 +969,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.j
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/DummyRenderer.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/DummyRenderer.js
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/DummyRenderer.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/SVGRenderer.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/SVGRenderer.js
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/SVGRenderer.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js.map
