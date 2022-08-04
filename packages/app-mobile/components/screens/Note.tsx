@@ -56,8 +56,6 @@ const emptyArray: any[] = [];
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
-	isNotesBarOpen: boolean;
-
 	static navigationOptions(): any {
 		return { header: null };
 	}
@@ -92,8 +90,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canRedo: false,
 			},
 
-			showNotesBar: false,
-
 		};
 
 		this.saveActionQueues_ = {};
@@ -105,8 +101,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
-
-		this.isNotesBarOpen = false;
 
 		this.editorRef = React.createRef();
 
