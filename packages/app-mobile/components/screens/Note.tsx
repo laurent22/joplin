@@ -1338,13 +1338,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
+		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
+
 		const noteActionButtonGroup = (
 			<View style={this.styles().noteActionButtonGroup}>
-				<TouchableOpacity style={[this.styles().noteActionButtonActive, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
-					<Icon name="columns" style={this.styles().noteActionButtonIconActive} />
+				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
+					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
 				</TouchableOpacity>
-				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton2]} activeOpacity={0.7}>
-					<Icon name="list" style={this.styles().noteActionButtonIcon} />
+				<TouchableOpacity style={[notesBarToggleStyle, this.styles().noteActionButton2]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
+					<Icon name="list" style={notesBarToggleIconStyle} />
 				</TouchableOpacity>
 			</View>
 		);
@@ -1352,7 +1355,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
 				<Animated.View style={this.styles().notesBarContainer}>
-					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
+					<NotesBar todoCheckbox_change={this.todoCheckbox_change} toggleNotesBar={this.onNotesBarToggle} />
 				</Animated.View>
 				<Animated.View style={this.styles().noteComp}>
 					{titleComp}
