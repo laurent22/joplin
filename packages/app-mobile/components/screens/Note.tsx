@@ -56,6 +56,8 @@ const emptyArray: any[] = [];
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
+	isNotesBarOpen: boolean;
+
 	static navigationOptions(): any {
 		return { header: null };
 	}
@@ -90,7 +92,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canRedo: false,
 			},
 
-			isNotesBarOpen: false,
+			showNotesBar: false,
+
 		};
 
 		this.saveActionQueues_ = {};
@@ -102,6 +105,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
+
+		this.isNotesBarOpen = false;
 
 		this.editorRef = React.createRef();
 
@@ -243,6 +248,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
+		this.onNotesBarOpen = this.onNotesBarOpen.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -402,6 +408,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			left: this.notesBarPosition,
 			top: 0,
 			width: 250,
+			height: '100%',
 		};
 
 		styles.noteComp = {
@@ -505,8 +512,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	}
 
-	private handleNotesBarOpen_ = async () => {
-		await this.setState({ isNotesBarOpen: true });
+	private onNotesBarOpen = async () => {
+		this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
 
 		Animated.parallel([
 			Animated.spring(
@@ -569,9 +576,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	componentWillMount() {
-		this.notesBarPosition = new Animated.Value(-250);
-		this.notePosition = new Animated.Value(-250);
-		this.noteWidth = new Animated.Value(Dimensions.get('window').width);
+		if (this.props.showNotesBar) {
+			this.notesBarPosition = new Animated.Value(0);
+			this.notePosition = new Animated.Value(0);
+			this.noteWidth = new Animated.Value(Dimensions.get('window').width - 250);
+		} else {
+			this.notesBarPosition = new Animated.Value(-250);
+			this.notePosition = new Animated.Value(-250);
+			this.noteWidth = new Animated.Value(Dimensions.get('window').width);
+		}
 	}
 
 	title_changeText(text: string) {
@@ -1297,7 +1310,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteActionButtonGroup = (
 			<View style={this.styles().noteActionButtonGroup}>
-				<TouchableOpacity style={[this.styles().noteActionButtonActive, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.handleNotesBarOpen_}>
+				<TouchableOpacity style={[this.styles().noteActionButtonActive, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.onNotesBarOpen}>
 					<Icon name="columns" style={this.styles().noteActionButtonIconActive} />
 				</TouchableOpacity>
 				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton2]} activeOpacity={0.7}>
@@ -1366,6 +1379,7 @@ const NoteScreen = connect((state: State) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
 		useEditorBeta: state.settings['editor.beta'],
+		showNotesBar: state.showMobileNotesBar,
 	};
 })(NoteScreenComponent);
 

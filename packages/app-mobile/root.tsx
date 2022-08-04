@@ -378,6 +378,17 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
+		case 'NOTES_BAR_OPEN':
+
+			newState = Object.assign({}, state);
+			newState.showMobileNotesBar = true;
+			break;
+
+		case 'NOTES_BAR_CLOSE':
+
+			newState = Object.assign({}, state);
+			newState.showMobileNotesBar = false;
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
