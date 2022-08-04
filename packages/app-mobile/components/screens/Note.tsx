@@ -242,7 +242,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
-		this.onNotesBarOpen = this.onNotesBarOpen.bind(this);
+		this.onNotesBarToggle = this.onNotesBarToggle.bind(this);
+		this.animateNotesBarOpen = this.animateNotesBarOpen.bind(this);
+		this.animateNotesBarClose = this.animateNotesBarClose.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -506,9 +508,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	}
 
-	private onNotesBarOpen = async () => {
-		this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
-
+	private animateNotesBarOpen = () => {
 		Animated.parallel([
 			Animated.spring(
 				this.notesBarPosition,
@@ -532,6 +532,42 @@ class NoteScreenComponent extends BaseScreenComponent {
 				}
 			),
 		]).start();
+	};
+
+	private animateNotesBarClose = () => {
+		Animated.parallel([
+			Animated.spring(
+				this.notesBarPosition,
+				{
+					toValue: -250,
+					duration: 1500,
+				}
+			),
+			Animated.spring(
+				this.notePosition,
+				{
+					toValue: -250,
+					duration: 1500,
+				}
+			),
+			Animated.spring(
+				this.noteWidth,
+				{
+					toValue: Dimensions.get('window').width,
+					duration: 1500,
+				}
+			),
+		]).start();
+	};
+
+	private onNotesBarToggle = async () => {
+		if (this.props.showNotesBar === true) {
+			this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
+			this.animateNotesBarClose();
+		} else {
+			this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
+			this.animateNotesBarOpen();
+		}
 	};
 
 	onMarkForDownload(event: any) {
@@ -1304,7 +1340,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteActionButtonGroup = (
 			<View style={this.styles().noteActionButtonGroup}>
-				<TouchableOpacity style={[this.styles().noteActionButtonActive, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.onNotesBarOpen}>
+				<TouchableOpacity style={[this.styles().noteActionButtonActive, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
 					<Icon name="columns" style={this.styles().noteActionButtonIconActive} />
 				</TouchableOpacity>
 				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton2]} activeOpacity={0.7}>
