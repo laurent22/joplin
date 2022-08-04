@@ -5,7 +5,7 @@ import Setting from './Setting';
 import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
-import { NoteEntity } from '../services/database/types';
+import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -119,7 +119,7 @@ export default class Note extends BaseItem {
 		return unique(itemIds);
 	}
 
-	static async linkedItems(body: string) {
+	static async linkedItems(body: string):Promise<BaseItemEntity[]> {
 		const itemIds = this.linkedItemIds(body);
 		const r = await BaseItem.loadItemsByIds(itemIds);
 		return r;

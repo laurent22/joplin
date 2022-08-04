@@ -80,7 +80,7 @@ export default class ResourceService extends BaseService {
 								break;
 							}
 
-							await this.setAssociatedResources(note.id, note.body);
+							await this.setAssociatedItems(note.id, note.body);
 						} else {
 							this.logger().warn(`ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ${change.item_id}`);
 						}
@@ -110,9 +110,9 @@ export default class ResourceService extends BaseService {
 		this.logger().info('ResourceService::indexNoteResources: Completed');
 	}
 
-	public async setAssociatedResources(noteId: string, noteBody: string) {
-		const resourceIds = await Note.linkedResourceIds(noteBody);
-		await NoteResource.setAssociatedResources(noteId, resourceIds);
+	public async setAssociatedItems(noteId: string, noteBody: string) {
+		const items = await Note.linkedItems(noteBody);
+		await NoteResource.setAssociatedItems(noteId, items);
 	}
 
 	public async deleteOrphanResources(expiryDelay: number = null) {
@@ -126,7 +126,7 @@ export default class ResourceService extends BaseService {
 				const note = await Note.load(results[0].id);
 				if (note) {
 					this.logger().info(sprintf('ResourceService::deleteOrphanResources: Skipping deletion of resource %s because it is still referenced in note %s. Re-indexing note content to fix the issue.', resourceId, note.id));
-					await this.setAssociatedResources(note.id, note.body);
+					await this.setAssociatedItems(note.id, note.body);
 				}
 			} else {
 				await Resource.delete(resourceId);
