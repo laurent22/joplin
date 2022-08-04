@@ -61,6 +61,10 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return `${_('Joplin Server')} (Beta)`;
 	}
 
+	public static supportsRecursiveLinkedNotes(): boolean {
+		return true;
+	}
+	
 	public async isAuthenticated() {
 		return true;
 	}
