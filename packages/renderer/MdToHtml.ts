@@ -27,6 +27,7 @@ export interface RenderOptions {
 	codeHighlightCacheKey?: string;
 	plainResourceRendering?: boolean;
 	mapsToLine?: boolean;
+	useCustomPdfViewer?: boolean;
 }
 
 interface RendererRule {
@@ -170,7 +171,7 @@ export interface RuleOptions {
 	audioPlayerEnabled: boolean;
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
-
+	useCustomPdfViewer: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
 }
 

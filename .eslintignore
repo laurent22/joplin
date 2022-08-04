@@ -69,6 +69,7 @@ packages/tools/node_modules
 packages/tools/PortableAppsLauncher
 packages/turndown-plugin-gfm/
 packages/turndown/
+packages/pdf-viewer/dist
 plugin_types/
 readme/
 
@@ -1909,6 +1910,27 @@ packages/lib/uuid.js.map
 packages/lib/versionInfo.d.ts
 packages/lib/versionInfo.js
 packages/lib/versionInfo.js.map
+packages/pdf-viewer/Page.d.ts
+packages/pdf-viewer/Page.js
+packages/pdf-viewer/Page.js.map
+packages/pdf-viewer/VerticalPages.d.ts
+packages/pdf-viewer/VerticalPages.js
+packages/pdf-viewer/VerticalPages.js.map
+packages/pdf-viewer/hooks/useIsFocused.d.ts
+packages/pdf-viewer/hooks/useIsFocused.js
+packages/pdf-viewer/hooks/useIsFocused.js.map
+packages/pdf-viewer/hooks/useIsVisible.d.ts
+packages/pdf-viewer/hooks/useIsVisible.js
+packages/pdf-viewer/hooks/useIsVisible.js.map
+packages/pdf-viewer/miniViewer.d.ts
+packages/pdf-viewer/miniViewer.js
+packages/pdf-viewer/miniViewer.js.map
+packages/pdf-viewer/pdfSource.d.ts
+packages/pdf-viewer/pdfSource.js
+packages/pdf-viewer/pdfSource.js.map
+packages/pdf-viewer/pdfSource.test.d.ts
+packages/pdf-viewer/pdfSource.test.js
+packages/pdf-viewer/pdfSource.test.js.map
 packages/plugin-repo-cli/commands/updateRelease.d.ts
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/commands/updateRelease.js.map
