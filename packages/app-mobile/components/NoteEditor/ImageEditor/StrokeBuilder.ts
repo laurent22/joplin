@@ -23,6 +23,12 @@ export default class StrokeBuilder {
 	private curveStartWidth: number;
 	private curveEndWidth: number;
 
+	// Maximum distance from the actual curve (irrespective of stroke width)
+	// for which a point is considered 'part of the curve'.
+	// Note that the maximum will be smaller if the stroke width is less than
+	// [maxFitAllowed].
+	private maxFitAllowed: number = 50;
+
 	// Stroke smoothing and tangent approximation
 	private momentum: Vec2;
 
@@ -214,7 +220,7 @@ export default class StrokeBuilder {
 		let exitingVec = this.computeExitingVec();
 
 		// Find the intersection between the entering vector and the exiting vector
-		const maxRelativeLength = 0.9;
+		const maxRelativeLength = 2;
 		const segmentStart = this.buffer[0];
 		const segmentEnd = newPoint.pos;
 		const startEndDist = segmentEnd.minus(segmentStart).magnitude();
@@ -234,7 +240,7 @@ export default class StrokeBuilder {
 		);
 		const lineFromEnd = new LineSegment2(
 			segmentEnd.minus(exitingVec.times(maxControlPointDist)),
-			segmentEnd.plus(exitingVec.times(maxControlPointDist))
+			segmentEnd
 		);
 		const intersection = lineFromEnd.intersection(lineFromStart);
 
@@ -243,9 +249,9 @@ export default class StrokeBuilder {
 		if (intersection) {
 			controlPoint = intersection.point;
 		} else {
-			// Position the control point close to the first -- the connecting
+			// Position the control point closer to the first -- the connecting
 			// segment will be roughly a line.
-			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 5));
+			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 3));
 		}
 
 		if (isNaN(controlPoint.magnitude())) {
@@ -264,7 +270,8 @@ export default class StrokeBuilder {
 					Vec2.ofXY(curve.project(point.xy));
 				const dist = proj.minus(point).magnitude();
 
-				if (dist > Math.min(this.curveStartWidth, this.curveEndWidth)) {
+				if (dist > Math.min(this.curveStartWidth, this.curveEndWidth)
+						|| dist > this.maxFitAllowed) {
 					return false;
 				}
 			}

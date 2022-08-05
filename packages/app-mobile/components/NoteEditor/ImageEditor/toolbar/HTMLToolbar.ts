@@ -1,14 +1,16 @@
-import ImageEditor from "../editor";
-import ToolController, { ToolType } from "../tools/ToolController";
-import { EditorEventType } from "../types";
+import ImageEditor from '../editor';
+import ToolController, { ToolType } from '../tools/ToolController';
+import { EditorEventType } from '../types';
 
 import './toolbar.css';
-import "@melloware/coloris/dist/coloris.css";
-import { coloris, init as colorisInit } from "@melloware/coloris";
-import Color4 from "../Color4";
-import Pen from "../tools/Pen";
+import '@melloware/coloris/dist/coloris.css';
+import { coloris, init as colorisInit } from '@melloware/coloris';
+import Color4 from '../Color4';
+import Pen from '../tools/Pen';
+import Eraser from '../tools/Eraser';
+import BaseTool from '../tools/BaseTool';
 
-interface HTMLToolButton {
+interface HtmlToolButton {
 	onToolEnabled(): void;
 	onToolDisabled(): void;
 }
@@ -26,7 +28,7 @@ abstract class ToolbarWidget {
 	private dropdownContainer: HTMLElement;
 	private label: HTMLLabelElement;
 
-	public constructor() {
+	public constructor(editor: ImageEditor, targetTool: BaseTool) {
 		this.container = document.createElement('div');
 		this.container.classList.add(`${toolbarCSSPrefix}toolContainer`);
 		this.dropdownContainer = document.createElement('div');
@@ -41,6 +43,27 @@ abstract class ToolbarWidget {
 		this.button.onclick = () => {
 			this.handleClick();
 		};
+
+
+		editor.notifier.on(EditorEventType.ToolEnabled, toolEvt => {
+			if (toolEvt.kind !== EditorEventType.ToolEnabled) {
+				throw new Error('Incorrect event type! (Expected ToolEnabled)');
+			}
+
+			if (toolEvt.tool === targetTool) {
+				this.updateSelected(true);
+			}
+		});
+
+		editor.notifier.on(EditorEventType.ToolDisabled, toolEvt => {
+			if (toolEvt.kind !== EditorEventType.ToolDisabled) {
+				throw new Error('Incorrect event type! (Expected ToolDisabled)');
+			}
+
+			if (toolEvt.tool === targetTool) {
+				this.updateSelected(false);
+			}
+		});
 	}
 
 	protected abstract getTitle(): string;
@@ -96,30 +119,46 @@ abstract class ToolbarWidget {
 	}
 }
 
+class EraserWidget extends ToolbarWidget {
+	public constructor(editor: ImageEditor, private targetTool: Eraser) {
+		super(editor, targetTool);
+	}
+
+	protected getTitle(): string {
+		return 'Eraser'; // TODO: Localize
+	}
+	protected createIcon(): Element {
+		const icon = document.createElementNS(
+			'http://www.w3.org/2000/svg', 'svg'
+		);
+
+		// Draw a pen-like shape
+		icon.innerHTML = `
+		<g>
+			<rect x=10 y=50 width=80 height=30 rx=10 fill='pink' />
+			<rect x=10 y=10 width=80 height=50 fill='black'/>
+		</g>
+		`;
+		icon.setAttribute('viewBox', '0 0 100 100');
+
+		return icon;
+	}
+
+	protected fillDropdown(_dropdown: HTMLElement): boolean {
+		// No dropdown associated with the eraser
+		return false;
+	}
+
+	protected handleClick(): void {
+		this.targetTool.setEnabled(!this.targetTool.isEnabled());
+	}
+}
+
 class PenWidget extends ToolbarWidget {
-	private updateInputs: ()=>void = () => {};
+	private updateInputs: ()=> void = () => {};
 
 	public constructor(private editor: ImageEditor, private targetTool: Pen) {
-		super();
-		this.editor.notifier.on(EditorEventType.ToolEnabled, toolEvt => {
-			if (toolEvt.kind !== EditorEventType.ToolEnabled) {
-				throw new Error('Incorrect event type! (Expected ToolEnabled)');
-			}
-
-			if (toolEvt.tool === this.targetTool) {
-				this.updateSelected(true);
-			}
-		});
-
-		this.editor.notifier.on(EditorEventType.ToolDisabled, toolEvt => {
-			if (toolEvt.kind !== EditorEventType.ToolDisabled) {
-				throw new Error('Incorrect event type! (Expected ToolDisabled)');
-			}
-
-			if (toolEvt.tool === this.targetTool) {
-				this.updateSelected(false);
-			}
-		});
+		super(editor, targetTool);
 
 		this.editor.notifier.on(EditorEventType.ToolUpdated, toolEvt => {
 			if (toolEvt.kind !== EditorEventType.ToolUpdated) {
@@ -131,7 +170,7 @@ class PenWidget extends ToolbarWidget {
 				this.updateIcon();
 				this.updateInputs();
 			}
-		})
+		});
 
 		this.updateSelected(this.targetTool.isEnabled());
 	}
@@ -169,6 +208,7 @@ class PenWidget extends ToolbarWidget {
 	protected fillDropdown(dropdown: HTMLElement): boolean {
 		const container = document.createElement('div');
 
+		// Thickness: Value of the input is squared to allow for finer control/larger values.
 		const thicknessRow = document.createElement('div');
 		const thicknessLabel = document.createElement('label');
 		const thicknessInput = document.createElement('input');
@@ -180,14 +220,14 @@ class PenWidget extends ToolbarWidget {
 
 		thicknessInput.type = 'range';
 		thicknessInput.min = '1';
-		thicknessInput.max = '61';
-		thicknessInput.step = '5';
+		thicknessInput.max = '20';
+		thicknessInput.step = '1';
 		thicknessInput.oninput = () => {
-			this.targetTool.setThickness(parseFloat(thicknessInput.value));
+			this.targetTool.setThickness(parseFloat(thicknessInput.value) ** 2);
 		};
 		thicknessRow.appendChild(thicknessLabel);
 		thicknessRow.appendChild(thicknessInput);
-		
+
 		const colorRow = document.createElement('div');
 		const colorLabel = document.createElement('label');
 		const colorInput = document.createElement('input');
@@ -197,7 +237,7 @@ class PenWidget extends ToolbarWidget {
 		colorLabel.setAttribute('for', colorInput.id);
 
 		colorInput.className = 'coloris_input';
-		colorInput.type = 'text';
+		colorInput.type = 'button';
 		colorInput.oninput = () => {
 			this.targetTool.setColor(Color4.fromHex(colorInput.value));
 		};
@@ -207,7 +247,7 @@ class PenWidget extends ToolbarWidget {
 
 		this.updateInputs = () => {
 			colorInput.value = this.targetTool.getColor().toHexString();
-			thicknessInput.value = this.targetTool.getThickness().toString();
+			thicknessInput.value = Math.sqrt(this.targetTool.getThickness()).toString();
 		};
 		this.updateInputs();
 
@@ -230,10 +270,10 @@ class PenWidget extends ToolbarWidget {
  * debugging purposes — when the editor is running directly in a browser.
  */
 export default class HTMLToolbar {
-	private toolButtons: Partial<Record<ToolType, HTMLToolButton[]>>;
+	private toolButtons: Partial<Record<ToolType, HtmlToolButton[]>>;
 	private container: HTMLElement;
 
-    public constructor(private editor: ImageEditor, parent: HTMLElement) {
+	public constructor(private editor: ImageEditor, parent: HTMLElement) {
 		this.toolButtons = {};
 
 		this.container = document.createElement('div');
@@ -247,6 +287,7 @@ export default class HTMLToolbar {
 			el: '.coloris_input',
 			format: 'hex',
 			theme: 'polaroid',
+			selectInput: false,
 			focusInput: false,
 			swatches: [
 				Color4.red.toHexString(),
@@ -259,7 +300,7 @@ export default class HTMLToolbar {
 				Color4.white.toHexString(),
 			],
 		});
-    }
+	}
 
 	private addToolButton(toolType: ToolType, toolName: string) {
 		const button = document.createElement('button');
@@ -294,7 +335,7 @@ export default class HTMLToolbar {
 		this.container.appendChild(button);
 	}
 
-	private addActionButton(text: string, command: ()=>void) {
+	private addActionButton(text: string, command: ()=> void) {
 		const button = document.createElement('button');
 		button.innerText = text;
 		button.classList.add('toolButton');
@@ -313,9 +354,16 @@ export default class HTMLToolbar {
 			widget.addTo(this.container);
 		}
 
+		for (const tool of toolController.getMatchingTools(ToolType.Eraser)) {
+			if (!(tool instanceof Eraser)) {
+				throw new Error('All Erasers must have kind === ToolType.Eraser!');
+			}
+
+			(new EraserWidget(this.editor, tool)).addTo(this.container);
+		}
+
+		this.addToolButton(ToolType.Selection, 'Select');
 		this.addToolButton(ToolType.TouchPanZoom, 'Touch Panning');
-		this.addToolButton(ToolType.Eraser, 'Eraser');
-		this.addToolButton(ToolType.Selection, 'Select Tool');
 		this.addActionButton('Undo', () => {
 			this.editor.history.undo();
 		});
