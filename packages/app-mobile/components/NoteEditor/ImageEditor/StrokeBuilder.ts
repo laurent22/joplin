@@ -47,7 +47,6 @@ export default class StrokeBuilder {
 		this.maxFitAllowed = maxFitAllowed;
 
 		this.bbox = new Rect2(startPoint.pos.x, startPoint.pos.y, 0, 0);
-		this.addPoint(startPoint);
 	}
 
 	public getBBox(): Rect2 {
@@ -214,11 +213,16 @@ export default class StrokeBuilder {
 			this.curveStartWidth = lastPoint.width / 2;
 		}
 
-		if (!this.lastExitingVec) {
-			this.lastExitingVec = this.computeExitingVec();
+		let enteringVec = this.lastExitingVec;
+		if (!enteringVec) {
+			let sampleIdx = Math.ceil(this.buffer.length / 3);
+			if (sampleIdx === 0) {
+				sampleIdx = this.buffer.length - 1;
+			}
+
+			enteringVec = this.buffer[sampleIdx].minus(this.buffer[0]);
 		}
 
-		let enteringVec = this.lastExitingVec;
 		let exitingVec = this.computeExitingVec();
 
 		// Find the intersection between the entering vector and the exiting vector

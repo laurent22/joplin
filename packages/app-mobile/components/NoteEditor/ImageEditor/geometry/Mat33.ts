@@ -1,11 +1,11 @@
-import { Point2, Vec2 } from "./Vec2";
-import Vec3 from "./Vec3";
+import { Point2, Vec2 } from './Vec2';
+import Vec3 from './Vec3';
 
 /**
  * Represents a three dimensional linear transformation or
  * a two-dimensional affine transformation.
  */
- export default class Mat33 {
+export default class Mat33 {
 	private readonly rows: Vec3[];
 
 	public constructor(
@@ -206,12 +206,21 @@ import Vec3 from "./Vec3";
 	}
 
 	/** @return a transform that scales X and Y by [amount] */
-	public static scaling2D(amount: number, center: Point2 = Vec2.zero): Mat33 {
+	public static scaling2D(amount: number|Vec2, center: Point2 = Vec2.zero): Mat33 {
 		let result = Mat33.translation(center);
+		let xAmount, yAmount;
+
+		if (typeof amount === 'number') {
+			xAmount = amount;
+			yAmount = amount;
+		} else {
+			xAmount = amount.x;
+			yAmount = amount.y;
+		}
 
 		result = result.rightMul(new Mat33(
-			amount, 0, 0,
-			0, amount, 0,
+			xAmount, 0, 0,
+			0, yAmount, 0,
 			0, 0, 1
 		));
 

@@ -1,9 +1,10 @@
-import LineSegment2 from "../geometry/LineSegment2";
-import Path from "../geometry/Path";
-import Rect2 from "../geometry/Rect2";
-import { Vec2 } from "../geometry/Vec2";
-import AbstractRenderer, { RenderablePathSpec } from "../rendering/AbstractRenderer";
-import AbstractComponent from "./AbstractComponent";
+import LineSegment2 from '../geometry/LineSegment2';
+import Mat33 from '../geometry/Mat33';
+import Path from '../geometry/Path';
+import Rect2 from '../geometry/Rect2';
+import { Vec2 } from '../geometry/Vec2';
+import AbstractRenderer, { RenderablePathSpec } from '../rendering/AbstractRenderer';
+import AbstractComponent from './AbstractComponent';
 
 interface StrokePart {
 	path: RenderablePathSpec;
@@ -36,37 +37,32 @@ export default class Stroke extends AbstractComponent {
 	}
 
 	public intersects(line: LineSegment2): boolean {
-		return this.geometry.transformedBy(this.transform).intersection(line).length > 0;
+		return this.geometry.intersection(line).length > 0;
 	}
 
 	public getGeometry(): Path {
-		return this.geometry.transformedBy(this.transform);
+		return this.geometry;
 	}
 
 	public render(canvas: AbstractRenderer, visibleRect: Rect2): void {
 		for (const part of this.parts) {
-			const bbox = part.bbox.transformedBoundingBox(this.transform);
+			const bbox = part.bbox;
 			if (bbox.intersects(visibleRect)) {
-				canvas.drawPath(part.path, this.transform);
+				canvas.drawPath(part.path);
 			}
 		}
 	}
 
-	public fromSVG(elem: SVGGraphicsElement): boolean {
-		if (elem.tagName === 'PATH') {
-			return this.fromPathString(elem.getAttribute('d') ?? '');
-		}
+	protected applyTransformation(affineTransfm: Mat33): void {
+		this.geometry = this.geometry.transformedBy(affineTransfm);
+		this.contentBBox = this.geometry.bbox;
 
-		return false;
-	}
-
-	public fromPathString(pathString: string): boolean {
-		this.geometry = Path.fromString(pathString);
-		this.parts = [];
-		
-		//this.parts = pathString.parts;
-		//TODO
-
-		return true;
+		this.parts = this.parts.map((part) => {
+			const geom = Path.fromRenderable(part.path).transformedBy(affineTransfm);
+			return {
+				path: geom.toRenderable(part.path.fill),
+				bbox: geom.bbox,
+			};
+		});
 	}
 }

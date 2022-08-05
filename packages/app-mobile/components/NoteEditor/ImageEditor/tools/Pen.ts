@@ -1,6 +1,7 @@
 import Color4 from '../Color4';
 import ImageEditor from '../editor';
 import EditorImage from '../EditorImage';
+import { Vec2 } from '../geometry/Vec2';
 import StrokeBuilder from '../StrokeBuilder';
 import { EditorEventType, Pointer, PointerDevice, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
@@ -42,7 +43,10 @@ export default class Pen extends BaseTool {
 
 	public onPointerDown({ current, allPointers }: PointerEvt): boolean {
 		if (allPointers.length === 1 || current.device === PointerDevice.Pen) {
-			const maxSmoothingDist = this.editor.viewport.visibleRect.maxDimension / 40;
+			// Don't smooth if input is more than ± 35 pixels from the true curve
+			const canvasTransform = this.editor.viewport.screenToCanvasTransform;
+			const maxSmoothingDist = canvasTransform.transformVec3(Vec2.unitX).magnitude() * 35;
+
 			this.builder = new StrokeBuilder(this.getStrokePoint(current), maxSmoothingDist);
 			return true;
 		}

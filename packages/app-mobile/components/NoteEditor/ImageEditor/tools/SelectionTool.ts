@@ -1,13 +1,13 @@
-import Command from "../commands/Command";
-import AbstractComponent from "../components/AbstractComponent";
-import ImageEditor from "../editor";
-import Mat33 from "../geometry/Mat33";
-//import Mat33 from "../geometry/Mat33";
-import Rect2 from "../geometry/Rect2";
-import { Point2, Vec2 } from "../geometry/Vec2";
-import { EditorEventType, PointerEvt } from "../types";
-import BaseTool from "./BaseTool";
-import { ToolType } from "./ToolController";
+import Command from '../commands/Command';
+import AbstractComponent from '../components/AbstractComponent';
+import ImageEditor from '../editor';
+import Mat33 from '../geometry/Mat33';
+// import Mat33 from "../geometry/Mat33";
+import Rect2 from '../geometry/Rect2';
+import { Point2, Vec2 } from '../geometry/Vec2';
+import { EditorEventType, PointerEvt } from '../types';
+import BaseTool from './BaseTool';
+import { ToolType } from './ToolController';
 
 const styles = `
 	.handleOverlay {
@@ -19,13 +19,36 @@ const styles = `
 	.handleOverlay > .selectionBox {
 		position: fixed;
 		z-index: 0;
+	}
+
+	.handleOverlay > .selectionBox .draggableBackground {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+
 		background-color: rgba(255, 100, 255, 0.5);
 		border: 1px solid #ffccff;
 	}
+
+	.handleOverlay > .selectionBox .resizeCorner {
+		width: 15px;
+		height: 15px;
+		margin-right: -8px;
+		margin-bottom: -8px;
+
+		position: absolute;
+		bottom: 0;
+		right: 0;
+
+		background-color: white;
+		border: 1px solid black;
+	}
 `;
 
-type DragCallback = (delta: Vec2)=>void;
-type DragEndCallback = ()=>void;
+type DragCallback = (delta: Vec2)=> void;
+type DragEndCallback = ()=> void;
 
 const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: DragEndCallback) => {
 	element.style.touchAction = 'none';
@@ -42,6 +65,7 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 			element.setPointerCapture(event.pointerId);
 			lastX = event.pageX;
 			lastY = event.pageY;
+
 			return true;
 		}
 		return false;
@@ -54,6 +78,7 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 			onDrag(delta);
 			lastX = event.pageX;
 			lastY = event.pageY;
+
 			return true;
 		}
 		return false;
@@ -62,6 +87,7 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 		if (event.isPrimary) {
 			down = false;
 			onDragEnd();
+
 			return true;
 		}
 		return false;
@@ -73,40 +99,34 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 class Selection {
 	private region: Rect2;
 	private boxRotation: number;
-	//private transform: Mat33;
+	// private transform: Mat33;
 	private backgroundBox: HTMLElement;
 	private selectedElems: AbstractComponent[];
 
 	public constructor(
 		public startPoint: Point2, private editor: ImageEditor
 	) {
-		//this.transform = Mat33.identity;
+		// this.transform = Mat33.identity;
 		this.boxRotation = 0;
 		this.selectedElems = [];
-		this.region = Rect2.bboxOf([ startPoint ]);
+		this.region = Rect2.bboxOf([startPoint]);
 
 		// Create draggable rectangles
 		this.backgroundBox = document.createElement('div');
+		const draggableBackground = document.createElement('div');
+		const resizeCorner = document.createElement('div');
+
 		this.backgroundBox.classList.add('selectionBox');
+		draggableBackground.classList.add('draggableBackground');
+		resizeCorner.classList.add('resizeCorner');
+
+		this.backgroundBox.appendChild(draggableBackground);
+		this.backgroundBox.appendChild(resizeCorner);
 
 		let transformationCommands: Command[] = [];
 		let transform = Mat33.identity;
-		makeDraggable(this.backgroundBox, (deltaPosition: Vec2) => {
-			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
-				deltaPosition,
-			);
-			// TODO: Make transform undo-able
-			this.region = this.region.translatedBy(deltaPosition);
-			transform = transform.rightMul(Mat33.translation(deltaPosition));
 
-			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
-			transformationCommands = this.selectedElems.map(elem => {
-				return elem.transformBy(transform);
-			});
-			transformationCommands.forEach(cmd => cmd.apply(this.editor));
-
-			this.updateUI();
-		}, () => {
+		const applyTransformCmds = () => {
 			transformationCommands.forEach(cmd => {
 				cmd.unapply(this.editor);
 			});
@@ -136,7 +156,49 @@ class Selection {
 					this.updateUI();
 				},
 			});
-		});
+		};
+
+		const previewTransformCmds = () => {
+			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
+			transformationCommands = this.selectedElems.map(elem => {
+				return elem.transformBy(transform);
+			});
+			transformationCommands.forEach(cmd => cmd.apply(this.editor));
+
+			this.updateUI();
+		};
+
+		makeDraggable(draggableBackground, (deltaPosition: Vec2) => {
+			// Re-scale the change in position
+			// (use a Vec3 transform to avoid translating deltaPosition)
+			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
+				deltaPosition
+			);
+
+			this.region = this.region.translatedBy(deltaPosition);
+			transform = transform.rightMul(Mat33.translation(deltaPosition));
+
+			previewTransformCmds();
+		}, applyTransformCmds);
+
+		makeDraggable(resizeCorner, (deltaPosition) => {
+			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
+				deltaPosition
+			);
+
+			const oldWidth = this.region.w;
+			const oldHeight = this.region.h;
+			const newSize = this.region.size.plus(deltaPosition);
+
+			if (newSize.y > 0 && newSize.x > 0) {
+				this.region = this.region.resizedTo(newSize);
+				const scaleFactor = Vec2.of(this.region.w / oldWidth, this.region.h / oldHeight);
+
+				const currentTransfm = Mat33.scaling2D(scaleFactor, this.region.topLeft);
+				transform = transform.rightMul(currentTransfm);
+				previewTransformCmds();
+			}
+		}, applyTransformCmds);
 	}
 
 	public appendBackgroundBoxTo(elem: HTMLElement) {
@@ -209,7 +271,7 @@ class Selection {
 
 		const rotationDeg = this.boxRotation * 180 / Math.PI;
 		this.backgroundBox.style.transform = `rotate(${rotationDeg}deg)`;
-	};
+	}
 }
 
 export default class SelectionTool extends BaseTool {
@@ -237,7 +299,7 @@ export default class SelectionTool extends BaseTool {
 	public onPointerDown(event: PointerEvt): boolean {
 		if (event.allPointers.length === 1) {
 			this.selectionBox = new Selection(
-				event.current.canvasPos, this.editor,
+				event.current.canvasPos, this.editor
 			);
 			// Remove any previous selection rects
 			this.handleOverlay.replaceChildren();
@@ -265,6 +327,10 @@ export default class SelectionTool extends BaseTool {
 
 	public setEnabled(enabled: boolean) {
 		super.setEnabled(enabled);
+
+		// Clear the selection
+		this.handleOverlay.replaceChildren();
+		this.selectionBox = null;
 
 		this.handleOverlay.style.display = enabled ? 'block' : 'none';
 	}

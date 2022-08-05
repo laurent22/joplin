@@ -10,13 +10,12 @@
     background-color: var(--primary-background-color);
     border: 1px solid gray;
     border-radius: 2px;
+    flex-wrap: wrap;
 
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-
-    max-height: min(33vh, 60px);
 
     display: flex;
     flex-direction: row;
@@ -35,9 +34,10 @@
     cursor: pointer;
 
     overflow-x: hidden;
-    height: 100%;
     min-width: 40px;
     max-width: 60px;
+
+    height: min(20vh, 60px);
 }
 
 .toolbar-button .toolbar-icon {
