@@ -44,11 +44,25 @@
     flex-shrink: 1;
     min-width: 30px;
     width: max-content;
+    overflow-y: visible;
 }
 
 .toolbar-toolContainer.selected .toolbar-button {
     background-color: var(--secondary-background-color);
     color: var(--secondary-foreground-color);
+}
+
+.toolbar-toolContainer:not(.selected) .toolbar-showHideDropdownIcon {
+    display: none;
+}
+
+.toolbar-toolContainer.selected .toolbar-showHideDropdownIcon {
+    height: 10px;
+    transition: transform 0.5s ease;
+}
+
+.toolbar-toolContainer.dropdownVisible .toolbar-showHideDropdownIcon {
+    transform: rotate(180deg);
 }
 
 .toolbar-dropdown.hidden, .toolbar-toolContainer:not(.selected) > .toolbar-dropdown {

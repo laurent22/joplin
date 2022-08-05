@@ -26,6 +26,7 @@ abstract class ToolbarWidget {
 	private button: HTMLElement;
 	private icon: Element;
 	private dropdownContainer: HTMLElement;
+	private dropdownIcon: Element;
 	private label: HTMLLabelElement;
 
 	public constructor(editor: ImageEditor, targetTool: BaseTool) {
@@ -87,9 +88,12 @@ abstract class ToolbarWidget {
 		this.container.appendChild(this.button);
 
 		if (this.fillDropdown(this.dropdownContainer)) {
+			this.dropdownIcon = this.createDropdownIcon();
+			this.button.appendChild(this.dropdownIcon);
 			this.container.appendChild(this.dropdownContainer);
 		}
 
+		this.setDropdownVisible(false);
 		parent.appendChild(this.container);
 	}
 
@@ -110,13 +114,27 @@ abstract class ToolbarWidget {
 	protected setDropdownVisible(visible: boolean) {
 		if (visible) {
 			this.dropdownContainer.classList.remove('hidden');
+			this.container.classList.add('dropdownVisible');
 		} else {
 			this.dropdownContainer.classList.add('hidden');
+			this.container.classList.remove('dropdownVisible');
 		}
 	}
 
 	protected isDropdownVisible(): boolean {
 		return !this.dropdownContainer.classList.contains('hidden');
+	}
+
+	private createDropdownIcon(): Element {
+		const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		icon.innerHTML = `
+		<g>
+			<path d='M5,10 L50,90 L95,10 Z'/>
+		</g>
+		`;
+		icon.classList.add(`${toolbarCSSPrefix}showHideDropdownIcon`);
+		icon.setAttribute('viewBox', '0 0 100 100');
+		return icon;
 	}
 }
 
