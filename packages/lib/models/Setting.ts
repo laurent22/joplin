@@ -452,7 +452,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				show: (settings: any) => {
 					try {
-						return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem');
+						return settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem');
 					} catch (error) {
 						return false;
 					}
@@ -471,7 +471,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
 				label: () => _('Nextcloud WebDAV URL'),
@@ -483,7 +483,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
 				label: () => _('Nextcloud username'),
@@ -494,7 +494,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
 				label: () => _('Nextcloud password'),
@@ -506,7 +506,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
 				label: () => _('WebDAV URL'),
@@ -518,7 +518,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
 				label: () => _('WebDAV username'),
@@ -529,7 +529,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
 				label: () => _('WebDAV password'),
@@ -542,7 +542,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				show: (settings: any) => {
 					try {
-						return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+						return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 					} catch (error) {
 						return false;
 					}
@@ -560,7 +560,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				filter: value => {
 					return value ? value.trim() : '';
@@ -574,7 +574,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				filter: value => {
 					return value ? value.trim() : '';
@@ -588,7 +588,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
 				label: () => _('S3 access key'),
@@ -599,7 +599,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
 				label: () => _('S3 secret key'),
@@ -610,7 +610,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
 				label: () => _('Force path style'),
@@ -621,7 +621,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
 				label: () => _('Joplin Server URL'),
@@ -639,7 +639,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
 				label: () => _('Joplin Server email'),
@@ -650,7 +650,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
 				label: () => _('Joplin Server password'),
@@ -678,7 +678,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
 				},
 				public: true,
 				label: () => _('Joplin Cloud email'),
@@ -689,7 +689,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
 				},
 				public: true,
 				label: () => _('Joplin Cloud password'),
@@ -1856,7 +1856,7 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			const c = this.cache_[i];
-			if (c.key == key) {
+			if (c.key === key) {
 				const md = this.settingMetadata(key);
 
 				if (md.isEnum === true) {
@@ -1973,11 +1973,11 @@ class Setting extends BaseModel {
 	static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
-		if (md.type == SettingItemType.Int) return value.toFixed(0);
-		if (md.type == SettingItemType.Bool) return value ? '1' : '0';
-		if (md.type == SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
-		if (md.type == SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
-		if (md.type == SettingItemType.String) return value ? `${value}` : '';
+		if (md.type === SettingItemType.Int) return value.toFixed(0);
+		if (md.type === SettingItemType.Bool) return value ? '1' : '0';
+		if (md.type === SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
+		if (md.type === SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
+		if (md.type === SettingItemType.String) return value ? `${value}` : '';
 
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
@@ -1990,9 +1990,9 @@ class Setting extends BaseModel {
 	static formatValue(key: string, value: any) {
 		const md = this.settingMetadata(key);
 
-		if (md.type == SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
+		if (md.type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
 
-		if (md.type == SettingItemType.Bool) {
+		if (md.type === SettingItemType.Bool) {
 			if (typeof value === 'string') {
 				value = value.toLowerCase();
 				if (value === 'true') return true;
@@ -2039,14 +2039,14 @@ class Setting extends BaseModel {
 		if (key in this.constants_) {
 			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
-			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
+			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
 		}
 
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		for (let i = 0; i < this.cache_.length; i++) {
-			if (this.cache_[i].key == key) {
+			if (this.cache_[i].key === key) {
 				return copyIfNeeded(this.cache_[i].value);
 			}
 		}
@@ -2079,7 +2079,7 @@ class Setting extends BaseModel {
 	static enumOptionLabel(key: string, value: any) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
-			if (n == value) return options[n];
+			if (n === value) return options[n];
 		}
 		return '';
 	}

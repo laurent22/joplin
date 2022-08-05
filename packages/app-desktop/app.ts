@@ -104,22 +104,22 @@ class Application extends BaseApplication {
 	}
 
 	protected async generalMiddleware(store: any, next: any, action: any) {
-		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
 			// so it needs to be set too here.
 			bridge().setLocale(Setting.value('locale'));
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'showTrayIcon' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateTray();
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.editor.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'windowContentZoomFactor' || action.type == 'SETTING_UPDATE_ALL') {
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'windowContentZoomFactor' || action.type === 'SETTING_UPDATE_ALL') {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
 
@@ -142,7 +142,7 @@ class Application extends BaseApplication {
 			await Folder.expandTree(newState.folders, action.folderId);
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type === 'SETTING_UPDATE_ALL')) {
 			this.handleThemeAutoDetect();
 		}
 
@@ -387,7 +387,7 @@ class Application extends BaseApplication {
 
 		PerFolderSortOrderService.initialize();
 
-		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev', stateToWhenClauseContext);
+		CommandService.instance().initialize(this.store(), Setting.value('env') === 'dev', stateToWhenClauseContext);
 
 		for (const command of commands) {
 			CommandService.instance().registerDeclaration(command.declaration);

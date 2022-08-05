@@ -197,7 +197,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	menu_select(value) {
-		if (typeof value == 'function') {
+		if (typeof value === 'function') {
 			value();
 		}
 	}

@@ -41,7 +41,7 @@ const shim = {
 	isNode: () => {
 		if (typeof process === 'undefined') return false;
 		if (shim.isElectron()) return true;
-		return process.title == 'node' || (process.title && process.title.indexOf('gulp') === 0);
+		return process.title === 'node' || (process.title && process.title.indexOf('gulp') === 0);
 	},
 
 	isReactNative: () => {
@@ -115,16 +115,16 @@ const shim = {
 
 		// Unfortunately the error 'Network request failed' doesn't have a type
 		// or error code, so hopefully that message won't change and is not localized
-		if (error.message == 'Network request failed') return true;
+		if (error.message === 'Network request failed') return true;
 
 		// request to https://public-ch3302....1fab24cb1bd5f.md failed, reason: socket hang up"
-		if (error.code == 'ECONNRESET') return true;
+		if (error.code === 'ECONNRESET') return true;
 
 		// OneDrive (or Node?) sometimes sends back a "not found" error for resources
 		// that definitely exist and in this case repeating the request works.
 		// Error is:
 		// request to https://graph.microsoft.com/v1.0/drive/special/approot failed, reason: getaddrinfo ENOTFOUND graph.microsoft.com graph.microsoft.com:443
-		if (error.code == 'ENOTFOUND') return true;
+		if (error.code === 'ENOTFOUND') return true;
 
 		// network timeout at: https://public-ch3302...859f9b0e3ab.md
 		if (error.message && error.message.indexOf('network timeout') === 0) return true;
@@ -136,7 +136,7 @@ const shim = {
 		// code: 'EAI_AGAIN' } } reason: { FetchError: request to https://api.ipify.org/?format=json failed, reason: getaddrinfo EAI_AGAIN api.ipify.org:443
 		//
 		// It's a Microsoft error: "A temporary failure in name resolution occurred."
-		if (error.code == 'EAI_AGAIN') return true;
+		if (error.code === 'EAI_AGAIN') return true;
 
 		// request to https://public-...8fd8bc6bb68e9c4d17a.md failed, reason: connect ETIMEDOUT 204.79.197.213:443
 		// Code: ETIMEDOUT
