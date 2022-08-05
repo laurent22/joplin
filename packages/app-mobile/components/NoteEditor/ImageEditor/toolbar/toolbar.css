@@ -16,6 +16,8 @@
     left: 0;
     right: 0;
 
+    max-height: min(33vh, 60px);
+
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -32,16 +34,15 @@
     transition: background-color 0.25s ease;
     cursor: pointer;
 
-    min-height: 60px;
-    min-width: 60px;
-    max-height: 100px;
+    height: 100%;
+    min-width: 40px;
+    max-width: 60px;
 }
 
 .toolbar-button .toolbar-icon {
     flex-shrink: 1;
-    min-width: 40px;
-    aspect-ratio: 1;
-    width: min-content;
+    min-width: 30px;
+    width: max-content;
 }
 
 .toolbar-toolContainer.selected .toolbar-button {
