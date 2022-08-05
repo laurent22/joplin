@@ -12,9 +12,15 @@ export default class Erase implements Command {
 	}
 
 	public apply(editor: ImageEditor): void {
-		for (const elem of this.toRemove) {
-			editor.image.findParent(elem)?.remove();
+		for (const part of this.toRemove) {
+			const parent = editor.image.findParent(part);
+			
+			if (parent) {
+				parent.remove();
+			}
 		}
+
+		editor.queueRerender();
 	}
 
 	public unapply(editor: ImageEditor): void {
@@ -23,5 +29,7 @@ export default class Erase implements Command {
 				new EditorImage.AddElementCommand(part).apply(editor);
 			}
 		}
+
+		editor.queueRerender();
 	}
 }

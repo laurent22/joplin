@@ -29,7 +29,11 @@ export default class Eraser extends BaseTool {
 
 	public onPointerMove(event: PointerEvt): void {
 		const currentPoint = event.current.canvasPos;
-		const line = new LineSegment2(currentPoint, this.lastPoint);
+		if (currentPoint.minus(this.lastPoint).magnitude() === 0) {
+			return;
+		}
+
+		const line = new LineSegment2(this.lastPoint, currentPoint);
 		const region = line.bbox;
 
 		// Remove any intersecting elements.
@@ -46,7 +50,7 @@ export default class Eraser extends BaseTool {
 	}
 
 	public onPointerUp(_event: PointerEvt): void {
-		if (this.command) {
+		if (this.command && this.toRemove.length > 0) {
 			this.command?.unapply(this.editor);
 
 			// Dispatch the command to make it undo-able

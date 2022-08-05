@@ -7,7 +7,7 @@ import { ImageComponent } from 'react-native';
 import Mat33 from './geometry/Mat33';
 import { Point2, Vec2 } from './geometry/Vec2';
 import Vec3 from './geometry/Vec3';
-import { ToolType } from './tools/ToolController';
+import BaseTool from './tools/BaseTool';
 
 /**
  * Provides a snapshot containing information about a pointer. A Pointer
@@ -131,17 +131,21 @@ export type EditorNotifier = EventDispatcher<EditorEventType, EditorEventDataTyp
 export enum EditorEventType {
 	ToolEnabled,
 	ToolDisabled,
+	ToolUpdated,
 	ObjectAdded,
 	ViewportChanged,
 	DisplayResized,
 };
 
-export interface EditorToolEventType {
-	readonly kind: EditorEventType.ToolEnabled|EditorEventType.ToolDisabled;
-	readonly toolType: ToolType;
+type EditorToolEventType = EditorEventType.ToolEnabled
+	| EditorEventType.ToolDisabled
+	| EditorEventType.ToolUpdated;
+export interface EditorToolEvent {
+	readonly kind: EditorToolEventType;
+	readonly tool: BaseTool;
 }
 
-export interface EditorObjectEventType {
+export interface EditorObjectEvent {
 	readonly kind: EditorEventType.ObjectAdded;
 	readonly object: ImageComponent;
 }
@@ -158,4 +162,4 @@ export interface DisplayResizedEvent {
 	readonly newSize: Vec2;
 }
 
-export type EditorEventDataType = EditorToolEventType | EditorObjectEventType | EditorViewportChangedEvent | DisplayResizedEvent;
+export type EditorEventDataType = EditorToolEvent | EditorObjectEvent | EditorViewportChangedEvent | DisplayResizedEvent;

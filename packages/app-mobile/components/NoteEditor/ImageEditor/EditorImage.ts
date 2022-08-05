@@ -282,6 +282,9 @@ export class ImageNode {
 	/** Remove this node and all of its children */
 	public remove() {
 		if (!this.parent) {
+			this.content = null;
+			this.children = [];
+
 			return;
 		}
 

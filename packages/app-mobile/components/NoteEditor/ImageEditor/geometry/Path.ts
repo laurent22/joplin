@@ -1,5 +1,5 @@
 import { Bezier } from 'bezier-js';
-import { RenderablePathSpec } from '../rendering/AbstractRenderer';
+import { FillStyle, RenderablePathSpec } from '../rendering/AbstractRenderer';
 import LineSegment2 from './LineSegment2';
 import Mat33 from './Mat33';
 import Rect2 from './Rect2';
@@ -208,6 +208,14 @@ export default class Path {
 
 	public static fromRenderable(renderable: RenderablePathSpec): Path {
 		return new Path(renderable.startPoint, renderable.commands);
+	}
+
+	public toRenderable(fill: FillStyle): RenderablePathSpec {
+		return {
+			startPoint: this.startPoint,
+			fill,
+			commands: this.parts,
+		};
 	}
 
 	public toString(): string {

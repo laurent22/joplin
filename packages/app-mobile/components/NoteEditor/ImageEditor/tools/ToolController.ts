@@ -7,6 +7,7 @@ import Pen from "./Pen";
 import ToolEnabledGroup from "./ToolEnabledGroup";
 import Eraser from "./Eraser";
 import SelectionTool from "./SelectionTool";
+import Color4 from "../Color4";
 
 
 
@@ -29,11 +30,17 @@ export default class ToolController {
 	public constructor(editor: ImageEditor) {
 		const primaryToolEnabledGroup = new ToolEnabledGroup();
 		const touchPanZoom = new PanZoom(editor, PanZoomMode.OneFingerGestures);
-		const penTool = new Pen(editor);
+		const primaryPenTool = new Pen(editor);
 		const primaryTools = [
 			new SelectionTool(editor),
 			new Eraser(editor),
-			penTool,
+
+			// Three pens
+			primaryPenTool,
+			new Pen(editor, Color4.clay, 8),
+
+			// Highlighter-like pen with width=32
+			new Pen(editor, Color4.ofRGBA(1, 1, 0, 0.5), 32),
 		];
 		this.tools = [
 			touchPanZoom,
@@ -42,7 +49,7 @@ export default class ToolController {
 		];
 		primaryTools.forEach(tool => tool.setToolGroup(primaryToolEnabledGroup));
 		touchPanZoom.setEnabled(false);
-		penTool.setEnabled(true);
+		primaryPenTool.setEnabled(true);
 
 		this.activeTool = null;
 	}
@@ -100,16 +107,8 @@ export default class ToolController {
 		return handled;
 	}
 
-	// Returns the enabled Pen tool, if such a tool exists.
-	public getCurrentPen(): Pen {
-		for (const tool of this.tools) {
-			if (
-				tool.kind === ToolType.Pen && tool instanceof Pen && tool.isEnabled()
-			) {
-				return tool;
-			}
-		}
-		return null;
+	public getMatchingTools(kind: ToolType): BaseTool[] {
+		return this.tools.filter(tool => tool.kind === kind);
 	}
 
 	#setToolEnabled(kind: ToolType, enabled: boolean) {

@@ -39,6 +39,10 @@ export default class Stroke extends AbstractComponent {
 		return this.geometry.transformedBy(this.transform).intersection(line).length > 0;
 	}
 
+	public getGeometry(): Path {
+		return this.geometry.transformedBy(this.transform);
+	}
+
 	public render(canvas: AbstractRenderer, visibleRect: Rect2): void {
 		for (const part of this.parts) {
 			const bbox = part.bbox.transformedBoundingBox(this.transform);
@@ -61,6 +65,7 @@ export default class Stroke extends AbstractComponent {
 		this.parts = [];
 		
 		//this.parts = pathString.parts;
+		//TODO
 
 		return true;
 	}

@@ -107,10 +107,15 @@ export default class LineSegment2 {
 			resultT = (xIntersect - this.point1.x) / this.direction.x;
 		}
 
-		// Ensure the result is in the segment.
-		if (resultPoint.minus(this.point1).magnitude() > this.length
-			|| resultPoint.minus(this.point2).magnitude() > this.length
-		) {
+		// Ensure the result is in this/the other segment.
+		const resultToP1 = resultPoint.minus(this.point1).magnitude();
+		const resultToP2 = resultPoint.minus(this.point2).magnitude();
+		const resultToP3 = resultPoint.minus(other.point1).magnitude();
+		const resultToP4 = resultPoint.minus(other.point2).magnitude();
+		if (resultToP1 > this.length
+			|| resultToP2 > this.length
+			|| resultToP3 > other.length
+			|| resultToP4 > other.length) {
 			return null;
 		}
 

@@ -82,6 +82,7 @@ export default class Color4 {
 	public static blue = Color4.ofRGB(0.0, 0.0, 1.0);
 	public static purple = Color4.ofRGB(0.5, 0.2, 0.5);
 	public static yellow = Color4.ofRGB(1, 1, 0.1);
+	public static clay = Color4.ofRGB(0.8, 0.4, 0.2);
 	public static black = Color4.ofRGB(0, 0, 0);
 	public static white = Color4.ofRGB(1, 1, 1);
 }

@@ -25,15 +25,15 @@ export default abstract class BaseTool implements PointerEvtListener {
 
 		// Ensure that at most one tool in the group is enabled.
 		if (enabled) {
-			this.group.notifyEnabled(this);
+			this.group?.notifyEnabled(this);
 			this.notifier.dispatch(EditorEventType.ToolEnabled, {
 				kind: EditorEventType.ToolEnabled,
-				toolType: this.kind,
+				tool: this,
 			});
 		} else {
 			this.notifier.dispatch(EditorEventType.ToolDisabled, {
 				kind: EditorEventType.ToolDisabled,
-				toolType: this.kind,
+				tool: this,
 			});
 		}
 	}

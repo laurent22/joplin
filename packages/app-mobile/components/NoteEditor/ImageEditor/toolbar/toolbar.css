@@ -1,14 +1,15 @@
 
 :root {
     --primary-background-color: white;
+    --secondary-background-color: #faf;
     --primary-foreground-color: black;
+    --secondary-foreground-color: black;
 }
 
 .toolbar-root {
     background-color: var(--primary-background-color);
     border: 1px solid gray;
     border-radius: 2px;
-    width: 100vw;
 
     position: absolute;
     top: 0;
@@ -18,4 +19,39 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+
+    font-family: sans-serif;
+}
+
+.toolbar-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 2px;
+    transition: background-color 0.25s ease;
+    cursor: pointer;
+}
+
+.toolbar-button .toolbar-icon {
+    flex-shrink: 1;
+    min-width: 40px;
+    aspect-ratio: 1;
+    width: min-content;
+}
+
+.toolbar-toolContainer.selected .toolbar-button {
+    background-color: var(--secondary-background-color);
+    color: var(--secondary-foreground-color);
+}
+
+.toolbar-dropdown.hidden, .toolbar-toolContainer:not(.selected) > .toolbar-dropdown {
+    display: none;
+}
+
+.toolbar-dropdown {
+    position: absolute;
+    padding: 15px;
+    background-color: var(--primary-background-color);
+    box-shadow: 0px 3px 3px var(--primary-foreground-color);
 }

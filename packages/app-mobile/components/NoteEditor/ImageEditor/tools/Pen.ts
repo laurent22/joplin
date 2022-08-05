@@ -2,17 +2,19 @@ import Color4 from '../Color4';
 import ImageEditor from '../editor';
 import EditorImage from '../EditorImage';
 import StrokeBuilder from '../StrokeBuilder';
-import { Pointer, PointerDevice, PointerEvt } from '../types';
+import { EditorEventType, Pointer, PointerDevice, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 
 export default class Pen extends BaseTool {
 	private builder: StrokeBuilder;
-	private color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.5, 0.3);
-	private thickness: number = 16.0;
 	public readonly kind: ToolType = ToolType.Pen;
 
-	public constructor(private editor: ImageEditor) {
+	public constructor(
+		private editor: ImageEditor,
+		private color: Color4 = Color4.purple,
+		private thickness: number = 16.0,
+	) {
 		super(editor.notifier);
 	}
 
@@ -75,11 +77,27 @@ export default class Pen extends BaseTool {
 		this.editor.clearWetInk();
 	}
 
+	private noteUpdated() {
+		this.editor.notifier.dispatch(EditorEventType.ToolUpdated, {
+			kind: EditorEventType.ToolUpdated,
+			tool: this,
+		});
+	}
+
 	public setColor(color: Color4): void {
-		this.color = color;
+		if (color.toHexString() !== this.color.toHexString()) {
+			this.color = color;
+			this.noteUpdated();
+		}
 	}
 
 	public setThickness(thickness: number) {
-		this.thickness = thickness;
+		if (thickness !== this.thickness) {
+			this.thickness = thickness;
+			this.noteUpdated();
+		}
 	}
+
+	public getThickness() { return this.thickness; }
+	public getColor() { return this.color; }
 }
