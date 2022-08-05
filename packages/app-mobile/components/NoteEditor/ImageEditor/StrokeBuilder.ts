@@ -180,7 +180,7 @@ export default class StrokeBuilder {
 			}
 
 			const velocity = newPoint.pos.minus(this.lastPoint.pos).times(1 / (deltaTime) * 1000);
-			this.momentum = this.momentum.lerp(velocity, 0.8);
+			this.momentum = this.momentum.lerp(velocity, 0.9);
 		}
 
 		const lastPoint = this.lastPoint ?? newPoint;
@@ -230,7 +230,7 @@ export default class StrokeBuilder {
 
 		const lineFromStart = new LineSegment2(
 			segmentStart,
-			segmentStart.minus(enteringVec.times(maxControlPointDist))
+			segmentStart.plus(enteringVec.times(maxControlPointDist))
 		);
 		const lineFromEnd = new LineSegment2(
 			segmentEnd.minus(exitingVec.times(maxControlPointDist)),
