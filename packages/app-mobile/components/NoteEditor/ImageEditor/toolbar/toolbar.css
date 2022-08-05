@@ -34,6 +34,7 @@
     transition: background-color 0.25s ease;
     cursor: pointer;
 
+    overflow-x: hidden;
     height: 100%;
     min-width: 40px;
     max-width: 60px;

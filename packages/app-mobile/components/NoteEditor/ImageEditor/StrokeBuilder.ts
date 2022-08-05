@@ -27,7 +27,7 @@ export default class StrokeBuilder {
 	// for which a point is considered 'part of the curve'.
 	// Note that the maximum will be smaller if the stroke width is less than
 	// [maxFitAllowed].
-	private maxFitAllowed: number = 50;
+	private maxFitAllowed: number;
 
 	// Stroke smoothing and tangent approximation
 	private momentum: Vec2;
@@ -36,13 +36,15 @@ export default class StrokeBuilder {
 	private bbox: Rect2;
 
 	public constructor(
-		private startPoint: StrokeDataPoint
+		private startPoint: StrokeDataPoint,
+		maxFitAllowed: number
 	) {
 		this.lastPoint = startPoint;
 		this.segments = [];
 		this.buffer = [startPoint.pos];
 		this.momentum = Vec2.zero;
 		this.currentCurve = null;
+		this.maxFitAllowed = maxFitAllowed;
 
 		this.bbox = new Rect2(startPoint.pos.x, startPoint.pos.y, 0, 0);
 		this.addPoint(startPoint);

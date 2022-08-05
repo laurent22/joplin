@@ -13,7 +13,7 @@ export default class Pen extends BaseTool {
 	public constructor(
 		private editor: ImageEditor,
 		private color: Color4 = Color4.purple,
-		private thickness: number = 16.0,
+		private thickness: number = 16.0
 	) {
 		super(editor.notifier);
 	}
@@ -42,7 +42,8 @@ export default class Pen extends BaseTool {
 
 	public onPointerDown({ current, allPointers }: PointerEvt): boolean {
 		if (allPointers.length === 1 || current.device === PointerDevice.Pen) {
-			this.builder = new StrokeBuilder(this.getStrokePoint(current));
+			const maxSmoothingDist = this.editor.viewport.visibleRect.maxDimension / 40;
+			this.builder = new StrokeBuilder(this.getStrokePoint(current), maxSmoothingDist);
 			return true;
 		}
 

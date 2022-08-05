@@ -39,6 +39,7 @@ abstract class ToolbarWidget {
 		this.button.classList.add(`${toolbarCSSPrefix}button`);
 		this.label = document.createElement('label');
 		this.button.setAttribute('role', 'button');
+		this.button.tabIndex = 0;
 
 		this.button.onclick = () => {
 			this.handleClick();
@@ -185,7 +186,9 @@ class PenWidget extends ToolbarWidget {
 		const icon = document.createElementNS(
 			'http://www.w3.org/2000/svg', 'svg'
 		);
-		const scale = this.targetTool.getThickness() / 2;
+
+		// Use a square-root scale to prevent the pen's tip from overflowing.
+		const scale = Math.sqrt(this.targetTool.getThickness()) * 2;
 		const color = this.targetTool.getColor();
 
 		// Draw a pen-like shape
