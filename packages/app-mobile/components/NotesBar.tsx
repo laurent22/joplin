@@ -9,6 +9,7 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
+import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
 
 interface Props {
     themeId: string;
@@ -19,9 +20,13 @@ interface Props {
 	dispatch: any;
 	selectedNoteId: string;
 	toggleNotesBar: ()=> void;
+	settings: any;
 }
 
 function NotesBarComponent(props: Props) {
+
+	const [notes, setNotes] = React.useState<any[]>(props.items);
+	const [query, setQuery] = React.useState<string>('');
 
 	const themeId = props.themeId;
 	const theme = themeStyle(themeId);
@@ -171,10 +176,55 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
+	const updateNotes = async () => {
+		let notes = [];
+
+		if (query) {
+			if (props.settings['db.ftsEnabled']) {
+				notes = await SearchEngineUtils.notesForQuery(query, true);
+			} else {
+				const p = query.split(' ');
+				const temp = [];
+				for (let i = 0; i < p.length; i++) {
+					const t = p[i].trim();
+					if (!t) continue;
+					temp.push(t);
+				}
+
+				notes = await Note.previews(null, {
+					anywherePattern: `*${temp.join('*')}*`,
+				});
+			}
+		}
+
+		setNotes(notes);
+	};
+
+	const handleQuerySubmit = async () => {
+		if (!query) {
+			setNotes(props.items);
+			return;
+		}
+
+		const searchQuery = query.trim();
+
+		if (searchQuery === '') {
+			setNotes(props.items);
+			return;
+		}
+
+		props.dispatch({
+			type: 'SEARCH_QUERY',
+			query: query,
+		});
+
+		await updateNotes();
+	};
+
 	const searchInputComp = (
 		<View style={[styles().horizontalFlex, styles().searchInput]}>
 			<Icon name='search' style={[styles().top, styles().searchIcon]}/>
-			<TextInput style={styles().nativeInput} placeholder='Search' />
+			<TextInput style={styles().nativeInput} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} />
 		</View>
 	);
 
@@ -193,7 +243,7 @@ function NotesBarComponent(props: Props) {
 
 	const NotesBarListComp = (
 		<FlatList
-			data={props.items}
+			data={notes}
 			renderItem={({ item }: { item: any }) => {
 				if (item.is_todo) {
 					return <NotesBarListItem note={item} todoCheckbox_change={props.todoCheckbox_change} />;
@@ -215,7 +265,7 @@ function NotesBarComponent(props: Props) {
 	);
 
 	React.useEffect(() => {
-		const selectedItemIndex = props.items.findIndex(item => item.id === props.selectedNoteId);
+		const selectedItemIndex = notes.findIndex(item => item.id === props.selectedNoteId);
 		flatListRef.scrollToIndex({ index: selectedItemIndex });
 	}, []);
 
@@ -235,9 +285,8 @@ const NotesBar = connect((state: State) => {
 		activeFolderId: state.settings.activeFolderId,
 		selectedFolderId: state.selectedFolderId,
 		selectedNoteId: state.selectedNoteIds[0],
+		settings: state.settings,
 	};
 })(NotesBarComponent);
 
 export default NotesBar;
-
-
