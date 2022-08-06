@@ -924,7 +924,7 @@ msgstr "생성됨: %s"
 msgid "Creates a new note."
 msgstr "새 노트를 만듭니다."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "새 노트북을 만듭니다."
 

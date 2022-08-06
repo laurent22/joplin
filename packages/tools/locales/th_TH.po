@@ -927,7 +927,7 @@ msgstr "สร้างเมื่อ: %s"
 msgid "Creates a new note."
 msgstr "สร้างบันทึกใหม่"
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "สร้างสมุดบันทึกใหม่"
 

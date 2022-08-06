@@ -937,7 +937,7 @@ msgstr "Criado: %s"
 msgid "Creates a new note."
 msgstr "Cria uma nova nota."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "Cria um novo caderno."
 

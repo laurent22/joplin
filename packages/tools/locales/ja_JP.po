@@ -918,7 +918,7 @@ msgstr "作成しました：%s"
 msgid "Creates a new note."
 msgstr "あたらしいノートを作成します。"
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "あたらしいノートブックを作成します。"
 

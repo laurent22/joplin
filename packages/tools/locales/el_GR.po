@@ -936,7 +936,7 @@ msgstr "Δημιουργήθηκε: %s"
 msgid "Creates a new note."
 msgstr "Δημιουργεί μία νέα σημείωση."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "Δημιουργεί ένα νέο σημειωματάριο."
 

@@ -919,7 +919,7 @@ msgstr "الإنشاء في: %s"
 msgid "Creates a new note."
 msgstr "ينشئ ملاحظة جديدة."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "ينشئ دفتر ملاحظات جديد."
 

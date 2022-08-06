@@ -926,7 +926,7 @@ msgstr "Gecreëerd op: %s"
 msgid "Creates a new note."
 msgstr "Creëert een nieuwe notitie."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:12
 msgid "Creates a new notebook."
 msgstr "Creëert een nieuw notitieboek."
 
