@@ -122,6 +122,7 @@ export default class StrokeBuilder {
 		this.lastExitingVec = Vec2.ofXY(
 			this.currentCurve.points[2]
 		).minus(Vec2.ofXY(this.currentCurve.points[1]));
+		console.assert(this.lastExitingVec.magnitude() != 0);
 
 		// Use the last two points to start a new curve (the last point isn't used
 		// in the current curve and we want connected curves to share end points)
@@ -139,9 +140,10 @@ export default class StrokeBuilder {
 		endVec = endVec.times(this.curveEndWidth / 2);
 
 		if (isNaN(startVec.magnitude())) {
+			// TODO: This can happen when events are too close together. Find out why and
+			// 		 fix.
 			console.error('startVec is NaN', startVec, endVec, this.currentCurve);
-			console.error('startWidth:', this.curveStartWidth, 'endW:', this.curveEndWidth);
-			throw new Error('ERR');
+			startVec = endVec;
 		}
 
 		const startPt = Vec2.ofXY(this.currentCurve.get(0));
@@ -231,6 +233,7 @@ export default class StrokeBuilder {
 				p1.xy, p2.xy, p3.xy
 			);
 			this.curveStartWidth = lastPoint.width / 2;
+			console.assert(!isNaN(p1.magnitude()) && !isNaN(p2.magnitude()) && !isNaN(p3.magnitude()), 'Expected !NaN');
 		}
 
 		let enteringVec = this.lastExitingVec;
@@ -253,12 +256,16 @@ export default class StrokeBuilder {
 		const maxControlPointDist = maxRelativeLength * startEndDist;
 
 		// Exit in cases where we would divide by zero
-		if (maxControlPointDist === 0 || exitingVec.magnitude() === 0) {
+		if (maxControlPointDist === 0 || exitingVec.magnitude() === 0 || isNaN(exitingVec.magnitude())) {
 			return;
 		}
 
+		console.assert(!isNaN(enteringVec.magnitude()));
+
 		enteringVec = enteringVec.normalized();
 		exitingVec = exitingVec.normalized();
+
+		console.assert(!isNaN(enteringVec.magnitude()));
 
 		const lineFromStart = new LineSegment2(
 			segmentStart,
@@ -280,7 +287,7 @@ export default class StrokeBuilder {
 			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 3));
 		}
 
-		if (isNaN(controlPoint.magnitude())) {
+		if (isNaN(controlPoint.magnitude()) || isNaN(segmentStart.magnitude())) {
 			console.error('controlPoint is NaN', intersection, 'Start:', segmentStart, 'End:', segmentEnd, 'in:', enteringVec, 'out:', exitingVec);
 		}
 
