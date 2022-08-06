@@ -1,13 +1,13 @@
-import Command from "../commands/Command";
-import { InputEvtType, InputEvt, } from "../types";
-import ImageEditor from "../editor";
-import BaseTool from "./BaseTool";
-import PanZoom, { PanZoomMode } from "./PanZoom";
-import Pen from "./Pen";
-import ToolEnabledGroup from "./ToolEnabledGroup";
-import Eraser from "./Eraser";
-import SelectionTool from "./SelectionTool";
-import Color4 from "../Color4";
+import Command from '../commands/Command';
+import { InputEvtType, InputEvt } from '../types';
+import ImageEditor from '../editor';
+import BaseTool from './BaseTool';
+import PanZoom, { PanZoomMode } from './PanZoom';
+import Pen from './Pen';
+import ToolEnabledGroup from './ToolEnabledGroup';
+import Eraser from './Eraser';
+import SelectionTool from './SelectionTool';
+import Color4 from '../Color4';
 
 
 
@@ -39,8 +39,8 @@ export default class ToolController {
 			primaryPenTool,
 			new Pen(editor, Color4.clay, 8),
 
-			// Highlighter-like pen with width=32
-			new Pen(editor, Color4.ofRGBA(1, 1, 0, 0.5), 32),
+			// Highlighter-like pen with width=64
+			new Pen(editor, Color4.ofRGBA(1, 1, 0, 0.5), 64),
 		];
 		this.tools = [
 			touchPanZoom,
@@ -87,6 +87,8 @@ export default class ToolController {
 				}
 			}
 		} else if (this.activeTool !== null) {
+			let allCasesHandledGuard: never;
+
 			switch (event.kind) {
 			case InputEvtType.PointerMoveEvt:
 				this.activeTool.onPointerMove(event);
@@ -96,8 +98,8 @@ export default class ToolController {
 				this.activeTool = null;
 				break;
 			default:
-				const _allCasesHandledGuard: never = event;
-				return _allCasesHandledGuard;
+				allCasesHandledGuard = event;
+				return allCasesHandledGuard;
 			}
 			handled = true;
 		} else {
@@ -128,11 +130,11 @@ export default class ToolController {
 	public static setToolEnabled(kind: ToolType, enabled: boolean): Command {
 		return new class implements Command {
 			private wasEnabled: boolean|null = null;
-			apply(editor: ImageEditor): void {
+			public apply(editor: ImageEditor): void {
 				this.wasEnabled = editor.toolController.isToolEnabled(kind);
 				editor.toolController.#setToolEnabled(kind, enabled);
 			}
-			unapply(editor: ImageEditor): void {
+			public unapply(editor: ImageEditor): void {
 				// Can't unapply if not applied before
 				if (this.wasEnabled !== null) {
 					editor.toolController.#setToolEnabled(kind, this.wasEnabled);

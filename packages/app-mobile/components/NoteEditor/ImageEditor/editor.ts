@@ -2,7 +2,7 @@
 import EditorImage from './EditorImage';
 import ToolController from './tools/ToolController';
 import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorNotifier, EditorEventType } from './types';
-import Command from "./commands/Command";
+import Command from './commands/Command';
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
 import EventDispatcher from '@joplin/lib/EventDispatcher';
@@ -11,6 +11,8 @@ import Vec3 from './geometry/Vec3';
 import HTMLToolbar from './toolbar/HTMLToolbar';
 import { RenderablePathSpec } from './rendering/AbstractRenderer';
 import Display, { RenderingMode } from './Display';
+import SVGRenderer from './rendering/SVGRenderer';
+import Color4 from './Color4';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
@@ -20,6 +22,9 @@ export class ImageEditor {
 	public history: UndoRedoHistory;
 	public display: Display;
 	public image: EditorImage;
+
+	// Viewport for the exported/imported image
+	private importExportViewport: Viewport;
 
 	public viewport: Viewport;
 	public toolController: ToolController;
@@ -35,6 +40,7 @@ export class ImageEditor {
 		this.renderingRegion.className = 'imageEditorRenderArea';
 
 		this.notifier = new EventDispatcher();
+		this.importExportViewport = new Viewport(this.notifier);
 		this.viewport = new Viewport(this.notifier);
 		this.display = new Display(this, renderingMode, this.renderingRegion);
 		this.image = new EditorImage();
@@ -43,6 +49,9 @@ export class ImageEditor {
 
 		new HTMLToolbar(this, this.container);
 		parent.appendChild(this.container);
+
+		// Default to a 1000x1500 image
+		this.importExportViewport.updateScreenSize(Vec2.of(1000, 1500));
 
 		this.viewport.updateScreenSize(
 			Vec2.of(this.display.width, this.display.height)
@@ -179,7 +188,7 @@ export class ImageEditor {
 				kind: EditorEventType.DisplayResized,
 				newSize: Vec2.of(
 					this.display.width,
-					this.display.height,
+					this.display.height
 				),
 			});
 			this.viewport.updateScreenSize(
@@ -207,9 +216,18 @@ export class ImageEditor {
 
 	public rerender() {
 		this.display.startRerender();
-		this.image.render(
-			this.display.getDryInkRenderer(), this.viewport
+
+		// Draw a rectangle around the region that will be visible on save
+		const renderer = this.display.getDryInkRenderer();
+		const exportRectFill = { color: Color4.fromHex('#44444455') };
+		const exportRectStrokeWidth = 12;
+		renderer.drawRect(
+			this.importExportViewport.visibleRect,
+			exportRectStrokeWidth,
+			exportRectFill
 		);
+
+		this.image.render(renderer, this.viewport);
 	}
 
 	public drawWetInk(...path: RenderablePathSpec[]) {
@@ -240,9 +258,21 @@ export class ImageEditor {
 	}
 
 	public toSVG(): SVGElement {
-		// TODO
-		throw new Error('TODO: Implement');
-		return null;
+		const viewport = this.importExportViewport;
+		const result = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		const renderer = new SVGRenderer(result, viewport);
+
+		// Render **all** elements.
+		this.image.renderAll(renderer);
+
+		// Just show the main region
+		const rect = viewport.visibleRect;
+		result.setAttribute('viewBox', `${rect.x} ${rect.y} ${rect.w} ${rect.h}`);
+		result.setAttribute('width', `${rect.w}`);
+		result.setAttribute('height', `${rect.w}`);
+
+
+		return result;
 	}
 }
 

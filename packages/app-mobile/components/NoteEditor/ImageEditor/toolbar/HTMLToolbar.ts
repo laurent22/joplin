@@ -1,5 +1,5 @@
 import ImageEditor from '../editor';
-import ToolController, { ToolType } from '../tools/ToolController';
+import { ToolType } from '../tools/ToolController';
 import { EditorEventType } from '../types';
 
 import './toolbar.css';
@@ -9,11 +9,7 @@ import Color4 from '../Color4';
 import Pen from '../tools/Pen';
 import Eraser from '../tools/Eraser';
 import BaseTool from '../tools/BaseTool';
-
-interface HtmlToolButton {
-	onToolEnabled(): void;
-	onToolDisabled(): void;
-}
+import SelectionTool from '../tools/SelectionTool';
 
 // WidgetBuilder
 //  → build()
@@ -22,14 +18,14 @@ interface HtmlToolButton {
 
 const toolbarCSSPrefix = 'toolbar-';
 abstract class ToolbarWidget {
-	private readonly container: HTMLElement;
+	protected readonly container: HTMLElement;
 	private button: HTMLElement;
 	private icon: Element;
 	private dropdownContainer: HTMLElement;
 	private dropdownIcon: Element;
 	private label: HTMLLabelElement;
 
-	public constructor(editor: ImageEditor, targetTool: BaseTool) {
+	public constructor(editor: ImageEditor, protected targetTool: BaseTool) {
 		this.container = document.createElement('div');
 		this.container.classList.add(`${toolbarCSSPrefix}toolContainer`);
 		this.dropdownContainer = document.createElement('div');
@@ -64,6 +60,7 @@ abstract class ToolbarWidget {
 
 			if (toolEvt.tool === targetTool) {
 				this.updateSelected(false);
+				this.setDropdownVisible(false);
 			}
 		});
 	}
@@ -75,15 +72,19 @@ abstract class ToolbarWidget {
 	// Returns true if such a menu should be created, false otherwise.
 	protected abstract fillDropdown(dropdown: HTMLElement): boolean;
 
-	// Returns true if this' dropdown should be visible.
-	protected abstract handleClick(): void;
+	protected handleClick() {
+		this.targetTool.setEnabled(!this.targetTool.isEnabled());
+	}
 
 	// Adds this to [parent]. This can only be called once for each ToolbarWidget.
 	public addTo(parent: HTMLElement) {
 		this.label.innerText = this.getTitle();
 
-		this.icon = this.createIcon();
-		this.icon.classList.add(`${toolbarCSSPrefix}icon`);
+		this.icon = null;
+		this.updateIcon();
+
+		this.updateSelected(this.targetTool.isEnabled());
+
 		this.button.replaceChildren(this.icon, this.label);
 		this.container.appendChild(this.button);
 
@@ -101,6 +102,7 @@ abstract class ToolbarWidget {
 		const newIcon = this.createIcon();
 		this.icon?.replaceWith(newIcon);
 		this.icon = newIcon;
+		this.icon.classList.add(`${toolbarCSSPrefix}icon`);
 	}
 
 	protected updateSelected(active: boolean) {
@@ -139,10 +141,6 @@ abstract class ToolbarWidget {
 }
 
 class EraserWidget extends ToolbarWidget {
-	public constructor(editor: ImageEditor, private targetTool: Eraser) {
-		super(editor, targetTool);
-	}
-
 	protected getTitle(): string {
 		return 'Eraser'; // TODO: Localize
 	}
@@ -151,7 +149,7 @@ class EraserWidget extends ToolbarWidget {
 			'http://www.w3.org/2000/svg', 'svg'
 		);
 
-		// Draw a pen-like shape
+		// Draw an eraser-like shape
 		icon.innerHTML = `
 		<g>
 			<rect x=10 y=50 width=80 height=30 rx=10 fill='pink' />
@@ -167,17 +165,74 @@ class EraserWidget extends ToolbarWidget {
 		// No dropdown associated with the eraser
 		return false;
 	}
+}
 
-	protected handleClick(): void {
-		this.targetTool.setEnabled(!this.targetTool.isEnabled());
+class SelectionWidget extends ToolbarWidget {
+	protected getTitle(): string {
+		return 'Select'; // TODO: Localize
+	}
+
+	protected createIcon(): Element {
+		const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+		// Draw a cursor-like shape
+		icon.innerHTML = `
+		<g>
+			<rect x=10 y=10 width=70 height=70 fill='pink' stroke='black'/>
+			<rect x=75 y=75 width=10 height=10 fill='white' stroke='black'/>
+		</g>
+		`;
+		icon.setAttribute('viewBox', '0 0 100 100');
+
+		return icon;
+	}
+	protected fillDropdown(_dropdown: HTMLElement): boolean {
+		// No dropdown
+		return false;
+	}
+}
+
+class TouchDrawingWidget extends ToolbarWidget {
+	protected getTitle(): string {
+		return 'Touch Drawing'; // TODO: Localize
+	}
+
+	protected createIcon(): Element {
+		const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+		// Draw a cursor-like shape
+		icon.innerHTML = `
+		<g>
+			<path d='M11,-30 Q0,10 20,20 Q40,20 40,-30 Z' fill='blue'/>
+			<path d='
+				M0,90 L0,50 Q5,40 10,50
+				L10,20 Q20,15 30,20
+				L30,50 Q50,40 80,50
+				L80,90 L10,90 Z' fill='black' stroke='black' />
+		</g>
+		`;
+		icon.setAttribute('viewBox', '-10 -30 100 100');
+
+		return icon;
+	}
+	protected fillDropdown(_dropdown: HTMLElement): boolean {
+		// No dropdown
+		return false;
+	}
+	protected updateSelected(active: boolean) {
+		if (active) {
+			this.container.classList.remove('selected');
+		} else {
+			this.container.classList.add('selected');
+		}
 	}
 }
 
 class PenWidget extends ToolbarWidget {
 	private updateInputs: ()=> void = () => {};
 
-	public constructor(private editor: ImageEditor, private targetTool: Pen) {
-		super(editor, targetTool);
+	public constructor(private editor: ImageEditor, private tool: Pen) {
+		super(editor, tool);
 
 		this.editor.notifier.on(EditorEventType.ToolUpdated, toolEvt => {
 			if (toolEvt.kind !== EditorEventType.ToolUpdated) {
@@ -185,13 +240,11 @@ class PenWidget extends ToolbarWidget {
 			}
 
 			// The button icon may depend on tool properties.
-			if (toolEvt.tool === this.targetTool) {
+			if (toolEvt.tool === this.tool) {
 				this.updateIcon();
 				this.updateInputs();
 			}
 		});
-
-		this.updateSelected(this.targetTool.isEnabled());
 	}
 
 	protected getTitle(): string {
@@ -206,18 +259,42 @@ class PenWidget extends ToolbarWidget {
 		);
 
 		// Use a square-root scale to prevent the pen's tip from overflowing.
-		const scale = Math.sqrt(this.targetTool.getThickness()) * 2;
-		const color = this.targetTool.getColor();
+		const scale = Math.round(Math.sqrt(this.tool.getThickness()) * 2);
+		const color = this.tool.getColor();
 
 		// Draw a pen-like shape
+		const primaryStrokeTipPath = `M14,63 L${50 - scale},95 L${50 + scale},90 L88,60 Z`;
+		const backgroundStrokeTipPath = `M14,63 L${50 - scale},85 L${50 + scale},83 L88,60 Z`;
 		icon.innerHTML = `
+		<defs>
+			<pattern
+				id='checkerboard'
+				viewBox='0,0,10,10'
+				width='20%'
+				height='20%'
+				patternUnits='userSpaceOnUse'
+			>
+				<rect x=0 y=0 width=10 height=10 fill='white'/>
+				<rect x=0 y=0 width=5 height=5 fill='gray'/>
+				<rect x=5 y=5 width=5 height=5 fill='gray'/>
+			</pattern>
+		</defs>
 		<g>
+			<!-- Pen grip -->
 			<path
 				d='M10,10 L90,10 L90,60 L${50 + scale},80 L${50 - scale},80 L10,60 Z'
 				fill='black' stroke='black'/>
+		</g>
+		<g>
+			<!-- Checkerboard background for slightly transparent pens -->
+			<path d='${backgroundStrokeTipPath}' fill='url(#checkerboard)'/>
+
+			<!-- Actual pen tip -->
 			<path
-				d='M14,63 L${50 - scale},85 L${50 + scale},83 L86,60 Z'
-				fill='${color.toHexString()}'/>
+				d='${primaryStrokeTipPath}'
+				fill='${color.toHexString()}'
+				stroke='${color.toHexString()}'
+			/>
 		</g>
 		`;
 		icon.setAttribute('viewBox', '0 0 100 100');
@@ -244,7 +321,7 @@ class PenWidget extends ToolbarWidget {
 		thicknessInput.max = '20';
 		thicknessInput.step = '1';
 		thicknessInput.oninput = () => {
-			this.targetTool.setThickness(parseFloat(thicknessInput.value) ** 2);
+			this.tool.setThickness(parseFloat(thicknessInput.value) ** 2);
 		};
 		thicknessRow.appendChild(thicknessLabel);
 		thicknessRow.appendChild(thicknessInput);
@@ -260,15 +337,15 @@ class PenWidget extends ToolbarWidget {
 		colorInput.className = 'coloris_input';
 		colorInput.type = 'button';
 		colorInput.oninput = () => {
-			this.targetTool.setColor(Color4.fromHex(colorInput.value));
+			this.tool.setColor(Color4.fromHex(colorInput.value));
 		};
 
 		colorRow.appendChild(colorLabel);
 		colorRow.appendChild(colorInput);
 
 		this.updateInputs = () => {
-			colorInput.value = this.targetTool.getColor().toHexString();
-			thicknessInput.value = Math.sqrt(this.targetTool.getThickness()).toString();
+			colorInput.value = this.tool.getColor().toHexString();
+			thicknessInput.value = Math.sqrt(this.tool.getThickness()).toString();
 		};
 		this.updateInputs();
 
@@ -278,8 +355,8 @@ class PenWidget extends ToolbarWidget {
 	}
 
 	protected handleClick(): void {
-		if (!this.targetTool.isEnabled()) {
-			this.targetTool.setEnabled(true);
+		if (!this.tool.isEnabled()) {
+			this.tool.setEnabled(true);
 		} else {
 			this.setDropdownVisible(!this.isDropdownVisible());
 		}
@@ -291,12 +368,9 @@ class PenWidget extends ToolbarWidget {
  * debugging purposes — when the editor is running directly in a browser.
  */
 export default class HTMLToolbar {
-	private toolButtons: Partial<Record<ToolType, HtmlToolButton[]>>;
 	private container: HTMLElement;
 
 	public constructor(private editor: ImageEditor, parent: HTMLElement) {
-		this.toolButtons = {};
-
 		this.container = document.createElement('div');
 		this.container.classList.add(`${toolbarCSSPrefix}root`);
 		this.addElements();
@@ -321,39 +395,6 @@ export default class HTMLToolbar {
 				Color4.white.toHexString(),
 			],
 		});
-	}
-
-	private addToolButton(toolType: ToolType, toolName: string) {
-		const button = document.createElement('button');
-		button.innerText = `${toolName}`;
-		button.classList.add('toolButton');
-		button.onclick = () => {
-			const toolController = this.editor.toolController;
-			const isEnabled = toolController.isToolEnabled(toolType);
-			const cmd = ToolController.setToolEnabled(toolType, !isEnabled);
-			cmd.apply(this.editor);
-		};
-
-		const onToolEnabled = () => {
-			button.classList.remove('toolDisabled');
-		};
-
-		const onToolDisabled = () => {
-			button.classList.add('toolDisabled');
-		};
-
-		if (this.editor.toolController.isToolEnabled(toolType)) {
-			onToolEnabled();
-		} else {
-			onToolDisabled();
-		}
-
-		this.toolButtons[toolType] ??= [];
-		this.toolButtons[toolType].push({
-			onToolEnabled,
-			onToolDisabled,
-		});
-		this.container.appendChild(button);
 	}
 
 	private addActionButton(text: string, command: ()=> void) {
@@ -383,13 +424,49 @@ export default class HTMLToolbar {
 			(new EraserWidget(this.editor, tool)).addTo(this.container);
 		}
 
-		this.addToolButton(ToolType.Selection, 'Select');
-		this.addToolButton(ToolType.TouchPanZoom, 'Touch Panning');
+		for (const tool of toolController.getMatchingTools(ToolType.Selection)) {
+			if (!(tool instanceof SelectionTool)) {
+				throw new Error('All SelectionTools must have kind === ToolType.Selection');
+			}
+
+			(new SelectionWidget(this.editor, tool)).addTo(this.container);
+		}
+
+		for (const tool of toolController.getMatchingTools(ToolType.TouchPanZoom)) {
+			(new TouchDrawingWidget(this.editor, tool)).addTo(this.container);
+		}
+
 		this.addActionButton('Undo', () => {
 			this.editor.history.undo();
 		});
 		this.addActionButton('Redo', () => {
 			this.editor.history.redo();
+		});
+		this.addActionButton('Save', () => {
+			// TODO: Connect to Joplin here
+			const popup = window.open();
+			const img = this.editor.toSVG();
+
+			popup.document.open();
+			popup.document.write(`
+				<!DOCTYPE html>
+				<html>
+				<body>
+					<style>
+						svg {
+							width: 500px;
+							border: 1px solid gray;
+						}
+					</style>
+					<p>Save/load isn't fully implemented. For now, save the following text as an SVG:</p>
+					<textarea id='svg-text'>${img.outerHTML}</textarea><br/>
+					${img.outerHTML}
+				</body>
+				</html>`
+			);
+			popup.document.close();
+
+			throw new Error('TO-DO: Save/communicate with Joplin');
 		});
 	}
 }

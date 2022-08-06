@@ -4,29 +4,34 @@ import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
 import AbstractRenderer, { FillStyle } from './AbstractRenderer';
 
+const svgNameSpace = 'http://www.w3.org/2000/svg';
 export default class SVGRenderer extends AbstractRenderer {
 	private currentPath: PathCommand[]|null = null;
 	private pathStart: Point2|null;
+	private mainGroup: SVGGElement;
 
 	public constructor(private elem: SVGSVGElement, viewport: Viewport) {
 		super(viewport);
+		this.clear();
 	}
 	public displaySize(): Vec2 {
 		return Vec2.of(this.elem.clientWidth, this.elem.clientHeight);
 	}
 	public clear(): void {
+		this.mainGroup = document.createElementNS(svgNameSpace, 'g');
+
 		// Remove all children
-		this.elem.replaceChildren();
+		this.elem.replaceChildren(this.mainGroup);
 	}
 	protected beginPath(startPoint: Point2): void {
 		this.currentPath = [];
 		this.pathStart = this.viewport.canvasToScreen(startPoint);
 	}
 	protected endPath(style: FillStyle): void {
-		const pathElem = document.createElement('path');
+		const pathElem = document.createElementNS(svgNameSpace, 'path');
 		pathElem.setAttribute('d', new Path(this.pathStart, this.currentPath).toString());
 		pathElem.setAttribute('fill', style.color.toHexString());
-		this.elem.appendChild(pathElem);
+		this.mainGroup.appendChild(pathElem);
 
 		this.currentPath = null;
 	}
@@ -64,11 +69,11 @@ export default class SVGRenderer extends AbstractRenderer {
 	}
 	public drawPoints(...points: Point2[]): void {
 		points.map(point => {
-			const elem = document.createElement('circle');
+			const elem = document.createElementNS(svgNameSpace, 'circle');
 			elem.setAttribute('cx', `${point.x}`);
 			elem.setAttribute('cy', `${point.y}`);
 			elem.setAttribute('r', '15');
-			this.elem.appendChild(elem);
+			this.mainGroup.appendChild(elem);
 		});
 	}
 }

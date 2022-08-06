@@ -43,9 +43,9 @@ export default class Pen extends BaseTool {
 
 	public onPointerDown({ current, allPointers }: PointerEvt): boolean {
 		if (allPointers.length === 1 || current.device === PointerDevice.Pen) {
-			// Don't smooth if input is more than ± 25 pixels from the true curve
+			// Don't smooth if input is more than ± 7 pixels from the true curve
 			const canvasTransform = this.editor.viewport.screenToCanvasTransform;
-			const maxSmoothingDist = canvasTransform.transformVec3(Vec2.unitX).magnitude() * 25;
+			const maxSmoothingDist = canvasTransform.transformVec3(Vec2.unitX).magnitude() * 7;
 
 			this.builder = new StrokeBuilder(this.getStrokePoint(current), maxSmoothingDist);
 			return true;

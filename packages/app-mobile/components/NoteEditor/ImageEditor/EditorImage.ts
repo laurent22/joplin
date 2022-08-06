@@ -1,6 +1,6 @@
 import ImageEditor from './editor';
 import AbstractRenderer from './rendering/AbstractRenderer';
-import Command from "./commands/Command";
+import Command from './commands/Command';
 import Viewport from './Viewport';
 import AbstractComponent from './components/AbstractComponent';
 import Rect2 from './geometry/Rect2';
@@ -32,12 +32,18 @@ export default class EditorImage {
 		return null;
 	}
 
-	public render(renderer: AbstractRenderer, viewport: Viewport) {
+	public render(renderer: AbstractRenderer, viewport: Viewport, minFraction: number = 0.001) {
 		// Don't render components that are < 0.1% of the viewport.
-		const minFraction = 0.001;
 		const leaves = this.root.getLeavesInRegion(viewport.visibleRect, minFraction);
 		for (const leaf of leaves) {
 			leaf.getContent().render(renderer, viewport.visibleRect);
+		}
+	}
+
+	// Renders all nodes, even ones not within the viewport
+	public renderAll(renderer: AbstractRenderer) {
+		for (const leaf of this.root.getLeaves()) {
+			leaf.getContent().render(renderer, leaf.getBBox());
 		}
 	}
 
@@ -52,7 +58,7 @@ export default class EditorImage {
 		// the first time this command is applied (the surfaces are joined instead).
 		public constructor(
 			private readonly element: AbstractComponent,
-			private applyByFlattening: boolean = false,
+			private applyByFlattening: boolean = false
 		) {
 		}
 
@@ -129,6 +135,21 @@ export class ImageNode {
 		return result;
 	}
 
+	// Returns a list of leaves with this as an ancestor.
+	// Like getLeavesInRegion, but does not check whether ancestors are in a given rectangle
+	public getLeaves(): ImageNode[] {
+		if (this.content) {
+			return [this];
+		}
+
+		const result: ImageNode[] = [];
+		for (const child of this.children) {
+			result.push(...child.getLeaves());
+		}
+
+		return result;
+	}
+
 	public addLeaf(leaf: AbstractComponent): ImageNode {
 		if (this.content === null && this.children.length === 0) {
 			this.content = leaf;
@@ -150,72 +171,72 @@ export class ImageNode {
 		return this.bbox;
 	}
 
-	/*private changeParent(newParent: ImageNode) {
-		if (this.parent) {
-			this.parent.children = this.parent.children.filter(child => child !== this);
-			this.parent.recomputeBBox();
-		}
-		this.parent = newParent;
-		newParent.recomputeBBox();
-	}
-
-	// Returns an index at which this can be broken into two clusters
-	private getClusterBreakIdx(): number {
-		this.children.sort((a, b) => a.bbox.topLeft.x - b.bbox.topLeft.x);
-
-		let leftMax = -Infinity;
-		let rightMin = Infinity;
-		let leftIdx = 0;
-		let rightIdx = this.children.length - 1;
-		while (leftMax < rightMin && leftIdx < rightIdx) {
-			let left = this.children[leftIdx];
-			let right = this.children[rightIdx];
-			leftMax = Math.max(left.bbox.bottomRight.x);
-			rightMin = Math.min(right.bbox.topLeft.x);
-
-			if (leftMax < rightMin) {
-				leftIdx ++;
-			} else {
-				leftIdx = Math.max(0, leftIdx - 1);
-				rightIdx --;
-			}
-		}
-		return leftIdx;
-	}
-
-	// Removes outliers from this' children and adds them to the given target
-	private removeOutliers(target: ImageNode) {
-		if (this.content !== null) {
-			return;
-		}
-
-		const breakIdx = this.getClusterBreakIdx();
-		let children = this.children;
-		for (let i = 0; i <= breakIdx; i++) {
-			children[i].changeParent(target);
-		}
-
-		this.recomputeBBox();
-	}
-
-	private mergeOverlap() {
-		if (this.content != null) {
-			return;
-		}
-
-		const breakIdx = this.getClusterBreakIdx();
-		if (breakIdx >= this.children.length) {
-			return;
-		}
-
-		const newNode = new ImageNode(this);
-		this.children.push(newNode);
-
-		let children = this.children;
-		for (let i = 0; i <= breakIdx; i++) {
-			children[i].changeParent(newNode);
-		}
-	}*/
+	// private changeParent(newParent: ImageNode) {
+	// if (this.parent) {
+	// this.parent.children = this.parent.children.filter(child => child !== this);
+	// this.parent.recomputeBBox();
+	// }
+	// this.parent = newParent;
+	// newParent.recomputeBBox();
+	// }
+	//
+	// // Returns an index at which this can be broken into two clusters
+	// private getClusterBreakIdx(): number {
+	// this.children.sort((a, b) => a.bbox.topLeft.x - b.bbox.topLeft.x);
+	//
+	// let leftMax = -Infinity;
+	// let rightMin = Infinity;
+	// let leftIdx = 0;
+	// let rightIdx = this.children.length - 1;
+	// while (leftMax < rightMin && leftIdx < rightIdx) {
+	// let left = this.children[leftIdx];
+	// let right = this.children[rightIdx];
+	// leftMax = Math.max(left.bbox.bottomRight.x);
+	// rightMin = Math.min(right.bbox.topLeft.x);
+	//
+	// if (leftMax < rightMin) {
+	// leftIdx ++;
+	// } else {
+	// leftIdx = Math.max(0, leftIdx - 1);
+	// rightIdx --;
+	// }
+	// }
+	// return leftIdx;
+	// }
+	//
+	// // Removes outliers from this' children and adds them to the given target
+	// private removeOutliers(target: ImageNode) {
+	// if (this.content !== null) {
+	// return;
+	// }
+	//
+	// const breakIdx = this.getClusterBreakIdx();
+	// let children = this.children;
+	// for (let i = 0; i <= breakIdx; i++) {
+	// children[i].changeParent(target);
+	// }
+	//
+	// this.recomputeBBox();
+	// }
+	//
+	// private mergeOverlap() {
+	// if (this.content != null) {
+	// return;
+	// }
+	//
+	// const breakIdx = this.getClusterBreakIdx();
+	// if (breakIdx >= this.children.length) {
+	// return;
+	// }
+	//
+	// const newNode = new ImageNode(this);
+	// this.children.push(newNode);
+	//
+	// let children = this.children;
+	// for (let i = 0; i <= breakIdx; i++) {
+	// children[i].changeParent(newNode);
+	// }
+	// }
 
 	/** Ensure that this node doesn't have too many or too few children */
 	private rebalance() {
@@ -234,7 +255,7 @@ export class ImageNode {
 
 		// Group children
 		if (this.children.length > 4) {
-			//this.mergeOverlap();
+			// this.mergeOverlap();
 		}
 
 		// Can we reduce a child's maximum dimension by pulling children out?
@@ -249,7 +270,7 @@ export class ImageNode {
 						this.content = child.content;
 					} else {
 						// Find a good split
-						//child.removeOutliers(this);
+						// child.removeOutliers(this);
 					}
 				}
 			}
@@ -274,7 +295,7 @@ export class ImageNode {
 				centerOfMass = centerOfMass.plus(child.centerOfMass.times(child.totalMass));
 				totalMass += child.totalMass;
 			}
-			this.centerOfMass = centerOfMass.times(1/totalMass);
+			this.centerOfMass = centerOfMass.times(1 / totalMass);
 			this.totalMass = totalMass;
 		}
 	}

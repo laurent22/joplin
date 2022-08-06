@@ -58,9 +58,14 @@ describe('Rect2 tests', () => {
 		expect(new Rect2(-2, -2, 4, 4).containsRect(new Rect2(-1, 0, 10, 1))).toBe(false);
 	});
 
+	it('a rectangle should contain itself', () => {
+		const rect = new Rect2(1 / 3, 1 / 4, 1 / 5, 1 / 6);
+		expect(rect.containsRect(rect)).toBe(true);
+	});
+
 	it('empty rect should not contain a larger rect', () => {
 		expect(Rect2.empty.containsRect(new Rect2(-1, -1, 3, 3))).toBe(false);
-	})
+	});
 
 	it('Intersection testing', () => {
 		expect(new Rect2(-1, -1, 2, 2).intersects(Rect2.empty)).toBe(true);

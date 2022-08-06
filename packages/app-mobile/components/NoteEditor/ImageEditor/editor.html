@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 		<style>
 			canvas {
-				position: absolute;
+				position: fixed;
 				left: 0;
 				right: 0;
 				top: 0;
@@ -14,28 +14,19 @@
 				height: 100vh;
 				touch-action: none;
 			}
-
-			.toolbar {
-				position: fixed;
-				top: 0;
-				left: 0;
-			}
-
-			.toolbar .toolDisabled {
-				background-color: gray;
-			}
 		</style>
 	</head>
 	<body>
-		<p>
-			This page is intended for <b>local</b> debugging and development of
-			the image editor.
-		</p>
-		<p>
-			To use it, start a server (like <code>python</code>'s
-			<code>http.server</code> module) and open this page in a
-			browser.
-		</p>
+		<!--
+				This page is intended for <b>local</b> debugging and development of
+				the image editor.
+
+				To use it, start a server (like `python`'s
+				`http.server` module) and open this page in a
+				browser.
+
+				For example `cd /path/to/ImageEditor/folder ; python3 -m http.server`.
+		-->
 	</body>
 	<script>
 		//window.onerror = (evt, source) => {

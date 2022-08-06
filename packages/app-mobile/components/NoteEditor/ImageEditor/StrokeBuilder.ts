@@ -75,20 +75,40 @@ export default class StrokeBuilder {
 	private finalizeCurrentCurve(fillStyle: FillStyle) {
 		// Case where no points have been added
 		if (!this.currentCurve) {
-			const width = this.startPoint.width / 2;
+			const width = this.startPoint.width / 3;
 
 			// Draw a circle-ish shape around the start point
 			this.segments.push({
+				// Start on the right, cycle clockwise:
+				//    |
+				//  ----- ←
+				//    |
 				startPoint: this.startPoint.pos.plus(Vec2.of(width, 0)),
 				commands: [
 					{
 						kind: PathCommandType.QuadraticBezierTo,
-						controlPoint: this.startPoint.pos.plus(Vec2.of(0, -width)),
+						controlPoint: this.startPoint.pos.plus(Vec2.of(width, width)),
+
+						// Bottom of the circle
+						//    |
+						//  -----
+						//    |
+						//    ↑
+						endPoint: this.startPoint.pos.plus(Vec2.of(0, width)),
+					},
+					{
+						kind: PathCommandType.QuadraticBezierTo,
+						controlPoint: this.startPoint.pos.plus(Vec2.of(-width, width)),
 						endPoint: this.startPoint.pos.plus(Vec2.of(-width, 0)),
 					},
 					{
 						kind: PathCommandType.QuadraticBezierTo,
-						controlPoint: this.startPoint.pos.plus(Vec2.of(0, width)),
+						controlPoint: this.startPoint.pos.plus(Vec2.of(-width, -width)),
+						endPoint: this.startPoint.pos.plus(Vec2.of(0, -width)),
+					},
+					{
+						kind: PathCommandType.QuadraticBezierTo,
+						controlPoint: this.startPoint.pos.plus(Vec2.of(width, -width)),
 						endPoint: this.startPoint.pos.plus(Vec2.of(width, 0)),
 					},
 				],
@@ -276,7 +296,7 @@ export default class StrokeBuilder {
 					Vec2.ofXY(curve.project(point.xy));
 				const dist = proj.minus(point).magnitude();
 
-				if (dist > Math.min(this.curveStartWidth, this.curveEndWidth)
+				if (dist > Math.min(this.curveStartWidth, this.curveEndWidth) / 2
 						|| dist > this.maxFitAllowed) {
 					return false;
 				}

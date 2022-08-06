@@ -1,13 +1,16 @@
 
 :root {
     --primary-background-color: white;
+    --primary-background-color-transparent: rgba(255, 255, 255, 0.5);
     --secondary-background-color: #faf;
     --primary-foreground-color: black;
     --secondary-foreground-color: black;
 }
 
 .toolbar-root {
-    background-color: var(--primary-background-color);
+    background-color: var(--primary-background-color-transparent);
+    backdrop-filter: blur(6px);
+
     border: 1px solid gray;
     border-radius: 2px;
     flex-wrap: wrap;
@@ -33,18 +36,20 @@
     transition: background-color 0.25s ease;
     cursor: pointer;
 
-    overflow-x: hidden;
+    padding-left: 3px;
+    padding-right: 3px;
+
     min-width: 40px;
-    max-width: 60px;
+    max-width: 70px;
+    font-size: 11pt;
 
     height: min(20vh, 60px);
+    background-color: white;
 }
 
 .toolbar-button .toolbar-icon {
     flex-shrink: 1;
     min-width: 30px;
-    width: max-content;
-    overflow-y: visible;
 }
 
 .toolbar-toolContainer.selected .toolbar-button {

@@ -45,12 +45,12 @@ export default abstract class AbstractRenderer {
 				this.traceCubicBezierCurve(
 					transform.transformVec2(command.controlPoint1),
 					transform.transformVec2(command.controlPoint2),
-					transform.transformVec2(command.endPoint),
+					transform.transformVec2(command.endPoint)
 				);
 			} else if (command.kind === PathCommandType.QuadraticBezierTo) {
 				this.traceQuadraticBezierCurve(
 					transform.transformVec2(command.controlPoint),
-					transform.transformVec2(command.endPoint),
+					transform.transformVec2(command.endPoint)
 				);
 			}
 		}
@@ -58,11 +58,27 @@ export default abstract class AbstractRenderer {
 		this.endPath(fill);
 	}
 
-	// Debugging method
-	public drawDebugRect(rect: Rect2, color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.0, 0.1)): void {
-		const corners = rect.corners;
+	// Draw a rectangle. Boundary lines have width [lineWidth] and are filled with [lineFill]
+	public drawRect(rect: Rect2, lineWidth: number, lineFill: FillStyle): void {
 		const commands: PathCommand[] = [];
 
+		// Vector from the top left corner or bottom right corner to the edge of the
+		// stroked region.
+		const cornerToEdge = Vec2.of(lineWidth, lineWidth).times(0.5);
+		const innerRect = Rect2.fromCorners(
+			rect.topLeft.plus(cornerToEdge),
+			rect.bottomRight.minus(cornerToEdge)
+		);
+		const outerRect = Rect2.fromCorners(
+			rect.topLeft.minus(cornerToEdge),
+			rect.bottomRight.plus(cornerToEdge)
+		);
+
+		const corners = [
+			innerRect.corners[3],
+			...innerRect.corners,
+			...outerRect.corners.reverse(),
+		];
 		for (const corner of corners) {
 			commands.push({
 				kind: PathCommandType.LineTo,
@@ -71,9 +87,9 @@ export default abstract class AbstractRenderer {
 		}
 
 		this.drawPath({
-			startPoint: corners[0],
+			startPoint: outerRect.corners[3],
 			commands,
-			fill: { color },
+			fill: lineFill,
 		});
 	}
 
