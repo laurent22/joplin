@@ -22,6 +22,12 @@
 				background-color: #ddd;
 				border-radius: 4px;
 				padding: 14px;
+
+				font-family: sans-serif;
+			}
+
+			#editorOptions > ul > li {
+				border-bottom: 1px solid gray;
 			}
 
 			#logOutput {
@@ -34,6 +40,15 @@
 				left: 0;
 				right: 0;
 				bottom: 0;
+			}
+
+			#startButton {
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+
+				width: 100%;
+				font-weight: bold;
 			}
 		</style>
 	</head>
@@ -55,17 +70,17 @@
 			<ul>
 				<li>
 					<input type="checkbox" id="alertOnError"/><label for="alertOnError">
-						Display error messages.
+						Display error messages (useful for debugging on mobile devices).
 					</label>
 				</li>
 				<li>
-					<textarea id="initialData"></textarea><label for="initialData">
-						Load image from (paste the contents of an SVG here).
-						If empty, a blank image will be used.
-					</label>
+					<label for="initialData">
+						SVG image to load (paste the contents of a saved SVG here).
+						This can be empty.
+					</label><textarea id="initialData"></textarea>
 				</li>
 			</ul>
-			<button id="startButton">Start</button>
+			<button id="startButton">Start Editor</button>
 		</div>
 		<textarea id="logOutput">
 		</textarea>
