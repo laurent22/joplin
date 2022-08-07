@@ -79,6 +79,10 @@
 						This can be empty.
 					</label><textarea id="initialData"></textarea>
 				</li>
+				<li>
+					<label for="initialFile">Alternatively, select an SVG to upload:</label>
+					<input type="file" id="initialFile" accept='image/svg,image/svg+xml,text/plain'/>
+				</li>
 			</ul>
 			<button id="startButton">Start Editor</button>
 		</div>
@@ -118,14 +122,45 @@ If enabled, errors will be logged to this textarea.
 		(() => {
 			const showErrorsCheckbox = document.querySelector('#alertOnError');
 			const loadFromTextarea = document.querySelector('#initialData');
+			const fileInput = document.querySelector('#initialFile');
 			const startButton = document.querySelector('#startButton');
 			const optionsScreen = document.querySelector('#editorOptions');
 
-			const loadFromLastSaveText = 'Load from last save (if available)'
+			const loadFromLastSaveText = 'Load from last save (if available)';
+			const loadFromFileText = 'Load from selected file';
 			loadFromTextarea.value = loadFromLastSaveText;
 
+			// SVG source string
+			let sourceText = null;
+
+			// Clear the file input (don't autofill)
+			fileInput.value = null;
+
+			// Handle file uploads.
+			fileInput.onchange = () => {
+				loadFromTextarea.value = '...';
+				const files = fileInput.files;
+
+				if (files.length > 1) {
+					alert('Too many files!');
+					return;
+				}
+				if (files.length === 0) {
+					return;
+				}
+
+				const reader = new FileReader();
+				reader.onload = (progress => {
+					if (progress.target?.result) {
+						loadFromTextarea.value = loadFromFileText;
+						sourceText = progress.target.result;
+					}
+				});
+				reader.readAsText(files[0]);
+			};
+
 			startButton.onclick = () => {
-				const initialData = loadFromTextarea.value;
+				const textareaData = loadFromTextarea.value;
 				const showErrors = showErrorsCheckbox.checked;
 				optionsScreen.remove();
 
@@ -149,9 +184,24 @@ If enabled, errors will be logged to this textarea.
 						</head>
 						<body>
 							<style>
+								#previewRegion {
+									display: flex;
+									flex-direction: row;
+								}
+
 								svg {
-									width: 500px;
+									height: auto;
+									width: auto;
+									max-width: 500px;
+									max-height: 100vh;
+									flex-grow: 1;
 									border: 1px solid gray;
+								}
+
+								textarea {
+									flex-grow: 1;
+									flex-shrink: 1;
+									width: auto;
 								}
 							</style>
 							<p>
@@ -183,13 +233,35 @@ If enabled, errors will be logged to this textarea.
 						imagePreview.innerHTML = img.innerHTML;
 						imagePreview.setAttribute('viewBox', img.getAttribute('viewBox'));
 
-						messageContainer.innerText = 'Preview';
+						messageContainer.innerText = 'Preview: ';
 						svgTextContainer.value = imgHTML;
 
 						previewRegion.replaceChildren(
 							messageContainer, svgTextContainer, imagePreview
 						);
 					};
+
+					const downloadButton = popup.document.createElement('button');
+					downloadButton.innerText = 'Download';
+					downloadButton.onclick = () => {
+						const blob = new Blob([ imgHTML ], { type: 'image/svg' });
+						const objectURL = URL.createObjectURL(blob);
+	
+						const link = popup.document.createElement('a');
+						link.href = objectURL;
+						link.innerText = 'Download';
+						// Download as: (Ref: https://stackoverflow.com/a/52814195/17055750)
+						link.setAttribute('download', 'editor-save.svg');
+
+						downloadButton.replaceWith(link);
+						link.click();
+
+						// Release URL (see section on object URLs in
+						// https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications)
+						link.remove();
+						URL.revokeObjectURL(blob);
+					};
+					popup.document.body.appendChild(downloadButton);
 
 					let localStorageSaveStatus = 'Unable to save to localStorage. ';
 					if (window.localStorage) {
@@ -212,7 +284,7 @@ If enabled, errors will be logged to this textarea.
 					);
 				});
 
-				let sourceText = initialData;
+				sourceText ??= textareaData;
 				if (sourceText === loadFromLastSaveText) {
 					sourceText = window.localStorage?.getItem(lastSaveLocalStorageKey) ?? '';
 				}
