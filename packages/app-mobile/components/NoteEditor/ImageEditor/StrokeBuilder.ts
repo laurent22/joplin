@@ -6,6 +6,7 @@ import Rect2 from './geometry/Rect2';
 import { PathCommand, PathCommandType } from './geometry/Path';
 import LineSegment2 from './geometry/LineSegment2';
 import Stroke from './components/Stroke';
+import Vec3 from './geometry/Vec3';
 
 export interface StrokeDataPoint {
 	pos: Point2;
@@ -13,6 +14,13 @@ export interface StrokeDataPoint {
 	time: number;
 	color: Color4;
 }
+
+// Returns the base type of some type of point/number
+type PointDataType<T extends Point2|StrokeDataPoint|number> =
+	T extends Point2
+		? Point2
+	: T extends StrokeDataPoint
+		? StrokeDataPoint : number;
 
 export default class StrokeBuilder {
 	private segments: RenderablePathSpec[];
@@ -39,13 +47,13 @@ export default class StrokeBuilder {
 		private minFitAllowed: number,
 		private maxFitAllowed: number
 	) {
-		this.lastPoint = startPoint;
+		this.lastPoint = this.startPoint;
 		this.segments = [];
-		this.buffer = [startPoint.pos];
+		this.buffer = [this.startPoint.pos];
 		this.momentum = Vec2.zero;
 		this.currentCurve = null;
 
-		this.bbox = new Rect2(startPoint.pos.x, startPoint.pos.y, 0, 0);
+		this.bbox = new Rect2(this.startPoint.pos.x, this.startPoint.pos.y, 0, 0);
 	}
 
 	public getBBox(): Rect2 {
@@ -71,10 +79,41 @@ export default class StrokeBuilder {
 		);
 	}
 
+	// Rounds the given point based on min/max fitting.
+	private roundPoint<T extends Point2|StrokeDataPoint|number>(
+		point: T
+	): PointDataType<T>;
+
+	// The separate function type definition seems necessary here.
+	// See https://stackoverflow.com/a/58163623/17055750.
+	// eslint-disable-next-line no-dupe-class-members
+	private roundPoint(point: Point2|StrokeDataPoint|number): Point2|StrokeDataPoint|number {
+		const scaleFactor = 10 ** Math.floor(Math.log10(this.minFitAllowed));
+		const roundComponent = (component: number): number => {
+			return Math.round(component / scaleFactor) * scaleFactor;
+		};
+
+		if (typeof point === 'number') {
+			return roundComponent(point);
+		}
+
+		// instanceof Vec3 because Vec2 is an alias for Vec3 (instanceof
+		// seems to be unable to handle type aliases).
+		if (point instanceof Vec3) { // T extends Point2
+			return point.map(roundComponent);
+		}
+
+		return {
+			...point,
+			pos: point.pos.map(roundComponent),
+		};
+	}
+
 	private finalizeCurrentCurve(fillStyle: FillStyle) {
 		// Case where no points have been added
 		if (!this.currentCurve) {
-			const width = this.startPoint.width / 3;
+			const width = this.roundPoint(this.startPoint.width / 3);
+			const center = this.roundPoint(this.startPoint.pos);
 
 			// Draw a circle-ish shape around the start point
 			this.segments.push({
@@ -86,29 +125,29 @@ export default class StrokeBuilder {
 				commands: [
 					{
 						kind: PathCommandType.QuadraticBezierTo,
-						controlPoint: this.startPoint.pos.plus(Vec2.of(width, width)),
+						controlPoint: center.plus(Vec2.of(width, width)),
 
 						// Bottom of the circle
 						//    |
 						//  -----
 						//    |
 						//    ↑
-						endPoint: this.startPoint.pos.plus(Vec2.of(0, width)),
+						endPoint: center.plus(Vec2.of(0, width)),
 					},
 					{
 						kind: PathCommandType.QuadraticBezierTo,
-						controlPoint: this.startPoint.pos.plus(Vec2.of(-width, width)),
-						endPoint: this.startPoint.pos.plus(Vec2.of(-width, 0)),
+						controlPoint: center.plus(Vec2.of(-width, width)),
+						endPoint: center.plus(Vec2.of(-width, 0)),
 					},
 					{
 						kind: PathCommandType.QuadraticBezierTo,
-						controlPoint: this.startPoint.pos.plus(Vec2.of(-width, -width)),
-						endPoint: this.startPoint.pos.plus(Vec2.of(0, -width)),
+						controlPoint: center.plus(Vec2.of(-width, -width)),
+						endPoint: center.plus(Vec2.of(0, -width)),
 					},
 					{
 						kind: PathCommandType.QuadraticBezierTo,
-						controlPoint: this.startPoint.pos.plus(Vec2.of(width, -width)),
-						endPoint: this.startPoint.pos.plus(Vec2.of(width, 0)),
+						controlPoint: center.plus(Vec2.of(width, -width)),
+						endPoint: center.plus(Vec2.of(width, 0)),
 					},
 				],
 				fill: fillStyle,
@@ -160,29 +199,29 @@ export default class StrokeBuilder {
 		const pathCommands: PathCommand[] = [
 			{
 				kind: PathCommandType.QuadraticBezierTo,
-				controlPoint: controlPoint.plus(halfVec),
-				endPoint: endPt.plus(endVec),
+				controlPoint: this.roundPoint(controlPoint.plus(halfVec)),
+				endPoint: this.roundPoint(endPt.plus(endVec)),
 			},
 
 			{
 				kind: PathCommandType.LineTo,
-				point: endPt.minus(endVec),
+				point: this.roundPoint(endPt.minus(endVec)),
 			},
 
 			{
 				kind: PathCommandType.QuadraticBezierTo,
-				controlPoint: controlPoint.minus(halfVec),
-				endPoint: startPt.minus(startVec),
+				controlPoint: this.roundPoint(controlPoint.minus(halfVec)),
+				endPoint: this.roundPoint(startPt.minus(startVec)),
 			},
 
 			{
 				kind: PathCommandType.LineTo,
-				point: startPt.plus(startVec),
+				point: this.roundPoint(startPt.plus(startVec)),
 			},
 		];
 
 		return {
-			startPoint: startPt.plus(startVec),
+			startPoint: this.roundPoint(startPt.plus(startVec)),
 			commands: pathCommands,
 			fill: fillStyle,
 		};

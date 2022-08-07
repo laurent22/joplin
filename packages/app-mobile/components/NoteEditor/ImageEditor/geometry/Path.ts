@@ -225,9 +225,47 @@ export default class Path {
 	public static toString(startPoint: Point2, parts: PathCommand[]): string {
 		const result: string[] = [];
 
+		const toRoundedString = (num: number): string => {
+			// Try to remove rounding errors. If the number ends in at least three/four zeroes
+			// (or nines) just one or two digits, it's probably a rounding error.
+			const fixRoundingUpExp = /^([-]?\d*\.?\d*[1-9.])0{4,}\d$/;
+			const hasRoundingDownExp = /^([-]?)(\d*)\.(\d*9{4,}\d)$/;
+
+			let text = num.toString();
+			if (text.indexOf('.') === -1) {
+				return text;
+			}
+
+			const roundingDownMatch = hasRoundingDownExp.exec(text);
+			if (roundingDownMatch) {
+				const negativeSign = roundingDownMatch[1];
+				const lastDigit = parseInt(text.charAt(text.length - 1), 10);
+				const postDecimal = parseInt(roundingDownMatch[3], 10);
+				const preDecimal = parseInt(roundingDownMatch[2], 10);
+
+				let newPostDecimal = (postDecimal + 10 - lastDigit).toString();
+				let carry = 0;
+				if (newPostDecimal.length > postDecimal.toString().length) {
+					// Left-shift
+					newPostDecimal = newPostDecimal.substring(1);
+					carry = 1;
+				}
+				text = `${negativeSign + (preDecimal + carry).toString()}.${newPostDecimal}`;
+			}
+
+			text = text.replace(fixRoundingUpExp, '$1');
+			// Remove trailing period (if it exists)
+			return text.replace(/[.]$/, '');
+		};
+
 		const addCommand = (command: string, ...points: Point2[]) => {
-			const pointString = points.map(point => `${point.x},${point.y}`).join(' ');
-			result.push(`${command}${pointString}`);
+			const parts: string[] = [];
+			for (const point of points) {
+				const xComponent = toRoundedString(point.x);
+				const yComponent = toRoundedString(point.y);
+				parts.push(`${xComponent},${yComponent}`);
+			}
+			result.push(`${command}${parts.join(' ')}`);
 		};
 
 		addCommand('M', startPoint);
