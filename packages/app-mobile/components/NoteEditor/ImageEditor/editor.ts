@@ -279,7 +279,8 @@ export class ImageEditor {
 
 	public toSVG(): SVGElement {
 		const viewport = this.importExportViewport;
-		const result = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		const svgNameSpace = 'http://www.w3.org/2000/svg';
+		const result = document.createElementNS(svgNameSpace, 'svg');
 		const renderer = new SVGRenderer(result, viewport);
 
 		// Render **all** elements.
@@ -290,6 +291,12 @@ export class ImageEditor {
 		result.setAttribute('viewBox', `${rect.x} ${rect.y} ${rect.w} ${rect.h}`);
 		result.setAttribute('width', `${rect.w}`);
 		result.setAttribute('height', `${rect.w}`);
+
+		// Ensure the image can be identified as an SVG if downloaded.
+		// See https://jwatt.org/svg/authoring/
+		result.setAttribute('version', '1.1');
+		result.setAttribute('baseProfile', 'full');
+		result.setAttribute('xmlns', svgNameSpace);
 
 
 		return result;
