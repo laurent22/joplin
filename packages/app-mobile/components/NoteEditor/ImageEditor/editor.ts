@@ -14,6 +14,7 @@ import Display, { RenderingMode } from './Display';
 import SVGRenderer from './rendering/SVGRenderer';
 import Color4 from './Color4';
 import SVGLoader from './SVGLoader';
+import './editor.css';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
@@ -31,6 +32,8 @@ export class ImageEditor {
 	public toolController: ToolController;
 	public notifier: EditorNotifier;
 
+	private loadingWarning: HTMLElement;
+
 	public constructor(
 		parent: HTMLElement, renderingMode: RenderingMode = RenderingMode.CanvasRenderer
 	) {
@@ -38,6 +41,10 @@ export class ImageEditor {
 		this.renderingRegion = document.createElement('div');
 		this.container.appendChild(this.renderingRegion);
 		this.container.className = 'imageEditorContainer';
+
+		this.loadingWarning = document.createElement('div');
+		this.loadingWarning.classList.add('loadingMessage');
+		this.container.appendChild(this.loadingWarning);
 
 		this.renderingRegion.style.touchAction = 'none';
 		this.renderingRegion.className = 'imageEditorRenderArea';
@@ -61,24 +68,46 @@ export class ImageEditor {
 
 		this.registerListeners();
 		this.rerender();
+		this.hideLoadingWarning();
+	}
+
+	private showLoadingWarning(fractionLoaded: number) {
+		const loadingPercent = Math.round(fractionLoaded * 100);
+		this.loadingWarning.innerText = `Loading... ${loadingPercent}%`; // TODO: Localize!
+		this.loadingWarning.style.display = 'block';
+	}
+
+	private hideLoadingWarning() {
+		this.loadingWarning.style.display = 'none';
 	}
 
 	public addToolbar(): HTMLToolbar {
 		return new HTMLToolbar(this, this.container);
 	}
 
-	public loadFrom(loader: ImageLoader) {
-		loader.start((component) => {
+	public async loadFrom(loader: ImageLoader) {
+		this.showLoadingWarning(0);
+		await loader.start((component) => {
 			(new EditorImage.AddElementCommand(component)).apply(this);
-			// TODO: Display a progress bar?
+		}, (countProcessed: number, totalToProcess: number) => {
+			if (countProcessed % 100 === 0) {
+				this.showLoadingWarning(countProcessed / totalToProcess);
+				this.rerender();
+				return new Promise(resolve => {
+					requestAnimationFrame(() => resolve());
+				});
+			}
+
+			return null;
 		});
+		this.hideLoadingWarning();
 	}
 
 	// Alias for loadFrom(SVGLoader.fromString).
 	// This is particularly useful when accessing a bundled version of the editor.
-	public loadFromSVG(svgData: string) {
+	public async loadFromSVG(svgData: string) {
 		const loader = SVGLoader.fromString(svgData);
-		this.loadFrom(loader);
+		await this.loadFrom(loader);
 	}
 
 	private registerListeners() {
@@ -248,6 +277,7 @@ export class ImageEditor {
 		);
 
 		this.image.render(renderer, this.viewport);
+		this.rerenderQueued = false;
 	}
 
 	public drawWetInk(...path: RenderablePathSpec[]) {

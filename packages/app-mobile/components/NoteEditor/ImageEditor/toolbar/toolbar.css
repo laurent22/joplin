@@ -24,7 +24,7 @@
     flex-direction: row;
     justify-content: center;
 
-    font-family: sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
 }
 
 .toolbar-button {

@@ -166,8 +166,17 @@ export interface DisplayResizedEvent {
 
 export type EditorEventDataType = EditorToolEvent | EditorObjectEvent | EditorViewportChangedEvent | DisplayResizedEvent;
 
+
+// Returns a Promise to indicate that the event source should pause until the Promise resolves.
+// Returns null to continue loading without pause.
+// [totalToProcess] can be an estimate and may change if a better estimate becomes available.
+export type OnProgressListener =
+	(amountProcessed: number, totalToProcess: number)=> Promise<void>|null;
+
 export type ComponentAddedListener = (component: AbstractComponent)=> void;
 export interface ImageLoader {
 	// Returns the main region of the loaded image
-	start(onAddComponent: ComponentAddedListener): Rect2;
+	start(
+		onAddComponent: ComponentAddedListener, onProgressListener: OnProgressListener
+	): Promise<Rect2>;
 }

@@ -3,7 +3,7 @@ import Stroke from './components/Stroke';
 import Path from './geometry/Path';
 import Rect2 from './geometry/Rect2';
 import { RenderablePathSpec } from './rendering/AbstractRenderer';
-import { ComponentAddedListener, ImageLoader } from './types';
+import { ComponentAddedListener, ImageLoader, OnProgressListener } from './types';
 
 type OnFinishListener = ()=> void;
 
@@ -12,6 +12,9 @@ export const defaultSVGViewRect = new Rect2(0, 0, 500, 500);
 
 export default class SVGLoader implements ImageLoader {
 	private onAddComponent: ComponentAddedListener|null = null;
+	private onProgress: OnProgressListener|null = null;
+	private processedCount: number = 0;
+	private totalToProcess: number = 0;
 	private rootViewBox: SVGRect|null;
 
 	private constructor(private source: SVGSVGElement, private onFinish?: OnFinishListener) {
@@ -71,39 +74,49 @@ export default class SVGLoader implements ImageLoader {
 		this.onAddComponent?.(stroke);
 	}
 
-	private visit(node: Element) {
-		if (node.tagName === 'SVG') {
-			this.rootViewBox ??= (node as SVGSVGElement).viewBox?.baseVal;
-		}
+	private async visit(node: Element) {
+		this.totalToProcess += node.childElementCount;
 
 		const legacyStrokeGroupClass = 'joplin-stroke';
-		for (const child of node.children) {
-			switch (child.tagName.toLowerCase()) {
-			case 'g':
-				if (child.classList.contains(legacyStrokeGroupClass)) {
-					this.addLegacyStroke(child as SVGGElement);
-				} else {
-					this.visit(child);
-				}
-				break;
-			case 'path':
-				this.addPath(child as SVGPathElement);
-				break;
-			case 'svg':
-				this.visit(child as SVGSVGElement);
-				break;
-			default:
-				console.warn('Unknown SVG element,', child, ', ignoring!');
-				// TODO: Load into an UnknownObject element.
+		switch (node.tagName.toLowerCase()) {
+		case 'g':
+			if (node.classList.contains(legacyStrokeGroupClass)) {
+				this.addLegacyStroke(node as SVGGElement);
 			}
+			break;
+		case 'path':
+			this.addPath(node as SVGPathElement);
+			break;
+		case 'svg':
+			this.rootViewBox ??= (node as SVGSVGElement).viewBox?.baseVal;
+			break;
+		default:
+			console.warn('Unknown SVG element,', node, ', ignoring!');
+
+			// TODO: Load into an UnknownObject element.
+			return;
 		}
+
+		for (const child of node.children) {
+			await this.visit(child);
+		}
+
+		this.processedCount ++;
+		await this.onProgress?.(this.processedCount, this.totalToProcess);
 	}
 
-	public start(onAddComponent: ComponentAddedListener): Rect2 {
+	public async start(
+		onAddComponent: ComponentAddedListener, onProgress: OnProgressListener
+	): Promise<Rect2> {
 		this.onAddComponent = onAddComponent;
+		this.onProgress = onProgress;
+
+		// Estimate the number of tags to process.
+		this.totalToProcess = this.source.childElementCount;
+		this.processedCount = 0;
 
 		this.rootViewBox = null;
-		this.visit(this.source);
+		await this.visit(this.source);
 
 		const viewBox = this.rootViewBox;
 		let result = defaultSVGViewRect;
