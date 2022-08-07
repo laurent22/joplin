@@ -166,6 +166,7 @@ If enabled, errors will be logged to this textarea.
 					popup.document.close();
 
 					const img = editor.toSVG();
+					const imgHTML = img.outerHTML;
 
 					// Loading the preview can be much slower than saving the image.
 					// Only do so if requested.
@@ -183,7 +184,7 @@ If enabled, errors will be logged to this textarea.
 						imagePreview.setAttribute('viewBox', img.getAttribute('viewBox'));
 
 						messageContainer.innerText = 'Preview';
-						svgTextContainer.value = img.outerHTML;
+						svgTextContainer.value = imgHTML;
 
 						previewRegion.replaceChildren(
 							messageContainer, svgTextContainer, imagePreview
@@ -193,12 +194,20 @@ If enabled, errors will be logged to this textarea.
 					let localStorageSaveStatus = 'Unable to save to localStorage. ';
 					if (window.localStorage) {
 						// Save
-						window.localStorage.setItem(lastSaveLocalStorageKey, img.outerHTML);
+						window.localStorage.setItem(lastSaveLocalStorageKey, imgHTML);
 						localStorageSaveStatus = 'Saved to localStorage! ';
+					}
+
+					let imageSize = `${Math.round(imgHTML.length / 1024 * 10) / 10} KiB`;
+					if (imgHTML.length > 1024 * 1024) {
+						imageSize = `${Math.round(imgHTML.length / 1024 * 10 / 1024) / 10} MiB`;
 					}
 
 					previewRegion.replaceChildren(
 						popup.document.createTextNode(localStorageSaveStatus),
+						popup.document.createTextNode(
+							`Image size: ${imageSize}.`
+						),
 						previewButton,
 					);
 				});
