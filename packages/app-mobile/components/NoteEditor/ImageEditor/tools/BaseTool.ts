@@ -21,7 +21,6 @@ export default abstract class BaseTool implements PointerEvtListener {
 
 	public setEnabled(enabled: boolean) {
 		this.enabled = enabled;
-		console.log('Setting ', this.kind, 'to ', enabled)
 
 		// Ensure that at most one tool in the group is enabled.
 		if (enabled) {

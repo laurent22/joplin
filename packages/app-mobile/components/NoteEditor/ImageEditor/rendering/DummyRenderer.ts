@@ -1,9 +1,10 @@
 // Renderer that outputs nothing. Useful for automated tests.
 
-import { Point2, Vec2 } from "../geometry/Vec2";
-import Vec3 from "../geometry/Vec3";
-import Viewport from "../Viewport";
-import AbstractRenderer, { FillStyle } from "./AbstractRenderer";
+import Rect2 from '../geometry/Rect2';
+import { Point2, Vec2 } from '../geometry/Vec2';
+import Vec3 from '../geometry/Vec3';
+import Viewport from '../Viewport';
+import AbstractRenderer, { FillStyle } from './AbstractRenderer';
 
 export default class DummyRenderer extends AbstractRenderer {
 	// Variables that track the state of what's been rendered
@@ -11,6 +12,7 @@ export default class DummyRenderer extends AbstractRenderer {
 	public renderedPathCount: number = 0;
 	public lastFillStyle: FillStyle|null = null;
 	public lastPoint: Point2|null = null;
+	public objectNestingLevel: number = 0;
 
 	// List of points drawn since the last clear.
 	public pointBuffer: Point2[] = [];
@@ -28,6 +30,13 @@ export default class DummyRenderer extends AbstractRenderer {
 		this.clearedCount ++;
 		this.renderedPathCount = 0;
 		this.pointBuffer = [];
+
+		// Ensure all objects finished rendering
+		if (this.objectNestingLevel > 0) {
+			throw new Error(
+				`Within an object while clearing! Nesting level: ${this.objectNestingLevel}`
+			);
+		}
 	}
 	protected beginPath(startPoint: Vec3): void {
 		this.lastPoint = startPoint;
@@ -52,5 +61,13 @@ export default class DummyRenderer extends AbstractRenderer {
 	public drawPoints(..._points: Vec3[]): void {
 		// drawPoints is intended for debugging.
 		// As such, it is unlikely to be the target of automated tests.
+	}
+
+	public startObject(_boundingBox: Rect2): void {
+		// Ignore the start/end of different objects
+		this.objectNestingLevel += 1;
+	}
+	public endObject(): void {
+		this.objectNestingLevel -= 1;
 	}
 }

@@ -219,6 +219,10 @@ export default class Path {
 	}
 
 	public toString(): string {
+		return Path.toString(this.startPoint, this.parts);
+	}
+
+	public static toString(startPoint: Point2, parts: PathCommand[]): string {
 		const result: string[] = [];
 
 		const addCommand = (command: string, ...points: Point2[]) => {
@@ -226,9 +230,9 @@ export default class Path {
 			result.push(`${command}${pointString}`);
 		};
 
-		addCommand('M', this.startPoint);
+		addCommand('M', startPoint);
 		let exhaustivenessCheck: never;
-		for (const part of this.parts) {
+		for (const part of parts) {
 			switch (part.kind) {
 			case PathCommandType.MoveTo:
 				addCommand('M', part.point);

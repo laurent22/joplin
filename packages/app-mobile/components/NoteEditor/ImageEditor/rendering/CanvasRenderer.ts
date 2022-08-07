@@ -1,4 +1,5 @@
 import Color4 from '../Color4';
+import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
@@ -103,5 +104,14 @@ export default class CanvasRenderer extends AbstractRenderer {
 			this.ctx.fillStyle = 'black';
 			this.ctx.fillText(`${i}`, point.x, point.y, pointRadius * 2);
 		}
+	}
+
+	public startObject(_boundingBox: Rect2): void {
+		// Do nothing. TODO: Use this to optimize drawing (e.g. skip drawing if the box is
+		// small enough).
+	}
+
+	public endObject(): void {
+		// Do nothing
 	}
 }

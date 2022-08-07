@@ -23,12 +23,6 @@ export default class StrokeBuilder {
 	private curveStartWidth: number;
 	private curveEndWidth: number;
 
-	// Maximum distance from the actual curve (irrespective of stroke width)
-	// for which a point is considered 'part of the curve'.
-	// Note that the maximum will be smaller if the stroke width is less than
-	// [maxFitAllowed].
-	private maxFitAllowed: number;
-
 	// Stroke smoothing and tangent approximation
 	private momentum: Vec2;
 
@@ -37,14 +31,19 @@ export default class StrokeBuilder {
 
 	public constructor(
 		private startPoint: StrokeDataPoint,
-		maxFitAllowed: number
+
+		// Maximum distance from the actual curve (irrespective of stroke width)
+		// for which a point is considered 'part of the curve'.
+		// Note that the maximum will be smaller if the stroke width is less than
+		// [maxFitAllowed].
+		private minFitAllowed: number,
+		private maxFitAllowed: number
 	) {
 		this.lastPoint = startPoint;
 		this.segments = [];
 		this.buffer = [startPoint.pos];
 		this.momentum = Vec2.zero;
 		this.currentCurve = null;
-		this.maxFitAllowed = maxFitAllowed;
 
 		this.bbox = new Rect2(startPoint.pos.x, startPoint.pos.y, 0, 0);
 	}
@@ -284,7 +283,7 @@ export default class StrokeBuilder {
 		} else {
 			// Position the control point closer to the first -- the connecting
 			// segment will be roughly a line.
-			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 3));
+			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 4));
 		}
 
 		if (isNaN(controlPoint.magnitude()) || isNaN(segmentStart.magnitude())) {
@@ -303,8 +302,11 @@ export default class StrokeBuilder {
 					Vec2.ofXY(curve.project(point.xy));
 				const dist = proj.minus(point).magnitude();
 
-				if (dist > Math.min(this.curveStartWidth, this.curveEndWidth) / 2
-						|| dist > this.maxFitAllowed) {
+				const minFit = Math.max(
+					Math.min(this.curveStartWidth, this.curveEndWidth) / 2,
+					this.minFitAllowed
+				);
+				if (dist > minFit || dist > this.maxFitAllowed) {
 					return false;
 				}
 			}

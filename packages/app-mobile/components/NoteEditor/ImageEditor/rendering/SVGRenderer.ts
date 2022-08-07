@@ -1,19 +1,36 @@
 
 import Path, { PathCommand, PathCommandType } from '../geometry/Path';
+import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
 import AbstractRenderer, { FillStyle } from './AbstractRenderer';
+
+interface GroupRecord {
+	pathOnlyGroup: boolean;
+	elem: SVGGElement;
+}
+
+const makeGroupRecord = (elem: SVGGElement): GroupRecord => {
+	return {
+		pathOnlyGroup: true,
+		elem,
+	};
+};
+
+export const strokeGroupClass = 'joplin-stroke';
 
 const svgNameSpace = 'http://www.w3.org/2000/svg';
 export default class SVGRenderer extends AbstractRenderer {
 	private currentPath: PathCommand[]|null = null;
 	private pathStart: Point2|null;
 	private mainGroup: SVGGElement;
+	private groupStack: GroupRecord[];
 
 	public constructor(private elem: SVGSVGElement, viewport: Viewport) {
 		super(viewport);
 		this.clear();
 	}
+
 	public displaySize(): Vec2 {
 		return Vec2.of(this.elem.clientWidth, this.elem.clientHeight);
 	}
@@ -22,19 +39,43 @@ export default class SVGRenderer extends AbstractRenderer {
 
 		// Remove all children
 		this.elem.replaceChildren(this.mainGroup);
+		this.groupStack = [makeGroupRecord(this.mainGroup)];
 	}
+
 	protected beginPath(startPoint: Point2): void {
 		this.currentPath = [];
 		this.pathStart = this.viewport.canvasToScreen(startPoint);
 	}
 	protected endPath(style: FillStyle): void {
 		const pathElem = document.createElementNS(svgNameSpace, 'path');
-		pathElem.setAttribute('d', new Path(this.pathStart, this.currentPath).toString());
+		pathElem.setAttribute('d', Path.toString(this.pathStart, this.currentPath));
 		pathElem.setAttribute('fill', style.color.toHexString());
-		this.mainGroup.appendChild(pathElem);
+		this.getCurrentGroup().elem.appendChild(pathElem);
 
 		this.currentPath = null;
 	}
+
+	private getCurrentGroup(): GroupRecord {
+		return this.groupStack[this.groupStack.length - 1];
+	}
+	public startObject(_boundingBox: Rect2): void {
+		const group = document.createElementNS(svgNameSpace, 'g');
+		this.groupStack.push(makeGroupRecord(group));
+	}
+	public endObject(): void {
+		const prevGroup = this.groupStack.pop();
+
+		// Throw if we've ended more objects than we've started:
+		if (this.groupStack.length < 1) {
+			throw new Error('The main group has been removed from the stack!');
+		}
+
+		if (prevGroup.pathOnlyGroup) {
+			prevGroup.elem.classList.add(strokeGroupClass);
+		}
+		this.getCurrentGroup().elem.appendChild(prevGroup.elem);
+	}
+
 	protected lineTo(point: Point2): void {
 		point = this.viewport.canvasToScreen(point);
 
@@ -67,6 +108,7 @@ export default class SVGRenderer extends AbstractRenderer {
 			endPoint,
 		});
 	}
+
 	public drawPoints(...points: Point2[]): void {
 		points.map(point => {
 			const elem = document.createElementNS(svgNameSpace, 'circle');

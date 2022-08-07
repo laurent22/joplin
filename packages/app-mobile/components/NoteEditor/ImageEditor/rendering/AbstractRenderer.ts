@@ -93,6 +93,10 @@ export default abstract class AbstractRenderer {
 		});
 	}
 
+	// Note the start/end of an object with the given bounding box.
+	public abstract startObject(boundingBox: Rect2): void;
+	public abstract endObject(): void;
+
 	/** Debugging method */
 	public abstract drawPoints(...points: Point2[]): void;
 }

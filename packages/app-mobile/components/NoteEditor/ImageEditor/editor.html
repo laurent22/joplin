@@ -14,6 +14,27 @@
 				height: 100vh;
 				touch-action: none;
 			}
+
+			#editorOptions {
+				max-width: 400px;
+				margin-left: auto;
+				margin-right: auto;
+				background-color: #ddd;
+				border-radius: 4px;
+				padding: 14px;
+			}
+
+			#logOutput {
+				display: none;
+				width: 100vw;
+				height: 100vh;
+
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -27,14 +48,78 @@
 
 				For example `cd /path/to/ImageEditor/folder ; python3 -m http.server`.
 		-->
+		<div id="editorOptions">
+			<h1>ImageEditor test page</h1>
+			<p>Options for testing the image editor:</p>
+			<noscript>JavaScript has been disabled!</noscript>
+			<ul>
+				<li>
+					<input type="checkbox" id="alertOnError"/><label for="alertOnError">
+						Display error messages.
+					</label>
+				</li>
+				<li>
+					<textarea id="initialData"></textarea><label for="initialData">
+						Load image from (paste the contents of an SVG here).
+						If empty, a blank image will be used.
+					</label>
+				</li>
+			</ul>
+			<button id="startButton">Start</button>
+		</div>
+		<textarea id="logOutput">
+		</textarea>
 	</body>
-	<script>
-		//window.onerror = (evt, source) => {
-		//	alert(evt);
-		//};
-	</script>
 	<script src='editor.bundle.js'></script>
 	<script>
-		new svgEditor.ImageEditor(document.body);
+		const startVisualErrorLog = () => {
+			const logArea = document.querySelector('#logOutput');
+			logArea.style.display = 'block';
+			logArea.value = `
+
+If enabled, errors will be logged to this textarea.
+
+
+			`;
+
+			const scrollLogToEnd = () => {
+				logArea.scrollTop = logArea.scrollHeight;
+			};
+
+			window.onerror = (evt) => {
+				logArea.value += '\nError thrown: ' + evt + '\n';
+				scrollLogToEnd();
+			};
+			const originalErrFn = console.error;
+			console.error = (...data) => {
+				originalErrFn.apply(console, data);
+				logArea.value += '\nError logged: ' + data.join(', ') + '\n';
+				scrollLogToEnd();
+			};
+		};
+
+		(() => {
+			const showErrorsCheckbox = document.querySelector('#alertOnError');
+			const loadFromTextarea = document.querySelector('#initialData');
+			const startButton = document.querySelector('#startButton');
+			const optionsScreen = document.querySelector('#editorOptions');
+
+			startButton.onclick = () => {
+				const initialData = loadFromTextarea.value;
+				const showErrors = showErrorsCheckbox.checked;
+				optionsScreen.remove();
+
+				if (showErrors) {
+					startVisualErrorLog();
+				}
+
+				const editor = new svgEditor.ImageEditor(document.body);
+				editor.addToolbar();
+
+				if (initialData && initialData.length > 0) {
+					editor.loadFromSVG(initialData);
+				}
+			};
+		})();
 	</script>
 </html>

@@ -8,6 +8,8 @@ import Mat33 from './geometry/Mat33';
 import { Point2, Vec2 } from './geometry/Vec2';
 import Vec3 from './geometry/Vec3';
 import BaseTool from './tools/BaseTool';
+import AbstractComponent from './components/AbstractComponent';
+import Rect2 from './geometry/Rect2';
 
 /**
  * Provides a snapshot containing information about a pointer. A Pointer
@@ -86,7 +88,7 @@ export enum InputEvtType {
  * [delta.y] is vertical scroll,
  * [delta.z] is zoom scroll (ctrl+scroll or pinch zoom)
  */
-export interface WheelEvt  {
+export interface WheelEvt {
 	readonly kind: InputEvtType.WheelEvt;
 	readonly delta: Vec3;
 	readonly screenPos: Point2;
@@ -96,14 +98,14 @@ export interface WheelEvt  {
  * Event triggered when pointer capture is taken by a different [PointerEvtListener].
  * @see PointerEvtListener.onGestureCancel
  */
-export interface GestureCancelEvt  {
+export interface GestureCancelEvt {
 	readonly kind: InputEvtType.GestureCancelEvt;
 }
 
 /**
  * Base class for all PointerEvts
  */
-interface PointerEvtBase  {
+interface PointerEvtBase {
 	readonly current: Pointer;
 	readonly allPointers: Pointer[];
 }
@@ -135,7 +137,7 @@ export enum EditorEventType {
 	ObjectAdded,
 	ViewportChanged,
 	DisplayResized,
-};
+}
 
 type EditorToolEventType = EditorEventType.ToolEnabled
 	| EditorEventType.ToolDisabled
@@ -163,3 +165,9 @@ export interface DisplayResizedEvent {
 }
 
 export type EditorEventDataType = EditorToolEvent | EditorObjectEvent | EditorViewportChangedEvent | DisplayResizedEvent;
+
+export type ComponentAddedListener = (component: AbstractComponent)=> void;
+export interface ImageLoader {
+	// Returns the main region of the loaded image
+	start(onAddComponent: ComponentAddedListener): Rect2;
+}

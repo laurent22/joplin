@@ -1,7 +1,7 @@
 
 import EditorImage from './EditorImage';
 import ToolController from './tools/ToolController';
-import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorNotifier, EditorEventType } from './types';
+import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorNotifier, EditorEventType, ImageLoader } from './types';
 import Command from './commands/Command';
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
@@ -13,6 +13,7 @@ import { RenderablePathSpec } from './rendering/AbstractRenderer';
 import Display, { RenderingMode } from './Display';
 import SVGRenderer from './rendering/SVGRenderer';
 import Color4 from './Color4';
+import SVGLoader from './SVGLoader';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
@@ -30,7 +31,9 @@ export class ImageEditor {
 	public toolController: ToolController;
 	public notifier: EditorNotifier;
 
-	public constructor(parent: HTMLElement, renderingMode: RenderingMode = RenderingMode.CanvasRenderer) {
+	public constructor(
+		parent: HTMLElement, renderingMode: RenderingMode = RenderingMode.CanvasRenderer
+	) {
 		this.container = document.createElement('div');
 		this.renderingRegion = document.createElement('div');
 		this.container.appendChild(this.renderingRegion);
@@ -47,7 +50,6 @@ export class ImageEditor {
 		this.history = new UndoRedoHistory(this);
 		this.toolController = new ToolController(this);
 
-		new HTMLToolbar(this, this.container);
 		parent.appendChild(this.container);
 
 		// Default to a 1000x1500 image
@@ -59,6 +61,24 @@ export class ImageEditor {
 
 		this.registerListeners();
 		this.rerender();
+	}
+
+	public addToolbar() {
+		new HTMLToolbar(this, this.container);
+	}
+
+	public loadFrom(loader: ImageLoader) {
+		loader.start((component) => {
+			(new EditorImage.AddElementCommand(component)).apply(this);
+			// TODO: Display a progress bar?
+		});
+	}
+
+	// Alias for loadFrom(SVGLoader.fromString).
+	// This is particularly useful when accessing a bundled version of the editor.
+	public loadFromSVG(svgData: string) {
+		const loader = SVGLoader.fromString(svgData);
+		this.loadFrom(loader);
 	}
 
 	private registerListeners() {
