@@ -76,7 +76,7 @@
 				<li>
 					<label for="initialData">
 						SVG image to load (paste the contents of a saved SVG here).
-						This can be empty.
+						This can be empty. This box may be auto-filled with the last save.
 					</label><textarea id="initialData"></textarea>
 				</li>
 			</ul>
@@ -87,6 +87,8 @@
 	</body>
 	<script src='editor.bundle.js'></script>
 	<script>
+		const lastSaveLocalStorageKey = 'lastSave';
+
 		const startVisualErrorLog = () => {
 			const logArea = document.querySelector('#logOutput');
 			logArea.style.display = 'block';
@@ -118,6 +120,8 @@ If enabled, errors will be logged to this textarea.
 			const loadFromTextarea = document.querySelector('#initialData');
 			const startButton = document.querySelector('#startButton');
 			const optionsScreen = document.querySelector('#editorOptions');
+
+			loadFromTextarea.value = window.localStorage?.getItem(lastSaveLocalStorageKey) ?? '';
 
 			startButton.onclick = () => {
 				const initialData = loadFromTextarea.value;
@@ -152,6 +156,8 @@ If enabled, errors will be logged to this textarea.
 						</html>`
 					);
 					popup.document.close();
+
+					window.localStorage?.setItem(lastSaveLocalStorageKey, img.outerHTML);
 
 					const imagePreview = popup.document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 					imagePreview.innerHTML = img.innerHTML;
