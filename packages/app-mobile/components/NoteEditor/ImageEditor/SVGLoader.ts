@@ -6,18 +6,6 @@ import { RenderablePathSpec } from './rendering/AbstractRenderer';
 import { strokeGroupClass } from './rendering/SVGRenderer';
 import { ComponentAddedListener, ImageLoader } from './types';
 
-// Assert that a node is really of a given type.
-// See https://github.com/Microsoft/TypeScript/wiki/FAQ#why-cant-i-write-typeof-t-new-t-or-instanceof-t-in-my-generic-function
-// Furthermore, this seems to require a function() { }-style declaration.
-type ElementConstructor<T> = { new(...args: any[]): T };
-function nodeTypeCheck<T extends Element>(
-	elem: Element, ctor: ElementConstructor<T>
-): asserts elem is T {
-	if (!(elem instanceof ctor)) {
-		throw new Error(`${elem} is not an instanceof ${ctor}`);
-	}
-}
-
 type OnFinishListener = ()=> void;
 
 // Size of a loaded image if no size is specified.
@@ -58,8 +46,7 @@ export default class SVGLoader implements ImageLoader {
 				throw new Error('node is not a stroke!');
 			}
 
-			nodeTypeCheck(child, SVGPathElement);
-			parts.push(this.pathFromElem(child));
+			parts.push(this.pathFromElem(child as SVGPathElement));
 		}
 
 		const stroke = new Stroke(parts);
@@ -67,29 +54,28 @@ export default class SVGLoader implements ImageLoader {
 	}
 
 	private visit(node: Element) {
+		if (node.tagName === 'SVG') {
+			this.rootViewBox ??= (node as SVGSVGElement).viewBox?.baseVal;
+		}
+
 		for (const child of node.children) {
 			switch (child.tagName.toLowerCase()) {
 			case 'g':
-				nodeTypeCheck(child, SVGGElement);
-
 				if (child.classList.contains(strokeGroupClass)) {
-					this.addStroke(child);
+					this.addStroke(child as SVGGElement);
 				} else {
 					this.visit(child);
 				}
 				break;
 			case 'path':
-				nodeTypeCheck(child, SVGPathElement);
-				this.addPath(child);
+				this.addPath(child as SVGPathElement);
 				break;
 			case 'svg':
-				nodeTypeCheck(child, SVGSVGElement);
-				this.visit(child);
-				this.rootViewBox ??= child.viewBox?.baseVal;
+				this.visit(child as SVGSVGElement);
 				break;
 			default:
 				console.warn('Unknown SVG element,', child, ', ignoring!');
-					// TODO: Load into an UnknownObject element.
+				// TODO: Load into an UnknownObject element.
 			}
 		}
 	}
@@ -97,7 +83,7 @@ export default class SVGLoader implements ImageLoader {
 	public start(onAddComponent: ComponentAddedListener): Rect2 {
 		this.onAddComponent = onAddComponent;
 
-		this.rootViewBox = this.source.viewBox?.baseVal;
+		this.rootViewBox = null;
 		this.visit(this.source);
 
 		const viewBox = this.rootViewBox;
