@@ -397,7 +397,7 @@ export default class HTMLToolbar {
 		});
 	}
 
-	private addActionButton(text: string, command: ()=> void) {
+	public addActionButton(text: string, command: ()=> void) {
 		const button = document.createElement('button');
 		button.innerText = text;
 		button.classList.add('toolButton');
@@ -441,32 +441,6 @@ export default class HTMLToolbar {
 		});
 		this.addActionButton('Redo', () => {
 			this.editor.history.redo();
-		});
-		this.addActionButton('Save', () => {
-			// TODO: Connect to Joplin here
-			const popup = window.open();
-			const img = this.editor.toSVG();
-
-			popup.document.open();
-			popup.document.write(`
-				<!DOCTYPE html>
-				<html>
-				<body>
-					<style>
-						svg {
-							width: 500px;
-							border: 1px solid gray;
-						}
-					</style>
-					<p>Save/load isn't fully implemented. For now, save the following text as an SVG:</p>
-					<textarea id='svg-text'>${img.outerHTML}</textarea><br/>
-					${img.outerHTML}
-				</body>
-				</html>`
-			);
-			popup.document.close();
-
-			throw new Error('TO-DO: Save/communicate with Joplin');
 		});
 	}
 }

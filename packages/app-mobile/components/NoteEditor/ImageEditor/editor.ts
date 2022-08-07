@@ -63,8 +63,8 @@ export class ImageEditor {
 		this.rerender();
 	}
 
-	public addToolbar() {
-		new HTMLToolbar(this, this.container);
+	public addToolbar(): HTMLToolbar {
+		return new HTMLToolbar(this, this.container);
 	}
 
 	public loadFrom(loader: ImageLoader) {
