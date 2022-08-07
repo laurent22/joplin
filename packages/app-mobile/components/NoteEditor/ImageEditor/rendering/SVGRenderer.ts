@@ -5,26 +5,16 @@ import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
 import AbstractRenderer, { FillStyle } from './AbstractRenderer';
 
-interface GroupRecord {
-	pathOnlyGroup: boolean;
-	elem: SVGGElement;
-}
-
-const makeGroupRecord = (elem: SVGGElement): GroupRecord => {
-	return {
-		pathOnlyGroup: true,
-		elem,
-	};
-};
-
-export const strokeGroupClass = 'joplin-stroke';
-
 const svgNameSpace = 'http://www.w3.org/2000/svg';
 export default class SVGRenderer extends AbstractRenderer {
-	private currentPath: PathCommand[]|null = null;
+	private currentPath: PathCommand[]|null;
 	private pathStart: Point2|null;
+
+	private lastPathStyle: FillStyle|null;
+	private lastPath: PathCommand[]|null;
+	private lastPathStart: Point2|null;
+
 	private mainGroup: SVGGElement;
-	private groupStack: GroupRecord[];
 
 	public constructor(private elem: SVGSVGElement, viewport: Viewport) {
 		super(viewport);
@@ -39,41 +29,54 @@ export default class SVGRenderer extends AbstractRenderer {
 
 		// Remove all children
 		this.elem.replaceChildren(this.mainGroup);
-		this.groupStack = [makeGroupRecord(this.mainGroup)];
 	}
 
 	protected beginPath(startPoint: Point2): void {
 		this.currentPath = [];
 		this.pathStart = this.viewport.canvasToScreen(startPoint);
+		this.lastPathStart ??= this.pathStart;
 	}
 	protected endPath(style: FillStyle): void {
+		// Try to extend the previous path, if possible
+		if (style.color.eq(this.lastPathStyle?.color)) {
+			this.lastPath.push({
+				kind: PathCommandType.MoveTo,
+				point: this.pathStart,
+			}, ...this.currentPath);
+			this.pathStart = null;
+			this.currentPath = null;
+		} else {
+			this.addPathToSVG();
+			this.lastPathStart = this.pathStart;
+			this.lastPathStyle = style;
+			this.lastPath = this.currentPath;
+
+			this.pathStart = null;
+			this.currentPath = null;
+		}
+	}
+
+	// Push [this.fullPath] to the SVG
+	private addPathToSVG() {
+		if (!this.lastPathStyle || !this.lastPath) {
+			return;
+		}
+
 		const pathElem = document.createElementNS(svgNameSpace, 'path');
-		pathElem.setAttribute('d', Path.toString(this.pathStart, this.currentPath));
-		pathElem.setAttribute('fill', style.color.toHexString());
-		this.getCurrentGroup().elem.appendChild(pathElem);
-
-		this.currentPath = null;
+		pathElem.setAttribute('d', Path.toString(this.lastPathStart, this.lastPath));
+		pathElem.setAttribute('fill', this.lastPathStyle.color.toHexString());
+		this.mainGroup.appendChild(pathElem);
 	}
 
-	private getCurrentGroup(): GroupRecord {
-		return this.groupStack[this.groupStack.length - 1];
-	}
 	public startObject(_boundingBox: Rect2): void {
-		const group = document.createElementNS(svgNameSpace, 'g');
-		this.groupStack.push(makeGroupRecord(group));
+		// Only accumulate a path within an object
+		this.lastPath = null;
+		this.lastPathStart = null;
+		this.lastPathStyle = null;
 	}
 	public endObject(): void {
-		const prevGroup = this.groupStack.pop();
-
-		// Throw if we've ended more objects than we've started:
-		if (this.groupStack.length < 1) {
-			throw new Error('The main group has been removed from the stack!');
-		}
-
-		if (prevGroup.pathOnlyGroup) {
-			prevGroup.elem.classList.add(strokeGroupClass);
-		}
-		this.getCurrentGroup().elem.appendChild(prevGroup.elem);
+		// Don't extend paths across objects
+		this.addPathToSVG();
 	}
 
 	protected lineTo(point: Point2): void {

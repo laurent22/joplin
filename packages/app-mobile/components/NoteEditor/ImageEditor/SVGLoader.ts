@@ -3,7 +3,6 @@ import Stroke from './components/Stroke';
 import Path from './geometry/Path';
 import Rect2 from './geometry/Rect2';
 import { RenderablePathSpec } from './rendering/AbstractRenderer';
-import { strokeGroupClass } from './rendering/SVGRenderer';
 import { ComponentAddedListener, ImageLoader } from './types';
 
 type OnFinishListener = ()=> void;
@@ -18,25 +17,44 @@ export default class SVGLoader implements ImageLoader {
 	private constructor(private source: SVGSVGElement, private onFinish?: OnFinishListener) {
 	}
 
-	private pathFromElem(node: SVGPathElement): RenderablePathSpec {
-		const path = Path.fromString(node.getAttribute('d') ?? '');
+	private strokeDataFromElem(node: SVGPathElement): RenderablePathSpec[] {
+		const result: RenderablePathSpec[] = [];
+		const pathData = node.getAttribute('d') ?? '';
 		let fillColor = Color4.black;
 		try {
 			fillColor = Color4.fromHex(node.getAttribute('fill'));
 		} catch (e) {
 			console.error('Unknown fill color,', node.getAttribute('fill'));
 		}
-		const spec = path.toRenderable({ color: fillColor });
-		return spec;
+
+		// Break the path into chunks at each moveTo ('M') command:
+		const parts = pathData.split('M');
+		let isFirst = true;
+		for (const part of parts) {
+			if (part !== '') {
+				// We split the path by moveTo commands, so add the 'M' back in
+				// if it was present.
+				const current = !isFirst ? `M${part}` : part;
+				const path = Path.fromString(current);
+				const spec = path.toRenderable({ color: fillColor });
+				result.push(spec);
+			}
+
+			isFirst = false;
+		}
+
+		return result;
 	}
 
 	// Adds a stroke with a single path
 	private addPath(node: SVGPathElement) {
-		const stroke = new Stroke([this.pathFromElem(node)]);
+		const stroke = new Stroke(this.strokeDataFromElem(node));
 		this.onAddComponent?.(stroke);
 	}
 
-	private addStroke(node: SVGGElement) {
+	// TODO: Remove. This method migrates users from the older (and more verbose)
+	// <group class=joplin-stroke>...</group> syntax.
+	private addLegacyStroke(node: SVGGElement) {
 		const parts: RenderablePathSpec[] = [];
 		for (const child of node.children) {
 			if (child.tagName !== 'path') {
@@ -46,7 +64,7 @@ export default class SVGLoader implements ImageLoader {
 				throw new Error('node is not a stroke!');
 			}
 
-			parts.push(this.pathFromElem(child as SVGPathElement));
+			parts.push(...this.strokeDataFromElem(child as SVGPathElement));
 		}
 
 		const stroke = new Stroke(parts);
@@ -58,11 +76,12 @@ export default class SVGLoader implements ImageLoader {
 			this.rootViewBox ??= (node as SVGSVGElement).viewBox?.baseVal;
 		}
 
+		const legacyStrokeGroupClass = 'joplin-stroke';
 		for (const child of node.children) {
 			switch (child.tagName.toLowerCase()) {
 			case 'g':
-				if (child.classList.contains(strokeGroupClass)) {
-					this.addStroke(child as SVGGElement);
+				if (child.classList.contains(legacyStrokeGroupClass)) {
+					this.addLegacyStroke(child as SVGGElement);
 				} else {
 					this.visit(child);
 				}

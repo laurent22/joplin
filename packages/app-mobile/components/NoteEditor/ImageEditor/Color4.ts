@@ -36,7 +36,7 @@ export default class Color4 {
 			const components = hexString.split('');
 
 			// Convert to RRGGBBAA or RRGGBB format
-			hexString = components.map(component => component + '0').join('');
+			hexString = components.map(component => `${component}0`).join('');
 		}
 
 		if (hexString.length === 6) {
@@ -55,6 +55,14 @@ export default class Color4 {
 		}
 
 		return new Color4(components[0], components[1], components[2], components[3]);
+	}
+
+	public eq(other: Color4|null|undefined): boolean {
+		if ((other ?? null) === null) {
+			return false;
+		}
+
+		return this.toHexString() === other.toHexString();
 	}
 
 	public toHexString(): string {
