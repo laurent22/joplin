@@ -76,7 +76,7 @@
 				<li>
 					<label for="initialData">
 						SVG image to load (paste the contents of a saved SVG here).
-						This can be empty. This box may be auto-filled with the last save.
+						This can be empty.
 					</label><textarea id="initialData"></textarea>
 				</li>
 			</ul>
@@ -121,7 +121,8 @@ If enabled, errors will be logged to this textarea.
 			const startButton = document.querySelector('#startButton');
 			const optionsScreen = document.querySelector('#editorOptions');
 
-			loadFromTextarea.value = window.localStorage?.getItem(lastSaveLocalStorageKey) ?? '';
+			const loadFromLastSaveText = 'Load from last save (if available)'
+			loadFromTextarea.value = loadFromLastSaveText;
 
 			startButton.onclick = () => {
 				const initialData = loadFromTextarea.value;
@@ -137,7 +138,6 @@ If enabled, errors will be logged to this textarea.
 
 				toolbar.addActionButton('Save', () => {
 					const popup = window.open();
-					const img = editor.toSVG();
 
 					popup.document.open();
 					popup.document.write(`
@@ -150,23 +150,62 @@ If enabled, errors will be logged to this textarea.
 									border: 1px solid gray;
 								}
 							</style>
-							<p>Save/load isn't fully implemented. For now, save the following text as an SVG:</p>
-							<textarea id='svg-text'>${img.outerHTML}</textarea><br/>
+							<p>
+								⚠ Warning ⚠: This editor isn't connected to an instance of Joplin!
+							</p>
+							<div id='previewRegion'>
+								<p>Saving to <code>localStorage</code>...</p>
+							</div>
 						</body>
 						</html>`
 					);
 					popup.document.close();
 
-					window.localStorage?.setItem(lastSaveLocalStorageKey, img.outerHTML);
+					const img = editor.toSVG();
 
-					const imagePreview = popup.document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-					imagePreview.innerHTML = img.innerHTML;
-					imagePreview.setAttribute('viewBox', img.getAttribute('viewBox'));
-					popup.document.body.appendChild(imagePreview);
+					// Loading the preview can be much slower than saving the image.
+					// Only do so if requested.
+					const previewRegion = popup.document.querySelector('#previewRegion');
+					const previewButton = popup.document.createElement('button');
+					previewButton.innerText = 'View generated SVG image';
+					previewButton.onclick = () => {
+						const messageContainer = popup.document.createElement('p');
+						const svgTextContainer = popup.document.createElement('textarea');
+
+						const imagePreview = popup.document.createElementNS(
+							'http://www.w3.org/2000/svg', 'svg'
+						);
+						imagePreview.innerHTML = img.innerHTML;
+						imagePreview.setAttribute('viewBox', img.getAttribute('viewBox'));
+
+						messageContainer.innerText = 'Preview';
+						svgTextContainer.value = img.outerHTML;
+
+						previewRegion.replaceChildren(
+							messageContainer, svgTextContainer, imagePreview
+						);
+					};
+
+					let localStorageSaveStatus = 'Unable to save to localStorage. ';
+					if (window.localStorage) {
+						// Save
+						window.localStorage.setItem(lastSaveLocalStorageKey, img.outerHTML);
+						localStorageSaveStatus = 'Saved to localStorage! ';
+					}
+
+					previewRegion.replaceChildren(
+						popup.document.createTextNode(localStorageSaveStatus),
+						previewButton,
+					);
 				});
 
-				if (initialData && initialData.length > 0) {
-					editor.loadFromSVG(initialData);
+				let sourceText = initialData;
+				if (sourceText === loadFromLastSaveText) {
+					sourceText = window.localStorage?.getItem(lastSaveLocalStorageKey) ?? '';
+				}
+
+				if (sourceText && sourceText.length > 0) {
+					editor.loadFromSVG(sourceText);
 				}
 			};
 		})();
