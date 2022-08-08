@@ -275,11 +275,6 @@ class Selection {
 				this.boxRotation += 2 * Math.PI;
 			}
 
-			// To rotate, we need *at least* the rotation circle's size offset
-			if (offset.magnitude() <= this.rotateCircle.clientWidth) {
-				return;
-			}
-
 			let targetRotation = offset.angle();
 			targetRotation = targetRotation % (2 * Math.PI);
 			if (targetRotation < 0) {
@@ -299,8 +294,27 @@ class Selection {
 				deltaRotation *= rotationDirection;
 			}
 
-			this.boxRotation += deltaRotation;
+			const oldTransform = transform;
 			transform = transform.rightMul(Mat33.zRotation(deltaRotation, this.region.center));
+
+			// TODO: Fix this. Currently, this works around a bug in which transform might not
+			// be invertable...
+			if (
+				!transform.transformVec2(
+					transform.inverse().transformVec2(Vec2.of(1,1))
+				).eq(Vec2.of(1,1), 0.1)
+			) {
+				transform = oldTransform;
+				console.error(
+					'Uninvertable transform! Canceling rotation update.',
+					'\nTransform:', transform,
+					'\nΔϑ', deltaRotation,
+					'\nCenter:', this.region.center
+				);
+				return;
+			}
+
+			this.boxRotation += deltaRotation;
 			previewTransformCmds();
 		}, applyTransformCmds);
 	}
