@@ -1,5 +1,5 @@
-import Rect2 from "./Rect2";
-import { Vec2, Point2 } from "./Vec2";
+import Rect2 from './Rect2';
+import { Vec2, Point2 } from './Vec2';
 
 interface IntersectionResult {
 	point: Point2;
@@ -7,22 +7,22 @@ interface IntersectionResult {
 }
 
 export default class LineSegment2 {
-	private readonly direction: Vec2;
+	public readonly direction: Vec2;
 	public readonly length: number;
 	public readonly bbox;
 
 	public constructor(
 		private readonly point1: Point2,
-		private readonly point2: Point2,
+		private readonly point2: Point2
 	) {
-		this.bbox = Rect2.bboxOf([ point1, point2 ]);
-		
+		this.bbox = Rect2.bboxOf([point1, point2]);
+
 		this.direction = point2.minus(point1);
 		this.length = this.direction.magnitude();
 
 		// Normalize
 		if (this.length > 0) {
-			this.direction = this.direction.times(1/this.length);
+			this.direction = this.direction.times(1 / this.length);
 		}
 	}
 

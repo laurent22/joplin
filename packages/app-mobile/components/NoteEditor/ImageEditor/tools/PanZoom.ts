@@ -4,7 +4,7 @@ import Mat33 from '../geometry/Mat33';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
 import Pointer, { PointerDevice } from '../Pointer';
-import { PointerEvt, WheelEvt } from '../types';
+import { KeyPressEvent, PointerEvt, WheelEvt } from '../types';
 import { Viewport } from '../Viewport';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
@@ -137,16 +137,25 @@ export default class PanZoom extends BaseTool {
 	}
 
 	public onPointerUp(_event: PointerEvt): void {
-		if (this.transform) {
-			this.transform.unapply(this.editor);
-			this.editor.dispatch(this.transform);
-			this.transform = null;
-		}
+		this.transform = null;
 	}
 
 	public onGestureCancel(): void {
 		this.transform?.unapply(this.editor);
 		this.transform = null;
+	}
+
+	// Applies [transformUpdate] to the editor. This stacks on top of the
+	// current transformation, if it exists.
+	private updateTransform(transformUpdate: Mat33) {
+		let newTransform = transformUpdate;
+		if (this.transform) {
+			newTransform = this.transform.transform.rightMul(transformUpdate);
+		}
+
+		this.transform?.unapply(this.editor);
+		this.transform = new Viewport.ViewportTransform(newTransform);
+		this.transform.apply(this.editor);
 	}
 
 	public onWheel({ delta, screenPos }: WheelEvt): boolean {
@@ -155,21 +164,89 @@ export default class PanZoom extends BaseTool {
 		}
 
 		const canvasPos = this.editor.viewport.screenToCanvas(screenPos);
+		const toCanvas = this.editor.viewport.screenToCanvasTransform;
+
 		// Transform without including translation
 		const translation =
-			this.editor.viewport.screenToCanvasTransform.transformVec3(
+			toCanvas.transformVec3(
 				Vec3.of(-delta.x, -delta.y, 0)
 			);
 		const pinchZoomScaleFactor = 1.04;
-		const transformUpdate = Mat33.scaling2D(Math.pow(pinchZoomScaleFactor, -delta.z), canvasPos).rightMul(
+		const transformUpdate = Mat33.scaling2D(
+			Math.pow(pinchZoomScaleFactor, -delta.z), canvasPos
+		).rightMul(
 			Mat33.translation(translation)
 		);
+		this.updateTransform(transformUpdate);
 
-		this.transform.unapply(this.editor);
-		this.transform = new Viewport.ViewportTransform(
-			this.transform.transform.rightMul(transformUpdate)
-		);
-		this.transform.apply(this.editor);
+		return true;
+	}
+
+	public onKeyPress({ key }: KeyPressEvent): boolean {
+		let translation = Vec2.zero;
+		let scale = 1;
+		let rotation = 0;
+
+		switch (key) {
+		case 'a':
+		case 'h':
+		case 'ArrowLeft':
+			translation = Vec2.of(-1, 0);
+			break;
+		case 'd':
+		case 'l':
+		case 'ArrowRight':
+			translation = Vec2.of(1, 0);
+			break;
+		case 'k':
+		case 'ArrowUp':
+			translation = Vec2.of(0, -1);
+			break;
+		case 'j':
+		case 'ArrowDown':
+			translation = Vec2.of(0, 1);
+			break;
+		case 'w':
+			scale = 1 / 2;
+			break;
+		case 's':
+			scale = 2;
+			break;
+		case 'r':
+			rotation = 1;
+			break;
+		case 'R':
+			rotation = -1;
+			break;
+		default:
+			return false;
+		}
+
+		// For each keypress,
+		translation = translation.times(30); // Move at most 30 units
+		rotation *= Math.PI / 8; // Rotate at most a sixteenth of a rotation
+
+		// Transform the canvas, not the viewport:
+		translation = translation.times(-1);
+		rotation = rotation * -1;
+		scale = 1 / scale;
+
+		const toCanvas = this.editor.viewport.screenToCanvasTransform;
+
+		// Transform without translating (treat toCanvas as a linear instead of
+		// an affine transformation).
+		translation = toCanvas.transformVec3(translation);
+
+		// Rotate/scale about the center of the canvas
+		const transformCenter = this.editor.viewport.visibleRect.center;
+		const transformUpdate = Mat33.scaling2D(
+			scale, transformCenter
+		).rightMul(Mat33.zRotation(
+			rotation, transformCenter
+		)).rightMul(Mat33.translation(
+			translation
+		));
+		this.updateTransform(transformUpdate);
 
 		return true;
 	}

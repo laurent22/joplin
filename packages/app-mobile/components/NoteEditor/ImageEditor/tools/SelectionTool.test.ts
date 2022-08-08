@@ -32,11 +32,14 @@ describe('SelectionTool', () => {
 		editor.sendPenEvent(InputEvtType.PointerMoveEvt, Vec2.of(0.1, 0.1));
 		editor.sendPenEvent(InputEvtType.PointerUpEvt, Vec2.of(0.1, 0.1));
 
+		// Should surround the selected object (which has bbox = (0, 0, 1, 1))
+		// with extra space.
+		const paddingSize = selectionTool.getSelection().getMinCanvasSize();
 		expect(selectionTool.getSelection().region).toMatchObject({
-			x: 0,
-			y: 0,
-			w: 1,
-			h: 1,
+			x: -paddingSize / 2,
+			y: -paddingSize / 2,
+			w: paddingSize + 1,
+			h: paddingSize + 1,
 		});
 	});
 });

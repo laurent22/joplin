@@ -119,9 +119,9 @@ export default class Rect2 {
 	public get corners(): Point2[] {
 		return [
 			this.bottomRight,
-			this.bottomRight.plus(Vec2.of(0, -this.h)),
+			this.topRight,
 			this.topLeft,
-			this.topLeft.plus(Vec2.of(0, this.h)),
+			this.bottomLeft,
 		];
 	}
 
@@ -129,6 +129,16 @@ export default class Rect2 {
 		return Math.max(this.w, this.h);
 	}
 
+	public get topRight() {
+		return this.bottomRight.plus(Vec2.of(0, -this.h));
+	}
+
+	public get bottomLeft() {
+		return this.topLeft.plus(Vec2.of(0, this.h));
+	}
+
+	// Returns edges in the order
+	// [ rightEdge, topEdge, leftEdge, bottomEdge ]
 	public getEdges(): LineSegment2[] {
 		const corners = this.corners;
 		return [

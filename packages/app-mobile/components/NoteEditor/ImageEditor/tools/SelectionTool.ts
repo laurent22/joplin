@@ -10,6 +10,7 @@ import Viewport from '../Viewport';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 
+const handleScreenSize = 30;
 const styles = `
 	.handleOverlay {
 		position: absolute;
@@ -35,15 +36,16 @@ const styles = `
 	}
 
 	.handleOverlay > .selectionBox .resizeCorner {
-		width: 15px;
-		height: 15px;
-		margin-right: -8px;
-		margin-bottom: -8px;
+		width: ${handleScreenSize}px;
+		height: ${handleScreenSize}px;
+		margin-right: -${handleScreenSize / 2}px;
+		margin-bottom: -${handleScreenSize / 2}px;
 
 		position: absolute;
 		bottom: 0;
 		right: 0;
 
+		opacity: 0.8;
 		background-color: white;
 		border: 1px solid black;
 	}
@@ -57,10 +59,11 @@ const styles = `
 	}
 
 	.handleOverlay .rotateCircle {
-		width: 14px;
-		height: 14px;
-		margin-left: -7px;
-		margin-top: -7px;
+		width: ${handleScreenSize}px;
+		height: ${handleScreenSize}px;
+		margin-left: -${handleScreenSize / 2}px;
+		margin-top: -${handleScreenSize / 2}px;
+		opacity: 0.8;
 
 		border: 1px solid black;
 		background-color: white;
@@ -127,7 +130,7 @@ class Selection {
 	public constructor(
 		public startPoint: Point2, private editor: ImageEditor
 	) {
-		this.boxRotation = 0;
+		this.boxRotation = this.editor.viewport.getRotationAngle();
 		this.selectedElems = [];
 		this.region = Rect2.bboxOf([startPoint]);
 
@@ -192,7 +195,6 @@ class Selection {
 			transform = Mat33.identity;
 			transformationCommands = [];
 			this.region = this.region.transformedBoundingBox(inverseTransform);
-			this.boxRotation = 0;
 
 			const elems = this.selectedElems;
 			this.editor.dispatch({
@@ -225,8 +227,6 @@ class Selection {
 				return;
 			}
 
-			console.log('Previewing,', this.selectedElems.length);
-
 			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
 			transformationCommands = this.selectedElems.map(elem => {
 				return elem.transformBy(transform);
@@ -244,9 +244,7 @@ class Selection {
 			);
 
 			// Snap position to a multiple of 10 (additional decimal points lead to larger files).
-			deltaPosition = Viewport.roundPoint(
-				deltaPosition, 1 / this.editor.viewport.getScaleFactor()
-			);
+			deltaPosition = this.editor.viewport.roundPoint(deltaPosition);
 
 			this.region = this.region.translatedBy(deltaPosition);
 			transform = transform.rightMul(Mat33.translation(deltaPosition));
@@ -332,7 +330,8 @@ class Selection {
 	}
 
 	public setToPoint(point: Point2) {
-		this.region = Rect2.fromCorners(point, this.startPoint);
+		this.region = this.region.grownToPoint(point);
+		this.recomputeBoxRotation();
 		this.updateUI();
 	}
 
@@ -372,7 +371,7 @@ class Selection {
 
 	// Recompute this' region from the selected elements. Resets rotation to zero.
 	// Returns false if the selection is empty.
-	private recomputeRegion(): boolean {
+	public recomputeRegion(): boolean {
 		const newRegion = this.selectedElems.reduce((
 			accumulator: Rect2|null, elem: AbstractComponent
 		): Rect2 => {
@@ -385,8 +384,28 @@ class Selection {
 		}
 
 		this.region = newRegion;
-		this.boxRotation = 0;
+
+
+		const minSize = this.getMinCanvasSize();
+		if (this.region.w < minSize || this.region.h < minSize) {
+			// Add padding
+			const padding = minSize / 2;
+			this.region = Rect2.bboxOf(
+				this.region.corners, padding
+			);
+		}
+
+		this.recomputeBoxRotation();
 		return true;
+	}
+
+	public getMinCanvasSize(): number {
+		const canvasHandleSize = handleScreenSize / this.editor.viewport.getScaleFactor();
+		return canvasHandleSize * 2;
+	}
+
+	private recomputeBoxRotation() {
+		this.boxRotation = this.editor.viewport.getRotationAngle();
 	}
 
 	public updateUI() {
@@ -394,15 +413,21 @@ class Selection {
 			return;
 		}
 
-		const rect = this.region.transformedBoundingBox(
-			this.editor.viewport.canvasToScreenTransform
-		);
-		this.backgroundBox.style.left = `${rect.x}px`;
-		this.backgroundBox.style.top = `${rect.y}px`;
-		this.backgroundBox.style.width = `${rect.w}px`;
-		this.backgroundBox.style.height = `${rect.h}px`;
+		const rightSideDirection = this.region.topRight.minus(this.region.bottomRight);
+		const topSideDirection = this.region.topLeft.minus(this.region.topRight);
+
+		const toScreen = this.editor.viewport.canvasToScreenTransform;
+		const centerOnScreen = toScreen.transformVec2(this.region.center);
+		const heightOnScreen = toScreen.transformVec3(rightSideDirection).magnitude();
+		const widthOnScreen = toScreen.transformVec3(topSideDirection).magnitude();
+
+		this.backgroundBox.style.left = `${centerOnScreen.x - widthOnScreen / 2}px`;
+		this.backgroundBox.style.top = `${centerOnScreen.y - heightOnScreen / 2}px`;
+		this.backgroundBox.style.width = `${widthOnScreen}px`;
+		this.backgroundBox.style.height = `${heightOnScreen}px`;
 
 		const rotationDeg = this.boxRotation * 180 / Math.PI;
+
 		this.backgroundBox.style.transform = `rotate(${rotationDeg}deg)`;
 		this.rotateCircle.style.transform = `rotate(${-rotationDeg}deg)`;
 	}
@@ -424,14 +449,13 @@ export default class SelectionTool extends BaseTool {
 		this.handleOverlay.classList.add('handleOverlay');
 
 		editor.notifier.on(EditorEventType.ViewportChanged, _data => {
-			if (this.selectionBox) {
-				this.selectionBox.updateUI();
-			}
+			this.selectionBox?.recomputeRegion();
+			this.selectionBox?.updateUI();
 		});
 	}
 
 	public onPointerDown(event: PointerEvt): boolean {
-		if (event.allPointers.length === 1) {
+		if (event.allPointers.length === 1 && event.current.isPrimary) {
 			this.selectionBox = new Selection(
 				event.current.canvasPos, this.editor
 			);
@@ -448,9 +472,7 @@ export default class SelectionTool extends BaseTool {
 		this.selectionBox.setToPoint(event.current.canvasPos);
 	}
 
-	public onPointerUp(event: PointerEvt): void {
-		this.selectionBox.setToPoint(event.current.canvasPos);
-
+	private onGestureEnd() {
 		// Expand/shrink the selection rectangle, if applicable
 		this.selectionBox.resolveToObjects();
 
@@ -484,8 +506,13 @@ export default class SelectionTool extends BaseTool {
 		}
 	}
 
+	public onPointerUp(event: PointerEvt): void {
+		this.selectionBox.setToPoint(event.current.canvasPos);
+		this.onGestureEnd();
+	}
+
 	public onGestureCancel(): void {
-		this.selectionBox.cancelSelection();
+		this.onGestureEnd();
 	}
 
 	public setEnabled(enabled: boolean) {

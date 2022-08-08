@@ -1,4 +1,4 @@
-import { PointerEvtListener, WheelEvt, PointerEvt, EditorNotifier, EditorEventType } from '../types';
+import { PointerEvtListener, WheelEvt, PointerEvt, EditorNotifier, EditorEventType, KeyPressEvent } from '../types';
 import { ToolType } from './ToolController';
 import ToolEnabledGroup from './ToolEnabledGroup';
 
@@ -16,6 +16,10 @@ export default abstract class BaseTool implements PointerEvtListener {
 	}
 
 	public onWheel(_event: WheelEvt): boolean {
+		return false;
+	}
+
+	public onKeyPress(_event: KeyPressEvent): boolean {
 		return false;
 	}
 

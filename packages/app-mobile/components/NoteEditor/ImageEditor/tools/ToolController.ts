@@ -79,10 +79,21 @@ export default class ToolController {
 			this.activeTool?.onPointerUp(event);
 			this.activeTool = null;
 			handled = true;
-		} else if (event.kind === InputEvtType.WheelEvt) {
+		} else if (
+			event.kind === InputEvtType.WheelEvt || event.kind === InputEvtType.KeyPressEvent
+		) {
+			const isKeyPressEvt = event.kind === InputEvtType.KeyPressEvent;
+			const isWheelEvt = event.kind === InputEvtType.WheelEvt;
 			for (const tool of this.tools) {
-				if (tool.isEnabled() && tool.onWheel(event)) {
-					handled = true;
+				if (!tool.isEnabled()) {
+					continue;
+				}
+
+				const wheelResult = isWheelEvt && tool.onWheel(event);
+				const keyPressResult = isKeyPressEvt && tool.onKeyPress(event);
+				handled = keyPressResult || wheelResult;
+
+				if (handled) {
 					break;
 				}
 			}

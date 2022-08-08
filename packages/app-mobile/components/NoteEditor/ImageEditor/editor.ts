@@ -49,6 +49,8 @@ export class ImageEditor {
 
 		this.renderingRegion.style.touchAction = 'none';
 		this.renderingRegion.className = 'imageEditorRenderArea';
+		this.renderingRegion.setAttribute('tabIndex', '0');
+		this.renderingRegion.ariaLabel = 'Image editor'; // TODO: Localize/make more descriptive
 
 		this.notifier = new EventDispatcher();
 		this.importExportViewport = new Viewport(this.notifier);
@@ -140,9 +142,7 @@ export class ImageEditor {
 				current: pointer,
 				allPointers: getPointerList(),
 			};
-			if (this.toolController.dispatchInputEvent(event)) {
-				evt.preventDefault();
-			}
+			this.toolController.dispatchInputEvent(event);
 
 			return true;
 		});
@@ -188,6 +188,15 @@ export class ImageEditor {
 
 		this.renderingRegion.addEventListener('pointercancel', evt => {
 			pointerEnd(evt);
+		});
+
+		this.renderingRegion.addEventListener('keydown', evt => {
+			if (this.toolController.dispatchInputEvent({
+				kind: InputEvtType.KeyPressEvent,
+				key: evt.key,
+			})) {
+				evt.preventDefault();
+			}
 		});
 
 		this.container.addEventListener('wheel', evt => {

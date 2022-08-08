@@ -42,7 +42,22 @@ export default class Mat33 {
 		0, 0, 1
 	);
 
+	// Either returns the inverse of this, or, if this matrix is singular/uninvertable,
+	// returns Mat33.identity.
 	public inverse(): Mat33 {
+		return this.computeInverse() ?? Mat33.identity;
+	}
+
+	public invertable(): boolean {
+		return this.computeInverse() !== null;
+	}
+
+	private cachedInverse: Mat33|undefined = undefined;
+	private computeInverse(): Mat33|null {
+		if (this.cachedInverse !== undefined) {
+			return this.cachedInverse;
+		}
+
 		const toIdentity = [
 			this.rows[0],
 			this.rows[1],
@@ -58,29 +73,69 @@ export default class Mat33 {
 		// Convert toIdentity to the identity matrix and
 		// toResult to the inverse through elementary row operations
 		for (let cursor = 0; cursor < 3; cursor++) {
+			// Select the [cursor]th diagonal entry
+			let pivot = toIdentity[cursor].at(cursor);
+
+			// Don't divide by zero (treat very small numbers as zero).
+			const minDivideBy = 1e-10;
+			if (Math.abs(pivot) < minDivideBy) {
+				let swapIndex = -1;
+				// For all other rows,
+				for (let i = 1; i <= 2; i++) {
+					const otherRowIdx = (cursor + i) % 3;
+
+					if (Math.abs(toIdentity[otherRowIdx].at(cursor)) >= minDivideBy) {
+						swapIndex = otherRowIdx;
+						break;
+					}
+				}
+
+				// Can't swap with another row?
+				if (swapIndex === -1) {
+					this.cachedInverse = null;
+					return null;
+				}
+
+				const tmpIdentityRow = toIdentity[cursor];
+				const tmpResultRow = toResult[cursor];
+
+				// Swap!
+				toIdentity[cursor] = toIdentity[swapIndex];
+				toResult[cursor] = toResult[swapIndex];
+				toIdentity[swapIndex] = tmpIdentityRow;
+				toResult[swapIndex] = tmpResultRow;
+
+				pivot = toIdentity[cursor].at(cursor);
+			}
+
 			// Make toIdentity[k = cursor] = 1
-			let scale = 1.0 / (toIdentity[cursor].at(cursor) || 1);
+			let scale = 1.0 / pivot;
 			toIdentity[cursor] = toIdentity[cursor].times(scale);
 			toResult[cursor] = toResult[cursor].times(scale);
+
+			const cursorToIdentityRow = toIdentity[cursor];
+			const cursorToResultRow = toResult[cursor];
 
 			// Make toIdentity[k ≠ cursor] = 0
 			for (let i = 1; i <= 2; i++) {
 				const otherRowIdx = (cursor + i) % 3;
 				scale = -toIdentity[otherRowIdx].at(cursor);
 				toIdentity[otherRowIdx] = toIdentity[otherRowIdx].plus(
-					toIdentity[cursor].times(scale)
+					cursorToIdentityRow.times(scale)
 				);
 				toResult[otherRowIdx] = toResult[otherRowIdx].plus(
-					toResult[cursor].times(scale)
+					cursorToResultRow.times(scale)
 				);
 			}
 		}
 
-		return Mat33.ofRows(
+		const inverse = Mat33.ofRows(
 			toResult[0],
 			toResult[1],
 			toResult[2]
 		);
+		this.cachedInverse = inverse;
+		return inverse;
 	}
 
 	/** @return thisᵀ */

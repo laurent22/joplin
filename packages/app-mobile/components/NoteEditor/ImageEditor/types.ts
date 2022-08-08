@@ -45,6 +45,7 @@ export enum InputEvtType {
 	GestureCancelEvt,
 
 	WheelEvt,
+	KeyPressEvent,
 }
 
 /**
@@ -57,6 +58,11 @@ export interface WheelEvt {
 	readonly kind: InputEvtType.WheelEvt;
 	readonly delta: Vec3;
 	readonly screenPos: Point2;
+}
+
+export interface KeyPressEvent {
+	readonly kind: InputEvtType.KeyPressEvent;
+	readonly key: string;
 }
 
 /**
@@ -91,7 +97,7 @@ export interface PointerUpEvt extends PointerEvtBase {
 // types of InputEvt/PointerEvt are handled.
 // See https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions
 export type PointerEvt = PointerDownEvt | PointerMoveEvt | PointerUpEvt;
-export type InputEvt = WheelEvt | GestureCancelEvt | PointerEvt;
+export type InputEvt = KeyPressEvent | WheelEvt | GestureCancelEvt | PointerEvt;
 
 export type EditorNotifier = EventDispatcher<EditorEventType, EditorEventDataType>;
 

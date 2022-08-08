@@ -82,8 +82,15 @@ export class Viewport {
 		return this.transform;
 	}
 
+	// Returns the amount a vector on the canvas is scaled to become a vector on the screen.
 	public getScaleFactor(): number {
+		// Use transformVec3 to avoid translating the vector
 		return this.transform.transformVec3(Vec3.unitX).magnitude();
+	}
+
+	// Returns the angle of the canvas in radians
+	public getRotationAngle(): number {
+		return this.transform.transformVec3(Vec3.unitX).angle();
 	}
 
 	// Rounds the given [point] to a multiple of 10 such that it is within [tolerance] of
@@ -108,6 +115,12 @@ export class Viewport {
 		}
 
 		return point.map(roundComponent);
+	}
+
+
+	// Round a point with a tolerance of ±1 screen unit.
+	public roundPoint(point: Point2): Point2 {
+		return Viewport.roundPoint(point, 1 / this.getScaleFactor());
 	}
 }
 
