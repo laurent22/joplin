@@ -1,52 +1,19 @@
----
-name: "\U0001F41B Bug Report"
-about: Report a reproducible bug or regression in Joplin.
-title: ''
-labels: bug
-assignees: ''
+Found a bug? Please fill out the sections below. 👍
 
----
+### Issue Summary
 
-<!--
-  Please provide a clear and concise description of what the bug is. (In the section Steps To Reproduce.)
-  Include screenshots for UI problems if needed.
-  DO NOT create screenshots of text !!! Copy and paste the text into a code block.
-  Please test using the latest Joplin release to make sure your issue has not already been fixed.
--->
+A summary of the issue. This needs to be a clear detailed-rich summary.
 
-<!--
-  IMPORTANT: If you are reporting a clipper bug, please include an example URL that shows the issue.
-  Without the URL the issue is likely to be closed.
--->
+### Steps to Reproduce
 
-## Environment
+1. (for example) Went to ...
+2. Clicked on...
+3. ...
 
-Joplin version: 
-Platform: 
-OS specifics: 
+Any other relevant information. For example, why do you consider this a bug and what did you expect to happen instead?
 
-<!--
-  Platform can be one of: macOS, Linux, Windows, Android, iOS, terminal (or a combination)
-  OS specifics: e.g. OS version, Linux distribution, Android/iOS version...
--->
+### Technical details
 
-## Steps to reproduce
-
-1. 
-2. 
-3. 
-
-<!--
-  Issues without reproduction steps are likely to stall.
--->
-
-## Describe what you expected to happen
-
-
-
-## Logfile
-
-<!--
-  Please attach a debug log. Issues without a debug log are likely to stall.
-  For information on how to collect a log file: https://joplinapp.org/debugging/
--->
+- Browser version, screen recording, console logs, network requests: You can make a recording with [Bird Eats Bug](https://birdeatsbug.com/).
+- Node.js version
+- Anything else that you think could be an issue.
