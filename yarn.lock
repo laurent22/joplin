@@ -4075,6 +4075,7 @@ __metadata:
     fs-extra: ^8.1.0
     gulp: ^4.0.2
     jest: ^28.1.1
+    jest-environment-jsdom: ^28.1.3
     jetifier: ^1.6.5
     joplin-rn-alarm-notification: ^1.0.5
     jsc-android: 241213.1.0

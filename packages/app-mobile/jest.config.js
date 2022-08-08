@@ -7,6 +7,8 @@ module.exports = {
 		'js',
 	],
 
+	testEnvironment: 'jsdom',
+
 	testMatch: ['**/*.test.(ts|tsx)'],
 
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
