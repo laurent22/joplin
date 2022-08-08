@@ -6,6 +6,7 @@ import Mat33 from '../geometry/Mat33';
 import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import { EditorEventType, PointerEvt } from '../types';
+import Viewport from '../Viewport';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 
@@ -19,6 +20,7 @@ const styles = `
 	.handleOverlay > .selectionBox {
 		position: fixed;
 		z-index: 0;
+		transform-origin: center;
 	}
 
 	.handleOverlay > .selectionBox .draggableBackground {
@@ -45,9 +47,28 @@ const styles = `
 		background-color: white;
 		border: 1px solid black;
 	}
+
+	.handleOverlay > .selectionBox .rotateCircleContainer {
+		position: absolute;
+		top: 50%;
+		bottom: 50%;
+		left: 50%;
+		right: 50%;
+	}
+
+	.handleOverlay .rotateCircle {
+		width: 14px;
+		height: 14px;
+		margin-left: -7px;
+		margin-top: -7px;
+
+		border: 1px solid black;
+		background-color: white;
+		border-radius: 100%;
+	}
 `;
 
-type DragCallback = (delta: Vec2)=> void;
+type DragCallback = (delta: Vec2, offset: Point2)=> void;
 type DragEndCallback = ()=> void;
 
 const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: DragEndCallback) => {
@@ -75,7 +96,7 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 			// Safari/iOS doesn't seem to support movementX/movementY on pointer events.
 			// Calculate manually:
 			const delta = Vec2.of(event.pageX - lastX, event.pageY - lastY);
-			onDrag(delta);
+			onDrag(delta, Vec2.of(event.offsetX, event.offsetY));
 			lastX = event.pageX;
 			lastY = event.pageY;
 
@@ -97,10 +118,10 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 };
 
 class Selection {
-	private region: Rect2;
+	public region: Rect2;
 	private boxRotation: number;
-	// private transform: Mat33;
 	private backgroundBox: HTMLElement;
+	private rotateCircle: HTMLElement;
 	private selectedElems: AbstractComponent[];
 
 	public constructor(
@@ -115,12 +136,19 @@ class Selection {
 		this.backgroundBox = document.createElement('div');
 		const draggableBackground = document.createElement('div');
 		const resizeCorner = document.createElement('div');
+		this.rotateCircle = document.createElement('div');
+		const rotateCircleContainer = document.createElement('div');
 
 		this.backgroundBox.classList.add('selectionBox');
 		draggableBackground.classList.add('draggableBackground');
 		resizeCorner.classList.add('resizeCorner');
+		this.rotateCircle.classList.add('rotateCircle');
+		rotateCircleContainer.classList.add('rotateCircleContainer');
+
+		rotateCircleContainer.appendChild(this.rotateCircle);
 
 		this.backgroundBox.appendChild(draggableBackground);
+		this.backgroundBox.appendChild(rotateCircleContainer);
 		this.backgroundBox.appendChild(resizeCorner);
 
 		let transformationCommands: Command[] = [];
@@ -156,23 +184,34 @@ class Selection {
 
 			const fullTransform = transform;
 			const inverseTransform = transform.inverse();
+			const deltaBoxRotation = this.boxRotation;
 
 			// Reset for the next drag
 			transform = Mat33.identity;
 			transformationCommands = [];
 			this.region = this.region.transformedBoundingBox(inverseTransform);
+			this.boxRotation = 0;
 
 			const elems = this.selectedElems;
 			this.editor.dispatch({
 				apply: async (editor) => {
+					// Approximate the new selection
 					this.region = this.region.transformedBoundingBox(fullTransform);
+					this.boxRotation += deltaBoxRotation;
 					this.updateUI();
+
 					await asyncTransformElems(editor, elems, fullTransform);
+					this.recomputeRegion();
+					this.updateUI();
 				},
 				unapply: async (editor) => {
 					this.region = this.region.transformedBoundingBox(inverseTransform);
+					this.boxRotation -= deltaBoxRotation;
 					this.updateUI();
+
 					await asyncTransformElems(editor, elems, inverseTransform);
+					this.recomputeRegion();
+					this.updateUI();
 				},
 			});
 		};
@@ -224,6 +263,35 @@ class Selection {
 				previewTransformCmds();
 			}
 		}, applyTransformCmds);
+
+		makeDraggable(this.rotateCircle, (_deltaPosition, offset) => {
+			this.boxRotation = this.boxRotation % (2 * Math.PI);
+			if (this.boxRotation < 0) {
+				this.boxRotation += 2 * Math.PI;
+			}
+
+			// To rotate, we need *at least* the rotation circle's size offset
+			if (offset.magnitude() <= this.rotateCircle.clientWidth) {
+				return;
+			}
+
+			let targetRotation = offset.angle();
+			targetRotation = targetRotation % (2 * Math.PI);
+			if (targetRotation < 0) {
+				targetRotation += 2 * Math.PI;
+			}
+
+			const deltaRotation = (targetRotation - this.boxRotation);
+
+			const minRotation = 0.1;
+			if (Math.abs(deltaRotation) < minRotation || !isFinite(deltaRotation)) {
+				return;
+			}
+
+			this.boxRotation += deltaRotation;
+			transform = transform.rightMul(Mat33.zRotation(deltaRotation, this.region.center));
+			previewTransformCmds();
+		}, applyTransformCmds);
 	}
 
 	public appendBackgroundBoxTo(elem: HTMLElement) {
@@ -265,6 +333,17 @@ class Selection {
 		});
 
 		// Find the bounding box of all selected elements.
+		if (!this.recomputeRegion()) {
+			return false;
+		}
+		this.updateUI();
+
+		return true;
+	}
+
+	// Recompute this' region from the selected elements. Resets rotation to zero.
+	// Returns false if the selection is empty.
+	private recomputeRegion(): boolean {
 		const newRegion = this.selectedElems.reduce((
 			accumulator: Rect2|null, elem: AbstractComponent
 		): Rect2 => {
@@ -277,7 +356,7 @@ class Selection {
 		}
 
 		this.region = newRegion;
-		this.updateUI();
+		this.boxRotation = 0;
 		return true;
 	}
 
@@ -296,6 +375,7 @@ class Selection {
 
 		const rotationDeg = this.boxRotation * 180 / Math.PI;
 		this.backgroundBox.style.transform = `rotate(${rotationDeg}deg)`;
+		this.rotateCircle.style.transform = `rotate(${-rotationDeg}deg)`;
 	}
 }
 
@@ -344,6 +424,35 @@ export default class SelectionTool extends BaseTool {
 
 		// Expand/shrink the selection rectangle, if applicable
 		this.selectionBox.resolveToObjects();
+
+		const visibleRect = this.editor.viewport.visibleRect;
+		const selectionRect = this.selectionBox.region;
+
+		// Try to move the selection within the center 2/3rds of the viewport.
+		const targetRect = visibleRect.transformedBoundingBox(
+			Mat33.scaling2D(2 / 3, visibleRect.center)
+		);
+
+		// Ensure that the selection fits within the target
+		if (targetRect.w < selectionRect.w || targetRect.h < selectionRect.h) {
+			const multiplier = Math.max(
+				selectionRect.w / targetRect.w, selectionRect.h / targetRect.h
+			);
+			const visibleRectTransform = Mat33.scaling2D(multiplier, targetRect.topLeft);
+			const viewportContentTransform = visibleRectTransform.inverse();
+
+			this.editor.dispatch(new Viewport.ViewportTransform(viewportContentTransform));
+		}
+
+		// Ensure that the top left is visible
+		if (!targetRect.containsRect(selectionRect)) {
+			// target position - current position
+			const translation = selectionRect.center.minus(targetRect.center);
+			const visibleRectTransform = Mat33.translation(translation);
+			const viewportContentTransform = visibleRectTransform.inverse();
+
+			this.editor.dispatch(new Viewport.ViewportTransform(viewportContentTransform));
+		}
 	}
 
 	public onGestureCancel(): void {

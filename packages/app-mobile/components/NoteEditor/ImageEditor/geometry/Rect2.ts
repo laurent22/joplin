@@ -1,15 +1,25 @@
-import LineSegment2 from "./LineSegment2";
-import Mat33 from "./Mat33";
-import { Point2, Vec2 } from "./Vec2";
+import LineSegment2 from './LineSegment2';
+import Mat33 from './Mat33';
+import { Point2, Vec2 } from './Vec2';
+
+// An object that can be converted to a Rect2.
+interface RectTemplate {
+	x: number;
+	y: number;
+	w?: number;
+	h?: number;
+	width?: number;
+	height?: number;
+}
 
 /**
  * Represents a rectangle.
  *
  * invariant: w > 0, h > 0.
  */
- export default class Rect2 {
+export default class Rect2 {
 	// Derived state:
-	
+
 	// topLeft assumes up is -y
 	public readonly topLeft: Point2;
 	public readonly size: Vec2;
@@ -191,6 +201,11 @@ import { Point2, Vec2 } from "./Vec2";
 		);
 	}
 
+	public static of(template: RectTemplate) {
+		const width = template.width ?? template.w ?? 0;
+		const height = template.height ?? template.h ?? 0;
+		return new Rect2(template.x, template.y, width, height);
+	}
 
 	public static empty = new Rect2(0, 0, 0, 0);
 	public static unitSquare = new Rect2(0, 0, 1, 1);
