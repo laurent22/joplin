@@ -162,6 +162,8 @@ class Selection {
 			editor: ImageEditor, elems: AbstractComponent[], transformBy: Mat33
 		) => {
 			for (let i = 0; i < elems.length; i += updateChunkSize) {
+				editor.showLoadingWarning(i / elems.length);
+
 				for (let j = i; j < elems.length && j < i + updateChunkSize; j++) {
 					const elem = elems[j];
 					elem.transformBy(transformBy).apply(editor);
@@ -175,6 +177,7 @@ class Selection {
 					});
 				}
 			}
+			editor.hideLoadingWarning();
 		};
 
 		const applyTransformCmds = () => {

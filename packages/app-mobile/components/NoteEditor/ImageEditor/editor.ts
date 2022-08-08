@@ -71,13 +71,13 @@ export class ImageEditor {
 		this.hideLoadingWarning();
 	}
 
-	private showLoadingWarning(fractionLoaded: number) {
+	public showLoadingWarning(fractionLoaded: number) {
 		const loadingPercent = Math.round(fractionLoaded * 100);
 		this.loadingWarning.innerText = `Loading... ${loadingPercent}%`; // TODO: Localize!
 		this.loadingWarning.style.display = 'block';
 	}
 
-	private hideLoadingWarning() {
+	public hideLoadingWarning() {
 		this.loadingWarning.style.display = 'none';
 	}
 
