@@ -1,5 +1,6 @@
 ---
 tweet: Joplin will have its first Meetup on 30 August! Come and join us at the Old Thameside Inn next to London Bridge! https://www.meetup.com/joplin/events/287611873/
+forum_url: https://discourse.joplinapp.org/t/26808
 ---
 
 # Joplin first meetup on 30 August!
