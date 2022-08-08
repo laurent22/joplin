@@ -8,7 +8,11 @@ import Mat33 from './geometry/Mat33';
 import Rect2 from './geometry/Rect2';
 import { Point2, Vec2 } from './geometry/Vec2';
 import Vec3 from './geometry/Vec3';
+import { StrokeDataPoint } from './StrokeBuilder';
 import { EditorEventType, EditorNotifier } from './types';
+
+// Returns the base type of some type of point/number
+type PointDataType<T extends Point2|StrokeDataPoint|number> = T extends Point2 ? Point2 : number;
 
 export class Viewport {
 	/**
@@ -80,6 +84,30 @@ export class Viewport {
 
 	public getScaleFactor(): number {
 		return this.transform.transformVec3(Vec3.unitX).magnitude();
+	}
+
+	// Rounds the given [point] to a multiple of 10 such that it is within [tolerance] of
+	// its original location. This is useful for preparing data for base-10 conversion.
+	public static roundPoint<T extends Point2|number>(
+		point: T, tolerance: number,
+	): PointDataType<T>;
+
+	// The separate function type definition seems necessary here.
+	// See https://stackoverflow.com/a/58163623/17055750.
+	// eslint-disable-next-line no-dupe-class-members
+	public static roundPoint(
+		point: Point2|number, tolerance: number
+	): Point2|number {
+		const scaleFactor = 10 ** Math.floor(Math.log10(tolerance));
+		const roundComponent = (component: number): number => {
+			return Math.round(component / scaleFactor) * scaleFactor;
+		};
+
+		if (typeof point === 'number') {
+			return roundComponent(point);
+		}
+
+		return point.map(roundComponent);
 	}
 }
 

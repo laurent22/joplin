@@ -6,7 +6,7 @@ import Rect2 from './geometry/Rect2';
 import { PathCommand, PathCommandType } from './geometry/Path';
 import LineSegment2 from './geometry/LineSegment2';
 import Stroke from './components/Stroke';
-import Vec3 from './geometry/Vec3';
+import Viewport from './Viewport';
 
 export interface StrokeDataPoint {
 	pos: Point2;
@@ -15,12 +15,6 @@ export interface StrokeDataPoint {
 	color: Color4;
 }
 
-// Returns the base type of some type of point/number
-type PointDataType<T extends Point2|StrokeDataPoint|number> =
-	T extends Point2
-		? Point2
-	: T extends StrokeDataPoint
-		? StrokeDataPoint : number;
 
 export default class StrokeBuilder {
 	private segments: RenderablePathSpec[];
@@ -79,40 +73,14 @@ export default class StrokeBuilder {
 		);
 	}
 
-	// Rounds the given point based on min/max fitting.
-	private roundPoint<T extends Point2|StrokeDataPoint|number>(
-		point: T
-	): PointDataType<T>;
-
-	// The separate function type definition seems necessary here.
-	// See https://stackoverflow.com/a/58163623/17055750.
-	// eslint-disable-next-line no-dupe-class-members
-	private roundPoint(point: Point2|StrokeDataPoint|number): Point2|StrokeDataPoint|number {
-		const scaleFactor = 10 ** Math.floor(Math.log10(this.minFitAllowed));
-		const roundComponent = (component: number): number => {
-			return Math.round(component / scaleFactor) * scaleFactor;
-		};
-
-		if (typeof point === 'number') {
-			return roundComponent(point);
-		}
-
-		// instanceof Vec3 because Vec2 is an alias for Vec3 (instanceof
-		// seems to be unable to handle type aliases).
-		if (point instanceof Vec3) { // T extends Point2
-			return point.map(roundComponent);
-		}
-
-		return {
-			...point,
-			pos: point.pos.map(roundComponent),
-		};
+	private roundPoint(point: Point2): Point2 {
+		return Viewport.roundPoint(point, this.minFitAllowed);
 	}
 
 	private finalizeCurrentCurve(fillStyle: FillStyle) {
 		// Case where no points have been added
 		if (!this.currentCurve) {
-			const width = this.roundPoint(this.startPoint.width / 3);
+			const width = Viewport.roundPoint(this.startPoint.width / 3, this.minFitAllowed);
 			const center = this.roundPoint(this.startPoint.pos);
 
 			// Draw a circle-ish shape around the start point

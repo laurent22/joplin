@@ -1,8 +1,8 @@
-import AbstractRenderer from "./rendering/AbstractRenderer";
-import CanvasRenderer from "./rendering/CanvasRenderer";
-import { ImageEditor } from "./editor";
-import { EditorEventType } from "./types";
-import DummyRenderer from "./rendering/DummyRenderer";
+import AbstractRenderer from './rendering/AbstractRenderer';
+import CanvasRenderer from './rendering/CanvasRenderer';
+import { ImageEditor } from './editor';
+import { EditorEventType } from './types';
+import DummyRenderer from './rendering/DummyRenderer';
 
 export enum RenderingMode {
 	DummyRenderer,
@@ -12,8 +12,8 @@ export enum RenderingMode {
 export default class Display {
 	private dryInkRenderer: AbstractRenderer;
 	private wetInkRenderer: AbstractRenderer;
-	private resizeSurfacesCallback?: ()=>void;
-	private flattenCallback?: ()=>void;
+	private resizeSurfacesCallback?: ()=> void;
+	private flattenCallback?: ()=> void;
 
 	public constructor(
 		private editor: ImageEditor, mode: RenderingMode, private parent: HTMLElement|null

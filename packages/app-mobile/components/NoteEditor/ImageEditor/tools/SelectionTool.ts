@@ -155,7 +155,7 @@ class Selection {
 		let transform = Mat33.identity;
 
 		// Maximum number of strokes to transform without a re-render.
-		const updateChunkSize = 25;
+		const updateChunkSize = 20;
 
 		// Apply a large transformation in chunks.
 		const asyncTransformElems = async (
@@ -223,6 +223,8 @@ class Selection {
 				return;
 			}
 
+			console.log('Previewing,', this.selectedElems.length);
+
 			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
 			transformationCommands = this.selectedElems.map(elem => {
 				return elem.transformBy(transform);
@@ -237,6 +239,9 @@ class Selection {
 			// (use a Vec3 transform to avoid translating deltaPosition)
 			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
 				deltaPosition
+			);
+			deltaPosition = Viewport.roundPoint(
+				deltaPosition, this.editor.viewport.getScaleFactor()
 			);
 
 			this.region = this.region.translatedBy(deltaPosition);
@@ -281,11 +286,17 @@ class Selection {
 				targetRotation += 2 * Math.PI;
 			}
 
-			const deltaRotation = (targetRotation - this.boxRotation);
+			let deltaRotation = (targetRotation - this.boxRotation);
 
-			const minRotation = 0.1;
-			if (Math.abs(deltaRotation) < minRotation || !isFinite(deltaRotation)) {
+			const rotationStep = Math.PI / 12;
+			if (Math.abs(deltaRotation) < rotationStep || !isFinite(deltaRotation)) {
 				return;
+			} else {
+				const rotationDirection = Math.sign(deltaRotation);
+
+				// Step exactly one rotationStep
+				deltaRotation = Math.floor(Math.abs(deltaRotation) / rotationStep) * rotationStep;
+				deltaRotation *= rotationDirection;
 			}
 
 			this.boxRotation += deltaRotation;
