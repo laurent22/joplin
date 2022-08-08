@@ -2,8 +2,9 @@ import Color4 from '../Color4';
 import ImageEditor from '../editor';
 import EditorImage from '../EditorImage';
 import { Vec2 } from '../geometry/Vec2';
+import Pointer, { PointerDevice } from '../Pointer';
 import StrokeBuilder from '../StrokeBuilder';
-import { EditorEventType, Pointer, PointerDevice, PointerEvt } from '../types';
+import { EditorEventType, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 

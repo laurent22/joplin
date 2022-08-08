@@ -127,7 +127,6 @@ class Selection {
 	public constructor(
 		public startPoint: Point2, private editor: ImageEditor
 	) {
-		// this.transform = Mat33.identity;
 		this.boxRotation = 0;
 		this.selectedElems = [];
 		this.region = Rect2.bboxOf([startPoint]);
@@ -243,8 +242,10 @@ class Selection {
 			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
 				deltaPosition
 			);
+
+			// Snap position to a multiple of 10 (additional decimal points lead to larger files).
 			deltaPosition = Viewport.roundPoint(
-				deltaPosition, this.editor.viewport.getScaleFactor()
+				deltaPosition, 1 / this.editor.viewport.getScaleFactor()
 			);
 
 			this.region = this.region.translatedBy(deltaPosition);
@@ -495,5 +496,10 @@ export default class SelectionTool extends BaseTool {
 		this.selectionBox = null;
 
 		this.handleOverlay.style.display = enabled ? 'block' : 'none';
+	}
+
+	// Get the object responsible for displaying this' selection.
+	public getSelection(): Selection {
+		return this.selectionBox;
 	}
 }

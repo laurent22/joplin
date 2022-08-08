@@ -12,6 +12,7 @@ const config = {
 	// See https://jestjs.io/docs/webpack#handling-static-assets
 	moduleNameMapper: {
 		'\\.(css|lessc)': '<rootDir>/__mocks__/styleMock.js',
+		'@melloware/coloris': '<rootDir>/__mocks__/coloris.ts',
 	},
 };
 

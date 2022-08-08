@@ -3,7 +3,8 @@ import { ImageEditor } from '../editor';
 import Mat33 from '../geometry/Mat33';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
-import { Pointer, PointerDevice, PointerEvt, WheelEvt } from '../types';
+import Pointer, { PointerDevice } from '../Pointer';
+import { PointerEvt, WheelEvt } from '../types';
 import { Viewport } from '../Viewport';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
@@ -30,7 +31,7 @@ export enum PanZoomMode {
 
 	/** Handle gestures from any device, rather than just touch */
 	AnyDevice = 0x1 << 2,
-};
+}
 
 export default class PanZoom extends BaseTool {
 	public readonly kind: ToolType.PanZoom|ToolType.TouchPanZoom = ToolType.PanZoom;
@@ -60,7 +61,9 @@ export default class PanZoom extends BaseTool {
 	}
 
 	private pointersHaveCorrectDeviceType(pointers: Pointer[]) {
-		return this.mode & PanZoomMode.AnyDevice || pointers.every(pointer => pointer.device === PointerDevice.Touch);
+		return this.mode & PanZoomMode.AnyDevice || pointers.every(
+			pointer => pointer.device === PointerDevice.Touch
+		);
 	}
 
 	public onPointerDown({ allPointers }: PointerEvt): boolean {

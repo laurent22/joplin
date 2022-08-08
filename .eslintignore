@@ -835,6 +835,9 @@ packages/app-desktop/utils/markupLanguageUtils.js.map
 packages/app-mobile/PluginAssetsLoader.d.ts
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/PluginAssetsLoader.js.map
+packages/app-mobile/__mocks__/coloris.d.ts
+packages/app-mobile/__mocks__/coloris.js
+packages/app-mobile/__mocks__/coloris.js.map
 packages/app-mobile/components/BackButtonDialogBox.d.ts
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BackButtonDialogBox.js.map
@@ -904,6 +907,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.test.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.test.js
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.test.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/Pointer.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/Pointer.js
+packages/app-mobile/components/NoteEditor/ImageEditor/Pointer.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/SVGLoader.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/SVGLoader.js
 packages/app-mobile/components/NoteEditor/ImageEditor/SVGLoader.js.map
@@ -955,6 +961,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.test.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.test.js
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.test.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.toString.test.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.toString.test.js
+packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.toString.test.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Rect2.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Rect2.js
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Rect2.js.map
@@ -1006,6 +1015,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/tools/Pen.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.test.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.test.js
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.test.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.js.map

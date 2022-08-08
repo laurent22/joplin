@@ -10,43 +10,8 @@ import Vec3 from './geometry/Vec3';
 import BaseTool from './tools/BaseTool';
 import AbstractComponent from './components/AbstractComponent';
 import Rect2 from './geometry/Rect2';
+import Pointer from './Pointer';
 
-/**
- * Provides a snapshot containing information about a pointer. A Pointer
- * object is immutable --- it will not be updated when the pointer's information changes.
- */
-export interface Pointer {
-	/**
-	 * The (x, y) position of the pointer relative to the top-left corner
-	 * of the visible canvas.
-	 */
-	readonly screenPos: Point2;
-
-	/**
-	 * Position of the pointer relative to the top left corner of the drawing
-	 * surface.
-	 */
-	readonly canvasPos: Point2;
-
-	readonly pressure?: number;
-	readonly isPrimary: boolean;
-	readonly down: boolean;
-
-	readonly device: PointerDevice;
-
-	/** Unique ID for the pointer */
-	readonly id: number;
-
-	/** Numeric timestamp {@see event.timeStamp} */
-	readonly timeStamp: number;
-}
-
-export enum PointerDevice {
-	Pen,
-	Touch,
-	Mouse,
-	Other,
-}
 
 export interface PointerEvtListener {
 	/**

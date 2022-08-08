@@ -1,12 +1,12 @@
 
 import EditorImage from './EditorImage';
 import ToolController from './tools/ToolController';
-import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorNotifier, EditorEventType, ImageLoader } from './types';
+import { InputEvtType, PointerEvt, EditorNotifier, EditorEventType, ImageLoader } from './types';
 import Command from './commands/Command';
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
 import EventDispatcher from '@joplin/lib/EventDispatcher';
-import { Vec2 } from './geometry/Vec2';
+import { Point2, Vec2 } from './geometry/Vec2';
 import Vec3 from './geometry/Vec3';
 import HTMLToolbar from './toolbar/HTMLToolbar';
 import { RenderablePathSpec } from './rendering/AbstractRenderer';
@@ -15,6 +15,7 @@ import SVGRenderer from './rendering/SVGRenderer';
 import Color4 from './Color4';
 import SVGLoader from './SVGLoader';
 import './editor.css';
+import Pointer from './Pointer';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
@@ -111,28 +112,6 @@ export class ImageEditor {
 	}
 
 	private registerListeners() {
-		const pointerTypeToDevice: Record<string, PointerDevice> = {
-			'mouse': PointerDevice.Mouse,
-			'pen': PointerDevice.Pen,
-			'touch': PointerDevice.Touch,
-		};
-
-		const pointerFor = (evt: PointerEvent, isDown: boolean): Pointer => {
-			const screenPos = Vec2.of(evt.clientX, evt.clientY);
-			const device = pointerTypeToDevice[evt.pointerType] ?? PointerDevice.Other;
-
-			return {
-				timeStamp: (new Date()).getTime(),
-				isPrimary: evt.isPrimary,
-				down: isDown,
-				id: evt.pointerId,
-				pressure: evt.pressure,
-				screenPos,
-				device,
-				canvasPos: this.viewport.screenToCanvas(screenPos),
-			};
-		};
-
 		const pointers: Record<number, Pointer> = {};
 		const getPointerList = () => {
 			const nowTime = (new Date()).getTime();
@@ -152,7 +131,7 @@ export class ImageEditor {
 		this.renderingRegion.addEventListener('touchstart', evt => evt.preventDefault());
 
 		this.renderingRegion.addEventListener('pointerdown', evt => {
-			const pointer = pointerFor(evt, true);
+			const pointer = Pointer.ofEvent(evt, true, this.viewport);
 			pointers[pointer.id] = pointer;
 
 			this.renderingRegion.setPointerCapture(pointer.id);
@@ -169,7 +148,9 @@ export class ImageEditor {
 		});
 
 		this.renderingRegion.addEventListener('pointermove', evt => {
-			const pointer = pointerFor(evt, pointers[evt.pointerId]?.down ?? false);
+			const pointer = Pointer.ofEvent(
+				evt, pointers[evt.pointerId]?.down ?? false, this.viewport
+			);
 			if (pointer.down) {
 				pointers[pointer.id] = pointer;
 
@@ -184,7 +165,7 @@ export class ImageEditor {
 		});
 
 		const pointerEnd = (evt: PointerEvent) => {
-			const pointer = pointerFor(evt, false);
+			const pointer = Pointer.ofEvent(evt, false, this.viewport);
 			if (!pointers[pointer.id]) {
 				return;
 			}
@@ -229,7 +210,9 @@ export class ImageEditor {
 				screenPos: pos,
 			})) {
 				evt.preventDefault();
+				return true;
 			}
+			return false;
 		});
 
 		window.addEventListener('resize', () => {
@@ -305,6 +288,25 @@ export class ImageEditor {
 		this.container.appendChild(styleSheet);
 
 		return styleSheet;
+	}
+
+	// Dispatch a pen event to the currently selected tool.
+	// Intented for unit tests.
+	public sendPenEvent(
+		eventType: InputEvtType.PointerDownEvt|InputEvtType.PointerMoveEvt|InputEvtType.PointerUpEvt,
+		point: Point2,
+		allPointers?: Pointer[]
+	) {
+		const mainPointer = Pointer.ofCanvasPoint(
+			point, eventType !== InputEvtType.PointerUpEvt, this.viewport
+		);
+		this.toolController.dispatchInputEvent({
+			kind: eventType,
+			allPointers: allPointers ?? [
+				mainPointer,
+			],
+			current: mainPointer,
+		});
 	}
 
 	public toSVG(): SVGElement {
