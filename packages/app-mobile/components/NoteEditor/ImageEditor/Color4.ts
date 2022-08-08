@@ -65,7 +65,12 @@ export default class Color4 {
 		return this.toHexString() === other.toHexString();
 	}
 
+	private hexString: string|null = null;
 	public toHexString(): string {
+		if (this.hexString) {
+			return this.hexString;
+		}
+
 		const componentToHex = (component: number): string => {
 			const res = Math.round(255 * component).toString(16);
 
@@ -82,7 +87,8 @@ export default class Color4 {
 		if (alpha === 'ff') {
 			return `#${red}${green}${blue}`;
 		}
-		return `#${red}${green}${blue}${alpha}`;
+		this.hexString = `#${red}${green}${blue}${alpha}`;
+		return this.hexString;
 	}
 
 	public static red = Color4.ofRGB(1.0, 0.0, 0.0);

@@ -2,17 +2,15 @@ import LineSegment2 from '../geometry/LineSegment2';
 import Mat33 from '../geometry/Mat33';
 import Path from '../geometry/Path';
 import Rect2 from '../geometry/Rect2';
-import { Vec2 } from '../geometry/Vec2';
 import AbstractRenderer, { RenderablePathSpec } from '../rendering/AbstractRenderer';
 import AbstractComponent from './AbstractComponent';
 
-interface StrokePart {
-	path: RenderablePathSpec;
+interface StrokePart extends RenderablePathSpec {
+	path: Path;
 	bbox: Rect2;
 }
 
 export default class Stroke extends AbstractComponent {
-	private geometry: Path;
 	private parts: StrokePart[];
 	protected contentBBox: Rect2;
 
@@ -22,26 +20,34 @@ export default class Stroke extends AbstractComponent {
 		// TODO: This can be optimized (Path.fromRenderable does extra work (e.g.
 		// computing Bezier curves, etc.)).
 		this.parts = parts.map(section => {
+			const path = Path.fromRenderable(section);
+
+			if (!this.contentBBox) {
+				this.contentBBox = path.bbox;
+			} else {
+				this.contentBBox = this.contentBBox.union(path.bbox);
+			}
+
 			return {
-				path: section,
-				bbox: Path.fromRenderable(section).bbox,
+				path,
+				bbox: path.bbox,
+
+				// To implement RenderablePathSpec
+				startPoint: path.startPoint,
+				fill: section.fill,
+				commands: path.parts,
 			};
 		});
-
-		this.geometry = this.parts.reduce((accumulator: Path, current: StrokePart) => {
-			return Path.fromRenderable(current.path).union(accumulator);
-		}, null)
-		// If no parts, fall back to a sensible default
-			?? new Path(Vec2.of(0, 0), []);
-		this.contentBBox = this.geometry?.bbox ?? Rect2.empty;
+		this.contentBBox ??= Rect2.empty;
 	}
 
 	public intersects(line: LineSegment2): boolean {
-		return this.geometry.intersection(line).length > 0;
-	}
-
-	public getGeometry(): Path {
-		return this.geometry;
+		for (const part of this.parts) {
+			if (part.path.intersection(line).length > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public render(canvas: AbstractRenderer, visibleRect: Rect2): void {
@@ -49,22 +55,34 @@ export default class Stroke extends AbstractComponent {
 		for (const part of this.parts) {
 			const bbox = part.bbox;
 			if (bbox.intersects(visibleRect)) {
-				canvas.drawPath(part.path);
+				canvas.drawPath(part);
 			}
 		}
 		canvas.endObject();
 	}
 
 	protected applyTransformation(affineTransfm: Mat33): void {
-		this.geometry = this.geometry.transformedBy(affineTransfm);
-		this.contentBBox = this.geometry.bbox;
+		this.contentBBox = null;
 
+		// Update each part
 		this.parts = this.parts.map((part) => {
-			const geom = Path.fromRenderable(part.path).transformedBy(affineTransfm);
+			const newPath = part.path.transformedBy(affineTransfm);
+			const newBBox = newPath.bbox;
+			if (!this.contentBBox) {
+				this.contentBBox = newBBox;
+			} else {
+				this.contentBBox = this.contentBBox.union(newBBox);
+			}
+
 			return {
-				path: geom.toRenderable(part.path.fill),
-				bbox: geom.bbox,
+				path: newPath,
+				bbox: newBBox,
+				startPoint: newPath.startPoint,
+				commands: newPath.parts,
+				fill: part.fill,
 			};
 		});
+
+		this.contentBBox ??= Rect2.empty;
 	}
 }

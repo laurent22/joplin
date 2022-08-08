@@ -126,6 +126,29 @@ class Selection {
 		let transformationCommands: Command[] = [];
 		let transform = Mat33.identity;
 
+		// Maximum number of strokes to transform without a re-render.
+		const updateChunkSize = 25;
+
+		// Apply a large transformation in chunks.
+		const asyncTransformElems = async (
+			editor: ImageEditor, elems: AbstractComponent[], transformBy: Mat33
+		) => {
+			for (let i = 0; i < elems.length; i += updateChunkSize) {
+				for (let j = i; j < elems.length && j < i + updateChunkSize; j++) {
+					const elem = elems[j];
+					elem.transformBy(transformBy).apply(editor);
+				}
+
+				// Re-render to show progress, but only if we're not done.
+				if (i + updateChunkSize < elems.length) {
+					await new Promise(resolve => {
+						editor.rerender();
+						requestAnimationFrame(resolve);
+					});
+				}
+			}
+		};
+
 		const applyTransformCmds = () => {
 			transformationCommands.forEach(cmd => {
 				cmd.unapply(this.editor);
@@ -141,24 +164,26 @@ class Selection {
 
 			const elems = this.selectedElems;
 			this.editor.dispatch({
-				apply: (editor) => {
-					elems.forEach(elem => {
-						elem.transformBy(fullTransform).apply(editor);
-					});
+				apply: async (editor) => {
 					this.region = this.region.transformedBoundingBox(fullTransform);
 					this.updateUI();
+					await asyncTransformElems(editor, elems, fullTransform);
 				},
-				unapply: (editor) => {
-					elems.forEach(elem => {
-						elem.transformBy(inverseTransform).apply(editor);
-					});
+				unapply: async (editor) => {
 					this.region = this.region.transformedBoundingBox(inverseTransform);
 					this.updateUI();
+					await asyncTransformElems(editor, elems, inverseTransform);
 				},
 			});
 		};
 
 		const previewTransformCmds = () => {
+			// Don't render what we're moving if it's likely to be slow.
+			if (this.selectedElems.length > updateChunkSize) {
+				this.updateUI();
+				return;
+			}
+
 			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
 			transformationCommands = this.selectedElems.map(elem => {
 				return elem.transformBy(transform);

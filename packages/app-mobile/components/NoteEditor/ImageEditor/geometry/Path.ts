@@ -44,11 +44,11 @@ interface IntersectionResult {
 }
 
 export default class Path {
-	public readonly geometry: Array<LineSegment2|Bezier>;
+	private cachedGeometry: Array<LineSegment2|Bezier>|null;
 	public readonly bbox: Rect2;
 
 	public constructor(public readonly startPoint: Point2, public readonly parts: PathCommand[]) {
-		this.geometry = [];
+		this.cachedGeometry = null;
 
 		// Initial bounding box contains one point: the start point.
 		this.bbox = Rect2.bboxOf([startPoint]);
@@ -57,9 +57,22 @@ export default class Path {
 		// calculation)
 		for (const part of parts) {
 			this.bbox = this.bbox.union(Path.computeBBoxForSegment(startPoint, part));
+		}
+	}
+
+	// Lazy-loads and returns this path's geometry
+	public get geometry(): Array<LineSegment2|Bezier> {
+		if (this.cachedGeometry) {
+			return this.cachedGeometry;
+		}
+
+		let startPoint = this.startPoint;
+		const geometry = [];
+
+		for (const part of this.parts) {
 			switch (part.kind) {
 			case PathCommandType.CubicBezierTo:
-				this.geometry.push(
+				geometry.push(
 					new Bezier(
 						startPoint.xy, part.controlPoint1.xy, part.controlPoint2.xy, part.endPoint.xy
 					)
@@ -67,7 +80,7 @@ export default class Path {
 				startPoint = part.endPoint;
 				break;
 			case PathCommandType.QuadraticBezierTo:
-				this.geometry.push(
+				geometry.push(
 					new Bezier(
 						startPoint.xy, part.controlPoint.xy, part.endPoint.xy
 					)
@@ -75,7 +88,7 @@ export default class Path {
 				startPoint = part.endPoint;
 				break;
 			case PathCommandType.LineTo:
-				this.geometry.push(
+				geometry.push(
 					new LineSegment2(startPoint, part.point)
 				);
 				startPoint = part.point;
@@ -85,6 +98,9 @@ export default class Path {
 				break;
 			}
 		}
+
+		this.cachedGeometry = geometry;
+		return this.cachedGeometry;
 	}
 
 	public static computeBBoxForSegment(startPoint: Point2, part: PathCommand): Rect2 {
