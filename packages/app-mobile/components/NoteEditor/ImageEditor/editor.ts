@@ -220,6 +220,45 @@ export class ImageEditor {
 		this.history.push(command);
 	}
 
+	// Apply a large transformation in chunks.
+	// If [apply] is false, the commands are unapplied.
+	// Triggers a re-render after each [updateChunkSize]-sized group of commands
+	// has been applied.
+	private async asyncApplyOrUnapplyCommands(
+		commands: Command[], apply: boolean, updateChunkSize: number
+	) {
+		for (let i = 0; i < commands.length; i += updateChunkSize) {
+			this.showLoadingWarning(i / commands.length);
+
+			for (let j = i; j < commands.length && j < i + updateChunkSize; j++) {
+				const cmd = commands[j];
+
+				if (apply) {
+					cmd.apply(this);
+				} else {
+					cmd.unapply(this);
+				}
+			}
+
+			// Re-render to show progress, but only if we're not done.
+			if (i + updateChunkSize < commands.length) {
+				await new Promise(resolve => {
+					this.rerender();
+					requestAnimationFrame(resolve);
+				});
+			}
+		}
+		this.hideLoadingWarning();
+	}
+
+	public asyncApplyCommands(commands: Command[], chunkSize: number) {
+		return this.asyncApplyOrUnapplyCommands(commands, true, chunkSize);
+	}
+
+	public asyncUnapplyCommands(commands: Command[], chunkSize: number) {
+		return this.asyncApplyOrUnapplyCommands(commands, false, chunkSize);
+	}
+
 	private rerenderQueued: boolean = false;
 	public queueRerender() {
 		if (!this.rerenderQueued) {

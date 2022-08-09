@@ -120,12 +120,17 @@ const makeDraggable = (element: HTMLElement, onDrag: DragCallback, onDragEnd: Dr
 	element.addEventListener('pointercancel', onPointerEnd);
 };
 
+// Maximum number of strokes to transform without a re-render.
+const updateChunkSize = 50;
+
 class Selection {
 	public region: Rect2;
 	private boxRotation: number;
 	private backgroundBox: HTMLElement;
 	private rotateCircle: HTMLElement;
 	private selectedElems: AbstractComponent[];
+	private transform: Mat33;
+	private transformationCommands: Command[];
 
 	public constructor(
 		public startPoint: Point2, private editor: ImageEditor
@@ -153,166 +158,151 @@ class Selection {
 		this.backgroundBox.appendChild(rotateCircleContainer);
 		this.backgroundBox.appendChild(resizeCorner);
 
-		let transformationCommands: Command[] = [];
-		let transform = Mat33.identity;
-
-		// Maximum number of strokes to transform without a re-render.
-		const updateChunkSize = 20;
-
-		// Apply a large transformation in chunks.
-		// If [apply] is false, the commands are unapplied.
-		const asyncTransformElems = async (
-			editor: ImageEditor, transformCmds: Command[], apply: boolean
-		) => {
-			for (let i = 0; i < transformCmds.length; i += updateChunkSize) {
-				editor.showLoadingWarning(i / transformCmds.length);
-
-				for (let j = i; j < transformCmds.length && j < i + updateChunkSize; j++) {
-					const cmd = transformCmds[j];
-
-					if (apply) {
-						cmd.apply(editor);
-					} else {
-						cmd.unapply(editor);
-					}
-				}
-
-				// Re-render to show progress, but only if we're not done.
-				if (i + updateChunkSize < transformCmds.length) {
-					await new Promise(resolve => {
-						editor.rerender();
-						requestAnimationFrame(resolve);
-					});
-				}
-			}
-			editor.hideLoadingWarning();
-		};
-
-		const computeTransformCommands = () => {
-			return this.selectedElems.map(elem => {
-				return elem.transformBy(transform);
-			});
-		};
-
-		const applyTransformCmds = () => {
-			transformationCommands.forEach(cmd => {
-				cmd.unapply(this.editor);
-			});
-
-			const fullTransform = transform;
-			const inverseTransform = transform.inverse();
-			const deltaBoxRotation = this.boxRotation;
-			const currentTransfmCommands = computeTransformCommands();
-
-			// Reset for the next drag
-			transformationCommands = [];
-			transform = Mat33.identity;
-			this.region = this.region.transformedBoundingBox(inverseTransform);
-
-			// Make the commands undo-able
-			this.editor.dispatch({
-				apply: async (editor) => {
-					// Approximate the new selection
-					this.region = this.region.transformedBoundingBox(fullTransform);
-					this.boxRotation += deltaBoxRotation;
-					this.updateUI();
-
-					await asyncTransformElems(editor, currentTransfmCommands, true);
-					this.recomputeRegion();
-					this.updateUI();
-				},
-				unapply: async (editor) => {
-					this.region = this.region.transformedBoundingBox(inverseTransform);
-					this.boxRotation -= deltaBoxRotation;
-					this.updateUI();
-
-					await asyncTransformElems(editor, currentTransfmCommands, false);
-					this.recomputeRegion();
-					this.updateUI();
-				},
-			});
-		};
-
-		const previewTransformCmds = () => {
-			// Don't render what we're moving if it's likely to be slow.
-			if (this.selectedElems.length > updateChunkSize) {
-				this.updateUI();
-				return;
-			}
-
-			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
-			transformationCommands = computeTransformCommands();
-			transformationCommands.forEach(cmd => cmd.apply(this.editor));
-
-			this.updateUI();
-		};
+		this.transformationCommands = [];
+		this.transform = Mat33.identity;
 
 		makeDraggable(draggableBackground, (deltaPosition: Vec2) => {
-			// Re-scale the change in position
-			// (use a Vec3 transform to avoid translating deltaPosition)
-			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
-				deltaPosition
-			);
-
-			// Snap position to a multiple of 10 (additional decimal points lead to larger files).
-			deltaPosition = this.editor.viewport.roundPoint(deltaPosition);
-
-			this.region = this.region.translatedBy(deltaPosition);
-			transform = transform.rightMul(Mat33.translation(deltaPosition));
-
-			previewTransformCmds();
-		}, applyTransformCmds);
+			this.handleBackgroundDrag(deltaPosition);
+		}, () => this.finishDragging());
 
 		makeDraggable(resizeCorner, (deltaPosition) => {
-			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
-				deltaPosition
-			);
-			deltaPosition = this.editor.viewport.roundPoint(deltaPosition);
-
-			const oldWidth = this.region.w;
-			const oldHeight = this.region.h;
-			const newSize = this.region.size.plus(deltaPosition);
-
-			if (newSize.y > 0 && newSize.x > 0) {
-				this.region = this.region.resizedTo(newSize);
-				const scaleFactor = Vec2.of(this.region.w / oldWidth, this.region.h / oldHeight);
-
-				const currentTransfm = Mat33.scaling2D(scaleFactor, this.region.topLeft);
-				transform = transform.rightMul(currentTransfm);
-				previewTransformCmds();
-			}
-		}, applyTransformCmds);
+			this.handleResizeCornerDrag(deltaPosition);
+		}, () => this.finishDragging());
 
 		makeDraggable(this.rotateCircle, (_deltaPosition, offset) => {
-			this.boxRotation = this.boxRotation % (2 * Math.PI);
-			if (this.boxRotation < 0) {
-				this.boxRotation += 2 * Math.PI;
-			}
-
-			let targetRotation = offset.angle();
-			targetRotation = targetRotation % (2 * Math.PI);
-			if (targetRotation < 0) {
-				targetRotation += 2 * Math.PI;
-			}
-
-			let deltaRotation = (targetRotation - this.boxRotation);
-
-			const rotationStep = Math.PI / 12;
-			if (Math.abs(deltaRotation) < rotationStep || !isFinite(deltaRotation)) {
-				return;
-			} else {
-				const rotationDirection = Math.sign(deltaRotation);
-
-				// Step exactly one rotationStep
-				deltaRotation = Math.floor(Math.abs(deltaRotation) / rotationStep) * rotationStep;
-				deltaRotation *= rotationDirection;
-			}
-
-			transform = transform.rightMul(Mat33.zRotation(deltaRotation, this.region.center));
-			this.boxRotation += deltaRotation;
-			previewTransformCmds();
-		}, applyTransformCmds);
+			this.handleRotateCircleDrag(offset);
+		}, () => this.finishDragging());
 	}
+
+	// Note a small change in the position of this' background while dragging
+	// At the end of a drag, changes should be applied by calling this.finishDragging()
+	public handleBackgroundDrag(deltaPosition: Vec2) {
+		// Re-scale the change in position
+		// (use a Vec3 transform to avoid translating deltaPosition)
+		deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
+			deltaPosition
+		);
+
+		// Snap position to a multiple of 10 (additional decimal points lead to larger files).
+		deltaPosition = this.editor.viewport.roundPoint(deltaPosition);
+
+		this.region = this.region.translatedBy(deltaPosition);
+		this.transform = this.transform.rightMul(Mat33.translation(deltaPosition));
+
+		this.previewTransformCmds();
+	}
+
+	public handleResizeCornerDrag(deltaPosition: Vec2) {
+		deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
+			deltaPosition
+		);
+		deltaPosition = this.editor.viewport.roundPoint(deltaPosition);
+
+		const oldWidth = this.region.w;
+		const oldHeight = this.region.h;
+		const newSize = this.region.size.plus(deltaPosition);
+
+		if (newSize.y > 0 && newSize.x > 0) {
+			this.region = this.region.resizedTo(newSize);
+			const scaleFactor = Vec2.of(this.region.w / oldWidth, this.region.h / oldHeight);
+
+			const currentTransfm = Mat33.scaling2D(scaleFactor, this.region.topLeft);
+			this.transform = this.transform.rightMul(currentTransfm);
+			this.previewTransformCmds();
+		}
+	}
+
+	public handleRotateCircleDrag(offset: Vec2) {
+		this.boxRotation = this.boxRotation % (2 * Math.PI);
+		if (this.boxRotation < 0) {
+			this.boxRotation += 2 * Math.PI;
+		}
+
+		let targetRotation = offset.angle();
+		targetRotation = targetRotation % (2 * Math.PI);
+		if (targetRotation < 0) {
+			targetRotation += 2 * Math.PI;
+		}
+
+		let deltaRotation = (targetRotation - this.boxRotation);
+
+		const rotationStep = Math.PI / 12;
+		if (Math.abs(deltaRotation) < rotationStep || !isFinite(deltaRotation)) {
+			return;
+		} else {
+			const rotationDirection = Math.sign(deltaRotation);
+
+			// Step exactly one rotationStep
+			deltaRotation = Math.floor(Math.abs(deltaRotation) / rotationStep) * rotationStep;
+			deltaRotation *= rotationDirection;
+		}
+
+		this.transform = this.transform.rightMul(Mat33.zRotation(deltaRotation, this.region.center));
+		this.boxRotation += deltaRotation;
+		this.previewTransformCmds();
+	}
+
+	private computeTransformCommands() {
+		return this.selectedElems.map(elem => {
+			return elem.transformBy(this.transform);
+		});
+	}
+
+	// Applies the current transformation to the selection
+	public finishDragging() {
+		this.transformationCommands.forEach(cmd => {
+			cmd.unapply(this.editor);
+		});
+
+		const fullTransform = this.transform;
+		const inverseTransform = this.transform.inverse();
+		const deltaBoxRotation = this.boxRotation;
+		const currentTransfmCommands = this.computeTransformCommands();
+
+		// Reset for the next drag
+		this.transformationCommands = [];
+		this.transform = Mat33.identity;
+		this.region = this.region.transformedBoundingBox(inverseTransform);
+
+		// Make the commands undo-able
+		this.editor.dispatch({
+			apply: async (editor) => {
+				// Approximate the new selection
+				this.region = this.region.transformedBoundingBox(fullTransform);
+				this.boxRotation += deltaBoxRotation;
+				this.updateUI();
+
+				await editor.asyncApplyCommands(currentTransfmCommands, updateChunkSize);
+				this.recomputeRegion();
+				this.updateUI();
+			},
+			unapply: async (editor) => {
+				this.region = this.region.transformedBoundingBox(inverseTransform);
+				this.boxRotation -= deltaBoxRotation;
+				this.updateUI();
+
+				await editor.asyncUnapplyCommands(currentTransfmCommands, updateChunkSize);
+				this.recomputeRegion();
+				this.updateUI();
+			},
+		});
+	}
+
+	// Preview the effects of the current transformation on the selection
+	private previewTransformCmds() {
+		// Don't render what we're moving if it's likely to be slow.
+		if (this.selectedElems.length > updateChunkSize) {
+			this.updateUI();
+			return;
+		}
+
+		this.transformationCommands.forEach(cmd => cmd.unapply(this.editor));
+		this.transformationCommands = this.computeTransformCommands();
+		this.transformationCommands.forEach(cmd => cmd.apply(this.editor));
+
+		this.updateUI();
+	}
+
 
 	public appendBackgroundBoxTo(elem: HTMLElement) {
 		if (this.backgroundBox.parentElement) {
