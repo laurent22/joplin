@@ -1,4 +1,5 @@
 import Color4 from './Color4';
+import AbstractComponent from './components/AbstractComponent';
 import Stroke from './components/Stroke';
 import UnknownSVGObject from './components/UnknownSVGObject';
 import Path from './geometry/Path';
@@ -82,8 +83,20 @@ export default class SVGLoader implements ImageLoader {
 
 	// Adds a stroke with a single path
 	private addPath(node: SVGPathElement) {
-		const stroke = new Stroke(this.strokeDataFromElem(node));
-		this.onAddComponent?.(stroke);
+		let elem: AbstractComponent;
+		try {
+			const strokeData = this.strokeDataFromElem(node);
+			elem = new Stroke(strokeData);
+		} catch (e) {
+			console.error(
+				'Invalid path in node', node,
+				'\nError:', e,
+				'\nAdding as an unknown object.'
+			);
+
+			elem = new UnknownSVGObject(node);
+		}
+		this.onAddComponent?.(elem);
 	}
 
 	// TODO: Remove. This method migrates users from the older (and more verbose)

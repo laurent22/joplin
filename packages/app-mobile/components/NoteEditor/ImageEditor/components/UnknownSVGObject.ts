@@ -1,4 +1,3 @@
-import Color4 from '../Color4';
 import LineSegment2 from '../geometry/LineSegment2';
 import Mat33 from '../geometry/Mat33';
 import Rect2 from '../geometry/Rect2';
@@ -16,10 +15,7 @@ export default class UnknownSVGObject extends AbstractComponent {
 
 	public render(canvas: AbstractRenderer, _visibleRect: Rect2): void {
 		if (!(canvas instanceof SVGRenderer)) {
-			// Draw a red rectangle to represent this.
-			// TODO: Better representation of unrenderable objects.
-			canvas.drawRect(this.contentBBox, 5, { fill: Color4.red });
-
+			// Don't draw unrenderable objects if we can't
 			return;
 		}
 

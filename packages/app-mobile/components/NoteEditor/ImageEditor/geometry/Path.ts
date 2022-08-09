@@ -359,23 +359,24 @@ export default class Path {
 		const commandExp = /([MmZzLlHhVvCcSsQqTtAa])\s*([^a-zA-Z]*)/g;
 		let current;
 		while ((current = commandExp.exec(pathString)) !== null) {
-			const commandChar = current[1];
-			const argParts = current[2].trim().split(/[^0-9.-]/);
-
-			// Convert arguments to points
-			const args = argParts.filter(
+			const argParts = current[2].trim().split(/[^0-9.-]/).filter(
 				part => part.length > 0
-			).reduce((accumulator: Point2[], current, index, parts): Point2[] => {
+			);
+			const numericArgs = argParts.map(arg => parseFloat(arg));
+
+			const commandChar = current[1];
+			const uppercaseCommand = commandChar !== commandChar.toLowerCase();
+			const args = numericArgs.reduce((
+				accumulator: Point2[], current, index, parts
+			): Point2[] => {
 				if (index % 2 !== 0) {
-					const currentAsFloat = parseFloat(current);
-					const prevAsFloat = parseFloat(parts[index - 1]);
+					const currentAsFloat = current;
+					const prevAsFloat = parts[index - 1];
 					return accumulator.concat(Vec2.of(prevAsFloat, currentAsFloat));
 				} else {
 					return accumulator;
 				}
 			}, []).map((coordinate: Vec2): Point2 => {
-				const uppercaseCommand = commandChar !== commandChar.toLowerCase();
-
 				// Lowercase commands are relative, uppercase commands use absolute
 				// positioning
 				if (uppercaseCommand) {
@@ -387,37 +388,59 @@ export default class Path {
 				}
 			});
 
-			let expectedArgsCount;
+			let expectedPointArgCount;
 
 			switch (commandChar.toLowerCase()) {
 			case 'm':
-				expectedArgsCount = 1;
+				expectedPointArgCount = 1;
 				moveTo(args[0]);
 				break;
 			case 'l':
-				expectedArgsCount = 1;
+				expectedPointArgCount = 1;
 				lineTo(args[0]);
 				break;
 			case 'z':
-				expectedArgsCount = 0;
+				expectedPointArgCount = 0;
 				lineTo(firstPos);
 				// TODO: Consider case where firstPos is null
 				break;
 			case 'c':
-				expectedArgsCount = 3;
+				expectedPointArgCount = 3;
 				cubicBezierTo(args[0], args[1], args[2]);
 				break;
 			case 'q':
-				expectedArgsCount = 2;
+				expectedPointArgCount = 2;
 				quadraticBeierTo(args[0], args[1]);
+				break;
+
+			// Horizontal line
+			case 'h':
+				expectedPointArgCount = 0;
+
+				if (uppercaseCommand) {
+					lineTo(Vec2.of(numericArgs[0], lastPos.y));
+				} else {
+					lineTo(lastPos.plus(Vec2.of(numericArgs[0], 0)));
+				}
+				break;
+
+			// Vertical line
+			case 'v':
+				expectedPointArgCount = 0;
+
+				if (uppercaseCommand) {
+					lineTo(Vec2.of(lastPos.x, numericArgs[1]));
+				} else {
+					lineTo(lastPos.plus(Vec2.of(0, numericArgs[1])));
+				}
 				break;
 			default:
 				throw new Error(`Unknown path command ${commandChar}`);
 			}
 
-			if (args.length !== expectedArgsCount) {
+			if (args.length !== expectedPointArgCount) {
 				throw new Error(`
-					Incorrect number of arguments: got ${JSON.stringify(args)} with a length of ${args.length} ≠ ${expectedArgsCount}.
+					Incorrect number of arguments: got ${JSON.stringify(args)} with a length of ${args.length} ≠ ${expectedPointArgCount}.
 				`.trim());
 			}
 
