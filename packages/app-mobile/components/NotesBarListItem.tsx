@@ -57,6 +57,7 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 				paddingLeft: theme.marginLeft,
 				paddingTop: 12,
 				paddingBottom: 12,
+				color: theme.color,
 			},
 			selectedItem: props.selectedNoteId === note.id ? {
 				backgroundColor: theme.dividerColor,

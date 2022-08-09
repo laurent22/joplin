@@ -92,7 +92,7 @@ function NotesBarComponent(props: Props) {
 				borderRadius: 4,
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
-				height: 42,
+				height: '100%',
 				flex: 1,
 			},
 			button: {
@@ -224,7 +224,7 @@ function NotesBarComponent(props: Props) {
 	const searchInputComp = (
 		<View style={[styles().horizontalFlex, styles().searchInput]}>
 			<Icon name='search' style={[styles().top, styles().searchIcon]}/>
-			<TextInput style={styles().nativeInput} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} />
+			<TextInput style={[styles().top, styles().nativeInput]} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} placeholderTextColor={theme.dividerColor} />
 		</View>
 	);
 
