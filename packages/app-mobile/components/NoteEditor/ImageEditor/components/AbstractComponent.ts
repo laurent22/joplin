@@ -9,9 +9,14 @@ import AbstractRenderer from '../rendering/AbstractRenderer';
 export default abstract class AbstractComponent {
 	protected lastChangedTime: number;
 	protected abstract contentBBox: Rect2;
+	public zIndex: number;
+
+	// Topmost z-index
+	private static zIndexCounter: number = 0;
 
 	protected constructor() {
 		this.lastChangedTime = (new Date()).getTime();
+		this.zIndex = AbstractComponent.zIndexCounter++;
 	}
 
 	public getBBox(): Rect2 {
@@ -42,13 +47,16 @@ export default abstract class AbstractComponent {
 				new EditorImage.AddElementCommand(this).apply(editor);
 			}
 		};
+		const origZIndex = this.zIndex;
 
 		return {
 			apply: (editor: ImageEditor) => {
+				this.zIndex = AbstractComponent.zIndexCounter++;
 				updateTransform(editor, affineTransfm);
 				editor.queueRerender();
 			},
 			unapply: (editor: ImageEditor): void => {
+				this.zIndex = origZIndex;
 				updateTransform(
 					editor, affineTransfm.inverse()
 				);

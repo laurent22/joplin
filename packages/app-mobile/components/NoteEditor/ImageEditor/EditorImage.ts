@@ -4,7 +4,6 @@ import Command from './commands/Command';
 import Viewport from './Viewport';
 import AbstractComponent from './components/AbstractComponent';
 import Rect2 from './geometry/Rect2';
-import { Point2, Vec2 } from './geometry/Vec2';
 
 /**
  * A tree of nodes contained within the editor
@@ -32,9 +31,15 @@ export default class EditorImage {
 		return null;
 	}
 
+	private sortLeaves(leaves: ImageNode[]) {
+		leaves.sort((a, b) => a.getContent().zIndex - b.getContent().zIndex);
+	}
+
 	public render(renderer: AbstractRenderer, viewport: Viewport, minFraction: number = 0.001) {
 		// Don't render components that are < 0.1% of the viewport.
 		const leaves = this.root.getLeavesInRegion(viewport.visibleRect, minFraction);
+		this.sortLeaves(leaves);
+
 		for (const leaf of leaves) {
 			leaf.getContent().render(renderer, viewport.visibleRect);
 		}
@@ -42,13 +47,18 @@ export default class EditorImage {
 
 	// Renders all nodes, even ones not within the viewport
 	public renderAll(renderer: AbstractRenderer) {
-		for (const leaf of this.root.getLeaves()) {
+		const leaves = this.root.getLeaves();
+		this.sortLeaves(leaves);
+
+		for (const leaf of leaves) {
 			leaf.getContent().render(renderer, leaf.getBBox());
 		}
 	}
 
 	public getElementsIntersectingRegion(region: Rect2): AbstractComponent[] {
-		return this.root.getLeavesInRegion(region).map(leaf => leaf.getContent());
+		const leaves = this.root.getLeavesInRegion(region);
+		this.sortLeaves(leaves);
+		return leaves.map(leaf => leaf.getContent());
 	}
 
 	public static AddElementCommand = class implements Command {
@@ -86,26 +96,24 @@ export type AddElementCommand = typeof EditorImage.AddElementCommand.prototype;
 
 export class ImageNode {
 	private content: AbstractComponent|null;
-	private children: ImageNode[];
 	private bbox: Rect2;
-
-	// Estimates of this' relative center of mass and total mass.
-	// Used for clustering.
-	private centerOfMass: Point2;
-	private totalMass: number;
+	private children: ImageNode[];
+	private targetChildCount: number = 30;
 
 	public constructor(
-		private parent?: ImageNode
+		private parent: ImageNode|null = null
 	) {
 		this.children = [];
 		this.bbox = Rect2.empty;
-		this.totalMass = 0;
 		this.content = null;
-		this.centerOfMass = Vec2.zero;
 	}
 
 	public getContent(): AbstractComponent|null {
 		return this.content;
+	}
+
+	public getParent(): ImageNode|null {
+		return this.parent;
 	}
 
 	private getChildrenInRegion(region: Rect2): ImageNode[] {
@@ -153,150 +161,102 @@ export class ImageNode {
 	public addLeaf(leaf: AbstractComponent): ImageNode {
 		if (this.content === null && this.children.length === 0) {
 			this.content = leaf;
-			this.recomputeBBox();
+			this.recomputeBBox(true);
 
 			return this;
-		} else {
-			const newNode = new ImageNode(this);
-			newNode.addLeaf(leaf);
-			this.children.push(newNode);
-			this.recomputeBBox();
-
-			this.rebalance();
-			return newNode;
 		}
+
+		if (this.content !== null) {
+			console.assert(this.children.length === 0);
+
+			const contentNode = new ImageNode(this);
+			contentNode.content = this.content;
+			this.content = null;
+			this.children.push(contentNode);
+			contentNode.recomputeBBox(false);
+		}
+
+		// If this node is contained within the leaf, make this and the leaf
+		// share a parent.
+		const leafBBox = leaf.getBBox();
+		if (leafBBox.containsRect(this.getBBox())) {
+			// Create a node for this' children and for the new content..
+			const nodeForNewLeaf = new ImageNode(this);
+			const nodeForChildren = new ImageNode(this);
+
+			nodeForChildren.children = this.children;
+			this.children = [nodeForNewLeaf, nodeForChildren];
+			nodeForChildren.recomputeBBox(true);
+
+			return nodeForNewLeaf.addLeaf(leaf);
+		}
+
+		const containingNodes = this.children.filter(
+			child => child.getBBox().containsRect(leafBBox)
+		);
+
+		// Does the leaf already fit within one of the children?
+		if (containingNodes.length > 0 && this.children.length >= this.targetChildCount) {
+			// Sort the containers in ascending order by area
+			containingNodes.sort((a, b) => a.getBBox().area - b.getBBox().area);
+
+			// Choose the smallest child that contains the new element.
+			const result = containingNodes[0].addLeaf(leaf);
+			result.rebalance();
+			return result;
+		}
+
+
+		const newNode = new ImageNode(this);
+		this.children.push(newNode);
+		newNode.content = leaf;
+		newNode.recomputeBBox(true);
+
+		return newNode;
 	}
 
 	public getBBox(): Rect2 {
 		return this.bbox;
 	}
 
-	// private changeParent(newParent: ImageNode) {
-	// if (this.parent) {
-	// this.parent.children = this.parent.children.filter(child => child !== this);
-	// this.parent.recomputeBBox();
-	// }
-	// this.parent = newParent;
-	// newParent.recomputeBBox();
-	// }
-	//
-	// // Returns an index at which this can be broken into two clusters
-	// private getClusterBreakIdx(): number {
-	// this.children.sort((a, b) => a.bbox.topLeft.x - b.bbox.topLeft.x);
-	//
-	// let leftMax = -Infinity;
-	// let rightMin = Infinity;
-	// let leftIdx = 0;
-	// let rightIdx = this.children.length - 1;
-	// while (leftMax < rightMin && leftIdx < rightIdx) {
-	// let left = this.children[leftIdx];
-	// let right = this.children[rightIdx];
-	// leftMax = Math.max(left.bbox.bottomRight.x);
-	// rightMin = Math.min(right.bbox.topLeft.x);
-	//
-	// if (leftMax < rightMin) {
-	// leftIdx ++;
-	// } else {
-	// leftIdx = Math.max(0, leftIdx - 1);
-	// rightIdx --;
-	// }
-	// }
-	// return leftIdx;
-	// }
-	//
-	// // Removes outliers from this' children and adds them to the given target
-	// private removeOutliers(target: ImageNode) {
-	// if (this.content !== null) {
-	// return;
-	// }
-	//
-	// const breakIdx = this.getClusterBreakIdx();
-	// let children = this.children;
-	// for (let i = 0; i <= breakIdx; i++) {
-	// children[i].changeParent(target);
-	// }
-	//
-	// this.recomputeBBox();
-	// }
-	//
-	// private mergeOverlap() {
-	// if (this.content != null) {
-	// return;
-	// }
-	//
-	// const breakIdx = this.getClusterBreakIdx();
-	// if (breakIdx >= this.children.length) {
-	// return;
-	// }
-	//
-	// const newNode = new ImageNode(this);
-	// this.children.push(newNode);
-	//
-	// let children = this.children;
-	// for (let i = 0; i <= breakIdx; i++) {
-	// children[i].changeParent(newNode);
-	// }
-	// }
-
-	/** Ensure that this node doesn't have too many or too few children */
-	private rebalance() {
-		if (this.children.length === 0 && this.content == null) {
-			this.remove();
-			return;
-		}
-
-		// Ensure each node either has content or children (but not both)
-		if (this.content !== null && this.children.length > 0) {
-			const newNode = new ImageNode(this);
-			newNode.addLeaf(this.content);
-			this.content = null;
-			this.children.push(newNode);
-		}
-
-		// Group children
-		if (this.children.length > 4) {
-			// this.mergeOverlap();
-		}
-
-		// Can we reduce a child's maximum dimension by pulling children out?
-		const maxDimen = this.bbox.maxDimension;
-		const maxChildFraction = 0.7;
-		if (maxDimen > 0) {
-			for (const child of this.children) {
-				if (child.getBBox().maxDimension / maxDimen > maxChildFraction && child.content == null) {
-					// Can we replace this with the child?
-					if (this.children.length === 1) {
-						this.children = child.children;
-						this.content = child.content;
-					} else {
-						// Find a good split
-						// child.removeOutliers(this);
-					}
-				}
-			}
-		}
-
-		this.recomputeBBox();
-	}
-
-	/** Recomputes this' bounding box and center of mass */
-	private recomputeBBox() {
+	// Recomputes this' bounding box. If [bubbleUp], also recompute
+	// this' ancestors bounding boxes
+	public recomputeBBox(bubbleUp: boolean) {
+		const oldBBox = this.bbox;
 		if (this.content != null) {
 			this.bbox = this.content.getBBox();
-			this.centerOfMass = this.bbox.center;
-			this.totalMass = this.bbox.area;
 		} else {
 			this.bbox = Rect2.empty;
-			let centerOfMass = Vec2.of(0, 0);
-			let totalMass = 0;
 
 			for (const child of this.children) {
 				this.bbox = this.bbox.union(child.getBBox());
-				centerOfMass = centerOfMass.plus(child.centerOfMass.times(child.totalMass));
-				totalMass += child.totalMass;
 			}
-			this.centerOfMass = centerOfMass.times(1 / totalMass);
-			this.totalMass = totalMass;
+		}
+
+		if (bubbleUp && !oldBBox.eq(this.bbox)) {
+			this.parent?.recomputeBBox(true);
+		}
+	}
+
+	private rebalance() {
+		// If the current node is its parent's only child,
+		if (this.parent && this.parent.children.length === 1) {
+			console.assert(this.parent.content === null);
+			console.assert(this.parent.children[0] === this);
+
+			// Remove this' parent, if this' parent isn't the root.
+			if (this.parent.parent !== null) {
+				const oldParent = this.parent;
+				oldParent.children = [];
+				this.parent = oldParent.parent;
+				this.parent.children.push(this);
+				oldParent.parent = null;
+				this.parent.recomputeBBox(false);
+			} else if (this.content === null) {
+				// Remove this and transfer this' children to the parent.
+				this.parent.children = this.children;
+				this.parent = null;
+			}
 		}
 	}
 
@@ -309,15 +269,21 @@ export class ImageNode {
 			return;
 		}
 
+		const oldChildCount = this.parent.children.length;
 		this.parent.children = this.parent.children.filter(node => {
 			return node !== this;
 		});
-		let node = this.parent;
-		while (node != null) {
-			node.rebalance();
-			node.recomputeBBox();
-			node = node.parent;
-		}
+		console.assert(this.parent.children.length === oldChildCount - 1);
+
+		this.parent.children.forEach(child => {
+			child.rebalance();
+		});
+
+		this.parent.recomputeBBox(true);
+
+		// Invalidate/disconnect this.
 		this.content = null;
+		this.parent = null;
+		this.children = null;
 	}
 }

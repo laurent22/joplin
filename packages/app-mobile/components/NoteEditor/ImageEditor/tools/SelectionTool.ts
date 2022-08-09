@@ -160,19 +160,25 @@ class Selection {
 		const updateChunkSize = 20;
 
 		// Apply a large transformation in chunks.
+		// If [apply] is false, the commands are unapplied.
 		const asyncTransformElems = async (
-			editor: ImageEditor, elems: AbstractComponent[], transformBy: Mat33
+			editor: ImageEditor, transformCmds: Command[], apply: boolean
 		) => {
-			for (let i = 0; i < elems.length; i += updateChunkSize) {
-				editor.showLoadingWarning(i / elems.length);
+			for (let i = 0; i < transformCmds.length; i += updateChunkSize) {
+				editor.showLoadingWarning(i / transformCmds.length);
 
-				for (let j = i; j < elems.length && j < i + updateChunkSize; j++) {
-					const elem = elems[j];
-					elem.transformBy(transformBy).apply(editor);
+				for (let j = i; j < transformCmds.length && j < i + updateChunkSize; j++) {
+					const cmd = transformCmds[j];
+
+					if (apply) {
+						cmd.apply(editor);
+					} else {
+						cmd.unapply(editor);
+					}
 				}
 
 				// Re-render to show progress, but only if we're not done.
-				if (i + updateChunkSize < elems.length) {
+				if (i + updateChunkSize < transformCmds.length) {
 					await new Promise(resolve => {
 						editor.rerender();
 						requestAnimationFrame(resolve);
@@ -180,6 +186,12 @@ class Selection {
 				}
 			}
 			editor.hideLoadingWarning();
+		};
+
+		const computeTransformCommands = () => {
+			return this.selectedElems.map(elem => {
+				return elem.transformBy(transform);
+			});
 		};
 
 		const applyTransformCmds = () => {
@@ -190,13 +202,14 @@ class Selection {
 			const fullTransform = transform;
 			const inverseTransform = transform.inverse();
 			const deltaBoxRotation = this.boxRotation;
+			const currentTransfmCommands = computeTransformCommands();
 
 			// Reset for the next drag
-			transform = Mat33.identity;
 			transformationCommands = [];
+			transform = Mat33.identity;
 			this.region = this.region.transformedBoundingBox(inverseTransform);
 
-			const elems = this.selectedElems;
+			// Make the commands undo-able
 			this.editor.dispatch({
 				apply: async (editor) => {
 					// Approximate the new selection
@@ -204,7 +217,7 @@ class Selection {
 					this.boxRotation += deltaBoxRotation;
 					this.updateUI();
 
-					await asyncTransformElems(editor, elems, fullTransform);
+					await asyncTransformElems(editor, currentTransfmCommands, true);
 					this.recomputeRegion();
 					this.updateUI();
 				},
@@ -213,7 +226,7 @@ class Selection {
 					this.boxRotation -= deltaBoxRotation;
 					this.updateUI();
 
-					await asyncTransformElems(editor, elems, inverseTransform);
+					await asyncTransformElems(editor, currentTransfmCommands, false);
 					this.recomputeRegion();
 					this.updateUI();
 				},
@@ -228,9 +241,7 @@ class Selection {
 			}
 
 			transformationCommands.forEach(cmd => cmd.unapply(this.editor));
-			transformationCommands = this.selectedElems.map(elem => {
-				return elem.transformBy(transform);
-			});
+			transformationCommands = computeTransformCommands();
 			transformationCommands.forEach(cmd => cmd.apply(this.editor));
 
 			this.updateUI();
@@ -256,6 +267,7 @@ class Selection {
 			deltaPosition = this.editor.viewport.screenToCanvasTransform.transformVec3(
 				deltaPosition
 			);
+			deltaPosition = this.editor.viewport.roundPoint(deltaPosition);
 
 			const oldWidth = this.region.w;
 			const oldHeight = this.region.h;
@@ -296,26 +308,7 @@ class Selection {
 				deltaRotation *= rotationDirection;
 			}
 
-			const oldTransform = transform;
 			transform = transform.rightMul(Mat33.zRotation(deltaRotation, this.region.center));
-
-			// TODO: Fix this. Currently, this works around a bug in which transform might not
-			// be invertable...
-			if (
-				!transform.transformVec2(
-					transform.inverse().transformVec2(Vec2.of(1,1))
-				).eq(Vec2.of(1,1), 0.1)
-			) {
-				transform = oldTransform;
-				console.error(
-					'Uninvertable transform! Canceling rotation update.',
-					'\nTransform:', transform,
-					'\nΔϑ', deltaRotation,
-					'\nCenter:', this.region.center
-				);
-				return;
-			}
-
 			this.boxRotation += deltaRotation;
 			previewTransformCmds();
 		}, applyTransformCmds);
@@ -435,6 +428,7 @@ class Selection {
 
 export default class SelectionTool extends BaseTool {
 	private handleOverlay: HTMLElement;
+	private prevSelectionBox: Selection|null;
 	private selectionBox: Selection|null;
 	public readonly kind: ToolType = ToolType.Selection;
 
@@ -456,6 +450,7 @@ export default class SelectionTool extends BaseTool {
 
 	public onPointerDown(event: PointerEvt): boolean {
 		if (event.allPointers.length === 1 && event.current.isPrimary) {
+			this.prevSelectionBox = this.selectionBox;
 			this.selectionBox = new Selection(
 				event.current.canvasPos, this.editor
 			);
@@ -474,35 +469,37 @@ export default class SelectionTool extends BaseTool {
 
 	private onGestureEnd() {
 		// Expand/shrink the selection rectangle, if applicable
-		this.selectionBox.resolveToObjects();
+		const hasSelection = this.selectionBox.resolveToObjects();
 
-		const visibleRect = this.editor.viewport.visibleRect;
-		const selectionRect = this.selectionBox.region;
+		if (hasSelection) {
+			const visibleRect = this.editor.viewport.visibleRect;
+			const selectionRect = this.selectionBox.region;
 
-		// Try to move the selection within the center 2/3rds of the viewport.
-		const targetRect = visibleRect.transformedBoundingBox(
-			Mat33.scaling2D(2 / 3, visibleRect.center)
-		);
-
-		// Ensure that the selection fits within the target
-		if (targetRect.w < selectionRect.w || targetRect.h < selectionRect.h) {
-			const multiplier = Math.max(
-				selectionRect.w / targetRect.w, selectionRect.h / targetRect.h
+			// Try to move the selection within the center 2/3rds of the viewport.
+			const targetRect = visibleRect.transformedBoundingBox(
+				Mat33.scaling2D(2 / 3, visibleRect.center)
 			);
-			const visibleRectTransform = Mat33.scaling2D(multiplier, targetRect.topLeft);
-			const viewportContentTransform = visibleRectTransform.inverse();
 
-			this.editor.dispatch(new Viewport.ViewportTransform(viewportContentTransform));
-		}
+			// Ensure that the selection fits within the target
+			if (targetRect.w < selectionRect.w || targetRect.h < selectionRect.h) {
+				const multiplier = Math.max(
+					selectionRect.w / targetRect.w, selectionRect.h / targetRect.h
+				);
+				const visibleRectTransform = Mat33.scaling2D(multiplier, targetRect.topLeft);
+				const viewportContentTransform = visibleRectTransform.inverse();
 
-		// Ensure that the top left is visible
-		if (!targetRect.containsRect(selectionRect)) {
-			// target position - current position
-			const translation = selectionRect.center.minus(targetRect.center);
-			const visibleRectTransform = Mat33.translation(translation);
-			const viewportContentTransform = visibleRectTransform.inverse();
+				(new Viewport.ViewportTransform(viewportContentTransform)).apply(this.editor);
+			}
 
-			this.editor.dispatch(new Viewport.ViewportTransform(viewportContentTransform));
+			// Ensure that the top left is visible
+			if (!targetRect.containsRect(selectionRect)) {
+				// target position - current position
+				const translation = selectionRect.center.minus(targetRect.center);
+				const visibleRectTransform = Mat33.translation(translation);
+				const viewportContentTransform = visibleRectTransform.inverse();
+
+				(new Viewport.ViewportTransform(viewportContentTransform)).apply(this.editor);
+			}
 		}
 	}
 
@@ -512,7 +509,10 @@ export default class SelectionTool extends BaseTool {
 	}
 
 	public onGestureCancel(): void {
-		this.onGestureEnd();
+		// Revert to the previous selection, if any.
+		this.selectionBox?.cancelSelection();
+		this.selectionBox = this.prevSelectionBox;
+		this.selectionBox?.appendBackgroundBoxTo(this.handleOverlay);
 	}
 
 	public setEnabled(enabled: boolean) {
