@@ -1344,10 +1344,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
 
 		const handleNoteActionsDrag = (gestureState: any) => {
-			const minY = 0;
-			const maxY = 0.8 * Dimensions.get('window').width;
+			const minY = 160;
+			const maxY = 0.8 * Dimensions.get('window').height;
 
-			let newY = gestureState.moveY - 162;
+			let newY = gestureState.moveY;
 
 			if (newY < minY) {
 				newY = minY;
@@ -1355,12 +1355,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 				newY = maxY;
 			}
 
-			this.noteActionsPositionY.setValue(newY);
+			this.noteActionsPositionY.setValue(newY - 162);
 		};
 
 		this.noteActionsDragResponder = PanResponder.create({
 			onMoveShouldSetPanResponder: () => true,
-			onPanResponderMove: (e: any, gestureState: any) => {
+			onPanResponderMove: (_e: any, gestureState: any) => {
 				handleNoteActionsDrag(gestureState);
 			},
 		});
