@@ -284,6 +284,6 @@ export class ImageNode {
 		// Invalidate/disconnect this.
 		this.content = null;
 		this.parent = null;
-		this.children = null;
+		this.children = [];
 	}
 }
