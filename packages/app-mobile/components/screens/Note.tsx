@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions } = require('react-native');
+const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions, PanResponder } = require('react-native');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -243,8 +243,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 		this.onNotesBarToggle = this.onNotesBarToggle.bind(this);
-		this.animateNotesBarOpen = this.animateNotesBarOpen.bind(this);
-		this.animateNotesBarClose = this.animateNotesBarClose.bind(this);
+
 	}
 
 	private useEditorBeta(): boolean {
@@ -455,6 +454,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			position: 'absolute',
 			top: '8%',
 			right: '3%',
+			transform: [{ translateY: this.noteActionsPositionY }],
 		};
 
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
@@ -615,6 +615,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.notePosition = new Animated.Value(-250);
 			this.noteWidth = new Animated.Value(Dimensions.get('window').width);
 		}
+
+		this.noteActionsPositionY = new Animated.Value(0);
 	}
 
 	title_changeText(text: string) {
@@ -1341,15 +1343,37 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
 		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
 
+		const handleNoteActionsDrag = (gestureState: any) => {
+			const minY = 0;
+			const maxY = 0.8 * Dimensions.get('window').width;
+
+			let newY = gestureState.moveY - 162;
+
+			if (newY < minY) {
+				newY = minY;
+			} else if (newY > maxY) {
+				newY = maxY;
+			}
+
+			this.noteActionsPositionY.setValue(newY);
+		};
+
+		this.noteActionsDragResponder = PanResponder.create({
+			onMoveShouldSetPanResponder: () => true,
+			onPanResponderMove: (e: any, gestureState: any) => {
+				handleNoteActionsDrag(gestureState);
+			},
+		});
+
 		const noteActionButtonGroup = (
-			<View style={this.styles().noteActionButtonGroup}>
+			<Animated.View style={this.styles().noteActionButtonGroup} {...this.noteActionsDragResponder.panHandlers} >
 				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
 					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
 				</TouchableOpacity>
 				<TouchableOpacity style={[notesBarToggleStyle, this.styles().noteActionButton2]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
 					<Icon name="list" style={notesBarToggleIconStyle} />
 				</TouchableOpacity>
-			</View>
+			</Animated.View>
 		);
 
 		const noteMainComp = (
