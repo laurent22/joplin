@@ -17,7 +17,7 @@ export default class SVGLoader implements ImageLoader {
 	private onProgress: OnProgressListener|null = null;
 	private processedCount: number = 0;
 	private totalToProcess: number = 0;
-	private rootViewBox: SVGRect|null;
+	private rootViewBox: Rect2|null;
 
 	private constructor(private source: SVGSVGElement, private onFinish?: OnFinishListener) {
 	}
@@ -123,6 +123,25 @@ export default class SVGLoader implements ImageLoader {
 		this.onAddComponent?.(component);
 	}
 
+	private updateViewBox(node: SVGSVGElement) {
+		const viewBoxAttr = node.getAttribute('viewBox');
+		if (this.rootViewBox || !viewBoxAttr) {
+			return;
+		}
+
+		const components = viewBoxAttr.split(/[ \t,]/);
+		const x = parseFloat(components[0]);
+		const y = parseFloat(components[1]);
+		const width = parseFloat(components[2]);
+		const height = parseFloat(components[3]);
+
+		if (isNaN(x) || isNaN(y) || isNaN(width) || isNaN(height)) {
+			return;
+		}
+
+		this.rootViewBox = new Rect2(x, y, width, height);
+	}
+
 	private async visit(node: Element) {
 		this.totalToProcess += node.childElementCount;
 
@@ -137,7 +156,7 @@ export default class SVGLoader implements ImageLoader {
 			this.addPath(node as SVGPathElement);
 			break;
 		case 'svg':
-			this.rootViewBox ??= (node as SVGSVGElement).viewBox?.baseVal;
+			this.updateViewBox(node as SVGSVGElement);
 			break;
 		default:
 			console.warn('Unknown SVG element,', node);

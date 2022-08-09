@@ -231,18 +231,21 @@ export class ImageEditor {
 		}
 	}
 
-	public rerender() {
+	public rerender(showImageBounds: boolean = true) {
 		this.display.startRerender();
 
 		// Draw a rectangle around the region that will be visible on save
 		const renderer = this.display.getDryInkRenderer();
-		const exportRectFill = { fill: Color4.fromHex('#44444455') };
-		const exportRectStrokeWidth = 12;
-		renderer.drawRect(
-			this.importExportViewport.visibleRect,
-			exportRectStrokeWidth,
-			exportRectFill
-		);
+
+		if (showImageBounds) {
+			const exportRectFill = { fill: Color4.fromHex('#44444455') };
+			const exportRectStrokeWidth = 12;
+			renderer.drawRect(
+				this.importExportViewport.visibleRect,
+				exportRectStrokeWidth,
+				exportRectFill
+			);
+		}
 
 		this.image.render(renderer, this.viewport);
 		this.rerenderQueued = false;
@@ -326,7 +329,7 @@ export class ImageEditor {
 		}, (countProcessed: number, totalToProcess: number) => {
 			if (countProcessed % 100 === 0) {
 				this.showLoadingWarning(countProcessed / totalToProcess);
-				this.rerender();
+				this.rerender(false);
 				return new Promise(resolve => {
 					requestAnimationFrame(() => resolve());
 				});
