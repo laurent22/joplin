@@ -3,14 +3,14 @@ import Path, { PathCommand, PathCommandType } from '../geometry/Path';
 import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
-import AbstractRenderer, { FillStyle } from './AbstractRenderer';
+import AbstractRenderer, { RenderingStyle } from './AbstractRenderer';
 
 const svgNameSpace = 'http://www.w3.org/2000/svg';
 export default class SVGRenderer extends AbstractRenderer {
 	private currentPath: PathCommand[]|null;
 	private pathStart: Point2|null;
 
-	private lastPathStyle: FillStyle|null;
+	private lastPathStyle: RenderingStyle|null;
 	private lastPath: PathCommand[]|null;
 	private lastPathStart: Point2|null;
 
@@ -24,21 +24,23 @@ export default class SVGRenderer extends AbstractRenderer {
 	public displaySize(): Vec2 {
 		return Vec2.of(this.elem.clientWidth, this.elem.clientHeight);
 	}
-	public clear(): void {
+
+	public clear() {
 		this.mainGroup = document.createElementNS(svgNameSpace, 'g');
 
 		// Remove all children
 		this.elem.replaceChildren(this.mainGroup);
 	}
 
-	protected beginPath(startPoint: Point2): void {
+	protected beginPath(startPoint: Point2) {
 		this.currentPath = [];
 		this.pathStart = this.viewport.canvasToScreen(startPoint);
 		this.lastPathStart ??= this.pathStart;
 	}
-	protected endPath(style: FillStyle): void {
+
+	protected endPath(style: RenderingStyle) {
 		// Try to extend the previous path, if possible
-		if (style.color.eq(this.lastPathStyle?.color)) {
+		if (style.fill.eq(this.lastPathStyle?.fill)) {
 			this.lastPath.push({
 				kind: PathCommandType.MoveTo,
 				point: this.pathStart,
@@ -64,7 +66,15 @@ export default class SVGRenderer extends AbstractRenderer {
 
 		const pathElem = document.createElementNS(svgNameSpace, 'path');
 		pathElem.setAttribute('d', Path.toString(this.lastPathStart, this.lastPath));
-		pathElem.setAttribute('fill', this.lastPathStyle.color.toHexString());
+
+		const style = this.lastPathStyle;
+		pathElem.setAttribute('fill', style.fill.toHexString());
+
+		if (this.lastPathStyle.stroke) {
+			pathElem.setAttribute('stroke', style.stroke.color.toHexString());
+			pathElem.setAttribute('stroke-width', style.stroke.width.toString());
+		}
+
 		this.mainGroup.appendChild(pathElem);
 	}
 
@@ -112,7 +122,7 @@ export default class SVGRenderer extends AbstractRenderer {
 		});
 	}
 
-	public drawPoints(...points: Point2[]): void {
+	public drawPoints(...points: Point2[]) {
 		points.map(point => {
 			const elem = document.createElementNS(svgNameSpace, 'circle');
 			elem.setAttribute('cx', `${point.x}`);
@@ -120,5 +130,10 @@ export default class SVGRenderer extends AbstractRenderer {
 			elem.setAttribute('r', '15');
 			this.mainGroup.appendChild(elem);
 		});
+	}
+
+	// Renders a copy of the given element.
+	public drawSVGElem(elem: SVGElement) {
+		this.elem.appendChild(elem.cloneNode(true));
 	}
 }

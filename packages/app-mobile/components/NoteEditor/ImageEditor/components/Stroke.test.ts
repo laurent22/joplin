@@ -7,8 +7,8 @@ describe('Stroke', () => {
 		const stroke = new Stroke([{
 			startPoint: Vec2.zero,
 			commands: [],
-			fill: {
-				color: Color4.blue,
+			style: {
+				fill: Color4.blue,
 			},
 		}]);
 		expect(stroke.getBBox()).toMatchObject({

@@ -5,14 +5,18 @@ import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
 
-export interface FillStyle {
-	color: Color4;
+export interface RenderingStyle {
+	fill: Color4;
+	stroke?: {
+		color: Color4;
+		width: number;
+	};
 }
 
 export interface RenderablePathSpec {
 	startPoint: Point2;
 	commands: PathCommand[];
-	fill: FillStyle;
+	style: RenderingStyle;
 }
 
 export default abstract class AbstractRenderer {
@@ -24,7 +28,7 @@ export default abstract class AbstractRenderer {
 
 	public abstract clear(): void;
 	protected abstract beginPath(startPoint: Point2): void;
-	protected abstract endPath(style: FillStyle): void;
+	protected abstract endPath(style: RenderingStyle): void;
 	protected abstract lineTo(point: Point2): void;
 	protected abstract traceCubicBezierCurve(
 		p1: Point2, p2: Point2, p3: Point2,
@@ -34,7 +38,7 @@ export default abstract class AbstractRenderer {
 	): void;
 
 	public drawPath(
-		{ startPoint, commands, fill }: RenderablePathSpec, transform: Mat33 = Mat33.identity
+		{ startPoint, commands, style: fill }: RenderablePathSpec, transform: Mat33 = Mat33.identity
 	) {
 		this.beginPath(transform.transformVec2(startPoint));
 
@@ -59,7 +63,7 @@ export default abstract class AbstractRenderer {
 	}
 
 	// Draw a rectangle. Boundary lines have width [lineWidth] and are filled with [lineFill]
-	public drawRect(rect: Rect2, lineWidth: number, lineFill: FillStyle): void {
+	public drawRect(rect: Rect2, lineWidth: number, lineFill: RenderingStyle): void {
 		const commands: PathCommand[] = [];
 
 		// Vector from the top left corner or bottom right corner to the edge of the
@@ -89,7 +93,7 @@ export default abstract class AbstractRenderer {
 		this.drawPath({
 			startPoint: outerRect.corners[3],
 			commands,
-			fill: lineFill,
+			style: lineFill,
 		});
 	}
 

@@ -1,6 +1,6 @@
 import Color4 from './Color4';
 import { Bezier } from 'bezier-js';
-import { FillStyle, RenderablePathSpec } from './rendering/AbstractRenderer';
+import { RenderingStyle, RenderablePathSpec } from './rendering/AbstractRenderer';
 import { Point2, Vec2 } from './geometry/Vec2';
 import Rect2 from './geometry/Rect2';
 import { PathCommand, PathCommandType } from './geometry/Path';
@@ -54,10 +54,16 @@ export default class StrokeBuilder {
 		return this.bbox;
 	}
 
+	private getRenderingStyle(): RenderingStyle {
+		return {
+			fill: this.lastPoint.color ?? null,
+		};
+	}
+
 	// Get the segments that make up this' path. Can be called after calling build()
 	public preview(): RenderablePathSpec[] {
 		if (this.currentCurve && this.lastPoint) {
-			const currentPath = this.currentSegmentToPath(this.lastPoint);
+			const currentPath = this.currentSegmentToPath();
 			return this.segments.concat(currentPath);
 		}
 
@@ -66,7 +72,7 @@ export default class StrokeBuilder {
 
 	public build(): Stroke {
 		if (this.lastPoint) {
-			this.finalizeCurrentCurve(this.lastPoint);
+			this.finalizeCurrentCurve();
 		}
 		return new Stroke(
 			this.segments
@@ -77,7 +83,7 @@ export default class StrokeBuilder {
 		return Viewport.roundPoint(point, this.minFitAllowed);
 	}
 
-	private finalizeCurrentCurve(fillStyle: FillStyle) {
+	private finalizeCurrentCurve() {
 		// Case where no points have been added
 		if (!this.currentCurve) {
 			const width = Viewport.roundPoint(this.startPoint.width / 3, this.minFitAllowed);
@@ -118,12 +124,12 @@ export default class StrokeBuilder {
 						endPoint: center.plus(Vec2.of(width, 0)),
 					},
 				],
-				fill: fillStyle,
+				style: this.getRenderingStyle(),
 			});
 			return;
 		}
 
-		this.segments.push(this.currentSegmentToPath(fillStyle));
+		this.segments.push(this.currentSegmentToPath());
 		const lastPoint = this.buffer[this.buffer.length - 1];
 		this.lastExitingVec = Vec2.ofXY(
 			this.currentCurve.points[2]
@@ -138,7 +144,7 @@ export default class StrokeBuilder {
 		this.currentCurve = null;
 	}
 
-	private currentSegmentToPath(fillStyle: FillStyle): RenderablePathSpec {
+	private currentSegmentToPath(): RenderablePathSpec {
 		let startVec = Vec2.ofXY(this.currentCurve.normal(0)).normalized();
 		let endVec = Vec2.ofXY(this.currentCurve.normal(1)).normalized();
 
@@ -191,7 +197,7 @@ export default class StrokeBuilder {
 		return {
 			startPoint: this.roundPoint(startPt.plus(startVec)),
 			commands: pathCommands,
-			fill: fillStyle,
+			style: this.getRenderingStyle(),
 		};
 	}
 
@@ -329,7 +335,7 @@ export default class StrokeBuilder {
 				// Reset the last point -- the current point was not added to the curve.
 				this.lastPoint = lastPoint;
 
-				this.finalizeCurrentCurve(lastPoint);
+				this.finalizeCurrentCurve();
 				return;
 			}
 		}

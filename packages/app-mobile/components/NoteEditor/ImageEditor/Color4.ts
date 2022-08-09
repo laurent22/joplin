@@ -57,6 +57,40 @@ export default class Color4 {
 		return new Color4(components[0], components[1], components[2], components[3]);
 	}
 
+	public static fromString(text: string): Color4 {
+		const colorNameMap: Record<string, string> = {
+			white: '#fff',
+			black: '#000',
+			blue: '#00f',
+			red: '#f00',
+		};
+
+		if (text in colorNameMap) {
+			text = colorNameMap[text];
+		}
+
+		if (text.startsWith('#')) {
+			return Color4.fromHex(text);
+		} else {
+			// Otherwise, try to use an HTML5Canvas to determine the color
+			const canvas = document.createElement('canvas');
+			canvas.width = 1;
+			canvas.height = 1;
+
+			const ctx = canvas.getContext('2d');
+			ctx.fillStyle = text;
+			ctx.fillRect(0, 0, 1, 1);
+
+			const data = ctx.getImageData(0, 0, 1, 1);
+			const red = data.data[0] / 255;
+			const green = data.data[1] / 255;
+			const blue = data.data[2] / 255;
+			const alpha = data.data[3] / 255;
+
+			return Color4.ofRGBA(red, green, blue, alpha);
+		}
+	}
+
 	public eq(other: Color4|null|undefined): boolean {
 		if ((other ?? null) === null) {
 			return false;
@@ -91,6 +125,7 @@ export default class Color4 {
 		return this.hexString;
 	}
 
+	public static transparent = Color4.ofRGBA(0, 0, 0, 0);
 	public static red = Color4.ofRGB(1.0, 0.0, 0.0);
 	public static green = Color4.ofRGB(0.0, 1.0, 0.0);
 	public static blue = Color4.ofRGB(0.0, 0.0, 1.0);

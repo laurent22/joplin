@@ -3,7 +3,7 @@ import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
-import AbstractRenderer, { FillStyle } from './AbstractRenderer';
+import AbstractRenderer, { RenderingStyle } from './AbstractRenderer';
 
 const minCurveApproxDist = 5;
 export default class CanvasRenderer extends AbstractRenderer {
@@ -29,21 +29,17 @@ export default class CanvasRenderer extends AbstractRenderer {
 		this.ctx.moveTo(startPoint.x, startPoint.y);
 	}
 
-	protected endPath(fill: FillStyle): void {
-		this.fill(fill);
-		this.ctx.closePath();
-	}
+	protected endPath(style: RenderingStyle): void {
+		this.ctx.fillStyle = style.fill.toHexString();
+		this.ctx.fill();
 
-	protected fill(style: FillStyle): void {
-		this.ctx.fillStyle = style.color.toHexString();
-
-		const debugShowStrokes = false;
-		if (debugShowStrokes) {
-			this.ctx.strokeStyle = style.color.toHexString();
+		if (style.stroke) {
+			this.ctx.strokeStyle = style.stroke.color.toHexString();
+			this.ctx.lineWidth = this.viewport.getScaleFactor() * style.stroke.width;
 			this.ctx.stroke();
 		}
 
-		this.ctx.fill();
+		this.ctx.closePath();
 	}
 
 	protected lineTo(point: Vec3): void {

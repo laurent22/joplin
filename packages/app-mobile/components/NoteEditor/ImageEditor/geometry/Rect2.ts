@@ -116,6 +116,13 @@ export default class Rect2 {
 		return this.union(otherRect);
 	}
 
+	// Returns this grown by [margin] in both the x and y directions.
+	public grownBy(margin: number): Rect2 {
+		return new Rect2(
+			this.x - margin, this.y - margin, this.w + margin * 2, this.h + margin * 2
+		);
+	}
+
 	public get corners(): Point2[] {
 		return [
 			this.bottomRight,

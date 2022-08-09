@@ -4,13 +4,13 @@ import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
-import AbstractRenderer, { FillStyle } from './AbstractRenderer';
+import AbstractRenderer, { RenderingStyle } from './AbstractRenderer';
 
 export default class DummyRenderer extends AbstractRenderer {
 	// Variables that track the state of what's been rendered
 	public clearedCount: number = 0;
 	public renderedPathCount: number = 0;
-	public lastFillStyle: FillStyle|null = null;
+	public lastFillStyle: RenderingStyle|null = null;
 	public lastPoint: Point2|null = null;
 	public objectNestingLevel: number = 0;
 
@@ -42,7 +42,7 @@ export default class DummyRenderer extends AbstractRenderer {
 		this.lastPoint = startPoint;
 		this.pointBuffer.push(startPoint);
 	}
-	protected endPath(style: FillStyle): void {
+	protected endPath(style: RenderingStyle): void {
 		this.renderedPathCount++;
 		this.lastFillStyle = style;
 	}

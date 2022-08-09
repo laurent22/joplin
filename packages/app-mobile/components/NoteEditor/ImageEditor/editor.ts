@@ -16,6 +16,7 @@ import Color4 from './Color4';
 import SVGLoader from './SVGLoader';
 import './editor.css';
 import Pointer from './Pointer';
+import Mat33 from './geometry/Mat33';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
@@ -86,31 +87,6 @@ export class ImageEditor {
 
 	public addToolbar(): HTMLToolbar {
 		return new HTMLToolbar(this, this.container);
-	}
-
-	public async loadFrom(loader: ImageLoader) {
-		this.showLoadingWarning(0);
-		await loader.start((component) => {
-			(new EditorImage.AddElementCommand(component)).apply(this);
-		}, (countProcessed: number, totalToProcess: number) => {
-			if (countProcessed % 100 === 0) {
-				this.showLoadingWarning(countProcessed / totalToProcess);
-				this.rerender();
-				return new Promise(resolve => {
-					requestAnimationFrame(() => resolve());
-				});
-			}
-
-			return null;
-		});
-		this.hideLoadingWarning();
-	}
-
-	// Alias for loadFrom(SVGLoader.fromString).
-	// This is particularly useful when accessing a bundled version of the editor.
-	public async loadFromSVG(svgData: string) {
-		const loader = SVGLoader.fromString(svgData);
-		await this.loadFrom(loader);
 	}
 
 	private registerListeners() {
@@ -260,7 +236,7 @@ export class ImageEditor {
 
 		// Draw a rectangle around the region that will be visible on save
 		const renderer = this.display.getDryInkRenderer();
-		const exportRectFill = { color: Color4.fromHex('#44444455') };
+		const exportRectFill = { fill: Color4.fromHex('#44444455') };
 		const exportRectStrokeWidth = 12;
 		renderer.drawRect(
 			this.importExportViewport.visibleRect,
@@ -341,6 +317,34 @@ export class ImageEditor {
 
 
 		return result;
+	}
+
+	public async loadFrom(loader: ImageLoader) {
+		this.showLoadingWarning(0);
+		const visibleRect = await loader.start((component) => {
+			(new EditorImage.AddElementCommand(component)).apply(this);
+		}, (countProcessed: number, totalToProcess: number) => {
+			if (countProcessed % 100 === 0) {
+				this.showLoadingWarning(countProcessed / totalToProcess);
+				this.rerender();
+				return new Promise(resolve => {
+					requestAnimationFrame(() => resolve());
+				});
+			}
+
+			return null;
+		});
+		this.hideLoadingWarning();
+
+		this.importExportViewport.updateScreenSize(visibleRect.size);
+		this.importExportViewport.resetTransform(Mat33.translation(visibleRect.topLeft));
+	}
+
+	// Alias for loadFrom(SVGLoader.fromString).
+	// This is particularly useful when accessing a bundled version of the editor.
+	public async loadFromSVG(svgData: string) {
+		const loader = SVGLoader.fromString(svgData);
+		await this.loadFrom(loader);
 	}
 }
 

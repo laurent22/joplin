@@ -27,13 +27,13 @@ export class Viewport {
 
 		public apply(editor: ImageEditor) {
 			const viewport = editor.viewport;
-			viewport.updateTransform(viewport.transform.rightMul(this.transform));
+			viewport.resetTransform(viewport.transform.rightMul(this.transform));
 			editor.queueRerender();
 		}
 
 		public unapply(editor: ImageEditor) {
 			const viewport = editor.viewport;
-			viewport.updateTransform(viewport.transform.rightMul(this.inverseTransform));
+			viewport.resetTransform(viewport.transform.rightMul(this.inverseTransform));
 			editor.queueRerender();
 		}
 	};
@@ -43,7 +43,7 @@ export class Viewport {
 	private screenRect: Rect2;
 
 	public constructor(private notifier: EditorNotifier) {
-		this.updateTransform(Mat33.identity);
+		this.resetTransform(Mat33.identity);
 		this.screenRect = Rect2.empty;
 	}
 
@@ -65,7 +65,8 @@ export class Viewport {
 		return this.transform.transformVec2(canvasPoint);
 	}
 
-	private updateTransform(newTransform: Mat33) {
+	// Updates the transformation directly. Using ViewportTransform is preferred.
+	public resetTransform(newTransform: Mat33) {
 		this.transform = newTransform;
 		this.inverseTransform = newTransform.inverse();
 		this.notifier.dispatch(EditorEventType.ViewportChanged, {

@@ -8,7 +8,7 @@ import Color4 from './Color4';
 import ImageEditor from './editor';
 import { RenderingMode } from './Display';
 import DummyRenderer from './rendering/DummyRenderer';
-import { FillStyle } from './rendering/AbstractRenderer';
+import { RenderingStyle } from './rendering/AbstractRenderer';
 
 describe('EditorImage', () => {
 	const testStroke = new Stroke([
@@ -20,12 +20,12 @@ describe('EditorImage', () => {
 					point: Vec2.of(3, 3),
 				},
 			],
-			fill: {
-				color: Color4.red,
+			style: {
+				fill: Color4.red,
 			},
 		},
 	]);
-	const testFill: FillStyle = { color: Color4.black };
+	const testFill: RenderingStyle = { fill: Color4.black };
 	const addTestStrokeCommand = new EditorImage.AddElementCommand(testStroke);
 
 	it('elements added to the image should be findable', () => {

@@ -937,6 +937,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.test.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.test.js
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.test.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/components/UnknownSVGObject.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/components/UnknownSVGObject.js
+packages/app-mobile/components/NoteEditor/ImageEditor/components/UnknownSVGObject.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/editor.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/editor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/editor.js.map

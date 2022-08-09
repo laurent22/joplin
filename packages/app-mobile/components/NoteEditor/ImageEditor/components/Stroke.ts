@@ -2,7 +2,7 @@ import LineSegment2 from '../geometry/LineSegment2';
 import Mat33 from '../geometry/Mat33';
 import Path from '../geometry/Path';
 import Rect2 from '../geometry/Rect2';
-import AbstractRenderer, { RenderablePathSpec } from '../rendering/AbstractRenderer';
+import AbstractRenderer, { RenderablePathSpec, RenderingStyle } from '../rendering/AbstractRenderer';
 import AbstractComponent from './AbstractComponent';
 
 interface StrokePart extends RenderablePathSpec {
@@ -17,24 +17,23 @@ export default class Stroke extends AbstractComponent {
 	public constructor(parts: RenderablePathSpec[]) {
 		super();
 
-		// TODO: This can be optimized (Path.fromRenderable does extra work (e.g.
-		// computing Bezier curves, etc.)).
 		this.parts = parts.map(section => {
 			const path = Path.fromRenderable(section);
+			const pathBBox = this.bboxForPart(path.bbox, section.style);
 
 			if (!this.contentBBox) {
-				this.contentBBox = path.bbox;
+				this.contentBBox = pathBBox;
 			} else {
-				this.contentBBox = this.contentBBox.union(path.bbox);
+				this.contentBBox = this.contentBBox.union(pathBBox);
 			}
 
 			return {
 				path,
-				bbox: path.bbox,
+				bbox: pathBBox,
 
 				// To implement RenderablePathSpec
 				startPoint: path.startPoint,
-				fill: section.fill,
+				style: section.style,
 				commands: path.parts,
 			};
 		});
@@ -61,13 +60,23 @@ export default class Stroke extends AbstractComponent {
 		canvas.endObject();
 	}
 
+	// Grows the bounding box for a given stroke part based on that part's style.
+	private bboxForPart(origBBox: Rect2, style: RenderingStyle) {
+		if (!style.stroke) {
+			return origBBox;
+		}
+
+		return origBBox.grownBy(style.stroke.width / 2);
+	}
+
 	protected applyTransformation(affineTransfm: Mat33): void {
 		this.contentBBox = null;
 
 		// Update each part
 		this.parts = this.parts.map((part) => {
 			const newPath = part.path.transformedBy(affineTransfm);
-			const newBBox = newPath.bbox;
+			const newBBox = this.bboxForPart(newPath.bbox, part.style);
+
 			if (!this.contentBBox) {
 				this.contentBBox = newBBox;
 			} else {
@@ -79,7 +88,7 @@ export default class Stroke extends AbstractComponent {
 				bbox: newBBox,
 				startPoint: newPath.startPoint,
 				commands: newPath.parts,
-				fill: part.fill,
+				style: part.style,
 			};
 		});
 

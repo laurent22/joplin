@@ -1,8 +1,9 @@
 import Color4 from './Color4';
 import Stroke from './components/Stroke';
+import UnknownSVGObject from './components/UnknownSVGObject';
 import Path from './geometry/Path';
 import Rect2 from './geometry/Rect2';
-import { RenderablePathSpec } from './rendering/AbstractRenderer';
+import { RenderablePathSpec, RenderingStyle } from './rendering/AbstractRenderer';
 import { ComponentAddedListener, ImageLoader, OnProgressListener } from './types';
 
 type OnFinishListener = ()=> void;
@@ -20,15 +21,45 @@ export default class SVGLoader implements ImageLoader {
 	private constructor(private source: SVGSVGElement, private onFinish?: OnFinishListener) {
 	}
 
+	private getStyle(node: SVGElement) {
+		const style: RenderingStyle = {
+			fill: Color4.transparent,
+		};
+
+		const fillAttribute = node.getAttribute('fill') ?? node.style.fill;
+		if (fillAttribute) {
+			try {
+				style.fill = Color4.fromString(fillAttribute);
+			} catch (e) {
+				console.error('Unknown fill color,', fillAttribute);
+			}
+		}
+
+		const strokeAttribute = node.getAttribute('stroke') ?? node.style.stroke;
+		const strokeWidthAttr = node.getAttribute('stroke-width') ?? node.style.strokeWidth;
+		if (strokeAttribute) {
+			try {
+				let width = parseFloat(strokeWidthAttr ?? '1');
+				if (!isFinite(width)) {
+					width = 0;
+				}
+
+				style.stroke = {
+					width,
+					color: Color4.fromString(strokeAttribute),
+				};
+			} catch (e) {
+				console.error('Error parsing stroke data:', e);
+			}
+		}
+
+		return style;
+	}
+
 	private strokeDataFromElem(node: SVGPathElement): RenderablePathSpec[] {
 		const result: RenderablePathSpec[] = [];
 		const pathData = node.getAttribute('d') ?? '';
-		let fillColor = Color4.black;
-		try {
-			fillColor = Color4.fromHex(node.getAttribute('fill'));
-		} catch (e) {
-			console.error('Unknown fill color,', node.getAttribute('fill'));
-		}
+		const style = this.getStyle(node);
 
 		// Break the path into chunks at each moveTo ('M') command:
 		const parts = pathData.split('M');
@@ -39,7 +70,7 @@ export default class SVGLoader implements ImageLoader {
 				// if it was present.
 				const current = !isFirst ? `M${part}` : part;
 				const path = Path.fromString(current);
-				const spec = path.toRenderable({ color: fillColor });
+				const spec = path.toRenderable(style);
 				result.push(spec);
 			}
 
@@ -74,6 +105,11 @@ export default class SVGLoader implements ImageLoader {
 		this.onAddComponent?.(stroke);
 	}
 
+	private addUnknownNode(node: SVGElement) {
+		const component = new UnknownSVGObject(node);
+		this.onAddComponent?.(component);
+	}
+
 	private async visit(node: Element) {
 		this.totalToProcess += node.childElementCount;
 
@@ -91,9 +127,12 @@ export default class SVGLoader implements ImageLoader {
 			this.rootViewBox ??= (node as SVGSVGElement).viewBox?.baseVal;
 			break;
 		default:
-			console.warn('Unknown SVG element,', node, ', ignoring!');
-
-			// TODO: Load into an UnknownObject element.
+			console.warn('Unknown SVG element,', node);
+			if (node instanceof SVGElement) {
+				this.addUnknownNode(node);
+			} else {
+				console.error('Element', node, 'is not an SVGElement!');
+			}
 			return;
 		}
 
@@ -122,7 +161,7 @@ export default class SVGLoader implements ImageLoader {
 		let result = defaultSVGViewRect;
 
 		if (viewBox) {
-			result = new Rect2(viewBox.x, viewBox.y, viewBox.width, viewBox.height);
+			result = Rect2.of(viewBox);
 		}
 
 		this.onFinish?.();
