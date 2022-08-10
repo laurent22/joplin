@@ -9,7 +9,6 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
-import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
 
 interface Props {
     themeId: string;
@@ -176,49 +175,30 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	const updateNotes = async () => {
-		let notes = [];
-
-		if (query) {
-			if (props.settings['db.ftsEnabled']) {
-				notes = await SearchEngineUtils.notesForQuery(query, true);
-			} else {
-				const p = query.split(' ');
-				const temp = [];
-				for (let i = 0; i < p.length; i++) {
-					const t = p[i].trim();
-					if (!t) continue;
-					temp.push(t);
-				}
-
-				notes = await Note.previews(null, {
-					anywherePattern: `*${temp.join('*')}*`,
-				});
-			}
-		}
-
-		setNotes(notes);
-	};
-
 	const handleQuerySubmit = async () => {
 		if (!query) {
 			setNotes(props.items);
 			return;
 		}
 
-		const searchQuery = query.trim();
+		let searchQuery = query.trim();
 
 		if (searchQuery === '') {
 			setNotes(props.items);
 			return;
 		}
 
-		props.dispatch({
-			type: 'SEARCH_QUERY',
-			query: query,
+		searchQuery = searchQuery.toLowerCase();
+
+		// Find notes in folder using only note title
+		const result = props.items.filter(item => {
+			let noteTitle = Note.displayTitle(item);
+			noteTitle = noteTitle.toLowerCase();
+
+			return noteTitle.includes(searchQuery);
 		});
 
-		await updateNotes();
+		setNotes(result);
 	};
 
 	const searchInputComp = (
@@ -268,6 +248,10 @@ function NotesBarComponent(props: Props) {
 		const selectedItemIndex = notes.findIndex(item => item.id === props.selectedNoteId);
 		flatListRef.scrollToIndex({ index: selectedItemIndex });
 	}, []);
+
+	React.useEffect(() => {
+		setNotes(props.items);
+	}, [props.items]);
 
 	return (
 		<View style={styles().container}>
