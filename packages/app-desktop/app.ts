@@ -43,7 +43,7 @@ import sidebarCommands from './gui/Sidebar/commands/index';
 import appCommands from './commands/index';
 import libCommands from '@joplin/lib/commands/index';
 import { homedir } from 'os';
-import { defaultPlugins, getInitialSettings } from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import { getDefaultPluginsInfo } from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
@@ -263,7 +263,7 @@ class Application extends BaseApplication {
 		const pluginRunner = new PluginRunner();
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 		service.isSafeMode = Setting.value('isSafeMode');
-		const defaultPluginsId = Object.keys(defaultPlugins);
+		const defaultPluginsId = Object.keys(getDefaultPluginsInfo());
 
 		let pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 		{
@@ -327,7 +327,7 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				setSettingsForDefaultPlugins(getInitialSettings());
+				setSettingsForDefaultPlugins(getDefaultPluginsInfo());
 			}
 		}, 500);
 	}

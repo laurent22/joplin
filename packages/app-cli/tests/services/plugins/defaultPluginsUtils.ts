@@ -1,8 +1,8 @@
 import { installDefaultPlugins, getDefaultPluginsInstallState, setSettingsForDefaultPlugins, checkPreInstalledDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
-import * as fs from 'fs-extra';
+import { pathExists } from 'fs-extra';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
-import PluginService, { defaultPluginSetting, InitialSettings, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 
 const testPluginDir = `${supportDir}/plugins`;
@@ -47,8 +47,8 @@ describe('defaultPluginsUtils', function() {
 		const installedPluginPath1 = `${Setting.value('pluginDir')}/${pluginsId[0]}.jpl`;
 		const installedPluginPath2 = `${Setting.value('pluginDir')}/${pluginsId[1]}.jpl`;
 
-		expect(await fs.pathExists(installedPluginPath1)).toBe(true);
-		expect(await fs.pathExists(installedPluginPath2)).toBe(true);
+		expect(await pathExists(installedPluginPath1)).toBe(true);
+		expect(await pathExists(installedPluginPath2)).toBe(true);
 
 		expect(newPluginsSettings[pluginsId[0]]).toMatchObject(defaultPluginSetting());
 		expect(newPluginsSettings[pluginsId[1]]).toMatchObject(defaultPluginSetting());
@@ -69,8 +69,8 @@ describe('defaultPluginsUtils', function() {
 		const installedPluginPath1 = `${Setting.value('pluginDir')}/${pluginsId[0]}.jpl`;
 		const installedPluginPath2 = `${Setting.value('pluginDir')}/${pluginsId[1]}.jpl`;
 
-		expect(await fs.pathExists(installedPluginPath1)).toBe(true);
-		expect(await fs.pathExists(installedPluginPath2)).toBe(false);
+		expect(await pathExists(installedPluginPath1)).toBe(true);
+		expect(await pathExists(installedPluginPath2)).toBe(false);
 
 		expect(newPluginsSettings[pluginsId[0]]).toMatchObject(defaultPluginSetting());
 		expect(newPluginsSettings[pluginsId[1]]).toBeUndefined();
@@ -188,22 +188,28 @@ describe('defaultPluginsUtils', function() {
 		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
 		await service.runPlugin(plugin);
 
-		const initialSettings: InitialSettings = {
+		const defaultPluginsInfo: DefaultPluginsInfo = {
 			'io.github.jackgruber.backup': {
-				'path': `${Setting.value('profileDir')}/testBackup`,
+				version: '1.0.2',
+				settings: {
+					'path': `${Setting.value('profileDir')}`,
+				},
+			},
+			'plugin.calebjohn.rich-markdown': {
+				version: '0.8.3',
 			},
 		};
 
 		// with pre-installed default plugin
 		Setting.setValue('installedDefaultPlugins', ['io.github.jackgruber.backup']);
-		setSettingsForDefaultPlugins(initialSettings);
+		setSettingsForDefaultPlugins(defaultPluginsInfo);
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('initial-path');
 		await service.destroy();
 
 		// with no pre-installed default plugin
 		Setting.setValue('installedDefaultPlugins', ['']);
-		setSettingsForDefaultPlugins(initialSettings);
-		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}/testBackup`);
+		setSettingsForDefaultPlugins(defaultPluginsInfo);
+		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}`);
 		await service.destroy();
 	});
 

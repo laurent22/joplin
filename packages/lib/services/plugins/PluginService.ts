@@ -29,11 +29,16 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-    [settingName: string]: string;
+	[settingName: string]: string;
 }
 
-export interface InitialSettings {
-    [pluginId: string]: SettingAndValue;
+export interface DefaultPluginSettings {
+	version: string;
+	settings?: SettingAndValue;
+}
+
+export interface DefaultPluginsInfo {
+    [pluginId: string]: DefaultPluginSettings;
 }
 
 export interface PluginSetting {

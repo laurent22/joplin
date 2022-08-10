@@ -1550,7 +1550,7 @@ class Setting extends BaseModel {
 				value: [],
 				type: SettingItemType.Array,
 				public: false,
-				storage: SettingStorage.File,
+				storage: SettingStorage.Database,
 			},
 
 			// 'featureFlag.syncAccurateTimestamps': {
@@ -1924,7 +1924,7 @@ class Setting extends BaseModel {
 	// this method checks if the 'value' passed is present in the Setting "Array"
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
-	static checkArrayAndUpdate(settingName: string, value: string): boolean {
+	public static setArrayValue(settingName: string, value: string): boolean {
 		const settingValue: Array<any> = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);

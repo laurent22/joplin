@@ -2,7 +2,7 @@ import produce from 'immer';
 import path = require('path');
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
-import PluginService, { defaultPluginSetting, InitialSettings, PluginSettings } from '../PluginService';
+import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
 import * as React from 'react';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 
@@ -11,7 +11,7 @@ export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[],plugi
 	for (const pluginId of defaultPluginsId) {
 		// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
 		// then its either pre-installed by user or just uninstalled
-		if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) Setting.checkArrayAndUpdate('installedDefaultPlugins', pluginId);
+		if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) Setting.setArrayValue('installedDefaultPlugins', pluginId);
 	}
 }
 
@@ -34,14 +34,15 @@ export async function installDefaultPlugins(service: PluginService, pluginsDir: 
 	return pluginSettings;
 }
 
-export function setSettingsForDefaultPlugins(initialSettings: InitialSettings) {
+export function setSettingsForDefaultPlugins(defaultPluginsInfo: DefaultPluginsInfo) {
 	const installedDefaultPlugins = Setting.value('installedDefaultPlugins');
 
 	// only set initial settings if the plugin is not present in installedDefaultPlugins array
-	for (const pluginId of Object.keys(initialSettings)) {
-		for (const settingName of Object.keys(initialSettings[pluginId])) {
+	for (const pluginId of Object.keys(defaultPluginsInfo)) {
+		if (!defaultPluginsInfo[pluginId].settings) continue;
+		for (const settingName of Object.keys(defaultPluginsInfo[pluginId].settings)) {
 			if (!installedDefaultPlugins.includes(pluginId)) {
-				Setting.setValue(`plugin-${pluginId}.${settingName}`, initialSettings[pluginId][settingName]);
+				Setting.setValue(`plugin-${pluginId}.${settingName}`, defaultPluginsInfo[pluginId].settings[settingName]);
 			}
 		}
 	}
@@ -51,7 +52,7 @@ export function getDefaultPluginsInstallState(service: PluginService, defaultPlu
 	const settings: PluginSettings = {};
 	for (const pluginId of defaultPluginsId) {
 		if (!service.pluginIds.includes(pluginId)) continue;
-		if (!Setting.checkArrayAndUpdate('installedDefaultPlugins', pluginId)) {
+		if (!Setting.setArrayValue('installedDefaultPlugins', pluginId)) {
 			settings[pluginId] = defaultPluginSetting();
 		}
 	}

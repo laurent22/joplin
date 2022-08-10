@@ -1,16 +1,18 @@
-import { InitialSettings } from '../PluginService';
+import { DefaultPluginsInfo } from '../PluginService';
 import Setting from '../../../models/Setting';
 
-export const defaultPlugins = {
-	'io.github.jackgruber.backup': '1.0.2',
-	'plugin.calebjohn.rich-markdown': '0.8.3',
-};
-
-export function getInitialSettings(): InitialSettings {
-	const initialSettings: InitialSettings = {
+const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
+	const defaultPlugins = {
 		'io.github.jackgruber.backup': {
-			'path': `${Setting.value('profileDir')}`,
+			version: '1.0.2',
+			settings: {
+				'path': `${Setting.value('profileDir')}`,
+			},
+		},
+		'plugin.calebjohn.rich-markdown': {
+			version: '0.8.3',
 		},
 	};
-	return initialSettings;
-}
+	return defaultPlugins;
+};
+export default getDefaultPluginsInfo;
