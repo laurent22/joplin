@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 
 		const dstFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetNotebook);
 		if (!dstFolder) {
-			throw new Error(_('Cannot find "%s", please create at first "%s".', targetNotebook));
+			throw new Error(_('Cannot find "%s", please create it first.', targetNotebook));
 		}
 
 		const dstDups = await Folder.search({ titlePattern: targetNotebook, limit: 2 });
