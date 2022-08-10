@@ -1,4 +1,4 @@
-import ImageEditor from '../editor';
+import SVGEditor from '../SVGEditor';
 import { ToolType } from '../tools/ToolController';
 import { EditorEventType } from '../types';
 
@@ -10,11 +10,14 @@ import Pen from '../tools/Pen';
 import Eraser from '../tools/Eraser';
 import BaseTool from '../tools/BaseTool';
 import SelectionTool from '../tools/SelectionTool';
+import { ToolbarLocalization } from './types';
 
-// WidgetBuilder
-//  → build()
-//  → withIcon(...)
-//  → withTitle(...)
+const primaryForegroundFill = `
+	style='fill: var(--primary-foreground-color);'
+`;
+const primaryForegroundStrokeFill = `
+	style='fill: var(--primary-foreground-color); stroke: var(--primary-foreground-color);'
+`;
 
 const toolbarCSSPrefix = 'toolbar-';
 abstract class ToolbarWidget {
@@ -25,7 +28,11 @@ abstract class ToolbarWidget {
 	private dropdownIcon: Element;
 	private label: HTMLLabelElement;
 
-	public constructor(editor: ImageEditor, protected targetTool: BaseTool) {
+	public constructor(
+		editor: SVGEditor,
+		protected targetTool: BaseTool,
+		protected localizationTable: ToolbarLocalization
+	) {
 		this.container = document.createElement('div');
 		this.container.classList.add(`${toolbarCSSPrefix}toolContainer`);
 		this.dropdownContainer = document.createElement('div');
@@ -131,7 +138,10 @@ abstract class ToolbarWidget {
 		const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 		icon.innerHTML = `
 		<g>
-			<path d='M5,10 L50,90 L95,10 Z'/>
+			<path
+				d='M5,10 L50,90 L95,10 Z'
+				${primaryForegroundFill}
+			/>
 		</g>
 		`;
 		icon.classList.add(`${toolbarCSSPrefix}showHideDropdownIcon`);
@@ -142,7 +152,7 @@ abstract class ToolbarWidget {
 
 class EraserWidget extends ToolbarWidget {
 	protected getTitle(): string {
-		return 'Eraser'; // TODO: Localize
+		return this.localizationTable.eraser;
 	}
 	protected createIcon(): Element {
 		const icon = document.createElementNS(
@@ -153,7 +163,10 @@ class EraserWidget extends ToolbarWidget {
 		icon.innerHTML = `
 		<g>
 			<rect x=10 y=50 width=80 height=30 rx=10 fill='pink' />
-			<rect x=10 y=10 width=80 height=50 fill='black'/>
+			<rect
+				x=10 y=10 width=80 height=50
+				${primaryForegroundFill}
+			/>
 		</g>
 		`;
 		icon.setAttribute('viewBox', '0 0 100 100');
@@ -169,7 +182,7 @@ class EraserWidget extends ToolbarWidget {
 
 class SelectionWidget extends ToolbarWidget {
 	protected getTitle(): string {
-		return 'Select'; // TODO: Localize
+		return this.localizationTable.select;
 	}
 
 	protected createIcon(): Element {
@@ -194,7 +207,7 @@ class SelectionWidget extends ToolbarWidget {
 
 class TouchDrawingWidget extends ToolbarWidget {
 	protected getTitle(): string {
-		return 'Touch Drawing'; // TODO: Localize
+		return this.localizationTable.touchDrawing;
 	}
 
 	protected createIcon(): Element {
@@ -203,12 +216,15 @@ class TouchDrawingWidget extends ToolbarWidget {
 		// Draw a cursor-like shape
 		icon.innerHTML = `
 		<g>
-			<path d='M11,-30 Q0,10 20,20 Q40,20 40,-30 Z' fill='blue'/>
+			<path d='M11,-30 Q0,10 20,20 Q40,20 40,-30 Z' fill='blue' stroke='black'/>
 			<path d='
 				M0,90 L0,50 Q5,40 10,50
 				L10,20 Q20,15 30,20
 				L30,50 Q50,40 80,50
-				L80,90 L10,90 Z' fill='black' stroke='black' />
+				L80,90 L10,90 Z'
+				
+				${primaryForegroundStrokeFill}
+			/>
 		</g>
 		`;
 		icon.setAttribute('viewBox', '-10 -30 100 100');
@@ -231,8 +247,10 @@ class TouchDrawingWidget extends ToolbarWidget {
 class PenWidget extends ToolbarWidget {
 	private updateInputs: ()=> void = () => {};
 
-	public constructor(private editor: ImageEditor, private tool: Pen) {
-		super(editor, tool);
+	public constructor(
+		private editor: SVGEditor, private tool: Pen, localization: ToolbarLocalization
+	) {
+		super(editor, tool, localization);
 
 		this.editor.notifier.on(EditorEventType.ToolUpdated, toolEvt => {
 			if (toolEvt.kind !== EditorEventType.ToolUpdated) {
@@ -248,7 +266,7 @@ class PenWidget extends ToolbarWidget {
 	}
 
 	protected getTitle(): string {
-		return 'Pen'; // TODO: Localize
+		return this.localizationTable.pen;
 	}
 
 	protected createIcon(): Element {
@@ -283,7 +301,8 @@ class PenWidget extends ToolbarWidget {
 			<!-- Pen grip -->
 			<path
 				d='M10,10 L90,10 L90,60 L${50 + scale},80 L${50 - scale},80 L10,60 Z'
-				fill='black' stroke='black'/>
+				${primaryForegroundStrokeFill}
+			/>
 		</g>
 		<g>
 			<!-- Checkerboard background for slightly transparent pens -->
@@ -313,7 +332,7 @@ class PenWidget extends ToolbarWidget {
 
 		thicknessInput.id = `${toolbarCSSPrefix}thicknessInput${PenWidget.idCounter++}`;
 
-		thicknessLabel.innerText = 'Thickness: '; // TODO: Localize
+		thicknessLabel.innerText = this.localizationTable.thicknessLabel;
 		thicknessLabel.setAttribute('for', thicknessInput.id);
 
 		thicknessInput.type = 'range';
@@ -370,7 +389,20 @@ class PenWidget extends ToolbarWidget {
 export default class HTMLToolbar {
 	private container: HTMLElement;
 
-	public constructor(private editor: ImageEditor, parent: HTMLElement) {
+	private static defaultStrings: ToolbarLocalization = {
+		pen: 'Pen',
+		eraser: 'Eraser',
+		select: 'Select',
+		touchDrawing: 'Touch Drawing',
+		thicknessLabel: 'Thickness: ',
+		undo: 'Undo',
+		redo: 'Redo',
+	};
+
+	public constructor(
+		private editor: SVGEditor, parent: HTMLElement,
+		private localizationTable: ToolbarLocalization = HTMLToolbar.defaultStrings
+	) {
 		this.container = document.createElement('div');
 		this.container.classList.add(`${toolbarCSSPrefix}root`);
 		this.addElements();
@@ -381,15 +413,14 @@ export default class HTMLToolbar {
 		coloris({
 			el: '.coloris_input',
 			format: 'hex',
-			theme: 'polaroid',
 			selectInput: false,
 			focusInput: false,
+			themeMode: this.editor.lightMode ? 'light' : 'dark',
+
 			swatches: [
 				Color4.red.toHexString(),
 				Color4.purple.toHexString(),
 				Color4.blue.toHexString(),
-				Color4.yellow.toHexString(),
-				Color4.green.toHexString(),
 				Color4.clay.toHexString(),
 				Color4.black.toHexString(),
 				Color4.white.toHexString(),
@@ -397,12 +428,12 @@ export default class HTMLToolbar {
 		});
 	}
 
-	public addActionButton(text: string, command: ()=> void) {
+	public addActionButton(text: string, command: ()=> void, parent?: Element) {
 		const button = document.createElement('button');
 		button.innerText = text;
-		button.classList.add('toolButton');
+		button.classList.add(`${toolbarCSSPrefix}toolButton`);
 		button.onclick = command;
-		this.container.appendChild(button);
+		(parent ?? this.container).appendChild(button);
 	}
 
 	private addElements() {
@@ -412,7 +443,7 @@ export default class HTMLToolbar {
 				throw new Error('All `Pen` tools must have kind === ToolType.Pen');
 			}
 
-			const widget = new PenWidget(this.editor, tool);
+			const widget = new PenWidget(this.editor, tool, this.localizationTable);
 			widget.addTo(this.container);
 		}
 
@@ -421,7 +452,7 @@ export default class HTMLToolbar {
 				throw new Error('All Erasers must have kind === ToolType.Eraser!');
 			}
 
-			(new EraserWidget(this.editor, tool)).addTo(this.container);
+			(new EraserWidget(this.editor, tool, this.localizationTable)).addTo(this.container);
 		}
 
 		for (const tool of toolController.getMatchingTools(ToolType.Selection)) {
@@ -429,18 +460,22 @@ export default class HTMLToolbar {
 				throw new Error('All SelectionTools must have kind === ToolType.Selection');
 			}
 
-			(new SelectionWidget(this.editor, tool)).addTo(this.container);
+			(new SelectionWidget(this.editor, tool, this.localizationTable)).addTo(this.container);
 		}
 
 		for (const tool of toolController.getMatchingTools(ToolType.TouchPanZoom)) {
-			(new TouchDrawingWidget(this.editor, tool)).addTo(this.container);
+			(new TouchDrawingWidget(this.editor, tool, this.localizationTable)).addTo(this.container);
 		}
+
+		const undoRedoGroup = document.createElement('div');
+		undoRedoGroup.classList.add(`${toolbarCSSPrefix}buttonGroup`);
 
 		this.addActionButton('Undo', () => {
 			this.editor.history.undo();
-		});
+		}, undoRedoGroup);
 		this.addActionButton('Redo', () => {
 			this.editor.history.redo();
-		});
+		}, undoRedoGroup);
+		this.container.appendChild(undoRedoGroup);
 	}
 }

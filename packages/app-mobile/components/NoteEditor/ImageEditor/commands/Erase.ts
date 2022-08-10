@@ -1,7 +1,7 @@
-import AbstractComponent from "../components/AbstractComponent";
-import ImageEditor from "../editor";
-import EditorImage from "../EditorImage";
-import Command from "./Command";
+import AbstractComponent from '../components/AbstractComponent';
+import SVGEditor from '../SVGEditor';
+import EditorImage from '../EditorImage';
+import Command from './Command';
 
 export default class Erase implements Command {
 	private toRemove: AbstractComponent[];
@@ -11,10 +11,10 @@ export default class Erase implements Command {
 		this.toRemove = toRemove.map(elem => elem);
 	}
 
-	public apply(editor: ImageEditor): void {
+	public apply(editor: SVGEditor): void {
 		for (const part of this.toRemove) {
 			const parent = editor.image.findParent(part);
-			
+
 			if (parent) {
 				parent.remove();
 			}
@@ -23,7 +23,7 @@ export default class Erase implements Command {
 		editor.queueRerender();
 	}
 
-	public unapply(editor: ImageEditor): void {
+	public unapply(editor: SVGEditor): void {
 		for (const part of this.toRemove) {
 			if (!editor.image.findParent(part)) {
 				new EditorImage.AddElementCommand(part).apply(editor);

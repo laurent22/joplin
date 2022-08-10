@@ -195,8 +195,8 @@ class BundledFile {
 
 const bundledFiles: BundledFile[] = [
 	new BundledFile(
-		'svgEditor',
-		`${mobileDir}/components/NoteEditor/ImageEditor/editor.ts`
+		'svgEditorBundle',
+		`${mobileDir}/components/NoteEditor/ImageEditor/SVGEditor.ts`
 	),
 	new BundledFile(
 		'codeMirrorBundle',

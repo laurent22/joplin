@@ -1,6 +1,6 @@
 import AbstractRenderer from './rendering/AbstractRenderer';
 import CanvasRenderer from './rendering/CanvasRenderer';
-import { ImageEditor } from './editor';
+import { SVGEditor } from './SVGEditor';
 import { EditorEventType } from './types';
 import DummyRenderer from './rendering/DummyRenderer';
 
@@ -16,7 +16,7 @@ export default class Display {
 	private flattenCallback?: ()=> void;
 
 	public constructor(
-		private editor: ImageEditor, mode: RenderingMode, private parent: HTMLElement|null
+		private editor: SVGEditor, mode: RenderingMode, private parent: HTMLElement|null
 	) {
 		if (mode === RenderingMode.CanvasRenderer) {
 			this.initializeCanvasRendering();

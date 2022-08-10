@@ -1,17 +1,7 @@
-
-:root {
-    --primary-background-color: white;
-    --primary-background-color-transparent: rgba(255, 255, 255, 0.5);
-    --secondary-background-color: #faf;
-    --primary-foreground-color: black;
-    --secondary-foreground-color: black;
-}
-
 .toolbar-root {
-    background-color: var(--primary-background-color-transparent);
-    backdrop-filter: blur(6px);
+    background-color: var(--primary-background-color);
 
-    border: 1px solid gray;
+    border: 1px solid var(--secondary-background-color);
     border-radius: 2px;
     flex-wrap: wrap;
 
@@ -44,7 +34,7 @@
     font-size: 11pt;
 
     height: min(20vh, 60px);
-    background-color: white;
+    background-color: var(--primary-background-color);
 }
 
 .toolbar-button .toolbar-icon {
@@ -79,6 +69,11 @@
     padding: 15px;
     background-color: var(--primary-background-color);
     box-shadow: 0px 3px 3px var(--primary-foreground-color);
+}
+
+.toolbar-buttonGroup {
+    display: flex;
+    flex-direction: row;
 }
 
 /* Color selector inputs */

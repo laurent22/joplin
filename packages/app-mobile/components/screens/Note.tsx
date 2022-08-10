@@ -46,6 +46,7 @@ import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
+import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -71,6 +72,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			noteTagDialogShown: false,
 			fromShare: false,
 			showCamera: false,
+			showImageEditor: false,
+			imageEditorData: '',
+			imageEditorResource: null,
 			noteResources: {},
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
@@ -186,10 +190,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
-						const resourcePath = Resource.fullPath(item);
 
-						logger.info(`Opening resource: ${resourcePath}`);
-						await FileViewer.open(resourcePath);
+						const resourcePath = Resource.fullPath(item);
+						if (item.mime === 'image/svg+xml') {
+							void this.editDrawing(resourcePath, item);
+						} else {
+							logger.info(`Opening resource: ${resourcePath}`);
+							await FileViewer.open(resourcePath);
+						}
 					} else {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
@@ -681,7 +689,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
-				if (fileType === 'image') {
+				if (fileType === 'image' && mimeType !== 'image/svg+xml') {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));
 					return;
 				} else {
@@ -760,6 +768,48 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	cameraView_onCancel() {
 		this.setState({ showCamera: false });
+	}
+
+	private drawPicture_onPress = () => {
+		this.setState({
+			showImageEditor: true,
+			imageEditorData: '',
+			imageEditorResource: null,
+		});
+	};
+
+	private attachDrawing = async (svgData: string) => {
+		this.setState({ showImageEditor: false });
+
+		let resource = this.state.imageEditorResource;
+		const resourcePath = resource ? Resource.fullPath(resource) : null;
+
+		const filePath = resourcePath ?? `${Setting.value('resourceDir')}/saved-drawing.svg`;
+		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
+		console.info('Saved drawing to', filePath);
+
+		if (resource) {
+			resource = await Resource.save(resource, { isNew: false });
+			await this.refreshResource(resource);
+			this.setState({
+				imageEditorResource: null,
+			});
+		} else {
+			// Otherwise, we're creating a new file
+			await this.attachFile({
+				uri: filePath,
+				name: _('A Drawing'),
+			}, 'image');
+		}
+	};
+
+	private async editDrawing(filePath: string, item: BaseItem) {
+		const svgData = await shim.fsDriver().readFile(filePath);
+		this.setState({
+			showImageEditor: true,
+			imageEditorData: svgData,
+			imageEditorResource: item,
+		});
 	}
 
 	async attachFile_onPress() {
@@ -904,12 +954,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 					// because that's only way to browse photos from the camera roll.
 					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
 					buttons.push({ text: _('Take photo'), id: 'takePhoto' });
+					buttons.push({ text: _('Draw picture'), id: 'drawPicture' });
 
 					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachFile') void this.attachFile_onPress();
 					if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+					if (buttonId === 'drawPicture') this.drawPicture_onPress();
 				},
 			});
 		}
@@ -1063,6 +1115,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (this.state.showCamera) {
 			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
+		} else if (this.state.showImageEditor) {
+			return <ImageEditor
+				initialSVGData={this.state.imageEditorData}
+				themeId={this.props.themeId}
+				onSave={this.attachDrawing}
+			/>;
 		}
 
 		// Currently keyword highlighting is supported only when FTS is available.

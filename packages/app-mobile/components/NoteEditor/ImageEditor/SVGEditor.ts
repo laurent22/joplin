@@ -17,8 +17,9 @@ import SVGLoader from './SVGLoader';
 import './editor.css';
 import Pointer from './Pointer';
 import Mat33 from './geometry/Mat33';
+import { ToolbarLocalization } from './toolbar/types';
 
-export class ImageEditor {
+export class SVGEditor {
 	// Wrapper around the viewport and toolbar
 	private container: HTMLElement;
 	private renderingRegion: HTMLElement;
@@ -37,7 +38,9 @@ export class ImageEditor {
 	private loadingWarning: HTMLElement;
 
 	public constructor(
-		parent: HTMLElement, renderingMode: RenderingMode = RenderingMode.CanvasRenderer
+		parent: HTMLElement,
+		renderingMode: RenderingMode = RenderingMode.CanvasRenderer,
+		public readonly lightMode: boolean = true
 	) {
 		this.container = document.createElement('div');
 		this.renderingRegion = document.createElement('div');
@@ -63,8 +66,8 @@ export class ImageEditor {
 
 		parent.appendChild(this.container);
 
-		// Default to a 1000x1500 image
-		this.importExportViewport.updateScreenSize(Vec2.of(1000, 1500));
+		// Default to a 500x500 image
+		this.importExportViewport.updateScreenSize(Vec2.of(500, 500));
 
 		this.viewport.updateScreenSize(
 			Vec2.of(this.display.width, this.display.height)
@@ -85,8 +88,8 @@ export class ImageEditor {
 		this.loadingWarning.style.display = 'none';
 	}
 
-	public addToolbar(): HTMLToolbar {
-		return new HTMLToolbar(this, this.container);
+	public addToolbar(localization?: ToolbarLocalization): HTMLToolbar {
+		return new HTMLToolbar(this, this.container, localization);
 	}
 
 	private registerListeners() {
@@ -390,4 +393,4 @@ export class ImageEditor {
 	}
 }
 
-export default ImageEditor;
+export default SVGEditor;

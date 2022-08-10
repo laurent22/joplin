@@ -3,7 +3,7 @@
  */
 
 import Command from './commands/Command';
-import ImageEditor from './editor';
+import SVGEditor from './SVGEditor';
 import Mat33 from './geometry/Mat33';
 import Rect2 from './geometry/Rect2';
 import { Point2, Vec2 } from './geometry/Vec2';
@@ -25,13 +25,13 @@ export class Viewport {
 			this.inverseTransform = transform.inverse();
 		}
 
-		public apply(editor: ImageEditor) {
+		public apply(editor: SVGEditor) {
 			const viewport = editor.viewport;
 			viewport.resetTransform(viewport.transform.rightMul(this.transform));
 			editor.queueRerender();
 		}
 
-		public unapply(editor: ImageEditor) {
+		public unapply(editor: SVGEditor) {
 			const viewport = editor.viewport;
 			viewport.resetTransform(viewport.transform.rightMul(this.inverseTransform));
 			editor.queueRerender();

@@ -78,7 +78,7 @@
 		<textarea id="logOutput">
 		</textarea>
 	</body>
-	<script src='editor.bundle.js'></script>
+	<script src='SVGEditor.bundle.js'></script>
 	<script>
 		const lastSaveLocalStorageKey = 'lastSave';
 
@@ -157,7 +157,7 @@ If enabled, errors will be logged to this textarea.
 					startVisualErrorLog();
 				}
 
-				const editor = new svgEditor.ImageEditor(document.body);
+				const editor = new svgEditorBundle.SVGEditor(document.body);
 				const toolbar = editor.addToolbar();
 
 				toolbar.addActionButton('Save', () => {

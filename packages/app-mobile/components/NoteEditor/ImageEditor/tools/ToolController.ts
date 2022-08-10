@@ -1,6 +1,6 @@
 import Command from '../commands/Command';
 import { InputEvtType, InputEvt } from '../types';
-import ImageEditor from '../editor';
+import SVGEditor from '../SVGEditor';
 import BaseTool from './BaseTool';
 import PanZoom, { PanZoomMode } from './PanZoom';
 import Pen from './Pen';
@@ -19,15 +19,11 @@ export enum ToolType {
 	PanZoom,
 }
 
-/**
- * Controller for interactive tools/modes. See `commands/` for non-interactive
- * tools.
- */
 export default class ToolController {
 	private tools: BaseTool[];
 	private activeTool: BaseTool|null;
 
-	public constructor(editor: ImageEditor) {
+	public constructor(editor: SVGEditor) {
 		const primaryToolEnabledGroup = new ToolEnabledGroup();
 		const touchPanZoom = new PanZoom(editor, PanZoomMode.OneFingerGestures);
 		const primaryPenTool = new Pen(editor);
@@ -54,13 +50,7 @@ export default class ToolController {
 		this.activeTool = null;
 	}
 
-	/**
-	 * Sends an input event to the active tool, returns whether the event was handled.
-	 * @param event Event to dispatch. If a `PointerDownEvt`, the active tool will be changed.
-	 *              `WheelEvt`s are dispatched to the first tool which handles them. Other events
-	 *              are dispatched to the active tool.
-	 * @return true iff the event was handled.
-	 */
+	// Returns true if the event was handled
 	public dispatchInputEvent(event: InputEvt): boolean {
 		let handled;
 		if (event.kind === InputEvtType.PointerDownEvt) {
@@ -124,6 +114,7 @@ export default class ToolController {
 		return this.tools.filter(tool => tool.kind === kind);
 	}
 
+	// Private helper
 	#setToolEnabled(kind: ToolType, enabled: boolean) {
 		const matchingTools = this.tools.filter(tool => tool.kind === kind);
 		for (const tool of matchingTools) {
@@ -132,20 +123,15 @@ export default class ToolController {
 		}
 	}
 
-	/**
-	 * @param kind kind of tool to search for (e.g. ToolType.Pen would set
-	 *             whether the pen tool is enabled)
-	 * @param enabled Whether all matching tools should be enabled.
-	 * @returns A `Command` that, when applied, enables/disables all matching tools.
-	 */
+	// Returns A `Command` that, when applied, enables/disables all matching tools.
 	public static setToolEnabled(kind: ToolType, enabled: boolean): Command {
 		return new class implements Command {
 			private wasEnabled: boolean|null = null;
-			public apply(editor: ImageEditor): void {
+			public apply(editor: SVGEditor): void {
 				this.wasEnabled = editor.toolController.isToolEnabled(kind);
 				editor.toolController.#setToolEnabled(kind, enabled);
 			}
-			public unapply(editor: ImageEditor): void {
+			public unapply(editor: SVGEditor): void {
 				// Can't unapply if not applied before
 				if (this.wasEnabled !== null) {
 					editor.toolController.#setToolEnabled(kind, this.wasEnabled);
@@ -154,9 +140,7 @@ export default class ToolController {
 		};
 	}
 
-	/**
-	 * @returns true iff any tools of the given kind are enabled.
-	 */
+	// Returns true iff any tools of the given kind are enabled.
 	public isToolEnabled(kind: ToolType): boolean {
 		const matchingTools = this.tools.filter(tool => tool.kind === kind);
 		return matchingTools.some((tool: BaseTool) => tool.isEnabled());

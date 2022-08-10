@@ -1,11 +1,11 @@
-import { PointerEvt } from "../types";
-import BaseTool from "./BaseTool";
-import ImageEditor from '../editor';
-import { Point2 } from "../geometry/Vec2";
-import LineSegment2 from "../geometry/LineSegment2";
-import Erase from "../commands/Erase";
-import { ToolType } from "./ToolController";
-import AbstractComponent from "../components/AbstractComponent";
+import { PointerEvt } from '../types';
+import BaseTool from './BaseTool';
+import SVGEditor from '../SVGEditor';
+import { Point2 } from '../geometry/Vec2';
+import LineSegment2 from '../geometry/LineSegment2';
+import Erase from '../commands/Erase';
+import { ToolType } from './ToolController';
+import AbstractComponent from '../components/AbstractComponent';
 
 export default class Eraser extends BaseTool {
 	private lastPoint: Point2;
@@ -13,7 +13,7 @@ export default class Eraser extends BaseTool {
 	public kind: ToolType = ToolType.Eraser;
 	private toRemove: AbstractComponent[];
 
-	public constructor(private editor: ImageEditor) {
+	public constructor(private editor: SVGEditor) {
 		super(editor.notifier);
 	}
 

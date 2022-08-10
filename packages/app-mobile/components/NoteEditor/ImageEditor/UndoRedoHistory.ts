@@ -1,4 +1,4 @@
-import ImageEditor from "./editor";
+import SVGEditor from './SVGEditor';
 import Command from './commands/Command';
 
 
@@ -6,7 +6,7 @@ class UndoRedoHistory {
 	private undoStack: Command[];
 	private redoStack: Command[];
 
-	public constructor(private readonly editor: ImageEditor) {
+	public constructor(private readonly editor: SVGEditor) {
 		this.undoStack = [];
 		this.redoStack = [];
 	}

@@ -1,6 +1,6 @@
 import Command from '../commands/Command';
 import AbstractComponent from '../components/AbstractComponent';
-import ImageEditor from '../editor';
+import SVGEditor from '../SVGEditor';
 import Mat33 from '../geometry/Mat33';
 // import Mat33 from "../geometry/Mat33";
 import Rect2 from '../geometry/Rect2';
@@ -31,8 +31,9 @@ const styles = `
 		right: 0;
 		bottom: 0;
 
-		background-color: rgba(255, 100, 255, 0.5);
-		border: 1px solid #ffccff;
+		background-color: var(--secondary-background-color);
+		opacity: 0.8;
+		border: 1px solid var(--primary-background-color);
 	}
 
 	.handleOverlay > .selectionBox .resizeCorner {
@@ -46,8 +47,8 @@ const styles = `
 		right: 0;
 
 		opacity: 0.8;
-		background-color: white;
-		border: 1px solid black;
+		background-color: var(--primary-background-color);
+		border: 1px solid var(--primary-foreground-color);
 	}
 
 	.handleOverlay > .selectionBox .rotateCircleContainer {
@@ -65,8 +66,8 @@ const styles = `
 		margin-top: -${handleScreenSize / 2}px;
 		opacity: 0.8;
 
-		border: 1px solid black;
-		background-color: white;
+		border: 1px solid var(--primary-foreground-color);
+		background-color: var(--primary-background-color);
 		border-radius: 100%;
 	}
 `;
@@ -133,7 +134,7 @@ class Selection {
 	private transformationCommands: Command[];
 
 	public constructor(
-		public startPoint: Point2, private editor: ImageEditor
+		public startPoint: Point2, private editor: SVGEditor
 	) {
 		this.boxRotation = this.editor.viewport.getRotationAngle();
 		this.selectedElems = [];
@@ -422,7 +423,7 @@ export default class SelectionTool extends BaseTool {
 	private selectionBox: Selection|null;
 	public readonly kind: ToolType = ToolType.Selection;
 
-	public constructor(private editor: ImageEditor) {
+	public constructor(private editor: SVGEditor) {
 		super(editor.notifier);
 
 		this.handleOverlay = document.createElement('div');

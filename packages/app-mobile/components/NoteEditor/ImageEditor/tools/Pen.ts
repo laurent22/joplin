@@ -1,5 +1,5 @@
 import Color4 from '../Color4';
-import ImageEditor from '../editor';
+import SVGEditor from '../SVGEditor';
 import EditorImage from '../EditorImage';
 import { Vec2 } from '../geometry/Vec2';
 import Pointer, { PointerDevice } from '../Pointer';
@@ -13,7 +13,7 @@ export default class Pen extends BaseTool {
 	public readonly kind: ToolType = ToolType.Pen;
 
 	public constructor(
-		private editor: ImageEditor,
+		private editor: SVGEditor,
 		private color: Color4 = Color4.purple,
 		private thickness: number = 16.0
 	) {

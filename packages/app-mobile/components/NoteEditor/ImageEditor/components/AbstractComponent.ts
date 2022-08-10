@@ -1,5 +1,5 @@
 import Command from '../commands/Command';
-import ImageEditor from '../editor';
+import SVGEditor from '../SVGEditor';
 import EditorImage from '../EditorImage';
 import LineSegment2 from '../geometry/LineSegment2';
 import Mat33 from '../geometry/Mat33';
@@ -31,7 +31,7 @@ export default abstract class AbstractComponent {
 	// Returns a command that, when applied, transforms this by [affineTransfm] and
 	// updates the editor.
 	public transformBy(affineTransfm: Mat33): Command {
-		const updateTransform = (editor: ImageEditor, newTransfm: Mat33) => {
+		const updateTransform = (editor: SVGEditor, newTransfm: Mat33) => {
 			// Any parent should have only one direct child.
 			const parent = editor.image.findParent(this);
 			let hadParent = false;
@@ -50,12 +50,12 @@ export default abstract class AbstractComponent {
 		const origZIndex = this.zIndex;
 
 		return {
-			apply: (editor: ImageEditor) => {
+			apply: (editor: SVGEditor) => {
 				this.zIndex = AbstractComponent.zIndexCounter++;
 				updateTransform(editor, affineTransfm);
 				editor.queueRerender();
 			},
-			unapply: (editor: ImageEditor): void => {
+			unapply: (editor: SVGEditor): void => {
 				this.zIndex = origZIndex;
 				updateTransform(
 					editor, affineTransfm.inverse()

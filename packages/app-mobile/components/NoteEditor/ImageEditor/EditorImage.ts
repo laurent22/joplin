@@ -1,4 +1,4 @@
-import ImageEditor from './editor';
+import SVGEditor from './SVGEditor';
 import AbstractRenderer from './rendering/AbstractRenderer';
 import Command from './commands/Command';
 import Viewport from './Viewport';
@@ -72,7 +72,7 @@ export default class EditorImage {
 		) {
 		}
 
-		public apply(editor: ImageEditor) {
+		public apply(editor: SVGEditor) {
 			this.elementContainer = editor.image.addElement(this.element);
 
 			if (!this.applyByFlattening) {
@@ -83,7 +83,7 @@ export default class EditorImage {
 			}
 		}
 
-		public unapply(editor: ImageEditor) {
+		public unapply(editor: SVGEditor) {
 			this.elementContainer?.remove();
 			this.elementContainer = null;
 			editor.queueRerender();
@@ -223,7 +223,7 @@ export class ImageNode {
 	// this' ancestors bounding boxes
 	public recomputeBBox(bubbleUp: boolean) {
 		const oldBBox = this.bbox;
-		if (this.content != null) {
+		if (this.content !== null) {
 			this.bbox = this.content.getBBox();
 		} else {
 			this.bbox = Rect2.empty;

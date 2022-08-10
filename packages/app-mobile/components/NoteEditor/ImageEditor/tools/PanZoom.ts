@@ -1,5 +1,5 @@
 
-import { ImageEditor } from '../editor';
+import { SVGEditor } from '../SVGEditor';
 import Mat33 from '../geometry/Mat33';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
@@ -41,7 +41,7 @@ export default class PanZoom extends BaseTool {
 	private lastDist: number;
 	private lastScreenCenter: Point2;
 
-	public constructor(private editor: ImageEditor, private mode: PanZoomMode) {
+	public constructor(private editor: SVGEditor, private mode: PanZoomMode) {
 		super(editor.notifier);
 
 		if (mode === PanZoomMode.OneFingerGestures) {
@@ -159,7 +159,7 @@ export default class PanZoom extends BaseTool {
 	}
 
 	public onWheel({ delta, screenPos }: WheelEvt): boolean {
-		if (this.transform == null) {
+		if (this.transform === null) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 		}
 
