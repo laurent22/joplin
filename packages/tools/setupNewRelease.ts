@@ -135,6 +135,7 @@ async function main() {
 	await updatePackageVersion(`${rootDir}/packages/renderer/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/pdf-viewer/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {
 		await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);

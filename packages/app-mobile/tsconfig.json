@@ -6,11 +6,11 @@
 	],
 	"exclude": [
 		"**/node_modules",
-		"**/*.test.ts",
-		"**/*.test.tsx",
 
 		// Files that don't need transpilation
 		"gulpfile.ts",
 		"tools/*.ts",
+		"**/*.test.ts",
+		"**/*.test.tsx",
 	],
 }

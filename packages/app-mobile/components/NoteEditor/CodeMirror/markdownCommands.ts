@@ -1,579 +1,71 @@
-/**
- * CodeMirror 6 commands that modify markdown formatting (e.g. toggleBold).
- */
+// CodeMirror 6 commands that modify markdown formatting (e.g. toggleBold).
 
 import { EditorView, Command } from '@codemirror/view';
 
 import { ListType } from '../types';
 import {
-	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec, EditorState,
-	Text as DocumentText,
+	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec,
 } from '@codemirror/state';
 import { getIndentUnit, indentString, syntaxTree } from '@codemirror/language';
-import RegionSpec from './RegionSpec';
-import { logMessage } from './webviewLogger';
+import {
+	RegionSpec, growSelectionToNode, renumberList,
+	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
+	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
+} from './markdownReformatter';
 
-// Length of the symbol that starts a block quote
-const blockQuoteStartLen = '> '.length;
-const blockQuoteRegex = /^>\s/;
+const startingSpaceRegex = /^(\s*)/;
 
-type SelectionFilter = (sel: SelectionRange)=> boolean;
-
-// Specifies the update of a single selection region and its contents
-type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
-
-// Expands [sel] to the smallest container node with name in [nodeNames].
-// Returns a new selection.
-const growSelectionToNode = (
-	state: EditorState, sel: SelectionRange, nodeNames: string|string[]
-): SelectionRange => {
-	let newFrom = null;
-	let newTo = null;
-	let smallestLen = Infinity;
-
-	const isAcceptableNode = (name: string): boolean => {
-		if (typeof nodeNames == 'string') {
-			return name == nodeNames;
-		}
-
-		for (const otherName of nodeNames) {
-			if (otherName == name) {
-				return true;
-			}
-		}
-
-		return false;
-	};
-
-	// Find the smallest range.
-	syntaxTree(state).iterate({
-		from: sel.from, to: sel.to,
-		enter: node => {
-			if (isAcceptableNode(node.name)) {
-				if (node.to - node.from < smallestLen) {
-					newFrom = node.from;
-					newTo = node.to;
-					smallestLen = newTo - newFrom;
-				}
-			}
-		},
-	});
-
-	// If it's in such a node,
-	if (newFrom != null && newTo != null) {
-		return EditorSelection.range(newFrom, newTo);
-	} else {
-		return sel;
-	}
-};
-
-// Expand each selection range to match an enclosing node with name in [nodeNames], provided that
-// node exists and [expandSelection] returns true. Expands to the smallest non-empty expansion,
-// if possible.
-const growAllSelectionsToNode = (
-	state: EditorState, nodeNames: string|string[], expandSelection: SelectionFilter
-): TransactionSpec => {
-	const updatedSelection = EditorSelection.create(state.selection.ranges.map((sel: SelectionRange): SelectionRange => {
-		if (!expandSelection(sel)) {
-			return sel;
-		}
-
-		return growSelectionToNode(state, sel, nodeNames);
-	}));
-
-	return {
-		selection: updatedSelection,
-	};
-};
-
-// Adds/removes [spec.templateStart] before the current selection and
-// [spec.templateStop] after it.
-// For example, surroundSelecton('**', '**') surrounds every selection
-// range with asterisks (including the caret).
-// If the selection is already surrounded by these characters, they are
-// removed.
-const toggleRegionSurrounded = (
-	doc: DocumentText, sel: SelectionRange, spec: RegionSpec
-): SelectionUpdate => {
-	let content = doc.sliceString(sel.from, sel.to);
-	const startMatchLen = spec.matchStart(doc, sel);
-	const endMatchLen = spec.matchStop(doc, sel);
-
-	const startsWithBefore = startMatchLen >= 0;
-	const endsWithAfter = endMatchLen >= 0;
-
-	const changes = [];
-	let finalSelStart = sel.from;
-	let finalSelStop = sel.to;
-
-	if (startsWithBefore && endsWithAfter) {
-		// Remove the before and after.
-		content = content.substring(startMatchLen);
-		content = content.substring(0, content.length - endMatchLen);
-
-		finalSelStop -= startMatchLen + endMatchLen;
-
-		changes.push({
-			from: sel.from,
-			to: sel.to,
-			insert: content,
-		});
-	} else {
-		changes.push({
-			from: sel.from,
-			insert: spec.templateStart,
-		});
-
-		changes.push({
-			from: sel.to,
-			insert: spec.templateStop,
-		});
-
-		// If not a caret,
-		if (!sel.empty) {
-			// Select the surrounding chars.
-			finalSelStop += spec.templateStart.length + spec.templateStop.length;
-		} else {
-			// Position the caret within the added content.
-			finalSelStart = sel.from + spec.templateStart.length;
-			finalSelStop = finalSelStart;
-		}
-	}
-
-	return {
-		changes,
-		range: EditorSelection.range(finalSelStart, finalSelStop),
-	};
-};
-
-// Toggles whether the current selection/caret location is
-// associated with [nodeName], if [start] defines the start of
-// the region and [end], the end.
-const toggleGlobalSelectionFormat = (
-	state: EditorState, nodeName: string, spec: RegionSpec
-): TransactionSpec => {
-	const changes = state.changeByRange((sel: SelectionRange) => {
-		return toggleSelectionFormat(state, nodeName, sel, spec);
-	});
-	return changes;
-};
-
-const toggleSelectionFormat = (
-	state: EditorState, nodeName: string, sel: SelectionRange, spec: RegionSpec
-): SelectionUpdate => {
-	const endMatchLen = spec.matchStop(state.doc, sel);
-
-	// If at the end of the region, move the
-	// caret to the end.
-	// E.g.
-	//   **foobar|**
-	//   **foobar**|
-	if (sel.empty && endMatchLen > -1) {
-		const newCursorPos = sel.from + endMatchLen;
-
-		return {
-			range: EditorSelection.cursor(newCursorPos),
-		};
-	}
-
-	// Grow the selection to encompass the entire node.
-	const newRange = growSelectionToNode(state, sel, nodeName);
-	return toggleRegionSurrounded(state.doc, newRange, spec);
-};
-
-// Toggle formatting in a region, applying a block version of the formatting
-// if multiple lines are selected.
-export const toggleRegionFormat = (
-	state: EditorState,
-
-	inlineNodeName: string, inlineSpec: RegionSpec,
-
-	// The block version of the tag (e.g. fenced code)
-	blockNodeName: string,
-	blockRegex: { start: RegExp; stop: RegExp },
-
-	// start: Single-line content that precedes the block
-	// stop: Single-line content that follows the block.
-	// line breaks will be added
-	blockTemplate: { start: string; stop: string },
-
-	// If false, don't ensure that block formatting preserves block quotes
-	preserveBlockQuotes: boolean = true
-) => {
-	const doc = state.doc;
-
-	const getMatchEndPoints = (
-		match: RegExpMatchArray, line: Line, inBlockQuote: boolean
-	): [startIdx: number, stopIdx: number] => {
-		const startIdx = line.from + match.index;
-		let stopIdx;
-
-		let contentLength = line.text.length;
-
-		// Don't treat '> ' as part of the line's content if we're in a blockquote.
-		if (inBlockQuote && preserveBlockQuotes) {
-			contentLength -= blockQuoteStartLen;
-		}
-
-		// If it matches the entire line, remove the newline character.
-		if (match[0].length == contentLength) {
-			stopIdx = line.to + 1;
-		} else {
-			stopIdx = startIdx + match[0].length;
-
-			// Take into account the extra '> ' characters, if necessary
-			if (inBlockQuote && preserveBlockQuotes) {
-				stopIdx += blockQuoteStartLen;
-			}
-		}
-
-		stopIdx = Math.min(stopIdx, doc.length);
-		return [startIdx, stopIdx];
-	};
-
-	// Returns a change spec that converts an inline region to a block region
-	// only if the user's cursor is in an empty inline region.
-	// For example,
-	//    $|$ -> $$\n|\n$$ where | represents the cursor.
-	const handleInlineToBlockConversion = (sel: SelectionRange) => {
-		if (!sel.empty) {
-			return null;
-		}
-
-		const startMatchLen = inlineSpec.matchStart(doc, sel);
-		const stopMatchLen = inlineSpec.matchStop(doc, sel);
-
-		if (startMatchLen >= 0 && stopMatchLen >= 0) {
-			const inlineStart = sel.from - startMatchLen;
-			const inlineStop = sel.from + stopMatchLen;
-
-			const fromLine = doc.lineAt(sel.from);
-			const inBlockQuote = fromLine.text.match(blockQuoteRegex);
-
-			let lineStartStr = '\n';
-			if (inBlockQuote && preserveBlockQuotes) {
-				lineStartStr = '\n> ';
-			}
-
-			// Determine the text that starts the new block (e.g. \n$$\n for
-			// a math block).
-			let blockStart = `${blockTemplate.start}${lineStartStr}`;
-			if (fromLine.from != inlineStart) {
-				// Add a line before to put the start of the block
-				// on its own line.
-				blockStart = lineStartStr + blockStart;
-			}
-
-			return {
-				changes: [
-					{
-						from: inlineStart,
-						to: inlineStop,
-						insert: `${blockStart}${lineStartStr}${blockTemplate.stop}`,
-					},
-				],
-
-				range: EditorSelection.cursor(inlineStart + blockStart.length),
-			};
-		}
-
-		return null;
-	};
-
-	const changes = state.changeByRange((sel: SelectionRange) => {
-		const blockConversion = handleInlineToBlockConversion(sel);
-		if (blockConversion) {
-			return blockConversion;
-		}
-
-		// If we're in the block version, grow the selection to cover the entire region.
-		sel = growSelectionToNode(state, sel, blockNodeName);
-
-		const fromLine = doc.lineAt(sel.from);
-		const toLine = doc.lineAt(sel.to);
-		let fromLineText = fromLine.text;
-		let toLineText = toLine.text;
-
-		let charsAdded = 0;
-		const changes = [];
-
-		// Single line: Inline toggle.
-		if (fromLine.number == toLine.number) {
-			return toggleSelectionFormat(state, inlineNodeName, sel, inlineSpec);
-		}
-
-		// Are all lines in a block quote?
-		let inBlockQuote = true;
-		for (let i = fromLine.number; i <= toLine.number; i++) {
-			const line = doc.line(i);
-
-			if (!line.text.match(blockQuoteRegex)) {
-				inBlockQuote = false;
-				break;
-			}
-		}
-
-		// Ignore block quote characters if in a block quote.
-		if (inBlockQuote && preserveBlockQuotes) {
-			fromLineText = fromLineText.substring(blockQuoteStartLen);
-			toLineText = toLineText.substring(blockQuoteStartLen);
-		}
-
-		// Otherwise, we're toggling the block version
-		const startMatch = blockRegex.start.exec(fromLineText);
-		const stopMatch = blockRegex.stop.exec(toLineText);
-		if (startMatch && stopMatch) {
-			// Get start and stop indicies for the starting and ending matches
-			const [fromMatchFrom, fromMatchTo] = getMatchEndPoints(startMatch, fromLine, inBlockQuote);
-			const [toMatchFrom, toMatchTo] = getMatchEndPoints(stopMatch, toLine, inBlockQuote);
-
-			// Delete content of the first line
-			changes.push({
-				from: fromMatchFrom,
-				to: fromMatchTo,
-			});
-			charsAdded -= fromMatchTo - fromMatchFrom;
-
-			// Delete content of the last line
-			changes.push({
-				from: toMatchFrom,
-				to: toMatchTo,
-			});
-			charsAdded -= toMatchTo - toMatchFrom;
-		} else {
-			let insertBefore, insertAfter;
-
-			if (inBlockQuote && preserveBlockQuotes) {
-				insertBefore = `> ${blockTemplate.start}\n`;
-				insertAfter = `\n> ${blockTemplate.stop}`;
-			} else {
-				insertBefore = `${blockTemplate.start}\n`;
-				insertAfter = `\n${blockTemplate.stop}`;
-			}
-
-			changes.push({
-				from: fromLine.from,
-				insert: insertBefore,
-			});
-
-			changes.push({
-				from: toLine.to,
-				insert: insertAfter,
-			});
-			charsAdded += insertBefore.length + insertAfter.length;
-		}
-
-		return {
-			changes,
-
-			// Selection should now encompass all lines that were changed.
-			range: EditorSelection.range(
-				fromLine.from, toLine.to + charsAdded
-			),
-		};
-	});
-
-	return changes;
-};
-
-// Toggles whether all lines in the user's selection start with [regex].
-// [template] is that match of [regex] that is used when adding a match.
-// [template] can also be a function that maps a given line to a string.
-// If so, it is called on each line of a selection sequentially, starting
-// with the first. [lineContent], in that case, is the portion of the line
-// relevant to the match (e.g. in a block quote, everything after "> ").
-// If [matchEmpty], all lines **after the first** that have no non-space
-// content are ignored.
-// [nodeName], if given, is the name of the node to expand the selection
-// to, (e.g. TaskList to expand selections to containing TaskLists if possible).
-// Note that selection is only expanded if the existing selection is empty
-// (just a caret).
-export const toggleSelectedLinesStartWith = (
-	state: EditorState,
-	regex: RegExp,
-	template: string | ((lineContent: string, line: Line)=> string),
-	matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true,
-	forEachDeletion: (lineContent: string, line: Line)=> void = (() => {})
-): TransactionSpec => {
-	const blockQuoteRegex = /^>\s(.*)$/;
-
-	const getLineContentStart = (line: Line): number => {
-		if (!ignoreBlockQuotes) {
-			return line.from;
-		}
-
-		const blockQuoteMatch = blockQuoteRegex.exec(line.text);
-		if (blockQuoteMatch) {
-			return line.from + blockQuoteMatch.length;
-		}
-
-		return line.from;
-	};
-
-	const getLineContent = (line: Line): string => {
-		const contentStart = getLineContentStart(line);
-		return line.text.substring(contentStart - line.from);
-	};
-
-	const changes = state.changeByRange((sel: SelectionRange) => {
-		// Attempt to select all lines in the region
-		if (nodeName && sel.empty) {
-			sel = growSelectionToNode(state, sel, nodeName);
-		}
-
-		const doc = state.doc;
-		const fromLine = doc.lineAt(sel.from);
-		const toLine = doc.lineAt(sel.to);
-		let hasProp = false;
-		let charsAdded = 0;
-
-		const changes = [];
-		const lines = [];
-
-		for (let i = fromLine.number; i <= toLine.number; i++) {
-			const line = doc.line(i);
-			const text = getLineContent(line);
-
-			// If already matching [regex],
-			if (text.search(regex) == 0) {
-				hasProp = true;
-			}
-
-			lines.push(line);
-		}
-
-		for (const line of lines) {
-			const text = getLineContent(line);
-			const contentFrom = getLineContentStart(line);
-
-			// Only process if the line is non-empty.
-			if (!matchEmpty && text.trim().length == 0
-				// Treat the first line differently
-				&& fromLine.number < line.number) {
-				continue;
-			}
-
-			if (hasProp) {
-				const match = text.match(regex);
-				if (!match) {
-					continue;
-				}
-
-				forEachDeletion(text, line);
-
-				changes.push({
-					from: contentFrom,
-					to: contentFrom + match[0].length,
-				});
-
-				charsAdded -= match[0].length;
-			} else {
-				let templateVal;
-				if (typeof template == 'string') {
-					templateVal = template;
-				} else {
-					templateVal = template(text, line);
-				}
-
-				changes.push({
-					from: contentFrom,
-					insert: templateVal,
-				});
-
-				charsAdded += templateVal.length;
-			}
-		}
-
-		// If the selection is empty and a single line was changed, don't grow it.
-		// (user might be adding a list/header, in which case, selecting the just
-		// added text isn't helpful)
-		let newSel;
-		if (sel.empty && fromLine.number == toLine.number) {
-			const regionEnd = toLine.to + charsAdded;
-			newSel = EditorSelection.cursor(regionEnd);
-		} else {
-			newSel = EditorSelection.range(fromLine.from, toLine.to + charsAdded);
-		}
-
-		return {
-			changes,
-
-			// Selection should now encompass all lines that were changed.
-			range: newSel,
-		};
-	});
-
-	return changes;
-};
-
-// Bolds/unbolds the current selection.
 export const toggleBolded: Command = (view: EditorView): boolean => {
-	logMessage('Toggling bolded!');
-
-	const changes = toggleGlobalSelectionFormat(view.state, 'StrongEmphasis', new RegionSpec({
-		templateStart: '**',
-		templateStop: '**',
-	}));
+	const spec = RegionSpec.of({ template: '**', nodeName: 'StrongEmphasis' });
+	const changes = toggleInlineFormatGlobally(view.state, spec);
 
 	view.dispatch(changes);
 	return true;
 };
 
-// Italicizes/deitalicizes the current selection.
 export const toggleItalicized: Command = (view: EditorView): boolean => {
-	logMessage('Toggling italicized!');
+	const changes = toggleInlineFormatGlobally(view.state, {
+		nodeName: 'Emphasis',
 
-	const changes = toggleGlobalSelectionFormat(view.state, 'Emphasis', new RegionSpec({
-		// Template start/end
-		templateStart: '_',
-		templateStop: '_',
-
-		// Regular expressions that match all possible start/ends
-		startExp: /[_*]/g,
-		stopExp: /[_*]/g,
-	}));
+		template: { start: '*', end: '*' },
+		matcher: { start: /[_*]/g, end: /[_*]/g },
+	});
 	view.dispatch(changes);
 
 	return true;
 };
 
+// If the selected region is an empty inline code block, it will be converted to
+// a block (fenced) code block.
 export const toggleCode: Command = (view: EditorView): boolean => {
-	logMessage('Toggling code!');
-
 	const codeFenceRegex = /^```\w*\s*$/;
-	const inlineRegionSpec = new RegionSpec({
-		templateStart: '`',
-		templateStop: '`',
-	});
+	const inlineRegionSpec = RegionSpec.of({ template: '`', nodeName: 'InlineCode' });
+	const blockRegionSpec: RegionSpec = {
+		nodeName: 'FencedCode',
+		template: { start: '```', end: '```' },
+		matcher: { start: codeFenceRegex, end: codeFenceRegex },
+	};
 
-	const changes = toggleRegionFormat(
-		view.state,
-		'InlineCode', inlineRegionSpec,
-
-		'FencedCode', { start: codeFenceRegex, stop: codeFenceRegex },
-		{ start: '```', stop: '```' }
-	);
+	const changes = toggleRegionFormatGlobally(view.state, inlineRegionSpec, blockRegionSpec);
 	view.dispatch(changes);
+
 	return true;
 };
 
 export const toggleMath: Command = (view: EditorView): boolean => {
-	logMessage('Toggling math!');
-
 	const blockStartRegex = /^\$\$/;
-	const blockStopRegex = /\$\$\s*$/;
-	const inlineRegionSpec = new RegionSpec({
-		templateStart: '$',
-		templateStop: '$',
+	const blockEndRegex = /\$\$\s*$/;
+	const inlineRegionSpec = RegionSpec.of({ nodeName: 'InlineMath', template: '$' });
+	const blockRegionSpec = RegionSpec.of({
+		nodeName: 'BlockMath',
+		template: '$$',
+		matcher: {
+			start: blockStartRegex,
+			end: blockEndRegex,
+		},
 	});
 
-	const changes = toggleRegionFormat(
-		view.state,
-		'InlineMath', inlineRegionSpec,
-
-		'BlockMath', { start: blockStartRegex, stop: blockStopRegex },
-		{ start: '$$', stop: '$$' }
-	);
+	const changes = toggleRegionFormatGlobally(view.state, inlineRegionSpec, blockRegionSpec);
 	view.dispatch(changes);
 
 	return true;
@@ -581,12 +73,16 @@ export const toggleMath: Command = (view: EditorView): boolean => {
 
 export const toggleList = (listType: ListType): Command => {
 	return (view: EditorView): boolean => {
-		logMessage('Toggling list!');
+		let state = view.state;
+		let doc = state.doc;
 
-		const listTypes = [ListType.OrderedList, ListType.UnorderedList, ListType.CheckList];
+		const orderedListTag = 'OrderedList';
+		const unorderedListTag = 'BulletList';
 
+		// RegExps for different list types. The regular expressions MUST
+		// be mutually exclusive.
 		// `(?!\[[ xX]+\]\s?)` means "not followed by [x] or [ ]".
-		const bulletedRegex = /^\s*[-*](?!\s\[[ xX]+\])\s?/;
+		const bulletedRegex = /^\s*([-*])(?!\s\[[ xX]+\])\s?/;
 		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s?/;
 		const numberedRegex = /^\s*\d+\.\s?/;
 
@@ -595,85 +91,223 @@ export const toggleList = (listType: ListType): Command => {
 			[ListType.CheckList]: checklistRegex,
 			[ListType.UnorderedList]: bulletedRegex,
 		};
-		const listTags = {
-			[ListType.OrderedList]: 'OrderedList',
 
-			// Both checklists and unordered lists use the BulletList
-			// node as a container
-			[ListType.CheckList]: 'BulletList',
-			[ListType.UnorderedList]: 'BulletList',
-		};
-		const thisListTypeRegex = listRegexes[listType];
-		const thisTag = listTags[listType];
+		const getContainerType = (line: Line): ListType|null => {
+			const lineContent = stripBlockquote(line);
 
-		let changes: TransactionSpec;
+			// Determine the container's type.
+			const checklistMatch = lineContent.match(checklistRegex);
+			const bulletListMatch = lineContent.match(bulletedRegex);
+			const orderedListMatch = lineContent.match(numberedRegex);
 
-		// Select the current list type, if possible.
-		changes = growAllSelectionsToNode(
-			view.state, ['OrderedList', 'BulletList'], (sel) => sel.empty
-		);
-		view.dispatch(changes);
-
-		// Ignore empty lines
-		const matchEmpty = false;
-
-		// Handle list items within block quotes
-		const ignoreBlockQuotes = true;
-
-		// Maps line numbers to leading space characters
-		const leadingSpaces: Record<string, string> = {};
-
-		// Remove existing formatting matching other list types.
-		const replacementUpdates: TransactionSpec[] = [];
-		for (const kind of listTypes) {
-			if (kind == listType) {
-				continue;
+			if (checklistMatch) {
+				return ListType.CheckList;
+			} else if (bulletListMatch) {
+				return ListType.UnorderedList;
+			} else if (orderedListMatch) {
+				return ListType.OrderedList;
 			}
 
-			// Remove the contianing list, if it exists.
-			replacementUpdates.push(toggleSelectedLinesStartWith(
-				view.state,
-				listRegexes[kind],
-				'',
-				matchEmpty,
-				listTags[kind],
+			return null;
+		};
 
-				ignoreBlockQuotes,
+		const changes: TransactionSpec = state.changeByRange((sel: SelectionRange) => {
+			const changes: ChangeSpec[] = [];
+			let containerType: ListType|null = null;
 
-				// For each deletion,
-				(content, line) => {
-					// Store all leading spaces so that they can be restored later.
-					const spaceMatch = content.match(/^\s*/);
-					const listRegexMatch = content.match(listRegexes[kind]);
+			// Total number of characters added (deleted if negative)
+			let charsAdded = 0;
 
-					if (listRegexMatch && !leadingSpaces[line.number]) {
-						leadingSpaces[line.number] = spaceMatch ? spaceMatch[0] : '';
+			const originalSel = sel;
+			let fromLine: Line;
+			let toLine: Line;
+			let firstLineIndentation: string;
+			let firstLineInBlockQuote: boolean;
+			let fromLineContent: string;
+			const computeSelectionProps = () => {
+				fromLine = doc.lineAt(sel.from);
+				toLine = doc.lineAt(sel.to);
+				fromLineContent = stripBlockquote(fromLine);
+				firstLineIndentation = fromLineContent.match(startingSpaceRegex)[0];
+				firstLineInBlockQuote = (fromLineContent !== fromLine.text);
+
+				containerType = getContainerType(fromLine);
+			};
+			computeSelectionProps();
+
+			const origFirstLineIndentation = firstLineIndentation;
+			const origContainerType = containerType;
+
+			// Grow [sel] to the smallest containing list
+			if (sel.empty) {
+				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
+				computeSelectionProps();
+			}
+
+			// Reset the selection if it seems likely the user didn't want the selection
+			// to be expanded
+			const isIndentationDiff =
+				!isIndentationEquivalent(state, firstLineIndentation, origFirstLineIndentation);
+			if (isIndentationDiff) {
+				const expandedRegionIndentation = firstLineIndentation;
+				sel = originalSel;
+				computeSelectionProps();
+
+				// Use the indentation level of the expanded region if it's greater.
+				// This makes sense in the case where unindented text is being converted to
+				// the same type of list as its container. For example,
+				//     1. Foobar
+				// unindented text
+				// that should be made a part of the above list.
+				//
+				// becoming
+				//
+				//     1. Foobar
+				//     2. unindented text
+				//     3. that should be made a part of the above list.
+				const wasGreaterIndentation = (
+					tabsToSpaces(state, expandedRegionIndentation).length
+						> tabsToSpaces(state, firstLineIndentation).length
+				);
+				if (wasGreaterIndentation) {
+					firstLineIndentation = expandedRegionIndentation;
+				}
+			} else if (
+				(origContainerType !== containerType && (origContainerType ?? null) !== null)
+					|| containerType !== getContainerType(toLine)
+			) {
+				// If the container type changed, this could be an artifact of checklists/bulleted
+				// lists sharing the same node type.
+				// Find the closest range of the same type of list to the original selection
+				let newFromLineNo = doc.lineAt(originalSel.from).number;
+				let newToLineNo = doc.lineAt(originalSel.to).number;
+				let lastFromLineNo;
+				let lastToLineNo;
+
+				while (newFromLineNo !== lastFromLineNo || newToLineNo !== lastToLineNo) {
+					lastFromLineNo = newFromLineNo;
+					lastToLineNo = newToLineNo;
+
+					if (lastFromLineNo - 1 >= 1) {
+						const testFromLine = doc.line(lastFromLineNo - 1);
+						if (getContainerType(testFromLine) === origContainerType) {
+							newFromLineNo --;
+						}
+					}
+
+					if (lastToLineNo + 1 <= doc.lines) {
+						const testToLine = doc.line(lastToLineNo + 1);
+						if (getContainerType(testToLine) === origContainerType) {
+							newToLineNo ++;
+						}
 					}
 				}
-			));
-		}
-		view.dispatch(...replacementUpdates);
 
-		let lineIdx = 0;
-		changes = toggleSelectedLinesStartWith(
-			view.state,
-			thisListTypeRegex,
-			(_lineContent: string, line: Line): string => {
-				const leadingSpaceChars = leadingSpaces[line.number] ?? '';
+				sel = EditorSelection.range(
+					doc.line(newFromLineNo).from,
+					doc.line(newToLineNo).to
+				);
+				computeSelectionProps();
+			}
 
-				if (listType == ListType.UnorderedList) {
-					return `${leadingSpaceChars}- `;
-				} else if (listType == ListType.CheckList) {
-					return `${leadingSpaceChars}- [ ] `;
+			// Determine whether the expanded selection should be empty
+			if (originalSel.empty && fromLine.number === toLine.number) {
+				sel = EditorSelection.cursor(toLine.to);
+			}
+
+			// Select entire lines (if not just a cursor)
+			if (!sel.empty) {
+				sel = EditorSelection.range(fromLine.from, toLine.to);
+			}
+
+			// Number of the item in the list (e.g. 2 for the 2nd item in the list)
+			let listItemCounter = 1;
+			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum ++) {
+				const line = doc.line(lineNum);
+				const lineContent = stripBlockquote(line);
+				const lineContentFrom = line.to - lineContent.length;
+				const inBlockQuote = (lineContent !== line.text);
+				const indentation = lineContent.match(startingSpaceRegex)[0];
+
+				const wrongIndentaton = !isIndentationEquivalent(state, indentation, firstLineIndentation);
+
+				// If not the right list level,
+				if (inBlockQuote !== firstLineInBlockQuote || wrongIndentaton) {
+					// We'll be starting a new list
+					listItemCounter = 1;
+					continue;
 				}
 
-				lineIdx++;
-				return `${leadingSpaceChars}${lineIdx}. `;
-			},
-			matchEmpty,
-			thisTag
-		);
+				// Don't add list numbers to otherwise empty lines (unless it's the first line)
+				if (lineNum !== fromLine.number && line.text.trim().length === 0) {
+					// Do not reset the counter -- the markdown renderer doesn't!
+					continue;
+				}
+
+				const deleteFrom = lineContentFrom;
+				let deleteTo = deleteFrom + indentation.length;
+
+				// If we need to remove an existing list,
+				const currentContainer = getContainerType(line);
+				if (currentContainer !== null) {
+					const containerRegex = listRegexes[currentContainer];
+					const containerMatch = lineContent.match(containerRegex);
+					if (!containerMatch) {
+						throw new Error(
+							'Assertion failed: container regex does not match line content.'
+						);
+					}
+
+					deleteTo = lineContentFrom + containerMatch[0].length;
+				}
+
+				let replacementString;
+
+				if (listType === containerType) {
+					// Delete the existing list if it's the same type as the current
+					replacementString = '';
+				} else if (listType === ListType.OrderedList) {
+					replacementString = `${firstLineIndentation}${listItemCounter}. `;
+				} else if (listType === ListType.CheckList) {
+					replacementString = `${firstLineIndentation}- [ ] `;
+				} else {
+					replacementString = `${firstLineIndentation}- `;
+				}
+
+				changes.push({
+					from: deleteFrom,
+					to: deleteTo,
+					insert: replacementString,
+				});
+				charsAdded -= deleteTo - deleteFrom;
+				charsAdded += replacementString.length;
+				listItemCounter++;
+			}
+
+			// Don't change cursors to selections
+			if (sel.empty) {
+				// Position the cursor at the end of the last line modified
+				sel = EditorSelection.cursor(toLine.to + charsAdded);
+			} else {
+				sel = EditorSelection.range(
+					sel.from,
+					sel.to + charsAdded
+				);
+			}
+
+			return {
+				changes,
+				range: sel,
+			};
+		});
 		view.dispatch(changes);
+		state = view.state;
+		doc = state.doc;
+
+		// Renumber the list
+		view.dispatch(state.changeByRange((sel: SelectionRange) => {
+			return renumberList(state, sel);
+		}));
 
 		return true;
 	};
@@ -681,8 +315,6 @@ export const toggleList = (listType: ListType): Command => {
 
 export const toggleHeaderLevel = (level: number): Command => {
 	return (view: EditorView): boolean => {
-		logMessage(`Setting heading level to ${level}`);
-
 		let headerStr = '';
 		for (let i = 0; i < level; i++) {
 			headerStr += '#';
@@ -718,8 +350,9 @@ export const toggleHeaderLevel = (level: number): Command => {
 	};
 };
 
+// Prepends the given editor's indentUnit to all lines of the current selection
+// and re-numbers modified ordered lists (if any).
 export const increaseIndent: Command = (view: EditorView): boolean => {
-	logMessage('Increasing indentation.');
 	const matchEmpty = true;
 	const matchNothing = /$ ^/;
 	const indentUnit = indentString(view.state, getIndentUnit(view.state));
@@ -734,31 +367,39 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	);
 	view.dispatch(changes);
 
+	// Fix any lists
+	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
+		return renumberList(view.state, sel);
+	}));
+
 	return true;
 };
 
-export const decreaseIndent: Command = (editor: EditorView): boolean => {
-	logMessage('Decreasing indentation.');
+export const decreaseIndent: Command = (view: EditorView): boolean => {
 	const matchEmpty = true;
 	const changes = toggleSelectedLinesStartWith(
-		editor.state,
+		view.state,
 		// Assume indentation is either a tab or in units
-		// of four spaces.
-		/^(?:[\t]|[ ]{1,4})/,
+		// of n spaces.
+		new RegExp(`^(?:[\\t]|[ ]{1,${getIndentUnit(view.state)}})`),
 		// Don't add new text
 		'',
 		matchEmpty
 	);
 
-	editor.dispatch(changes);
+	view.dispatch(changes);
+
+	// Fix any lists
+	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
+		return renumberList(view.state, sel);
+	}));
+
 	return true;
 };
 
-// Create a new link with [label] and [url], or, if a link is either partially
-// or fully selected, update the label and URL of that link.
 export const updateLink = (label: string, url: string): Command => {
 	// Empty label? Just include the URL.
-	const linkText = label == '' ? url : `[${label}](${url})`;
+	const linkText = label === '' ? url : `[${label}](${url})`;
 
 	return (editor: EditorView): boolean => {
 		const transaction = editor.state.changeByRange((sel: SelectionRange) => {
@@ -770,19 +411,17 @@ export const updateLink = (label: string, url: string): Command => {
 			syntaxTree(editor.state).iterate({
 				from: sel.from, to: sel.to,
 				enter: node => {
-					const haveFoundLink = (linkFrom != null && linkTo != null);
+					const haveFoundLink = (linkFrom !== null && linkTo !== null);
 
-					if (node.name == 'Link' || (node.name == 'URL' && !haveFoundLink)) {
+					if (node.name === 'Link' || (node.name === 'URL' && !haveFoundLink)) {
 						linkFrom = node.from;
 						linkTo = node.to;
 					}
 				},
 			});
 
-			if (linkFrom == null || linkTo == null) {
-				linkFrom = sel.from;
-				linkTo = sel.to;
-			}
+			linkFrom ??= sel.from;
+			linkTo ??= sel.to;
 
 			changes.push({
 				from: linkFrom, to: linkTo,

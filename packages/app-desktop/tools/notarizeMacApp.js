@@ -8,7 +8,7 @@ function execCommand(command) {
 	return new Promise((resolve, reject) => {
 		exec(command, (error, stdout, stderr) => {
 			if (error) {
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					reject(new Error([stdout.trim(), stderr.trim()].join('\n')));

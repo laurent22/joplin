@@ -82,13 +82,13 @@ if (process.platform === 'win32') {
 
 process.stdout.on('error', function(err) {
 	// https://stackoverflow.com/questions/12329816/error-write-epipe-when-piping-node-output-to-head#15884508
-	if (err.code == 'EPIPE') {
+	if (err.code === 'EPIPE') {
 		process.exit(0);
 	}
 });
 
 application.start(process.argv).catch(error => {
-	if (error.code == 'flagError') {
+	if (error.code === 'flagError') {
 		console.error(error.message);
 		console.error(_('Type `joplin help` for usage information.'));
 	} else {

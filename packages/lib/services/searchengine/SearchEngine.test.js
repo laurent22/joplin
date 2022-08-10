@@ -41,7 +41,7 @@ const calculateScore = (searchString, notes) => {
 	};
 
 	let titleBM25WeightedByLastUpdate = new Array(notes.length).fill(-1);
-	if (avgTokens != 0) {
+	if (avgTokens !== 0) {
 		for (let i = 0; i < notes.length; i++) {
 			titleBM25WeightedByLastUpdate[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
 			titleBM25WeightedByLastUpdate[i] += weightForDaysSinceLastUpdate(notes[i]);

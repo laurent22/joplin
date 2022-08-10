@@ -5,7 +5,7 @@ let perFieldReverse: { [field: string]: boolean } = null;
 
 export const notesSortOrderFieldArray = (): string[] => {
 	// The order of the fields is strictly determinate.
-	if (fields == null) {
+	if (fields === null) {
 		fields = Setting.enumOptionValues('notes.sortOrder.field').sort().reverse();
 	}
 	return fields;

@@ -69,16 +69,16 @@ export default class Database {
 	}
 
 	public escapeField(field: string) {
-		if (field == '*') return '*';
+		if (field === '*') return '*';
 		const p = field.split('.');
-		if (p.length == 1) return `\`${field}\``;
-		if (p.length == 2) return `${p[0]}.\`${p[1]}\``;
+		if (p.length === 1) return `\`${field}\``;
+		if (p.length === 2) return `${p[0]}.\`${p[1]}\``;
 
 		throw new Error(`Invalid field format: ${field}`);
 	}
 
 	public escapeFields(fields: string[] | string): string[] | string {
-		if (fields == '*') return '*';
+		if (fields === '*') return '*';
 
 		const output = [];
 		for (let i = 0; i < fields.length; i++) {
@@ -137,7 +137,7 @@ export default class Database {
 
 				return result; // No exception was thrown
 			} catch (error) {
-				if (error && (error.code == 'SQLITE_IOERR' || error.code == 'SQLITE_BUSY')) {
+				if (error && (error.code === 'SQLITE_IOERR' || error.code === 'SQLITE_BUSY')) {
 					if (totalWaitTime >= 20000) throw this.sqliteErrorToJsError(error, sql, params);
 					// NOTE: don't put logger statements here because it might log to the database, which
 					// could result in an error being thrown again.
@@ -193,7 +193,7 @@ export default class Database {
 	async transactionExecBatch(queries: StringOrSqlQuery[]) {
 		if (queries.length <= 0) return;
 
-		if (queries.length == 1) {
+		if (queries.length === 1) {
 			const q = this.wrapQuery(queries[0]);
 			await this.exec(q.sql, q.params);
 			return;
@@ -220,20 +220,20 @@ export default class Database {
 	}
 
 	static enumId(type: string, s: string) {
-		if (type == 'settings') {
-			if (s == 'int') return 1;
-			if (s == 'string') return 2;
+		if (type === 'settings') {
+			if (s === 'int') return 1;
+			if (s === 'string') return 2;
 		}
-		if (type == 'fieldType') {
+		if (type === 'fieldType') {
 			if (s) s = s.toUpperCase();
-			if (s == 'INTEGER') s = 'INT';
+			if (s === 'INTEGER') s = 'INT';
 			if (!(`TYPE_${s}` in this)) throw new Error(`Unkonwn fieldType: ${s}`);
 			return (this as any)[`TYPE_${s}`];
 		}
-		if (type == 'syncTarget') {
-			if (s == 'memory') return 1;
-			if (s == 'filesystem') return 2;
-			if (s == 'onedrive') return 3;
+		if (type === 'syncTarget') {
+			if (s === 'memory') return 1;
+			if (s === 'filesystem') return 2;
+			if (s === 'onedrive') return 3;
 		}
 		throw new Error(`Unknown enum type or value: ${type}, ${s}`);
 	}
@@ -253,9 +253,9 @@ export default class Database {
 
 	static formatValue(type: number, value: any) {
 		if (value === null || value === undefined) return null;
-		if (type == this.TYPE_INT) return Number(value);
-		if (type == this.TYPE_TEXT) return value;
-		if (type == this.TYPE_NUMERIC) return Number(value);
+		if (type === this.TYPE_INT) return Number(value);
+		if (type === this.TYPE_TEXT) return value;
+		if (type === this.TYPE_NUMERIC) return Number(value);
 		throw new Error(`Unknown type: ${type}`);
 	}
 
@@ -265,11 +265,11 @@ export default class Database {
 		let statement = '';
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];
-			if (line == '') continue;
-			if (line.substr(0, 2) == '--') continue;
+			if (line === '') continue;
+			if (line.substr(0, 2) === '--') continue;
 			statement += line.trim();
-			if (line[line.length - 1] == ',') statement += ' ';
-			if (line[line.length - 1] == ';') {
+			if (line[line.length - 1] === ',') statement += ' ';
+			if (line[line.length - 1] === ';') {
 				output.push(statement);
 				statement = '';
 			}
@@ -299,9 +299,9 @@ export default class Database {
 		const params = [];
 		for (const key in data) {
 			if (!data.hasOwnProperty(key)) continue;
-			if (key[key.length - 1] == '_') continue;
-			if (keySql != '') keySql += ', ';
-			if (valueSql != '') valueSql += ', ';
+			if (key[key.length - 1] === '_') continue;
+			if (keySql !== '') keySql += ', ';
+			if (valueSql !== '') valueSql += ', ';
 			keySql += `\`${key}\``;
 			valueSql += '?';
 			params.push(data[key]);
@@ -319,13 +319,13 @@ export default class Database {
 		const params = [];
 		for (const key in data) {
 			if (!data.hasOwnProperty(key)) continue;
-			if (key[key.length - 1] == '_') continue;
-			if (sql != '') sql += ', ';
+			if (key[key.length - 1] === '_') continue;
+			if (sql !== '') sql += ', ';
 			sql += `\`${key}\`=?`;
 			params.push(data[key]);
 		}
 
-		if (typeof where != 'string') {
+		if (typeof where !== 'string') {
 			const s = [];
 			for (const n in where) {
 				if (!where.hasOwnProperty(n)) continue;

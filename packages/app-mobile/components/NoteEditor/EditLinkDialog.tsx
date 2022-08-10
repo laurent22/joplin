@@ -1,6 +1,4 @@
-/**
- * Pop-up dialog for editing the content of a link.
- */
+// Dialog allowing the user to update/create links
 
 const React = require('react');
 const { useState, useEffect, useMemo, useRef } = require('react');
@@ -11,6 +9,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { EditorControl } from './types';
 import SelectionFormatting from './SelectionFormatting';
+import { useCallback } from 'react';
 
 interface LinkDialogProps {
 	editorControl: EditorControl;
@@ -25,16 +24,16 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	const [linkLabel, setLinkLabel] = useState('');
 	const [linkURL, setLinkURL] = useState('');
 
+	const linkInputRef = useRef();
+
 	// Reset the label and URL when shown/hidden
 	useEffect(() => {
 		setLinkLabel(editorLinkData.linkText ?? props.selectionState.selectedText);
 		setLinkURL(editorLinkData.linkURL ?? '');
-	}, [props.visible]);
-
-	// Updates the content of the CodeMirror editor based on internal state.
-	const updateEditor = () => {
-		props.editorControl.updateLink(linkLabel, linkURL);
-	};
+	}, [
+		props.visible, editorLinkData.linkText, props.selectionState.selectedText,
+		editorLinkData.linkURL,
+	]);
 
 	const [styles, placeholderColor] = useMemo(() => {
 		const theme = themeStyle(props.themeId);
@@ -81,11 +80,10 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 		return [styleSheet, placeholderColor];
 	}, [props.themeId]);
 
-	const submit = () => {
-		updateEditor();
+	const onSubmit = useCallback(() => {
+		props.editorControl.updateLink(linkLabel, linkURL);
 		props.editorControl.hideLinkDialog();
-	};
-	const linkInputRef = useRef();
+	}, [props.editorControl, linkLabel, linkURL]);
 
 	// See https://www.hingehealth.com/engineering-blog/accessible-react-native-textinput/
 	// for more about creating accessible RN inputs.
@@ -125,7 +123,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				textContentType="URL"
 				returnKeyType="done"
 
-				onSubmitEditing={submit}
+				onSubmitEditing={onSubmit}
 				onChangeText={(text: string) => setLinkURL(text)}
 			/>
 		</View>
@@ -147,7 +145,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				</View>
 				<Button
 					style={styles.button}
-					onPress={submit}
+					onPress={onSubmit}
 					title={_('Done')}
 				/>
 			</View>

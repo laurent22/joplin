@@ -42,11 +42,11 @@ describe('Synchronizer.conflicts', function() {
 		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
 		// the conflicted and original note must be the same in every way, to make sure no data has been lost.
 		const conflictedNote = conflictedNotes[0];
-		expect(conflictedNote.id == note2conf.id).toBe(false);
+		expect(conflictedNote.id === note2conf.id).toBe(false);
 		expect(conflictedNote.conflict_original_id).toBe(note2conf.id);
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
-			if (n == 'id' || n == 'is_conflict' || n == 'conflict_original_id') continue;
+			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
 			expect(conflictedNote[n]).toBe(note2conf[n]);
 		}
 

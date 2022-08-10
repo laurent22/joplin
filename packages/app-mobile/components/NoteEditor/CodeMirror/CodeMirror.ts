@@ -10,27 +10,28 @@
 // from NoteEditor.tsx.
 
 import { MarkdownMathExtension } from './markdownMathParser';
-import codeMirrorDecorator from './decorators';
 import createTheme from './theme';
-import syntaxHighlightingLanguages from './languages';
+import decoratorExtension from './decoratorExtension';
+
+import syntaxHighlightingLanguages from './syntaxHighlightingLanguages';
 
 import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
-import { GFM } from '@lezer/markdown';
+import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
 import {
-	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,highlightSelectionMatches, search,
-	findNext, findPrevious, replaceAll, replaceNext,
+	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,
+	highlightSelectionMatches, search, findNext, findPrevious, replaceAll, replaceNext,
 } from '@codemirror/search';
 
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
 } from '@codemirror/view';
-import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
+import { undo, redo, history, undoDepth, redoDepth, indentWithTab } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
-import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
+import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 
 import { CodeMirrorControl } from './types';
 import { EditorSettings, ListType, SearchState } from '../types';
@@ -119,8 +120,13 @@ export function initCodeMirror(
 		}
 	};
 
-	const notifySelectionFormattingChange = (viewUpdate: ViewUpdate) => {
-		if (viewUpdate.docChanged || !viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+	const notifySelectionFormattingChange = (viewUpdate?: ViewUpdate) => {
+		// If we can't determine the previous formatting, post the update regardless
+		if (!viewUpdate) {
+			const formatting = computeSelectionFormatting(editor.state);
+			postMessage('onSelectionFormattingChange', formatting.toJSON());
+		} else if (viewUpdate.docChanged || !viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+			// Only post the update if something changed
 			const oldFormatting = computeSelectionFormatting(viewUpdate.startState);
 			const newFormatting = computeSelectionFormatting(viewUpdate.state);
 
@@ -134,6 +140,7 @@ export function initCodeMirror(
 		const range = state.selection.main;
 		const formatting: SelectionFormatting = new SelectionFormatting();
 		formatting.selectedText = state.doc.sliceString(range.from, range.to);
+		formatting.spellChecking = editor.contentDOM.spellcheck;
 
 		const parseLinkData = (nodeText: string) => {
 			const linkMatch = nodeText.match(/\[([^\]]*)\]\(([^)]*)\)/);
@@ -154,7 +161,7 @@ export function initCodeMirror(
 			enter: node => {
 				// Checklists don't have a specific containing node. As such,
 				// we're in a checklist if we've selected a 'Task' node.
-				if (node.name == 'Task') {
+				if (node.name === 'Task') {
 					formatting.inChecklist = true;
 				}
 
@@ -187,10 +194,12 @@ export function initCodeMirror(
 				case 'InlineCode':
 				case 'FencedCode':
 					formatting.inCode = true;
+					formatting.unspellCheckableRegion = true;
 					break;
 				case 'InlineMath':
 				case 'BlockMath':
 					formatting.inMath = true;
+					formatting.unspellCheckableRegion = true;
 					break;
 				case 'ATXHeading1':
 					formatting.headerLevel = 1;
@@ -210,6 +219,7 @@ export function initCodeMirror(
 				case 'URL':
 					formatting.inLink = true;
 					formatting.linkData.linkURL = nodeText();
+					formatting.unspellCheckableRegion = true;
 					break;
 				case 'Link':
 					formatting.inLink = true;
@@ -232,9 +242,12 @@ export function initCodeMirror(
 			}
 		}
 
+		if (formatting.unspellCheckableRegion) {
+			formatting.spellChecking = false;
+		}
+
 		return formatting;
 	};
-
 
 	// Returns a keyboard command that returns true (so accepts the keybind)
 	const keyCommand = (key: string, run: Command): KeyBinding => {
@@ -252,7 +265,7 @@ export function initCodeMirror(
 			extensions: [
 				markdown({
 					extensions: [
-						GFM,
+						GitHubFlavoredMarkdownExtension,
 
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? MarkdownMathExtension : [],
@@ -281,11 +294,12 @@ export function initCodeMirror(
 				highlightSelectionMatches(),
 				indentOnInput(),
 
-				// By default, indent with two spaces
-				indentUnit.of('  '),
+				// By default, indent with four spaces
+				indentUnit.of('    '),
+				EditorState.tabSize.of(4),
 
 				// Apply styles to entire lines (block-display decorations)
-				codeMirrorDecorator,
+				decoratorExtension,
 
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
@@ -339,67 +353,71 @@ export function initCodeMirror(
 
 	const editorControls = {
 		editor,
-		undo() {
+		undo: () => {
 			undo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
 		},
-		redo() {
+		redo: () => {
 			redo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
 		},
-		select(anchor: number, head: number) {
+		select: (anchor: number, head: number) => {
 			editor.dispatch(editor.state.update({
 				selection: { anchor, head },
 				scrollIntoView: true,
 			}));
 		},
-		scrollSelectionIntoView() {
+		scrollSelectionIntoView: () => {
 			editor.dispatch(editor.state.update({
 				scrollIntoView: true,
 			}));
 		},
-		insertText(text: string) {
+		insertText: (text: string) => {
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
-		toggleFindDialog() {
+		toggleFindDialog: () => {
 			const opened = openSearchPanel(editor);
 			if (!opened) {
 				closeSearchPanel(editor);
 			}
 		},
+		setSpellcheckEnabled: (enabled: boolean) => {
+			editor.contentDOM.spellcheck = enabled;
+			notifySelectionFormattingChange();
+		},
 
 		// Formatting
-		toggleBolded() { toggleBolded(editor); },
-		toggleItalicized() { toggleItalicized(editor); },
-		toggleCode() { toggleCode(editor); },
-		toggleMath() { toggleMath(editor); },
-		increaseIndent() { increaseIndent(editor); },
-		decreaseIndent() { decreaseIndent(editor); },
-		toggleList(kind: ListType) { toggleList(kind)(editor); },
-		toggleHeaderLevel(level: number) { toggleHeaderLevel(level)(editor); },
-		updateLink(label: string, url: string) { updateLink(label, url)(editor); },
+		toggleBolded: () => { toggleBolded(editor); },
+		toggleItalicized: () => { toggleItalicized(editor); },
+		toggleCode: () => { toggleCode(editor); },
+		toggleMath: () => { toggleMath(editor); },
+		increaseIndent: () => { increaseIndent(editor); },
+		decreaseIndent: () => { decreaseIndent(editor); },
+		toggleList: (kind: ListType) => { toggleList(kind)(editor); },
+		toggleHeaderLevel: (level: number) => { toggleHeaderLevel(level)(editor); },
+		updateLink: (label: string, url: string) => { updateLink(label, url)(editor); },
 
 		// Search
 		searchControl: {
-			findNext() {
+			findNext: () => {
 				findNext(editor);
 			},
-			findPrevious() {
+			findPrevious: () => {
 				findPrevious(editor);
 			},
-			replaceCurrent() {
+			replaceCurrent: () => {
 				replaceNext(editor);
 			},
-			replaceAll() {
+			replaceAll: () => {
 				replaceAll(editor);
 			},
-			setSearchState(state: SearchState) {
+			setSearchState: (state: SearchState) => {
 				updateSearchQuery(state);
 			},
-			showSearch() {
+			showSearch: () => {
 				showSearchDialog();
 			},
-			hideSearch() {
+			hideSearch: () => {
 				hideSearchDialog();
 			},
 		},

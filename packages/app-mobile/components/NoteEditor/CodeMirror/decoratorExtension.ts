@@ -1,9 +1,9 @@
-/**
- * Exports an editor plugin that creates multi-line decorations based on the
- * editor's syntax tree (assumes markdown).
- *
- * For more about creating decorations, see https://codemirror.net/examples/zebra/
- */
+//
+// Exports an editor plugin that creates multi-line decorations based on the
+// editor's syntax tree (assumes markdown).
+//
+// For more about creating decorations, see https://codemirror.net/examples/zebra/
+//
 
 import { Decoration, EditorView } from '@codemirror/view';
 import { ViewPlugin, DecorationSet, ViewUpdate } from '@codemirror/view';
@@ -19,19 +19,23 @@ const regionStopDecoration = Decoration.line({
 });
 
 const codeBlockDecoration = Decoration.line({
-	attributes: { class: 'cm-codeBlock' },
+	attributes: { class: 'cm-codeBlock', spellcheck: 'false' },
 });
 
 const inlineCodeDecoration = Decoration.mark({
-	attributes: { class: 'cm-inlineCode' },
+	attributes: { class: 'cm-inlineCode', spellcheck: 'false' },
 });
 
 const mathBlockDecoration = Decoration.line({
-	attributes: { class: 'cm-mathBlock' },
+	attributes: { class: 'cm-mathBlock', spellcheck: 'false' },
 });
 
 const inlineMathDecoration = Decoration.mark({
-	attributes: { class: 'cm-inlineMath' },
+	attributes: { class: 'cm-inlineMath', spellcheck: 'false' },
+});
+
+const urlDecoration = Decoration.mark({
+	attributes: { class: 'cm-url', spellcheck: 'false' },
 });
 
 const blockQuoteDecoration = Decoration.line({
@@ -42,10 +46,12 @@ const headerLineDecoration = Decoration.line({
 	attributes: { class: 'cm-headerLine' },
 });
 
+type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
+
 // Returns a set of [Decoration]s, associated with block syntax groups that require
 // full-line styling.
-function computeDecorations(view: EditorView) {
-	const decorations: { pos: number; length?: number; decoration: Decoration }[] = [];
+const computeDecorations = (view: EditorView) => {
+	const decorations: DecorationDescription[] = [];
 
 	// Add a decoration to all lines between the document position [from] up to
 	// and includeing the position [to].
@@ -104,6 +110,9 @@ function computeDecorations(view: EditorView) {
 				case 'InlineCode':
 					addDecorationToRange(viewFrom, viewTo, inlineCodeDecoration);
 					break;
+				case 'URL':
+					addDecorationToRange(viewFrom, viewTo, urlDecoration);
+					break;
 				case 'SetextHeading1':
 				case 'SetextHeading2':
 				case 'ATXHeading1':
@@ -119,11 +128,11 @@ function computeDecorations(view: EditorView) {
 				// Only block decorations will have differing first and last lines
 				if (blockDecorated) {
 					// Allow different styles for the first, last lines in a block.
-					if (viewFrom == node.from) {
+					if (viewFrom === node.from) {
 						addDecorationToLines(viewFrom, viewFrom, regionStartDecoration);
 					}
 
-					if (viewTo == node.to) {
+					if (viewTo === node.to) {
 						addDecorationToLines(viewTo, viewTo, regionStopDecoration);
 					}
 				}
@@ -140,9 +149,9 @@ function computeDecorations(view: EditorView) {
 		decorationBuilder.add(pos, pos + (length ?? 0), decoration);
 	}
 	return decorationBuilder.finish();
-}
+};
 
-const decoratorPlugin = ViewPlugin.fromClass(class {
+const decoratorExtension = ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
 
 	public constructor(view: EditorView) {
@@ -158,4 +167,4 @@ const decoratorPlugin = ViewPlugin.fromClass(class {
 	decorations: pluginVal => pluginVal.decorations,
 });
 
-export default decoratorPlugin;
+export default decoratorExtension;

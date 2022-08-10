@@ -53,7 +53,7 @@ export const runtime = (): CommandRuntime => {
 				return 'error';
 			}
 
-			if (action == 'cancel') {
+			if (action === 'cancel') {
 				sync.cancel();
 				return 'cancel';
 			} else {

@@ -1,6 +1,4 @@
-/**
- * Stores information about the formatting of the region contained within the current selection.
- */
+// Stores information about the current content of the user's selection
 
 export default class SelectionFormatting {
 	public bolded: boolean = false;
@@ -11,6 +9,8 @@ export default class SelectionFormatting {
 	public inOrderedList: boolean = false;
 	public inMath: boolean = false;
 	public inLink: boolean = false;
+	public spellChecking: boolean = false;
+	public unspellCheckableRegion: boolean = false;
 
 	// Link data, both fields are null if not in a link.
 	public linkData: { linkText?: string; linkURL?: string } = {
@@ -35,6 +35,9 @@ export default class SelectionFormatting {
 		'headerLevel', 'listLevel',
 
 		'selectedText',
+
+		'spellChecking',
+		'unspellCheckableRegion',
 	];
 
 	// Returns true iff [this] is equivalent to [other]
