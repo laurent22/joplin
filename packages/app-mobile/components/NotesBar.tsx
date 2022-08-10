@@ -91,7 +91,7 @@ function NotesBarComponent(props: Props) {
 				borderRadius: 4,
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
-				height: '100%',
+				height: 42,
 				flex: 1,
 			},
 			button: {
