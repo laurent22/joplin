@@ -5,12 +5,12 @@ export default class Vec3 {
 	private constructor(
 		public readonly x: number,
 		public readonly y: number,
-		public readonly z: number,
+		public readonly z: number
 	) {
 	}
 
 	// Returns the x, y components of this
-	public get xy(): { x: number, y: number } {
+	public get xy(): { x: number; y: number } {
 		// Useful for APIs that behave differently if .z is present.
 		return {
 			x: this.x,
@@ -22,24 +22,24 @@ export default class Vec3 {
 		return new Vec3(x, y, z);
 	}
 
-	/** @return the [idx]th component of this. */
+	// Returns this' [idx]th component
 	public at(idx: number): number {
-		if (idx == 0) return this.x;
-		if (idx == 1) return this.y;
-		if (idx == 2) return this.z;
+		if (idx === 0) return this.x;
+		if (idx === 1) return this.y;
+		if (idx === 2) return this.z;
 
 		throw new Error(`${idx} out of bounds!`);
 	}
 
-	/** @return the L2 norm of this */
 	public magnitude(): number {
 		return Math.sqrt(this.dot(this));
 	}
 
-	/**
-	 * @return this vector's angle in the XY plane (treats this as a Vec2).
-	 *         The angle is in radians and is measured counterclockwise.
-	 */
+	public magnitudeSquared(): number {
+		return this.dot(this);
+	}
+
+	// Return this' angle in the XY plane (treats this as a Vec2)
 	public angle(): number {
 		return Math.atan2(this.y, this.x);
 	}
@@ -76,20 +76,18 @@ export default class Vec3 {
 		);
 	}
 
-	/** @return this + direction.normalized() * distance */
+	// Returns this plus a vector of length [distance] in [direction]
 	public extend(distance: number, direction: Vec3): Vec3 {
 		return this.plus(direction.normalized().times(distance));
 	}
 
-	/** @return a vector [fractionTo] of the way to target from this. */
+	// Returns a vector [fractionTo] of the way to target from this.
 	public lerp(target: Vec3, fractionTo: number): Vec3 {
 		return this.times(1 - fractionTo).plus(target.times(fractionTo));
 	}
 
-	/**
-	 * @param zip Maps a component of this and a corresponding component of
-	 *            [other] to a component of the output vector.
-	 */
+	// [zip] Maps a component of this and a corresponding component of
+	// [other] to a component of the output vector.
 	public zip(
 		other: Vec3, zip: (componentInThis: number, componentInOther: number)=> number
 	): Vec3 {
@@ -100,9 +98,7 @@ export default class Vec3 {
 		);
 	}
 
-	/**
-	 * @return each component of this mapped to a new component by [fn]
-	 */
+	// Returns a vector with each component acted on by [fn]
 	public map(fn: (component: number)=> number): Vec3 {
 		return Vec3.of(
 			fn(this.x), fn(this.y), fn(this.z)
@@ -113,10 +109,8 @@ export default class Vec3 {
 		return [this.x, this.y, this.z];
 	}
 
-	/**
-	 * @return true iff each component of this is equal to the corresponding
-	 * 				component of [other]
-	 */
+	// [fuzz] The maximum difference between two components for this and [other]
+	// to be considered equal.
 	public eq(other: Vec3, fuzz: number): boolean {
 		for (let i = 0; i < 3; i++) {
 			if (Math.abs(other.at(i) - this.at(i)) > fuzz) {

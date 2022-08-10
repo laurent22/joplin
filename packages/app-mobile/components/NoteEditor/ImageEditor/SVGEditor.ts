@@ -341,19 +341,25 @@ export class SVGEditor {
 	}
 
 	public toSVG(): SVGElement {
-		const viewport = this.importExportViewport;
+		const importExportViewport = this.importExportViewport;
 		const svgNameSpace = 'http://www.w3.org/2000/svg';
 		const result = document.createElementNS(svgNameSpace, 'svg');
-		const renderer = new SVGRenderer(result, viewport);
+		const renderer = new SVGRenderer(result, importExportViewport);
+
+		const origTransform = importExportViewport.canvasToScreenTransform;
+		// Reset the transform to ensure that (0, 0) is (0, 0)
+		importExportViewport.resetTransform(Mat33.identity);
 
 		// Render **all** elements.
 		this.image.renderAll(renderer);
 
+		importExportViewport.resetTransform(origTransform);
+
 		// Just show the main region
-		const rect = viewport.visibleRect;
+		const rect = importExportViewport.visibleRect;
 		result.setAttribute('viewBox', `${rect.x} ${rect.y} ${rect.w} ${rect.h}`);
 		result.setAttribute('width', `${rect.w}`);
-		result.setAttribute('height', `${rect.w}`);
+		result.setAttribute('height', `${rect.h}`);
 
 		// Ensure the image can be identified as an SVG if downloaded.
 		// See https://jwatt.org/svg/authoring/

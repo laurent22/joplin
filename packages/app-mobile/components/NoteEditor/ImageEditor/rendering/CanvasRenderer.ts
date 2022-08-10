@@ -5,7 +5,7 @@ import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
 import AbstractRenderer, { RenderingStyle } from './AbstractRenderer';
 
-const minCurveApproxDist = 5;
+const minSquareCurveApproxDist = 25;
 export default class CanvasRenderer extends AbstractRenderer {
 	public constructor(private ctx: CanvasRenderingContext2D, viewport: Viewport) {
 		super(viewport);
@@ -44,6 +44,7 @@ export default class CanvasRenderer extends AbstractRenderer {
 
 	protected lineTo(point: Vec3): void {
 		point = this.viewport.canvasToScreen(point);
+
 		this.ctx.lineTo(point.x, point.y);
 	}
 
@@ -55,8 +56,8 @@ export default class CanvasRenderer extends AbstractRenderer {
 		// Approximate the curve if small enough.
 		const delta1 = p2.minus(p1);
 		const delta2 = p3.minus(p2);
-		if (delta1.dot(delta1) < minCurveApproxDist * minCurveApproxDist
-			&& delta2.dot(delta2) < minCurveApproxDist * minCurveApproxDist) {
+		if (delta1.magnitudeSquared() < minSquareCurveApproxDist
+			&& delta2.magnitudeSquared() < minSquareCurveApproxDist) {
 			this.ctx.lineTo(p3.x, p3.y);
 		} else {
 			this.ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
@@ -69,7 +70,7 @@ export default class CanvasRenderer extends AbstractRenderer {
 
 		// Approximate the curve with a line if small enough
 		const delta = controlPoint.minus(endPoint);
-		if (delta.dot(delta) < minCurveApproxDist * minCurveApproxDist) {
+		if (delta.magnitudeSquared() < minSquareCurveApproxDist) {
 			this.ctx.lineTo(endPoint.x, endPoint.y);
 		} else {
 			this.ctx.quadraticCurveTo(
