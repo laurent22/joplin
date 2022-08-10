@@ -36,17 +36,24 @@
     max-width: 70px;
     font-size: 11pt;
 
+    cursor: pointer;
+
     height: min(20vh, 60px);
     background-color: var(--primary-background-color);
     color: var(--primary-foreground-color);
     border: none;
     box-shadow: 0px 0px 2px var(--primary-foreground-color);
 
-    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
 }
 
 .toolbar-button:hover, .toolbar-root button:not(:disabled):hover {
     box-shadow: 0px 2px 4px var(--primary-foreground-color);
+}
+
+.toolbar-root button:disabled {
+    cursor: inherit;
+    opacity: 0.5;
 }
 
 .toolbar-button .toolbar-icon {

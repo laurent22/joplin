@@ -466,6 +466,32 @@ export default class HTMLToolbar {
 		button.classList.add(`${toolbarCSSPrefix}toolButton`);
 		button.onclick = command;
 		(parent ?? this.container).appendChild(button);
+
+		return button;
+	}
+
+	private addUndoRedoButtons() {
+		const undoRedoGroup = document.createElement('div');
+		undoRedoGroup.classList.add(`${toolbarCSSPrefix}buttonGroup`);
+
+		const undoButton = this.addActionButton('Undo', () => {
+			this.editor.history.undo();
+		}, undoRedoGroup);
+		const redoButton = this.addActionButton('Redo', () => {
+			this.editor.history.redo();
+		}, undoRedoGroup);
+		this.container.appendChild(undoRedoGroup);
+
+		undoButton.disabled = true;
+		redoButton.disabled = true;
+		this.editor.notifier.on(EditorEventType.UndoRedoStackUpdated, event => {
+			if (event.kind !== EditorEventType.UndoRedoStackUpdated) {
+				throw new Error('Wrong event type!');
+			}
+
+			undoButton.disabled = event.undoStackSize === 0;
+			redoButton.disabled = event.redoStackSize === 0;
+		});
 	}
 
 	private addElements() {
@@ -499,15 +525,6 @@ export default class HTMLToolbar {
 			(new TouchDrawingWidget(this.editor, tool, this.localizationTable)).addTo(this.container);
 		}
 
-		const undoRedoGroup = document.createElement('div');
-		undoRedoGroup.classList.add(`${toolbarCSSPrefix}buttonGroup`);
-
-		this.addActionButton('Undo', () => {
-			this.editor.history.undo();
-		}, undoRedoGroup);
-		this.addActionButton('Redo', () => {
-			this.editor.history.redo();
-		}, undoRedoGroup);
-		this.container.appendChild(undoRedoGroup);
+		this.addUndoRedoButtons();
 	}
 }

@@ -91,6 +91,7 @@ export enum EditorEventType {
 	ToolEnabled,
 	ToolDisabled,
 	ToolUpdated,
+	UndoRedoStackUpdated,
 	ObjectAdded,
 	ViewportChanged,
 	DisplayResized,
@@ -121,7 +122,13 @@ export interface DisplayResizedEvent {
 	readonly newSize: Vec2;
 }
 
-export type EditorEventDataType = EditorToolEvent | EditorObjectEvent | EditorViewportChangedEvent | DisplayResizedEvent;
+export interface EditorUndoStackUpdated {
+	readonly kind: EditorEventType.UndoRedoStackUpdated;
+	readonly undoStackSize: number;
+	readonly redoStackSize: number;
+}
+
+export type EditorEventDataType = EditorToolEvent | EditorObjectEvent | EditorViewportChangedEvent | DisplayResizedEvent | EditorUndoStackUpdated;
 
 
 // Returns a Promise to indicate that the event source should pause until the Promise resolves.
