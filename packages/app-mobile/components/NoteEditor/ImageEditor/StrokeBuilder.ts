@@ -134,7 +134,7 @@ export default class StrokeBuilder {
 		this.lastExitingVec = Vec2.ofXY(
 			this.currentCurve.points[2]
 		).minus(Vec2.ofXY(this.currentCurve.points[1]));
-		console.assert(this.lastExitingVec.magnitude() != 0);
+		console.assert(this.lastExitingVec.magnitude() !== 0);
 
 		// Use the last two points to start a new curve (the last point isn't used
 		// in the current curve and we want connected curves to share end points)
@@ -186,11 +186,6 @@ export default class StrokeBuilder {
 				kind: PathCommandType.QuadraticBezierTo,
 				controlPoint: this.roundPoint(controlPoint.minus(halfVec)),
 				endPoint: this.roundPoint(startPt.minus(startVec)),
-			},
-
-			{
-				kind: PathCommandType.LineTo,
-				point: this.roundPoint(startPt.plus(startVec)),
 			},
 		];
 
