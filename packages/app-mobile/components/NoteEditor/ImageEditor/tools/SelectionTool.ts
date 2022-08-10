@@ -36,7 +36,7 @@ const styles = `
 		border: 1px solid var(--primary-background-color);
 	}
 
-	.handleOverlay > .selectionBox .resizeCorner {
+	.handleOverlay .resizeCorner {
 		width: ${handleScreenSize}px;
 		height: ${handleScreenSize}px;
 		margin-right: -${handleScreenSize / 2}px;
@@ -323,6 +323,7 @@ class Selection {
 		if (this.backgroundBox.parentElement) {
 			this.backgroundBox.remove();
 		}
+		this.region = Rect2.empty;
 	}
 
 	// Find the objects corresponding to this in the document,
@@ -461,6 +462,12 @@ export default class SelectionTool extends BaseTool {
 	private onGestureEnd() {
 		// Expand/shrink the selection rectangle, if applicable
 		const hasSelection = this.selectionBox.resolveToObjects();
+
+		// Note that the selection has changed
+		this.editor.notifier.dispatch(EditorEventType.ToolUpdated, {
+			kind: EditorEventType.ToolUpdated,
+			tool: this,
+		});
 
 		if (hasSelection) {
 			const visibleRect = this.editor.viewport.visibleRect;

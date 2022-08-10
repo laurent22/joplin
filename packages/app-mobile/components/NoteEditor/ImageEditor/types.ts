@@ -1,6 +1,4 @@
-/**
- * Types relevant to the image editor
- */
+// Types related to the image editor
 
 import EventDispatcher from '@joplin/lib/EventDispatcher';
 import { ImageComponent } from 'react-native';
@@ -48,12 +46,9 @@ export enum InputEvtType {
 	KeyPressEvent,
 }
 
-/**
- * A mouse wheel event.
- * [delta.x] is horizontal scroll,
- * [delta.y] is vertical scroll,
- * [delta.z] is zoom scroll (ctrl+scroll or pinch zoom)
- */
+// [delta.x] is horizontal scroll,
+// [delta.y] is vertical scroll,
+// [delta.z] is zoom scroll (ctrl+scroll or pinch zoom)
 export interface WheelEvt {
 	readonly kind: InputEvtType.WheelEvt;
 	readonly delta: Vec3;
@@ -65,17 +60,11 @@ export interface KeyPressEvent {
 	readonly key: string;
 }
 
-/**
- * Event triggered when pointer capture is taken by a different [PointerEvtListener].
- * @see PointerEvtListener.onGestureCancel
- */
+// Event triggered when pointer capture is taken by a different [PointerEvtListener].
 export interface GestureCancelEvt {
 	readonly kind: InputEvtType.GestureCancelEvt;
 }
 
-/**
- * Base class for all PointerEvts
- */
 interface PointerEvtBase {
 	readonly current: Pointer;
 	readonly allPointers: Pointer[];
@@ -93,9 +82,6 @@ export interface PointerUpEvt extends PointerEvtBase {
 	readonly kind: InputEvtType.PointerUpEvt;
 }
 
-// Structuring events like this allows us to use TypeScript to ensure all
-// types of InputEvt/PointerEvt are handled.
-// See https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions
 export type PointerEvt = PointerDownEvt | PointerMoveEvt | PointerUpEvt;
 export type InputEvt = KeyPressEvent | WheelEvt | GestureCancelEvt | PointerEvt;
 

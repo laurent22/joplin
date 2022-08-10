@@ -27,9 +27,10 @@ abstract class ToolbarWidget {
 	private dropdownContainer: HTMLElement;
 	private dropdownIcon: Element;
 	private label: HTMLLabelElement;
+	private hasDropdown: boolean;
 
 	public constructor(
-		editor: SVGEditor,
+		protected editor: SVGEditor,
 		protected targetTool: BaseTool,
 		protected localizationTable: ToolbarLocalization
 	) {
@@ -38,6 +39,7 @@ abstract class ToolbarWidget {
 		this.dropdownContainer = document.createElement('div');
 		this.dropdownContainer.classList.add(`${toolbarCSSPrefix}dropdown`);
 		this.dropdownContainer.classList.add('hidden');
+		this.hasDropdown = false;
 
 		this.button = document.createElement('div');
 		this.button.classList.add(`${toolbarCSSPrefix}button`);
@@ -80,7 +82,15 @@ abstract class ToolbarWidget {
 	protected abstract fillDropdown(dropdown: HTMLElement): boolean;
 
 	protected handleClick() {
-		this.targetTool.setEnabled(!this.targetTool.isEnabled());
+		if (this.hasDropdown) {
+			if (!this.targetTool.isEnabled()) {
+				this.targetTool.setEnabled(true);
+			} else {
+				this.setDropdownVisible(!this.isDropdownVisible());
+			}
+		} else {
+			this.targetTool.setEnabled(!this.targetTool.isEnabled());
+		}
 	}
 
 	// Adds this to [parent]. This can only be called once for each ToolbarWidget.
@@ -95,7 +105,8 @@ abstract class ToolbarWidget {
 		this.button.replaceChildren(this.icon, this.label);
 		this.container.appendChild(this.button);
 
-		if (this.fillDropdown(this.dropdownContainer)) {
+		this.hasDropdown = this.fillDropdown(this.dropdownContainer);
+		if (this.hasDropdown) {
 			this.dropdownIcon = this.createDropdownIcon();
 			this.button.appendChild(this.dropdownIcon);
 			this.container.appendChild(this.dropdownContainer);
@@ -181,6 +192,12 @@ class EraserWidget extends ToolbarWidget {
 }
 
 class SelectionWidget extends ToolbarWidget {
+	public constructor(
+		editor: SVGEditor, private tool: SelectionTool, localization: ToolbarLocalization
+	) {
+		super(editor, tool, localization);
+	}
+
 	protected getTitle(): string {
 		return this.localizationTable.select;
 	}
@@ -199,9 +216,34 @@ class SelectionWidget extends ToolbarWidget {
 
 		return icon;
 	}
-	protected fillDropdown(_dropdown: HTMLElement): boolean {
-		// No dropdown
-		return false;
+	protected fillDropdown(dropdown: HTMLElement): boolean {
+		const container = document.createElement('div');
+		const resizeButton = document.createElement('button');
+
+		resizeButton.innerText = this.localizationTable.resizeImageToSelection;
+		resizeButton.disabled = true;
+
+		resizeButton.onclick = () => {
+			const selection = this.tool.getSelection();
+			this.editor.dispatch(this.editor.setImportExportRect(selection.region));
+		};
+
+		// Enable/disable actions based on whether items are selected
+		this.editor.notifier.on(EditorEventType.ToolUpdated, toolEvt => {
+			if (toolEvt.kind !== EditorEventType.ToolUpdated) {
+				throw new Error('Invalid event type!');
+			}
+
+			if (toolEvt.tool === this.tool) {
+				const selection = this.tool.getSelection();
+				const hasSelection = selection.region.area > 0;
+				resizeButton.disabled = !hasSelection;
+			}
+		});
+
+		container.replaceChildren(resizeButton);
+		dropdown.appendChild(container);
+		return true;
 	}
 }
 
@@ -248,7 +290,7 @@ class PenWidget extends ToolbarWidget {
 	private updateInputs: ()=> void = () => {};
 
 	public constructor(
-		private editor: SVGEditor, private tool: Pen, localization: ToolbarLocalization
+		editor: SVGEditor, private tool: Pen, localization: ToolbarLocalization
 	) {
 		super(editor, tool, localization);
 
@@ -350,7 +392,7 @@ class PenWidget extends ToolbarWidget {
 		const colorInput = document.createElement('input');
 
 		colorInput.id = `${toolbarCSSPrefix}colorInput${PenWidget.idCounter++}`;
-		colorLabel.innerText = 'Color: ';
+		colorLabel.innerText = this.localizationTable.colorLabel;
 		colorLabel.setAttribute('for', colorInput.id);
 
 		colorInput.className = 'coloris_input';
@@ -372,20 +414,8 @@ class PenWidget extends ToolbarWidget {
 		dropdown.replaceChildren(container);
 		return true;
 	}
-
-	protected handleClick(): void {
-		if (!this.tool.isEnabled()) {
-			this.tool.setEnabled(true);
-		} else {
-			this.setDropdownVisible(!this.isDropdownVisible());
-		}
-	}
 }
 
-/**
- * An HTML implementation of the toolbar. This implementation is primarially intended for
- * debugging purposes — when the editor is running directly in a browser.
- */
 export default class HTMLToolbar {
 	private container: HTMLElement;
 
@@ -395,6 +425,8 @@ export default class HTMLToolbar {
 		select: 'Select',
 		touchDrawing: 'Touch Drawing',
 		thicknessLabel: 'Thickness: ',
+		colorLabel: 'Color: ',
+		resizeImageToSelection: 'Resize image to selection',
 		undo: 'Undo',
 		redo: 'Redo',
 	};

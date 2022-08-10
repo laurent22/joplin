@@ -40,8 +40,10 @@ const ImageEditor = (props: Props) => {
 		pen: _('Pen'),
 		eraser: _('Eraser'),
 		select: _('Select'),
-		touchDrawing: _('Touch Drawing:'),
+		touchDrawing: _('Touch Drawing'),
 		thicknessLabel: _('Thickness: '),
+		colorLabel: _('Color:'),
+		resizeImageToSelection: _('Resize image to selection'),
 		undo: _('Undo'),
 		redo: _('Redo'),
 	};

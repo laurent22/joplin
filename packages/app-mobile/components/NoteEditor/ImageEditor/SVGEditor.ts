@@ -18,6 +18,7 @@ import './editor.css';
 import Pointer from './Pointer';
 import Mat33 from './geometry/Mat33';
 import { ToolbarLocalization } from './toolbar/types';
+import Rect2 from './geometry/Rect2';
 
 export class SVGEditor {
 	// Wrapper around the viewport and toolbar
@@ -366,7 +367,7 @@ export class SVGEditor {
 
 	public async loadFrom(loader: ImageLoader) {
 		this.showLoadingWarning(0);
-		const visibleRect = await loader.start((component) => {
+		const imageRect = await loader.start((component) => {
 			(new EditorImage.AddElementCommand(component)).apply(this);
 		}, (countProcessed: number, totalToProcess: number) => {
 			if (countProcessed % 100 === 0) {
@@ -381,8 +382,33 @@ export class SVGEditor {
 		});
 		this.hideLoadingWarning();
 
-		this.importExportViewport.updateScreenSize(visibleRect.size);
-		this.importExportViewport.resetTransform(Mat33.translation(visibleRect.topLeft));
+		this.setImportExportRect(imageRect).apply(this);
+	}
+
+	// Returns the size of the visible region of the output SVG
+	public getImportExportRect(): Rect2 {
+		return this.importExportViewport.visibleRect;
+	}
+
+	// Resize the output SVG
+	public setImportExportRect(imageRect: Rect2): Command {
+		const origSize = this.importExportViewport.visibleRect.size;
+		const origTransform = this.importExportViewport.canvasToScreenTransform;
+
+		return {
+			apply(editor) {
+				const viewport = editor.importExportViewport;
+				viewport.updateScreenSize(imageRect.size);
+				viewport.resetTransform(Mat33.translation(imageRect.topLeft.times(-1)));
+				editor.queueRerender();
+			},
+			unapply(editor) {
+				const viewport = editor.importExportViewport;
+				viewport.updateScreenSize(origSize);
+				viewport.resetTransform(origTransform);
+				editor.queueRerender();
+			},
+		};
 	}
 
 	// Alias for loadFrom(SVGLoader.fromString).

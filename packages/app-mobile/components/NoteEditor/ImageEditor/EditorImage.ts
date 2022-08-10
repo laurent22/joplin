@@ -62,7 +62,6 @@ export default class EditorImage {
 	}
 
 	public static AddElementCommand = class implements Command {
-		private elementContainer: ImageNode;
 		// If [applyByFlattening], then the rendered content of this element
 		// is present on the display's wet ink canvas. As such, no re-render is necessary
 		// the first time this command is applied (the surfaces are joined instead).
@@ -73,7 +72,7 @@ export default class EditorImage {
 		}
 
 		public apply(editor: SVGEditor) {
-			this.elementContainer = editor.image.addElement(this.element);
+			editor.image.addElement(this.element);
 
 			if (!this.applyByFlattening) {
 				editor.queueRerender();
@@ -84,8 +83,8 @@ export default class EditorImage {
 		}
 
 		public unapply(editor: SVGEditor) {
-			this.elementContainer?.remove();
-			this.elementContainer = null;
+			const container = editor.image.findParent(this.element);
+			container?.remove();
 			editor.queueRerender();
 		}
 	};
