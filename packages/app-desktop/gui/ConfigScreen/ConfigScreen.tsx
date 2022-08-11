@@ -17,7 +17,7 @@ import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
-import { defaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -69,7 +69,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				this.switchSection(this.props.defaultSection);
 			});
 		}
-		updateDefaultPluginsInstallState(getDefaultPluginsInstallState(PluginService.instance(), Object.keys(defaultPlugins)), this);
+		updateDefaultPluginsInstallState(getDefaultPluginsInstallState(PluginService.instance(), Object.keys(getDefaultPluginsInfo())), this);
 	}
 
 	private async handleSettingButton(key: string) {
