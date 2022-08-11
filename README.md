@@ -4,6 +4,10 @@
 
 * * *
 
+Joplin will have [its first Meetup on 30 August 2022](https://discourse.joplinapp.org/t/joplin-first-meetup-on-30-august/26808)! Come and join us at the Old Thameside Inn next to London Bridge!
+
+* * *
+
 🌞 Joplin participates in **Google Summer of Code 2022**! More info on [the announcement post](https://github.com/laurent22/joplin/blob/dev/readme/news/20220308-gsoc2022-start.md). 🌞
 
 * * *
