@@ -932,7 +932,7 @@ msgstr "Skapad: %s"
 msgid "Creates a new note."
 msgstr "Skapar en ny anteckning."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Skapar en ny anteckningsbok."
 

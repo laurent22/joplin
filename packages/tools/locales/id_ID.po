@@ -932,7 +932,7 @@ msgstr "Dibuat: %s"
 msgid "Creates a new note."
 msgstr "Membuat catatan baru."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Membuat buku catatan baru."
 

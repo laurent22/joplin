@@ -925,7 +925,7 @@ msgstr "Oluşturulma: %s"
 msgid "Creates a new note."
 msgstr "Yeni bir not oluşturur."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Yeni bir not defteri oluşturur."
 

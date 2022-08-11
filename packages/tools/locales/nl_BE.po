@@ -957,7 +957,7 @@ msgstr "Aangemaakt: %s"
 msgid "Creates a new note."
 msgstr "Maakt een nieuwe notitie aan."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Maakt een nieuw notitieboek aan."
 

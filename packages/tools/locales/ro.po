@@ -930,7 +930,7 @@ msgstr "Creat: %s"
 msgid "Creates a new note."
 msgstr "Creați o nouă notiță."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Creați caiet de notițe."
 

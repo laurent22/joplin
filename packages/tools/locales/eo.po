@@ -910,7 +910,7 @@ msgstr "Kreita: %s"
 msgid "Creates a new note."
 msgstr "Kreas novan noton."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Kreas novan notlibron."
 

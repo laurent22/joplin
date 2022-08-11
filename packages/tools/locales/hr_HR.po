@@ -922,7 +922,7 @@ msgstr "Stvoreno: %s"
 msgid "Creates a new note."
 msgstr "Stvara novu bilješku."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Stvara novu bilježnicu."
 

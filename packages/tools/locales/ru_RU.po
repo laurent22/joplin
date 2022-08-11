@@ -925,7 +925,7 @@ msgstr "Создано: %s"
 msgid "Creates a new note."
 msgstr "Создает новую заметку."
 
-#: packages/app-cli/app/command-mkbook.ts:12
+#: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Создает новый блокнот."
 
