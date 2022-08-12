@@ -92,7 +92,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 
 			notesBarWidth: this.getNotesBarWidth(),
-
+			isTablet: Dimensions.get('window').width >= 768,
 		};
 
 		this.saveActionQueues_ = {};
@@ -302,8 +302,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	private async handleScreenWidthChange_() {
-		console.log('Something\'s happening');
-		this.setState({ notesBarWidth: this.getNotesBarWidth() });
+		this.setState({
+			notesBarWidth: this.getNotesBarWidth(),
+			isTablet: Dimensions.get('window').width >= 768,
+		});
 	}
 
 	screenHeader_undoButtonPress() {
@@ -1406,7 +1408,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					{titleComp}
 					{bodyComponent}
 				</Animated.View>
-				{ noteActionButtonGroup }
+				{ this.state.isTablet && noteActionButtonGroup }
 			</View>
 		);
 		return (
