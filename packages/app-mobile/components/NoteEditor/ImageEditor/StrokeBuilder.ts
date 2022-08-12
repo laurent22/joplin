@@ -15,7 +15,7 @@ export interface StrokeDataPoint {
 	color: Color4;
 }
 
-
+// Handles stroke smoothing and creates Strokes from user/stylus input.
 export default class StrokeBuilder {
 	private segments: RenderablePathSpec[];
 	private buffer: Point2[];

@@ -12,27 +12,15 @@ import Pointer from './Pointer';
 
 
 export interface PointerEvtListener {
-	/**
-	 * @param current The pointer that triggered the event
-	 * @param allPointers A list of all pointers that are down
-	 * @return true to capture the event, canceling any in-progress gestures.
-	 *         false to not receive `pointerMove`/`pointerUp` events for the gesture
-	 *         until another call to `onPointerDown` returns `true`.
-	 */
 	onPointerDown(event: PointerEvt): boolean;
 	onPointerMove(event: PointerEvt): void;
 	onPointerUp(event: PointerEvt): void;
 
-	/**
-	 * Called if a pointer that has been captured by this listener (by returning
-	 * `true` from `onPointerDown`) is re-captured by another listener.
-	 *
-	 * When called, this method should cancel any changes being made by the current
-	 * gesture.
-	 *
-	 * @see onPointerDown
-	 * @see GestureCancelEvt
-	 */
+	// Called if a pointer that has been captured by this listener (by returning
+	// `true` from `onPointerDown`) is re-captured by another listener.
+	//
+	// When called, this method should cancel any changes being made by the current
+	// gesture.
 	onGestureCancel(): void;
 }
 

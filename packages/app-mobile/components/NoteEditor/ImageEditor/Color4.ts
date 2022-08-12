@@ -7,12 +7,7 @@ export default class Color4 {
 		public readonly a: number
 	) { }
 
-	/**
-	 * @param red The red component of the color, in the range [0, 1]
-	 * @param green The green component, in [0, 1] where 1 is most green
-	 * @param blue The blue component
-	 * @return A Color4 with the given red, green, blue values and an alpha channel of 1.
-	 */
+	// Each component should be in the range [0, 1]
 	public static ofRGB(red: number, green: number, blue: number): Color4 {
 		return new Color4(red, green, blue, 1.0);
 	}
@@ -57,18 +52,8 @@ export default class Color4 {
 		return new Color4(components[0], components[1], components[2], components[3]);
 	}
 
+	// Like fromHex, but can handle additional colors if an HTML5Canvas is available.
 	public static fromString(text: string): Color4 {
-		const colorNameMap: Record<string, string> = {
-			white: '#fff',
-			black: '#000',
-			blue: '#00f',
-			red: '#f00',
-		};
-
-		if (text in colorNameMap) {
-			text = colorNameMap[text];
-		}
-
 		if (text.startsWith('#')) {
 			return Color4.fromHex(text);
 		} else {

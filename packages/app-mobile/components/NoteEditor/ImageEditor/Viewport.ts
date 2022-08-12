@@ -1,7 +1,3 @@
-/**
- * Represents an ImageEditor's viewable region.
- */
-
 import Command from './commands/Command';
 import SVGEditor from './SVGEditor';
 import Mat33 from './geometry/Mat33';
@@ -15,9 +11,7 @@ import { EditorEventType, EditorNotifier } from './types';
 type PointDataType<T extends Point2|StrokeDataPoint|number> = T extends Point2 ? Point2 : number;
 
 export class Viewport {
-	/**
-	 * Command that translates/scales the viewport.
-	 */
+	// Command that translates/scales the viewport.
 	public static ViewportTransform = class implements Command {
 		private readonly inverseTransform: Mat33;
 
@@ -55,17 +49,17 @@ export class Viewport {
 		return this.screenRect.transformedBoundingBox(this.inverseTransform);
 	}
 
-	/** @return the given point, but in canvas coordinates */
+	// the given point, but in canvas coordinates
 	public screenToCanvas(screenPoint: Point2): Point2 {
 		return this.inverseTransform.transformVec2(screenPoint);
 	}
 
-	/** @return the given point, but in screen coordinates */
 	public canvasToScreen(canvasPoint: Point2): Point2 {
 		return this.transform.transformVec2(canvasPoint);
 	}
 
 	// Updates the transformation directly. Using ViewportTransform is preferred.
+	// [newTransform] should map from canvas coordinates to screen coordinates.
 	public resetTransform(newTransform: Mat33) {
 		this.transform = newTransform;
 		this.inverseTransform = newTransform.inverse();

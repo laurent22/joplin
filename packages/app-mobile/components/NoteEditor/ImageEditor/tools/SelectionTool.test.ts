@@ -3,7 +3,7 @@
 import Color4 from '../Color4';
 import Stroke from '../components/Stroke';
 import { RenderingMode } from '../Display';
-import ImageEditor from '../editor';
+import SVGEditor from '../SVGEditor';
 import EditorImage from '../EditorImage';
 import Path from '../geometry/Path';
 import { Vec2 } from '../geometry/Vec2';
@@ -11,11 +11,11 @@ import { InputEvtType } from '../types';
 import SelectionTool from './SelectionTool';
 import { ToolType } from './ToolController';
 
-const getSelectionTool = (editor: ImageEditor): SelectionTool => {
+const getSelectionTool = (editor: SVGEditor): SelectionTool => {
 	return editor.toolController.getMatchingTools(ToolType.Selection)[0] as SelectionTool;
 };
 
-const createEditor = () => new ImageEditor(document.body, RenderingMode.DummyRenderer);
+const createEditor = () => new SVGEditor(document.body, RenderingMode.DummyRenderer);
 
 const createSquareStroke = () => {
 	const testStroke = new Stroke([

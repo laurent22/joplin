@@ -5,12 +5,9 @@ import Viewport from './Viewport';
 import AbstractComponent from './components/AbstractComponent';
 import Rect2 from './geometry/Rect2';
 
-/**
- * A tree of nodes contained within the editor
- */
+// Handles lookup/storage of elements in the image
 export default class EditorImage {
 	private root: ImageNode;
-	public id: number = Math.random();
 
 	public constructor() {
 		this.root = new ImageNode();
@@ -61,6 +58,7 @@ export default class EditorImage {
 		return leaves.map(leaf => leaf.getContent());
 	}
 
+	// A Command that can access private [EditorImage] functionality
 	public static AddElementCommand = class implements Command {
 		// If [applyByFlattening], then the rendered content of this element
 		// is present on the display's wet ink canvas. As such, no re-render is necessary
@@ -121,7 +119,7 @@ export class ImageNode {
 		});
 	}
 
-	/** @returns a list of `ImageNode`s with content (and thus no children). */
+	// / Returns a list of `ImageNode`s with content (and thus no children).
 	public getLeavesInRegion(region: Rect2, minFractionOfRegion: number = 0): ImageNode[] {
 		const result: ImageNode[] = [];
 
@@ -259,7 +257,7 @@ export class ImageNode {
 		}
 	}
 
-	/** Remove this node and all of its children */
+	// Remove this node and all of its children
 	public remove() {
 		if (!this.parent) {
 			this.content = null;

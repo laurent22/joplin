@@ -1,10 +1,9 @@
 import { Point2, Vec2 } from './Vec2';
 import Vec3 from './Vec3';
 
-/**
- * Represents a three dimensional linear transformation or
- * a two-dimensional affine transformation.
- */
+// Represents a three dimensional linear transformation or
+// a two-dimensional affine transformation. (An affine transformation scales/rotates/shears
+// **and** translates while a linear transformation just scales/rotates/shears).
 export default class Mat33 {
 	private readonly rows: Vec3[];
 
@@ -138,7 +137,6 @@ export default class Mat33 {
 		return inverse;
 	}
 
-	/** @return thisᵀ */
 	public transposed(): Mat33 {
 		return new Mat33(
 			this.a1, this.b1, this.c1,
@@ -147,7 +145,6 @@ export default class Mat33 {
 		);
 	}
 
-	/** @return (this)(other) */
 	public rightMul(other: Mat33): Mat33 {
 		other = other.transposed();
 
@@ -162,12 +159,8 @@ export default class Mat33 {
 		);
 	}
 
-	/**
-	 * Treat the given vector like a Vec2. Applies this as an affine transformation
-	 * to the given vector.
-	 *
-	 * @return the transformed vector.
-	 */
+	// Applies this as an affine transformation to the given vector.
+	// Returns a transformed version of [other].
 	public transformVec2(other: Vec3): Vec2 {
 		// When transforming a Vec2, we want to use the z transformation
 		// components of this for translation:
@@ -183,7 +176,8 @@ export default class Mat33 {
 		return Vec2.of(intermediate.x, intermediate.y);
 	}
 
-	/** @returns the right multiplication of this with other */
+	// Applies this as a linear transformation to the given vector (doesn't translate).
+	// This is the standard way of transforming vectors in ℝ³.
 	public transformVec3(other: Vec3): Vec3 {
 		return Vec3.of(
 			this.rows[0].dot(other),
@@ -192,7 +186,7 @@ export default class Mat33 {
 		);
 	}
 
-	/** @returns true iff this = other ± fuzz */
+	// Returns true iff this = other ± fuzz
 	public eq(other: Mat33, fuzz: number = 0): boolean {
 		for (let i = 0; i < 3; i++) {
 			if (!this.rows[i].eq(other.rows[i], fuzz)) {
@@ -211,12 +205,9 @@ export default class Mat33 {
 		`.trimRight();
 	}
 
-	/**
-	 * @return a 1D array where [0] corresponds to the
-	 * top-left element, [1] corresponds to the element
-	 * at [0,1] (row zero, column 1) and [5] corresponds
-	 * to the element at [1,2].
-	 */
+	// result[0] = top left element
+	// result[1] = element at row zero, column 1
+	// ...
 	public toArray(): number[] {
 		return [
 			this.a1, this.a2, this.a3,
@@ -225,10 +216,7 @@ export default class Mat33 {
 		];
 	}
 
-	/**
-	 * @return a 3x3 translation matrix. When transforming a Vec2,
-	 *    that Vec2 will be translated by [amount].
-	 */
+	// Constructs a 3x3 translation matrix (for translating Vec2s)
 	public static translation(amount: Vec2): Mat33 {
 		// When transforming Vec2s by a 3x3 matrix, we give the input
 		// Vec2s z = 1. As such,
@@ -241,10 +229,6 @@ export default class Mat33 {
 		);
 	}
 
-	/**
-	 * @return a rotation matrix that rotates [radians] about the
-	 *     z-axis.
-	 */
 	public static zRotation(radians: number, center: Point2 = Vec2.zero): Mat33 {
 		const cos = Math.cos(radians);
 		const sin = Math.sin(radians);
@@ -260,7 +244,6 @@ export default class Mat33 {
 		return result.rightMul(Mat33.translation(center.times(-1)));
 	}
 
-	/** @return a transform that scales X and Y by [amount] */
 	public static scaling2D(amount: number|Vec2, center: Point2 = Vec2.zero): Mat33 {
 		let result = Mat33.translation(center);
 		let xAmount, yAmount;

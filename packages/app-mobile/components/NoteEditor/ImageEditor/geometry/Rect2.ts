@@ -12,11 +12,7 @@ interface RectTemplate {
 	height?: number;
 }
 
-/**
- * Represents a rectangle.
- *
- * invariant: w > 0, h > 0.
- */
+// invariant: w > 0, h > 0.
 export default class Rect2 {
 	// Derived state:
 
@@ -71,13 +67,11 @@ export default class Rect2 {
 	}
 
 	public intersects(other: Rect2): boolean {
-		return this.intersection(other) != null;
+		return this.intersection(other) !== null;
 	}
 
-	/**
-	 * @return the overlap of this and [other], or null, if no such
-	 *         overlap exists
-	 */
+	// Returns the overlap of this and [other], or null, if no such
+	// /         overlap exists
 	public intersection(other: Rect2): Rect2|null {
 		const topLeft = this.topLeft.zip(other.topLeft, Math.max);
 		const bottomRight = this.bottomRight.zip(other.bottomRight, Math.min);
@@ -92,7 +86,7 @@ export default class Rect2 {
 		return Rect2.fromCorners(topLeft, bottomRight);
 	}
 
-	/** @return a new rectangle containing both [this] and [other]. */
+	// Returns a new rectangle containing both [this] and [other].
 	public union(other: Rect2): Rect2 {
 		const topLeft = this.topLeft.zip(other.topLeft, Math.min);
 		const bottomRight = this.bottomRight.zip(other.bottomRight, Math.max);
@@ -103,11 +97,9 @@ export default class Rect2 {
 		);
 	}
 
-	/**
-	 * @param margin The minimum distance between the new point and the edge
-	 *               of the resultant rectangle.
-	 * @return a new rectangle that contains this and the given point.
-	 */
+	// Returns a rectangle containing this and [point].
+	// [margin] is the minimum distance between the new point and the edge
+	// of the resultant rectangle.
 	public grownToPoint(point: Point2, margin: number = 0): Rect2 {
 		const otherRect = new Rect2(
 			point.x - margin, point.y - margin,
@@ -156,12 +148,8 @@ export default class Rect2 {
 		];
 	}
 
-	/**
-	 * @param affineTransform A transformation matrix to be interpreted as an affine
-	 *                        transformation.
-	 * @return the bounding box of this' four corners after transformed by
-	 *         the given affine transformation.
-	 */
+	// [affineTransform] is a transformation matrix that both scales and **translates**.
+	// the bounding box of this' four corners after transformed by the given affine transformation.
 	public transformedBoundingBox(affineTransform: Mat33): Rect2 {
 		return Rect2.bboxOf(this.corners.map(corner => affineTransform.transformVec2(corner)));
 	}
@@ -185,10 +173,8 @@ export default class Rect2 {
 		);
 	}
 
-	/**
-	 * @return a box that contains all points in [points] with at least
-	 *         [margin] between each point and the edge of the box.
-	 */
+	// Returns a box that contains all points in [points] with at least [margin]
+	// between each point and the edge of the box.
 	public static bboxOf(points: Point2[], margin: number = 0) {
 		let minX = 0;
 		let minY = 0;

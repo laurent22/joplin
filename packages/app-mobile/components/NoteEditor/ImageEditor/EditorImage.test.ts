@@ -5,7 +5,7 @@ import Stroke from './components/Stroke';
 import { Vec2 } from './geometry/Vec2';
 import Path, { PathCommandType } from './geometry/Path';
 import Color4 from './Color4';
-import ImageEditor from './editor';
+import SVGEditor from './SVGEditor';
 import { RenderingMode } from './Display';
 import DummyRenderer from './rendering/DummyRenderer';
 import { RenderingStyle } from './rendering/AbstractRenderer';
@@ -29,7 +29,7 @@ describe('EditorImage', () => {
 	const addTestStrokeCommand = new EditorImage.AddElementCommand(testStroke);
 
 	it('elements added to the image should be findable', () => {
-		const editor = new ImageEditor(document.body, RenderingMode.DummyRenderer);
+		const editor = new SVGEditor(document.body, RenderingMode.DummyRenderer);
 		const image = editor.image;
 
 		// We haven't activated the command, so testStroke's parent should be null.
@@ -39,7 +39,7 @@ describe('EditorImage', () => {
 	});
 
 	it('should render an element added to the image', () => {
-		const editor = new ImageEditor(document.body, RenderingMode.DummyRenderer);
+		const editor = new SVGEditor(document.body, RenderingMode.DummyRenderer);
 		const renderer = editor.display.getDryInkRenderer();
 		if (!(renderer instanceof DummyRenderer)) {
 			throw new Error('Wrong display type!');
@@ -56,7 +56,7 @@ describe('EditorImage', () => {
 	});
 
 	it('should have a 1-deep tree if two non-overlapping strokes are added', () => {
-		const editor = new ImageEditor(document.body, RenderingMode.DummyRenderer);
+		const editor = new SVGEditor(document.body, RenderingMode.DummyRenderer);
 		const image = editor.image;
 
 		const leftmostStroke = new Stroke([

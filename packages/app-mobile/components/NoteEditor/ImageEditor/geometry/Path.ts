@@ -311,7 +311,7 @@ export default class Path {
 
 	// Create a Path from a SVG path specification.
 	// TODO: Support a larger subset of SVG paths.
-	// TODO: Support h,v,s,t shorthands.
+	// TODO: Support s,t shorthands.
 	public static fromString(pathString: string): Path {
 		// See the MDN reference:
 		// https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d

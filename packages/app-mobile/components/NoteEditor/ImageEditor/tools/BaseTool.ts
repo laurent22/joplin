@@ -45,10 +45,8 @@ export default abstract class BaseTool implements PointerEvtListener {
 		return this.enabled;
 	}
 
-	/**
-	 * Connect this tool to a set of other tools, ensuring that at most one
-	 * of the tools in the group is enabled.
-	 */
+	// Connect this tool to a set of other tools, ensuring that at most one
+	// of the tools in the group is enabled.
 	public setToolGroup(group: ToolEnabledGroup) {
 		if (this.isEnabled()) {
 			group.notifyEnabled(this);

@@ -17,19 +17,13 @@ interface PinchData {
 }
 
 export enum PanZoomMode {
-	/**
-	 * Handle one-pointer gestures (touchscreen only unless AnyDevice is set)
-	 * @see AnyDevice
-	 */
+	// Handle one-pointer gestures (touchscreen only unless AnyDevice is set)
 	OneFingerGestures = 0x1,
 
-	/**
-	 * Handle two-pointer gestures (touchscreen only unless AnyDevice is set)
-	 * @see AnyDevice
-	 */
+	// Handle two-pointer gestures (touchscreen only unless AnyDevice is set)
 	TwoFingerGestures = 0x1 << 1,
 
-	/** Handle gestures from any device, rather than just touch */
+	// / Handle gestures from any device, rather than just touch
 	AnyDevice = 0x1 << 2,
 }
 
@@ -49,7 +43,7 @@ export default class PanZoom extends BaseTool {
 		}
 	}
 
-	/** @return information about the pointers in a gesture */
+	// Returns information about the pointers in a gesture
 	public computePinchData(p1: Pointer, p2: Pointer): PinchData {
 		const screenBetween = p2.screenPos.minus(p1.screenPos);
 		const angle = screenBetween.angle();
@@ -187,6 +181,7 @@ export default class PanZoom extends BaseTool {
 		let scale = 1;
 		let rotation = 0;
 
+		// Keyboard shortcut handling
 		switch (key) {
 		case 'a':
 		case 'h':
