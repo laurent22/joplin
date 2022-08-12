@@ -626,6 +626,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
 		// componentWillUnmount, but with React Native the impossible often becomes possible.
 		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
+
+		if (this.unsubscribeScreenWidthChangeHandler_) {
+			this.unsubscribeScreenWidthChangeHandler_.remove();
+			this.unsubscribeScreenWidthChangeHandler_ = null;
+		}
 	}
 
 	componentWillMount() {
