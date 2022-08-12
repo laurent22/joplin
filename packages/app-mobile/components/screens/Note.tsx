@@ -778,7 +778,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	};
 
-	private attachDrawing = async (svgData: string) => {
+	private async attachDrawing(svgData: string) {
 		this.setState({ showImageEditor: false });
 
 		let resource = this.state.imageEditorResource;
@@ -801,6 +801,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				name: _('Joplin Drawing'),
 			}, 'image');
 		}
+	}
+
+	private onSaveDrawing = async (svgData: string) => {
+		await this.attachDrawing(svgData);
+	};
+
+	private onCancelDrawing = () => {
+		this.setState({ showImageEditor: false });
 	};
 
 	private async editDrawing(filePath: string, item: BaseItem) {
@@ -1119,7 +1127,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <ImageEditor
 				initialSVGData={this.state.imageEditorData}
 				themeId={this.props.themeId}
-				onSave={this.attachDrawing}
+				onSave={this.onSaveDrawing}
+				onCancel={this.onCancelDrawing}
 			/>;
 		}
 

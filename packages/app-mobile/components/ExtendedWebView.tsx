@@ -16,6 +16,8 @@ import { StyleProp, ViewStyle } from 'react-native';
 
 
 export interface WebViewControl {
+	// Evaluate the given [script] in the context of the page.
+	// Unlike react-native-webview/WebView, this does not need to return true.
 	injectJS(script: string): void;
 }
 
@@ -25,7 +27,10 @@ type OnErrorCallback = (event: WebViewErrorEvent)=> void;
 interface Props {
 	themeId: number;
 	html: string;
+
+	// Initial javascript. Must evaluate to true.
 	injectedJavaScript: string;
+
 	style?: StyleProp<ViewStyle>;
 	onMessage: OnMessageCallback;
 	onError: OnErrorCallback;

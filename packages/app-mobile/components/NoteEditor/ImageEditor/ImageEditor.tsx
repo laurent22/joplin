@@ -3,17 +3,20 @@ import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView from '../../ExtendedWebView';
 import { EditorLocalization } from './types';
 
 type OnSaveCallback = (svgData: string)=> void;
+type OnCancelCallback = ()=> void;
 
 interface Props {
 	themeId: number;
 	initialSVGData: string;
 	onSave: OnSaveCallback;
+	onCancel: OnCancelCallback;
 }
 
 const useCss = (editorTheme: Theme) => {
@@ -34,7 +37,28 @@ const ImageEditor = (props: Props) => {
 	const editorTheme: Theme = themeStyle(props.themeId);
 	const webviewRef = useRef(null);
 
-	const css = useCss(editorTheme);
+	useEffect(() => {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			Alert.alert(
+				_('Save changes?'), _('This drawing may have unsaved changes.'), [
+					{
+						text: _('Discard changes'),
+						onPress: () => props.onCancel(),
+						style: 'destructive',
+					},
+					{
+						text: _('Save changes'),
+						onPress: () => {
+							// saveDrawing calls props.onSave(...) which may close the
+							// editor.
+							webviewRef.current.injectJS('saveDrawing();');
+						},
+					},
+				]
+			);
+			return true;
+		});
+	}, []);
 
 	const localization: EditorLocalization = {
 		pen: _('Pen'),
@@ -53,6 +77,7 @@ const ImageEditor = (props: Props) => {
 		imageEditor: _('Image Editor'),
 	};
 
+	const css = useCss(editorTheme);
 	const html = useMemo(() => `
 		<!DOCTYPE html>
 		<html>
@@ -72,6 +97,16 @@ const ImageEditor = (props: Props) => {
 		window.onerror = (message, source, lineno) => {
 			window.ReactNativeWebView.postMessage(
 				"error: " + message + " in file://" + source + ", line " + lineno
+			);
+		};
+
+		window.saveDrawing = () => {
+			const img = window.editor.toSVG();
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					action: 'save',
+					data: img.outerHTML
+				}),
 			);
 		};
 
@@ -96,13 +131,7 @@ const ImageEditor = (props: Props) => {
 
 				const toolbar = editor.addToolbar();
 				toolbar.addActionButton(${JSON.stringify(_('Done'))}, () => {
-					const img = editor.toSVG();
-					window.ReactNativeWebView.postMessage(
-						JSON.stringify({
-							action: 'save',
-							data: img.outerHTML
-						}),
-					);
+					saveDrawing();
 				});
 			}
 		} catch(e) {
