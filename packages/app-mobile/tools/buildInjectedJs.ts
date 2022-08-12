@@ -145,7 +145,7 @@ class BundledFile {
 	// Create a minified JS file in the same directory as `this.sourceFilePath` with
 	// the same name.
 	public build() {
-		const compiler = webpack(this.getWebpackOptions('production'));
+		const compiler = webpack(this.getWebpackOptions('development'));
 		return new Promise<void>((resolve, reject) => {
 			console.info(`Building bundle: ${this.bundleName}...`);
 
