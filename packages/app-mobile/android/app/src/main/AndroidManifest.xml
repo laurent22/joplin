@@ -58,6 +58,11 @@
 					This is recommended in the React docs: https://reactnavigation.org/docs/deep-linking. In practice, "singleTask" and "singleTop" are
 					largely similar, but "singleTask" is more strict in preventing multiple instances of the app from being created if another app
 					explicitly requests it.
+
+		2022-08-12: Added `screenLayout` and `smallestScreenSize` to `android:configChanges`.
+					This prevents the application from being re-constructed on
+					screen orientation change/window resizes on some devices.
+					See https://github.com/laurent22/joplin/pull/6737.
 		-->
 
 		<activity
