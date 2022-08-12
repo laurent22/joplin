@@ -6978,17 +6978,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.0.14":
-  version: 18.0.15
-  resolution: "@types/react@npm:18.0.15"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: e22cc388d1c145aa184787e44dc28db4789976c704cd5db475c170bb76a560eb81def5f346cfe750949bb3d43ad88822b8cbb9f19b1286e3795892a8263e7715
-  languageName: node
-  linkType: hard
-
 "@types/responselike@npm:*, @types/responselike@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/responselike@npm:1.0.0"
@@ -20004,33 +19993,6 @@ __metadata:
 "jest-circus@npm:^28.1.3":
   version: 28.1.3
   resolution: "jest-circus@npm:28.1.3"
-  dependencies:
-    "@jest/environment": ^28.1.3
-    "@jest/expect": ^28.1.3
-    "@jest/test-result": ^28.1.3
-    "@jest/types": ^28.1.3
-    "@types/node": "*"
-    chalk: ^4.0.0
-    co: ^4.6.0
-    dedent: ^0.7.0
-    is-generator-fn: ^2.0.0
-    jest-each: ^28.1.3
-    jest-matcher-utils: ^28.1.3
-    jest-message-util: ^28.1.3
-    jest-runtime: ^28.1.3
-    jest-snapshot: ^28.1.3
-    jest-util: ^28.1.3
-    p-limit: ^3.1.0
-    pretty-format: ^28.1.3
-    slash: ^3.0.0
-    stack-utils: ^2.0.3
-  checksum: b635e60a9c92adaefc3f24def8eba691e7c2fdcf6c9fa640cddf2eb8c8b26ee62eab73ebb88798fd7c52a74c1495a984e39b748429b610426f02e9d3d56e09b2
-  languageName: node
-  linkType: hard
-
-"jest-cli@npm:^26.6.3":
-  version: 26.6.3
-  resolution: "jest-cli@npm:26.6.3"
   dependencies:
     "@jest/environment": ^28.1.3
     "@jest/expect": ^28.1.3
