@@ -50,6 +50,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
 const Icon = require('react-native-vector-icons/Feather').default;
+import getResponsiveValue from '../getResponsiveValue';
 
 const emptyArray: any[] = [];
 
@@ -89,6 +90,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
+
+			notesBarWidth: this.getNotesBarWidth(),
 
 		};
 
@@ -243,7 +246,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 		this.onNotesBarToggle = this.onNotesBarToggle.bind(this);
-
+		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -284,6 +287,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 				note: newNote,
 			};
 		});
+	}
+
+	private getNotesBarWidth = () => {
+		const notesBarWidth = getResponsiveValue({
+			sm: 250,
+			md: 260,
+			lg: 270,
+			xl: 280,
+			xxl: 290,
+		});
+
+		return notesBarWidth;
+	};
+
+	private async handleScreenWidthChange_() {
+		console.log('Something\'s happening');
+		this.setState({ notesBarWidth: this.getNotesBarWidth() });
 	}
 
 	screenHeader_undoButtonPress() {
@@ -402,7 +422,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			position: 'relative',
 			left: this.notesBarPosition,
 			top: 0,
-			width: 250,
+			width: this.state.notesBarWidth,
 			height: '100%',
 		};
 
@@ -506,6 +526,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// been granted, the popup will open anyway.
 		void this.requestGeoLocationPermissions();
 
+		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 	}
 
 	private animateNotesBarOpen = () => {
@@ -527,7 +548,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			Animated.spring(
 				this.noteWidth,
 				{
-					toValue: Dimensions.get('window').width - 250,
+					toValue: Dimensions.get('window').width - this.state.notesBarWidth,
 					duration: 1500,
 				}
 			),
@@ -539,14 +560,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 			Animated.spring(
 				this.notesBarPosition,
 				{
-					toValue: -250,
+					toValue: -1 * this.state.notesBarWidth,
 					duration: 1500,
 				}
 			),
 			Animated.spring(
 				this.notePosition,
 				{
-					toValue: -250,
+					toValue: -1 * this.state.notesBarWidth,
 					duration: 1500,
 				}
 			),
@@ -611,8 +632,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.notePosition = new Animated.Value(0);
 			this.noteWidth = new Animated.Value(Dimensions.get('window').width - 250);
 		} else {
-			this.notesBarPosition = new Animated.Value(-250);
-			this.notePosition = new Animated.Value(-250);
+			this.notesBarPosition = new Animated.Value(-1 * this.state.notesBarWidth);
+			this.notePosition = new Animated.Value(-1 * this.state.notesBarWidth);
 			this.noteWidth = new Animated.Value(Dimensions.get('window').width);
 		}
 
