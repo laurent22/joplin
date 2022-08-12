@@ -86,6 +86,9 @@
 .toolbar-dropdown {
     position: absolute;
     padding: 15px;
+    padding-top: 5px;
+    /* Prevent overlap/being displayed under the undo/redo buttons */
+    z-index: 2;
     background-color: var(--primary-background-color);
     box-shadow: 0px 3px 3px var(--primary-foreground-color);
 }
