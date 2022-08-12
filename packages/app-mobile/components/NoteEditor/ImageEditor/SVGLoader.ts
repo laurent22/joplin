@@ -99,25 +99,6 @@ export default class SVGLoader implements ImageLoader {
 		this.onAddComponent?.(elem);
 	}
 
-	// TODO: Remove. This method migrates users from the older (and more verbose)
-	// <group class=joplin-stroke>...</group> syntax.
-	private addLegacyStroke(node: SVGGElement) {
-		const parts: RenderablePathSpec[] = [];
-		for (const child of node.children) {
-			if (child.tagName !== 'path') {
-				console.error(
-					'Encountered a node that is not a stroke:', node, '\nChecking child', child
-				);
-				throw new Error('node is not a stroke!');
-			}
-
-			parts.push(...this.strokeDataFromElem(child as SVGPathElement));
-		}
-
-		const stroke = new Stroke(parts);
-		this.onAddComponent?.(stroke);
-	}
-
 	private addUnknownNode(node: SVGElement) {
 		const component = new UnknownSVGObject(node);
 		this.onAddComponent?.(component);
@@ -145,12 +126,9 @@ export default class SVGLoader implements ImageLoader {
 	private async visit(node: Element) {
 		this.totalToProcess += node.childElementCount;
 
-		const legacyStrokeGroupClass = 'joplin-stroke';
 		switch (node.tagName.toLowerCase()) {
 		case 'g':
-			if (node.classList.contains(legacyStrokeGroupClass)) {
-				this.addLegacyStroke(node as SVGGElement);
-			}
+			// Continue -- visit the node's children.
 			break;
 		case 'path':
 			this.addPath(node as SVGPathElement);

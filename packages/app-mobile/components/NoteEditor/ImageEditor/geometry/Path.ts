@@ -321,7 +321,6 @@ export default class Path {
 		// Remove linebreaks
 		pathString = pathString.split('\n').join(' ');
 
-		// TODO: Check default initializer
 		let lastPos: Point2 = Vec2.zero;
 		let firstPos: Point2|null = null;
 		const commands: PathCommand[] = [];
@@ -401,8 +400,10 @@ export default class Path {
 				break;
 			case 'z':
 				expectedPointArgCount = 0;
-				lineTo(firstPos);
-				// TODO: Consider case where firstPos is null
+				// firstPos can be null if the stroke data is just 'z'.
+				if (firstPos) {
+					lineTo(firstPos);
+				}
 				break;
 			case 'c':
 				expectedPointArgCount = 3;

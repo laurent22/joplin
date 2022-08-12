@@ -27,8 +27,6 @@ export default class StrokeBuilder {
 
 	// Stroke smoothing and tangent approximation
 	private momentum: Vec2;
-
-
 	private bbox: Rect2;
 
 	public constructor(

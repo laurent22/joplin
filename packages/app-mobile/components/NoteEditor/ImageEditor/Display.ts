@@ -7,6 +7,7 @@ import DummyRenderer from './rendering/DummyRenderer';
 export enum RenderingMode {
 	DummyRenderer,
 	CanvasRenderer,
+	// SVGRenderer is not supported by the main display
 }
 
 export default class Display {
@@ -24,7 +25,6 @@ export default class Display {
 			this.dryInkRenderer = new DummyRenderer(editor.viewport);
 			this.wetInkRenderer = new DummyRenderer(editor.viewport);
 		}
-		// TODO: SVG case
 
 
 		this.editor.notifier.on(EditorEventType.DisplayResized, event => {
