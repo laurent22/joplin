@@ -1,5 +1,4 @@
 import Color4 from '../Color4';
-import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
@@ -18,18 +17,18 @@ export default class CanvasRenderer extends AbstractRenderer {
 		);
 	}
 
-	public clear(): void {
+	public clear() {
 		this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 	}
 
-	protected beginPath(startPoint: Point2): void {
+	protected beginPath(startPoint: Point2) {
 		startPoint = this.viewport.canvasToScreen(startPoint);
 
 		this.ctx.beginPath();
 		this.ctx.moveTo(startPoint.x, startPoint.y);
 	}
 
-	protected endPath(style: RenderingStyle): void {
+	protected endPath(style: RenderingStyle) {
 		this.ctx.fillStyle = style.fill.toHexString();
 		this.ctx.fill();
 
@@ -42,13 +41,17 @@ export default class CanvasRenderer extends AbstractRenderer {
 		this.ctx.closePath();
 	}
 
-	protected lineTo(point: Vec3): void {
+	protected lineTo(point: Point2) {
 		point = this.viewport.canvasToScreen(point);
-
 		this.ctx.lineTo(point.x, point.y);
 	}
 
-	protected traceCubicBezierCurve(p1: Point2, p2: Point2, p3: Point2): void {
+	protected moveTo(point: Point2) {
+		point = this.viewport.canvasToScreen(point);
+		this.ctx.moveTo(point.x, point.y);
+	}
+
+	protected traceCubicBezierCurve(p1: Point2, p2: Point2, p3: Point2) {
 		p1 = this.viewport.canvasToScreen(p1);
 		p2 = this.viewport.canvasToScreen(p2);
 		p3 = this.viewport.canvasToScreen(p3);
@@ -64,7 +67,7 @@ export default class CanvasRenderer extends AbstractRenderer {
 		}
 	}
 
-	protected traceQuadraticBezierCurve(controlPoint: Vec3, endPoint: Vec3): void {
+	protected traceQuadraticBezierCurve(controlPoint: Vec3, endPoint: Vec3) {
 		controlPoint = this.viewport.canvasToScreen(controlPoint);
 		endPoint = this.viewport.canvasToScreen(endPoint);
 
@@ -79,7 +82,7 @@ export default class CanvasRenderer extends AbstractRenderer {
 		}
 	}
 
-	public drawPoints(...points: Point2[]): void {
+	public drawPoints(...points: Point2[]) {
 		const pointRadius = 10;
 
 		for (let i = 0; i < points.length; i++) {
@@ -101,14 +104,5 @@ export default class CanvasRenderer extends AbstractRenderer {
 			this.ctx.fillStyle = 'black';
 			this.ctx.fillText(`${i}`, point.x, point.y, pointRadius * 2);
 		}
-	}
-
-	public startObject(_boundingBox: Rect2): void {
-		// Do nothing. TODO: Use this to optimize drawing (e.g. skip drawing if the box is
-		// small enough).
-	}
-
-	public endObject(): void {
-		// Do nothing
 	}
 }

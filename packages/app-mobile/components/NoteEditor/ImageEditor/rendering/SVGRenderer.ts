@@ -78,18 +78,23 @@ export default class SVGRenderer extends AbstractRenderer {
 		this.mainGroup.appendChild(pathElem);
 	}
 
-	public startObject(_boundingBox: Rect2): void {
+	public startObject(boundingBox: Rect2) {
+		super.startObject(boundingBox);
+
 		// Only accumulate a path within an object
 		this.lastPath = null;
 		this.lastPathStart = null;
 		this.lastPathStyle = null;
 	}
-	public endObject(): void {
+
+	public endObject() {
+		super.endObject();
+
 		// Don't extend paths across objects
 		this.addPathToSVG();
 	}
 
-	protected lineTo(point: Point2): void {
+	protected lineTo(point: Point2) {
 		point = this.viewport.canvasToScreen(point);
 
 		this.currentPath.push({
@@ -97,9 +102,19 @@ export default class SVGRenderer extends AbstractRenderer {
 			point,
 		});
 	}
+
+	protected moveTo(point: Point2) {
+		point = this.viewport.canvasToScreen(point);
+
+		this.currentPath.push({
+			kind: PathCommandType.MoveTo,
+			point,
+		});
+	}
+
 	protected traceCubicBezierCurve(
 		controlPoint1: Point2, controlPoint2: Point2, endPoint: Point2
-	): void {
+	) {
 		controlPoint1 = this.viewport.canvasToScreen(controlPoint1);
 		controlPoint2 = this.viewport.canvasToScreen(controlPoint2);
 		endPoint = this.viewport.canvasToScreen(endPoint);
@@ -111,7 +126,8 @@ export default class SVGRenderer extends AbstractRenderer {
 			endPoint,
 		});
 	}
-	protected traceQuadraticBezierCurve(controlPoint: Point2, endPoint: Point2): void {
+
+	protected traceQuadraticBezierCurve(controlPoint: Point2, endPoint: Point2) {
 		controlPoint = this.viewport.canvasToScreen(controlPoint);
 		endPoint = this.viewport.canvasToScreen(endPoint);
 

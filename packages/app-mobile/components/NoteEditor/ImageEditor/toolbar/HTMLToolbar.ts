@@ -419,7 +419,7 @@ class PenWidget extends ToolbarWidget {
 export default class HTMLToolbar {
 	private container: HTMLElement;
 
-	private static defaultStrings: ToolbarLocalization = {
+	public static defaultLocalization: ToolbarLocalization = {
 		pen: 'Pen',
 		eraser: 'Eraser',
 		select: 'Select',
@@ -433,7 +433,7 @@ export default class HTMLToolbar {
 
 	public constructor(
 		private editor: SVGEditor, parent: HTMLElement,
-		private localizationTable: ToolbarLocalization = HTMLToolbar.defaultStrings
+		private localizationTable: ToolbarLocalization = HTMLToolbar.defaultLocalization
 	) {
 		this.container = document.createElement('div');
 		this.container.classList.add(`${toolbarCSSPrefix}root`);

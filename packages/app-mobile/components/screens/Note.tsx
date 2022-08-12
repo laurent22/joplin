@@ -784,7 +784,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let resource = this.state.imageEditorResource;
 		const resourcePath = resource ? Resource.fullPath(resource) : null;
 
-		const filePath = resourcePath ?? `${Setting.value('resourceDir')}/saved-drawing.svg`;
+		const filePath = resourcePath ?? `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
 		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
 		console.info('Saved drawing to', filePath);
 
@@ -798,7 +798,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Otherwise, we're creating a new file
 			await this.attachFile({
 				uri: filePath,
-				name: _('A Drawing'),
+				name: _('Joplin Drawing'),
 			}, 'image');
 		}
 	};

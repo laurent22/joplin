@@ -1,7 +1,7 @@
 
 import EditorImage from './EditorImage';
 import ToolController from './tools/ToolController';
-import { InputEvtType, PointerEvt, EditorNotifier, EditorEventType, ImageLoader } from './types';
+import { InputEvtType, PointerEvt, EditorNotifier, EditorEventType, ImageLoader, EditorLocalization } from './types';
 import Command from './commands/Command';
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
@@ -17,7 +17,6 @@ import SVGLoader from './SVGLoader';
 import './SVGEditor.css';
 import Pointer from './Pointer';
 import Mat33 from './geometry/Mat33';
-import { ToolbarLocalization } from './toolbar/types';
 import Rect2 from './geometry/Rect2';
 
 export class SVGEditor {
@@ -32,6 +31,13 @@ export class SVGEditor {
 	// Viewport for the exported/imported image
 	private importExportViewport: Viewport;
 
+	// Default value for when testing:
+	private localization: EditorLocalization = {
+		...HTMLToolbar.defaultLocalization,
+		loading: 'Loading {}%...',
+		imageEditor: 'Image Editor',
+	};
+
 	public viewport: Viewport;
 	public toolController: ToolController;
 	public notifier: EditorNotifier;
@@ -41,12 +47,14 @@ export class SVGEditor {
 	public constructor(
 		parent: HTMLElement,
 		renderingMode: RenderingMode = RenderingMode.CanvasRenderer,
-		public readonly lightMode: boolean = true
+		public readonly lightMode: boolean = true,
+		localization?: EditorLocalization
 	) {
 		this.container = document.createElement('div');
 		this.renderingRegion = document.createElement('div');
 		this.container.appendChild(this.renderingRegion);
 		this.container.className = 'imageEditorContainer';
+		this.localization = localization ?? this.localization;
 
 		this.loadingWarning = document.createElement('div');
 		this.loadingWarning.classList.add('loadingMessage');
@@ -55,7 +63,7 @@ export class SVGEditor {
 		this.renderingRegion.style.touchAction = 'none';
 		this.renderingRegion.className = 'imageEditorRenderArea';
 		this.renderingRegion.setAttribute('tabIndex', '0');
-		this.renderingRegion.ariaLabel = 'Image editor'; // TODO: Localize/make more descriptive
+		this.renderingRegion.ariaLabel = this.localization.imageEditor;
 
 		this.notifier = new EventDispatcher();
 		this.importExportViewport = new Viewport(this.notifier);
@@ -81,7 +89,9 @@ export class SVGEditor {
 
 	public showLoadingWarning(fractionLoaded: number) {
 		const loadingPercent = Math.round(fractionLoaded * 100);
-		this.loadingWarning.innerText = `Loading... ${loadingPercent}%`; // TODO: Localize!
+		this.loadingWarning.innerText = this.localization.loading.replace(
+			'{}', loadingPercent.toString()
+		);
 		this.loadingWarning.style.display = 'block';
 	}
 
@@ -89,8 +99,8 @@ export class SVGEditor {
 		this.loadingWarning.style.display = 'none';
 	}
 
-	public addToolbar(localization?: ToolbarLocalization): HTMLToolbar {
-		return new HTMLToolbar(this, this.container, localization);
+	public addToolbar(): HTMLToolbar {
+		return new HTMLToolbar(this, this.container, this.localization);
 	}
 
 	private registerListeners() {

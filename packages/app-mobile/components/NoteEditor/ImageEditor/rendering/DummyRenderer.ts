@@ -26,7 +26,7 @@ export default class DummyRenderer extends AbstractRenderer {
 		return Vec2.of(640, 480);
 	}
 
-	public clear(): void {
+	public clear() {
 		this.clearedCount ++;
 		this.renderedPathCount = 0;
 		this.pointBuffer = [];
@@ -38,36 +38,43 @@ export default class DummyRenderer extends AbstractRenderer {
 			);
 		}
 	}
-	protected beginPath(startPoint: Vec3): void {
+	protected beginPath(startPoint: Vec3) {
 		this.lastPoint = startPoint;
 		this.pointBuffer.push(startPoint);
 	}
-	protected endPath(style: RenderingStyle): void {
+	protected endPath(style: RenderingStyle) {
 		this.renderedPathCount++;
 		this.lastFillStyle = style;
 	}
-	protected lineTo(point: Vec3): void {
+	protected lineTo(point: Vec3) {
 		this.lastPoint = point;
 		this.pointBuffer.push(point);
 	}
-	protected traceCubicBezierCurve(p1: Vec3, p2: Vec3, p3: Vec3): void {
+	protected moveTo(point: Point2) {
+		this.lastPoint = point;
+		this.pointBuffer.push(point);
+	}
+	protected traceCubicBezierCurve(p1: Vec3, p2: Vec3, p3: Vec3) {
 		this.lastPoint = p3;
 		this.pointBuffer.push(p1, p2, p3);
 	}
-	protected traceQuadraticBezierCurve(controlPoint: Vec3, endPoint: Vec3): void {
+	protected traceQuadraticBezierCurve(controlPoint: Vec3, endPoint: Vec3) {
 		this.lastPoint = endPoint;
 		this.pointBuffer.push(controlPoint, endPoint);
 	}
-	public drawPoints(..._points: Vec3[]): void {
+	public drawPoints(..._points: Vec3[]) {
 		// drawPoints is intended for debugging.
 		// As such, it is unlikely to be the target of automated tests.
 	}
 
-	public startObject(_boundingBox: Rect2): void {
-		// Ignore the start/end of different objects
+	public startObject(boundingBox: Rect2) {
+		super.startObject(boundingBox);
+
 		this.objectNestingLevel += 1;
 	}
-	public endObject(): void {
+	public endObject() {
+		super.endObject();
+
 		this.objectNestingLevel -= 1;
 	}
 }

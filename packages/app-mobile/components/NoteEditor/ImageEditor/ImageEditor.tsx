@@ -6,7 +6,7 @@ import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { useCallback, useMemo, useRef } from 'react';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView from '../../ExtendedWebView';
-import { ToolbarLocalization } from './toolbar/types';
+import { EditorLocalization } from './types';
 
 type OnSaveCallback = (svgData: string)=> void;
 
@@ -36,7 +36,7 @@ const ImageEditor = (props: Props) => {
 
 	const css = useCss(editorTheme);
 
-	const localization: ToolbarLocalization = {
+	const localization: EditorLocalization = {
 		pen: _('Pen'),
 		eraser: _('Eraser'),
 		select: _('Select'),
@@ -46,6 +46,11 @@ const ImageEditor = (props: Props) => {
 		resizeImageToSelection: _('Resize image to selection'),
 		undo: _('Undo'),
 		redo: _('Redo'),
+
+		// {} is used instead of %d here because formatting is being done within
+		// the injected JS.
+		loading: _('Loading {}%%...'),
+		imageEditor: _('Image Editor'),
 	};
 
 	const html = useMemo(() => `
@@ -76,8 +81,12 @@ const ImageEditor = (props: Props) => {
 
 				window.editor = new svgEditorBundle.SVGEditor(
 					document.body,
+
+					// Use the default rendering mode -- we can't access it while bundled
 					undefined,
+
 					${editorTheme.appearance === ThemeAppearance.Light},
+					${JSON.stringify(localization)},
 				);
 
 				window.initialSVGData = ${JSON.stringify(props.initialSVGData)};
@@ -85,7 +94,7 @@ const ImageEditor = (props: Props) => {
 					editor.loadFromSVG(initialSVGData);
 				}
 
-				const toolbar = editor.addToolbar(${JSON.stringify(localization)});
+				const toolbar = editor.addToolbar();
 				toolbar.addActionButton(${JSON.stringify(_('Done'))}, () => {
 					const img = editor.toSVG();
 					window.ReactNativeWebView.postMessage(
