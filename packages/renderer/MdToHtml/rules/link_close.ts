@@ -9,13 +9,15 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		return self.renderToken(tokens, idx, options);
 	};
 
+	const linkIndexes: any = {};
+
 	markdownIt.renderer.rules.link_close = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 		const defaultOutput = defaultRender(tokens, idx, options, env, self);
 		const link = ruleOptions.context.currentLinks.pop();
 
 		if (!link || ruleOptions.linkRenderingType === 2 || ruleOptions.plainResourceRendering) return defaultOutput;
 
-		return [defaultOutput, renderMedia(link, ruleOptions as RenderMediaOptions)].join('');
+		return [defaultOutput, renderMedia(link, ruleOptions as RenderMediaOptions, linkIndexes)].join('');
 	};
 }
 

@@ -75,6 +75,7 @@ export interface NoteBodyEditorProps {
 	fontSize: number;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
+	mediaParentId: string;
 }
 
 export interface FormNote {

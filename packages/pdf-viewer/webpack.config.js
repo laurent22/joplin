@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		main: './miniViewer.tsx',
+		main: './main.tsx',
 		'pdf.worker': 'pdfjs-dist/build/pdf.worker.entry',
 	},
 	module: {
