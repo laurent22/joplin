@@ -170,7 +170,7 @@ class BundledFile {
 	}
 
 	public startWatching() {
-		const compiler = webpack(this.getWebpackOptions('development'));
+		const compiler = webpack(this.getWebpackOptions('production'));
 		const watchOptions = {
 			ignored: '**/node_modules',
 		};
