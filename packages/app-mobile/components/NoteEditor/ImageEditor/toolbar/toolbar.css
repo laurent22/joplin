@@ -51,9 +51,13 @@
     box-shadow: 0px 2px 4px var(--primary-foreground-color);
 }
 
+.toolbar-root button {
+    height: auto;
+}
+
 .toolbar-root button:disabled {
     cursor: inherit;
-    opacity: 0.5;
+    filter: opacity(0.5);
 }
 
 .toolbar-button .toolbar-icon {
