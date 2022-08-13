@@ -12,6 +12,7 @@ import htmlUtils from '../../htmlUtils';
 import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
+import { isAbsolute } from 'path';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	private importedNotes: Record<string, NoteEntity> = {};
@@ -103,7 +104,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			const link = decodeURI(encodedLink);
 			// Handle anchor links appropriately
 			const trimmedLink = this.trimAnchorLink(link);
-			const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
+			const attachmentPath = filename(isAbsolute(trimmedLink) ? trimmedLink : `${dirname(filePath)}/${trimmedLink}`, true);
 			const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
 			const stat = await shim.fsDriver().stat(pathWithExtension);
 			const isDir = stat ? stat.isDirectory() : false;
