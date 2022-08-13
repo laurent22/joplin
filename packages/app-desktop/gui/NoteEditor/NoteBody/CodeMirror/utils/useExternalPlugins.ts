@@ -7,6 +7,8 @@ import uuid from '@joplin/lib/uuid';
 
 import { reg } from '@joplin/lib/registry';
 
+const loadedPluginIdSet = new Set<string>();
+
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
 
 	const [options, setOptions] = useState({});
@@ -17,6 +19,10 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 
 		for (const contentScript of contentScripts) {
 			try {
+				if (loadedPluginIdSet.has(contentScript.id)) {
+					continue;
+				}
+
 				const mod = contentScript.module;
 
 				if (mod.codeMirrorResources) {
@@ -64,6 +70,8 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 				if (mod.plugin) {
 					mod.plugin(CodeMirror);
 				}
+
+				loadedPluginIdSet.add(contentScript.id);
 			} catch (error) {
 				reg.logger().error(error.toString());
 			}
