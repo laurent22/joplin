@@ -57,3 +57,28 @@ If there is an error `/joplin/packages/app-mobile/ios/Pods/Target Support Files/
     cd ios
     pod deintegrate
     pod install
+
+## Android
+
+If you run the self-built app without connecting to PC, you might get error messages like this when opening the app:
+
+```
+Unable to load script. Make sure you're either running Metro (run 'npx react-native start') or that your bundle 'index.android.bundle' is packaged correctly for release.
+``` 
+
+When the app is built in Debug mode, it will attempt to connect to the Metro on the PC. To disable this, you need to package the bundle file in the APK. Here are the steps:
+
+```
+# Assuming that you are at the root of the repository
+cd packages/app-mobile/android
+./gradlew clean
+mkdir app/src/main/assets
+npx react-native bundle --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+./gradlew assembleDebug -x bundleDebugJsAndAssets
+```
+
+Then you will get app-debug.apk in 
+
+```
+packages/app-mobile/android/app/build/outputs/apk/debug/
+```
