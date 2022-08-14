@@ -1,37 +1,45 @@
-import { TestApp } from '@joplin/lib/testing/test-utils.js';
-// import uuid from '@joplin/lib/uuid';
-// import Folder from '@joplin/lib/models/Folder';
-// import execCommand2 from '@joplin/tools/tool-utils';
+import { execCommand2 } from '@joplin/tools/tool-utils';
+import { homedir } from 'os';
+import * as fsE from 'fs-extra';
+
+const profileDir = `${homedir()}/.config/joplindev-populate/joplindev-testing-command-mkbook`;
+
+// eC2W is an wrapper for execCommand2
+const eC2W = async (command: string) => {
+	await execCommand2(`yarn start-no-build --profile ${profileDir} ${command}`, { quiet: true });
+};
 
 describe('CreateSubNotebook', function() {
-	let testApp: any;
 
-	beforeEach(async (done) => {
-		testApp = new TestApp();
-		await testApp.start(['--no-welcome']);
-		done();
-	});
-
-	afterEach(async (done) => {
-		if (testApp) await testApp.destroy();
-		testApp = null;
-		done();
-	});
-
-	it('Create notebook', (async () => {
-		// const folders = await createNTestFolders(1);
-		// await testApp.wait();
-		// const notes0 = await createNTestNotes(0, folders[0]);
-		// const notes1 = await createNTestNotes(1, folders[1]);
-		// console.log(notes0);
-		// console.log(notes1);
-		// await testApp.wait();
+	test('Create notebooks', (async () => {
+		await eC2W('mkbook test1');
+		await eC2W('mkbook test2');
 	}));
 
-	it('Create sub-notebook', (async () => {}));
+	test('Create sub-notebook', (async () => {
+		await eC2W('use test1');
+		await eC2W('mkbook -s test1.1');
+	}));
 
-	it('Create sub-notebook in target notebook', (async () => {}));
+	test('Create sub-notebook in target notebook', (async () => {
+		await eC2W('mkbook -s test2.1 test2');
+	}));
 
-	it('Create sub-notebook in target ambiguous notebook', (async () => {}));
+	test('Fail create sub-notebook in ambiguous notebook', (async () => {
+		await eC2W('mkbook test3');
+		await eC2W('mkbook test3');	// ambiguous notebook
+		await eC2W('use test3');
+		await eC2W('mkbook -s test3.1');
+
+		try {
+			await eC2W('mkbook -s test3.2 test3');
+			throw new Error('Ambiguous notebooks, it should not work!');
+		} catch (e) {
+			expect(e.message).toContain('Error:');
+		}
+	}));
+
+	fsE.removeSync(profileDir);
 
 });
+
