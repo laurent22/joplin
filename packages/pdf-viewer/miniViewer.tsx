@@ -1,30 +1,21 @@
 import React, { useRef, useState } from 'react';
-import shim from '@joplin/lib/shim';
-shim.setReact(React);
-import { render } from 'react-dom';
-import * as pdfjsLib from 'pdfjs-dist';
 import useIsFocused from './hooks/useIsFocused';
-import { PdfData } from './pdfSource';
+import usePdfData from './hooks/usePdfData';
 import VerticalPages from './VerticalPages';
-import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-
-require('./viewer.css');
-
-// Setting worker path to worker bundle.
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 
 
-function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; anchorPage: number }) {
-	const [pdf, setPdf] = useState<PdfData>(null);
+export interface MiniViewerAppProps {
+	pdfPath: string;
+	isDarkTheme: boolean;
+	anchorPage: number;
+	pdfId: string;
+}
+
+export default function MiniViewerApp(props: MiniViewerAppProps) {
+	const pdf = usePdfData(props.pdfPath);
+	const [activePage, setActivePage] = useState(1);
 	const isFocused = useIsFocused();
 	const containerEl = useRef<HTMLDivElement>(null);
-
-	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const pdfData = new PdfData();
-		await pdfData.loadDoc(props.pdfPath);
-		if (event.cancelled) return;
-		setPdf(pdfData);
-	}, []);
 
 	if (!pdf) {
 		return (
@@ -33,28 +24,28 @@ function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; anchorPag
 			</div>);
 	}
 
+	const onActivePageChange = (page: number) => {
+		setActivePage(page);
+	};
+
 	return (
 		<div className={`mini-app${isFocused ? ' focused' : ''}`}>
 			<div className={`app-pages${isFocused ? ' focused' : ''}`} ref={containerEl}>
-				<VerticalPages pdf={pdf} isDarkTheme={props.isDarkTheme} anchorPage={props.anchorPage} container={containerEl} />
+				<VerticalPages pdf={pdf} isDarkTheme={props.isDarkTheme} anchorPage={props.anchorPage}
+					onActivePageChange={onActivePageChange} container={containerEl} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>
-					{pdf.pageCount} pages
+					<div style={{ paddingRight: '0.4rem' }}>{activePage}/{pdf.pageCount} pages</div>
+					<a onClick={pdf?.printPdf}>
+						Print
+					</a>
+					<a onClick={pdf?.downloadPdf}>
+						Download
+					</a>
 				</div>
 				<div>{isFocused ? '' : 'Click to enable scroll'}</div>
 			</div>
 		</div>
 	);
 }
-
-const url = window.frameElement.getAttribute('url');
-const appearance = window.frameElement.getAttribute('appearance');
-const anchorPage = window.frameElement.getAttribute('anchorPage');
-
-document.documentElement.setAttribute('data-theme', appearance);
-
-render(
-	<MiniViewerApp pdfPath={url} isDarkTheme={appearance === 'dark'} anchorPage={anchorPage ? Number(anchorPage) : null} />,
-	document.getElementById('pdf-root')
-);

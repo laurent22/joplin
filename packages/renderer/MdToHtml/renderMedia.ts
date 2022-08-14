@@ -50,8 +50,9 @@ export default function(link: Link, options: Options) {
 				anchorPageNo = Number(link.href.split('#').pop());
 				if (anchorPageNo < 1) anchorPageNo = null;
 			}
-			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" url="${escapedResourcePath}" 
-			appearance="${options.theme.appearance}" ${anchorPageNo ? `anchorPage="${anchorPageNo}"` : ''}
+			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" x-url="${escapedResourcePath}" 
+			x-appearance="${options.theme.appearance}" ${anchorPageNo ? `x-anchorPage="${anchorPageNo}"` : ''}
+			x-type="mini"
 		 class="media-player media-pdf"></iframe>`;
 		}
 		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;
