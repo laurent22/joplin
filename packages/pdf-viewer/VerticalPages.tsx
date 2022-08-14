@@ -65,17 +65,6 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		};
 
 		window.addEventListener('resize', onResize);
-		_updateSize()
-			.then(() => {
-				if (props.rememberScroll && props.pdfId) {
-					const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${props.pdfId}.scrollTop`), 10) || null;
-					if (scrollOffset && !props.anchorPage) {
-						props.container.current.scrollTop = scrollOffset;
-						// console.log('scroll set',props.container.current.scrollTop);
-					}
-				}
-			})
-			.catch(console.error);
 
 		return () => {
 			cancelled = true;
@@ -85,7 +74,24 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, []);
+	}, [props.pdf]);
+
+
+	useLayoutEffect(() => {
+		const _updateSize = async () => {
+			await updateSize();
+			if (props.rememberScroll && props.pdfId) {
+				const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${props.pdfId}.scrollTop`), 10) || null;
+				if (scrollOffset && !props.anchorPage) {
+					props.container.current.scrollTop = scrollOffset;
+					// console.log('scroll set',props.container.current.scrollTop);
+				}
+			}
+		};
+
+		_updateSize()
+			.catch(console.error);
+	}, [props.pdf, props.pdfId, props.rememberScroll, props.anchorPage]);
 
 
 	useEffect(() => {
@@ -116,7 +122,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 			}
 		};
 
-	}, []);
+	}, [props.pdfId, props.rememberScroll]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {

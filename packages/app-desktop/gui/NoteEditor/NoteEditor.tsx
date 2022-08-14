@@ -415,7 +415,7 @@ function NoteEditor(props: NoteEditorProps) {
 		isSafeMode: props.isSafeMode,
 		// We need it to identify the context for which media is rendered.
 		// It is currently used to remember pdf scroll position for each attacments of each note uniquely.
-		mediaParentId: props.noteId,
+		noteId: props.noteId,
 	};
 
 	let editor = null;

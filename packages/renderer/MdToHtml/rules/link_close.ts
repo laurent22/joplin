@@ -4,12 +4,17 @@
 import { RuleOptions } from '../../MdToHtml';
 import renderMedia, { Options as RenderMediaOptions } from '../renderMedia';
 
+
+export interface LinkIndexesType {
+	[key: string]: number;
+}
+
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.link_close || function(tokens: any, idx: any, options: any, _env: any, self: any) {
 		return self.renderToken(tokens, idx, options);
 	};
 
-	const linkIndexes: any = {};
+	const linkIndexes: LinkIndexesType = {};
 
 	markdownIt.renderer.rules.link_close = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 		const defaultOutput = defaultRender(tokens, idx, options, env, self);

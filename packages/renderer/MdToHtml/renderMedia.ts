@@ -1,5 +1,6 @@
 import { Link } from '../MdToHtml';
 import { toForwardSlashes } from '../pathUtils';
+import { LinkIndexesType } from './rules/link_close';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -8,7 +9,7 @@ export interface Options {
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
 	useCustomPdfViewer: boolean;
-	mediaParentId: string;
+	noteId: string;
 	theme: any;
 }
 
@@ -17,7 +18,7 @@ function resourceUrl(resourceFullPath: string): string {
 	return `file://${toForwardSlashes(resourceFullPath)}`;
 }
 
-export default function(link: Link, options: Options, linkIndexes: any) {
+export default function(link: Link, options: Options, linkIndexes: LinkIndexesType) {
 	const resource = link.resource;
 
 	if (!link.resourceReady || !resource || !resource.mime) return '';
@@ -48,7 +49,7 @@ export default function(link: Link, options: Options, linkIndexes: any) {
 		if (options.useCustomPdfViewer) {
 			const resourceId = resource.id;
 			let anchorPageNo = null;
-			let id = `${options.mediaParentId}.${resourceId}`;
+			let id = `${options.noteId}.${resourceId}`;
 			if (linkIndexes && linkIndexes[resourceId]) {
 				linkIndexes[resourceId]++;
 			} else {
