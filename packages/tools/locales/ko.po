@@ -33,8 +33,8 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합"
-"니다."
+"- 저장소: 노트에 파일을 첨부하고 파일시스템 동기화를 활성화하기 위해 필요합니"
+"다."
 
 #: packages/lib/services/KeymapService.ts:314
 #: packages/lib/services/KeymapService.ts:320
@@ -226,7 +226,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid "Accept"
-msgstr "확인"
+msgstr "허용"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -363,7 +363,7 @@ msgstr "첨부 충돌: \"%s\""
 
 #: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
-msgstr "첨부파일 다운로드 방식"
+msgstr "첨부 내려받기 방식"
 
 #: packages/lib/services/ReportService.ts:233
 msgid "Attachments"
@@ -371,7 +371,7 @@ msgstr "첨부"
 
 #: packages/lib/services/ReportService.ts:257
 msgid "Attachments that could not be downloaded"
-msgstr "첨부 파일을 다운로드할 수 없습니다: %s"
+msgstr "첨부 파일을 내려받을 수 없습니다: %s"
 
 #: packages/lib/models/Setting.ts:374
 msgid ""
@@ -1042,7 +1042,7 @@ msgstr "줄 삭제"
 
 #: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
-msgstr "로컬 데이터를 지우고 동기화 서버의 데이터를 받아오기"
+msgstr "로컬 데이터를 지우고 동기화 대상의 데이터를 다시 내려받기"
 
 #: packages/lib/models/Note.ts:765
 msgid "Delete note \"%s\"?"
@@ -1086,8 +1086,8 @@ msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
-"초대하신 분을 제거하시겠습니까? 제거하게 된다면 더 이상 공유 노트북에 접근할"
-"수 없게 됩니다."
+"이 초대를 제거하시겠어요? 이 초대를 받았던 공유 수신자는 더 이상 공유 노트북"
+"에 접근할 수 없게 됩니다."
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1158,8 +1158,8 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 "
-"않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
+"암호화를 해제하게 되면 모든 노트와 첨부들이 다시 동기화되며, 암호화 되지 않"
+"은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
 #: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Discard changes"
@@ -1175,7 +1175,7 @@ msgstr "노트 위치 URL을 표시합니다."
 
 #: packages/app-cli/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
-msgstr "맨 처음 <num> 노트만 표시합니다."
+msgstr "맨 처음 <num>개의 노트만 표시합니다."
 
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
@@ -1234,32 +1234,32 @@ msgstr ""
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
-msgstr "다운로드"
+msgstr "내려받기"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid "Download and install the relevant extension for your browser:"
-msgstr "브라우저에 맞는 확장 기능을 다운로드 및 설치하세요:"
+msgstr "브라우저에 맞는 확장 기능을 내려받아 설치하세요:"
 
 #: packages/lib/models/Resource.ts:355
 msgid "Downloaded"
-msgstr "다운로드됨"
+msgstr "내려받음"
 
 #: packages/lib/services/ReportService.ts:242
 msgid "Downloaded and decrypted"
-msgstr "다운로드 및 복호화됨"
+msgstr "내려받기 및 복호화됨"
 
 #: packages/lib/services/ReportService.ts:243
 msgid "Downloaded and encrypted"
-msgstr "다운로드 및 암호화됨"
+msgstr "내려받기 및 암호화됨"
 
 #: packages/lib/models/Resource.ts:354
 msgid "Downloading"
-msgstr "다운로드 중"
+msgstr "내려받는 중"
 
 #: packages/app-cli/app/command-sync.ts:236
 msgid "Downloading resources..."
-msgstr "리소스 다운로드 중..."
+msgstr "리소스 내려받는 중..."
 
 #: packages/lib/models/Setting.ts:384
 msgid "Dracula"
@@ -1476,7 +1476,7 @@ msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
-"암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로암"
+"암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암"
 "호화되어 전송됩니다."
 
 #: packages/lib/models/BaseItem.ts:808
@@ -1587,7 +1587,7 @@ msgstr "모두 내보내기"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:178
 msgid "Export debug report"
-msgstr "디버깅 보고서 내보내기"
+msgstr "디버그 보고서 내보내기"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:518
 msgid "Export Debug Report"
@@ -1878,9 +1878,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"\"수동\" 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, \"자동\" 모드에서는 "
-"노트를 열 때만 다운로드됩니다. \"항상\" 모드에서는 노트를 열지 않아도 첨부 파"
-"일이 다운로드됩니다."
+"\"수동\" 모드에서, 첨부 대상을 클릭했을 때 내려받으며, \"자동\" 모드에서는 노"
+"트를 열 때 내려받습니다. \"항상\" 모드에서는 노트를 열지 않아도 첨부를 내려받"
+"습니다."
 
 #: packages/app-cli/app/command-help.js:77
 msgid ""
@@ -2028,7 +2028,7 @@ msgstr "기울임"
 
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "\"%s\" 항목 다운로드 할 수 없습니다: %s"
+msgstr "\"%s\" 항목을 내려받을 수 없습니다: %s"
 
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:273
@@ -2057,7 +2057,7 @@ msgstr "Joplin 클라우드"
 
 #: packages/lib/models/Setting.ts:684
 msgid "Joplin Cloud email"
-msgstr "Joplin 클라우드 email"
+msgstr "Joplin 클라우드 전자우편"
 
 #: packages/lib/models/Setting.ts:695
 msgid "Joplin Cloud password"
@@ -2093,7 +2093,7 @@ msgstr "Joplin 서버"
 
 #: packages/lib/models/Setting.ts:645
 msgid "Joplin Server email"
-msgstr "Joplin 서버 email"
+msgstr "Joplin 서버 전자우편"
 
 #: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
@@ -2499,7 +2499,7 @@ msgstr "%s과 인증되지 않았습니다. 증명서를 제공해주세요."
 
 #: packages/lib/models/Resource.ts:353
 msgid "Not downloaded"
-msgstr "다운로드 안됨"
+msgstr "내려받지 않았음"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Not generated"
@@ -2521,11 +2521,11 @@ msgstr "노트 영역 증가 인수"
 
 #: packages/app-desktop/gui/Root.tsx:221
 msgid "Note attachments"
-msgstr "노트 첨부"
+msgstr "첨부 파일"
 
 #: packages/app-desktop/gui/MenuBar.tsx:460
 msgid "Note attachments..."
-msgstr "첨부파일..."
+msgstr "첨부 파일..."
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:6
 msgid "Note body"
@@ -2576,7 +2576,7 @@ msgstr "참고: 공유된 노트는 서버에서 암호화될 수 없습니다."
 
 #: packages/app-desktop/gui/MenuBar.tsx:750
 msgid "Note&book"
-msgstr "노트북(&B)"
+msgstr "노트북(&b)"
 
 #: packages/lib/models/Setting.ts:2299
 msgid "Notebook"
@@ -2833,8 +2833,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"모든 첨부 파일들이 다운로드 및 복호화될 때까지 기다려주세요. %s를 통해 이 노"
-"트를 편집하도록 전환할 수 있습니다."
+"모든 첨부 파일들을 내려받아서 복호화할 때까지 기다려주세요. %s를 통해 이 노트"
+"를 편집하도록 전환할 수 있습니다."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:120
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
@@ -2970,7 +2970,7 @@ msgstr "다시 암호화"
 
 #: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
-msgstr "동기화 서버에 로컬 데이터 재 업로드"
+msgstr "로컬 데이터를 동기화 대상에 다시 업로드"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
@@ -3325,7 +3325,7 @@ msgstr "크기"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Skip this version"
-msgstr "이 버전 넘기기"
+msgstr "이 버전 건너뛰기"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
@@ -3687,7 +3687,7 @@ msgstr "변경 사항이 적용되려면 애플리케이션이 반드시 재시�
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr "다른 노트로 전환하면 첨부 파일이 더 이상 감시되지 않습니다."
+msgstr "다른 노트로 전환하면 첨부 파일들이 더 이상 감시되지 않습니다."
 
 #: packages/app-cli/app/app.js:304
 msgid "The command \"%s\" is only available in GUI mode"
@@ -3766,8 +3766,8 @@ msgid ""
 "eventually be downloaded via synchronisation."
 msgstr ""
 "이 ID와 연관된 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플리케이"
-"션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드될 가능"
-"성이 있습니다."
+"션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 내려받을 가능성"
+"이 있습니다."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
@@ -3780,8 +3780,8 @@ msgid ""
 "they will eventually be downloaded via synchronisation."
 msgstr ""
 "이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플"
-"리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드"
-"될 가능성이 있습니다."
+"리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 내려받을 "
+"가능성이 있습니다."
 
 #: packages/lib/services/RevisionService.ts:267
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -3873,13 +3873,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"아래의 첨부에서 [충돌](%s)이 발생했습니다.\n"
+"아래의 첨부 파일에서 [충돌](%s)이 발생했습니다.\n"
 "\n"
 "%s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:43
 msgid "There was an error downloading this attachment:"
-msgstr "첨부 파일을 내려 받는 중에 오류가 발생했습니다:"
+msgstr "첨부 파일을 내려받는 중에 오류가 발생했습니다:"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:224
 msgid ""
@@ -3923,11 +3923,11 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:45
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "이 첨부 파일은 아직 다운로드 또는 복호화되지 않았습니다"
+msgstr "이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다"
 
 #: packages/app-mobile/components/screens/Note.tsx:187
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "이 첨부는 아직 다운로드 또는 복호화되지 않았습니다."
+msgstr "이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:155
@@ -4183,7 +4183,7 @@ msgstr "알 수 없는 플래그: %s"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"알려지지 않은 타입이 다운로드되었습니다 - Joplin을 최신 버전으로 업데이트 해"
+"알 수 없는 항목 유형을 내려받았습니다 - Joplin을 최신 버전으로 업그레이드 해"
 "주세요"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:164
@@ -4192,15 +4192,15 @@ msgstr "노트 발행 취소"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:153
 msgid "Unshare"
-msgstr "공유하지 않기"
+msgstr "공유 해제"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:327
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
-"현재 노트북을 공유하지 많으시겠습니까? 공유자는 더 이상 해당 노트북에 접근이 "
-"불가능합니다."
+"이 노트북의 공유를 해제하시겠어요? 공유 수신자들은 더 이상 해당 노트북에 접근"
+"할 수 없게 됩니다."
 
 #: packages/app-mobile/components/screens/Note.tsx:684
 msgid "Unsupported image type: %s"
