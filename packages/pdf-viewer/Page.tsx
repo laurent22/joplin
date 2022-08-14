@@ -1,9 +1,38 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MutableRefObject } from 'react';
+import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
 import { PdfData, ScaledSize } from './pdfSource';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
+import styled from 'styled-components';
 
-require('./pages.css');
+const PageWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	border: solid thin rgba(120, 120, 120, 0.498);
+	background: rgb(233, 233, 233);
+	position: relative;
+	border-radius: 0px;
+`;
+
+const PageInfo = styled.div`
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	padding: 0.3rem;
+	background: rgba(203, 203, 203, 0.509);
+	border-radius: 0.3rem;
+	font-size: 0.8rem;
+	color: rgba(91, 91, 91, 0.829);
+	backdrop-filter: blur(0.5rem);
+	cursor: default;
+	user-select: none;
+	&:hover{
+        opacity: 0.3;
+    }
+`;
 
 export interface PageProps {
 	pdf: PdfData;
@@ -12,7 +41,8 @@ export interface PageProps {
 	isAnchored: boolean;
 	scaledSize: ScaledSize;
 	isDarkTheme: boolean;
-	container: React.MutableRefObject<HTMLElement>;
+	container: MutableRefObject<HTMLElement>;
+	showPageNumbers?: boolean;
 }
 
 
@@ -85,16 +115,14 @@ export default function Page(props: PageProps) {
 	}
 
 	return (
-		<div className="page-wrapper" ref={wrapperRef} style={style}>
+		<PageWrapper ref={wrapperRef} style={style}>
 			<canvas ref={canvasRef} className="page-canvas" style={style}>
 				<div>
 					{error ? 'ERROR' : 'Loading..'}
 				</div>
 				Page {props.pageNo}
 			</canvas>
-			<div className="page-info">
-				{props.isAnchored ? '📌' : ''} Page {props.pageNo}
-			</div>
-		</div>
+			{props.showPageNumbers && <PageInfo>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
+		</PageWrapper>
 	);
 }

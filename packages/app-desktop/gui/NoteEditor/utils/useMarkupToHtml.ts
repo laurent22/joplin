@@ -21,6 +21,7 @@ export interface MarkupToHtmlOptions {
 	bodyOnly?: boolean;
 	mapsToLine?: boolean;
 	useCustomPdfViewer?: boolean;
+	mediaParentId?: string;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
