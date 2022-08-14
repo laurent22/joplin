@@ -1,30 +1,40 @@
 import React, { useRef, useState } from 'react';
-import shim from '@joplin/lib/shim';
-shim.setReact(React);
-import { render } from 'react-dom';
-import * as pdfjsLib from 'pdfjs-dist';
 import useIsFocused from './hooks/useIsFocused';
-import { PdfData } from './pdfSource';
+import usePdfData from './hooks/usePdfData';
 import VerticalPages from './VerticalPages';
-import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
+import styled from 'styled-components';
 
-require('./viewer.css');
+const ZoomButton = styled.a`
+	font-size: 1rem;
+	cursor: pointer;
+	color:  var(--blue);
+	font-weight: 200;
+	padding: 0px 0.2rem;
+`;
 
-// Setting worker path to worker bundle.
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
+const ZoomGroup = styled.a`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: row;
+	color: var(--grey);
+	height: 1.4rem;
+	cursor: initial !important;
+`;
 
 
-function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; anchorPage: number }) {
-	const [pdf, setPdf] = useState<PdfData>(null);
+export interface MiniViewerAppProps {
+	pdfPath: string;
+	isDarkTheme: boolean;
+	anchorPage: number;
+	pdfId: string;
+}
+
+export default function MiniViewerApp(props: MiniViewerAppProps) {
+	const pdf = usePdfData(props.pdfPath);
 	const isFocused = useIsFocused();
+	const [zoom, setZoom] = useState<number>(1);
 	const containerEl = useRef<HTMLDivElement>(null);
-
-	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const pdfData = new PdfData();
-		await pdfData.loadDoc(props.pdfPath);
-		if (event.cancelled) return;
-		setPdf(pdfData);
-	}, []);
 
 	if (!pdf) {
 		return (
@@ -33,28 +43,31 @@ function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; anchorPag
 			</div>);
 	}
 
+	const zoomIn = () => {
+		setZoom(Math.min(zoom + 0.25, 2));
+	};
+
+	const zoomOut = () => {
+		setZoom(Math.max(zoom - 0.25, 0.5));
+	};
+
 	return (
 		<div className={`mini-app${isFocused ? ' focused' : ''}`}>
 			<div className={`app-pages${isFocused ? ' focused' : ''}`} ref={containerEl}>
-				<VerticalPages pdf={pdf} isDarkTheme={props.isDarkTheme} anchorPage={props.anchorPage} container={containerEl} />
+				<VerticalPages pdf={pdf} isDarkTheme={props.isDarkTheme} anchorPage={props.anchorPage}
+					container={containerEl} zoom={zoom} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>
-					{pdf.pageCount} pages
+					<div style={{ paddingRight: '0.4rem' }}>{pdf.pageCount} pages</div>
+					<ZoomGroup>
+						<ZoomButton onClick={zoomIn}>+</ZoomButton>
+						<span style={{ color: 'grey' }} >{zoom * 100}%</span>
+						<ZoomButton onClick={zoomOut} style={{ fontSize: '1.6rem' }}>-</ZoomButton>
+					</ZoomGroup>
 				</div>
 				<div>{isFocused ? '' : 'Click to enable scroll'}</div>
 			</div>
 		</div>
 	);
 }
-
-const url = window.frameElement.getAttribute('url');
-const appearance = window.frameElement.getAttribute('appearance');
-const anchorPage = window.frameElement.getAttribute('anchorPage');
-
-document.documentElement.setAttribute('data-theme', appearance);
-
-render(
-	<MiniViewerApp pdfPath={url} isDarkTheme={appearance === 'dark'} anchorPage={anchorPage ? Number(anchorPage) : null} />,
-	document.getElementById('pdf-root')
-);
