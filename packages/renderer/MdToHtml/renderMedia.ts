@@ -46,9 +46,11 @@ export default function(link: Link, options: Options, linkIndexes: LinkIndexesTy
 	}
 
 	if (options.pdfViewerEnabled && resource.mime === 'application/pdf') {
+
 		if (options.useCustomPdfViewer) {
 			const resourceId = resource.id;
 			let anchorPageNo = null;
+
 			let id = `${options.noteId}.${resourceId}`;
 			if (linkIndexes && linkIndexes[resourceId]) {
 				linkIndexes[resourceId]++;
@@ -56,15 +58,18 @@ export default function(link: Link, options: Options, linkIndexes: LinkIndexesTy
 				linkIndexes[resourceId] = 1;
 			}
 			id += `.${linkIndexes[resourceId]}`;
+
 			if (link.href.indexOf('#') > 0) {
 				anchorPageNo = Number(link.href.split('#').pop());
 				if (anchorPageNo < 1) anchorPageNo = null;
 			}
+
 			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" x-url="${escapedResourcePath}" 
 			x-appearance="${options.theme.appearance}" ${anchorPageNo ? `x-anchorPage="${anchorPageNo}"` : ''} id="${id}"
 			x-type="mini"
 		 class="media-player media-pdf"></iframe>`;
 		}
+
 		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;
 	}
 
