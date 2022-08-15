@@ -1,74 +1,87 @@
-import path = require('path');
+import { join } from 'path';
 import { execCommand2 } from './tool-utils';
-import fs = require('fs-extra');
-import { defaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import { pathExists, mkdir, readFile, move, remove, writeFile } from 'fs-extra';
+import { DefaultPluginsInfo } from '@joplin/lib/services/plugins/PluginService';
+import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const fetch = require('node-fetch');
-const { writeFile } = require('fs');
-const { promisify } = require('util');
-const writeFilePromise = promisify(writeFile);
-// const util = require('util');
 
 interface PluginAndVersion {
    [pluginId: string]: string;
 }
 
-export const localPluginsVersion = async (defaultPluginDir: string, defaultPluginsId: PluginAndVersion): Promise<PluginAndVersion> => {
-	if (!await fs.pathExists(path.join(defaultPluginDir))) await fs.mkdir(defaultPluginDir);
+interface PluginIdAndName {
+	[pluginId: string]: string;
+}
+
+export const localPluginsVersion = async (defaultPluginDir: string, defaultPluginsInfo: DefaultPluginsInfo): Promise<PluginAndVersion> => {
+	if (!await pathExists(join(defaultPluginDir))) await mkdir(defaultPluginDir);
 	const localPluginsVersions: PluginAndVersion = {};
 
-	for (const pluginId of Object.keys(defaultPluginsId)) {
+	for (const pluginId of Object.keys(defaultPluginsInfo)) {
 
-		if (!await fs.pathExists(path.join(__dirname, '..', '..', `packages/app-desktop/build/defaultPlugins/${pluginId}`))) {
+		if (!await pathExists(join(__dirname, '..', '..', `packages/app-desktop/build/defaultPlugins/${pluginId}`))) {
 			localPluginsVersions[pluginId] = '0.0.0';
 			continue;
 		}
-		const data = fs.readFileSync(`${defaultPluginDir}/${pluginId}/manifest.json`, 'utf8');
+		const data = await readFile(`${defaultPluginDir}/${pluginId}/manifest.json`, 'utf8');
 		const manifest = JSON.parse(data);
 		localPluginsVersions[pluginId] = manifest.version;
 	}
 	return localPluginsVersions;
 };
 
-function downloadFile(url: string, outputPath: string) {
-	return fetch(url).then(response => response.buffer()).then(buff => writeFilePromise(outputPath, Buffer.from(buff)));
+async function downloadFile(url: string, outputPath: string) {
+	const response = await fetch(url);
+	await writeFile(outputPath, await response.buffer());
 }
 
-export const downloadPlugins = async (defaultPluginDir: string, localPluginsVersions: PluginAndVersion, defaultPluginsId: PluginAndVersion, manifests: any): Promise<void> => {
+export async function extractPlugins(currentDir: string, defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName) {
+	for (const pluginId of Object.keys(downloadedPluginsNames)) {
+		await execCommand2(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`);
+		await move(`package/publish/${pluginId}.jpl`,`${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
+		await move(`package/publish/${pluginId}.json`,`${defaultPluginDir}/${pluginId}/manifest.json`, { overwrite: true });
+		await remove(`${downloadedPluginsNames[pluginId]}`);
+		await remove('package');
+	}
+}
 
-	for (const pluginId of Object.keys(defaultPluginsId)) {
-		if (localPluginsVersions[pluginId] === defaultPluginsId[pluginId]) continue;
+export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, defaultPluginsInfo: DefaultPluginsInfo, manifests: any): Promise<any> => {
+
+	const downloadedPluginsNames: PluginIdAndName = {};
+	for (const pluginId of Object.keys(defaultPluginsInfo)) {
+		if (localPluginsVersions[pluginId] === defaultPluginsInfo[pluginId].version) continue;
 		const response = await fetch(`https://registry.npmjs.org/${manifests[pluginId]._npm_package_name}`);
 
-		if (!(response.ok)) {
-			// const responseText = await response.text();
-			throw new Error('Cannot get latest release info');
+		if (!response.ok) {
+			const responseText = await response.text();
+			throw new Error(`Cannot download plugin file ${responseText.substr(0,500)}`);
 		}
-		const release = JSON.parse(await response.text());
+		const releaseText = await response.text();
+		const release = JSON.parse(releaseText);
 
-		const pluginUrl = release.versions[defaultPluginsId[pluginId]].dist.tarball;
+		const pluginUrl = release.versions[defaultPluginsInfo[pluginId].version].dist.tarball;
 
-		const pluginName = `${manifests[pluginId]._npm_package_name}-${defaultPluginsId[pluginId]}.tgz`;
+		const pluginName = `${manifests[pluginId]._npm_package_name}-${defaultPluginsInfo[pluginId].version}.tgz`;
 		await downloadFile(pluginUrl, pluginName);
 
-		if (!fs.existsSync(pluginName)) throw new Error(`${pluginName} cannot be downloaded`);
+		if (!await pathExists(pluginName)) throw new Error(`${pluginName} cannot be downloaded`);
 
-		await execCommand2(`tar xvzf ${pluginName}`);
-		await fs.move(`package/publish/${pluginId}.jpl`,`${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
-		await fs.move(`package/publish/${pluginId}.json`,`${defaultPluginDir}/${pluginId}/manifest.json`, { overwrite: true });
-		await fs.remove(`${pluginName}`);
-		await fs.remove('package');
+		downloadedPluginsNames[pluginId] = pluginName;
 	}
+	return downloadedPluginsNames;
 };
 
 async function start(): Promise<void> {
-	const defaultPluginDir = path.join(__dirname, '..', '..', 'packages/app-desktop/build/defaultPlugins');
+	const defaultPluginDir = join(__dirname, '..', '..', 'packages/app-desktop/build/defaultPlugins');
+	const defaultPluginsInfo = getDefaultPluginsInfo();
 
 	const manifestData = await fetch('https://raw.githubusercontent.com/joplin/plugins/master/manifests.json');
 	const manifests = JSON.parse(await manifestData.text());
 	if (!manifests) throw new Error('Invalid or missing JSON');
 
-	const localPluginsVersions = await localPluginsVersion(defaultPluginDir, defaultPlugins);
-	await downloadPlugins(defaultPluginDir, localPluginsVersions, defaultPlugins, manifests);
+	const localPluginsVersions = await localPluginsVersion(defaultPluginDir, defaultPluginsInfo);
+	const downloadedPluginNames: PluginIdAndName = await downloadPlugins(localPluginsVersions, defaultPluginsInfo, manifests);
+	await extractPlugins(__dirname, defaultPluginDir, downloadedPluginNames);
 }
 
 if (require.main === module) {

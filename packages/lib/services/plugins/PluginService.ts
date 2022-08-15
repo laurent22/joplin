@@ -28,6 +28,20 @@ export interface Plugins {
 	[key: string]: Plugin;
 }
 
+export interface SettingAndValue {
+	[settingName: string]: string;
+}
+
+export interface DefaultPluginSettings {
+	version: string;
+	settings?: SettingAndValue;
+}
+
+export interface DefaultPluginsInfo {
+    [pluginId: string]: DefaultPluginSettings;
+}
+
+
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
