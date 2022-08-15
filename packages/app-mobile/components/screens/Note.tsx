@@ -103,8 +103,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (this.isModified()) {
 				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
-				if (buttonId == 'cancel') return true;
-				if (buttonId == 'save') await this.saveNoteButton_press();
+				if (buttonId === 'cancel') return true;
+				if (buttonId === 'save') await this.saveNoteButton_press();
 			}
 
 			return false;
@@ -126,7 +126,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				return false;
 			}
 
-			if (this.state.mode == 'edit') {
+			if (this.state.mode === 'edit') {
 				Keyboard.dismiss();
 
 				this.setState({
@@ -603,7 +603,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			reg.logger().info('New dimensions ', dimensions);
 
-			const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info(`Resizing image ${localFilePath}`);
 			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
 
@@ -676,7 +676,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const targetPath = Resource.fullPath(resource);
 
 		try {
-			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
+			if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
 				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
@@ -711,7 +711,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !!this.selection) {
+		if (this.state.mode === 'edit' && !!this.selection) {
 			const newText = `\n${resourceTag}\n`;
 
 			const prefix = newNote.body.substring(0, this.selection.start);
@@ -1068,7 +1068,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view') {
+		if (this.state.mode === 'view') {
 			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
 			// to avoid the HACK_webviewLoadingState related bug.
 			bodyComponent =
@@ -1154,7 +1154,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
-			if (this.state.mode == 'edit') return null;
+			if (this.state.mode === 'edit') return null;
 
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
 		};
@@ -1162,7 +1162,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
-		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;

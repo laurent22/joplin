@@ -1,3 +1,10 @@
+// =============================================================================
+// DO NOT DIRECTLY MODIFY THIS ARRAY AS IT MAY BE OVERWRITTEN WHEN IT'S UPDATED
+// FROM A MORE CURRENT MIME TYPE LIST.
+//
+// Any change should be appended at the end of this file using push/splice.
+// =============================================================================
+
 const mimeTypes = [
 	{ t: 'application/andrew-inset', e: ['ez'] },
 	{ t: 'application/applixware', e: ['aw'] },
