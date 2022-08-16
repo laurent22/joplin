@@ -918,6 +918,9 @@ packages/app-mobile/components/SelectDateTimeDialog.js.map
 packages/app-mobile/components/SideMenu.d.ts
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenu.js.map
+packages/app-mobile/components/checkbox.d.ts
+packages/app-mobile/components/checkbox.js
+packages/app-mobile/components/checkbox.js.map
 packages/app-mobile/components/getResponsiveValue.d.ts
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.js.map
@@ -927,6 +930,9 @@ packages/app-mobile/components/getResponsiveValue.test.js.map
 packages/app-mobile/components/checkbox.d.ts
 packages/app-mobile/components/checkbox.js
 packages/app-mobile/components/checkbox.js.map
+packages/app-mobile/components/global-style.d.ts
+packages/app-mobile/components/global-style.js
+packages/app-mobile/components/global-style.js.map
 packages/app-mobile/components/global-style.d.ts
 packages/app-mobile/components/global-style.js
 packages/app-mobile/components/global-style.js.map
