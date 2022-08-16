@@ -4063,6 +4063,7 @@ __metadata:
     "@react-native-community/netinfo": ^6.0.0
     "@react-native-community/push-notification-ios": ^1.6.0
     "@react-native-community/slider": ^3.0.3
+    "@testing-library/react-native": ^11.0.0
     "@types/jest": ^28.1.3
     "@types/react-native": ^0.64.4
     assert-browserify: ^2.0.0
@@ -4110,6 +4111,7 @@ __metadata:
     react-native-version-info: ^1.1.0
     react-native-webview: ^10.9.2
     react-redux: 5.0.7
+    react-test-renderer: 17.0.2
     redux: 4.0.0
     rn-fetch-blob: ^0.12.0
     stream: 0.0.2
@@ -6221,6 +6223,19 @@ __metadata:
     react: ">=16.9.0"
     react-test-renderer: ">=16.9.0"
   checksum: 7ada35cb4114056908990250033527ffd554d055eced797083aca752fb9789b3bc70291077f1d57b8cf64ab5eb7b3827f9de3bcaa38655f2b975c65a33a418d6
+  languageName: node
+  linkType: hard
+
+"@testing-library/react-native@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@testing-library/react-native@npm:11.0.0"
+  dependencies:
+    pretty-format: ^28.1.3
+  peerDependencies:
+    react: ">=16.0.0"
+    react-native: ">=0.59"
+    react-test-renderer: ">=16.0.0"
+  checksum: 04b13b38ac0a81425635136a64af1dcae2593591253dea62fac036c3e8525dbf4970816b5fe3f6298dfc71d5b9e2d77467c166bfc413f8632eecd173fed083ca
   languageName: node
   linkType: hard
 
@@ -27920,6 +27935,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-is@npm:^16.12.0 || ^17.0.0 || ^18.0.0, react-is@npm:^18.0.0":
+  version: 18.2.0
+  resolution: "react-is@npm:18.2.0"
+  checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.12.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1, react-is@npm:^16.8.6":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -27927,17 +27949,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^17.0.1":
+"react-is@npm:^17.0.1, react-is@npm:^17.0.2":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
-  languageName: node
-  linkType: hard
-
-"react-is@npm:^18.0.0":
-  version: 18.2.0
-  resolution: "react-is@npm:18.2.0"
-  checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
   languageName: node
   linkType: hard
 
@@ -28282,6 +28297,32 @@ __metadata:
     react: ^15.3.0 || ^16.0.0
     react-dom: ^15.3.0 || ^16.0.0
   checksum: 85eddf7ec1d83bb1edf2ec11a57f9d7eefc1750a72a976399a1ba0f61e914a5e80a01b5cd9f89ea9ad94f097563a1fd132af2a91176d7e73e87869ebee4d5208
+  languageName: node
+  linkType: hard
+
+"react-shallow-renderer@npm:^16.13.1":
+  version: 16.15.0
+  resolution: "react-shallow-renderer@npm:16.15.0"
+  dependencies:
+    object-assign: ^4.1.1
+    react-is: ^16.12.0 || ^17.0.0 || ^18.0.0
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 6052c7e3e9627485120ebd8257f128aad8f56386fe8d42374b7743eac1be457c33506d153c7886b4e32923c0c352d402ab805ef9ca02dbcd8393b2bdeb6e5af8
+  languageName: node
+  linkType: hard
+
+"react-test-renderer@npm:17.0.2":
+  version: 17.0.2
+  resolution: "react-test-renderer@npm:17.0.2"
+  dependencies:
+    object-assign: ^4.1.1
+    react-is: ^17.0.2
+    react-shallow-renderer: ^16.13.1
+    scheduler: ^0.20.2
+  peerDependencies:
+    react: 17.0.2
+  checksum: e6b5c6ed2a0bde2c34f1ab9523ff9bc4c141a271daf730d6b852374e83acc0155d58ab71a318251e953ebfa65b8bebb9c5dce3eba1ccfcbef7cc4e1e8261c401
   languageName: node
   linkType: hard
 
