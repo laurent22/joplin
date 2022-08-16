@@ -21,6 +21,7 @@ import {
 	SearchState,
 } from './types';
 import { _ } from '@joplin/lib/locale';
+import MarkdownToolbar from './MarkdownToolbar';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -384,7 +385,7 @@ function NoteEditor(props: Props, ref: any) {
 			<View style={{
 				flexGrow: 1,
 				flexShrink: 0,
-				minHeight: '40%',
+				minHeight: '30%',
 			}}>
 				<WebView
 					style={{
@@ -408,6 +409,17 @@ function NoteEditor(props: Props, ref: any) {
 			<SearchPanel
 				editorSettings={editorSettings}
 				searchControl={editorControl.searchControl}
+				searchState={searchState}
+			/>
+
+			<MarkdownToolbar
+				style={{
+					overflow: 'hidden',
+					flexShrink: 1,
+				}}
+				editorSettings={editorSettings}
+				editorControl={editorControl}
+				selectionState={selectionState}
 				searchState={searchState}
 			/>
 		</View>
