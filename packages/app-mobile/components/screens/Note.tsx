@@ -301,6 +301,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return notesBarWidth;
 	};
 
+	// Update state that depends on the screen width when the screen width changes ( the device orientation changess)
 	private async handleScreenWidthChange_() {
 		this.setState({
 			notesBarWidth: this.getNotesBarWidth(),
@@ -1368,6 +1369,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		// Different styles for when the note actions are active or not
 		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
 		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
 
@@ -1386,6 +1388,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.noteActionsPositionY.setValue(newY - 162);
 		};
 
+		// Pan responder that handles making the note actions draggable.
+		// The note actions need to be draggable, because they could
+		// potentially obstruct some portion of a note's content
 		this.noteActionsDragResponder = PanResponder.create({
 			onMoveShouldSetPanResponder: () => true,
 			onPanResponderMove: (_e: any, gestureState: any) => {
@@ -1393,7 +1398,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 		});
 
-		const noteActionButtonGroup = (
+		// Note actions are the notesbar and split layout toggle button
+		const noteActionButtonGroupComp = (
 			<Animated.View style={this.styles().noteActionButtonGroup} {...this.noteActionsDragResponder.panHandlers} >
 				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
 					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
@@ -1413,7 +1419,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					{titleComp}
 					{bodyComponent}
 				</Animated.View>
-				{ this.state.isTablet && noteActionButtonGroup }
+				{ this.state.isTablet && noteActionButtonGroupComp }
 			</View>
 		);
 		return (
