@@ -19,7 +19,7 @@ export const localPluginsVersion = async (defaultPluginDir: string, defaultPlugi
 
 	for (const pluginId of Object.keys(defaultPluginsInfo)) {
 
-		if (!await pathExists(join(__dirname, '..', '..', `packages/app-desktop/build/defaultPlugins/${pluginId}`))) {
+		if (!await pathExists(join(defaultPluginDir, pluginId))) {
 			localPluginsVersions[pluginId] = '0.0.0';
 			continue;
 		}
@@ -72,7 +72,7 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 };
 
 async function start(): Promise<void> {
-	const defaultPluginDir = join(__dirname, '..', '..', 'packages/app-desktop/build/defaultPlugins');
+	const defaultPluginDir = join(__dirname, '..', '..', 'packages', 'app-desktop', 'build','defaultPlugins');
 	const defaultPluginsInfo = getDefaultPluginsInfo();
 
 	const manifestData = await fetch('https://raw.githubusercontent.com/joplin/plugins/master/manifests.json');

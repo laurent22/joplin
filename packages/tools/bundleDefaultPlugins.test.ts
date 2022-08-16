@@ -5,7 +5,7 @@ import { join } from 'path';
 import { downloadPlugins, extractPlugins, localPluginsVersion } from './bundleDefaultPlugins';
 import { pathExists, readFile, remove } from 'fs-extra';
 import Setting from '@joplin/lib/models/Setting';
-import { createTempDir } from '@joplin/lib/testing/test-utils';
+import { createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
 
 const fetch = require('node-fetch');
 
@@ -122,12 +122,15 @@ describe('bundleDefaultPlugins', function() {
 	};
 
 	it('should get local plugin versions', async () => {
-		const manifestsPath = join(__dirname, '..', '..', '..' , 'joplin/packages/app-cli/tests/services/testPlugins');
-
+		const manifestsPath = join(supportDir, 'pluginRepo','plugins');
+		const testDefaultPluginsInfo = {
+			'joplin.plugin.ambrt.backlinksToNote': { version: '1.0.4' },
+			'org.joplinapp.plugins.ToggleSidebars': { version: '1.0.2' },
+		};
 		const localPluginsVersions = await localPluginsVersion(manifestsPath, testDefaultPluginsInfo);
 
-		expect(localPluginsVersions['io.github.jackgruber.backup']).toBe('1.1.0');
-		expect(localPluginsVersions['plugin.calebjohn.rich-markdown']).toBe('0.9.0');
+		expect(localPluginsVersions['joplin.plugin.ambrt.backlinksToNote']).toBe('1.0.4');
+		expect(localPluginsVersions['org.joplinapp.plugins.ToggleSidebars']).toBe('1.0.2');
 	});
 
 	it('should download plugins folder from GitHub with no initial plugins', async () => {
@@ -167,7 +170,7 @@ describe('bundleDefaultPlugins', function() {
 				.mockResolvedValueOnce({ text: () => Promise.resolve(NPM_Response2), ok: true })
 				.mockResolvedValueOnce({ buffer: () => Promise.resolve(tgzData) });
 
-			const tempDir = join(__dirname, '/tempDownload');
+			const tempDir = await createTempDir();
 
 			const downloadedPlugins = await downloadPlugins(testCase.localVersions, testDefaultPluginsInfo, manifests);
 
@@ -190,11 +193,13 @@ describe('bundleDefaultPlugins', function() {
 
 		const filePath = join(__dirname, '..', 'app-cli', 'tests', 'services', 'plugins', 'mockData');
 		const tempDir = await createTempDir();
+
 		await extractPlugins(filePath, tempDir, downloadedPluginsNames);
+
 		expect(await pathExists(join(tempDir, 'plugin.calebjohn.rich-markdown', 'plugin.jpl'))).toBe(true);
 		expect(await pathExists(join(tempDir, 'plugin.calebjohn.rich-markdown', 'manifest.json'))).toBe(true);
-		await remove(tempDir);
 
+		await remove(tempDir);
 	});
 
 });
