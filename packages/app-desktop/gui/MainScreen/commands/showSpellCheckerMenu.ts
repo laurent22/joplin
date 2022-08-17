@@ -14,11 +14,11 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, selectedLanguage: string[] = null, useSpellChecker: boolean = null) => {
-			selectedLanguage = selectedLanguage === null ? context.state.settings['spellChecker.languages'] : selectedLanguage;
+		execute: async (context: CommandContext, selectedLanguages: string[] = null, useSpellChecker: boolean = null) => {
+			selectedLanguages = selectedLanguages === null ? context.state.settings['spellChecker.languages'] : selectedLanguages;
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
-			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker);
+			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker);
 			const menu = Menu.buildFromTemplate(menuItems as any);
 			menu.popup(bridge().window());
 		},

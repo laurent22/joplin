@@ -150,11 +150,11 @@ export default class SpellCheckerService {
 		};
 	}
 
-	private changeLanguageMenuItems(selectedLanguage: string[], enabled: boolean) {
+	private changeLanguageMenuItems(selectedLanguages: string[], enabled: boolean) {
 		const languageMenuItems = [];
 
 		for (const locale of this.driver_.availableLanguages) {
-			languageMenuItems.push(this.changeLanguageMenuItem(locale, enabled, selectedLanguage.includes(locale)));
+			languageMenuItems.push(this.changeLanguageMenuItem(locale, enabled, selectedLanguages.includes(locale)));
 		}
 
 		languageMenuItems.sort((a: any, b: any) => {
@@ -164,9 +164,9 @@ export default class SpellCheckerService {
 		return languageMenuItems;
 	}
 
-	public spellCheckerConfigMenuItems(selectedLanguage: string[], useSpellChecker: boolean) {
+	public spellCheckerConfigMenuItems(selectedLanguages: string[], useSpellChecker: boolean) {
 		const latestLanguageItems = this.latestSelectedLanguages_.map((language: string) => {
-			return this.changeLanguageMenuItem(language, true, selectedLanguage.includes(language));
+			return this.changeLanguageMenuItem(language, true, selectedLanguages.includes(language));
 		});
 
 		if (latestLanguageItems.length) latestLanguageItems.splice(0, 0, { type: 'separator' } as any);
@@ -203,15 +203,15 @@ export default class SpellCheckerService {
 
 			{
 				label: _('Change language'),
-				submenu: this.changeLanguageMenuItems(selectedLanguage, useSpellChecker),
+				submenu: this.changeLanguageMenuItems(selectedLanguages, useSpellChecker),
 			},
 		];
 	}
 
-	public spellCheckerConfigMenuItem(selectedLanguage: string[], useSpellChecker: boolean) {
+	public spellCheckerConfigMenuItem(selectedLanguages: string[], useSpellChecker: boolean) {
 		return {
 			label: _('Spell checker'),
-			submenu: this.spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker),
+			submenu: this.spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker),
 		};
 	}
 
