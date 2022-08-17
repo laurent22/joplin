@@ -11,7 +11,7 @@ const usePdfData = (pdfPath: string) => {
 		await pdfData.loadDoc(pdfPath);
 		if (event.cancelled) return;
 		setPdf(pdfData);
-	}, []);
+	}, [pdfPath]);
 
 	return pdf;
 };

@@ -22,7 +22,6 @@ const ZoomGroup = styled.a`
 	cursor: initial !important;
 `;
 
-
 export interface MiniViewerAppProps {
 	pdfPath: string;
 	isDarkTheme: boolean;
@@ -54,8 +53,8 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 	return (
 		<div className={`mini-app${isFocused ? ' focused' : ''}`}>
 			<div className={`app-pages${isFocused ? ' focused' : ''}`} ref={containerEl}>
-				<VerticalPages pdf={pdf} isDarkTheme={props.isDarkTheme} anchorPage={props.anchorPage}
-					container={containerEl} zoom={zoom} />
+				<VerticalPages pdf={pdf} isDarkTheme={props.isDarkTheme} anchorPage={props.anchorPage} pdfId={props.pdfId} rememberScroll={true}
+					container={containerEl} showPageNumbers={true} zoom={zoom} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>

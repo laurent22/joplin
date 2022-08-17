@@ -42,6 +42,7 @@ export interface PageProps {
 	scaledSize: ScaledSize;
 	isDarkTheme: boolean;
 	container: MutableRefObject<HTMLElement>;
+	showPageNumbers?: boolean;
 }
 
 
@@ -121,7 +122,7 @@ export default function Page(props: PageProps) {
 				</div>
 				Page {props.pageNo}
 			</canvas>
-			<PageInfo>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>
+			{props.showPageNumbers && <PageInfo>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
 		</PageWrapper>
 	);
 }

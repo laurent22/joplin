@@ -28,6 +28,7 @@ export interface RenderOptions {
 	plainResourceRendering?: boolean;
 	mapsToLine?: boolean;
 	useCustomPdfViewer?: boolean;
+	noteId?: string;
 }
 
 interface RendererRule {
@@ -172,6 +173,7 @@ export interface RuleOptions {
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
 	useCustomPdfViewer: boolean;
+	noteId: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
