@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, MutableRefObject } from 'react';
 import * as React from 'react';
 import { PdfData, ScaledSize } from './pdfSource';
 import Page from './Page';
+import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import styled from 'styled-components';
 
 
@@ -118,9 +119,9 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 	}, [props.pdfId, props.rememberScroll]);
 
-	useEffect(() => {
-		const _updateSize = async () => {
-			await updateSize();
+	useAsyncEffect(async (event: AsyncEffectEvent) => {
+		try {
+			await updateSize(event.cancelled);
 			if (props.rememberScroll && props.pdfId) {
 				const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${props.pdfId}.scrollTop`), 10) || null;
 				if (scrollOffset && !props.anchorPage) {
@@ -128,10 +129,9 @@ export default function VerticalPages(props: VerticalPagesProps) {
 					// console.log('scroll set',props.container.current.scrollTop);
 				}
 			}
-		};
-
-		_updateSize()
-			.catch(console.error);
+		} catch (error) {
+			console.error(error);
+		}
 	}, [props.pdf, props.pdfId, props.rememberScroll, props.anchorPage]);
 
 
