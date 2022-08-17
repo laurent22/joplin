@@ -4203,6 +4203,7 @@ __metadata:
     "@react-native-community/slider": ^3.0.3
     "@testing-library/react-native": ^11.0.0
     "@types/jest": ^28.1.3
+    "@types/node": ^18.7.6
     "@types/react-native": ^0.64.4
     assert-browserify: ^2.0.0
     babel-plugin-module-resolver: ^4.1.0
@@ -6966,6 +6967,13 @@ __metadata:
   version: 16.11.33
   resolution: "@types/node@npm:16.11.33"
   checksum: 5c86d3f1e3b996607b41405d368d2e19d410eee0054595cef73d230368a609a2863926e75ad19f5091f0fd742cd018b667d54c51292018dd8020a202a5b29fa9
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.7.6":
+  version: 18.7.6
+  resolution: "@types/node@npm:18.7.6"
+  checksum: 5122988c325eda8d1f5cbe4494916036aae1758f9d5bb2d8139a800b8bad1540fbb167cd3c759da9a5cb4600cd3507609ac7969747113c1549a3e4320a17b1a9
   languageName: node
   linkType: hard
 
