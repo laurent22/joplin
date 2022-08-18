@@ -13,8 +13,9 @@ import {
 } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 
+type ButtonClickListener = ()=> void;
 interface ButtonProps {
-	onClick: ()=> void;
+	onClick: ButtonClickListener;
 
 	// Accessibility label and text shown in a tooltip
 	description: string;
@@ -121,15 +122,16 @@ const ButtonWithTooltip = (props: ButtonProps) => {
 	return (
 		<>
 			<View
-				// Tooltip data should be exposed via [accessibilityLabel]/[accessibilityHint]
-				// props.
-				// Hide from the screen reader on Android
+				// Any information given by the tooltip should also be provided via
+				// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
+				// from the screen reader.
+				// On Android:
 				importantForAccessibility='no-hide-descendants'
-
-				// Hide from the screen reader on iOS.
+				// On iOS:
 				accessibilityElementsHidden={true}
 
-				// Position the menu beneath the button
+				// Position the menu beneath the button so the tooltip appears in the
+				// correct location.
 				style={{
 					left: buttonLayout?.x,
 					top: buttonLayout?.y,
