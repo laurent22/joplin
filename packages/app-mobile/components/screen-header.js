@@ -288,7 +288,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				<ButtonWithTooltip
 					onClick={options.onClick}
 					style={{ padding: 0 }}
-					themeId={themeId}
+					theme={themeId}
 					disabled={!!options.disabled}
 					description={options.description}
 					contentStyle={viewStyle}
@@ -322,7 +322,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				<ButtonWithTooltip
 					onClick={onClick}
 
-					themeId={themeId}
+					theme={themeId}
 					description={_('Select all')}
 					contentStyle={styles.iconButton}
 				>
@@ -337,7 +337,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					onClick={onClick}
 
 					description={_('Search')}
-					themeId={themeId}
+					theme={themeId}
 					contentStyle={styles.iconButton}
 				>
 					<Icon name="md-search" style={styles.topIcon} />
@@ -351,7 +351,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					onClick={onClick}
 					disabled={disabled}
 
-					themeId={themeId}
+					theme={themeId}
 					description={_('Delete')}
 					accessibilityHint={
 						disabled ? null : _('Delete selected notes')
@@ -369,7 +369,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					onClick={onClick}
 					disabled={disabled}
 
-					themeId={themeId}
+					theme={themeId}
 					description={_('Duplicate')}
 					accessibilityHint={
 						disabled ? null : _('Duplicate selected notes')

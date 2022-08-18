@@ -1,15 +1,14 @@
 // Displays a find/replace dialog
 
 const React = require('react');
-const { StyleSheet } = require('react-native');
-const { TextInput, View, Text, TouchableOpacity } = require('react-native');
 const { useMemo, useState, useEffect } = require('react');
 const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 
 import { SearchControl, SearchState, EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
-import { BackHandler } from 'react-native';
+import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
+import ButtonWithTooltip from '../ButtonWithTooltip';
 
 const buttonSize = 48;
 
@@ -33,6 +32,7 @@ export interface SearchPanelProps {
 
 interface ActionButtonProps {
 	styles: any;
+	theme: Theme;
 	iconName: string;
 	title: string;
 	onPress: Callback;
@@ -42,20 +42,20 @@ const ActionButton = (
 	props: ActionButtonProps
 ) => {
 	return (
-		<TouchableOpacity
+		<ButtonWithTooltip
+			theme={props.theme}
 			style={props.styles.button}
-			onPress={props.onPress}
-
-			accessibilityLabel={props.title}
-			accessibilityRole='button'
+			onClick={props.onPress}
+			description={props.title}
 		>
 			<MaterialCommunityIcon name={props.iconName} style={props.styles.buttonText}/>
-		</TouchableOpacity>
+		</ButtonWithTooltip>
 	);
 };
 
 interface ToggleButtonProps {
 	styles: any;
+	theme: Theme;
 	iconName: string;
 	title: string;
 	active: boolean;
@@ -65,30 +65,31 @@ const ToggleButton = (props: ToggleButtonProps) => {
 	const active = props.active;
 
 	return (
-		<TouchableOpacity
+		<ButtonWithTooltip
+			theme={props.theme}
 			style={{
 				...props.styles.toggleButton,
 				...(active ? props.styles.toggleButtonActive : {}),
 			}}
-			onPress={props.onToggle}
+			onClick={props.onToggle}
 
 			accessibilityState={{
 				checked: props.active,
 			}}
-			accessibilityLabel={props.title}
+			description={props.title}
 			accessibilityRole='switch'
 		>
 			<MaterialCommunityIcon name={props.iconName} style={
 				active ? props.styles.activeButtonText : props.styles.buttonText
 			}/>
-		</TouchableOpacity>
+		</ButtonWithTooltip>
 	);
 };
 
 
 const useStyles = (theme: Theme) => {
 	return useMemo(() => {
-		const buttonStyle = {
+		const buttonStyle: ViewStyle = {
 			width: buttonSize,
 			height: buttonSize,
 			backgroundColor: theme.backgroundColor4,
@@ -136,8 +137,9 @@ const useStyles = (theme: Theme) => {
 };
 
 export const SearchPanel = (props: SearchPanelProps) => {
-	const placeholderColor = props.editorSettings.themeData.color3;
-	const styles = useStyles(props.editorSettings.themeData);
+	const theme = props.editorSettings.themeData;
+	const placeholderColor = theme.color3;
+	const styles = useStyles(theme);
 
 	const [showingAdvanced, setShowAdvanced] = useState(false);
 
@@ -187,6 +189,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const closeButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="close"
 			onPress={control.hideSearch}
@@ -196,6 +199,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const showDetailsButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="menu-down"
 			onPress={() => setShowAdvanced(true)}
@@ -205,6 +209,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const hideDetailsButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="menu-up"
 			onPress={() => setShowAdvanced(false)}
@@ -254,6 +259,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const toNextButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="menu-right"
 			onPress={control.findNext}
@@ -263,6 +269,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const toPrevButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="menu-left"
 			onPress={control.findPrevious}
@@ -272,6 +279,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const replaceButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="swap-horizontal"
 			onPress={control.replaceCurrent}
@@ -281,6 +289,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const replaceAllButton = (
 		<ActionButton
+			theme={theme}
 			styles={styles}
 			iconName="reply-all"
 			onPress={control.replaceAll}
@@ -290,6 +299,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const regexpButton = (
 		<ToggleButton
+			theme={theme}
 			styles={styles}
 			iconName="regex"
 			onToggle={() => {
@@ -304,6 +314,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const caseSensitiveButton = (
 		<ToggleButton
+			theme={theme}
 			styles={styles}
 			iconName="format-letter-case"
 			onToggle={() => {

@@ -1,5 +1,6 @@
 // Types related to the NoteEditor
 
+import { Theme } from '@joplin/lib/themes/type';
 import { CodeMirrorControl } from './CodeMirror/types';
 
 // Controls for the entire editor (including dialogs)
@@ -10,7 +11,7 @@ export interface EditorControl extends CodeMirrorControl {
 }
 
 export interface EditorSettings {
-    themeData: any;
+    themeData: Theme;
     katexEnabled: boolean;
 }
 

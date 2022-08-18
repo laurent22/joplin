@@ -3,153 +3,193 @@
 //
 
 const React = require('react');
+import { ReactNode } from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { Component, useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { View, Text, Pressable, ViewStyle, Animated } from 'react-native';
-
-interface TooltipProps {
-	theme: Theme;
-	text: string;
-	visible: boolean;
-}
-
-const Tooltip = (props: TooltipProps) => {
-	const [tooltipY, setTooltipY] = useState(0);
-	const [tooltipOnTop, setTooltipOnTop] = useState(true);
-	const [tooltipRemoved, setTooltipRemoved] = useState(true);
-	const tooltipRef = useRef<View>(null);
-	const opacityAnimation = useRef(new Animated.Value(0)).current;
-
-	// Fade in/out
-	useEffect(() => {
-		if (props.visible) {
-			setTooltipRemoved(false);
-		}
-
-		Animated.timing(
-			opacityAnimation,
-			{
-				toValue: props.visible ? 1.0 : 0.0,
-				duration: 150,
-				useNativeDriver: true,
-			}
-		).start(() => {
-			setTooltipRemoved(!props.visible);
-		});
-	}, [opacityAnimation, props.visible]);
-
-	const onTooltipLayout = useCallback(() => {
-		tooltipRef.current?.measure((_x, y, _width, height, _pageX, pageY) => {
-			if ((pageY - y) - height < 0) {
-				setTooltipOnTop(false);
-			}
-			setTooltipY(-height);
-		});
-	}, []);
-
-	const tooltipPosition: ViewStyle = {};
-	if (tooltipOnTop) {
-		tooltipPosition.top = tooltipY;
-	} else {
-		tooltipPosition.bottom = tooltipY;
-	}
-
-	if (tooltipRemoved) {
-		return null;
-	}
-
-	return (
-		<Animated.View
-			onLayout={onTooltipLayout}
-			ref={tooltipRef}
-			style={{
-				position: 'absolute',
-				backgroundColor: props.theme.backgroundColor2,
-				opacity: opacityAnimation,
-				...tooltipPosition,
-			}}
-		>
-			<Text style={{
-				color: props.theme.color2,
-				padding: 3,
-				textAlign: 'center',
-			}}>{props.text}</Text>
-		</Animated.View>
-	);
-};
+import { useState, useMemo, useCallback, useRef } from 'react';
+import {
+	View, Text, Pressable, ViewStyle, PressableStateCallbackType,
+	StyleProp, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole,
+} from 'react-native';
+import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 
 interface ButtonProps {
 	onClick: ()=> void;
+
+	// Accessibility label and text shown in a tooltip
 	description: string;
-	children: Component[];
-	themeId: number;
+
+	children: ReactNode;
+
+	// [theme] can either be a themeId or a [Theme] object.
+	theme: Theme|number;
+
+
+	style?: ViewStyle;
+	pressedStyle?: ViewStyle;
+	contentStyle?: ViewStyle;
 
 	// Additional accessibility information. See View.accessibilityHint
 	accessibilityHint?: string;
-	disabled?: boolean;
 
-	style?: ViewStyle;
-	contentStyle?: ViewStyle;
-	pressedStyle?: ViewStyle;
+	// Role of the button. Defaults to 'button'.
+	accessibilityRole?: AccessibilityRole;
+	accessibilityState?: AccessibilityState;
+
+	disabled?: boolean;
 }
 
 const ButtonWithTooltip = (props: ButtonProps) => {
-	const themeData = useMemo(() => themeStyle(props.themeId), [props.themeId]);
 	const [tooltipVisible, setTooltipVisible] = useState(false);
-	const [pressed, setPressed] = useState(false);
+	const [buttonLayout, setButtonLayout] = useState<LayoutRectangle|null>(null);
+	const tooltipStyles = useTooltipStyles(props.theme);
 
-	const tooltip = (
-		<Tooltip
-			theme={themeData}
-			text={props.description}
-			visible={tooltipVisible}
-		/>
-	);
+	// See https://blog.logrocket.com/react-native-touchable-vs-pressable-components/
+	// for more about animating Pressable buttons.
+	const fadeAnim = useRef(new Animated.Value(1)).current;
 
-	const contentStyle = useMemo((): ViewStyle => {
-		return {
-			...props.contentStyle,
-			...(pressed ? { opacity: 0.5 } : { }),
-			...(pressed ? props.pressedStyle : { }),
-		};
-	}, [pressed, props.style, props.pressedStyle]);
-
+	const animationDuration = 100; // ms
 	const onPressIn = useCallback(() => {
-		setPressed(true);
-	}, []);
+		// Fade in.
+		Animated.timing(fadeAnim, {
+			toValue: 0.5,
+			duration: animationDuration,
+			useNativeDriver: true,
+		}).start();
+	}, [fadeAnim]);
 	const onPressOut = useCallback(() => {
-		setPressed(false);
+		// Fade out.
+		Animated.timing(fadeAnim, {
+			toValue: 1,
+			duration: animationDuration,
+			useNativeDriver: true,
+		}).start();
+
 		setTooltipVisible(false);
-	}, []);
+	}, [fadeAnim]);
 	const onLongPress = useCallback(() => {
 		setTooltipVisible(true);
+	}, [fadeAnim]);
+
+	// Select different user-specified styles if selected/unselected.
+	const onStyleChange = useCallback((state: PressableStateCallbackType): StyleProp<ViewStyle> => {
+		let result = { ...props.style };
+
+		if (state.pressed) {
+			result = {
+				...result,
+				...props.pressedStyle,
+			};
+		}
+		return result;
+	}, [props.pressedStyle, props.style]);
+
+	const onButtonLayout = useCallback((event: LayoutChangeEvent) => {
+		const layoutEvt = event.nativeEvent.layout;
+
+		// Copy the layout event
+		setButtonLayout({ ...layoutEvt });
 	}, []);
+
 
 	const button = (
 		<Pressable
 			onPress={props.onClick}
-
-			onPressIn={onPressIn}
 			onLongPress={onLongPress}
+			onPressIn={onPressIn}
 			onPressOut={onPressOut}
 
-			style={ props.style }
+			style={ onStyleChange }
 
 			disabled={ props.disabled ?? false }
+			onLayout={ onButtonLayout }
 
 			accessibilityLabel={props.description}
 			accessibilityHint={props.accessibilityHint}
-			accessibilityRole={'button'}
+			accessibilityRole={props.accessibilityRole ?? 'button'}
+			accessibilityState={props.accessibilityState}
 		>
-			<View style={contentStyle}>
+			<Animated.View style={{
+				opacity: fadeAnim,
+				...props.contentStyle,
+			}}>
 				{ props.children }
-			</View>
-			{ tooltip }
+			</Animated.View>
 		</Pressable>
 	);
 
-	return button;
+	return (
+		<>
+			<View
+				// Tooltip data should be exposed via [accessibilityLabel]/[accessibilityHint]
+				// props.
+				// Hide from the screen reader on Android
+				importantForAccessibility='no-hide-descendants'
+
+				// Hide from the screen reader on iOS.
+				accessibilityElementsHidden={true}
+
+				// Position the menu beneath the button
+				style={{
+					left: buttonLayout?.x,
+					top: buttonLayout?.y,
+					position: 'absolute',
+					zIndex: -1,
+				}}
+			>
+				<Menu
+					opened={tooltipVisible}
+					renderer={renderers.Popover}
+					rendererProps={{
+						preferredPlacement: 'bottom',
+						anchorStyle: tooltipStyles.anchor,
+					}}>
+					<MenuTrigger
+						// Don't show/hide when pressed (let the Pressable handle opening/closing)
+						disabled={true}
+						style={{
+							// Ensure that the trigger region has the same size as the button.
+							width: buttonLayout?.width ?? 0,
+							height: buttonLayout?.height ?? 0,
+						}}
+					/>
+					<MenuOptions
+						customStyles={{ optionsContainer: tooltipStyles.optionsContainer }}
+					>
+						<Text style={tooltipStyles.text}>
+							{props.description}
+						</Text>
+					</MenuOptions>
+				</Menu>
+			</View>
+
+			{button}
+		</>
+	);
+};
+
+const useTooltipStyles = (theme: Theme|number) => {
+	return useMemo(() => {
+		let themeData: Theme;
+		if (typeof theme === 'number') {
+			themeData = themeStyle(theme);
+		} else {
+			themeData = theme;
+		}
+
+		return StyleSheet.create({
+			text: {
+				color: themeData.raisedColor,
+				padding: 4,
+			},
+			anchor: {
+				backgroundColor: themeData.raisedBackgroundColor,
+			},
+			optionsContainer: {
+				backgroundColor: themeData.raisedBackgroundColor,
+			},
+		});
+	}, [theme]);
 };
 
 export default ButtonWithTooltip;
