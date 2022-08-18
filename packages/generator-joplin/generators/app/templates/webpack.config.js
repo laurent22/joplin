@@ -15,7 +15,7 @@ const WebpackOnBuildPlugin = require('on-build-webpack');
 const tar = require('tar');
 const glob = require('glob');
 const execSync = require('child_process').execSync;
-const allPossibleCategories = require('@joplin/lib/plugin-categories.json').allPossibleCategories;
+const allPossibleCategories = require('@joplin/lib/pluginCategories.json');
 
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = './plugin.config.json';
@@ -72,7 +72,7 @@ function validateCategories(categories) {
 	if (!categories) return null;
 	if ((categories.length !== new Set(categories).size)) throw new Error('Repeated categories are not allowed');
 	categories.forEach(category => {
-		if (!allPossibleCategories.includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid Categories are: \n${allPossibleCategories}\n`);
+		if (!allPossibleCategories.map(category => { return category.name; }).includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid Categories are: \n${allPossibleCategories}\n`);
 	});
 }
 
