@@ -38,8 +38,8 @@ interface Props {
 }
 
 function fontFamilyFromSettings() {
-	const f = editorFont(Setting.value('style.editor.fontFamily'));
-	return [f, 'sans-serif'].join(', ');
+	const font = editorFont(Setting.value('style.editor.fontFamily'));
+	return font ? `${font}, sans-serif` : 'sans-serif';
 }
 
 function useCss(themeId: number): string {
