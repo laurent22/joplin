@@ -872,12 +872,9 @@ packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.js
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.js.map
-packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.toggleTwice.test.d.ts
-packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.toggleTwice.test.js
-packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.toggleTwice.test.js.map
-packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.togglingLists.test.d.ts
-packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.togglingLists.test.js
-packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.togglingLists.test.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.toggleList.test.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.toggleList.test.js
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.toggleList.test.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js.map

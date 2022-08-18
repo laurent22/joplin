@@ -13,7 +13,8 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "build": "webpack --config webpack.config.js",
     "test": "jest",
-    "test-ci": "yarn test"
+    "test-ci": "yarn test",
+    "postinstall": "yarn build"
   },
   "author": "Joplin",
   "license": "MIT",
