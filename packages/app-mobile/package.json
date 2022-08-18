@@ -98,6 +98,7 @@
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "jetifier": "^1.6.5",
+    "jsdom": "^20.0.0",
     "metro-react-native-babel-preset": "^0.66.2",
     "nodemon": "^2.0.12",
     "ts-jest": "^28.0.5",

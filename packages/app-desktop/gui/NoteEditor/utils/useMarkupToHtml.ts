@@ -20,6 +20,7 @@ export interface MarkupToHtmlOptions {
 	plugins?: Record<string, any>;
 	bodyOnly?: boolean;
 	mapsToLine?: boolean;
+	useCustomPdfViewer?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
