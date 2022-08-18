@@ -115,6 +115,7 @@ function NoteEditor(props: Props, ref: any) {
 	` : '';
 
 	const editorSettings: EditorSettings = {
+		themeId: props.themeId,
 		themeData: editorTheme(props.themeId),
 		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
 	};

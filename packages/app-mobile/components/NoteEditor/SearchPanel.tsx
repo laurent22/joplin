@@ -8,7 +8,7 @@ import { SearchControl, SearchState, EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
-import ButtonWithTooltip from '../ButtonWithTooltip';
+import CustomButton from '../CustomButton';
 
 const buttonSize = 48;
 
@@ -32,7 +32,7 @@ export interface SearchPanelProps {
 
 interface ActionButtonProps {
 	styles: any;
-	theme: Theme;
+	themeId: number;
 	iconName: string;
 	title: string;
 	onPress: Callback;
@@ -42,36 +42,37 @@ const ActionButton = (
 	props: ActionButtonProps
 ) => {
 	return (
-		<ButtonWithTooltip
-			theme={props.theme}
+		<CustomButton
+			themeId={props.themeId}
 			style={props.styles.button}
-			onClick={props.onPress}
+			onPress={props.onPress}
 			description={props.title}
 		>
 			<MaterialCommunityIcon name={props.iconName} style={props.styles.buttonText}/>
-		</ButtonWithTooltip>
+		</CustomButton>
 	);
 };
 
 interface ToggleButtonProps {
 	styles: any;
-	theme: Theme;
+	themeId: number;
 	iconName: string;
 	title: string;
 	active: boolean;
 	onToggle: Callback;
 }
+
 const ToggleButton = (props: ToggleButtonProps) => {
 	const active = props.active;
 
 	return (
-		<ButtonWithTooltip
-			theme={props.theme}
+		<CustomButton
+			themeId={props.themeId}
 			style={{
 				...props.styles.toggleButton,
 				...(active ? props.styles.toggleButtonActive : {}),
 			}}
-			onClick={props.onToggle}
+			onPress={props.onToggle}
 
 			accessibilityState={{
 				checked: props.active,
@@ -82,7 +83,7 @@ const ToggleButton = (props: ToggleButtonProps) => {
 			<MaterialCommunityIcon name={props.iconName} style={
 				active ? props.styles.activeButtonText : props.styles.buttonText
 			}/>
-		</ButtonWithTooltip>
+		</CustomButton>
 	);
 };
 
@@ -186,10 +187,10 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	}, [state.dialogVisible]);
 
 
-
+	const themeId = props.editorSettings.themeId;
 	const closeButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="close"
 			onPress={control.hideSearch}
@@ -199,7 +200,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const showDetailsButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="menu-down"
 			onPress={() => setShowAdvanced(true)}
@@ -209,7 +210,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const hideDetailsButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="menu-up"
 			onPress={() => setShowAdvanced(false)}
@@ -259,7 +260,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const toNextButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="menu-right"
 			onPress={control.findNext}
@@ -269,7 +270,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const toPrevButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="menu-left"
 			onPress={control.findPrevious}
@@ -279,7 +280,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const replaceButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="swap-horizontal"
 			onPress={control.replaceCurrent}
@@ -289,7 +290,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const replaceAllButton = (
 		<ActionButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="reply-all"
 			onPress={control.replaceAll}
@@ -299,7 +300,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const regexpButton = (
 		<ToggleButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="regex"
 			onToggle={() => {
@@ -314,7 +315,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const caseSensitiveButton = (
 		<ToggleButton
-			theme={theme}
+			themeId={themeId}
 			styles={styles}
 			iconName="format-letter-case"
 			onToggle={() => {

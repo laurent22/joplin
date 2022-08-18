@@ -16,7 +16,7 @@ const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
 const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
-import ButtonWithTooltip from './ButtonWithTooltip';
+import CustomButton from './CustomButton';
 
 Icon.loadFont();
 
@@ -285,16 +285,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
 
 			return (
-				<ButtonWithTooltip
-					onClick={options.onClick}
+				<CustomButton
+					onPress={options.onPress}
 					style={{ padding: 0 }}
-					theme={themeId}
+					themeId={themeId}
 					disabled={!!options.disabled}
 					description={options.description}
 					contentStyle={viewStyle}
 				>
 					{icon}
-				</ButtonWithTooltip>
+				</CustomButton>
 			);
 		};
 
@@ -302,7 +302,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return renderTopButton({
 				iconName: 'arrow-undo-circle-sharp',
 				description: _('Undo'),
-				onClick: this.props.onUndoButtonPress,
+				onPress: this.props.onUndoButtonPress,
 				visible: this.props.showUndoButton,
 				disabled: this.props.undoButtonDisabled,
 			});
@@ -312,46 +312,46 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return renderTopButton({
 				iconName: 'arrow-redo-circle-sharp',
 				description: _('Redo'),
-				onClick: this.props.onRedoButtonPress,
+				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
 			});
 		};
 
-		function selectAllButton(styles, onClick) {
+		function selectAllButton(styles, onPress) {
 			return (
-				<ButtonWithTooltip
-					onClick={onClick}
+				<CustomButton
+					onPress={onPress}
 
-					theme={themeId}
+					themeId={themeId}
 					description={_('Select all')}
 					contentStyle={styles.iconButton}
 				>
 					<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
-				</ButtonWithTooltip>
+				</CustomButton>
 			);
 		}
 
-		function searchButton(styles, onClick) {
+		function searchButton(styles, onPress) {
 			return (
-				<ButtonWithTooltip
-					onClick={onClick}
+				<CustomButton
+					onPress={onPress}
 
 					description={_('Search')}
-					theme={themeId}
+					themeId={themeId}
 					contentStyle={styles.iconButton}
 				>
 					<Icon name="md-search" style={styles.topIcon} />
-				</ButtonWithTooltip>
+				</CustomButton>
 			);
 		}
 
-		function deleteButton(styles, onClick, disabled) {
+		function deleteButton(styles, onPress, disabled) {
 			return (
-				<ButtonWithTooltip
-					onClick={onClick}
+				<CustomButton
+					onPress={onPress}
 					disabled={disabled}
 
-					theme={themeId}
+					themeId={themeId}
 					description={_('Delete')}
 					accessibilityHint={
 						disabled ? null : _('Delete selected notes')
@@ -359,17 +359,17 @@ class ScreenHeaderComponent extends React.PureComponent {
 					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
 				>
 					<Icon name="md-trash" style={styles.topIcon} />
-				</ButtonWithTooltip>
+				</CustomButton>
 			);
 		}
 
-		function duplicateButton(styles, onClick, disabled) {
+		function duplicateButton(styles, onPress, disabled) {
 			return (
-				<ButtonWithTooltip
-					onClick={onClick}
+				<CustomButton
+					onPress={onPress}
 					disabled={disabled}
 
-					theme={themeId}
+					themeId={themeId}
 					description={_('Duplicate')}
 					accessibilityHint={
 						disabled ? null : _('Duplicate selected notes')
@@ -377,7 +377,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
 				>
 					<Icon name="md-copy" style={styles.topIcon} />
-				</ButtonWithTooltip>
+				</CustomButton>
 			);
 		}
 

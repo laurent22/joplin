@@ -11,7 +11,12 @@ export interface EditorControl extends CodeMirrorControl {
 }
 
 export interface EditorSettings {
+	// EditorSettings objects are deserialized within WebViews, where
+	// [themeStyle(themeId: number)] doesn't work. As such, we need both
+	// the [themeId] and [themeData].
+	themeId: number;
     themeData: Theme;
+
     katexEnabled: boolean;
 }
 

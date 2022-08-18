@@ -15,16 +15,14 @@ import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-me
 
 type ButtonClickListener = ()=> void;
 interface ButtonProps {
-	onClick: ButtonClickListener;
+	onPress: ButtonClickListener;
 
 	// Accessibility label and text shown in a tooltip
-	description: string;
+	description?: string;
 
 	children: ReactNode;
 
-	// [theme] can either be a themeId or a [Theme] object.
-	theme: Theme|number;
-
+	themeId: number;
 
 	style?: ViewStyle;
 	pressedStyle?: ViewStyle;
@@ -40,10 +38,10 @@ interface ButtonProps {
 	disabled?: boolean;
 }
 
-const ButtonWithTooltip = (props: ButtonProps) => {
+const CustomButton = (props: ButtonProps) => {
 	const [tooltipVisible, setTooltipVisible] = useState(false);
 	const [buttonLayout, setButtonLayout] = useState<LayoutRectangle|null>(null);
-	const tooltipStyles = useTooltipStyles(props.theme);
+	const tooltipStyles = useTooltipStyles(props.themeId);
 
 	// See https://blog.logrocket.com/react-native-touchable-vs-pressable-components/
 	// for more about animating Pressable buttons.
@@ -51,7 +49,7 @@ const ButtonWithTooltip = (props: ButtonProps) => {
 
 	const animationDuration = 100; // ms
 	const onPressIn = useCallback(() => {
-		// Fade in.
+		// Fade out.
 		Animated.timing(fadeAnim, {
 			toValue: 0.5,
 			duration: animationDuration,
@@ -59,7 +57,7 @@ const ButtonWithTooltip = (props: ButtonProps) => {
 		}).start();
 	}, [fadeAnim]);
 	const onPressOut = useCallback(() => {
-		// Fade out.
+		// Fade in.
 		Animated.timing(fadeAnim, {
 			toValue: 1,
 			duration: animationDuration,
@@ -95,7 +93,7 @@ const ButtonWithTooltip = (props: ButtonProps) => {
 
 	const button = (
 		<Pressable
-			onPress={props.onClick}
+			onPress={props.onPress}
 			onLongPress={onLongPress}
 			onPressIn={onPressIn}
 			onPressOut={onPressOut}
@@ -119,65 +117,63 @@ const ButtonWithTooltip = (props: ButtonProps) => {
 		</Pressable>
 	);
 
+	const tooltip = (
+		<View
+			// Any information given by the tooltip should also be provided via
+			// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
+			// from the screen reader.
+			// On Android:
+			importantForAccessibility='no-hide-descendants'
+			// On iOS:
+			accessibilityElementsHidden={true}
+
+			// Position the menu beneath the button so the tooltip appears in the
+			// correct location.
+			style={{
+				left: buttonLayout?.x,
+				top: buttonLayout?.y,
+				position: 'absolute',
+				zIndex: -1,
+			}}
+		>
+			<Menu
+				opened={tooltipVisible}
+				renderer={renderers.Popover}
+				rendererProps={{
+					preferredPlacement: 'bottom',
+					anchorStyle: tooltipStyles.anchor,
+				}}>
+				<MenuTrigger
+					// Don't show/hide when pressed (let the Pressable handle opening/closing)
+					disabled={true}
+					style={{
+						// Ensure that the trigger region has the same size as the button.
+						width: buttonLayout?.width ?? 0,
+						height: buttonLayout?.height ?? 0,
+					}}
+				/>
+				<MenuOptions
+					customStyles={{ optionsContainer: tooltipStyles.optionsContainer }}
+				>
+					<Text style={tooltipStyles.text}>
+						{props.description}
+					</Text>
+				</MenuOptions>
+			</Menu>
+		</View>
+	);
+
 	return (
 		<>
-			<View
-				// Any information given by the tooltip should also be provided via
-				// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
-				// from the screen reader.
-				// On Android:
-				importantForAccessibility='no-hide-descendants'
-				// On iOS:
-				accessibilityElementsHidden={true}
-
-				// Position the menu beneath the button so the tooltip appears in the
-				// correct location.
-				style={{
-					left: buttonLayout?.x,
-					top: buttonLayout?.y,
-					position: 'absolute',
-					zIndex: -1,
-				}}
-			>
-				<Menu
-					opened={tooltipVisible}
-					renderer={renderers.Popover}
-					rendererProps={{
-						preferredPlacement: 'bottom',
-						anchorStyle: tooltipStyles.anchor,
-					}}>
-					<MenuTrigger
-						// Don't show/hide when pressed (let the Pressable handle opening/closing)
-						disabled={true}
-						style={{
-							// Ensure that the trigger region has the same size as the button.
-							width: buttonLayout?.width ?? 0,
-							height: buttonLayout?.height ?? 0,
-						}}
-					/>
-					<MenuOptions
-						customStyles={{ optionsContainer: tooltipStyles.optionsContainer }}
-					>
-						<Text style={tooltipStyles.text}>
-							{props.description}
-						</Text>
-					</MenuOptions>
-				</Menu>
-			</View>
-
+			{props.description ? tooltip : null}
 			{button}
 		</>
 	);
 };
 
-const useTooltipStyles = (theme: Theme|number) => {
+const useTooltipStyles = (themeId: number) => {
 	return useMemo(() => {
-		let themeData: Theme;
-		if (typeof theme === 'number') {
-			themeData = themeStyle(theme);
-		} else {
-			themeData = theme;
-		}
+		const themeData: Theme = themeStyle(themeId);
 
 		return StyleSheet.create({
 			text: {
@@ -191,7 +187,7 @@ const useTooltipStyles = (theme: Theme|number) => {
 				backgroundColor: themeData.raisedBackgroundColor,
 			},
 		});
-	}, [theme]);
+	}, [themeId]);
 };
 
-export default ButtonWithTooltip;
+export default CustomButton;
