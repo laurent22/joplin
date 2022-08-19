@@ -69,6 +69,7 @@ function UserWebview(props: Props, ref: any) {
 
 	useEffect(() => {
 		if (isReady && props.onReady) props.onReady();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [isReady]);
 
 	function frameWindow() {
