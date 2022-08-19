@@ -5969,6 +5969,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@seiyab/eslint-plugin-react-hooks@npm:^4.5.1-alpha.5":
+  version: 4.5.1-alpha.5
+  resolution: "@seiyab/eslint-plugin-react-hooks@npm:4.5.1-alpha.5"
+  peerDependencies:
+    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+  checksum: b9840dd3a454c68f6da7b5281d9d4bfe618567b2a2f6228379a9215cffef39eed8d7164dd8f9d809c8a74ea0b8c9e5633dfb747897ae189e5a3e1fede99e6d37
+  languageName: node
+  linkType: hard
+
 "@sideway/address@npm:^4.1.3":
   version: 4.1.3
   resolution: "@sideway/address@npm:4.1.3"
@@ -14960,15 +14969,6 @@ __metadata:
   version: 3.5.0
   resolution: "eslint-plugin-promise@npm:3.5.0"
   checksum: 22d9a873f7ac7b44d4cd95d1fc57a5be1e44b5c57d609cb90c4f8dec7b9893c48c8074e017ce1951cd02cac11f9d714457957ae7cefe7b3c6f3f92b64b1b9165
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-react-hooks@npm:^2.4.0":
-  version: 2.5.1
-  resolution: "eslint-plugin-react-hooks@npm:2.5.1"
-  peerDependencies:
-    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
-  checksum: a787ea0c665304f3f7249f5528ff1054bd8cfd6b188b95d048ff527b7e54ab7fb10d72254dba1738966e1a8fc4bd2d9fdf8ceb78d205fecbc7f660a334cd512e
   languageName: node
   linkType: hard
 
@@ -29489,6 +29489,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@seiyab/eslint-plugin-react-hooks": ^4.5.1-alpha.5
     "@typescript-eslint/eslint-plugin": ^4.6.0
     "@typescript-eslint/parser": ^4.6.0
     cspell: ^5.20.0
@@ -29496,7 +29497,6 @@ __metadata:
     eslint-interactive: ^10.0.0
     eslint-plugin-import: ^2.20.2
     eslint-plugin-react: ^7.18.0
-    eslint-plugin-react-hooks: ^2.4.0
     fs-extra: ^8.1.0
     glob: ^7.1.6
     gulp: ^4.0.2

@@ -60,6 +60,7 @@ export default function(props: Props) {
 				setSearchResultCount(r.length);
 			}
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchQuery]);
 
 	const onChange = useCallback((event: OnChangeEvent) => {
@@ -70,6 +71,7 @@ export default function(props: Props) {
 	const onSearchButtonClick = useCallback(() => {
 		setSearchStarted(false);
 		props.onSearchQueryChange({ value: '' });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	function installState(pluginId: string): InstallState {

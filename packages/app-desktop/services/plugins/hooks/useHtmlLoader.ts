@@ -45,6 +45,7 @@ export default function(frameWindow: any, isReady: boolean, postMessage: Functio
 			hash: htmlHash,
 			html: html,
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [html, htmlHash, isReady]);
 
 	return loadedHtmlHash;
