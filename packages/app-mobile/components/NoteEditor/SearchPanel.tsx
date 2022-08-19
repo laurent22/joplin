@@ -184,6 +184,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		});
 
 		return () => backListener.remove();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [state.dialogVisible]);
 
 
