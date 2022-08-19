@@ -66,6 +66,7 @@ function useRestartOnDone(upgradeResult: SyncTargetUpgradeResult) {
 		if (upgradeResult.done && !upgradeResult.error) {
 			void restart();
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [upgradeResult.done]);
 }
 

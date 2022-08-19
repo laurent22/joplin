@@ -29,6 +29,7 @@ const useIsVisible = (elementRef: MutableRefObject<HTMLElement>, rootRef: Mutabl
 				observer.disconnect();
 			}
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	return isVisible;

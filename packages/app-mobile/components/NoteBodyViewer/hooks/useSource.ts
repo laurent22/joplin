@@ -39,6 +39,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 	const markupToHtml = useMemo(() => {
 		return markupLanguageUtils.newMarkupToHtml();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [isFirstRender]);
 
 	// To address https://github.com/laurent22/joplin/issues/433
@@ -202,6 +203,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, effectDependencies);
 
 	return { source, injectedJs };
