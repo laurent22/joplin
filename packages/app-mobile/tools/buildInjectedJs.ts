@@ -7,7 +7,7 @@ import { mkdirp, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
 const execa = require('execa');
 
-import webpack from 'webpack';
+import * as webpack from 'webpack';
 
 const rootDir = dirname(dirname(dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
