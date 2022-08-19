@@ -10,10 +10,11 @@
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch --config webpack.config.js --mode=development",
+    "build": "webpack --config webpack.config.js --mode=production",
     "test": "jest",
-    "test-ci": "yarn test"
+    "test-ci": "yarn test",
+    "postinstall": "yarn build"
   },
   "author": "Joplin",
   "license": "MIT",
