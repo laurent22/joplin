@@ -5,7 +5,7 @@ import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
 
 const React = require('react');
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 const { WebView } = require('react-native-webview');
 import { View } from 'react-native';
@@ -13,12 +13,8 @@ const { editorFont } = require('../global-style');
 
 import SelectionFormatting from './SelectionFormatting';
 import {
-	EditorSettings,
-	EditorControl,
-
-	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
-	ListType,
-	SearchState,
+	EditorSettings, EditorControl,
+	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent, ListType, SearchState,
 } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar';
@@ -107,92 +103,14 @@ function editorTheme(themeId: number) {
 	};
 }
 
-function NoteEditor(props: Props, ref: any) {
-	const [source, setSource] = useState(undefined);
-	const webviewRef = useRef(null);
-
-	const setInitialSelectionJS = props.initialSelection ? `
-		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
-	` : '';
-
-	const editorSettings: EditorSettings = {
-		themeData: editorTheme(props.themeId),
-		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
-	};
-
-	const injectedJavaScript = `
-		function postMessage(name, data) {
-			window.ReactNativeWebView.postMessage(JSON.stringify({
-				data,
-				name,
-			}));
-		}
-
-		function logMessage(...msg) {
-			postMessage('onLog', { value: msg });
-		}
-
-		// Globalize logMessage, postMessage
-		window.logMessage = logMessage;
-		window.postMessage = postMessage;
-
-		window.onerror = (message, source, lineno) => {
-			window.ReactNativeWebView.postMessage(
-				"error: " + message + " in file://" + source + ", line " + lineno
-			);
-		};
-
-		if (!window.cm) {
-			// This variable is not used within this script
-			// but is called using "injectJavaScript" from
-			// the wrapper component.
-			window.cm = null;
-
-			try {
-				${shim.injectedJs('codeMirrorBundle')};
-
-				const parentElement = document.getElementsByClassName('CodeMirror')[0];
-				const initialText = ${JSON.stringify(props.initialText)};
-				const settings = ${JSON.stringify(editorSettings)};
-
-				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
-				${setInitialSelectionJS}
-
-				window.onresize = () => {
-					cm.scrollSelectionIntoView();
-				};
-			} catch (e) {
-				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
-			}
-		}
-		true;
-	`;
-
-	const css = useCss(props.themeId);
-	const html = useHtml(css);
-	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
-	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
-
-	// Use a reference to allow callbacks to access the current searchState without
-	// being re-created.
-	const searchStateRef = useRef(defaultSearchState);
-
-	// Runs [js] in the context of the CodeMirror frame.
-	const injectJS = (js: string) => {
-		webviewRef.current.injectJavaScript(`
-			try {
-				${js}
-			}
-			catch(e) {
-				logMessage('Error in injected JS:' + e, e);
-				throw e;
-			};
-
-			true;`);
-	};
-
-
-	const editorControl: EditorControl = useMemo(() => {
+type OnInjectJSCallback = (js: string)=> void;
+type OnSetVisibleCallback = (visible: boolean)=> void;
+type OnSearchStateChangeCallback = (state: SearchState)=> void;
+const useEditorControl = (
+	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
+	setSearchState: OnSearchStateChangeCallback, searchStateRef: RefObject<SearchState>
+): EditorControl => {
+	return useMemo(() => {
 		return {
 			undo() {
 				injectJS('cm.undo();');
@@ -269,23 +187,118 @@ function NoteEditor(props: Props, ref: any) {
 				},
 				setSearchState(state: SearchState) {
 					injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
-					searchStateRef.current = state;
+					setSearchState(state);
 				},
 				showSearch() {
-					searchStateRef.current = {
+					setSearchState({
 						...searchStateRef.current,
 						dialogVisible: true,
-					};
+					});
 				},
 				hideSearch() {
-					searchStateRef.current = {
+					setSearchState({
 						...searchStateRef.current,
 						dialogVisible: false,
-					};
+					});
 				},
 			},
 		};
-	}, [searchStateRef, webviewRef]);
+	}, [injectJS, searchStateRef]);
+};
+
+function NoteEditor(props: Props, ref: any) {
+	const [source, setSource] = useState(undefined);
+	const webviewRef = useRef(null);
+
+	const setInitialSelectionJS = props.initialSelection ? `
+		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
+	` : '';
+
+	const editorSettings: EditorSettings = {
+		themeData: editorTheme(props.themeId),
+		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
+	};
+
+	const injectedJavaScript = `
+		function postMessage(name, data) {
+			window.ReactNativeWebView.postMessage(JSON.stringify({
+				data,
+				name,
+			}));
+		}
+
+		function logMessage(...msg) {
+			postMessage('onLog', { value: msg });
+		}
+
+		// Globalize logMessage, postMessage
+		window.logMessage = logMessage;
+		window.postMessage = postMessage;
+
+		window.onerror = (message, source, lineno) => {
+			window.ReactNativeWebView.postMessage(
+				"error: " + message + " in file://" + source + ", line " + lineno
+			);
+		};
+
+		if (!window.cm) {
+			// This variable is not used within this script
+			// but is called using "injectJavaScript" from
+			// the wrapper component.
+			window.cm = null;
+
+			try {
+				${shim.injectedJs('codeMirrorBundle')};
+
+				const parentElement = document.getElementsByClassName('CodeMirror')[0];
+				const initialText = ${JSON.stringify(props.initialText)};
+				const settings = ${JSON.stringify(editorSettings)};
+
+				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+				${setInitialSelectionJS}
+
+				window.onresize = () => {
+					cm.scrollSelectionIntoView();
+				};
+			} catch (e) {
+				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
+			}
+		}
+		true;
+	`;
+
+	const css = useCss(props.themeId);
+	const html = useHtml(css);
+	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
+	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
+	const [searchState, setSearchState] = useState(defaultSearchState);
+
+	// Having a [searchStateRef] allows [editorControl] to not be re-created
+	// whenever [searchState] changes.
+	const searchStateRef = useRef(defaultSearchState);
+
+	// Keep the reference and the [searchState] in sync
+	useEffect(() => {
+		searchStateRef.current = searchState;
+	}, [searchState]);
+
+	// Runs [js] in the context of the CodeMirror frame.
+	const injectJS = (js: string) => {
+		webviewRef.current.injectJavaScript(`
+			try {
+				${js}
+			}
+			catch(e) {
+				logMessage('Error in injected JS:' + e, e);
+				throw e;
+			};
+
+			true;`);
+	};
+
+	const editorControl = useEditorControl(
+		injectJS, setLinkDialogVisible, setSearchState, searchStateRef
+	);
 
 	useImperativeHandle(ref, () => {
 		return editorControl;
@@ -414,7 +427,7 @@ function NoteEditor(props: Props, ref: any) {
 			<SearchPanel
 				editorSettings={editorSettings}
 				searchControl={editorControl.searchControl}
-				searchState={searchStateRef.current}
+				searchState={searchState}
 			/>
 
 			<MarkdownToolbar
@@ -427,7 +440,7 @@ function NoteEditor(props: Props, ref: any) {
 				editorSettings={editorSettings}
 				editorControl={editorControl}
 				selectionState={selectionState}
-				searchState={searchStateRef.current}
+				searchState={searchState}
 			/>
 		</View>
 	);
