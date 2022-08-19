@@ -184,5 +184,6 @@ export default function useKeymap(CodeMirror: any) {
 
 		setupEmacs();
 		setupVim();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

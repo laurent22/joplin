@@ -35,8 +35,8 @@ interface Props {
 }
 
 function fontFamilyFromSettings() {
-	const f = editorFont(Setting.value('style.editor.fontFamily'));
-	return [f, 'sans-serif'].join(', ');
+	const font = editorFont(Setting.value('style.editor.fontFamily'));
+	return font ? `${font}, sans-serif` : 'sans-serif';
 }
 
 function useCss(themeId: number): string {
@@ -378,8 +378,10 @@ function NoteEditor(props: Props, ref: any) {
 		} else {
 			console.info('Unsupported CodeMirror message:', msg);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onChange]);
 
+	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	const onError = useCallback(() => {
 		console.error('NoteEditor: webview error');
 	}, []);
