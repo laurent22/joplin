@@ -1,8 +1,5 @@
 const React = require('react');
-import {
-	TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle,
-	ViewStyle, TextStyle,
-} from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle } from 'react-native';
 import { Component } from 'react';
 const { ItemList } = require('./ItemList.js');
 

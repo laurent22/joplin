@@ -2,9 +2,7 @@ const React = require('react');
 
 import { connect } from 'react-redux';
 import { PureComponent, Component } from 'react';
-import {
-	View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
