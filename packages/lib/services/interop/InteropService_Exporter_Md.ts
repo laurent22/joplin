@@ -146,6 +146,9 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 			fileName = friendlySafeFilename(resource.title, null, true);
 		}
 
+		// Markdown link destination should not contain space characters
+		fileName = fileName.replace(' ', '_');
+
 		// Fall back on the resource filename saved in the users resource folder
 		return fileName;
 	}
