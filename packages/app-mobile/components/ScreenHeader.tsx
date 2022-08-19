@@ -1,21 +1,26 @@
 const React = require('react');
 
-const { connect } = require('react-redux');
-const { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
+import { connect } from 'react-redux';
+import { PureComponent, Component } from 'react';
+import {
+	View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle,
+} from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
-const NavService = require('@joplin/lib/services/NavService').default;
-const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
-const { _ } = require('@joplin/lib/locale');
-const Setting = require('@joplin/lib/models/Setting').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Folder = require('@joplin/lib/models/Folder').default;
+import NavService from '@joplin/lib/services/NavService';
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import { _ } from '@joplin/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
+import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
 const { themeStyle } = require('./global-style.js');
-const { Dropdown } = require('./Dropdown.js');
+import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
-const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
+import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { State } from '@joplin/lib/reducer';
 
 Icon.loadFont();
 
@@ -25,20 +30,78 @@ Icon.loadFont();
 // default height.
 const PADDING_V = 10;
 
-class ScreenHeaderComponent extends React.PureComponent {
-	constructor() {
-		super();
-		this.styles_ = {};
+type OnSelectCallbackType=()=> void;
+type OnPressCallback=()=> void;
+interface NavButtonPressEvent {
+	// Name of the screen to navigate to
+	screen: string;
+}
+
+interface MenuOptionType {
+	onPress: OnPressCallback;
+	isDivider?: boolean;
+	title: string;
+}
+
+type DispatchCommandType=(event: { type: string })=> void;
+interface ScreenHeaderProps {
+	selectedNoteIds: string[];
+	noteSelectionEnabled: boolean;
+	parentComponent: Component;
+	showUndoButton: boolean;
+	undoButtonDisabled?: boolean;
+	showRedoButton: boolean;
+	menuOptions: MenuOptionType[];
+	title?: string|null;
+	folders: FolderEntity[];
+	folderPickerOptions?: {
+		enabled: boolean;
+		selectedFolderId: string;
+		onValueChange: OnValueChangedListener;
+		mustSelect?: boolean;
+	};
+
+	dispatch: DispatchCommandType;
+	onUndoButtonPress: OnPressCallback;
+	onRedoButtonPress: OnPressCallback;
+	onSaveButtonPress: OnPressCallback;
+	sortButton_press?: OnPressCallback;
+
+	showSideMenuButton?: boolean;
+	showSearchButton?: boolean;
+	showContextMenuButton?: boolean;
+	showBackButton?: boolean;
+
+	saveButtonDisabled?: boolean;
+	showSaveButton?: boolean;
+
+	historyCanGoBack?: boolean;
+	showMissingMasterKeyMessage?: boolean;
+	hasDisabledSyncItems?: boolean;
+	shouldUpgradeSyncTarget?: boolean;
+	showShouldUpgradeSyncTargetMessage?: boolean;
+
+}
+
+interface ScreenHeaderState {
+}
+
+class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
+	private cachedStyles: any;
+	public dialogbox?: typeof DialogBox;
+	public constructor(props: ScreenHeaderProps) {
+		super(props);
+		this.cachedStyles = {};
 	}
 
-	styles() {
+	private styles() {
 		const themeId = Setting.value('theme');
-		if (this.styles_[themeId]) return this.styles_[themeId];
-		this.styles_ = {};
+		if (this.cachedStyles[themeId]) return this.cachedStyles[themeId];
+		this.cachedStyles = {};
 
 		const theme = themeStyle(themeId);
 
-		const styleObject = {
+		const styleObject: any = {
 			container: {
 				flexDirection: 'column',
 				backgroundColor: theme.backgroundColor2,
@@ -147,15 +210,15 @@ class ScreenHeaderComponent extends React.PureComponent {
 		styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, { opacity: theme.disabledOpacity });
 		styleObject.iconButtonDisabled = Object.assign({}, styleObject.iconButton, { opacity: theme.disabledOpacity });
 
-		this.styles_[themeId] = StyleSheet.create(styleObject);
-		return this.styles_[themeId];
+		this.cachedStyles[themeId] = StyleSheet.create(styleObject);
+		return this.cachedStyles[themeId];
 	}
 
-	sideMenuButton_press() {
+	private sideMenuButton_press() {
 		this.props.dispatch({ type: 'SIDE_MENU_TOGGLE' });
 	}
 
-	async backButton_press() {
+	private async backButton_press() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 		} else {
@@ -163,15 +226,15 @@ class ScreenHeaderComponent extends React.PureComponent {
 		}
 	}
 
-	selectAllButton_press() {
+	private selectAllButton_press() {
 		this.props.dispatch({ type: 'NOTE_SELECT_ALL_TOGGLE' });
 	}
 
-	searchButton_press() {
-		NavService.go('Search');
+	private searchButton_press() {
+		void NavService.go('Search');
 	}
 
-	async duplicateButton_press() {
+	private async duplicateButton_press() {
 		const noteIds = this.props.selectedNoteIds;
 
 		// Duplicate all selected notes. ensureUniqueTitle is set to true to use the
@@ -181,7 +244,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 	}
 
-	async deleteButton_press() {
+	private async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
 		const noteIds = this.props.selectedNoteIds;
@@ -196,25 +259,17 @@ class ScreenHeaderComponent extends React.PureComponent {
 		await Note.batchDelete(noteIds);
 	}
 
-	menu_select(value) {
+	private menu_select(value: OnSelectCallbackType) {
 		if (typeof value === 'function') {
 			value();
 		}
 	}
 
-	log_press() {
-		NavService.go('Log');
+	private warningBox_press(event: NavButtonPressEvent) {
+		void NavService.go(event.screen);
 	}
 
-	status_press() {
-		NavService.go('Status');
-	}
-
-	warningBox_press(event) {
-		NavService.go(event.screen);
-	}
-
-	renderWarningBox(screen, message) {
+	private renderWarningBox(screen: string, message: string) {
 		return (
 			<TouchableOpacity key={screen} style={this.styles().warningBox} onPress={() => this.warningBox_press({ screen: screen })} activeOpacity={0.8}>
 				<Text style={{ flex: 1 }}>{message}</Text>
@@ -222,8 +277,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 		);
 	}
 
-	render() {
-		function sideMenuButton(styles, onPress) {
+	public render() {
+		function sideMenuButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -238,7 +293,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function backButton(styles, onPress, disabled) {
+		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -257,7 +312,9 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function saveButton(styles, onPress, disabled, show) {
+		function saveButton(
+			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean
+		) {
 			if (!show) return null;
 
 			const icon = disabled ? <Icon name="md-checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
@@ -276,7 +333,13 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		const renderTopButton = (options) => {
+		interface TopButtonOptions {
+			visible: boolean;
+			iconName: string;
+			disabled?: boolean;
+			onPress: OnPressCallback;
+		}
+		const renderTopButton = (options: TopButtonOptions) => {
 			if (!options.visible) return null;
 
 			const icon = <Icon name={options.iconName} style={this.styles().topIcon} />;
@@ -310,7 +373,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			});
 		};
 
-		function selectAllButton(styles, onPress) {
+		function selectAllButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -324,7 +387,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function searchButton(styles, onPress) {
+		function searchButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -338,7 +401,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function deleteButton(styles, onPress, disabled) {
+		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -356,7 +419,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function duplicateButton(styles, onPress, disabled) {
+		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -374,7 +437,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function sortButton(styles, onPress) {
+		function sortButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -423,13 +486,15 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		const createTitleComponent = (disabled) => {
+		const createTitleComponent = (disabled: boolean) => {
 			const themeId = Setting.value('theme');
 			const theme = themeStyle(themeId);
 			const folderPickerOptions = this.props.folderPickerOptions;
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
-				const addFolderChildren = (folders, pickerItems, indent) => {
+				const addFolderChildren = (
+					folders: FolderEntityWithChildren[], pickerItems: DropdownListItem[], indent: number
+				) => {
 					folders.sort((a, b) => {
 						const aTitle = a && a.title ? a.title : '';
 						const bTitle = b && b.title ? b.title : '';
@@ -447,7 +512,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					return pickerItems;
 				};
 
-				const titlePickerItems = mustSelect => {
+				const titlePickerItems = (mustSelect: boolean) => {
 					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
@@ -459,7 +524,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 				return (
 					<Dropdown
 						items={titlePickerItems(!!folderPickerOptions.mustSelect)}
-						itemHeight={35}
 						disabled={disabled}
 						labelTransform="trim"
 						selectedValue={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
@@ -521,7 +585,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		let backButtonDisabled = !this.props.historyCanGoBack;
 		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
-		const headerItemDisabled = !this.props.selectedNoteIds.length > 0;
+		const headerItemDisabled = !(this.props.selectedNoteIds.length > 0);
 
 		const titleComp = createTitleComponent(headerItemDisabled);
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
@@ -533,7 +597,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
-		const contextMenuStyle = { paddingTop: PADDING_V, paddingBottom: PADDING_V };
+		const contextMenuStyle: ViewStyle = {
+			paddingTop: PADDING_V,
+			paddingBottom: PADDING_V,
+		};
 
 		// HACK: if this button is removed during selection mode, the header layout is broken, so for now just make it 1 pixel large (normally it should be hidden)
 		if (this.props.noteSelectionEnabled) contextMenuStyle.width = 1;
@@ -555,8 +622,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					{sideMenuComp}
 					{backButtonComp}
-					{renderUndoButton(this.styles())}
-					{renderRedoButton(this.styles())}
+					{renderUndoButton()}
+					{renderRedoButton()}
 					{saveButton(
 						this.styles(),
 						() => {
@@ -575,20 +642,20 @@ class ScreenHeaderComponent extends React.PureComponent {
 				</View>
 				{warningComps}
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox: typeof DialogBox) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
 			</View>
 		);
 	}
+
+	public static defaultProps: Partial<ScreenHeaderProps> ={
+		menuOptions: [],
+	};
 }
 
-ScreenHeaderComponent.defaultProps = {
-	menuOptions: [],
-};
-
-const ScreenHeader = connect(state => {
+const ScreenHeader = connect((state: State) => {
 	const syncInfo = localSyncInfoFromState(state);
 
 	return {
@@ -604,4 +671,5 @@ const ScreenHeader = connect(state => {
 	};
 })(ScreenHeaderComponent);
 
-module.exports = { ScreenHeader };
+export default ScreenHeader;
+export { ScreenHeader };

@@ -52,6 +52,7 @@ interface StateResourceFetcher {
 
 export interface State {
 	notes: any[];
+	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
 	folders: any[];

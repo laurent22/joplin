@@ -14,7 +14,7 @@ import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 const VersionInfo = require('react-native-version-info').default;
 const { connect } = require('react-redux');
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { Dropdown } = require('../Dropdown.js');
