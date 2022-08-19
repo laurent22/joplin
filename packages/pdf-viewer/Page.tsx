@@ -54,6 +54,7 @@ export default function Page(props: PageProps) {
 			setError(error);
 			throw error;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [page, props.scaledSize, isVisible]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
@@ -73,6 +74,7 @@ export default function Page(props: PageProps) {
 			props.container.current.scrollTop = wrapperRef.current.offsetTop;
 			// console.warn('setting focus on page', props.pageNo, wrapperRef.current.offsetTop);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.focusOnLoad]);
 
 	let style: any = {};
