@@ -364,7 +364,7 @@ function NoteEditor(props: Props, ref: any) {
 			},
 
 			onRequestShowSearch(data: SearchState) {
-				searchStateRef.current = data;
+				setSearchState(data);
 				editorControl.searchControl.showSearch();
 			},
 
@@ -378,8 +378,7 @@ function NoteEditor(props: Props, ref: any) {
 		} else {
 			console.info('Unsupported CodeMirror message:', msg);
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.onChange]);
+	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
 
 	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	const onError = useCallback(() => {
