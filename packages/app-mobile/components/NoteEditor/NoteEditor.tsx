@@ -17,7 +17,7 @@ import {
 	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent, ListType, SearchState,
 } from './types';
 import { _ } from '@joplin/lib/locale';
-import MarkdownToolbar from './MarkdownToolbar';
+import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -203,7 +203,7 @@ const useEditorControl = (
 				},
 			},
 		};
-	}, [injectJS, searchStateRef]);
+	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
 };
 
 function NoteEditor(props: Props, ref: any) {
