@@ -302,6 +302,7 @@ const useStyles = (styleProps: any, theme: Theme) => {
 			},
 			toolbarContainer: {
 				maxHeight: '65%',
+				flexShrink: 1,
 			},
 			toolbarContent: {
 				flexGrow: 1,
