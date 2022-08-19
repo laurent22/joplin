@@ -69,6 +69,7 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 			}
 		}
 		setOptions(newOptions);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [plugins]);
 
 	function addInlineCss(cssStrings: string[], id: string) {

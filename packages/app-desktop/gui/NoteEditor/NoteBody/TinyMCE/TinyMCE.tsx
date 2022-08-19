@@ -280,6 +280,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				return true;
 			},
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss]);
 
 	// -----------------------------------------------------------------------------------------
@@ -512,6 +513,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		// style and re-applying it on editorReady gives our styles precedence and prevents any flashing
 		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editorReady, props.themeId]);
 
 	// -----------------------------------------------------------------------------------------
@@ -680,6 +682,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 
 		void loadEditor();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [scriptLoaded]);
 
 	// -----------------------------------------------------------------------------------------
@@ -829,6 +832,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey]);
 
 	useEffect(() => {
@@ -909,6 +913,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			void execOnChangeEvent();
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
@@ -1091,6 +1096,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				console.warn('Error removing events', error);
 			}
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor]);
 
 	// -----------------------------------------------------------------------------------------
