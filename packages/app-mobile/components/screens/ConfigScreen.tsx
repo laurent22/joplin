@@ -461,7 +461,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 								color: theme.color,
 								fontSize: theme.fontSize,
 							}}
-							onValueChange={(itemValue: any) => {
+							onValueChange={(itemValue: string) => {
 								updateSettingValue(key, itemValue);
 							}}
 						/>

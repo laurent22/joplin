@@ -12,7 +12,7 @@ export interface DropdownListItem {
 	value: ValueType;
 }
 
-export type OnValueChangedListener = (newValue: ValueType, itemIndex: number)=> void;
+export type OnValueChangedListener = (newValue: ValueType)=> void;
 
 interface DropdownProps {
 	listItemStyle?: ViewStyle;
@@ -124,15 +124,15 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			this.setState({ listVisible: false });
 		};
 
-		const itemRenderer = (item: DropdownListItem, index: number) => {
-			const key = (item.value ?? index).toString();
+		const itemRenderer = (item: DropdownListItem) => {
+			const key = item.value.toString();
 			return (
 				<TouchableOpacity
 					style={itemWrapperStyle}
 					key={key}
 					onPress={() => {
 						closeList();
-						if (this.props.onValueChange) this.props.onValueChange(item.value, index);
+						if (this.props.onValueChange) this.props.onValueChange(item.value);
 					}}
 				>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={itemStyle} key={key}>

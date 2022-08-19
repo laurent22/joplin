@@ -539,13 +539,13 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 							color: theme.color,
 							fontSize: theme.fontSize,
 						}}
-						onValueChange={async (folderId, itemIndex) => {
+						onValueChange={async (folderId) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the
 							// chosen folder.
 
 							if (folderPickerOptions.onValueChange) {
-								folderPickerOptions.onValueChange(folderId, itemIndex);
+								folderPickerOptions.onValueChange(folderId);
 								return;
 							}
 
