@@ -1,6 +1,6 @@
 import { _ } from '@joplin/lib/locale';
-import { ReactElement } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ReactElement, useCallback, useState } from 'react';
+import { LayoutChangeEvent, ScrollView, View } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
 import { ButtonGroup, ButtonSpec } from './types';
@@ -73,30 +73,48 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 		);
 	}
 
-	if (!props.visible) {
-		return null;
-	}
+	const [hasSpaceForCloseBtn, setHasSpaceForCloseBtn] = useState(true);
+	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
+		if (props.buttonGroups.length === 0) {
+			return;
+		}
+
+		// Add 1 to account for the close button
+		const totalButtonCount = props.buttonGroups[0].items.length + 1;
+
+		const newWidth = event.nativeEvent.layout.width;
+		setHasSpaceForCloseBtn(newWidth > totalButtonCount * buttonSize);
+	}, [setHasSpaceForCloseBtn, props.buttonGroups]);
 
 	const closeButtonSpec: ButtonSpec = {
 		icon: '⨉',
 		accessibilityLabel: _('Close'),
 		onPress: props.onToggleOverflow,
 	};
+	const closeButton = (
+		<ToolbarButton
+			styleSheet={props.styleSheet}
+			spec={closeButtonSpec}
+			style={{
+				position: 'absolute',
+				right: 0,
+				zIndex: 1,
+			}}
+		/>
+	);
 
+	if (!props.visible) {
+		return null;
+	}
 	return (
-		<View style={{
-			height: props.buttonGroups.length * buttonSize,
-			flexDirection: 'column',
-		}}>
-			<ToolbarButton
-				styleSheet={props.styleSheet}
-				spec={closeButtonSpec}
-				style={{
-					position: 'absolute',
-					right: 0,
-					zIndex: 1,
-				}}
-			/>
+		<View
+			style={{
+				height: props.buttonGroups.length * buttonSize,
+				flexDirection: 'column',
+			}}
+			onLayout={onContainerLayout}
+		>
+			{hasSpaceForCloseBtn ? closeButton : null}
 			{overflowRows}
 		</View>
 	);

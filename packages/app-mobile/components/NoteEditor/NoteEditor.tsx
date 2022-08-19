@@ -437,7 +437,6 @@ function NoteEditor(props: Props, ref: any) {
 				style={{
 					// Don't show the markdown toolbar if there isn't enough space
 					// for it:
-					overflow: 'hidden',
 					flexShrink: 1,
 				}}
 				editorSettings={editorSettings}
