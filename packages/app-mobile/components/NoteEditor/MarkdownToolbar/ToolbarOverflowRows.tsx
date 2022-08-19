@@ -1,8 +1,9 @@
+import { _ } from '@joplin/lib/locale';
 import { ReactElement } from 'react';
 import { ScrollView, View } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
-import { ButtonGroup } from './types';
+import { ButtonGroup, ButtonSpec } from './types';
 
 const React = require('react');
 
@@ -76,11 +77,26 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 		return null;
 	}
 
+	const closeButtonSpec: ButtonSpec = {
+		icon: '⨉',
+		accessibilityLabel: _('Close'),
+		onPress: props.onToggleOverflow,
+	};
+
 	return (
 		<View style={{
 			height: props.buttonGroups.length * buttonSize,
 			flexDirection: 'column',
 		}}>
+			<ToolbarButton
+				styleSheet={props.styleSheet}
+				spec={closeButtonSpec}
+				style={{
+					position: 'absolute',
+					right: 0,
+					zIndex: 1,
+				}}
+			/>
 			{overflowRows}
 		</View>
 	);

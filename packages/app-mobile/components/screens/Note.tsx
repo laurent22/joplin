@@ -1129,6 +1129,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					/>
 				);
 			} else {
+				const editorStyle = this.styles().bodyTextInput;
+
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
 					themeId={this.props.themeId}
@@ -1137,7 +1139,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onChange={this.onBodyChange}
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-					style={this.styles().bodyTextInput}
+					style={{
+						...editorStyle,
+						paddingLeft: 0,
+						paddingRight: 0,
+					}}
+					contentStyle={{
+						// Apply padding to the editor's content, but not the toolbar.
+						paddingLeft: editorStyle.paddingLeft,
+						paddingRight: editorStyle.paddingRight,
+					}}
 				/>;
 			}
 		}

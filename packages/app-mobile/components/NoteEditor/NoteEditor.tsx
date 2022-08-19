@@ -8,7 +8,7 @@ const React = require('react');
 import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 const { WebView } = require('react-native-webview');
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
 import SelectionFormatting from './SelectionFormatting';
@@ -27,7 +27,8 @@ interface Props {
 	themeId: number;
 	initialText: string;
 	initialSelection?: Selection;
-	style: any;
+	style: ViewStyle;
+	contentStyle?: ViewStyle;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -405,6 +406,7 @@ function NoteEditor(props: Props, ref: any) {
 				flexGrow: 1,
 				flexShrink: 0,
 				minHeight: '30%',
+				...props.contentStyle,
 			}}>
 				<WebView
 					style={{
