@@ -39,6 +39,7 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 			onError({ recorderError });
 			setSaveAllowed(false);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [accelerator]);
 
 	const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
