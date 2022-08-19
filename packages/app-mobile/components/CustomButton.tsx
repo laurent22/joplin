@@ -7,10 +7,7 @@ import { ReactNode } from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useState, useMemo, useCallback, useRef } from 'react';
-import {
-	View, Text, Pressable, ViewStyle, PressableStateCallbackType,
-	StyleProp, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole,
-} from 'react-native';
+import { View, Text, Pressable, ViewStyle, PressableStateCallbackType, StyleProp, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 
 type ButtonClickListener = ()=> void;
@@ -68,7 +65,7 @@ const CustomButton = (props: ButtonProps) => {
 	}, [fadeAnim]);
 	const onLongPress = useCallback(() => {
 		setTooltipVisible(true);
-	}, [fadeAnim]);
+	}, []);
 
 	// Select different user-specified styles if selected/unselected.
 	const onStyleChange = useCallback((state: PressableStateCallbackType): StyleProp<ViewStyle> => {
