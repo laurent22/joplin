@@ -12,4 +12,7 @@
 		"gulpfile.ts",
 		"tools/*.ts",
 	],
+	"compilerOptions": {
+		"types": ["jest", "node"]
+	}
 }
