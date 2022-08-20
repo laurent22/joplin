@@ -74,6 +74,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.UnorderedList);
 		}, [editorControl]),
+
+		priority: -2,
 	});
 
 	listButtons.push({
@@ -87,7 +89,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			editorControl.toggleList(ListType.OrderedList);
 		}, [editorControl]),
 
-		priority: -1,
+		priority: -2,
 	});
 
 	listButtons.push({
@@ -101,7 +103,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			editorControl.toggleList(ListType.CheckList);
 		}, [editorControl]),
 
-		priority: -1,
+		priority: -2,
 	});
 
 
@@ -111,6 +113,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		accessibilityLabel: _('Decrease indent level'),
 		onPress: editorControl.decreaseIndent,
+
+		priority: -1,
 	});
 
 	listButtons.push({
@@ -119,6 +123,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		accessibilityLabel: _('Increase indent level'),
 		onPress: editorControl.increaseIndent,
+
+		priority: -1,
 	});
 
 
@@ -179,7 +185,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		active: selState.inLink,
 		onPress: editorControl.showLinkDialog,
 
-		priority: -2,
+		priority: -3,
 	});
 
 
@@ -222,7 +228,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			}
 		}, [editorControl, props.searchState.dialogVisible]),
 
-		priority: -2,
+		priority: -3,
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -256,7 +262,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		disabled: !keyboardVisible,
 		onPress: onToggleKeyboard,
 
-		priority: -2,
+		priority: -3,
 	});
 
 	return (
