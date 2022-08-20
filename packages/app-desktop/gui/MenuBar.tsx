@@ -86,14 +86,14 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 				menuItem = {
 					label: profile.name,
 					click: () => {
-						void CommandService.instance().execute('switchProfile', i);
+						void CommandService.instance().execute('switchProfile', profile.id);
 					},
 				};
 			}
 
 			menuItem.label = profile.name;
 			menuItem.type = 'checkbox';
-			menuItem.checked = profileConfig.currentProfile === i;
+			menuItem.checked = profileConfig.currentProfileId === profile.id;
 
 			switchProfileMenuItems.push(menuItem);
 		}
@@ -174,7 +174,7 @@ function useMenuStates(menu: any, props: Props) {
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
-				const id = type == 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
+				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
 				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
@@ -192,12 +192,17 @@ function useMenuStates(menu: any, props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [
 		props.menuItemProps,
 		props.layoutButtonSequence,
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.reverse'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
 		props.showNoteCounts,
 		props.uncompletedTodosOnTop,
@@ -276,6 +281,7 @@ function useMenu(props: Props) {
 		}
 
 		void CommandService.instance().execute('hideModalMessage');
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
@@ -292,6 +298,7 @@ function useMenu(props: Props) {
 			(commandName: string) => onMenuItemClickRef.current(commandName),
 			props.locale
 		);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [commandNames, pluginCommandNames, props.locale]);
 
 	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
@@ -332,7 +339,7 @@ function useMenu(props: Props) {
 
 				sortItems.push({ type: 'separator' });
 
-				if (type == 'notes') {
+				if (type === 'notes') {
 					sortItems.push(
 						{ ...menuItemDic.toggleNotesSortOrderReverse, type: 'checkbox' },
 						{ ...menuItemDic.toggleNotesSortOrderField, visible: false }
@@ -632,9 +639,11 @@ function useMenu(props: Props) {
 						// editor or a regular text field.
 						{
 							role: 'undo',
+							label: _('Undo'),
 						},
 						{
 							role: 'redo',
+							label: _('Redo'),
 						},
 						separator(),
 						menuItemDic.textBold,
@@ -903,13 +912,16 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [
 		props.routeName,
 		props.pluginMenuItems,
 		props.pluginMenus,
 		keymapLastChangeTime,
 		modulesLastChangeTime,
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['spellChecker.language'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['spellChecker.enabled'],
 		props.customCss,
 		props.locale,

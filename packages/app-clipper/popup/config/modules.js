@@ -16,6 +16,8 @@ function getAdditionalModulePaths(options = {}) {
 
 	// We need to explicitly check for null and undefined (and not a falsy value) because
 	// TypeScript treats an empty string as `.`.
+	//
+	// eslint-disable-next-line eqeqeq
 	if (baseUrl == null) {
 		// If there's no baseUrl set we respect NODE_PATH
 		// Note that NODE_PATH is deprecated and will be removed

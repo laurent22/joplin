@@ -121,7 +121,7 @@ async function initialize() {
 
 class RootComponent extends React.Component<Props, any> {
 	public async componentDidMount() {
-		if (this.props.appState == 'starting') {
+		if (this.props.appState === 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'initializing',
@@ -228,7 +228,7 @@ class RootComponent extends React.Component<Props, any> {
 					<StyleSheetContainer themeId={this.props.themeId}></StyleSheetContainer>
 					<MenuBar/>
 					<GlobalStyle/>
-					<Navigator style={navigatorStyle} screens={screens} />
+					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 					{this.renderModalMessage(this.modalDialogProps())}
 					{this.renderDialogs()}
 				</ThemeProvider>
@@ -245,6 +245,7 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		needApiAuth: state.needApiAuth,
 		dialogs: state.dialogs,
+		profileConfigCurrentProfileId: state.profileConfig.currentProfileId,
 	};
 };
 

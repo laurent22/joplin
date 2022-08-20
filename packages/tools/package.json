@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
@@ -20,9 +20,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "~2.8",
-    "@joplin/renderer": "~2.8",
+    "@joplin/lib": "~2.9",
+    "@joplin/renderer": "~2.9",
     "@types/node-fetch": "1.6.9",
+    "@types/yargs": "16.0.3",
     "dayjs": "^1.10.7",
     "execa": "^4.1.0",
     "fs-extra": "^4.0.3",
@@ -49,6 +50,7 @@
     "gettext-extractor": "^3.5.3",
     "gulp": "^4.0.2",
     "jest": "^26.6.3",
+    "rss": "^1.2.2",
     "sass": "^1.39.2",
     "sqlite3": "^5.0.0",
     "typescript": "^4.1.3"

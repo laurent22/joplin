@@ -32,15 +32,19 @@ async function updatePackageVersion(packageFilePath: string, majorMinorVersion: 
 	}
 
 	if (options.updateDependenciesVersion) {
-		for (const [name] of Object.entries(content.dependencies)) {
-			if (isJoplinPackage(name)) {
-				content.dependencies[name] = `~${majorMinorVersion}`;
+		if (content.dependencies) {
+			for (const [name] of Object.entries(content.dependencies)) {
+				if (isJoplinPackage(name)) {
+					content.dependencies[name] = `~${majorMinorVersion}`;
+				}
 			}
 		}
 
-		for (const [name] of Object.entries(content.devDependencies)) {
-			if (isJoplinPackage(name)) {
-				content.devDependencies[name] = `~${majorMinorVersion}`;
+		if (content.devDependencies) {
+			for (const [name] of Object.entries(content.devDependencies)) {
+				if (isJoplinPackage(name)) {
+					content.devDependencies[name] = `~${majorMinorVersion}`;
+				}
 			}
 		}
 	}
@@ -122,13 +126,16 @@ async function main() {
 
 	await updatePackageVersion(`${rootDir}/packages/app-cli/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/app-desktop/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/app-mobile/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/generator-joplin/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/htmlpack/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/react-native-saf-x/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/lib/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/plugin-repo-cli/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/renderer/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/pdf-viewer/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {
 		await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);
@@ -137,7 +144,7 @@ async function main() {
 		await updatePluginGeneratorTemplateVersion(`${rootDir}/packages/generator-joplin/generators/app/templates/src/manifest.json`, majorMinorVersion);
 	}
 
-	console.info('Version numbers have been updated. Consider running `yarn i` to update the lock files');
+	console.info('Version numbers have been updated. Consider running `yarn install` to update the lock files');
 }
 
 main().catch((error) => {

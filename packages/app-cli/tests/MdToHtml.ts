@@ -60,16 +60,20 @@ describe('MdToHtml', function() {
 			actualHtml = actualHtml.replace(/\r?\n/g, '\n');
 
 			if (actualHtml !== expectedHtml) {
-				console.info('');
-				console.info(`Error converting file: ${mdFilename}`);
-				console.info('--------------------------------- Got:');
-				console.info(actualHtml);
-				console.info('--------------------------------- Raw:');
-				console.info(actualHtml.split('\n'));
-				console.info('--------------------------------- Expected:');
-				console.info(expectedHtml.split('\n'));
-				console.info('--------------------------------------------');
-				console.info('');
+				const msg: string[] = [
+					'',
+					`Error converting file: ${mdFilename}`,
+					'--------------------------------- Got:',
+					actualHtml,
+					'--------------------------------- Raw:',
+					actualHtml.split('\n'),
+					'--------------------------------- Expected:',
+					expectedHtml.split('\n'),
+					'--------------------------------------------',
+					'',
+				];
+
+				console.info(msg.join('\n'));
 
 				expect(false).toBe(true);
 				// return;

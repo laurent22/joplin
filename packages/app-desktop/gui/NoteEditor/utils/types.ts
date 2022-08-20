@@ -27,7 +27,6 @@ export interface NoteEditorProps {
 	editorNoteStatuses: any;
 	syncStarted: boolean;
 	bodyEditor: string;
-	folders: any[];
 	notesParentType: string;
 	selectedNoteTags: any[];
 	lastEditorScrollPercents: any;

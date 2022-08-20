@@ -259,7 +259,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				return commandOutput;
 			},
 		};
-	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
@@ -465,6 +466,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.color};
 			}
 
+			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
+				color: ${theme.color};
+			}
+
 			div.CodeMirror span.cm-quote {
 				color: ${theme.color};
 				opacity: ${theme.blockQuoteOpacity};
@@ -477,10 +482,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			div.CodeMirror span.cm-url {
 				color: ${theme.urlColor};
 				opacity: 0.5;
-			}
-
-			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
-				color: ${theme.color};
 			}
 
 			div.CodeMirror span.cm-comment {
@@ -565,6 +566,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			document.head.removeChild(element);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.themeId, props.contentMaxWidth]);
 
 	const webview_domReady = useCallback(() => {
@@ -592,6 +594,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		} else {
 			props.onMessage(event);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onMessage, props.content, setEditorPercentScroll]);
 
 	useEffect(() => {
@@ -614,6 +617,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				resourceInfos: props.resourceInfos,
 				contentMaxWidth: props.contentMaxWidth,
 				mapsToLine: true,
+				// Always using useCustomPdfViewer for now, we can add a new setting for it in future if we need to.
+				useCustomPdfViewer: true,
 			}));
 
 			if (cancelled) return;
@@ -633,6 +638,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			cancelled = true;
 			shim.clearTimeout(timeoutId);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
 
 	useEffect(() => {
@@ -658,6 +664,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
@@ -672,7 +679,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// props.content has been updated).
 		const textChanged = props.searchMarkers.keywords.length > 0 && (props.content !== previousContent || renderedBody !== previousRenderedBody);
 
-		if (props.searchMarkers !== previousSearchMarkers || textChanged) {
+		if (webviewRef.current?.wrappedInstance && (props.searchMarkers !== previousSearchMarkers || textChanged)) {
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
@@ -681,6 +688,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				props.setLocalSearchResultCount(matches);
 			}
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
 
 	const cellEditorStyle = useMemo(() => {
@@ -706,6 +714,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
+	const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
+
 	useEffect(() => {
 		if (!editorRef.current) return;
 
@@ -713,10 +723,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// we should focus the editor
 		// The intuition is that a panel toggle (with editor in view) is the equivalent of
 		// an editor interaction so users should expect the editor to be focused
-		if (props.visiblePanes.indexOf('editor') >= 0) {
+		if (editorPaneVisible) {
 			editorRef.current.focus();
 		}
-	}, [props.visiblePanes]);
+	}, [editorPaneVisible]);
 
 	useEffect(() => {
 		if (!editorRef.current) return;
@@ -831,6 +841,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.plugins]);
 
 	function renderEditor() {

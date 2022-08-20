@@ -297,7 +297,7 @@ export interface MenuItem {
 	/**
 	 * Set to "separator" to create a divider line
 	 */
-	type?: string;
+	type?: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio');
 
 	/**
 	 * Accelerator associated with the menu item
@@ -364,6 +364,12 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum SettingItemSubType {
+	FilePathAndArgs = 'file_path_and_args',
+	FilePath = 'file_path', // Not supported on mobile!
+	DirectoryPath = 'directory_path', // Not supported on mobile!
+}
+
 export enum AppType {
 	Desktop = 'desktop',
 	Mobile = 'mobile',
@@ -380,6 +386,12 @@ export enum SettingStorage {
 export interface SettingItem {
 	value: any;
 	type: SettingItemType;
+
+	/**
+	 * Currently only used to display a file or directory selector. Always set
+	 * `type` to `SettingItemType.String` when using this property.
+	 */
+	subType?: SettingItemSubType;
 
 	label: string;
 	description?: string;

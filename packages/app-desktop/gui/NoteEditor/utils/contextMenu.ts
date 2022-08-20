@@ -86,21 +86,21 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (!filePath) return;
 				await fs.copy(resourcePath, filePath);
 			},
-			// We handle images received as text seperately as it can be saved in multiple formats
+			// We handle images received as text separately as it can be saved in multiple formats
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		saveAsSvg: {
-			label: _('Save as SVG'),
+			label: _('Save as %s', 'SVG'),
 			onAction: async (options: ContextMenuOptions) => {
 				await saveFileData(options.textToCopy, options.filename);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy && itemType === ContextMenuItemType.Image && options.mime?.startsWith('image/svg'),
 		},
 		saveAsPng: {
-			label: _('Save as PNG'),
+			label: _('Save as %s', 'PNG'),
 			onAction: async (options: ContextMenuOptions) => {
 				// First convert it to png then save
-				if (options.mime != 'image/svg+xml') {
+				if (options.mime !== 'image/svg+xml') {
 					throw new Error(`Unsupported image type: ${options.mime}`);
 				}
 				if (!options.filename) {
@@ -151,14 +151,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				handleCopyToClipboard(options);
 				options.insertContent('');
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType != ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
 		},
 		copy: {
 			label: _('Copy'),
 			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType != ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
 		},
 		paste: {
 			label: _('Paste'),

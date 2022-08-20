@@ -1,5 +1,36 @@
 # Joplin Android app changelog
 
+## [android-v2.9.1](https://github.com/laurent22/joplin/releases/tag/android-v2.9.1) (Pre-release) - 2022-08-12T17:14:49Z
+
+- New: Add alt text/roles to some buttons to improve accessibility (#6616 by Henry Heino)
+- New: Add keyboard-activatable markdown commands (e.g. bold, italicize) on text editor (#6707 by Henry Heino)
+- Improved: Ctrl+F search support in beta editor (#6587 by Henry Heino)
+- Improved: Improve syntax highlighting on mobile beta editor (#6684 by Henry Heino)
+- Improved: Removes whitespace above navigation component (#6597 by [@tom](https://github.com/tom))
+- Fixed: Do not encrypt non-owned note if it was not shared encrypted (#6645)
+- Fixed: Fix checklist continuation in beta editor (#6577) (#6576 by Henry Heino)
+- Fixed: Fixed android filesystem sync (#6395) (#5779 by [@jd1378](https://github.com/jd1378))
+- Fixed: Note links with HTML notation did not work (#6515)
+- Fixed: Scroll selection into view in beta editor when window resizes (#6610) (#5949 by Henry Heino)
+
+## [android-v2.8.1](https://github.com/laurent22/joplin/releases/tag/android-v2.8.1) (Pre-release) - 2022-05-18T13:35:01Z
+
+- Improved: Allow filtering tags in tag dialog (#6221 by [@shinglyu](https://github.com/shinglyu))
+- Improved: Automatically start sync after setting the sync parameters (ff066ba)
+- Improved: Color of Date-Time text changed to match theme (#6279 by Ayush Srivastava)
+- Improved: Handle invalid revision patches (#6209)
+- Improved: Improve error message when revision metadata cannot be decoded, to improve debugging (a325bf6)
+- Improved: Make search engine filter keywords case insensitive (#6267) (#6266 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Sort sync target options (814a5a0)
+- Fixed: "Move Note" dropdown menu can be very narrow (#6306) (#3564 by Ayush Srivastava)
+- Fixed: Cursor hard to see in dark mode (#6307) (#5987 by Henry Heino)
+- Fixed: Ensure that note revision markup type is set correctly (#6261)
+- Fixed: Error when pressing undo or redo button while editor is closed (#6426) (#6328 by Tolulope Malomo)
+- Fixed: Long path in "Export profile" prevents tapping OK button (#6359) (#6026 by Tolulope Malomo)
+- Fixed: Prevent multiline note titles (#6144) (#5482 by [@Daeraxa](https://github.com/Daeraxa))
+- Fixed: Support inserting attachments from Beta Editor (#6325) (#6324 by Henry Heino)
+- Fixed: The camera button remains clickable after taking a photo bug (#6222 by [@shinglyu](https://github.com/shinglyu))
+
 ## [android-v2.7.2](https://github.com/laurent22/joplin/releases/tag/android-v2.7.2) (Pre-release) - 2022-02-12T12:51:29Z
 
 - New: Add additional time format HH.mm (#6086 by [@vincentjocodes](https://github.com/vincentjocodes))

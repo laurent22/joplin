@@ -221,6 +221,12 @@ export enum ModelType {
 	Command = 16,
 }
 
+export interface VersionInfo {
+	version: string;
+	profileVersion: number;
+	syncVersion: number;
+}
+
 // =================================================================
 // Menu types
 // =================================================================
@@ -364,6 +370,12 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum SettingItemSubType {
+	FilePathAndArgs = 'file_path_and_args',
+	FilePath = 'file_path', // Not supported on mobile!
+	DirectoryPath = 'directory_path', // Not supported on mobile!
+}
+
 export enum AppType {
 	Desktop = 'desktop',
 	Mobile = 'mobile',
@@ -380,6 +392,12 @@ export enum SettingStorage {
 export interface SettingItem {
 	value: any;
 	type: SettingItemType;
+
+	/**
+	 * Currently only used to display a file or directory selector. Always set
+	 * `type` to `SettingItemType.String` when using this property.
+	 */
+	subType?: SettingItemSubType;
 
 	label: string;
 	description?: string;

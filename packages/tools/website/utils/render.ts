@@ -47,7 +47,17 @@ export function getMarkdownIt() {
 }
 
 export function markdownToPageHtml(md: string, templateParams: TemplateParams): string {
+	const html = markdownToHtml(md);
+	return renderMustache(html, templateParams);
+}
+
+export const markdownToHtml = (md: string): string => {
 	const markdownIt = getMarkdownIt();
 	markdownIt.use(headerAnchor);
-	return renderMustache(markdownIt.render(md), templateParams);
-}
+	markdownIt.linkify.set({
+		'fuzzyLink': false,
+		'fuzzyIP': false,
+		'fuzzyEmail': false,
+	});
+	return markdownIt.render(md);
+};

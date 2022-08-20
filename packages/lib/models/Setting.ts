@@ -25,6 +25,17 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+interface OptionsToValueLabelsOptions {
+	valueKey: string;
+	labelKey: string;
+}
+
+export enum SettingItemSubType {
+	FilePathAndArgs = 'file_path_and_args',
+	FilePath = 'file_path', // Not supported on mobile!
+	DirectoryPath = 'directory_path', // Not supported on mobile!
+}
+
 interface KeysOptions {
 	secureOnly?: boolean;
 }
@@ -47,6 +58,7 @@ export interface SettingItem {
 	label?(): string;
 	description?: Function;
 	options?(): any;
+	optionsOrder?(): string[];
 	appTypes?: AppType[];
 	show?(settings: any): boolean;
 	filter?(value: any): any;
@@ -243,7 +255,7 @@ class Setting extends BaseModel {
 	public static SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
 	public static SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
 
-	public static custom_css_files = {
+	public static customCssFilenames = {
 		JOPLIN_APP: 'userchrome.css',
 		RENDERED_MARKDOWN: 'userstyle.css',
 	};
@@ -293,7 +305,7 @@ class Setting extends BaseModel {
 		return BaseModel.TYPE_SETTING;
 	}
 
-	static async reset() {
+	public static async reset() {
 		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
 		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
 
@@ -304,6 +316,7 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		this.customMetadata_ = {};
 		this.fileHandler_ = null;
+		this.rootFileHandler_ = null;
 	}
 
 	public static get settingFilePath(): string {
@@ -415,6 +428,9 @@ class Setting extends BaseModel {
 				options: () => {
 					return SyncTargetRegistry.idAndLabelPlainObject(platform);
 				},
+				optionsOrder: () => {
+					return SyncTargetRegistry.optionsOrder();
+				},
 				storage: SettingStorage.File,
 			},
 
@@ -436,7 +452,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				show: (settings: any) => {
 					try {
-						return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem');
+						return settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem');
 					} catch (error) {
 						return false;
 					}
@@ -455,7 +471,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
 				label: () => _('Nextcloud WebDAV URL'),
@@ -467,7 +483,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
 				label: () => _('Nextcloud username'),
@@ -478,7 +494,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
 				public: true,
 				label: () => _('Nextcloud password'),
@@ -490,7 +506,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
 				label: () => _('WebDAV URL'),
@@ -502,7 +518,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
 				label: () => _('WebDAV username'),
@@ -513,7 +529,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
 				public: true,
 				label: () => _('WebDAV password'),
@@ -526,7 +542,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				show: (settings: any) => {
 					try {
-						return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+						return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 					} catch (error) {
 						return false;
 					}
@@ -544,7 +560,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				filter: value => {
 					return value ? value.trim() : '';
@@ -558,7 +574,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				filter: value => {
 					return value ? value.trim() : '';
@@ -572,7 +588,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
 				label: () => _('S3 access key'),
@@ -583,7 +599,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
 				label: () => _('S3 secret key'),
@@ -594,7 +610,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
 				label: () => _('Force path style'),
@@ -605,7 +621,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
 				label: () => _('Joplin Server URL'),
@@ -623,7 +639,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
 				label: () => _('Joplin Server email'),
@@ -634,7 +650,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
 				label: () => _('Joplin Server password'),
@@ -662,7 +678,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
 				},
 				public: true,
 				label: () => _('Joplin Cloud email'),
@@ -673,7 +689,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.String,
 				section: 'sync',
 				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
 				},
 				public: true,
 				label: () => _('Joplin Cloud password'),
@@ -848,7 +864,7 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
-			showNoteCounts: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false, advanced: true, appTypes: [AppType.Desktop], label: () => _('Show note counts') },
+			showNoteCounts: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false, advanced: true, appTypes: [AppType.Desktop,AppType.Cli], label: () => _('Show note counts') },
 
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
@@ -899,7 +915,7 @@ class Setting extends BaseModel {
 			},
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
-			// which implies changing the setting automatically triggers the reflesh of notes.
+			// which implies changing the setting automatically triggers the refresh of notes.
 			// See lib/BaseApplication.ts/generalMiddleware() for details.
 			'notes.sortOrder.buttonsVisible': {
 				value: true,
@@ -1177,7 +1193,7 @@ class Setting extends BaseModel {
 
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true,appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
-			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
+			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
@@ -1187,12 +1203,10 @@ class Setting extends BaseModel {
 			'style.customCss.renderedMarkdown': {
 				value: null,
 				onClick: () => {
-					const dir = Setting.value('profileDir');
-					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
-					const filepath = `${dir}/${filename}`;
-					const defaultContents = '/* For styling the rendered Markdown */';
-
-					shim.openOrCreateFile(filepath, defaultContents);
+					shim.openOrCreateFile(
+						this.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN),
+						'/* For styling the rendered Markdown */'
+					);
 				},
 				type: SettingItemType.Button,
 				public: true,
@@ -1206,12 +1220,10 @@ class Setting extends BaseModel {
 			'style.customCss.joplinApp': {
 				value: null,
 				onClick: () => {
-					const dir = Setting.value('profileDir');
-					const filename = Setting.custom_css_files.JOPLIN_APP;
-					const filepath = `${dir}/${filename}`;
-					const defaultContents = `/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.custom_css_files.RENDERED_MARKDOWN}\`) */`;
-
-					shim.openOrCreateFile(filepath, defaultContents);
+					shim.openOrCreateFile(
+						this.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP),
+						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`
+					);
 				},
 				type: SettingItemType.Button,
 				public: true,
@@ -1372,7 +1384,37 @@ class Setting extends BaseModel {
 				label: () => _('Ignore TLS certificate errors'),
 				storage: SettingStorage.File,
 			},
-
+			'net.proxyEnabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				advanced: true,
+				section: 'sync',
+				isGlobal: true,
+				public: true,
+				label: () => _('Proxy enabled (beta)'),
+				storage: SettingStorage.File,
+			},
+			'net.proxyUrl': {
+				value: '',
+				type: SettingItemType.String,
+				advanced: true,
+				section: 'sync',
+				isGlobal: true,
+				public: true,
+				label: () => _('Proxy URL (beta)'),
+				description: () => _('e.g "http://my.proxy.com:80". You can also set via environment variables'),
+				storage: SettingStorage.File,
+			},
+			'net.proxyTimeout': {
+				value: 1,
+				type: SettingItemType.Int,
+				advanced: true,
+				section: 'sync',
+				isGlobal: true,
+				public: true,
+				label: () => _('proxy timeout (seconds) (beta)'),
+				storage: SettingStorage.File,
+			},
 			'sync.wipeOutFailSafe': {
 				value: true,
 				type: SettingItemType.Bool,
@@ -1498,6 +1540,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			wasClosedSuccessfully: {
+				value: true,
+				type: SettingItemType.Bool,
+				public: false,
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,
@@ -1525,6 +1573,10 @@ class Setting extends BaseModel {
 		for (const [k, v] of Object.entries(md)) {
 			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
 		}
+	}
+
+	public static customCssFilePath(filename: string): string {
+		return `${this.value('rootProfileDir')}/${filename}`;
 	}
 
 	public static skipDefaultMigrations() {
@@ -1723,7 +1775,7 @@ class Setting extends BaseModel {
 		// Keys in the database takes precedence over keys in the keychain because
 		// they are more likely to be up to date (saving to keychain can fail, but
 		// saving to database shouldn't). When the keychain works, the secure keys
-		// are deleted from the database and transfered to the keychain in saveAll().
+		// are deleted from the database and transferred to the keychain in saveAll().
 
 		const rowKeys = rows.map((r: any) => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
@@ -1804,7 +1856,7 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			const c = this.cache_[i];
-			if (c.key == key) {
+			if (c.key === key) {
 				const md = this.settingMetadata(key);
 
 				if (md.isEnum === true) {
@@ -1889,14 +1941,43 @@ class Setting extends BaseModel {
 		}
 	}
 
+	public static enumOptionsToValueLabels(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions = null) {
+		options = {
+			labelKey: 'label',
+			valueKey: 'value',
+			...options,
+		};
+
+		const output = [];
+
+		for (const value of order) {
+			output.push({
+				[options.valueKey]: value,
+				[options.labelKey]: enumOptions[value],
+			});
+		}
+
+		for (const k in enumOptions) {
+			if (!enumOptions.hasOwnProperty(k)) continue;
+			if (order.includes(k)) continue;
+
+			output.push({
+				[options.valueKey]: k,
+				[options.labelKey]: enumOptions[k],
+			});
+		}
+
+		return output;
+	}
+
 	static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
-		if (md.type == SettingItemType.Int) return value.toFixed(0);
-		if (md.type == SettingItemType.Bool) return value ? '1' : '0';
-		if (md.type == SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
-		if (md.type == SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
-		if (md.type == SettingItemType.String) return value ? `${value}` : '';
+		if (md.type === SettingItemType.Int) return value.toFixed(0);
+		if (md.type === SettingItemType.Bool) return value ? '1' : '0';
+		if (md.type === SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
+		if (md.type === SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
+		if (md.type === SettingItemType.String) return value ? `${value}` : '';
 
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
@@ -1909,9 +1990,9 @@ class Setting extends BaseModel {
 	static formatValue(key: string, value: any) {
 		const md = this.settingMetadata(key);
 
-		if (md.type == SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
+		if (md.type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
 
-		if (md.type == SettingItemType.Bool) {
+		if (md.type === SettingItemType.Bool) {
 			if (typeof value === 'string') {
 				value = value.toLowerCase();
 				if (value === 'true') return true;
@@ -1958,14 +2039,14 @@ class Setting extends BaseModel {
 		if (key in this.constants_) {
 			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
-			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
+			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
 		}
 
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		for (let i = 0; i < this.cache_.length; i++) {
-			if (this.cache_[i].key == key) {
+			if (this.cache_[i].key === key) {
 				return copyIfNeeded(this.cache_[i].value);
 			}
 		}
@@ -1998,7 +2079,7 @@ class Setting extends BaseModel {
 	static enumOptionLabel(key: string, value: any) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
-			if (n == value) return options[n];
+			if (n === value) return options[n];
 		}
 		return '';
 	}
@@ -2066,7 +2147,7 @@ class Setting extends BaseModel {
 				// We need to be careful here because there's a bug in the macOS keychain that can
 				// make it fail to save a password. https://github.com/desktop/desktop/issues/3263
 				// So we try to set it and if it fails, we set it on the database instead. This is not
-				// ideal because they won't be crypted, but better than losing all the user's passwords.
+				// ideal because they won't be encrypted, but better than losing all the user's passwords.
 				// The passwords would be set again on the keychain once it starts working again (probably
 				// after the user switch their computer off and on again).
 				//
@@ -2106,7 +2187,17 @@ class Setting extends BaseModel {
 		if (this.canUseFileStorage()) {
 			if (this.value('isSubProfile')) {
 				const { globalSettings, localSettings } = splitGlobalAndLocalSettings(valuesForFile);
-				await this.rootFileHandler.save(globalSettings);
+				const currentGlobalSettings = await this.rootFileHandler.load();
+
+				// When saving to the root setting file, we preserve the
+				// existing settings, which are specific to the root profile,
+				// and add the global settings.
+
+				await this.rootFileHandler.save({
+					...currentGlobalSettings,
+					...globalSettings,
+				});
+
 				await this.fileHandler.save(localSettings);
 			} else {
 				await this.fileHandler.save(valuesForFile);

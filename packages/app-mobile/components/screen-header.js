@@ -29,9 +29,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	constructor() {
 		super();
 		this.styles_ = {};
-		this.state = { showUndoRedoButtons: true };
 	}
-
 
 	styles() {
 		const themeId = Setting.value('theme');
@@ -199,7 +197,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	menu_select(value) {
-		if (typeof value == 'function') {
+		if (typeof value === 'function') {
 			value();
 		}
 	}
@@ -227,7 +225,12 @@ class ScreenHeaderComponent extends React.PureComponent {
 	render() {
 		function sideMenuButton(styles, onPress) {
 			return (
-				<TouchableOpacity onPress={onPress}>
+				<TouchableOpacity
+					onPress={onPress}
+
+					accessibilityLabel={_('Sidebar')}
+					accessibilityHint={_('Show/hide the sidebar')}
+					accessibilityRole="button">
 					<View style={styles.sideMenuButton}>
 						<Icon name="md-menu" style={styles.topIcon} />
 					</View>
@@ -237,9 +240,18 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		function backButton(styles, onPress, disabled) {
 			return (
-				<TouchableOpacity onPress={onPress} disabled={disabled}>
+				<TouchableOpacity
+					onPress={onPress}
+					disabled={disabled}
+
+					accessibilityLabel={_('Back')}
+					accessibilityHint={_('Navigate to the previous view')}
+					accessibilityRole="button">
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
-						<Icon name="md-arrow-back" style={styles.topIcon} />
+						<Icon
+							name="md-arrow-back"
+							style={styles.topIcon}
+						/>
 					</View>
 				</TouchableOpacity>
 			);
@@ -251,20 +263,31 @@ class ScreenHeaderComponent extends React.PureComponent {
 			const icon = disabled ? <Icon name="md-checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
 
 			return (
-				<TouchableOpacity onPress={onPress} disabled={disabled} style={{ padding: 0 }}>
+				<TouchableOpacity
+					onPress={onPress}
+					disabled={disabled}
+					style={{ padding: 0 }}
+
+					accessibilityLabel={_('Save changes')}
+					accessibilityHint={disabled ? _('Any changes have been saved') : null}
+					accessibilityRole="button">
 					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>{icon}</View>
 				</TouchableOpacity>
 			);
 		}
 
 		const renderTopButton = (options) => {
-			if (!options.visible || !this.state.showUndoRedoButtons) return null;
+			if (!options.visible) return null;
 
 			const icon = <Icon name={options.iconName} style={this.styles().topIcon} />;
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
 
 			return (
-				<TouchableOpacity onPress={options.onPress} style={{ padding: 0 }} disabled={!!options.disabled}>
+				<TouchableOpacity
+					onPress={options.onPress}
+					style={{ padding: 0 }}
+					disabled={!!options.disabled}
+					accessibilityRole="button">
 					<View style={viewStyle}>{icon}</View>
 				</TouchableOpacity>
 			);
@@ -289,7 +312,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		function selectAllButton(styles, onPress) {
 			return (
-				<TouchableOpacity onPress={onPress}>
+				<TouchableOpacity
+					onPress={onPress}
+
+					accessibilityLabel={_('Select all')}
+					accessibilityRole="button">
 					<View style={styles.iconButton}>
 						<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
 					</View>
@@ -299,7 +326,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		function searchButton(styles, onPress) {
 			return (
-				<TouchableOpacity onPress={onPress}>
+				<TouchableOpacity
+					onPress={onPress}
+
+					accessibilityLabel={_('Search')}
+					accessibilityRole="button">
 					<View style={styles.iconButton}>
 						<Icon name="md-search" style={styles.topIcon} />
 					</View>
@@ -309,7 +340,15 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		function deleteButton(styles, onPress, disabled) {
 			return (
-				<TouchableOpacity onPress={onPress} disabled={disabled}>
+				<TouchableOpacity
+					onPress={onPress}
+					disabled={disabled}
+
+					accessibilityLabel={_('Delete')}
+					accessibilityHint={
+						disabled ? null : _('Delete selected notes')
+					}
+					accessibilityRole="button">
 					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
 						<Icon name="md-trash" style={styles.topIcon} />
 					</View>
@@ -319,7 +358,15 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		function duplicateButton(styles, onPress, disabled) {
 			return (
-				<TouchableOpacity onPress={onPress} disabled={disabled}>
+				<TouchableOpacity
+					onPress={onPress}
+					disabled={disabled}
+
+					accessibilityLabel={_('Duplicate')}
+					accessibilityHint={
+						disabled ? null : _('Duplicate selected notes')
+					}
+					accessibilityRole="button">
 					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
 						<Icon name="md-copy" style={styles.topIcon} />
 					</View>
@@ -329,7 +376,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		function sortButton(styles, onPress) {
 			return (
-				<TouchableOpacity onPress={onPress}>
+				<TouchableOpacity
+					onPress={onPress}
+
+					accessibilityLabel={_('Sort notes by')}
+					accessibilityRole="button">
 					<View style={styles.iconButton}>
 						<Icon name="filter-outline" style={styles.topIcon} />
 					</View>
@@ -423,16 +474,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 						itemStyle={{
 							color: theme.color,
 							fontSize: theme.fontSize,
-						}}
-						onOpen={() => {
-							this.setState({
-								showUndoRedoButtons: false,
-							});
-						}}
-						onClose={() => {
-							this.setState({
-								showUndoRedoButtons: true,
-							});
 						}}
 						onValueChange={async (folderId, itemIndex) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default

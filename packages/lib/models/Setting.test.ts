@@ -15,8 +15,9 @@ const switchToSubProfileSettings = async () => {
 	const rootProfileDir = Setting.value('profileDir');
 	const profileConfigPath = `${rootProfileDir}/profiles.json`;
 	let profileConfig = defaultProfileConfig();
-	profileConfig = createNewProfile(profileConfig, 'Sub-profile');
-	profileConfig.currentProfile = 1;
+	const { newConfig, newProfile } = createNewProfile(profileConfig, 'Sub-profile');
+	profileConfig = newConfig;
+	profileConfig.currentProfileId = newProfile.id;
 	await saveProfileConfig(profileConfigPath, profileConfig);
 	const { profileDir } = await initProfile(rootProfileDir);
 	await mkdirp(profileDir);
@@ -272,7 +273,7 @@ describe('models/Setting', function() {
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
 
-	it('should load sub-profile settings', async () => {
+	it('should load sub-profile settings - 1', async () => {
 		await Setting.reset();
 
 		Setting.setValue('locale', 'fr_FR'); // Global setting
@@ -293,7 +294,7 @@ describe('models/Setting', function() {
 		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
 	});
 
-	it('should save sub-profile settings', async () => {
+	it('should save sub-profile settings - 2', async () => {
 		await Setting.reset();
 		Setting.setValue('locale', 'fr_FR'); // Global setting
 		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
@@ -327,6 +328,25 @@ describe('models/Setting', function() {
 			'$schema': 'https://joplinapp.org/schema/settings.json',
 			'sync.target': 8,
 		});
+	});
+
+	it('should not erase settings of parent profile', async () => {
+		// When a sub-profile settings are saved, we should ensure that the
+		// local settings of the root profiles are not lost.
+		// https://github.com/laurent22/joplin/issues/6459
+
+		await Setting.reset();
+
+		Setting.setValue('sync.target', 9); // Local setting (Root profile)
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+
+		Setting.setValue('sync.target', 2); // Local setting (Sub-profile)
+		await Setting.saveAll();
+
+		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		expect(globalSettings['sync.target']).toBe(9);
 	});
 
 	it('all global settings should be saved to file', async () => {
