@@ -82,7 +82,7 @@ function editorFont(fontId) {
 		[Setting.FONT_MONOSPACE]: 'monospace',
 	};
 	if (!fontId) {
-		console.warn('Editor font not set! Falling back to default font."');
+		// console.warn('Editor font not set! Falling back to default font."');
 		fontId = Setting.FONT_DEFAULT;
 	}
 	return fonts[fontId];
