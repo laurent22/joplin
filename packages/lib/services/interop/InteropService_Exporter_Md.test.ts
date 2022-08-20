@@ -446,7 +446,7 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
 		expect(fileExtension(resourceFilename)).toBe('jpg');
 	}));
-	it.only('should replace spaces in resource name by underscores', (async () => {
+	it('should replace spaces in resource name by underscores', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
 		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
