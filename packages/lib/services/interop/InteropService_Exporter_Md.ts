@@ -147,7 +147,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 
 		// Markdown link destination should not contain space characters
-		fileName = fileName.replace(' ', '_');
+		fileName = fileName.replace(/\s/g, '_');
 
 		// Fall back on the resource filename saved in the users resource folder
 		return fileName;
