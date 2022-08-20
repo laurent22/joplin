@@ -1,6 +1,6 @@
 import React = require('react');
 import { useCallback } from 'react';
-import { TouchableHighlight, Text, TextStyle } from 'react-native';
+import { TouchableOpacity, Text, TextStyle } from 'react-native';
 import { ButtonSpec } from './types';
 
 export const buttonSize = 56;
@@ -42,7 +42,7 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 	}, [disabled, sourceOnPress, onActionComplete]);
 
 	return (
-		<TouchableHighlight
+		<TouchableOpacity
 			style={{ ...styleSheet.button, ...activatedStyle, ...disabledStyle, ...style }}
 			onPress={onPress}
 			accessibilityLabel={ spec.accessibilityLabel }
@@ -50,7 +50,7 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 			disabled={ disabled }
 		>
 			{ content }
-		</TouchableHighlight>
+		</TouchableOpacity>
 	);
 };
 
