@@ -9,6 +9,12 @@ export interface ButtonSpec {
 	accessibilityLabel: string;
 	onPress: OnPressListener;
 
+	// Priority for showing the button in the main toolbar.
+	// Higher priority => more likely to be shown on the left of the toolbar
+	// Lower (negative) priority => more likely to be shown on the right side of the
+	// toolbar.
+	priority?: number;
+
 	// True if the button is connected to an enabled action.
 	// E.g. the cursor is in a header and the button is a header button.
 	active?: boolean;

@@ -22,6 +22,9 @@ const Toolbar = (props: ToolbarProps) => {
 		return accumulator.concat(...current.items);
 	}, []);
 
+	// Sort from highest priority to lowest
+	allButtonSpecs.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+
 	const allButtonComponents: ReactElement[] = [];
 	let key = 0;
 	for (const spec of allButtonSpecs) {

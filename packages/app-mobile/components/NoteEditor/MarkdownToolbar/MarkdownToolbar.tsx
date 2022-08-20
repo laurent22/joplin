@@ -56,6 +56,10 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			onPress: useCallback(() => {
 				editorControl.toggleHeaderLevel(level);
 			}, [editorControl, level]),
+
+			// Make it likely for the first three header buttons to show, less likely for
+			// the others.
+			priority: level < 3 ? 2 : 0,
 		});
 	}
 
@@ -82,6 +86,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.OrderedList);
 		}, [editorControl]),
+
+		priority: -1,
 	});
 
 	listButtons.push({
@@ -94,6 +100,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.CheckList);
 		}, [editorControl]),
+
+		priority: -1,
 	});
 
 
@@ -124,6 +132,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			selState.bolded ? _('Unbold') : _('Bold text'),
 		active: selState.bolded,
 		onPress: editorControl.toggleBolded,
+
+		priority: 3,
 	});
 
 	inlineFormattingBtns.push({
@@ -134,6 +144,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			selState.italicized ? _('Unitalicize') : _('Italicize'),
 		active: selState.italicized,
 		onPress: editorControl.toggleItalicized,
+
+		priority: 2,
 	});
 
 	inlineFormattingBtns.push({
@@ -142,6 +154,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			selState.inCode ? _('Remove code formatting') : _('Format as code'),
 		active: selState.inCode,
 		onPress: editorControl.toggleCode,
+
+		priority: 2,
 	});
 
 	if (props.editorSettings.katexEnabled) {
@@ -151,6 +165,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 				selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
 			active: selState.inMath,
 			onPress: editorControl.toggleMath,
+
+			priority: 1,
 		});
 	}
 
@@ -162,6 +178,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			selState.inLink ? _('Edit link') : _('Create link'),
 		active: selState.inLink,
 		onPress: editorControl.showLinkDialog,
+
+		priority: -2,
 	});
 
 
@@ -203,6 +221,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 				editorControl.searchControl.showSearch();
 			}
 		}, [editorControl, props.searchState.dialogVisible]),
+
+		priority: -2,
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -235,6 +255,8 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		accessibilityLabel: _('Hide keyboard'),
 		disabled: !keyboardVisible,
 		onPress: onToggleKeyboard,
+
+		priority: -2,
 	});
 
 	return (
