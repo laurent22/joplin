@@ -5,7 +5,7 @@ import { RuleOptions } from '../../MdToHtml';
 import renderMedia, { Options as RenderMediaOptions } from '../renderMedia';
 
 
-export interface LinkIndexesType {
+export interface LinkIndexes {
 	[key: string]: number;
 }
 
@@ -14,7 +14,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		return self.renderToken(tokens, idx, options);
 	};
 
-	const linkIndexes: LinkIndexesType = {};
+	const linkIndexes: LinkIndexes = {};
 
 	markdownIt.renderer.rules.link_close = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 		const defaultOutput = defaultRender(tokens, idx, options, env, self);
