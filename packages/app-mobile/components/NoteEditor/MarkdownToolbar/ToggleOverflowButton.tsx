@@ -18,7 +18,7 @@ const ToggleOverflowButton = (props: ToggleOverflowButtonProps) => {
 		icon: (
 			<MaterialIcon name="more-horiz" style={props.styleSheet.styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			props.overflowVisible ? _('Hide more actions') : _('Show more actions'),
 		active: props.overflowVisible,
 		onPress: props.onToggleOverflowVisible,

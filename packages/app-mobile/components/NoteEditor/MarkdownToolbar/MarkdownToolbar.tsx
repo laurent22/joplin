@@ -47,7 +47,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 
 		headerButtons.push({
 			icon: `H${level}`,
-			accessibilityLabel: label,
+			description: label,
 			active,
 
 			// We only call addHeaderButton 5 times and in the same order, so
@@ -68,7 +68,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="list-ul" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			selState.inUnorderedList ? _('Remove unordered list') : _('Create unordered list'),
 		active: selState.inUnorderedList,
 		onPress: useCallback(() => {
@@ -82,7 +82,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="list-ol" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			selState.inOrderedList ? _('Remove ordered list') : _('Create ordered list'),
 		active: selState.inOrderedList,
 		onPress: useCallback(() => {
@@ -96,7 +96,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="tasks" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			selState.inChecklist ? _('Remove task list') : _('Create task list'),
 		active: selState.inChecklist,
 		onPress: useCallback(() => {
@@ -111,7 +111,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<AntIcon name="indent-left" style={styles.text}/>
 		),
-		accessibilityLabel: _('Decrease indent level'),
+		description: _('Decrease indent level'),
 		onPress: editorControl.decreaseIndent,
 
 		priority: -1,
@@ -121,7 +121,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<AntIcon name="indent-right" style={styles.text}/>
 		),
-		accessibilityLabel: _('Increase indent level'),
+		description: _('Increase indent level'),
 		onPress: editorControl.increaseIndent,
 
 		priority: -1,
@@ -134,7 +134,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="bold" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			selState.bolded ? _('Unbold') : _('Bold text'),
 		active: selState.bolded,
 		onPress: editorControl.toggleBolded,
@@ -146,7 +146,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="italic" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			selState.italicized ? _('Unitalicize') : _('Italicize'),
 		active: selState.italicized,
 		onPress: editorControl.toggleItalicized,
@@ -156,7 +156,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 
 	inlineFormattingBtns.push({
 		icon: '{;}',
-		accessibilityLabel:
+		description:
 			selState.inCode ? _('Remove code formatting') : _('Format as code'),
 		active: selState.inCode,
 		onPress: editorControl.toggleCode,
@@ -167,7 +167,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	if (props.editorSettings.katexEnabled) {
 		inlineFormattingBtns.push({
 			icon: '∑',
-			accessibilityLabel:
+			description:
 				selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
 			active: selState.inMath,
 			onPress: editorControl.toggleMath,
@@ -180,7 +180,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="link" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			selState.inLink ? _('Edit link') : _('Create link'),
 		active: selState.inLink,
 		onPress: editorControl.showLinkDialog,
@@ -195,7 +195,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="calendar-plus" style={styles.text}/>
 		),
-		accessibilityLabel: _('Insert time'),
+		description: _('Insert time'),
 		onPress: useCallback(() => {
 			editorControl.insertText(time.formatDateToLocal(new Date()));
 		}, [editorControl]),
@@ -205,7 +205,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<MaterialIcon name="spellcheck" style={styles.text}/>
 		),
-		accessibilityLabel:
+		description:
 			!props.selectionState.spellChecking ? _('Check spelling') : _('Stop checking spelling'),
 		active: props.selectionState.spellChecking,
 		disabled: props.selectionState.unspellCheckableRegion,
@@ -218,7 +218,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<MaterialIcon name="search" style={styles.text}/>
 		),
-		accessibilityLabel: (
+		description: (
 			props.searchState.dialogVisible ? _('Close find and replace') : _('Find and replace')
 		),
 		active: props.searchState.dialogVisible,
@@ -260,7 +260,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<MaterialIcon name="keyboard-hide" style={styles.text}/>
 		),
-		accessibilityLabel: _('Hide keyboard'),
+		description: _('Hide keyboard'),
 		disabled: !keyboardVisible,
 		onPress: onToggleKeyboard,
 

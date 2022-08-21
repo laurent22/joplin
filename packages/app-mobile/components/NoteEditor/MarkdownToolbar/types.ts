@@ -6,7 +6,9 @@ export type OnPressListener = ()=> void;
 export interface ButtonSpec {
 	// Either text that will be shown in place of an icon or a component.
 	icon: string | ReactElement;
-	accessibilityLabel: string;
+
+	// Tooltip/accessibility label
+	description: string;
 	onPress: OnPressListener;
 
 	// Priority for showing the button in the main toolbar.

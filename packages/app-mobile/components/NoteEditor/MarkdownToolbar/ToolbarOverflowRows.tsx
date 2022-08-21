@@ -88,7 +88,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 
 	const closeButtonSpec: ButtonSpec = {
 		icon: '⨉',
-		accessibilityLabel: _('Close'),
+		description: _('Close'),
 		onPress: props.onToggleOverflow,
 	};
 	const closeButton = (

@@ -48,7 +48,7 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 			style={{ ...styles.button, ...activatedStyle, ...disabledStyle, ...style }}
 			themeId={styleSheet.themeId}
 			onPress={onPress}
-			description={ spec.accessibilityLabel }
+			description={ spec.description }
 			accessibilityRole="button"
 			disabled={ disabled }
 		>
