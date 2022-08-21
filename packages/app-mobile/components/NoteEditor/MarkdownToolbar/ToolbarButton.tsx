@@ -1,12 +1,13 @@
 import React = require('react');
 import { useCallback } from 'react';
-import { TouchableOpacity, Text, TextStyle } from 'react-native';
-import { ButtonSpec } from './types';
+import { Text, TextStyle } from 'react-native';
+import { ButtonSpec, StyleSheetData } from './types';
+import CustomButton from '../../CustomButton';
 
 export const buttonSize = 56;
 
 interface ToolbarButtonProps {
-	styleSheet: any;
+	styleSheet: StyleSheetData;
 	style?: TextStyle;
 	spec: ButtonSpec;
 	onActionComplete?: ()=> void;
@@ -14,18 +15,19 @@ interface ToolbarButtonProps {
 
 const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarButtonProps) => {
 	const disabled = spec.disabled ?? false;
+	const styles = styleSheet.styles;
 
 	// Additional styles if activated
-	const activatedStyle = spec.active ? styleSheet.buttonActive : {};
-	const activatedTextStyle = spec.active ? styleSheet.buttonActiveContent : {};
-	const disabledStyle = disabled ? styleSheet.buttonDisabled : {};
-	const disabledTextStyle = disabled ? styleSheet.buttonDisabledContent : {};
+	const activatedStyle = spec.active ? styles.buttonActive : {};
+	const activatedTextStyle = spec.active ? styles.buttonActiveContent : {};
+	const disabledStyle = disabled ? styles.buttonDisabled : {};
+	const disabledTextStyle = disabled ? styles.buttonDisabledContent : {};
 
 	let content;
 
 	if (typeof spec.icon === 'string') {
 		content = (
-			<Text style={{ ...styleSheet.text, ...activatedTextStyle, ...disabledTextStyle }}>
+			<Text style={{ ...styles.text, ...activatedTextStyle, ...disabledTextStyle }}>
 				{spec.icon}
 			</Text>
 		);
@@ -42,15 +44,16 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 	}, [disabled, sourceOnPress, onActionComplete]);
 
 	return (
-		<TouchableOpacity
-			style={{ ...styleSheet.button, ...activatedStyle, ...disabledStyle, ...style }}
+		<CustomButton
+			style={{ ...styles.button, ...activatedStyle, ...disabledStyle, ...style }}
+			themeId={styleSheet.themeId}
 			onPress={onPress}
-			accessibilityLabel={ spec.accessibilityLabel }
+			description={ spec.accessibilityLabel }
 			accessibilityRole="button"
 			disabled={ disabled }
 		>
 			{ content }
-		</TouchableOpacity>
+		</CustomButton>
 	);
 };
 

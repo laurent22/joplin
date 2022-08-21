@@ -6,11 +6,11 @@ import { AccessibilityInfo, LayoutChangeEvent, ScrollView, View } from 'react-na
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
 import ToolbarOverflowRows from './ToolbarOverflowRows';
-import { ButtonGroup, ButtonSpec } from './types';
+import { ButtonGroup, ButtonSpec, StyleSheetData } from './types';
 
 interface ToolbarProps {
 	buttons: ButtonGroup[];
-	styleSheet: any;
+	styleSheet: StyleSheetData;
 }
 
 // Displays a list of buttons with an overflow menu.
@@ -78,8 +78,9 @@ const Toolbar = (props: ToolbarProps) => {
 		mainButtons.push(...allButtonComponents);
 	}
 
+	const styles = props.styleSheet.styles;
 	const mainButtonRow = (
-		<View style={props.styleSheet.toolbarRow}>
+		<View style={styles.toolbarRow}>
 			{!overflowButtonsVisible ? mainButtons : null }
 		</View>
 	);
@@ -87,7 +88,7 @@ const Toolbar = (props: ToolbarProps) => {
 	return (
 		<View
 			style={{
-				...props.styleSheet.toolbarContainer,
+				...styles.toolbarContainer,
 
 				// The number of buttons displayed is based on the width of the
 				// container. As such, we can't base the container's width on the

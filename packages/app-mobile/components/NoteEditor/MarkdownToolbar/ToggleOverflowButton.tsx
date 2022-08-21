@@ -2,21 +2,21 @@ const React = require('react');
 
 import { _ } from '@joplin/lib/locale';
 import ToolbarButton from './ToolbarButton';
-import { ButtonSpec } from './types';
+import { ButtonSpec, StyleSheetData } from './types';
 const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
 
 type OnToggleOverflowCallback = ()=> void;
 interface ToggleOverflowButtonProps {
 	overflowVisible: boolean;
 	onToggleOverflowVisible: OnToggleOverflowCallback;
-	styleSheet: any;
+	styleSheet: StyleSheetData;
 }
 
 // Button that shows/hides the overflow menu.
 const ToggleOverflowButton = (props: ToggleOverflowButtonProps) => {
 	const spec: ButtonSpec = {
 		icon: (
-			<MaterialIcon name="more-horiz" style={props.styleSheet.text}/>
+			<MaterialIcon name="more-horiz" style={props.styleSheet.styles.text}/>
 		),
 		accessibilityLabel:
 			props.overflowVisible ? _('Hide more actions') : _('Show more actions'),

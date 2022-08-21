@@ -25,3 +25,8 @@ export interface ButtonGroup {
 	title: string;
 	items: ButtonSpec[];
 }
+
+export interface StyleSheetData {
+	themeId: number;
+	styles: any;
+}

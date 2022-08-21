@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 import { Keyboard, ViewStyle } from 'react-native';
 import { EditorControl, EditorSettings, ListType, SearchState } from '../types';
 import SelectionFormatting from '../SelectionFormatting';
-import { ButtonSpec } from './types';
+import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
@@ -206,7 +206,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			<MaterialIcon name="spellcheck" style={styles.text}/>
 		),
 		accessibilityLabel:
-			props.selectionState.spellChecking ? _('Check spelling') : _('Stop checking spelling'),
+			!props.selectionState.spellChecking ? _('Check spelling') : _('Stop checking spelling'),
 		active: props.selectionState.spellChecking,
 		disabled: props.selectionState.unspellCheckableRegion,
 		onPress: useCallback(() => {
@@ -218,7 +218,9 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<MaterialIcon name="search" style={styles.text}/>
 		),
-		accessibilityLabel: _('Find and replace'),
+		accessibilityLabel: (
+			props.searchState.dialogVisible ? _('Close find and replace') : _('Find and replace')
+		),
 		active: props.searchState.dialogVisible,
 		onPress: useCallback(() => {
 			if (props.searchState.dialogVisible) {
@@ -265,9 +267,13 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		priority: -3,
 	});
 
+	const styleData: StyleSheetData = {
+		styles: styles,
+		themeId: props.editorSettings.themeId,
+	};
 	return (
 		<Toolbar
-			styleSheet={styles}
+			styleSheet={styleData}
 			buttons={[
 				{
 					title: _('Formatting'),

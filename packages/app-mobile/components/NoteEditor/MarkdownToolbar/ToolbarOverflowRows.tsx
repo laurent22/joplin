@@ -3,14 +3,14 @@ import { ReactElement, useCallback, useState } from 'react';
 import { LayoutChangeEvent, ScrollView, View } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
-import { ButtonGroup, ButtonSpec } from './types';
+import { ButtonGroup, ButtonSpec, StyleSheetData } from './types';
 
 const React = require('react');
 
 type OnToggleOverflowCallback = ()=> void;
 interface OverflowPopupProps {
 	buttonGroups: ButtonGroup[];
-	styleSheet: any;
+	styleSheet: StyleSheetData;
 	visible: boolean;
 
 	// Should be created using useCallback
@@ -65,7 +65,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 			>
 				<ScrollView
 					horizontal={true}
-					contentContainerStyle={props.styleSheet.toolbarContent}
+					contentContainerStyle={props.styleSheet.styles.toolbarContent}
 				>
 					{row}
 				</ScrollView>
