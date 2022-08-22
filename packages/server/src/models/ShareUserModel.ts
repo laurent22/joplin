@@ -50,7 +50,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			.select(this.defaultFields)
 			.whereIn('share_id', shareIds);
 
-		if (status !== null) query.where('status', status);
+		if (status !== null) void query.where('status', status);
 
 		const rows: ShareUser[] = await query;
 

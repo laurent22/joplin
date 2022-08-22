@@ -30,39 +30,39 @@ import { ButtonSpec, ViewHandle, DialogResult } from './types';
  * plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/dialog)
  */
 export default class JoplinViewsDialogs {
-    private store;
-    private plugin;
-    private implementation_;
-    constructor(implementation: any, plugin: Plugin, store: any);
-    private controller;
-    /**
+	private store;
+	private plugin;
+	private implementation_;
+	constructor(implementation: any, plugin: Plugin, store: any);
+	private controller;
+	/**
      * Creates a new dialog
      */
-    create(id: string): Promise<ViewHandle>;
-    /**
+	create(id: string): Promise<ViewHandle>;
+	/**
      * Displays a message box with OK/Cancel buttons. Returns the button index that was clicked - "0" for OK and "1" for "Cancel"
      */
-    showMessageBox(message: string): Promise<number>;
-    /**
+	showMessageBox(message: string): Promise<number>;
+	/**
      * Sets the dialog HTML content
      */
-    setHtml(handle: ViewHandle, html: string): Promise<string>;
-    /**
+	setHtml(handle: ViewHandle, html: string): Promise<string>;
+	/**
      * Adds and loads a new JS or CSS files into the dialog.
      */
-    addScript(handle: ViewHandle, scriptPath: string): Promise<void>;
-    /**
+	addScript(handle: ViewHandle, scriptPath: string): Promise<void>;
+	/**
      * Sets the dialog buttons.
      */
-    setButtons(handle: ViewHandle, buttons: ButtonSpec[]): Promise<ButtonSpec[]>;
-    /**
+	setButtons(handle: ViewHandle, buttons: ButtonSpec[]): Promise<ButtonSpec[]>;
+	/**
      * Opens the dialog
      */
-    open(handle: ViewHandle): Promise<DialogResult>;
-    /**
+	open(handle: ViewHandle): Promise<DialogResult>;
+	/**
      * Toggle on whether to fit the dialog size to the content or not.
      * When set to false, the dialog is set to 90vw and 80vh
      * @default true
      */
-    setFitToContent(handle: ViewHandle, status: boolean): Promise<boolean>;
+	setFitToContent(handle: ViewHandle, status: boolean): Promise<boolean>;
 }

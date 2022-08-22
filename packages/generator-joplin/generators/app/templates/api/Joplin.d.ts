@@ -23,36 +23,36 @@ import JoplinWindow from './JoplinWindow';
  * So if you are developing a plugin, please keep an eye on the changelog as everything will be in there with information about how to update your code.
  */
 export default class Joplin {
-    private data_;
-    private plugins_;
-    private workspace_;
-    private filters_;
-    private commands_;
-    private views_;
-    private interop_;
-    private settings_;
-    private contentScripts_;
-    private clipboard_;
-    private window_;
-    constructor(implementation: any, plugin: Plugin, store: any);
-    get data(): JoplinData;
-    get clipboard(): JoplinClipboard;
-    get window(): JoplinWindow;
-    get plugins(): JoplinPlugins;
-    get workspace(): JoplinWorkspace;
-    get contentScripts(): JoplinContentScripts;
-    /**
+	private data_;
+	private plugins_;
+	private workspace_;
+	private filters_;
+	private commands_;
+	private views_;
+	private interop_;
+	private settings_;
+	private contentScripts_;
+	private clipboard_;
+	private window_;
+	constructor(implementation: any, plugin: Plugin, store: any);
+	get data(): JoplinData;
+	get clipboard(): JoplinClipboard;
+	get window(): JoplinWindow;
+	get plugins(): JoplinPlugins;
+	get workspace(): JoplinWorkspace;
+	get contentScripts(): JoplinContentScripts;
+	/**
      * @ignore
      *
      * Not sure if it's the best way to hook into the app
      * so for now disable filters.
      */
-    get filters(): JoplinFilters;
-    get commands(): JoplinCommands;
-    get views(): JoplinViews;
-    get interop(): JoplinInterop;
-    get settings(): JoplinSettings;
-    /**
+	get filters(): JoplinFilters;
+	get commands(): JoplinCommands;
+	get views(): JoplinViews;
+	get interop(): JoplinInterop;
+	get settings(): JoplinSettings;
+	/**
      * It is not possible to bundle native packages with a plugin, because they
      * need to work cross-platforms. Instead access to certain useful native
      * packages is provided using this function.
@@ -64,5 +64,5 @@ export default class Joplin {
      *
      * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/nativeModule)
      */
-    require(_path: string): any;
+	require(_path: string): any;
 }

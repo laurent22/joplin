@@ -11,7 +11,7 @@ class GeolocationReact {
 				speed: 0,
 				heading: 0,
 				accuracy: 20,
-				longitude: -3.4596633911132812,
+				longitude: -3.45966339111328,
 				altitude: 0,
 				latitude: 48.73219093634444,
 			},
