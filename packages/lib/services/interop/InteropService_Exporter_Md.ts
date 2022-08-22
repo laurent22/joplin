@@ -51,7 +51,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		const resourcePaths = this.context() && this.context().destResourcePaths ? this.context().destResourcePaths : {};
 
 		const createRelativePath = function(resourcePath: string) {
-			return `${relativePathToRoot}_resources/${basename(resourcePath)}`;
+			return markdownUtils.escapeLinkUrl(`${relativePathToRoot}_resources/${basename(resourcePath)}`);
 		};
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedResourceIds, resourcePaths, createRelativePath);
 	}
@@ -145,9 +145,6 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		} else if (resource.title) {
 			fileName = friendlySafeFilename(resource.title, null, true);
 		}
-
-		// Markdown link destination should not contain space characters
-		fileName = fileName.replace(/\s/g, '_');
 
 		// Fall back on the resource filename saved in the users resource folder
 		return fileName;

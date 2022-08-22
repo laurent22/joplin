@@ -446,7 +446,7 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
 		expect(fileExtension(resourceFilename)).toBe('jpg');
 	}));
-	it('should replace spaces in resource name by underscores', (async () => {
+	it('should url encode resource links', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
 		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
@@ -461,8 +461,8 @@ describe('interop/InteropService_Exporter_Md', function() {
 			format: 'md',
 		});
 
-		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
-		expect(resourceFilename).toBe('name_with_spaces.jpg');
+		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
+		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
 	}));
 
 });
