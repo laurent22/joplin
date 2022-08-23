@@ -139,7 +139,7 @@ function NotesBarComponent(props: Props) {
 		return (
 			<TouchableOpacity style={styles().button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
 		);
-	}
+	};
 
 
 	const handleNewNote = async (isTodo: boolean) => {
@@ -219,7 +219,7 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	const flatListRef = useRef<FlatList>(null);
+	const flatListRef: any = React.useRef(null);
 
 	const NotesBarListComp = (
 		<FlatList
@@ -240,7 +240,7 @@ function NotesBarComponent(props: Props) {
 					index,
 				}
 			)}
-			ref={(ref: any) => { flatListRef = ref; }}
+			ref={flatListRef}
 		/>
 	);
 
