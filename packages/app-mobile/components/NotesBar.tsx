@@ -135,7 +135,7 @@ function NotesBarComponent(props: Props) {
 		</TouchableOpacity>
 	);
 
-	function renderIconButton(icon: JSX.Element, onPress: ()=> Promise<void>) {
+	const renderIconButton = (icon: JSX.Element, onPress: ()=> Promise<void>) => {
 		return (
 			<TouchableOpacity style={styles().button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
 		);
