@@ -26,7 +26,7 @@ const styles: Style = {
 	},
 };
 
-class Checkbox extends Component {
+class Checkbox extends Component<Props, State> {
 	state: State;
 	props: Props;
 
