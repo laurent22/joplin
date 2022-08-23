@@ -19,7 +19,7 @@ interface NoteListProps {
 }
 
 const NotesBarListItemComponent = function(props: NoteListProps) {
-	const note = props.note ? props.note : {};
+	const note = props.note ?? {};
 	const isTodo = !!Number(note.is_todo);
 
 	function styles() {
