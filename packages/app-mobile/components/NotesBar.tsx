@@ -219,7 +219,7 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	let flatListRef: any = React.useRef(null);
+	const flatListRef = useRef<FlatList>(null);
 
 	const NotesBarListComp = (
 		<FlatList
