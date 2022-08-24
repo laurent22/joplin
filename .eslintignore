@@ -845,6 +845,9 @@ packages/app-mobile/components/CameraView.js.map
 packages/app-mobile/components/Dropdown.d.ts
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/Dropdown.js.map
+packages/app-mobile/components/CustomButton.d.ts
+packages/app-mobile/components/CustomButton.js
+packages/app-mobile/components/CustomButton.js.map
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.d.ts
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js.map

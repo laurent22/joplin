@@ -19,6 +19,7 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
+import CustomButton from './CustomButton';
 
 Icon.loadFont();
 
@@ -276,6 +277,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	}
 
 	public render() {
+		const themeId = Setting.value('theme');
 		function sideMenuButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
@@ -335,6 +337,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			visible: boolean;
 			iconName: string;
 			disabled?: boolean;
+			description: string;
 			onPress: OnPressCallback;
 		}
 		const renderTopButton = (options: TopButtonOptions) => {
@@ -344,19 +347,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
 
 			return (
-				<TouchableOpacity
+				<CustomButton
 					onPress={options.onPress}
 					style={{ padding: 0 }}
+					themeId={themeId}
 					disabled={!!options.disabled}
-					accessibilityRole="button">
-					<View style={viewStyle}>{icon}</View>
-				</TouchableOpacity>
+					description={options.description}
+					contentStyle={viewStyle}
+				>
+					{icon}
+				</CustomButton>
 			);
 		};
 
 		const renderUndoButton = () => {
 			return renderTopButton({
 				iconName: 'arrow-undo-circle-sharp',
+				description: _('Undo'),
 				onPress: this.props.onUndoButtonPress,
 				visible: this.props.showUndoButton,
 				disabled: this.props.undoButtonDisabled,
@@ -366,6 +373,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const renderRedoButton = () => {
 			return renderTopButton({
 				iconName: 'arrow-redo-circle-sharp',
+				description: _('Redo'),
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
 			});
@@ -373,65 +381,65 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		function selectAllButton(styles: any, onPress: OnPressCallback) {
 			return (
-				<TouchableOpacity
+				<CustomButton
 					onPress={onPress}
 
-					accessibilityLabel={_('Select all')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					themeId={themeId}
+					description={_('Select all')}
+					contentStyle={styles.iconButton}
+				>
+					<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
+				</CustomButton>
 			);
 		}
 
 		function searchButton(styles: any, onPress: OnPressCallback) {
 			return (
-				<TouchableOpacity
+				<CustomButton
 					onPress={onPress}
 
-					accessibilityLabel={_('Search')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="md-search" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					description={_('Search')}
+					themeId={themeId}
+					contentStyle={styles.iconButton}
+				>
+					<Icon name="md-search" style={styles.topIcon} />
+				</CustomButton>
 			);
 		}
 
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
-				<TouchableOpacity
+				<CustomButton
 					onPress={onPress}
 					disabled={disabled}
 
-					accessibilityLabel={_('Delete')}
+					themeId={themeId}
+					description={_('Delete')}
 					accessibilityHint={
 						disabled ? null : _('Delete selected notes')
 					}
-					accessibilityRole="button">
-					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
-						<Icon name="md-trash" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+				>
+					<Icon name="md-trash" style={styles.topIcon} />
+				</CustomButton>
 			);
 		}
 
 		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
-				<TouchableOpacity
+				<CustomButton
 					onPress={onPress}
 					disabled={disabled}
 
-					accessibilityLabel={_('Duplicate')}
+					themeId={themeId}
+					description={_('Duplicate')}
 					accessibilityHint={
 						disabled ? null : _('Duplicate selected notes')
 					}
-					accessibilityRole="button">
-					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
-						<Icon name="md-copy" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+				>
+					<Icon name="md-copy" style={styles.topIcon} />
+				</CustomButton>
 			);
 		}
 
