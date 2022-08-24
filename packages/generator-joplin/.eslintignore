@@ -1,0 +1,2 @@
+# Generator files are copied from elsewhere and so shouldn't be linted
+generators/app/templates/api
