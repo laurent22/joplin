@@ -22,6 +22,7 @@ import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
+type OnAttachCallback = ()=> void;
 
 interface Props {
 	themeId: number;
@@ -33,6 +34,7 @@ interface Props {
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
+	onAttach: OnAttachCallback;
 }
 
 function fontFamilyFromSettings() {
@@ -444,6 +446,7 @@ function NoteEditor(props: Props, ref: any) {
 				editorControl={editorControl}
 				selectionState={selectionState}
 				searchState={searchState}
+				onAttach={props.onAttach}
 			/>
 		</View>
 	);

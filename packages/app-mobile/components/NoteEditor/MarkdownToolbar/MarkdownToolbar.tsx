@@ -21,11 +21,14 @@ import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
 
+type OnAttachCallback = ()=> void;
+
 interface MarkdownToolbarProps {
 	editorControl: EditorControl;
 	selectionState: SelectionFormatting;
 	searchState: SearchState;
 	editorSettings: EditorSettings;
+	onAttach: OnAttachCallback;
 	style?: ViewStyle;
 }
 
@@ -201,17 +204,23 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		}, [editorControl]),
 	});
 
+	const onDismissKeyboard = useCallback(() => {
+		// Keyboard.dismiss() doesn't dismiss the keyboard if it's editing the WebView.
+		Keyboard.dismiss();
+
+		// As such, dismiss the keyboard by sending a message to the View.
+		editorControl.hideKeyboard();
+	}, [editorControl]);
+
 	actionButtons.push({
 		icon: (
-			<MaterialIcon name="spellcheck" style={styles.text}/>
+			<MaterialIcon name="attachment" style={styles.text}/>
 		),
-		description:
-			!props.selectionState.spellChecking ? _('Check spelling') : _('Stop checking spelling'),
-		active: props.selectionState.spellChecking,
-		disabled: props.selectionState.unspellCheckableRegion,
+		description: _('Attach'),
 		onPress: useCallback(() => {
-			editorControl.setSpellcheckEnabled(!props.selectionState.spellChecking);
-		}, [editorControl, props.selectionState.spellChecking]),
+			onDismissKeyboard();
+			props.onAttach();
+		}, [props.onAttach, onDismissKeyboard]),
 	});
 
 	actionButtons.push({
@@ -248,21 +257,13 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		});
 	});
 
-	const onToggleKeyboard = useCallback(() => {
-		// Keyboard.dismiss() doesn't dismiss the keyboard if it's editing the WebView.
-		Keyboard.dismiss();
-
-		// As such, dismiss the keyboard by sending a message to the View.
-		editorControl.hideKeyboard();
-	}, [editorControl]);
-
 	actionButtons.push({
 		icon: (
 			<MaterialIcon name="keyboard-hide" style={styles.text}/>
 		),
 		description: _('Hide keyboard'),
 		disabled: !keyboardVisible,
-		onPress: onToggleKeyboard,
+		onPress: onDismissKeyboard,
 
 		priority: -3,
 	});
