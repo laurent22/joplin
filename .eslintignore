@@ -6,6 +6,7 @@ _releases/
 *.min.js
 **/commands/index.ts
 **/node_modules/
+packages/generator-joplin/generators/app/templates/api/
 Assets/
 docs/
 highlight.pack.js

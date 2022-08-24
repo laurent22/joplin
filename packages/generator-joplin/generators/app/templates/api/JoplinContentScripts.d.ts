@@ -1,9 +1,9 @@
 import Plugin from '../Plugin';
 import { ContentScriptType } from './types';
 export default class JoplinContentScripts {
-	private plugin;
-	constructor(plugin: Plugin);
-	/**
+    private plugin;
+    constructor(plugin: Plugin);
+    /**
      * Registers a new content script. Unlike regular plugin code, which runs in
      * a separate process, content scripts run within the main process code and
      * thus allow improved performances and more customisations in specific
@@ -29,12 +29,12 @@ export default class JoplinContentScripts {
      * @param id A unique ID for the content script.
      * @param scriptPath Must be a path relative to the plugin main script. For example, if your file content_script.js is next to your index.ts file, you would set `scriptPath` to `"./content_script.js`.
      */
-	register(type: ContentScriptType, id: string, scriptPath: string): Promise<void>;
-	/**
+    register(type: ContentScriptType, id: string, scriptPath: string): Promise<void>;
+    /**
      * Listens to a messages sent from the content script using postMessage().
      * See {@link ContentScriptType} for more information as well as the
      * [postMessage
      * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages)
      */
-	onMessage(contentScriptId: string, callback: any): Promise<void>;
+    onMessage(contentScriptId: string, callback: any): Promise<void>;
 }

@@ -10,23 +10,23 @@ import { ViewHandle } from './types';
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/toc)
  */
 export default class JoplinViewsPanels {
-	private store;
-	private plugin;
-	constructor(plugin: Plugin, store: any);
-	private controller;
-	/**
+    private store;
+    private plugin;
+    constructor(plugin: Plugin, store: any);
+    private controller;
+    /**
      * Creates a new panel
      */
-	create(id: string): Promise<ViewHandle>;
-	/**
+    create(id: string): Promise<ViewHandle>;
+    /**
      * Sets the panel webview HTML
      */
-	setHtml(handle: ViewHandle, html: string): Promise<string>;
-	/**
+    setHtml(handle: ViewHandle, html: string): Promise<string>;
+    /**
      * Adds and loads a new JS or CSS files into the panel.
      */
-	addScript(handle: ViewHandle, scriptPath: string): Promise<void>;
-	/**
+    addScript(handle: ViewHandle, scriptPath: string): Promise<void>;
+    /**
      * Called when a message is sent from the webview (using postMessage).
      *
      * To post a message from the webview to the plugin use:
@@ -45,8 +45,8 @@ export default class JoplinViewsPanels {
      * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
      *
      */
-	onMessage(handle: ViewHandle, callback: Function): Promise<void>;
-	/**
+    onMessage(handle: ViewHandle, callback: Function): Promise<void>;
+    /**
      * Sends a message to the webview.
      *
      * The webview must have registered a message handler prior, otherwise the message is ignored. Use;
@@ -62,17 +62,17 @@ export default class JoplinViewsPanels {
      *
      * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
      */
-	postMessage(handle: ViewHandle, message: any): void;
-	/**
+    postMessage(handle: ViewHandle, message: any): void;
+    /**
      * Shows the panel
      */
-	show(handle: ViewHandle, show?: boolean): Promise<void>;
-	/**
+    show(handle: ViewHandle, show?: boolean): Promise<void>;
+    /**
      * Hides the panel
      */
-	hide(handle: ViewHandle): Promise<void>;
-	/**
+    hide(handle: ViewHandle): Promise<void>;
+    /**
      * Tells whether the panel is visible or not
      */
-	visible(handle: ViewHandle): Promise<boolean>;
+    visible(handle: ViewHandle): Promise<boolean>;
 }
