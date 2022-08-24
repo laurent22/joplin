@@ -302,7 +302,10 @@ export function initCodeMirror(
 				decoratorExtension,
 
 				EditorView.lineWrapping,
-				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
+				EditorView.contentAttributes.of({
+					autocapitalize: 'sentence',
+					spellcheck: 'true',
+				}),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
 					notifyDocChanged(viewUpdate);
 					notifySelectionChange(viewUpdate);
