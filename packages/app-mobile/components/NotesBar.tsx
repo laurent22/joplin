@@ -219,7 +219,7 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	const flatListRef: any = React.useRef(null);
+	let flatListRef: any = React.useRef(null);
 
 	const NotesBarListComp = (
 		<FlatList
@@ -240,7 +240,7 @@ function NotesBarComponent(props: Props) {
 					index,
 				}
 			)}
-			ref={flatListRef}
+			ref={(ref: any) => { flatListRef = ref; }}
 		/>
 	);
 
