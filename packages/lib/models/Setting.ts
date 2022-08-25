@@ -1010,6 +1010,24 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'editor.beta.spellcheckEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				show: (settings: any) => settings['editor.beta'],
+				label: () => 'Enable spellcheck in the beta editor',
+				description: () => {
+					if (shim.mobilePlatform() === 'ios') {
+						return 'Enables automatic spellcheck in the beta editor. This may not work properly on iOS';
+					}
+					return null;
+				},
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: SettingItemType.String,

@@ -18,6 +18,7 @@ export interface EditorSettings {
     themeData: Theme;
 
     katexEnabled: boolean;
+	spellcheckEnabled: boolean;
 }
 
 export interface ChangeEvent {
