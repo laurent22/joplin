@@ -1018,13 +1018,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile],
 				show: (settings: any) => settings['editor.beta'],
-				label: () => 'Enable spellcheck in the beta editor',
-				description: () => {
-					if (shim.mobilePlatform() === 'ios') {
-						return 'Enables automatic spellcheck in the beta editor. This may not work properly on iOS';
-					}
-					return null;
-				},
+				label: () => _('Enable spellcheck in the beta editor'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
