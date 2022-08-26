@@ -117,8 +117,8 @@ function NoteEditor(props: Props, ref: any) {
 	const editorSettings: EditorSettings = {
 		themeId: props.themeId,
 		themeData: editorTheme(props.themeId),
-		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
-		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled') as boolean,
+		katexEnabled: Setting.value('markdown.plugin.katex'),
+		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 	};
 
 	const injectedJavaScript = `
