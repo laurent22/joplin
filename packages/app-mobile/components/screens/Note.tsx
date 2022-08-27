@@ -459,8 +459,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		styles.noteActionButton2 = {
-			borderBottomLeftRadius: 8,
-			borderBottomRightRadius: 8,
+			// Removing this temporarily till second noteAction is implemented
+			// borderBottomLeftRadius: 8,
+			// borderBottomRightRadius: 8,
+			borderRadius: 8,
 		};
 
 		styles.noteActionButtonIcon = {
@@ -1401,9 +1403,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// Note actions are the notesbar and split layout toggle button
 		const noteActionButtonGroupComp = (
 			<Animated.View style={this.styles().noteActionButtonGroup} {...this.noteActionsDragResponder.panHandlers} >
-				<TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
+				{/* Temporarily hiding the split layout button till it's implemented */}
+				{/* <TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
 					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 				<TouchableOpacity style={[notesBarToggleStyle, this.styles().noteActionButton2]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
 					<Icon name="list" style={notesBarToggleIconStyle} />
 				</TouchableOpacity>
