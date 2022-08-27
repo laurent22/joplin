@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Checkbox from './checkbox';
 import Note from '@joplin/lib/models/Note';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Style } from './global-style';
 import { State } from '@joplin/lib/reducer';
 const { connect } = require('react-redux');
-import { themeStyle } from './global-style';
 const { _ } = require('@joplin/lib/locale');
 import shim from '@joplin/lib/shim';
+import useStyles from './useStyles';
 
 
 interface NoteListProps {
@@ -21,12 +21,10 @@ interface NoteListProps {
 const NotesBarListItemComponent = function(props: NoteListProps) {
 	const note = props.note ?? {};
 	const isTodo = !!Number(note.is_todo);
+	const themeId = props.themeId;
 
-	function styles() {
-		const themeId = props.themeId;
-		const theme = themeStyle(themeId);
-
-		let styles: Style = {
+	const stylingFunction = (theme: Style): Style => {
+		return {
 			horizontalFlex: {
 				flexDirection: 'row',
 			},
@@ -67,11 +65,9 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 				borderColor: theme.dividerColor,
 			},
 		};
+	};
 
-		styles = StyleSheet.create(styles);
-
-		return styles;
-	}
+	const styles = useStyles(stylingFunction, themeId);
 
 	const onTodoCheckboxChange = async (checked: boolean) => {
 		await props.todoCheckbox_change(checked);
@@ -100,22 +96,22 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 	if (isTodo) {
 		item = (
 			<View>
-				<TouchableOpacity style={[styles().horizontalFlex, styles().item, styles().selectedItem]} onPress={onPress}>
+				<TouchableOpacity style={[styles.horizontalFlex, styles.item, styles.selectedItem]} onPress={onPress}>
 					<Checkbox
-						style={styles().checkbox}
+						style={styles.checkbox}
 						checked={!!Number(note.todo_completed)}
 						onChange={(checked) => onTodoCheckboxChange(checked)}
 						accessibilityLabel={_('to-do: %s', noteTitle)}
 					/>
-					<Text style={styles().itemText}>{noteTitle}</Text>
+					<Text style={styles.itemText}>{noteTitle}</Text>
 				</TouchableOpacity>
 			</View>
 		);
 	} else {
 		item = (
 			<View>
-				<TouchableOpacity onPress={onPress} style={[styles().selectedItem, styles().item]}>
-					<Text style={[styles().itemText, styles().padding]}>{noteTitle}</Text>
+				<TouchableOpacity onPress={onPress} style={[styles.selectedItem, styles.item]}>
+					<Text style={[styles.itemText, styles.padding]}>{noteTitle}</Text>
 				</TouchableOpacity>
 			</View>
 		);
