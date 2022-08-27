@@ -302,7 +302,10 @@ export function initCodeMirror(
 				decoratorExtension,
 
 				EditorView.lineWrapping,
-				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
+				EditorView.contentAttributes.of({
+					autocapitalize: 'sentence',
+					spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
+				}),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
 					notifyDocChanged(viewUpdate);
 					notifySelectionChange(viewUpdate);
@@ -380,10 +383,6 @@ export function initCodeMirror(
 			if (!opened) {
 				closeSearchPanel(editor);
 			}
-		},
-		setSpellcheckEnabled: (enabled: boolean) => {
-			editor.contentDOM.spellcheck = enabled;
-			notifySelectionFormattingChange();
 		},
 
 		// Formatting

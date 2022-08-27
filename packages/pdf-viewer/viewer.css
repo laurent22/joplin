@@ -136,6 +136,7 @@ hr {
 	height: 100%;
 	padding: 0.5rem;
 	padding-top: 0px;
+	padding-bottom: 0px;
 	overflow-y: hidden;
 	padding-right: 0.25rem;
 	position: relative;

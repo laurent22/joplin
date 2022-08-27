@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, MutableRefObject } from 'react';
 import * as React from 'react';
-import { PdfData, ScaledSize } from './pdfSource';
+import { PdfData } from './pdfSource';
 import Page from './Page';
-import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import styled from 'styled-components';
+import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
 
 
 const PagesHolder = styled.div<{ pageGap: number }>`
@@ -31,34 +31,27 @@ export interface VerticalPagesProps {
 
 
 export default function VerticalPages(props: VerticalPagesProps) {
-	const currentZoom = useRef(props.zoom);
-	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
-	const currentScaleSize = useRef(scaledSize);
+	const [containerWidth, setContainerWidth] = useState<number>(null);
 	const innerContainerEl = useRef<HTMLDivElement>(null);
-
-	const updateSize = async (cancelled?: boolean) => {
-		if (props.pdf) {
-			const containerWidth = props.container.current.clientWidth - 20;
-			const effectiveWidth = Math.min(containerWidth, 900) * (props.zoom || 1);
-			const scaledSize_ = await props.pdf.getScaledSize(null, effectiveWidth);
-			if (cancelled) return;
-			innerContainerEl.current.style.height = `${(scaledSize_.height + (props.pageGap || 2)) * props.pdf.pageCount}px`;
-			const oldScaleSize = currentScaleSize.current;
-			if (oldScaleSize && props.container.current) {
-				const oldScrollTop = props.container.current.scrollTop;
-				props.container.current.scrollTop = oldScrollTop * (scaledSize_.scale / oldScaleSize.scale);
-			}
-			currentScaleSize.current = scaledSize_;
-			setScaledSize(scaledSize_);
-		}
-	};
+	const scaledSize = useScaledSize({
+		pdf: props.pdf,
+		pdfId: props.pdfId,
+		containerWidth,
+		rememberScroll: props.rememberScroll,
+		anchorPage: props.anchorPage,
+		container: props.container,
+		innerContainerEl,
+		pageGap: props.pageGap,
+		zoom: props.zoom,
+	} as ScaledSizeParams);
 
 	useEffect(() => {
 		let resizeTimer: number = null;
 		let cancelled = false;
 
-		const _updateSize = async () => {
-			return updateSize(cancelled);
+		const updateWidth = () => {
+			if (cancelled) return;
+			setContainerWidth(props.container.current.clientWidth);
 		};
 
 		const onResize = () => {
@@ -66,9 +59,10 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				clearTimeout(resizeTimer);
 				resizeTimer = null;
 			}
-			resizeTimer = window.setTimeout(_updateSize, 200);
+			resizeTimer = window.setTimeout(updateWidth, 200);
 		};
 
+		updateWidth();
 		window.addEventListener('resize', onResize);
 
 		return () => {
@@ -79,15 +73,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, [props.pdf]);
-
-	useEffect(() => {
-		if (currentZoom.current && currentZoom.current !== props.zoom) {
-			// console.log('zoom changed', currentZoom.current, props.zoom);
-			updateSize().catch(console.error);
-			currentZoom.current = props.zoom;
-		}
-	}, [props.zoom]);
+	}, [props.container, props.pdf]);
 
 	useEffect(() => {
 		let scrollTimer: number = null;
@@ -116,33 +102,18 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				scrollTimer = null;
 			}
 		};
-
-	}, [props.pdfId, props.rememberScroll]);
-
-	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		try {
-			await updateSize(event.cancelled);
-			if (props.rememberScroll && props.pdfId) {
-				const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${props.pdfId}.scrollTop`), 10) || null;
-				if (scrollOffset && !props.anchorPage) {
-					props.container.current.scrollTop = scrollOffset;
-					// console.log('scroll set',props.container.current.scrollTop);
-				}
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	}, [props.pdf, props.pdfId, props.rememberScroll, props.anchorPage]);
-
+	}, [props.container, props.pdfId, props.rememberScroll]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
-		{Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {
-			// setting focusOnLoad only after scaledSize is set so that the container height is set correctly
-			return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
-				isAnchored={props.anchorPage && props.anchorPage === i + 1}
-				showPageNumbers={props.showPageNumbers}
-				isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
+		{scaledSize ?
+			Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {
+				// setting focusOnLoad only after scaledSize is set so that the container height is set correctly
+				return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
+					isAnchored={props.anchorPage && props.anchorPage === i + 1}
+					showPageNumbers={props.showPageNumbers}
+					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
+			}
+			) : 'Calculating size...'
 		}
-		)}
 	</PagesHolder>);
 }

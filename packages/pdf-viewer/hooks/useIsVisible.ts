@@ -2,7 +2,8 @@ import { useEffect, useState, MutableRefObject } from 'react';
 
 
 const useIsVisible = (elementRef: MutableRefObject<HTMLElement>, rootRef: MutableRefObject<HTMLElement>) => {
-	const [isVisible, setIsVisible] = useState(null);
+	const [isVisible, setIsVisible] = useState(false);
+
 	useEffect(() => {
 		let observer: IntersectionObserver = null;
 		if (elementRef.current) {
@@ -29,8 +30,7 @@ const useIsVisible = (elementRef: MutableRefObject<HTMLElement>, rootRef: Mutabl
 				observer.disconnect();
 			}
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, []);
+	}, [elementRef, rootRef]);
 
 	return isVisible;
 };

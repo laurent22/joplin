@@ -9,5 +9,6 @@
 	"homepage_url": "<%= pluginHomepageUrl %>",
 	"repository_url": "<%= pluginRepositoryUrl %>",
 	"keywords": [],
-	"categories": []
+	"categories": [],
+	"screenshots": []
 }

@@ -49,14 +49,14 @@ export interface PageProps {
 export default function Page(props: PageProps) {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(null);
-	const [scale, setScale] = useState(null);
-	const [timestamp, setTimestamp] = useState(null);
+	const scaleRef = useRef<number>(null);
+	const timestampRef = useRef<number>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const isVisible = useIsVisible(canvasRef, props.container);
 
 	useEffect(() => {
-		if (!isVisible || !page || !props.scaledSize || (scale && props.scaledSize.scale === scale)) return;
+		if (!isVisible || !page || !props.scaledSize || (scaleRef.current && props.scaledSize.scale === scaleRef.current)) return;
 		try {
 			const viewport = page.getViewport({ scale: props.scaledSize.scale || 1.0 });
 			const canvas = canvasRef.current;
@@ -64,28 +64,27 @@ export default function Page(props: PageProps) {
 			canvas.height = viewport.height;
 			const ctx = canvas.getContext('2d');
 			const pageTimestamp = new Date().getTime();
-			setTimestamp(pageTimestamp);
+			timestampRef.current = pageTimestamp;
 			page.render({
 				canvasContext: ctx,
 				viewport,
 				// Used so that the page rendering is throttled to some extent.
 				// https://stackoverflow.com/questions/18069448/halting-pdf-js-page-rendering
 				continueCallback: function(cont: any) {
-					if (timestamp !== pageTimestamp) {
+					if (timestampRef.current !== pageTimestamp) {
 						return;
 					}
 					cont();
 				},
 			});
-			setScale(props.scaledSize.scale);
+			scaleRef.current = props.scaledSize.scale;
 
 		} catch (error) {
 			error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
 			setError(error);
 			throw error;
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [page, props.scaledSize, isVisible]);
+	}, [page, props.scaledSize, isVisible, props.pageNo]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		if (page || !isVisible || !props.pdf) return;
@@ -104,8 +103,7 @@ export default function Page(props: PageProps) {
 			props.container.current.scrollTop = wrapperRef.current.offsetTop;
 			// console.warn('setting focus on page', props.pageNo, wrapperRef.current.offsetTop);
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.focusOnLoad]);
+	}, [props.container, props.focusOnLoad]);
 
 	let style: any = {};
 	if (props.scaledSize) {
