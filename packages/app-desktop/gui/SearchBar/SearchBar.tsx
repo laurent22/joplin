@@ -55,6 +55,7 @@ function SearchBar(props: Props) {
 		return () => {
 			debouncedSearch.clear();
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [query, searchStarted]);
 
 	const onExitSearch = useCallback(async (navigateAway = true) => {
@@ -80,6 +81,7 @@ function SearchBar(props: Props) {
 				}
 			}
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedNoteId]);
 
 	function onChange(event: any) {
@@ -129,6 +131,7 @@ function SearchBar(props: Props) {
 				field: 'globalSearch',
 			});
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [onExitSearch, props.isFocused, searchStarted]);
 
 	useEffect(() => {
@@ -150,6 +153,7 @@ function SearchBar(props: Props) {
 			}
 			void onExitSearch(true);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	return (
