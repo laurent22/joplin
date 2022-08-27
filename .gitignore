@@ -834,6 +834,9 @@ packages/app-mobile/components/CameraView.js.map
 packages/app-mobile/components/CustomButton.d.ts
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/CustomButton.js.map
+packages/app-mobile/components/Dropdown.d.ts
+packages/app-mobile/components/Dropdown.js
+packages/app-mobile/components/Dropdown.js.map
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.d.ts
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js.map
@@ -906,6 +909,9 @@ packages/app-mobile/components/NoteEditor/SelectionFormatting.js.map
 packages/app-mobile/components/NoteEditor/types.d.ts
 packages/app-mobile/components/NoteEditor/types.js
 packages/app-mobile/components/NoteEditor/types.js.map
+packages/app-mobile/components/ScreenHeader.d.ts
+packages/app-mobile/components/ScreenHeader.js
+packages/app-mobile/components/ScreenHeader.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
