@@ -14,7 +14,8 @@ interface ToolbarButtonProps {
 }
 
 const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarButtonProps) => {
-	const disabled = spec.disabled ?? false;
+	const visible = spec.visible ?? true;
+	const disabled = (spec.disabled ?? false) && visible;
 	const styles = styleSheet.styles;
 
 	// Additional styles if activated
@@ -45,7 +46,10 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 
 	return (
 		<CustomButton
-			style={{ ...styles.button, ...activatedStyle, ...disabledStyle, ...style }}
+			style={{
+				...styles.button, ...activatedStyle, ...disabledStyle, ...style,
+				...(!visible ? { opacity: 0 } : null),
+			}}
 			themeId={styleSheet.themeId}
 			onPress={onPress}
 			description={ spec.description }

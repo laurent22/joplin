@@ -243,9 +243,11 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
+	const [hasSoftwareKeyboard, setHasSoftwareKeyboard] = useState(false);
 	useEffect(() => {
 		const showListener = Keyboard.addListener('keyboardDidShow', () => {
 			setKeyboardVisible(true);
+			setHasSoftwareKeyboard(true);
 		});
 		const hideListener = Keyboard.addListener('keyboardDidHide', () => {
 			setKeyboardVisible(false);
@@ -263,6 +265,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Hide keyboard'),
 		disabled: !keyboardVisible,
+		visible: hasSoftwareKeyboard,
 		onPress: onDismissKeyboard,
 
 		priority: -3,

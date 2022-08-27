@@ -21,6 +21,7 @@ export interface ButtonSpec {
 	// E.g. the cursor is in a header and the button is a header button.
 	active?: boolean;
 	disabled?: boolean;
+	visible?: boolean;
 }
 
 export interface ButtonGroup {

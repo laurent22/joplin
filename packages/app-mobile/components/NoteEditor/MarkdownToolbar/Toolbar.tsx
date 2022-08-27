@@ -19,7 +19,14 @@ const Toolbar = (props: ToolbarProps) => {
 	const [maxButtonsEachSide, setMaxButtonsEachSide] = useState(0);
 
 	const allButtonSpecs = props.buttons.reduce((accumulator: ButtonSpec[], current: ButtonGroup) => {
-		return accumulator.concat(...current.items);
+		const newItems: ButtonSpec[] = [];
+		for (const item of current.items) {
+			if (item.visible ?? true) {
+				newItems.push(item);
+			}
+		}
+
+		return accumulator.concat(...newItems);
 	}, []);
 
 	// Sort from highest priority to lowest
