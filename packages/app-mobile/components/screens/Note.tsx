@@ -26,7 +26,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 const { ActionButton } = require('../action-button.js');
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');

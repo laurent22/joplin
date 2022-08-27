@@ -1,17 +1,19 @@
-// Test configuration
-// See https://jestjs.io/docs/configuration#testenvironment-string
+module.exports = {
+	preset: 'react-native',
 
-const config = {
-	preset: 'ts-jest',
-
-	// File extensions for imports, in order of precedence:
-	// prefer importing from .ts or .tsx to importing from .js
-	// files.
-	moduleFileExtensions: [
+	'moduleFileExtensions': [
 		'ts',
 		'tsx',
 		'js',
 	],
-};
 
-module.exports = config;
+	'transform': {
+		'\\.(ts|tsx)$': 'ts-jest',
+	},
+
+	testMatch: ['**/*.test.(ts|tsx)'],
+
+	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+
+	slowTestThreshold: 40,
+};
