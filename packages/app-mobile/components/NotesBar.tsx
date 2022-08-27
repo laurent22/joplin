@@ -247,7 +247,9 @@ function NotesBarComponent(props: Props) {
 	// Scroll the notesbar to selected note item after rendering
 	React.useEffect(() => {
 		const selectedItemIndex = notes.findIndex(item => item.id === props.selectedNoteId);
-		flatListRef.scrollToIndex({ index: selectedItemIndex });
+		if (selectedItemIndex >= 0) {
+			flatListRef.scrollToIndex({ index: selectedItemIndex });
+		}
 	});
 
 	// Update the notesbar when a note item changes
