@@ -42,6 +42,7 @@ const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage,
 		if (rememberScroll && pdfId && !oldScaleSize && !anchorPage) {
 			const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${pdfId}.scrollTop`), 10) || null;
 			if (scrollOffset) {
+				// Adjusting it according to the new scale
 				container.current.scrollTop = scrollOffset * scaledSize_.scale;
 				// console.log('scroll set',container.current.scrollTop);
 			}
