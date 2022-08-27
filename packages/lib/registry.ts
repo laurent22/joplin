@@ -163,7 +163,7 @@ class Registry {
 							const newContext = await sync.start(options);
 							Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
-							if (error.code == 'alreadyStarted') {
+							if (error.code === 'alreadyStarted') {
 								this.logger().info(error.message);
 							} else {
 								promiseResolve();

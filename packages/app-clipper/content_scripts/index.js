@@ -352,7 +352,7 @@
 	}
 
 	function isPagePdf() {
-		return document.contentType == 'application/pdf';
+		return document.contentType === 'application/pdf';
 	}
 
 	function embedPageUrl() {

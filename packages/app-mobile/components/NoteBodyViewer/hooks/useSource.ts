@@ -39,6 +39,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 	const markupToHtml = useMemo(() => {
 		return markupLanguageUtils.newMarkupToHtml();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [isFirstRender]);
 
 	// To address https://github.com/laurent22/joplin/issues/433
@@ -82,7 +83,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				resources: noteResources,
 				codeTheme: theme.codeThemeCss,
 				postMessageSyntax: 'window.joplinPostMessage_',
-				enableLongPress: shim.mobilePlatform() === 'android', // On iOS, there's already a built-on open/share menu
+				enableLongPress: true,
 			};
 
 			// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"
@@ -139,6 +140,17 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			js.push('}');
 			js.push('true;');
 
+			// iOS doesn't automatically adjust the WebView's font size to match users'
+			// accessibility settings. To do this, we need to tell it to match the system font.
+			// See https://github.com/ionic-team/capacitor/issues/2748#issuecomment-612923135
+			const iOSSpecificCss = `
+				@media screen {
+					:root body {
+						font: -apple-system-body;
+					}
+				}
+			`;
+
 			html =
 				`
 				<!DOCTYPE html>
@@ -146,6 +158,9 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					<head>
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
+						<style>
+							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 					</head>
 					<body>
@@ -188,6 +203,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, effectDependencies);
 
 	return { source, injectedJs };

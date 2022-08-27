@@ -26,7 +26,7 @@ const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const bridge = require('@electron/remote').require('./bridge').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
 
@@ -131,7 +131,7 @@ app().start(bridge().processArgv()).then((result) => {
 }).catch((error) => {
 	const env = bridge().env();
 
-	if (error.code == 'flagError') {
+	if (error.code === 'flagError') {
 		bridge().showErrorMessageBox(error.message);
 	} else {
 		// If something goes wrong at this stage we don't have a console or a log file

@@ -182,7 +182,7 @@ export default class Note extends BaseItem {
 
 		const resourceDir = toForwardSlashes(Setting.value('resourceDir'));
 
-		let pathsToTry = [];
+		const pathsToTry = [];
 		if (options.useAbsolutePaths) {
 			pathsToTry.push(`file://${resourceDir}`);
 			pathsToTry.push(`file:///${resourceDir}`);
@@ -191,6 +191,13 @@ export default class Note extends BaseItem {
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
+
+		body = Note.replaceResourceExternalToInternalLinks_(pathsToTry, body);
+		return body;
+	}
+
+	private static replaceResourceExternalToInternalLinks_(pathsToTry: string[], body: string) {
+		// This is a moved to a separate function for the purpose of testing only
 
 		// We support both the escaped and unescaped versions because both
 		// of those paths are valid:
@@ -202,7 +209,7 @@ export default class Note extends BaseItem {
 		const temp = [];
 		for (const p of pathsToTry) {
 			temp.push(p);
-			temp.push(markdownUtils.escapeLinkUrl(p));
+			temp.push(encodeURI(p));
 		}
 
 		pathsToTry = temp;
@@ -227,7 +234,6 @@ export default class Note extends BaseItem {
 			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
 			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
-
 		// this.logger().debug('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
@@ -294,7 +300,7 @@ export default class Note extends BaseItem {
 					if (aProp < bProp) r = +1;
 					if (aProp > bProp) r = -1;
 				}
-				if (order.dir == 'ASC') r = -r;
+				if (order.dir === 'ASC') r = -r;
 				if (r !== 0) return r;
 			}
 
@@ -359,7 +365,7 @@ export default class Note extends BaseItem {
 		// it's confusing to have conflicts but with an empty conflict folder.
 		if (parentId === Folder.conflictFolderId()) options.showCompletedTodos = true;
 
-		if (parentId == Folder.conflictFolderId()) {
+		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
@@ -521,7 +527,7 @@ export default class Note extends BaseItem {
 	}
 
 	static async copyToFolder(noteId: string, folderId: string) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -533,7 +539,7 @@ export default class Note extends BaseItem {
 	}
 
 	static async moveToFolder(noteId: string, folderId: string) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.

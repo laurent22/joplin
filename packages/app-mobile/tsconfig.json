@@ -1,10 +1,18 @@
 {
-    "extends": "../../tsconfig.json",
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
+	"extends": "../../tsconfig.json",
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
 	],
 	"exclude": [
+		//Files that don't need transpilation
 		"**/node_modules",
+		"**/*.test.ts",
+		"**/*.test.tsx",
+		"gulpfile.ts",
+		"tools/*.ts",
 	],
+	"compilerOptions": {
+		"types": ["jest", "node"]
+	}
 }

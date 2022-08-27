@@ -1,5 +1,33 @@
 # Joplin changelog
 
+## [v2.9.4](https://github.com/laurent22/joplin/releases/tag/v2.9.4) (Pre-release) - 2022-08-18T16:52:26Z
+
+- Fixed macOS release
+
+## [v2.9.3](https://github.com/laurent22/joplin/releases/tag/v2.9.3) (Pre-release) - 2022-08-18T13:11:09Z
+
+- Fixed Linux release
+
+## [v2.9.2](https://github.com/laurent22/joplin/releases/tag/v2.9.2) (Pre-release) - 2022-08-12T18:12:12Z
+
+- Improved: Allow electron flag to disable smooth scrolling ([#6712](https://github.com/laurent22/joplin/issues/6712) by [@joserebelo](https://github.com/joserebelo))
+- Improved: New Embedded Pdf Viewer ([#6681](https://github.com/laurent22/joplin/issues/6681) by [@asrient](https://github.com/asrient))
+- Fixed: Do not encrypt non-owned note if it was not shared encrypted ([#6645](https://github.com/laurent22/joplin/issues/6645))
+- Fixed: Fixed broken image links ([#6590](https://github.com/laurent22/joplin/issues/6590)) ([#6570](https://github.com/laurent22/joplin/issues/6570) by [@SFulpius](https://github.com/SFulpius))
+- Fixed: Play flac files ([#6666](https://github.com/laurent22/joplin/issues/6666)) ([#6434](https://github.com/laurent22/joplin/issues/6434) by [@SFulpius](https://github.com/SFulpius))
+
+## [v2.9.1](https://github.com/laurent22/joplin/releases/tag/v2.9.1) (Pre-release) - 2022-07-11T09:59:32Z
+
+- New: Plugins: Added joplin.versionInfo method ([3b35ab6](https://github.com/laurent22/joplin/commit/3b35ab6))
+- Improved: Add support for proxy ([#6537](https://github.com/laurent22/joplin/issues/6537)) ([#164](https://github.com/laurent22/joplin/issues/164) by Jason Williams)
+- Improved: Checkbox don't function while checkbox format button hidden from toolbar ([#6567](https://github.com/laurent22/joplin/issues/6567)) ([#6172](https://github.com/laurent22/joplin/issues/6172) by [@SFulpius](https://github.com/SFulpius))
+- Improved: Update to Electron 18 ([#6496](https://github.com/laurent22/joplin/issues/6496) by [@alexmo1997](https://github.com/alexmo1997))
+- Fixed: Allow styling note list items using custom CSS ([#6542](https://github.com/laurent22/joplin/issues/6542)) ([#5178](https://github.com/laurent22/joplin/issues/5178) by Kenichi Kobayashi)
+- Fixed: App can crash with certain combinations of plugins ([#6506](https://github.com/laurent22/joplin/issues/6506))
+- Fixed: Search field focus is stolen on layout change ([#6514](https://github.com/laurent22/joplin/issues/6514))
+- Fixed: Search field would not clear as expected ([#6557](https://github.com/laurent22/joplin/issues/6557))
+- Security: Fixes XSS in GotoAnything dialog (Vulnerability found by [@ly1g3](https://github.com/ly1g3) CVE-2022-35131) ([e797ebb](https://github.com/laurent22/joplin/commit/e797ebb))
+
 ## [v2.8.8](https://github.com/laurent22/joplin/releases/tag/v2.8.8) - 2022-05-17T14:48:06Z
 
 - Improved: Remove plugin backoff handler for now ([7ec3a7b](https://github.com/laurent22/joplin/commit/7ec3a7b))

@@ -7,6 +7,8 @@ export interface Options {
 	audioPlayerEnabled: boolean;
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
+	useCustomPdfViewer: boolean;
+	theme: any;
 }
 
 function resourceUrl(resourceFullPath: string): string {
@@ -31,14 +33,27 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.audioPlayerEnabled && resource.mime.indexOf('audio/') === 0) {
+		// We want to support both audio/x-flac and audio/flac MIME types, but chromium only supports audio/flac
+		// https://github.com/laurent22/joplin/issues/6434
+		const escapedAudioMime = escapedMime === 'audio/x-flac' ? 'audio/flac' : escapedMime;
 		return `
 			<audio class="media-player media-audio" controls>
-				<source src="${escapedResourcePath}" type="${escapedMime}">
+				<source src="${escapedResourcePath}" type="${escapedAudioMime}">
 			</audio>
 		`;
 	}
 
 	if (options.pdfViewerEnabled && resource.mime === 'application/pdf') {
+		if (options.useCustomPdfViewer) {
+			let anchorPageNo = null;
+			if (link.href.indexOf('#') > 0) {
+				anchorPageNo = Number(link.href.split('#').pop());
+				if (anchorPageNo < 1) anchorPageNo = null;
+			}
+			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" url="${escapedResourcePath}" 
+			appearance="${options.theme.appearance}" ${anchorPageNo ? `anchorPage="${anchorPageNo}"` : ''}
+		 class="media-player media-pdf"></iframe>`;
+		}
 		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;
 	}
 

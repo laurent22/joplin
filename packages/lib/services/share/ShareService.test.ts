@@ -140,6 +140,7 @@ describe('ShareService', function() {
 		expect(await MasterKey.count()).toBe(1);
 
 		let { folder, note, resource } = await testShareFolder(shareService);
+		await Folder.updateAllShareIds(resourceService());
 
 		// The share service should automatically create a new encryption key
 		// specifically for that shared folder
