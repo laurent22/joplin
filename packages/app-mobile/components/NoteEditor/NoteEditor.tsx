@@ -117,7 +117,8 @@ function NoteEditor(props: Props, ref: any) {
 	const editorSettings: EditorSettings = {
 		themeId: props.themeId,
 		themeData: editorTheme(props.themeId),
-		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
+		katexEnabled: Setting.value('markdown.plugin.katex'),
+		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 	};
 
 	const injectedJavaScript = `
@@ -246,9 +247,6 @@ function NoteEditor(props: Props, ref: any) {
 		},
 		hideKeyboard() {
 			injectJS('document.activeElement?.blur();');
-		},
-		setSpellcheckEnabled(enabled: boolean) {
-			injectJS(`cm.setSpellcheckEnabled(${enabled ? 'true' : 'false'});`);
 		},
 		searchControl: {
 			findNext() {

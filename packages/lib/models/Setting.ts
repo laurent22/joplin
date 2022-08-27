@@ -1026,6 +1026,19 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			// Enables/disables spellcheck in the mobile markdown beta editor.
+			'editor.mobile.spellcheckEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				show: (settings: any) => settings['editor.beta'],
+				label: () => _('Enable spellcheck in the beta editor'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: SettingItemType.String,
