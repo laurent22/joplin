@@ -7,7 +7,9 @@ import { mkdirp, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
 const execa = require('execa');
 
-import webpack from 'webpack';
+// We need this to be transpiled to `const webpack = require('webpack')`.
+// As such, do a namespace import. See https://www.typescriptlang.org/tsconfig#esModuleInterop
+import * as webpack from 'webpack';
 
 const rootDir = dirname(dirname(dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
