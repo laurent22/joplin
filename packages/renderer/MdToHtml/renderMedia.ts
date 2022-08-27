@@ -1,5 +1,6 @@
 import { Link } from '../MdToHtml';
 import { toForwardSlashes } from '../pathUtils';
+import { LinkIndexes } from './rules/link_close';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -8,6 +9,8 @@ export interface Options {
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
 	useCustomPdfViewer: boolean;
+	noteId: string;
+	vendorDir: string;
 	theme: any;
 }
 
@@ -16,7 +19,7 @@ function resourceUrl(resourceFullPath: string): string {
 	return `file://${toForwardSlashes(resourceFullPath)}`;
 }
 
-export default function(link: Link, options: Options) {
+export default function(link: Link, options: Options, linkIndexes: LinkIndexes) {
 	const resource = link.resource;
 
 	if (!link.resourceReady || !resource || !resource.mime) return '';
@@ -44,16 +47,32 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.pdfViewerEnabled && resource.mime === 'application/pdf') {
+
 		if (options.useCustomPdfViewer) {
+			const resourceId = resource.id;
 			let anchorPageNo = null;
+
+			let id = `${options.noteId}.${resourceId}`;
+			if (linkIndexes && linkIndexes[resourceId]) {
+				linkIndexes[resourceId]++;
+			} else {
+				linkIndexes[resourceId] = 1;
+			}
+			id += `.${linkIndexes[resourceId]}`;
+
 			if (link.href.indexOf('#') > 0) {
 				anchorPageNo = Number(link.href.split('#').pop());
 				if (anchorPageNo < 1) anchorPageNo = null;
 			}
-			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" url="${escapedResourcePath}" 
-			appearance="${options.theme.appearance}" ${anchorPageNo ? `anchorPage="${anchorPageNo}"` : ''}
+
+			const src = `${options.vendorDir}/lib/@joplin/pdf-viewer/index.html`;
+
+			return `<iframe src="${src}" x-url="${escapedResourcePath}" 
+			x-appearance="${options.theme.appearance}" ${anchorPageNo ? `x-anchorPage="${anchorPageNo}"` : ''} id="${id}"
+			x-type="mini"
 		 class="media-player media-pdf"></iframe>`;
 		}
+
 		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;
 	}
 

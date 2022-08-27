@@ -30,6 +30,7 @@ const userConfig = Object.assign({}, {
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
 const allPossibleCategories = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
+const allPossibleScreenshotsType = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
@@ -76,11 +77,29 @@ function validateCategories(categories) {
 	});
 }
 
+function validateScreenshots(screenshots) {
+	if (!screenshots) return null;
+	screenshots.forEach(screenshot => {
+		if (!screenshot.src) throw new Error('You must specify a src for each screenshot');
+
+		const screenshotType = screenshot.src.split('.').pop();
+		if (!allPossibleScreenshotsType.includes(screenshotType)) throw new Error(`${screenshotType} is not a valid screenshot type. Valid types are: \n${allPossibleScreenshotsType}\n`);
+
+		const screenshotPath = path.resolve(srcDir, screenshot.src);
+		// Max file size is 1MB
+		const fileMaxSize = 1024;
+		const fileSize = fs.statSync(screenshotPath).size / 1024;
+		if (fileSize > fileMaxSize) throw new Error(`Max screenshot file size is ${fileMaxSize}KB. ${screenshotPath} is ${fileSize}KB`);
+	});
+}
+
+
 function readManifest(manifestPath) {
 	const content = fs.readFileSync(manifestPath, 'utf8');
 	const output = JSON.parse(content);
 	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
 	validateCategories(output.categories);
+	validateScreenshots(output.screenshots);
 	return output;
 }
 

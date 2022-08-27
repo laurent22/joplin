@@ -5,7 +5,7 @@ const { View, Text, ScrollView } = require('react-native');
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('../global-style.js');
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 
 function UpgradeSyncTargetScreen(props: any) {
 	const upgradeResult = useSyncTargetUpgrade();

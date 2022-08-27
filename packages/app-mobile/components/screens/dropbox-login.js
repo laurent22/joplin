@@ -2,7 +2,7 @@ const React = require('react');
 
 const { View, Button, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } = require('react-native');
 const { connect } = require('react-redux');
-const { ScreenHeader } = require('../screen-header.js');
+const { ScreenHeader } = require('../ScreenHeader');
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 const DialogBox = require('react-native-dialogbox').default;
