@@ -115,19 +115,6 @@ hr {
 	color: var(--grey);
 }
 
-.pdf-info>a {
-	padding: 0rem 0.4rem;
-	color: var(--blue);
-	cursor: pointer;
-	border: solid thin transparent;
-	border-radius: 5px;
-	user-select: none;
-}
-
-.pdf-info>a:hover {
-	border-color: var(--grey);
-}
-
 .app-pages {
 	display: block;
 	margin: 0px auto;
@@ -153,4 +140,5 @@ hr {
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
+	column-gap: 0.2rem;
 }

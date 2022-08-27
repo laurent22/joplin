@@ -2,25 +2,7 @@ import React, { useRef, useState } from 'react';
 import useIsFocused from './hooks/useIsFocused';
 import usePdfData from './hooks/usePdfData';
 import VerticalPages from './VerticalPages';
-import styled from 'styled-components';
-
-const ZoomButton = styled.a`
-	font-size: 1rem;
-	cursor: pointer;
-	color:  var(--blue);
-	font-weight: 200;
-	padding: 0px 0.2rem;
-`;
-
-const ZoomGroup = styled.a`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-flow: row;
-	color: var(--grey);
-	height: 1.4rem;
-	cursor: initial !important;
-`;
+import ZoomControls from './ui/ZoomControls';
 
 export interface MiniViewerAppProps {
 	pdfPath: string;
@@ -42,14 +24,6 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 			</div>);
 	}
 
-	const zoomIn = () => {
-		setZoom(Math.min(zoom + 0.25, 2));
-	};
-
-	const zoomOut = () => {
-		setZoom(Math.max(zoom - 0.25, 0.5));
-	};
-
 	return (
 		<div className={`mini-app${isFocused ? ' focused' : ''}`}>
 			<div className={`app-pages${isFocused ? ' focused' : ''}`} ref={containerEl}>
@@ -66,11 +40,7 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>
 					<div style={{ paddingRight: '0.4rem' }}>{pdf.pageCount} pages</div>
-					<ZoomGroup>
-						<ZoomButton onClick={zoomIn}>+</ZoomButton>
-						<span style={{ color: 'grey' }} >{zoom * 100}%</span>
-						<ZoomButton onClick={zoomOut} style={{ fontSize: '1.6rem' }}>-</ZoomButton>
-					</ZoomGroup>
+					<ZoomControls onChange={setZoom} zoom={zoom} />
 				</div>
 				<div>{isFocused ? '' : 'Click to enable scroll'}</div>
 			</div>

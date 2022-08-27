@@ -4,6 +4,7 @@ import { PdfData } from './pdfSource';
 import Page from './Page';
 import styled from 'styled-components';
 import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
+import useScrollSaver, { ScrollSaver } from './hooks/useScrollSaver';
 
 
 const PagesHolder = styled.div<{ pageGap: number }>`
@@ -33,6 +34,7 @@ export interface VerticalPagesProps {
 export default function VerticalPages(props: VerticalPagesProps) {
 	const [containerWidth, setContainerWidth] = useState<number>(null);
 	const innerContainerEl = useRef<HTMLDivElement>(null);
+
 	const scaledSize = useScaledSize({
 		pdf: props.pdf,
 		pdfId: props.pdfId,
@@ -44,6 +46,13 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		pageGap: props.pageGap,
 		zoom: props.zoom,
 	} as ScaledSizeParams);
+
+	useScrollSaver({
+		container: props.container,
+		scaledSize,
+		pdfId: props.pdfId,
+		rememberScroll: props.rememberScroll,
+	} as ScrollSaver);
 
 	useEffect(() => {
 		let resizeTimer: number = null;
@@ -74,35 +83,6 @@ export default function VerticalPages(props: VerticalPagesProps) {
 			}
 		};
 	}, [props.container, props.pdf]);
-
-	useEffect(() => {
-		let scrollTimer: number = null;
-
-		const saveScroll = () => {
-			const scrollTop = props.container.current.scrollTop;
-			if (props.rememberScroll && props.pdfId) {
-				sessionStorage.setItem(`pdf.${props.pdfId}.scrollTop`, `${scrollTop}`);
-			}
-		};
-
-		const onScroll = () => {
-			if (scrollTimer) {
-				clearTimeout(scrollTimer);
-				scrollTimer = null;
-			}
-			scrollTimer = window.setTimeout(saveScroll, 200);
-		};
-
-		props.container.current.addEventListener('scroll', onScroll);
-
-		return () => {
-			props.container.current.removeEventListener('scroll', onScroll);
-			if (scrollTimer) {
-				clearTimeout(scrollTimer);
-				scrollTimer = null;
-			}
-		};
-	}, [props.container, props.pdfId, props.rememberScroll]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{scaledSize ?

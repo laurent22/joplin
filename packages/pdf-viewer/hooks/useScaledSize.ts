@@ -42,7 +42,7 @@ const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage,
 		if (rememberScroll && pdfId && !oldScaleSize && !anchorPage) {
 			const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${pdfId}.scrollTop`), 10) || null;
 			if (scrollOffset) {
-				container.current.scrollTop = scrollOffset;
+				container.current.scrollTop = scrollOffset * scaledSize_.scale;
 				// console.log('scroll set',container.current.scrollTop);
 			}
 		}
