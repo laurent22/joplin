@@ -221,16 +221,18 @@ function NotesBarComponent(props: Props) {
 
 	let flatListRef: any = React.useRef(null);
 
+	const memoizedRenderItem = React.useCallback(({ item }: { item: any }) => {
+		if (item.is_todo) {
+			return <NotesBarListItem note={item} todoCheckbox_change={props.todoCheckbox_change} />;
+		} else {
+			return <NotesBarListItem note={item} />;
+		}
+	}, [props.todoCheckbox_change]);
+
 	const NotesBarListComp = (
 		<FlatList
 			data={notes}
-			renderItem={({ item }: { item: any }) => {
-				if (item.is_todo) {
-					return <NotesBarListItem note={item} todoCheckbox_change={props.todoCheckbox_change} />;
-				} else {
-					return <NotesBarListItem note={item} />;
-				}
-			}}
+			renderItem={memoizedRenderItem}
 			keyExtractor={(item: any) => item.id}
 			getItemLayout={(data, index) => (
 				{
