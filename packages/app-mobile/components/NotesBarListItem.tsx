@@ -12,7 +12,7 @@ import shim from '@joplin/lib/shim';
 
 interface NoteListProps {
 	note: any;
-    themeId: string;
+    themeId: number;
 	todoCheckbox_change: (checked: boolean)=> void;
 	dispatch: Function;
 	selectedNoteId: string;

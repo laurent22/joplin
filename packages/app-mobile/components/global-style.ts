@@ -1,4 +1,4 @@
-const Setting = require('@joplin/lib/models/Setting').default;
+import Setting from '@joplin/lib/models/Setting';
 const { Platform } = require('react-native');
 import { themeById } from '@joplin/lib/theme';
 
@@ -100,7 +100,7 @@ export function editorFont(fontId?: number) {
 	return fonts[fontId];
 }
 
-export function themeStyle(theme?: string) {
+export function themeStyle(theme?: number) {
 	if (!theme) {
 		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;

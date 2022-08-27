@@ -11,7 +11,7 @@ import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
 
 interface Props {
-    themeId: string;
+    themeId: number;
 	items: any[];
 	todoCheckbox_change: (checked: boolean)=> void;
 	selectedFolderId: string;
@@ -143,7 +143,7 @@ function NotesBarComponent(props: Props) {
 
 
 	const handleNewNote = async (isTodo: boolean) => {
-		let folderId = props.selectedFolderId != Folder.conflictFolderId() ? props.selectedFolderId : null;
+		let folderId = props.selectedFolderId !== Folder.conflictFolderId() ? props.selectedFolderId : null;
 		if (!folderId) folderId = props.activeFolderId;
 
 		props.dispatch({
@@ -248,7 +248,7 @@ function NotesBarComponent(props: Props) {
 	React.useEffect(() => {
 		const selectedItemIndex = notes.findIndex(item => item.id === props.selectedNoteId);
 		flatListRef.scrollToIndex({ index: selectedItemIndex });
-	}, []);
+	});
 
 	// Update the notesbar when a note item changes
 	React.useEffect(() => {
