@@ -421,6 +421,9 @@ function NoteEditor(props: NoteEditorProps) {
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
 		isSafeMode: props.isSafeMode,
+		// We need it to identify the context for which media is rendered.
+		// It is currently used to remember pdf scroll position for each attacments of each note uniquely.
+		noteId: props.noteId,
 	};
 
 	let editor = null;
