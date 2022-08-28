@@ -32,10 +32,13 @@ export const localPluginsVersion = async (defaultPluginDir: string, defaultPlugi
 
 async function downloadFile(url: string, outputPath: string) {
 	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Cannot download file from ${url}`);
+	}
 	await writeFile(outputPath, await response.buffer());
 }
 
-export async function extractPlugins(currentDir: string, defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName) {
+export async function extractPlugins(currentDir: string, defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName): Promise<void> {
 	for (const pluginId of Object.keys(downloadedPluginsNames)) {
 		await execCommand2(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`);
 		await move(`package/publish/${pluginId}.jpl`,`${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
@@ -45,7 +48,7 @@ export async function extractPlugins(currentDir: string, defaultPluginDir: strin
 	}
 }
 
-export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, defaultPluginsInfo: DefaultPluginsInfo, manifests: any): Promise<any> => {
+export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, defaultPluginsInfo: DefaultPluginsInfo, manifests: any): Promise<PluginIdAndName> => {
 
 	const downloadedPluginsNames: PluginIdAndName = {};
 	for (const pluginId of Object.keys(defaultPluginsInfo)) {
@@ -53,8 +56,7 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 		const response = await fetch(`https://registry.npmjs.org/${manifests[pluginId]._npm_package_name}`);
 
 		if (!response.ok) {
-			const responseText = await response.text();
-			throw new Error(`Cannot download plugin file ${responseText.substr(0,500)}`);
+			throw new Error(`Cannot fetch ${manifests[pluginId]._npm_package_name} release info from NPM`);
 		}
 		const releaseText = await response.text();
 		const release = JSON.parse(releaseText);
@@ -63,8 +65,6 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 
 		const pluginName = `${manifests[pluginId]._npm_package_name}-${defaultPluginsInfo[pluginId].version}.tgz`;
 		await downloadFile(pluginUrl, pluginName);
-
-		if (!await pathExists(pluginName)) throw new Error(`${pluginName} cannot be downloaded`);
 
 		downloadedPluginsNames[pluginId] = pluginName;
 	}
