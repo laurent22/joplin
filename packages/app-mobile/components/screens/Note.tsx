@@ -46,6 +46,7 @@ import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
+import SyncStatusIcon from '../SyncStatusIcon';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -72,6 +73,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			lastSaveScheduledTimestamp: null,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -510,6 +512,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	scheduleSave() {
+		this.setState({
+			lastSaveScheduledTimestamp: time.unixMs(),
+		});
+
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
@@ -1192,6 +1198,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const syncStatusIcon = <SyncStatusIcon
+			noteLastModifiedTimestamp={this.state.lastSaveScheduledTimestamp}
+		/>;
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -1207,6 +1217,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
+					syncStatusIcon={syncStatusIcon}
 				/>
 				{titleComp}
 				{bodyComponent}

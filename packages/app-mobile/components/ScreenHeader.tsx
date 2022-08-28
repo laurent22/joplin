@@ -1,7 +1,7 @@
 const React = require('react');
 
 import { connect } from 'react-redux';
-import { PureComponent, Component } from 'react';
+import { PureComponent, Component, ReactElement } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
@@ -70,6 +70,7 @@ interface ScreenHeaderProps {
 	showSearchButton?: boolean;
 	showContextMenuButton?: boolean;
 	showBackButton?: boolean;
+	syncStatusIcon?: ReactElement;
 
 	saveButtonDisabled?: boolean;
 	showSaveButton?: boolean;
@@ -644,6 +645,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					{deleteButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}
+					{this.props.syncStatusIcon ?? null}
 					{menuComp}
 				</View>
 				{warningComps}
@@ -656,7 +658,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		);
 	}
 
-	public static defaultProps: Partial<ScreenHeaderProps> ={
+	public static defaultProps: Partial<ScreenHeaderProps> = {
 		menuOptions: [],
 	};
 }

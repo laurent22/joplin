@@ -3,7 +3,7 @@ import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeade
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import Synchronizer from '@joplin/lib/Synchronizer';
+import Synchronizer, { SyncReport } from '@joplin/lib/Synchronizer';
 import Setting from '@joplin/lib/models/Setting';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
@@ -46,7 +46,7 @@ interface Props {
 	selectedSmartFilterId: string;
 	decryptionWorker: any;
 	resourceFetcher: any;
-	syncReport: any;
+	syncReport: SyncReport;
 	tags: any[];
 	syncStarted: boolean;
 	plugins: PluginStates;

@@ -842,12 +842,12 @@ packages/app-mobile/components/BackButtonDialogBox.js.map
 packages/app-mobile/components/CameraView.d.ts
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CameraView.js.map
-packages/app-mobile/components/Dropdown.d.ts
-packages/app-mobile/components/Dropdown.js
-packages/app-mobile/components/Dropdown.js.map
 packages/app-mobile/components/CustomButton.d.ts
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/CustomButton.js.map
+packages/app-mobile/components/Dropdown.d.ts
+packages/app-mobile/components/Dropdown.js
+packages/app-mobile/components/Dropdown.js.map
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.d.ts
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js.map
@@ -929,6 +929,9 @@ packages/app-mobile/components/SelectDateTimeDialog.js.map
 packages/app-mobile/components/SideMenu.d.ts
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenu.js.map
+packages/app-mobile/components/SyncStatusIcon.d.ts
+packages/app-mobile/components/SyncStatusIcon.js
+packages/app-mobile/components/SyncStatusIcon.js.map
 packages/app-mobile/components/getResponsiveValue.d.ts
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.js.map
@@ -1148,6 +1151,9 @@ packages/lib/commands/synchronize.js.map
 packages/lib/components/EncryptionConfigScreen/utils.d.ts
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/EncryptionConfigScreen/utils.js.map
+packages/lib/components/shared/synchronizeButtonPress.d.ts
+packages/lib/components/shared/synchronizeButtonPress.js
+packages/lib/components/shared/synchronizeButtonPress.js.map
 packages/lib/database-driver-better-sqlite.d.ts
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database-driver-better-sqlite.js.map

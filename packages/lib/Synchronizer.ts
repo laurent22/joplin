@@ -47,6 +47,32 @@ function isCannotSyncError(error: any): boolean {
 	return false;
 }
 
+export interface SyncReport {
+	// Number of local items created/updated/deleted
+	createLocal?: number;
+	updateLocal?: number;
+	deleteLocal?: number;
+
+	// Number of remote items created/updated/deleted
+	createRemote?: number;
+	updateRemote?: number;
+	deleteRemote?: number;
+
+	fetchingTotal?: number;
+	fetchingProcessed?: number;
+
+	cancelling?: boolean;
+
+	// Timestamp (in ms) at which the sync finished/started
+	// Timestamps use time.unixMs()
+	completedTime?: number;
+	startTime?: number;
+
+	syncTarget?: number;
+
+	errors?: any[];
+}
+
 export default class Synchronizer {
 
 	public static verboseMode: boolean = true;
@@ -167,17 +193,17 @@ export default class Synchronizer {
 		}
 	}
 
-	private static reportHasErrors(report: any): boolean {
+	private static reportHasErrors(report: SyncReport): boolean {
 		return !!report && !!report.errors && !!report.errors.length;
 	}
 
-	private static completionTime(report: any): string {
+	private static completionTime(report: SyncReport): string {
 		const duration = report.completedTime - report.startTime;
 		if (duration > 1000) return `${Math.round(duration / 1000)}s`;
 		return `${duration}ms`;
 	}
 
-	static reportToLines(report: any) {
+	public static reportToLines(report: SyncReport) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
@@ -379,6 +405,7 @@ export default class Synchronizer {
 		const throwOnError = options.throwOnError === true;
 
 		const syncTargetId = this.api().syncTargetId();
+		this.progressReport_.syncTarget = syncTargetId;
 
 		this.syncTargetIsLocked_ = false;
 		this.cancelling_ = false;

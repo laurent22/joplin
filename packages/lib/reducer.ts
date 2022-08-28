@@ -7,6 +7,7 @@ import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
+import { SyncReport } from './Synchronizer';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -73,7 +74,7 @@ export interface State {
 	screens: any;
 	historyCanGoBack: boolean;
 	syncStarted: boolean;
-	syncReport: any;
+	syncReport: SyncReport;
 	searchQuery: string;
 	settings: any;
 	sharedData: any;
@@ -96,6 +97,7 @@ export interface State {
 	hasEncryptedItems: boolean;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
+	isOnMobileData?: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
