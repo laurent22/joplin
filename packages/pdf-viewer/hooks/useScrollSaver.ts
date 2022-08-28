@@ -16,7 +16,8 @@ const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll }: Scroll
 		const containerElement = container.current;
 
 		const saveScroll = () => {
-			const scale = currentScaleSize ? currentScaleSize.current.scale : 1;
+			if (!currentScaleSize.current) return;
+			const scale = currentScaleSize.current.scale;
 			const scrollTop = container.current.scrollTop / scale;
 			if (rememberScroll && pdfId) {
 				sessionStorage.setItem(`pdf.${pdfId}.scrollTop`, `${scrollTop}`);
