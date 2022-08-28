@@ -34,16 +34,23 @@ const SyncStatusIconComponent = (props: Props) => {
 
 	useEffect(() => {
 		if (props.syncStarted) {
-			Animated.loop(Animated.timing(syncAnim, {
+			const animation = Animated.loop(Animated.timing(syncAnim, {
 				toValue: 360,
 				duration: 5000,
 				easing: Easing.linear,
 				useNativeDriver: true,
-			})).start();
+			}));
+			animation.start();
+
+			return () => {
+				animation.stop();
+			};
 		} else {
 			syncAnim.stopAnimation(_endValue => {
 				syncAnim.setValue(0);
 			});
+
+			return () => { };
 		}
 	}, [syncAnim, props.syncStarted]);
 
