@@ -40,8 +40,8 @@ const SyncStatusIconComponent = (props: Props) => {
 				easing: Easing.linear,
 				useNativeDriver: true,
 			}));
-			animation.start();
 
+			animation.start();
 			return () => {
 				animation.stop();
 			};
