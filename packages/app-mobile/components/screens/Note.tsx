@@ -5,7 +5,8 @@ import shim from '@joplin/lib/shim';
 import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
-import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/NoteEditor';
+import NoteEditor from '../NoteEditor/NoteEditor';
+import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');

@@ -140,6 +140,7 @@ function ShareFolderDialog(props: Props) {
 	useEffect(() => {
 		const s = props.shares.find(s => s.folder_id === props.folderId);
 		setShare(s);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.shares]);
 
 	useEffect(() => {

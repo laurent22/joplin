@@ -1,8 +1,6 @@
+# Coding style
+
 Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
-
-
-
-# Rules
 
 ## Use TypeScript for new files
 
