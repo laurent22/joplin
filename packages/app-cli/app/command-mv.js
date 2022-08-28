@@ -24,16 +24,16 @@ class Command extends BaseCommand {
 			if (!folder) throw new Error(_('Cannot find "%s".', destination));
 		}
 
-		const dstDups = await Folder.search({ titlePattern: destination, limit: 2 });
-		if (dstDups.length > 1) {
-			throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - look for parent id in metadata', destination));
+		const destinationDuplicates = await Folder.search({ titlePattern: destination, limit: 2 });
+		if (destinationDuplicates.length > 1) {
+			throw new Error(_('Ambiguous notebook "%s". Please use short notebook id instead - press "ti" to see the short notebook id' , destination));
 		}
 
 		const itemFolder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
 		if (itemFolder) {
-			const srcDups = await Folder.search({ titlePattern: pattern, limit: 2 });
-			if (srcDups.length > 1) {
-				throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - look for parent id in metadata or use $b for current', pattern));
+			const sourceDuplicates = await Folder.search({ titlePattern: pattern, limit: 2 });
+			if (sourceDuplicates.length > 1) {
+				throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - press "ti" to see the short notebook id or use $b for current selected notebook', pattern));
 			}
 			if (destination === 'root') {
 				await Folder.moveToFolder(itemFolder.id, '');
