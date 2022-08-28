@@ -166,9 +166,9 @@ describe('bundleDefaultPlugins', function() {
 		for (const testCase of testCases) {
 
 			mockFetch.mockResolvedValueOnce({ text: () => Promise.resolve(NPM_Response1), ok: true })
-				.mockResolvedValueOnce({ buffer: () => Promise.resolve(tgzData) })
+				.mockResolvedValueOnce({ buffer: () => Promise.resolve(tgzData), ok: true })
 				.mockResolvedValueOnce({ text: () => Promise.resolve(NPM_Response2), ok: true })
-				.mockResolvedValueOnce({ buffer: () => Promise.resolve(tgzData) });
+				.mockResolvedValueOnce({ buffer: () => Promise.resolve(tgzData), ok: true });
 
 			const tempDir = await createTempDir();
 
