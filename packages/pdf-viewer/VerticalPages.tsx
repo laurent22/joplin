@@ -30,7 +30,6 @@ export interface VerticalPagesProps {
 	showPageNumbers?: boolean;
 }
 
-
 export default function VerticalPages(props: VerticalPagesProps) {
 	const [containerWidth, setContainerWidth] = useState<number>(null);
 	const innerContainerEl = useRef<HTMLDivElement>(null);
