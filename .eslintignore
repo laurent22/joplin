@@ -842,12 +842,12 @@ packages/app-mobile/components/BackButtonDialogBox.js.map
 packages/app-mobile/components/CameraView.d.ts
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CameraView.js.map
-packages/app-mobile/components/Dropdown.d.ts
-packages/app-mobile/components/Dropdown.js
-packages/app-mobile/components/Dropdown.js.map
 packages/app-mobile/components/CustomButton.d.ts
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/CustomButton.js.map
+packages/app-mobile/components/Dropdown.d.ts
+packages/app-mobile/components/Dropdown.js
+packages/app-mobile/components/Dropdown.js.map
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.d.ts
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js.map
@@ -1985,6 +1985,9 @@ packages/pdf-viewer/hooks/usePdfData.js.map
 packages/pdf-viewer/hooks/useScaledSize.d.ts
 packages/pdf-viewer/hooks/useScaledSize.js
 packages/pdf-viewer/hooks/useScaledSize.js.map
+packages/pdf-viewer/hooks/useScrollSaver.d.ts
+packages/pdf-viewer/hooks/useScrollSaver.js
+packages/pdf-viewer/hooks/useScrollSaver.js.map
 packages/pdf-viewer/main.d.ts
 packages/pdf-viewer/main.js
 packages/pdf-viewer/main.js.map
@@ -1997,6 +2000,9 @@ packages/pdf-viewer/pdfSource.js.map
 packages/pdf-viewer/pdfSource.test.d.ts
 packages/pdf-viewer/pdfSource.test.js
 packages/pdf-viewer/pdfSource.test.js.map
+packages/pdf-viewer/ui/ZoomControls.d.ts
+packages/pdf-viewer/ui/ZoomControls.js
+packages/pdf-viewer/ui/ZoomControls.js.map
 packages/plugin-repo-cli/commands/updateRelease.d.ts
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/commands/updateRelease.js.map

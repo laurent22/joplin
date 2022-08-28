@@ -3,6 +3,7 @@ import { useEffect, useState, MutableRefObject } from 'react';
 
 const useIsVisible = (elementRef: MutableRefObject<HTMLElement>, rootRef: MutableRefObject<HTMLElement>) => {
 	const [isVisible, setIsVisible] = useState(false);
+
 	useEffect(() => {
 		let observer: IntersectionObserver = null;
 		if (elementRef.current) {
