@@ -41,7 +41,6 @@ export interface DefaultPluginsInfo {
     [pluginId: string]: DefaultPluginSettings;
 }
 
-
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
