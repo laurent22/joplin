@@ -19,12 +19,12 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Камера: щоб дозволити фотографувати та додавати його до нотатки."
+msgstr "- Камера: щоб надати доступ до камери була можливість додавати фто до нотатки."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:563
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Розташування: щоб дозволити додавати інформацію до геолокації до нотатки."
+"- Розташування: щоб дозволити додавати інформацію про геолокацію до нотатки."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:557
 msgid ""
@@ -54,7 +54,7 @@ msgstr "(wysiwyg: %s)"
 #: packages/app-desktop/gui/MenuBar.tsx:623
 #: packages/app-desktop/gui/MenuBar.tsx:888
 msgid "&Edit"
-msgstr "&Редактувати"
+msgstr "&Редагувати"
 
 #: packages/app-desktop/gui/MenuBar.tsx:498
 #: packages/app-desktop/gui/MenuBar.tsx:578
@@ -113,7 +113,7 @@ msgstr "Не вдалося завантажити %s (%s): %s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) хоче поділитись нотаткою з вами."
 
 #: packages/lib/services/ReportService.ts:262
 msgid "%s (%s): %s"
@@ -225,7 +225,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid "Accept"
-msgstr ""
+msgstr "Прийняти"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -255,7 +255,7 @@ msgstr "Додати або видалити теги:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:245
 msgid "Add recipient:"
-msgstr ""
+msgstr "Додати одержувача"
 
 #: packages/app-mobile/components/screens/Note.tsx:1186
 msgid "Add title"
@@ -268,11 +268,11 @@ msgstr "Додати до словника"
 #: packages/server/src/services/MustacheService.ts:156
 #: packages/server/src/services/MustacheService.ts:278
 msgid "Admin"
-msgstr ""
+msgstr "Адміністратор"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Панель адміністратора"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -326,7 +326,7 @@ msgstr "Застосувати"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:45
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Ви впевненні що хочете поновити токен авторизації?"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:497
 msgid "Arguments:"
@@ -374,7 +374,7 @@ msgstr "Вкладення"
 
 #: packages/lib/services/ReportService.ts:257
 msgid "Attachments that could not be downloaded"
-msgstr "Вкладення, що не можуть бути завантадені"
+msgstr "Вкладення, що не можуть бути завантажені"
 
 #: packages/lib/models/Setting.ts:374
 msgid ""
@@ -413,11 +413,11 @@ msgstr "Автоматичне закриття дужок, лапок тощо.
 #: packages/lib/models/Setting.ts:1262
 #, fuzzy
 msgid "Automatically check for updates"
-msgstr "Перевірити наявність оновлень…"
+msgstr "Автоматично перевіряти наявність оновлень"
 
 #: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
-msgstr "Автоматично перемикати тему на відповідність системній темі"
+msgstr "Автоматично перемикати тему на відповідну системній темі"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
@@ -664,7 +664,7 @@ msgstr "Вбудований код"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:179
 msgid "Collaborate on notebooks with others"
-msgstr ""
+msgstr "Співпрацюйте над нотатками з іншими"
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -693,16 +693,16 @@ msgstr "Команда"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:637
 msgid "Command palette"
-msgstr "Командна палітра"
+msgstr "Панель команд"
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.ts:7
 #, fuzzy
 msgid "Command palette..."
-msgstr "Командна палітра"
+msgstr "Панель команд..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
-msgstr "Закінчено"
+msgstr "Завершено"
 
 #: packages/app-cli/app/command-e2ee.ts:79
 msgid "Completed decryption."
@@ -715,7 +715,7 @@ msgstr "Завершено: %s"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Стиснути старі зміни"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:632
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -777,12 +777,12 @@ msgstr "Скопіюйте команду режиму розробника в �
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 #, fuzzy
 msgid "Copy external link"
-msgstr "Зупинити зовнішнє редагування"
+msgstr "Копіювати зовнішнє посилання"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
 #, fuzzy
 msgid "Copy image"
-msgstr "Скопіювати токен"
+msgstr "Копіювати зображення"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
 msgid "Copy Link Address"
@@ -869,7 +869,7 @@ msgstr ""
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #, fuzzy
 msgid "Create"
-msgstr "Створено"
+msgstr "Створити"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
