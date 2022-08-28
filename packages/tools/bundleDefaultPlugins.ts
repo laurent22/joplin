@@ -33,7 +33,8 @@ export const localPluginsVersion = async (defaultPluginDir: string, defaultPlugi
 async function downloadFile(url: string, outputPath: string) {
 	const response = await fetch(url);
 	if (!response.ok) {
-		throw new Error(`Cannot download file from ${url}`);
+		const responseText = await response.text();
+		throw new Error(`Cannot download file from ${url} : ${responseText.substr(0,500)}`);
 	}
 	await writeFile(outputPath, await response.buffer());
 }
@@ -56,7 +57,8 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 		const response = await fetch(`https://registry.npmjs.org/${manifests[pluginId]._npm_package_name}`);
 
 		if (!response.ok) {
-			throw new Error(`Cannot fetch ${manifests[pluginId]._npm_package_name} release info from NPM`);
+			const responseText = await response.text();
+			throw new Error(`Cannot fetch ${manifests[pluginId]._npm_package_name} release info from NPM : ${responseText.substr(0,500)}`);
 		}
 		const releaseText = await response.text();
 		const release = JSON.parse(releaseText);
