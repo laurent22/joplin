@@ -544,7 +544,7 @@ export default class Folder extends BaseItem {
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 
-		if (options.includeNotes) {
+		if (options && options.includeNotes) {
 			for (const folder of all) {
 				folder.notes = await Note.previews(folder.id);
 			}
