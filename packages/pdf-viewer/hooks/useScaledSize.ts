@@ -11,16 +11,18 @@ export interface ScaledSizeParams {
 	container: MutableRefObject<HTMLElement>;
 	innerContainerEl: MutableRefObject<HTMLElement>;
 	pageGap: number;
+	zoom: number;
 }
 
-const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage, container, innerContainerEl, pageGap }: ScaledSizeParams) => {
+const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage, container, innerContainerEl, pageGap, zoom }: ScaledSizeParams) => {
 	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
 	const currentScaleSize = useRef(scaledSize);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		if (!pdf || !containerWidth) return;
 		// console.log('scaledSize calculation triggered');
-		const scaledSize_ = await pdf.getScaledSize(null, containerWidth - 10);
+		const effectiveWidth = Math.min(containerWidth - 20, 900) * (zoom || 1);
+		const scaledSize_ = await pdf.getScaledSize(null, effectiveWidth);
 		if (event.cancelled) return;
 
 		const oldScaleSize = currentScaleSize.current;
@@ -40,11 +42,12 @@ const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage,
 		if (rememberScroll && pdfId && !oldScaleSize && !anchorPage) {
 			const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${pdfId}.scrollTop`), 10) || null;
 			if (scrollOffset) {
-				container.current.scrollTop = scrollOffset;
+				// Adjusting it according to the new scale
+				container.current.scrollTop = scrollOffset * scaledSize_.scale;
 				// console.log('scroll set',container.current.scrollTop);
 			}
 		}
-	}, [pdf, pdfId, rememberScroll, anchorPage, containerWidth]);
+	}, [pdf, pdfId, rememberScroll, anchorPage, containerWidth, zoom]);
 
 	return scaledSize;
 };
