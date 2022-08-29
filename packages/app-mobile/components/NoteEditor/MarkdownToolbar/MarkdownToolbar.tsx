@@ -276,11 +276,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		themeId: props.editorSettings.themeId,
 	};
 	return (
-		<View style={{
-			// The keyboard on iOS can overlap the markdown toolbar.
-			// Add additional padding to prevent this.
-			paddingBottom: (Platform.OS === 'ios' ? 15 : 0),
-		}}>
+		<>
 			<Toolbar
 				styleSheet={styleData}
 				buttons={[
@@ -302,7 +298,15 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 					},
 				]}
 			/>
-		</View>
+
+			<View style={{
+				// The keyboard on iOS can overlap the markdown toolbar.
+				// Add additional padding to prevent this.
+				height: (
+					Platform.OS === 'ios' && keyboardVisible ? 20 : 0
+				),
+			}}/>
+		</>
 	);
 };
 
