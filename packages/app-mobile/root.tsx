@@ -389,6 +389,18 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState = Object.assign({}, state);
 			newState.showMobileNotesBar = false;
 			break;
+
+		case 'ENABLE_SPLIT_LAYOUT':
+
+			newState = Object.assign({}, state);
+			newState.useMobileSplitLayout = true;
+			break;
+
+		case 'DISABLE_SPLIT_LAYOUT':
+
+			newState = Object.assign({}, state);
+			newState.useMobileSplitLayout = false;
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
