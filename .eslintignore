@@ -1989,6 +1989,9 @@ packages/pdf-viewer/hooks/usePdfData.js.map
 packages/pdf-viewer/hooks/useScaledSize.d.ts
 packages/pdf-viewer/hooks/useScaledSize.js
 packages/pdf-viewer/hooks/useScaledSize.js.map
+packages/pdf-viewer/hooks/useScrollSaver.d.ts
+packages/pdf-viewer/hooks/useScrollSaver.js
+packages/pdf-viewer/hooks/useScrollSaver.js.map
 packages/pdf-viewer/main.d.ts
 packages/pdf-viewer/main.js
 packages/pdf-viewer/main.js.map
@@ -2001,6 +2004,9 @@ packages/pdf-viewer/pdfSource.js.map
 packages/pdf-viewer/pdfSource.test.d.ts
 packages/pdf-viewer/pdfSource.test.js
 packages/pdf-viewer/pdfSource.test.js.map
+packages/pdf-viewer/ui/ZoomControls.d.ts
+packages/pdf-viewer/ui/ZoomControls.js
+packages/pdf-viewer/ui/ZoomControls.js.map
 packages/plugin-repo-cli/commands/updateRelease.d.ts
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/commands/updateRelease.js.map
