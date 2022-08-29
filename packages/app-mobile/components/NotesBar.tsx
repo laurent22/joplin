@@ -13,19 +13,18 @@ import useStyles from './useStyles';
 
 interface Props {
     themeId: number;
-	items: any[];
+	notes: any[];
 	todoCheckbox_change: (checked: boolean)=> void;
 	selectedFolderId: string;
 	activeFolderId: string;
 	dispatch: any;
 	selectedNoteId: string;
 	toggleNotesBar: ()=> void;
-	settings: any;
 }
 
 function NotesBarComponent(props: Props) {
 
-	const [notes, setNotes] = React.useState<any[]>(props.items);
+	const [notes, setNotes] = React.useState<any[]>(props.notes);
 	const [query, setQuery] = React.useState<string>('');
 
 	const themeId = props.themeId;
@@ -175,22 +174,22 @@ function NotesBarComponent(props: Props) {
 
 	const handleQuerySubmit = async () => {
 		if (!query) {
-			setNotes(props.items);
+			setNotes(props.notes);
 			return;
 		}
 
 		let searchQuery = query.trim();
 
 		if (searchQuery === '') {
-			setNotes(props.items);
+			setNotes(props.notes);
 			return;
 		}
 
 		searchQuery = searchQuery.toLowerCase();
 
 		// Find notes in folder using only note title
-		const result = props.items.filter(item => {
-			let noteTitle = Note.displayTitle(item);
+		const result = props.notes.filter(note => {
+			let noteTitle = Note.displayTitle(note);
 			noteTitle = noteTitle.toLowerCase();
 
 			return noteTitle.includes(searchQuery);
@@ -256,8 +255,8 @@ function NotesBarComponent(props: Props) {
 
 	// Update the notesbar when a note item changes
 	React.useEffect(() => {
-		setNotes(props.items);
-	}, [props.items]);
+		setNotes(props.notes);
+	}, [props.notes]);
 
 	return (
 		<View style={styles.container}>
@@ -271,11 +270,10 @@ function NotesBarComponent(props: Props) {
 const NotesBar = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
-		items: state.notes,
+		notes: state.notes,
 		activeFolderId: state.settings.activeFolderId,
 		selectedFolderId: state.selectedFolderId,
 		selectedNoteId: state.selectedNoteIds[0],
-		settings: state.settings,
 	};
 })(NotesBarComponent);
 
