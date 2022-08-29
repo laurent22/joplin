@@ -375,7 +375,7 @@ class AppGui {
 		this.showNoteMetadata(!this.widget('noteMetadata').shown);
 	}
 
-	toggleNotebookIds() {
+	toggleFolderIds() {
 		this.widget('folderList').toggleShowIds();
 		this.widget('noteList').toggleShowIds();
 	}
@@ -504,7 +504,7 @@ class AppGui {
 		} else if (cmd === 'toggle_metadata') {
 			this.toggleNoteMetadata();
 		} else if (cmd === 'toggle_ids') {
-			this.toggleNotebookIds();
+			this.toggleFolderIds();
 		} else if (cmd === 'enter_command_line_mode') {
 			const cmd = await this.widget('statusBar').prompt();
 			if (!cmd) return;
