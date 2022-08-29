@@ -265,7 +265,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Hide keyboard'),
 		disabled: !keyboardVisible,
-		visible: hasSoftwareKeyboard,
+		visible: hasSoftwareKeyboard && Platform.OS === 'ios',
 		onPress: onDismissKeyboard,
 
 		priority: -3,
