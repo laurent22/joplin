@@ -1571,6 +1571,9 @@ packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js.map
 packages/lib/services/interop/InteropService_Importer_Raw.d.ts
 packages/lib/services/interop/InteropService_Importer_Raw.js
 packages/lib/services/interop/InteropService_Importer_Raw.js.map
+packages/lib/services/interop/InteropService_Importer_Raw.test.d.ts
+packages/lib/services/interop/InteropService_Importer_Raw.test.js
+packages/lib/services/interop/InteropService_Importer_Raw.test.js.map
 packages/lib/services/interop/types.d.ts
 packages/lib/services/interop/types.js
 packages/lib/services/interop/types.js.map
