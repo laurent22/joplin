@@ -1,7 +1,7 @@
 // A toolbar for the markdown editor.
 
 const React = require('react');
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useMemo, useState, useCallback } from 'react';
 
 // See https://oblador.github.io/react-native-vector-icons/ for a list of
@@ -276,27 +276,33 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		themeId: props.editorSettings.themeId,
 	};
 	return (
-		<Toolbar
-			styleSheet={styleData}
-			buttons={[
-				{
-					title: _('Formatting'),
-					items: inlineFormattingBtns,
-				},
-				{
-					title: _('Headers'),
-					items: headerButtons,
-				},
-				{
-					title: _('Lists'),
-					items: listButtons,
-				},
-				{
-					title: _('Actions'),
-					items: actionButtons,
-				},
-			]}
-		/>
+		<View style={{
+			// The keyboard on iOS can overlap the markdown toolbar.
+			// Add additional padding to prevent this.
+			paddingBottom: (Platform.OS === 'ios' ? 15 : 0),
+		}}>
+			<Toolbar
+				styleSheet={styleData}
+				buttons={[
+					{
+						title: _('Formatting'),
+						items: inlineFormattingBtns,
+					},
+					{
+						title: _('Headers'),
+						items: headerButtons,
+					},
+					{
+						title: _('Lists'),
+						items: listButtons,
+					},
+					{
+						title: _('Actions'),
+						items: actionButtons,
+					},
+				]}
+			/>
+		</View>
 	);
 };
 

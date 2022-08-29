@@ -4,7 +4,7 @@ import { Text, TextStyle } from 'react-native';
 import { ButtonSpec, StyleSheetData } from './types';
 import CustomButton from '../../CustomButton';
 
-export const buttonSize = 56;
+export const buttonSize = 50;
 
 interface ToolbarButtonProps {
 	styleSheet: StyleSheetData;
