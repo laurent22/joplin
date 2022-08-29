@@ -169,7 +169,10 @@ public class SafXModule extends ReactContextBaseJavaModule {
     try {
       DocumentFile doc = this.documentHelper.goToDocument(uriString, false, true);
       boolean result = doc.delete();
-      promise.resolve(result);
+      if (!result) {
+        throw new Exception("Failed to unlink file. Unknown error.");
+      }
+      promise.resolve(true);
     } catch (FileNotFoundException e) {
       promise.reject("ENOENT", e.getLocalizedMessage());
     } catch (SecurityException e) {
