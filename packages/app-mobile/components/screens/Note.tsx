@@ -57,11 +57,11 @@ const emptyArray: any[] = [];
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
-	static navigationOptions(): any {
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	constructor() {
+	public constructor() {
 		super();
 		this.state = {
 			note: Note.new(),
@@ -245,7 +245,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
-		this.onNotesBarToggle = this.onNotesBarToggle.bind(this);
 		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
@@ -309,7 +308,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	screenHeader_undoButtonPress() {
+	private screenHeader_undoButtonPress() {
 		if (this.useEditorBeta()) {
 			this.editorRef.current.undo();
 		} else {
@@ -317,7 +316,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	screenHeader_redoButtonPress() {
+	private screenHeader_redoButtonPress() {
 		if (this.useEditorBeta()) {
 			this.editorRef.current.redo();
 		} else {
@@ -325,13 +324,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	undoState(noteBody: string = null) {
+	private undoState(noteBody: string = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
 		};
 	}
 
-	styles() {
+	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -459,10 +458,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		styles.noteActionButton2 = {
-			// Removing this temporarily till second noteAction is implemented
-			// borderBottomLeftRadius: 8,
-			// borderBottomRightRadius: 8,
-			borderRadius: 8,
+			borderBottomLeftRadius: 8,
+			borderBottomRightRadius: 8,
 		};
 
 		styles.noteActionButtonIcon = {
@@ -482,17 +479,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 			transform: [{ translateY: this.noteActionsPositionY }],
 		};
 
+		styles.splitLayoutDivider = {
+			backgroundColor: theme.dividerColor,
+			height: '100%',
+			width: 2,
+		};
+
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
 		return this.styles_[cacheKey];
 	}
 
-	isModified() {
+	private isModified() {
 		return shared.isModified(this);
 	}
 
-	async requestGeoLocationPermissions() {
+	private async requestGeoLocationPermissions() {
 		if (!Setting.value('trackLocation')) return;
 
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
@@ -509,7 +512,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async componentDidMount() {
+	public async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
@@ -587,20 +590,36 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	private onNotesBarToggle = async () => {
-		if (this.props.showNotesBar === true) {
+		if (this.props.showNotesBar) {
 			this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
 			this.animateNotesBarClose();
 		} else {
+			// Split layout and notesbar shouldn't be enabled together because of screen space.
+			// Similar logic is in onSplitLayoutToggle.
+			if (this.props.useSplitLayout) {
+				await this.onSplitLayoutToggle();
+			}
 			this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
 			this.animateNotesBarOpen();
 		}
 	};
 
-	onMarkForDownload(event: any) {
+	private onSplitLayoutToggle = async () => {
+		if (this.props.useSplitLayout) {
+			this.props.dispatch({ type: 'DISABLE_SPLIT_LAYOUT' });
+		} else {
+			if (this.props.showNotesBar) {
+				await this.onNotesBarToggle();
+			}
+			this.props.dispatch({ type: 'ENABLE_SPLIT_LAYOUT' });
+		}
+	};
+
+	private onMarkForDownload(event: any) {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -614,7 +633,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
@@ -636,7 +655,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	componentWillMount() {
+	public componentWillMount() {
 		if (this.props.showNotesBar) {
 			this.notesBarPosition = new Animated.Value(0);
 			this.notePosition = new Animated.Value(0);
@@ -650,13 +669,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.noteActionsPositionY = new Animated.Value(0);
 	}
 
-	title_changeText(text: string) {
+	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
 	}
 
-	body_changeText(text: string) {
+	private body_changeText(text: string) {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -667,7 +686,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	body_selectionChange(event: any) {
+	private body_selectionChange(event: any) {
 		if (this.useEditorBeta()) {
 			this.selection = event.selection;
 		} else {
@@ -675,34 +694,34 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	makeSaveAction() {
+	private makeSaveAction() {
 		return async () => {
 			return shared.saveNoteButton_press(this);
 		};
 	}
 
-	saveActionQueue(noteId: string) {
+	private saveActionQueue(noteId: string) {
 		if (!this.saveActionQueues_[noteId]) {
 			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
 		}
 		return this.saveActionQueues_[noteId];
 	}
 
-	scheduleSave() {
+	private scheduleSave() {
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
-	async saveNoteButton_press(folderId: string = null) {
+	private async saveNoteButton_press(folderId: string = null) {
 		await shared.saveNoteButton_press(this, folderId);
 
 		Keyboard.dismiss();
 	}
 
-	async saveOneProperty(name: string, value: any) {
+	private async saveOneProperty(name: string, value: any) {
 		await shared.saveOneProperty(this, name, value);
 	}
 
-	async deleteNote_onPress() {
+	private async deleteNote_onPress() {
 		const note = this.state.note;
 		if (!note.id) return;
 
@@ -720,7 +739,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async pickDocument() {
+	private async pickDocument() {
 		try {
 			const result = await DocumentPicker.pick();
 			return result;
@@ -734,7 +753,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async imageDimensions(uri: string) {
+	private async imageDimensions(uri: string) {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
@@ -748,7 +767,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	showImagePicker(options: any) {
+	private showImagePicker(options: any) {
 		return new Promise((resolve) => {
 			ImagePicker.launchImageLibrary(options, (response: any) => {
 				resolve(response);
@@ -756,7 +775,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
+	private async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
 		const dimensions: any = await this.imageDimensions(localFilePath);
@@ -805,7 +824,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return true;
 	}
 
-	async attachFile(pickerResponse: any, fileType: string) {
+	private async attachFile(pickerResponse: any, fileType: string) {
 		if (!pickerResponse) {
 			// User has cancelled
 			return;
@@ -914,16 +933,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	async attachPhoto_onPress() {
+	private async attachPhoto_onPress() {
 		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
 		await this.attachFile(response, 'image');
 	}
 
-	takePhoto_onPress() {
+	private takePhoto_onPress() {
 		this.setState({ showCamera: true });
 	}
 
-	cameraView_onPhoto(data: any) {
+	private cameraView_onPhoto(data: any) {
 		void this.attachFile(
 			{
 				uri: data.uri,
@@ -937,43 +956,43 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	cameraView_onCancel() {
+	private cameraView_onCancel() {
 		this.setState({ showCamera: false });
 	}
 
-	async attachFile_onPress() {
+	private async attachFile_onPress() {
 		const response = await this.pickDocument();
 		await this.attachFile(response, 'all');
 	}
 
-	toggleIsTodo_onPress() {
+	private toggleIsTodo_onPress() {
 		shared.toggleIsTodo_onPress(this);
 
 		this.scheduleSave();
 	}
 
-	tags_onPress() {
+	private tags_onPress() {
 		if (!this.state.note || !this.state.note.id) return;
 
 		this.setState({ noteTagDialogShown: true });
 	}
 
-	async share_onPress() {
+	private async share_onPress() {
 		await Share.share({
 			message: `${this.state.note.title}\n\n${this.state.note.body}`,
 			title: this.state.note.title,
 		});
 	}
 
-	properties_onPress() {
+	private properties_onPress() {
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
-	setAlarm_onPress() {
+	public setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
 
-	async onAlarmDialogAccept(date: Date) {
+	private async onAlarmDialogAccept(date: Date) {
 		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
@@ -982,11 +1001,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ alarmDialogShown: false });
 	}
 
-	onAlarmDialogReject() {
+	private onAlarmDialogReject() {
 		this.setState({ alarmDialogShown: false });
 	}
 
-	async showOnMap_onPress() {
+	private async showOnMap_onPress() {
 		if (!this.state.note.id) return;
 
 		const note = await Note.load(this.state.note.id);
@@ -999,7 +1018,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async showSource_onPress() {
+	private async showSource_onPress() {
 		if (!this.state.note.id) return;
 
 		const note = await Note.load(this.state.note.id);
@@ -1010,12 +1029,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	copyMarkdownLink_onPress() {
+	private copyMarkdownLink_onPress() {
 		const note = this.state.note;
 		Clipboard.setString(Note.markdownTag(note));
 	}
 
-	sideMenuOptions() {
+	private sideMenuOptions() {
 		const note = this.state.note;
 		if (!note) return [];
 
@@ -1046,7 +1065,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	menuOptions() {
+	private menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
@@ -1149,11 +1168,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	async todoCheckbox_change(checked: boolean) {
+	private async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
-	scheduleFocusUpdate() {
+	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
 		this.focusUpdateIID_ = shim.setTimeout(() => {
@@ -1162,7 +1181,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 100);
 	}
 
-	focusUpdate() {
+	private focusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 		this.focusUpdateIID_ = null;
 
@@ -1180,7 +1199,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// }
 	}
 
-	async folderPickerOptions_valueChanged(itemValue: any) {
+	private async folderPickerOptions_valueChanged(itemValue: any) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
@@ -1201,7 +1220,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	folderPickerOptions() {
+	private folderPickerOptions() {
 		const options = {
 			enabled: true,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
@@ -1214,7 +1233,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.folderPickerOptions_;
 	}
 
-	onBodyViewerLoadEnd() {
+	private onBodyViewerLoadEnd() {
 		shim.setTimeout(() => {
 			this.setState({ HACK_webviewLoadingState: 1 });
 			shim.setTimeout(() => {
@@ -1223,11 +1242,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 5);
 	}
 
-	onBodyViewerCheckboxChange(newBody: string) {
+	private onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
 	}
 
-	render() {
+	public render() {
 		if (this.state.isLoading) {
 			return (
 				<View style={this.styles().screen}>
@@ -1248,47 +1267,96 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		let bodyComponent = null;
-		if (this.state.mode === 'view') {
-			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
-			// to avoid the HACK_webviewLoadingState related bug.
-			bodyComponent =
-				!note || !note.body.trim() ? null : (
-					<NoteBodyViewer
-						onJoplinLinkClick={this.onJoplinLinkClick_}
-						style={this.styles().noteBodyViewer}
-						// Extra bottom padding to make it possible to scroll past the
-						// action button (so that it doesn't overlap the text)
-						paddingBottom={150}
-						noteBody={note.body}
-						noteMarkupLanguage={note.markup_language}
-						noteResources={this.state.noteResources}
-						highlightedKeywords={keywords}
+		let editor = null;
+
+		if (!this.props.useSplitLayout) {
+			if (this.state.mode === 'view') {
+				// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
+				// to avoid the HACK_webviewLoadingState related bug.
+				bodyComponent =
+					!note || !note.body.trim() ? null : (
+						<NoteBodyViewer
+							onJoplinLinkClick={this.onJoplinLinkClick_}
+							style={this.styles().noteBodyViewer}
+							// Extra bottom padding to make it possible to scroll past the
+							// action button (so that it doesn't overlap the text)
+							paddingBottom={150}
+							noteBody={note.body}
+							noteMarkupLanguage={note.markup_language}
+							noteResources={this.state.noteResources}
+							highlightedKeywords={keywords}
+							themeId={this.props.themeId}
+							noteHash={this.props.noteHash}
+							onCheckboxChange={this.onBodyViewerCheckboxChange}
+							onMarkForDownload={this.onMarkForDownload}
+							onLoadEnd={this.onBodyViewerLoadEnd}
+						/>
+					);
+			} else {
+				// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+				// However it causes memory or rendering issues on older Android devices, probably because
+				// the whole text input has to be in memory for the scrollview to work. So we keep it as
+				// a plain TextInput for now.
+				// See https://github.com/laurent22/joplin/issues/3041
+
+				// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+				// context. In other words, the selection should be considered read-only. For example, if the seleciton
+				// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+				// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+				// later the real selection will be different from what is stored in the state, thus making
+				// the cursor jump around. Eg, when typing "abcdef", it will do this:
+				//     abcd|
+				//     abcde|
+				//     abcde|f
+
+				if (!this.useEditorBeta()) {
+					bodyComponent = (
+						<TextInput
+							autoCapitalize="sentences"
+							style={this.styles().bodyTextInput}
+							ref="noteBodyTextField"
+							multiline={true}
+							value={note.body}
+							onChangeText={(text: string) => this.body_changeText(text)}
+							onSelectionChange={this.body_selectionChange}
+							blurOnSubmit={false}
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							placeholder={_('Add body')}
+							placeholderTextColor={theme.colorFaded}
+							// need some extra padding for iOS so that the keyboard won't cover last line of the note
+							// see https://github.com/laurent22/joplin/issues/3607
+							paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+						/>
+					);
+				} else {
+					bodyComponent = <NoteEditor
+						ref={this.editorRef}
 						themeId={this.props.themeId}
-						noteHash={this.props.noteHash}
-						onCheckboxChange={this.onBodyViewerCheckboxChange}
-						onMarkForDownload={this.onMarkForDownload}
-						onLoadEnd={this.onBodyViewerLoadEnd}
-					/>
-				);
+						initialText={note.body}
+						initialSelection={this.selection}
+						onChange={this.onBodyChange}
+						onSelectionChange={this.body_selectionChange}
+						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+						style={this.styles().bodyTextInput}
+					/>;
+				}
+			}
 		} else {
-			// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
-			// However it causes memory or rendering issues on older Android devices, probably because
-			// the whole text input has to be in memory for the scrollview to work. So we keep it as
-			// a plain TextInput for now.
-			// See https://github.com/laurent22/joplin/issues/3041
-
-			// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
-			// context. In other words, the selection should be considered read-only. For example, if the seleciton
-			// is saved to the state in onSelectionChange and the current text in onChangeText, then set
-			// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
-			// later the real selection will be different from what is stored in the state, thus making
-			// the cursor jump around. Eg, when typing "abcdef", it will do this:
-			//     abcd|
-			//     abcde|
-			//     abcde|f
-
-			if (!this.useEditorBeta()) {
-				bodyComponent = (
+			if (this.useEditorBeta()) {
+				editor = (
+					<NoteEditor
+						ref={this.editorRef}
+						themeId={this.props.themeId}
+						initialText={note.body}
+						initialSelection={this.selection}
+						onChange={this.onBodyChange}
+						onSelectionChange={this.body_selectionChange}
+						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+						style={this.styles().bodyTextInput}
+					/>);
+			} else {
+				editor = (
 					<TextInput
 						autoCapitalize="sentences"
 						style={this.styles().bodyTextInput}
@@ -1305,19 +1373,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						// need some extra padding for iOS so that the keyboard won't cover last line of the note
 						// see https://github.com/laurent22/joplin/issues/3607
 						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+						autoFocus={true}
 					/>
 				);
-			} else {
-				bodyComponent = <NoteEditor
-					ref={this.editorRef}
-					themeId={this.props.themeId}
-					initialText={note.body}
-					initialSelection={this.selection}
-					onChange={this.onBodyChange}
-					onSelectionChange={this.body_selectionChange}
-					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-					style={this.styles().bodyTextInput}
-				/>;
 			}
 		}
 
@@ -1369,11 +1427,44 @@ class NoteScreenComponent extends BaseScreenComponent {
 			</View>
 		);
 
-		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
+		const singleNoteScreenLayoutComp = (
+			<Animated.View style={this.styles().noteComp}>
+				{titleComp}
+				{bodyComponent}
+			</Animated.View>
+		);
 
-		// Different styles for when the note actions are active or not
-		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
-		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
+		const splitNoteScreenLayoutComp = (
+			<Animated.View style={this.styles().noteComp}>
+				{ titleComp }
+				<View style={{ flex: 1, flexDirection: 'row' }}>
+					<View style={{ flex: 1 }}>
+						{ editor }
+					</View>
+
+					<View style={this.styles().splitLayoutDivider}></View>
+
+					<NoteBodyViewer
+						onJoplinLinkClick={this.onJoplinLinkClick_}
+						style={this.styles().noteBodyViewer}
+						// Extra bottom padding to make it possible to scroll past the
+						// action button (so that it doesn't overlap the text)
+						paddingBottom={150}
+						noteBody={note.body}
+						noteMarkupLanguage={note.markup_language}
+						noteResources={this.state.noteResources}
+						highlightedKeywords={keywords}
+						themeId={this.props.themeId}
+						noteHash={this.props.noteHash}
+						onCheckboxChange={this.onBodyViewerCheckboxChange}
+						onMarkForDownload={this.onMarkForDownload}
+						onLoadEnd={this.onBodyViewerLoadEnd}
+					/>
+				</View>
+			</Animated.View>
+		);
+
+		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
 		const handleNoteActionsDrag = (gestureState: any) => {
 			const minY = 160;
@@ -1400,13 +1491,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 		});
 
+		// Different styles for when the note actions are active or not
+		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
+		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
+
+		const splitLayoutToggleIconStyle = this.props.useSplitLayout ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
+		const splitLayoutToggleStyle = this.props.useSplitLayout ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
+
 		// Note actions are the notesbar and split layout toggle button
 		const noteActionButtonGroupComp = (
 			<Animated.View style={this.styles().noteActionButtonGroup} {...this.noteActionsDragResponder.panHandlers} >
-				{/* Temporarily hiding the split layout button till it's implemented */}
-				{/* <TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
-					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
-				</TouchableOpacity> */}
+				<TouchableOpacity style={[splitLayoutToggleStyle, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.onSplitLayoutToggle}>
+					<Icon name="columns" style={splitLayoutToggleIconStyle} />
+				</TouchableOpacity>
 				<TouchableOpacity style={[notesBarToggleStyle, this.styles().noteActionButton2]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
 					<Icon name="list" style={notesBarToggleIconStyle} />
 				</TouchableOpacity>
@@ -1418,10 +1515,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<Animated.View style={this.styles().notesBarContainer}>
 					<NotesBar todoCheckbox_change={this.todoCheckbox_change} toggleNotesBar={this.onNotesBarToggle} />
 				</Animated.View>
-				<Animated.View style={this.styles().noteComp}>
-					{titleComp}
-					{bodyComponent}
-				</Animated.View>
+
+				{ this.props.useSplitLayout ? splitNoteScreenLayoutComp : singleNoteScreenLayoutComp }
+
 				{ this.state.isTablet && noteActionButtonGroupComp }
 			</View>
 		);
@@ -1442,7 +1538,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
 				/>
 				{noteMainComp}
-				{actionButtonComp}
+				{!this.props.useSplitLayout && actionButtonComp}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1474,6 +1570,7 @@ const NoteScreen = connect((state: State) => {
 		highlightedWords: state.highlightedWords,
 		useEditorBeta: state.settings['editor.beta'],
 		showNotesBar: state.showMobileNotesBar,
+		useSplitLayout: state.useMobileSplitLayout,
 	};
 })(NoteScreenComponent);
 
