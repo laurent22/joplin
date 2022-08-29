@@ -27,8 +27,6 @@ const styles: Style = {
 };
 
 class Checkbox extends Component<Props, State> {
-	state: State;
-	props: Props;
 
 	public constructor(props: Props) {
 		super(props);

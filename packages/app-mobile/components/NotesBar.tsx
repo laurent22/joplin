@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { themeStyle } from './global-style';
 const { connect } = require('react-redux');
@@ -9,7 +9,6 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
-import useStyles from './useStyles';
 
 interface Props {
     themeId: number;
@@ -27,10 +26,11 @@ function NotesBarComponent(props: Props) {
 	const [notes, setNotes] = React.useState<any[]>(props.notes);
 	const [query, setQuery] = React.useState<string>('');
 
-	const themeId = props.themeId;
+	const styles = (): Style => {
+		const themeId = props.themeId;
+		const theme = themeStyle(themeId);
 
-	const stylingFunction = (theme: Style): Style => {
-		return {
+		const styles: Style = {
 			container: {
 				flex: 1,
 				width: '100%',
@@ -111,30 +111,30 @@ function NotesBarComponent(props: Props) {
 				justifyContent: 'space-between',
 			},
 		};
+
+		return StyleSheet.create(styles);
 	};
 
-	const styles = useStyles(stylingFunction, themeId);
-
 	const titleComp = (
-		<View style={[styles.title, styles.horizontalFlex]}>
-			<Icon name='md-document'style={[styles.top, styles.titleIcon]} />
-			<Text style={[styles.top, styles.titleText]}>{_('Notes')}</Text>
+		<View style={[styles().title, styles().horizontalFlex]}>
+			<Icon name='md-document'style={[styles().top, styles().titleIcon]} />
+			<Text style={[styles().top, styles().titleText]}>{_('Notes')}</Text>
 		</View>
 	);
 
 	const dividerComp = (
-		<View style={styles.divider}></View>
+		<View style={styles().divider}></View>
 	);
 
 	const closeButtonComp = (
 		<TouchableOpacity onPress={props.toggleNotesBar}>
-			<Icon name="close" style={[styles.top, styles.closeIcon]}/>
+			<Icon name="close" style={[styles().top, styles().closeIcon]}/>
 		</TouchableOpacity>
 	);
 
 	const renderIconButton = (icon: JSX.Element, onPress: ()=> Promise<void>) => {
 		return (
-			<TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
+			<TouchableOpacity style={styles().button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
 		);
 	};
 
@@ -159,12 +159,12 @@ function NotesBarComponent(props: Props) {
 		});
 	};
 
-	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles.buttonIcon} />, () => handleNewNote(false));
-	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles.buttonIcon} />, () => handleNewNote(true));
+	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false));
+	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true));
 
 	const topComp = (
 		<View>
-			<View style={[styles.topContainer, styles.horizontalFlex]}>
+			<View style={[styles().topContainer, styles().horizontalFlex]}>
 				{titleComp}
 				{closeButtonComp}
 			</View>
@@ -198,18 +198,19 @@ function NotesBarComponent(props: Props) {
 		setNotes(result);
 	};
 
-	const theme = themeStyle(themeId);
+	const theme = themeStyle(props.themeId);
 
 	const searchInputComp = (
-		<View style={[styles.horizontalFlex, styles.searchInput]}>
-			<Icon name='search' style={[styles.top, styles.searchIcon]}/>
-			<TextInput style={[styles.top, styles.nativeInput]} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} placeholderTextColor={theme.dividerColor} />
+		<View style={[styles().horizontalFlex, styles().searchInput]}>
+			<Icon name='search' style={[styles().top, styles().searchIcon]}/>
+
+			<TextInput style={[styles().top, styles().nativeInput]} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} placeholderTextColor={theme.dividerColor} />
 		</View>
 	);
 
 	const inputGroupComp = (
 		<View style={{ width: '100%' }}>
-			<View style={[styles.padding, styles.horizontalFlex, styles.inputGroup]}>
+			<View style={[styles().padding, styles().horizontalFlex, styles().inputGroup]}>
 				{searchInputComp}
 				{addNoteButtonComp}
 				{addTodoButtonComp}
@@ -236,8 +237,8 @@ function NotesBarComponent(props: Props) {
 			getItemLayout={(data, index) => (
 				{
 					length: data.length,
-					offset: (theme.fontSize + styles.padding.paddingTop + styles.padding.paddingBottom) * index,
-					viewOffset: (theme.fontSize + styles.padding.paddingTop + styles.padding.paddingBottom),
+					offset: (theme.fontSize + styles().padding.paddingTop + styles().padding.paddingBottom) * index,
+					viewOffset: (theme.fontSize + styles().padding.paddingTop + styles().padding.paddingBottom),
 					index,
 				}
 			)}
@@ -259,7 +260,7 @@ function NotesBarComponent(props: Props) {
 	}, [props.notes]);
 
 	return (
-		<View style={styles.container}>
+		<View style={styles().container}>
 			{topComp}
 			{inputGroupComp}
 			{ NotesBarListComp }
