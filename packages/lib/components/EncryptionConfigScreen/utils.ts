@@ -118,6 +118,7 @@ export const useInputMasterPassword = (masterKeys: MasterKeyEntity[], activeMast
 		if (!(await masterPasswordIsValid(inputMasterPassword, masterKeys.find(mk => mk.id === activeMasterKeyId)))) {
 			alert('Password is invalid. Please try again.');
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [inputMasterPassword]);
 
 	const onMasterPasswordChange = useCallback((password: string) => {

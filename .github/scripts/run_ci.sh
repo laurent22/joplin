@@ -57,6 +57,11 @@ echo "Yarn $( yarn -v )"
 
 cd "$ROOT_DIR"
 yarn install
+testResult=$?
+if [ $testResult -ne 0 ]; then
+	echo "Yarn installation failed. Search for 'exit code 1' in the log for more information."
+	exit $testResult
+fi
 
 # =============================================================================
 # Run test units. Only do it for pull requests and dev branch because we don't

@@ -23,5 +23,6 @@ export default function useEffectDebugger(effectHook: any, dependencies: any, de
 		console.log('[use-effet-debugger] ', changedDeps);
 	}
 
+	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	useEffect(effectHook, dependencies);
 }

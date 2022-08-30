@@ -273,6 +273,31 @@ describe('models/Setting', function() {
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
 
+	it('should migrate to new setting', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('spellChecker.language', 'fr-FR');
+		Setting.applyUserSettingMigration();
+		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR']);
+	}));
+
+	it('should not override new setting, if it already set', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('spellChecker.languages', ['fr-FR', 'en-US']);
+		Setting.setValue('spellChecker.language', 'fr-FR');
+		Setting.applyUserSettingMigration();
+		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR', 'en-US']);
+	}));
+
+	it('should not set new setting, if old setting is not set', (async () => {
+		await Setting.reset();
+
+		expect(Setting.isSet('spellChecker.language')).toBe(false);
+		Setting.applyUserSettingMigration();
+		expect(Setting.isSet('spellChecker.languages')).toBe(false);
+	}));
+
 	it('should load sub-profile settings - 1', async () => {
 		await Setting.reset();
 

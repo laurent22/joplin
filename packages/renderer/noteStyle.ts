@@ -375,7 +375,12 @@ export default function(theme: any, options: Options = null) {
 		}
 
 		.media-player.media-pdf {
-			min-height: 100vh;
+			min-height: 35rem;
+			width: 100%;
+			max-width: 1000px;
+			margin: 0;
+			border: 0;
+			display: block;
 		}
 
 		/* Clear the CODE style if the element is within a joplin-editable block */

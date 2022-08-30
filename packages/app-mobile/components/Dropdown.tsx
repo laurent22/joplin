@@ -1,31 +1,60 @@
 const React = require('react');
-const { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View } = require('react-native');
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle } from 'react-native';
+import { Component } from 'react';
 const { ItemList } = require('./ItemList.js');
 
-class Dropdown extends React.Component {
-	constructor() {
-		super();
+type ValueType = string;
+export interface DropdownListItem {
+	label: string;
+	value: ValueType;
+}
 
-		this.headerRef_ = null;
-	}
+export type OnValueChangedListener = (newValue: ValueType)=> void;
 
-	UNSAFE_componentWillMount() {
-		this.setState({
+interface DropdownProps {
+	listItemStyle?: ViewStyle;
+	itemListStyle?: ViewStyle;
+	itemWrapperStyle?: ViewStyle;
+	headerWrapperStyle?: ViewStyle;
+	headerStyle?: TextStyle;
+	itemStyle?: TextStyle;
+	disabled?: boolean;
+
+	labelTransform?: 'trim';
+	items: DropdownListItem[];
+
+	selectedValue: ValueType|null;
+	onValueChange?: OnValueChangedListener;
+}
+
+interface DropdownState {
+	headerSize: LayoutRectangle;
+	listVisible: boolean;
+}
+
+class Dropdown extends Component<DropdownProps, DropdownState> {
+	private headerRef: TouchableOpacity;
+
+	public constructor(props: DropdownProps) {
+		super(props);
+
+		this.headerRef = null;
+		this.state = {
 			headerSize: { x: 0, y: 0, width: 0, height: 0 },
 			listVisible: false,
-		});
+		};
 	}
 
-	updateHeaderCoordinates() {
+	private updateHeaderCoordinates() {
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
-		this.headerRef_.measure((fx, fy, width, height, px, py) => {
+		this.headerRef.measure((_fx, _fy, width, height, px, py) => {
 			this.setState({
 				headerSize: { x: px, y: py, width: width, height: height },
 			});
 		});
 	}
 
-	render() {
+	public render() {
 		const items = this.props.items;
 		const itemHeight = 60;
 		const windowHeight = Dimensions.get('window').height - 50;
@@ -84,23 +113,26 @@ class Dropdown extends React.Component {
 			}
 		}
 
-		if (this.props.labelTransform && this.props.labelTransform === 'trim') headerLabel = headerLabel.trim();
+		if (this.props.labelTransform && this.props.labelTransform === 'trim') {
+			headerLabel = headerLabel.trim();
+		}
 
 		const closeList = () => {
 			this.setState({ listVisible: false });
 		};
 
-		const itemRenderer = item => {
+		const itemRenderer = (item: DropdownListItem) => {
+			const key = item.value.toString();
 			return (
 				<TouchableOpacity
 					style={itemWrapperStyle}
-					key={item.value}
+					key={key}
 					onPress={() => {
 						closeList();
 						if (this.props.onValueChange) this.props.onValueChange(item.value);
 					}}
 				>
-					<Text ellipsizeMode="tail" numberOfLines={1} style={itemStyle} key={item.value}>
+					<Text ellipsizeMode="tail" numberOfLines={1} style={itemStyle} key={key}>
 						{item.label}
 					</Text>
 				</TouchableOpacity>
@@ -111,7 +143,7 @@ class Dropdown extends React.Component {
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<TouchableOpacity
 					style={headerWrapperStyle}
-					ref={ref => (this.headerRef_ = ref)}
+					ref={ref => (this.headerRef = ref)}
 					disabled={this.props.disabled}
 					onPress={() => {
 						this.updateHeaderCoordinates();
@@ -141,9 +173,7 @@ class Dropdown extends React.Component {
 									style={itemListStyle}
 									items={this.props.items}
 									itemHeight={itemHeight}
-									itemRenderer={item => {
-										return itemRenderer(item);
-									}}
+									itemRenderer={itemRenderer}
 								/>
 							</View>
 						</View>
@@ -154,4 +184,5 @@ class Dropdown extends React.Component {
 	}
 }
 
-module.exports = { Dropdown };
+export default Dropdown;
+export { Dropdown };

@@ -2,7 +2,7 @@ const React = require('react');
 
 const { StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
 const { connect } = require('react-redux');
-const { ScreenHeader } = require('../screen-header.js');
+const { ScreenHeader } = require('../ScreenHeader');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { _ } = require('@joplin/lib/locale');
 const Note = require('@joplin/lib/models/Note').default;

@@ -94,6 +94,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		if (editorRef.current) {
 			scheduleOnScroll({ percent });
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [scheduleOnScroll]);
 
 	const setViewerPercentScroll = useCallback((percent: number) => {
@@ -101,6 +102,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			webviewRef.current.wrappedInstance.send('setPercentScroll', percent);
 			scheduleOnScroll({ percent });
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [scheduleOnScroll]);
 
 	const editor_scroll = useCallback(() => {
@@ -126,6 +128,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			lastResizeHeight_.current = NaN;
 			lastLinesHeight_.current = NaN;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [setViewerPercentScroll]);
 
 	const resetScroll = useCallback(() => {
@@ -134,6 +137,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			editorRef.current.setScrollPercent(0);
 			scrollTopIsUncertain_.current = false;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const editor_resize = useCallback((cm) => {
@@ -152,6 +156,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			lastResizeHeight_.current = NaN;
 			lastLinesHeight_.current = NaN;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	// When heights of lines are updated in CodeMirror, 'update' events are raised.
@@ -173,6 +178,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			lastResizeHeight_.current = NaN;
 			lastLinesHeight_.current = NaN;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const getLineScrollPercent = useCallback(() => {
@@ -183,6 +189,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		} else {
 			return scrollPercent_.current;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	return {

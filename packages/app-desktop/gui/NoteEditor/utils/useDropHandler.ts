@@ -51,5 +51,6 @@ export default function useDropHandler(dependencies: HookDependencies) {
 				},
 			});
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

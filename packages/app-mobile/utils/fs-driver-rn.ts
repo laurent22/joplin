@@ -107,10 +107,8 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async move(source: string, dest: string) {
-		if (isScopedUri(source) && isScopedUri(dest)) {
+		if (isScopedUri(source) || isScopedUri(dest)) {
 			await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
-		} else if (isScopedUri(source) || isScopedUri(dest)) {
-			throw new Error('Move between different storage types not supported');
 		}
 		return RNFS.moveFile(source, dest);
 	}
@@ -191,11 +189,9 @@ export default class FsDriverRN extends FsDriverBase {
 	public async copy(source: string, dest: string) {
 		let retry = false;
 		try {
-			if (isScopedUri(source) && isScopedUri(dest)) {
+			if (isScopedUri(source) || isScopedUri(dest)) {
 				await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
 				return;
-			} else if (isScopedUri(source) || isScopedUri(dest)) {
-				throw new Error('Move between different storage types not supported');
 			}
 			await RNFS.copyFile(source, dest);
 		} catch (error) {
@@ -204,7 +200,13 @@ export default class FsDriverRN extends FsDriverBase {
 			await this.unlink(dest);
 		}
 
-		if (retry) await RNFS.copyFile(source, dest);
+		if (retry) {
+			if (isScopedUri(source) || isScopedUri(dest)) {
+				await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+			} else {
+				await RNFS.copyFile(source, dest);
+			}
+		}
 	}
 
 	public async unlink(path: string) {

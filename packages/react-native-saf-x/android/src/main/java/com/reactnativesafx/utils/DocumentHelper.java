@@ -2,6 +2,7 @@ package com.reactnativesafx.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.UriPermission;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -378,6 +380,9 @@ public class DocumentHelper {
   public DocumentFile goToDocument(
       String unknownUriString, boolean createIfDirectoryNotExist, boolean includeLastSegment)
       throws SecurityException, IOException {
+    if (unknownUriString.startsWith(ContentResolver.SCHEME_FILE)) {
+      return DocumentFile.fromFile(new File(Uri.parse(unknownUriString).getPath()));
+    }
     String uriString = UriHelper.normalize(unknownUriString);
     String baseUri = "";
     String appendUri;
@@ -454,7 +459,7 @@ public class DocumentHelper {
   public void transferFile(
       String srcUri, String destUri, boolean replaceIfDestExists, boolean copy, Promise promise) {
     try {
-      DocumentFile srcDoc = this.goToDocument(srcUri, false, true);
+      DocumentFile srcDoc = this.goToDocument(UriHelper.getUnifiedUri(srcUri), false, true);
 
       if (srcDoc.isDirectory()) {
         throw new IllegalArgumentException("Cannot move directories");
@@ -462,7 +467,7 @@ public class DocumentHelper {
 
       DocumentFile destDoc;
       try {
-        destDoc = this.goToDocument(destUri, false, true);
+        destDoc = this.goToDocument(UriHelper.getUnifiedUri(destUri), false, true);
         if (!replaceIfDestExists) {
           throw new IOException("a document with the same name already exists in destination");
         }

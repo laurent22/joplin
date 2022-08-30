@@ -43,8 +43,10 @@ export default function useViewIsReady(viewRef: any) {
 		return () => {
 			viewRef.current.removeEventListener('dom-ready', onIFrameReady);
 			viewRef.current.removeEventListener('load', onIFrameReady);
+			// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 			viewRef.current.contentWindow.removeEventListener('message', onMessage);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	return iframeReady && iframeContentReady;
