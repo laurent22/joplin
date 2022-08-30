@@ -9,6 +9,8 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
+import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 interface Props {
     themeId: number;
@@ -19,17 +21,16 @@ interface Props {
 	dispatch: any;
 	selectedNoteId: string;
 	toggleNotesBar: ()=> void;
+	settings: any;
 }
 
 function NotesBarComponent(props: Props) {
 
-	const [notes, setNotes] = React.useState<any[]>(props.notes);
 	const [query, setQuery] = React.useState<string>('');
+	const [notes, setNotes] = React.useState<any[]>(props.notes);
+	const theme: Style = React.useMemo(() => themeStyle(props.themeId), [props.themeId]);
 
 	const styles = (): Style => {
-		const themeId = props.themeId;
-		const theme = themeStyle(themeId);
-
 		const styles: Style = {
 			container: {
 				flex: 1,
@@ -172,33 +173,57 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	const handleQuerySubmit = async () => {
-		if (!query) {
-			setNotes(props.notes);
-			return;
+	// Copied from './screens/search.js' and modified
+	const refreshSearch = async () => {
+		let notes_ = [];
+
+		if (query) {
+			if (props.settings['db.ftsEnabled']) {
+				notes_ = await SearchEngineUtils.notesForQuery(query, true);
+			} else {
+				const p = query.split(' ');
+				const temp = [];
+				for (let i = 0; i < p.length; i++) {
+					const t = p[i].trim();
+					if (!t) continue;
+					temp.push(t);
+				}
+
+				notes_ = await Note.previews(null, {
+					anywherePattern: `*${temp.join('*')}*`,
+				});
+			}
+
+			const parsedQuery = await SearchEngine.instance().parseQuery(query);
+			const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+
+			props.dispatch({
+				type: 'SET_HIGHLIGHTED',
+				words: highlightedWords,
+			});
+
+			setNotes(notes_);
 		}
-
-		let searchQuery = query.trim();
-
-		if (searchQuery === '') {
-			setNotes(props.notes);
-			return;
-		}
-
-		searchQuery = searchQuery.toLowerCase();
-
-		// Find notes in folder using only note title
-		const result = props.notes.filter(note => {
-			let noteTitle = Note.displayTitle(note);
-			noteTitle = noteTitle.toLowerCase();
-
-			return noteTitle.includes(searchQuery);
-		});
-
-		setNotes(result);
 	};
 
-	const theme = themeStyle(props.themeId);
+	const handleQuerySubmit = async () => {
+		const query_ = query.trim();
+
+		if (!query_) {
+			props.dispatch({
+				type: 'SEARCH_QUERY',
+				query: '',
+			});
+		} else {
+			props.dispatch({
+				type: 'SEARCH_QUERY',
+				query: query_,
+			});
+		}
+
+		setQuery(query_);
+		await refreshSearch();
+	};
 
 	const searchInputComp = (
 		<View style={[styles().horizontalFlex, styles().searchInput]}>
@@ -221,7 +246,7 @@ function NotesBarComponent(props: Props) {
 
 	let flatListRef: any = React.useRef(null);
 
-	const memoizedRenderItem = React.useCallback(({ item }: { item: any }) => {
+	const onRenderItem = React.useCallback(({ item }: { item: any }) => {
 		if (item.is_todo) {
 			return <NotesBarListItem note={item} todoCheckbox_change={props.todoCheckbox_change} />;
 		} else {
@@ -232,7 +257,7 @@ function NotesBarComponent(props: Props) {
 	const NotesBarListComp = (
 		<FlatList
 			data={notes}
-			renderItem={memoizedRenderItem}
+			renderItem={onRenderItem}
 			keyExtractor={(item: any) => item.id}
 			getItemLayout={(data, index) => (
 				{
@@ -275,6 +300,7 @@ const NotesBar = connect((state: State) => {
 		activeFolderId: state.settings.activeFolderId,
 		selectedFolderId: state.selectedFolderId,
 		selectedNoteId: state.selectedNoteIds[0],
+		settings: state.settings,
 	};
 })(NotesBarComponent);
 
