@@ -21,45 +21,45 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// validDestinationSubNotebook check for presents and ambiguous notebooks
-	private async validDestinationSubNotebook(targetNotebook: string) {
+	// validDestinationSubFolder check for presents and ambiguous folders
+	private async validDestinationSubFolder(targetFolder: string) {
 
-		const dstFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetNotebook);
-		if (!dstFolder) {
-			throw new Error(_('Cannot find "%s", please create it first.', targetNotebook));
+		const destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetFolder);
+		if (!destinationFolder) {
+			throw new Error(_('Cannot find "%s", please create it first.', targetFolder));
 		}
 
-		const dstDups = await Folder.search({ titlePattern: targetNotebook, limit: 2 });
-		if (dstDups.length > 1) {
-			throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - look for parent id in metadata', targetNotebook));
+		const destinationDups = await Folder.search({ titlePattern: targetFolder, limit: 2 });
+		if (destinationDups.length > 1) {
+			throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - press "ti" to see the short notebook id', targetFolder));
 		}
 
-		return dstFolder;
+		return destinationFolder;
 	}
 
 	protected async action(args: any) {
-		const createSubNotebook = args.options && args.options.sub === true;
-		const targetNotebook = args['notebook'];
-		const newNotebook: FolderEntity = {
+		const createSubFolder = args.options && args.options.sub === true;
+		const targetFolder = args['notebook'];
+		const newFolder: FolderEntity = {
 			title: args['new-notebook'],
 		};
 
-		if (createSubNotebook) {
-			if (targetNotebook) {
-				const dstNotebook = await this.validDestinationSubNotebook(targetNotebook);
-				newNotebook.parent_id = dstNotebook.id;
+		if (createSubFolder) {
+			if (targetFolder) {
+				const destinationFolder = await this.validDestinationSubFolder(targetFolder);
+				newFolder.parent_id = destinationFolder.id;
 
-				const folder = await Folder.save(newNotebook, { userSideValidation: true });
+				const folder = await Folder.save(newFolder, { userSideValidation: true });
 				app().switchCurrentFolder(folder);
 
 			} else {
-				newNotebook.parent_id = app().currentFolder().id;
-				const folder = await Folder.save(newNotebook, { userSideValidation: true });
+				newFolder.parent_id = app().currentFolder().id;
+				const folder = await Folder.save(newFolder, { userSideValidation: true });
 				app().switchCurrentFolder(folder);
 			}
 
 		} else {
-			const folder = await Folder.save(newNotebook, { userSideValidation: true });
+			const folder = await Folder.save(newFolder, { userSideValidation: true });
 			app().switchCurrentFolder(folder);
 		}
 	}
