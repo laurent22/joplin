@@ -19,7 +19,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--grey);
+	background: rgb(112, 112, 112);
 	border-radius: 5px;
 }
 
@@ -27,7 +27,7 @@
 	--white: rgb(255, 255, 255);
 	--light: rgb(219, 219, 219);
 	--grey: rgb(128, 128, 128);
-	--dark: rgb(1, 0, 34);
+	--dark: rgb(38, 38, 38);
 	--black: rgb(24, 24, 24);
 
 	--red: #ff000d;
@@ -88,7 +88,6 @@ hr {
 	border: solid thin var(--tertiary);
 	padding-top: 0.6rem;
 	padding-right: 0.25rem;
-	background-color: rgb(240, 241, 245);
 }
 
 .mini-app.focused {
@@ -101,7 +100,11 @@ hr {
 	align-items: center;
 }
 
-[data-theme="dark"] .mini-app {
+.dark-bg{
+	background-color: rgb(171, 171, 171);
+}
+
+[data-theme="dark"] .dark-bg {
 	background-color: rgb(54, 54, 54);
 }
 
@@ -150,12 +153,12 @@ hr {
 	width: 100%;
 	height: 100%;
     display: grid;
-    grid-template-rows: 2.2rem auto;
+    grid-template-rows: 2.8rem auto;
 }
 
 .viewers{
 	width: 100%;
-    height: calc(100vh - 2.2rem);
+    height: calc(100vh - 2.8rem);
     overflow: hidden;
     display: grid;
     grid-template-columns: 11rem auto;
@@ -173,20 +176,15 @@ hr {
     position: relative;
 }
 .thumbnail-pane{
-	width: 10rem;
-}
-.thumbnail-wrapper{
+	padding-left: 1rem;
+    padding-right: 1rem;
 	background-color: var(--tertiary);
-	height: 100%;
-	width: 100%;
-    overflow: hidden;
+	overflow-y: scroll;
 }
+
 @media screen and (max-width: 840px) {
 	.viewers{
 		grid-template-columns: 9rem auto;
-	}
-	.thumbnail-pane{
-		width: 8rem;
 	}
 }
 

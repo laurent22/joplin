@@ -2015,6 +2015,9 @@ packages/pdf-viewer/pdfSource.js.map
 packages/pdf-viewer/pdfSource.test.d.ts
 packages/pdf-viewer/pdfSource.test.js
 packages/pdf-viewer/pdfSource.test.js.map
+packages/pdf-viewer/ui/GotoPage.d.ts
+packages/pdf-viewer/ui/GotoPage.js
+packages/pdf-viewer/ui/GotoPage.js.map
 packages/pdf-viewer/ui/IconButtons.d.ts
 packages/pdf-viewer/ui/IconButtons.js
 packages/pdf-viewer/ui/IconButtons.js.map

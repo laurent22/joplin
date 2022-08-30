@@ -5,6 +5,35 @@ import VerticalPages from './VerticalPages';
 import MessageService from './messageService';
 import { OpenLinkButton, CloseButton } from './ui/IconButtons';
 import ZoomControls from './ui/ZoomControls';
+import styled from 'styled-components';
+import GotoInput from './ui/GotoPage';
+
+
+const TitleWrapper = styled.div`
+	font-size: 0.7rem;
+	font-weight: 400;
+	display: flex;
+	align-items: start;
+	flex-direction: column;
+	min-width: 15rem;
+	max-width: 18rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--secondary);
+	padding: 0.2rem 0.4rem;
+	height: 100%;
+	justify-content: center;
+`;
+
+const Title = styled.div`
+	font-size: 0.9rem;
+	font-weight: bold;
+	margin-bottom: 0.2rem;
+	color: var(--primary);
+	overflow: hidden;
+`;
+
 
 export interface FullViewerProps {
 	pdfPath: string;
@@ -13,6 +42,7 @@ export interface FullViewerProps {
 	pdfId?: string;
 	messageService?: MessageService;
 	startPage?: number;
+	title?: string;
 }
 
 export default function FullViewer(props: FullViewerProps) {
@@ -28,16 +58,10 @@ export default function FullViewer(props: FullViewerProps) {
 	}, []);
 
 	const goToPage = useCallback((pageNo: number) => {
+		if (pageNo < 1 || pageNo > pdf.pageCount || pageNo === selectedPage) return;
 		setSelectedPage(pageNo);
 		setStartPage(pageNo);
-	}, []);
-
-	const onPageNoInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.value.length <= 0) return;
-		const pageNo = parseInt(e.target.value, 10);
-		if (pageNo < 1 || pageNo > pdf.pageCount) return;
-		goToPage(pageNo);
-	}, [goToPage, pdf]);
+	}, [pdf, selectedPage]);
 
 	if (!pdf) {
 		return (
@@ -49,27 +73,27 @@ export default function FullViewer(props: FullViewerProps) {
 	return (
 		<div className="full-app">
 			<div className="top-bar">
-				<ZoomControls onChange={setZoom} zoom={zoom} size={0.9} />
-				<OpenLinkButton onClick={props.messageService.openExternalViewer} size={1.1} />
-				<div className="bar-btn">
-					<input onChange={onPageNoInput} placeholder="Go to page"/> {selectedPage} / {pdf.pageCount} Pages
-				</div>
-				<CloseButton onClick={props.messageService.close} size={1.2} />
+				<TitleWrapper>
+					<Title title={props.title}>{props.title || props.pdfId}</Title>
+					<div>{selectedPage} of {pdf.pageCount} pages</div>
+				</TitleWrapper>
+				<ZoomControls onChange={setZoom} zoom={zoom} size={1} />
+				<OpenLinkButton onClick={props.messageService.openExternalViewer} size={1.3} />
+				<GotoInput onChange={goToPage} size={1.3} pageCount={pdf.pageCount} currentPage={selectedPage} />
+				<CloseButton onClick={props.messageService.close} size={1.3} />
 			</div>
-			<div className="viewers">
-				<div className="thumbnail-wrapper">
-					<div className="pane thumbnail-pane" ref={thubmnailRef}>
-						<VerticalPages
-							pdf={pdf}
-							isDarkTheme={true}
-							rememberScroll={false}
-							container={thubmnailRef}
-							pageGap={16}
-							showPageNumbers={true}
-							selectedPage={selectedPage}
-							onPageClick={goToPage}
-						/>
-					</div>
+			<div className="viewers dark-bg">
+				<div className="pane thumbnail-pane" ref={thubmnailRef}>
+					<VerticalPages
+						pdf={pdf}
+						isDarkTheme={true}
+						rememberScroll={false}
+						container={thubmnailRef}
+						pageGap={16}
+						showPageNumbers={true}
+						selectedPage={selectedPage}
+						onPageClick={goToPage}
+					/>
 				</div>
 				<div className="pane main-pane" ref={mainViewerRef}>
 					<VerticalPages

@@ -18,6 +18,7 @@ const appearance = window.frameElement.getAttribute('x-appearance');
 const anchorPage = window.frameElement.getAttribute('x-anchorPage');
 const pdfId = window.frameElement.getAttribute('id');
 const resourceId = window.frameElement.getAttribute('x-resourceid');
+const title = window.frameElement.getAttribute('x-title');
 
 document.documentElement.setAttribute('data-theme', appearance);
 
@@ -35,6 +36,7 @@ function App() {
 		return <FullViewer pdfPath={url}
 			isDarkTheme={appearance === 'dark'}
 			startPage={anchorPage ? Number(anchorPage) : 1}
+			title={title}
 			messageService={messageService} />;
 	}
 	return <div>Error: Unknown app type "{type}"</div>;
