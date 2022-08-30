@@ -48,20 +48,6 @@ function convertJsx(paths) {
 	});
 }
 
-function build(path) {
-	chdir(path);
-
-	const result = spawnSync('yarn', ['run', 'build'], { shell: true });
-	if (result.status !== 0) {
-		const msg = [];
-		if (result.stdout) msg.push(result.stdout.toString());
-		if (result.stderr) msg.push(result.stderr.toString());
-		console.error(msg.join('\n'));
-		if (result.error) console.error(result.error);
-		process.exit(result.status);
-	}
-}
-
 module.exports = function() {
 	convertJsx([
 		`${__dirname}/../gui`,
@@ -69,8 +55,6 @@ module.exports = function() {
 		`${__dirname}/../gui/NoteList`,
 		`${__dirname}/../plugins`,
 	]);
-
-	build(`${__dirname}/../../pdf-viewer`);
 
 	const libContent = [
 		fs.readFileSync(`${basePath}/packages/lib/string-utils-common.js`, 'utf8'),

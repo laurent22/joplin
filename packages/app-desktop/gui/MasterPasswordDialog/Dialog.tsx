@@ -38,6 +38,7 @@ export default function(props: Props) {
 		if ([MasterPasswordStatus.NotSet, MasterPasswordStatus.Invalid].includes(status)) return false;
 		if (mode === Mode.Reset) return false;
 		return true;
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [status]);
 
 	const onClose = useCallback(() => {
@@ -84,6 +85,7 @@ export default function(props: Props) {
 			}
 			return;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [currentPassword, password1, onClose, mode]);
 
 	const needToRepeatPassword = useMemo(() => {

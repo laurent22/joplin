@@ -28,7 +28,8 @@ import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 const VersionInfo = require('react-native-version-info').default;
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -64,7 +65,7 @@ const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js'
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
-const { SideMenu } = require('./components/side-menu.js');
+import SideMenu from './components/SideMenu';
 const { SideMenuContent } = require('./components/side-menu-content.js');
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
@@ -684,6 +685,7 @@ class AppComponent extends React.Component {
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
+			sideMenuWidth: this.getSideMenuWidth(),
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -701,6 +703,8 @@ class AppComponent extends React.Component {
 				void this.handleShareData();
 			}
 		};
+
+		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
 	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
@@ -769,6 +773,7 @@ class AppComponent extends React.Component {
 		});
 
 		AppState.addEventListener('change', this.onAppStateChange_);
+		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		await this.handleShareData();
 
@@ -783,6 +788,12 @@ class AppComponent extends React.Component {
 	public componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
+
+		if (this.unsubscribeScreenWidthChangeHandler_) {
+			this.unsubscribeScreenWidthChangeHandler_.remove();
+			this.unsubscribeScreenWidthChangeHandler_ = null;
+		}
+
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
@@ -828,6 +839,10 @@ class AppComponent extends React.Component {
 		}
 	}
 
+	private async handleScreenWidthChange_() {
+		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
+	}
+
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
 			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
@@ -842,6 +857,18 @@ class AppComponent extends React.Component {
 			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
 		});
 	}
+
+	private getSideMenuWidth = () => {
+		const sideMenuWidth = getResponsiveValue({
+			sm: 250,
+			md: 260,
+			lg: 270,
+			xl: 280,
+			xxl: 290,
+		});
+
+		return sideMenuWidth;
+	};
 
 	public render() {
 		if (this.props.appState !== 'ready') return null;
@@ -872,6 +899,7 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
+
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
@@ -880,6 +908,7 @@ class AppComponent extends React.Component {
 				<SideMenu
 					menu={sideMenuContent}
 					edgeHitWidth={5}
+					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					onSliding={(percent: number) => {

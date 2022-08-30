@@ -219,9 +219,11 @@ function Editor(props: EditorProps, ref: any) {
 			cm.off('dragover', editor_drag);
 			cm.off('refresh', editor_resize);
 			cm.off('update', editor_update);
+			// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 			editorParent.current.removeChild(cm.getWrapperElement());
 			setEditor(null);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	useEffect(() => {
@@ -234,36 +236,42 @@ function Editor(props: EditorProps, ref: any) {
 			}
 			editor.setOption('screenReaderLabel', props.value);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.value]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('theme', props.codeMirrorTheme);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.codeMirrorTheme]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('mode', props.mode);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.mode]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('readOnly', props.readOnly);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.readOnly]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.autoMatchBraces]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.keyMap]);
 
 	useEffect(() => {

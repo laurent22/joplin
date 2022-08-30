@@ -8,5 +8,6 @@ export default function usePluginServiceRegistration(ref: any) {
 		return () => {
 			PlatformImplementation.instance().unregisterComponent('textEditor');
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

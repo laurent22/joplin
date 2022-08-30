@@ -13,5 +13,6 @@ export default function useWindowResizeEvent(eventEmitter: any) {
 			window_resize.clear();
 			window.removeEventListener('resize', window_resize);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

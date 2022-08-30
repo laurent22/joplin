@@ -138,6 +138,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [prevSyncStarted, syncStarted, formNote]);
 
 	useEffect(() => {
@@ -188,6 +189,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
 
 	const onResourceChange = useCallback(async function(event: any = null) {

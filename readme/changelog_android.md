@@ -1,5 +1,18 @@
 # Joplin Android app changelog
 
+## [android-v2.9.1](https://github.com/laurent22/joplin/releases/tag/android-v2.9.1) (Pre-release) - 2022-08-12T17:14:49Z
+
+- New: Add alt text/roles to some buttons to improve accessibility (#6616 by Henry Heino)
+- New: Add keyboard-activatable markdown commands (e.g. bold, italicize) on text editor (#6707 by Henry Heino)
+- Improved: Ctrl+F search support in beta editor (#6587 by Henry Heino)
+- Improved: Improve syntax highlighting on mobile beta editor (#6684 by Henry Heino)
+- Improved: Removes whitespace above navigation component (#6597 by [@tom](https://github.com/tom))
+- Fixed: Do not encrypt non-owned note if it was not shared encrypted (#6645)
+- Fixed: Fix checklist continuation in beta editor (#6577) (#6576 by Henry Heino)
+- Fixed: Fixed android filesystem sync (#6395) (#5779 by [@jd1378](https://github.com/jd1378))
+- Fixed: Note links with HTML notation did not work (#6515)
+- Fixed: Scroll selection into view in beta editor when window resizes (#6610) (#5949 by Henry Heino)
+
 ## [android-v2.8.1](https://github.com/laurent22/joplin/releases/tag/android-v2.8.1) (Pre-release) - 2022-05-18T13:35:01Z
 
 - Improved: Allow filtering tags in tag dialog (#6221 by [@shinglyu](https://github.com/shinglyu))

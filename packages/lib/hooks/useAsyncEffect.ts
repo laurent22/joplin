@@ -14,5 +14,6 @@ export default function(effect: EffectFunction, dependencies: any[]) {
 		return () => {
 			event.cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, dependencies);
 }
