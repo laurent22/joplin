@@ -378,10 +378,34 @@ public class DocumentHelper {
   }
 
   public DocumentFile goToDocument(
-      String unknownUriString, boolean createIfDirectoryNotExist, boolean includeLastSegment)
-      throws SecurityException, IOException {
+      String unknownUriStr, boolean createIfDirectoryNotExist, boolean includeLastSegment)
+      throws SecurityException, IOException, IllegalArgumentException {
+      String unknownUriString = UriHelper.getUnifiedUri(unknownUriStr);
     if (unknownUriString.startsWith(ContentResolver.SCHEME_FILE)) {
-      return DocumentFile.fromFile(new File(Uri.parse(unknownUriString).getPath()));
+      Uri uri = Uri.parse(unknownUriString);
+      if (uri == null) {
+        throw new IllegalArgumentException("Invalid Uri String");
+      }
+      String path =
+        uri.getPath()
+          .substring(
+            0,
+            includeLastSegment
+              ? uri.getPath().length()
+              : uri.getPath().length() - uri.getLastPathSegment().length());
+
+      if (createIfDirectoryNotExist) {
+        boolean madeFolder = new File(path).mkdirs();
+        if (!madeFolder) {
+          throw new IOException("mkdir failed for Uri with `file` scheme");
+        }
+      }
+      DocumentFile targetFile = DocumentFile.fromFile(new File(path));
+      if (!targetFile.exists()) {
+        throw new FileNotFoundException(
+          "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
+      }
+      return targetFile;
     }
     String uriString = UriHelper.normalize(unknownUriString);
     String baseUri = "";
@@ -459,7 +483,7 @@ public class DocumentHelper {
   public void transferFile(
       String srcUri, String destUri, boolean replaceIfDestExists, boolean copy, Promise promise) {
     try {
-      DocumentFile srcDoc = this.goToDocument(UriHelper.getUnifiedUri(srcUri), false, true);
+      DocumentFile srcDoc = this.goToDocument(srcUri, false, true);
 
       if (srcDoc.isDirectory()) {
         throw new IllegalArgumentException("Cannot move directories");
@@ -467,7 +491,7 @@ public class DocumentHelper {
 
       DocumentFile destDoc;
       try {
-        destDoc = this.goToDocument(UriHelper.getUnifiedUri(destUri), false, true);
+        destDoc = this.goToDocument(destUri, false, true);
         if (!replaceIfDestExists) {
           throw new IOException("a document with the same name already exists in destination");
         }
