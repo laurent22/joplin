@@ -395,9 +395,12 @@ public class DocumentHelper {
               : uri.getPath().length() - uri.getLastPathSegment().length());
 
       if (createIfDirectoryNotExist) {
-        boolean madeFolder = new File(path).mkdirs();
-        if (!madeFolder) {
-          throw new IOException("mkdir failed for Uri with `file` scheme");
+        File targetFile = new File(path);
+        if (!targetFile.exists()) {
+          boolean madeFolder = targetFile.mkdirs();
+          if (!madeFolder) {
+            throw new IOException("mkdir failed for Uri with `file` scheme");
+          }
         }
       }
       DocumentFile targetFile = DocumentFile.fromFile(new File(path));
