@@ -544,6 +544,12 @@ export default class Folder extends BaseItem {
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 
+		if (options && options.includeNotes) {
+			for (const folder of all) {
+				folder.notes = await Note.previews(folder.id);
+			}
+		}
+
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models: FolderEntityWithChildren[], parentId: string) {
 			const nestedTreeStructure = [];
