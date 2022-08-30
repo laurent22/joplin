@@ -71,4 +71,10 @@ export class PdfData {
 			scale,
 		};
 	};
+
+	public getActivePageNo = (scaledSize: ScaledSize, pageGap: number, scrollTop: number): number => {
+		const pageHeight = scaledSize.height + pageGap;
+		const pageNo = Math.floor(scrollTop / pageHeight) + 1;
+		return pageNo;
+	};
 }

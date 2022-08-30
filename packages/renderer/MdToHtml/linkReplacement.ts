@@ -90,7 +90,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	// https://github.com/laurent22/joplin/issues/2030
 	href = href.replace(/'/g, '%27');
 
-	let js = `${options.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
+	let js = `${options.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)}, mime: ${JSON.stringify(mime)} }); return false;`;
 	if (options.enableLongPress && !!resourceId) {
 		const onClick = `${options.postMessageSyntax}(${JSON.stringify(href)})`;
 		const onLongClick = `${options.postMessageSyntax}("longclick:${resourceId}")`;

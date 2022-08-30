@@ -22,6 +22,7 @@ import Dialog from './Dialog';
 import SyncWizardDialog from './SyncWizard/Dialog';
 import MasterPasswordDialog from './MasterPasswordDialog/Dialog';
 import EditFolderDialog from './EditFolderDialog/Dialog';
+import PdfViewer from './PdfViewer';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
@@ -73,6 +74,11 @@ const registeredDialogs: Record<string, RegisteredDialog> = {
 	editFolder: {
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <EditFolderDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+		},
+	},
+	pdfViewer: {
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <PdfViewer key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 };

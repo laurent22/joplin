@@ -1,14 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import useIsFocused from './hooks/useIsFocused';
 import usePdfData from './hooks/usePdfData';
 import VerticalPages from './VerticalPages';
 import ZoomControls from './ui/ZoomControls';
+import MessageService from './messageService';
 
 export interface MiniViewerAppProps {
 	pdfPath: string;
 	isDarkTheme: boolean;
 	anchorPage: number;
 	pdfId: string;
+	resourceId?: string;
+	messageService: MessageService;
 }
 
 export default function MiniViewerApp(props: MiniViewerAppProps) {
@@ -16,6 +19,10 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 	const isFocused = useIsFocused();
 	const [zoom, setZoom] = useState<number>(1);
 	const containerEl = useRef<HTMLDivElement>(null);
+
+	const onDoubleClick = useCallback((pageNo: number) => {
+		props.messageService.openFullScreenViewer(props.resourceId, pageNo);
+	}, [props.messageService, props.resourceId]);
 
 	if (!pdf) {
 		return (
@@ -35,7 +42,10 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 					rememberScroll={true}
 					container={containerEl}
 					showPageNumbers={true}
-					zoom={zoom} />
+					zoom={zoom}
+					textSelectable={true}
+					onTextSelect={props.messageService.textSelected}
+					onDoubleClick={onDoubleClick} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>

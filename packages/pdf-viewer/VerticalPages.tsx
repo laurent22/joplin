@@ -28,6 +28,12 @@ export interface VerticalPagesProps {
 	container: MutableRefObject<HTMLElement>;
 	pageGap?: number;
 	showPageNumbers?: boolean;
+	selectedPage?: number;
+	textSelectable?: boolean;
+	onTextSelect?: (text: string)=> void;
+	onPageClick?: (page: number)=> void;
+	onActivePageChange?: (page: number)=> void;
+	onDoubleClick?: (page: number)=> void;
 }
 
 export default function VerticalPages(props: VerticalPagesProps) {
@@ -51,6 +57,9 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		scaledSize,
 		pdfId: props.pdfId,
 		rememberScroll: props.rememberScroll,
+		pdf: props.pdf,
+		pageGap: props.pageGap,
+		onActivePageChange: props.onActivePageChange,
 	} as ScrollSaver);
 
 	useEffect(() => {
@@ -90,6 +99,11 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
 					isAnchored={props.anchorPage && props.anchorPage === i + 1}
 					showPageNumbers={props.showPageNumbers}
+					isSelected={scaledSize && props.selectedPage && props.selectedPage === i + 1}
+					onClick={props.onPageClick}
+					textSelectable={props.textSelectable}
+					onTextSelect={props.onTextSelect}
+					onDoubleClick={props.onDoubleClick}
 					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
 			}
 			) : 'Calculating size...'
