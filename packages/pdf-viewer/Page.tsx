@@ -4,7 +4,6 @@ import useIsVisible from './hooks/useIsVisible';
 import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect';
 import { PdfData, ScaledSize } from './pdfSource';
 import styled from 'styled-components';
-import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 
 
 require('./textLayer.css');
@@ -69,22 +68,25 @@ export default function Page(props: PageProps) {
 		wrapperRef,
 	} as VisibleOnSelect);
 
-	useAsyncEffect(async (event: AsyncEffectEvent) => {
+	useEffect(() => {
+		const isCancelled = () => props.scaledSize.scale !== scaleRef.current;
 
-		const isCancelled = () => event.cancelled;
+		const renderPage = async () => {
+			try {
+				await props.pdf.renderPage(props.pageNo, props.scaledSize, canvasRef, props.textSelectable ? textRef : null, isCancelled);
+			} catch (error) {
+				error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
+				setError(error);
+				throw error;
+			}
+		};
 
-		if (!isVisible || !props.scaledSize || (scaleRef.current && props.scaledSize.scale === scaleRef.current)) return;
-
-		try {
-			await props.pdf.renderPage(props.pageNo, props.scaledSize, canvasRef, props.textSelectable ? textRef : null, isCancelled);
+		if (isVisible && props.scaledSize && (props.scaledSize.scale !== scaleRef.current)) {
 			scaleRef.current = props.scaledSize.scale;
-		} catch (error) {
-			error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
-			setError(error);
-			throw error;
+			void renderPage();
 		}
 
-	}, [props.scaledSize, isVisible, props.textSelectable, props.pageNo]);
+	}, [props.scaledSize, isVisible, props.textSelectable, props.pageNo, props.pdf]);
 
 	useEffect(() => {
 		if (props.focusOnLoad) {

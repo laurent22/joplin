@@ -15,7 +15,6 @@ interface RenderingTask {
 	textLayer: MutableRefObject<HTMLElement>;
 	scaledSize: ScaledSize;
 	isCancelled: ()=> boolean;
-	retry: number;
 }
 
 export class PdfData {
@@ -127,7 +126,7 @@ export class PdfData {
 		}
 	};
 
-	public renderPage(pageNo: number, scaledSize: ScaledSize, canvas: MutableRefObject<HTMLCanvasElement>, textLayer: MutableRefObject<HTMLElement>, isCancelled: ()=> boolean, retry?: number): Promise<void> {
+	public renderPage(pageNo: number, scaledSize: ScaledSize, canvas: MutableRefObject<HTMLCanvasElement>, textLayer: MutableRefObject<HTMLElement>, isCancelled: ()=> boolean): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
 			if (this.renderingQueue.lock) {
 				// console.warn('Adding to task, page:', pageNo, 'prev queue size:', this.renderingQueue.tasks.length);
@@ -139,7 +138,6 @@ export class PdfData {
 					textLayer,
 					scaledSize,
 					isCancelled,
-					retry: retry + 1,
 				});
 			} else {
 				this.renderingQueue.lock = true;
@@ -148,7 +146,7 @@ export class PdfData {
 					if (this.renderingQueue.tasks.length > 0) {
 						const task = this.renderingQueue.tasks.shift();
 						// console.log('executing next task of page:', pageNo, 'remaining tasks:', this.renderingQueue.tasks.length);
-						void this.renderPage(task.pageNo, task.scaledSize, task.canvas, task.textLayer, task.isCancelled, task.retry);
+						void this.renderPage(task.pageNo, task.scaledSize, task.canvas, task.textLayer, task.isCancelled);
 					}
 				};
 				// console.log('rendering page:', pageNo, 'scaledSize:', scaledSize);
