@@ -20,7 +20,7 @@ interface LinkDialogProps {
 
 const EditLinkDialog = (props: LinkDialogProps) => {
 	// The content of the link selected in the editor (if any)
-	const editorLinkData = props.selectionState.linkData;
+	const editorLinkData = props.selectionState.linkData ?? {};
 	const [linkLabel, setLinkLabel] = useState('');
 	const [linkURL, setLinkURL] = useState('');
 

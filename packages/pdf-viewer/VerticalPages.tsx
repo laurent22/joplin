@@ -4,6 +4,7 @@ import { PdfData } from './pdfSource';
 import Page from './Page';
 import styled from 'styled-components';
 import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
+import useScrollSaver, { ScrollSaver } from './hooks/useScrollSaver';
 
 
 const PagesHolder = styled.div<{ pageGap: number }>`
@@ -11,7 +12,8 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	justify-content: center;
 	align-items: center;
 	flex-flow: column;
-	width: 100%;
+	width: fit-content;
+	min-width: 100%;
 	min-height: 100%;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
@@ -22,15 +24,16 @@ export interface VerticalPagesProps {
 	anchorPage?: number;
 	rememberScroll?: boolean;
 	pdfId?: string;
+	zoom?: number;
 	container: MutableRefObject<HTMLElement>;
 	pageGap?: number;
 	showPageNumbers?: boolean;
 }
 
-
 export default function VerticalPages(props: VerticalPagesProps) {
 	const [containerWidth, setContainerWidth] = useState<number>(null);
 	const innerContainerEl = useRef<HTMLDivElement>(null);
+
 	const scaledSize = useScaledSize({
 		pdf: props.pdf,
 		pdfId: props.pdfId,
@@ -40,7 +43,15 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		container: props.container,
 		innerContainerEl,
 		pageGap: props.pageGap,
+		zoom: props.zoom,
 	} as ScaledSizeParams);
+
+	useScrollSaver({
+		container: props.container,
+		scaledSize,
+		pdfId: props.pdfId,
+		rememberScroll: props.rememberScroll,
+	} as ScrollSaver);
 
 	useEffect(() => {
 		let resizeTimer: number = null;
@@ -48,7 +59,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 		const updateWidth = () => {
 			if (cancelled) return;
-			setContainerWidth(innerContainerEl.current.clientWidth);
+			setContainerWidth(props.container.current.clientWidth);
 		};
 
 		const onResize = () => {
@@ -70,37 +81,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, [props.pdf]);
-
-	useEffect(() => {
-		let scrollTimer: number = null;
-
-		const saveScroll = () => {
-			const scrollTop = props.container.current.scrollTop;
-			if (props.rememberScroll && props.pdfId) {
-				sessionStorage.setItem(`pdf.${props.pdfId}.scrollTop`, `${scrollTop}`);
-			}
-		};
-
-		const onScroll = () => {
-			if (scrollTimer) {
-				clearTimeout(scrollTimer);
-				scrollTimer = null;
-			}
-			scrollTimer = window.setTimeout(saveScroll, 200);
-		};
-
-		props.container.current.addEventListener('scroll', onScroll);
-
-		return () => {
-			props.container.current.removeEventListener('scroll', onScroll);
-			if (scrollTimer) {
-				clearTimeout(scrollTimer);
-				scrollTimer = null;
-			}
-		};
-
-	}, [props.container, props.pdfId, props.rememberScroll]);
+	}, [props.container, props.pdf]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{scaledSize ?

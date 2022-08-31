@@ -98,12 +98,13 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
 				item.id = itemIdMap[item.id];
-				item.title = await Folder.findUniqueItemTitle(item.title, item.parent_id);
 
 				if (item.parent_id) {
 					await setFolderToImportTo(item.parent_id);
 					item.parent_id = itemIdMap[item.parent_id];
 				}
+
+				item.title = await Folder.findUniqueItemTitle(item.title, item.parent_id);
 			} else if (itemType === BaseModel.TYPE_RESOURCE) {
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
 				item.id = itemIdMap[item.id];
