@@ -970,7 +970,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
-	private setAlarm_onPress() {
+	public setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
 
