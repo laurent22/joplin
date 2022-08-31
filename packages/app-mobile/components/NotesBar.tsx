@@ -20,7 +20,6 @@ interface Props {
 	activeFolderId: string;
 	dispatch: any;
 	selectedNoteId: string;
-	toggleNotesBar: ()=> void;
 	settings: any;
 }
 
@@ -127,8 +126,12 @@ function NotesBarComponent(props: Props) {
 		<View style={styles().divider}></View>
 	);
 
+	const handleNotesBarClose = () => {
+		props.dispatch({ type: 'NOTES_BAR_CLOSE' });
+	};
+
 	const closeButtonComp = (
-		<TouchableOpacity onPress={props.toggleNotesBar}>
+		<TouchableOpacity onPress={handleNotesBarClose}>
 			<Icon name="close" style={[styles().top, styles().closeIcon]}/>
 		</TouchableOpacity>
 	);

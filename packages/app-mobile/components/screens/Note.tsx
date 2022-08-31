@@ -588,12 +588,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	private onNotesBarToggle = async () => {
-		if (this.props.showNotesBar === true) {
+		if (this.props.showNotesBar) {
 			this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
-			this.animateNotesBarClose();
 		} else {
 			this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
-			this.animateNotesBarOpen();
 		}
 	};
 
@@ -612,6 +610,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
 				options: this.sideMenuOptions(),
 			});
+		}
+
+		if (this.props.showNotesBar !== prevProps.showNotesBar) {
+			if (this.props.showNotesBar) {
+				this.animateNotesBarOpen();
+			} else {
+				this.animateNotesBarClose();
+			}
 		}
 	}
 
@@ -1430,7 +1436,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
 				<Animated.View style={this.styles().notesBarContainer}>
-					<NotesBar todoCheckbox_change={this.todoCheckbox_change} toggleNotesBar={this.onNotesBarToggle} />
+					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
 				</Animated.View>
 				<Animated.View style={this.styles().noteComp}>
 					{titleComp}
@@ -1439,6 +1445,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{ this.state.isTablet && noteActionButtonGroupComp }
 			</View>
 		);
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
