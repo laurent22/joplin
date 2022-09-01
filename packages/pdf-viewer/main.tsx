@@ -7,7 +7,7 @@ import MiniViewerApp from './miniViewer';
 import MessageService from './messageService';
 import FullViewer from './FullViewer';
 
-require('./viewer.css');
+require('./common.css');
 
 // Setting worker path to worker bundle.
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';

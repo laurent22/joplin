@@ -12,7 +12,6 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	justify-content: center;
 	align-items: center;
 	flex-flow: column;
-	width: fit-content;
 	min-width: 100%;
 	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;

@@ -3,11 +3,12 @@ import * as React from 'react';
 import usePdfData from './hooks/usePdfData';
 import VerticalPages from './VerticalPages';
 import MessageService from './messageService';
-import { OpenLinkButton, CloseButton } from './ui/IconButtons';
+import { DownloadButton, PrintButton, OpenLinkButton, CloseButton } from './ui/IconButtons';
 import ZoomControls from './ui/ZoomControls';
 import styled from 'styled-components';
 import GotoInput from './ui/GotoPage';
 
+require('./fullScreen.css');
 
 const TitleWrapper = styled.div`
 	font-size: 0.7rem;
@@ -15,14 +16,15 @@ const TitleWrapper = styled.div`
 	display: flex;
 	align-items: start;
 	flex-direction: column;
-	min-width: 15rem;
+	min-width: 10rem;
 	max-width: 18rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	color: var(--secondary);
-	padding: 0.2rem 0.4rem;
+	padding: 0.2rem 0.6rem;
 	height: 100%;
+	width: 100%;
 	justify-content: center;
 `;
 
@@ -73,14 +75,22 @@ export default function FullViewer(props: FullViewerProps) {
 	return (
 		<div className="full-app">
 			<div className="top-bar">
-				<TitleWrapper>
-					<Title title={props.title}>{props.title || props.pdfId}</Title>
-					<div>{selectedPage} of {pdf.pageCount} pages</div>
-				</TitleWrapper>
-				<ZoomControls onChange={setZoom} zoom={zoom} size={1} />
-				<OpenLinkButton onClick={props.messageService.openExternalViewer} size={1.3} />
-				<GotoInput onChange={goToPage} size={1.3} pageCount={pdf.pageCount} currentPage={selectedPage} />
-				<CloseButton onClick={props.messageService.close} size={1.3} />
+				<div>
+					<TitleWrapper>
+						<Title title={props.title}>{props.title || props.pdfId}</Title>
+						<div>{selectedPage} of {pdf.pageCount} pages</div>
+					</TitleWrapper>
+				</div>
+				<div>
+					<ZoomControls onChange={setZoom} zoom={zoom} size={1} />
+					<OpenLinkButton onClick={props.messageService.openExternalViewer} size={1.3} />
+					<PrintButton onClick={pdf?.printPdf} size={1.3}/>
+					<DownloadButton onClick={pdf?.downloadPdf} size={1.3}/>
+					<GotoInput onChange={goToPage} size={1.3} pageCount={pdf.pageCount} currentPage={selectedPage} />
+				</div>
+				<div>
+					<CloseButton onClick={props.messageService.close} size={1.3} />
+				</div>
 			</div>
 			<div className="viewers dark-bg">
 				<div className="pane thumbnail-pane" ref={thubmnailRef}>
