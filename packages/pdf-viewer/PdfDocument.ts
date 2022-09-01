@@ -1,5 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import { ScaledSize } from './types';
+import TaskQueue from './utils/taskQueue';
 
 interface RenderingTask {
 	resolve: (result: [canvas: HTMLCanvasElement, textLayer: HTMLDivElement])=> void;
@@ -16,7 +17,7 @@ export default class PdfDocument {
 	private doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
-	private renderingQueue: {tasks: RenderingTask[]; lock: boolean};
+	private renderingQueue: {tasks: TaskQueue<RenderingTask>; lock: boolean};
 	private pageSize: {
 		height: number;
 		width: number;
@@ -25,7 +26,7 @@ export default class PdfDocument {
 
 	public constructor(document: HTMLDocument) {
 		this.document = document;
-		this.renderingQueue = { tasks: [], lock: false };
+		this.renderingQueue = { tasks: new TaskQueue<RenderingTask>(), lock: false };
 	}
 
 	public loadDoc = async (url: string | Uint8Array) => {
@@ -142,7 +143,7 @@ export default class PdfDocument {
 		return new Promise<[HTMLCanvasElement, HTMLDivElement]>((resolve, reject) => {
 			if (this.renderingQueue.lock) {
 				// console.warn('Adding to task, page:', pageNo, 'prev queue size:', this.renderingQueue.tasks.length);
-				this.renderingQueue.tasks.push({
+				this.renderingQueue.tasks.enqueue({
 					resolve,
 					reject,
 					pageNo,
@@ -155,7 +156,7 @@ export default class PdfDocument {
 				const next = () => {
 					this.renderingQueue.lock = false;
 					if (this.renderingQueue.tasks.length > 0) {
-						const task = this.renderingQueue.tasks.shift();
+						const task = this.renderingQueue.tasks.dequeue();
 						// console.log('executing next task of page:', task.pageNo, 'remaining tasks:', this.renderingQueue.tasks.length);
 						this.renderPage(task.pageNo, task.scaledSize, task.textLayer, task.isCancelled).then(task.resolve).catch(task.reject);
 					}
