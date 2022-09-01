@@ -222,9 +222,9 @@ function NotesBarComponent(props: Props) {
 	};
 
 	const handleQuerySubmit = async () => {
-		const query_ = query.trim();
+		const trimmedQuery = query.trim();
 
-		if (!query_) {
+		if (!trimmedQuery) {
 			props.dispatch({
 				type: 'SEARCH_QUERY',
 				query: '',
@@ -232,11 +232,11 @@ function NotesBarComponent(props: Props) {
 		} else {
 			props.dispatch({
 				type: 'SEARCH_QUERY',
-				query: query_,
+				query: trimmedQuery,
 			});
 		}
 
-		setQuery(query_);
+		setQuery(trimmedQuery);
 		await refreshSearch();
 	};
 
