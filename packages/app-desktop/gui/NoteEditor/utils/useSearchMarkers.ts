@@ -32,5 +32,6 @@ export default function useSearchMarkers(showLocalSearch: boolean, localSearchMa
 		output.keywords = highlightedWords;
 
 		return output;
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [highlightedWords, showLocalSearch, localSearchMarkerOptions, searches, selectedSearchId]);
 }

@@ -14,21 +14,24 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, selectedLanguage: string = null, useSpellChecker: boolean = null) => {
-			selectedLanguage = selectedLanguage === null ? context.state.settings['spellChecker.language'] : selectedLanguage;
+		execute: async (context: CommandContext, selectedLanguages: string[] = null, useSpellChecker: boolean = null) => {
+			selectedLanguages = selectedLanguages === null ? context.state.settings['spellChecker.languages'] : selectedLanguages;
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
-			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker);
+			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker);
 			const menu = Menu.buildFromTemplate(menuItems as any);
 			menu.popup(bridge().window());
 		},
 
 		mapStateToTitle(state: AppState): string {
 			if (!state.settings['spellChecker.enabled']) return null;
-			const language = state.settings['spellChecker.language'];
-			if (!language) return null;
-			const s = language.split('-');
-			return s[0];
+			const languages = state.settings['spellChecker.languages'];
+			if (languages.length === 0) return null;
+			const s: string[] = [];
+			languages.forEach((language: string) => {
+				s.push(language.split('-')[0]);
+			});
+			return s.join(', ');
 		},
 	};
 };

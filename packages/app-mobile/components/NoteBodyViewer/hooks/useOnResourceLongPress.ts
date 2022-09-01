@@ -36,5 +36,6 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 			reg.logger().error('Could not handle link long press', e);
 			ToastAndroid.show('An error occurred, check log for details', ToastAndroid.SHORT);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [onJoplinLinkClick]);
 }

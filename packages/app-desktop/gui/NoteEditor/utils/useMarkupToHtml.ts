@@ -21,6 +21,8 @@ export interface MarkupToHtmlOptions {
 	bodyOnly?: boolean;
 	mapsToLine?: boolean;
 	useCustomPdfViewer?: boolean;
+	noteId?: string;
+	vendorDir?: string;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
@@ -31,6 +33,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [plugins, customCss]);
 
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
@@ -62,5 +65,6 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 		}, options));
 
 		return result;
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [themeId, customCss, markupToHtml]);
 }

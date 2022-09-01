@@ -10,18 +10,20 @@
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch --config webpack.config.js --mode=development",
+    "build": "webpack --config webpack.config.js --mode=production",
     "test": "jest",
-    "test-ci": "yarn test"
+    "test-ci": "yarn test",
+    "postinstall": "yarn build"
   },
   "author": "Joplin",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^28.1.6",
     "@types/pdfjs-dist": "^2.10.378",
-    "@types/react": "^18.0.14",
+    "@types/react": "16.9.55",
     "@types/react-dom": "^16.9.0",
+    "@types/styled-components": "^5.1.25",
     "babel-jest": "^28.1.3",
     "css-loader": "^6.7.1",
     "jest": "^28.1.3",
@@ -34,9 +36,13 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@joplin/lib": "workspace:^",
     "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
-    "react-dom": "16.9.0"
+    "react-dom": "16.9.0",
+    "styled-components": "^5.3.5"
   }
 }

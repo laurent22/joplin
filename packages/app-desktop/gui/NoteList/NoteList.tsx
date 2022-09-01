@@ -273,6 +273,7 @@ const NoteListComponent = (props: Props) => {
 			onTitleClick={noteItem_titleClick}
 			onContextMenu={itemContextMenu}
 		/>;
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [style, props.themeId, width, itemHeight, dragOverTargetNoteIndex, props.provisionalNoteIds, props.selectedNoteIds, props.watchedNoteFiles,
 		props.notes,
 		props.notesParentType,
@@ -305,6 +306,7 @@ const NoteListComponent = (props: Props) => {
 		if (previousVisible !== props.visible) {
 			updateSizeState();
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [previousSelectedNoteIds,previousNotes, previousVisible, props.selectedNoteIds, props.notes]);
 
 	const scrollNoteIndex_ = (keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) => {
@@ -439,6 +441,7 @@ const NoteListComponent = (props: Props) => {
 		return () => {
 			props.resizableLayoutEventEmitter.off('resize', resizableLayout_resize);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.resizableLayoutEventEmitter]);
 
 	useEffect(() => {
@@ -453,6 +456,7 @@ const NoteListComponent = (props: Props) => {
 		};
 	}, []);
 
+	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	useEffect(() => {
 		// When a note list item is styled by userchrome.css, its height is reflected.
 		// Ref. https://github.com/laurent22/joplin/pull/6542
