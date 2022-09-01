@@ -2184,6 +2184,12 @@ packages/tools/buildServerDocker.js.map
 packages/tools/buildServerDocker.test.d.ts
 packages/tools/buildServerDocker.test.js
 packages/tools/buildServerDocker.test.js.map
+packages/tools/bundleDefaultPlugins.d.ts
+packages/tools/bundleDefaultPlugins.js
+packages/tools/bundleDefaultPlugins.js.map
+packages/tools/bundleDefaultPlugins.test.d.ts
+packages/tools/bundleDefaultPlugins.test.js
+packages/tools/bundleDefaultPlugins.test.js.map
 packages/tools/checkLibPaths.d.ts
 packages/tools/checkLibPaths.js
 packages/tools/checkLibPaths.js.map
