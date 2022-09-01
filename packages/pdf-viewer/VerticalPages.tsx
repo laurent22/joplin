@@ -28,7 +28,7 @@ export interface VerticalPagesProps {
 	container: MutableRefObject<HTMLElement>;
 	pageGap: number;
 	showPageNumbers?: boolean;
-	onActivePageChange?: (page: number)=> void;
+	onActivePageChange: (page: number)=> void;
 }
 
 export default function VerticalPages(props: VerticalPagesProps) {
