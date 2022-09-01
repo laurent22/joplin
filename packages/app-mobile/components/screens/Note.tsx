@@ -1413,16 +1413,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// Pan responder that handles making the note actions draggable.
 		// The note actions need to be draggable, because they could
 		// potentially obstruct some portion of a note's content
-		this.noteActionsDragResponder = PanResponder.create({
+		const noteActionsDragResponder = PanResponder.create({
 			onMoveShouldSetPanResponder: () => true,
-			onPanResponderMove: (_e: any, gestureState: any) => {
+			onPanResponderMove: (_e, gestureState) => {
 				handleNoteActionsDrag(gestureState);
 			},
 		});
 
 		// Note actions are the notesbar and split layout toggle button
 		const noteActionButtonGroupComp = (
-			<Animated.View style={this.styles().noteActionButtonGroup} {...this.noteActionsDragResponder.panHandlers} >
+			<Animated.View style={this.styles().noteActionButtonGroup} {...noteActionsDragResponder.panHandlers} >
 				{/* Temporarily hiding the split layout button till it's implemented */}
 				{/* <TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
 					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
