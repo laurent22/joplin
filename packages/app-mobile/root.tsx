@@ -64,7 +64,7 @@ const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
-const { MenuProvider } = require('react-native-popup-menu');
+import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu from './components/SideMenu';
 const { SideMenuContent } = require('./components/side-menu-content.js');
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
