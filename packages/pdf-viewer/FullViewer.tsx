@@ -48,7 +48,7 @@ export interface FullViewerProps {
 }
 
 export default function FullViewer(props: FullViewerProps) {
-	const pdf = usePdfData(props.pdfPath);
+	const pdfDocument = usePdfData(props.pdfPath);
 	const [zoom, setZoom] = useState<number>(1);
 	const [startPage, setStartPage] = useState<number>(props.startPage || 1);
 	const [selectedPage, setSelectedPage] = useState<number>(startPage);
@@ -60,12 +60,12 @@ export default function FullViewer(props: FullViewerProps) {
 	}, []);
 
 	const goToPage = useCallback((pageNo: number) => {
-		if (pageNo < 1 || pageNo > pdf.pageCount || pageNo === selectedPage) return;
+		if (pageNo < 1 || pageNo > pdfDocument.pageCount || pageNo === selectedPage) return;
 		setSelectedPage(pageNo);
 		setStartPage(pageNo);
-	}, [pdf, selectedPage]);
+	}, [pdfDocument, selectedPage]);
 
-	if (!pdf) {
+	if (!pdfDocument) {
 		return (
 			<div className="full-app loading">
 				<div>Loading pdf..</div>
@@ -78,15 +78,15 @@ export default function FullViewer(props: FullViewerProps) {
 				<div>
 					<TitleWrapper>
 						<Title title={props.title}>{props.title || props.pdfId}</Title>
-						<div>{selectedPage} of {pdf.pageCount} pages</div>
+						<div>{selectedPage} of {pdfDocument.pageCount} pages</div>
 					</TitleWrapper>
 				</div>
 				<div>
 					<ZoomControls onChange={setZoom} zoom={zoom} size={1} />
 					<OpenLinkButton onClick={props.messageService.openExternalViewer} size={1.3} />
-					<PrintButton onClick={pdf?.printPdf} size={1.3}/>
-					<DownloadButton onClick={pdf?.downloadPdf} size={1.3}/>
-					<GotoInput onChange={goToPage} size={1.3} pageCount={pdf.pageCount} currentPage={selectedPage} />
+					<PrintButton onClick={pdfDocument?.printPdf} size={1.3}/>
+					<DownloadButton onClick={pdfDocument?.downloadPdf} size={1.3}/>
+					<GotoInput onChange={goToPage} size={1.3} pageCount={pdfDocument.pageCount} currentPage={selectedPage} />
 				</div>
 				<div>
 					<CloseButton onClick={props.messageService.close} size={1.3} />
@@ -95,7 +95,7 @@ export default function FullViewer(props: FullViewerProps) {
 			<div className="viewers dark-bg">
 				<div className="pane thumbnail-pane" ref={thubmnailRef}>
 					<VerticalPages
-						pdf={pdf}
+						pdfDocument={pdfDocument}
 						isDarkTheme={true}
 						rememberScroll={false}
 						container={thubmnailRef}
@@ -108,7 +108,7 @@ export default function FullViewer(props: FullViewerProps) {
 				</div>
 				<div className="pane main-pane" ref={mainViewerRef}>
 					<VerticalPages
-						pdf={pdf}
+						pdfDocument={pdfDocument}
 						isDarkTheme={true}
 						rememberScroll={false}
 						container={mainViewerRef}
