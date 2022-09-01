@@ -63,7 +63,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 		const updateWidth = () => {
 			if (cancelled) return;
-			setContainerWidth(innerContainerEl.current.clientWidth);
+			setContainerWidth(props.container.current.clientWidth);
 		};
 
 		const onResize = () => {
