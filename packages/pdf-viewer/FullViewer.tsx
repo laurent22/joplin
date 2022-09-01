@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react';
 import * as React from 'react';
-import usePdfData from './hooks/usePdfData';
+import usePdfDocument from './hooks/usePdfDocument';
 import VerticalPages from './VerticalPages';
 import MessageService from './messageService';
 import { DownloadButton, PrintButton, OpenLinkButton, CloseButton } from './ui/IconButtons';
@@ -48,7 +48,7 @@ export interface FullViewerProps {
 }
 
 export default function FullViewer(props: FullViewerProps) {
-	const pdfDocument = usePdfData(props.pdfPath);
+	const pdfDocument = usePdfDocument(props.pdfPath);
 	const [zoom, setZoom] = useState<number>(1);
 	const [startPage, setStartPage] = useState<number>(props.startPage || 1);
 	const [selectedPage, setSelectedPage] = useState<number>(startPage);
