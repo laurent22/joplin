@@ -13,6 +13,7 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	align-items: center;
 	flex-flow: column;
 	min-width: 100%;
+	width: fit-content;
 	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
@@ -26,6 +27,7 @@ export interface VerticalPagesProps {
 	zoom?: number;
 	container: MutableRefObject<HTMLElement>;
 	pageGap?: number;
+	widthPercent?: number;
 	showPageNumbers?: boolean;
 	selectedPage?: number;
 	textSelectable?: boolean;
@@ -67,7 +69,8 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 		const updateWidth = () => {
 			if (cancelled) return;
-			setContainerWidth(innerContainerEl.current.clientWidth);
+			const factor = (props.widthPercent || 100) / 100;
+			setContainerWidth(props.container.current.clientWidth * factor);
 		};
 
 		const onResize = () => {
@@ -89,7 +92,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, [props.container, props.pdf]);
+	}, [props.container, props.pdf, props.widthPercent]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{scaledSize ?

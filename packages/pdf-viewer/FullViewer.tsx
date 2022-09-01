@@ -100,6 +100,7 @@ export default function FullViewer(props: FullViewerProps) {
 						rememberScroll={false}
 						container={thubmnailRef}
 						pageGap={16}
+						widthPercent={86}
 						showPageNumbers={true}
 						selectedPage={selectedPage}
 						onPageClick={goToPage}
