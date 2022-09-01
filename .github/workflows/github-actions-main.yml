@@ -1,7 +1,11 @@
 name: Joplin Continuous Integration
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   Main:
+    permissions:
+      contents: write # for publishing
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
