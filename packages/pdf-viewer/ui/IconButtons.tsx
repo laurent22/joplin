@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPrint, faDownload, faSquareArrowUpRight, faXmark, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faPrint, faDownload, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 
 const ButtonElement = styled.button<{ hoverColor?: string; size?: number; color?: string }>`
@@ -39,20 +39,6 @@ export function Button({ onClick, icon, name, size, color, hoverColor }: ButtonP
 			hoverColor={hoverColor || 'secondary'}>
 			<FontAwesomeIcon icon={icon} />
 		</ButtonElement>
-	);
-
-
-}
-
-export function OpenLinkButton({ onClick, size, color }: ButtonProps) {
-	return (
-		<Button onClick={onClick} icon={faSquareArrowUpRight} name='Open in another app' size={size} color={color} />
-	);
-}
-
-export function CloseButton({ onClick, size, color }: ButtonProps) {
-	return (
-		<Button onClick={onClick} icon={faXmark} name='Close' size={size} color={color} hoverColor={'red'} />
 	);
 }
 
