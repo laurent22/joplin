@@ -19,7 +19,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--grey);
+	background: rgb(112, 112, 112);
 	border-radius: 5px;
 }
 
@@ -27,7 +27,7 @@
 	--white: rgb(255, 255, 255);
 	--light: rgb(219, 219, 219);
 	--grey: rgb(128, 128, 128);
-	--dark: rgb(1, 0, 34);
+	--dark: rgb(38, 38, 38);
 	--black: rgb(24, 24, 24);
 
 	--red: #ff000d;
@@ -77,68 +77,11 @@ hr {
 	overflow: visible;
 }
 
-.mini-app {
-	display: grid;
-	grid-template-rows: auto 2rem;
-	height: 100vh;
-	width: 100vw;
-	background-color: var(--bg);
-	overflow: hidden;
-	border-radius: 0.4rem;
-	border: solid thin var(--tertiary);
-	padding-top: 0.6rem;
-	padding-right: 0.25rem;
-	background-color: rgb(240, 241, 245);
+.dark-bg{
+	background-color: rgb(171, 171, 171);
 }
 
-.mini-app.focused {
-	border: solid thin var(--grey);
-}
-
-.mini-app.loading {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-[data-theme="dark"] .mini-app {
+[data-theme="dark"] .dark-bg {
 	background-color: rgb(54, 54, 54);
 }
 
-.app-bottom-bar {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0.2rem 0.5rem;
-	font-size: 0.8rem;
-	color: var(--grey);
-}
-
-.app-pages {
-	display: block;
-	margin: 0px auto;
-	overflow-x: hidden;
-	width: 100%;
-	height: 100%;
-	padding: 0.5rem;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	overflow-y: hidden;
-	padding-right: 0.25rem;
-	position: relative;
-}
-
-.app-pages.focused {
-	padding-right: 0px;
-	overflow-y: auto;
-	overflow-x: auto;
-}
-
-.pdf-info {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
-	column-gap: 0.2rem;
-}

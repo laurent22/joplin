@@ -21,7 +21,7 @@ const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage,
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		if (!pdf || !containerWidth) return;
 		// console.log('scaledSize calculation triggered');
-		const effectiveWidth = Math.min(containerWidth - 20, 900) * (zoom || 1);
+		const effectiveWidth = Math.min(containerWidth - 10, 900) * (zoom || 1);
 		const scaledSize_ = await pdf.getScaledSize(null, effectiveWidth);
 		if (event.cancelled) return;
 

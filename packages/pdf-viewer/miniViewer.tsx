@@ -1,8 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import useIsFocused from './hooks/useIsFocused';
 import usePdfData from './hooks/usePdfData';
 import VerticalPages from './VerticalPages';
 import ZoomControls from './ui/ZoomControls';
+import { DownloadButton, PrintButton } from './ui/IconButtons';
+
+require('./miniViewer.css');
 
 export interface MiniViewerAppProps {
 	pdfPath: string;
@@ -16,6 +19,11 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 	const isFocused = useIsFocused();
 	const [zoom, setZoom] = useState<number>(1);
 	const containerEl = useRef<HTMLDivElement>(null);
+	const [activePage, setActivePage] = useState(1);
+
+	const onActivePageChange = useCallback((page: number) => {
+		setActivePage(page);
+	}, []);
 
 	if (!pdf) {
 		return (
@@ -35,14 +43,17 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 					rememberScroll={true}
 					container={containerEl}
 					showPageNumbers={true}
-					zoom={zoom} />
+					zoom={zoom}
+					onActivePageChange={onActivePageChange} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>
-					<div style={{ paddingRight: '0.4rem' }}>{pdf.pageCount} pages</div>
+					<div style={{ paddingRight: '0.4rem' }}>{activePage}/{pdf.pageCount} pages</div>
 					<ZoomControls onChange={setZoom} zoom={zoom} />
+					<PrintButton onClick={pdf?.printPdf}/>
+					<DownloadButton onClick={pdf?.downloadPdf}/>
 				</div>
-				<div>{isFocused ? '' : 'Click to enable scroll'}</div>
+				<div className="can-hide">{isFocused ? '' : 'Click to enable scroll'}</div>
 			</div>
 		</div>
 	);

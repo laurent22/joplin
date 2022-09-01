@@ -12,9 +12,8 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	justify-content: center;
 	align-items: center;
 	flex-flow: column;
-	width: fit-content;
 	min-width: 100%;
-	min-height: 100%;
+	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
 
@@ -28,6 +27,7 @@ export interface VerticalPagesProps {
 	container: MutableRefObject<HTMLElement>;
 	pageGap?: number;
 	showPageNumbers?: boolean;
+	onActivePageChange?: (page: number)=> void;
 }
 
 export default function VerticalPages(props: VerticalPagesProps) {
@@ -51,6 +51,9 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		scaledSize,
 		pdfId: props.pdfId,
 		rememberScroll: props.rememberScroll,
+		pdf: props.pdf,
+		pageGap: props.pageGap,
+		onActivePageChange: props.onActivePageChange,
 	} as ScrollSaver);
 
 	useEffect(() => {
@@ -59,7 +62,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 		const updateWidth = () => {
 			if (cancelled) return;
-			setContainerWidth(props.container.current.clientWidth);
+			setContainerWidth(innerContainerEl.current.clientWidth);
 		};
 
 		const onResize = () => {

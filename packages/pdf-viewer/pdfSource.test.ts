@@ -53,4 +53,15 @@ describe('pdfData', () => {
 		expect(scaledSize.scale).toBeCloseTo(0.336157);
 	});
 
+	test('Should get correct active page', async () => {
+		const file = await loadFile(pdfFilePath1);
+		const pdf = new PdfData();
+		await pdf.loadDoc(file);
+		const scaledSize = await pdf.getScaledSize(null, 200);
+		const activePage = pdf.getActivePageNo(scaledSize, 3, 0);
+		expect(activePage).toBe(1);
+		const activePage2 = pdf.getActivePageNo(scaledSize, 4, 8000);
+		expect(activePage2).toBe(1);
+	});
+
 });

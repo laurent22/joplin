@@ -1,6 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist';
 
-
 export interface ScaledSize {
 	height: number;
 	width: number;
@@ -70,5 +69,37 @@ export class PdfData {
 			width: actualSize.width * scale,
 			scale,
 		};
+	};
+
+	public getActivePageNo = (scaledSize: ScaledSize, pageGap: number, scrollTop: number): number => {
+		const pageHeight = scaledSize.height + pageGap;
+		const pageNo = Math.floor(scrollTop / pageHeight) + 1;
+		return Math.min(pageNo, this.pageCount);
+	};
+
+	public printPdf = () => {
+		const frame = document.createElement('iframe');
+		frame.style.position = 'fixed';
+		frame.style.display = 'none';
+		frame.style.height = '100%';
+		frame.style.width = '100%';
+		document.body.appendChild(frame);
+		frame.onload = () => {
+			frame.contentWindow.onafterprint = () => {
+				frame.remove();
+			};
+			frame.focus();
+			frame.contentWindow.print();
+		};
+		frame.src = this.url as string;
+	};
+
+	public downloadPdf = async () => {
+		const url = this.url as string;
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = url;
+		link.click();
+		link.remove();
 	};
 }
