@@ -1438,6 +1438,24 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
+		const renderViewNoteButton = () => {
+			const buttons = [];
+
+			buttons.push({
+				title: _('View'),
+				icon: 'eye-outline',
+				onPress: () => {
+					this.setState({ mode: 'view' });
+				},
+			});
+
+			if (this.state.mode === 'view') return null;
+
+			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
+		};
+
+		const viewNoteButtonComp = renderViewNoteButton();
+
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
@@ -1579,6 +1597,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{noteMainComp}
 				{!this.props.useSplitLayout && actionButtonComp}
+				{!this.props.useSplitLayout && this.state.mode === 'edit' && viewNoteButtonComp}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
