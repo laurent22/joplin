@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 import useIsFocused from './hooks/useIsFocused';
-import usePdfData from './hooks/usePdfData';
+import usePdfDocument from './hooks/usePdfDocument';
 import VerticalPages from './VerticalPages';
 import ZoomControls from './ui/ZoomControls';
 import MessageService from './messageService';
@@ -18,7 +18,7 @@ export interface MiniViewerAppProps {
 }
 
 export default function MiniViewerApp(props: MiniViewerAppProps) {
-	const pdfDocument = usePdfData(props.pdfPath);
+	const pdfDocument = usePdfDocument(props.pdfPath);
 	const isFocused = useIsFocused();
 	const [zoom, setZoom] = useState<number>(1);
 	const containerEl = useRef<HTMLDivElement>(null);
