@@ -1,5 +1,17 @@
 # Joplin Android app changelog
 
+## [android-v2.9.2](https://github.com/laurent22/joplin/releases/tag/android-v2.9.2) (Pre-release) - 2022-09-01T11:14:58Z
+
+- New: Add Markdown toolbar (#6753 by Henry Heino)
+- New: Add long-press tooltips (#6758 by Henry Heino)
+- Improved: Enable spellcheck by default on beta editor (#6778 by Henry Heino)
+- Improved: Setting to disable spellcheck in beta editor (#6780 by Henry Heino)
+- Fixed: Don't reload the application on screen rotation (#6737) (#6732 by Henry Heino)
+- Fixed: Fix default font in beta editor (#6760) (#6759 by Henry Heino)
+- Fixed: Fix side menu width on wide screen devices (#6662 by Tolulope Malomo)
+- Fixed: Fixed Android filesystem sync (resources) (#6789) (#6779 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixed handling of normal paths in filesystem sync (#6792) (#6791 by [@jd1378](https://github.com/jd1378))
+
 ## [android-v2.9.1](https://github.com/laurent22/joplin/releases/tag/android-v2.9.1) (Pre-release) - 2022-08-12T17:14:49Z
 
 - New: Add alt text/roles to some buttons to improve accessibility (#6616 by Henry Heino)
