@@ -131,7 +131,11 @@ function NotesBarComponent(props: Props) {
 	};
 
 	const closeButtonComp = (
-		<TouchableOpacity onPress={handleNotesBarClose}>
+		<TouchableOpacity
+			onPress={handleNotesBarClose}
+			accessibilityLabel={_('Close notes bar')}
+			accessibilityRole="button"
+		>
 			<Icon name="close" style={[styles().top, styles().closeIcon]}/>
 		</TouchableOpacity>
 	);
