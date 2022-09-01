@@ -18,7 +18,7 @@ export interface MiniViewerAppProps {
 }
 
 export default function MiniViewerApp(props: MiniViewerAppProps) {
-	const pdf = usePdfData(props.pdfPath);
+	const pdfDocument = usePdfData(props.pdfPath);
 	const isFocused = useIsFocused();
 	const [zoom, setZoom] = useState<number>(1);
 	const containerEl = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 		props.messageService.openFullScreenViewer(props.resourceId, pageNo);
 	}, [props.messageService, props.resourceId]);
 
-	if (!pdf) {
+	if (!pdfDocument) {
 		return (
 			<div className="mini-app loading">
 				<div>Loading pdf..</div>
@@ -43,7 +43,7 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 		<div className={`mini-app${isFocused ? ' focused' : ''}`}>
 			<div className={`app-pages${isFocused ? ' focused' : ''}`} ref={containerEl}>
 				<VerticalPages
-					pdf={pdf}
+					pdfDocument={pdfDocument}
 					isDarkTheme={props.isDarkTheme}
 					anchorPage={props.anchorPage}
 					pdfId={props.pdfId}
@@ -54,14 +54,15 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 					textSelectable={true}
 					onTextSelect={props.messageService.textSelected}
 					onDoubleClick={onDoubleClick}
+					pageGap={2}
 					onActivePageChange={onActivePageChange} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>
-					<div style={{ paddingRight: '0.4rem' }}>{activePage}/{pdf.pageCount} pages</div>
+					<div style={{ paddingRight: '0.4rem' }}>{activePage}/{pdfDocument.pageCount} pages</div>
 					<ZoomControls onChange={setZoom} zoom={zoom} />
-					<PrintButton onClick={pdf?.printPdf}/>
-					<DownloadButton onClick={pdf?.downloadPdf}/>
+					<PrintButton onClick={pdfDocument?.printPdf}/>
+					<DownloadButton onClick={pdfDocument?.downloadPdf}/>
 				</div>
 				<div className="can-hide">{isFocused ? '' : 'Click to enable scroll'}</div>
 			</div>

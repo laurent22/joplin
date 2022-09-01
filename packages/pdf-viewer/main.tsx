@@ -15,7 +15,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 const url = window.frameElement.getAttribute('x-url');
 const type = window.frameElement.getAttribute('x-type');
 const appearance = window.frameElement.getAttribute('x-appearance');
-const anchorPage = window.frameElement.getAttribute('x-anchorPage');
+const anchorPage = Number(window.frameElement.getAttribute('x-anchorPage')) || null;
 const pdfId = window.frameElement.getAttribute('id');
 const resourceId = window.frameElement.getAttribute('x-resourceid');
 const title = window.frameElement.getAttribute('x-title');
@@ -28,14 +28,14 @@ function App() {
 	if (type === 'mini') {
 		return <MiniViewerApp pdfPath={url}
 			isDarkTheme={appearance === 'dark'}
-			anchorPage={anchorPage ? Number(anchorPage) : null}
+			anchorPage={anchorPage}
 			pdfId={pdfId}
 			resourceId={resourceId}
 			messageService={messageService}/>;
 	} else if (type === 'full') {
 		return <FullViewer pdfPath={url}
 			isDarkTheme={appearance === 'dark'}
-			startPage={anchorPage ? Number(anchorPage) : 1}
+			startPage={anchorPage || 1}
 			title={title}
 			messageService={messageService} />;
 	}

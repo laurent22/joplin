@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPrint, faDownload, faSquareArrowUpRight, faXmark, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { IconButtonProps } from '../types';
 
 
 const ButtonElement = styled.button<{ hoverColor?: string; size?: number; color?: string }>`
@@ -22,16 +23,16 @@ const ButtonElement = styled.button<{ hoverColor?: string; size?: number; color?
     }
 `;
 
-interface ButtonProps {
-    icon?: IconDefinition;
-    onClick?: ()=> void;
-    name?: string;
-    size?: number;
-    color?: string;
+interface BaseButtonProps {
+    icon: IconDefinition;
+    onClick: ()=> void;
+    name: string;
+    size: number;
+    color: string;
     hoverColor?: string;
 }
 
-export function Button({ onClick, icon, name, size, color, hoverColor }: ButtonProps) {
+function BaseButton({ onClick, icon, name, size, color, hoverColor }: BaseButtonProps) {
 	return (
 		<ButtonElement onClick={onClick} title={name}
 			color={color}
@@ -40,30 +41,28 @@ export function Button({ onClick, icon, name, size, color, hoverColor }: ButtonP
 			<FontAwesomeIcon icon={icon} />
 		</ButtonElement>
 	);
-
-
 }
 
-export function OpenLinkButton({ onClick, size, color }: ButtonProps) {
+export function OpenLinkButton({ onClick, size, color }: IconButtonProps) {
 	return (
-		<Button onClick={onClick} icon={faSquareArrowUpRight} name='Open in another app' size={size} color={color} />
+		<BaseButton onClick={onClick} icon={faSquareArrowUpRight} name='Open in another app' size={size} color={color} />
 	);
 }
 
-export function CloseButton({ onClick, size, color }: ButtonProps) {
+export function CloseButton({ onClick, size, color }: IconButtonProps) {
 	return (
-		<Button onClick={onClick} icon={faXmark} name='Close' size={size} color={color} hoverColor={'red'} />
+		<BaseButton onClick={onClick} icon={faXmark} name='Close' size={size} color={color} hoverColor={'red'} />
 	);
 }
 
-export function DownloadButton({ onClick, size, color }: ButtonProps) {
+export function DownloadButton({ onClick, size, color }: IconButtonProps) {
 	return (
-		<Button onClick={onClick} icon={faDownload} name='Download' size={size} color={color} />
+		<BaseButton onClick={onClick} icon={faDownload} name='Download' size={size} color={color} />
 	);
 }
 
-export function PrintButton({ onClick, size, color }: ButtonProps) {
+export function PrintButton({ onClick, size, color }: IconButtonProps) {
 	return (
-		<Button onClick={onClick} icon={faPrint} name='Print' size={size} color={color} />
+		<BaseButton onClick={onClick} icon={faPrint} name='Print' size={size} color={color} />
 	);
 }

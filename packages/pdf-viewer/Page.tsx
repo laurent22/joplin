@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, MutableRefObject, useCallback } from 'reac
 import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
 import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect';
-import { PdfData, ScaledSize } from './pdfSource';
+import PdfDocument from './PdfDocument';
+import { ScaledSize } from './types';
 import styled from 'styled-components';
 
 
@@ -38,7 +39,7 @@ const PageInfo = styled.div<{ isSelected?: boolean }>`
 `;
 
 export interface PageProps {
-	pdf: PdfData;
+	pdfDocument: PdfDocument;
 	pageNo: number;
 	focusOnLoad: boolean;
 	isAnchored: boolean;
@@ -73,7 +74,7 @@ export default function Page(props: PageProps) {
 
 		const renderPage = async () => {
 			try {
-				const [canvas, textLayer] = await props.pdf.renderPage(props.pageNo, props.scaledSize, props.textSelectable, isCancelled);
+				const [canvas, textLayer] = await props.pdfDocument.renderPage(props.pageNo, props.scaledSize, props.textSelectable, isCancelled);
 				wrapperRef.current.appendChild(canvas);
 				if (textLayer) wrapperRef.current.appendChild(textLayer);
 				if (canvasRef.current) canvasRef.current.remove();
@@ -93,7 +94,7 @@ export default function Page(props: PageProps) {
 			void renderPage();
 		}
 
-	}, [props.scaledSize, isVisible, props.textSelectable, props.pageNo, props.pdf]);
+	}, [props.scaledSize, isVisible, props.textSelectable, props.pageNo, props.pdfDocument]);
 
 	useEffect(() => {
 		if (props.focusOnLoad) {

@@ -1,10 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist';
-
-export interface ScaledSize {
-	height: number;
-	width: number;
-	scale: number;
-}
+import { ScaledSize } from './types';
 
 interface RenderingTask {
 	resolve: (result: [canvas: HTMLCanvasElement, textLayer: HTMLDivElement])=> void;
@@ -15,7 +10,8 @@ interface RenderingTask {
 	isCancelled: ()=> boolean;
 }
 
-export class PdfData {
+
+export default class PdfDocument {
 	public url: string | Uint8Array;
 	private doc: any = null;
 	public pageCount: number = null;
@@ -25,8 +21,10 @@ export class PdfData {
 		height: number;
 		width: number;
 	} = null;
+	private document: HTMLDocument = null;
 
-	public constructor() {
+	public constructor(document: HTMLDocument) {
+		this.document = document;
 		this.renderingQueue = { tasks: [], lock: false };
 	}
 
@@ -85,7 +83,7 @@ export class PdfData {
 	public getActivePageNo = (scaledSize: ScaledSize, pageGap: number, scrollTop: number): number => {
 		const pageHeight = scaledSize.height + pageGap;
 		const pageNo = Math.floor(scrollTop / pageHeight) + 1;
-		return pageNo;
+		return Math.min(pageNo, this.pageCount);
 	};
 
 	private renderPageImpl = async (pageNo: number, scaledSize: ScaledSize, textLayer: boolean, isCancelled: ()=> boolean): Promise<[HTMLCanvasElement, HTMLDivElement]> => {
@@ -99,7 +97,7 @@ export class PdfData {
 		const page = await this.getPage(pageNo);
 		checkCancelled();
 
-		const canvas = document.createElement('canvas');
+		const canvas = this.document.createElement('canvas');
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		canvas.width = viewport.width;
 		canvas.height = viewport.height;
@@ -116,7 +114,7 @@ export class PdfData {
 
 		let textLayerDiv = null;
 		if (textLayer) {
-			textLayerDiv = document.createElement('div');
+			textLayerDiv = this.document.createElement('div');
 			textLayerDiv.classList.add('textLayer');
 			const txtContext = await page.getTextContent();
 			checkCancelled();
@@ -169,12 +167,12 @@ export class PdfData {
 	}
 
 	public printPdf = () => {
-		const frame = document.createElement('iframe');
+		const frame = this.document.createElement('iframe');
 		frame.style.position = 'fixed';
 		frame.style.display = 'none';
 		frame.style.height = '100%';
 		frame.style.width = '100%';
-		document.body.appendChild(frame);
+		this.document.body.appendChild(frame);
 		frame.onload = () => {
 			frame.contentWindow.onafterprint = () => {
 				frame.remove();
@@ -187,7 +185,7 @@ export class PdfData {
 
 	public downloadPdf = async () => {
 		const url = this.url as string;
-		const link = document.createElement('a');
+		const link = this.document.createElement('a');
 		link.href = url;
 		link.download = url;
 		link.click();

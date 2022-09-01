@@ -1,17 +1,18 @@
 import { useRef, useEffect, MutableRefObject, useState } from 'react';
-import { ScaledSize, PdfData } from '../pdfSource';
+import PdfDocument from '../PdfDocument';
+import { ScaledSize } from '../types';
 
 export interface ScrollSaver {
 	container: MutableRefObject<HTMLElement>;
 	scaledSize: ScaledSize;
 	pdfId: string;
 	rememberScroll: boolean;
-	onActivePageChange?: (activePage: number)=> void;
-	pdf: PdfData;
-	pageGap?: number;
+	onActivePageChange: (activePage: number)=> void;
+	pdfDocument: PdfDocument;
+	pageGap: number;
 }
 
-const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll, onActivePageChange, pdf, pageGap }: ScrollSaver) => {
+const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll, onActivePageChange, pdfDocument, pageGap }: ScrollSaver) => {
 	const currentScaleSize = useRef(scaledSize);
 	const [currentActivePage, setCurrentActivePage] = useState(1);
 	const currentActivePageRef = useRef(currentActivePage);
@@ -28,7 +29,7 @@ const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll, onActive
 				sessionStorage.setItem(`pdf.${pdfId}.scrollTop`, `${pdfScrollTop}`);
 			}
 			if (onActivePageChange && currentScaleSize.current) {
-				const activePage = pdf.getActivePageNo(currentScaleSize.current, pageGap || 2, container.current.scrollTop);
+				const activePage = pdfDocument.getActivePageNo(currentScaleSize.current, pageGap, container.current.scrollTop);
 				if (currentActivePageRef.current !== activePage) {
 					// console.log('Active page changed', activePage, container.current.scrollTop);
 					currentActivePageRef.current = activePage;
@@ -55,7 +56,7 @@ const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll, onActive
 				scrollTimer = null;
 			}
 		};
-	}, [container, pdfId, rememberScroll, currentScaleSize, onActivePageChange, pdf, pageGap]);
+	}, [container, pdfId, rememberScroll, currentScaleSize, onActivePageChange, pdfDocument, pageGap]);
 
 	useEffect(() => {
 		currentScaleSize.current = scaledSize;
