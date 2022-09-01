@@ -2,6 +2,7 @@ package com.reactnativesafx.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.UriPermission;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -376,8 +378,38 @@ public class DocumentHelper {
   }
 
   public DocumentFile goToDocument(
-      String unknownUriString, boolean createIfDirectoryNotExist, boolean includeLastSegment)
-      throws SecurityException, IOException {
+      String unknownUriStr, boolean createIfDirectoryNotExist, boolean includeLastSegment)
+      throws SecurityException, IOException, IllegalArgumentException {
+      String unknownUriString = UriHelper.getUnifiedUri(unknownUriStr);
+    if (unknownUriString.startsWith(ContentResolver.SCHEME_FILE)) {
+      Uri uri = Uri.parse(unknownUriString);
+      if (uri == null) {
+        throw new IllegalArgumentException("Invalid Uri String");
+      }
+      String path =
+        uri.getPath()
+          .substring(
+            0,
+            includeLastSegment
+              ? uri.getPath().length()
+              : uri.getPath().length() - uri.getLastPathSegment().length());
+
+      if (createIfDirectoryNotExist) {
+        File targetFile = new File(path);
+        if (!targetFile.exists()) {
+          boolean madeFolder = targetFile.mkdirs();
+          if (!madeFolder) {
+            throw new IOException("mkdir failed for Uri with `file` scheme");
+          }
+        }
+      }
+      DocumentFile targetFile = DocumentFile.fromFile(new File(path));
+      if (!targetFile.exists()) {
+        throw new FileNotFoundException(
+          "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
+      }
+      return targetFile;
+    }
     String uriString = UriHelper.normalize(unknownUriString);
     String baseUri = "";
     String appendUri;

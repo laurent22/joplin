@@ -15,6 +15,9 @@ import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
+import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -66,6 +69,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				this.switchSection(this.props.defaultSection);
 			});
 		}
+		updateDefaultPluginsInstallState(getDefaultPluginsInstallState(PluginService.instance(), Object.keys(getDefaultPluginsInfo())), this);
 	}
 
 	private async handleSettingButton(key: string) {
@@ -484,13 +488,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					} else {
 						const paths = await bridge().showOpenDialog();
 						if (!paths || !paths.length) return;
-						const cmd = splitCmd(this.state.settings[key]);
-						cmd[0] = paths[0];
-						updateSettingValue(key, joinCmd(cmd));
+
+						if (md.subType === 'file_path') {
+							updateSettingValue(key, paths[0]);
+						} else {
+							const cmd = splitCmd(this.state.settings[key]);
+							cmd[0] = paths[0];
+							updateSettingValue(key, joinCmd(cmd));
+						}
 					}
 				};
 
 				const cmd = splitCmd(this.state.settings[key]);
+				const path = md.subType === 'file_path_and_args' ? cmd[0] : this.state.settings[key];
 
 				const argComp = md.subType !== 'file_path_and_args' ? null : (
 					<div style={{ ...rowStyle, marginBottom: 5 }}>
@@ -526,7 +536,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											onChange={(event: any) => {
 												onPathChange(event);
 											}}
-											value={cmd[0]}
+											value={path}
 											spellCheck={false}
 										/>
 										<Button
