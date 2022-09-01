@@ -101,7 +101,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			});
 		}
 
-		if (props.html.length > 0) {
+		if (props.html && props.html.length > 0) {
 			void createHtmlFile();
 		} else {
 			setSource(undefined);
