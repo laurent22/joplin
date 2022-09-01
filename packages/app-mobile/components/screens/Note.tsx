@@ -1414,7 +1414,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// The note actions need to be draggable, because they could
 		// potentially obstruct some portion of a note's content
 		this.noteActionsDragResponder = PanResponder.create({
-			onMoveShouldSetPanResponder: () => true,
+			// Only start dragging after moving at least 10px — this prevents clicks from dragging instead
+			// of triggering onPress events
+			onMoveShouldSetPanResponder: (_evt, gestureState) => {
+				return Math.abs(gestureState.dx) > 10 || Math.abs(gestureState.dy) > 10;
+			},
 			onPanResponderMove: (_e: any, gestureState: any) => {
 				handleNoteActionsDrag(gestureState);
 			},
