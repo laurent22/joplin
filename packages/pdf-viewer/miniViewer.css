@@ -63,7 +63,7 @@
     user-select: none;
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 380px) {
 	.can-hide {
         display: none;
     }

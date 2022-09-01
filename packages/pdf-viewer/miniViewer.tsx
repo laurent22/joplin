@@ -22,6 +22,11 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 	const isFocused = useIsFocused();
 	const [zoom, setZoom] = useState<number>(1);
 	const containerEl = useRef<HTMLDivElement>(null);
+	const [activePage, setActivePage] = useState(1);
+
+	const onActivePageChange = useCallback((page: number) => {
+		setActivePage(page);
+	}, []);
 
 	const onDoubleClick = useCallback((pageNo: number) => {
 		props.messageService.openFullScreenViewer(props.resourceId, pageNo);
@@ -48,11 +53,12 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 					zoom={zoom}
 					textSelectable={true}
 					onTextSelect={props.messageService.textSelected}
-					onDoubleClick={onDoubleClick} />
+					onDoubleClick={onDoubleClick}
+					onActivePageChange={onActivePageChange} />
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='pdf-info'>
-					<div style={{ paddingRight: '0.4rem' }}>{pdf.pageCount} pages</div>
+					<div style={{ paddingRight: '0.4rem' }}>{activePage}/{pdf.pageCount} pages</div>
 					<ZoomControls onChange={setZoom} zoom={zoom} />
 					<PrintButton onClick={pdf?.printPdf}/>
 					<DownloadButton onClick={pdf?.downloadPdf}/>
