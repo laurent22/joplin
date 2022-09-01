@@ -36,8 +36,8 @@ type OnFileUpdateCallback = (event: SourceFileUpdateEvent)=> void;
 interface Props {
 	themeId: number;
 
-	// [html] should only be [null] if [html] is still being generated.
-	html: string|null;
+	// If HTML is still being loaded, [html] should be an empty string.
+	html: string;
 
 	// Allow a secure origin to load content from any other origin.
 	// Defaults to 'never'.
@@ -101,7 +101,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			});
 		}
 
-		if ((props.html ?? null) !== null) {
+		if (props.html.length > 0) {
 			void createHtmlFile();
 		} else {
 			setSource(undefined);

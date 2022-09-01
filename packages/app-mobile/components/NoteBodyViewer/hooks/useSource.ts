@@ -20,7 +20,7 @@ function usePrevious(value: any, initialValue: any = null): any {
 }
 
 export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
-	const [html, setHtml] = useState<string>(null);
+	const [html, setHtml] = useState<string>('');
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
 	const [isFirstRender, setIsFirstRender] = useState(true);
@@ -177,7 +177,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 		if (isFirstRender) {
 			setIsFirstRender(false);
-			setHtml(undefined);
+			setHtml('');
 			setInjectedJs([]);
 		} else {
 			void renderNote();
