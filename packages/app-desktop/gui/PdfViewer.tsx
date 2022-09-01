@@ -88,6 +88,7 @@ export default function PdfViewer(props: Props) {
 		<Window theme={theme}>
 			<IFrame src="./vendor/lib/@joplin/pdf-viewer/index.html" x-url={Resource.fullPath(props.resource)}
 				x-appearance={theme.appearance} ref={iframeRef}
+				x-title={props.resource.title}
 				x-anchorpage={props.pageNo || 1}
 				x-type="full"></IFrame>
 		</Window>

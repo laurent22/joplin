@@ -14,7 +14,7 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	flex-flow: column;
 	width: fit-content;
 	min-width: 100%;
-	min-height: 100%;
+	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
 

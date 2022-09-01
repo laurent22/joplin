@@ -60,7 +60,7 @@ export default function Page(props: PageProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const textRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
-	const isVisible = useIsVisible(canvasRef, props.container);
+	const isVisible = useIsVisible(wrapperRef, props.container);
 	useVisibleOnSelect({
 		isVisible,
 		isSelected: props.isSelected,
@@ -73,8 +73,15 @@ export default function Page(props: PageProps) {
 
 		const renderPage = async () => {
 			try {
-				await props.pdf.renderPage(props.pageNo, props.scaledSize, canvasRef, props.textSelectable ? textRef : null, isCancelled);
+				const [canvas, textLayer] = await props.pdf.renderPage(props.pageNo, props.scaledSize, props.textSelectable, isCancelled);
+				wrapperRef.current.appendChild(canvas);
+				if (textLayer) wrapperRef.current.appendChild(textLayer);
+				if (canvasRef.current) canvasRef.current.remove();
+				canvasRef.current = canvas;
+				if (textRef.current) textRef.current.remove();
+				if (textLayer) textRef.current = textLayer;
 			} catch (error) {
+				if (isCancelled()) return;
 				error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
 				setError(error);
 				throw error;
@@ -123,14 +130,8 @@ export default function Page(props: PageProps) {
 	}, [props.onDoubleClick, props.pageNo]);
 
 	return (
-		<PageWrapper onDoubleClick={onDoubleClick} isSelected={!!props.isSelected} onClick={onClick} ref={wrapperRef} style={style}>
-			<canvas ref={canvasRef} className="page-canvas" style={style}>
-				<div>
-					{error ? 'ERROR' : 'Loading..'}
-				</div>
-				Page {props.pageNo}
-			</canvas>
-			<div className="textLayer" onContextMenu={onContextMenu} ref={textRef}></div>
+		<PageWrapper onDoubleClick={onDoubleClick} isSelected={!!props.isSelected} onContextMenu={onContextMenu} onClick={onClick} ref={wrapperRef} style={style}>
+			{ error && <div>Error: {error}</div> }
 			{props.showPageNumbers && <PageInfo isSelected={!!props.isSelected}>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
 		</PageWrapper>
 	);

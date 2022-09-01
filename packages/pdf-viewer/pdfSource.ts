@@ -1,5 +1,4 @@
 import * as pdfjsLib from 'pdfjs-dist';
-import { MutableRefObject } from 'react';
 
 export interface ScaledSize {
 	height: number;
@@ -8,12 +7,11 @@ export interface ScaledSize {
 }
 
 interface RenderingTask {
-	resolve: ()=> void;
+	resolve: (result: [canvas: HTMLCanvasElement, textLayer: HTMLDivElement])=> void;
 	reject: (error: any)=> void;
 	pageNo: number;
-	canvas: MutableRefObject<HTMLCanvasElement>;
-	textLayer: MutableRefObject<HTMLElement>;
 	scaledSize: ScaledSize;
+	textLayer: boolean;
 	isCancelled: ()=> boolean;
 }
 
@@ -90,14 +88,22 @@ export class PdfData {
 		return pageNo;
 	};
 
-	private renderPageImpl = async (pageNo: number, canvas: MutableRefObject<HTMLCanvasElement>, textLayer: MutableRefObject<HTMLElement>, scaledSize: ScaledSize, isCancelled: ()=> boolean) => {
-		const page = await this.getPage(pageNo);
-		if (isCancelled()) return;
+	private renderPageImpl = async (pageNo: number, scaledSize: ScaledSize, textLayer: boolean, isCancelled: ()=> boolean): Promise<[HTMLCanvasElement, HTMLDivElement]> => {
 
+		const checkCancelled = () => {
+			if (isCancelled()) {
+				throw new Error(`Render cancelled, page: ${pageNo}`);
+			}
+		};
+
+		const page = await this.getPage(pageNo);
+		checkCancelled();
+
+		const canvas = document.createElement('canvas');
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
-		canvas.current.width = viewport.width;
-		canvas.current.height = viewport.height;
-		const ctx = canvas.current.getContext('2d');
+		canvas.width = viewport.width;
+		canvas.height = viewport.height;
+		const ctx = canvas.getContext('2d');
 		if (!ctx) {
 			throw new Error('Could not get canvas context');
 		}
@@ -106,37 +112,44 @@ export class PdfData {
 			canvasContext: ctx,
 			viewport,
 		}).promise;
-		if (isCancelled()) return;
+		checkCancelled();
 
+		let textLayerDiv = null;
 		if (textLayer) {
+			textLayerDiv = document.createElement('div');
+			textLayerDiv.classList.add('textLayer');
 			const txtContext = await page.getTextContent();
-			if (isCancelled()) return;
+			checkCancelled();
 			// Pass the data to the method for rendering of text over the pdf canvas.
-			textLayer.current.style.height = `${canvas.current.clientHeight}px`;
-			textLayer.current.style.width = `${canvas.current.clientWidth}px`;
-			textLayer.current.innerHTML = '';
+			textLayerDiv.style.height = `${viewport.height}px`;
+			textLayerDiv.style.width = `${viewport.width}px`;
+			textLayerDiv.innerHTML = '';
 			pdfjsLib.renderTextLayer({
 				textContent: txtContext,
 				enhanceTextSelection: true,
 				// @ts-ignore
-				container: textLayer.current,
+				container: textLayerDiv,
 				viewport: viewport,
 				textDivs: [],
 			});
 		}
+
+		canvas.style.height = '100%';
+		canvas.style.width = '100%';
+
+		return [canvas, textLayerDiv];
 	};
 
-	public renderPage(pageNo: number, scaledSize: ScaledSize, canvas: MutableRefObject<HTMLCanvasElement>, textLayer: MutableRefObject<HTMLElement>, isCancelled: ()=> boolean): Promise<void> {
-		return new Promise<void>((resolve, reject) => {
+	public renderPage(pageNo: number, scaledSize: ScaledSize, textLayer: boolean, isCancelled: ()=> boolean): Promise<[HTMLCanvasElement, HTMLDivElement]> {
+		return new Promise<[HTMLCanvasElement, HTMLDivElement]>((resolve, reject) => {
 			if (this.renderingQueue.lock) {
 				// console.warn('Adding to task, page:', pageNo, 'prev queue size:', this.renderingQueue.tasks.length);
 				this.renderingQueue.tasks.push({
 					resolve,
 					reject,
 					pageNo,
-					canvas,
-					textLayer,
 					scaledSize,
+					textLayer,
 					isCancelled,
 				});
 			} else {
@@ -145,12 +158,12 @@ export class PdfData {
 					this.renderingQueue.lock = false;
 					if (this.renderingQueue.tasks.length > 0) {
 						const task = this.renderingQueue.tasks.shift();
-						// console.log('executing next task of page:', pageNo, 'remaining tasks:', this.renderingQueue.tasks.length);
-						void this.renderPage(task.pageNo, task.scaledSize, task.canvas, task.textLayer, task.isCancelled);
+						// console.log('executing next task of page:', task.pageNo, 'remaining tasks:', this.renderingQueue.tasks.length);
+						this.renderPage(task.pageNo, task.scaledSize, task.textLayer, task.isCancelled).then(task.resolve).catch(task.reject);
 					}
 				};
 				// console.log('rendering page:', pageNo, 'scaledSize:', scaledSize);
-				this.renderPageImpl(pageNo, canvas, textLayer, scaledSize, isCancelled).then(resolve).catch(reject).finally(next);
+				this.renderPageImpl(pageNo, scaledSize, textLayer, isCancelled).then(resolve).catch(reject).finally(next);
 			}
 		});
 	}
