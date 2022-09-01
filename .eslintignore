@@ -2013,9 +2013,9 @@ packages/pdf-viewer/hooks/useIsFocused.js.map
 packages/pdf-viewer/hooks/useIsVisible.d.ts
 packages/pdf-viewer/hooks/useIsVisible.js
 packages/pdf-viewer/hooks/useIsVisible.js.map
-packages/pdf-viewer/hooks/usePdfData.d.ts
-packages/pdf-viewer/hooks/usePdfData.js
-packages/pdf-viewer/hooks/usePdfData.js.map
+packages/pdf-viewer/hooks/usePdfDocument.d.ts
+packages/pdf-viewer/hooks/usePdfDocument.js
+packages/pdf-viewer/hooks/usePdfDocument.js.map
 packages/pdf-viewer/hooks/useScaledSize.d.ts
 packages/pdf-viewer/hooks/useScaledSize.js
 packages/pdf-viewer/hooks/useScaledSize.js.map

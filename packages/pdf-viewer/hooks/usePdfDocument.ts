@@ -3,7 +3,7 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import PdfDocument from '../PdfDocument';
 
 
-const usePdfData = (pdfPath: string) => {
+const usePdfDocument = (pdfPath: string) => {
 	const [pdfDocument, setPdfDocument] = useState<PdfDocument>(null);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
@@ -16,4 +16,4 @@ const usePdfData = (pdfPath: string) => {
 	return pdfDocument;
 };
 
-export default usePdfData;
+export default usePdfDocument;
