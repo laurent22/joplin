@@ -1,12 +1,7 @@
 import * as pdfjsLib from 'pdfjs-dist';
+import { ScaledSize } from './types';
 
-export interface ScaledSize {
-	height: number;
-	width: number;
-	scale: number;
-}
-
-export class PdfData {
+export default class PdfDocument {
 	public url: string | Uint8Array;
 	private doc: any = null;
 	public pageCount: number = null;
@@ -15,8 +10,10 @@ export class PdfData {
 		height: number;
 		width: number;
 	} = null;
+	private document: HTMLDocument = null;
 
-	public constructor() {
+	public constructor(document: HTMLDocument) {
+		this.document = document;
 	}
 
 	public loadDoc = async (url: string | Uint8Array) => {
@@ -78,12 +75,12 @@ export class PdfData {
 	};
 
 	public printPdf = () => {
-		const frame = document.createElement('iframe');
+		const frame = this.document.createElement('iframe');
 		frame.style.position = 'fixed';
 		frame.style.display = 'none';
 		frame.style.height = '100%';
 		frame.style.width = '100%';
-		document.body.appendChild(frame);
+		this.document.body.appendChild(frame);
 		frame.onload = () => {
 			frame.contentWindow.onafterprint = () => {
 				frame.remove();
@@ -96,7 +93,7 @@ export class PdfData {
 
 	public downloadPdf = async () => {
 		const url = this.url as string;
-		const link = document.createElement('a');
+		const link = this.document.createElement('a');
 		link.href = url;
 		link.download = url;
 		link.click();

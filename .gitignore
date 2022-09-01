@@ -1989,6 +1989,9 @@ packages/lib/versionInfo.js.map
 packages/pdf-viewer/Page.d.ts
 packages/pdf-viewer/Page.js
 packages/pdf-viewer/Page.js.map
+packages/pdf-viewer/PdfDocument.d.ts
+packages/pdf-viewer/PdfDocument.js
+packages/pdf-viewer/PdfDocument.js.map
 packages/pdf-viewer/VerticalPages.d.ts
 packages/pdf-viewer/VerticalPages.js
 packages/pdf-viewer/VerticalPages.js.map
@@ -2013,12 +2016,12 @@ packages/pdf-viewer/main.js.map
 packages/pdf-viewer/miniViewer.d.ts
 packages/pdf-viewer/miniViewer.js
 packages/pdf-viewer/miniViewer.js.map
-packages/pdf-viewer/pdfSource.d.ts
-packages/pdf-viewer/pdfSource.js
-packages/pdf-viewer/pdfSource.js.map
 packages/pdf-viewer/pdfSource.test.d.ts
 packages/pdf-viewer/pdfSource.test.js
 packages/pdf-viewer/pdfSource.test.js.map
+packages/pdf-viewer/types.d.ts
+packages/pdf-viewer/types.js
+packages/pdf-viewer/types.js.map
 packages/pdf-viewer/ui/IconButtons.d.ts
 packages/pdf-viewer/ui/IconButtons.js
 packages/pdf-viewer/ui/IconButtons.js.map

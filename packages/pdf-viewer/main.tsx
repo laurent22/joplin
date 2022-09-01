@@ -13,7 +13,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 const url = window.frameElement.getAttribute('x-url');
 const type = window.frameElement.getAttribute('x-type');
 const appearance = window.frameElement.getAttribute('x-appearance');
-const anchorPage = window.frameElement.getAttribute('x-anchorPage');
+const anchorPage = Number(window.frameElement.getAttribute('x-anchorPage')) || null;
 const pdfId = window.frameElement.getAttribute('id');
 
 document.documentElement.setAttribute('data-theme', appearance);
@@ -22,7 +22,7 @@ function App() {
 	if (type === 'mini') {
 		return <MiniViewerApp pdfPath={url}
 			isDarkTheme={appearance === 'dark'}
-			anchorPage={anchorPage ? Number(anchorPage) : null}
+			anchorPage={anchorPage}
 			pdfId={pdfId} />;
 	}
 	return <div>Error: Unknown app type "{type}"</div>;
