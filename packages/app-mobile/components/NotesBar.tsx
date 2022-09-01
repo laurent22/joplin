@@ -140,9 +140,17 @@ function NotesBarComponent(props: Props) {
 		</TouchableOpacity>
 	);
 
-	const renderIconButton = (icon: JSX.Element, onPress: ()=> Promise<void>) => {
+	const renderIconButton = (icon: JSX.Element, onPress: ()=> Promise<void>, label: string) => {
 		return (
-			<TouchableOpacity style={styles().button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
+			<TouchableOpacity
+				style={styles().button}
+				activeOpacity={0.8}
+				onPress={onPress}
+				accessibilityLabel={label}
+				accessibilityRole="button"
+			>
+				{icon}
+			</TouchableOpacity>
 		);
 	};
 
@@ -167,8 +175,8 @@ function NotesBarComponent(props: Props) {
 		});
 	};
 
-	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false));
-	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true));
+	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false), 'Create new note');
+	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true), 'Create new todo');
 
 	const topComp = (
 		<View>
