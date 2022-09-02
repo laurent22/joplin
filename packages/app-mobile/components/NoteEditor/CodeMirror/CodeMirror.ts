@@ -344,6 +344,8 @@ export function initCodeMirror(
 
 	// HACK: 09/02/22: Work around https://github.com/laurent22/joplin/issues/6802 by creating a copy mousedown
 	//  event to stop the Editor from calling .preventDefault on the mouse event.
+	// TODO: Track the upstream issue at https://github.com/codemirror/dev/issues/935 and remove this workaround
+	//  when the upstream bug is fixed.
 	document.body.addEventListener('mousedown', (evt) => {
 		if (!evt.isTrusted) {
 			return;
