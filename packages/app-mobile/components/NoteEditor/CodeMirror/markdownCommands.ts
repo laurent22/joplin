@@ -24,13 +24,58 @@ export const toggleBolded: Command = (view: EditorView): boolean => {
 };
 
 export const toggleItalicized: Command = (view: EditorView): boolean => {
-	const changes = toggleInlineFormatGlobally(view.state, {
-		nodeName: 'Emphasis',
+	let handledBoldItalicRegion = false;
 
-		template: { start: '*', end: '*' },
-		matcher: { start: /[_*]/g, end: /[_*]/g },
-	});
-	view.dispatch(changes);
+	// Bold-italic regions' starting and ending patterns are similar to italicized regions.
+	// Use custom logic:
+	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
+		const changes: ChangeSpec[] = [];
+
+		// Only handle cursors (empty selections)
+		if (sel.empty) {
+			const doc = view.state.doc;
+			const selLine = doc.lineAt(sel.from);
+
+			const selStartLineIdx = sel.from - selLine.from;
+			const selEndLineIdx = sel.to - selLine.from;
+			const beforeSel = selLine.text.substring(0, selStartLineIdx);
+			const afterSel = selLine.text.substring(selEndLineIdx);
+
+			const isBolded = beforeSel.endsWith('**') && afterSel.startsWith('**');
+
+			// If at the end of a bold-italic region, exit the region.
+			if (afterSel.startsWith('***')) {
+				sel = EditorSelection.cursor(sel.to + 3);
+				handledBoldItalicRegion = true;
+			} else if (isBolded) {
+				// Create a bold-italic region.
+				changes.push({
+					from: sel.from,
+					to: sel.to,
+					insert: '**',
+				});
+
+				// Move to the center of the bold-italic region:
+				sel = EditorSelection.cursor(sel.to + 1);
+				handledBoldItalicRegion = true;
+			}
+		}
+
+		return {
+			changes,
+			range: sel,
+		};
+	}));
+
+	if (!handledBoldItalicRegion) {
+		const changes = toggleInlineFormatGlobally(view.state, {
+			nodeName: 'Emphasis',
+
+			template: { start: '*', end: '*' },
+			matcher: { start: /[_*]/g, end: /[_*]/g },
+		});
+		view.dispatch(changes);
+	}
 
 	return true;
 };
