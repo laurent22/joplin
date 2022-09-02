@@ -3,7 +3,7 @@ import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
 import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect';
 import PdfDocument from './PdfDocument';
-import { ScaledSize } from './types';
+import { ScaledSize, RenderRequest } from './types';
 import styled from 'styled-components';
 
 
@@ -74,13 +74,22 @@ export default function Page(props: PageProps) {
 
 		const renderPage = async () => {
 			try {
-				const [canvas, textLayer] = await props.pdfDocument.renderPage(props.pageNo, props.scaledSize, props.textSelectable, isCancelled);
+				const renderRequest: RenderRequest = {
+					pageNo: props.pageNo,
+					scaledSize: props.scaledSize,
+					getTextLayer: props.textSelectable,
+					isCancelled,
+				};
+				const { canvas, textLayerDiv } = await props.pdfDocument.renderPage(renderRequest);
+
 				wrapperRef.current.appendChild(canvas);
-				if (textLayer) wrapperRef.current.appendChild(textLayer);
+				if (textLayerDiv) wrapperRef.current.appendChild(textLayerDiv);
+
 				if (canvasRef.current) canvasRef.current.remove();
-				canvasRef.current = canvas;
 				if (textRef.current) textRef.current.remove();
-				if (textLayer) textRef.current = textLayer;
+
+				canvasRef.current = canvas;
+				if (textLayerDiv) textRef.current = textLayerDiv;
 			} catch (error) {
 				if (isCancelled()) return;
 				error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;

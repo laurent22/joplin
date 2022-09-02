@@ -1,14 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
-import { ScaledSize } from './types';
-
-interface RenderingTask {
-	resolve: (result: [canvas: HTMLCanvasElement, textLayer: HTMLDivElement])=> void;
-	reject: (error: any)=> void;
-	pageNo: number;
-	scaledSize: ScaledSize;
-	textLayer: boolean;
-	isCancelled: ()=> boolean;
-}
+import { ScaledSize, RenderRequest, RenderResult } from './types';
+import RenderQueue from './utils/renderQueue';
 
 
 export default class PdfDocument {
@@ -16,7 +8,7 @@ export default class PdfDocument {
 	private doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
-	private renderingQueue: {tasks: RenderingTask[]; lock: boolean};
+	private renderQueue: RenderQueue;
 	private pageSize: {
 		height: number;
 		width: number;
@@ -25,7 +17,7 @@ export default class PdfDocument {
 
 	public constructor(document: HTMLDocument) {
 		this.document = document;
-		this.renderingQueue = { tasks: [], lock: false };
+		this.renderQueue = new RenderQueue(this.renderPageImpl);
 	}
 
 	public loadDoc = async (url: string | Uint8Array) => {
@@ -86,7 +78,7 @@ export default class PdfDocument {
 		return Math.min(pageNo, this.pageCount);
 	};
 
-	private renderPageImpl = async (pageNo: number, scaledSize: ScaledSize, textLayer: boolean, isCancelled: ()=> boolean): Promise<[HTMLCanvasElement, HTMLDivElement]> => {
+	private renderPageImpl = async ({ pageNo, scaledSize, getTextLayer, isCancelled }: RenderRequest): Promise<RenderResult> => {
 
 		const checkCancelled = () => {
 			if (isCancelled()) {
@@ -113,7 +105,7 @@ export default class PdfDocument {
 		checkCancelled();
 
 		let textLayerDiv = null;
-		if (textLayer) {
+		if (getTextLayer) {
 			textLayerDiv = this.document.createElement('div');
 			textLayerDiv.classList.add('textLayer');
 			const txtContext = await page.getTextContent();
@@ -135,34 +127,17 @@ export default class PdfDocument {
 		canvas.style.height = '100%';
 		canvas.style.width = '100%';
 
-		return [canvas, textLayerDiv];
+		return { canvas, textLayerDiv };
 	};
 
-	public renderPage(pageNo: number, scaledSize: ScaledSize, textLayer: boolean, isCancelled: ()=> boolean): Promise<[HTMLCanvasElement, HTMLDivElement]> {
-		return new Promise<[HTMLCanvasElement, HTMLDivElement]>((resolve, reject) => {
-			if (this.renderingQueue.lock) {
-				// console.warn('Adding to task, page:', pageNo, 'prev queue size:', this.renderingQueue.tasks.length);
-				this.renderingQueue.tasks.push({
-					resolve,
-					reject,
-					pageNo,
-					scaledSize,
-					textLayer,
-					isCancelled,
-				});
-			} else {
-				this.renderingQueue.lock = true;
-				const next = () => {
-					this.renderingQueue.lock = false;
-					if (this.renderingQueue.tasks.length > 0) {
-						const task = this.renderingQueue.tasks.shift();
-						// console.log('executing next task of page:', task.pageNo, 'remaining tasks:', this.renderingQueue.tasks.length);
-						this.renderPage(task.pageNo, task.scaledSize, task.textLayer, task.isCancelled).then(task.resolve).catch(task.reject);
-					}
-				};
-				// console.log('rendering page:', pageNo, 'scaledSize:', scaledSize);
-				this.renderPageImpl(pageNo, scaledSize, textLayer, isCancelled).then(resolve).catch(reject).finally(next);
-			}
+	public renderPage(task: RenderRequest): Promise<RenderResult> {
+		return new Promise<RenderResult>((resolve, reject) => {
+			const queueTask = {
+				params: task,
+				resolve,
+				reject,
+			};
+			this.renderQueue.addTask(queueTask);
 		});
 	}
 
