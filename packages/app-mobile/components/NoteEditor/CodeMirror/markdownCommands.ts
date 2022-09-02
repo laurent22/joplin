@@ -27,7 +27,7 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 	let handledBoldItalicRegion = false;
 
 	// Bold-italic regions' starting and ending patterns are similar to italicized regions.
-	// Use custom logic:
+	// Thus, we need additional logic to convert bold regions to bold-italic regions.
 	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
 		const changes: ChangeSpec[] = [];
 
@@ -55,7 +55,7 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 					insert: '**',
 				});
 
-				// Move to the center of the bold-italic region:
+				// Move to the center of the bold-italic region (**|**** -> ***|***)
 				sel = EditorSelection.cursor(sel.to + 1);
 				handledBoldItalicRegion = true;
 			}
