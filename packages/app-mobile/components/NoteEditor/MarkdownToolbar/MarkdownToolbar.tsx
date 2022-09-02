@@ -1,7 +1,7 @@
 // A toolbar for the markdown editor.
 
 const React = require('react');
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useMemo, useState, useCallback } from 'react';
 
 // See https://oblador.github.io/react-native-vector-icons/ for a list of
@@ -20,6 +20,7 @@ import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
+import Setting from '@joplin/lib/models/Setting';
 
 type OnAttachCallback = ()=> void;
 
@@ -276,38 +277,41 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		themeId: props.editorSettings.themeId,
 	};
 
-	return (
-		<>
-			<Toolbar
-				styleSheet={styleData}
-				buttons={[
-					{
-						title: _('Formatting'),
-						items: inlineFormattingBtns,
-					},
-					{
-						title: _('Headers'),
-						items: headerButtons,
-					},
-					{
-						title: _('Lists'),
-						items: listButtons,
-					},
-					{
-						title: _('Actions'),
-						items: actionButtons,
-					},
-				]}
-			/>
+	// Work around views being incorrectly positioned due to the presence of a keyboard.
+	let keyboardHeightAdjustment = 0;
+	if (keyboardVisible) {
+		if (Setting.value('editor.mobile.removeSpaceBelowToolbar')) {
+			keyboardHeightAdjustment -= 14;
+		} else if (Platform.OS === 'ios') {
+			keyboardHeightAdjustment = 16;
+		}
+	}
 
-			<View style={{
-				// The keyboard on iOS can overlap the markdown toolbar.
-				// Add additional padding to prevent this.
-				height: (
-					Platform.OS === 'ios' && keyboardVisible ? 16 : 0
-				),
-			}}/>
-		</>
+	return (
+		<Toolbar
+			styleSheet={styleData}
+			style={{
+				marginBottom: keyboardHeightAdjustment,
+			}}
+			buttons={[
+				{
+					title: _('Formatting'),
+					items: inlineFormattingBtns,
+				},
+				{
+					title: _('Headers'),
+					items: headerButtons,
+				},
+				{
+					title: _('Lists'),
+					items: listButtons,
+				},
+				{
+					title: _('Actions'),
+					items: actionButtons,
+				},
+			]}
+		/>
 	);
 };
 
@@ -353,6 +357,7 @@ const useStyles = (styleProps: any, theme: Theme) => {
 			toolbarContainer: {
 				maxHeight: '65%',
 				flexShrink: 1,
+				marginBotton: -26,
 			},
 			toolbarContent: {
 				flexGrow: 1,

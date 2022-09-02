@@ -1039,6 +1039,19 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'editor.mobile.removeSpaceBelowToolbar': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				label: () => _('Move markdown toolbar closer to keyboard.'),
+				description: () =>
+					_('On some devices, the markdown toolbar is too far above the keyboard. When the keyboard is open, this setting brings the toolbar closer to the bottom of the screen.'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: SettingItemType.String,

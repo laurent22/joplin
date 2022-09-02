@@ -2,7 +2,7 @@ const React = require('react');
 
 import { _ } from '@joplin/lib/locale';
 import { ReactElement, useCallback, useState } from 'react';
-import { AccessibilityInfo, LayoutChangeEvent, ScrollView, View } from 'react-native';
+import { AccessibilityInfo, LayoutChangeEvent, ScrollView, View, ViewStyle } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
 import ToolbarOverflowRows from './ToolbarOverflowRows';
@@ -11,6 +11,7 @@ import { ButtonGroup, ButtonSpec, StyleSheetData } from './types';
 interface ToolbarProps {
 	buttons: ButtonGroup[];
 	styleSheet: StyleSheetData;
+	style?: ViewStyle;
 }
 
 // Displays a list of buttons with an overflow menu.
@@ -101,6 +102,7 @@ const Toolbar = (props: ToolbarProps) => {
 				// container. As such, we can't base the container's width on the
 				// size of its content.
 				width: '100%',
+				...props.style,
 			}}
 			onLayout={onContainerLayout}
 		>
