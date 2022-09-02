@@ -342,6 +342,24 @@ export function initCodeMirror(
 		parent: parentElement,
 	});
 
+	// HACK: 09/02/22: Work around https://github.com/laurent22/joplin/issues/6802 by creating a copy mousedown
+	//  event to stop the Editor from calling .preventDefault on the mouse event.
+	document.body.addEventListener('mousedown', (evt) => {
+		if (!evt.isTrusted) {
+			return;
+		}
+
+		for (let current: Record<string, any> = evt.target; current; current = current.parentElement) {
+			if (current === editor.contentDOM) {
+				evt.stopPropagation();
+
+				const copyEvent = new Event('mousedown', evt);
+				editor.contentDOM.dispatchEvent(copyEvent);
+				return;
+			}
+		}
+	}, true);
+
 	const updateSearchQuery = (newState: SearchState) => {
 		const query = new SearchQuery({
 			search: newState.searchText,
