@@ -492,8 +492,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		styles.noteActionButtonGroup = {
 			position: 'absolute',
-			top: '8%',
-			right: '3%',
+			top: 120,
+			right: 30,
 			transform: [{ translateY: this.noteActionsPositionY }],
 		};
 
@@ -1576,7 +1576,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 				{ this.props.useSplitLayout ? splitNoteScreenLayoutComp : singleNoteScreenLayoutComp }
 
-				{ this.state.isTablet && noteActionButtonGroupComp }
 			</View>
 		);
 		return (
@@ -1598,6 +1597,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{noteMainComp}
 				{!this.props.useSplitLayout && actionButtonComp}
 				{!this.props.useSplitLayout && this.state.mode === 'edit' && viewNoteButtonComp}
+				{ this.state.isTablet && noteActionButtonGroupComp }
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
