@@ -18,19 +18,21 @@ export default class RenderQueue {
 
 	public addTask = (task: Task) => {
 		if (this.lock) {
-			// console.warn('Adding to task, page:', pageNo, 'prev queue size:', this.renderingQueue.tasks.length);
+			// Some task is already in progress, so add this task to the queue
 			this.tasks.push(task);
 		} else {
 			this.lock = true;
+
 			const next = () => {
 				this.lock = false;
 				if (this.tasks.length > 0) {
+					// Time to execute the next task in the queue
 					const nextTask = this.tasks.shift();
-					// console.log('executing next task of page:', task.pageNo, 'remaining tasks:', this.renderingQueue.tasks.length);
 					this.addTask(nextTask);
 				}
 			};
-			// console.log('rendering page:', pageNo, 'scaledSize:', scaledSize);
+
+			// Render the page
 			this.executeTaskImpl(task.params).then(task.resolve).catch(task.reject).finally(next);
 		}
 	};

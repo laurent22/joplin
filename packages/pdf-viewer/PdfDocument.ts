@@ -131,6 +131,8 @@ export default class PdfDocument {
 	};
 
 	public renderPage(task: RenderRequest): Promise<RenderResult> {
+		// We're using a render queue to avoid rendering too many pages at the same time
+		// Which can cause the pdfjs library to abandon some of the in-progress rendering unexpectedly
 		return new Promise<RenderResult>((resolve, reject) => {
 			const queueTask = {
 				params: task,
