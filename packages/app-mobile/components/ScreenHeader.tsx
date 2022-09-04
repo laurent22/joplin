@@ -656,7 +656,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		);
 	}
 
-	public static defaultProps: Partial<ScreenHeaderProps> ={
+	public static defaultProps: Partial<ScreenHeaderProps> = {
 		menuOptions: [],
 	};
 }

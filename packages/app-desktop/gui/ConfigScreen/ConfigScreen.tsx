@@ -484,13 +484,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					} else {
 						const paths = await bridge().showOpenDialog();
 						if (!paths || !paths.length) return;
-						const cmd = splitCmd(this.state.settings[key]);
-						cmd[0] = paths[0];
-						updateSettingValue(key, joinCmd(cmd));
+
+						if (md.subType === 'file_path') {
+							updateSettingValue(key, paths[0]);
+						} else {
+							const cmd = splitCmd(this.state.settings[key]);
+							cmd[0] = paths[0];
+							updateSettingValue(key, joinCmd(cmd));
+						}
 					}
 				};
 
 				const cmd = splitCmd(this.state.settings[key]);
+				const path = md.subType === 'file_path_and_args' ? cmd[0] : this.state.settings[key];
 
 				const argComp = md.subType !== 'file_path_and_args' ? null : (
 					<div style={{ ...rowStyle, marginBottom: 5 }}>
@@ -526,7 +532,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											onChange={(event: any) => {
 												onPathChange(event);
 											}}
-											value={cmd[0]}
+											value={path}
 											spellCheck={false}
 										/>
 										<Button

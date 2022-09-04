@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { themeStyle } from './global-style';
 const { connect } = require('react-redux');
@@ -9,29 +9,28 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
-import useStyles from './useStyles';
+import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 interface Props {
     themeId: number;
-	items: any[];
+	notes: any[];
 	todoCheckbox_change: (checked: boolean)=> void;
 	selectedFolderId: string;
 	activeFolderId: string;
 	dispatch: any;
 	selectedNoteId: string;
-	toggleNotesBar: ()=> void;
 	settings: any;
 }
 
 function NotesBarComponent(props: Props) {
 
-	const [notes, setNotes] = React.useState<any[]>(props.items);
 	const [query, setQuery] = React.useState<string>('');
+	const [notes, setNotes] = React.useState<any[]>(props.notes);
+	const theme: Style = React.useMemo(() => themeStyle(props.themeId), [props.themeId]);
 
-	const themeId = props.themeId;
-
-	const stylingFunction = (theme: Style): Style => {
-		return {
+	const styles = (): Style => {
+		const styles: Style = {
 			container: {
 				flex: 1,
 				width: '100%',
@@ -112,30 +111,46 @@ function NotesBarComponent(props: Props) {
 				justifyContent: 'space-between',
 			},
 		};
+
+		return StyleSheet.create(styles);
 	};
 
-	const styles = useStyles(stylingFunction, themeId);
-
 	const titleComp = (
-		<View style={[styles.title, styles.horizontalFlex]}>
-			<Icon name='md-document'style={[styles.top, styles.titleIcon]} />
-			<Text style={[styles.top, styles.titleText]}>{_('Notes')}</Text>
+		<View style={[styles().title, styles().horizontalFlex]}>
+			<Icon name='md-document'style={[styles().top, styles().titleIcon]} />
+			<Text style={[styles().top, styles().titleText]}>{_('Notes')}</Text>
 		</View>
 	);
 
 	const dividerComp = (
-		<View style={styles.divider}></View>
+		<View style={styles().divider}></View>
 	);
 
+	const handleNotesBarClose = () => {
+		props.dispatch({ type: 'NOTES_BAR_CLOSE' });
+	};
+
 	const closeButtonComp = (
-		<TouchableOpacity onPress={props.toggleNotesBar}>
-			<Icon name="close" style={[styles.top, styles.closeIcon]}/>
+		<TouchableOpacity
+			onPress={handleNotesBarClose}
+			accessibilityLabel={_('Close notes bar')}
+			accessibilityRole="button"
+		>
+			<Icon name="close" style={[styles().top, styles().closeIcon]}/>
 		</TouchableOpacity>
 	);
 
-	const renderIconButton = (icon: JSX.Element, onPress: ()=> Promise<void>) => {
+	const renderIconButton = (icon: JSX.Element, onPress: ()=> Promise<void>, label: string) => {
 		return (
-			<TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={onPress}>{icon}</TouchableOpacity>
+			<TouchableOpacity
+				style={styles().button}
+				activeOpacity={0.8}
+				onPress={onPress}
+				accessibilityLabel={label}
+				accessibilityRole="button"
+			>
+				{icon}
+			</TouchableOpacity>
 		);
 	};
 
@@ -160,12 +175,12 @@ function NotesBarComponent(props: Props) {
 		});
 	};
 
-	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles.buttonIcon} />, () => handleNewNote(false));
-	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles.buttonIcon} />, () => handleNewNote(true));
+	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false), 'Create new note');
+	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true), 'Create new todo');
 
 	const topComp = (
 		<View>
-			<View style={[styles.topContainer, styles.horizontalFlex]}>
+			<View style={[styles().topContainer, styles().horizontalFlex]}>
 				{titleComp}
 				{closeButtonComp}
 			</View>
@@ -173,44 +188,69 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	const handleQuerySubmit = async () => {
-		if (!query) {
-			setNotes(props.items);
-			return;
+	// Copied from './screens/search.js' and modified
+	const refreshSearch = async () => {
+		let notes_ = [];
+
+		if (query) {
+			if (props.settings['db.ftsEnabled']) {
+				notes_ = await SearchEngineUtils.notesForQuery(query, true);
+			} else {
+				const p = query.split(' ');
+				const temp = [];
+				for (let i = 0; i < p.length; i++) {
+					const t = p[i].trim();
+					if (!t) continue;
+					temp.push(t);
+				}
+
+				notes_ = await Note.previews(null, {
+					anywherePattern: `*${temp.join('*')}*`,
+				});
+			}
+
+			const parsedQuery = await SearchEngine.instance().parseQuery(query);
+			const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+
+			props.dispatch({
+				type: 'SET_HIGHLIGHTED',
+				words: highlightedWords,
+			});
+
+			setNotes(notes_);
 		}
-
-		let searchQuery = query.trim();
-
-		if (searchQuery === '') {
-			setNotes(props.items);
-			return;
-		}
-
-		searchQuery = searchQuery.toLowerCase();
-
-		// Find notes in folder using only note title
-		const result = props.items.filter(item => {
-			let noteTitle = Note.displayTitle(item);
-			noteTitle = noteTitle.toLowerCase();
-
-			return noteTitle.includes(searchQuery);
-		});
-
-		setNotes(result);
 	};
 
-	const theme = themeStyle(themeId);
+	const handleQuerySubmit = async () => {
+		const trimmedQuery = query.trim();
+
+		if (!trimmedQuery) {
+			props.dispatch({
+				type: 'SEARCH_QUERY',
+				query: '',
+			});
+		} else {
+			props.dispatch({
+				type: 'SEARCH_QUERY',
+				query: trimmedQuery,
+			});
+		}
+
+		setQuery(trimmedQuery);
+		await refreshSearch();
+	};
 
 	const searchInputComp = (
-		<View style={[styles.horizontalFlex, styles.searchInput]}>
-			<Icon name='search' style={[styles.top, styles.searchIcon]}/>
-			<TextInput style={[styles.top, styles.nativeInput]} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} placeholderTextColor={theme.dividerColor} />
+		<View style={[styles().horizontalFlex, styles().searchInput]}>
+			<Icon name='search' style={[styles().top, styles().searchIcon]}/>
+
+			<TextInput style={[styles().top, styles().nativeInput]} placeholder='Search' onChangeText={setQuery} value={query} onSubmitEditing={handleQuerySubmit} placeholderTextColor={theme.dividerColor} />
 		</View>
 	);
 
 	const inputGroupComp = (
 		<View style={{ width: '100%' }}>
-			<View style={[styles.padding, styles.horizontalFlex, styles.inputGroup]}>
+			<View style={[styles().padding, styles().horizontalFlex, styles().inputGroup]}>
 				{searchInputComp}
 				{addNoteButtonComp}
 				{addTodoButtonComp}
@@ -221,7 +261,7 @@ function NotesBarComponent(props: Props) {
 
 	let flatListRef: any = React.useRef(null);
 
-	const memoizedRenderItem = React.useCallback(({ item }: { item: any }) => {
+	const onRenderItem = React.useCallback(({ item }: { item: any }) => {
 		if (item.is_todo) {
 			return <NotesBarListItem note={item} todoCheckbox_change={props.todoCheckbox_change} />;
 		} else {
@@ -232,13 +272,13 @@ function NotesBarComponent(props: Props) {
 	const NotesBarListComp = (
 		<FlatList
 			data={notes}
-			renderItem={memoizedRenderItem}
+			renderItem={onRenderItem}
 			keyExtractor={(item: any) => item.id}
 			getItemLayout={(data, index) => (
 				{
 					length: data.length,
-					offset: (theme.fontSize + styles.padding.paddingTop + styles.padding.paddingBottom) * index,
-					viewOffset: (theme.fontSize + styles.padding.paddingTop + styles.padding.paddingBottom),
+					offset: (theme.fontSize + styles().padding.paddingTop + styles().padding.paddingBottom) * index,
+					viewOffset: (theme.fontSize + styles().padding.paddingTop + styles().padding.paddingBottom),
 					index,
 				}
 			)}
@@ -256,11 +296,11 @@ function NotesBarComponent(props: Props) {
 
 	// Update the notesbar when a note item changes
 	React.useEffect(() => {
-		setNotes(props.items);
-	}, [props.items]);
+		setNotes(props.notes);
+	}, [props.notes]);
 
 	return (
-		<View style={styles.container}>
+		<View style={styles().container}>
 			{topComp}
 			{inputGroupComp}
 			{ NotesBarListComp }
@@ -271,7 +311,7 @@ function NotesBarComponent(props: Props) {
 const NotesBar = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
-		items: state.notes,
+		notes: state.notes,
 		activeFolderId: state.settings.activeFolderId,
 		selectedFolderId: state.selectedFolderId,
 		selectedNoteId: state.selectedNoteIds[0],

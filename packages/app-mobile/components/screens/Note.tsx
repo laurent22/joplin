@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions, PanResponder } = require('react-native');
+import { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions, PanResponder } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -205,7 +205,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (msg.indexOf('file://') === 0) {
 						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
 					} else {
-						Linking.openURL(msg);
+						await Linking.openURL(msg);
 					}
 				}
 			} catch (error) {
@@ -319,7 +319,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	};
 
 	// Update state that depends on the screen width when the screen width changes ( the device orientation changess)
-	private async handleScreenWidthChange_() {
+	private handleScreenWidthChange_() {
 		this.setState({
 			notesBarWidth: this.getNotesBarWidth(),
 			isTablet: Dimensions.get('window').width >= 768,
@@ -367,6 +367,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
+				paddingBottom: Platform.OS === 'ios' ? 40 : 0,
 
 				// Add extra space to allow scrolling past end of document, and also to fix this:
 				// https://github.com/laurent22/joplin/issues/1437
@@ -561,21 +562,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.notesBarPosition,
 				{
 					toValue: 0,
-					duration: 1500,
+					useNativeDriver: false,
 				}
 			),
 			Animated.spring(
 				this.notePosition,
 				{
 					toValue: 0,
-					duration: 1500,
+					useNativeDriver: false,
 				}
 			),
 			Animated.spring(
 				this.noteWidth,
 				{
 					toValue: Dimensions.get('window').width - this.state.notesBarWidth,
-					duration: 1500,
+					useNativeDriver: false,
 				}
 			),
 		]).start();
@@ -587,21 +588,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.notesBarPosition,
 				{
 					toValue: -1 * this.state.notesBarWidth,
-					duration: 1500,
+					useNativeDriver: false,
 				}
 			),
 			Animated.spring(
 				this.notePosition,
 				{
 					toValue: -1 * this.state.notesBarWidth,
-					duration: 1500,
+					useNativeDriver: false,
 				}
 			),
 			Animated.spring(
 				this.noteWidth,
 				{
 					toValue: Dimensions.get('window').width,
-					duration: 1500,
+					useNativeDriver: false,
 				}
 			),
 		]).start();
@@ -610,7 +611,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private onNotesBarToggle = async () => {
 		if (this.props.showNotesBar) {
 			this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
-			this.animateNotesBarClose();
 		} else {
 			// Split layout and notesbar shouldn't be enabled together because of screen space.
 			// Similar logic is in onSplitLayoutToggle.
@@ -618,7 +618,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				await this.onSplitLayoutToggle();
 			}
 			this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
-			this.animateNotesBarOpen();
 		}
 	};
 
@@ -648,6 +647,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
 				options: this.sideMenuOptions(),
 			});
+		}
+
+		if (this.props.showNotesBar !== prevProps.showNotesBar) {
+			if (this.props.showNotesBar) {
+				this.animateNotesBarOpen();
+			} else {
+				this.animateNotesBarClose();
+			}
 		}
 	}
 
@@ -1050,7 +1057,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = await Note.load(this.state.note.id);
 		try {
 			const url = Note.geolocationUrl(note);
-			Linking.openURL(url);
+			await Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			await dialogs.error(this, error.message);
@@ -1062,7 +1069,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const note = await Note.load(this.state.note.id);
 		try {
-			Linking.openURL(note.source_url);
+			await Linking.openURL(note.source_url);
 		} catch (error) {
 			await dialogs.error(this, error.message);
 		}
@@ -1104,6 +1111,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
+	async showAttachMenu() {
+		const buttons = [];
+
+		// On iOS, it will show "local files", which means certain files saved from the browser
+		// and the iCloud files, but it doesn't include photos and images from the CameraRoll
+		//
+		// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+		buttons.push({ text: _('Attach file'), id: 'attachFile' });
+
+		// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
+		// because that's only way to browse photos from the camera roll.
+		if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
+		buttons.push({ text: _('Take photo'), id: 'takePhoto' });
+
+		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
+
+		if (buttonId === 'takePhoto') this.takePhoto_onPress();
+		if (buttonId === 'attachFile') void this.attachFile_onPress();
+		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+	}
+
 	private menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -1128,26 +1156,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
-				onPress: async () => {
-					const buttons = [];
-
-					// On iOS, it will show "local files", which means certain files saved from the browser
-					// and the iCloud files, but it doesn't include photos and images from the CameraRoll
-					//
-					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
-					buttons.push({ text: _('Attach file'), id: 'attachFile' });
-
-					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
-					// because that's only way to browse photos from the camera roll.
-					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
-					buttons.push({ text: _('Take photo'), id: 'takePhoto' });
-
-					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
-
-					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachFile') void this.attachFile_onPress();
-					if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
-				},
+				onPress: () => this.showAttachMenu(),
 			});
 		}
 
@@ -1363,12 +1372,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
-							// need some extra padding for iOS so that the keyboard won't cover last line of the note
-							// see https://github.com/laurent22/joplin/issues/3607
-							paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
 						/>
 					);
 				} else {
+					const editorStyle = this.styles().bodyTextInput;
+
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
 						themeId={this.props.themeId}
@@ -1377,12 +1385,24 @@ class NoteScreenComponent extends BaseScreenComponent {
 						onChange={this.onBodyChange}
 						onSelectionChange={this.body_selectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-						style={this.styles().bodyTextInput}
+						onAttach={() => this.showAttachMenu()}
+						style={{
+							...editorStyle,
+							paddingLeft: 0,
+							paddingRight: 0,
+						}}
+						contentStyle={{
+							// Apply padding to the editor's content, but not the toolbar.
+							paddingLeft: editorStyle.paddingLeft,
+							paddingRight: editorStyle.paddingRight,
+						}}
 					/>;
 				}
 			}
 		} else {
 			if (this.useEditorBeta()) {
+				const editorStyle = this.styles().bodyTextInput;
+
 				editor = (
 					<NoteEditor
 						ref={this.editorRef}
@@ -1392,7 +1412,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 						onChange={this.splitLayoutEditor_onBodyChange}
 						onSelectionChange={this.body_selectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-						style={this.styles().bodyTextInput}
+						onAttach={() => this.showAttachMenu()}
+						style={{
+							...editorStyle,
+							paddingLeft: 0,
+							paddingRight: 0,
+						}}
+						contentStyle={{
+							// Apply padding to the editor's content, but not the toolbar.
+							paddingLeft: editorStyle.paddingLeft,
+							paddingRight: editorStyle.paddingRight,
+						}}
 					/>);
 			} else {
 				editor = (
@@ -1409,9 +1439,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 						keyboardAppearance={theme.keyboardAppearance}
 						placeholder={_('Add body')}
 						placeholderTextColor={theme.colorFaded}
-						// need some extra padding for iOS so that the keyboard won't cover last line of the note
-						// see https://github.com/laurent22/joplin/issues/3607
-						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
 						autoFocus={true}
 					/>
 				);
@@ -1542,8 +1569,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// Pan responder that handles making the note actions draggable.
 		// The note actions need to be draggable, because they could
 		// potentially obstruct some portion of a note's content
-		this.noteActionsDragResponder = PanResponder.create({
-			onMoveShouldSetPanResponder: () => true,
+		const noteActionsDragResponder = PanResponder.create({
+			// Only start dragging after moving at least 10px — this prevents clicks from dragging instead
+			// of triggering onPress events
+			onMoveShouldSetPanResponder: (_evt, gestureState) => {
+				return Math.abs(gestureState.dx) > 10 || Math.abs(gestureState.dy) > 10;
+			},
 			onPanResponderMove: (_e: any, gestureState: any) => {
 				handleNoteActionsDrag(gestureState);
 			},
@@ -1558,7 +1589,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		// Note actions are the notesbar and split layout toggle button
 		const noteActionButtonGroupComp = (
-			<Animated.View style={this.styles().noteActionButtonGroup} {...this.noteActionsDragResponder.panHandlers} >
+			<Animated.View style={this.styles().noteActionButtonGroup} {...noteActionsDragResponder.panHandlers} >
 				<TouchableOpacity style={[splitLayoutToggleStyle, this.styles().noteActionButton1]} activeOpacity={0.7} onPress={this.onSplitLayoutToggle}>
 					<Icon name="columns" style={splitLayoutToggleIconStyle} />
 				</TouchableOpacity>
@@ -1571,13 +1602,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
 				<Animated.View style={this.styles().notesBarContainer}>
-					<NotesBar todoCheckbox_change={this.todoCheckbox_change} toggleNotesBar={this.onNotesBarToggle} />
+					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
 				</Animated.View>
 
 				{ this.props.useSplitLayout ? splitNoteScreenLayoutComp : singleNoteScreenLayoutComp }
 
 			</View>
 		);
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
