@@ -7,6 +7,7 @@ import { DownloadButton, PrintButton, OpenLinkButton, CloseButton } from './ui/I
 import ZoomControls from './ui/ZoomControls';
 import styled from 'styled-components';
 import GotoInput from './ui/GotoPage';
+import useAnnotator from './hooks/useAnnotator';
 
 require('./fullScreen.css');
 
@@ -54,6 +55,7 @@ export default function FullViewer(props: FullViewerProps) {
 	const [selectedPage, setSelectedPage] = useState<number>(startPage);
 	const mainViewerRef = useRef<HTMLDivElement>(null);
 	const thubmnailRef = useRef<HTMLDivElement>(null);
+	const annotator = useAnnotator(pdfDocument);
 
 	const onActivePageChange = useCallback((pageNo: number) => {
 		setSelectedPage(pageNo);
@@ -64,6 +66,16 @@ export default function FullViewer(props: FullViewerProps) {
 		setSelectedPage(pageNo);
 		setStartPage(pageNo);
 	}, [pdfDocument, selectedPage]);
+
+	const onClose = useCallback(async () => {
+		if (annotator.hasChanges) {
+			console.log('has changes');
+			const data = await pdfDocument.doc.getData();
+			props.messageService.saveFile(data, true);
+		} else {
+			props.messageService.close();
+		}
+	}, [annotator, pdfDocument, props.messageService]);
 
 	if (!pdfDocument) {
 		return (
@@ -89,7 +101,7 @@ export default function FullViewer(props: FullViewerProps) {
 					<GotoInput onChange={goToPage} size={1.3} pageCount={pdfDocument.pageCount} currentPage={selectedPage} />
 				</div>
 				<div>
-					<CloseButton onClick={props.messageService.close} size={1.3} />
+					<CloseButton onClick={onClose} size={1.3} />
 				</div>
 			</div>
 			<div className="viewers dark-bg">
@@ -118,6 +130,7 @@ export default function FullViewer(props: FullViewerProps) {
 						onActivePageChange={onActivePageChange}
 						textSelectable={true}
 						onTextSelect={props.messageService.textSelected}
+						annotator={annotator}
 					/>
 				</div>
 			</div>

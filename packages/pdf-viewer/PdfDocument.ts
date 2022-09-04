@@ -5,7 +5,7 @@ import RenderQueue from './utils/renderQueue';
 
 export default class PdfDocument {
 	public url: string | Uint8Array;
-	private doc: any = null;
+	public doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
 	private renderQueue: RenderQueue;
@@ -27,6 +27,7 @@ export default class PdfDocument {
 			const pdfDocument: any = await loadingTask.promise;
 			this.doc = pdfDocument;
 			this.pageCount = pdfDocument.numPages;
+			this.pages = {};
 		} catch (error) {
 			error.message = `Could not load document: ${error.message}`;
 			throw error;

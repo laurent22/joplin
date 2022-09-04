@@ -4346,6 +4346,7 @@ __metadata:
     "@types/react": 16.9.55
     "@types/react-dom": ^16.9.0
     "@types/styled-components": ^5.1.25
+    annotpdf: ^1.0.15
     babel-jest: ^28.1.3
     css-loader: ^6.7.1
     jest: ^28.1.3
@@ -4353,6 +4354,7 @@ __metadata:
     pdfjs-dist: ^2.14.305
     react: 16.13.1
     react-dom: 16.9.0
+    reactjs-popup: ^2.0.5
     style-loader: ^3.3.1
     styled-components: ^5.3.5
     ts-jest: ^28.0.7
@@ -6466,6 +6468,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/crypto-js@npm:^4.0.1":
+  version: 4.1.1
+  resolution: "@types/crypto-js@npm:4.1.1"
+  checksum: ea3d6a67b69f88baeb6af96004395903d2367a41bd5cd86306da23a44dd96589749495da50974a9b01bb5163c500764c8a33706831eade036bddae016417e3ea
+  languageName: node
+  linkType: hard
+
 "@types/debug@npm:^4.1.6":
   version: 4.1.7
   resolution: "@types/debug@npm:4.1.7"
@@ -6943,6 +6952,13 @@ __metadata:
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
   checksum: e87bccbf11f95035c89a132b52b79ce69a1e3652fe55962363063c9c0dae0fe2477ebc585e03a9652adc6f381d24ba5589cc5e51849df4ced3d3e004a7d40ed5
+  languageName: node
+  linkType: hard
+
+"@types/pako@npm:^1.0.1":
+  version: 1.0.4
+  resolution: "@types/pako@npm:1.0.4"
+  checksum: a7ee316fad8e01b895d97fd6db771624d28d7bab43693db563dba768ca6d563aacf99e6d1045288366fec5cd2cb379bf86ef947848690ea648470b21d9a572c5
   languageName: node
   linkType: hard
 
@@ -8030,6 +8046,18 @@ __metadata:
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
   checksum: 90849ef03c4f4f7051d15f655120137b89e3205537d683beebd39d95f40c0ca00ea8476cd999602d2f433863e7e4bf1b81d1869d1e07f4dcf56d71b6430a605c
+  languageName: node
+  linkType: hard
+
+"annotpdf@npm:^1.0.15":
+  version: 1.0.15
+  resolution: "annotpdf@npm:1.0.15"
+  dependencies:
+    "@types/crypto-js": ^4.0.1
+    "@types/pako": ^1.0.1
+    crypto-js: ^4.0.0
+    pako: ^1.0.10
+  checksum: e89c3316160c801f61560e1e9b7c880657c9bef01c9bf6fc6331a4da7b1262bfd704b3b846bc3dc1c2ace56ba10556119761b4cb3b2fb35f5d505b4918ba2f37
   languageName: node
   linkType: hard
 
@@ -12207,6 +12235,13 @@ __metadata:
     randombytes: ^2.0.0
     randomfill: ^1.0.3
   checksum: c1609af82605474262f3eaa07daa0b2140026bd264ab316d4bf1170272570dbe02f0c49e29407fe0d3634f96c507c27a19a6765fb856fed854a625f9d15618e2
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^4.0.0":
+  version: 4.1.1
+  resolution: "crypto-js@npm:4.1.1"
+  checksum: b3747c12ee3a7632fab3b3e171ea50f78b182545f0714f6d3e7e2858385f0f4101a15f2517e033802ce9d12ba50a391575ff4638c9de3dd9b2c4bc47768d5425
   languageName: node
   linkType: hard
 
@@ -26712,7 +26747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pako@npm:~1.0.5":
+"pako@npm:^1.0.10, pako@npm:~1.0.5":
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 1be2bfa1f807608c7538afa15d6f25baa523c30ec870a3228a89579e474a4d992f4293859524e46d5d87fd30fa17c5edf34dbef0671251d9749820b488660b16
@@ -28812,6 +28847,16 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  languageName: node
+  linkType: hard
+
+"reactjs-popup@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "reactjs-popup@npm:2.0.5"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 7b9ebd49e66fb936e85cd4e7a3713cdf903e95f802e5783963f1f9c000d2f8bdb7e4b9967756677238b2fcd9c07637282f2a037403374931ba42865ffffe60e6
   languageName: node
   linkType: hard
 

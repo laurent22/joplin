@@ -16,6 +16,9 @@
     "test-ci": "yarn test",
     "postinstall": "yarn build"
   },
+  "browser": {
+    "fs": false
+  },
   "author": "Joplin",
   "license": "MIT",
   "devDependencies": {
@@ -40,9 +43,11 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@joplin/lib": "workspace:^",
+    "annotpdf": "^1.0.15",
     "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
     "react-dom": "16.9.0",
+    "reactjs-popup": "^2.0.5",
     "styled-components": "^5.3.5"
   }
 }

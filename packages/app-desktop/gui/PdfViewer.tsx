@@ -7,6 +7,8 @@ import { ContextMenuItemType, ContextMenuOptions } from './NoteEditor/utils/cont
 import CommandService from '@joplin/lib/services/CommandService';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
+import shim from '@joplin/lib/shim';
+import { tmpdir } from 'os';
 
 const Window = styled.div`
 	height: 100%;
@@ -47,6 +49,16 @@ export default function PdfViewer(props: Props) {
 		await CommandService.instance().execute('openItem', `joplin://${props.resource.id}`);
 	}, [props.resource.id]);
 
+	const saveFile = useCallback(async (file: Uint8Array) => {
+		const tempPath = `${tmpdir()}/joplin-meow.pdf`;
+		await shim.fsDriver().writeFile(tempPath, file);
+		console.log('tempPath', tempPath);
+		await Resource.updateResourceBlobContent(props.resource.id, tempPath);
+		console.log('updated resource');
+		await shim.fsDriver().remove(tempPath);
+		console.log('deleted temp file');
+	}, [props.resource]);
+
 	useEffect(() => {
 		const onMessage_ = async (event: any) =>{
 			if (!event.data || !event.data.name) {
@@ -71,6 +83,17 @@ export default function PdfViewer(props: Props) {
 				} as ContextMenuOptions, props.dispatch);
 
 				menu.popup(bridge().window());
+			} else if (event.data.name === 'saveFile') {
+				if (event.data.file) {
+					await saveFile(event.data.file);
+					console.log('file saved', event.data.closeAfterSave);
+					if (event.data.closeAfterSave) {
+						console.log('closing');
+						onClose();
+					}
+				} else {
+					bridge().showErrorMessageBox('File could not be saved');
+				}
 			} else {
 				console.error('Unknown event received', event.data.name);
 			}
@@ -80,7 +103,7 @@ export default function PdfViewer(props: Props) {
 		return () => {
 			iframe.contentWindow.removeEventListener('message', onMessage_);
 		};
-	}, [onClose, openExternalViewer, props.dispatch]);
+	}, [onClose, openExternalViewer, props.dispatch, saveFile]);
 
 	const theme = themeStyle(props.themeId);
 

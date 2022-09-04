@@ -5,6 +5,7 @@ import Page from './Page';
 import styled from 'styled-components';
 import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
 import useScrollSaver, { ScrollSaver } from './hooks/useScrollSaver';
+import Annotator from './Annotator';
 
 
 const PagesHolder = styled.div<{ pageGap: number }>`
@@ -35,6 +36,7 @@ export interface VerticalPagesProps {
 	onPageClick?: (page: number)=> void;
 	onActivePageChange?: (page: number)=> void;
 	onDoubleClick?: (page: number)=> void;
+	annotator?: Annotator;
 }
 
 export default function VerticalPages(props: VerticalPagesProps) {
@@ -106,6 +108,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 					textSelectable={props.textSelectable}
 					onTextSelect={props.onTextSelect}
 					onDoubleClick={props.onDoubleClick}
+					annotator={props.annotator}
 					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
 			}
 			) : 'Calculating size...'

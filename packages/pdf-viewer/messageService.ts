@@ -9,6 +9,7 @@ export default class MessageService {
 				name,
 				...data,
 			};
+			console.log('passing data to parent', message);
 			window.postMessage(message, '*');
 		} else if (this.viewerType === 'mini') {
 			const message = {
@@ -31,5 +32,8 @@ export default class MessageService {
 
 	public openFullScreenViewer = (resourceId: string, pageNo: number) => {
 		this.sendMessage('openPdfViewer', { resourceId, pageNo });
+	};
+	public saveFile = (file: Uint8Array, closeAfterSave = false) => {
+		this.sendMessage('saveFile', { file, closeAfterSave });
 	};
 }
