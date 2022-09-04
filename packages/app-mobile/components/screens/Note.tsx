@@ -615,7 +615,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Split layout and notesbar shouldn't be enabled together because of screen space.
 			// Similar logic is in onSplitLayoutToggle.
 			if (this.props.useSplitLayout) {
-				await this.onSplitLayoutToggle();
+				this.props.dispatch({ type: 'DISABLE_SPLIT_LAYOUT' });
 			}
 			this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
 		}
@@ -626,7 +626,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.props.dispatch({ type: 'DISABLE_SPLIT_LAYOUT' });
 		} else {
 			if (this.props.showNotesBar) {
-				await this.onNotesBarToggle();
+				this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
 			}
 			this.props.dispatch({ type: 'ENABLE_SPLIT_LAYOUT' });
 		}
