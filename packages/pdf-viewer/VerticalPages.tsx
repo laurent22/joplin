@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, MutableRefObject } from 'react';
 import * as React from 'react';
-import { PdfData } from './pdfSource';
+import PdfDocument from './PdfDocument';
 import Page from './Page';
 import styled from 'styled-components';
 import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
@@ -14,20 +14,21 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	flex-flow: column;
 	width: fit-content;
 	min-width: 100%;
-	min-height: 100%;
+	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
 
 export interface VerticalPagesProps {
-	pdf: PdfData;
+	pdfDocument: PdfDocument;
 	isDarkTheme: boolean;
 	anchorPage?: number;
 	rememberScroll?: boolean;
 	pdfId?: string;
 	zoom?: number;
 	container: MutableRefObject<HTMLElement>;
-	pageGap?: number;
+	pageGap: number;
 	showPageNumbers?: boolean;
+	onActivePageChange: (page: number)=> void;
 }
 
 export default function VerticalPages(props: VerticalPagesProps) {
@@ -35,7 +36,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 	const innerContainerEl = useRef<HTMLDivElement>(null);
 
 	const scaledSize = useScaledSize({
-		pdf: props.pdf,
+		pdfDocument: props.pdfDocument,
 		pdfId: props.pdfId,
 		containerWidth,
 		rememberScroll: props.rememberScroll,
@@ -51,6 +52,9 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		scaledSize,
 		pdfId: props.pdfId,
 		rememberScroll: props.rememberScroll,
+		pdfDocument: props.pdfDocument,
+		pageGap: props.pageGap,
+		onActivePageChange: props.onActivePageChange,
 	} as ScrollSaver);
 
 	useEffect(() => {
@@ -81,13 +85,13 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, [props.container, props.pdf]);
+	}, [props.container, props.pdfDocument]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{scaledSize ?
-			Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {
+			Array.from(Array(props.pdfDocument.pageCount).keys()).map((i: number) => {
 				// setting focusOnLoad only after scaledSize is set so that the container height is set correctly
-				return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
+				return <Page pdfDocument={props.pdfDocument} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
 					isAnchored={props.anchorPage && props.anchorPage === i + 1}
 					showPageNumbers={props.showPageNumbers}
 					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;

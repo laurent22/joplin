@@ -1,9 +1,10 @@
 import { useRef, useState, MutableRefObject } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-import { ScaledSize, PdfData } from '../pdfSource';
+import PdfDocument from '../PdfDocument';
+import { ScaledSize } from '../types';
 
 export interface ScaledSizeParams {
-	pdf: PdfData;
+	pdfDocument: PdfDocument;
 	pdfId: string;
 	containerWidth: number;
 	rememberScroll: boolean;
@@ -14,21 +15,21 @@ export interface ScaledSizeParams {
 	zoom: number;
 }
 
-const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage, container, innerContainerEl, pageGap, zoom }: ScaledSizeParams) => {
+const useScaledSize = ({ pdfDocument, pdfId, containerWidth, rememberScroll, anchorPage, container, innerContainerEl, pageGap, zoom }: ScaledSizeParams) => {
 	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
 	const currentScaleSize = useRef(scaledSize);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (!pdf || !containerWidth) return;
+		if (!pdfDocument || !containerWidth) return;
 		// console.log('scaledSize calculation triggered');
 		const effectiveWidth = Math.min(containerWidth - 20, 900) * (zoom || 1);
-		const scaledSize_ = await pdf.getScaledSize(null, effectiveWidth);
+		const scaledSize_ = await pdfDocument.getScaledSize(null, effectiveWidth);
 		if (event.cancelled) return;
 
 		const oldScaleSize = currentScaleSize.current;
 		const oldScrollTop = container.current.scrollTop;
 
-		innerContainerEl.current.style.height = `${(scaledSize_.height + (pageGap || 2)) * pdf.pageCount}px`;
+		innerContainerEl.current.style.height = `${(scaledSize_.height + pageGap) * pdfDocument.pageCount}px`;
 
 		// Adjust scroll position after window resize to keep the same page visible
 		if (oldScaleSize && container.current) {
@@ -47,7 +48,7 @@ const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage,
 				// console.log('scroll set',container.current.scrollTop);
 			}
 		}
-	}, [pdf, pdfId, rememberScroll, anchorPage, containerWidth, zoom]);
+	}, [pdfDocument, pdfId, rememberScroll, anchorPage, containerWidth, zoom]);
 
 	return scaledSize;
 };
