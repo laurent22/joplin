@@ -332,6 +332,7 @@ class Application extends BaseApplication {
 			{ keys: [' '], command: 'todo toggle $n' },
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
+			{ keys: ['ti'], type: 'function', command: 'toggle_ids' },
 			{ keys: ['/'], type: 'prompt', command: 'search ""', cursorPosition: -2 },
 			{ keys: ['mn'], type: 'prompt', command: 'mknote ""', cursorPosition: -2 },
 			{ keys: ['mt'], type: 'prompt', command: 'mktodo ""', cursorPosition: -2 },
