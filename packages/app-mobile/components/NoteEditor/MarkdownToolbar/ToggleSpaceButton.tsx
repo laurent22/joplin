@@ -21,7 +21,7 @@ const AntIcon = require('react-native-vector-icons/AntDesign').default;
 
 interface Props {
 	children: ReactNode;
-	spaceAppliccable: boolean;
+	spaceApplicable: boolean;
 	themeId: number;
 	style?: ViewStyle;
 }
@@ -82,14 +82,14 @@ const ToggleSpaceButton = (props: Props) => {
 	);
 
 	const style: ViewStyle = {
-		marginBottom: props.spaceAppliccable ? additionalSpace : 0,
+		marginBottom: props.spaceApplicable ? additionalSpace : 0,
 		...props.style,
 	};
 
 	return (
 		<View style={style}>
 			{props.children}
-			{ decreaseSpaceBtnVisible && props.spaceAppliccable ? decreaseSpaceButton : null }
+			{ decreaseSpaceBtnVisible && props.spaceApplicable ? decreaseSpaceButton : null }
 		</View>
 	);
 };

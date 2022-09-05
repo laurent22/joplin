@@ -279,7 +279,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 
 	return (
 		<ToggleSpaceButton
-			spaceAppliccable={Platform.OS === 'ios' && keyboardVisible }
+			spaceApplicable={ Platform.OS === 'ios' && keyboardVisible }
 			themeId={props.editorSettings.themeId}
 			style={styles.container}
 		>
