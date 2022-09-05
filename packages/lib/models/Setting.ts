@@ -1046,6 +1046,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile],
 				label: () => _('Show sync status in the note viewer and editor'),
+				show: (settings: any) => settings['sync.target'] && settings['sync.target'] !== 0,
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
