@@ -587,7 +587,7 @@
 		}
 
 		ipc.openPdfViewer = function(event) {
-			ipcProxySendToHost("joplin://"+event.resourceId, { resourceId: event.resourceId, mime: "application/pdf", pageNo: event.pageNo });
+			ipcProxySendToHost("joplin://"+event.resourceId, { resourceId: event.resourceId, mime: "application/pdf", pageNo: event.pageNo || 1 });
 		}
 
 		window.addEventListener('hashchange', webviewLib.logEnabledEventHandler(e => {

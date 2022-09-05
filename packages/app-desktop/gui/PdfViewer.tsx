@@ -29,7 +29,7 @@ interface Props {
 	themeId: number;
 	dispatch: Function;
 	resource: any;
-	pageNo?: number;
+	pageNo: number;
 }
 
 export default function PdfViewer(props: Props) {
@@ -94,7 +94,7 @@ export default function PdfViewer(props: Props) {
 			<IFrame src="./vendor/lib/@joplin/pdf-viewer/index.html" x-url={Resource.fullPath(props.resource)}
 				x-appearance={theme.appearance} ref={iframeRef}
 				x-title={props.resource.title}
-				x-anchorpage={props.pageNo || 1}
+				x-anchorpage={props.pageNo}
 				x-type="full"></IFrame>
 		</Window>
 	);

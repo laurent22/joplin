@@ -39,12 +39,10 @@ const Title = styled.div`
 
 export interface FullViewerProps {
 	pdfPath: string;
-	isDarkTheme?: boolean;
-	anchorPage?: number;
-	pdfId?: string;
-	messageService?: MessageService;
-	startPage?: number;
-	title?: string;
+	isDarkTheme: boolean;
+	messageService: MessageService;
+	startPage: number;
+	title: string;
 }
 
 export default function FullViewer(props: FullViewerProps) {
@@ -77,7 +75,7 @@ export default function FullViewer(props: FullViewerProps) {
 			<div className="top-bar">
 				<div>
 					<TitleWrapper>
-						<Title title={props.title}>{props.title || props.pdfId}</Title>
+						<Title title={props.title}>{props.title}</Title>
 						<div>{selectedPage} of {pdfDocument.pageCount} pages</div>
 					</TitleWrapper>
 				</div>
@@ -104,6 +102,8 @@ export default function FullViewer(props: FullViewerProps) {
 						showPageNumbers={true}
 						selectedPage={selectedPage}
 						onPageClick={goToPage}
+						textSelectable={false}
+						zoom={1}
 					/>
 				</div>
 				<div className="pane main-pane" ref={mainViewerRef}>
@@ -118,6 +118,7 @@ export default function FullViewer(props: FullViewerProps) {
 						onActivePageChange={onActivePageChange}
 						textSelectable={true}
 						onTextSelect={props.messageService.textSelected}
+						showPageNumbers={false}
 					/>
 				</div>
 			</div>

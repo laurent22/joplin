@@ -9,7 +9,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, resourceId: string, pageNo?: number) => {
+		execute: async (context: CommandContext, resourceId: string, pageNo: number) => {
 
 			const resource = await Resource.load(resourceId);
 			if (!resource) throw new Error(`No such resource: ${resourceId}`);
@@ -20,7 +20,7 @@ export const runtime = (): CommandRuntime => {
 				name: 'pdfViewer',
 				props: {
 					resource,
-					pageNo: pageNo || 1,
+					pageNo: pageNo,
 				},
 			});
 		},

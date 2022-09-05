@@ -53,7 +53,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		} else if (msg === 'postMessageService.message') {
 			void PostMessageService.instance().postMessage(arg0);
 		} else if (arg0 && arg0.mime === 'application/pdf') {
-			await CommandService.instance().execute('openPdfViewer', arg0.resourceId, arg0.pageNo || 1);
+			await CommandService.instance().execute('openPdfViewer', arg0.resourceId, arg0.pageNo);
 		} else {
 			await CommandService.instance().execute('openItem', msg);
 			// bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));

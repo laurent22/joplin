@@ -46,9 +46,9 @@ export interface PageProps {
 	scaledSize: ScaledSize;
 	isDarkTheme: boolean;
 	container: MutableRefObject<HTMLElement>;
-	showPageNumbers?: boolean;
-	isSelected?: boolean;
-	textSelectable?: boolean;
+	showPageNumbers: boolean;
+	isSelected: boolean;
+	textSelectable: boolean;
 	onTextSelect?: (text: string)=> void;
 	onClick?: (page: number)=> void;
 	onDoubleClick?: (page: number)=> void;
