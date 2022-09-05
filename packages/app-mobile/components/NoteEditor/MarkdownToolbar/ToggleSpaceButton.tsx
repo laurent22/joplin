@@ -41,7 +41,10 @@ const ToggleSpaceButton = (props: Props) => {
 
 	const decreaseSpaceButton = (
 		<>
-			<View style={{ height: additionalPositiveSpace }} />
+			<View style={{
+				height: additionalPositiveSpace,
+				zIndex: -2,
+			}} />
 			<CustomButton
 				themeId={props.themeId}
 				description={_('Move toolbar to bottom of screen')}
@@ -53,6 +56,9 @@ const ToggleSpaceButton = (props: Props) => {
 					// and thus invisible on devices where it isn't necessary.
 					position: 'absolute',
 					bottom: 0,
+
+					// Don't show the button on top of views with content.
+					zIndex: -1,
 
 					alignItems: 'center',
 				}}
