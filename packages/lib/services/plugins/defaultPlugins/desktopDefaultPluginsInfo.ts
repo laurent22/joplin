@@ -4,7 +4,7 @@ import Setting from '../../../models/Setting';
 const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 	const defaultPlugins = {
 		'io.github.jackgruber.backup': {
-			version: '1.0.2',
+			version: '1.1.1',
 			settings: {
 				'path': `${Setting.value('profileDir')}`,
 			},
