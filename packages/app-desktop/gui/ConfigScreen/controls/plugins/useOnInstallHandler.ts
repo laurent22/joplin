@@ -57,5 +57,6 @@ export default function(setInstallingPluginIds: Function, pluginSettings: Plugin
 		});
 
 		if (installError) alert(_('Could not install plugin: %s', installError.message));
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [pluginSettings, onPluginSettingsChange]);
 }

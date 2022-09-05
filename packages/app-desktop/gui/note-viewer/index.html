@@ -653,6 +653,17 @@
 			e.preventDefault();
 		}));
 
+		document.addEventListener('click', webviewLib.logEnabledEventHandler(e => {
+			document.querySelectorAll('.media-pdf').forEach(element => {
+				if(!!element.contentWindow){
+					element.contentWindow.postMessage({
+						type: 'blur'
+					}, '*');
+				}
+			}
+			);
+		}));
+
 		let lastClientWidth_ = NaN, lastClientHeight_ = NaN, lastScrollTop_ = NaN;
 
 		window.addEventListener('resize', webviewLib.logEnabledEventHandler(() => {

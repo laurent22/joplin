@@ -96,5 +96,6 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 				CommandService.instance().unregisterRuntime(command.declaration.name);
 			}
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef]);
 }

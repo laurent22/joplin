@@ -4,7 +4,7 @@ const { View, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-na
 const { connect } = require('react-redux');
 const Tag = require('@joplin/lib/models/Tag').default;
 const { themeStyle } = require('../global-style.js');
-const { ScreenHeader } = require('../screen-header.js');
+const { ScreenHeader } = require('../ScreenHeader');
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 

@@ -14,7 +14,7 @@ const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
 
-interface FolderEntityWithChildren extends FolderEntity {
+export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
 
@@ -544,6 +544,12 @@ export default class Folder extends BaseItem {
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 
+		if (options && options.includeNotes) {
+			for (const folder of all) {
+				folder.notes = await Note.previews(folder.id);
+			}
+		}
+
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models: FolderEntityWithChildren[], parentId: string) {
 			const nestedTreeStructure = [];
@@ -609,7 +615,7 @@ export default class Folder extends BaseItem {
 		return output.join(' / ');
 	}
 
-	static buildTree(folders: FolderEntity[]) {
+	static buildTree(folders: FolderEntity[]): FolderEntityWithChildren[] {
 		const idToFolders: Record<string, any> = {};
 		for (let i = 0; i < folders.length; i++) {
 			idToFolders[folders[i].id] = Object.assign({}, folders[i]);

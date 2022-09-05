@@ -56,5 +56,6 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			await CommandService.instance().execute('openItem', msg);
 			// bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [dispatch, setLocalSearchResultCount, scrollWhenReady, formNote]);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.9.1",
+  "version": "2.9.4",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -31,7 +31,8 @@
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
       "build/icons/**",
-      "build/images/**"
+      "build/images/**",
+      "build/defaultPlugins/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
@@ -138,6 +139,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@joeattardi/emoji-button": "^4.6.0",
     "@joplin/lib": "~2.9",
+    "@joplin/pdf-viewer": "~2.9",
     "@joplin/renderer": "~2.9",
     "async-mutex": "^0.1.3",
     "codemirror": "^5.56.0",

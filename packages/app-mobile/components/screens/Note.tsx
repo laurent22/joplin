@@ -5,7 +5,8 @@ import shim from '@joplin/lib/shim';
 import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
-import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/NoteEditor';
+import NoteEditor from '../NoteEditor/NoteEditor';
+import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
@@ -25,7 +26,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 const { ActionButton } = require('../action-button.js');
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
@@ -866,6 +867,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
+	async showAttachMenu() {
+		const buttons = [];
+
+		// On iOS, it will show "local files", which means certain files saved from the browser
+		// and the iCloud files, but it doesn't include photos and images from the CameraRoll
+		//
+		// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+		buttons.push({ text: _('Attach file'), id: 'attachFile' });
+
+		// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
+		// because that's only way to browse photos from the camera roll.
+		if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
+		buttons.push({ text: _('Take photo'), id: 'takePhoto' });
+
+		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
+
+		if (buttonId === 'takePhoto') this.takePhoto_onPress();
+		if (buttonId === 'attachFile') void this.attachFile_onPress();
+		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+	}
+
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -890,26 +912,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
-				onPress: async () => {
-					const buttons = [];
-
-					// On iOS, it will show "local files", which means certain files saved from the browser
-					// and the iCloud files, but it doesn't include photos and images from the CameraRoll
-					//
-					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
-					buttons.push({ text: _('Attach file'), id: 'attachFile' });
-
-					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
-					// because that's only way to browse photos from the camera roll.
-					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
-					buttons.push({ text: _('Take photo'), id: 'takePhoto' });
-
-					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
-
-					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachFile') void this.attachFile_onPress();
-					if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
-				},
+				onPress: () => this.showAttachMenu(),
 			});
 		}
 
@@ -1128,6 +1131,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					/>
 				);
 			} else {
+				const editorStyle = this.styles().bodyTextInput;
+
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
 					themeId={this.props.themeId}
@@ -1136,7 +1141,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onChange={this.onBodyChange}
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-					style={this.styles().bodyTextInput}
+					onAttach={() => this.showAttachMenu()}
+					style={{
+						...editorStyle,
+						paddingLeft: 0,
+						paddingRight: 0,
+					}}
+					contentStyle={{
+						// Apply padding to the editor's content, but not the toolbar.
+						paddingLeft: editorStyle.paddingLeft,
+						paddingRight: editorStyle.paddingRight,
+					}}
 				/>;
 			}
 		}

@@ -131,11 +131,15 @@ export default class ExternalEditWatcher {
 							if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
 						}
 
+						this.logger().debug('ExternalEditWatcher: Updating note object.');
+
 						const updatedNote = await Note.unserializeForEdit(noteContent);
 						updatedNote.id = id;
 						updatedNote.parent_id = note.parent_id;
 						await Note.save(updatedNote);
 						this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
+					} else {
+						this.logger().debug('ExternalEditWatcher: Skipping this event.');
 					}
 
 					this.skipNextChangeEvent_ = {};

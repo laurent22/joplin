@@ -57,6 +57,11 @@ echo "Yarn $( yarn -v )"
 
 cd "$ROOT_DIR"
 yarn install
+testResult=$?
+if [ $testResult -ne 0 ]; then
+	echo "Yarn installation failed. Search for 'exit code 1' in the log for more information."
+	exit $testResult
+fi
 
 # =============================================================================
 # Run test units. Only do it for pull requests and dev branch because we don't
@@ -170,6 +175,9 @@ cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
+	cd "$ROOT_DIR/packages/tools"
+	node bundleDefaultPlugins.js
+	cd "$ROOT_DIR/packages/app-desktop"
 	USE_HARD_LINKS=false yarn run dist
 elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	echo "Step: Building Docker Image..."
