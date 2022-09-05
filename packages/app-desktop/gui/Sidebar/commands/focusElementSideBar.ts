@@ -9,18 +9,24 @@ export const declaration: CommandDeclaration = {
 	parentLabel: () => _('Focus'),
 };
 
-export const runtime = (comp: any): CommandRuntime => {
+export interface RuntimeProps {
+	getSelectedItem(): any;
+	getFirstAnchorItemRef(type: string): any;
+	anchorItemRefs: any;
+}
+
+export const runtime = (props: RuntimeProps): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			const sidebarVisible = layoutItemProp((context.state as AppState).mainLayout, 'sideBar', 'visible');
 
 			if (sidebarVisible) {
-				const item = comp.selectedItem();
+				const item = props.getSelectedItem();
 				if (item) {
-					const anchorRef = comp.anchorItemRefs[item.type][item.id];
+					const anchorRef = props.anchorItemRefs.current[item.type][item.id];
 					if (anchorRef) anchorRef.current.focus();
 				} else {
-					const anchorRef = comp.firstAnchorItemRef('folder');
+					const anchorRef = props.getFirstAnchorItemRef('folder');
 					if (anchorRef) anchorRef.current.focus();
 				}
 			}

@@ -342,6 +342,27 @@ export function initCodeMirror(
 		parent: parentElement,
 	});
 
+	// HACK: 09/02/22: Work around https://github.com/laurent22/joplin/issues/6802 by creating a copy mousedown
+	//  event to prevent the Editor's .preventDefault from making the context menu not appear.
+	// TODO: Track the upstream issue at https://github.com/codemirror/dev/issues/935 and remove this workaround
+	//  when the upstream bug is fixed.
+	document.body.addEventListener('mousedown', (evt) => {
+		if (!evt.isTrusted) {
+			return;
+		}
+
+		// Walk up the tree -- is evt.target or any of its parent nodes the editor's input region?
+		for (let current: Record<string, any> = evt.target; current; current = current.parentElement) {
+			if (current === editor.contentDOM) {
+				evt.stopPropagation();
+
+				const copyEvent = new Event('mousedown', evt);
+				editor.contentDOM.dispatchEvent(copyEvent);
+				return;
+			}
+		}
+	}, true);
+
 	const updateSearchQuery = (newState: SearchState) => {
 		const query = new SearchQuery({
 			search: newState.searchText,

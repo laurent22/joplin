@@ -5,11 +5,15 @@ class NoteListWidget extends ListWidget {
 	constructor() {
 		super();
 		this.selectedNoteId_ = 0;
+		this.showIds = false;
 
 		this.updateIndexFromSelectedNoteId_ = false;
 
 		this.itemRenderer = note => {
-			let label = Note.displayTitle(note); // + ' ' + note.id;
+			let label = Note.displayTitle(note);
+			if (this.showIds) {
+				label = `${Note.shortId(note.id)} ${Note.displayTitle(note)}`;
+			}
 			if (note.is_todo) {
 				label = `[${note.todo_completed ? 'X' : ' '}] ${label}`;
 			}
@@ -20,6 +24,11 @@ class NoteListWidget extends ListWidget {
 	set selectedNoteId(v) {
 		this.updateIndexFromSelectedNoteId_ = true;
 		this.selectedNoteId_ = v;
+	}
+
+	toggleShowIds() {
+		this.showIds = !this.showIds;
+		this.invalidate();
 	}
 
 	render() {
