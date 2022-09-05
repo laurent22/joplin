@@ -47,6 +47,23 @@ export default function PdfViewer(props: Props) {
 		await CommandService.instance().execute('openItem', `joplin://${props.resource.id}`);
 	}, [props.resource.id]);
 
+	const textSelected = useCallback(async (text: string) => {
+		if (!text) return;
+		const itemType = ContextMenuItemType.Text;
+		const menu = await contextMenu({
+			itemType,
+			resourceId: null,
+			filename: null,
+			mime: 'text/plain',
+			textToCopy: text,
+			linkToCopy: null,
+			htmlToCopy: '',
+			insertContent: () => { console.warn('insertContent() not implemented'); },
+		} as ContextMenuOptions, props.dispatch);
+
+		menu.popup(bridge().window());
+	}, [props.dispatch]);
+
 	useEffect(() => {
 		const onMessage_ = async (event: any) =>{
 			if (!event.data || !event.data.name) {
@@ -58,19 +75,7 @@ export default function PdfViewer(props: Props) {
 			} else if (event.data.name === 'externalViewer') {
 				await openExternalViewer();
 			} else if (event.data.name === 'textSelected') {
-				const itemType = ContextMenuItemType.Text;
-				const menu = await contextMenu({
-					itemType,
-					resourceId: null,
-					filename: null,
-					mime: 'text/plain',
-					textToCopy: event.data.text,
-					linkToCopy: null,
-					htmlToCopy: '',
-					insertContent: () => { console.warn('insertContent() not implemented'); },
-				} as ContextMenuOptions, props.dispatch);
-
-				menu.popup(bridge().window());
+				await textSelected(event.data.text);
 			} else {
 				console.error('Unknown event received', event.data.name);
 			}
@@ -80,7 +85,7 @@ export default function PdfViewer(props: Props) {
 		return () => {
 			iframe.contentWindow.removeEventListener('message', onMessage_);
 		};
-	}, [onClose, openExternalViewer, props.dispatch]);
+	}, [onClose, openExternalViewer, textSelected]);
 
 	const theme = themeStyle(props.themeId);
 
