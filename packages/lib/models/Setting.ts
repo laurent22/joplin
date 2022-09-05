@@ -1576,6 +1576,13 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			installedDefaultPlugins: {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,
@@ -1952,6 +1959,17 @@ class Setting extends BaseModel {
 
 	static toggle(key: string) {
 		return this.setValue(key, !this.value(key));
+	}
+
+	// this method checks if the 'value' passed is present in the Setting "Array"
+	// If yes, then it just returns 'true'. If its not present then, it will
+	// update it and return 'false'
+	public static setArrayValue(settingName: string, value: string): boolean {
+		const settingValue: Array<any> = this.value(settingName);
+		if (settingValue.includes(value)) return true;
+		settingValue.push(value);
+		this.setValue(settingName, settingValue);
+		return false;
 	}
 
 	static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {

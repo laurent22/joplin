@@ -1,9 +1,10 @@
 import { useRef, useState, MutableRefObject } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-import { ScaledSize, PdfData } from '../pdfSource';
+import PdfDocument from '../PdfDocument';
+import { ScaledSize } from '../types';
 
 export interface ScaledSizeParams {
-	pdf: PdfData;
+	pdfDocument: PdfDocument;
 	pdfId: string;
 	containerWidth: number;
 	rememberScroll: boolean;
@@ -11,22 +12,24 @@ export interface ScaledSizeParams {
 	container: MutableRefObject<HTMLElement>;
 	innerContainerEl: MutableRefObject<HTMLElement>;
 	pageGap: number;
+	zoom: number;
 }
 
-const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage, container, innerContainerEl, pageGap }: ScaledSizeParams) => {
+const useScaledSize = ({ pdfDocument, pdfId, containerWidth, rememberScroll, anchorPage, container, innerContainerEl, pageGap, zoom }: ScaledSizeParams) => {
 	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
 	const currentScaleSize = useRef(scaledSize);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (!pdf || !containerWidth) return;
+		if (!pdfDocument || !containerWidth) return;
 		// console.log('scaledSize calculation triggered');
-		const scaledSize_ = await pdf.getScaledSize(null, containerWidth - 10);
+		const effectiveWidth = Math.min(containerWidth - 20, 900) * (zoom || 1);
+		const scaledSize_ = await pdfDocument.getScaledSize(null, effectiveWidth);
 		if (event.cancelled) return;
 
 		const oldScaleSize = currentScaleSize.current;
 		const oldScrollTop = container.current.scrollTop;
 
-		innerContainerEl.current.style.height = `${(scaledSize_.height + (pageGap || 2)) * pdf.pageCount}px`;
+		innerContainerEl.current.style.height = `${(scaledSize_.height + pageGap) * pdfDocument.pageCount}px`;
 
 		// Adjust scroll position after window resize to keep the same page visible
 		if (oldScaleSize && container.current) {
@@ -40,11 +43,12 @@ const useScaledSize = ({ pdf, pdfId, containerWidth, rememberScroll, anchorPage,
 		if (rememberScroll && pdfId && !oldScaleSize && !anchorPage) {
 			const scrollOffset = parseInt(sessionStorage.getItem(`pdf.${pdfId}.scrollTop`), 10) || null;
 			if (scrollOffset) {
-				container.current.scrollTop = scrollOffset;
+				// Adjusting it according to the new scale
+				container.current.scrollTop = scrollOffset * scaledSize_.scale;
 				// console.log('scroll set',container.current.scrollTop);
 			}
 		}
-	}, [pdf, pdfId, rememberScroll, anchorPage, containerWidth]);
+	}, [pdfDocument, pdfId, rememberScroll, anchorPage, containerWidth, zoom]);
 
 	return scaledSize;
 };

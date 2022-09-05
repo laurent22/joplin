@@ -55,6 +55,24 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
+	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', () => {
+		const initialDocText = '';
+		const editor = createEditor(
+			initialDocText, EditorSelection.cursor(0)
+		);
+
+		toggleBolded(editor);
+		toggleItalicized(editor);
+		expect(editor.state.doc.toString()).toBe('******');
+
+		editor.dispatch(editor.state.replaceSelection('Test'));
+		expect(editor.state.doc.toString()).toBe('***Test***');
+
+		toggleItalicized(editor);
+		editor.dispatch(editor.state.replaceSelection(' Test'));
+		expect(editor.state.doc.toString()).toBe('***Test*** Test');
+	});
+
 	it('toggling math should both create and navigate out of math regions', () => {
 		const initialDocText = 'Testing... ';
 		const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));

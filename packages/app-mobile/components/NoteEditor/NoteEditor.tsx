@@ -3,38 +3,38 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
+import ExtendedWebView from '../ExtendedWebView';
 
 const React = require('react');
-const { forwardRef, useImperativeHandle } = require('react');
-const { useEffect, useMemo, useState, useCallback, useRef } = require('react');
-const { WebView } = require('react-native-webview');
-const { View } = require('react-native');
+import { forwardRef, RefObject, useImperativeHandle } from 'react';
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import { View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
 import SelectionFormatting from './SelectionFormatting';
 import {
-	EditorSettings,
-	EditorControl,
-
-	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
-	ListType,
-	SearchState,
+	EditorSettings, EditorControl,
+	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent, ListType, SearchState,
 } from './types';
 import { _ } from '@joplin/lib/locale';
+import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
+type OnAttachCallback = ()=> void;
 
 interface Props {
 	themeId: number;
 	initialText: string;
 	initialSelection?: Selection;
-	style: any;
+	style: ViewStyle;
+	contentStyle?: ViewStyle;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
+	onAttach: OnAttachCallback;
 }
 
 function fontFamilyFromSettings() {
@@ -106,8 +106,107 @@ function editorTheme(themeId: number) {
 	};
 }
 
+type OnInjectJSCallback = (js: string)=> void;
+type OnSetVisibleCallback = (visible: boolean)=> void;
+type OnSearchStateChangeCallback = (state: SearchState)=> void;
+const useEditorControl = (
+	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
+	setSearchState: OnSearchStateChangeCallback, searchStateRef: RefObject<SearchState>
+): EditorControl => {
+	return useMemo(() => {
+		return {
+			undo() {
+				injectJS('cm.undo();');
+			},
+			redo() {
+				injectJS('cm.redo();');
+			},
+			select(anchor: number, head: number) {
+				injectJS(
+					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
+				);
+			},
+			insertText(text: string) {
+				injectJS(`cm.insertText(${JSON.stringify(text)});`);
+			},
+
+			toggleBolded() {
+				injectJS('cm.toggleBolded();');
+			},
+			toggleItalicized() {
+				injectJS('cm.toggleItalicized();');
+			},
+			toggleList(listType: ListType) {
+				injectJS(`cm.toggleList(${JSON.stringify(listType)});`);
+			},
+			toggleCode() {
+				injectJS('cm.toggleCode();');
+			},
+			toggleMath() {
+				injectJS('cm.toggleMath();');
+			},
+			toggleHeaderLevel(level: number) {
+				injectJS(`cm.toggleHeaderLevel(${level});`);
+			},
+			increaseIndent() {
+				injectJS('cm.increaseIndent();');
+			},
+			decreaseIndent() {
+				injectJS('cm.decreaseIndent();');
+			},
+			updateLink(label: string, url: string) {
+				injectJS(`cm.updateLink(
+					${JSON.stringify(label)},
+					${JSON.stringify(url)}
+				);`);
+			},
+			scrollSelectionIntoView() {
+				injectJS('cm.scrollSelectionIntoView();');
+			},
+			showLinkDialog() {
+				setLinkDialogVisible(true);
+			},
+			hideLinkDialog() {
+				setLinkDialogVisible(false);
+			},
+			hideKeyboard() {
+				injectJS('document.activeElement?.blur();');
+			},
+			searchControl: {
+				findNext() {
+					injectJS('cm.searchControl.findNext();');
+				},
+				findPrevious() {
+					injectJS('cm.searchControl.findPrevious();');
+				},
+				replaceCurrent() {
+					injectJS('cm.searchControl.replaceCurrent();');
+				},
+				replaceAll() {
+					injectJS('cm.searchControl.replaceAll();');
+				},
+				setSearchState(state: SearchState) {
+					injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
+					setSearchState(state);
+				},
+				showSearch() {
+					setSearchState({
+						...searchStateRef.current,
+						dialogVisible: true,
+					});
+				},
+				hideSearch() {
+					setSearchState({
+						...searchStateRef.current,
+						dialogVisible: false,
+					});
+				},
+			},
+		};
+	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
+};
+
 function NoteEditor(props: Props, ref: any) {
-	const [source, setSource] = useState(undefined);
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
@@ -172,137 +271,30 @@ function NoteEditor(props: Props, ref: any) {
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
-	const [searchState, setSearchState] = useState(defaultSearchState);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
+	const [searchState, setSearchState] = useState(defaultSearchState);
+
+	// Having a [searchStateRef] allows [editorControl] to not be re-created
+	// whenever [searchState] changes.
+	const searchStateRef = useRef(defaultSearchState);
+
+	// Keep the reference and the [searchState] in sync
+	useEffect(() => {
+		searchStateRef.current = searchState;
+	}, [searchState]);
 
 	// / Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
-		webviewRef.current.injectJavaScript(`
-			try {
-				${js}
-			}
-			catch(e) {
-				logMessage('Error in injected JS:' + e, e);
-				throw e;
-			};
-
-			true;`);
+		webviewRef.current.injectJS(js);
 	};
 
-
-	const editorControl: EditorControl = {
-		undo() {
-			injectJS('cm.undo();');
-		},
-		redo() {
-			injectJS('cm.redo();');
-		},
-		select(anchor: number, head: number) {
-			injectJS(
-				`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
-			);
-		},
-		insertText(text: string) {
-			injectJS(`cm.insertText(${JSON.stringify(text)});`);
-		},
-
-		toggleBolded() {
-			injectJS('cm.toggleBolded();');
-		},
-		toggleItalicized() {
-			injectJS('cm.toggleItalicized();');
-		},
-		toggleList(listType: ListType) {
-			injectJS(`cm.toggleList(${JSON.stringify(listType)});`);
-		},
-		toggleCode() {
-			injectJS('cm.toggleCode();');
-		},
-		toggleMath() {
-			injectJS('cm.toggleMath();');
-		},
-		toggleHeaderLevel(level: number) {
-			injectJS(`cm.toggleHeaderLevel(${level});`);
-		},
-		increaseIndent() {
-			injectJS('cm.increaseIndent();');
-		},
-		decreaseIndent() {
-			injectJS('cm.decreaseIndent();');
-		},
-		updateLink(label: string, url: string) {
-			injectJS(`cm.updateLink(
-				${JSON.stringify(label)},
-				${JSON.stringify(url)}
-			);`);
-		},
-		scrollSelectionIntoView() {
-			injectJS('cm.scrollSelectionIntoView();');
-		},
-		showLinkDialog() {
-			setLinkDialogVisible(true);
-		},
-		hideLinkDialog() {
-			setLinkDialogVisible(false);
-		},
-		hideKeyboard() {
-			injectJS('document.activeElement?.blur();');
-		},
-		searchControl: {
-			findNext() {
-				injectJS('cm.searchControl.findNext();');
-			},
-			findPrevious() {
-				injectJS('cm.searchControl.findPrevious();');
-			},
-			replaceCurrent() {
-				injectJS('cm.searchControl.replaceCurrent();');
-			},
-			replaceAll() {
-				injectJS('cm.searchControl.replaceAll();');
-			},
-			setSearchState(state: SearchState) {
-				injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
-				setSearchState(state);
-			},
-			showSearch() {
-				const newSearchState: SearchState = Object.assign({}, searchState);
-				newSearchState.dialogVisible = true;
-
-				setSearchState(newSearchState);
-			},
-			hideSearch() {
-				const newSearchState: SearchState = Object.assign({}, searchState);
-				newSearchState.dialogVisible = false;
-
-				setSearchState(newSearchState);
-			},
-		},
-	};
+	const editorControl = useEditorControl(
+		injectJS, setLinkDialogVisible, setSearchState, searchStateRef
+	);
 
 	useImperativeHandle(ref, () => {
 		return editorControl;
 	});
-
-	useEffect(() => {
-		let cancelled = false;
-		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/NoteEditor.html`;
-			await shim.fsDriver().writeFile(tempFile, html, 'utf8');
-			if (cancelled) return;
-
-			setSource({
-				uri: `file://${tempFile}?r=${Math.round(Math.random() * 100000000)}`,
-				baseUrl: `file://${Setting.value('resourceDir')}/`,
-			});
-		}
-
-		void createHtmlFile();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [html]);
 
 	const onMessage = useCallback((event: any) => {
 		const data = event.nativeEvent.data;
@@ -358,19 +350,12 @@ function NoteEditor(props: Props, ref: any) {
 		} else {
 			console.info('Unsupported CodeMirror message:', msg);
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.onChange]);
+	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
 
-	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	const onError = useCallback(() => {
 		console.error('NoteEditor: webview error');
-	});
+	}, []);
 
-
-	// - `setSupportMultipleWindows` must be `true` for security reasons:
-	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
-	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
-	//    when the editor is focused.
 	return (
 		<View style={{
 			...props.style,
@@ -385,21 +370,13 @@ function NoteEditor(props: Props, ref: any) {
 			<View style={{
 				flexGrow: 1,
 				flexShrink: 0,
-				minHeight: '40%',
+				minHeight: '30%',
+				...props.contentStyle,
 			}}>
-				<WebView
-					style={{
-						backgroundColor: editorSettings.themeData.backgroundColor,
-					}}
+				<ExtendedWebView
+					themeId={props.themeId}
 					ref={webviewRef}
-					scrollEnabled={false}
-					useWebKit={true}
-					source={source}
-					setSupportMultipleWindows={true}
-					hideKeyboardAccessoryView={true}
-					allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
-					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
-					allowFileAccess={true}
+					html={html}
 					injectedJavaScript={injectedJavaScript}
 					onMessage={onMessage}
 					onError={onError}
@@ -410,6 +387,19 @@ function NoteEditor(props: Props, ref: any) {
 				editorSettings={editorSettings}
 				searchControl={editorControl.searchControl}
 				searchState={searchState}
+			/>
+
+			<MarkdownToolbar
+				style={{
+					// Don't show the markdown toolbar if there isn't enough space
+					// for it:
+					flexShrink: 1,
+				}}
+				editorSettings={editorSettings}
+				editorControl={editorControl}
+				selectionState={selectionState}
+				searchState={searchState}
+				onAttach={props.onAttach}
 			/>
 		</View>
 	);

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, MutableRefObject } from 'react';
 import * as React from 'react';
-import { PdfData } from './pdfSource';
+import PdfDocument from './PdfDocument';
 import Page from './Page';
 import styled from 'styled-components';
 import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
+import useScrollSaver, { ScrollSaver } from './hooks/useScrollSaver';
 
 
 const PagesHolder = styled.div<{ pageGap: number }>`
@@ -11,28 +12,31 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	justify-content: center;
 	align-items: center;
 	flex-flow: column;
-	width: 100%;
-	min-height: 100%;
+	width: fit-content;
+	min-width: 100%;
+	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
 
 export interface VerticalPagesProps {
-	pdf: PdfData;
+	pdfDocument: PdfDocument;
 	isDarkTheme: boolean;
 	anchorPage?: number;
 	rememberScroll?: boolean;
 	pdfId?: string;
+	zoom?: number;
 	container: MutableRefObject<HTMLElement>;
-	pageGap?: number;
+	pageGap: number;
 	showPageNumbers?: boolean;
+	onActivePageChange: (page: number)=> void;
 }
-
 
 export default function VerticalPages(props: VerticalPagesProps) {
 	const [containerWidth, setContainerWidth] = useState<number>(null);
 	const innerContainerEl = useRef<HTMLDivElement>(null);
+
 	const scaledSize = useScaledSize({
-		pdf: props.pdf,
+		pdfDocument: props.pdfDocument,
 		pdfId: props.pdfId,
 		containerWidth,
 		rememberScroll: props.rememberScroll,
@@ -40,7 +44,18 @@ export default function VerticalPages(props: VerticalPagesProps) {
 		container: props.container,
 		innerContainerEl,
 		pageGap: props.pageGap,
+		zoom: props.zoom,
 	} as ScaledSizeParams);
+
+	useScrollSaver({
+		container: props.container,
+		scaledSize,
+		pdfId: props.pdfId,
+		rememberScroll: props.rememberScroll,
+		pdfDocument: props.pdfDocument,
+		pageGap: props.pageGap,
+		onActivePageChange: props.onActivePageChange,
+	} as ScrollSaver);
 
 	useEffect(() => {
 		let resizeTimer: number = null;
@@ -48,7 +63,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 		const updateWidth = () => {
 			if (cancelled) return;
-			setContainerWidth(innerContainerEl.current.clientWidth);
+			setContainerWidth(props.container.current.clientWidth);
 		};
 
 		const onResize = () => {
@@ -70,43 +85,13 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, [props.pdf]);
-
-	useEffect(() => {
-		let scrollTimer: number = null;
-
-		const saveScroll = () => {
-			const scrollTop = props.container.current.scrollTop;
-			if (props.rememberScroll && props.pdfId) {
-				sessionStorage.setItem(`pdf.${props.pdfId}.scrollTop`, `${scrollTop}`);
-			}
-		};
-
-		const onScroll = () => {
-			if (scrollTimer) {
-				clearTimeout(scrollTimer);
-				scrollTimer = null;
-			}
-			scrollTimer = window.setTimeout(saveScroll, 200);
-		};
-
-		props.container.current.addEventListener('scroll', onScroll);
-
-		return () => {
-			props.container.current.removeEventListener('scroll', onScroll);
-			if (scrollTimer) {
-				clearTimeout(scrollTimer);
-				scrollTimer = null;
-			}
-		};
-
-	}, [props.container, props.pdfId, props.rememberScroll]);
+	}, [props.container, props.pdfDocument]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{scaledSize ?
-			Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {
+			Array.from(Array(props.pdfDocument.pageCount).keys()).map((i: number) => {
 				// setting focusOnLoad only after scaledSize is set so that the container height is set correctly
-				return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
+				return <Page pdfDocument={props.pdfDocument} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
 					isAnchored={props.anchorPage && props.anchorPage === i + 1}
 					showPageNumbers={props.showPageNumbers}
 					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;

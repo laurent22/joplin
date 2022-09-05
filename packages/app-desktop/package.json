@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -31,7 +31,8 @@
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
       "build/icons/**",
-      "build/images/**"
+      "build/images/**",
+      "build/defaultPlugins/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
