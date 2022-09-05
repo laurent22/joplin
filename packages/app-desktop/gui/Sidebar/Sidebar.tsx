@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -18,7 +18,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Logger from '@joplin/lib/Logger';
-import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
@@ -79,13 +79,21 @@ function ExpandLink(props: any) {
 }
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
-	if (!folderIcon) return null;
+	if (!folderIcon) {
+		const defaultFolderIcon: FolderIcon = {
+			dataUrl: '',
+			emoji: '',
+			name: 'far fa-folder',
+			type: FolderIconType.FontAwesome,
+		};
+		return <div style={{ marginRight: 5, display: 'flex' }}><FolderIconBox opacity={0.7} folderIcon={defaultFolderIcon}/></div>;
+	}
 
 	return <div style={{ marginRight: 5, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
 
 function FolderItem(props: any) {
-	const { hasChildren, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
+	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
 	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
 
@@ -110,7 +118,7 @@ function FolderItem(props: any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{renderFolderIcon(folderIcon)}<span className="title" style={{ lineHeight: 0 }}>{folderTitle}</span>
+				{showFolderIcon ? renderFolderIcon(folderIcon) : null}<span className="title" style={{ lineHeight: 0 }}>{folderTitle}</span>
 				{shareIcon} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
@@ -138,6 +146,14 @@ const SidebarComponent = (props: Props) => {
 	// probably have to be refactored using React Hooks first.
 	const pluginsRef = useRef<PluginStates>(null);
 	pluginsRef.current = props.plugins;
+
+	// If at least one of the folder has an icon, then we display icons for all
+	// folders (those without one will get the default icon). This is so that
+	// visual alignment is correct for all folders, otherwise the folder tree
+	// looks messy.
+	const showFolderIcons = useMemo(() => {
+		return !!props.folders.find((f: FolderEntity) => !!f.icon);
+	}, [props.folders]);
 
 	const getSelectedItem = useCallback(() => {
 		if (props.notesParentType === 'Folder' && props.selectedFolderId) {
@@ -506,6 +522,7 @@ const SidebarComponent = (props: Props) => {
 			onFolderToggleClick_={onFolderToggleClick_}
 			shareId={folder.share_id}
 			parentId={folder.parent_id}
+			showFolderIcon={showFolderIcons}
 		/>;
 	};
 
