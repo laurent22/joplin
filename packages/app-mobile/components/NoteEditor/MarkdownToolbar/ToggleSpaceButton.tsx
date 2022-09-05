@@ -7,7 +7,6 @@
 // Works around https://github.com/facebook/react-native/issues/13393 by adding additional
 // space below the given component when the keyboard is visible unless a button is pressed.
 
-import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
@@ -57,7 +56,7 @@ const ToggleSpaceButton = (props: Props) => {
 			}} />
 			<CustomButton
 				themeId={props.themeId}
-				description={_('Move toolbar to bottom of screen')}
+				description={'Move toolbar to bottom of screen'}
 				style={{
 					height: additionalPositiveSpace,
 					width: '100%',
