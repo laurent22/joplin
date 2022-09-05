@@ -133,7 +133,7 @@ function NotesBarComponent(props: Props) {
 	const closeButtonComp = (
 		<TouchableOpacity
 			onPress={handleNotesBarClose}
-			accessibilityLabel={_('Close notes bar')}
+			accessibilityLabel={_('Toggle note list')}
 			accessibilityRole="button"
 		>
 			<Icon name="close" style={[styles().top, styles().closeIcon]}/>
@@ -175,8 +175,8 @@ function NotesBarComponent(props: Props) {
 		});
 	};
 
-	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false), 'Create new note');
-	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true), 'Create new todo');
+	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false), _('New note'));
+	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true), _('New to-do'));
 
 	const topComp = (
 		<View>
