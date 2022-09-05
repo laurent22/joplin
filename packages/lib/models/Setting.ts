@@ -1039,6 +1039,21 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			// Works around a bug in which additional space is visible beneath the toolbar on some devices.
+			// See https://github.com/laurent22/joplin/pull/6823
+			'editor.mobile.removeSpaceBelowToolbar': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				show: (settings: any) => settings['editor.mobile.removeSpaceBelowToolbar'],
+				label: () => _('Remove extra space below the markdown toolbar'),
+				description: () => _('Works around bug on some devices where the markdown toolbar does not touch the bottom of the screen.'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: SettingItemType.String,

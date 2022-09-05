@@ -8,10 +8,12 @@
 // space below the given component when the keyboard is visible unless a button is pressed.
 
 import { _ } from '@joplin/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
+
 import * as React from 'react';
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState, useEffect } from 'react';
 import { View, ViewStyle } from 'react-native';
 import CustomButton from '../../CustomButton';
 
@@ -36,7 +38,15 @@ const ToggleSpaceButton = (props: Props) => {
 	const onDecreaseSpace = useCallback(() => {
 		setAdditionalSpace(additionalNegativeSpace);
 		setDecreaseSpaceBtnVisible(false);
+		Setting.setValue('editor.mobile.removeSpaceBelowToolbar', true);
 	}, [setAdditionalSpace, setDecreaseSpaceBtnVisible, additionalNegativeSpace]);
+
+	useEffect(() => {
+		if (Setting.value('editor.mobile.removeSpaceBelowToolbar')) {
+			onDecreaseSpace();
+		}
+	}, [onDecreaseSpace]);
+
 	const theme: Theme = themeStyle(props.themeId);
 
 	const decreaseSpaceButton = (
