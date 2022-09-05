@@ -1039,6 +1039,17 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'editor.showSyncStatus': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				label: () => _('Show sync status in the note viewer/editor'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: SettingItemType.String,
