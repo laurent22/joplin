@@ -4,7 +4,7 @@ export default class SpellCheckerServiceDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	public setLanguage(_v: string) {
+	public setLanguages(_v: string[]) {
 		throw new Error('Not implemented');
 	}
 

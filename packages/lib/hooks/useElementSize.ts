@@ -27,7 +27,7 @@ function useElementSize(elementRef: any): Size {
 	// Initial size on mount
 	useEffect(() => {
 		updateSize();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	useEventListener('resize', updateSize);

@@ -133,7 +133,7 @@ class Command extends BaseCommand {
 
 				this.releaseLockFn_ = await Command.lockFile(lockFilePath);
 			} catch (error) {
-				if (error.code == 'ELOCKED') {
+				if (error.code === 'ELOCKED') {
 					const msg = _('Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at "%s" and resume the operation.', error.file);
 					this.stdout(msg);
 					return;
@@ -222,7 +222,7 @@ class Command extends BaseCommand {
 				const newContext = await sync.start(options);
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {
-				if (error.code == 'alreadyStarted') {
+				if (error.code === 'alreadyStarted') {
 					this.stdout(error.message);
 				} else {
 					throw error;

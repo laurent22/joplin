@@ -5,13 +5,9 @@ const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 const { assetsToHeaders } = require('@joplin/renderer');
 
-interface Source {
-	uri: string;
-	baseUrl: string;
-}
-
 interface UseSourceResult {
-	source: Source;
+	// [html] can be null if the note is still being rendered.
+	html: string|null;
 	injectedJs: string[];
 }
 
@@ -24,7 +20,7 @@ function usePrevious(value: any, initialValue: any = null): any {
 }
 
 export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
-	const [source, setSource] = useState<Source>(undefined);
+	const [html, setHtml] = useState<string>('');
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
 	const [isFirstRender, setIsFirstRender] = useState(true);
@@ -39,6 +35,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 	const markupToHtml = useMemo(() => {
 		return markupLanguageUtils.newMarkupToHtml();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [isFirstRender]);
 
 	// To address https://github.com/laurent22/joplin/issues/433
@@ -82,7 +79,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				resources: noteResources,
 				codeTheme: theme.codeThemeCss,
 				postMessageSyntax: 'window.joplinPostMessage_',
-				enableLongPress: shim.mobilePlatform() === 'android', // On iOS, there's already a built-on open/share menu
+				enableLongPress: true,
 			};
 
 			// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"
@@ -139,6 +136,17 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			js.push('}');
 			js.push('true;');
 
+			// iOS doesn't automatically adjust the WebView's font size to match users'
+			// accessibility settings. To do this, we need to tell it to match the system font.
+			// See https://github.com/ionic-team/capacitor/issues/2748#issuecomment-612923135
+			const iOSSpecificCss = `
+				@media screen {
+					:root body {
+						font: -apple-system-body;
+					}
+				}
+			`;
+
 			html =
 				`
 				<!DOCTYPE html>
@@ -146,6 +154,9 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					<head>
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
+						<style>
+							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 					</head>
 					<body>
@@ -154,20 +165,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				</html>
 			`;
 
-			const tempFile = `${Setting.value('resourceDir')}/NoteBodyViewer.html`;
-			await shim.fsDriver().writeFile(tempFile, html, 'utf8');
-
-			if (cancelled) return;
-
-			// Now that we are sending back a file instead of an HTML string, we're always sending back the
-			// same file. So we add a cache busting query parameter to it, to make sure that the WebView re-renders.
-			//
-			// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
-			setSource({
-				uri: `file://${tempFile}?r=${Math.round(Math.random() * 100000000)}`,
-				baseUrl: `file://${Setting.value('resourceDir')}/`,
-			});
-
+			setHtml(html);
 			setInjectedJs(js);
 		}
 
@@ -179,7 +177,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 		if (isFirstRender) {
 			setIsFirstRender(false);
-			setSource(undefined);
+			setHtml('');
 			setInjectedJs([]);
 		} else {
 			void renderNote();
@@ -188,7 +186,8 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, effectDependencies);
 
-	return { source, injectedJs };
+	return { html, injectedJs };
 }

@@ -30,7 +30,7 @@ describe('feature_NoteHistory', function() {
 	});
 
 	afterEach(async (done) => {
-		if (testApp !== null) await testApp.destroy();
+		if (testApp) await testApp.destroy();
 		testApp = null;
 		done();
 	});

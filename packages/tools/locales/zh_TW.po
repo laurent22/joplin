@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: SiderealArt <nelson22768384@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Kevin Hsu <kevin.hsu.hws@gmail.com>\n"
 "Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -60,7 +62,7 @@ msgstr "檔案 (&F)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "&Go"
-msgstr "跳轉 (&N)"
+msgstr "跳轉 (&G)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:770
 msgid "&Help"
@@ -222,9 +224,8 @@ msgid "Action"
 msgstr "動作"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
-#, fuzzy
 msgid "Actions"
-msgstr "動作"
+msgstr "行動"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
 msgid "Active"
@@ -258,11 +259,11 @@ msgstr "添加到字典"
 #: packages/server/src/services/MustacheService.ts:156
 #: packages/server/src/services/MustacheService.ts:278
 msgid "Admin"
-msgstr ""
+msgstr "管理員"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "管理員儀表板"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -288,9 +289,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "亦顯示未設定和隱藏的設定變數。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "停止分享"
+msgstr "同步發布已連結記事"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -345,7 +345,6 @@ msgstr "將特定的檔案附加到記事。"
 
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
-#, fuzzy
 msgid "attachment"
 msgstr "附加檔案"
 
@@ -392,16 +391,15 @@ msgstr "自動"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "自動於刪除清單中加入已停用帳戶"
 
 #: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "自動配對大括號、括號、引號等。"
 
 #: packages/lib/models/Setting.ts:1262
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "檢查更新..."
+msgstr "自動檢查更新"
 
 #: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
@@ -537,13 +535,13 @@ msgstr "缺少身份驗證資料，無法更新 Token。再次啟動同步可能
 
 #: packages/server/src/models/UserModel.ts:214
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
-msgstr ""
+msgstr "無法儲存 %s 「%s」，因為檔案尺寸超出允許限制 (%s)"
 
 #: packages/server/src/models/UserModel.ts:231
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
-msgstr ""
+msgstr "無法儲存 %s 「%s」，因為此舉將會超出當前帳號可使用的儲存空間 (%s)"
 
 #: packages/lib/services/share/ShareService.ts:318
 msgid ""
@@ -551,6 +549,8 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
+"無法向共享對象 %s 分享加密記事，因為他們並沒有啟用端到端加密。他們可以前往 選"
+"項 > 加密 來啟用該功能。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -649,9 +649,8 @@ msgid "Code View"
 msgstr "程式碼檢視"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:179
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "請先新增記事本"
+msgstr "與其他人在記事本協作"
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -693,13 +692,12 @@ msgid "Completed decryption."
 msgstr "解密完成。"
 
 #: packages/lib/Synchronizer.ts:190
-#, fuzzy
 msgid "Completed: %s (%s)"
-msgstr "已完成於: %s"
+msgstr "已完成: %s"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "壓縮舊的更改"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:632
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -716,9 +714,8 @@ msgid "Confirm password:"
 msgstr "確認密碼："
 
 #: packages/app-desktop/gui/Root.tsx:147
-#, fuzzy
 msgid "Confirmation"
-msgstr "設置"
+msgstr "確認"
 
 #: packages/lib/services/ReportService.ts:284
 msgid "Conflicted: %d"
@@ -729,14 +726,12 @@ msgid "Conflicts"
 msgstr "衝突"
 
 #: packages/lib/models/Resource.ts:407
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "記事附件"
+msgstr "衝突 (附件)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "內容屬性"
+msgstr "%s 提供的內容"
 
 #: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to note"
@@ -760,14 +755,12 @@ msgstr "複製開發模式命令到剪貼簿"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:355
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:369
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "停止外部編輯"
+msgstr "複製外部鏈結"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
-#, fuzzy
 msgid "Copy image"
-msgstr "複製 Token"
+msgstr "複製圖片"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
 msgid "Copy Link Address"
@@ -818,9 +811,8 @@ msgstr ""
 "%s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:302
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "無法連上延伸模組中心"
+msgstr "無法連上延伸模組儲存庫。"
 
 #: packages/app-desktop/InteropServiceHelper.ts:190
 msgid "Could not export notes: %s"
@@ -837,6 +829,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"無法回應此邀請。請重試一次，或者向記事本擁有者確認是否仍然啟用共享 \n"
+"\v\n"
+"錯誤訊息：\"%s\""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -846,31 +841,27 @@ msgstr "無法升級主密鑰：%s"
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
-msgstr ""
+msgstr "無法驗證此筆記本的共享狀態 - 正在中止。請連接網路後重試。"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
 msgstr "建立時間"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
-msgstr "新增一份記事本"
+msgstr "新增一份記事"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "新增記事。"
+msgstr "新增使用者..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
-msgstr "新增一份記事本"
+msgstr "新增記事本"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "已建立: %s"
+msgstr "新增使用者"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -893,9 +884,8 @@ msgid "Created remote items: %d."
 msgstr "已建立的遠端項目: %d 項。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
-#, fuzzy
 msgid "Created: "
-msgstr "已建立: %s"
+msgstr "新增於："
 
 #: packages/app-cli/app/command-import.js:48
 #: packages/app-desktop/gui/ImportScreen.min.js:69
@@ -963,7 +953,7 @@ msgstr "暗黑"
 
 #: packages/server/src/services/MustacheService.ts:111
 msgid "Dashboard"
-msgstr ""
+msgstr "儀表板"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Database v%s"
@@ -1020,14 +1010,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "刪除此附件「%s」？"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "啟用數學表達式"
+msgstr "刪除已過期 session"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "刪除這些記事 %d ？"
+msgstr "刪除已過期 token"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1062,7 +1050,7 @@ msgstr ""
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr "刪除記事本時，其中的所有記事和子記事本也將被刪除。確定要刪除記事本？"
+msgstr "確定要刪除記事本？此舉亦會刪除其中的所有記事和子記事本。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:161
 msgid "Delete plugin \"%s\"?"
@@ -1076,7 +1064,7 @@ msgstr "刪除這些記事 %d ？"
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
-msgstr "刪除邀請後，共享對象將無法再存取這份共享記事本。確定要刪除這份邀請嗎？"
+msgstr "確定刪除這份邀請嗎？此舉將會使共享對象無法再存取這份共享記事本。"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1212,15 +1200,13 @@ msgid "Do not ask for confirmation."
 msgstr "不要求確認。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:56
-#, fuzzy
 msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* "
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"啟用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送加密後的資料到同"
-"步目標。千萬不要忘記密碼，因為這是解密的 *唯一* 方式！要啟用加密，請在下面輸"
-"入密碼。"
+"不要遺失此密碼，為了安全起見，這將是 *唯一* 解密資料的方法！若要啟用加密，請"
+"在下方輸入您的密碼。"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1305,7 +1291,7 @@ msgstr "編輯記事本"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "編輯使用者設定..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1335,9 +1321,8 @@ msgstr "編輯器字型系列"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "編輯器"
+msgstr "編輯器：%s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1350,12 +1335,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "電子信箱"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:127
 msgid "Emails"
-msgstr ""
+msgstr "電子信箱"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1463,13 +1448,12 @@ msgid "Enabled"
 msgstr "已啟用"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:51
-#, fuzzy
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
 "停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同"
-"步目標。您要繼續嗎？"
+"步目標。"
 
 #: packages/lib/models/BaseItem.ts:808
 msgid "Encrypted"
@@ -1499,19 +1483,16 @@ msgstr "加密: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Encryption keys"
-msgstr "加密："
+msgstr "加密密鑰"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
-#, fuzzy
 msgid "Encryption:"
-msgstr "加密"
+msgstr "加密："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "啟用加密"
+msgstr "端到端加密"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1634,7 +1615,7 @@ msgstr "嚴重錯誤："
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:540
 msgid "Feature flags"
-msgstr ""
+msgstr "功能旗標"
 
 #: packages/lib/Synchronizer.ts:188
 msgid "Fetched items: %d/%d."
@@ -1654,9 +1635,8 @@ msgid "File system"
 msgstr "檔案系統"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "新增標籤："
+msgstr "篩選標籤"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1711,7 +1691,7 @@ msgstr "請輸入`help keymap` 查看鍵盤快速鍵與設定選項"
 
 #: packages/lib/models/Setting.ts:616
 msgid "Force path style"
-msgstr ""
+msgstr "使用路徑樣式存取 (Force path style)"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1736,9 +1716,8 @@ msgid "General"
 msgstr "一般選項"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
-#, fuzzy
 msgid "Generated"
-msgstr "一般選項"
+msgstr "已生成"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Generating link..."
@@ -1772,9 +1751,8 @@ msgid "Goto Anything..."
 msgstr "前往任意內容..."
 
 #: packages/app-desktop/gui/Root.tsx:172
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "授權 Token："
+msgstr "授權"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -1790,7 +1768,7 @@ msgstr "隱藏 %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
-msgstr ""
+msgstr "隱藏未啟用密鑰"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -1803,7 +1781,7 @@ msgstr "強調標記"
 #: packages/server/src/services/MustacheService.ts:140
 #: packages/server/src/services/MustacheService.ts:271
 msgid "Home"
-msgstr ""
+msgstr "主頁"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1847,7 +1825,7 @@ msgstr "忽略 TLS 證書錯誤"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "圖片"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:536
@@ -2011,9 +1989,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "不正確選項值: \"%s\"。可能的值為: %s。"
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "無效的答案：%s"
+msgstr "無效的密碼"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2026,7 +2003,7 @@ msgstr "項目「%s」無法下載：%s"
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:273
 msgid "Items"
-msgstr ""
+msgstr "項目"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2040,22 +2017,19 @@ msgstr "無法同步的項目"
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
-msgstr ""
+msgstr "Joplin 可以使用各種服務來同步您的筆記。從下面的列表中選擇一個。"
 
 #: packages/lib/SyncTargetJoplinCloud.ts:30
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin 討論區"
+msgstr "Joplin Cloud"
 
 #: packages/lib/models/Setting.ts:684
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin 主機 email"
+msgstr "Joplin Cloud 信箱"
 
 #: packages/lib/models/Setting.ts:695
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin 主機密碼"
+msgstr "Joplin Cloud 密碼"
 
 #: packages/lib/services/interop/InteropService.ts:107
 #: packages/lib/services/interop/InteropService.ts:72
@@ -2112,6 +2086,8 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplin 自己的同步服務。還可以使用 Joplin 的專屬功能，例如發布筆記或與他人在筆"
+"記本上協作。"
 
 #: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
@@ -2134,9 +2110,8 @@ msgid "Keychain Supported: %s"
 msgstr "鑰匙圈支援：%s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:71
-#, fuzzy
 msgid "Keys that need upgrading"
-msgstr "主密鑰需要升級"
+msgstr "需要升級的密鑰"
 
 #: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
@@ -2163,9 +2138,8 @@ msgid "Layout button sequence"
 msgstr "頁面佈局"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
-#, fuzzy
 msgid "Leave notebook..."
-msgstr "分享記事..."
+msgstr "離開記事本..."
 
 #: packages/lib/models/Setting.ts:1307
 msgid "Legal"
@@ -2199,9 +2173,8 @@ msgid "List item"
 msgstr "清單項目"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
-#, fuzzy
 msgid "Loaded"
-msgstr "已下載"
+msgstr "已讀取"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "Location"
@@ -2238,11 +2211,11 @@ msgstr "以 OneDrive 登入"
 
 #: packages/server/src/services/MustacheService.ts:277
 msgid "Logout"
-msgstr ""
+msgstr "登出"
 
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Logs"
-msgstr ""
+msgstr "日誌"
 
 #: packages/app-desktop/gui/MenuBar.tsx:780
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:578
@@ -2250,14 +2223,12 @@ msgid "Make a donation"
 msgstr "捐助"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
-#, fuzzy
 msgid "Manage master password"
-msgstr "輸入主密碼："
+msgstr "管理主密碼"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "輸入主密碼："
+msgstr "管理主密碼..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2265,12 +2236,11 @@ msgstr "管理您的延伸模組"
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:20
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"管理 E2EE 設定。指令為 `enable`，`disable`，`decrypt`，`status` 和 `target-"
+"管理 E2EE 設定。指令包含 `enable`，`disable`，`decrypt`，`status` 和 `target-"
 "status`。"
 
 #: packages/lib/models/Setting.ts:714
@@ -2286,7 +2256,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:119
 #: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + Front Matter"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2307,24 +2277,21 @@ msgstr "密鑰 %s"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
-#, fuzzy
 msgid "Master password"
-msgstr "輸入主密碼："
+msgstr "主密碼"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
-#, fuzzy
 msgid "Master password:"
-msgstr "輸入主密碼："
+msgstr "主密碼："
 
 #: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "最大同時連接數"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
-#, fuzzy
 msgid "Missing keys"
-msgstr "缺少主密鑰"
+msgstr "遺失的密鑰"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
@@ -2496,7 +2463,7 @@ msgstr "尚未下載"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Not generated"
-msgstr ""
+msgstr "尚未生成"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
@@ -2568,12 +2535,10 @@ msgid ""
 msgstr "注意：分享記事後，該記事將不會在伺服器上加密。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:750
-#, fuzzy
 msgid "Note&book"
-msgstr "記事本"
+msgstr "記事本 (&B)"
 
 #: packages/lib/models/Setting.ts:2299
-#, fuzzy
 msgid "Notebook"
 msgstr "記事本"
 
@@ -2596,9 +2561,8 @@ msgstr "此標題「%s」已被程式保留，無法使用。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "記事本"
+msgstr "記事"
 
 #: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
@@ -2703,9 +2667,8 @@ msgid "Or create an account."
 msgstr "或是建立帳號。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:400
-#, fuzzy
 msgid "Other applications..."
-msgstr "離開本程式。"
+msgstr "其他應用程式..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2765,7 +2728,7 @@ msgstr "允許使用相機"
 msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
-msgstr ""
+msgstr "請點擊「%s」繼續，或在下方的「%s」列表中設定密碼"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2783,6 +2746,7 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
+"請注意，如果是大型筆記本，可能需要幾分鐘才能在共享對象的設備上顯示所有筆記。"
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2900,24 +2864,23 @@ msgstr "隱私政策"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "處理失敗的付款訂閱"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "處理過大的帳戶"
 
 #: packages/server/src/services/TaskService.ts:38
 msgid "Process user deletions"
-msgstr ""
+msgstr "處理使用者刪除"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "使用者"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "設定檔版本：%s"
+msgstr "使用者名稱：%s"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -2929,12 +2892,11 @@ msgstr "屬性"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "公開、私密鍵值對"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
-#, fuzzy
 msgid "Publish note..."
-msgstr "分享記事..."
+msgstr "上傳記事..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:211
 msgid "Publish Notes"
@@ -3039,9 +3001,8 @@ msgstr "換一組 token"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:218
-#, fuzzy
 msgid "Reset master password"
-msgstr "輸入主密碼："
+msgstr "重設主密碼"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3101,31 +3062,27 @@ msgstr "執行文字檔中的命令，每條命令各佔一行。"
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:594
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS 金鑰"
+msgstr "S3 存取金鑰"
 
 #: packages/lib/models/Setting.ts:554
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 bucket"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:583
 msgid "S3 region"
-msgstr ""
+msgstr "S3 region"
 
 #: packages/lib/models/Setting.ts:605
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS secret"
+msgstr "S3 密鑰"
 
 #: packages/lib/models/Setting.ts:569
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 網址"
+msgstr "S3 網址"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
@@ -3147,9 +3104,8 @@ msgstr "儲存提醒事項"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "另存新檔..."
+msgstr "另存為  %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3198,23 +3154,20 @@ msgid "See the pre-release page for more details: %s"
 msgstr "詳細訊息請參考發行前測試版頁面: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:266
-#, fuzzy
 msgid "Select"
-msgstr "選擇全部"
+msgstr "選擇"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
 msgid "Select all"
 msgstr "選擇全部"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "選擇日期"
+msgstr "選擇表情符號..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "選擇全部"
+msgstr "選擇檔案..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3240,11 +3193,10 @@ msgid "Set alarm:"
 msgstr "設定提醒："
 
 #: packages/lib/models/Setting.ts:1194
-#, fuzzy
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
-msgstr "設置為 0 將占滿可用空間。"
+msgstr "設置為 0 將完全佔滿可用空間。建議寬度為 600"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:633
 msgid "Set the password"
@@ -3296,18 +3248,16 @@ msgid "Show completed to-dos"
 msgstr "顯示已完成的待辦事項"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#, fuzzy
 msgid "Show disabled keys"
-msgstr "顯示進階選項"
+msgstr "顯示已停用密鑰"
 
 #: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "顯示記事數量"
 
 #: packages/lib/models/Setting.ts:926
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "顯示記事數量"
+msgstr "顯示排序按鈕"
 
 #: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
@@ -3376,9 +3326,8 @@ msgid "Source format: %s"
 msgstr "來源格式：%s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:151
-#, fuzzy
 msgid "Source: "
-msgstr "來源"
+msgstr "來源："
 
 #: packages/lib/models/Setting.ts:1400
 msgid ""
@@ -3513,9 +3462,8 @@ msgid "Switch between note and to-do type"
 msgstr "切換記事 / 待辦事項"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "匯出設定檔"
+msgstr "切換使用者"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3524,9 +3472,8 @@ msgstr "切換為記事"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "切換為記事"
+msgstr "切換到使用者 %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3619,7 +3566,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "標籤 1、標籤 2、..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3641,7 +3588,7 @@ msgstr "拍攝相片"
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
 msgid "Tasks"
-msgstr ""
+msgstr "任務"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
@@ -3649,7 +3596,7 @@ msgstr "文字編輯器命令"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:215
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "謝謝您！您的 Joplin Cloud 帳戶已經完成設定，現在即可開始使用。"
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -3659,7 +3606,7 @@ msgstr "程式即將關閉，請重新啟動以完成此過程。"
 #: packages/app-desktop/app.ts:332
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+msgstr "應用程式並未正確關閉，請問你要開啟安全模式嗎？"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3731,14 +3678,13 @@ msgid "The following attachments are being watched for changes:"
 msgstr "已監控下列附件的變動："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:72
-#, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"以下主密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的"
-"資料。"
+"以下密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的資"
+"料。"
 
 #: packages/app-mobile/components/screens/Note.tsx:193
 msgid "The Joplin mobile app does not currently support this type of link: %s"
@@ -3749,16 +3695,16 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Joplin 團隊已經完成這個擴充插件的審查，此插件符合我們的安全與效能標準。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
-#, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"某些項目以下列 ID 的密鑰加密過，但目前程式無法存取密鑰來解密。也許很快就會透"
-"過同步下載完畢。"
+"以下帶有 ID 的密鑰目前正被使用於加密你的部分項目，然而應用程式目前無法存取這"
+"些項目。它們最終很可能會透過同步的方式來下載。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
@@ -3796,6 +3742,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"此共享對象無法從列表中移除。請重試。\n"
+"\n"
+"錯誤訊息：「%s」"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid ""
@@ -3807,9 +3756,8 @@ msgstr ""
 "動。如願繼續，請點擊連結。"
 
 #: packages/app-mobile/components/screen-header.js:473
-#, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr "需要升級同步目標！執行 `%s` 以升級。"
+msgstr "此同步對象需要升級。點擊這個橫幅來執行升級。"
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -3825,7 +3773,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/Root.tsx:171
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
+msgstr "Web Clipper  需要你的授權才得以存取你的資料。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:83
@@ -3875,6 +3823,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"設定你的 Joplin Cloud 帳戶時發生錯誤。請確認你的電子信箱與密碼並重試。錯誤訊"
+"息：\n"
+"\n"
+"%s"
 
 #: packages/lib/services/ReportService.ts:175
 msgid ""
@@ -3971,11 +3923,12 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr "這將會開啟新視窗。儲存您目前的變更嗎？"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
-#, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
-msgstr "停止共享後，共享對象將無法再存取這份共享記事本。確定要停止共享嗎？"
+msgstr ""
+"此動作將會從你的收藏庫中移除記事本，並且未來將無法再存取其內容。確定要繼續"
+"嗎？"
 
 #: packages/lib/models/Setting.ts:789
 msgid "Time format"
@@ -3998,9 +3951,8 @@ msgid ""
 msgstr "請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項："
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
-#, fuzzy
 msgid "To continue, please enter your master password below."
-msgstr "輸入主密碼："
+msgstr "若要繼續，請在下方輸入你的主密碼。"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4073,9 +4025,8 @@ msgid "Toggle note list"
 msgstr "切換記事清單"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "切換安全模式"
+msgstr "切換目前的排序"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -4086,9 +4037,8 @@ msgid "Toggle sidebar"
 msgstr "顯示 / 隱藏側邊欄"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "切換安全模式"
+msgstr "切換排序方式"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4155,9 +4105,8 @@ msgid ""
 msgstr "已下載項目為未知類型，請將 Joplin 升級至最新版本"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:164
-#, fuzzy
 msgid "Unpublish note"
-msgstr "停止分享"
+msgstr "未上傳記事"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:153
 msgid "Unshare"
@@ -4167,7 +4116,7 @@ msgstr "停止分享"
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
-msgstr "停止共享後，共享對象將無法再存取這份共享記事本。確定要停止共享嗎？"
+msgstr "確定要停止共享嗎？此舉將會使共享對象無法再存取這份共享記事本。"
 
 #: packages/app-mobile/components/screens/Note.tsx:684
 msgid "Unsupported image type: %s"
@@ -4190,14 +4139,12 @@ msgstr "更新"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "匯出設定檔"
+msgstr "更新使用者"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "已更新的本地項目: %d 項。"
+msgstr "更新整體尺寸"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4218,9 +4165,8 @@ msgid "Updated remote items: %d."
 msgstr "已更新的遠端項目: %d 項。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
-#, fuzzy
 msgid "Updated: "
-msgstr "已更新：%s"
+msgstr "更新於："
 
 #: packages/app-cli/app/command-import.js:49
 #: packages/app-desktop/gui/ImportScreen.min.js:70
@@ -4300,22 +4246,21 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:119
 msgid "User deletions"
-msgstr ""
+msgstr "使用者移除"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:115
 #: packages/server/src/services/MustacheService.ts:272
 msgid "Users"
-msgstr ""
+msgstr "使用者"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
-#, fuzzy
 msgid "Valid"
-msgstr "無效"
+msgstr "有效的"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
-msgstr "檢視 (&V)"
+msgstr "檢視"
 
 #: packages/app-mobile/components/screens/Note.tsx:852
 msgid "View on map"
@@ -4445,7 +4390,7 @@ msgstr ""
 
 #: packages/app-cli/app/cli-utils.js:144
 msgid "Your choice: "
-msgstr "您的選擇："
+msgstr "您的選擇： "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:71
 msgid "Your data is going to be re-encrypted and synced again."
@@ -4453,13 +4398,14 @@ msgstr "您的資料將被重新加密並再次同步。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Your password is needed to decrypt some of your data."
-msgstr ""
+msgstr "需要輸入你的密碼，才能解密你的部分資料。"
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
+"需要輸入你的密碼，才能解密你的部分資料。輸入 `:e2ee decrypt`  來進行設定。"
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."

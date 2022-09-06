@@ -36,7 +36,7 @@ const mime = {
 		// Return the first file extension that is 3 characters long
 		// If none exist return the first one in the list.
 		for (let j = 0; j < extensions.length; j++) {
-			if (extensions[j].length == 3) return extensions[j];
+			if (extensions[j].length === 3) return extensions[j];
 		}
 
 		return extensions.length ? extensions[0] : null;
@@ -46,7 +46,7 @@ const mime = {
 		mimeType = mimeType.toLowerCase();
 		for (let i = 0; i < mimeTypes.length; i++) {
 			const t = mimeTypes[i];
-			if (mimeType == t.t) {
+			if (mimeType === t.t) {
 				return t.e;
 			}
 		}

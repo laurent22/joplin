@@ -52,6 +52,7 @@ interface StateResourceFetcher {
 
 export interface State {
 	notes: any[];
+	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
 	folders: any[];
@@ -358,7 +359,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 		if (isSelected) {
 			// the selected item is deleted so select the following item
 			// if multiple items are selected then just use the first one
-			if (selectedItemKeys[0] == item.id) {
+			if (selectedItemKeys[0] === item.id) {
 				newSelectedIndexes.push(newItems.length);
 			}
 		} else {
@@ -367,16 +368,16 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 				newSelectedIndexes.push(newItems.length);
 			}
 		}
-		if (item.id == action.id) {
+		if (item.id === action.id) {
 			continue;
 		}
 		newItems.push(item);
 	}
 
-	if (newItems.length == 0) {
+	if (newItems.length === 0) {
 		newSelectedIndexes = []; // no remaining items so no selection
 
-	} else if (newSelectedIndexes.length == 0) {
+	} else if (newSelectedIndexes.length === 0) {
 		newSelectedIndexes.push(0); // no selection exists so select the top
 
 	} else {
@@ -397,7 +398,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	}
 	(draft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
-	if ((newIds.length == 0) && draft.notesParentType !== 'Folder') {
+	if ((newIds.length === 0) && draft.notesParentType !== 'Folder') {
 		draft.notesParentType = 'Folder';
 	}
 }
@@ -416,7 +417,7 @@ function updateOneItem(draft: Draft<State>, action: any, keyName: string = '') {
 	let found = false;
 	for (let i = 0; i < newItems.length; i++) {
 		const n = newItems[i];
-		if (n.id == item.id) {
+		if (n.id === item.id) {
 			newItems[i] = Object.assign({}, newItems[i], item);
 			found = true;
 			break;
@@ -552,9 +553,9 @@ const getContextFromHistory = (ctx: any) => {
 function getNoteHistoryInfo(state: State) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
-	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
+	if (selectedNoteIds && selectedNoteIds.length > 0) {
 		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
-		if (currNote != null) {
+		if (currNote) {
 			return {
 				id: currNote.id,
 				parent_id: currNote.parent_id,
@@ -575,7 +576,7 @@ function handleHistory(draft: Draft<State>, action: any) {
 	switch (action.type) {
 	case 'HISTORY_BACKWARD': {
 		const note = draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1];
-		if (currentNote != null && (draft.forwardHistoryNotes.length === 0 || currentNote.id != draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1].id)) {
+		if (currentNote && (draft.forwardHistoryNotes.length === 0 || currentNote.id !== draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1].id)) {
 			draft.forwardHistoryNotes = draft.forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
@@ -591,7 +592,7 @@ function handleHistory(draft: Draft<State>, action: any) {
 	case 'HISTORY_FORWARD': {
 		const note = draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1];
 
-		if (currentNote != null && (draft.backwardHistoryNotes.length === 0 || currentNote.id != draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id)) {
+		if (currentNote && (draft.backwardHistoryNotes.length === 0 || currentNote.id !== draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id)) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
@@ -606,12 +607,12 @@ function handleHistory(draft: Draft<State>, action: any) {
 		break;
 	}
 	case 'NOTE_SELECT':
-		if (currentNote != null && action.id != currentNote.id) {
+		if (currentNote && action.id !== currentNote.id) {
 			draft.forwardHistoryNotes = [];
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 		// History should be free from duplicates.
-		if (draft.backwardHistoryNotes != null && draft.backwardHistoryNotes.length > 0 &&
+		if (draft.backwardHistoryNotes && draft.backwardHistoryNotes.length > 0 &&
 						action.id === draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id) {
 			draft.backwardHistoryNotes.pop();
 		}
@@ -619,7 +620,7 @@ function handleHistory(draft: Draft<State>, action: any) {
 	case 'TAG_SELECT':
 	case 'FOLDER_AND_NOTE_SELECT':
 	case 'FOLDER_SELECT':
-		if (currentNote != null) {
+		if (currentNote) {
 			if (draft.forwardHistoryNotes.length) draft.forwardHistoryNotes = [];
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
@@ -644,22 +645,22 @@ function handleHistory(draft: Draft<State>, action: any) {
 		break;
 	}
 	case 'SEARCH_UPDATE':
-		if (currentNote != null && (draft.backwardHistoryNotes.length === 0 ||
-						draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id != currentNote.id)) {
+		if (currentNote && (draft.backwardHistoryNotes.length === 0 ||
+						draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id !== currentNote.id)) {
 			if (draft.forwardHistoryNotes.length) draft.forwardHistoryNotes = [];
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 		break;
 	case 'FOLDER_DELETE':
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.parent_id != action.id);
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.parent_id != action.id);
+		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.parent_id !== action.id);
+		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.parent_id !== action.id);
 
 		draft.backwardHistoryNotes = removeAdjacentDuplicates(draft.backwardHistoryNotes);
 		draft.forwardHistoryNotes = removeAdjacentDuplicates(draft.forwardHistoryNotes);
 		break;
 	case 'NOTE_DELETE': {
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.id != action.id);
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.id != action.id);
+		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.id !== action.id);
+		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.id !== action.id);
 
 		draft.backwardHistoryNotes = removeAdjacentDuplicates(draft.backwardHistoryNotes);
 		draft.forwardHistoryNotes = removeAdjacentDuplicates(draft.forwardHistoryNotes);
@@ -802,7 +803,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 				const noteIsInFolder = function(note: any, folderId: string) {
 					if (note.is_conflict && isViewingConflictFolder) return true;
-					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
+					if (!('parent_id' in modNote) || note.parent_id === folderId) return true;
 					return false;
 				};
 
@@ -812,7 +813,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				let found = false;
 				for (let i = 0; i < newNotes.length; i++) {
 					const n = newNotes[i];
-					if (n.id == modNote.id) {
+					if (n.id === modNote.id) {
 						if (n.is_conflict && !modNote.is_conflict) {
 							// Note was a conflict but was moved outside of
 							// the conflict folder

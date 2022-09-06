@@ -18,7 +18,7 @@ export const binarySearch = function(items: any[], value: any) {
 		stopIndex = items.length - 1,
 		middle = Math.floor((stopIndex + startIndex) / 2);
 
-	while (items[middle] != value && startIndex < stopIndex) {
+	while (items[middle] !== value && startIndex < stopIndex) {
 		// adjust search area
 		if (value < items[middle]) {
 			stopIndex = middle - 1;
@@ -31,7 +31,7 @@ export const binarySearch = function(items: any[], value: any) {
 	}
 
 	// make sure it's the right value
-	return items[middle] != value ? -1 : middle;
+	return items[middle] !== value ? -1 : middle;
 };
 
 export const findByKey = function(array: any[], key: any, value: any) {

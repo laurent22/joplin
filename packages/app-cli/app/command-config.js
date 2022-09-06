@@ -122,7 +122,7 @@ class Command extends BaseCommand {
 		}
 
 
-		if (args.name == 'locale') {
+		if (args.name === 'locale') {
 			setLocale(Setting.value('locale'));
 		}
 

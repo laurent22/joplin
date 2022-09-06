@@ -121,7 +121,7 @@ async function initialize() {
 
 class RootComponent extends React.Component<Props, any> {
 	public async componentDidMount() {
-		if (this.props.appState == 'starting') {
+		if (this.props.appState === 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'initializing',

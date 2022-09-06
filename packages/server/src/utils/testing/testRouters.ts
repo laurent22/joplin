@@ -10,7 +10,7 @@ const execCommand = function(command: string, returnStdErr: boolean = false): Pr
 	return new Promise((resolve, reject) => {
 		exec(command, (error: any, stdout: any, stderr: any) => {
 			if (error) {
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					reject(error);
@@ -39,7 +39,7 @@ async function curl(method: string, path: string, query: object = null, body: an
 	if (options.verbose) curlCmd.push('-v');
 	if (options.output) curlCmd.push(`--output "${options.output}"`);
 
-	if ((['PUT', 'DELETE', 'PATCH'].indexOf(method) >= 0) || (method == 'POST' && !formFields && !body)) {
+	if ((['PUT', 'DELETE', 'PATCH'].indexOf(method) >= 0) || (method === 'POST' && !formFields && !body)) {
 		curlCmd.push('-X');
 		curlCmd.push(method);
 	}

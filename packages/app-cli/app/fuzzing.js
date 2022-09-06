@@ -2071,7 +2071,7 @@ function execCommand(client, command, options = {}) {
 	return new Promise((resolve, reject) => {
 		const childProcess = exec(cmd, (error, stdout, stderr) => {
 			if (error) {
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					logger.error(stderr);
@@ -2103,7 +2103,7 @@ async function clientItems(client) {
 function randomTag(items) {
 	const tags = [];
 	for (let i = 0; i < items.length; i++) {
-		if (items[i].type_ != 5) continue;
+		if (items[i].type_ !== 5) continue;
 		tags.push(items[i]);
 	}
 
@@ -2113,7 +2113,7 @@ function randomTag(items) {
 function randomNote(items) {
 	const notes = [];
 	for (let i = 0; i < items.length; i++) {
-		if (items[i].type_ != 1) continue;
+		if (items[i].type_ !== 1) continue;
 		notes.push(items[i]);
 	}
 
@@ -2131,11 +2131,11 @@ async function execRandomCommand(client) {
 				const item = randomElement(items);
 				if (!item) return;
 
-				if (item.type_ == 1) {
+				if (item.type_ === 1) {
 					return execCommand(client, `rm -f ${item.id}`);
-				} else if (item.type_ == 2) {
+				} else if (item.type_ === 2) {
 					return execCommand(client, `rm -r -f ${item.id}`);
-				} else if (item.type_ == 5) {
+				} else if (item.type_ === 5) {
 					// tag
 				} else {
 					throw new Error(`Unknown type: ${item.type_}`);
@@ -2213,7 +2213,7 @@ function randomNextCheckTime() {
 
 function findItem(items, itemId) {
 	for (let i = 0; i < items.length; i++) {
-		if (items[i].id == itemId) return items[i];
+		if (items[i].id === itemId) return items[i];
 	}
 	return null;
 }
@@ -2225,7 +2225,7 @@ function compareItems(item1, item2) {
 		const p1 = item1[n];
 		const p2 = item2[n];
 
-		if (n == 'notes_') {
+		if (n === 'notes_') {
 			p1.sort();
 			p2.sort();
 			if (JSON.stringify(p1) !== JSON.stringify(p2)) {
@@ -2246,7 +2246,7 @@ function findMissingItems_(items1, items2) {
 		let found = false;
 		for (let j = 0; j < items2.length; j++) {
 			const item2 = items2[j];
-			if (item1.id == item2.id) {
+			if (item1.id === item2.id) {
 				found = true;
 				break;
 			}
@@ -2340,9 +2340,9 @@ async function main() {
 	let state = 'commands';
 
 	setInterval(async () => {
-		if (state == 'waitForSyncCheck') return;
+		if (state === 'waitForSyncCheck') return;
 
-		if (state == 'syncCheck') {
+		if (state === 'syncCheck') {
 			state = 'waitForSyncCheck';
 			const clientItems = [];
 			// Up to 3 sync operations must be performed by each clients in order for them
@@ -2371,7 +2371,7 @@ async function main() {
 			return;
 		}
 
-		if (state == 'waitForClients') {
+		if (state === 'waitForClients') {
 			for (let i = 0; i < clients.length; i++) {
 				if (clients[i].activeCommandCount > 0) return;
 			}
@@ -2380,7 +2380,7 @@ async function main() {
 			return;
 		}
 
-		if (state == 'commands') {
+		if (state === 'commands') {
 			if (nextSyncCheckTime <= time.unixMs()) {
 				state = 'waitForClients';
 				return;

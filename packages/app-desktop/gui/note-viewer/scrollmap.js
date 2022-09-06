@@ -40,7 +40,7 @@ scrollmap.get_ = () => {
 	// embedded into elements by the renderer.
 	// See also renderer/MdToHtml/rules/source_map.ts.
 	const elems = document.getElementsByClassName('maps-to-line');
-	if (elems.length == 0) return null;
+	if (elems.length === 0) return null;
 	const map = { line: [0], percent: [0], viewHeight: height, lineCount: 0 };
 	// Each map entry is total-ordered.
 	let last = 0;

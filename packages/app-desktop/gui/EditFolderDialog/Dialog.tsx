@@ -81,6 +81,7 @@ export default function(props: Props) {
 
 			return;
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [onClose, folderTitle, folderIcon, props.folderId, props.parentId]);
 
 	const onFolderTitleChange = useCallback((event: any) => {

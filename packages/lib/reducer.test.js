@@ -6,26 +6,26 @@ const { defaultState, MAX_HISTORY } = require('./reducer');
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
 
-	if (selectedFolderIndex != null) {
+	if (selectedFolderIndex !== null) {
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[selectedFolderIndex].id });
 	}
-	if (folders != null) {
+	if (folders !== null) {
 		state = reducer(state, { type: 'FOLDER_UPDATE_ALL', items: folders });
 	}
-	if (notes != null) {
+	if (notes !== null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
 	}
-	if (selectedNoteIndexes != null) {
+	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
 		}
 		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
 	}
-	if (tags != null) {
+	if (tags !== null) {
 		state = reducer(state, { type: 'TAG_UPDATE_ALL', items: tags });
 	}
-	if (selectedTagIndex != null) {
+	if (selectedTagIndex !== null) {
 		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
 	}
 
@@ -33,7 +33,7 @@ function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes,
 }
 
 function goToNote(notes, selectedNoteIndexes, state) {
-	if (selectedNoteIndexes != null) {
+	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
@@ -74,7 +74,7 @@ function createExpectedState(items, keepIndexes, selectedIndexes) {
 function getIds(items, indexes = null) {
 	const ids = [];
 	for (let i = 0; i < items.length; i++) {
-		if (indexes == null || i in indexes) {
+		if (!indexes || i in indexes) {
 			ids.push(items[i].id);
 		}
 	}

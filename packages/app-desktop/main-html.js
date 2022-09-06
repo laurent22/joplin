@@ -131,7 +131,7 @@ app().start(bridge().processArgv()).then((result) => {
 }).catch((error) => {
 	const env = bridge().env();
 
-	if (error.code == 'flagError') {
+	if (error.code === 'flagError') {
 		bridge().showErrorMessageBox(error.message);
 	} else {
 		// If something goes wrong at this stage we don't have a console or a log file

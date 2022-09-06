@@ -214,7 +214,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	modalLayer_onClick(event: any) {
-		if (event.currentTarget == event.target) {
+		if (event.currentTarget === event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
 				type: 'PLUGINLEGACY_DIALOG_SET',

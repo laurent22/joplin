@@ -177,13 +177,13 @@ export default class JoplinServerApi {
 
 			let response: any = null;
 
-			if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+			if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
 				if (fetchOptions.path) {
 					const fileStat = await shim.fsDriver().stat(fetchOptions.path);
 					if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
 				}
 				response = await shim.uploadBlob(url, fetchOptions);
-			} else if (options.target == 'string') {
+			} else if (options.target === 'string') {
 				if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
 				response = await shim.fetch(url, fetchOptions);
 			} else {

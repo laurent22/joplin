@@ -70,6 +70,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 	useEffect(() => {
 		const strippedText: string = markupToHtml().stripMarkup(props.markupLanguage, props.text);
 		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedLines);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.text]);
 
 	useEffect(() => {

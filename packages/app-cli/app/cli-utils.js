@@ -21,7 +21,7 @@ cliUtils.printArray = function(logFunction, rows) {
 		for (let j = 0; j < row.length; j++) {
 			const item = row[j];
 			const width = item ? item.toString().length : 0;
-			const align = typeof item == 'number' ? ALIGN_RIGHT : ALIGN_LEFT;
+			const align = typeof item === 'number' ? ALIGN_RIGHT : ALIGN_LEFT;
 			if (!colWidths[j] || colWidths[j] < width) colWidths[j] = width;
 			if (colAligns.length <= j) colAligns[j] = align;
 		}
@@ -32,7 +32,7 @@ cliUtils.printArray = function(logFunction, rows) {
 		for (let col = 0; col < colWidths.length; col++) {
 			const item = rows[row][col];
 			const width = colWidths[col];
-			const dir = colAligns[col] == ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
+			const dir = colAligns[col] === ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
 			line.push(stringPadding(item, width, ' ', dir));
 		}
 		logFunction(line.join(' '));
@@ -45,13 +45,13 @@ cliUtils.parseFlags = function(flags) {
 	for (let i = 0; i < flags.length; i++) {
 		let f = flags[i].trim();
 
-		if (f.substr(0, 2) == '--') {
+		if (f.substr(0, 2) === '--') {
 			f = f.split(' ');
 			output.long = f[0].substr(2).trim();
-			if (f.length == 2) {
+			if (f.length === 2) {
 				output.arg = cliUtils.parseCommandArg(f[1].trim());
 			}
-		} else if (f.substr(0, 1) == '-') {
+		} else if (f.substr(0, 1) === '-') {
 			output.short = f.substr(1);
 		}
 	}
@@ -65,9 +65,9 @@ cliUtils.parseCommandArg = function(arg) {
 	const c2 = arg[arg.length - 1];
 	const name = arg.substr(1, arg.length - 2);
 
-	if (c1 == '<' && c2 == '>') {
+	if (c1 === '<' && c2 === '>') {
 		return { required: true, name: name };
-	} else if (c1 == '[' && c2 == ']') {
+	} else if (c1 === '[' && c2 === ']') {
 		return { required: false, name: name };
 	} else {
 		throw new Error(`Invalid command arg: ${arg}`);
@@ -83,7 +83,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	const booleanFlags = [];
 	const aliases = {};
 	for (let i = 0; i < options.length; i++) {
-		if (options[i].length != 2) throw new Error(`Invalid options: ${options[i]}`);
+		if (options[i].length !== 2) throw new Error(`Invalid options: ${options[i]}`);
 		let flags = options[i][0];
 
 		flags = cliUtils.parseFlags(flags);
@@ -117,7 +117,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	const argOptions = {};
 	for (const key in args) {
 		if (!args.hasOwnProperty(key)) continue;
-		if (key == '_') continue;
+		if (key === '_') continue;
 		argOptions[key] = args[key];
 	}
 
@@ -170,7 +170,7 @@ cliUtils.promptConfirm = function(message, answers = null) {
 
 	return new Promise((resolve) => {
 		rl.question(`${message} `, answer => {
-			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
+			const ok = !answer || answer.toLowerCase() === answers[0].toLowerCase();
 			rl.close();
 			resolve(ok);
 		});

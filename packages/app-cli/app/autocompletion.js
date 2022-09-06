@@ -12,7 +12,7 @@ async function handleAutocompletionPromise(line) {
 	const words = getArguments(line);
 	// If there is only one word and it is not already a command name then you
 	// should look for commands it could be
-	if (words.length == 1) {
+	if (words.length === 1) {
 		if (names.indexOf(words[0]) === -1) {
 			const x = names.filter(n => n.indexOf(words[0]) === 0);
 			if (x.length === 1) {
@@ -78,38 +78,38 @@ async function handleAutocompletionPromise(line) {
 
 		const currentFolder = app().currentFolder();
 
-		if (argName == 'note' || argName == 'note-pattern') {
+		if (argName === 'note' || argName === 'note-pattern') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
 			l.push(...notes.map(n => n.title));
 		}
 
-		if (argName == 'notebook') {
+		if (argName === 'notebook') {
 			const folders = await Folder.search({ titlePattern: `${next}*` });
 			l.push(...folders.map(n => n.title));
 		}
 
-		if (argName == 'item') {
+		if (argName === 'item') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
 			const folders = await Folder.search({ titlePattern: `${next}*` });
 			l.push(...notes.map(n => n.title), folders.map(n => n.title));
 		}
 
-		if (argName == 'tag') {
+		if (argName === 'tag') {
 			const tags = await Tag.search({ titlePattern: `${next}*` });
 			l.push(...tags.map(n => n.title));
 		}
 
-		if (argName == 'file') {
+		if (argName === 'file') {
 			const files = await fs.readdir('.');
 			l.push(...files);
 		}
 
-		if (argName == 'tag-command') {
+		if (argName === 'tag-command') {
 			const c = filterList(['add', 'remove', 'list', 'notetags'], next);
 			l.push(...c);
 		}
 
-		if (argName == 'todo-command') {
+		if (argName === 'todo-command') {
 			const c = filterList(['toggle', 'clear'], next);
 			l.push(...c);
 		}

@@ -123,7 +123,7 @@ class BaseModel {
 
 	static byId(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
-			if (items[i].id == id) return items[i];
+			if (items[i].id === id) return items[i];
 		}
 		return null;
 	}
@@ -138,7 +138,7 @@ class BaseModel {
 
 	static modelIndexById(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
-			if (items[i].id == id) return i;
+			if (items[i].id === id) return i;
 		}
 		return -1;
 	}
@@ -200,7 +200,7 @@ class BaseModel {
 	static fieldType(name: string, defaultValue: any = null) {
 		const fields = this.fields();
 		for (let i = 0; i < fields.length; i++) {
-			if (fields[i].name == name) return fields[i].type;
+			if (fields[i].name === name) return fields[i].type;
 		}
 		if (defaultValue !== null) return defaultValue;
 		throw new Error(`Unknown field: ${name}`);
@@ -391,7 +391,7 @@ class BaseModel {
 		const output = [];
 		for (const n in newModel) {
 			if (!newModel.hasOwnProperty(n)) continue;
-			if (n == 'type_') continue;
+			if (n === 'type_') continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
 				output.push(n);
 			}

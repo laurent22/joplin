@@ -6,8 +6,6 @@
   ],
   "exclude": [
     "**/node_modules",
-    "tests/support/**/*",
-    "tests-build/**/*",
     "build/**/*",
   ],
 }

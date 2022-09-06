@@ -105,7 +105,7 @@ class FileApiDriverLocal {
 				output = await this.fsDriver().readFile(path, options.encoding);
 			}
 		} catch (error) {
-			if (error.code == 'ENOENT') return null;
+			if (error.code === 'ENOENT') return null;
 			throw this.fsErrorToJsError_(error, path);
 		}
 

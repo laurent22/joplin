@@ -5,7 +5,8 @@ import shim from '@joplin/lib/shim';
 import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
-import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/NoteEditor';
+import NoteEditor from '../NoteEditor/NoteEditor';
+import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
@@ -25,7 +26,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 const { ActionButton } = require('../action-button.js');
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
@@ -103,8 +104,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			if (this.isModified()) {
 				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
-				if (buttonId == 'cancel') return true;
-				if (buttonId == 'save') await this.saveNoteButton_press();
+				if (buttonId === 'cancel') return true;
+				if (buttonId === 'save') await this.saveNoteButton_press();
 			}
 
 			return false;
@@ -126,7 +127,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				return false;
 			}
 
-			if (this.state.mode == 'edit') {
+			if (this.state.mode === 'edit') {
 				Keyboard.dismiss();
 
 				this.setState({
@@ -161,8 +162,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.onJoplinLinkClick_ = async (msg: string) => {
 			try {
-				if (msg.indexOf('joplin://') === 0) {
-					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+				const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+				if (resourceUrlInfo) {
 					const itemId = resourceUrlInfo.itemId;
 					const item = await BaseItem.loadItemById(itemId);
 					if (!item) throw new Error(_('No item with ID %s', itemId));
@@ -603,7 +604,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			reg.logger().info('New dimensions ', dimensions);
 
-			const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info(`Resizing image ${localFilePath}`);
 			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
 
@@ -676,7 +677,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const targetPath = Resource.fullPath(resource);
 
 		try {
-			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
+			if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
 				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
@@ -711,7 +712,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !!this.selection) {
+		if (this.state.mode === 'edit' && !!this.selection) {
 			const newText = `\n${resourceTag}\n`;
 
 			const prefix = newNote.body.substring(0, this.selection.start);
@@ -866,6 +867,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
+	async showAttachMenu() {
+		const buttons = [];
+
+		// On iOS, it will show "local files", which means certain files saved from the browser
+		// and the iCloud files, but it doesn't include photos and images from the CameraRoll
+		//
+		// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+		buttons.push({ text: _('Attach file'), id: 'attachFile' });
+
+		// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
+		// because that's only way to browse photos from the camera roll.
+		if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
+		buttons.push({ text: _('Take photo'), id: 'takePhoto' });
+
+		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
+
+		if (buttonId === 'takePhoto') this.takePhoto_onPress();
+		if (buttonId === 'attachFile') void this.attachFile_onPress();
+		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+	}
+
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -890,26 +912,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
-				onPress: async () => {
-					const buttons = [];
-
-					// On iOS, it will show "local files", which means certain files saved from the browser
-					// and the iCloud files, but it doesn't include photos and images from the CameraRoll
-					//
-					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
-					buttons.push({ text: _('Attach file'), id: 'attachFile' });
-
-					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
-					// because that's only way to browse photos from the camera roll.
-					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
-					buttons.push({ text: _('Take photo'), id: 'takePhoto' });
-
-					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
-
-					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachFile') void this.attachFile_onPress();
-					if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
-				},
+				onPress: () => this.showAttachMenu(),
 			});
 		}
 
@@ -1068,7 +1071,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view') {
+		if (this.state.mode === 'view') {
 			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
 			// to avoid the HACK_webviewLoadingState related bug.
 			bodyComponent =
@@ -1128,6 +1131,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					/>
 				);
 			} else {
+				const editorStyle = this.styles().bodyTextInput;
+
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
 					themeId={this.props.themeId}
@@ -1136,7 +1141,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onChange={this.onBodyChange}
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-					style={this.styles().bodyTextInput}
+					onAttach={() => this.showAttachMenu()}
+					style={{
+						...editorStyle,
+						paddingLeft: 0,
+						paddingRight: 0,
+					}}
+					contentStyle={{
+						// Apply padding to the editor's content, but not the toolbar.
+						paddingLeft: editorStyle.paddingLeft,
+						paddingRight: editorStyle.paddingRight,
+					}}
 				/>;
 			}
 		}
@@ -1154,7 +1169,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
-			if (this.state.mode == 'edit') return null;
+			if (this.state.mode === 'edit') return null;
 
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
 		};
@@ -1162,7 +1177,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
-		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;

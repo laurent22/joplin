@@ -411,3 +411,37 @@ describe('models/Note', function() {
 	}));
 
 });
+
+describe('models/Note_replacePaths', function() {
+
+	function testResourceReplacment(body: string, pathsToTry: string[], expected: string) {
+		expect(Note['replaceResourceExternalToInternalLinks_'](pathsToTry, body)).toBe(expected);
+	}
+	test('Basic replacement', () => {
+		const body = '![image.png](file:///C:Users/Username/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/Username/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+
+	test('Replacement with spaces', () => {
+		const body = '![image.png](file:///C:Users/Username%20with%20spaces/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/Username with spaces/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+
+	test('Replacement with Non-ASCII', () => {
+		const body = '![image.png](file:///C:Users/UsernameWith%C3%A9%C3%A0%C3%B6/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/UsernameWithéàö/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+
+	test('Replacement with Non-ASCII and spaces', () => {
+		const body = '![image.png](file:///C:Users/Username%20With%20%C3%A9%C3%A0%C3%B6/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/Username With éàö/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+});

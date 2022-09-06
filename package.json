@@ -12,8 +12,8 @@
     "node": ">=16"
   },
   "scripts": {
-    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 run build && yarn run tsc",
-    "buildSequential": "yarn workspaces foreach --verbose --interlaced run build && yarn run tsc",
+    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn run tsc",
+    "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
     "buildCommandIndex": "gulp buildCommandIndex",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out ../joplin-website/docs/api/references/plugin_api packages/lib/services/plugins/api/",
@@ -31,6 +31,7 @@
     "linter-ci": "eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "linter-interactive": "eslint-interactive --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "postinstall": "gulp build",
     "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
@@ -61,13 +62,14 @@
     }
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.6.0",
-    "@typescript-eslint/parser": "^4.6.0",
+    "@seiyab/eslint-plugin-react-hooks": "^4.5.1-alpha.5",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
     "cspell": "^5.20.0",
-    "eslint": "^7.6.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-react": "^7.18.0",
-    "eslint-plugin-react-hooks": "^2.4.0",
+    "eslint": "^8.22.0",
+    "eslint-interactive": "^10.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-react": "^7.30.1",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
@@ -76,9 +78,10 @@
     "lint-staged": "^9.2.1",
     "madge": "^4.0.2",
     "typedoc": "^0.17.8",
-    "typescript": "4.0.5"
+    "typescript": "4.7.4"
   },
   "dependencies": {
+    "@types/fs-extra": "^9.0.13",
     "http-server": "^0.12.3",
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"

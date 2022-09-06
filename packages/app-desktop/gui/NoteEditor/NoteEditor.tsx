@@ -59,6 +59,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const formNote_beforeLoad = useCallback(async (event: OnLoadEvent) => {
 		await saveNoteIfWillChange(event.formNote);
 		setShowRevisions(false);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const formNote_afterLoad = useCallback(async () => {
@@ -177,6 +178,7 @@ function NoteEditor(props: NoteEditorProps) {
 				id: formNote.id,
 			});
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.isProvisional, formNote.id]);
 
 	const previousNoteId = usePrevious(formNote.id);
@@ -194,6 +196,7 @@ function NoteEditor(props: NoteEditorProps) {
 		});
 
 		void ResourceEditWatcher.instance().stopWatchingAll();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote.id, previousNoteId]);
 
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
@@ -238,6 +241,7 @@ function NoteEditor(props: NoteEditorProps) {
 			setFormNote(newNote);
 			scheduleSaveNote(newNote);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
 	useWindowCommandHandler({
@@ -288,6 +292,7 @@ function NoteEditor(props: NoteEditorProps) {
 			id: formNote.id,
 			status: 'saving',
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote, handleProvisionalFlag]);
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
@@ -302,6 +307,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 			setFormNote(newFormNote);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote]);
 
 	const onNotePropertyChange = useCallback((event) => {
@@ -317,6 +323,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 			return newFormNote;
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	useEffect(() => {
@@ -350,6 +357,7 @@ function NoteEditor(props: NoteEditorProps) {
 			noteId: formNoteRef.current.id,
 			percent: event.percent,
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.dispatch, formNote]);
 
 	function renderNoNotes(rootStyle: any) {
@@ -413,6 +421,9 @@ function NoteEditor(props: NoteEditorProps) {
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
 		isSafeMode: props.isSafeMode,
+		// We need it to identify the context for which media is rendered.
+		// It is currently used to remember pdf scroll position for each attacments of each note uniquely.
+		noteId: props.noteId,
 	};
 
 	let editor = null;

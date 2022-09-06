@@ -45,11 +45,11 @@ Building the apps is relatively easy - please [see the build instructions](https
 
 ## Coding style
 
-Coding style is enforced by a pre-commit hook that runs eslint. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
+Please see [readme/coding_style.md](readme/coding_style.md).
 
-For new React components, please use [React Hooks](https://reactjs.org/docs/hooks-intro.html). For new code in general, please use TypeScript. Even if you are modifying a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it. Doing so is relatively easy and it helps maintain code quality.
+## GUI style
 
-For changes made to the Desktop client that affect the user interface, refer to `packages/app-desktop/theme.ts` for all styling information. The goal is to create a consistent user interface to allow for easy navigation of Joplin's various features and improve the overall user experience.
+For changes made to the Desktop and mobile clients that affect the user interface, refer to `packages/lib/theme.ts` for all styling information. The goal is to create a consistent user interface to allow for easy navigation of Joplin's various features and improve the overall user experience.
 
 ## Automated tests
 

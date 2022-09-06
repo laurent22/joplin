@@ -32,7 +32,7 @@ function renderFoldersRecursive_(props, renderItem, items, parentId, depth, orde
 		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, props.selectedFolderId == folder.id && props.notesParentType == 'Folder', hasChildren, depth));
+		items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
@@ -69,7 +69,7 @@ shared.renderTags = function(props, renderItem) {
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];
 		order.push(tag.id);
-		tagItems.push(renderItem(tag, props.selectedTagId == tag.id && props.notesParentType == 'Tag'));
+		tagItems.push(renderItem(tag, props.selectedTagId === tag.id && props.notesParentType === 'Tag'));
 	}
 	return {
 		items: tagItems,
@@ -123,7 +123,7 @@ shared.synchronize_press = async function(comp) {
 		return 'error';
 	}
 
-	if (action == 'cancel') {
+	if (action === 'cancel') {
 		sync.cancel();
 		return 'cancel';
 	} else {

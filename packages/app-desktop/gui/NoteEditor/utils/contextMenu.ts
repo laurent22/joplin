@@ -100,7 +100,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			label: _('Save as %s', 'PNG'),
 			onAction: async (options: ContextMenuOptions) => {
 				// First convert it to png then save
-				if (options.mime != 'image/svg+xml') {
+				if (options.mime !== 'image/svg+xml') {
 					throw new Error(`Unsupported image type: ${options.mime}`);
 				}
 				if (!options.filename) {
@@ -151,14 +151,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				handleCopyToClipboard(options);
 				options.insertContent('');
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType != ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
 		},
 		copy: {
 			label: _('Copy'),
 			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType != ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
 		},
 		paste: {
 			label: _('Paste'),

@@ -44,7 +44,7 @@ class Command extends BaseCommand {
 			queryOptions.orderBy = options.sort;
 			queryOptions.orderByDir = 'ASC';
 		}
-		if (options.reverse === true) queryOptions.orderByDir = queryOptions.orderByDir == 'ASC' ? 'DESC' : 'ASC';
+		if (options.reverse === true) queryOptions.orderByDir = queryOptions.orderByDir === 'ASC' ? 'DESC' : 'ASC';
 		queryOptions.caseInsensitive = true;
 		if (options.type) {
 			queryOptions.itemTypes = [];
@@ -55,7 +55,7 @@ class Command extends BaseCommand {
 		queryOptions.uncompletedTodosOnTop = Setting.value('uncompletedTodosOnTop');
 
 		let modelType = null;
-		if (pattern == '/' || !app().currentFolder()) {
+		if (pattern === '/' || !app().currentFolder()) {
 			queryOptions.includeConflictFolder = true;
 			items = await Folder.all(queryOptions);
 			modelType = Folder.modelType();
@@ -65,7 +65,7 @@ class Command extends BaseCommand {
 			modelType = Note.modelType();
 		}
 
-		if (options.format && options.format == 'json') {
+		if (options.format && options.format === 'json') {
 			this.stdout(JSON.stringify(items));
 		} else {
 			let hasTodos = false;
@@ -88,7 +88,7 @@ class Command extends BaseCommand {
 					row.push(BaseModel.shortId(item.id));
 					shortIdShown = true;
 
-					if (modelType == Folder.modelType()) {
+					if (modelType === Folder.modelType()) {
 						row.push(await Folder.noteCount(item.id));
 					}
 

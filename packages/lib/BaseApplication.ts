@@ -166,57 +166,57 @@ export default class BaseApplication {
 			const arg = argv[0];
 			const nextArg = argv.length >= 2 ? argv[1] : null;
 
-			if (arg == '--profile') {
+			if (arg === '--profile') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
 				matched.profileDir = nextArg;
 				argv.splice(0, 2);
 				continue;
 			}
 
-			if (arg == '--no-welcome') {
+			if (arg === '--no-welcome') {
 				matched.welcomeDisabled = true;
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--env') {
+			if (arg === '--env') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--env <dev|prod>'), 'flagError');
 				matched.env = nextArg;
 				argv.splice(0, 2);
 				continue;
 			}
 
-			if (arg == '--is-demo') {
+			if (arg === '--is-demo') {
 				Setting.setConstant('isDemo', true);
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--open-dev-tools') {
+			if (arg === '--open-dev-tools') {
 				Setting.setConstant('flagOpenDevTools', true);
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--debug') {
+			if (arg === '--debug') {
 				// Currently only handled by ElectronAppWrapper (isDebugMode property)
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--update-geolocation-disabled') {
+			if (arg === '--update-geolocation-disabled') {
 				Note.updateGeolocationEnabled_ = false;
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--stack-trace-enabled') {
+			if (arg === '--stack-trace-enabled') {
 				this.showStackTraces_ = true;
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--log-level') {
+			if (arg === '--log-level') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--log-level <none|error|warn|info|debug>'), 'flagError');
 				matched.logLevel = Logger.levelStringToId(nextArg);
 				argv.splice(0, 2);
@@ -277,7 +277,14 @@ export default class BaseApplication {
 				continue;
 			}
 
-			if (arg.length && arg[0] == '-') {
+			if (arg === '--disable-smooth-scrolling') {
+				// Electron-specific flag - ignore it
+				// Allows users to disable smooth scrolling
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.length && arg[0] === '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
 				break;
@@ -538,12 +545,12 @@ export default class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD') {
+		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
 		}
 
-		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD' || action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD' || action.type === 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
@@ -554,23 +561,23 @@ export default class BaseApplication {
 			}
 		}
 
-		if (this.hasGui() && (action.type == 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
+		if (this.hasGui() && (action.type === 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'uncompletedTodosOnTop') || action.type === 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showCompletedTodos') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'showCompletedTodos') || action.type === 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type === 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'SMART_FILTER_SELECT') {
+		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
 		}
@@ -583,11 +590,11 @@ export default class BaseApplication {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
+		if (action.type === 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'NOTE_TAG_REMOVE') {
+		if (action.type === 'NOTE_TAG_REMOVE') {
 			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
 				if (newState.notes.length === newState.selectedNoteIds.length) {
 					await this.refreshCurrentFolder();
@@ -615,14 +622,14 @@ export default class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
+		if (this.hasGui() && action.type === 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+		if (this.hasGui() && action.type === 'SETTING_UPDATE_ONE' && (
 			action.key.indexOf('folders.sortOrder') === 0 ||
-			action.key == 'showNoteCounts' ||
-			action.key == 'showCompletedTodos')) {
+			action.key === 'showNoteCounts' ||
+			action.key === 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 
@@ -634,9 +641,9 @@ export default class BaseApplication {
 			void ResourceFetcher.instance().autoAddResources();
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE') {
+		if (action.type === 'SETTING_UPDATE_ONE') {
 			await this.applySettingsSideEffects(action);
-		} else if (action.type == 'SETTING_UPDATE_ALL') {
+		} else if (action.type === 'SETTING_UPDATE_ALL') {
 			await this.applySettingsSideEffects();
 		}
 
@@ -728,7 +735,7 @@ export default class BaseApplication {
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
 
-		let appName = initArgs.env == 'dev' ? 'joplindev' : 'joplin';
+		let appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
 		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
 		Setting.setConstant('appName', appName);
 
@@ -841,6 +848,7 @@ export default class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			Setting.applyDefaultMigrations();
+			Setting.applyUserSettingMigration();
 		}
 
 		setLocale(Setting.value('locale'));

@@ -122,7 +122,7 @@ interface Props {
 	pluginMenuItems: any[];
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
-	['spellChecker.language']: string;
+	['spellChecker.languages']: string[];
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
@@ -174,7 +174,7 @@ function useMenuStates(menu: any, props: Props) {
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
-				const id = type == 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
+				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
 				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
@@ -192,12 +192,17 @@ function useMenuStates(menu: any, props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [
 		props.menuItemProps,
 		props.layoutButtonSequence,
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.reverse'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
 		props.showNoteCounts,
 		props.uncompletedTodosOnTop,
@@ -276,6 +281,7 @@ function useMenu(props: Props) {
 		}
 
 		void CommandService.instance().execute('hideModalMessage');
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
@@ -292,6 +298,7 @@ function useMenu(props: Props) {
 			(commandName: string) => onMenuItemClickRef.current(commandName),
 			props.locale
 		);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [commandNames, pluginCommandNames, props.locale]);
 
 	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
@@ -332,7 +339,7 @@ function useMenu(props: Props) {
 
 				sortItems.push({ type: 'separator' });
 
-				if (type == 'notes') {
+				if (type === 'notes') {
 					sortItems.push(
 						{ ...menuItemDic.toggleNotesSortOrderReverse, type: 'checkbox' },
 						{ ...menuItemDic.toggleNotesSortOrderField, visible: false }
@@ -471,7 +478,7 @@ function useMenu(props: Props) {
 			}
 			toolsItems = toolsItems.concat(toolsItemsAll);
 
-			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
+			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.languages'], props['spellChecker.enabled']));
 
 			function _checkForUpdates() {
 				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -905,13 +912,16 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [
 		props.routeName,
 		props.pluginMenuItems,
 		props.pluginMenus,
 		keymapLastChangeTime,
 		modulesLastChangeTime,
-		props['spellChecker.language'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+		props['spellChecker.languages'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['spellChecker.enabled'],
 		props.customCss,
 		props.locale,
@@ -973,7 +983,7 @@ const mapStateToProps = (state: AppState) => {
 		showCompletedTodos: state.settings.showCompletedTodos,
 		pluginMenuItems: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menuItem') }, 'menuBar.pluginMenuItems'),
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
-		['spellChecker.language']: state.settings['spellChecker.language'],
+		['spellChecker.languages']: state.settings['spellChecker.languages'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,

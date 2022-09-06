@@ -111,7 +111,7 @@ function escapeFilename(s, maxLength = 32) {
 		output = output.replace(unsafe[i], '_');
 	}
 
-	if (output.toLowerCase() == 'nul') output = 'n_l'; // For Windows...
+	if (output.toLowerCase() === 'nul') output = 'n_l'; // For Windows...
 
 	return output.substr(0, maxLength);
 }
@@ -152,8 +152,8 @@ function splitCommandString(command, options = null) {
 	for (let i = 0; i < command.length; i++) {
 		const c = command[i];
 
-		if (state == 'quotes') {
-			if (c != quote) {
+		if (state === 'quotes') {
+			if (c !== quote) {
 				current += c;
 			} else {
 				args.push(current);
@@ -169,19 +169,19 @@ function splitCommandString(command, options = null) {
 			continue;
 		}
 
-		if (c == '\\' && options.handleEscape) {
+		if (c === '\\' && options.handleEscape) {
 			escapeNext = true;
 			continue;
 		}
 
-		if (c == '"' || c == '\'') {
+		if (c === '"' || c === '\'') {
 			state = 'quotes';
 			quote = c;
 			continue;
 		}
 
-		if (state == 'arg') {
-			if (c == ' ' || c == '\t') {
+		if (state === 'arg') {
+			if (c === ' ' || c === '\t') {
 				args.push(current);
 				current = '';
 				state = 'start';
@@ -191,17 +191,17 @@ function splitCommandString(command, options = null) {
 			continue;
 		}
 
-		if (c != ' ' && c != '\t') {
+		if (c !== ' ' && c !== '\t') {
 			state = 'arg';
 			current += c;
 		}
 	}
 
-	if (state == 'quotes') {
+	if (state === 'quotes') {
 		throw new Error(`Unclosed quote in command line: ${command}`);
 	}
 
-	if (current != '') {
+	if (current !== '') {
 		args.push(current);
 	}
 

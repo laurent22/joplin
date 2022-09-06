@@ -14,7 +14,7 @@ import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 const VersionInfo = require('react-native-version-info').default;
 const { connect } = require('react-redux');
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { Dropdown } = require('../Dropdown.js');
@@ -461,7 +461,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 								color: theme.color,
 								fontSize: theme.fontSize,
 							}}
-							onValueChange={(itemValue: any) => {
+							onValueChange={(itemValue: string) => {
 								updateSettingValue(key, itemValue);
 							}}
 						/>
@@ -469,7 +469,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					{descriptionComp}
 				</View>
 			);
-		} else if (md.type == Setting.TYPE_BOOL) {
+		} else if (md.type === Setting.TYPE_BOOL) {
 			return this.renderToggle(key, md.label(), value, updateSettingValue, descriptionComp);
 			// return (
 			// 	<View key={key}>
@@ -482,7 +482,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			// 		{descriptionComp}
 			// 	</View>
 			// );
-		} else if (md.type == Setting.TYPE_INT) {
+		} else if (md.type === Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
 			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
 			// on the Slider as they are buggy and can crash the app on certain devices.
@@ -499,7 +499,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</View>
 				</View>
 			);
-		} else if (md.type == Setting.TYPE_STRING) {
+		} else if (md.type === Setting.TYPE_STRING) {
 			if (md.key === 'sync.2.path' && Platform.OS === 'android' && Platform.Version > 28) {
 				return (
 					<TouchableNativeFeedback key={key} onPress={this.selectDirectoryButtonPress} style={this.styles().settingContainer}>

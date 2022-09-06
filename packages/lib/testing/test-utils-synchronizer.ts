@@ -53,7 +53,7 @@ export async function localNotesFoldersSameAsRemote(locals: any[], expect: Funct
 
 			let remoteContent = await fileApi().get(path);
 
-			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
+			remoteContent = dbItem.type_ === BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
 			expect(remoteContent.title).toBe(dbItem.title);
 		}
 	} catch (e) {

@@ -236,11 +236,11 @@ export default class OneDriveApi {
 		if (!options.headers) options.headers = {};
 		if (!options.target) options.target = 'string';
 
-		if (method != 'GET') {
+		if (method !== 'GET') {
 			options.method = method;
 		}
 
-		if (method == 'PATCH' || method == 'POST') {
+		if (method === 'PATCH' || method === 'POST') {
 			options.headers['Content-Type'] = 'application/json';
 			if (data) data = JSON.stringify(data);
 		}
@@ -279,9 +279,9 @@ export default class OneDriveApi {
 			try {
 				if (path.includes('/createUploadSession')) {
 					response = await this.uploadBigFile(url, options);
-				} else if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+				} else if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
 					response = await shim.uploadBlob(url, options);
-				} else if (options.target == 'string') {
+				} else if (options.target === 'string') {
 					response = await shim.fetch(url, options);
 				} else {
 					// file
@@ -311,11 +311,11 @@ export default class OneDriveApi {
 
 				const error = this.oneDriveErrorResponseToError(errorResponse);
 
-				if (error.code == 'InvalidAuthenticationToken' || error.code == 'unauthenticated') {
+				if (error.code === 'InvalidAuthenticationToken' || error.code === 'unauthenticated') {
 					logger.info('Token expired: refreshing...');
 					await this.refreshAccessToken();
 					continue;
-				} else if (error && ((error.error && error.error.code == 'generalException') || error.code == 'generalException' || error.code == 'EAGAIN')) {
+				} else if (error && ((error.error && error.error.code === 'generalException') || error.code === 'generalException' || error.code === 'EAGAIN')) {
 					// Rare error (one Google hit) - I guess the request can be repeated
 					// { error:
 					//    { code: 'generalException',
@@ -351,7 +351,7 @@ export default class OneDriveApi {
 					logger.info(`OneDrive Throttle, sync thread sleeping for ${sleepSeconds} seconds...`);
 					await handleRequestRepeat(error, Number(sleepSeconds));
 					continue;
-				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
+				} else if (error.code === 'itemNotFound' && method === 'DELETE') {
 					// Deleting a non-existing item is ok - noop
 					return;
 				} else {

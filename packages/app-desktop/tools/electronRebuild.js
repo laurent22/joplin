@@ -6,7 +6,7 @@ const execCommand = function(command) {
 	return new Promise((resolve, reject) => {
 		exec(command, (error, stdout) => {
 			if (error) {
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					reject(error);

@@ -59,7 +59,7 @@ export default class FsDriverNode extends FsDriverBase {
 				lastError = error;
 				// Normally cannot happen with the `overwrite` flag but sometime it still does.
 				// In this case, retry.
-				if (error.code == 'EEXIST') {
+				if (error.code === 'EEXIST') {
 					await time.sleep(1);
 					continue;
 				}
@@ -95,7 +95,7 @@ export default class FsDriverNode extends FsDriverBase {
 				size: stat.size,
 			};
 		} catch (error) {
-			if (error.code == 'ENOENT') return null;
+			if (error.code === 'ENOENT') return null;
 			throw error;
 		}
 	}

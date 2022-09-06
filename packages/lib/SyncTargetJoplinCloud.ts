@@ -39,7 +39,10 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 	}
 
 	public static supportsRecursiveLinkedNotes(): boolean {
-		return true;
+		// Not currently working:
+		// https://github.com/laurent22/joplin/pull/6661
+		// https://github.com/laurent22/joplin/pull/6600
+		return false;
 	}
 
 	public async isAuthenticated() {

@@ -38,7 +38,7 @@ utils.execCommand = function(command) {
 					return;
 				}
 
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					const newError = new Error(`Code: ${error.code}: ${error.message}: ${stdout.trim()}`);

@@ -68,7 +68,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps: any) {
-		if (newProps.date != this.state.date) {
+		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
 		}
 	}

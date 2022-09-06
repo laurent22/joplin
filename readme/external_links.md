@@ -12,4 +12,4 @@ To create a link, right click a note, a folder, or a tag in the sidebar and sele
 
 ## Known problems
 
-On macOS if Joplin isn't running it will start but it won't open the note.
+On macOS if Joplin isn't running it will start but it won't open the note. If Joplin is running but on a different space as the external link, then Joplin will come to the foreground but without displaying the note.

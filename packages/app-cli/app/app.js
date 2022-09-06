@@ -81,21 +81,21 @@ class Application extends BaseApplication {
 
 		pattern = pattern ? pattern.toString() : '';
 
-		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];
+		if (type === BaseModel.TYPE_FOLDER && (pattern === Folder.conflictFolderTitle() || pattern === Folder.conflictFolderId())) return [Folder.conflictFolder()];
 
 		if (!options) options = {};
 
 		const parent = options.parent ? options.parent : app().currentFolder();
 		const ItemClass = BaseItem.itemClass(type);
 
-		if (type == BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) {
+		if (type === BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) {
 			// Handle it as pattern
 			if (!parent) throw new Error(_('No notebook selected.'));
 			return await Note.previews(parent.id, { titlePattern: pattern });
 		} else {
 			// Single item
 			let item = null;
-			if (type == BaseModel.TYPE_NOTE) {
+			if (type === BaseModel.TYPE_NOTE) {
 				if (!parent) throw new Error(_('No notebook has been specified.'));
 				item = await ItemClass.loadFolderNoteByField(parent.id, 'title', pattern);
 			} else {
@@ -137,7 +137,7 @@ class Application extends BaseApplication {
 			if (!options.booleanAnswerDefault) options.booleanAnswerDefault = 'y';
 			if (!options.answers) options.answers = options.booleanAnswerDefault === 'y' ? [_('Y'), _('n')] : [_('N'), _('y')];
 
-			if (options.type == 'boolean') {
+			if (options.type === 'boolean') {
 				message += ` (${options.answers.join('/')})`;
 			}
 
@@ -146,7 +146,7 @@ class Application extends BaseApplication {
 			if (options.type === 'boolean') {
 				if (answer === null) return false; // Pressed ESCAPE
 				if (!answer) answer = options.answers[0];
-				const positiveIndex = options.booleanAnswerDefault == 'y' ? 0 : 1;
+				const positiveIndex = options.booleanAnswerDefault === 'y' ? 0 : 1;
 				return answer.toLowerCase() === options.answers[positiveIndex].toLowerCase();
 			} else {
 				return answer;
@@ -181,7 +181,7 @@ class Application extends BaseApplication {
 			fs.readdirSync(__dirname).forEach(path => {
 				if (path.indexOf('command-') !== 0) return;
 				const ext = fileExtension(path);
-				if (ext != 'js') return;
+				if (ext !== 'js') return;
 
 				const CommandClass = require(`./${path}`);
 				let cmd = new CommandClass();
@@ -332,6 +332,7 @@ class Application extends BaseApplication {
 			{ keys: [' '], command: 'todo toggle $n' },
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
+			{ keys: ['ti'], type: 'function', command: 'toggle_ids' },
 			{ keys: ['/'], type: 'prompt', command: 'search ""', cursorPosition: -2 },
 			{ keys: ['mn'], type: 'prompt', command: 'mknote ""', cursorPosition: -2 },
 			{ keys: ['mt'], type: 'prompt', command: 'mktodo ""', cursorPosition: -2 },

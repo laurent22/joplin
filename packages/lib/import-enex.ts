@@ -169,7 +169,7 @@ async function processNoteResource(resource: ExtractedResource) {
 		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
 		await fs.writeFile(resource.dataFilePath, '');
 	} else {
-		if (resource.dataEncoding == 'base64') {
+		if (resource.dataEncoding === 'base64') {
 			const decodedFilePath = `${resource.dataFilePath}.decoded`;
 			await decodeBase64File(resource.dataFilePath, decodedFilePath);
 			resource.dataFilePath = decodedFilePath;
@@ -505,7 +505,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			} else if (noteResourceAttributes) {
 				noteResourceAttributes[n] = text;
 			} else if (noteResource) {
-				if (n == 'data') {
+				if (n === 'data') {
 					if (!noteResource.dataEncoding) {
 						const attr = currentNodeAttributes();
 						noteResource.dataEncoding = attr.encoding;
@@ -523,17 +523,17 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 					(noteResource as any)[n] += text;
 				}
 			} else if (note) {
-				if (n == 'title') {
+				if (n === 'title') {
 					note.title = text;
-				} else if (n == 'created') {
+				} else if (n === 'created') {
 					note.created_time = dateToTimestamp(text, 0);
-				} else if (n == 'updated') {
+				} else if (n === 'updated') {
 					note.updated_time = dateToTimestamp(text, 0);
-				} else if (n == 'tag') {
+				} else if (n === 'tag') {
 					note.tags.push(text);
-				} else if (n == 'note') {
+				} else if (n === 'note') {
 					// Ignore - white space between the opening tag <note> and the first sub-tag
-				} else if (n == 'content') {
+				} else if (n === 'content') {
 					// Ignore - white space between the opening tag <content> and the <![CDATA[< block where the content actually is
 				} else {
 					console.warn(createErrorWithNoteTitle(this, new Error(`Unsupported note tag: ${n}`)));
@@ -545,19 +545,19 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			const n = node.name.toLowerCase();
 			nodes.push(node);
 
-			if (n == 'note') {
+			if (n === 'note') {
 				note = {
 					resources: [],
 					tags: [],
 					bodyXml: '',
 				};
-			} else if (n == 'resource-attributes') {
+			} else if (n === 'resource-attributes') {
 				noteResourceAttributes = {};
-			} else if (n == 'recognition') {
+			} else if (n === 'recognition') {
 				if (noteResource) noteResourceRecognition = {};
-			} else if (n == 'note-attributes') {
+			} else if (n === 'note-attributes') {
 				noteAttributes = {};
-			} else if (n == 'resource') {
+			} else if (n === 'resource') {
 				noteResource = {
 					hasData: false,
 				};
@@ -570,7 +570,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			if (noteResourceRecognition) {
 				noteResourceRecognition.objID = extractRecognitionObjId(data);
 			} else if (note) {
-				if (n == 'content') {
+				if (n === 'content') {
 					note.bodyXml += data;
 				}
 			}
@@ -579,7 +579,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 		saxStream.on('closetag', handleSaxStreamEvent(function(n: string) {
 			nodes.pop();
 
-			if (n == 'note') {
+			if (n === 'note') {
 				note = removeUndefinedProperties(note);
 
 				progressState.loaded++;
@@ -593,14 +593,14 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 					});
 				}
 				note = null;
-			} else if (n == 'recognition' && noteResource) {
+			} else if (n === 'recognition' && noteResource) {
 				noteResource.id = noteResourceRecognition.objID;
 				noteResourceRecognition = null;
-			} else if (n == 'resource-attributes') {
+			} else if (n === 'resource-attributes') {
 				noteResource.filename = noteResourceAttributes['file-name'];
 				if (noteResourceAttributes['source-url']) noteResource.sourceUrl = noteResourceAttributes['source-url'];
 				noteResourceAttributes = null;
-			} else if (n == 'note-attributes') {
+			} else if (n === 'note-attributes') {
 				note.latitude = noteAttributes.latitude;
 				note.longitude = noteAttributes.longitude;
 				note.altitude = noteAttributes.altitude;
@@ -613,7 +613,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'].trim() : '';
 
 				noteAttributes = null;
-			} else if (n == 'resource') {
+			} else if (n === 'resource') {
 				let mimeType = noteResource.mime ? noteResource.mime.trim() : '';
 
 				// Evernote sometimes gives an invalid or generic

@@ -16,10 +16,8 @@ function addResourceTag(lines, resource, attributes) {
 	if (resourceUtils.isImageMimeType(resource.mime)) {
 		lines.push(resourceUtils.imgElement({ src, attributes }));
 	} else if (resource.mime === 'audio/x-m4a') {
-		/**
-		 * TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved,
-		 * come back to this and make sure it works.
-		 */
+		// TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved,
+		// come back to this and make sure it works.
 		lines.push(resourceUtils.audioElement({
 			src,
 			alt: attributes.alt,
@@ -90,7 +88,7 @@ function enexXmlToHtml_(stream, resources) {
 				let resource = null;
 				for (let i = 0; i < resources.length; i++) {
 					const r = resources[i];
-					if (r.id == hash) {
+					if (r.id === hash) {
 						resource = r;
 						removeRemainingResource(r.id);
 						break;
@@ -122,9 +120,9 @@ function enexXmlToHtml_(stream, resources) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes);
 				}
-			} else if (tagName == 'en-todo') {
+			} else if (tagName === 'en-todo') {
 				const nodeAttributes = attributeToLowerCase(node);
-				const checkedHtml = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? ' checked="checked" ' : ' ';
+				const checkedHtml = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() === 'true' ? ' checked="checked" ' : ' ';
 				section.lines.push(`<input${checkedHtml}type="checkbox" onclick="return false;" />`);
 			} else if (htmlUtils.isSelfClosingTag(tagName)) {
 				section.lines.push(`<${tagName}${attributesStr}/>`);

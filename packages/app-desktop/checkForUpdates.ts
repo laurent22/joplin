@@ -86,7 +86,7 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 		const ext = fileExtension(asset.name);
 		if (platform === 'win32' && ext === 'exe') {
 			if (shim.isPortable()) {
-				found = asset.name == 'JoplinPortable.exe';
+				found = asset.name === 'JoplinPortable.exe';
 			} else {
 				found = !!asset.name.match(/^Joplin-Setup-[\d.]+\.exe$/);
 			}
