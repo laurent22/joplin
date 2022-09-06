@@ -1,7 +1,7 @@
 import { installDefaultPlugins, getDefaultPluginsInstallState, setSettingsForDefaultPlugins, checkPreInstalledDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
 import { pathExists } from 'fs-extra';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
+import { checkThrow, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 
@@ -203,6 +203,12 @@ describe('defaultPluginsUtils', function() {
 		// with pre-installed default plugin
 		Setting.setValue('installedDefaultPlugins', ['io.github.jackgruber.backup']);
 		setSettingsForDefaultPlugins(defaultPluginsInfo);
+		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('initial-path');
+		await service.destroy();
+
+		// with missing default setting key
+		Setting.setValue('installedDefaultPlugins', ['']);
+		expect(checkThrow(() => setSettingsForDefaultPlugins(defaultPluginsInfo))).toBe(false);
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('initial-path');
 		await service.destroy();
 

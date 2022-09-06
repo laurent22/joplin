@@ -16,7 +16,10 @@ export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[],plugi
 }
 
 export async function installDefaultPlugins(service: PluginService, pluginsDir: string, defaultPluginsId: string[], pluginSettings: PluginSettings): Promise<PluginSettings> {
+	if (!await shim.fsDriver().exists(pluginsDir)) return pluginSettings;
 	const defaultPluginsPaths = await shim.fsDriver().readDirStats(pluginsDir);
+	if (defaultPluginsPaths.length <= 0) return pluginSettings;
+
 	const installedPlugins = Setting.value('installedDefaultPlugins');
 
 	for (let pluginId of defaultPluginsPaths) {
@@ -25,6 +28,7 @@ export async function installDefaultPlugins(service: PluginService, pluginsDir: 
 		// if pluginId is present in 'installedDefaultPlugins' array or it doesn't have default plugin ID, then we won't install it again as default plugin
 		if (installedPlugins.includes(pluginId) || !defaultPluginsId.includes(pluginId)) continue;
 		const defaultPluginPath: string = path.join(pluginsDir, pluginId, 'plugin.jpl');
+		if (!await shim.fsDriver().exists(defaultPluginPath)) continue;
 		await service.installPlugin(defaultPluginPath, false);
 
 		pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
@@ -41,7 +45,7 @@ export function setSettingsForDefaultPlugins(defaultPluginsInfo: DefaultPluginsI
 	for (const pluginId of Object.keys(defaultPluginsInfo)) {
 		if (!defaultPluginsInfo[pluginId].settings) continue;
 		for (const settingName of Object.keys(defaultPluginsInfo[pluginId].settings)) {
-			if (!installedDefaultPlugins.includes(pluginId)) {
+			if (!installedDefaultPlugins.includes(pluginId) && Setting.keyExists(`plugin-${pluginId}.${settingName}`)) {
 				Setting.setValue(`plugin-${pluginId}.${settingName}`, defaultPluginsInfo[pluginId].settings[settingName]);
 			}
 		}
