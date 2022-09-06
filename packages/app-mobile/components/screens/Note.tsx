@@ -260,10 +260,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	private splitLayoutEditor_onBodyChange = (event: ChangeEvent) =>{
-		shared.noteComponent_change(this, 'body', event.value);
-		this.scheduleSave();
-
+	private updateViewOnPause = () => {
 		// Clear timeout if user continues typing
 		if (this.updateViewTimer_) {
 			shim.clearTimeout(this.updateViewTimer_);
@@ -273,6 +270,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.updateViewTimer_ = shim.setTimeout(() => {
 			this.setState({ updateView: this.state.updateView + 1 });
 		}, 1000);
+	};
+
+	private splitLayoutEditor_onBodyChange = (event: ChangeEvent) =>{
+		this.onBodyChange(event);
+		this.updateViewOnPause();
 	};
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
@@ -712,24 +714,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private splitLayoutEditor_bodyChangeText = (text: string) =>{
-		if (!this.undoRedoService_.canUndo) {
-			this.undoRedoService_.push(this.undoState());
-		} else {
-			this.undoRedoService_.schedulePush(this.undoState());
-		}
-
-		shared.noteComponent_change(this, 'body', text);
-		this.scheduleSave();
-
-		// Clear timeout if user continues typing
-		if (this.updateViewTimer_) {
-			shim.clearTimeout(this.updateViewTimer_);
-		}
-
-		// Update the viewer if editing is paused for 1 second
-		this.updateViewTimer_ = shim.setTimeout(() => {
-			this.setState({ updateView: this.state.updateView + 1 });
-		}, 1000);
+		this.body_changeText(text);
+		this.updateViewOnPause();
 	};
 
 	private body_selectionChange(event: any) {
