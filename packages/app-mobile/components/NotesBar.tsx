@@ -9,7 +9,7 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
-import HandleNoteQuery from './HandleNoteQuery';
+import searchNotes from './searchNotes';
 
 interface Props {
     themeId: number;
@@ -187,9 +187,8 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	// Copied from './screens/search.js' and modified
 	const refreshSearch = async () => {
-		const notes = await HandleNoteQuery(query, props.settings, props.dispatch);
+		const notes = await searchNotes(query, props.settings['db.ftsEnabled'], props.dispatch);
 		setNotes(notes);
 	};
 

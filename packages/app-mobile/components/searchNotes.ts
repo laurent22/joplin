@@ -1,16 +1,17 @@
 import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import Note from '@joplin/lib/models/Note';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 // Returns notes from a search query and sets highlighted words
 // Be sure to use 'await' keyword or the function might not work properly
 // Eg. await HandleNoteQuery();
 
-const HandleNoteQuery = async (query: string, settings: any, dispatch: (action: Object)=> void): Promise<any[]> => {
+const searchNotes = async (query: string, dbFtsEnabled: boolean, dispatch: (action: Object)=> void): Promise<NoteEntity[]> => {
 	let notes = [];
 
 	if (query) {
-		if (settings['db.ftsEnabled']) {
+		if (dbFtsEnabled) {
 			notes = await SearchEngineUtils.notesForQuery(query, true);
 		} else {
 			const p = query.split(' ');
@@ -38,4 +39,4 @@ const HandleNoteQuery = async (query: string, settings: any, dispatch: (action: 
 	return notes;
 };
 
-export default HandleNoteQuery;
+export default searchNotes;

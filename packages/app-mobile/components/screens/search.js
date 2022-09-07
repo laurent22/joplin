@@ -10,7 +10,7 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
-import HandleNoteQuery from '../HandleNoteQuery';
+import searchNotes from '../searchNotes';
 
 Icon.loadFont();
 
@@ -100,7 +100,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		query = query === null ? this.state.query.trim : query.trim();
 
-		const notes = await HandleNoteQuery(query, this.props.settings, this.props.dispatch);
+		const notes = await searchNotes(query, this.props.settings['db.ftsEnabled'], this.props.dispatch);
 
 		if (!this.isMounted_) return;
 
