@@ -2061,12 +2061,6 @@ packages/pdf-viewer/ui/IconButtons.js.map
 packages/pdf-viewer/ui/ZoomControls.d.ts
 packages/pdf-viewer/ui/ZoomControls.js
 packages/pdf-viewer/ui/ZoomControls.js.map
-packages/pdf-viewer/utils/renderQueue.d.ts
-packages/pdf-viewer/utils/renderQueue.js
-packages/pdf-viewer/utils/renderQueue.js.map
-packages/pdf-viewer/utils/renderQueue.test.d.ts
-packages/pdf-viewer/utils/renderQueue.test.js
-packages/pdf-viewer/utils/renderQueue.test.js.map
 packages/plugin-repo-cli/commands/updateRelease.d.ts
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/commands/updateRelease.js.map
