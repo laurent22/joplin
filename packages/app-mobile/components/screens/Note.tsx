@@ -94,7 +94,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			notesBarWidth: this.getNotesBarWidth(),
 			isTablet: Dimensions.get('window').width >= 768,
 			updateView: 0,
-			viewNoteButtonMaxY: 0.85 * Dimensions.get('window').height,
+			viewNoteButtonMaxY: 0.75 * Dimensions.get('window').height,
 		};
 
 		this.saveActionQueues_ = {};
@@ -1631,7 +1631,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const viewNoteButtonComp = (
 			<Animated.View style={this.styles().viewNoteButtonContainer} {...viewNoteButtonDragResponder.panHandlers}>
-				<TouchableOpacity onPress={handleViewNotePress} style={this.styles().viewNoteButton}>
+				<TouchableOpacity
+					onPress={handleViewNotePress}
+					style={this.styles().viewNoteButton}
+					accessibilityLabel={_('View notes')}
+					accessibilityRole="button"
+				>
 					<Icon name="eye" style={this.styles().viewNoteButtonIcon} />
 				</TouchableOpacity>
 			</Animated.View>
