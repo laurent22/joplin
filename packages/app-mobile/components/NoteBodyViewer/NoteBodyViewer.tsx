@@ -1,16 +1,14 @@
 import { useRef, useCallback } from 'react';
 
-import Setting from '@joplin/lib/models/Setting';
 import useSource from './hooks/useSource';
 import useOnMessage from './hooks/useOnMessage';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 
 const React = require('react');
-const { View } = require('react-native');
-const { WebView } = require('react-native-webview');
-const { themeStyle } = require('../global-style.js');
+import { View } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
 import { reg } from '@joplin/lib/registry';
+import ExtendedWebView from '../ExtendedWebView';
 
 interface Props {
 	themeId: number;
@@ -32,11 +30,9 @@ const webViewStyle = {
 };
 
 export default function NoteBodyViewer(props: Props) {
-	const theme = themeStyle(props.themeId);
-
 	const dialogBoxRef = useRef(null);
 
-	const { source, injectedJs } = useSource(
+	const { html, injectedJs } = useSource(
 		props.noteBody,
 		props.noteMarkupLanguage,
 		props.themeId,
@@ -67,6 +63,8 @@ export default function NoteBodyViewer(props: Props) {
 		reg.logger().error('WebView error');
 	}
 
+	const BackButtonDialogBox_ = BackButtonDialogBox as any;
+
 	// On iOS scalesPageToFit work like this:
 	//
 	// Find the widest image, resize it *and everything else* by x% so that
@@ -88,21 +86,14 @@ export default function NoteBodyViewer(props: Props) {
 	// 2020-10-15: As we've now fully switched to WebKit for iOS (useWebKit=true) and
 	// since the WebView package went through many versions it's possible that
 	// the above no longer applies.
-
-	const BackButtonDialogBox_ = BackButtonDialogBox as any;
-
 	return (
 		<View style={props.style}>
-			<WebView
-				theme={theme}
-				useWebKit={true}
-				allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
+			<ExtendedWebView
+				themeId={props.themeId}
 				style={webViewStyle}
-				source={source}
+				html={html}
 				injectedJavaScript={injectedJs.join('\n')}
-				originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 				mixedContentMode="always"
-				allowFileAccess={true}
 				onLoadEnd={onLoadEnd}
 				onError={onError}
 				onMessage={onMessage}

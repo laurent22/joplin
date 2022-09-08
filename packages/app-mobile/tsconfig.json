@@ -5,12 +5,14 @@
 		"**/*.tsx",
 	],
 	"exclude": [
+		//Files that don't need transpilation
 		"**/node_modules",
-
-		// Files that don't need transpilation
-		"gulpfile.ts",
-		"tools/*.ts",
 		"**/*.test.ts",
 		"**/*.test.tsx",
+		"gulpfile.ts",
+		"tools/*.ts",
 	],
+	"compilerOptions": {
+		"types": ["jest", "node"]
+	}
 }

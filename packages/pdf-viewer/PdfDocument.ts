@@ -1,13 +1,7 @@
 import * as pdfjsLib from 'pdfjs-dist';
+import { ScaledSize } from './types';
 
-
-export interface ScaledSize {
-	height: number;
-	width: number;
-	scale: number;
-}
-
-export class PdfData {
+export default class PdfDocument {
 	public url: string | Uint8Array;
 	private doc: any = null;
 	public pageCount: number = null;
@@ -16,8 +10,10 @@ export class PdfData {
 		height: number;
 		width: number;
 	} = null;
+	private document: HTMLDocument = null;
 
-	public constructor() {
+	public constructor(document: HTMLDocument) {
+		this.document = document;
 	}
 
 	public loadDoc = async (url: string | Uint8Array) => {
@@ -70,5 +66,37 @@ export class PdfData {
 			width: actualSize.width * scale,
 			scale,
 		};
+	};
+
+	public getActivePageNo = (scaledSize: ScaledSize, pageGap: number, scrollTop: number): number => {
+		const pageHeight = scaledSize.height + pageGap;
+		const pageNo = Math.floor(scrollTop / pageHeight) + 1;
+		return Math.min(pageNo, this.pageCount);
+	};
+
+	public printPdf = () => {
+		const frame = this.document.createElement('iframe');
+		frame.style.position = 'fixed';
+		frame.style.display = 'none';
+		frame.style.height = '100%';
+		frame.style.width = '100%';
+		this.document.body.appendChild(frame);
+		frame.onload = () => {
+			frame.contentWindow.onafterprint = () => {
+				frame.remove();
+			};
+			frame.focus();
+			frame.contentWindow.print();
+		};
+		frame.src = this.url as string;
+	};
+
+	public downloadPdf = async () => {
+		const url = this.url as string;
+		const link = this.document.createElement('a');
+		link.href = url;
+		link.download = url;
+		link.click();
+		link.remove();
 	};
 }

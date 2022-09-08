@@ -619,6 +619,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				mapsToLine: true,
 				// Always using useCustomPdfViewer for now, we can add a new setting for it in future if we need to.
 				useCustomPdfViewer: true,
+				noteId: props.noteId,
+				vendorDir: bridge().vendorDir(),
 			}));
 
 			if (cancelled) return;
