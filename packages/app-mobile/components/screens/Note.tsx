@@ -41,6 +41,7 @@ const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
+import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -728,10 +729,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async attachPhoto_onPress() {
 		// the selection Limit should be specfied. I think 200 is enough?
-		const response = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+		const response:ImagePickerResponse = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
 
-		if (response.errCode) {
-			reg.logger().warn('Got error from picker', response.errCode);
+		if (response.errorCode) {
+			reg.logger().warn('Got error from picker', response.errorCode);
 			return;
 		}
 
@@ -740,7 +741,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		response.assets.forEach(element => {
+		response.assets.forEach(async (element:Asset) => {
 			await this.attachFile(element, 'image');
 		});
 	}
@@ -767,7 +768,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async attachFile_onPress() {
 		const response = await this.pickDocuments();
-		response.forEach(element => {
+		response.forEach(async (element:Asset) => {
 			await this.attachFile(element, 'all');
 		});
 	}
