@@ -541,13 +541,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async pickDocument() {
+	async pickDocuments() {
 		try {
-			const result = await DocumentPicker.pick();
+			// the result is an array
+			const result = await DocumentPicker.pickMultiple();
 			return result;
 		} catch (error) {
 			if (DocumentPicker.isCancel(error)) {
-				console.info('pickDocument: user has cancelled');
+				console.info('pickDocuments: user has cancelled');
 				return null;
 			} else {
 				throw error;
@@ -629,16 +630,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async attachFile(pickerResponse: any, fileType: string) {
 		if (!pickerResponse) {
 			// User has cancelled
-			return;
-		}
-
-		if (pickerResponse.error) {
-			reg.logger().warn('Got error from picker', pickerResponse.error);
-			return;
-		}
-
-		if (pickerResponse.didCancel) {
-			reg.logger().info('User cancelled picker');
 			return;
 		}
 
@@ -736,8 +727,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
-		await this.attachFile(response, 'image');
+		// the selection Limit should be specfied. I think 200 is enough?
+		const response = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+
+		if (response.errCode) {
+			reg.logger().warn('Got error from picker', response.errCode);
+			return;
+		}
+
+		if (response.didCancel) {
+			reg.logger().info('User cancelled picker');
+			return;
+		}
+
+		response.assets.forEach(element => {
+			await this.attachFile(element, 'image');
+		});
 	}
 
 	takePhoto_onPress() {
@@ -748,8 +753,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void this.attachFile(
 			{
 				uri: data.uri,
-				didCancel: false,
-				error: null,
 				type: 'image/jpg',
 			},
 			'image'
@@ -763,8 +766,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async attachFile_onPress() {
-		const response = await this.pickDocument();
-		await this.attachFile(response, 'all');
+		const response = await this.pickDocuments();
+		response.forEach(element => {
+			await this.attachFile(element, 'all');
+		});
 	}
 
 	toggleIsTodo_onPress() {
