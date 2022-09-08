@@ -47,7 +47,6 @@
     "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
     "react-dom": "16.9.0",
-    "reactjs-popup": "^2.0.5",
     "styled-components": "^5.3.5"
   }
 }

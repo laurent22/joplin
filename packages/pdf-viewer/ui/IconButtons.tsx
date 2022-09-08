@@ -32,7 +32,7 @@ interface BaseButtonProps {
     hoverColor?: string;
 }
 
-function BaseButton({ onClick, icon, name, size, color, hoverColor }: BaseButtonProps) {
+export function BaseButton({ onClick, icon, name, size, color, hoverColor }: BaseButtonProps) {
 	return (
 		<ButtonElement onClick={onClick} title={name}
 			color={color}

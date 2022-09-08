@@ -3,10 +3,9 @@ import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
 import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect';
 import PdfDocument from './PdfDocument';
-import { ScaledSize, RenderRequest } from './types';
+import { ScaledSize, RenderRequest, MarkupState, MarkupTool, MarkupColor } from './types';
 import styled from 'styled-components';
 import Annotator from './Annotator';
-import AnnotationPopup from './ui/AnnotationPopup';
 
 require('./textLayer.css');
 
@@ -54,6 +53,7 @@ export interface PageProps {
 	onClick?: (page: number)=> void;
 	onDoubleClick?: (page: number)=> void;
 	annotator?: Annotator;
+	markupState?: MarkupState;
 }
 
 
@@ -64,7 +64,6 @@ export default function Page(props: PageProps) {
 	const textRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const isVisible = useIsVisible(wrapperRef, props.container);
-	const [popupOpen, setPopupOpen] = useState(false);
 	useVisibleOnSelect({
 		isVisible,
 		isSelected: props.isSelected,
@@ -74,7 +73,6 @@ export default function Page(props: PageProps) {
 
 	const renderPage = useCallback(async () => {
 		const isCancelled = () => props.scaledSize.scale !== scaleRef.current;
-		setPopupOpen(false);
 		try {
 			const renderRequest: RenderRequest = {
 				pageNo: props.pageNo,
@@ -116,20 +114,28 @@ export default function Page(props: PageProps) {
 
 
 	const onClick = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
-		if (props.annotator && !popupOpen) {
-			await props.annotator.processClick(props.pageNo, props.scaledSize, canvasRef.current, e);
-			if (props.annotator.hasTextSelection()) {
-				setPopupOpen(true);
-			} else {
-				const clickedId = await props.annotator.getAnnotationIdAtClick();
-				console.log('clickedId', clickedId);
-				if (clickedId) {
-					setPopupOpen(true);
+		if (props.annotator && props.markupState && canvasRef.current) {
+			if (props.markupState.isEnabled) {
+				try {
+					if (props.markupState.currentTool !== MarkupTool.Erase) {
+						await props.annotator.addTextAnnotation(props.markupState.currentTool as MarkupTool,
+							props.markupState.color as MarkupColor,
+							props.pageNo,
+							props.scaledSize,
+							canvasRef.current);
+						void renderPage();
+					} else {
+						const updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef.current, e);
+						if (updated) void renderPage();
+					}
+				} catch (error) {
+					alert('Sorry we could not complete that operation. Your pdf might not be supported.');
+					console.error(error);
 				}
 			}
 		}
 		if (props.onClick) props.onClick(props.pageNo);
-	}, [popupOpen, props.annotator, props.onClick, props.pageNo, props.scaledSize]);
+	}, [props.annotator, props.markupState, props.onClick, props.pageNo, props.scaledSize, renderPage]);
 
 	let style: any = {};
 	if (props.scaledSize) {
@@ -153,25 +159,10 @@ export default function Page(props: PageProps) {
 		if (props.onDoubleClick) props.onDoubleClick(props.pageNo);
 	}, [props.onDoubleClick, props.pageNo]);
 
-	const onPopupClose = useCallback(() => {
-		setPopupOpen(false);
-	}, []);
-
-	const onAnnotationUpdate = useCallback(() => {
-		void renderPage();
-	}, [renderPage]);
-
-
 	return (
 		<PageWrapper onDoubleClick={onDoubleClick} isSelected={!!props.isSelected} onContextMenu={onContextMenu} onClick={onClick} ref={wrapperRef} style={style}>
 			{ error && <div>Error: {error}</div> }
 			{props.showPageNumbers && <PageInfo isSelected={!!props.isSelected}>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
-			<AnnotationPopup
-				isOpen={popupOpen}
-				onClose={onPopupClose}
-				annotator={props.annotator}
-				onPageUpdate={onAnnotationUpdate}
-				pageNo={props.pageNo} />
 		</PageWrapper>
 	);
 }

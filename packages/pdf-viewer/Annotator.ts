@@ -1,19 +1,12 @@
 import { MouseEvent } from 'react';
 import { AnnotationFactory } from 'annotpdf/lib/annotation';
 import PdfDocument from './PdfDocument';
-import { ScaledSize } from './types';
+import { ScaledSize, MarkupTool, MarkupColor } from './types';
 
 export default class Annotator {
 	private pdfDocument: PdfDocument = null;
-	private currentPage: number = 1;
 	private driver: AnnotationFactory = null;
 	private hasChange = false;
-	private clickPoint: {
-		x: number;
-		y: number;
-	} = null;
-	private selectionPoints: number[] = null;
-	private selectedText: string = null;
 	public constructor(pdfDocument: PdfDocument) {
 		this.pdfDocument = pdfDocument;
 	}
@@ -32,11 +25,11 @@ export default class Annotator {
 		};
 	};
 
-	private selectionCoordinates = async (scaledSize: ScaledSize, canvasElem: HTMLCanvasElement) => {
+	private selectionCoordinates = async (pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement) => {
 		const rects = window.getSelection().getRangeAt(0).getClientRects();
 		const ost = this.computePageOffset(canvasElem);
 		const points: number[] = [];
-		const page = await this.pdfDocument.getPage(this.currentPage);
+		const page = await this.pdfDocument.getPage(pageNo);
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		const processPoint = (x: number, y: number) => {
 			const x_y = viewport.convertToPdfPoint(x, y);
@@ -73,65 +66,80 @@ export default class Annotator {
 			console.log('annotation', annotation);
 			if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
 				console.log('found annotation', annotation);
-				return true;
+				return annotation;
 			}
-			return false;
+			return null;
 		});
 	};
 
-	public getAnnotationIdAtClick = async (): Promise<string> => {
-		if (!this.clickPoint) return null;
-		const { x, y } = this.clickPoint;
-		const annotation = await this.getAnnotationAtPoint(this.currentPage, x, y);
-		if (!annotation) return null;
-		return annotation.id;
-	};
-
-	public hasTextSelection = (): boolean => {
-		return (this.selectionPoints && this.selectionPoints.length && !!this.selectedText);
-	};
-
-	public processClick = async (pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement, evt: MouseEvent) => {
-		const text = window.getSelection().toString();
+	public deleteAnnotationAtClick = async (pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement, evt: MouseEvent): Promise<boolean> => {
 		const ost = this.computePageOffset(canvasElem);
 		let x = evt.pageX - ost.left;
 		let y = evt.pageY - ost.top;
-		if (text) {
-			const coords = await this.selectionCoordinates(scaledSize, canvasElem);
-			this.selectionPoints = coords;
-			this.selectedText = text;
-		} else {
-			this.selectionPoints = null;
-			this.selectedText = null;
-		}
-		const page = await this.pdfDocument.getPage(this.currentPage);
+		const page = await this.pdfDocument.getPage(pageNo);
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		const x_y = viewport.convertToPdfPoint(x, y);
 		x = x_y[0];
 		y = x_y[1];
-		this.currentPage = pageNo;
-		this.clickPoint = { x, y };
+		if (!x || !y) return false;
+		const annotation = await this.getAnnotationAtPoint(pageNo, x, y);
+		if (!annotation) return false;
+		await this.deleteAnnotation(annotation.id || annotation.object_id);
+		return true;
 	};
 
-	public deleteAnnotation = async (id: string) => {
+	public deleteAnnotation = async (id: string | any) => {
+		console.log('deleting annotation', id);
 		const driver = await this.getDriver();
+		console.log('driver', driver);
 		await driver.deleteAnnotation(id);
+		console.log('deleted annotation', id);
 		await this.save();
 	};
 
-	public addHighlightAtClick = async () => {
-		if (!this.hasTextSelection()) return;
+	private getColor = (color: MarkupColor) => {
+		switch (MarkupColor[color]) {
+		case MarkupColor.Red:
+			return [1, 0, 0];
+		case MarkupColor.Green:
+			return [0, 1, 0];
+		case MarkupColor.Blue:
+			return [0, 0, 1];
+		case MarkupColor.Yellow:
+			return [1, 1, 0];
+		case MarkupColor.Purple:
+			return [1, 0, 1];
+		default:{
+			console.error('Unknown color', color);
+			return [0, 0, 0];
+		}
+		}
+	};
+
+	public addTextAnnotation = async (tool: MarkupTool, color: MarkupColor, pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement) => {
+		const text = window.getSelection().toString();
+		if (!text) return;
+		const coords = await this.selectionCoordinates(pageNo, scaledSize, canvasElem);
 		const driver = await this.getDriver();
-		const obj = driver.createHighlightAnnotation({
-			page: this.currentPage - 1,
+		const colorArray = this.getColor(color);
+		const options: any = {
+			page: pageNo - 1,
 			rect: [],
-			quadPoints: this.selectionPoints,
-			contents: this.selectedText,
+			quadPoints: coords,
+			contents: text,
 			author: 'Joplin',
-			color: { r: 255, g: 207, b: 0 },
-			opacity: 0.4,
-		});
-		console.log(obj);
+			color: { r: colorArray[0], g: colorArray[1], b: colorArray[2] },
+			opacity: 0.6,
+		};
+		if (tool === MarkupTool.Highlight) {
+			driver.createHighlightAnnotation(options);
+		} else if (tool === MarkupTool.Underline) {
+			driver.createUnderlineAnnotation(options);
+		} else if (tool === MarkupTool.StrikeThrough) {
+			driver.createStrikeOutAnnotation(options);
+		} else {
+			throw new Error(`Invalid text tool: ${tool}`);
+		}
 		console.log('annotation added');
 		await this.save();
 		// driver.download();
