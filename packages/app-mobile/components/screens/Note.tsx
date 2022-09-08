@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-import { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions, PanResponder } from 'react-native';
+import { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions, PanResponder, PanResponderGestureState } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -94,6 +94,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			notesBarWidth: this.getNotesBarWidth(),
 			isTablet: Dimensions.get('window').width >= 768,
 			updateView: 0,
+			viewNoteButtonMaxY: 0.85 * Dimensions.get('window').height,
 		};
 
 		this.saveActionQueues_ = {};
@@ -506,6 +507,32 @@ class NoteScreenComponent extends BaseScreenComponent {
 			width: 2,
 		};
 
+		styles.viewNoteButtonContainer = {
+			borderRadius: 27,
+			height: 54,
+			width: 54,
+			alignItems: 'center',
+			justifyContent: 'center',
+			position: 'absolute',
+			top: this.state.viewNoteButtonMaxY,
+			right: 30,
+			transform: [{ translateY: this.viewNoteButtonPositionY }],
+		};
+
+		styles.viewNoteButton = {
+			borderRadius: 27,
+			height: 54,
+			width: 54,
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundColor: 'rgba(231,76,60,1)',
+		};
+
+		styles.viewNoteButtonIcon = {
+			fontSize: 18,
+			color: theme.backgroundColor,
+		};
+
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -694,6 +721,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		this.noteActionsPositionY = new Animated.Value(0);
+		this.viewNoteButtonPositionY = new Animated.Value(0);
 	}
 
 	private title_changeText(text: string) {
@@ -1451,24 +1479,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
-		const renderViewNoteButton = () => {
-			const buttons = [];
-
-			buttons.push({
-				title: _('View'),
-				icon: 'eye-outline',
-				onPress: () => {
-					this.setState({ mode: 'view' });
-				},
-			});
-
-			if (this.state.mode === 'view') return null;
-
-			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
-		};
-
-		const viewNoteButtonComp = renderViewNoteButton();
-
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
@@ -1549,22 +1559,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 				newY = maxY;
 			}
 
-			this.noteActionsPositionY.setValue(newY - 162);
+			this.noteActionsPositionY.setValue(newY - (this.styles().noteActionButton.height) * 3);
 		};
 
-		// Pan responder that handles making the note actions draggable.
-		// The note actions need to be draggable, because they could
-		// potentially obstruct some portion of a note's content
-		const noteActionsDragResponder = PanResponder.create({
-			// Only start dragging after moving at least 10px — this prevents clicks from dragging instead
-			// of triggering onPress events
-			onMoveShouldSetPanResponder: (_evt, gestureState) => {
-				return Math.abs(gestureState.dx) > 10 || Math.abs(gestureState.dy) > 10;
-			},
-			onPanResponderMove: (_e: any, gestureState: any) => {
-				handleNoteActionsDrag(gestureState);
-			},
-		});
+		const DragResponder = (onPanResponderMoveFn: (gestureState: PanResponderGestureState)=> void) => {
+			return PanResponder.create({
+				// Only start dragging after moving at least 10px — this prevents clicks from dragging instead
+				// of triggering onPress events
+				onMoveShouldSetPanResponder: (_evt, gestureState) => {
+					return Math.abs(gestureState.dx) > 10 || Math.abs(gestureState.dy) > 10;
+				},
+				onPanResponderMove: (_e, gestureState) => {
+					onPanResponderMoveFn(gestureState);
+				},
+			});
+		};
+
+		const noteActionsDragResponder = DragResponder(handleNoteActionsDrag);
 
 		// Different styles for when the note actions are active or not
 		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
@@ -1594,6 +1605,36 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{ this.props.useSplitLayout ? splitNoteScreenLayoutComp : singleNoteScreenLayoutComp }
 
 			</View>
+		);
+
+		const handleViewNotePress = () => {
+			if (this.state.mode === 'view') return;
+			this.setState({ mode: 'view' });
+		};
+
+		const handleViewNoteButtonDrag = (gestureState: PanResponderGestureState) => {
+			const minY = 160;
+			const maxY = this.state.viewNoteButtonMaxY;
+
+			let newY = gestureState.moveY;
+
+			if (newY < minY) {
+				newY = minY;
+			} else if (newY > maxY) {
+				newY = maxY;
+			}
+
+			this.viewNoteButtonPositionY.setValue(newY - this.state.viewNoteButtonMaxY - (this.styles().viewNoteButton.height / 2));
+		};
+
+		const viewNoteButtonDragResponder = DragResponder(handleViewNoteButtonDrag);
+
+		const viewNoteButtonComp = (
+			<Animated.View style={this.styles().viewNoteButtonContainer} {...viewNoteButtonDragResponder.panHandlers}>
+				<TouchableOpacity onPress={handleViewNotePress} style={this.styles().viewNoteButton}>
+					<Icon name="eye" style={this.styles().viewNoteButtonIcon} />
+				</TouchableOpacity>
+			</Animated.View>
 		);
 
 		return (
