@@ -741,7 +741,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		for(const asset of response.assets) {
+		for (const asset of response.assets) {
 			await this.attachFile(asset, 'image');
 		}
 	}
@@ -768,7 +768,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async attachFile_onPress() {
 		const response = await this.pickDocuments();
-		for(const asset of response) {
+		for (const asset of response) {
 			await this.attachFile(asset, 'all');
 		}
 	}
