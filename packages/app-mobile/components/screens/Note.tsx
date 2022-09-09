@@ -41,7 +41,7 @@ const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
-import { Asset, ImagePickerResponse } from 'react-native-image-picker';
+import { ImagePickerResponse } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -741,9 +741,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		response.assets.forEach(async (element: Asset) => {
-			await this.attachFile(element, 'image');
-		});
+		for(const asset of response.assets) {
+			await this.attachFile(asset, 'image');
+		}
 	}
 
 	takePhoto_onPress() {
@@ -768,9 +768,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async attachFile_onPress() {
 		const response = await this.pickDocuments();
-		response.forEach(async (element: Asset) => {
-			await this.attachFile(element, 'all');
-		});
+		for(const asset of response) {
+			await this.attachFile(asset, 'all');
+		}
 	}
 
 	toggleIsTodo_onPress() {
