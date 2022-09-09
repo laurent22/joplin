@@ -3,6 +3,7 @@ import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import UndoRedoService from '@joplin/lib/services/UndoRedoService';
+import { State } from '@joplin/lib/reducer';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
@@ -10,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+import { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid, Animated, TouchableOpacity, Dimensions, PanResponder } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -29,12 +30,12 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
-const { Checkbox } = require('../checkbox.js');
+import Checkbox from '../checkbox';
 const { _ } = require('@joplin/lib/locale');
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
-const { themeStyle, editorFont } = require('../global-style.js');
+import { themeStyle, editorFont } from '../global-style';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const DocumentPicker = require('react-native-document-picker').default;
@@ -44,20 +45,23 @@ const ImagePicker = require('react-native-image-picker').default;
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
+import NotesBar from '../NotesBar';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
+const Icon = require('react-native-vector-icons/Feather').default;
+import getResponsiveValue from '../getResponsiveValue';
 
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
-	static navigationOptions(): any {
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	constructor() {
+	public constructor() {
 		super();
 		this.state = {
 			note: Note.new(),
@@ -86,6 +90,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
+
+			notesBarWidth: this.getNotesBarWidth(),
+			isTablet: Dimensions.get('window').width >= 768,
 		};
 
 		this.saveActionQueues_ = {};
@@ -197,7 +204,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (msg.indexOf('file://') === 0) {
 						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
 					} else {
-						Linking.openURL(msg);
+						await Linking.openURL(msg);
 					}
 				}
 			} catch (error) {
@@ -238,6 +245,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
+		this.onNotesBarToggle = this.onNotesBarToggle.bind(this);
+		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -280,7 +289,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	screenHeader_undoButtonPress() {
+	private getNotesBarWidth = () => {
+		const notesBarWidth = getResponsiveValue({
+			sm: 250,
+			md: 260,
+			lg: 270,
+			xl: 280,
+			xxl: 290,
+		});
+
+		return notesBarWidth;
+	};
+
+	// Update state that depends on the screen width when the screen width changes ( the device orientation changess)
+	private handleScreenWidthChange_() {
+		this.setState({
+			notesBarWidth: this.getNotesBarWidth(),
+			isTablet: Dimensions.get('window').width >= 768,
+		});
+	}
+
+	private screenHeader_undoButtonPress() {
 		if (this.useEditorBeta()) {
 			this.editorRef.current.undo();
 		} else {
@@ -288,7 +317,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	screenHeader_redoButtonPress() {
+	private screenHeader_redoButtonPress() {
 		if (this.useEditorBeta()) {
 			this.editorRef.current.redo();
 		} else {
@@ -296,13 +325,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	undoState(noteBody: string = null) {
+	private undoState(noteBody: string = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
 		};
 	}
 
-	styles() {
+	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -321,6 +350,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
+				paddingBottom: Platform.OS === 'ios' ? 40 : 0,
 
 				// Add extra space to allow scrolling past end of document, and also to fix this:
 				// https://github.com/laurent22/joplin/issues/1437
@@ -386,17 +416,84 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
+		styles.noteMainComp = {
+			flex: 1,
+			flexDirection: 'row',
+			position: 'relative',
+		};
+
+		styles.notesBarContainer = {
+			position: 'relative',
+			left: this.notesBarPosition,
+			top: 0,
+			width: this.state.notesBarWidth,
+			height: '100%',
+		};
+
+		styles.noteComp = {
+			position: 'relative',
+			top: 0,
+			left: this.notePosition,
+			width: this.noteWidth,
+		};
+
+		styles.noteActionButton = {
+			width: 54,
+			height: 54,
+			backgroundColor: theme.backgroundColor3,
+			borderWidth: 1,
+			borderColor: theme.dividerColor,
+			alignItems: 'center',
+			justifyContent: 'center',
+		};
+
+		styles.noteActionButtonActive = {
+			...styles.noteActionButton,
+			borderWidth: 0,
+			backgroundColor: theme.color4,
+		};
+
+		styles.noteActionButton1 = {
+			borderBottomWidth: 0,
+			borderTopLeftRadius: 8,
+			borderTopRightRadius: 8,
+		};
+
+		styles.noteActionButton2 = {
+			// Removing this temporarily till second noteAction is implemented
+			// borderBottomLeftRadius: 8,
+			// borderBottomRightRadius: 8,
+			borderRadius: 8,
+		};
+
+		styles.noteActionButtonIcon = {
+			fontSize: 30,
+			color: theme.color,
+		};
+
+		styles.noteActionButtonIconActive = {
+			...styles.noteActionButtonIcon,
+			color: theme.backgroundColor,
+		};
+
+		styles.noteActionButtonGroup = {
+			position: 'absolute',
+			top: '8%',
+			right: '3%',
+			transform: [{ translateY: this.noteActionsPositionY }],
+		};
+
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
 		return this.styles_[cacheKey];
 	}
 
-	isModified() {
+	private isModified() {
 		return shared.isModified(this);
 	}
 
-	async requestGeoLocationPermissions() {
+	private async requestGeoLocationPermissions() {
 		if (!Setting.value('trackLocation')) return;
 
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
@@ -413,7 +510,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async componentDidMount() {
+	public async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
@@ -434,13 +531,75 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// has already been granted, it doesn't slow down opening the note. If it hasn't
 		// been granted, the popup will open anyway.
 		void this.requestGeoLocationPermissions();
+
+		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 	}
 
-	onMarkForDownload(event: any) {
+	private animateNotesBarOpen = () => {
+		Animated.parallel([
+			Animated.spring(
+				this.notesBarPosition,
+				{
+					toValue: 0,
+					useNativeDriver: false,
+				}
+			),
+			Animated.spring(
+				this.notePosition,
+				{
+					toValue: 0,
+					useNativeDriver: false,
+				}
+			),
+			Animated.spring(
+				this.noteWidth,
+				{
+					toValue: Dimensions.get('window').width - this.state.notesBarWidth,
+					useNativeDriver: false,
+				}
+			),
+		]).start();
+	};
+
+	private animateNotesBarClose = () => {
+		Animated.parallel([
+			Animated.spring(
+				this.notesBarPosition,
+				{
+					toValue: -1 * this.state.notesBarWidth,
+					useNativeDriver: false,
+				}
+			),
+			Animated.spring(
+				this.notePosition,
+				{
+					toValue: -1 * this.state.notesBarWidth,
+					useNativeDriver: false,
+				}
+			),
+			Animated.spring(
+				this.noteWidth,
+				{
+					toValue: Dimensions.get('window').width,
+					useNativeDriver: false,
+				}
+			),
+		]).start();
+	};
+
+	private onNotesBarToggle = async () => {
+		if (this.props.showNotesBar) {
+			this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
+		} else {
+			this.props.dispatch({ type: 'NOTES_BAR_OPEN' });
+		}
+	};
+
+	private onMarkForDownload(event: any) {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -452,9 +611,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 				options: this.sideMenuOptions(),
 			});
 		}
+
+		if (this.props.showNotesBar !== prevProps.showNotesBar) {
+			if (this.props.showNotesBar) {
+				this.animateNotesBarOpen();
+			} else {
+				this.animateNotesBarClose();
+			}
+		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
@@ -469,15 +636,34 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
 		// componentWillUnmount, but with React Native the impossible often becomes possible.
 		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
+
+		if (this.unsubscribeScreenWidthChangeHandler_) {
+			this.unsubscribeScreenWidthChangeHandler_.remove();
+			this.unsubscribeScreenWidthChangeHandler_ = null;
+		}
 	}
 
-	title_changeText(text: string) {
+	public componentWillMount() {
+		if (this.props.showNotesBar) {
+			this.notesBarPosition = new Animated.Value(0);
+			this.notePosition = new Animated.Value(0);
+			this.noteWidth = new Animated.Value(Dimensions.get('window').width - 250);
+		} else {
+			this.notesBarPosition = new Animated.Value(-1 * this.state.notesBarWidth);
+			this.notePosition = new Animated.Value(-1 * this.state.notesBarWidth);
+			this.noteWidth = new Animated.Value(Dimensions.get('window').width);
+		}
+
+		this.noteActionsPositionY = new Animated.Value(0);
+	}
+
+	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
 	}
 
-	body_changeText(text: string) {
+	private body_changeText(text: string) {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -488,7 +674,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	body_selectionChange(event: any) {
+	private body_selectionChange(event: any) {
 		if (this.useEditorBeta()) {
 			this.selection = event.selection;
 		} else {
@@ -496,34 +682,34 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	makeSaveAction() {
+	private makeSaveAction() {
 		return async () => {
 			return shared.saveNoteButton_press(this);
 		};
 	}
 
-	saveActionQueue(noteId: string) {
+	private saveActionQueue(noteId: string) {
 		if (!this.saveActionQueues_[noteId]) {
 			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
 		}
 		return this.saveActionQueues_[noteId];
 	}
 
-	scheduleSave() {
+	private scheduleSave() {
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
-	async saveNoteButton_press(folderId: string = null) {
+	private async saveNoteButton_press(folderId: string = null) {
 		await shared.saveNoteButton_press(this, folderId);
 
 		Keyboard.dismiss();
 	}
 
-	async saveOneProperty(name: string, value: any) {
+	private async saveOneProperty(name: string, value: any) {
 		await shared.saveOneProperty(this, name, value);
 	}
 
-	async deleteNote_onPress() {
+	private async deleteNote_onPress() {
 		const note = this.state.note;
 		if (!note.id) return;
 
@@ -541,7 +727,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async pickDocument() {
+	private async pickDocument() {
 		try {
 			const result = await DocumentPicker.pick();
 			return result;
@@ -555,7 +741,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async imageDimensions(uri: string) {
+	private async imageDimensions(uri: string) {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
@@ -569,7 +755,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	showImagePicker(options: any) {
+	private showImagePicker(options: any) {
 		return new Promise((resolve) => {
 			ImagePicker.launchImageLibrary(options, (response: any) => {
 				resolve(response);
@@ -577,7 +763,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
+	private async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
 		const dimensions: any = await this.imageDimensions(localFilePath);
@@ -626,7 +812,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return true;
 	}
 
-	async attachFile(pickerResponse: any, fileType: string) {
+	private async attachFile(pickerResponse: any, fileType: string) {
 		if (!pickerResponse) {
 			// User has cancelled
 			return;
@@ -735,16 +921,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	async attachPhoto_onPress() {
+	private async attachPhoto_onPress() {
 		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
 		await this.attachFile(response, 'image');
 	}
 
-	takePhoto_onPress() {
+	private takePhoto_onPress() {
 		this.setState({ showCamera: true });
 	}
 
-	cameraView_onPhoto(data: any) {
+	private cameraView_onPhoto(data: any) {
 		void this.attachFile(
 			{
 				uri: data.uri,
@@ -758,43 +944,43 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	cameraView_onCancel() {
+	private cameraView_onCancel() {
 		this.setState({ showCamera: false });
 	}
 
-	async attachFile_onPress() {
+	private async attachFile_onPress() {
 		const response = await this.pickDocument();
 		await this.attachFile(response, 'all');
 	}
 
-	toggleIsTodo_onPress() {
+	private toggleIsTodo_onPress() {
 		shared.toggleIsTodo_onPress(this);
 
 		this.scheduleSave();
 	}
 
-	tags_onPress() {
+	private tags_onPress() {
 		if (!this.state.note || !this.state.note.id) return;
 
 		this.setState({ noteTagDialogShown: true });
 	}
 
-	async share_onPress() {
+	private async share_onPress() {
 		await Share.share({
 			message: `${this.state.note.title}\n\n${this.state.note.body}`,
 			title: this.state.note.title,
 		});
 	}
 
-	properties_onPress() {
+	private properties_onPress() {
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
-	setAlarm_onPress() {
+	public setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
 
-	async onAlarmDialogAccept(date: Date) {
+	private async onAlarmDialogAccept(date: Date) {
 		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
@@ -803,40 +989,40 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ alarmDialogShown: false });
 	}
 
-	onAlarmDialogReject() {
+	private onAlarmDialogReject() {
 		this.setState({ alarmDialogShown: false });
 	}
 
-	async showOnMap_onPress() {
+	private async showOnMap_onPress() {
 		if (!this.state.note.id) return;
 
 		const note = await Note.load(this.state.note.id);
 		try {
 			const url = Note.geolocationUrl(note);
-			Linking.openURL(url);
+			await Linking.openURL(url);
 		} catch (error) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			await dialogs.error(this, error.message);
 		}
 	}
 
-	async showSource_onPress() {
+	private async showSource_onPress() {
 		if (!this.state.note.id) return;
 
 		const note = await Note.load(this.state.note.id);
 		try {
-			Linking.openURL(note.source_url);
+			await Linking.openURL(note.source_url);
 		} catch (error) {
 			await dialogs.error(this, error.message);
 		}
 	}
 
-	copyMarkdownLink_onPress() {
+	private copyMarkdownLink_onPress() {
 		const note = this.state.note;
 		Clipboard.setString(Note.markdownTag(note));
 	}
 
-	sideMenuOptions() {
+	private sideMenuOptions() {
 		const note = this.state.note;
 		if (!note) return [];
 
@@ -888,7 +1074,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
 	}
 
-	menuOptions() {
+	private menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
@@ -972,11 +1158,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	async todoCheckbox_change(checked: boolean) {
+	private async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
-	scheduleFocusUpdate() {
+	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
 		this.focusUpdateIID_ = shim.setTimeout(() => {
@@ -985,7 +1171,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 100);
 	}
 
-	focusUpdate() {
+	private focusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 		this.focusUpdateIID_ = null;
 
@@ -1003,7 +1189,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// }
 	}
 
-	async folderPickerOptions_valueChanged(itemValue: any) {
+	private async folderPickerOptions_valueChanged(itemValue: any) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
@@ -1024,7 +1210,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	folderPickerOptions() {
+	private folderPickerOptions() {
 		const options = {
 			enabled: true,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
@@ -1037,7 +1223,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.folderPickerOptions_;
 	}
 
-	onBodyViewerLoadEnd() {
+	private onBodyViewerLoadEnd() {
 		shim.setTimeout(() => {
 			this.setState({ HACK_webviewLoadingState: 1 });
 			shim.setTimeout(() => {
@@ -1046,11 +1232,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 5);
 	}
 
-	onBodyViewerCheckboxChange(newBody: string) {
+	private onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
 	}
 
-	render() {
+	public render() {
 		if (this.state.isLoading) {
 			return (
 				<View style={this.styles().screen}>
@@ -1127,7 +1313,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 						placeholderTextColor={theme.colorFaded}
 						// need some extra padding for iOS so that the keyboard won't cover last line of the note
 						// see https://github.com/laurent22/joplin/issues/3607
-						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
 					/>
 				);
 			} else {
@@ -1206,6 +1391,65 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		// Different styles for when the note actions are active or not
+		const notesBarToggleIconStyle = this.props.showNotesBar ? this.styles().noteActionButtonIconActive : this.styles().noteActionButtonIcon;
+		const notesBarToggleStyle = this.props.showNotesBar ? this.styles().noteActionButtonActive : this.styles().noteActionButton;
+
+		const handleNoteActionsDrag = (gestureState: any) => {
+			const minY = 160;
+			const maxY = 0.8 * Dimensions.get('window').height;
+
+			let newY = gestureState.moveY;
+
+			if (newY < minY) {
+				newY = minY;
+			} else if (newY > maxY) {
+				newY = maxY;
+			}
+
+			this.noteActionsPositionY.setValue(newY - 162);
+		};
+
+		// Pan responder that handles making the note actions draggable.
+		// The note actions need to be draggable, because they could
+		// potentially obstruct some portion of a note's content
+		const noteActionsDragResponder = PanResponder.create({
+			// Only start dragging after moving at least 10px — this prevents clicks from dragging instead
+			// of triggering onPress events
+			onMoveShouldSetPanResponder: (_evt, gestureState) => {
+				return Math.abs(gestureState.dx) > 10 || Math.abs(gestureState.dy) > 10;
+			},
+			onPanResponderMove: (_e: any, gestureState: any) => {
+				handleNoteActionsDrag(gestureState);
+			},
+		});
+
+		// Note actions are the notesbar and split layout toggle button
+		const noteActionButtonGroupComp = (
+			<Animated.View style={this.styles().noteActionButtonGroup} {...noteActionsDragResponder.panHandlers} >
+				{/* Temporarily hiding the split layout button till it's implemented */}
+				{/* <TouchableOpacity style={[this.styles().noteActionButton, this.styles().noteActionButton1]} activeOpacity={0.7}>
+					<Icon name="columns" style={this.styles().noteActionButtonIcon} />
+				</TouchableOpacity> */}
+				<TouchableOpacity style={[notesBarToggleStyle, this.styles().noteActionButton2]} activeOpacity={0.7} onPress={this.onNotesBarToggle}>
+					<Icon name="list" style={notesBarToggleIconStyle} />
+				</TouchableOpacity>
+			</Animated.View>
+		);
+
+		const noteMainComp = (
+			<View style={this.styles().noteMainComp}>
+				<Animated.View style={this.styles().notesBarContainer}>
+					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
+				</Animated.View>
+				<Animated.View style={this.styles().noteComp}>
+					{titleComp}
+					{bodyComponent}
+				</Animated.View>
+				{ this.state.isTablet && noteActionButtonGroupComp }
+			</View>
+		);
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -1222,8 +1466,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
 				/>
-				{titleComp}
-				{bodyComponent}
+				{noteMainComp}
 				{actionButtonComp}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
@@ -1239,7 +1482,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NoteScreen = connect((state: any) => {
+const NoteScreen = connect((state: State) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
@@ -1255,6 +1498,7 @@ const NoteScreen = connect((state: any) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
 		useEditorBeta: state.settings['editor.beta'],
+		showNotesBar: state.showMobileNotesBar,
 	};
 })(NoteScreenComponent);
 
