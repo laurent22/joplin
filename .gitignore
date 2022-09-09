@@ -909,6 +909,9 @@ packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js.map
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.d.ts
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.js.map
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleSpaceButton.d.ts
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleSpaceButton.js
+packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleSpaceButton.js.map
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.d.ts
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.js.map
