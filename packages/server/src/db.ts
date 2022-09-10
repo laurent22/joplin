@@ -45,6 +45,7 @@ export interface DbConfigConnection {
 	database?: string;
 	filename?: string;
 	password?: string;
+	connectionString?: string;
 }
 
 export interface QueryContext {
@@ -77,11 +78,15 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	if (dbConfig.client === 'sqlite3') {
 		connection.filename = dbConfig.name;
 	} else {
-		connection.database = dbConfig.name;
-		connection.host = dbConfig.host;
-		connection.port = dbConfig.port;
-		connection.user = dbConfig.user;
-		connection.password = dbConfig.password;
+		if (dbConfig.connectionString) {
+			connection.connectionString = dbConfig.connectionString;
+		} else {
+			connection.database = dbConfig.name;
+			connection.host = dbConfig.host;
+			connection.port = dbConfig.port;
+			connection.user = dbConfig.user;
+			connection.password = dbConfig.password;
+		}
 	}
 
 	return {
