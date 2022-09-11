@@ -20,6 +20,7 @@ Enabling the Web Clipper service will enable the browser extension app to commun
 To use the Web Clipper, simply click on the extensions tab that is usually located to the right of the address bar. Select the Joplin Web Clipper from the list of extensions. While using the Web Clipper for the first time, it may ask you to complete authorization in order to access your data. To proceed, open the Joplin desktop application where you will see a pop up. Grant permission to Web Clipper by clicking on the **Grant Authorization** button.
 
 Once you have completed the authorization process, you can see the following menu when you click on the Joplin Web Clipper from the extensions tab.
+
 ![Screenshot](https://user-images.githubusercontent.com/58488861/189547712-071948f7-6f2a-4454-80cd-8c2b997e7d91.png)
 
 - Clip simplified page: This feature will allow you to store the contents of the entire webpage as simplified text and images to your notebook.
