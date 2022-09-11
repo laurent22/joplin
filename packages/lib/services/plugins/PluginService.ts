@@ -28,6 +28,19 @@ export interface Plugins {
 	[key: string]: Plugin;
 }
 
+export interface SettingAndValue {
+	[settingName: string]: string;
+}
+
+export interface DefaultPluginSettings {
+	version: string;
+	settings?: SettingAndValue;
+}
+
+export interface DefaultPluginsInfo {
+    [pluginId: string]: DefaultPluginSettings;
+}
+
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
@@ -416,7 +429,7 @@ export default class PluginService extends BaseService {
 		return this.installPluginFromRepo(repoApi, pluginId);
 	}
 
-	public async installPlugin(jplPath: string): Promise<Plugin> {
+	public async installPlugin(jplPath: string, loadPlugin: boolean = true): Promise<Plugin | null> {
 		logger.info(`Installing plugin: "${jplPath}"`);
 
 		// Before moving the plugin to the profile directory, we load it
@@ -429,9 +442,11 @@ export default class PluginService extends BaseService {
 		await shim.fsDriver().copy(jplPath, destPath);
 
 		// Now load it from the profile directory
-		const plugin = await this.loadPluginFromPath(destPath);
-		if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
-		return plugin;
+		if (loadPlugin) {
+			const plugin = await this.loadPluginFromPath(destPath);
+			if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
+			return plugin;
+		} else { return null; }
 	}
 
 	private async pluginPath(pluginId: string) {

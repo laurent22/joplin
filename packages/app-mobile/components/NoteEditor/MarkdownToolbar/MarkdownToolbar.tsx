@@ -1,7 +1,7 @@
 // A toolbar for the markdown editor.
 
 const React = require('react');
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useMemo, useState, useCallback } from 'react';
 
 // See https://oblador.github.io/react-native-vector-icons/ for a list of
@@ -20,6 +20,7 @@ import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
+import ToggleSpaceButton from './ToggleSpaceButton';
 
 type OnAttachCallback = ()=> void;
 
@@ -277,7 +278,11 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	};
 
 	return (
-		<>
+		<ToggleSpaceButton
+			spaceApplicable={ Platform.OS === 'ios' && keyboardVisible }
+			themeId={props.editorSettings.themeId}
+			style={styles.container}
+		>
 			<Toolbar
 				styleSheet={styleData}
 				buttons={[
@@ -299,21 +304,16 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 					},
 				]}
 			/>
-
-			<View style={{
-				// The keyboard on iOS can overlap the markdown toolbar.
-				// Add additional padding to prevent this.
-				height: (
-					Platform.OS === 'ios' && keyboardVisible ? 16 : 0
-				),
-			}}/>
-		</>
+		</ToggleSpaceButton>
 	);
 };
 
 const useStyles = (styleProps: any, theme: Theme) => {
 	return useMemo(() => {
 		return StyleSheet.create({
+			container: {
+				...styleProps,
+			},
 			button: {
 				width: buttonSize,
 				height: buttonSize,
@@ -348,10 +348,8 @@ const useStyles = (styleProps: any, theme: Theme) => {
 
 				// Add a small amount of additional padding for button borders
 				height: buttonSize + 6,
-				...styleProps,
 			},
 			toolbarContainer: {
-				maxHeight: '65%',
 				flexShrink: 1,
 			},
 			toolbarContent: {

@@ -30,7 +30,7 @@ This is a quick summary of the Markdown syntax.
 
 ### Tables
 
-Tables are created using pipes `|` and and hyphens `-`. This is a Markdown table:
+Tables are created using pipes `|` and hyphens `-`. This is a Markdown table:
 
 	| First Header  | Second Header |
 	| ------------- | ------------- |
