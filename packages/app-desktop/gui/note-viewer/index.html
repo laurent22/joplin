@@ -587,7 +587,7 @@
 		}
 
 		ipc.openPdfViewer = function(event) {
-			ipcProxySendToHost("joplin://"+event.resourceId, { resourceId: event.resourceId, mime: "application/pdf", pageNo: event.pageNo || 1 });
+			ipcProxySendToHost('openPdfViewer', { resourceId: event.resourceId, mime: 'application/pdf', pageNo: event.pageNo || 1 });
 		}
 
 		window.addEventListener('hashchange', webviewLib.logEnabledEventHandler(e => {
@@ -624,7 +624,6 @@
 			if (element && element.getAttribute('data-resource-id')) {
 				ipcProxySendToHost('contextMenu', {
 					type: element.getAttribute('src') ? 'image' : 'resource',
-					mime: element.getAttribute('type') || null,
 					resourceId: element.getAttribute('data-resource-id'),
 				});
 			} else {
