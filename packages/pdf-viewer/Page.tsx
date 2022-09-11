@@ -1,32 +1,35 @@
-import { useEffect, useRef, useState, MutableRefObject } from 'react';
+import { useEffect, useRef, useState, MutableRefObject, useCallback } from 'react';
 import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
+import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect';
 import PdfDocument from './PdfDocument';
-import { ScaledSize } from './types';
-import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
+import { ScaledSize, RenderRequest } from './types';
 import styled from 'styled-components';
 
-const PageWrapper = styled.div`
+
+require('./textLayer.css');
+
+const PageWrapper = styled.div<{ isSelected?: boolean }>`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
-	border: solid thin rgba(120, 120, 120, 0.498);
+	border: ${props => props.isSelected ? 'solid 5px #0079ff' : 'solid thin rgba(120, 120, 120, 0.498)'};
 	background: rgb(233, 233, 233);
 	position: relative;
-	border-radius: 0px;
+	border-radius: ${props => props.isSelected ? '0.3rem' : '0px'};
 `;
 
-const PageInfo = styled.div`
+const PageInfo = styled.div<{ isSelected?: boolean }>`
 	position: absolute;
 	top: 0.5rem;
 	left: 0.5rem;
 	padding: 0.3rem;
-	background: rgba(203, 203, 203, 0.509);
+	background: ${props => props.isSelected ? '#0079ff' : 'rgba(203, 203, 203, 0.509)'};
 	border-radius: 0.3rem;
 	font-size: 0.8rem;
-	color: rgba(91, 91, 91, 0.829);
+	color: ${props => props.isSelected ? 'white' : 'rgba(91, 91, 91, 0.829)'};
 	backdrop-filter: blur(0.5rem);
 	cursor: default;
 	user-select: none;
@@ -43,61 +46,64 @@ export interface PageProps {
 	scaledSize: ScaledSize;
 	isDarkTheme: boolean;
 	container: MutableRefObject<HTMLElement>;
-	showPageNumbers?: boolean;
+	showPageNumbers: boolean;
+	isSelected: boolean;
+	textSelectable: boolean;
+	onTextSelect?: (text: string)=> void;
+	onClick?: (page: number)=> void;
+	onDoubleClick?: (page: number)=> void;
 }
 
 
 export default function Page(props: PageProps) {
 	const [error, setError] = useState(null);
-	const [page, setPage] = useState(null);
 	const scaleRef = useRef<number>(null);
-	const timestampRef = useRef<number>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const textRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
-	const isVisible = useIsVisible(canvasRef, props.container);
+	const isVisible = useIsVisible(wrapperRef, props.container);
+	useVisibleOnSelect({
+		isVisible,
+		isSelected: props.isSelected,
+		container: props.container,
+		wrapperRef,
+	} as VisibleOnSelect);
 
 	useEffect(() => {
-		if (!isVisible || !page || !props.scaledSize || (scaleRef.current && props.scaledSize.scale === scaleRef.current)) return;
-		try {
-			const viewport = page.getViewport({ scale: props.scaledSize.scale || 1.0 });
-			const canvas = canvasRef.current;
-			canvas.width = viewport.width;
-			canvas.height = viewport.height;
-			const ctx = canvas.getContext('2d');
-			const pageTimestamp = new Date().getTime();
-			timestampRef.current = pageTimestamp;
-			page.render({
-				canvasContext: ctx,
-				viewport,
-				// Used so that the page rendering is throttled to some extent.
-				// https://stackoverflow.com/questions/18069448/halting-pdf-js-page-rendering
-				continueCallback: function(cont: any) {
-					if (timestampRef.current !== pageTimestamp) {
-						return;
-					}
-					cont();
-				},
-			});
+		const isCancelled = () => props.scaledSize.scale !== scaleRef.current;
+
+		const renderPage = async () => {
+			try {
+				const renderRequest: RenderRequest = {
+					pageNo: props.pageNo,
+					scaledSize: props.scaledSize,
+					getTextLayer: props.textSelectable,
+					isCancelled,
+				};
+				const { canvas, textLayerDiv } = await props.pdfDocument.renderPage(renderRequest);
+
+				wrapperRef.current.appendChild(canvas);
+				if (textLayerDiv) wrapperRef.current.appendChild(textLayerDiv);
+
+				if (canvasRef.current) canvasRef.current.remove();
+				if (textRef.current) textRef.current.remove();
+
+				canvasRef.current = canvas;
+				if (textLayerDiv) textRef.current = textLayerDiv;
+			} catch (error) {
+				if (isCancelled()) return;
+				error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
+				setError(error);
+				throw error;
+			}
+		};
+
+		if (isVisible && props.scaledSize && (props.scaledSize.scale !== scaleRef.current)) {
 			scaleRef.current = props.scaledSize.scale;
-
-		} catch (error) {
-			error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
-			setError(error);
-			throw error;
+			void renderPage();
 		}
-	}, [page, props.scaledSize, isVisible, props.pageNo]);
 
-	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (page || !isVisible || !props.pdfDocument) return;
-		try {
-			const _page = await props.pdfDocument.getPage(props.pageNo);
-			if (event.cancelled) return;
-			setPage(_page);
-		} catch (error) {
-			console.error('Page load error', props.pageNo, error);
-			setError(error);
-		}
-	}, [page, props.scaledSize, isVisible]);
+	}, [props.scaledSize, isVisible, props.textSelectable, props.pageNo, props.pdfDocument]);
 
 	useEffect(() => {
 		if (props.focusOnLoad) {
@@ -105,6 +111,11 @@ export default function Page(props: PageProps) {
 			// console.warn('setting focus on page', props.pageNo, wrapperRef.current.offsetTop);
 		}
 	}, [props.container, props.focusOnLoad]);
+
+
+	const onClick = useCallback(async (_e: React.MouseEvent<HTMLDivElement>) => {
+		if (props.onClick) props.onClick(props.pageNo);
+	}, [props.onClick, props.pageNo]);
 
 	let style: any = {};
 	if (props.scaledSize) {
@@ -115,15 +126,23 @@ export default function Page(props: PageProps) {
 		};
 	}
 
+	const onContextMenu = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+		if (!props.textSelectable || !props.onTextSelect || !window.getSelection()) return;
+		const text = window.getSelection().toString();
+		if (!text) return;
+		props.onTextSelect(text);
+		e.preventDefault();
+		e.stopPropagation();
+	}, [props.textSelectable, props.onTextSelect]);
+
+	const onDoubleClick = useCallback(() => {
+		if (props.onDoubleClick) props.onDoubleClick(props.pageNo);
+	}, [props.onDoubleClick, props.pageNo]);
+
 	return (
-		<PageWrapper ref={wrapperRef} style={style}>
-			<canvas ref={canvasRef} className="page-canvas" style={style}>
-				<div>
-					{error ? 'ERROR' : 'Loading..'}
-				</div>
-				Page {props.pageNo}
-			</canvas>
-			{props.showPageNumbers && <PageInfo>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
+		<PageWrapper onDoubleClick={onDoubleClick} isSelected={!!props.isSelected} onContextMenu={onContextMenu} onClick={onClick} ref={wrapperRef} style={style}>
+			{ error && <div>Error: {error}</div> }
+			{props.showPageNumbers && <PageInfo isSelected={!!props.isSelected}>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
 		</PageWrapper>
 	);
 }
