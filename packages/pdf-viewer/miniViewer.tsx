@@ -3,6 +3,7 @@ import useIsFocused from './hooks/useIsFocused';
 import usePdfDocument from './hooks/usePdfDocument';
 import VerticalPages from './VerticalPages';
 import ZoomControls from './ui/ZoomControls';
+import MessageService from './messageService';
 import { DownloadButton, PrintButton } from './ui/IconButtons';
 
 require('./miniViewer.css');
@@ -12,6 +13,8 @@ export interface MiniViewerAppProps {
 	isDarkTheme: boolean;
 	anchorPage: number;
 	pdfId: string;
+	resourceId?: string;
+	messageService: MessageService;
 }
 
 export default function MiniViewerApp(props: MiniViewerAppProps) {
@@ -24,6 +27,10 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 	const onActivePageChange = useCallback((page: number) => {
 		setActivePage(page);
 	}, []);
+
+	const onDoubleClick = useCallback((pageNo: number) => {
+		props.messageService.openFullScreenViewer(props.resourceId, pageNo);
+	}, [props.messageService, props.resourceId]);
 
 	if (!pdfDocument) {
 		return (
@@ -44,6 +51,9 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 					container={containerEl}
 					showPageNumbers={true}
 					zoom={zoom}
+					textSelectable={true}
+					onTextSelect={props.messageService.textSelected}
+					onDoubleClick={onDoubleClick}
 					pageGap={2}
 					onActivePageChange={onActivePageChange} />
 			</div>

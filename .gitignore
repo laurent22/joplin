@@ -321,6 +321,9 @@ packages/app-desktop/gui/MainScreen/commands/openItem.js.map
 packages/app-desktop/gui/MainScreen/commands/openNote.d.ts
 packages/app-desktop/gui/MainScreen/commands/openNote.js
 packages/app-desktop/gui/MainScreen/commands/openNote.js.map
+packages/app-desktop/gui/MainScreen/commands/openPdfViewer.d.ts
+packages/app-desktop/gui/MainScreen/commands/openPdfViewer.js
+packages/app-desktop/gui/MainScreen/commands/openPdfViewer.js.map
 packages/app-desktop/gui/MainScreen/commands/openTag.d.ts
 packages/app-desktop/gui/MainScreen/commands/openTag.js
 packages/app-desktop/gui/MainScreen/commands/openTag.js.map
@@ -585,6 +588,9 @@ packages/app-desktop/gui/OneDriveLoginScreen.js.map
 packages/app-desktop/gui/PasswordInput/PasswordInput.d.ts
 packages/app-desktop/gui/PasswordInput/PasswordInput.js
 packages/app-desktop/gui/PasswordInput/PasswordInput.js.map
+packages/app-desktop/gui/PdfViewer.d.ts
+packages/app-desktop/gui/PdfViewer.js
+packages/app-desktop/gui/PdfViewer.js.map
 packages/app-desktop/gui/ResizableLayout/MoveButtons.d.ts
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js.map
@@ -2007,6 +2013,9 @@ packages/lib/uuid.js.map
 packages/lib/versionInfo.d.ts
 packages/lib/versionInfo.js
 packages/lib/versionInfo.js.map
+packages/pdf-viewer/FullViewer.d.ts
+packages/pdf-viewer/FullViewer.js
+packages/pdf-viewer/FullViewer.js.map
 packages/pdf-viewer/Page.d.ts
 packages/pdf-viewer/Page.js
 packages/pdf-viewer/Page.js.map
@@ -2031,9 +2040,15 @@ packages/pdf-viewer/hooks/useScaledSize.js.map
 packages/pdf-viewer/hooks/useScrollSaver.d.ts
 packages/pdf-viewer/hooks/useScrollSaver.js
 packages/pdf-viewer/hooks/useScrollSaver.js.map
+packages/pdf-viewer/hooks/useVisibleOnSelect.d.ts
+packages/pdf-viewer/hooks/useVisibleOnSelect.js
+packages/pdf-viewer/hooks/useVisibleOnSelect.js.map
 packages/pdf-viewer/main.d.ts
 packages/pdf-viewer/main.js
 packages/pdf-viewer/main.js.map
+packages/pdf-viewer/messageService.d.ts
+packages/pdf-viewer/messageService.js
+packages/pdf-viewer/messageService.js.map
 packages/pdf-viewer/miniViewer.d.ts
 packages/pdf-viewer/miniViewer.js
 packages/pdf-viewer/miniViewer.js.map
@@ -2043,6 +2058,9 @@ packages/pdf-viewer/pdfSource.test.js.map
 packages/pdf-viewer/types.d.ts
 packages/pdf-viewer/types.js
 packages/pdf-viewer/types.js.map
+packages/pdf-viewer/ui/GotoPage.d.ts
+packages/pdf-viewer/ui/GotoPage.js
+packages/pdf-viewer/ui/GotoPage.js.map
 packages/pdf-viewer/ui/IconButtons.d.ts
 packages/pdf-viewer/ui/IconButtons.js
 packages/pdf-viewer/ui/IconButtons.js.map

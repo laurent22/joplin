@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPrint, faDownload, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faPrint, faDownload, faSquareArrowUpRight, faXmark, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { IconButtonProps } from '../types';
 
 
@@ -40,6 +40,18 @@ function BaseButton({ onClick, icon, name, size, color, hoverColor }: BaseButton
 			hoverColor={hoverColor || 'secondary'}>
 			<FontAwesomeIcon icon={icon} />
 		</ButtonElement>
+	);
+}
+
+export function OpenLinkButton({ onClick, size, color }: IconButtonProps) {
+	return (
+		<BaseButton onClick={onClick} icon={faSquareArrowUpRight} name='Open in another app' size={size} color={color} />
+	);
+}
+
+export function CloseButton({ onClick, size, color }: IconButtonProps) {
+	return (
+		<BaseButton onClick={onClick} icon={faXmark} name='Close' size={size} color={color} hoverColor={'red'} />
 	);
 }
 

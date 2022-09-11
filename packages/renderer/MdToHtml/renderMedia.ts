@@ -69,7 +69,7 @@ export default function(link: Link, options: Options, linkIndexes: LinkIndexes) 
 
 			return `<iframe src="${src}" x-url="${escapedResourcePath}" 
 			x-appearance="${options.theme.appearance}" ${anchorPageNo ? `x-anchorPage="${anchorPageNo}"` : ''} id="${id}"
-			x-type="mini"
+			x-type="mini" x-resourceid="${resourceId}"
 		 class="media-player media-pdf"></iframe>`;
 		}
 
