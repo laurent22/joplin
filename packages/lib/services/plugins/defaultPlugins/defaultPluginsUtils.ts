@@ -3,8 +3,11 @@ import path = require('path');
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
+import Logger from '@joplin/lib/Logger';
 import * as React from 'react';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
+
+const logger = Logger.create('defaultPluginsUtils');
 
 export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[],pluginSettings: PluginSettings) {
 	const installedDefaultPlugins: Array<string> = Setting.value('installedDefaultPlugins');
@@ -15,10 +18,16 @@ export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[],plugi
 	}
 }
 
-export async function installDefaultPlugins(service: PluginService, pluginsDir: string, defaultPluginsId: string[], pluginSettings: PluginSettings): Promise<PluginSettings> {
-	if (!await shim.fsDriver().exists(pluginsDir)) return pluginSettings;
-	const defaultPluginsPaths = await shim.fsDriver().readDirStats(pluginsDir);
-	if (defaultPluginsPaths.length <= 0) return pluginSettings;
+export async function installDefaultPlugins(service: PluginService, defaultPluginsDir: string, defaultPluginsId: string[], pluginSettings: PluginSettings): Promise<PluginSettings> {
+	if (!await shim.fsDriver().exists(defaultPluginsDir)) {
+		logger.info('Could not find default plugins\' directory - skipping installation.');
+		return pluginSettings;
+	}
+	const defaultPluginsPaths = await shim.fsDriver().readDirStats(defaultPluginsDir);
+	if (defaultPluginsPaths.length <= 0) {
+		logger.info('Default plugins\' directory is empty - skipping installation.');
+		return pluginSettings;
+	}
 
 	const installedPlugins = Setting.value('installedDefaultPlugins');
 
@@ -27,7 +36,7 @@ export async function installDefaultPlugins(service: PluginService, pluginsDir: 
 
 		// if pluginId is present in 'installedDefaultPlugins' array or it doesn't have default plugin ID, then we won't install it again as default plugin
 		if (installedPlugins.includes(pluginId) || !defaultPluginsId.includes(pluginId)) continue;
-		const defaultPluginPath: string = path.join(pluginsDir, pluginId, 'plugin.jpl');
+		const defaultPluginPath: string = path.join(defaultPluginsDir, pluginId, 'plugin.jpl');
 		await service.installPlugin(defaultPluginPath, false);
 
 		pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
