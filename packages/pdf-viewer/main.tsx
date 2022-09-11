@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import * as pdfjsLib from 'pdfjs-dist';
 import MiniViewerApp from './miniViewer';
 
-require('./viewer.css');
+require('./common.css');
 
 // Setting worker path to worker bundle.
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
@@ -13,14 +13,17 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 const url = window.frameElement.getAttribute('x-url');
 const type = window.frameElement.getAttribute('x-type');
 const appearance = window.frameElement.getAttribute('x-appearance');
-const anchorPage = window.frameElement.getAttribute('x-anchorPage');
+const anchorPage = Number(window.frameElement.getAttribute('x-anchorPage')) || null;
 const pdfId = window.frameElement.getAttribute('id');
 
 document.documentElement.setAttribute('data-theme', appearance);
 
 function App() {
 	if (type === 'mini') {
-		return <MiniViewerApp pdfPath={url} isDarkTheme={appearance === 'dark'} anchorPage={anchorPage ? Number(anchorPage) : null} pdfId={pdfId} />;
+		return <MiniViewerApp pdfPath={url}
+			isDarkTheme={appearance === 'dark'}
+			anchorPage={anchorPage}
+			pdfId={pdfId} />;
 	}
 	return <div>Error: Unknown app type "{type}"</div>;
 }

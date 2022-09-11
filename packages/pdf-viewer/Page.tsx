@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, MutableRefObject } from 'react';
 import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
-import { PdfData, ScaledSize } from './pdfSource';
+import PdfDocument from './PdfDocument';
+import { ScaledSize } from './types';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import styled from 'styled-components';
 
@@ -35,7 +36,7 @@ const PageInfo = styled.div`
 `;
 
 export interface PageProps {
-	pdf: PdfData;
+	pdfDocument: PdfDocument;
 	pageNo: number;
 	focusOnLoad: boolean;
 	isAnchored: boolean;
@@ -87,9 +88,9 @@ export default function Page(props: PageProps) {
 	}, [page, props.scaledSize, isVisible, props.pageNo]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (page || !isVisible || !props.pdf) return;
+		if (page || !isVisible || !props.pdfDocument) return;
 		try {
-			const _page = await props.pdf.getPage(props.pageNo);
+			const _page = await props.pdfDocument.getPage(props.pageNo);
 			if (event.cancelled) return;
 			setPage(_page);
 		} catch (error) {

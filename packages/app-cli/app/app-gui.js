@@ -375,6 +375,11 @@ class AppGui {
 		this.showNoteMetadata(!this.widget('noteMetadata').shown);
 	}
 
+	toggleFolderIds() {
+		this.widget('folderList').toggleShowIds();
+		this.widget('noteList').toggleShowIds();
+	}
+
 	widget(name) {
 		if (name === 'root') return this.rootWidget_;
 		return this.rootWidget_.childByName(name);
@@ -498,6 +503,8 @@ class AppGui {
 			}
 		} else if (cmd === 'toggle_metadata') {
 			this.toggleNoteMetadata();
+		} else if (cmd === 'toggle_ids') {
+			this.toggleFolderIds();
 		} else if (cmd === 'enter_command_line_mode') {
 			const cmd = await this.widget('statusBar').prompt();
 			if (!cmd) return;

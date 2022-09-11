@@ -25,6 +25,7 @@
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "yargs": "^16.2.0"
+    "yargs": "^16.2.0",
+    "@joplin/lib": "~2.9"
   }
 }

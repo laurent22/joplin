@@ -9,8 +9,7 @@ import { Style } from './global-style';
 import Note from '@joplin/lib/models/Note';
 import NotesBarListItem from './NotesBarListItem';
 import Folder from '@joplin/lib/models/Folder';
-import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import searchNotes from './searchNotes';
 
 interface Props {
     themeId: number;
@@ -133,7 +132,7 @@ function NotesBarComponent(props: Props) {
 	const closeButtonComp = (
 		<TouchableOpacity
 			onPress={handleNotesBarClose}
-			accessibilityLabel={_('Close notes bar')}
+			accessibilityLabel={_('Toggle note list')}
 			accessibilityRole="button"
 		>
 			<Icon name="close" style={[styles().top, styles().closeIcon]}/>
@@ -175,8 +174,8 @@ function NotesBarComponent(props: Props) {
 		});
 	};
 
-	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false), 'Create new note');
-	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true), 'Create new todo');
+	const addNoteButtonComp = renderIconButton(<Icon name='document-text-outline' style={styles().buttonIcon} />, () => handleNewNote(false), _('New note'));
+	const addTodoButtonComp = renderIconButton(<Icon name='checkbox-outline' style={styles().buttonIcon} />, () => handleNewNote(true), _('New to-do'));
 
 	const topComp = (
 		<View>
@@ -188,37 +187,9 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-	// Copied from './screens/search.js' and modified
 	const refreshSearch = async () => {
-		let notes_ = [];
-
-		if (query) {
-			if (props.settings['db.ftsEnabled']) {
-				notes_ = await SearchEngineUtils.notesForQuery(query, true);
-			} else {
-				const p = query.split(' ');
-				const temp = [];
-				for (let i = 0; i < p.length; i++) {
-					const t = p[i].trim();
-					if (!t) continue;
-					temp.push(t);
-				}
-
-				notes_ = await Note.previews(null, {
-					anywherePattern: `*${temp.join('*')}*`,
-				});
-			}
-
-			const parsedQuery = await SearchEngine.instance().parseQuery(query);
-			const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
-
-			props.dispatch({
-				type: 'SET_HIGHLIGHTED',
-				words: highlightedWords,
-			});
-
-			setNotes(notes_);
-		}
+		const notes = await searchNotes(query, props.settings['db.ftsEnabled'], props.dispatch);
+		setNotes(notes);
 	};
 
 	const handleQuerySubmit = async () => {

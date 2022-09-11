@@ -7,25 +7,45 @@ const Note = require('@joplin/lib/models/Note').default;
 
 class Command extends BaseCommand {
 	usage() {
-		return 'mv <note> [notebook]';
+		return 'mv <item> [notebook]';
 	}
 
 	description() {
-		return _('Moves the notes matching <note> to [notebook].');
+		return _('Moves the given <item> (notes matching pattern in current notebook or one notebook) to [notebook]. If <item> is subnotebook and [notebook] is "root", will make <item> parent notebook');
 	}
 
 	async action(args) {
-		const pattern = args['note'];
+		const pattern = args['item'];
 		const destination = args['notebook'];
+		let folder = null;
 
-		const folder = await Folder.loadByField('title', destination);
-		if (!folder) throw new Error(_('Cannot find "%s".', destination));
+		if (destination !== 'root') {
+			folder = await app().loadItem(BaseModel.TYPE_FOLDER, destination);
+			if (!folder) throw new Error(_('Cannot find "%s".', destination));
+		}
 
-		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
-		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
+		const destinationDuplicates = await Folder.search({ titlePattern: destination, limit: 2 });
+		if (destinationDuplicates.length > 1) {
+			throw new Error(_('Ambiguous notebook "%s". Please use short notebook id instead - press "ti" to see the short notebook id' , destination));
+		}
 
-		for (let i = 0; i < notes.length; i++) {
-			await Note.moveToFolder(notes[i].id, folder.id);
+		const itemFolder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
+		if (itemFolder) {
+			const sourceDuplicates = await Folder.search({ titlePattern: pattern, limit: 2 });
+			if (sourceDuplicates.length > 1) {
+				throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - press "ti" to see the short notebook id or use $b for current selected notebook', pattern));
+			}
+			if (destination === 'root') {
+				await Folder.moveToFolder(itemFolder.id, '');
+			} else {
+				await Folder.moveToFolder(itemFolder.id, folder.id);
+			}
+		} else {
+			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+			if (notes.length === 0) throw new Error(_('Cannot find "%s".', pattern));
+			for (let i = 0; i < notes.length; i++) {
+				await Note.moveToFolder(notes[i].id, folder.id);
+			}
 		}
 	}
 }

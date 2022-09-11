@@ -1,15 +1,21 @@
-import { useRef, useEffect, MutableRefObject } from 'react';
-import { ScaledSize } from '../pdfSource';
+import { useRef, useEffect, MutableRefObject, useState } from 'react';
+import PdfDocument from '../PdfDocument';
+import { ScaledSize } from '../types';
 
 export interface ScrollSaver {
 	container: MutableRefObject<HTMLElement>;
 	scaledSize: ScaledSize;
 	pdfId: string;
 	rememberScroll: boolean;
+	onActivePageChange: (activePage: number)=> void;
+	pdfDocument: PdfDocument;
+	pageGap: number;
 }
 
-const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll }: ScrollSaver) => {
+const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll, onActivePageChange, pdfDocument, pageGap }: ScrollSaver) => {
 	const currentScaleSize = useRef(scaledSize);
+	const [currentActivePage, setCurrentActivePage] = useState(1);
+	const currentActivePageRef = useRef(currentActivePage);
 
 	useEffect(() => {
 		let scrollTimer: number = null;
@@ -18,9 +24,18 @@ const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll }: Scroll
 		const saveScroll = () => {
 			if (!currentScaleSize.current) return;
 			const scale = currentScaleSize.current.scale;
-			const scrollTop = container.current.scrollTop / scale;
+			const pdfScrollTop = container.current.scrollTop / scale;
 			if (rememberScroll && pdfId) {
-				sessionStorage.setItem(`pdf.${pdfId}.scrollTop`, `${scrollTop}`);
+				sessionStorage.setItem(`pdf.${pdfId}.scrollTop`, `${pdfScrollTop}`);
+			}
+			if (onActivePageChange && currentScaleSize.current) {
+				const activePage = pdfDocument.getActivePageNo(currentScaleSize.current, pageGap, container.current.scrollTop);
+				if (currentActivePageRef.current !== activePage) {
+					// console.log('Active page changed', activePage, container.current.scrollTop);
+					currentActivePageRef.current = activePage;
+					onActivePageChange(activePage);
+					setCurrentActivePage(activePage);
+				}
 			}
 		};
 
@@ -41,13 +56,11 @@ const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll }: Scroll
 				scrollTimer = null;
 			}
 		};
-	}, [container, pdfId, rememberScroll, currentScaleSize]);
+	}, [container, pdfId, rememberScroll, currentScaleSize, onActivePageChange, pdfDocument, pageGap]);
 
 	useEffect(() => {
 		currentScaleSize.current = scaledSize;
 	} , [scaledSize]);
-
-	return scaledSize;
 };
 
 export default useScrollSaver;

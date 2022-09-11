@@ -110,7 +110,7 @@
     "ts-jest": "^28.0.5",
     "ts-loader": "^9.3.1",
     "ts-node": "^10.9.1",
-    "typescript": "^4.0.5",
+    "typescript": "^4.7.4",
     "uglify-js": "^3.13.10",
     "webpack": "^5.74.0"
   }

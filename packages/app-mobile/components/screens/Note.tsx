@@ -250,6 +250,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 		this.splitLayoutEditor_bodyChangeText = this.splitLayoutEditor_bodyChangeText.bind(this);
 		this.splitLayoutEditor_onBodyChange = this.splitLayoutEditor_onBodyChange.bind(this);
+		this.onNotesBarToggle = this.onNotesBarToggle.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
