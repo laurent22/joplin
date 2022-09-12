@@ -36,9 +36,8 @@ const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
 
 const { builtinModules } = require('node:module');
 
-// Webpack5 doesn't polyfill by default. Plugins are likely to expect
-// the os- and path- modules. Setting these to false prevents Webpack from
-// warning us that they should be polyfilled.
+// Webpack5 doesn't polyfill by default and displays a warning when attempting to require() built-in
+// node modules. Set these to false to prevent Webpack from warning about not polyfilling these modules.
 const moduleFallback = {};
 for (const moduleName of builtinModules) {
 	moduleFallback[moduleName] = false;
