@@ -1,10 +1,24 @@
-const React = require('react');
+import * as React from 'react';
 const Component = React.Component;
 const { View, TouchableHighlight } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 Icon.loadFont();
 
-const styles = {
+interface Style {
+	[key: string]: any;
+}
+interface Props {
+	style: Style;
+	checked: boolean;
+	onChange: (checked: boolean)=> void;
+	accessibilityLabel?: string;
+}
+
+interface State {
+	checked: boolean;
+}
+
+const styles: Style = {
 	checkboxIcon: {
 		fontSize: 20,
 		height: 22,
@@ -12,34 +26,35 @@ const styles = {
 	},
 };
 
-class Checkbox extends Component {
-	constructor() {
-		super();
+class Checkbox extends Component<Props, State> {
+
+	public constructor(props: Props) {
+		super(props);
 		this.state = {
 			checked: false,
 		};
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({ checked: this.props.checked });
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if ('checked' in newProps) {
 			this.setState({ checked: newProps.checked });
 		}
 	}
 
-	onPress() {
+	private onPress() {
 		const newChecked = !this.state.checked;
 		this.setState({ checked: newChecked });
 		if (this.props.onChange) this.props.onChange(newChecked);
 	}
 
-	render() {
+	public render() {
 		const iconName = this.state.checked ? 'md-checkbox-outline' : 'md-square-outline';
 
-		const style = this.props.style ? Object.assign({}, this.props.style) : {};
+		const style: Style = this.props.style ? Object.assign({}, this.props.style) : {};
 		style.justifyContent = 'center';
 		style.alignItems = 'center';
 
@@ -75,4 +90,4 @@ class Checkbox extends Component {
 	}
 }
 
-module.exports = { Checkbox };
+export default Checkbox;

@@ -346,8 +346,8 @@ If you provide a configuration and you receive "success!" on the "check config" 
 - Force Path Style: unchecked
 
 ### Linode
-- URL: https://<region>.linodeobjects.com
-- Region: empty
+- URL: https://regionName.linodeobjects.com (regionName is the region on the URL provided by Linode; this URL is also the same as the URL provided by Linode with the bucket name removed)
+- Region: Anything you want to type, can't be left empty
 - Force Path Style: unchecked
 
 ### UpCloud

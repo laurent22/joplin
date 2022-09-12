@@ -78,7 +78,7 @@ There are two types of key:
 
 The master password is used to encrypt E2EE data keys as well as the user's private key.
 
-**It is possible to change the master password** - in this case, all keys are reencrypted with the new passowrd. The data, notes, notebooks, etc. does not need to be reencrypted.
+**It is possible to change the master password** - in this case, all keys are reencrypted with the new password. The data, notes, notebooks, etc. does not need to be reencrypted.
 
 If a master password is forgotten it's not possible to recover it. **It is however possible to reset it**. In that case, all associated keys are disabled, and the public-private key pair is regenerated. In practice it means that any content that was encrypted with the forgotten password can no longer be decrypted.
 
