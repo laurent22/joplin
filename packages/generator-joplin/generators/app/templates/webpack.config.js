@@ -34,12 +34,15 @@ const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
 
+const { builtinModules } = require('node:module');
+
 // Webpack5 doesn't polyfill by default. Plugins are likely to expect
-// the os- and path- modules.
-const moduleFallback = {
-	os: require.resolve('os-browserify/browser'),
-	path: require.resolve('path-browserify'),
-};
+// the os- and path- modules. Setting these to false prevents Webpack from
+// warning us that they should be polyfilled.
+const moduleFallback = {};
+for (const moduleName of builtinModules) {
+	moduleFallback[moduleName] = false;
+}
 
 function validatePackageJson() {
 	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
