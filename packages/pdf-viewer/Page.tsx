@@ -33,6 +33,7 @@ const PageInfo = styled.div<{ isSelected?: boolean }>`
 	backdrop-filter: blur(0.5rem);
 	cursor: default;
 	user-select: none;
+	z-index: 2;
 	&:hover{
         opacity: 0.3;
     }
@@ -64,6 +65,7 @@ export default function Page(props: PageProps) {
 	const textRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const isVisible = useIsVisible(wrapperRef, props.container);
+	const isMarkupEnabled = useRef(props.markupState && props.markupState.isEnabled);
 	useVisibleOnSelect({
 		isVisible,
 		isSelected: props.isSelected,
@@ -116,30 +118,48 @@ export default function Page(props: PageProps) {
 		}
 	}, [props.container, props.focusOnLoad]);
 
+	const applyMarkup = useCallback(async (e?: React.MouseEvent<HTMLDivElement>) => {
+		try {
+			if (props.markupState.currentTool !== MarkupTool.Erase) {
+				await props.annotator.addTextAnnotation(props.markupState.currentTool as MarkupTool,
+					props.markupState.color as MarkupColor,
+					props.pageNo,
+					props.scaledSize,
+					canvasRef.current);
+				void renderPage();
+			} else {
+				const updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef.current, e);
+				if (updated) void renderPage();
+			}
+		} catch (error) {
+			alert('Sorry we could not complete that operation. Your pdf might not be supported.');
+			console.error(error);
+		}
+	}, [props.annotator, props.markupState, props.pageNo, props.scaledSize, renderPage]);
+
+	useEffect(() => {
+		if (!props.annotator || !props.markupState) return;
+		if (props.markupState.isEnabled) {
+			if (!isMarkupEnabled.current) {
+				isMarkupEnabled.current = true;
+				if (props.markupState.currentTool !== MarkupTool.Erase) {
+					void applyMarkup();
+				}
+			}
+		} else {
+			isMarkupEnabled.current = false;
+		}
+	}, [applyMarkup, props.annotator, props.markupState, renderPage]);
+
 
 	const onClick = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
 		if (props.annotator && props.markupState && canvasRef.current) {
 			if (props.markupState.isEnabled) {
-				try {
-					if (props.markupState.currentTool !== MarkupTool.Erase) {
-						await props.annotator.addTextAnnotation(props.markupState.currentTool as MarkupTool,
-							props.markupState.color as MarkupColor,
-							props.pageNo,
-							props.scaledSize,
-							canvasRef.current);
-						void renderPage();
-					} else {
-						const updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef.current, e);
-						if (updated) void renderPage();
-					}
-				} catch (error) {
-					alert('Sorry we could not complete that operation. Your pdf might not be supported.');
-					console.error(error);
-				}
+				await applyMarkup(e);
 			}
 		}
 		if (props.onClick) props.onClick(props.pageNo);
-	}, [props.annotator, props.markupState, props.onClick, props.pageNo, props.scaledSize, renderPage]);
+	}, [applyMarkup, props.annotator, props.markupState, props.onClick, props.pageNo]);
 
 	let style: any = {};
 	if (props.scaledSize) {
