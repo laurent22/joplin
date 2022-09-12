@@ -2094,9 +2094,6 @@ packages/pdf-viewer/ui/MarkupControls.js.map
 packages/pdf-viewer/ui/ZoomControls.d.ts
 packages/pdf-viewer/ui/ZoomControls.js
 packages/pdf-viewer/ui/ZoomControls.js.map
-packages/pdf-viewer/utils/markupUtils.d.ts
-packages/pdf-viewer/utils/markupUtils.js
-packages/pdf-viewer/utils/markupUtils.js.map
 packages/pdf-viewer/utils/renderQueue.d.ts
 packages/pdf-viewer/utils/renderQueue.js
 packages/pdf-viewer/utils/renderQueue.js.map
