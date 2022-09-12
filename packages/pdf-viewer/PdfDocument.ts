@@ -90,6 +90,7 @@ export default class PdfDocument {
 		checkCancelled();
 
 		const canvas = this.document.createElement('canvas');
+		canvas.classList.add('page-canvas');
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		canvas.width = viewport.width;
 		canvas.height = viewport.height;
@@ -123,9 +124,6 @@ export default class PdfDocument {
 			}).promise;
 			textLayerDiv.appendChild(textFragment);
 		}
-
-		canvas.style.height = '100%';
-		canvas.style.width = '100%';
 
 		return { canvas, textLayerDiv };
 	};
