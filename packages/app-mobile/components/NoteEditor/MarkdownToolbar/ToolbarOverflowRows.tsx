@@ -111,6 +111,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 			style={{
 				height: props.buttonGroups.length * buttonSize,
 				flexDirection: 'column',
+				flexGrow: 1,
 			}}
 			onLayout={onContainerLayout}
 		>
