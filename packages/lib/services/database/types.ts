@@ -18,6 +18,7 @@ export interface BaseItemEntity {
 export enum FolderIconType {
   Emoji = 1,
   DataUrl = 2,
+  FontAwesome = 3,
 }
 
 export interface FolderIcon {

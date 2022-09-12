@@ -175,8 +175,8 @@ cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
-	cd "$ROOT_DIR/packages/tools"
-	node bundleDefaultPlugins.js
+	# cd "$ROOT_DIR/packages/tools"
+	# node bundleDefaultPlugins.js
 	cd "$ROOT_DIR/packages/app-desktop"
 	USE_HARD_LINKS=false yarn run dist
 elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then

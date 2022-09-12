@@ -46,9 +46,9 @@ export interface PageProps {
 	scaledSize: ScaledSize;
 	isDarkTheme: boolean;
 	container: MutableRefObject<HTMLElement>;
-	showPageNumbers?: boolean;
-	isSelected?: boolean;
-	textSelectable?: boolean;
+	showPageNumbers: boolean;
+	isSelected: boolean;
+	textSelectable: boolean;
 	onTextSelect?: (text: string)=> void;
 	onClick?: (page: number)=> void;
 	onDoubleClick?: (page: number)=> void;
@@ -74,6 +74,10 @@ export default function Page(props: PageProps) {
 	const renderPage = useCallback(async () => {
 		const isCancelled = () => props.scaledSize.scale !== scaleRef.current;
 		try {
+			if (canvasRef.current) {
+				canvasRef.current.style.height = '100%';
+				canvasRef.current.style.width = '100%';
+			}
 			const renderRequest: RenderRequest = {
 				pageNo: props.pageNo,
 				scaledSize: props.scaledSize,
@@ -103,7 +107,7 @@ export default function Page(props: PageProps) {
 			scaleRef.current = props.scaledSize.scale;
 			void renderPage();
 		}
-	}, [props.scaledSize, isVisible, props.pdfDocument, renderPage]);
+	}, [props.scaledSize, isVisible, renderPage]);
 
 	useEffect(() => {
 		if (props.focusOnLoad) {

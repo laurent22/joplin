@@ -1,6 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import { ScaledSize, RenderRequest, RenderResult } from './types';
-import RenderQueue from './utils/renderQueue';
+import { Mutex, MutexInterface, withTimeout } from 'async-mutex';
 
 
 export default class PdfDocument {
@@ -8,7 +8,7 @@ export default class PdfDocument {
 	public doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
-	private renderQueue: RenderQueue;
+	private rendererMutex: MutexInterface = null;
 	private pageSize: {
 		height: number;
 		width: number;
@@ -17,7 +17,7 @@ export default class PdfDocument {
 
 	public constructor(document: HTMLDocument) {
 		this.document = document;
-		this.renderQueue = new RenderQueue(this.renderPageImpl);
+		this.rendererMutex = withTimeout(new Mutex(), 40 * 1000);
 	}
 
 	public loadDoc = async (url: string | Uint8Array) => {
@@ -91,6 +91,7 @@ export default class PdfDocument {
 		checkCancelled();
 
 		const canvas = this.document.createElement('canvas');
+		canvas.classList.add('page-canvas');
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		canvas.width = viewport.width;
 		canvas.height = viewport.height;
@@ -109,38 +110,30 @@ export default class PdfDocument {
 		if (getTextLayer) {
 			textLayerDiv = this.document.createElement('div');
 			textLayerDiv.classList.add('textLayer');
+			const textFragment = this.document.createDocumentFragment();
 			const txtContext = await page.getTextContent();
 			checkCancelled();
 			// Pass the data to the method for rendering of text over the pdf canvas.
 			textLayerDiv.style.height = `${viewport.height}px`;
 			textLayerDiv.style.width = `${viewport.width}px`;
-			textLayerDiv.innerHTML = '';
-			pdfjsLib.renderTextLayer({
+			await pdfjsLib.renderTextLayer({
 				textContent: txtContext,
 				enhanceTextSelection: true,
-				// @ts-ignore
-				container: textLayerDiv,
+				container: textFragment,
 				viewport: viewport,
 				textDivs: [],
-			});
+			}).promise;
+			textLayerDiv.appendChild(textFragment);
 		}
-
-		canvas.style.height = '100%';
-		canvas.style.width = '100%';
 
 		return { canvas, textLayerDiv };
 	};
 
-	public renderPage(task: RenderRequest): Promise<RenderResult> {
-		// We're using a render queue to avoid rendering too many pages at the same time
+	public async renderPage(task: RenderRequest): Promise<RenderResult> {
+		// We're using a render mutex to avoid rendering too many pages at the same time
 		// Which can cause the pdfjs library to abandon some of the in-progress rendering unexpectedly
-		return new Promise<RenderResult>((resolve, reject) => {
-			const queueTask = {
-				params: task,
-				resolve,
-				reject,
-			};
-			this.renderQueue.addTask(queueTask);
+		return await this.rendererMutex.runExclusive(async () => {
+			return await this.renderPageImpl(task);
 		});
 	}
 

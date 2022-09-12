@@ -64,7 +64,7 @@ const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
-const { MenuContext } = require('react-native-popup-menu');
+import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu from './components/SideMenu';
 const { SideMenuContent } = require('./components/side-menu-content.js');
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
@@ -75,7 +75,7 @@ const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
-const { themeStyle } = require('./components/global-style.js');
+import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
@@ -378,6 +378,17 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
+		case 'NOTES_BAR_OPEN':
+
+			newState = Object.assign({}, state);
+			newState.showMobileNotesBar = true;
+			break;
+
+		case 'NOTES_BAR_CLOSE':
+
+			newState = Object.assign({}, state);
+			newState.showMobileNotesBar = false;
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
@@ -919,7 +930,7 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1 }}>
+					<MenuProvider style={{ flex: 1 }}>
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
@@ -928,7 +939,7 @@ class AppComponent extends React.Component {
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 						</SafeAreaView>
-					</MenuContext>
+					</MenuProvider>
 				</SideMenu>
 			</View>
 		);

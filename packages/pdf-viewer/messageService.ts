@@ -9,7 +9,6 @@ export default class MessageService {
 				name,
 				...data,
 			};
-			console.log('passing data to parent', message);
 			window.postMessage(message, '*');
 		} else if (this.viewerType === 'mini') {
 			const message = {
