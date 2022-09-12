@@ -70,8 +70,8 @@ export default function FullViewer(props: FullViewerProps) {
 
 	const onClose = useCallback(async () => {
 		if (annotator.hasChanges) {
-			console.log('has changes');
-			const data = await pdfDocument.doc.getData();
+			// console.log('has changes');
+			const data = await pdfDocument.getData();
 			props.messageService.saveFile(data, true);
 		} else {
 			props.messageService.close();

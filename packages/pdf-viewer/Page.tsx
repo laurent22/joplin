@@ -65,7 +65,7 @@ export default function Page(props: PageProps) {
 	const textRef = useRef<HTMLDivElement>(null);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const isVisible = useIsVisible(wrapperRef, props.container);
-	const isMarkupEnabled = useRef(props.markupState && props.markupState.isEnabled);
+	const currentMarkupState = useRef(props.markupState);
 	useVisibleOnSelect({
 		isVisible,
 		isSelected: props.isSelected,
@@ -119,18 +119,22 @@ export default function Page(props: PageProps) {
 	}, [props.container, props.focusOnLoad]);
 
 	const applyMarkup = useCallback(async (e?: React.MouseEvent<HTMLDivElement>) => {
+		if (!canvasRef.current || !props.annotator) return;
+		const isCancelled = () => props.markupState !== currentMarkupState.current;
 		try {
+			let updated = false;
 			if (props.markupState.currentTool !== MarkupTool.Erase) {
-				await props.annotator.addTextAnnotation(props.markupState.currentTool as MarkupTool,
+				updated = await props.annotator.addTextAnnotation(props.markupState.currentTool as MarkupTool,
 					props.markupState.color as MarkupColor,
 					props.pageNo,
 					props.scaledSize,
-					canvasRef.current);
-				void renderPage();
-			} else {
-				const updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef.current, e);
-				if (updated) void renderPage();
+					canvasRef,
+					isCancelled);
+			} else if (e) {
+				updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef, e, isCancelled);
 			}
+			if (isCancelled()) return;
+			if (updated) await renderPage();
 		} catch (error) {
 			alert('Sorry we could not complete that operation. Your pdf might not be supported.');
 			console.error(error);
@@ -139,22 +143,20 @@ export default function Page(props: PageProps) {
 
 	useEffect(() => {
 		if (!props.annotator || !props.markupState) return;
-		if (props.markupState.isEnabled) {
-			if (!isMarkupEnabled.current) {
-				isMarkupEnabled.current = true;
-				if (props.markupState.currentTool !== MarkupTool.Erase) {
-					void applyMarkup();
-				}
+		if (currentMarkupState.current !== props.markupState) {
+			const newlyEnabled = props.markupState.isEnabled && !currentMarkupState.current.isEnabled;
+			currentMarkupState.current = props.markupState;
+			if (newlyEnabled && props.markupState.currentTool !== MarkupTool.Erase) {
+				void applyMarkup();
 			}
-		} else {
-			isMarkupEnabled.current = false;
 		}
-	}, [applyMarkup, props.annotator, props.markupState, renderPage]);
+	}, [applyMarkup, props.annotator, props.markupState]);
 
 
 	const onClick = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
 		if (props.annotator && props.markupState && canvasRef.current) {
 			if (props.markupState.isEnabled) {
+				currentMarkupState.current = props.markupState;
 				await applyMarkup(e);
 			}
 		}
@@ -185,7 +187,7 @@ export default function Page(props: PageProps) {
 
 	return (
 		<PageWrapper onDoubleClick={onDoubleClick} isSelected={!!props.isSelected} onContextMenu={onContextMenu} onClick={onClick} ref={wrapperRef} style={style}>
-			{ error && <div>Error: {error}</div> }
+			{ error && <div>Error: {error.toString()}</div> }
 			{props.showPageNumbers && <PageInfo isSelected={!!props.isSelected}>{props.isAnchored ? '📌' : ''} Page {props.pageNo}</PageInfo>}
 		</PageWrapper>
 	);

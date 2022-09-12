@@ -50,7 +50,7 @@ export default function PdfViewer(props: Props) {
 	}, [props.resource.id]);
 
 	const saveFile = useCallback(async (file: Uint8Array) => {
-		const tempPath = `${tmpdir()}/joplin-meow.pdf`;
+		const tempPath = `${tmpdir()}/${props.resource.id}.pdf`;
 		await shim.fsDriver().writeFile(tempPath, file);
 		console.log('tempPath', tempPath);
 		await Resource.updateResourceBlobContent(props.resource.id, tempPath);

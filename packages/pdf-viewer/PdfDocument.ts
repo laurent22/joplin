@@ -5,7 +5,7 @@ import { Mutex, MutexInterface, withTimeout } from 'async-mutex';
 
 export default class PdfDocument {
 	public url: string | Uint8Array;
-	public doc: any = null;
+	private doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
 	private rendererMutex: MutexInterface = null;
@@ -161,5 +161,9 @@ export default class PdfDocument {
 		link.download = url;
 		link.click();
 		link.remove();
+	};
+
+	public getData = async (): Promise<Uint8Array> => {
+		return await this.doc.getData();
 	};
 }

@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, MutableRefObject } from 'react';
 import { AnnotationFactory } from 'annotpdf/lib/annotation';
 import PdfDocument from './PdfDocument';
 import { ScaledSize, MarkupTool, MarkupColor } from './types';
@@ -12,20 +12,21 @@ export default class Annotator {
 	}
 	public getDriver = async () => {
 		if (this.driver) return this.driver;
-		const pdfData = await this.pdfDocument.doc.getData();
+		const pdfData = await this.pdfDocument.getData();
 		this.driver = new AnnotationFactory(pdfData);
 		return this.driver;
 	};
 
-	private computePageOffset = (canvas: HTMLCanvasElement) => {
-		const rect = canvas.getBoundingClientRect(), bodyElt = document.body;
+	private computePageOffset = (canvas: MutableRefObject<HTMLCanvasElement>) => {
+		const rect = canvas.current.getBoundingClientRect(), bodyElt = document.body;
 		return {
 			top: rect.top + bodyElt .scrollTop,
 			left: rect.left + bodyElt .scrollLeft,
 		};
 	};
 
-	private selectionCoordinates = async (pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement) => {
+	private selectionCoordinates = async (pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>) => {
+		if (window.getSelection().rangeCount === 0) return null;
 		const rects = window.getSelection().getRangeAt(0).getClientRects();
 		const ost = this.computePageOffset(canvasElem);
 		const points: number[] = [];
@@ -58,40 +59,40 @@ export default class Annotator {
 		if (!pageAnnotations) return null;
 		return pageAnnotations.find((annotation) => {
 			const points = annotation.rect;
+			if (!points || points.length < 4) return false;
 			const x1 = points[0];
 			const y1 = points[1];
 			const x2 = points[2];
 			const y2 = points[3];
-			console.log('checking', x1, y1, x2, y2, 'pt:', x, y);
-			console.log('annotation', annotation);
+			// console.log('checking', x1, y1, x2, y2, 'pt:', x, y);
 			if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
-				console.log('found annotation', annotation);
-				return annotation;
+				// console.log('found annotation', annotation);
+				return true;
 			}
-			return null;
+			return false;
 		});
 	};
 
-	public deleteAnnotationAtClick = async (pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement, evt: MouseEvent): Promise<boolean> => {
+	public deleteAnnotationAtClick = async (pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>, evt: MouseEvent, isCancelled: ()=> boolean): Promise<boolean> => {
 		const ost = this.computePageOffset(canvasElem);
 		let x = evt.pageX - ost.left;
 		let y = evt.pageY - ost.top;
 		const page = await this.pdfDocument.getPage(pageNo);
+		if (isCancelled()) return false;
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		const x_y = viewport.convertToPdfPoint(x, y);
 		x = x_y[0];
 		y = x_y[1];
 		if (!x || !y) return false;
 		const annotation = await this.getAnnotationAtPoint(pageNo, x, y);
+		if (isCancelled()) return false;
 		if (!annotation) return false;
 		await this.deleteAnnotation(annotation.id || annotation.object_id);
 		return true;
 	};
 
 	public deleteAnnotation = async (id: string | any) => {
-		console.log('deleting annotation', id);
 		const driver = await this.getDriver();
-		console.log('driver', driver);
 		await driver.deleteAnnotation(id);
 		console.log('deleted annotation', id);
 		await this.save();
@@ -116,11 +117,14 @@ export default class Annotator {
 		}
 	};
 
-	public addTextAnnotation = async (tool: MarkupTool, color: MarkupColor, pageNo: number, scaledSize: ScaledSize, canvasElem: HTMLCanvasElement) => {
+	public addTextAnnotation = async (tool: MarkupTool, color: MarkupColor, pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>, isCancelled: ()=> boolean) => {
 		const text = window.getSelection().toString();
-		if (!text) return;
+		if (!text) return false;
 		const coords = await this.selectionCoordinates(pageNo, scaledSize, canvasElem);
+		if (!coords) return false;
+		if (isCancelled()) return false;
 		const driver = await this.getDriver();
+		if (isCancelled()) return false;
 		const colorArray = this.getColor(color);
 		const options: any = {
 			page: pageNo - 1,
@@ -142,7 +146,7 @@ export default class Annotator {
 		}
 		console.log('annotation added');
 		await this.save();
-		// driver.download();
+		return true;
 	};
 
 	public save = async () => {
