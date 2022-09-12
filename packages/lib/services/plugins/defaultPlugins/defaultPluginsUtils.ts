@@ -20,12 +20,12 @@ export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[],plugi
 
 export async function installDefaultPlugins(service: PluginService, defaultPluginsDir: string, defaultPluginsId: string[], pluginSettings: PluginSettings): Promise<PluginSettings> {
 	if (!await shim.fsDriver().exists(defaultPluginsDir)) {
-		logger.info('Could not find default plugins\' directory - skipping installation.');
+		logger.info(`Could not find default plugins' directory: ${defaultPluginsDir} - skipping installation.`);
 		return pluginSettings;
 	}
 	const defaultPluginsPaths = await shim.fsDriver().readDirStats(defaultPluginsDir);
 	if (defaultPluginsPaths.length <= 0) {
-		logger.info('Default plugins\' directory is empty - skipping installation.');
+		logger.info(`Default plugins' directory is empty: ${defaultPluginsDir} - skipping installation.`);
 		return pluginSettings;
 	}
 
