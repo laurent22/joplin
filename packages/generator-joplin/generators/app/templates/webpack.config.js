@@ -38,6 +38,7 @@ const { builtinModules } = require('node:module');
 
 // Webpack5 doesn't polyfill by default and displays a warning when attempting to require() built-in
 // node modules. Set these to false to prevent Webpack from warning about not polyfilling these modules.
+// We don't need to polyfill because the plugins run in Electron's Node environment.
 const moduleFallback = {};
 for (const moduleName of builtinModules) {
 	moduleFallback[moduleName] = false;
