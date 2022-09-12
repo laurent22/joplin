@@ -6,12 +6,12 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 # Installation and Setup
 
+- Before beginning, you will need to install the Joplin app on your system without which you will not be able to utilize the Web Clipper Service.
 - Install the Joplin Web Clipper browser extension for either [Google Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek) or [Mozilla Firefox](https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/).
 - Install the Joplin Desktop application, if you have not already done so.
 - Open the Joplin Desktop app and select the **Tools** tab at the top.
 - Then, click on the **Options** tab from the dropdown menu.
-- Choose the **Web Clipper** tab from the menu on the left side of the window.
-- Press the button that says **Enable Web Clipper Service**.
+- Choose the **Web Clipper** tab from the menu on the left side of the window, and follow the instructions on that page.
 
 Enabling the Web Clipper service will enable the browser extension app to communicate with the Joplin app. This would allow you to access all your saved webpages and browser screenshots taken through the Web Clipper along with all your other notes at one place on the Joplin app. In the same location you can also find an authorization token under the **Advanced Options** section. This token is only needed if you want to allow third-party applications to access Joplin.
 
@@ -21,8 +21,7 @@ To use the Web Clipper, simply click on the extensions tab that is usually locat
 
 Once you have completed the authorization process, you can see the following menu when you click on the Joplin Web Clipper from the extensions tab.
 
-![Screenshot](https://user-images.githubusercontent.com/58488861/189547712-071948f7-6f2a-4454-80cd-8c2b997e7d91.png)
-
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebClipperMenu.png" style="border: 1px solid gray;">
 - Clip simplified page: This feature will allow you to store the contents of the entire webpage as simplified text and images to your notebook.
 - Clip complete page (Markdown): Using this feature, you can store the contents of the webpage to your notebook in markdown format.
 - Clip complete page (HTML): This feature allows you to store the contents of a webpage to your notebook as HTML code.
@@ -71,4 +70,4 @@ Copy and paste the content of both the debugging window and the Firefox console,
 
 # Using the Web Clipper service
 
-The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. The browser extension form allows you to take notes directly from a webpage instead of having to retype everything. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the [Joplin API documentation](https://joplinapp.org/api/references/rest_api/).
+The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. The Web Clipper allows you to take notes directly from a webpage instead of having to retype everything. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the [Joplin API documentation](https://joplinapp.org/api/references/rest_api/).
