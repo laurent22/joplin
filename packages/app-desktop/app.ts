@@ -278,8 +278,8 @@ class Application extends BaseApplication {
 		checkPreInstalledDefaultPlugins(defaultPluginsId, pluginSettings);
 
 		try {
-			const pluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
-			pluginSettings = await installDefaultPlugins(service, pluginsDir, defaultPluginsId, pluginSettings);
+			const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
+			pluginSettings = await installDefaultPlugins(service, defaultPluginsDir, defaultPluginsId, pluginSettings);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
