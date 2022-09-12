@@ -36,6 +36,10 @@ type OnFileUpdateCallback = (event: SourceFileUpdateEvent)=> void;
 interface Props {
 	themeId: number;
 
+	// A name to be associated with the WebView (e.g. NoteEditor)
+	// This name should be unique.
+	webviewInstanceId: string;
+
 	// If HTML is still being loaded, [html] should be an empty string.
 	html: string;
 
@@ -81,7 +85,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		let cancelled = false;
 		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/NoteEditor.html`;
+			const tempFile = `${Setting.value('resourceDir')}/${props.webviewInstanceId}.html`;
 			await shim.fsDriver().writeFile(tempFile, props.html, 'utf8');
 			if (cancelled) return;
 
@@ -110,7 +114,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.html, props.onFileUpdate]);
+	}, [props.html, props.webviewInstanceId, props.onFileUpdate]);
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
