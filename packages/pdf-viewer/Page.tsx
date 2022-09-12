@@ -74,6 +74,10 @@ export default function Page(props: PageProps) {
 
 		const renderPage = async () => {
 			try {
+				if (canvasRef.current) {
+					canvasRef.current.style.height = '100%';
+					canvasRef.current.style.width = '100%';
+				}
 				const renderRequest: RenderRequest = {
 					pageNo: props.pageNo,
 					scaledSize: props.scaledSize,

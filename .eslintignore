@@ -993,6 +993,9 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js.map
 packages/app-mobile/components/screens/encryption-config.d.ts
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/encryption-config.js.map
+packages/app-mobile/components/searchNotes.d.ts
+packages/app-mobile/components/searchNotes.js
+packages/app-mobile/components/searchNotes.js.map
 packages/app-mobile/components/useStyles.d.ts
 packages/app-mobile/components/useStyles.js
 packages/app-mobile/components/useStyles.js.map
