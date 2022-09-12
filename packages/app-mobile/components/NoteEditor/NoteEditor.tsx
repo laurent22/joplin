@@ -374,6 +374,7 @@ function NoteEditor(props: Props, ref: any) {
 				...props.contentStyle,
 			}}>
 				<ExtendedWebView
+					webviewInstanceId='NoteEditor'
 					themeId={props.themeId}
 					ref={webviewRef}
 					html={html}
