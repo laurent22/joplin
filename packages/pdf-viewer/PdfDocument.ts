@@ -4,7 +4,7 @@ import { Mutex, MutexInterface, withTimeout } from 'async-mutex';
 
 
 export default class PdfDocument {
-	public url: string | Uint8Array;
+	public content: string | Uint8Array;
 	private doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
@@ -20,9 +20,9 @@ export default class PdfDocument {
 		this.rendererMutex = withTimeout(new Mutex(), 40 * 1000);
 	}
 
-	public loadDoc = async (url: string | Uint8Array) => {
-		this.url = url;
-		const loadingTask = pdfjsLib.getDocument(url);
+	public loadDoc = async (content: string | Uint8Array) => {
+		this.content = content;
+		const loadingTask = pdfjsLib.getDocument(content);
 		try {
 			const pdfDocument: any = await loadingTask.promise;
 			this.doc = pdfDocument;
@@ -32,6 +32,16 @@ export default class PdfDocument {
 			error.message = `Could not load document: ${error.message}`;
 			throw error;
 		}
+	};
+
+	private getUrl = () => {
+		if (typeof this.content !== 'string') {
+			const url = URL.createObjectURL(
+				new Blob([this.content.buffer], { type: 'application/pdf' })
+			);
+			return url;
+		}
+		return this.content;
 	};
 
 	public getPage = async (pageNo: number) => {
@@ -151,11 +161,11 @@ export default class PdfDocument {
 			frame.focus();
 			frame.contentWindow.print();
 		};
-		frame.src = this.url as string;
+		frame.src = this.getUrl();
 	};
 
 	public downloadPdf = async () => {
-		const url = this.url as string;
+		const url = this.getUrl();
 		const link = this.document.createElement('a');
 		link.href = url;
 		link.download = url;
