@@ -49,6 +49,23 @@ export default function PdfViewer(props: Props) {
 		await CommandService.instance().execute('openItem', `joplin://${props.resource.id}`);
 	}, [props.resource.id]);
 
+	const textSelected = useCallback(async (text: string) => {
+		if (!text) return;
+		const itemType = ContextMenuItemType.Text;
+		const menu = await contextMenu({
+			itemType,
+			resourceId: null,
+			filename: null,
+			mime: 'text/plain',
+			textToCopy: text,
+			linkToCopy: null,
+			htmlToCopy: '',
+			insertContent: () => { console.warn('insertContent() not implemented'); },
+		} as ContextMenuOptions, props.dispatch);
+
+		menu.popup(bridge().window());
+	}, [props.dispatch]);
+
 	const saveFile = useCallback(async (file: Uint8Array) => {
 		const tempPath = `${tmpdir()}/${props.resource.id}.pdf`;
 		await shim.fsDriver().writeFile(tempPath, file);
@@ -70,25 +87,11 @@ export default function PdfViewer(props: Props) {
 			} else if (event.data.name === 'externalViewer') {
 				await openExternalViewer();
 			} else if (event.data.name === 'textSelected') {
-				const itemType = ContextMenuItemType.Text;
-				const menu = await contextMenu({
-					itemType,
-					resourceId: null,
-					filename: null,
-					mime: 'text/plain',
-					textToCopy: event.data.text,
-					linkToCopy: null,
-					htmlToCopy: '',
-					insertContent: () => { console.warn('insertContent() not implemented'); },
-				} as ContextMenuOptions, props.dispatch);
-
-				menu.popup(bridge().window());
+				await textSelected(event.data.text);
 			} else if (event.data.name === 'saveFile') {
 				if (event.data.file) {
 					await saveFile(event.data.file);
-					console.log('file saved', event.data.closeAfterSave);
 					if (event.data.closeAfterSave) {
-						console.log('closing');
 						onClose();
 					}
 				} else {
@@ -103,7 +106,7 @@ export default function PdfViewer(props: Props) {
 		return () => {
 			iframe.contentWindow.removeEventListener('message', onMessage_);
 		};
-	}, [onClose, openExternalViewer, props.dispatch, saveFile]);
+	}, [onClose, openExternalViewer, props.dispatch, saveFile, textSelected]);
 
 	const theme = themeStyle(props.themeId);
 
