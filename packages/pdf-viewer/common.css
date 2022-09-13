@@ -84,15 +84,3 @@ hr {
 [data-theme="dark"] .dark-bg {
 	background-color: rgb(54, 54, 54);
 }
-
-.page-canvas {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-}
-
-.textLayer {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-}
