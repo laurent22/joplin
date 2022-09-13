@@ -3,14 +3,14 @@ import PdfDocument from '../PdfDocument';
 import Annotator from '../Annotator';
 
 
-const useAnnotator = (pdfDocument: PdfDocument) => {
+const useAnnotator = (pdfDocument: PdfDocument, onChange: ()=> void) => {
 	const [annotator, setAnnotator] = useState<Annotator>(null);
 
 	useEffect(() => {
 		if (pdfDocument) {
-			setAnnotator(new Annotator(pdfDocument));
+			setAnnotator(new Annotator(pdfDocument, onChange));
 		}
-	}, [pdfDocument]);
+	}, [pdfDocument, onChange]);
 
 	return annotator;
 };

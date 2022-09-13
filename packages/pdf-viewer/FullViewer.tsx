@@ -53,14 +53,20 @@ export default function FullViewer(props: FullViewerProps) {
 	const [zoom, setZoom] = useState<number>(1);
 	const [startPage, setStartPage] = useState<number>(props.startPage || 1);
 	const [selectedPage, setSelectedPage] = useState<number>(startPage);
+	const [isEdited, setIsEdited] = useState<boolean>(false);
 	const mainViewerRef = useRef<HTMLDivElement>(null);
 	const thubmnailRef = useRef<HTMLDivElement>(null);
-	const annotator = useAnnotator(pdfDocument);
 	const [markupState, dispatchMarkupState] = useMarkupState();
 
 	const onActivePageChange = useCallback((pageNo: number) => {
 		setSelectedPage(pageNo);
 	}, []);
+
+	const onAnnotationChange = useCallback(() => {
+		setIsEdited(true);
+	}, []);
+
+	const annotator = useAnnotator(pdfDocument, onAnnotationChange);
 
 	const goToPage = useCallback((pageNo: number) => {
 		if (pageNo < 1 || pageNo > pdfDocument.pageCount || pageNo === selectedPage) return;
@@ -91,7 +97,10 @@ export default function FullViewer(props: FullViewerProps) {
 				<div>
 					<TitleWrapper>
 						<Title title={props.title}>{props.title}</Title>
-						<div>{selectedPage} of {pdfDocument.pageCount} pages</div>
+						<div>
+							<span>{selectedPage} of {pdfDocument.pageCount} pages</span>
+							<span title='Changes will be saved when viewer closed.' style={{ color: 'var(--blue)' }}>{isEdited ? '  (Edited)' : ''}</span>
+						</div>
 					</TitleWrapper>
 				</div>
 				<div>

@@ -120,38 +120,26 @@ export default function Page(props: PageProps) {
 
 	const applyMarkup = useCallback(async (e?: React.MouseEvent<HTMLDivElement>) => {
 		if (!canvasRef.current || !props.annotator) return;
-		const isCancelled = () => props.markupState !== currentMarkupState.current;
 		try {
 			let updated = false;
+
 			if (props.markupState.currentTool !== MarkupTool.Erase) {
 				updated = await props.annotator.addTextAnnotation(props.markupState.currentTool as MarkupTool,
 					props.markupState.color as MarkupColor,
 					props.pageNo,
 					props.scaledSize,
-					canvasRef,
-					isCancelled);
+					canvasRef);
+
 			} else if (e) {
-				updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef, e, isCancelled);
+				updated = await props.annotator.deleteAnnotationAtClick(props.pageNo, props.scaledSize, canvasRef, e);
 			}
-			if (isCancelled()) return;
+
 			if (updated) await renderPage();
 		} catch (error) {
 			alert('Sorry we could not complete that operation. Your pdf might not be supported.');
 			console.error(error);
 		}
 	}, [props.annotator, props.markupState, props.pageNo, props.scaledSize, renderPage]);
-
-	useEffect(() => {
-		if (!props.annotator || !props.markupState) return;
-		if (currentMarkupState.current !== props.markupState) {
-			const newlyEnabled = props.markupState.isEnabled && !currentMarkupState.current.isEnabled;
-			currentMarkupState.current = props.markupState;
-			if (newlyEnabled && props.markupState.currentTool !== MarkupTool.Erase) {
-				void applyMarkup();
-			}
-		}
-	}, [applyMarkup, props.annotator, props.markupState]);
-
 
 	const onClick = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
 		if (props.annotator && props.markupState && canvasRef.current) {
@@ -160,6 +148,7 @@ export default function Page(props: PageProps) {
 				await applyMarkup(e);
 			}
 		}
+
 		if (props.onClick) props.onClick(props.pageNo);
 	}, [applyMarkup, props.annotator, props.markupState, props.onClick, props.pageNo]);
 

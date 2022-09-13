@@ -7,10 +7,13 @@ export default class Annotator {
 	private pdfDocument: PdfDocument = null;
 	private driver: AnnotationFactory = null;
 	private hasChange = false;
-	public constructor(pdfDocument: PdfDocument) {
+	private onChange: ()=> void = null;
+
+	public constructor(pdfDocument: PdfDocument, onChange: ()=> void) {
 		this.pdfDocument = pdfDocument;
+		this.onChange = onChange;
 	}
-	public getDriver = async () => {
+	private getDriver = async () => {
 		if (this.driver) return this.driver;
 		const pdfData = await this.pdfDocument.getData();
 		this.driver = new AnnotationFactory(pdfData);
@@ -27,17 +30,20 @@ export default class Annotator {
 
 	private selectionCoordinates = async (pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>) => {
 		if (window.getSelection().rangeCount === 0) return null;
+
 		const rects = window.getSelection().getRangeAt(0).getClientRects();
 		const ost = this.computePageOffset(canvasElem);
 		const points: number[] = [];
 		const page = await this.pdfDocument.getPage(pageNo);
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
+
 		const processPoint = (x: number, y: number) => {
 			const x_y = viewport.convertToPdfPoint(x, y);
 			x = x_y[0];
 			y = x_y[1];
 			points.push(x, y);
 		};
+
 		for (let i = 0; i < rects.length; i++) {
 			const rect = rects[i];
 			const x_1 = rect.x - ost.left;
@@ -57,6 +63,7 @@ export default class Annotator {
 		const annotations = await driver.getAnnotations();
 		const pageAnnotations = annotations[pageNo - 1];
 		if (!pageAnnotations) return null;
+
 		return pageAnnotations.find((annotation) => {
 			const points = annotation.rect;
 			if (!points || points.length < 4) return false;
@@ -73,25 +80,25 @@ export default class Annotator {
 		});
 	};
 
-	public deleteAnnotationAtClick = async (pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>, evt: MouseEvent, isCancelled: ()=> boolean): Promise<boolean> => {
+	public deleteAnnotationAtClick = async (pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>, evt: MouseEvent): Promise<boolean> => {
 		const ost = this.computePageOffset(canvasElem);
 		let x = evt.pageX - ost.left;
 		let y = evt.pageY - ost.top;
 		const page = await this.pdfDocument.getPage(pageNo);
-		if (isCancelled()) return false;
 		const viewport = page.getViewport({ scale: scaledSize.scale || 1.0 });
 		const x_y = viewport.convertToPdfPoint(x, y);
 		x = x_y[0];
 		y = x_y[1];
 		if (!x || !y) return false;
+
 		const annotation = await this.getAnnotationAtPoint(pageNo, x, y);
-		if (isCancelled()) return false;
 		if (!annotation) return false;
+
 		await this.deleteAnnotation(annotation.id || annotation.object_id);
 		return true;
 	};
 
-	public deleteAnnotation = async (id: string | any) => {
+	private deleteAnnotation = async (id: string | any) => {
 		const driver = await this.getDriver();
 		await driver.deleteAnnotation(id);
 		console.log('deleted annotation', id);
@@ -117,14 +124,12 @@ export default class Annotator {
 		}
 	};
 
-	public addTextAnnotation = async (tool: MarkupTool, color: MarkupColor, pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>, isCancelled: ()=> boolean) => {
+	public addTextAnnotation = async (tool: MarkupTool, color: MarkupColor, pageNo: number, scaledSize: ScaledSize, canvasElem: MutableRefObject<HTMLCanvasElement>) => {
 		const text = window.getSelection().toString();
 		if (!text) return false;
 		const coords = await this.selectionCoordinates(pageNo, scaledSize, canvasElem);
 		if (!coords) return false;
-		if (isCancelled()) return false;
 		const driver = await this.getDriver();
-		if (isCancelled()) return false;
 		const colorArray = this.getColor(color);
 		const options: any = {
 			page: pageNo - 1,
@@ -155,6 +160,7 @@ export default class Annotator {
 		const driver = await this.getDriver();
 		const annotatedBytes = driver.write();
 		await this.pdfDocument.loadDoc(annotatedBytes);
+		this.onChange();
 	};
 
 	public get hasChanges() {
