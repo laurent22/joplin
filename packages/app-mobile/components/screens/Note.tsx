@@ -866,9 +866,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 					await shim.fsDriver().copy(localFilePath, targetPath);
 
 					const stat = await shim.fsDriver().stat(targetPath);
-					if (stat.size >= 10000000) {
+					if (stat.size >= 200 * 1024 * 1024) {
 						await shim.fsDriver().remove(targetPath);
-						throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 					}
 				}
 			}
