@@ -147,10 +147,17 @@ Local filesystem sync can be initiated after starting the joplin terminal app by
 	:config sync.2.path <path to local sync dir>
 
 ## OneDrive synchronisation
+You will need to set the sync.target config variable from the command line mode using:
+
+	:config sync.target 3
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
+
+If you're using Joplin in WSL, when you try to sync, Joplin will shows a loopback address (127.0.0.1), you will need to discover your IP in the WSL machine (normally the command `ip a`) and access the address in your windows interface.
+	
+	http://<wsl ip address>:9967/auth  
 
 # URLs
 
