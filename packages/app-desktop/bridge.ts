@@ -242,11 +242,11 @@ export class Bridge {
 	}
 
 	openExternal(url: string) {
-		return require('electron').shell.openExternal(url);
+		return require('electron').shell.openExternal(toSystemSlashes(url));
 	}
 
 	async openItem(fullPath: string) {
-		return require('electron').shell.openPath(fullPath);
+		return require('electron').shell.openPath(toSystemSlashes(fullPath));
 	}
 
 	screen() {
