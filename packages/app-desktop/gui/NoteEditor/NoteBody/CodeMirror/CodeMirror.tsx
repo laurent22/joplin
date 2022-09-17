@@ -847,10 +847,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [props.plugins]);
 
 	function renderEditor() {
-		
+
 		let matchBracesOptions: boolean | object = Setting.value('editor.autoMatchingBraces');
-		if (matchBracesOptions === true)
-			matchBracesOptions = {override: true, pairs: "<>()[]{}''\"\"“”（）《》「」『』【】〔〕〖〗〘〙〚〛"};
+		if (matchBracesOptions === true) {
+			matchBracesOptions = {override: true, pairs: '<>()[]{}\'\'""‘’“”（）《》「」『』【】〔〕〖〗〘〙〚〛'};
+		}
 
 		return (
 			<div style={cellEditorStyle}>
