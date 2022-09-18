@@ -2331,10 +2331,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@braintree/sanitize-url@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@braintree/sanitize-url@npm:3.1.0"
-  checksum: 179a6bb79c78fefdff5f93df9d46aa9c7ac62c6fff59e73ecd92cb6b82fbb3b96b62a8ba5ef3e99b0ce73b2da5987db7a60b4323147764af6620e0de012af6df
+"@braintree/sanitize-url@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@braintree/sanitize-url@npm:6.0.0"
+  checksum: 409ce7709dc1a0c67bc887d20af1becd4145d5c62cc5124b1c4c1f3ea2a8d69b0ee9f582d446469c6f5294b56442b99048cbbba6861dd5c834d4e019b95e1f40
   languageName: node
   linkType: hard
 
@@ -4232,7 +4232,7 @@ __metadata:
     markdown-it-sup: ^1.0.0
     markdown-it-toc-done-right: ^4.1.0
     md5: ^2.2.1
-    mermaid: ^8.13.9
+    mermaid: ^9.1.7
     typescript: ^4.0.5
   languageName: unknown
   linkType: soft
@@ -13931,10 +13931,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:2.3.4":
-  version: 2.3.4
-  resolution: "dompurify@npm:2.3.4"
-  checksum: 65d50e62b7c5da611b3562d71a1fbcf0a951ea47844daf17c097acb209ea4d039a602ee0be37c314b998102e4ab09223b0fe3f4575eeda7240b01aeabf212415
+"dompurify@npm:2.4.0":
+  version: 2.4.0
+  resolution: "dompurify@npm:2.4.0"
+  checksum: c93ea73cf8e3ba044588450198563e56ce6902e36d0e16e3699df2fa59e82c4fdd11d4ad04ef5024569ce96a35b46f29d0bbea522516add33cd39a7f56a8a675
   languageName: node
   linkType: hard
 
@@ -21932,10 +21932,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"khroma@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "khroma@npm:1.4.1"
-  checksum: 7a2ad859dc808d340f736096e21c95f616bb4efefbf333b60c2d6a14ebc5b5b19d1397910bcf47714250ffdf58724affb5e87693933d241225103e0fbecb4c4b
+"khroma@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "khroma@npm:2.0.0"
+  checksum: 3be7ef681f41f6071464e21060731fa63e2915bcd0774b9f35e431aa664c0c0e0826825403360654935111d4309f6704e5dc27cd953614133dfbdee4c056c3a8
   languageName: node
   linkType: hard
 
@@ -23523,20 +23523,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^8.13.9":
-  version: 8.13.9
-  resolution: "mermaid@npm:8.13.9"
+"mermaid@npm:^9.1.7":
+  version: 9.1.7
+  resolution: "mermaid@npm:9.1.7"
   dependencies:
-    "@braintree/sanitize-url": ^3.1.0
+    "@braintree/sanitize-url": ^6.0.0
     d3: ^7.0.0
     dagre: ^0.8.5
     dagre-d3: ^0.6.4
-    dompurify: 2.3.4
+    dompurify: 2.4.0
     graphlib: ^2.1.8
-    khroma: ^1.4.1
-    moment-mini: ^2.24.0
+    khroma: ^2.0.0
+    moment-mini: 2.24.0
     stylis: ^4.0.10
-  checksum: 9b05ce16413ee7d76e5b921ee57b9cdff5738221c72593ac5b7daf7c93d5025ff8e4248b2a5cbabd5af44285d4e849d832246a89c214aeb7c8b811f92d967102
+  checksum: 7f3f4c55de9e290aa4fa37b01d37772bceae8b7fad888a034ba4cebbdba5e25632fcfbdcadc168d9c3589d173399b6bb74517bba91237f3b0ce7f945e62ab21c
   languageName: node
   linkType: hard
 
@@ -24329,7 +24329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-mini@npm:^2.24.0":
+"moment-mini@npm:2.24.0":
   version: 2.24.0
   resolution: "moment-mini@npm:2.24.0"
   checksum: c1162322fd05a305cf5d403107fe702a928e5a72c56a614142fae4882846f66bb21c423cef397fe56802564b0353386f1bca46c8bb080d2097e68cbd687d589e
