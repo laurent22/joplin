@@ -16,6 +16,7 @@ import NoteTextViewer from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../services/bridge';
 import markdownUtils from '@joplin/lib/markdownUtils';
@@ -293,7 +294,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	const editorPasteText = useCallback(() => {
 		if (editorRef.current) {
-			editorRef.current.replaceSelection(clipboard.readText());
+			void Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true })
+				.then((modifiedMd) => {
+					editorRef.current.replaceSelection(modifiedMd);
+				});
 		}
 	}, []);
 
