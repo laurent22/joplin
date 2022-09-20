@@ -89,6 +89,7 @@ export default function NoteBodyViewer(props: Props) {
 	return (
 		<View style={props.style}>
 			<ExtendedWebView
+				webviewInstanceId='NoteBodyViewer'
 				themeId={props.themeId}
 				style={webViewStyle}
 				html={html}

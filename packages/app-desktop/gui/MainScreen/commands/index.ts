@@ -15,6 +15,7 @@ import * as openFolder from './openFolder';
 import * as openFolderDialog from './openFolderDialog';
 import * as openItem from './openItem';
 import * as openNote from './openNote';
+import * as openPdfViewer from './openPdfViewer';
 import * as openTag from './openTag';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
@@ -55,6 +56,7 @@ const index:any[] = [
 	openFolderDialog,
 	openItem,
 	openNote,
+	openPdfViewer,
 	openTag,
 	print,
 	renameFolder,

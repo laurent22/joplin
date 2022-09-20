@@ -579,6 +579,17 @@
 			}
 		}
 
+		ipc.textSelected = function(event) {
+			ipcProxySendToHost('contextMenu', {
+				type: 'text',
+				textToCopy: event.text,
+			});
+		}
+
+		ipc.openPdfViewer = function(event) {
+			ipcProxySendToHost('openPdfViewer', { resourceId: event.resourceId, mime: 'application/pdf', pageNo: event.pageNo || 1 });
+		}
+
 		window.addEventListener('hashchange', webviewLib.logEnabledEventHandler(e => {
 			if (!window.location.hash) return;
 

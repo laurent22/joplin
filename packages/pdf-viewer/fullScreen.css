@@ -1,0 +1,64 @@
+.full-app{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+    display: grid;
+    grid-template-rows: 2.8rem auto;
+}
+
+.viewers{
+	width: 100%;
+    height: calc(100vh - 2.8rem);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 11rem auto;
+    padding-right: 0.4rem;
+}
+
+.pane{
+    display: block;
+	margin: 0px auto;
+	overflow-x: auto;
+    overflow-y: auto;
+    width: 100%;
+	height: 100%;
+	padding: 0rem 0.2rem;
+    position: relative;
+}
+.thumbnail-pane{
+	background-color: var(--tertiary);
+	overflow-y: scroll;
+}
+
+.top-bar{
+	display: grid;
+	grid-template-columns: 18rem auto 3rem;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--tertiary);
+    flex-direction: row;
+}
+.top-bar > div{
+	display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.2rem;
+	flex-direction: row;
+	column-gap: 0.6rem;
+	height: 100%;
+	width: 100%;
+	max-width: 30rem;
+    margin: 0rem auto;
+	overflow: hidden;
+}
+
+@media screen and (max-width: 840px) {
+	.viewers{
+		grid-template-columns: 9rem auto;
+	}
+	.top-bar{
+		grid-template-columns: 10rem auto 3rem;
+	}
+}

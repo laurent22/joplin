@@ -98,6 +98,7 @@ export interface State {
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	isOnMobileData?: boolean;
+	showMobileNotesBar: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -158,6 +159,7 @@ export const defaultState: State = {
 	},
 	backwardHistoryNotes: [],
 	forwardHistoryNotes: [],
+	showMobileNotesBar: false,
 	// pluginsLegacy is the original plugin system, which eventually was used only for GotoAnything.
 	// GotoAnything should be refactored to part of core and when it's done the pluginsLegacy key can
 	// be removed. It was originally named "plugins", then renamed "pluginsLegacy" so as not to conflict

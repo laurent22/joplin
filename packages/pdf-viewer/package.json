@@ -40,6 +40,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@joplin/lib": "workspace:^",
+    "async-mutex": "^0.4.0",
     "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
     "react-dom": "16.9.0",
