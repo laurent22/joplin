@@ -1212,9 +1212,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
-		const syncStatusIcon = this.props.showSyncStatus ? <SyncStatusIcon
+		const syncStatusIcon = <SyncStatusIcon
 			noteLastModifiedTimestamp={this.state.lastSaveScheduledTimestamp}
-		/> : null;
+		/>;
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
@@ -1266,7 +1266,6 @@ const NoteScreen = connect((state: any) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
 		useEditorBeta: state.settings['editor.beta'],
-		showSyncStatus: state.settings['editor.showSyncStatus'],
 	};
 })(NoteScreenComponent);
 
