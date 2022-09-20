@@ -13,6 +13,7 @@ import CustomButton from './CustomButton';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import synchronizeButtonPress from '@joplin/lib/components/shared/synchronizeButtonPress';
+import { Theme } from '@joplin/lib/themes/type';
 
 type DispatchEventCallback = (eventName: AnyAction)=> void;
 
@@ -106,43 +107,45 @@ const SyncStatusIconComponent = (props: Props) => {
 	, [styles.innerIcon]);
 
 	// Determine the inner/outer icons
-	const [innerIcon, outerIconName] = useMemo((): [ReactElement|null, string] => {
-		const defaultOuterIconName = 'cloud-outline';
+	const defaultOuterIconName = 'cloud-outline';
+	const [innerIcon, outerIconName, changesPublished] = useMemo((): [ReactElement|null, string, boolean] => {
+		let innerIcon: ReactElement|null = null;
+		let outerIconName: string = defaultOuterIconName;
+		let changesPublished = false;
 
+		const haveNewSyncTarget = (props.syncReport.syncTarget ?? props.syncTarget) !== props.syncTarget;
 
 		if (props.isOnMobileData && props.syncOnlyOverWifi) {
-			return [null, 'cloud-offline-outline'];
-		}
-
-		if (props.syncStarted && !props.syncReport.cancelling) {
-			return [syncingIcon, defaultOuterIconName];
-		}
-
-		// Don't show information from the previous sync target.
-		const haveNewSyncTarget = (props.syncReport.syncTarget ?? props.syncTarget) !== props.syncTarget;
-		if (haveNewSyncTarget) {
-			return [null, 'cloud-upload-outline'];
-		}
-
-		if (props.syncReport.errors && props.syncReport.errors.length > 0) {
-			return [syncErrorIcon, defaultOuterIconName];
-		}
-
-		const changesPublished = (props.syncReport.startTime ?? 0) > (props.noteLastModifiedTimestamp ?? 0);
-		console.log(props.syncReport.startTime, props.noteLastModifiedTimestamp);
-		if (changesPublished) {
-			return [syncSuccessIcon, defaultOuterIconName];
+			outerIconName = 'cloud-offline-outline';
+		} else if (props.syncStarted && !props.syncReport.cancelling) {
+			innerIcon = syncingIcon;
+			outerIconName = defaultOuterIconName;
+		} else if (haveNewSyncTarget) {
+			// Don't show information from the previous sync target.
+			outerIconName = 'cloud-upload-outline';
+		} else if (hasErrors) {
+			innerIcon = syncErrorIcon;
+			outerIconName = defaultOuterIconName;
 		} else {
-			return [null, 'cloud-upload-outline'];
+			changesPublished = (props.syncReport.startTime ?? 0) > (props.noteLastModifiedTimestamp ?? 0);
+
+			if (changesPublished) {
+				changesPublished = true;
+				innerIcon = syncSuccessIcon;
+			} else {
+				outerIconName = 'cloud-upload-outline';
+			}
 		}
+
+		return [innerIcon, outerIconName, changesPublished];
 	}, [
 		props.isOnMobileData, props.syncOnlyOverWifi, props.syncStarted, props.syncReport, props.syncTarget,
-		props.noteLastModifiedTimestamp,
+		props.noteLastModifiedTimestamp, hasErrors,
 
 		syncErrorIcon, syncSuccessIcon, syncingIcon,
 	]);
 
-	if (!props.syncTarget) {
+	if (!props.syncTarget || changesPublished) {
 		return null;
 	}
 
@@ -172,10 +175,10 @@ const SyncStatusIconComponent = (props: Props) => {
 
 const useStyles = (themeId: number) => {
 	return useMemo(() => {
-		const theme = themeStyle(themeId);
+		const theme: Theme = themeStyle(themeId ?? 0);
 		const iconStyle = {
 			fontSize: 30,
-			color: theme.color,
+			color: theme.color2,
 		};
 
 		return StyleSheet.create({
