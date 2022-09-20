@@ -46,7 +46,7 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
-    "mermaid": "^8.13.9"
+    "mermaid": "^9.1.7"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }
