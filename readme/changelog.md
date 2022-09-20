@@ -893,18 +893,6 @@ Fixed ENEX import regression: Fix issue when importing ENEX file that contains i
 - Fixed: Fixed issue with attachment paths being invalid when user has spaces in home directory path.
 - Fixed: Fixed title input field width on small windows
 
-## [v1.5.4](https://github.com/laurent22/joplin/releases/tag/v1.5.4) (Pre-release) - 2020-12-05T12:07:49Z
-
-- New: MacOS: Notarize application
-- Improved: Plugins: Improved note change event handling.
-- Fixed: Fixed basic search when executing a query in Chinese ([#4034](https://github.com/laurent22/joplin/issues/4034) by Naveen M V)
-- Fixed: Fixed importing ENEX files that contain empty resources
-- Fixed: Fixed issue with note not being saved when a column is added or remove from Rich Text editor
-- Fixed: Fixed numbered list bug in markdown editor ([#4116](https://github.com/laurent22/joplin/issues/4116)) ([#3917](https://github.com/laurent22/joplin/issues/3917) by [@MichBoi](https://github.com/MichBoi))
-- Fixed: Fixed potential crash when watching note files or resources
-- Fixed: Focus editor after pressing toolbar buttons ([#4037](https://github.com/laurent22/joplin/issues/4037)) ([#4036](https://github.com/laurent22/joplin/issues/4036) by [@CalebJohn](https://github.com/CalebJohn))
-- Fixed: Prevents crash when invalid spell checker language is selected, and provide fallback for invalid language codes ([#4146](https://github.com/laurent22/joplin/issues/4146))
-
 ## [v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) - 2020-12-01T11:11:16Z
 
 - Improved: Disable soft-break by default in Markdown rendering
@@ -1679,6 +1667,22 @@ IMPORTANT: If you use the Clipper API, please note that there are a few breaking
 
 - Improved: Clarifies labels of certain actions, and added shortcut for note list toggle
 - Security: Upgrade packages to fix vulnerabilities
+
+## [v1.1.1](https://github.com/laurent22/joplin/releases/tag/v1.1.1) (Pre-release) - 2020-09-11T23:32:47Z
+
+- New: Add keyboard shortcut editor ([#3525](https://github.com/laurent22/joplin/issues/3525) by Anjula Karunarathne)
+- Improved: Change CodeMirror default home and end to be visual line based ([#3672](https://github.com/laurent22/joplin/issues/3672) by Caleb John)
+- Improved: Added support for fuzzy search ([#3632](https://github.com/laurent22/joplin/issues/3632) by Naveen M V)
+- Improved: Make CodeMirror the default code editor ([#3703](https://github.com/laurent22/joplin/issues/3703)) ([#3560](https://github.com/laurent22/joplin/issues/3560) by Caleb John)
+- Improved: Rename menu item from "Export" to "Export all" to clarify what it does
+- Improved: Sync immediately on startup
+- Security: Disallow EMBED tags to prevent XSS vulnerability (CVE-2020-15930, vulnerability found by Ademar Nowasky Junior)
+- Fixed: Fix applying tags to multiple notes ([#3710](https://github.com/laurent22/joplin/issues/3710))
+- Fixed: Fix bug with quotes when searching ([#3735](https://github.com/laurent22/joplin/issues/3735) by Naveen M V)
+- Fixed: Fix wildcard search ([#3713](https://github.com/laurent22/joplin/issues/3713) by Naveen M V)
+- Fixed: Fixed copying link in Rich Text editor ([#3697](https://github.com/laurent22/joplin/issues/3697))
+- Fixed: Fixed note export when there are folders with non-existing parents. Also fixed long path issue on Windows. ([#3689](https://github.com/laurent22/joplin/issues/3689))
+- Fixed: Fixed viewer font size, in particular for inline code ([#3553](https://github.com/laurent22/joplin/issues/3553))
 
 ## [v1.1.1](https://github.com/laurent22/joplin/releases/tag/v1.1.1) (Pre-release) - 2020-09-11T23:32:47Z
 
