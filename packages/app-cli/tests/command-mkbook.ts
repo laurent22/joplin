@@ -1,43 +1,36 @@
 import { execCommand2 } from '@joplin/tools/tool-utils';
 import { homedir } from 'os';
-import * as fsE from 'fs-extra';
+import { removeSync } from 'fs-extra';
 
 const profileDir = `${homedir()}/.config/joplindev-populate/joplindev-testing-command-mkbook`;
-fsE.removeSync(profileDir);
+removeSync(profileDir);
 
 // eC2W is an wrapper for execCommand2
 const eC2W = async (command: string) => {
 	await execCommand2(`yarn start-no-build --profile ${profileDir} ${command}`, { quiet: true });
 };
 
-describe('CreateSubFolder', function() {
+describe('command-mkbook', function() {
 
-	test('Create folders', (async () => {
-		await eC2W('mkbook test1');
-		await eC2W('mkbook test2');
-	}));
+	it('should create first and second folder', async () => {
+		await expect(eC2W('mkbook test1')).resolves.not.toThrowError();
+		await expect(eC2W('mkbook test2')).resolves.not.toThrowError();
+	});
 
-	test('Create sub-folder', (async () => {
-		await eC2W('use test1');
-		await eC2W('mkbook -s test1.1');
-	}));
+	it('should create a subfolder in first folder', async () => {
+		await expect(eC2W('use test1')).resolves.not.toThrowError();
+		await expect(eC2W('mkbook -s test1.1')).resolves.not.toThrowError();
+	});
 
-	test('Create sub-folder in target folder', (async () => {
-		await eC2W('mkbook -s test2.1 test2');
-	}));
+	it('should create a subfolder in the second destination folder', async () => {
+		await expect(eC2W('mkbook -s test2.1 test2')).resolves.not.toThrowError();
+	});
 
-	test('Fail create sub-folder in ambiguous folder', (async () => {
-		await eC2W('mkbook test3');
-		await eC2W('mkbook test3');	// ambiguous folder
-		await eC2W('use test3');
-		await eC2W('mkbook -s test3.1');
-
-		try {
-			await eC2W('mkbook -s test3.2 test3');
-			throw new Error('Ambiguous folders, it should not work!');
-		} catch (e) {
-			expect(e.message).toContain('Error:');
-		}
-	}));
+	it('should not be possible to create subfolder in ambiguous destination folder', async () => {
+		await expect(eC2W('mkbook test3')).resolves.not.toThrowError();
+		await expect(eC2W('mkbook test3')).resolves.not.toThrowError();	// ambiguous folder
+		await expect(eC2W('use test3')).resolves.not.toThrowError(); // use the first folder
+		await expect(eC2W('mkbook -s test3.1 test3')).rejects.toThrowError();
+	});
 });
 
