@@ -304,16 +304,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 
 	private handleScreenWidthChange_() {
+		// Update state that depends on screen width
 		this.setState({
 			notesBarWidth: this.getNotesBarWidth(),
 			isTablet: Dimensions.get('window').width >= 768,
 		});
 
-		// Update the note width
+		// Update the note width and notePosition
 		if (!this.props.showNotesBar) {
 			this.noteWidth.setValue(Dimensions.get('window').width);
 			this.notePosition.setValue(-1 * this.state.notesBarWidth);
 		} else {
+			// Close notesbar if the new
+			// width is not large enough
 			if (!this.state.isTablet) {
 				this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
 			} else {
