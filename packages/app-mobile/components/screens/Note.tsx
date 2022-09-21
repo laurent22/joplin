@@ -302,12 +302,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return notesBarWidth;
 	};
 
-	// Update state that depends on the screen width when the screen width changes ( the device orientation changess)
+
 	private handleScreenWidthChange_() {
-		this.setState({
-			notesBarWidth: this.getNotesBarWidth(),
-			isTablet: Dimensions.get('window').width >= 768,
-		});
+		// Update the note width
+		if (!this.props.showNotesBar) {
+			this.noteWidth.setValue(Dimensions.get('window').width);
+		} else {
+			this.noteWidth.setValue(Dimensions.get('window').width - this.state.notesBarWidth);
+		}
 	}
 
 	private screenHeader_undoButtonPress() {
@@ -420,22 +422,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		styles.noteMainComp = {
 			flex: 1,
 			flexDirection: 'row',
-			position: 'relative',
 		};
 
 		styles.notesBarContainer = {
 			position: 'relative',
-			left: this.notesBarPosition,
 			top: 0,
-			width: this.state.notesBarWidth,
 			height: '100%',
 		};
 
 		styles.noteComp = {
 			position: 'relative',
 			top: 0,
-			left: this.notePosition,
-			width: this.noteWidth,
 		};
 
 		styles.noteActionButton = {
@@ -648,7 +645,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.props.showNotesBar) {
 			this.notesBarPosition = new Animated.Value(0);
 			this.notePosition = new Animated.Value(0);
-			this.noteWidth = new Animated.Value(Dimensions.get('window').width - 250);
+			this.noteWidth = new Animated.Value(Dimensions.get('window').width - this.state.notesBarWidth);
 		} else {
 			this.notesBarPosition = new Animated.Value(-1 * this.state.notesBarWidth);
 			this.notePosition = new Animated.Value(-1 * this.state.notesBarWidth);
@@ -1445,10 +1442,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
-				<Animated.View style={this.styles().notesBarContainer}>
+				<Animated.View style={[this.styles().notesBarContainer, { width: this.state.notesBarWidth, left: this.notesBarPosition }]}>
 					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
 				</Animated.View>
-				<Animated.View style={this.styles().noteComp}>
+				<Animated.View style={[this.styles().noteComp, { left: this.notePosition, width: this.noteWidth }]}>
 					{titleComp}
 					{bodyComponent}
 				</Animated.View>
