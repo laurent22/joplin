@@ -304,11 +304,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 
 	private handleScreenWidthChange_() {
+		this.setState({
+			notesBarWidth: this.getNotesBarWidth(),
+			isTablet: Dimensions.get('window').width >= 768,
+		});
+
 		// Update the note width
 		if (!this.props.showNotesBar) {
 			this.noteWidth.setValue(Dimensions.get('window').width);
+			this.notePosition.setValue(-1 * this.state.notesBarWidth);
 		} else {
-			this.noteWidth.setValue(Dimensions.get('window').width - this.state.notesBarWidth);
+			if (!this.state.isTablet) {
+				this.props.dispatch({ type: 'NOTES_BAR_CLOSE' });
+			} else {
+				this.noteWidth.setValue(Dimensions.get('window').width - this.state.notesBarWidth);
+				this.notePosition.setValue(0);
+			}
 		}
 	}
 
@@ -422,6 +433,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		styles.noteMainComp = {
 			flex: 1,
 			flexDirection: 'row',
+			position: 'relative',
+			top: 0,
+			left: 0,
 		};
 
 		styles.notesBarContainer = {
@@ -564,7 +578,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			Animated.spring(
 				this.notesBarPosition,
 				{
-					toValue: -1 * this.state.notesBarWidth,
+					toValue: -1.5 * this.state.notesBarWidth,
 					useNativeDriver: false,
 				}
 			),
@@ -647,7 +661,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.notePosition = new Animated.Value(0);
 			this.noteWidth = new Animated.Value(Dimensions.get('window').width - this.state.notesBarWidth);
 		} else {
-			this.notesBarPosition = new Animated.Value(-1 * this.state.notesBarWidth);
+			this.notesBarPosition = new Animated.Value(-1.5 * this.state.notesBarWidth);
 			this.notePosition = new Animated.Value(-1 * this.state.notesBarWidth);
 			this.noteWidth = new Animated.Value(Dimensions.get('window').width);
 		}
