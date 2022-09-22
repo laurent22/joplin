@@ -310,10 +310,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			isTablet: Dimensions.get('window').width >= 768,
 		});
 
-		// Update the note width and notePosition
+		// Update the noteWidth, notePosition and notePosition
 		if (!this.props.showNotesBar) {
 			this.noteWidth.setValue(Dimensions.get('window').width);
 			this.notePosition.setValue(-1 * this.state.notesBarWidth);
+			this.notesBarPosition.setValue(-1.5 * this.state.notesBarWidth);
 		} else {
 			// Close notesbar if the new
 			// width is not large enough
@@ -1460,7 +1461,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
 				<Animated.View style={[this.styles().notesBarContainer, { width: this.state.notesBarWidth, left: this.notesBarPosition }]}>
-					<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
+					{ this.state.isTablet && <NotesBar todoCheckbox_change={this.todoCheckbox_change} /> }
 				</Animated.View>
 				<Animated.View style={[this.styles().noteComp, { left: this.notePosition, width: this.noteWidth }]}>
 					{titleComp}
