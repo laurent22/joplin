@@ -96,7 +96,8 @@
       "category": "Office",
       "desktop": {
         "Icon": "joplin",
-        "MimeType": "x-scheme-handler/joplin;"
+        "MimeType": "x-scheme-handler/joplin;",
+        "X-AppImage-Integrate": "false"
       },
       "target": "AppImage"
     },
