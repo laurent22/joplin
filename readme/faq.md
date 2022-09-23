@@ -107,7 +107,7 @@ Unfortunately it is not possible. Joplin synchronises with file systems using an
 
 The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
 
-On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.
+On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted VeraCrypt drive for instance.
 
 For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.
 
