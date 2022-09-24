@@ -69,6 +69,10 @@ a {
 	border: 1px solid rgba(0,160,255,0);
 }
 
+.editor-toolbar > .scroll-horizontal > div {
+	position: initial !important;
+}
+
 .icon-button:hover {
 	background-color: rgba(0,0,0,0.05) !important;
 	border: 1px solid rgba(0,0,0,0.10);

@@ -165,6 +165,7 @@
     "react-datetime": "^2.14.0",
     "react-dom": "16.9.0",
     "react-redux": "5.0.7",
+    "react-scroll-horizontal": "^1.6.6",
     "react-select": "^2.4.3",
     "react-toggle-button": "^2.2.0",
     "react-tooltip": "^3.10.0",

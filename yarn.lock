@@ -3867,6 +3867,7 @@ __metadata:
     react-datetime: ^2.14.0
     react-dom: 16.9.0
     react-redux: 5.0.7
+    react-scroll-horizontal: ^1.6.6
     react-select: ^2.4.3
     react-test-renderer: ^16.14.0
     react-toggle-button: ^2.2.0
@@ -28089,6 +28090,19 @@ __metadata:
   version: 0.4.3
   resolution: "react-refresh@npm:0.4.3"
   checksum: 58d3b899ede4c890b1d06a2d02254a77d1c0dea400be139940e47b1c451ff1c4cbb3ca5d0a9d6ee9574e570075ab6c1bef15e77b7270d4a6f571847d2b26f4fc
+  languageName: node
+  linkType: hard
+
+"react-scroll-horizontal@npm:^1.6.6":
+  version: 1.6.6
+  resolution: "react-scroll-horizontal@npm:1.6.6"
+  dependencies:
+    react-motion: ^0.5.2
+  peerDependencies:
+    prop-types: ^15.5.4
+    react: ^15.0.0 || ^16.0.0
+    react-dom: ^15.0.0 || ^16.0.0
+  checksum: 01bda478587927afc7f9aed25b26ea05e55d06e999ec9fee9f57e88c5ef0656338f1288d6f900eebdb624a2789f6ab80a178df23d29d80516c187e97c70f9c74
   languageName: node
   linkType: hard
 
