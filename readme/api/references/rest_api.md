@@ -166,8 +166,8 @@ command | 16
 | author | text  |       |
 | source_url | text  | The full URL where the note comes from. |
 | is_todo | int   | Tells whether this note is a todo or not. |
-| todo_due | int   | When the todo is due. An alarm will be triggered on that date. |
-| todo_completed | int   | Tells whether todo is completed or not. This is a timestamp in milliseconds. |
+| todo_due | int   | When the todo is due. An alarm will be triggered on that date. Can only be used when `is_todo` is set to 1. |
+| todo_completed | int   | Tells whether todo is completed or not. This is a timestamp in milliseconds. Can only be used when `is_todo` is set to 1. |
 | source | text  |       |
 | source_application | text  |       |
 | application_data | text  |       |

@@ -414,6 +414,10 @@ export default async function(request: Request, id: string = null, link: string 
 
 		const newProps = request.bodyJson(readonlyProperties('PUT'));
 		if (!('user_updated_time' in newProps)) newProps.user_updated_time = timestamp;
+		if (newProps.is_todo === 0) {
+			newProps.todo_due = 0;
+			newProps.todo_completed = 0;
+		}
 
 		let newNote = {
 			...note,
