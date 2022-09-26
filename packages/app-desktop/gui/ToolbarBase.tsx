@@ -25,13 +25,13 @@ function ToolbarBaseComponent(Props: Props) {
 			setHorizScroll(true);
 		}
 		window?.addEventListener('resize', () => {
-			if (
-				childRef.current?.clientWidth > parentRef.current?.clientWidth
-			) {
-				setHorizScroll(true);
-			} else {
-				setHorizScroll(false);
-				if (!childRef.current) {
+			setTimeout(() => {
+				if (
+					childRef.current?.clientWidth > parentRef.current?.clientWidth
+				) {
+					setHorizScroll(true);
+				} else {
+					setHorizScroll(false);
 					setTimeout(() => {
 						if (
 							childRef.current?.clientWidth >
@@ -41,7 +41,7 @@ function ToolbarBaseComponent(Props: Props) {
 						}
 					}, 0);
 				}
-			}
+			}, 0);
 		});
 	}, []);
 
