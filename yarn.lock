@@ -3962,7 +3962,6 @@ __metadata:
     punycode: ^2.1.1
     react: 17.0.2
     react-native: 0.66.1
-    react-native-action-button: ^2.8.5
     react-native-camera: ^3.40.0
     react-native-dialogbox: ^0.6.10
     react-native-document-picker: ^4.0.0
@@ -27758,17 +27757,6 @@ __metadata:
   peerDependencies:
     react: ^0.14.9 || ^15.3.0 || ^16.0.0
   checksum: b1b2ab15d0e7492be827576fa7238c11679b52495a640b1234400771fdeac9ded8909532135b4a84be28e21e63dc97d54758d08ba280f90409b54104730b29c0
-  languageName: node
-  linkType: hard
-
-"react-native-action-button@npm:^2.8.5":
-  version: 2.8.5
-  resolution: "react-native-action-button@npm:2.8.5"
-  dependencies:
-    prop-types: ^15.5.10
-  peerDependencies:
-    react-native: ">=0.11"
-  checksum: e5f8236c9980e491daff3707648ab3a0f4c79c3c4c102ec340d376e204a740b87486f8d4b5e2336e2ab29e5dcd4990693778513cb76e7cc5ddd00ac1c2166977
   languageName: node
   linkType: hard
 
