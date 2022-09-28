@@ -846,6 +846,9 @@ packages/app-desktop/utils/markupLanguageUtils.js.map
 packages/app-mobile/PluginAssetsLoader.d.ts
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/PluginAssetsLoader.js.map
+packages/app-mobile/components/ActionButton.d.ts
+packages/app-mobile/components/ActionButton.js
+packages/app-mobile/components/ActionButton.js.map
 packages/app-mobile/components/BackButtonDialogBox.d.ts
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BackButtonDialogBox.js.map

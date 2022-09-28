@@ -7,6 +7,7 @@ import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
+import { FolderEntity } from './services/database/types';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -55,7 +56,7 @@ export interface State {
 	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
-	folders: any[];
+	folders: FolderEntity[];
 	tags: any[];
 	masterKeys: any[];
 	notLoadedMasterKeys: string[];
