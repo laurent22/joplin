@@ -23,7 +23,7 @@ const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import BaseModel from '@joplin/lib/BaseModel';
-const { ActionButton } = require('../action-button.js');
+import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 import ScreenHeader from '../ScreenHeader';
@@ -1163,21 +1163,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
-			const buttons = [];
-
-			buttons.push({
-				title: _('Edit'),
+			const editButton = {
+				label: _('Edit'),
 				icon: 'md-create',
 				onPress: () => {
 					this.setState({ mode: 'edit' });
 
 					this.doFocusUpdate_ = true;
 				},
-			});
+			};
 
 			if (this.state.mode === 'edit') return null;
 
-			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
+			return <ActionButton mainButton={editButton} />;
 		};
 
 		const actionButtonComp = renderActionButton();
