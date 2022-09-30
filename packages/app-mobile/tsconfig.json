@@ -13,7 +13,6 @@
 		"tools/*.ts",
 	],
 	"compilerOptions": {
-		"types": ["jest", "node", "react-test-renderer"],
-		"allowSyntheticDefaultImports": true
+		"types": ["jest", "node"]
 	}
 }

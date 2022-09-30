@@ -86,9 +86,5 @@
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
   },
-  "packageManager": "yarn@3.1.1",
-  "resolutions": {
-    "@types/react": "17.0.14",
-    "@types/react-dom": "17.0.14"
-  }
+  "packageManager": "yarn@3.1.1"
 }
