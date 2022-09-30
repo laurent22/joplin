@@ -502,7 +502,9 @@ function shimInit(options = null) {
 				const cleanUpOnError = error => {
 					// We ignore any unlink error as we only want to report on the main error
 					fs.unlink(filePath)
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.catch(() => {})
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.then(() => {
 							if (file) {
 								file.close(() => {

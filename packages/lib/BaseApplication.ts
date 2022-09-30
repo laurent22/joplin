@@ -880,6 +880,7 @@ export default class BaseApplication {
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()
 				.generateApiToken()
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
 				});

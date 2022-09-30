@@ -102,6 +102,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	comp.setState(newState);
 
 	if (isProvisionalNote) {
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		Note.updateGeolocation(note.id).then(geoNote => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;

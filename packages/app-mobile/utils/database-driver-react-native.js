@@ -41,6 +41,7 @@ class DatabaseDriverReactNative {
 	}
 
 	selectAll(sql, params = null) {
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return this.exec(sql, params).then(r => {
 			const output = [];
 			for (let i = 0; i < r.rows.length; i++) {
