@@ -55,6 +55,7 @@ export default class Folder extends BaseItem {
 
 		return this.db()
 			.selectAll(`SELECT id FROM notes WHERE ${where.join(' AND ')}`, [parentId])
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((rows: any[]) => {
 				const output = [];
 				for (let i = 0; i < rows.length; i++) {
@@ -759,6 +760,7 @@ export default class Folder extends BaseItem {
 
 		syncDebugLog.info('Folder Save:', o);
 
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(o, options).then((folder: FolderEntity) => {
 			this.dispatch({
 				type: 'FOLDER_UPDATE_ONE',

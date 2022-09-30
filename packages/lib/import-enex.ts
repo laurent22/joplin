@@ -588,6 +588,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 				notes.push(note);
 
 				if (notes.length >= 10) {
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					processNotes().catch(error => {
 						importOptions.onError(createErrorWithNoteTitle(this, error));
 					});
@@ -648,6 +649,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 		saxStream.on('end', handleSaxStreamEvent(function() {
 			// Wait till there is no more notes to process.
 			const iid = shim.setInterval(() => {
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				void processNotes().then(allDone => {
 					if (allDone) {
 						shim.clearTimeout(iid);

@@ -205,6 +205,7 @@ export default class Tag extends BaseItem {
 			}
 		}
 
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(o, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {
 				this.dispatch({

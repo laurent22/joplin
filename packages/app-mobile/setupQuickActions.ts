@@ -39,6 +39,7 @@ export default (dispatch: Function, folderId: string) => {
 		void Note.save({
 			parent_id: folderId,
 			is_todo: isTodo,
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		}, { provisional: true }).then((newNote: any) => {
 			dispatch({
 				type: 'NAV_GO',
@@ -51,6 +52,7 @@ export default (dispatch: Function, folderId: string) => {
 
 	DeviceEventEmitter.addListener('quickActionShortcut', handleQuickAction);
 
+	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	QuickActions.popInitialAction().then(handleQuickAction).catch((reason: any) => reg.logger().error(reason));
 };
 

@@ -23,7 +23,7 @@ const themes: any = {
 	[Setting.THEME_OLED_DARK]: theme_oledDark,
 };
 
-export function themeById(themeId: number) {
+export function themeById(themeId: string) {
 	if (!themes[themeId]) throw new Error(`Invalid theme ID: ${themeId}`);
 	const output = Object.assign({}, themes[themeId]);
 

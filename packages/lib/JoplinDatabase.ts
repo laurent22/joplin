@@ -292,6 +292,7 @@ export default class JoplinDatabase extends Database {
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
 		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"')
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then(tableRows => {
 				const chain = [];
 				for (let i = 0; i < tableRows.length; i++) {
@@ -303,6 +304,7 @@ export default class JoplinDatabase extends Database {
 					if (tableName === 'notes_spellfix') continue;
 					if (tableName === 'search_aux') continue;
 					chain.push(() => {
+						// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
 								const item = pragmas[i];
@@ -325,6 +327,7 @@ export default class JoplinDatabase extends Database {
 
 				return promiseChain(chain);
 			})
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then(() => {
 				queries.push({ sql: 'UPDATE version SET table_fields_version = ?', params: [newVersion] });
 				return this.transactionExecBatch(queries);
