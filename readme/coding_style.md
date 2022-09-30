@@ -2,6 +2,16 @@
 
 Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
 
+## Enforcing rules using eslint
+
+Whenever possible, coding style should be enforced using an eslint rule. To do so, add the relevant rule or plugin to `eslintrc.js`. To manually run the linter, run `yarn run linter ./` from the root of the project.
+
+When adding a rule, you will often find that many files will no longer pass the linter. In that case, you have two options:
+
+- Fix the files one by one. If there aren't too many files, and the changes are simple (they are unlikely to introduce regressions), this is the preferred solution.
+
+- Or use `yarn run linter-interactive ./` to disable existing errors. The interactive tool will process all the files and you can then choose to disable any existing error that it finds (by adding a `eslint-disable-next-line` comment above it). This allows keeping the existing, working codebase as it is, and enforcing that new code follows the rule. When using this method, add the comment "Old code before rule was applied" so that we can easily find back all the lines that have been automatically disabled.
+
 ## Use TypeScript for new files
 
 ### Creating a new `.ts` file
