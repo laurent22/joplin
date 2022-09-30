@@ -292,12 +292,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, []);
 
-	const editorPasteText = useCallback(() => {
+	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
-			void Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true })
-				.then((modifiedMd) => {
-					editorRef.current.replaceSelection(modifiedMd);
-				});
+			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
+			editorRef.current.replaceSelection(modifiedMd);
 		}
 	}, []);
 
@@ -305,7 +303,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const clipboardText = clipboard.readText();
 
 		if (clipboardText) {
-			editorPasteText();
+			void editorPasteText();
 		} else {
 			// To handle pasting images
 			void onEditorPaste();
