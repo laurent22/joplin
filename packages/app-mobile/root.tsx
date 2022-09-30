@@ -500,7 +500,7 @@ async function initialize(dispatch: Function) {
 		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
-		reg.logger.info(`Client ID: ${Setting.value('clientId')}`);
+		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			let locale = NativeModules.I18nManager.localeIdentifier;
