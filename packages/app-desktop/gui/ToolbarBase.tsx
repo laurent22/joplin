@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import ToolbarButton from './ToolbarButton/ToolbarButton';
 import ToggleEditorsButton, {
 	Value,
@@ -27,7 +26,8 @@ function ToolbarBaseComponent(Props: Props) {
 		window?.addEventListener('resize', () => {
 			setTimeout(() => {
 				if (
-					childRef.current?.clientWidth > parentRef.current?.clientWidth
+					childRef.current?.clientWidth >
+					parentRef.current?.clientWidth
 				) {
 					setHorizScroll(true);
 				} else {
@@ -104,24 +104,33 @@ function ToolbarBaseComponent(Props: Props) {
 			}
 		}
 	}
+
+	const children = [
+		<div style={groupStyle}>{leftItemComps}</div>,
+		<div style={groupStyle}>{centerItemComps}</div>,
+		<div
+			style={Object.assign({}, groupStyle, {
+				flex: 1,
+				justifyContent: 'flex-end',
+			})}
+		>
+			{rightItemComps}
+		</div>,
+	];
+
+	const childStyle = { display: 'flex' };
+
 	return (
 		<div className="editor-toolbar" ref={parentRef} style={style}>
-			{React.createElement(horizScroll ? HorizontalScroll : 'div', {
-				...(horizScroll ? { reverseScroll: true } : { ref: childRef }),
-				style: { display: 'flex' },
-				children: [
-					<div style={groupStyle}>{leftItemComps}</div>,
-					<div style={groupStyle}>{centerItemComps}</div>,
-					<div
-						style={Object.assign({}, groupStyle, {
-							flex: 1,
-							justifyContent: 'flex-end',
-						})}
-					>
-						{rightItemComps}
-					</div>,
-				],
-			})}
+			{horizScroll ? (
+				<HorizontalScroll reverseScroll style={childStyle}>
+					{children}
+				</HorizontalScroll>
+			) : (
+				<div ref={childRef} style={childStyle}>
+					{children}
+				</div>
+			)}
 		</div>
 	);
 }
