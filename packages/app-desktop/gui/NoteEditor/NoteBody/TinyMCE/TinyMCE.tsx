@@ -1008,7 +1008,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text
-					// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>, 
+					// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>,
 					// which seems to be not supported in editor.insertContent().
 					const pastedHtml = clipboard.readHTML();
 					if (pastedHtml) { // Handles HTML
