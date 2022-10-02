@@ -51,6 +51,35 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
+// const categoryFilterList = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
+// const filterOptions = ['Select plugin category','Most Downloaded','Recommended', 'Newest', 'Built-in', 'All', 'line-separator', 'Appearance', 'Developer tools', 'Productivity', 'Themes', 'Integrations', 'Viewer', 'Search', 'Tags', 'Editor', 'Files', 'Personal knowledge management', 'line-separator', 'Installed', 'Enabled', 'Disabled', 'Outdated'];
+	
+export enum pluginCategoriesOptions {
+	'selectPluginCategory' = 'Select plugin category',
+	'mostDownloaded' = 'Most Downloaded',
+	'recommended' = 'Recommended',
+	'newest' = 'Newest',
+	'builtIn' = 'Built-in',
+	'all' = 'All',
+	'lineSeparator1' = 'line-separator',
+	"appearance"= 'Appearance',
+	"developer tools"= 'Developer Tools',
+	"productivity"= 'Productivity',
+	"themes"= 'Themes',
+	"integrations"= 'Integrations',
+	"viewer"= 'Viewer',
+	"search"= 'Search',
+	"tags"= 'Tags',
+	"editor"= 'Editor',
+	"files"= 'Files',
+	"personal knowledge management"= 'Personal Knowledge Management',
+	'lineSeparator2' = 'line-separator',
+	'installed' = 'Installed',
+	'enabled' = 'Enabled',
+	'disabled' = 'Disabled',
+	'outdated' = 'Outdated',
+}
+
 function makePluginId(source: string): string {
 	// https://www.npmjs.com/package/slug#options
 	return uslug(source).substr(0,32);

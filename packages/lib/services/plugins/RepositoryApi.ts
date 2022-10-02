@@ -1,7 +1,7 @@
 import Logger from '../../Logger';
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { pluginCategoriesOptions } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 const md5 = require('md5');
 const compareVersions = require('compare-versions');
@@ -16,6 +16,10 @@ interface ReleaseAsset {
 interface Release {
 	upload_url: string;
 	assets: ReleaseAsset[];
+}
+
+interface SearchOptions {
+	category?: pluginCategoriesOptions;
 }
 
 const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> => {
@@ -191,18 +195,20 @@ export default class RepositoryApi {
 		}
 	}
 
-	public async searchAndFilter(category?: string, searchQuery?: string): Promise<PluginManifest[]> {
+	public async search(query: string, options:SearchOptions = null): Promise<PluginManifest[]> {
 		const manifests: PluginManifest[] = await this.manifests();
 		let output: PluginManifest[] = [];
 		const pluginStates = Setting.value('plugins.states');
-		category = category.toLowerCase();
+		options = options.toLowerCase();
+		
+		const categoriesList = Object.keys(pluginCategoriesOptions).slice(1, -6).filter((category) => !category.includes('lineSeparator'))
 
-		const categoryFilterList = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
+		// const categoryFilterList = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
 
-		if (categoryFilterList.includes(category)) {
-			output = manifests.filter((m) => m.categories && m.categories.includes(category));
+		if (categoriesList.includes(options)) {
+			output = manifests.filter((m) => m.categories && m.categories.includes(options));
 		} else {
-			switch (category) {
+			switch (options) {
 			case 'most downloaded':
 				output = manifests.sort((m1, m2) => m2._totalDownloads - m1._totalDownloads).slice(0, 50);
 				break;
@@ -213,7 +219,7 @@ export default class RepositoryApi {
 				// + before new keyword forces date to be number https://github.com/microsoft/TypeScript/issues/5710
 				output = manifests.sort((m1, m2) => +new Date(m2._created_date) - +new Date(m1._created_date)).slice(0,50);
 				break;
-			case 'built-in':
+			case 'builtIn':
 				output = manifests.filter(manifest => manifest._built_in);
 				break;
 			case 'all':
@@ -235,14 +241,14 @@ export default class RepositoryApi {
 			}
 		}
 
-		if (searchQuery) {
-			searchQuery = searchQuery.toLowerCase().trim();
-			if (!category) output = manifests;
+		if (query) {
+			query = query.toLowerCase().trim();
+			if (!options) output = manifests;
 
 			return output.filter(manifest => {
 				for (const field of ['name', 'description']) {
 					const v = (manifest as any)[field];
-					if (v && v.toLowerCase().indexOf(searchQuery) >= 0) return manifest;
+					if (v && v.toLowerCase().indexOf(query) >= 0) return manifest;
 				}
 				return null;
 			});

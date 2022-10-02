@@ -1579,9 +1579,6 @@ packages/lib/services/plugins/api/JoplinWorkspace.js.map
 packages/lib/services/plugins/api/types.d.ts
 packages/lib/services/plugins/api/types.js
 packages/lib/services/plugins/api/types.js.map
-packages/lib/services/plugins/pluginCategories.d.ts
-packages/lib/services/plugins/pluginCategories.js
-packages/lib/services/plugins/pluginCategories.js.map
 packages/lib/services/plugins/reducer.d.ts
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/reducer.js.map

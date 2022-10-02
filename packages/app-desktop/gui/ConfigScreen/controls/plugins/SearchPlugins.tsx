@@ -73,7 +73,7 @@ export default function(props: Props) {
 				if (filterValue === undefined) {
 					setFilterValue('');
 				} else {
-					const r = await props.repoApi().searchAndFilter(filterValue.toLowerCase(), props.searchQuery);
+					const r = await props.repoApi().search(filterValue.toLowerCase(), props.searchQuery);
 					['most downloaded', 'newest'].includes(filterValue.toLowerCase()) ? setManifests(r) : setManifests(sortManifestResults(r));
 					setSearchResultCount(r.length);
 					props.setShouldRenderUserPlugins(false);
