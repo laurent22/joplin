@@ -446,7 +446,7 @@ function shimInit(options = null) {
 
 	shim.fetch = async function(url, options = {}) {
 		try { // Check if the url is valid
-			const validateUrl = new URL(url);
+			new URL(url);
 		} catch (error) { // If the url is not valid, a TypeError will be thrown
 			throw new Error(`Not a valid URL: ${url}`);
 		}
