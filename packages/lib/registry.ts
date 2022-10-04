@@ -124,7 +124,7 @@ class Registry {
 						return;
 					}
 
-					if (syncTargetId != SyncTargetRegistry.nameToId('filesystem') && doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
+					if (syncTargetId !== SyncTargetRegistry.nameToId('filesystem') && doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');
 						promiseResolve();
 						return;
