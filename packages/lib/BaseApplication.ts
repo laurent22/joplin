@@ -34,6 +34,7 @@ import SyncTargetRegistry from './SyncTargetRegistry';
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
+const SyncTargetSwissDisk = require('./SyncTargetSwissDisk.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
@@ -764,6 +765,7 @@ export default class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);
 		SyncTargetRegistry.addClass(SyncTargetWebDAV);
+		SyncTargetRegistry.addClass(SyncTargetSwissDisk);
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 		SyncTargetRegistry.addClass(SyncTargetJoplinServer);

@@ -172,7 +172,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 - [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE).
 - Note history (revisions).
-- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
+- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV (Such as SwissDisk) and OneDrive.
 - Offline first, so the entire data is always available on the device even without an internet connection.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.

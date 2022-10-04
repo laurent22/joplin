@@ -712,6 +712,41 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
+			'sync.11.path': {
+				value: 'Joplin',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('swissdisk');
+				},
+				public: true,
+				label: () => _('Directory on SwissDisk for Joplin files'),
+				description: () => emptyDirWarning,
+				storage: SettingStorage.File,
+			},
+			'sync.11.username': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('swissdisk');
+				},
+				public: true,
+				label: () => _('SwissDisk username'),
+				storage: SettingStorage.File,
+			},
+			'sync.11.password': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('swissdisk');
+				},
+				public: true,
+				label: () => _('SwissDisk password'),
+				secure: true,
+			},
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -750,6 +785,7 @@ class Setting extends BaseModel {
 			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.10.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.11.context': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, isGlobal: true, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -1416,6 +1452,7 @@ class Setting extends BaseModel {
 						[
 							SyncTargetRegistry.nameToId('nextcloud'),
 							SyncTargetRegistry.nameToId('webdav'),
+							SyncTargetRegistry.nameToId('swissdisk'),
 							SyncTargetRegistry.nameToId('joplinServer'),
 							// Needs to be enabled for Joplin Cloud too because
 							// some companies filter all traffic and swap TLS
