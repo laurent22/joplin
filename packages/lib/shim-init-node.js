@@ -445,9 +445,9 @@ function shimInit(options = null) {
 	};
 
 	shim.fetch = async function(url, options = {}) {
-		try {
+		try { // Check if the url is valid
 			const validateUrl = new URL(url);
-		} catch (error) {
+		} catch (error) { // If the url is not valid, a TypeError will be thrown
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);

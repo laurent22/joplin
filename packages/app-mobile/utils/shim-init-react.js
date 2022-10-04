@@ -87,9 +87,9 @@ function shimInit() {
 		// "http://ocloud. de" so detect if the URL is valid beforehand and
 		// throw a catchable error. Bug:
 		// https://github.com/facebook/react-native/issues/7436
-		try {
+		try { // Check if the url is valid
 			const validateUrl = new URL(url);
-		} catch (error) {
+		} catch (error) { // If the url is not valid, a TypeError will be thrown
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 
