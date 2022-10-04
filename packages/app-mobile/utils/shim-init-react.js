@@ -4,7 +4,6 @@ const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('./fs-driver-rn').default;
-const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -88,8 +87,11 @@ function shimInit() {
 		// "http://ocloud. de" so detect if the URL is valid beforehand and
 		// throw a catchable error. Bug:
 		// https://github.com/facebook/react-native/issues/7436
-		const validatedUrl = urlValidator.isUri(url);
-		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
+		try {
+			const validateUrl = new URL(url);
+		} catch (error) {
+			throw new Error(`Not a valid URL: ${url}`);
+		}
 
 		return shim.fetchWithRetry(() => {
 			// If the request has a body and it's not a GET call, and it

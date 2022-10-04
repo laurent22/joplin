@@ -89,7 +89,6 @@
     "uglifycss": "0.0.29",
     "url-parse": "^1.4.7",
     "uuid": "^3.0.1",
-    "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3",
     "xml2js": "^0.4.19"
   },
