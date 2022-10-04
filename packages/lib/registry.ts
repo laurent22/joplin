@@ -116,16 +116,16 @@ class Registry {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
 
-					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
-						this.logger().info('Sync cancelled because we\'re on mobile data');
-						promiseResolve();
-						return;
-					}
-
 					const syncTargetId = Setting.value('sync.target');
 
 					if (!syncTargetId) {
 						this.logger().info('Sync cancelled - no sync target is selected.');
+						promiseResolve();
+						return;
+					}
+
+					if (syncTargetId != SyncTargetRegistry.nameToId('filesystem') && doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
+						this.logger().info('Sync cancelled because we\'re on mobile data');
 						promiseResolve();
 						return;
 					}
