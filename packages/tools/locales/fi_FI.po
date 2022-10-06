@@ -7,7 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-20 20:15+0300\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2022-10-06 19:20+0300\n"
 "Last-Translator: mrkaato0\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
@@ -2974,7 +2975,7 @@ msgstr "Julkaise muistiinpanot"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:178
 msgid "Publish notes to the internet"
-msgstr "Julkaise muistiinpanot Internetissä""PO-Revision-Date: 2022-08-20 20:15+0300\n"
+msgstr "Julkaise muistiinpanot Internetissä"
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
@@ -4566,9 +4567,6 @@ msgstr "Lähennä"
 msgid "Zoom Out"
 msgstr "Loitonna"
 
-#~ msgid "Save as SVG"
-#~ msgstr "Tallenna nimellä..."
-
 #~ msgid "Please click on \"%s\" to proceed"
 #~ msgstr "Napsauta \"%s\" jatkaaksesi"
 
@@ -4581,7 +4579,7 @@ msgstr "Loitonna"
 #~ msgid "Password OK"
 #~ msgstr "Salasana OK"
 
-#~ msgid """PO-Revision-Date: 2022-08-20 20:15+0300\n"
+#~ msgid ""
 #~ "Note: Only one master key is going to be used for encryption (the one "
 #~ "marked as \"active\"). Any of the keys might be used for decryption, "
 #~ "depending on how the notes or notebooks were originally encrypted."
