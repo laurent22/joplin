@@ -5,7 +5,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # Removed windows-2016 for now - discontinued by GitHub
         os: [macos-latest, ubuntu-latest, windows-2019]
     steps:
 

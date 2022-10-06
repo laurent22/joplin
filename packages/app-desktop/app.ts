@@ -278,8 +278,8 @@ class Application extends BaseApplication {
 		checkPreInstalledDefaultPlugins(defaultPluginsId, pluginSettings);
 
 		try {
-			const pluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
-			pluginSettings = await installDefaultPlugins(service, pluginsDir, defaultPluginsId, pluginSettings);
+			const defaultPluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
+			pluginSettings = await installDefaultPlugins(service, defaultPluginsDir, defaultPluginsId, pluginSettings);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
@@ -502,6 +502,7 @@ class Application extends BaseApplication {
 		if (Setting.value('env') === 'dev') {
 			void AlarmService.updateAllNotifications();
 		} else {
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			void reg.scheduleSync(1000).then(() => {
 				// Wait for the first sync before updating the notifications, since synchronisation
 				// might change the notifications.

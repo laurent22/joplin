@@ -489,6 +489,7 @@ async function initialize(dispatch: Function) {
 		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			let locale = NativeModules.I18nManager.localeIdentifier;
@@ -633,6 +634,7 @@ async function initialize(dispatch: Function) {
 	// start almost immediately to get the latest data.
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
+	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	void reg.scheduleSync(1000, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.

@@ -124,6 +124,7 @@ async function handleAutocompletionPromise(line) {
 	return line;
 }
 function handleAutocompletion(str, callback) {
+// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	handleAutocompletionPromise(str).then(function(res) {
 		callback(undefined, res);
 	});

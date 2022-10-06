@@ -41,6 +41,7 @@ const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
+import { ImagePickerResponse } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -541,13 +542,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async pickDocument() {
+	private async pickDocuments() {
 		try {
-			const result = await DocumentPicker.pick();
+			// the result is an array
+			const result = await DocumentPicker.pickMultiple();
 			return result;
 		} catch (error) {
 			if (DocumentPicker.isCancel(error)) {
-				console.info('pickDocument: user has cancelled');
+				console.info('pickDocuments: user has cancelled');
 				return null;
 			} else {
 				throw error;
@@ -632,16 +634,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		if (pickerResponse.error) {
-			reg.logger().warn('Got error from picker', pickerResponse.error);
-			return;
-		}
-
-		if (pickerResponse.didCancel) {
-			reg.logger().info('User cancelled picker');
-			return;
-		}
-
 		const localFilePath = Platform.select({
 			android: pickerResponse.uri,
 			ios: decodeURI(pickerResponse.uri),
@@ -688,9 +680,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 					await shim.fsDriver().copy(localFilePath, targetPath);
 
 					const stat = await shim.fsDriver().stat(targetPath);
-					if (stat.size >= 10000000) {
+					if (stat.size >= 200 * 1024 * 1024) {
 						await shim.fsDriver().remove(targetPath);
-						throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 					}
 				}
 			}
@@ -735,9 +727,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
-		await this.attachFile(response, 'image');
+	private async attachPhoto_onPress() {
+		// the selection Limit should be specfied. I think 200 is enough?
+		const response: ImagePickerResponse = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+
+		if (response.errorCode) {
+			reg.logger().warn('Got error from picker', response.errorCode);
+			return;
+		}
+
+		if (response.didCancel) {
+			reg.logger().info('User cancelled picker');
+			return;
+		}
+
+		for (const asset of response.assets) {
+			await this.attachFile(asset, 'image');
+		}
 	}
 
 	takePhoto_onPress() {
@@ -748,8 +754,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void this.attachFile(
 			{
 				uri: data.uri,
-				didCancel: false,
-				error: null,
 				type: 'image/jpg',
 			},
 			'image'
@@ -762,9 +766,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	async attachFile_onPress() {
-		const response = await this.pickDocument();
-		await this.attachFile(response, 'all');
+	private async attachFile_onPress() {
+		const response = await this.pickDocuments();
+		for (const asset of response) {
+			await this.attachFile(asset, 'all');
+		}
 	}
 
 	toggleIsTodo_onPress() {

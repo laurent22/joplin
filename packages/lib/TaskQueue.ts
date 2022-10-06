@@ -70,9 +70,11 @@ export default class TaskQueue {
 
 			task
 				.callback()
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then((result: any) => {
 					completeTask(task, result, null);
 				})
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.catch((error: Error) => {
 					if (!error) error = new Error('Unknown error');
 					completeTask(task, null, error);

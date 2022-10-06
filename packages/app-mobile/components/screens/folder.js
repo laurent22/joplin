@@ -50,6 +50,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 				lastSavedFolder: Object.assign({}, folder),
 			});
 		} else {
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			Folder.load(this.props.folderId).then(folder => {
 				this.setState({
 					folder: folder,
