@@ -1,5 +1,17 @@
 # Joplin Android app changelog
 
+## [android-v2.9.3](https://github.com/laurent22/joplin/releases/tag/android-v2.9.3) (Pre-release) - 2022-10-07T11:12:56Z
+
+- Improved: Convert empty bolded regions to bold-italic regions in beta editor (#6807) (#6808 by Henry Heino)
+- Improved: Increase the attachment size limit to 200MB (#6848 by Self Not Found)
+- Improved: Show client ID in log (#6897 by Self Not Found)
+- Improved: Supports attaching multiple files to a note at once (#6831 by Self Not Found)
+- Improved: Update Mermaid 8.13.9 to 9.1.7 (#6849 by Helmut K. C. Tessarek)
+- Fixed: Double/triple-tap selection doesn't show context menu  (#6803) (#6802 by Henry Heino)
+- Fixed: Fix multiple webview instances (#6841 by Henry Heino)
+- Fixed: Fix resources sync when proxy is set (#6817) (#6688 by Self Not Found)
+- Fixed: Fixed crash when trying to move note to notebook (#6898)
+
 ## [android-v2.9.2](https://github.com/laurent22/joplin/releases/tag/android-v2.9.2) (Pre-release) - 2022-09-01T11:14:58Z
 
 - New: Add Markdown toolbar (#6753 by Henry Heino)

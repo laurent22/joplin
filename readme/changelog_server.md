@@ -1,5 +1,21 @@
 # Joplin Server Changelog
 
+## [server-v2.9.1](https://github.com/laurent22/joplin/releases/tag/server-v2.9.1) - 2022-10-07T10:46:43Z
+
+- New: Add support for sidebar in user pages (053dbab)
+- Improved: Automatically delete expired sessions (d5dfecc)
+- Improved: Cannot sort user deletions by email (8e18024)
+- Improved: Do not make checkboxes in published notes clickable (cb637e8)
+- Improved: Improve admin email UI (e3c9bcb)
+- Improved: Process user deletions once an hour (f99b8df)
+- Improved: Use apt to install tini to enable multi-platform support (#6097 by Erik Thomsen)
+- Fixed: Could not manually start task (#6491)
+- Fixed: Fixed Unsupported File Type error when sharing certain notes (#6531)
+- Fixed: Fixed removal of user deletion tasks (8f8cc12)
+- Fixed: Fixed sidebar menu selection (422a5bf)
+- Fixed: Fixed user deletion schedule (bfe5ee8)
+- Fixed: Published note must be scrollable when it contains a large table (#6370)
+
 ## [server-v2.7.4](https://github.com/laurent22/joplin/releases/tag/server-v2.7.4) - 2022-02-02T19:23:34Z
 
 - New: Add task to automate deletion of disabled accounts (1afcb27)
