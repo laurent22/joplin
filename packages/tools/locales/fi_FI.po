@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2022-10-06 19:20+0300\n"
 "Last-Translator: mrkaato0\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -29,7 +31,7 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Tallennustila: sallia tiedostojen liittäminen muistiinpanoihin ja ottaa "
+"- Tallennustila: sallia tiedostojen liittämisen muistiinpanoihin ja ottaa "
 "tiedostojärjestelmän synkronointi käyttöön."
 
 #: packages/lib/services/KeymapService.ts:314
@@ -296,9 +298,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "Näyttää myös merkitsemättömät ja piilotetut konfigurointimuuttujat."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Peruuta muistiinpanon julkaisu"
+msgstr "Julkaise myös linkitetyt muistiinpanot"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -345,7 +346,7 @@ msgstr "Liitä valokuva"
 
 #: packages/app-mobile/components/screens/Note.tsx:892
 msgid "Attach..."
-msgstr "Liittää..."
+msgstr "Liitä..."
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -866,18 +867,16 @@ msgstr ""
 "uudelleen, kun olet muodostanut yhteyden Internetiin."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Luotu"
+msgstr "Luo"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Luo muistikirja"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Luo uuden muistiinpanon."
+msgstr "Luo uusi profiili..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1325,7 +1324,7 @@ msgstr "Muokkaa muistikirjaa"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Muokkaa profiilin asetuksia..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1355,9 +1354,8 @@ msgstr "Editorin monospace fonttiperhe"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Editoija"
+msgstr "Editori: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1671,9 +1669,8 @@ msgid "File system"
 msgstr "Tiedostojärjestelmä"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "Uudet tunnisteet:"
+msgstr "Suodata tunnisteet"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -2040,7 +2037,7 @@ msgstr "Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
 msgid "Invalid password"
-msgstr "Väärä salasana"
+msgstr "Virheellinen salasana"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2287,7 +2284,7 @@ msgstr "Pääsalasanan hallinta"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
 msgid "Manage master password..."
-msgstr "Hallitse pääsalasanaa..."
+msgstr "Pääsalasanan hallinta..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2563,7 +2560,7 @@ msgstr "Huomautus on tallennettu."
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/lib/models/Setting.ts:2303
 msgid "Note History"
-msgstr "Muistiinpano historia"
+msgstr "Muistiinpanohistoria"
 
 #: packages/app-cli/app/command-done.js:21
 msgid "Note is not a to-do: \"%s\""
@@ -2793,6 +2790,7 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"Jatka napsauttamalla \"%s\" tai aseta salasana oheiseen \"%s\" luetteloon."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2952,9 +2950,8 @@ msgid "Profile"
 msgstr "Profiili"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Profiili"
+msgstr "Profiilin nimi:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3181,9 +3178,8 @@ msgstr "Tallenna hälytys"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "Tallenna nimellä..."
+msgstr "Tallenna nimellä %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3553,9 +3549,8 @@ msgid "Switch between note and to-do type"
 msgstr "Vaihda muistiinpanon ja tehtävätyypin välillä"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Vie profiili"
+msgstr "Vaihda profiili"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3564,9 +3559,8 @@ msgstr "Vaihda muistiinpanotyyppiin"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Vaihda muistiinpanotyyppiin"
+msgstr "Vaihda profiiliin %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3662,7 +3656,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "tunniste1, tunniste2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3703,7 +3697,7 @@ msgstr ""
 #: packages/app-desktop/app.ts:332
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+msgstr "Sovellus ei sulkeutunut kunnolla. Haluatko aloittaa vikasietotilassa?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -4545,9 +4539,8 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Tietosi salataan ja synkronoidaan uudelleen."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr "Pääsalasanaa tarvitaan joidenkin tietojen salauksen purkamiseen."
+msgstr "Salasanaasi tarvitaan joidenkin tietojen salauksen purkamiseen."
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
@@ -4573,10 +4566,6 @@ msgstr "Lähennä"
 #: packages/app-desktop/gui/MenuBar.tsx:730
 msgid "Zoom Out"
 msgstr "Loitonna"
-
-#, fuzzy
-#~ msgid "Save as SVG"
-#~ msgstr "Tallenna nimellä..."
 
 #~ msgid "Please click on \"%s\" to proceed"
 #~ msgstr "Napsauta \"%s\" jatkaaksesi"
