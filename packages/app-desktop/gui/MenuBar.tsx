@@ -21,6 +21,7 @@ import checkForUpdates from '../checkForUpdates';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -485,7 +486,7 @@ function useMenu(props: Props) {
 			}
 
 			function _showAbout() {
-				const v = versionInfo(packageInfo);
+				const v = versionInfo(packageInfo, PluginService.instance().plugins);
 
 				const copyToClipboard = bridge().showMessageBox(v.message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,

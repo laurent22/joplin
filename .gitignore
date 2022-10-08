@@ -1998,6 +1998,9 @@ packages/lib/uuid.js.map
 packages/lib/versionInfo.d.ts
 packages/lib/versionInfo.js
 packages/lib/versionInfo.js.map
+packages/lib/versionInfo.test.d.ts
+packages/lib/versionInfo.test.js
+packages/lib/versionInfo.test.js.map
 packages/pdf-viewer/FullViewer.d.ts
 packages/pdf-viewer/FullViewer.js
 packages/pdf-viewer/FullViewer.js.map
@@ -2305,3 +2308,4 @@ packages/tools/website/utils/types.js.map
 packages/app-mobile/components/get-responsive-value.test.js
 packages/app-mobile/components/get-responsive-value.test.js
 packages/app-mobile/components/get-responsive-value.test.js
+packages/lib/versionInfo.test.js
