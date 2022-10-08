@@ -1,5 +1,10 @@
 import versionInfo from './versionInfo';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
+import { reg } from './registry';
+
+const db = {
+	version: jest.fn().mockReturnValue(1),
+};
 
 const packageInfo = {
 	'name': 'Joplin',
@@ -51,6 +56,10 @@ const Plugin2 = new Plugin(
 const testPlugins = { Plugin1, Plugin2 };
 
 describe('versionInfo', function() {
+	beforeAll(() => {
+		reg.setDb(db);
+	});
+
 	describe('when no plugin is installed', ()=>{
 		const expected = expect.stringContaining('No Plugin Installed');
 		it('should contain "No plugin installed"', ()=>{
