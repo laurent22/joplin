@@ -677,11 +677,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));
 					return;
 				} else {
-					await shim.fsDriver().copy(localFilePath, targetPath);
+					await RNFS.copyFile(localFilePath, targetPath);
 
-					const stat = await shim.fsDriver().stat(targetPath);
+					const stat = await RNFS.stat(targetPath);
 					if (stat.size >= 200 * 1024 * 1024) {
-						await shim.fsDriver().remove(targetPath);
+						await RNFS.unlink(targetPath);
 						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 					}
 				}
