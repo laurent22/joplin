@@ -117,15 +117,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 			let filePath;
 			if (Platform.OS === 'android' && Platform.Version > 28) {
-				try {
-					const doc = await openDocumentTree(true);
-					if (doc?.uri) {
-						filePath = `${doc?.uri}/syncReport-${new Date().getTime()}.txt`;
-					} else {
-						throw new Error('User cancelled operation');
-					}
-				} catch (e) {
-					reg.logger().info('Didn\'t pick sync dir: ', e);
+				const doc = await openDocumentTree(true);
+				if (doc?.uri) {
+					filePath = `${doc?.uri}/syncReport-${new Date().getTime()}.txt`;
+				} else {
+					alert('User cancelled operation');
+					this.setState({ creatingReport: false });
+					return;
 				}
 			} else {
 				filePath = `${RNFS.ExternalDirectoryPath}/syncReport-${new Date().getTime()}.txt`;
@@ -146,17 +144,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.exportProfileButtonPress_ = async () => {
 			let p;
 			if (Platform.OS === 'android' && Platform.Version > 28) {
-				try {
-					const doc = await openDocumentTree(true);
-					if (doc?.uri) {
-						this.setState({ profileExportPath: doc.uri }, () => {
-							this.exportProfileButtonPress2_();
-						});
-					} else {
-						throw new Error('User cancelled operation');
-					}
-				} catch (e) {
-					reg.logger().info('Didn\'t pick sync dir: ', e);
+				const doc = await openDocumentTree(true);
+				if (doc?.uri) {
+					this.setState({ profileExportPath: doc.uri }, () => {
+						this.exportProfileButtonPress2_();
+					});
 				}
 				return;
 			} else {
