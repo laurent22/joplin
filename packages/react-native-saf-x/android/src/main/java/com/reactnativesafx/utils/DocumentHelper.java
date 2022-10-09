@@ -396,6 +396,16 @@ public class DocumentHelper {
       throw new IOException(
           "File creation failed without any specific error for '" + fileName + "'");
     }
+    // some times setting mimetypes causes name changes, this is to prevent that.
+    if (!createdFile.renameTo(fileName)) {
+      createdFile.delete();
+      throw new IOException(
+          "The created file name was not as expected: '"
+              + uriString
+              + "'"
+              + "but got: "
+              + createdFile.getUri());
+    }
     return createdFile;
   }
 
