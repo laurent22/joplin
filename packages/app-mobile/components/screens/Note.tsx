@@ -46,6 +46,7 @@ import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
+import { openDocument } from '@joplin/react-native-saf-x';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -543,11 +544,25 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private async pickDocuments() {
 		try {
-			// the result is an array
-			const result = await DocumentPicker.pickMultiple();
+			let result;
+			if (Platform.OS === 'android' && Platform.Version > 28) {
+				result = await openDocument({ multiple: true });
+				if (!result) {
+					// to catch the error down below using the 'cancel' keyword
+					throw new Error('User canceled document picker');
+				}
+				result = result.map(r => {
+					(r.type as string) = r.mime;
+					((r as any).fileCopyUri as string) = r.uri;
+					return r;
+				});
+			} else {
+				// the result is an array
+				result = await DocumentPicker.pickMultiple();
+			}
 			return result;
 		} catch (error) {
-			if (DocumentPicker.isCancel(error)) {
+			if (DocumentPicker.isCancel(error) || error.message.includes('cancel')) {
 				console.info('pickDocuments: user has cancelled');
 				return null;
 			} else {
@@ -677,8 +692,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					return;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
-
 					const stat = await shim.fsDriver().stat(targetPath);
+
 					if (stat.size >= 200 * 1024 * 1024) {
 						await shim.fsDriver().remove(targetPath);
 						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
