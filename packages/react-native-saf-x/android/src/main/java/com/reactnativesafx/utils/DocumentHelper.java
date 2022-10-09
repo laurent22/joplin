@@ -389,22 +389,37 @@ public class DocumentHelper {
       throw new IOException(
           "Invalid file name: Could not extract filename from uri string provided");
     }
+
+    // maybe edited maybe not
+    String correctFileName = fileName;
+
+    // only files with mime type are special, so we treat it special
+    if (mimeType != null && !mimeType.equals("")) {
+      int indexOfDot = fileName.indexOf('.');
+      // len - 1 because there should be an extension that has at least 1 letter
+      if (indexOfDot != -1 && indexOfDot < fileName.length() - 1) {
+        correctFileName = fileName.substring(0, indexOfDot);
+      }
+    }
+
     DocumentFile createdFile =
         parentDirOfFile.createFile(
-            mimeType != null && !mimeType.equals("") ? mimeType : "*/*", fileName);
+            mimeType != null && !mimeType.equals("") ? mimeType : "*/*", correctFileName);
     if (createdFile == null) {
       throw new IOException(
           "File creation failed without any specific error for '" + fileName + "'");
     }
     // some times setting mimetypes causes name changes, this is to prevent that.
-    if (!createdFile.renameTo(fileName)) {
-      createdFile.delete();
-      throw new IOException(
-          "The created file name was not as expected: '"
-              + uriString
-              + "'"
-              + "but got: "
-              + createdFile.getUri());
+    if (!createdFile.getName().equals(fileName)) {
+      if (!createdFile.renameTo(fileName) || !createdFile.getName().equals(fileName)) {
+        createdFile.delete();
+        throw new IOException(
+            "The created file name was not as expected: '"
+                + uriString
+                + "'"
+                + "but got: "
+                + createdFile.getUri());
+      }
     }
     return createdFile;
   }
