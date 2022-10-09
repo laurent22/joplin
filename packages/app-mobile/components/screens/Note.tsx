@@ -13,7 +13,6 @@ const React = require('react');
 const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
-const RNFS = require('react-native-fs');
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -614,15 +613,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 			reg.logger().info('Resized image ', resizedImagePath);
 			reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
 
-			await RNFS.copyFile(resizedImagePath, targetPath);
+			await shim.fsDriver().copy(resizedImagePath, targetPath);
 
 			try {
-				await RNFS.unlink(resizedImagePath);
+				await shim.fsDriver().unlink(resizedImagePath);
 			} catch (error) {
 				reg.logger().warn('Error when unlinking cached file: ', error);
 			}
 		} else {
-			await RNFS.copyFile(localFilePath, targetPath);
+			await shim.fsDriver().copy(localFilePath, targetPath);
 		}
 
 		return true;

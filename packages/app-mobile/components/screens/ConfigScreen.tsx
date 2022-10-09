@@ -114,11 +114,25 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const logItemCsv = service.csvCreate(logItemRows);
 
 			const itemListCsv = await service.basicItemList({ format: 'csv' });
-			const filePath = `${RNFS.ExternalDirectoryPath}/syncReport-${new Date().getTime()}.txt`;
+
+			let filePath;
+			if (Platform.OS === 'android' && Platform.Version > 28) {
+				try {
+					const doc = await openDocumentTree(true);
+					if (doc?.uri) {
+						filePath = `${doc?.uri}/syncReport-${new Date().getTime()}.txt`;
+					} else {
+						throw new Error('User cancelled operation');
+					}
+				} catch (e) {
+					reg.logger().info('Didn\'t pick sync dir: ', e);
+				}
+			} else {
+				filePath = `${RNFS.ExternalDirectoryPath}/syncReport-${new Date().getTime()}.txt`;
+			}
 
 			const finalText = [logItemCsv, itemListCsv].join('\n================================================================================\n');
-
-			await RNFS.writeFile(filePath, finalText);
+			await shim.fsDriver().writeFile(filePath, finalText, 'utf8');
 			alert(`Debug report exported to ${filePath}`);
 			this.setState({ creatingReport: false });
 		};
@@ -130,7 +144,24 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.exportProfileButtonPress_ = async () => {
-			const p = this.state.profileExportPath ? this.state.profileExportPath : `${RNFS.ExternalStorageDirectoryPath}/JoplinProfileExport`;
+			let p;
+			if (Platform.OS === 'android' && Platform.Version > 28) {
+				try {
+					const doc = await openDocumentTree(true);
+					if (doc?.uri) {
+						this.setState({ profileExportPath: doc.uri }, () => {
+							this.exportProfileButtonPress2_();
+						});
+					} else {
+						throw new Error('User cancelled operation');
+					}
+				} catch (e) {
+					reg.logger().info('Didn\'t pick sync dir: ', e);
+				}
+				return;
+			} else {
+				p = this.state.profileExportPath ? this.state.profileExportPath : `${RNFS.ExternalStorageDirectoryPath}/JoplinProfileExport`;
+			}
 			this.setState({
 				profileExportStatus: 'prompt',
 				profileExportPath: p,
