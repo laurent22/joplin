@@ -142,7 +142,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			}
 			const p = this.state.profileExportPath ? this.state.profileExportPath : `${externalDir}/JoplinProfileExport`;
 
-			if (Platform.OS === 'android' && Platform.Version > 28) {
+			if (shim.fsDriver().isUsingAndroidSAF()) {
 				this.setState({ profileExportPath: p }, () => {
 					this.exportProfileButtonPress2_();
 				});
@@ -518,7 +518,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			if (md.key === 'sync.2.path' && Platform.OS === 'android' && Platform.Version > 28) {
+			if (md.key === 'sync.2.path' && shim.fsDriver().isUsingAndroidSAF()) {
 				return (
 					<TouchableNativeFeedback key={key} onPress={this.selectDirectoryButtonPress} style={this.styles().settingContainer}>
 						<View style={this.styles().settingContainer}>

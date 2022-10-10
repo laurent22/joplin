@@ -36,7 +36,6 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
@@ -542,18 +541,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async pickDocuments() {
-		try {
-			// the result is an array
-			const result = await DocumentPicker.pickMultiple();
-			return result;
-		} catch (error) {
-			if (DocumentPicker.isCancel(error)) {
-				console.info('pickDocuments: user has cancelled');
-				return null;
-			} else {
-				throw error;
-			}
+		const result = await shim.fsDriver().pickDocument();
+		if (!result) {
+			console.info('pickDocuments: user has cancelled');
 		}
+		return result;
 	}
 
 	async imageDimensions(uri: string) {
