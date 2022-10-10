@@ -162,8 +162,4 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	public async getExternalDirectoryPath(): Promise<string | undefined> {
-		throw new Error('Not implemented');
-	}
-
 }
