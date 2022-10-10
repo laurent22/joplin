@@ -1,7 +1,8 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 const RNFetchBlob = require('rn-fetch-blob').default;
 const RNFS = require('react-native-fs');
-import RNSAF, { Encoding, DocumentFileDetail } from '@joplin/react-native-saf-x';
+import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
+import { Platform } from 'react-native';
 
 const ANDROID_URI_PREFIX = 'content://';
 
@@ -248,5 +249,18 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async md5File(path: string): Promise<string> {
 		throw new Error(`Not implemented: md5File(): ${path}`);
+	}
+
+	public async getExternalDirectoryPath(): Promise<string | undefined> {
+		let directory;
+		if (Platform.OS === 'android' && Platform.Version > 28) {
+			const doc = await openDocumentTree(true);
+			if (doc?.uri) {
+				directory = doc?.uri;
+			}
+		} else {
+			directory = RNFS.ExternalDirectoryPath;
+		}
+		return directory;
 	}
 }

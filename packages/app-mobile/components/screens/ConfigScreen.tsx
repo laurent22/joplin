@@ -22,7 +22,6 @@ const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
-const RNFS = require('react-native-fs');
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions(): any {
@@ -115,19 +114,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 			const itemListCsv = await service.basicItemList({ format: 'csv' });
 
-			let filePath;
-			if (Platform.OS === 'android' && Platform.Version > 28) {
-				const doc = await openDocumentTree(true);
-				if (doc?.uri) {
-					filePath = `${doc?.uri}/syncReport-${new Date().getTime()}.txt`;
-				} else {
-					alert('User cancelled operation');
-					this.setState({ creatingReport: false });
-					return;
-				}
-			} else {
-				filePath = `${RNFS.ExternalDirectoryPath}/syncReport-${new Date().getTime()}.txt`;
+			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
+			if (!externalDir) {
+				alert('User cancelled operation');
+				this.setState({ creatingReport: false });
+				return;
 			}
+
+			const filePath = `${externalDir}/syncReport-${new Date().getTime()}.txt`;
 
 			const finalText = [logItemCsv, itemListCsv].join('\n================================================================================\n');
 			await shim.fsDriver().writeFile(filePath, finalText, 'utf8');
@@ -142,18 +136,19 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.exportProfileButtonPress_ = async () => {
-			let p;
-			if (Platform.OS === 'android' && Platform.Version > 28) {
-				const doc = await openDocumentTree(true);
-				if (doc?.uri) {
-					this.setState({ profileExportPath: doc.uri }, () => {
-						this.exportProfileButtonPress2_();
-					});
-				}
+			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
+			if (!externalDir) {
 				return;
-			} else {
-				p = this.state.profileExportPath ? this.state.profileExportPath : `${RNFS.ExternalStorageDirectoryPath}/JoplinProfileExport`;
 			}
+			const p = this.state.profileExportPath ? this.state.profileExportPath : `${externalDir}/JoplinProfileExport`;
+
+			if (Platform.OS === 'android' && Platform.Version > 28) {
+				this.setState({ profileExportPath: p }, () => {
+					this.exportProfileButtonPress2_();
+				});
+				return;
+			}
+
 			this.setState({
 				profileExportStatus: 'prompt',
 				profileExportPath: p,
