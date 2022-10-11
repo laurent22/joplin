@@ -1,5 +1,5 @@
 const React = require('react');
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
 const { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Alert, Image } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -11,6 +11,8 @@ const { themeStyle } = require('./global-style.js');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
+import Setting from '@joplin/lib/models/Setting';
+import { reg } from '@joplin/lib/registry';
 
 Icon.loadFont();
 
@@ -39,6 +41,8 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 let syncIconAnimation: any;
 
 const SideMenuContentComponent = (props: Props) => {
+	const alwaysShowFolderIcons = useMemo(() => Folder.shouldShowFolderIcons(props.folders), [props.folders]);
+
 	const styles_ = useMemo(() => {
 		const theme = themeStyle(props.themeId);
 
@@ -215,13 +219,72 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
-	const synchronize_press = async () => {
-		const actionDone = await shared.synchronize_press(this);
+	const performSync = useCallback(async () => {
+		const action = props.syncStarted ? 'cancel' : 'start';
+
+		if (!Setting.value('sync.target')) {
+			props.dispatch({
+				type: 'SIDE_MENU_CLOSE',
+			});
+
+			props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				sectionName: 'sync',
+			});
+
+			return 'init';
+		}
+
+		if (!(await reg.syncTarget().isAuthenticated())) {
+			if (reg.syncTarget().authRouteName()) {
+				props.dispatch({
+					type: 'NAV_GO',
+					routeName: reg.syncTarget().authRouteName(),
+				});
+				return 'auth';
+			}
+
+			reg.logger().error('Not authenticated with sync target - please check your credentials.');
+			return 'error';
+		}
+
+		let sync = null;
+		try {
+			sync = await reg.syncTarget().synchronizer();
+		} catch (error) {
+			reg.logger().error('Could not initialise synchroniser: ');
+			reg.logger().error(error);
+			error.message = `Could not initialise synchroniser: ${error.message}`;
+			props.dispatch({
+				type: 'SYNC_REPORT_UPDATE',
+				report: { errors: [error] },
+			});
+			return 'error';
+		}
+
+		if (action === 'cancel') {
+			void sync.cancel();
+			return 'cancel';
+		} else {
+			void reg.scheduleSync(0);
+			return 'sync';
+		}
+	}, [props.syncStarted, props.dispatch]);
+
+	const synchronize_press = useCallback(async () => {
+		const actionDone = await performSync();
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-	};
+	}, [performSync, props.dispatch]);
 
 	const renderFolderIcon = (theme: any, folderIcon: FolderIcon) => {
-		if (!folderIcon) return <Icon name="folder-outline" style={styles_.emptyFolderIcon} />;
+		if (!folderIcon) {
+			if (alwaysShowFolderIcons) {
+				return <Icon name="folder-outline" style={styles_.emptyFolderIcon} />;
+			} else {
+				return null;
+			}
+		}
 
 		if (folderIcon.type === 1) { // FolderIconType.Emoji
 			return <Text style={{ fontSize: theme.fontSize, marginRight: 4 }}>{folderIcon.emoji}</Text>;
@@ -380,8 +443,6 @@ const SideMenuContentComponent = (props: Props) => {
 	let items = [];
 
 	const theme = themeStyle(props.themeId);
-
-	// const showFolderIcons = Folder.shouldShowFolderIcons(props.folders);
 
 	// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 	// using padding. So instead creating blank elements for padding bottom and top.

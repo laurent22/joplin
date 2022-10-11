@@ -1,5 +1,4 @@
 const Folder = require('../../models/Folder').default;
-const Setting = require('../../models/Setting').default;
 const BaseModel = require('../../BaseModel').default;
 
 const shared = {};
@@ -75,61 +74,6 @@ shared.renderTags = function(props, renderItem) {
 		items: tagItems,
 		order: order,
 	};
-};
-
-shared.synchronize_press = async function(comp) {
-	const { reg } = require('../../registry.js');
-
-	const action = comp.props.syncStarted ? 'cancel' : 'start';
-
-	if (!Setting.value('sync.target')) {
-		comp.props.dispatch({
-			type: 'SIDE_MENU_CLOSE',
-		});
-
-		comp.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Config',
-			sectionName: 'sync',
-		});
-
-		return 'init';
-	}
-
-	if (!(await reg.syncTarget().isAuthenticated())) {
-		if (reg.syncTarget().authRouteName()) {
-			comp.props.dispatch({
-				type: 'NAV_GO',
-				routeName: reg.syncTarget().authRouteName(),
-			});
-			return 'auth';
-		}
-
-		reg.logger().error('Not authenticated with sync target - please check your credentials.');
-		return 'error';
-	}
-
-	let sync = null;
-	try {
-		sync = await reg.syncTarget().synchronizer();
-	} catch (error) {
-		reg.logger().error('Could not initialise synchroniser: ');
-		reg.logger().error(error);
-		error.message = `Could not initialise synchroniser: ${error.message}`;
-		comp.props.dispatch({
-			type: 'SYNC_REPORT_UPDATE',
-			report: { errors: [error] },
-		});
-		return 'error';
-	}
-
-	if (action === 'cancel') {
-		sync.cancel();
-		return 'cancel';
-	} else {
-		reg.scheduleSync(0);
-		return 'sync';
-	}
 };
 
 module.exports = shared;

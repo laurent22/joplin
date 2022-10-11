@@ -152,7 +152,7 @@ const SidebarComponent = (props: Props) => {
 	// visual alignment is correct for all folders, otherwise the folder tree
 	// looks messy.
 	const showFolderIcons = useMemo(() => {
-		return !!props.folders.find((f: FolderEntity) => !!f.icon);
+		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
 
 	const getSelectedItem = useCallback(() => {
