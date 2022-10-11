@@ -21,7 +21,7 @@ import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,
-	highlightSelectionMatches, search, findNext, findPrevious, replaceAll, replaceNext,
+	/* highlightSelectionMatches, */ search, findNext, findPrevious, replaceAll, replaceNext,
 } from '@codemirror/search';
 
 import {
@@ -291,7 +291,7 @@ export function initCodeMirror(
 				}),
 				drawSelection(),
 				highlightSpecialChars(),
-				highlightSelectionMatches(),
+				// highlightSelectionMatches(),
 				indentOnInput(),
 
 				// By default, indent with four spaces
