@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.9.5](https://github.com/laurent22/joplin/releases/tag/android-v2.9.5) (Pre-release) - 2022-10-11T13:52:00Z
+
+- Improved: Disable multi-highlighting to fix context menu (9b348fd)
+- Improved: Display icon for all notebooks if at least one notebook has an icon (ec97dd8)
+
 ## [android-v2.9.4](https://github.com/laurent22/joplin/releases/tag/android-v2.9.4) (Pre-release) - 2022-10-11T13:27:49Z
 
 - Improved: Disable multi-highlighting to fix context menu (9b348fd)
