@@ -461,7 +461,22 @@ public class DocumentHelper {
             "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
       }
       return targetFile;
+    } else if (!UriHelper.isContentDocumentTreeUri(unknownUriString)) {
+      // It's a document picked by user
+      DocumentFile doc = DocumentFile.fromSingleUri(context, Uri.parse(unknownUriString));
+      if (doc != null) {
+        if (!doc.canRead()) {
+          throw new SecurityException(
+              "You don't have read permission to access uri: " + unknownUriString);
+        }
+        if (doc.isFile() && doc.exists()) {
+          return doc;
+        }
+      }
+      throw new FileNotFoundException(
+          "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
     }
+
     String uriString = UriHelper.normalize(unknownUriString);
     String baseUri = "";
     String appendUri;
@@ -484,22 +499,6 @@ public class DocumentHelper {
     if (baseUri.equals("")) {
       // It's possible that the file access is temporary
       baseUri = uriString;
-    }
-
-    if (baseUri.matches("^content://[\\w.]+/document/.*")) {
-      // It's a document picked by user
-      DocumentFile doc = DocumentFile.fromSingleUri(context, Uri.parse(uriString));
-      if (doc != null) {
-        if (!doc.canRead() || !doc.canWrite()) {
-          throw new SecurityException(
-              "You don't have read/write permission to access uri: " + uriString);
-        }
-        if (doc.isFile() && doc.exists()) {
-          return doc;
-        }
-      }
-      throw new FileNotFoundException(
-          "Cannot find the given document. File does not exist at '" + uriString + "'");
     }
 
     Uri uri = Uri.parse(baseUri);
