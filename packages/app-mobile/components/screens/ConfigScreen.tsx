@@ -115,8 +115,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const itemListCsv = await service.basicItemList({ format: 'csv' });
 
 			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
+
 			if (!externalDir) {
-				alert('User cancelled operation');
 				this.setState({ creatingReport: false });
 				return;
 			}
@@ -141,13 +141,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				return;
 			}
 			const p = this.state.profileExportPath ? this.state.profileExportPath : `${externalDir}/JoplinProfileExport`;
-
-			if (shim.fsDriver().isUsingAndroidSAF()) {
-				this.setState({ profileExportPath: p }, () => {
-					this.exportProfileButtonPress2_();
-				});
-				return;
-			}
 
 			this.setState({
 				profileExportStatus: 'prompt',
