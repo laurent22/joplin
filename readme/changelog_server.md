@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.9.4](https://github.com/laurent22/joplin/releases/tag/server-v2.9.4) - 2022-10-11T10:07:48Z
+## [server-v2.9.5](https://github.com/laurent22/joplin/releases/tag/server-v2.9.5) - 2022-10-11T10:44:01Z
 
 - New: Add support for sidebar in user pages (053dbab)
 - Improved: Automatically delete expired sessions (d5dfecc)

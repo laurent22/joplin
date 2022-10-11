@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.9.4",
+  "version": "2.9.5",
   "private": true,
   "scripts": {
     "start-dev": "yarn run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
