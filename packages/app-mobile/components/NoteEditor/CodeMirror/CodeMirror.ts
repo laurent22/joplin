@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 // This contains the CodeMirror instance, which needs to be built into a bundle
-// using `npm run buildInjectedJs`. This bundle is then loaded from
+// using `yarn run buildInjectedJs`. This bundle is then loaded from
 // NoteEditor.tsx into the webview.
 //
 // In general, since this file is harder to debug due to the intermediate built
