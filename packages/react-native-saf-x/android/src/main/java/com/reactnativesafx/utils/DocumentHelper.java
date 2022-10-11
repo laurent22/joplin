@@ -77,7 +77,7 @@ public class DocumentHelper {
                     DocumentFile doc = goToDocument(uri.toString(), false);
                     resolveWithDocument(doc, uri.toString(), promise);
                   } catch (Exception e) {
-                    promise.resolve(null);
+                    promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
                   }
                 } else {
                   promise.resolve(null);
@@ -103,7 +103,7 @@ public class DocumentHelper {
       }
 
     } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
+      promise.reject("ERROR", e.getLocalizedMessage());
     }
   }
 
@@ -172,7 +172,7 @@ public class DocumentHelper {
                 }
                 promise.resolve(resolvedDocs);
               } catch (Exception e) {
-                promise.reject("EUNSPECIFIED", e.getMessage());
+                promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
               } finally {
                 context.removeActivityEventListener(activityEventListener);
                 activityEventListener = null;
@@ -194,7 +194,7 @@ public class DocumentHelper {
       }
 
     } catch (Exception e) {
-      promise.reject("EUNSPECIFIED", e.getMessage());
+      promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
     }
   }
 
@@ -269,7 +269,7 @@ public class DocumentHelper {
         promise.reject("ERROR", "Cannot get current activity, so cannot launch document picker");
       }
     } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
+      promise.reject("ERROR", e.getLocalizedMessage());
     }
   }
 
