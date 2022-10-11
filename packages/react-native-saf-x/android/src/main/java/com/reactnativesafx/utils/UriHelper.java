@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class UriHelper {
   public static final String CONTENT_URI_PREFIX = "content://";
   public static final Pattern DOCUMENT_TREE_PREFIX =
-      Pattern.compile("^content://.*?/tree/.+?:.*", Pattern.CASE_INSENSITIVE);
+      Pattern.compile("^content://.*?/tree/.+?", Pattern.CASE_INSENSITIVE);
 
   public static String getLastSegment(String uriString) {
 
