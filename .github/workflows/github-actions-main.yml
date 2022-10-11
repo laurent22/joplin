@@ -75,6 +75,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
+          SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
