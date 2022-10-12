@@ -1,5 +1,6 @@
 ---
 tweet: Joplin Cloud is now operated by the Joplin company! More info on the announcement post.
+forum_url: https://discourse.joplinapp.org/t/27773
 ---
 
 # Joplin Cloud is now part of the Joplin company
