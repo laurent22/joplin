@@ -38,6 +38,8 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 	outputRange: ['0deg', '360deg'],
 });
 
+const folderIconRightMargin = 10;
+
 let syncIconAnimation: any;
 
 const SideMenuContentComponent = (props: Props) => {
@@ -91,7 +93,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = Object.assign({}, styles.sideButton, { backgroundColor: theme.selectedColor });
 		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: 10 };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
@@ -287,9 +289,9 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		if (folderIcon.type === 1) { // FolderIconType.Emoji
-			return <Text style={{ fontSize: theme.fontSize, marginRight: 4 }}>{folderIcon.emoji}</Text>;
+			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin }}>{folderIcon.emoji}</Text>;
 		} else if (folderIcon.type === 2) { // FolderIconType.DataUrl
-			return <Image style={{ width: 20, height: 20, marginRight: 4, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
+			return <Image style={{ width: 20, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
 		} else {
 			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 		}
