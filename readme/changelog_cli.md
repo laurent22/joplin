@@ -1,5 +1,13 @@
 # Joplin terminal app changelog
 
+## [cli-v2.9.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.9.1) - 2022-10-12T14:49:48Z
+
+- Improved: Added note count indicator per notebook (#6526) (#6478 by Eduardo Esparza)
+- Improved: Toggle short ids and mv notebooks (#6671) (#1728 by Andrej Lifinzew)
+- Fixed: Do not encrypt non-owned note if it was not shared encrypted (#6645)
+- Fixed: Fix resources sync when proxy is set (#6817) (#6688 by Self Not Found)
+- Fixed: Fixed names of imported duplicate notebooks (#6704)
+
 ## [cli-v2.8.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.8.1) - 2022-05-18T13:02:48Z
 
 - New: Add additional time format HH.mm (#6086 by [@vincentjocodes](https://github.com/vincentjocodes))
