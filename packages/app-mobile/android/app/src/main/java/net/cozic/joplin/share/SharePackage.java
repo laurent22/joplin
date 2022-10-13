@@ -24,6 +24,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ViewManager;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,9 +46,13 @@ public class SharePackage implements ReactPackage {
     }
 
     public static class ShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+        private final String cacheDir;
+        // when refactoring the `shareDirName` make sure to refactor the dir name in `ShareUtils.ts`
+        private static String shareDirName = "sharedFiles";
 
         ShareModule(@NonNull ReactApplicationContext reactContext) {
             super(reactContext);
+            cacheDir = reactContext.getCacheDir().getAbsolutePath();
             reactContext.addActivityEventListener(this);
         }
 
@@ -139,7 +146,39 @@ public class SharePackage implements ReactPackage {
                 mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             }
 
-            imageData.putString("uri", uri.toString());
+            Uri copiedUri = null;
+            try {
+              String shareFolderPath = cacheDir + "/" + shareDirName;
+              String filepath = shareFolderPath + "/" + name;
+
+              File file = new File(filepath);
+              copiedUri = Uri.fromFile(file);
+              if (new File(shareFolderPath).mkdirs()) {
+                try (InputStream inStream =
+                    contentResolver.openInputStream(uri);
+                    OutputStream outStream =
+                        contentResolver.openOutputStream(copiedUri, "wt");
+                ) {
+                  byte[] buffer = new byte[1024 * 4];
+                  int length;
+                  while ((length = inStream.read(buffer)) > 0) {
+                    outStream.write(buffer, 0, length);
+                  }
+                }
+              } else {
+                throw new IOException("Cannot create sharedFiles directory in cacheDir");
+              }
+
+            } catch (Exception e) {
+              e.printStackTrace();
+              copiedUri = null;
+            }
+
+            if (copiedUri != null) {
+              imageData.putString("uri", copiedUri.toString());
+            } else {
+              imageData.putString("uri", uri.toString());
+            }
             imageData.putString("name", name);
             imageData.putString("mimeType", mimeType);
             return imageData;
