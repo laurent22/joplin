@@ -25,7 +25,8 @@ async function encodeFile(sourcePath, destPath) {
 	const hash = md5(buffer.toString('base64'));
 	const js = `module.exports = \`${buffer.toString('base64')}\`;`;
 	const outputPath = `${outputDir}/${destPath}.base64.js`;
-	await fs.mkdirp(utils.dirname(outputPath));
+	console.info(`Encoding "${sourcePath}" => "${outputPath}"`);
+	await utils.mkdirp(utils.dirname(outputPath));
 	await fs.writeFile(outputPath, js);
 
 	const ext = utils.fileExtension(sourcePath).toLowerCase();
@@ -44,7 +45,7 @@ async function encodeFile(sourcePath, destPath) {
 
 async function main() {
 	await fs.remove(outputDir);
-	await fs.mkdirp(outputDir);
+	await utils.mkdirp(outputDir);
 
 	const encodedFiles = [];
 	const sourceAssetDir = `${rootDir}/../renderer/assets`;

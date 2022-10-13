@@ -981,6 +981,9 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js.map
 packages/app-mobile/components/screens/encryption-config.d.ts
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/encryption-config.js.map
+packages/app-mobile/components/side-menu-content.d.ts
+packages/app-mobile/components/side-menu-content.js
+packages/app-mobile/components/side-menu-content.js.map
 packages/app-mobile/gulpfile.d.ts
 packages/app-mobile/gulpfile.js
 packages/app-mobile/gulpfile.js.map
@@ -1023,6 +1026,9 @@ packages/app-mobile/utils/setupNotifications.js.map
 packages/app-mobile/utils/shareHandler.d.ts
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shareHandler.js.map
+packages/app-mobile/utils/types.d.ts
+packages/app-mobile/utils/types.js
+packages/app-mobile/utils/types.js.map
 packages/fork-htmlparser2/src/CollectingHandler.d.ts
 packages/fork-htmlparser2/src/CollectingHandler.js
 packages/fork-htmlparser2/src/CollectingHandler.js.map

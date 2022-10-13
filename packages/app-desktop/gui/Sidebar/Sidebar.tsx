@@ -86,10 +86,10 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 			name: 'far fa-folder',
 			type: FolderIconType.FontAwesome,
 		};
-		return <div style={{ marginRight: 5, display: 'flex' }}><FolderIconBox opacity={0.7} folderIcon={defaultFolderIcon}/></div>;
+		return <div style={{ marginRight: 7, display: 'flex' }}><FolderIconBox opacity={0.7} folderIcon={defaultFolderIcon}/></div>;
 	}
 
-	return <div style={{ marginRight: 5, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
+	return <div style={{ marginRight: 7, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
 
 function FolderItem(props: any) {
@@ -152,7 +152,7 @@ const SidebarComponent = (props: Props) => {
 	// visual alignment is correct for all folders, otherwise the folder tree
 	// looks messy.
 	const showFolderIcons = useMemo(() => {
-		return !!props.folders.find((f: FolderEntity) => !!f.icon);
+		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
 
 	const getSelectedItem = useCallback(() => {
