@@ -465,13 +465,7 @@ public class DocumentHelper {
       // It's a document picked by user
       DocumentFile doc = DocumentFile.fromSingleUri(context, Uri.parse(unknownUriString));
       if (doc != null) {
-        if (!doc.canRead()) {
-          throw new SecurityException(
-              "You don't have read permission to access uri: " + unknownUriString);
-        }
-        if (doc.isFile() && doc.exists()) {
-          return doc;
-        }
+        return doc;
       }
       throw new FileNotFoundException(
           "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
