@@ -1,3 +1,5 @@
+import debounce from './debounce';
+
 const { NativeModules, Platform } = require('react-native');
 
 export interface SharedData {
@@ -9,7 +11,7 @@ export interface SharedData {
 const ShareExtension = (NativeModules.ShareExtension) ?
 	{
 		data: () => NativeModules.ShareExtension.data(),
-		close: () => NativeModules.ShareExtension.close(),
+		close: () => debounce(() => NativeModules.ShareExtension.close(), 3 * 60 * 1000), // close it after 3 minutes
 		shareURL: (Platform.OS === 'ios') ? NativeModules.ShareExtension.getConstants().SHARE_EXTENSION_SHARE_URL : '',
 	} :
 	{
