@@ -211,4 +211,12 @@ utils.getFilename = (path) => {
 	return splitted.join('.');
 };
 
+utils.msleep = (ms) => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+};
+
 module.exports = utils;
