@@ -2918,7 +2918,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/get@npm:^1.13.0":
+"@electron/get@npm:^1.14.1":
   version: 1.14.1
   resolution: "@electron/get@npm:1.14.1"
   dependencies:
@@ -4051,7 +4051,7 @@ __metadata:
     compare-versions: ^3.2.1
     countable: ^3.0.1
     debounce: ^1.2.0
-    electron: 18.2.0
+    electron: 19.0.10
     electron-builder: ^23.0.3
     electron-notarize: ^1.2.1
     electron-rebuild: ^3.2.7
@@ -14526,16 +14526,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:18.2.0":
-  version: 18.2.0
-  resolution: "electron@npm:18.2.0"
+"electron@npm:19.0.10":
+  version: 19.0.10
+  resolution: "electron@npm:19.0.10"
   dependencies:
-    "@electron/get": ^1.13.0
+    "@electron/get": ^1.14.1
     "@types/node": ^16.11.26
     extract-zip: ^1.0.3
   bin:
     electron: cli.js
-  checksum: 242169d6e22854248e427326a03910b96311333d5dd57aa0e4cd9cef733aa8c2e893b16269c32514ad325468cdc08c41736d6f1f6791770cad236652fe06662c
+  checksum: 828198c09cf1f9900e6f6a850761ee24d23e5bf157b1ef1960c2353d0c8d686177019df0082a5e08fe0ee7559a4327794e45022a769f45a0738a7a862dd77840
   languageName: node
   linkType: hard
 
