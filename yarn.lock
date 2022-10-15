@@ -4193,7 +4193,6 @@ __metadata:
     typescript: ^4.7.4
     uglify-js: ^3.13.10
     url: ^0.11.0
-    valid-url: ^1.0.9
     webpack: ^5.74.0
   languageName: unknown
   linkType: soft
@@ -4327,7 +4326,6 @@ __metadata:
     uglifycss: 0.0.29
     url-parse: ^1.4.7
     uuid: ^3.0.1
-    valid-url: ^1.0.9
     word-wrap: ^1.2.3
     xml2js: ^0.4.19
   languageName: unknown
@@ -34435,13 +34433,6 @@ __metadata:
   dependencies:
     homedir-polyfill: ^1.0.1
   checksum: 193db08aa396d993da04d3d985450784aa0010f51613005d13ef97d7b2b9e1ba5aef04affa585037adece12de5ca532f6f5fc40288495eab55e2eebc201809d2
-  languageName: node
-  linkType: hard
-
-"valid-url@npm:^1.0.9":
-  version: 1.0.9
-  resolution: "valid-url@npm:1.0.9"
-  checksum: 3ecb030559404441c2cf104cbabab8770efb0f36d117db03d1081052ef133015a68806148ce954bb4dd0b5c42c14b709a88783c93d66b0916cb67ba771c98702
   languageName: node
   linkType: hard
 

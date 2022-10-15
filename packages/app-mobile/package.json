@@ -68,8 +68,7 @@
     "stream-browserify": "^3.0.0",
     "string-natural-compare": "^2.0.2",
     "timers": "^0.1.1",
-    "url": "^0.11.0",
-    "valid-url": "^1.0.9"
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
