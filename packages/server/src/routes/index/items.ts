@@ -44,22 +44,24 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 			},
 		],
 		rows: paginatedItems.items.map(item => {
-			const row: Row = [
-				{
-					value: item.name,
-					stretch: true,
-					url: showItemUrls(config()) ? `${config().userContentBaseUrl}/items/${item.id}/content` : null,
-				},
-				{
-					value: formatBytes(item.content_size),
-				},
-				{
-					value: item.mime_type || 'binary',
-				},
-				{
-					value: formatDateTime(item.updated_time),
-				},
-			];
+			const row: Row = {
+				items: [
+					{
+						value: item.name,
+						stretch: true,
+						url: showItemUrls(config()) ? `${config().userContentBaseUrl}/items/${item.id}/content` : null,
+					},
+					{
+						value: formatBytes(item.content_size),
+					},
+					{
+						value: item.mime_type || 'binary',
+					},
+					{
+						value: formatDateTime(item.updated_time),
+					},
+				],
+			};
 
 			return row;
 		}),

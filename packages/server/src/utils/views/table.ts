@@ -47,7 +47,10 @@ interface RowItem {
 	render?: RowItemRenderCallback;
 }
 
-export type Row = RowItem[];
+export interface Row {
+	classNames?: string[];
+	items: RowItem[];
+}
 
 interface RowItemView {
 	value: string;
@@ -58,7 +61,10 @@ interface RowItemView {
 	hint: string;
 }
 
-type RowView = RowItemView[];
+interface RowView {
+	classNames: string[];
+	items: RowItemView[];
+}
 
 export interface Table {
 	headers: Header[];
@@ -97,16 +103,19 @@ function makeHeaderView(header: Header, parentBaseUrl: string, baseUrlQuery: Pag
 }
 
 function makeRowView(row: Row): RowView {
-	return row.map(rowItem => {
-		return {
-			value: rowItem.value,
-			valueHtml: rowItem.render ? rowItem.render() : '',
-			classNames: [rowItem.stretch ? 'stretch' : 'nowrap'],
-			url: rowItem.url,
-			checkbox: rowItem.checkbox,
-			hint: rowItem.hint,
-		};
-	});
+	return {
+		classNames: row.classNames,
+		items: row.items.map(rowItem => {
+			return {
+				value: rowItem.value,
+				valueHtml: rowItem.render ? rowItem.render() : '',
+				classNames: [rowItem.stretch ? 'stretch' : 'nowrap'],
+				url: rowItem.url,
+				checkbox: rowItem.checkbox,
+				hint: rowItem.hint,
+			};
+		}),
+	};
 }
 
 export function makeTableView(table: Table): TableView {
@@ -132,3 +141,7 @@ export function makeTableView(table: Table): TableView {
 export function tablePartials(): string[] {
 	return ['pagination', 'table', 'tableHeader', 'tableRowItem'];
 }
+
+export const renderUserIcon = () => {
+	return '<i class="fas fa-user-alt"></i>';
+};

@@ -64,31 +64,33 @@ router.get('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 		const state = taskService.taskState(taskId);
 		const events = await taskService.taskLastEvents(taskId);
 
-		taskRows.push([
-			{
-				value: `checkbox_${taskId}`,
-				checkbox: true,
-			},
-			{
-				value: taskId.toString(),
-			},
-			{
-				value: task.description,
-			},
-			{
-				value: task.schedule,
-				hint: prettyCron.toString(task.schedule),
-			},
-			{
-				value: yesOrNo(state.running),
-			},
-			{
-				value: events.taskStarted ? formatDateTime(events.taskStarted.created_time) : '-',
-			},
-			{
-				value: events.taskCompleted ? formatDateTime(events.taskCompleted.created_time) : '-',
-			},
-		]);
+		taskRows.push({
+			items: [
+				{
+					value: `checkbox_${taskId}`,
+					checkbox: true,
+				},
+				{
+					value: taskId.toString(),
+				},
+				{
+					value: task.description,
+				},
+				{
+					value: task.schedule,
+					hint: prettyCron.toString(task.schedule),
+				},
+				{
+					value: yesOrNo(state.running),
+				},
+				{
+					value: events.taskStarted ? formatDateTime(events.taskStarted.created_time) : '-',
+				},
+				{
+					value: events.taskCompleted ? formatDateTime(events.taskCompleted.created_time) : '-',
+				},
+			],
+		});
 	}
 
 	const table: Table = {
