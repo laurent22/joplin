@@ -51,6 +51,10 @@ interface Props {
 	// Initial javascript. Must evaluate to true.
 	injectedJavaScript: string;
 
+	// iOS only: Scroll the outer content of the view. Set this to `false` if
+	// the main view container doesn't scroll.
+	scrollEnabled?: boolean;
+
 	style?: StyleProp<ViewStyle>;
 	onMessage: OnMessageCallback;
 	onError: OnErrorCallback;
@@ -118,8 +122,6 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
-	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
-	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
 		<WebView
 			style={{
@@ -127,7 +129,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				...(props.style as any),
 			}}
 			ref={webviewRef}
-			scrollEnabled={false}
+			scrollEnabled={props.scrollEnabled}
 			useWebKit={true}
 			source={source}
 			setSupportMultipleWindows={true}

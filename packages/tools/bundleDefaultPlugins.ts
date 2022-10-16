@@ -87,6 +87,7 @@ async function start(): Promise<void> {
 }
 
 if (require.main === module) {
+// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	start().catch((error) => {
 		console.error('Fatal error');
 		console.error(error);

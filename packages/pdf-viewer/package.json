@@ -42,7 +42,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@joplin/lib": "workspace:^",
+    "@joplin/lib": "~2.9",
     "annotpdf": "^1.0.15",
     "async-mutex": "^0.4.0",
     "pdfjs-dist": "^2.14.305",

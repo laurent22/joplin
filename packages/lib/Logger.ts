@@ -231,11 +231,14 @@ class Logger {
 				// when many log operations are being done (eg. during sync in
 				// dev mode).
 				let release: Function = null;
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
 					return Logger.fsDriver().appendFile(target.path, `${line.join(': ')}\n`, 'utf8');
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				}).finally(() => {
 					if (release) release();
 				});

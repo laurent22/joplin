@@ -151,10 +151,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	deleteFolder_onPress(folderId) {
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
 			if (!ok) return;
 
 			Folder.delete(folderId)
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then(() => {
 					this.props.dispatch({
 						type: 'NAV_GO',
@@ -162,6 +164,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 						smartFilterId: 'c3176726992c11e9ac940492261af972',
 					});
 				})
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.catch(error => {
 					alert(error.message);
 				});

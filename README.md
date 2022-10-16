@@ -301,7 +301,7 @@ As of Joplin 2.x.x, Joplin supports multiple S3 providers. We expose some option
 In the **desktop application** or **mobile application**, select "S3 (Beta)" as the synchronisation target in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md).
 
 - **S3 Bucket:** The name of your Bucket, such as `joplin-bucket`
-- **S3 URL:** Fully qualified URL; For AWS this should be `https://s3.amazonaws.com/`
+- **S3 URL:** Fully qualified URL; For AWS this should be `https://s3.<regionName>.amazonaws.com/`
 - **S3 Access Key & S3 Secret Key:**  The User's programmatic access key.  To create a new key & secret on AWS, visit [IAM Security Credentials](https://console.aws.amazon.com/iam/home#/security_credentials). For other providers follow their documentation.
 - **S3 Region:** Some providers require you to provide the region of your bucket. This is usually in the form of "eu-west1" or something similar depending on your region. For providers that do not require a region, you can leave it blank.
 - **Force Path Style**: This setting enables Joplin to talk to S3 providers using an older style S3 Path. Depending on your provider you may need to try with this on and off.
@@ -341,17 +341,17 @@ All providers will require a bucket, Access Key, and Secret Key.
 If you provide a configuration and you receive "success!" on the "check config" then your S3 sync should work for your provider. If you do not receive success, you may need to adjust your settings, or save them, restart the app, and attempt a sync. This may reveal more clear error messaging that will help you deduce the problem.
 
 ### AWS
-- URL: https://s3.amazonaws.com
+- URL: `https://s3.<region>.amazonaws.com/` (fill in your region, a complete list of endpoint adresses can be found [here](https://docs.aws.amazon.com/general/latest/gr/s3.html))
 - Region: required
 - Force Path Style: unchecked
 
 ### Linode
-- URL: https://regionName.linodeobjects.com (regionName is the region on the URL provided by Linode; this URL is also the same as the URL provided by Linode with the bucket name removed)
+- URL: `https://<region>.linodeobjects.com` (region is in the URL provided by Linode; this URL is also the same as the URL provided by Linode with the bucket name removed)
 - Region: Anything you want to type, can't be left empty
 - Force Path Style: unchecked
 
 ### UpCloud
-- URL: https://<account>.<region>.upcloudobjects.com (They will provide you with multiple URLs, the one that follows this pattern should work.)
+- URL: `https://<account>.<region>.upcloudobjects.com` (They will provide you with multiple URLs, the one that follows this pattern should work.)
 - Region: required
 - Force Path Style: unchecked
 

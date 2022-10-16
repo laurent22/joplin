@@ -24,6 +24,12 @@ module.exports = {
 			'fs': false,
 		},
 	},
+	performance: {
+		// Disable warnings - "WARNING in entrypoint size limit: The following
+		// entrypoint(s) combined asset size exceeds the recommended limit (244
+		// KiB). This can impact web performance."
+		hints: false,
+	},
 	output: {
 		filename: '[name].js',
 		path: path.resolve(__dirname, 'dist'),

@@ -5,12 +5,13 @@ const { connect } = require('react-redux');
 const { ScreenHeader } = require('../ScreenHeader');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { _ } = require('@joplin/lib/locale');
+const Note = require('@joplin/lib/models/Note').default;
 const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
+const SearchEngineUtils = require('@joplin/lib/services/searchengine/SearchEngineUtils').default;
 const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
-import searchNotes from '../searchNotes';
 
 Icon.loadFont();
 
@@ -100,7 +101,25 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		query = query === null ? this.state.query.trim : query.trim();
 
-		const notes = await searchNotes(query, this.props.settings['db.ftsEnabled'], this.props.dispatch);
+		let notes = [];
+
+		if (query) {
+			if (this.props.settings['db.ftsEnabled']) {
+				notes = await SearchEngineUtils.notesForQuery(query, true);
+			} else {
+				const p = query.split(' ');
+				const temp = [];
+				for (let i = 0; i < p.length; i++) {
+					const t = p[i].trim();
+					if (!t) continue;
+					temp.push(t);
+				}
+
+				notes = await Note.previews(null, {
+					anywherePattern: `*${temp.join('*')}*`,
+				});
+			}
+		}
 
 		if (!this.isMounted_) return;
 

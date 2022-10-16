@@ -82,12 +82,14 @@ class OneDriveApiNodeUtils {
 
 				this.api()
 					.execTokenRequest(query.code, `http://localhost:${port.toString()}`)
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					.then(() => {
 						writeResponse(200, _('The application has been authorised - you may now close this browser tab.'));
 						targetConsole.log('');
 						targetConsole.log(_('The application has been successfully authorised.'));
 						waitAndDestroy();
 					})
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					.catch(error => {
 						writeResponse(400, error.message);
 						targetConsole.log('');

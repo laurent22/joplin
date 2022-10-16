@@ -248,6 +248,7 @@ class BaseModel {
 		if (options.where) sql += ` WHERE ${options.where}`;
 		return this.db()
 			.selectOne(sql)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((r: any) => {
 				return r ? r['total'] : 0;
 			});
@@ -335,6 +336,7 @@ class BaseModel {
 		if (params === null) params = [];
 		return this.db()
 			.selectOne(sql, params)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((model: any) => {
 				return this.filter(this.addModelMd(model));
 			});
@@ -344,6 +346,7 @@ class BaseModel {
 		if (params === null) params = [];
 		return this.db()
 			.selectAll(sql, params)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((models: any[]) => {
 				return this.filterArray(this.addModelMd(models));
 			});

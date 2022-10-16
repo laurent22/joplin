@@ -1,18 +1,6 @@
-import Setting from '@joplin/lib/models/Setting';
+const Setting = require('@joplin/lib/models/Setting').default;
 const { Platform } = require('react-native');
-import { themeById } from '@joplin/lib/theme';
-
-export interface Style {
-	[key: string]: any;
-}
-
-interface Fonts {
-	[key: number]: string;
-}
-
-interface ThemeCache {
-	[key: string]: any;
-}
+const { themeById } = require('@joplin/lib/theme');
 
 const baseStyle = {
 	appearance: 'light',
@@ -26,9 +14,9 @@ const baseStyle = {
 	lineHeight: '1.6em',
 };
 
-const themeCache_: ThemeCache = {};
+const themeCache_ = {};
 
-function addExtraStyles(style: Style) {
+function addExtraStyles(style) {
 	style.marginRight = style.margin;
 	style.marginLeft = style.margin;
 	style.marginTop = style.margin;
@@ -84,9 +72,9 @@ function addExtraStyles(style: Style) {
 	return style;
 }
 
-export function editorFont(fontId?: number) {
+function editorFont(fontId) {
 	// IMPORTANT: The font mapping must match the one in Setting.js
-	const fonts: Fonts = {
+	const fonts = {
 		[Setting.FONT_DEFAULT]: null,
 		[Setting.FONT_MENLO]: 'Menlo',
 		[Setting.FONT_COURIER_NEW]: 'Courier New',
@@ -100,7 +88,7 @@ export function editorFont(fontId?: number) {
 	return fonts[fontId];
 }
 
-export function themeStyle(theme?: number) {
+function themeStyle(theme) {
 	if (!theme) {
 		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
@@ -113,3 +101,5 @@ export function themeStyle(theme?: number) {
 	themeCache_[cacheKey] = addExtraStyles(output);
 	return themeCache_[cacheKey];
 }
+
+module.exports = { themeStyle, editorFont };
