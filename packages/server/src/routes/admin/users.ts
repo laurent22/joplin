@@ -1,6 +1,7 @@
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
+import { Knex } from 'knex';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
@@ -14,13 +15,15 @@ import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
-import { stripePortalUrl, adminUserDeletionsUrl, adminUserUrl } from '../../utils/urlUtils';
+import { stripePortalUrl, adminUserDeletionsUrl, adminUserUrl, adminUsersUrl, setQueryParameters } from '../../utils/urlUtils';
 import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime, Hour } from '../../utils/time';
 import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
 import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
+import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
+import { PaginationOrderDir } from '../../models/utils/pagination';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -95,33 +98,96 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	const userModel = ctx.joplin.models.user();
 	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
-	const users = await userModel.all();
+	const showDisabled = ctx.query.show_disabled === '1';
 
-	users.sort((u1: User, u2: User) => {
-		if (u1.full_name && u2.full_name) return u1.full_name.toLowerCase() < u2.full_name.toLowerCase() ? -1 : +1;
-		if (u1.full_name && !u2.full_name) return +1;
-		if (!u1.full_name && u2.full_name) return -1;
-		return u1.email.toLowerCase() < u2.email.toLowerCase() ? -1 : +1;
+	const pagination = makeTablePagination(ctx.query, 'full_name', PaginationOrderDir.ASC);
+	pagination.limit = 1000;
+	const page = await ctx.joplin.models.user().allPaginated(pagination, {
+		queryCallback: (query: Knex.QueryBuilder) => {
+			if (!showDisabled) {
+				void query.where('enabled', '=', 1);
+			}
+			return query;
+		},
 	});
 
-	const view: View = defaultView('admin/users', _('Users'));
-	view.content = {
-		users: users.map(user => {
-			return {
-				...user,
-				url: adminUserUrl(user.id),
-				displayName: user.full_name ? user.full_name : '(not set)',
-				formattedItemMaxSize: formatMaxItemSize(user),
-				formattedTotalSize: formatTotalSize(user),
-				formattedMaxTotalSize: formatMaxTotalSize(user),
-				formattedTotalSizePercent: formatTotalSizePercent(user),
-				totalSizeClass: totalSizeClass(user),
-				formattedAccountType: accountTypeToString(user.account_type),
-				formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),
-				rowClassName: user.enabled ? '' : 'is-disabled',
+	const table: Table = {
+		baseUrl: adminUsersUrl(),
+		requestQuery: ctx.query,
+		pageCount: page.page_count,
+		pagination,
+		headers: [
+			{
+				name: 'full_name',
+				label: _('Full name'),
+			},
+			{
+				name: 'email',
+				label: _('Email'),
+			},
+			{
+				name: 'account',
+				label: _('Account'),
+			},
+			{
+				name: 'max_item_size',
+				label: _('Max Item Size'),
+			},
+			{
+				name: 'total_size',
+				label: _('Total Size'),
+			},
+			{
+				name: 'max_total_size',
+				label: _('Max Total Size'),
+			},
+			{
+				name: 'can_share',
+				label: _('Can Share'),
+			},
+		],
+		rows: page.items.map(user => {
+			const row: Row = {
+				classNames: [user.enabled ? '' : 'is-disabled'],
+				items: [
+					{
+						value: user.full_name ? user.full_name : '(not set)',
+						url: adminUserUrl(user.id),
+					},
+					{
+						value: user.email,
+					},
+					{
+						value: accountTypeToString(user.account_type),
+					},
+					{
+						value: formatMaxItemSize(user),
+					},
+					{
+						value: `${formatTotalSize(user)} (${formatTotalSizePercent(user)})`,
+						classNames: [totalSizeClass(user)],
+					},
+					{
+						value: formatMaxTotalSize(user),
+					},
+					{
+						value: yesOrNo(getCanShareFolder(user)),
+					},
+				],
 			};
+
+			return row;
 		}),
 	};
+
+	const view = defaultView('admin/users', _('Users'));
+	view.content = {
+		userTable: makeTableView(table),
+		csrfTag: await createCsrfTag(ctx),
+		disabledToggleButtonLabel: showDisabled ? _('Hide disabled') : _('Show disabled'),
+		disabledToggleButtonUrl: setQueryParameters(adminUsersUrl(), { ...ctx.query, show_disabled: showDisabled ? '0' : '1' }),
+	};
+
 	return view;
 });
 
