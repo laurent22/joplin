@@ -99,6 +99,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
 	const showDisabled = ctx.query.show_disabled === '1';
+	const searchQuery = ctx.query.query || '';
 
 	const pagination = makeTablePagination(ctx.query, 'full_name', PaginationOrderDir.ASC);
 	pagination.limit = 1000;
@@ -107,6 +108,13 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 			if (!showDisabled) {
 				void query.where('enabled', '=', 1);
 			}
+
+			if (searchQuery) {
+				void query.where(qb => {
+					void qb.whereRaw('full_name like ?', [`%${searchQuery}%`]).orWhereRaw('email like ?', [`%${searchQuery}%`]);
+				});
+			}
+
 			return query;
 		},
 	});
@@ -183,6 +191,11 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	const view = defaultView('admin/users', _('Users'));
 	view.content = {
 		userTable: makeTableView(table),
+		queryArray: Object.entries(ctx.query).map(([name, value]) => {
+			return { name, value };
+		}).filter(e => e.name !== 'query'),
+		query: searchQuery,
+		searchUrl: setQueryParameters(adminUsersUrl(), ctx.query),
 		csrfTag: await createCsrfTag(ctx),
 		disabledToggleButtonLabel: showDisabled ? _('Hide disabled') : _('Show disabled'),
 		disabledToggleButtonUrl: setQueryParameters(adminUsersUrl(), { ...ctx.query, show_disabled: showDisabled ? '0' : '1' }),
