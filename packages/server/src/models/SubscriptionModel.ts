@@ -115,7 +115,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 				recipient_email: user.email,
 				recipient_id: user.id,
 				recipient_name: user.full_name || '',
-				sender_id: EmailSender.Support,
+				sender_id: EmailSender.NoReply,
 			});
 		}
 	}
