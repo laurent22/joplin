@@ -32,7 +32,7 @@ On mobile and CLI, you cannot currently share notebooks, but you can view or mod
 
 ### If I share a notebook with someone, what access do they have?
 
-Currently they have full access to the data, including reading, writing and deleting notebooks or notes. In a future version, access control might be implemented. For example, to only give read-only access to the shared notebook.
+Currently they have full access to the data, including reading, writing, and deleting of notebooks or notes.
 
 ### What is actually shared?
 
