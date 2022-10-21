@@ -36,6 +36,7 @@ const config = {
 		'main.users': 'WithDates, WithUuid',
 		'main.events': 'WithUuid',
 		'main.user_deletions': 'WithDates',
+		'main.task_states': 'WithDates',
 		'main.backup_items': 'WithCreatedDate',
 	},
 };
@@ -65,6 +66,7 @@ const propertyTypes: Record<string, string> = {
 	'user_deletions.scheduled_time': 'number',
 	'users.disabled_time': 'number',
 	'backup_items.content': 'Buffer',
+	'task_states.task_id': 'TaskId',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
@@ -158,6 +160,8 @@ async function main() {
 	content += `export const databaseSchema: DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 
 	insertContentIntoFile(dbFilePath, fileReplaceWithinMarker, fileReplaceWithinMarker, content);
+
+	console.info(`Types have been updated in ${dbFilePath}`);
 }
 
 main().catch(error => {

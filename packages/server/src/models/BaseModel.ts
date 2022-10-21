@@ -357,7 +357,7 @@ export default abstract class BaseModel<T> {
 		return toSave;
 	}
 
-	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<T[]> {
+	public async loadByIds(ids: string[] | number[], options: LoadOptions = {}): Promise<T[]> {
 		if (!ids.length) return [];
 		ids = unique(ids);
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
