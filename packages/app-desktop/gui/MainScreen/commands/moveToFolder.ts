@@ -17,15 +17,19 @@ export const runtime = (comp: any): CommandRuntime => {
 			const startFolders: any[] = [];
 			const maxDepth = 15;
 
-			const addOptions = (folders: any[], depth: number) => {
+			const addOptions = (folders: any[], depth: number, parentPath: String) => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
-					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
-					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
+					startFolders.push({ key: folder.id, value: folder.id, label: (parentPath === '' ? folder.title : (parentPath + folder.title)), indentDepth: depth });
+					if (folder.children) {
+						parentPath = `${parentPath + folder.title} > `;
+						addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth, parentPath);
+						parentPath = '';
+					}
 				}
 			};
 
-			addOptions(folders, 0);
+			addOptions(folders, 0,'');
 
 			comp.setState({
 				promptOptions: {
