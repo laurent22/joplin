@@ -1,5 +1,21 @@
 # Joplin changelog
 
+## [v2.9.11](https://github.com/laurent22/joplin/releases/tag/v2.9.11) (Pre-release) - 2022-10-23T16:09:58Z
+
+- New: Add PDF full screen viewer ([#6821](https://github.com/laurent22/joplin/issues/6821) by [@asrient](https://github.com/asrient))
+- New: Add support for multi-language spell check ([#6617](https://github.com/laurent22/joplin/issues/6617) by [@antontkv](https://github.com/antontkv))
+- New: Add zoom feature on PDF viewer ([#6748](https://github.com/laurent22/joplin/issues/6748) by [@asrient](https://github.com/asrient))
+- New: Added PDF viewer options ([#6800](https://github.com/laurent22/joplin/issues/6800) by [@asrient](https://github.com/asrient))
+- New: Plugins: Add support for media links in plugin manifest.json ([#6672](https://github.com/laurent22/joplin/issues/6672) by [@Retrove](https://github.com/Retrove))
+- Improved: Bundle default plugins with desktop application ([#6679](https://github.com/laurent22/joplin/issues/6679) by Mayank Bondre)
+- Improved: Display default notebook icons when at least one notebook has an icon ([7974df9](https://github.com/laurent22/joplin/commit/7974df9))
+- Improved: Install default plugins on first app start ([#6585](https://github.com/laurent22/joplin/issues/6585) by Mayank Bondre)
+- Improved: PDF scroll persistence ([#6747](https://github.com/laurent22/joplin/issues/6747) by [@asrient](https://github.com/asrient))
+- Fixed: Avoid reloading loaded plugin scripts ([#6742](https://github.com/laurent22/joplin/issues/6742)) ([#6719](https://github.com/laurent22/joplin/issues/6719) by [@SeptemberHX](https://github.com/SeptemberHX))
+- Fixed: Fix resources sync when proxy is set ([#6817](https://github.com/laurent22/joplin/issues/6817)) ([#6688](https://github.com/laurent22/joplin/issues/6688) by Self Not Found)
+- Fixed: Fixed file and directory paths in plugin setting dialogs ([#6692](https://github.com/laurent22/joplin/issues/6692))
+- Fixed: Fixed names of imported duplicate notebooks ([#6704](https://github.com/laurent22/joplin/issues/6704))
+
 ## [v2.9.4](https://github.com/laurent22/joplin/releases/tag/v2.9.4) (Pre-release) - 2022-08-18T16:52:26Z
 
 - Fixed macOS release
