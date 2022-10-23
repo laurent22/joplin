@@ -240,6 +240,9 @@ packages/app-desktop/gui/EditFolderDialog/Dialog.js.map
 packages/app-desktop/gui/EditFolderDialog/IconSelector.d.ts
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js.map
+packages/app-desktop/gui/EmojiBox.d.ts
+packages/app-desktop/gui/EmojiBox.js
+packages/app-desktop/gui/EmojiBox.js.map
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.d.ts
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js.map
