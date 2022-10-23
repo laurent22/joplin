@@ -1,5 +1,13 @@
 # Joplin Android app changelog
 
+## [android-v2.9.6](https://github.com/laurent22/joplin/releases/tag/android-v2.9.6) (Pre-release) - 2022-10-23T16:23:25Z
+
+- New: Add monochrome icon (#6954 by Tom Bursch)
+- Fixed: Fix file system sync issues (#6943 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fix note attachment issue (#6932 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixed notebook icon spacing (633c9ac)
+- Fixed: Support non-ASCII characters in OneDrive (#6916) (#6838 by Self Not Found)
+
 ## [android-v2.9.5](https://github.com/laurent22/joplin/releases/tag/android-v2.9.5) (Pre-release) - 2022-10-11T13:52:00Z
 
 - Improved: Disable multi-highlighting to fix context menu (9b348fd)
