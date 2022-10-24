@@ -93,7 +93,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = Object.assign({}, styles.sideButton, { backgroundColor: theme.selectedColor });
 		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 20 };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
@@ -289,7 +289,7 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		if (folderIcon.type === 1) { // FolderIconType.Emoji
-			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin }}>{folderIcon.emoji}</Text>;
+			return <Text style={{ fontSize: theme.fontSize, marginRight: folderIconRightMargin, width: 20 }}>{folderIcon.emoji}</Text>;
 		} else if (folderIcon.type === 2) { // FolderIconType.DataUrl
 			return <Image style={{ width: 20, height: 20, marginRight: folderIconRightMargin, resizeMode: 'contain' }} source={{ uri: folderIcon.dataUrl }}/>;
 		} else {
