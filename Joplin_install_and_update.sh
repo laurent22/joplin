@@ -25,6 +25,7 @@ SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
 INCLUDE_PRE_RELEASE=false
+LAUNCHER_ENABLE=true
 
 print() {
     if [[ "${SILENT}" == false ]] ; then
@@ -54,6 +55,7 @@ showHelp() {
     print "\t" "--force" "\t" "Always download the latest version"
     print "\t" "--silent" "\t" "Don't print any output"
     print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
+    print "\t" "--launcher-disable" "\t" "Disable AppImage Launcher ask to integrate" 
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -76,12 +78,13 @@ while getopts "${optspec}" OPT; do
     OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
   fi
   case "${OPT}" in
-    h | help )     showHelp ;;
-    allow-root )   ALLOW_ROOT=true ;;
-    silent )       SILENT=true ;;
-    force )        FORCE=true ;;
-    changelog )    SHOW_CHANGELOG=true ;;
-    prerelease )   INCLUDE_PRE_RELEASE=true ;;
+    h | help )          showHelp ;;
+    allow-root )        ALLOW_ROOT=true ;;
+    silent )            SILENT=true ;;
+    force )             FORCE=true ;;
+    changelog )         SHOW_CHANGELOG=true ;;
+    prerelease )        INCLUDE_PRE_RELEASE=true ;;
+    launcher-disable )  LAUNCHER_ENABLE=false ;;
     [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
     \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
   esac
@@ -206,6 +209,13 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
+
+    # Disable AppImageLauncher's integrate
+    APPIMAGE_LAUNCHER_ENV=""
+    if [ !LAUNCHER_ENABLE ]
+    then
+      APPIMAGE_LAUNCHER_ENV="env APPIMAGELAUNCHER_DISABLE=TRUE"
+    fi
     
     # Tabs specifically, and not spaces, are needed for indentation with Bash heredocs
     cat >> ~/.local/share/applications/appimagekit-joplin.desktop <<-EOF
@@ -213,7 +223,7 @@ then
 	Encoding=UTF-8
 	Name=Joplin
 	Comment=Joplin for Desktop
-	Exec=env APPIMAGELAUNCHER_DISABLE=TRUE ${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM} %u
+	Exec=${APPIMAGE_LAUNCHER_ENV} ${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM} %u
 	Icon=joplin
 	StartupWMClass=Joplin
 	Type=Application
