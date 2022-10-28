@@ -56,7 +56,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
 		});
 
-		if (filePath) {
+		if (filePath&&filePath.length!==0) {
 			const actualFilePath = filePath[0];
 			try {
 				const keymapFile = await shim.fsDriver().readFile(actualFilePath, 'utf-8');
