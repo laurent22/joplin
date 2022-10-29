@@ -108,6 +108,7 @@ import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { AppState } from './utils/types';
+import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 
 let storeDispatch = function(_action: any) {};
 
@@ -764,6 +765,13 @@ class AppComponent extends React.Component {
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
+
+			setTimeout(() => {
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'ProfileSwitcher',
+				});
+			}, 1000);
 		}
 
 		Linking.addEventListener('url', this.handleOpenURL_);
@@ -897,6 +905,7 @@ class AppComponent extends React.Component {
 			DropboxLogin: { screen: DropboxLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			ProfileSwitcher: { screen: ProfileSwitcher },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },

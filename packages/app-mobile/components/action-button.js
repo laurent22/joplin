@@ -148,8 +148,11 @@ class ActionButtonComponent extends React.Component {
 				/>
 			);
 		} else {
+			const mainButtonPress = this.props.mainButtonPress ? this.props.mainButtonPress : () => {};
+			const degrees = buttonComps.length ? 135 : 0;
+
 			return (
-				<ReactNativeActionButton textStyle={styles.itemText} renderIcon={this.renderIcon} buttonColor="rgba(231,76,60,1)" onPress={function() {}}>
+				<ReactNativeActionButton textStyle={styles.itemText} renderIcon={this.renderIcon} buttonColor="rgba(231,76,60,1)" onPress={mainButtonPress} degrees={degrees}>
 					{buttonComps}
 				</ReactNativeActionButton>
 			);
