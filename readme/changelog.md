@@ -3,7 +3,7 @@
 ## [v2.9.11](https://github.com/laurent22/joplin/releases/tag/v2.9.11) (Pre-release) - 2022-10-23T16:09:58Z
 
 - New: Add PDF full screen viewer ([#6821](https://github.com/laurent22/joplin/issues/6821) by [@asrient](https://github.com/asrient))
-- New: Add support for multi-language spell check ([#6617](https://github.com/laurent22/joplin/issues/6617) by [@antontkv](https://github.com/antontkv))
+- New: Add support for multi-language spell check ([#6617](https://github.com/laurent22/joplin/issues/6617))
 - New: Add zoom feature on PDF viewer ([#6748](https://github.com/laurent22/joplin/issues/6748) by [@asrient](https://github.com/asrient))
 - New: Added PDF viewer options ([#6800](https://github.com/laurent22/joplin/issues/6800) by [@asrient](https://github.com/asrient))
 - New: Plugins: Add support for media links in plugin manifest.json ([#6672](https://github.com/laurent22/joplin/issues/6672) by [@Retrove](https://github.com/Retrove))
