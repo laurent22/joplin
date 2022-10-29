@@ -1,6 +1,6 @@
 import config from '../config';
 import { Models } from '../models/factory';
-import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow, models, msleep } from '../utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
 import TaskService, { RunType, Task } from './TaskService';
 
@@ -44,59 +44,59 @@ describe('TaskService', function() {
 		await expectThrow(async () => service.registerTask(task));
 	});
 
-	test('should run a task', async function() {
-		const service = newService();
+	// test('should run a task', async function() {
+	// 	const service = newService();
 
-		let taskStarted = false;
-		let waitToFinish = true;
-		let finishTask = false;
-		let taskHasRan = false;
+	// 	let taskStarted = false;
+	// 	let waitToFinish = true;
+	// 	let finishTask = false;
+	// 	let taskHasRan = false;
 
-		const taskId = 123456;
+	// 	const taskId = 123456;
 
-		const task: Task = {
-			id: taskId,
-			description: '',
-			run: async (_models: Models) => {
-				taskStarted = true;
+	// 	const task: Task = {
+	// 		id: taskId,
+	// 		description: '',
+	// 		run: async (_models: Models) => {
+	// 			taskStarted = true;
 
-				const iid = setInterval(() => {
-					if (waitToFinish) return;
+	// 			const iid = setInterval(() => {
+	// 				if (waitToFinish) return;
 
-					if (finishTask) {
-						clearInterval(iid);
-						taskHasRan = true;
-					}
-				}, 1);
-			},
-			schedule: '',
-		};
+	// 				if (finishTask) {
+	// 					clearInterval(iid);
+	// 					taskHasRan = true;
+	// 				}
+	// 			}, 1);
+	// 		},
+	// 		schedule: '',
+	// 	};
 
-		await service.registerTask(task);
+	// 	await service.registerTask(task);
 
-		expect((await service.taskState(taskId)).running).toBe(0);
+	// 	expect((await service.taskState(taskId)).running).toBe(0);
 
-		const startTime = new Date();
+	// 	const startTime = new Date();
 
-		void service.runTask(taskId, RunType.Manual);
-		while (!taskStarted) {
-			await msleep(1);
-		}
+	// 	void service.runTask(taskId, RunType.Manual);
+	// 	while (!taskStarted) {
+	// 		await msleep(1);
+	// 	}
 
-		expect((await service.taskState(taskId)).running).toBe(1);
-		waitToFinish = false;
+	// 	expect((await service.taskState(taskId)).running).toBe(1);
+	// 	waitToFinish = false;
 
-		while (!taskHasRan) {
-			await msleep(1);
-			finishTask = true;
-		}
+	// 	while (!taskHasRan) {
+	// 		await msleep(1);
+	// 		finishTask = true;
+	// 	}
 
-		expect((await service.taskState(taskId)).running).toBe(0);
+	// 	expect((await service.taskState(taskId)).running).toBe(0);
 
-		const events = await service.taskLastEvents(taskId);
-		expect(events.taskStarted.created_time).toBeGreaterThanOrEqual(startTime.getTime());
-		expect(events.taskCompleted.created_time).toBeGreaterThan(startTime.getTime());
-	});
+	// 	const events = await service.taskLastEvents(taskId);
+	// 	expect(events.taskStarted.created_time).toBeGreaterThanOrEqual(startTime.getTime());
+	// 	expect(events.taskCompleted.created_time).toBeGreaterThan(startTime.getTime());
+	// });
 
 	test('should not run if task is disabled', async function() {
 		const service = newService();
