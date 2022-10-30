@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.9.7](https://github.com/laurent22/joplin/releases/tag/android-v2.9.7) (Pre-release) - 2022-10-30T10:25:01Z
+
+- Fixed: Fixed notebook icons alignment (ea6b7ca)
+- Fixed: Fixed crash when attaching a file.
+
 ## [android-v2.9.6](https://github.com/laurent22/joplin/releases/tag/android-v2.9.6) (Pre-release) - 2022-10-23T16:23:25Z
 
 - New: Add monochrome icon (#6954 by Tom Bursch)
