@@ -80,7 +80,7 @@ const declarations: CommandDeclaration[] = [
 	},
 	{
 		name: 'insertDateTime',
-		label: () => _('Insert Date Time'),
+		label: () => _('Insert time'),
 		iconName: 'icon-add-date',
 	},
 	{
