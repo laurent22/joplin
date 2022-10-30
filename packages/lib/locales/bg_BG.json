@@ -248,7 +248,6 @@
  "More than one item match \"%s\". Please narrow down your query.": "Повече от едно нещо съответства на \"%s\". Моля рафинирайте търсенето си.",
  "Move %d notes to notebook \"%s\"?": "Да преместя ли %d бележки в тетрадка \"%s\"?",
  "Move to notebook...": "Премести в тетрадка...",
- "Moves the notes matching <note> to [notebook].": "Премества бележките съответстващи на <бележка> в [тетрадка].",
  "n": "н",
  "N": "Н",
  "New note": "Нова бележка",

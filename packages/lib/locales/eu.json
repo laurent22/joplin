@@ -119,7 +119,6 @@
  "Missing required argument: %s": "Beharrezko argumentua faltan: %s",
  "More than one item match \"%s\". Please narrow down your query.": "Elementu bat baino gehiago bat dator \"%s\" bilaketarekin. Mugatu zure bilaketa, mesedez.",
  "Move %d notes to notebook \"%s\"?": "Mugitu %d oharrak \"%s\" koadernora?",
- "Moves the notes matching <note> to [notebook].": "Oharrak eramaten ditu <note> bilatuta [notebook]era.",
  "n": "e",
  "N": "E",
  "New note": "Ohar berria",
