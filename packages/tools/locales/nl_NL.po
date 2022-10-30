@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: MHolkamp <mholkamp@users.noreply.github.com>\n"
 "Language-Team: Dutch / Nederlands\n"
 "Language: nl_NL\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -256,9 +258,8 @@ msgid "Add body"
 msgstr "Inhoud toevoegen"
 
 #: packages/app-mobile/components/action-button.js:76
-#, fuzzy
 msgid "Add new"
-msgstr "Toevoegen titel"
+msgstr "Nieuw toevoegen"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -326,8 +327,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
 
 #: packages/app-desktop/checkForUpdates.ts:197
@@ -607,7 +608,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Hoofdlettergevoelig "
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -716,7 +717,7 @@ msgstr "Samenwerken aan notitieblokken met anderen"
 
 #: packages/app-mobile/components/side-menu-content.tsx:331
 msgid "Collapse"
-msgstr ""
+msgstr "Inklappen"
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -926,9 +927,8 @@ msgid "Create a notebook"
 msgstr "Creëer een notitieboek"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Creëert een nieuwe notitie."
+msgstr "Creëer nieuw profiel "
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:162
 msgid "Create notebook"
@@ -1362,9 +1362,8 @@ msgid "Duplicate line"
 msgstr "Dupliceer regel"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:435
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "Dupliceer regel"
+msgstr "Dupliceer geselecteerde notities"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -4882,11 +4881,11 @@ msgstr "Uw versie: %s"
 #: packages/app-desktop/gui/MenuBar.tsx:724
 #: packages/app-desktop/gui/MenuBar.tsx:730
 msgid "Zoom In"
-msgstr "Inzoemen"
+msgstr "Inzoomen"
 
 #: packages/app-desktop/gui/MenuBar.tsx:737
 msgid "Zoom Out"
-msgstr "Uitzoemen"
+msgstr "Uitzoomen"
 
 #, fuzzy
 #~ msgid "Changes have been saved"
