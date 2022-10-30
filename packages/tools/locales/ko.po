@@ -239,7 +239,7 @@ msgid "Action"
 msgstr "동작"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:302
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:288
 msgid "Actions"
 msgstr "동작"
 
@@ -333,11 +333,6 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "업데이트가 있습니다. 지금 내려 받을까요?"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:329
-#, fuzzy
-msgid "Any changes have been saved"
-msgstr "노트가 저장되었습니다."
-
 #: packages/lib/models/Setting.ts:2400
 msgid "Appearance"
 msgstr "보기"
@@ -363,7 +358,7 @@ msgstr "전달할 인수:"
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:220
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
 #, fuzzy
 msgid "Attach"
 msgstr "첨부..."
@@ -457,12 +452,8 @@ msgid "Back"
 msgstr "뒤로 가기"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
 msgid "Bold"
-msgstr "굵게"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:142
-#, fuzzy
-msgid "Bold text"
 msgstr "굵게"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:218
@@ -691,28 +682,19 @@ msgstr "클라이언트 식별자: %s"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:221
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:336
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.tsx:91
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:198
 msgid "Close"
 msgstr "닫기"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:232
-msgid "Close find and replace"
-msgstr ""
-
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:198
-msgid "Close search"
-msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:593
 msgid "Close Window"
 msgstr "창 닫기"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.tsx:61
-msgid "Closed toolbar overflow menu"
-msgstr ""
-
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:48
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:152
 msgid "Code"
 msgstr "코드"
 
@@ -729,7 +711,7 @@ msgid "Collaborate on notebooks with others"
 msgstr "노트북으로 협업하기"
 
 #: packages/app-mobile/components/side-menu-content.tsx:331
-msgid "Collapse folder"
+msgid "Collapse"
 msgstr ""
 
 #: packages/lib/services/ReportService.ts:305
@@ -936,15 +918,6 @@ msgstr "생성됨"
 msgid "Create a notebook"
 msgstr "새 노트북을 만듭니다"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:47
-msgid "Create header level %d"
-msgstr ""
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
-#, fuzzy
-msgid "Create link"
-msgstr "생성됨"
-
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
 msgid "Create new profile..."
 msgstr "새 프로파일을 만듭니다..."
@@ -952,26 +925,6 @@ msgstr "새 프로파일을 만듭니다..."
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:162
 msgid "Create notebook"
 msgstr "새 노트북을 만듭니다"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:90
-#, fuzzy
-msgid "Create ordered list"
-msgstr "사용자 생성"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:104
-#, fuzzy
-msgid "Create task list"
-msgstr "새 노트북을 만듭니다"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:175
-#, fuzzy
-msgid "Create TeX region"
-msgstr "사용자 생성"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:76
-#, fuzzy
-msgid "Create unordered list"
-msgstr "사용자 생성"
 
 #: packages/server/src/routes/admin/users.ts:250
 msgid "Create user"
@@ -1085,7 +1038,7 @@ msgstr "날짜 형식"
 msgid "days"
 msgstr "일"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:118
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:109
 msgid "Decrease indent level"
 msgstr ""
 
@@ -1117,8 +1070,8 @@ msgstr "기본값:  %s"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:292
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
-#: packages/app-mobile/components/ScreenHeader.tsx:417
-#: packages/app-mobile/components/ScreenHeader.tsx:484
+#: packages/app-mobile/components/ScreenHeader.tsx:415
+#: packages/app-mobile/components/ScreenHeader.tsx:482
 #: packages/app-mobile/components/screens/Note.tsx:960
 #: packages/app-mobile/components/side-menu-content.tsx:153
 msgid "Delete"
@@ -1177,7 +1130,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" 플러그인을 삭제할까요?"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:419
+#: packages/app-mobile/components/ScreenHeader.tsx:417
 #, fuzzy
 msgid "Delete selected notes"
 msgstr "이 노트를 삭제할까요?"
@@ -1217,10 +1170,6 @@ msgstr "<note-pattern>에 일치하는 노트를 삭제합니다."
 #: packages/app-cli/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
 msgstr "확인을 거치지 않고 노트를 삭제합니다."
-
-#: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-msgid "Description of the link"
-msgstr ""
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Destination format: %s"
@@ -1391,8 +1340,8 @@ msgid "Dropbox Login"
 msgstr "Dropbox 로그인"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/ScreenHeader.tsx:435
-#: packages/app-mobile/components/ScreenHeader.tsx:490
+#: packages/app-mobile/components/ScreenHeader.tsx:433
+#: packages/app-mobile/components/ScreenHeader.tsx:488
 msgid "Duplicate"
 msgstr "복제"
 
@@ -1400,7 +1349,7 @@ msgstr "복제"
 msgid "Duplicate line"
 msgstr "줄 복제"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:437
+#: packages/app-mobile/components/ScreenHeader.tsx:435
 #, fuzzy
 msgid "Duplicate selected notes"
 msgstr "줄 복제"
@@ -1413,11 +1362,6 @@ msgstr ""
 "<note>와 일치하는 노트를 [노트북]에 복제합니다. 노트북이 특정되지 않았다면 노"
 "트는 현재의 노트북에 복제됩니다."
 
-#: packages/lib/models/Setting.ts:1449
-msgid ""
-"e.g \"http://my.proxy.com:80\". You can also set via environment variables"
-msgstr ""
-
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
 #: packages/app-mobile/components/screens/Note.tsx:1160
@@ -1428,14 +1372,9 @@ msgstr "편집"
 msgid "Edit in external editor"
 msgstr "외부 편집기에서 편집하기"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
-#, fuzzy
-msgid "Edit link"
-msgstr "노트북 편집"
-
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
 #, fuzzy
-msgid "Edit Link"
+msgid "Edit link"
 msgstr "노트북 편집"
 
 #: packages/app-cli/app/command-edit.js:17
@@ -1583,10 +1522,6 @@ msgstr "PDF 보기 활성화"
 msgid "Enable soft breaks"
 msgstr "소프트 브레이크 활성화"
 
-#: packages/lib/models/Setting.ts:1037
-msgid "Enable spellcheck in the beta editor"
-msgstr ""
-
 #: packages/lib/models/Setting.ts:1132
 msgid "Enable table of contents extension"
 msgstr "목차 확장 활성화"
@@ -1714,7 +1649,7 @@ msgid "Exits the application."
 msgstr "애플리케이션을 종료합니다."
 
 #: packages/app-mobile/components/side-menu-content.tsx:331
-msgid "Expand folder"
+msgid "Expand"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
@@ -1805,7 +1740,7 @@ msgstr "파일 시스템"
 msgid "Filter tags"
 msgstr "태그 필터"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:232
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
 msgstr ""
 
@@ -1850,6 +1785,10 @@ msgstr "폴더"
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "디버깅 목적으로만 사용: 프로파일을 외장 SD 카드에 내보냅니다."
 
+#: packages/lib/models/Setting.ts:1449
+msgid "For example \"%s\""
+msgstr ""
+
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr "바로가기를 편집하는 것은 여기서 찾아보실 수 있습니다: %s"
@@ -1870,11 +1809,7 @@ msgstr "키보드 단축키 및 설정 옵션을 변경하려면 `help keymap`�
 msgid "Force path style"
 msgstr "경로 스타일을 강제"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:164
-msgid "Format as code"
-msgstr ""
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:290
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:276
 #, fuzzy
 msgid "Formatting"
 msgstr "정보"
@@ -1946,7 +1881,11 @@ msgstr "가고자 하는 곳으로 이동..."
 msgid "Grant authorisation"
 msgstr "허가된 권한"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:294
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
+msgid "Header %d"
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
 msgstr ""
 
@@ -1980,7 +1919,7 @@ msgstr "비활성화된 키들을 숨기기"
 msgid "Hide Joplin"
 msgstr "Joplin 숨기기"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:267
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:253
 #, fuzzy
 msgid "Hide keyboard"
 msgstr "메타데이터 숨김"
@@ -2143,7 +2082,7 @@ msgstr "진행 중"
 msgid "In: %s"
 msgstr "내부: %s"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:128
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:119
 msgid "Increase indent level"
 msgstr ""
 
@@ -2167,16 +2106,13 @@ msgstr "인라인 코드"
 msgid "Insert"
 msgstr "삽입"
 
-#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:625
-msgid "Insert Date Time"
-msgstr "날짜와 시간 입력"
-
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "Insert Hyperlink"
 msgstr "하이퍼링크 삽입"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:202
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:625
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
 #, fuzzy
 msgid "Insert time"
 msgstr "날짜와 시간 입력"
@@ -2222,12 +2158,8 @@ msgid "Invalid password"
 msgstr "유효하지 않은 비밀번호"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:143
 msgid "Italic"
-msgstr "기울임"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:154
-#, fuzzy
-msgid "Italicize"
 msgstr "기울임"
 
 #: packages/lib/services/ReportService.ts:185
@@ -2328,6 +2260,10 @@ msgstr ""
 "Joplin의 자체 동기화 서비스. 노트 발행이나 노트북 협업과 같은 Joplin에서만 지"
 "원하는 기능들을 제공합니다."
 
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
+msgid "KaTeX"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1494
 msgid "Keep note history for"
 msgstr "다음과 같이 노트 변경 이력을 유지"
@@ -2396,6 +2332,16 @@ msgstr "Light"
 msgid "Lines"
 msgstr "줄"
 
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:174
+#, fuzzy
+msgid "Link"
+msgstr "링크"
+
+#: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
+#, fuzzy
+msgid "Link description"
+msgstr "암호화"
+
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:185
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
@@ -2403,7 +2349,7 @@ msgstr[0] "링크가 클립보드로 복사되었습니다!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 #, fuzzy
-msgid "Link Text"
+msgid "Link text"
 msgstr "링크"
 
 #: packages/app-mobile/components/screens/Note.tsx:197
@@ -2416,7 +2362,7 @@ msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 msgid "List item"
 msgstr "목록 추가"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:298
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
 msgstr ""
 
@@ -2577,7 +2523,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:564
+#: packages/app-mobile/components/ScreenHeader.tsx:562
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
 
@@ -2589,16 +2535,14 @@ msgstr "노트북으로 옮기기"
 msgid "Move to notebook:"
 msgstr "노트북으로 옮기기:"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:524
+#: packages/app-mobile/components/ScreenHeader.tsx:522
 msgid "Move to notebook..."
 msgstr "노트북으로 옮기기..."
 
 #: packages/app-cli/app/command-mv.js:14
-msgid ""
-"Moves the given <item> (notes matching pattern in current notebook or one "
-"notebook) to [notebook]. If <item> is subnotebook and [notebook] is \"root"
-"\", will make <item> parent notebook"
-msgstr ""
+#, fuzzy
+msgid "Moves the given <item> to [notebook]"
+msgstr "<note>와 일치하는 노트를 [notebook]으로 옮깁니다."
 
 #: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
 msgid "n"
@@ -2607,10 +2551,6 @@ msgstr "아니오"
 #: packages/app-cli/app/app.js:138
 msgid "N"
 msgstr "아니오"
-
-#: packages/app-mobile/components/ScreenHeader.tsx:303
-msgid "Navigate to the previous view"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
 #: packages/app-mobile/components/action-button.js:105
@@ -2934,10 +2874,6 @@ msgstr "동기화 마법사 열기..."
 msgid "Open..."
 msgstr "열기..."
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.tsx:60
-msgid "Opened toolbar overflow menu"
-msgstr ""
-
 #: packages/app-cli/app/command-e2ee.ts:40
 #: packages/app-cli/app/command-e2ee.ts:86
 #: packages/app-cli/app/command-e2ee.ts:96
@@ -2953,6 +2889,11 @@ msgstr "옵션"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:235
 msgid "Or create an account."
 msgstr "또는 새 계정을 만듭니다."
+
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
+#, fuzzy
+msgid "Ordered list"
+msgstr "사용자 생성"
 
 #: packages/app-desktop/gui/MenuBar.tsx:407
 msgid "Other applications..."
@@ -3141,7 +3082,7 @@ msgstr ""
 "바로가기를 입력한 후 엔터 키를 누르세요. 바로가기를 지우려면 백스페이스 키를 "
 "누릅니다."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:582
+#: packages/app-mobile/components/ScreenHeader.tsx:580
 msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
@@ -3190,15 +3131,16 @@ msgid "Properties"
 msgstr "속성"
 
 #: packages/lib/models/Setting.ts:1438
-msgid "Proxy enabled (beta)"
-msgstr ""
+#, fuzzy
+msgid "Proxy enabled"
+msgstr "활성화됨"
 
 #: packages/lib/models/Setting.ts:1459
-msgid "proxy timeout (seconds) (beta)"
+msgid "Proxy timeout (seconds)"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:1448
-msgid "Proxy URL (beta)"
+msgid "Proxy URL"
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
@@ -3261,7 +3203,7 @@ msgstr "공유 수신자:"
 
 #: packages/app-desktop/gui/MenuBar.tsx:646
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
-#: packages/app-mobile/components/ScreenHeader.tsx:376
+#: packages/app-mobile/components/ScreenHeader.tsx:374
 msgid "Redo"
 msgstr "다시 실행"
 
@@ -3285,37 +3227,13 @@ msgstr "거절"
 msgid "Remove"
 msgstr "삭제"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:164
-msgid "Remove code formatting"
-msgstr ""
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:49
-msgid "Remove level %d header"
-msgstr ""
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:90
-msgid "Remove ordered list"
-msgstr ""
-
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:295
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:104
-msgid "Remove task list"
-msgstr ""
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:175
-msgid "Remove TeX region"
-msgstr ""
-
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:297
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:76
-msgid "Remove unordered list"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.ts:8
@@ -3472,7 +3390,7 @@ msgstr "%s(으)로 저장"
 msgid "Save as..."
 msgstr "다른 이름으로 저장..."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:328
+#: packages/app-mobile/components/ScreenHeader.tsx:327
 #: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Save changes"
 msgstr "변경 사항 저장"
@@ -3481,7 +3399,7 @@ msgstr "변경 사항 저장"
 msgid "Save geo-location with notes"
 msgstr "노트에 지리적 위치 정보 포함시키기"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:401
+#: packages/app-mobile/components/ScreenHeader.tsx:399
 #: packages/app-mobile/components/screens/search.js:160
 msgid "Search"
 msgstr "검색"
@@ -3526,7 +3444,7 @@ msgid "Select"
 msgstr "선택"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
-#: packages/app-mobile/components/ScreenHeader.tsx:388
+#: packages/app-mobile/components/ScreenHeader.tsx:386
 msgid "Select all"
 msgstr "모두 선택"
 
@@ -3690,7 +3608,7 @@ msgstr "일부 항목들은 암호화할 수 없습니다."
 msgid "Some items cannot be synchronised."
 msgstr "일부 항목들은 동기화할 수 없습니다."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:583
+#: packages/app-mobile/components/ScreenHeader.tsx:581
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "일부 항목들을 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
 
@@ -3699,7 +3617,7 @@ msgid "Sort notebooks by"
 msgstr "노트북을 다음 기준으로 정렬"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/app-mobile/components/ScreenHeader.tsx:451
+#: packages/app-mobile/components/ScreenHeader.tsx:449
 #: packages/lib/models/Setting.ts:909
 msgid "Sort notes by"
 msgstr "노트를 다음 기준으로 정렬"
@@ -3982,6 +3900,11 @@ msgstr "태그"
 msgid "Take photo"
 msgstr "사진 찍기"
 
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:95
+#, fuzzy
+msgid "Task list"
+msgstr "작업"
+
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
 msgid "Tasks"
@@ -4159,7 +4082,7 @@ msgstr ""
 "완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 다시 시작해야 합니다. 계속하"
 "려면 링크를 눌러주세요."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:584
+#: packages/app-mobile/components/ScreenHeader.tsx:582
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해 이 배너를 누르세요."
 
@@ -4515,23 +4438,15 @@ msgstr "새 태그를 입력하거나 목록에서 선택하세요"
 msgid "Type: %s."
 msgstr "형태: %s."
 
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:142
-msgid "Unbold"
-msgstr ""
-
 #: packages/lib/models/Setting.ts:900
 msgid "Uncompleted to-dos on top"
 msgstr "완료되지 않은 '할 일'을 맨 위에"
 
 #: packages/app-desktop/gui/MenuBar.tsx:642
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#: packages/app-mobile/components/ScreenHeader.tsx:366
+#: packages/app-mobile/components/ScreenHeader.tsx:364
 msgid "Undo"
 msgstr "실행 취소"
-
-#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:154
-msgid "Unitalicize"
-msgstr ""
 
 #: packages/lib/BaseApplication.ts:288
 msgid "Unknown flag: %s"
@@ -4543,6 +4458,11 @@ msgid ""
 msgstr ""
 "알 수 없는 항목 유형을 내려받았습니다 - Joplin을 최신 버전으로 업그레이드 해"
 "주세요"
+
+#: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
+#, fuzzy
+msgid "Unordered list"
+msgstr "사용자 생성"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:164
 msgid "Unpublish note"
@@ -4876,8 +4796,44 @@ msgstr "확대"
 msgid "Zoom Out"
 msgstr "축소"
 
-#~ msgid "Moves the notes matching <note> to [notebook]."
-#~ msgstr "<note>와 일치하는 노트를 [notebook]으로 옮깁니다."
+#, fuzzy
+#~ msgid "Changes have been saved"
+#~ msgstr "노트가 저장되었습니다."
+
+#, fuzzy
+#~ msgid "Create KaTeX region"
+#~ msgstr "사용자 생성"
+
+#, fuzzy
+#~ msgid "Create link"
+#~ msgstr "생성됨"
+
+#, fuzzy
+#~ msgid "Create task list"
+#~ msgstr "새 노트북을 만듭니다"
+
+#, fuzzy
+#~ msgid "Remove KaTeX region"
+#~ msgstr "사용자 생성"
+
+#, fuzzy
+#~ msgid "Unitalic"
+#~ msgstr "기울임"
+
+#, fuzzy
+#~ msgid "Bold text"
+#~ msgstr "굵게"
+
+#, fuzzy
+#~ msgid "Edit Link"
+#~ msgstr "노트북 편집"
+
+#~ msgid "Insert Date Time"
+#~ msgstr "날짜와 시간 입력"
+
+#, fuzzy
+#~ msgid "Italicize"
+#~ msgstr "기울임"
 
 #, fuzzy
 #~ msgid "Save as SVG"
