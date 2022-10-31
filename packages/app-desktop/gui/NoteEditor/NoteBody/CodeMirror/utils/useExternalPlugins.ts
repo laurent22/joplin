@@ -19,9 +19,6 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 
 		for (const contentScript of contentScripts) {
 			try {
-				if (loadedPluginIdSet.has(contentScript.id)) {
-					continue;
-				}
 
 				const mod = contentScript.module;
 
@@ -38,6 +35,10 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 
 				if (mod.codeMirrorOptions) {
 					newOptions = Object.assign({}, newOptions, mod.codeMirrorOptions);
+				}
+
+				if (loadedPluginIdSet.has(contentScript.id)) {
+					continue;
 				}
 
 				if (mod.assets) {
