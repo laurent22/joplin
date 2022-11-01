@@ -17,7 +17,7 @@
     "fs-extra": "^9.0.1",
     "glob": "^7.1.6",
     "on-build-webpack": "^0.1.0",
-    "tar": "^6.0.5",
+    "tar": "^6.1.9",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",
