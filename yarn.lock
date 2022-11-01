@@ -4039,7 +4039,7 @@ __metadata:
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
     "@types/react": 16.9.55
-    "@types/react-redux": 7.1.9
+    "@types/react-redux": 7.1.24
     "@types/styled-components": 5.1.4
     ajv: ^6.5.0
     app-builder-bin: ^1.9.11
@@ -7047,19 +7047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:7.1.9":
-  version: 7.1.9
-  resolution: "@types/react-redux@npm:7.1.9"
-  dependencies:
-    "@types/hoist-non-react-statics": ^3.3.0
-    "@types/react": "*"
-    hoist-non-react-statics: ^3.3.0
-    redux: ^4.0.0
-  checksum: 9de7513cdb2105798168208c57878bc14539b51ba45639b4b9e1e99544dea506cc0bf4e24e4a25ef2845c1169bc51932462799a4bf763bd9c109232f6516af69
-  languageName: node
-  linkType: hard
-
-"@types/react-redux@npm:^7.1.24":
+"@types/react-redux@npm:7.1.24, @types/react-redux@npm:^7.1.24":
   version: 7.1.24
   resolution: "@types/react-redux@npm:7.1.24"
   dependencies:
