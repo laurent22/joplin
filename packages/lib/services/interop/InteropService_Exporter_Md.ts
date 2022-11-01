@@ -51,7 +51,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		const resourcePaths = this.context() && this.context().destResourcePaths ? this.context().destResourcePaths : {};
 
 		const createRelativePath = function(resourcePath: string) {
-			return markdownUtils.escapeLinkUrl(`${relativePathToRoot}_resources/${basename(resourcePath)}`);
+			return `${relativePathToRoot}_resources/${basename(resourcePath)}`;
 		};
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedResourceIds, resourcePaths, createRelativePath);
 	}
@@ -72,7 +72,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		for (let i = 0; i < linkedItemIds.length; i++) {
 			const id = linkedItemIds[i];
 			const itemPath = fn_createRelativePath(paths[id]);
-			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), itemPath);
+			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), markdownUtils.escapeLinkUrl(itemPath));
 		}
 
 		return newBody;
