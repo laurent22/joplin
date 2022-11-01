@@ -27,6 +27,7 @@
 module.exports = {
 	testMatch: [
 		'**/tests/**/*.js',
+		'**/*.test.js',
 	],
 
 	testPathIgnorePatterns: [

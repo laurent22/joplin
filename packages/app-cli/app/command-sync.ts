@@ -6,7 +6,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const { app } = require('./app.js');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 const { reg } = require('@joplin/lib/registry.js');
