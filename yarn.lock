@@ -4477,7 +4477,7 @@ __metadata:
     jest-expect-message: ^1.0.2
     jquery: ^3.6.0
     jsdom: ^16.4.0
-    knex: 0.95.4
+    knex: 0.95.15
     koa: 2.8.1
     markdown-it: ^12.0.4
     mustache: ^3.1.0
@@ -11378,13 +11378,6 @@ __metadata:
     color-convert: ^1.9.3
     color-string: ^1.6.0
   checksum: f81220e8b774d35865c2561be921f5652117638dcda7ca4029262046e37fc2444ac7bbfdd110cf1fd9c074a4ee5eda8f85944ffbdda26186b602dd9bb05f6400
-  languageName: node
-  linkType: hard
-
-"colorette@npm:1.2.1":
-  version: 1.2.1
-  resolution: "colorette@npm:1.2.1"
-  checksum: 06e2fcdb9e2a2c527ac84509a56eadf481cde1768933eb612808f3bb3a9d9872c06b4a9f95e4d0f7befeef8b38307f79b88242d9ea52470d1125520b8116de08
   languageName: node
   linkType: hard
 
@@ -22640,29 +22633,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:0.95.4":
-  version: 0.95.4
-  resolution: "knex@npm:0.95.4"
+"knex@npm:0.95.15":
+  version: 0.95.15
+  resolution: "knex@npm:0.95.15"
   dependencies:
-    colorette: 1.2.1
+    colorette: 2.0.16
     commander: ^7.1.0
-    debug: 4.3.1
+    debug: 4.3.2
     escalade: ^3.1.1
     esm: ^3.2.25
     getopts: 2.2.5
     interpret: ^2.2.0
     lodash: ^4.17.21
-    pg-connection-string: 2.4.0
-    rechoir: ^0.7.0
+    pg-connection-string: 2.5.0
+    rechoir: 0.7.0
     resolve-from: ^5.0.0
     tarn: ^3.0.1
     tildify: 2.0.0
-  peerDependencies:
-    mysql: ^2.18.1
-    mysql2: ^2.2.5
-    pg: ^8.5.1
-    sqlite3: ^5.0.0
-    tedious: ^11.0.5
   peerDependenciesMeta:
     mysql:
       optional: true
@@ -22670,13 +22657,15 @@ __metadata:
       optional: true
     pg:
       optional: true
+    pg-native:
+      optional: true
     sqlite3:
       optional: true
     tedious:
       optional: true
   bin:
     knex: bin/cli.js
-  checksum: a8aafb182660769e11086fc9d58ba6936f651f620676224764d915bb61ca8ce5edc19bbabe65d0497cbee040747bc66e803b1acd5c5ea2c117679ce2dac3086b
+  checksum: f70ad630c1a829b785514070a67d472511877c8fd17ef75df9dcadf9f7a244356a16dc85cd61a1c0a91a24a5a8d6355bfc29d1ff037092d0e1c7dfb3d19f9ff6
   languageName: node
   linkType: hard
 
@@ -27150,13 +27139,6 @@ __metadata:
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
   checksum: 534e641aa8f7cba160f0afec0599b6cecefbb516a2e837b512be0adbe6c1da5550e89c78059c7fabc5c9ffdf6627edabe23eb7c518c4500067a898fa65c2b550
-  languageName: node
-  linkType: hard
-
-"pg-connection-string@npm:2.4.0":
-  version: 2.4.0
-  resolution: "pg-connection-string@npm:2.4.0"
-  checksum: 2743cb7f45beb9bc47438cd584c0194937fb2f7278a434e26e3d57305731a4b1b689f64d9bbe85b83cb5f8d093818e72bada6c9d5b954dbfcf2f9b795d5b0054
   languageName: node
   linkType: hard
 
