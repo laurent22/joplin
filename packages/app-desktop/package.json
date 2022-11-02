@@ -117,7 +117,7 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "19.0.10",
+    "electron": "19.1.4",
     "electron-builder": "^23.0.3",
     "electron-notarize": "^1.2.1",
     "electron-rebuild": "^3.2.7",
