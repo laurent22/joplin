@@ -38,7 +38,7 @@
     "@joplin/turndown": "^4.0.63",
     "@joplin/turndown-plugin-gfm": "^1.0.45",
     "@types/nanoid": "^3.0.0",
-    "async-mutex": "^0.1.3",
+    "async-mutex": "^0.4.0",
     "base-64": "^0.1.0",
     "base64-stream": "^1.0.0",
     "builtin-modules": "^3.1.0",
