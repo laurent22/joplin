@@ -1,0 +1,17 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:base"
+	],
+	"ignorePaths": [
+		"**/node_modules/**",
+		"**/bower_components/**",
+		"packages/app-cli/tests/**",
+		"packages/plugins/**",
+		"Assets/**"
+	],
+	"ignoreDeps": [
+		"react-native",
+		"@types/react-native"
+	]
+}

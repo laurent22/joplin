@@ -328,7 +328,7 @@ const SideMenuContentComponent = (props: Props) => {
 					if (hasChildren) folder_togglePress(folder);
 				}}
 
-				accessibilityLabel={collapsed ? _('Expand folder') : _('Collapse folder')}
+				accessibilityLabel={collapsed ? _('Expand') : _('Collapse')}
 				accessibilityRole="togglebutton"
 			>
 				{iconComp}

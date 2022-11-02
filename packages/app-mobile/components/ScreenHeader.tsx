@@ -300,7 +300,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					disabled={disabled}
 
 					accessibilityLabel={_('Back')}
-					accessibilityHint={_('Navigate to the previous view')}
 					accessibilityRole="button">
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
 						<Icon
@@ -326,7 +325,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					style={{ padding: 0 }}
 
 					accessibilityLabel={_('Save changes')}
-					accessibilityHint={disabled ? _('Any changes have been saved') : null}
 					accessibilityRole="button">
 					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>{icon}</View>
 				</TouchableOpacity>

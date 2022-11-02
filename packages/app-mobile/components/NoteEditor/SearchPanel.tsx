@@ -195,7 +195,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 			styles={styles}
 			iconName="close"
 			onPress={control.hideSearch}
-			title={_('Close search')}
+			title={_('Close')}
 		/>
 	);
 

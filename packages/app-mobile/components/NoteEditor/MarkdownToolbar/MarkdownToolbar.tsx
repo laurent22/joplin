@@ -42,16 +42,10 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	const headerButtons: ButtonSpec[] = [];
 	for (let level = 1; level <= 5; level++) {
 		const active = selState.headerLevel === level;
-		let label;
-		if (!active) {
-			label = _('Create header level %d', level);
-		} else {
-			label = _('Remove level %d header', level);
-		}
 
 		headerButtons.push({
 			icon: `H${level}`,
-			description: label,
+			description: _('Header %d', level),
 			active,
 
 			// We only call addHeaderButton 5 times and in the same order, so
@@ -72,8 +66,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="list-ul" style={styles.text}/>
 		),
-		description:
-			selState.inUnorderedList ? _('Remove unordered list') : _('Create unordered list'),
+		description: _('Unordered list'),
 		active: selState.inUnorderedList,
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.UnorderedList);
@@ -86,8 +79,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="list-ol" style={styles.text}/>
 		),
-		description:
-			selState.inOrderedList ? _('Remove ordered list') : _('Create ordered list'),
+		description: _('Ordered list'),
 		active: selState.inOrderedList,
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.OrderedList);
@@ -100,8 +92,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="tasks" style={styles.text}/>
 		),
-		description:
-			selState.inChecklist ? _('Remove task list') : _('Create task list'),
+		description: _('Task list'),
 		active: selState.inChecklist,
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.CheckList);
@@ -138,8 +129,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="bold" style={styles.text}/>
 		),
-		description:
-			selState.bolded ? _('Unbold') : _('Bold text'),
+		description: _('Bold'),
 		active: selState.bolded,
 		onPress: editorControl.toggleBolded,
 
@@ -150,8 +140,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="italic" style={styles.text}/>
 		),
-		description:
-			selState.italicized ? _('Unitalicize') : _('Italicize'),
+		description: _('Italic'),
 		active: selState.italicized,
 		onPress: editorControl.toggleItalicized,
 
@@ -160,8 +149,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 
 	inlineFormattingBtns.push({
 		icon: '{;}',
-		description:
-			selState.inCode ? _('Remove code formatting') : _('Format as code'),
+		description: _('Code'),
 		active: selState.inCode,
 		onPress: editorControl.toggleCode,
 
@@ -171,8 +159,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	if (props.editorSettings.katexEnabled) {
 		inlineFormattingBtns.push({
 			icon: '∑',
-			description:
-				selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
+			description: _('KaTeX'),
 			active: selState.inMath,
 			onPress: editorControl.toggleMath,
 
@@ -184,8 +171,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="link" style={styles.text}/>
 		),
-		description:
-			selState.inLink ? _('Edit link') : _('Create link'),
+		description: _('Link'),
 		active: selState.inLink,
 		onPress: editorControl.showLinkDialog,
 
@@ -229,7 +215,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			<MaterialIcon name="search" style={styles.text}/>
 		),
 		description: (
-			props.searchState.dialogVisible ? _('Close find and replace') : _('Find and replace')
+			props.searchState.dialogVisible ? _('Close') : _('Find and replace')
 		),
 		active: props.searchState.dialogVisible,
 		onPress: useCallback(() => {

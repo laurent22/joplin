@@ -78,6 +78,12 @@ readme/
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/LinkSelector.js.map
+packages/app-cli/app/base-command.d.ts
+packages/app-cli/app/base-command.js
+packages/app-cli/app/base-command.js.map
+packages/app-cli/app/command-done.test.d.ts
+packages/app-cli/app/command-done.test.js
+packages/app-cli/app/command-done.test.js.map
 packages/app-cli/app/command-e2ee.d.ts
 packages/app-cli/app/command-e2ee.js
 packages/app-cli/app/command-e2ee.js.map
@@ -93,6 +99,12 @@ packages/app-cli/app/command-testing.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
+packages/app-cli/app/setupCommand.d.ts
+packages/app-cli/app/setupCommand.js
+packages/app-cli/app/setupCommand.js.map
+packages/app-cli/app/utils/testUtils.d.ts
+packages/app-cli/app/utils/testUtils.js
+packages/app-cli/app/utils/testUtils.js.map
 packages/app-cli/tests/HtmlToMd.d.ts
 packages/app-cli/tests/HtmlToMd.js
 packages/app-cli/tests/HtmlToMd.js.map

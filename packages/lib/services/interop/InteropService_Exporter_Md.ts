@@ -72,7 +72,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		for (let i = 0; i < linkedItemIds.length; i++) {
 			const id = linkedItemIds[i];
 			const itemPath = fn_createRelativePath(paths[id]);
-			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), itemPath);
+			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), markdownUtils.escapeLinkUrl(itemPath));
 		}
 
 		return newBody;

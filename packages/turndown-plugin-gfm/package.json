@@ -12,7 +12,7 @@
     "rollup": "^0.50.0",
     "standard": "^10.0.3",
     "turndown": "4.0.1",
-    "turndown-attendant": "0.0.2"
+    "turndown-attendant": "0.0.3"
   },
   "files": [
     "lib",
