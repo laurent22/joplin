@@ -31,7 +31,7 @@
     "highlight.js": "11.1.0",
     "html-entities": "^1.2.1",
     "json-stringify-safe": "^5.0.1",
-    "katex": "^0.13.3",
+    "katex": "^0.16.0",
     "markdown-it": "^10.0.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-anchor": "^5.2.5",

@@ -4422,7 +4422,7 @@ __metadata:
     html-entities: ^1.2.1
     jest: ^26.6.3
     json-stringify-safe: ^5.0.1
-    katex: ^0.13.3
+    katex: ^0.16.0
     markdown-it: ^10.0.0
     markdown-it-abbr: ^1.0.4
     markdown-it-anchor: ^5.2.5
@@ -22500,14 +22500,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.13.3":
-  version: 0.13.24
-  resolution: "katex@npm:0.13.24"
+"katex@npm:^0.16.0":
+  version: 0.16.3
+  resolution: "katex@npm:0.16.3"
   dependencies:
     commander: ^8.0.0
   bin:
     katex: cli.js
-  checksum: 1b7c8295867073d0db4f6fb41ef1c0e3418b8e23924ff61b446b36134cb74cdadc7242dfbfb922d9c32f0b15eda6160a08cd30948c4e78141966ca2991a1726b
+  checksum: 3ee588b6420da2b8d087c524502163f52340c4b0bf9ccddb2603d90d66eb637d088696ddf97316eb88d3bb41340784c4270e1824dcf7311110ed4cb2bc5458db
   languageName: node
   linkType: hard
 
