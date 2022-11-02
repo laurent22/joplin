@@ -4550,7 +4550,7 @@ __metadata:
     rollup: ^0.50.0
     standard: ^10.0.3
     turndown: 4.0.1
-    turndown-attendant: 0.0.2
+    turndown-attendant: 0.0.3
   languageName: unknown
   linkType: soft
 
@@ -33332,16 +33332,6 @@ __metadata:
   version: 0.0.6
   resolution: "tunnel@npm:0.0.6"
   checksum: c362948df9ad34b649b5585e54ce2838fa583aa3037091aaed66793c65b423a264e5229f0d7e9a95513a795ac2bd4cb72cda7e89a74313f182c1e9ae0b0994fa
-  languageName: node
-  linkType: hard
-
-"turndown-attendant@npm:0.0.2":
-  version: 0.0.2
-  resolution: "turndown-attendant@npm:0.0.2"
-  dependencies:
-    jsdom: ^11.3.0
-    tape: ^4.8.0
-  checksum: ab8b5e1d572d13d850fe21d57e840bca6fb3689e45af0ade259f42a06495dc96d87fe88191a9e3910ec2be231dc49377c8f6d921297ec0160400ae4e7887e16a
   languageName: node
   linkType: hard
 
