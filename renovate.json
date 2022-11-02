@@ -12,6 +12,9 @@
 	],
 	"ignoreDeps": [
 		"react-native",
-		"@types/react-native"
+		"@types/react-native",
+		"@babel/core",
+		"babel-eslint",
+		"babel-loader"
 	]
 }
