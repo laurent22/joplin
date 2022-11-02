@@ -4277,7 +4277,7 @@ __metadata:
     builtin-modules: ^3.1.0
     chokidar: ^3.4.3
     clean-html: ^1.5.0
-    color: 3.1.2
+    color: 3.2.1
     compare-versions: ^3.6.0
     css: ^3.0.0
     diff-match-patch: ^1.0.4
@@ -11292,7 +11292,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.1, color-convert@npm:^1.9.3":
+"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -11324,7 +11324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-string@npm:^1.5.2, color-string@npm:^1.6.0":
+"color-string@npm:^1.6.0":
   version: 1.9.0
   resolution: "color-string@npm:1.9.0"
   dependencies:
@@ -11343,17 +11343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color@npm:3.1.2":
-  version: 3.1.2
-  resolution: "color@npm:3.1.2"
-  dependencies:
-    color-convert: ^1.9.1
-    color-string: ^1.5.2
-  checksum: 58ab3bf57d5acf95917045cac30db57fa8f8c0e92b8d54f2adaf5e843bb17abe0914809bd44b34b9747e6e08a2f0126adc7964e1ca45fe8948f44aad04e853c9
-  languageName: node
-  linkType: hard
-
-"color@npm:^3.1.2, color@npm:^3.1.3":
+"color@npm:3.2.1, color@npm:^3.1.2, color@npm:^3.1.3":
   version: 3.2.1
   resolution: "color@npm:3.2.1"
   dependencies:
