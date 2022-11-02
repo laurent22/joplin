@@ -4549,7 +4549,7 @@ __metadata:
     browserify: ^14.5.0
     rollup: ^0.50.0
     standard: ^10.0.3
-    turndown: 4.0.1
+    turndown: 4.0.2
     turndown-attendant: 0.0.3
   languageName: unknown
   linkType: soft
@@ -22068,7 +22068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^11.3.0":
+"jsdom@npm:^11.9.0":
   version: 11.12.0
   resolution: "jsdom@npm:11.12.0"
   dependencies:
@@ -33345,12 +33345,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turndown@npm:4.0.1":
-  version: 4.0.1
-  resolution: "turndown@npm:4.0.1"
+"turndown@npm:4.0.2":
+  version: 4.0.2
+  resolution: "turndown@npm:4.0.2"
   dependencies:
-    jsdom: ^11.3.0
-  checksum: 17d2b94d35d5936e52abe0978e92141ea9207a7b4e9372e68375e5e96ac79c4e322ba84a3108fc482e5750ecfdce916cd75f96d8c7180df57193ce90994ff6fb
+    jsdom: ^11.9.0
+  checksum: de2419e55a12c610417bd949fd4560844fddf4d6568f8de8dcc6a91a56263581b85f9b8cb1be313daed196cf5157b97c9a47ed9016c213eedd588bc49d4e5ce9
   languageName: node
   linkType: hard
 
