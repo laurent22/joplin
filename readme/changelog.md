@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v2.9.12](https://github.com/laurent22/joplin/releases/tag/v2.9.12) (Pre-release) - 2022-11-01T17:06:05Z
+
+- Improved: Display the plugin name in dialog boxes created by plugins ([#6979](https://github.com/laurent22/joplin/issues/6979))
+- Improved: Regression: Plugin CSS files were no longer being loaded correctly ([99a61f1](https://github.com/laurent22/joplin/commit/99a61f1))
+- Improved: Remove unnecessary PDF viewer messages ([db4c6ea](https://github.com/laurent22/joplin/commit/db4c6ea))
+- Fixed: Fix exporting resources to md and md + frontmatter ([#6768](https://github.com/laurent22/joplin/issues/6768)) ([#6721](https://github.com/laurent22/joplin/issues/6721) by [@SFulpius](https://github.com/SFulpius))
+- Fixed: Fixed crash when setting spellchecker language to en-IN ([ae17801](https://github.com/laurent22/joplin/commit/ae17801))
+- Fixed: Fixed sidebar tag header click ([5b80fbc](https://github.com/laurent22/joplin/commit/5b80fbc))
+- Fixed: Fixes an error when importing a shortcut map and canceling the dialog ([#6975](https://github.com/laurent22/joplin/issues/6975) by Ahmed Azzam)
+
 ## [v2.9.11](https://github.com/laurent22/joplin/releases/tag/v2.9.11) (Pre-release) - 2022-10-23T16:09:58Z
 
 - New: Add PDF full screen viewer ([#6821](https://github.com/laurent22/joplin/issues/6821) by [@asrient](https://github.com/asrient))
