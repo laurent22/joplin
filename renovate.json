@@ -11,6 +11,7 @@
 		"Assets/**"
 	],
 	"ignoreDeps": [
-		"react-native"
+		"react-native",
+		"@types/react-native"
 	]
 }
