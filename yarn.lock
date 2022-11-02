@@ -4043,7 +4043,7 @@ __metadata:
     "@types/styled-components": 5.1.4
     ajv: ^6.5.0
     app-builder-bin: ^1.9.11
-    async-mutex: ^0.1.3
+    async-mutex: ^0.4.0
     babel-cli: ^6.26.0
     babel-preset-react: ^6.24.1
     codemirror: ^5.56.0
@@ -4271,7 +4271,7 @@ __metadata:
     "@types/node": ^14.14.6
     "@types/node-rsa": ^1.1.1
     "@types/react": ^17.0.20
-    async-mutex: ^0.1.3
+    async-mutex: ^0.4.0
     base-64: ^0.1.0
     base64-stream: ^1.0.0
     builtin-modules: ^3.1.0
@@ -8828,13 +8828,6 @@ __metadata:
   version: 1.0.1
   resolution: "async-limiter@npm:1.0.1"
   checksum: 2b849695b465d93ad44c116220dee29a5aeb63adac16c1088983c339b0de57d76e82533e8e364a93a9f997f28bbfc6a92948cefc120652bd07f3b59f8d75cf2b
-  languageName: node
-  linkType: hard
-
-"async-mutex@npm:^0.1.3":
-  version: 0.1.4
-  resolution: "async-mutex@npm:0.1.4"
-  checksum: 7394d32a9734e54d996d36dd4a4d86246b717cf2d1124b32f9081669d64de0285fa3f460932a404291963f0b0b29811c990b042d4571094fa4f1a520e3e5a15e
   languageName: node
   linkType: hard
 
