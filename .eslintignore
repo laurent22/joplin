@@ -969,6 +969,9 @@ packages/app-mobile/components/NoteEditor/SelectionFormatting.js.map
 packages/app-mobile/components/NoteEditor/types.d.ts
 packages/app-mobile/components/NoteEditor/types.js
 packages/app-mobile/components/NoteEditor/types.js.map
+packages/app-mobile/components/ProfileSwitcher/ProfileEditor.d.ts
+packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
+packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js.map
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.d.ts
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js.map
@@ -981,6 +984,9 @@ packages/app-mobile/components/SelectDateTimeDialog.js.map
 packages/app-mobile/components/SideMenu.d.ts
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenu.js.map
+packages/app-mobile/components/TextInput.d.ts
+packages/app-mobile/components/TextInput.js
+packages/app-mobile/components/TextInput.js.map
 packages/app-mobile/components/getResponsiveValue.d.ts
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.js.map

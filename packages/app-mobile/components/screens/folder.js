@@ -1,14 +1,14 @@
 const React = require('react');
 
-const { View, TextInput, StyleSheet } = require('react-native');
+const { View } = require('react-native');
 const { connect } = require('react-redux');
 const Folder = require('@joplin/lib/models/Folder').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { ScreenHeader } = require('../ScreenHeader');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { dialogs } = require('../../utils/dialogs.js');
-const { themeStyle } = require('../global-style.js');
 const { _ } = require('@joplin/lib/locale');
+const TextInput = require('../TextInput').default;
 
 class FolderScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -21,25 +21,6 @@ class FolderScreenComponent extends BaseScreenComponent {
 			folder: Folder.new(),
 			lastSavedFolder: null,
 		};
-		this.styles_ = {};
-	}
-
-	styles() {
-		const theme = themeStyle(this.props.themeId);
-
-		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
-		this.styles_ = {};
-
-		const styles = {
-			textInput: {
-				color: theme.color,
-				paddingLeft: theme.marginLeft,
-				marginTop: theme.marginTop,
-			},
-		};
-
-		this.styles_[this.props.themeId] = StyleSheet.create(styles);
-		return this.styles_[this.props.themeId];
 	}
 
 	UNSAFE_componentWillMount() {
@@ -103,12 +84,17 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const saveButtonDisabled = !this.isModified();
-		const theme = themeStyle(this.props.themeId);
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Edit notebook')} showSaveButton={true} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={() => this.saveFolderButton_press()} showSideMenuButton={false} showSearchButton={false} />
-				<TextInput placeholder={_('Enter notebook title')} placeholderTextColor={theme.colorFaded} underlineColorAndroid={theme.dividerColor} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
+				<TextInput
+					themeId={this.props.themeId}
+					placeholder={_('Enter notebook title')}
+					autoFocus={true}
+					value={this.state.folder.title}
+					onChangeText={text => this.title_changeText(text)}
+				/>
 				<dialogs.DialogBox
 					ref={dialogbox => {
 						this.dialogbox = dialogbox;
