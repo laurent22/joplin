@@ -4149,7 +4149,7 @@ __metadata:
     jest-environment-jsdom: ^28.1.3
     jetifier: ^1.6.5
     joplin-rn-alarm-notification: ^1.0.5
-    jsc-android: 241213.1.0
+    jsc-android: 241213.2.0
     jsdom: ^20.0.0
     md5: ^2.2.1
     metro-react-native-babel-preset: ^0.66.2
@@ -22007,10 +22007,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsc-android@npm:241213.1.0":
-  version: 241213.1.0
-  resolution: "jsc-android@npm:241213.1.0"
-  checksum: fde613ee7d9f4761dab1757fb73f294489193d1b05b56d62fbfb7641db86edbf600a1072d52bbfb3fabb90d01942b4772ee0f53ee71c2bc004968b6d6f531d11
+"jsc-android@npm:241213.2.0":
+  version: 241213.2.0
+  resolution: "jsc-android@npm:241213.2.0"
+  checksum: 2702ffb5ce39e636ab1add039abf516f483485b9d3e994cbdc3ca9838b9914becfd6c7507d1dfbe85fd597690afeb10fb45df8b39322f25bd018cab87f03a0e8
   languageName: node
   linkType: hard
 
