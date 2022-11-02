@@ -20,7 +20,7 @@
     "dotenv-expand": "5.1.0",
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
-    "html-webpack-plugin": "4.0.0-beta.11",
+    "html-webpack-plugin": "4.5.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-environment-jsdom-fourteen": "1.0.1",
