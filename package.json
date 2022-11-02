@@ -87,5 +87,5 @@
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.2.4"
 }
