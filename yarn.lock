@@ -4068,7 +4068,7 @@ __metadata:
     mark.js: ^8.11.1
     md5: ^2.2.1
     moment: ^2.22.2
-    nan: 2.14.2
+    nan: 2.17.0
     node-fetch: ^1.7.3
     node-notifier: ^8.0.0
     node-rsa: ^1.1.1
@@ -14320,20 +14320,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ecstatic@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "ecstatic@npm:3.3.2"
-  dependencies:
-    he: ^1.1.1
-    mime: ^1.6.0
-    minimist: ^1.1.0
-    url-join: ^2.0.5
-  bin:
-    ecstatic: ./lib/ecstatic.js
-  checksum: 61787fe020a3344b3750fa95fa38f8e5810d6b8cb2626f084a7283c11dde641d204ef19a5e29926d6f0189b2d14780bb6910493b49f9f1e2a0aa39297cc6b1b9
-  languageName: node
-  linkType: hard
-
 "editions@npm:^2.2.0":
   version: 2.3.1
   resolution: "editions@npm:2.3.1"
@@ -18345,7 +18331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"he@npm:1.2.x, he@npm:^1.1.1":
+"he@npm:1.2.x, he@npm:^1.1.0":
   version: 1.2.0
   resolution: "he@npm:1.2.0"
   bin:
@@ -18665,24 +18651,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-server@npm:^0.12.3":
-  version: 0.12.3
-  resolution: "http-server@npm:0.12.3"
+"http-server@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "http-server@npm:0.13.0"
   dependencies:
     basic-auth: ^1.0.3
     colors: ^1.4.0
     corser: ^2.0.1
-    ecstatic: ^3.3.2
+    he: ^1.1.0
     http-proxy: ^1.18.0
+    mime: ^1.6.0
     minimist: ^1.2.5
     opener: ^1.5.1
     portfinder: ^1.0.25
     secure-compare: 3.0.1
     union: ~0.5.0
+    url-join: ^2.0.5
   bin:
     hs: bin/http-server
     http-server: bin/http-server
-  checksum: fdd8652638937940ce3e2c2a36f2b92cee57967aaba40552f0d422ba01cbb86c2645aabc73ba89035651ae0e5a02df28f81adce93cf3188236ced7d426b0b036
+  checksum: 6fcd40e590986cdd17c6acd35ec9260fe214cc49b41b94cbd52a759d43c5e683053ee9da90598689dca40def8328c6e1654b832d715e2858999177a0b5f17551
   languageName: node
   linkType: hard
 
@@ -25106,12 +25094,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.14.2":
-  version: 2.14.2
-  resolution: "nan@npm:2.14.2"
+"nan@npm:2.17.0":
+  version: 2.17.0
+  resolution: "nan@npm:2.17.0"
   dependencies:
     node-gyp: latest
-  checksum: 7a269139b66a7d37470effb7fb36a8de8cc3b5ffba6e40bb8e0545307911fe5ebf94797ec62f655ecde79c237d169899f8bd28256c66a32cbc8284faaf94c3f4
+  checksum: ec609aeaf7e68b76592a3ba96b372aa7f5df5b056c1e37410b0f1deefbab5a57a922061e2c5b369bae9c7c6b5e6eecf4ad2dac8833a1a7d3a751e0a7c7f849ed
   languageName: node
   linkType: hard
 
@@ -29960,7 +29948,7 @@ __metadata:
     fs-extra: ^8.1.0
     glob: ^7.1.6
     gulp: ^4.0.2
-    http-server: ^0.12.3
+    http-server: ^0.13.0
     husky: ^3.0.2
     lerna: ^3.22.1
     lint-staged: ^9.2.1
