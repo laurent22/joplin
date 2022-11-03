@@ -4068,7 +4068,7 @@ __metadata:
     mark.js: ^8.11.1
     md5: ^2.2.1
     moment: ^2.22.2
-    nan: 2.14.2
+    nan: 2.17.0
     node-fetch: ^1.7.3
     node-notifier: ^8.0.0
     node-rsa: ^1.1.1
@@ -25119,12 +25119,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.14.2":
-  version: 2.14.2
-  resolution: "nan@npm:2.14.2"
+"nan@npm:2.17.0":
+  version: 2.17.0
+  resolution: "nan@npm:2.17.0"
   dependencies:
     node-gyp: latest
-  checksum: 7a269139b66a7d37470effb7fb36a8de8cc3b5ffba6e40bb8e0545307911fe5ebf94797ec62f655ecde79c237d169899f8bd28256c66a32cbc8284faaf94c3f4
+  checksum: ec609aeaf7e68b76592a3ba96b372aa7f5df5b056c1e37410b0f1deefbab5a57a922061e2c5b369bae9c7c6b5e6eecf4ad2dac8833a1a7d3a751e0a7c7f849ed
   languageName: node
   linkType: hard
 
