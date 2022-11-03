@@ -4169,7 +4169,7 @@ __metadata:
     react-native-image-picker: ^4.10.0
     react-native-image-resizer: ^1.3.0
     react-native-modal-datetime-picker: ^9.0.0
-    react-native-popup-menu: ^0.15.13
+    react-native-popup-menu: ^0.16.0
     react-native-quick-actions: ^0.3.13
     react-native-rsa-native: ^2.0.4
     react-native-securerandom: ^1.0.0-rc.0
@@ -28511,10 +28511,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-popup-menu@npm:^0.15.13":
-  version: 0.15.13
-  resolution: "react-native-popup-menu@npm:0.15.13"
-  checksum: a251cf0336e607ad23eff6e71c08a3fafca9d0a91a910f958b902373d2a1aa49a437ecb9554c9bac1f605511d5dd53669a8903584a6c1cf742f913e2f4b9bd0b
+"react-native-popup-menu@npm:^0.16.0":
+  version: 0.16.1
+  resolution: "react-native-popup-menu@npm:0.16.1"
+  checksum: 4a4cfdfdcd7ee0a2515dbd4fa427dd38af89121e375ea452a470091456ecb8fc35fd24d6a79936703ebc4a84905352e8df0de24d58b036f56d2a9ba61449a7d5
   languageName: node
   linkType: hard
 
