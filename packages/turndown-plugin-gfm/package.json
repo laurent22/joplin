@@ -9,7 +9,7 @@
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
     "browserify": "^14.5.0",
-    "rollup": "^0.50.0",
+    "rollup": "^0.68.0",
     "standard": "^10.0.3",
     "turndown": "4.0.2",
     "turndown-attendant": "0.0.3"

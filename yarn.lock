@@ -4547,7 +4547,7 @@ __metadata:
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
     browserify: ^14.5.0
-    rollup: ^0.50.0
+    rollup: ^0.68.0
     standard: ^10.0.3
     turndown: 4.0.2
     turndown-attendant: 0.0.3
@@ -4562,7 +4562,7 @@ __metadata:
     css: ^2.2.4
     html-entities: ^1.2.1
     jsdom: ^15.2.1
-    rollup: ^0.50.0
+    rollup: ^0.68.0
     rollup-plugin-commonjs: ^8.2.6
     rollup-plugin-node-resolve: ^3.0.0
     rollup-plugin-replace: ^2.0.0
@@ -6515,6 +6515,13 @@ __metadata:
   version: 0.0.50
   resolution: "@types/estree@npm:0.0.50"
   checksum: 9a2b6a4a8c117f34d08fbda5e8f69b1dfb109f7d149b60b00fd7a9fb6ac545c078bc590aa4ec2f0a256d680cf72c88b3b28b60c326ee38a7bc8ee1ee95624922
+  languageName: node
+  linkType: hard
+
+"@types/estree@npm:0.0.39":
+  version: 0.0.39
+  resolution: "@types/estree@npm:0.0.39"
+  checksum: 412fb5b9868f2c418126451821833414189b75cc6bf84361156feed733e3d92ec220b9d74a89e52722e03d5e241b2932732711b7497374a404fad49087adc248
   languageName: node
   linkType: hard
 
@@ -29906,12 +29913,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^0.50.0":
-  version: 0.50.1
-  resolution: "rollup@npm:0.50.1"
+"rollup@npm:^0.68.0":
+  version: 0.68.2
+  resolution: "rollup@npm:0.68.2"
+  dependencies:
+    "@types/estree": 0.0.39
+    "@types/node": "*"
   bin:
     rollup: ./bin/rollup
-  checksum: c5ac8c8dedfb2c2af7238977b012fd9ce55df1e6e80108fa4061a7106d1fc8242261e630e687cbf93fe95221a15d3bb30ab0c914eda11eead5f043e6f39cea87
+  checksum: 0435c55c4a612051ae77972f19703e4d0787b4130dd0a8b0ab4d9130281af9b9c31900444b593dd3617ab75226b3543db924ef60564ad05a410146aa5ece5182
   languageName: node
   linkType: hard
 
