@@ -64,7 +64,7 @@
     "@types/jest": "^26.0.15",
     "@types/jest-expect-message": "^1.0.3",
     "@types/jsdom": "^16.2.6",
-    "@types/koa": "2.0.49",
+    "@types/koa": "2.13.4",
     "@types/markdown-it": "^12.0.0",
     "@types/mustache": "^0.8.32",
     "@types/nodemailer": "^6.4.1",
