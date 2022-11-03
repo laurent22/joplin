@@ -15,6 +15,9 @@
 		"@types/react-native",
 		"@babel/core",
 		"babel-eslint",
-		"babel-loader"
+		"babel-loader",
+		"katex",
+		"jsc-android",
+		"metro-react-native-babel-preset"
 	]
 }
