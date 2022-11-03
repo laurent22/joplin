@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "@types/fs-extra": "^9.0.13",
-    "http-server": "^0.12.3",
+    "http-server": "^0.13.0",
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
   },
