@@ -4077,7 +4077,7 @@ __metadata:
     react: 16.13.1
     react-datetime: ^2.14.0
     react-dom: 16.9.0
-    react-redux: 5.0.7
+    react-redux: 5.1.2
     react-select: ^2.4.3
     react-test-renderer: ^16.14.0
     react-toggle-button: ^2.2.0
@@ -4180,7 +4180,7 @@ __metadata:
     react-native-vector-icons: ^7.1.0
     react-native-version-info: ^1.1.0
     react-native-webview: ^10.9.2
-    react-redux: 5.0.7
+    react-redux: 5.1.2
     redux: 4.0.0
     rn-fetch-blob: ^0.12.0
     stream: 0.0.2
@@ -18396,13 +18396,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^2.5.0":
-  version: 2.5.5
-  resolution: "hoist-non-react-statics@npm:2.5.5"
-  checksum: ee2d05e5c7e1398ad84a15b0327f66bd78f38a8e0015e852f954b36434e32eb7e942d5357505020a3a1147f247b165bf1e69d72393e3accab67cafdafeb86230
-  languageName: node
-  linkType: hard
-
 "hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
@@ -19296,7 +19289,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:2.2.4, invariant@npm:^2.0.0, invariant@npm:^2.2.2, invariant@npm:^2.2.4":
+"invariant@npm:2.2.4, invariant@npm:^2.2.2, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -23074,7 +23067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.17.5, lodash-es@npm:^4.2.1":
+"lodash-es@npm:^4.2.1":
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
   checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
@@ -23254,7 +23247,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.0.0, lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0":
+"lodash@npm:^4.0.0, lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -27872,7 +27865,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.1, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -28305,7 +28298,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.12.0, react-is@npm:^16.13.1, react-is@npm:^16.7.0, react-is@npm:^16.8.1, react-is@npm:^16.8.6":
+"react-is@npm:^16.12.0, react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1, react-is@npm:^16.8.6":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -28326,7 +28319,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-lifecycles-compat@npm:^3.0.4":
+"react-lifecycles-compat@npm:^3.0.0, react-lifecycles-compat@npm:^3.0.4":
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
@@ -28631,20 +28624,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:5.0.7":
-  version: 5.0.7
-  resolution: "react-redux@npm:5.0.7"
+"react-redux@npm:5.1.2":
+  version: 5.1.2
+  resolution: "react-redux@npm:5.1.2"
   dependencies:
-    hoist-non-react-statics: ^2.5.0
-    invariant: ^2.0.0
-    lodash: ^4.17.5
-    lodash-es: ^4.17.5
+    "@babel/runtime": ^7.1.2
+    hoist-non-react-statics: ^3.3.0
+    invariant: ^2.2.4
     loose-envify: ^1.1.0
-    prop-types: ^15.6.0
+    prop-types: ^15.6.1
+    react-is: ^16.6.0
+    react-lifecycles-compat: ^3.0.0
   peerDependencies:
     react: ^0.14.0 || ^15.0.0-0 || ^16.0.0-0
     redux: ^2.0.0 || ^3.0.0 || ^4.0.0-0
-  checksum: 7dbbf7e0d89aa5fc921f78ea873c458c4bb2c747b544959e21e3e1aea9e6b84944b8f26af64fdd109f4f6c7672495605b2e76d82c1374c808abd62c341f0da99
+  checksum: 2079b57f4d25a8b2f535009eb7f5be53c5d3334b4ad2224f63309e3caa1b90209f6b6321c2bd509f715333102d645a8ed698f2c6298f05801095776c295478a8
   languageName: node
   linkType: hard
 
