@@ -59,7 +59,7 @@ async function getUserHtml(sessionId: string, userId: string): Promise<string> {
 
 	await routeHandler(context);
 	checkContextError(context);
-	return context.response.body;
+	return context.response.body as string;
 }
 
 describe('index/users', function() {
