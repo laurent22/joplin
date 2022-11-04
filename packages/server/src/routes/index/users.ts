@@ -124,7 +124,7 @@ router.publicSchemas.push('users/:id/confirm');
 router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
 	const models = ctx.joplin.models;
 	const userId = path.id;
-	const token = ctx.query.token;
+	const token = ctx.query.token as string;
 
 	if (!token) throw new ErrorBadRequest('Missing token');
 
