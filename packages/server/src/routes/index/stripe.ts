@@ -407,7 +407,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	success: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
 		try {
 			const models = ctx.joplin.models;
-			const checkoutSession = await stripe.checkout.sessions.retrieve(ctx.query.session_id);
+			const checkoutSession = await stripe.checkout.sessions.retrieve(ctx.query.session_id as string);
 			const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email; // customer_email appears to be always null but fallback to it just in case
 			if (!userEmail) throw new Error(`Could not find email from checkout session: ${JSON.stringify(checkoutSession)}`);
 			const user = await waitForUserCreation(models, userEmail);

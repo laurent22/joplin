@@ -39,9 +39,9 @@ describe('api/sessions', function() {
 
 		const context = await postSession(user.email, password);
 		expect(context.response.status).toBe(200);
-		expect(!!context.response.body.id).toBe(true);
+		expect(!!(context.response.body as any).id).toBe(true);
 
-		const session: Session = await models().session().load(context.response.body.id);
+		const session: Session = await models().session().load((context.response.body as any).id);
 		expect(session.user_id).toBe(user.id);
 	});
 

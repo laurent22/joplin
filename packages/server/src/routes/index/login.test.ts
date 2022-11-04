@@ -44,7 +44,7 @@ describe('index_login', function() {
 
 		await routeHandler(context);
 
-		const doc = parseHtml(context.response.body);
+		const doc = parseHtml(context.response.body as string);
 		expect(!!doc.querySelector('input[name=email]')).toBe(true);
 		expect(!!doc.querySelector('input[name=password]')).toBe(true);
 	});
