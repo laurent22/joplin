@@ -2,7 +2,7 @@ import config from '../config';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { afterAllTests, beforeAllDb, beforeEachDb, createNote, createUserAndSession, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
-import { BackupItemType } from './database/types';
+import { BackupItemType, UserFlagType } from './database/types';
 import UserDeletionService from './UserDeletionService';
 
 const newService = () => {
@@ -32,7 +32,7 @@ describe('UserDeletionService', function() {
 		const t0 = new Date('2021-12-14').getTime();
 		const t1 = t0 + 1000;
 
-		await models().user().setEnabled(user1.id, false);
+		await models().userFlag().toggle(user1.id, UserFlagType.ManuallyDisabled, true);
 
 		const job = await models().userDeletion().add(user1.id, t1, {
 			processData: true,
@@ -65,7 +65,7 @@ describe('UserDeletionService', function() {
 		const t0 = new Date('2021-12-14').getTime();
 		const t1 = t0 + 1000;
 
-		await models().user().setEnabled(user1.id, false);
+		await models().userFlag().toggle(user1.id, UserFlagType.ManuallyDisabled, true);
 
 		const job = await models().userDeletion().add(user1.id, t1, {
 			processData: false,
@@ -117,7 +117,7 @@ describe('UserDeletionService', function() {
 		expect(await models().share().count()).toBe(1);
 		expect(await models().shareUser().count()).toBe(1);
 
-		await models().user().setEnabled(user2.id, false);
+		await models().userFlag().toggle(user2.id, UserFlagType.ManuallyDisabled, true);
 
 		const job = await models().userDeletion().add(user2.id, Date.now());
 		const service = newService();
@@ -146,7 +146,7 @@ describe('UserDeletionService', function() {
 		expect(await models().share().count()).toBe(1);
 		expect(await models().shareUser().count()).toBe(1);
 
-		await models().user().setEnabled(user1.id, false);
+		await models().userFlag().toggle(user1.id, UserFlagType.ManuallyDisabled, true);
 
 		const job = await models().userDeletion().add(user1.id, Date.now());
 		const service = newService();

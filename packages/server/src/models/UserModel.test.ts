@@ -413,7 +413,7 @@ describe('UserModel', function() {
 		const t0 = new Date('2022-01-01').getTime();
 		jest.setSystemTime(t0);
 
-		await models().user().setEnabled(user1.id, false);
+		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
 
 		expect((await models().user().load(user1.id)).enabled).toBe(0);
 		expect((await models().user().load(user2.id)).enabled).toBe(1);
@@ -428,10 +428,10 @@ describe('UserModel', function() {
 
 		// If we make the account enabled again, the user should be immediately
 		// removed from the queue
-		await models().user().setEnabled(user1.id, true);
+		await models().userFlag().remove(user1.id, UserFlagType.ManuallyDisabled);
 		expect(await models().userDeletion().count()).toBe(0);
 
-		await models().user().setEnabled(user1.id, false);
+		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
 
 		const t2 = new Date('2022-03-01').getTime();
 		jest.setSystemTime(t2);
@@ -450,7 +450,7 @@ describe('UserModel', function() {
 		expect(job.user_id).toBe(user1.id);
 		await models().userDeletion().start(job.id);
 
-		await expectThrow(async () => models().user().setEnabled(user1.id, true));
+		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
 		expect((await models().user().load(user1.id)).enabled).toBe(0);
 	});
 

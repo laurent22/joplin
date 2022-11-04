@@ -618,20 +618,6 @@ export default class UserModel extends BaseModel<User> {
 		return syncInfo.ppk?.value || null;
 	}
 
-	public async setEnabled(userId: string, enabled: boolean) {
-		const user = await this.load(userId);
-		if (!user) throw new ErrorNotFound(`Not found: ${userId}`);
-
-		if (await this.models().userDeletion().isDeletedOrBeingDeleted(userId)) throw new ErrorBadRequest('User account is being deleted or already deleted and cannot be enabled again');
-
-		await this.models().userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !enabled);
-
-		// If the user has been re-enabled, we want to remove it from the
-		// deletion queue (if it has been queued there) immediately, so that it
-		// doesn't incorrectly get deleted.
-		if (enabled) await this.models().userDeletion().removeFromQueueByUserId(userId);
-	}
-
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
