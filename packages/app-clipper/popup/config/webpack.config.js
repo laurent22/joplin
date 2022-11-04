@@ -24,6 +24,19 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+const md5 = require('md5');
+
+class HashGen {
+
+  update(data) {
+    this.data_ = data;
+  }
+
+  digest() {
+    return md5(escape(this.data_));
+  }
+
+}
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -167,7 +180,7 @@ module.exports = function(webpackEnv) {
     ].filter(Boolean),
     output: {
       // Needed to fix this: https://www.reddit.com/r/webdev/comments/qd14bm/node_17_currently_breaks_most_webpack/
-      hashFunction: 'sha512',
+      hashFunction: HashGen,
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,
       // Add /* filename */ comments to generated require()s in the output.
