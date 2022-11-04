@@ -48,7 +48,7 @@ jobs:
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Yarn
         run: |
