@@ -32,6 +32,8 @@ describe('UserDeletionService', function() {
 		const t0 = new Date('2021-12-14').getTime();
 		const t1 = t0 + 1000;
 
+		await models().user().setEnabled(user1.id, false);
+
 		const job = await models().userDeletion().add(user1.id, t1, {
 			processData: true,
 			processAccount: false,
@@ -63,6 +65,8 @@ describe('UserDeletionService', function() {
 		const t0 = new Date('2021-12-14').getTime();
 		const t1 = t0 + 1000;
 
+		await models().user().setEnabled(user1.id, false);
+
 		const job = await models().userDeletion().add(user1.id, t1, {
 			processData: false,
 			processAccount: true,
@@ -92,7 +96,7 @@ describe('UserDeletionService', function() {
 		const content = JSON.parse(backupItem.content.toString());
 		expect(content.user.id).toBe(user1.id);
 		expect(content.user.email).toBe(user1.email);
-		expect(content.flags.length).toBe(0);
+		expect(content.flags.length).toBe(1);
 	});
 
 	test('should not delete notebooks that are not owned', async function() {
@@ -112,6 +116,8 @@ describe('UserDeletionService', function() {
 
 		expect(await models().share().count()).toBe(1);
 		expect(await models().shareUser().count()).toBe(1);
+
+		await models().user().setEnabled(user2.id, false);
 
 		const job = await models().userDeletion().add(user2.id, Date.now());
 		const service = newService();
@@ -140,6 +146,8 @@ describe('UserDeletionService', function() {
 		expect(await models().share().count()).toBe(1);
 		expect(await models().shareUser().count()).toBe(1);
 
+		await models().user().setEnabled(user1.id, false);
+
 		const job = await models().userDeletion().add(user1.id, Date.now());
 		const service = newService();
 		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
@@ -147,6 +155,29 @@ describe('UserDeletionService', function() {
 		expect(await models().share().count()).toBe(0);
 		expect(await models().shareUser().count()).toBe(0);
 		expect(await models().item().count()).toBe(0);
+	});
+
+	test('should not do anything if the user is still enabled', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const t0 = new Date('2021-12-14').getTime();
+		const t1 = t0 + 1000;
+
+		const job = await models().userDeletion().add(user1.id, t1, {
+			processData: false,
+			processAccount: true,
+		});
+
+		expect(await models().userDeletion().count()).toBe(1);
+
+		const service = newService();
+		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
+
+		// Nothing has been done because the user is still enabled
+		expect(await models().user().count()).toBe(1);
+
+		// And the job should have been removed from the queue
+		expect(await models().userDeletion().count()).toBe(0);
 	});
 
 });
