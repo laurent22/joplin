@@ -48,7 +48,7 @@
     "terser-webpack-plugin": "2.3.8",
     "ts-pnp": "1.1.5",
     "url-loader": "2.3.0",
-    "webpack": "4.41.5",
+    "webpack": "4.46.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "4.3.1"
