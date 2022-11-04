@@ -24,9 +24,11 @@ describe('api_ping', function() {
 
 		await routeHandler(context);
 
+		const body = context.response.body as any;
+
 		expect(context.response.status).toBe(200);
-		expect(context.response.body.status).toBe('ok');
-		expect(context.response.body.message).toBe('Joplin Server is running');
+		expect(body.status).toBe('ok');
+		expect(body.message).toBe('Joplin Server is running');
 	});
 
 });
