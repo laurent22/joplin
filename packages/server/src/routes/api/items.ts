@@ -49,7 +49,7 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 			// include the "share_id" field property so it doesn't need to be set via
 			// query parameter.
 			if (ctx.query['share_id']) {
-				saveOptions.shareId = ctx.query['share_id'];
+				saveOptions.shareId = ctx.query['share_id'] as string;
 				await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
 			}
 
