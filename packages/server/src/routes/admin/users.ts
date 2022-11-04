@@ -339,9 +339,8 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
 		} else if (fields.disable_button || fields.restore_button) {
-			const user = await models.user().load(path.id);
 			await models.user().checkIfAllowed(owner, AclAction.Delete, user);
-			await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
+			await models.user().setEnabled(path.id, !!fields.restore_button);
 		} else if (fields.send_account_confirmation_email) {
 			const user = await models.user().load(path.id);
 			await models.user().save({ id: user.id, must_set_password: 1 });
