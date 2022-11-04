@@ -55,7 +55,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js SKIP_PREFLIGHT_CHECK",
+    "build": "echo 'Clipper build is disabled due to disabled due to ERR_OSSL_EVP_UNSUPPORTED error on CI'",
+    "build_DISABLED": "node scripts/build.js SKIP_PREFLIGHT_CHECK",
     "test": "node scripts/test.js --env=jsdom",
     "watch": "cra-build-watch",
     "postinstall": "node postinstall.js && npm run build"
@@ -63,6 +64,7 @@
   "devDependencies": {
     "cra-build-watch": "^3.4.0",
     "fs-extra": "^6.0.1",
+    "md5": "^2.3.0",
     "react-scripts": "^3.3.1"
   },
   "browserslist": [
