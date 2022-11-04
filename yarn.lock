@@ -4074,9 +4074,9 @@ __metadata:
     node-rsa: ^1.1.1
     pretty-bytes: ^5.3.0
     re-resizable: ^6.5.4
-    react: 16.13.1
+    react: 16.14.0
     react-datetime: ^2.14.0
-    react-dom: 16.9.0
+    react-dom: 16.14.0
     react-redux: 5.1.2
     react-select: ^2.4.3
     react-test-renderer: ^16.14.0
@@ -4350,8 +4350,8 @@ __metadata:
     jest: ^28.1.3
     jest-environment-jsdom: ^28.1.3
     pdfjs-dist: ^2.14.305
-    react: 16.13.1
-    react-dom: 16.9.0
+    react: 16.14.0
+    react-dom: 16.14.0
     style-loader: ^3.3.1
     styled-components: ^5.3.5
     ts-jest: ^28.0.7
@@ -28273,17 +28273,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:16.9.0":
-  version: 16.9.0
-  resolution: "react-dom@npm:16.9.0"
+"react-dom@npm:16.14.0":
+  version: 16.14.0
+  resolution: "react-dom@npm:16.14.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
     prop-types: ^15.6.2
-    scheduler: ^0.15.0
+    scheduler: ^0.19.1
   peerDependencies:
-    react: ^16.0.0
-  checksum: a053a86f9bb30d7738cac21e399246d4399f163c5c272cfd1f92c8b80e381c5514d540fded733b15f1873810324765378d39b4105839ada48aff52cfaf17cbe3
+    react: ^16.14.0
+  checksum: 5a5c49da0f106b2655a69f96c622c347febcd10532db391c262b26aec225b235357d9da1834103457683482ab1b229af7a50f6927a6b70e53150275e31785544
   languageName: node
   linkType: hard
 
@@ -28720,14 +28720,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:16.13.1":
-  version: 16.13.1
-  resolution: "react@npm:16.13.1"
+"react@npm:16.14.0":
+  version: 16.14.0
+  resolution: "react@npm:16.14.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
     prop-types: ^15.6.2
-  checksum: 4508f4207caca6bef55736284cbf2ce18d2edfee4c1457fc0bb2086b34ed5bcf9b44acdb71e27574e73a5b5d4d093720b5b4ec0bf92bb89394ee3a0a7c42c2d4
+  checksum: 8484f3ecb13414526f2a7412190575fc134da785c02695eb92bb6028c930bfe1c238d7be2a125088fec663cc7cda0a3623373c46807cf2c281f49c34b79881ac
   languageName: node
   linkType: hard
 
@@ -30140,16 +30140,6 @@ __metadata:
   dependencies:
     xmlchars: ^2.2.0
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "scheduler@npm:0.15.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 75920a8288daac05d1c26a6aaa94cddfe302f03c7b1108191696b4cfcb2e2d2038810a4d44ac4d6c6687bb26fa1f8db4b19d0655a4e79ccf2a253749a394de1d
   languageName: node
   linkType: hard
 
