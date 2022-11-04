@@ -44,7 +44,7 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2
         with:
@@ -126,7 +126,7 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v2
         with:
