@@ -19,6 +19,7 @@
 		"katex",
 		"jsc-android",
 		"metro-react-native-babel-preset",
-		"webpack"
+		"webpack",
+		"rollup"
 	]
 }
