@@ -84,7 +84,7 @@ router.post('api/batch', async (_path: SubPath, ctx: AppContext) => {
 
 		response[subRequestId] = {
 			status: r.status,
-			body: typeof r.body === 'object' ? { ...r.body } : r.body,
+			body: typeof r.body === 'object' ? { ...(r.body as object) } : r.body,
 			header: r.header ? { ...r.header } : {},
 		};
 	}
