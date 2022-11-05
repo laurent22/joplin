@@ -1,5 +1,18 @@
 # Joplin Server Changelog
 
+## [server-v2.9.6](https://github.com/laurent22/joplin/releases/tag/server-v2.9.6) - 2022-11-05T11:52:09Z
+
+- Improved: Allow enabling and disabling tasks (1379c9c)
+- Improved: Allow searching user by email or name (1cfbefb)
+- Improved: Fail-safe when trying to delete a non-disabled account (21883b4)
+- Improved: Paginate users (8ac8d53)
+- Improved: Refactor table structure (8ea6d89)
+- Improved: Update sender email (bf92ee7)
+- Improved: Upgrade Koa framework to 2.13.4 (dc92546)
+- Improved: Upgrade to Node 18 (f34078b)
+- Improved: When re-activating an account, remove it from the deletion queue (bbc4228)
+- Fixed: Fixed account activation logic (ccf5d20)
+
 ## [server-v2.9.5](https://github.com/laurent22/joplin/releases/tag/server-v2.9.5) - 2022-10-11T10:44:01Z
 
 - New: Add support for sidebar in user pages (053dbab)

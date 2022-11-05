@@ -48,7 +48,7 @@ const subRoutes: Record<string, RouteHandler> = {
 	reset: async (_path: SubPath, ctx: AppContext) => {
 		let successMessage: string = '';
 		let error: Error = null;
-		const token = ctx.query.token;
+		const token = ctx.query.token as string;
 
 		if (ctx.method === 'POST') {
 			const fields = await bodyFields<ResetPasswordFields>(ctx.req);

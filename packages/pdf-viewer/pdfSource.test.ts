@@ -29,12 +29,15 @@ describe('pdfData', () => {
 		expect(pdf.pageCount).toBe(1);
 	});
 
-	test('Should throw error on invalid file', async () => {
-		const pdf = new PdfDocument(document);
-		await expect(async () => {
-			await pdf.loadDoc('');
-		}).rejects.toThrowError();
-	});
+	// Disable test because it throws warnings in console
+	// https://github.com/mozilla/pdf.js/issues/12443
+
+	// test('Should throw error on invalid file', async () => {
+	// 	const pdf = new PdfDocument(document);
+	// 	await expect(async () => {
+	// 		await pdf.loadDoc('');
+	// 	}).rejects.toThrowError();
+	// });
 
 	test('Should get correct page size', async () => {
 		const file = await loadFile(pdfFilePath1);

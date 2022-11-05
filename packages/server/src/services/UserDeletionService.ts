@@ -90,6 +90,20 @@ export default class UserDeletionService extends BaseService {
 
 		logger.info('Starting user deletion: ', deletion);
 
+		// Normally, a user that is still enabled should not be processed here,
+		// because it should not have been queued to begin with (or if it was
+		// queued, then enabled, it should have been removed from the queue).
+		// But as a fail safe we have this extra check.
+		//
+		// We also remove the job from the queue so that the service doesn't try
+		// to process it again.
+		const user = await this.models.user().load(deletion.user_id);
+		if (user.enabled) {
+			logger.error(`Trying to delete a user that is still enabled - aborting and removing the user from the queue. Deletion job: ${JSON.stringify(deletion)}`);
+			await this.models.userDeletion().removeFromQueueByUserId(user.id);
+			return;
+		}
+
 		let error: any = null;
 		let success: boolean = true;
 

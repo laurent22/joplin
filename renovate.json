@@ -12,6 +12,17 @@
 	],
 	"ignoreDeps": [
 		"react-native",
-		"@types/react-native"
+		"@types/react-native",
+		"@babel/core",
+		"babel-eslint",
+		"babel-loader",
+		"katex",
+		"jsc-android",
+		"metro-react-native-babel-preset",
+		"webpack",
+		"rollup",
+		"typedoc",
+		"actions/stale",
+		"@svgr/webpack"
 	]
 }

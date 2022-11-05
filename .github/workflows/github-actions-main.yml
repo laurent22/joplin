@@ -8,6 +8,22 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-2019]
     steps:
 
+      # Trying to fix random networking issues on Windows
+      # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
+      - name: Disable TCP/UDP offload on Windows
+        if: runner.os == 'Windows'
+        run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
+
+      - name: Disable TCP/UDP offload on Linux
+        if: runner.os == 'Linux'
+        run: sudo ethtool -K eth0 tx off rx off
+
+      - name: Disable TCP/UDP offload on macOS
+        if: runner.os == 'macOS'
+        run: |
+          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
+          sudo sysctl -w net.link.generic.system.hwcksum_rx=0
+
       # Silence apt-get update errors (for example when a module doesn't
       # exist) since otherwise it will make the whole build fails, even though
       # it might work without update. libsecret-1-dev is required for keytar -
@@ -48,7 +64,7 @@ jobs:
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Yarn
         run: |
@@ -130,7 +146,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Yarn
         run: |
