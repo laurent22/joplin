@@ -14,6 +14,16 @@ jobs:
         if: runner.os == 'Windows'
         run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
 
+      - name: Disable TCP/UDP offload on Linux
+        if: runner.os == 'Linux'
+        run: sudo ethtool -K eth0 tx off rx off
+
+      - name: Disable TCP/UDP offload on macOS
+        if: runner.os == 'macOS'
+        run: |
+          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
+          sudo sysctl -w net.link.generic.system.hwcksum_rx=0
+
       # Silence apt-get update errors (for example when a module doesn't
       # exist) since otherwise it will make the whole build fails, even though
       # it might work without update. libsecret-1-dev is required for keytar -
