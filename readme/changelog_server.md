@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.9.6](https://github.com/laurent22/joplin/releases/tag/server-v2.9.6) - 2022-11-05T11:52:09Z
+## [server-v2.9.7](https://github.com/laurent22/joplin/releases/tag/server-v2.9.7) - 2022-11-05T16:51:39Z
 
 - Improved: Allow enabling and disabling tasks (1379c9c)
 - Improved: Allow searching user by email or name (1cfbefb)
