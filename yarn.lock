@@ -3168,10 +3168,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-free@npm:^5.13.0, @fortawesome/fontawesome-free@npm:^5.15.1":
-  version: 5.15.4
-  resolution: "@fortawesome/fontawesome-free@npm:5.15.4"
-  checksum: 32281c3df4075290d9a96dfc22f72fadb3da7055d4117e48d34046b8c98032a55fa260ae351b0af5d6f6fb57a2f5d79a4abe52af456da35195f7cb7dda27b4a2
+"@fortawesome/fontawesome-free@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "@fortawesome/fontawesome-free@npm:6.2.0"
+  checksum: fd3fcc0a963b907110922b5ac0ca67633aea20b5034102a1f5d285830f7f7a27f9c9de0c4a30228ccd2579bd8f95581a1bbef9519c7b74632e7012d60dd57bb7
   languageName: node
   linkType: hard
 
@@ -4013,7 +4013,7 @@ __metadata:
     7zip-bin-mac: ^1.0.1
     7zip-bin-win: ^2.1.1
     "@electron/remote": ^2.0.1
-    "@fortawesome/fontawesome-free": ^5.13.0
+    "@fortawesome/fontawesome-free": ^6.0.0
     "@joeattardi/emoji-button": ^4.6.0
     "@joplin/lib": ~2.9
     "@joplin/pdf-viewer": ~2.9
@@ -4431,7 +4431,7 @@ __metadata:
   resolution: "@joplin/server@workspace:packages/server"
   dependencies:
     "@aws-sdk/client-s3": ^3.40.0
-    "@fortawesome/fontawesome-free": ^5.15.1
+    "@fortawesome/fontawesome-free": ^6.0.0
     "@joplin/lib": ~2.9
     "@joplin/renderer": ~2.9
     "@joplin/tools": ~2.9
