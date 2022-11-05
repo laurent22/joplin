@@ -26,7 +26,7 @@
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/netinfo": "^6.0.0",
     "@react-native-community/push-notification-ios": "^1.6.0",
-    "@react-native-community/slider": "^3.0.3",
+    "@react-native-community/slider": "^4.0.0",
     "assert-browserify": "^2.0.0",
     "buffer": "^5.0.8",
     "constants-browserify": "^1.0.0",

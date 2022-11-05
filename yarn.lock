@@ -4115,7 +4115,7 @@ __metadata:
     "@react-native-community/geolocation": ^2.0.2
     "@react-native-community/netinfo": ^6.0.0
     "@react-native-community/push-notification-ios": ^1.6.0
-    "@react-native-community/slider": ^3.0.3
+    "@react-native-community/slider": ^4.0.0
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^28.1.3
     "@types/react-native": ^0.64.4
@@ -5984,13 +5984,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/slider@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@react-native-community/slider@npm:3.0.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 640c7ed7befa8325c3582e2266f5910fc18394261fa76bf45109875b24e96314573254fb5fd7398588ff5b32fce25eae96e6499fd2925cded78d45f45ab86ba1
+"@react-native-community/slider@npm:^4.0.0":
+  version: 4.3.3
+  resolution: "@react-native-community/slider@npm:4.3.3"
+  checksum: 2329dbefd678f848b9660793dff3a2f81ab65880821fbd208d240d1049c875f8dc67cf82218fdb89177ccbf9ac3120974569383e1a4eaf749d921f0076619ead
   languageName: node
   linkType: hard
 
