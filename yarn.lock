@@ -4444,7 +4444,7 @@ __metadata:
     "@types/markdown-it": 12.2.3
     "@types/mustache": 0.8.32
     "@types/nodemailer": 6.4.4
-    "@types/uuid": 8.3.3
+    "@types/uuid": 8.3.4
     "@types/yargs": 17.0.7
     "@types/zxcvbn": 4.4.1
     bcryptjs: 2.4.3
@@ -7132,10 +7132,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:8.3.3":
-  version: 8.3.3
-  resolution: "@types/uuid@npm:8.3.3"
-  checksum: 3f340155bb1161f9ffa7163926d6222fea8f3505c23619b72bcc230883354926672c08a06510c7a543f73553c792a84444cc1744cff631b4ba988763e4bd7a8f
+"@types/uuid@npm:8.3.4":
+  version: 8.3.4
+  resolution: "@types/uuid@npm:8.3.4"
+  checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
   languageName: node
   linkType: hard
 
