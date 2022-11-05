@@ -43,6 +43,7 @@ class Command extends BaseCommand {
 		const newFolder: FolderEntity = {
 			title: args['new-notebook'],
 		};
+		// this.logger().debug('mkbook-command-args: ', args);
 
 		if (createSubFolder) {
 			if (targetFolder) {

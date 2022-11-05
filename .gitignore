@@ -87,6 +87,12 @@ packages/app-cli/app/command-testing.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
+packages/app-cli/app/setupCommand.d.ts
+packages/app-cli/app/setupCommand.js
+packages/app-cli/app/setupCommand.js.map
+packages/app-cli/app/utils/testUtils.d.ts
+packages/app-cli/app/utils/testUtils.js
+packages/app-cli/app/utils/testUtils.js.map
 packages/app-cli/tests/HtmlToMd.d.ts
 packages/app-cli/tests/HtmlToMd.js
 packages/app-cli/tests/HtmlToMd.js.map
