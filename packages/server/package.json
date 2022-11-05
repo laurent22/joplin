@@ -28,7 +28,7 @@
     "@koa/cors": "4.0.0",
     "@types/uuid": "8.3.3",
     "bcryptjs": "2.4.3",
-    "bulma": "0.9.3",
+    "bulma": "0.9.4",
     "bulma-prefers-dark": "0.1.0-beta.1",
     "compare-versions": "3.6.0",
     "dayjs": "1.10.7",

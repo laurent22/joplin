@@ -4448,7 +4448,7 @@ __metadata:
     "@types/yargs": ^17.0.4
     "@types/zxcvbn": ^4.4.1
     bcryptjs: 2.4.3
-    bulma: 0.9.3
+    bulma: 0.9.4
     bulma-prefers-dark: 0.1.0-beta.1
     compare-versions: 3.6.0
     dayjs: 1.10.7
@@ -10222,10 +10222,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bulma@npm:0.9.3":
-  version: 0.9.3
-  resolution: "bulma@npm:0.9.3"
-  checksum: 98e1c2794b70c6339b41afc929bec6e22eae5b2751dc5fb0d9b7195d1c799ba4129a6fda1097e966db492f65fc4bed719da2498356c1ea6a9972f23ad3025d5c
+"bulma@npm:0.9.4":
+  version: 0.9.4
+  resolution: "bulma@npm:0.9.4"
+  checksum: bc0ab8c203deb0ae200fab5b38547ad4bc8ed1e3abcf6f4ac8a2229af46540419bbcb78c9d2e80f3ddda8825d64fa186ed8775674656cdcabe5544be4d0f3d85
   languageName: node
   linkType: hard
 
