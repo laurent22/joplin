@@ -4021,7 +4021,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 26.0.24
     "@types/node": 14.18.0
-    "@types/react": 16.14.34
+    "@types/react": 18.0.25
     "@types/react-redux": 7.1.24
     "@types/styled-components": 5.1.26
     ajv: 6.12.6
@@ -4253,7 +4253,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 14.18.0
     "@types/node-rsa": 1.1.1
-    "@types/react": 17.0.37
+    "@types/react": 18.0.25
     async-mutex: 0.4.0
     base-64: 0.1.0
     base64-stream: 1.0.0
@@ -4324,7 +4324,7 @@ __metadata:
     "@joplin/lib": ~2.9
     "@types/jest": 28.1.6
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 16.14.34
+    "@types/react": 18.0.25
     "@types/react-dom": 16.9.16
     "@types/styled-components": 5.1.25
     async-mutex: 0.4.0
@@ -4380,7 +4380,7 @@ __metadata:
   resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
   dependencies:
     "@babel/core": 7.16.0
-    "@types/react": 16.14.21
+    "@types/react": 18.0.25
     "@types/react-native": 0.64.19
     react: 17.0.2
     react-native: 0.66.1
@@ -7025,7 +7025,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:17.0.37":
+"@types/react@npm:*":
   version: 17.0.37
   resolution: "@types/react@npm:17.0.37"
   dependencies:
@@ -7036,25 +7036,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:16.14.21":
-  version: 16.14.21
-  resolution: "@types/react@npm:16.14.21"
+"@types/react@npm:18.0.25":
+  version: 18.0.25
+  resolution: "@types/react@npm:18.0.25"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 9660ea0a2c7ad364295c1e5abd6b98a05fd372a0f06f97850f60fcc254bcec766d19b101c0acc382746a4e0b71848d88097a1db7124e3fd441c0472fb6b3f849
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:16.14.34":
-  version: 16.14.34
-  resolution: "@types/react@npm:16.14.34"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: a1a105c131bd7fd5cae693c641b3a05eb03c079875fe8e780e616afc54d86e3fa1e8c6433e7a30d2a7f8a1a7681cf1a4f652e9eb48b6abe1f80f7cafe858ebf2
+  checksum: 231d658c45abdef044a716b4502774f1585d8336d73b2f5bd68f181acbfc874b7a457686ecd29b415b43ed0922c309bab7e2cf96832d188a3f4f1b02f2af760a
   languageName: node
   linkType: hard
 
