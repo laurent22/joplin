@@ -4436,7 +4436,7 @@ __metadata:
     "@joplin/tools": ~2.9
     "@koa/cors": 4.0.0
     "@rmp135/sql-ts": 1.12.1
-    "@types/fs-extra": 8.1.2
+    "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
     "@types/jest-expect-message": 1.0.3
     "@types/jsdom": 16.2.13
@@ -6534,15 +6534,6 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 12a2a0e6c4b993fc0854bec665906788aea0d8ee4392389d7a98a5de1eefdd33c9e1e40a91f3afd274011119c506f7b4126acb97fae62ae20b654974d44cba12
-  languageName: node
-  linkType: hard
-
-"@types/fs-extra@npm:8.1.2":
-  version: 8.1.2
-  resolution: "@types/fs-extra@npm:8.1.2"
-  dependencies:
-    "@types/node": "*"
-  checksum: 7277198ded9caea5750c82e569ba1e6fbac28cdb4a95e5d52d24e7c4c2ac90bf45fbe89e08fc21de8f9d3c9b302e30680566eb04e460c30ceac66ad24c161b37
   languageName: node
   linkType: hard
 
