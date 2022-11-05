@@ -5,7 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "@babel/core": "7.8.4",
-    "@svgr/webpack": "4.3.3",
+    "@svgr/webpack": "6.5.1",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "babel-eslint": "10.0.3",
