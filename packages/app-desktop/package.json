@@ -137,7 +137,7 @@
   "dependencies": {
     "@electron/remote": "2.0.1",
     "@fortawesome/fontawesome-free": "5.15.4",
-    "@joeattardi/emoji-button": "4.6.2",
+    "@joeattardi/emoji-button": "4.6.4",
     "@joplin/lib": "~2.9",
     "@joplin/pdf-viewer": "~2.9",
     "@joplin/renderer": "~2.9",
