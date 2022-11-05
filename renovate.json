@@ -20,6 +20,8 @@
 		"jsc-android",
 		"metro-react-native-babel-preset",
 		"webpack",
-		"rollup"
+		"rollup",
+		"typedoc",
+		"actions/stale"
 	]
 }
