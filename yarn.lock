@@ -3980,22 +3980,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joeattardi/emoji-button@npm:4.6.2":
-  version: 4.6.2
-  resolution: "@joeattardi/emoji-button@npm:4.6.2"
+"@joeattardi/emoji-button@npm:4.6.4":
+  version: 4.6.4
+  resolution: "@joeattardi/emoji-button@npm:4.6.4"
   dependencies:
     "@fortawesome/fontawesome-svg-core": ^1.2.28
     "@fortawesome/free-regular-svg-icons": ^5.13.0
     "@fortawesome/free-solid-svg-icons": ^5.13.0
     "@popperjs/core": ^2.4.0
-    "@types/twemoji": ^12.1.1
     escape-html: ^1.0.3
     focus-trap: ^5.1.0
     fuzzysort: ^1.1.4
     tiny-emitter: ^2.1.0
     tslib: ^2.0.0
-    twemoji: ^13.0.0
-  checksum: 6799668126b6cd7599a5bd05b5a6ff4387db28b80879e28aa452b6e82d146fa8d36d59d3ef0353a0ea87648df0c8a7fd108c162addb7a2542e1b9a433806f7c7
+    twemoji: ^12.1.2
+  checksum: f500a7d7e6699f4b59dfc735d9323900654f587bbecc5429beebe1270224a5288af66bd208d345ec30b36be149352e6fbf9cc1ec384362c17b2e0f88c9022988
   languageName: node
   linkType: hard
 
@@ -4014,7 +4013,7 @@ __metadata:
     7zip-bin-win: ^2.1.1
     "@electron/remote": 2.0.1
     "@fortawesome/fontawesome-free": 5.15.4
-    "@joeattardi/emoji-button": 4.6.2
+    "@joeattardi/emoji-button": 4.6.4
     "@joplin/lib": ~2.9
     "@joplin/pdf-viewer": ~2.9
     "@joplin/renderer": ~2.9
@@ -7129,13 +7128,6 @@ __metadata:
   version: 4.0.1
   resolution: "@types/tough-cookie@npm:4.0.1"
   checksum: 7570c1c2d74201f4ead3512cf8e4c99e97d92ab8a02ae2fb987fd720ced0ca1a2baf250c98a861a170b86762606c9bf6d32207675f13dffc5ab75c08c96578d2
-  languageName: node
-  linkType: hard
-
-"@types/twemoji@npm:^12.1.1":
-  version: 12.1.2
-  resolution: "@types/twemoji@npm:12.1.2"
-  checksum: 35ef6fd9f58e1e2284aa202daf6b8f21d725941411ef7551b1283cc56b663cbcdd5252f359a39906e83657536b142b5350258378498698aba4dc80963e6eab8a
   languageName: node
   linkType: hard
 
@@ -33264,22 +33256,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twemoji-parser@npm:13.1.0":
-  version: 13.1.0
-  resolution: "twemoji-parser@npm:13.1.0"
-  checksum: 8046ce003c03dd92d68c2648cfbfa39c659fca4f05c10da8d14957985dc3c0c680f3ecf2de8245dc1ddffedc5b2a675f2032053e1e77cc7474301a88fe192ad3
+"twemoji-parser@npm:12.1.3":
+  version: 12.1.3
+  resolution: "twemoji-parser@npm:12.1.3"
+  checksum: 1ec154cec17dcb75902541070655da77c8dbd4d109217b3993b59e608de82c01d086d0d7bed861e78274b4bceda899a1ffb941caddd37a6a4a2471b959a2e312
   languageName: node
   linkType: hard
 
-"twemoji@npm:^13.0.0":
-  version: 13.1.0
-  resolution: "twemoji@npm:13.1.0"
+"twemoji@npm:^12.1.2":
+  version: 12.1.6
+  resolution: "twemoji@npm:12.1.6"
   dependencies:
     fs-extra: ^8.0.1
     jsonfile: ^5.0.0
-    twemoji-parser: 13.1.0
+    twemoji-parser: 12.1.3
     universalify: ^0.1.2
-  checksum: 9938fb6973b760a676052d11a5318b381bf6533d8195d578664d537082a61298e0b21f315b9e2938ec6a64f8be70a8d460cf85924393a8a6ba1a2fab2158a3ef
+  checksum: 7a146eaa03c3b62a0f3e95f61dc52df4e6273a8867d36ef41ccd515b8daa17036458cd53b7f900b0960a49a7a40dab775db156b4d4f46aa69ec1804e0c2c59b5
   languageName: node
   linkType: hard
 
