@@ -135,7 +135,7 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
-    "@electron/remote": "2.0.1",
+    "@electron/remote": "2.0.8",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.2",
     "@joplin/lib": "~2.9",
