@@ -23,10 +23,10 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
-    "chalk": "^2.1.0",
-    "slugify": "^1.4.6",
-    "yeoman-generator": "^2.0.1",
-    "yosay": "^2.0.1"
+    "chalk": "2.4.2",
+    "slugify": "1.6.3",
+    "yeoman-generator": "2.0.5",
+    "yosay": "2.0.2"
   },
   "devDependencies": {
     "jest": "^26.6.3"

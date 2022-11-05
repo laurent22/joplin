@@ -39,10 +39,10 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "domelementtype": "^2.0.1",
+    "domelementtype": "2.2.0",
     "domhandler": "3.3.0",
-    "domutils": "^2.0.0",
-    "entities": "^2.0.0"
+    "domutils": "2.8.0",
+    "entities": "2.2.0"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",
