@@ -121,7 +121,7 @@
     "electron-builder": "23.0.8",
     "electron-notarize": "1.2.1",
     "electron-rebuild": "3.2.7",
-    "glob": "7.2.0",
+    "glob": "7.2.3",
     "gulp": "4.0.2",
     "jest": "26.6.3",
     "js-sha512": "0.8.0",
