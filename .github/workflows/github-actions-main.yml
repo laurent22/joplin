@@ -159,4 +159,7 @@ jobs:
         run: |
           yarn install
           yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
-          
+
+          # Basic test to ensure that the created build is valid. It should exit with
+          # code 0  if it works.
+          docker run joplin/server:0.0.0 node dist/app.js migrate list
