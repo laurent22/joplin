@@ -112,7 +112,7 @@
     "@types/node": "^14.14.6",
     "@types/react": "16.14.34",
     "@types/react-redux": "7.1.24",
-    "@types/styled-components": "5.1.4",
+    "@types/styled-components": "5.1.26",
     "ajv": "^6.5.0",
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
@@ -173,7 +173,7 @@
     "roboto-fontface": "^0.10.0",
     "smalltalk": "^2.5.1",
     "sqlite3": "^5.0.2",
-    "styled-components": "5.1.1",
+    "styled-components": "5.3.6",
     "styled-system": "5.1.5",
     "taboverride": "^4.0.3",
     "tinymce": "^5.2.0"
