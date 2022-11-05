@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const { app } = require('./app.js');
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
@@ -7,22 +7,22 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
 
-	protected usage() {
+	usage() {
 		return 'mkbook <new-notebook> [notebook]';
 	}
 
-	protected description() {
+	description() {
 		return _('Creates a new notebook.');
 	}
 
-	protected options() {
+	options() {
 		return [
 			['-s, --sub', _('Creates the new notebook as a sub-notebook')],
 		];
 	}
 
 	// validDestinationSubFolder check for presents and ambiguous folders
-	private async validDestinationSubFolder(targetFolder: string) {
+	async validDestinationSubFolder(targetFolder: string) {
 
 		const destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetFolder);
 		if (!destinationFolder) {
@@ -37,7 +37,7 @@ class Command extends BaseCommand {
 		return destinationFolder;
 	}
 
-	protected async action(args: any) {
+	async action(args: any) {
 		const createSubFolder = args.options && args.options.sub === true;
 		const targetFolder = args['notebook'];
 		const newFolder: FolderEntity = {

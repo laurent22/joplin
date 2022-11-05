@@ -1,17 +1,17 @@
-const { _ } = require('@joplin/lib/locale');
-const { reg } = require('@joplin/lib/registry.js');
+import { _ } from '@joplin/lib/locale';
+import { reg } from '@joplin/lib/registry.js';
 
-class BaseCommand {
-	constructor() {
-		this.stdout_ = null;
-		this.prompt_ = null;
-	}
+export default class BaseCommand {
 
-	usage() {
+	protected stdout_: any = null;
+	protected prompt_: any = null;
+	protected dispatcher_: any;
+
+	usage(): string {
 		throw new Error('Usage not defined');
 	}
 
-	encryptionCheck(item) {
+	encryptionCheck(item: any) {
 		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
 	}
 
@@ -19,7 +19,7 @@ class BaseCommand {
 		throw new Error('Description not defined');
 	}
 
-	async action() {
+	async action(_args: any) {
 		throw new Error('Action not defined');
 	}
 
@@ -27,11 +27,11 @@ class BaseCommand {
 		return ['cli', 'gui'];
 	}
 
-	supportsUi(ui) {
+	supportsUi(ui: string) {
 		return this.compatibleUis().indexOf(ui) >= 0;
 	}
 
-	options() {
+	options(): any[] {
 		return [];
 	}
 
@@ -54,28 +54,28 @@ class BaseCommand {
 		return r[0];
 	}
 
-	setDispatcher(fn) {
+	setDispatcher(fn: Function) {
 		this.dispatcher_ = fn;
 	}
 
-	dispatch(action) {
+	dispatch(action: any) {
 		if (!this.dispatcher_) throw new Error('Dispatcher not defined');
 		return this.dispatcher_(action);
 	}
 
-	setStdout(fn) {
+	setStdout(fn: Function) {
 		this.stdout_ = fn;
 	}
 
-	stdout(text) {
+	stdout(text: string) {
 		if (this.stdout_) this.stdout_(text);
 	}
 
-	setPrompt(fn) {
+	setPrompt(fn: Function) {
 		this.prompt_ = fn;
 	}
 
-	async prompt(message, options = null) {
+	async prompt(message: string, options: any = null) {
 		if (!this.prompt_) throw new Error('Prompt is undefined');
 		return await this.prompt_(message, options);
 	}
@@ -93,5 +93,3 @@ class BaseCommand {
 		return reg.logger();
 	}
 }
-
-module.exports = { BaseCommand };
