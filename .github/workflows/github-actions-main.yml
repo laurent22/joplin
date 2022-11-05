@@ -162,4 +162,4 @@ jobs:
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
-          docker run joplin/server:0.0.0 node dist/app.js migrate list
+          docker run joplin/server:0.0.0-beta node dist/app.js migrate list
