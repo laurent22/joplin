@@ -237,8 +237,8 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.4):
     - React
-  - react-native-slider (3.0.3):
-    - React
+  - react-native-slider (4.3.3):
+    - React-Core
   - react-native-sqlite-storage (5.0.0):
     - React
   - react-native-version-info (1.1.1):
@@ -537,7 +537,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-netinfo: f80db8cac2151405633324cb645c60af098ee461
   react-native-rsa-native: 1f6bba06dd02f0e652a66a384c75c270f7a0062f
-  react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
+  react-native-slider: 7d19220da2f2ae7cbb9aa80127cb73c597fa221f
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
   react-native-webview: 0aa2cde4ee7e3e1c5fffdf64dbce9c709aa18155
