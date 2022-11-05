@@ -225,8 +225,8 @@ PODS:
     - React-Core
   - react-native-document-picker (4.3.0):
     - React-Core
-  - react-native-geolocation (2.0.2):
-    - React
+  - react-native-geolocation (3.0.3):
+    - React-Core
   - react-native-get-random-values (1.7.1):
     - React-Core
   - react-native-image-picker (4.10.0):
@@ -316,7 +316,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.10.1):
     - React-Core
-  - RNDateTimePicker (3.5.2):
+  - RNDateTimePicker (6.5.4):
     - React-Core
   - RNFileViewer (2.1.4):
     - React-Core
@@ -531,7 +531,7 @@ SPEC CHECKSUMS:
   react-native-alarm-notification: 4817a2a0d7cc2ed2acc97337ebcdf9ae2a69c9d5
   react-native-camera: b8cc03e2feec0c04403d0998e37cf519d8fd4c6f
   react-native-document-picker: 20f652c2402d3ddc81f396d8167c3bd978add4a2
-  react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+  react-native-geolocation: 2b4052c14edff18ba402795f4ce0f2a093c4ba3e
   react-native-get-random-values: 2c4ff6b44cb71291dabe9a8ae87d3877dcf387da
   react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
@@ -556,7 +556,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
-  RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
+  RNDateTimePicker: 93b9659fbd0fd91a4fb568bf8f5c00b0175aa1ba
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93

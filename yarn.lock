@@ -4058,9 +4058,9 @@ __metadata:
     node-rsa: ^1.1.1
     pretty-bytes: ^5.3.0
     re-resizable: ^6.5.4
-    react: 16.13.1
+    react: 16.14.0
     react-datetime: ^2.14.0
-    react-dom: 16.9.0
+    react-dom: 16.14.0
     react-redux: 5.1.2
     react-select: ^2.4.3
     react-test-renderer: ^16.14.0
@@ -4111,8 +4111,8 @@ __metadata:
     "@joplin/tools": ~2.9
     "@lezer/highlight": ^1.0.0
     "@react-native-community/clipboard": ^1.5.0
-    "@react-native-community/datetimepicker": ^3.0.3
-    "@react-native-community/geolocation": ^2.0.2
+    "@react-native-community/datetimepicker": 6.5.4
+    "@react-native-community/geolocation": ^3.0.0
     "@react-native-community/netinfo": ^6.0.0
     "@react-native-community/push-notification-ios": ^1.6.0
     "@react-native-community/slider": ^4.0.0
@@ -4334,8 +4334,8 @@ __metadata:
     jest: ^28.1.3
     jest-environment-jsdom: ^28.1.3
     pdfjs-dist: ^2.14.305
-    react: 16.13.1
-    react-dom: 16.9.0
+    react: 16.14.0
+    react-dom: 16.14.0
     style-loader: ^3.3.1
     styled-components: ^5.3.5
     ts-jest: ^28.0.7
@@ -4435,7 +4435,7 @@ __metadata:
     "@joplin/lib": ~2.9
     "@joplin/renderer": ~2.9
     "@joplin/tools": ~2.9
-    "@koa/cors": ^3.1.0
+    "@koa/cors": ^4.0.0
     "@rmp135/sql-ts": ^1.12.1
     "@types/fs-extra": ^8.0.0
     "@types/jest": ^26.0.15
@@ -4499,7 +4499,7 @@ __metadata:
     "@types/mustache": ^0.8.32
     "@types/node": ^14.14.6
     "@types/node-fetch": 1.6.9
-    "@types/yargs": 16.0.3
+    "@types/yargs": 16.0.4
     dayjs: ^1.10.7
     execa: ^4.1.0
     fs-extra: ^4.0.3
@@ -4522,7 +4522,7 @@ __metadata:
     sqlite3: ^5.0.0
     typescript: ^4.1.3
     uri-template: ^1.0.1
-    yargs: 16.0.3
+    yargs: 16.2.0
   languageName: unknown
   linkType: soft
 
@@ -4617,12 +4617,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@koa/cors@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@koa/cors@npm:3.1.0"
+"@koa/cors@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@koa/cors@npm:4.0.0"
   dependencies:
     vary: ^1.1.2
-  checksum: b6f18de404a967696fe19c9a8d35816e2a845be51f9aa49f1a8d31bbea095eaa20c35eceafe1b764a7e3a912052ca6eaf1965ac34b00020b1ec2823cb60a9b5d
+  checksum: e0760544823532f2d71d792e3076858e38bab9b1c090abea175f1319fd91ea58a1da384a2fe7f5108f1c681e3830b01f62a1cafe271d6406751976af443187aa
   languageName: node
   linkType: hard
 
@@ -5944,22 +5944,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^3.0.3":
-  version: 3.5.2
-  resolution: "@react-native-community/datetimepicker@npm:3.5.2"
+"@react-native-community/datetimepicker@npm:6.5.4":
+  version: 6.5.4
+  resolution: "@react-native-community/datetimepicker@npm:6.5.4"
   dependencies:
     invariant: ^2.2.4
-  checksum: 8f0d3bc7014b17c696a415565c6fc591591b29ba5a438f2c1692a96ffc185693266eb950229ed3e9bf6b035d61a720ee402cbe9750d5bef81fd19e7647a24229
+  checksum: f2e7e0fdcdaf8aae8d26fcf4e81216ada9a7387ad71d4b304e60a9a71e43395b5548c8875440db9972dd4d80debdffe0c113d4413fb5f133828859fa9f1617c6
   languageName: node
   linkType: hard
 
-"@react-native-community/geolocation@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@react-native-community/geolocation@npm:2.0.2"
+"@react-native-community/geolocation@npm:^3.0.0":
+  version: 3.0.3
+  resolution: "@react-native-community/geolocation@npm:3.0.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: b072e740d0a3bd05f6166d66a5ab268d248092ab812b215539667ce0d4b01a078faed9a1bb45ac654e6aae976115f5b8c68dcab9de02e1a811b30cc5bb2e7d36
+  checksum: c57397a9a8fdc66368c2bd517c8f6b3cbf19f1cb1cfb758759b76dd4ecc0d5496ba2402554fc9bc86c4025ba1dc12d5ba307775e5206e1b21035b123b71965a5
   languageName: node
   linkType: hard
 
@@ -7169,12 +7169,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:16.0.3":
-  version: 16.0.3
-  resolution: "@types/yargs@npm:16.0.3"
+"@types/yargs@npm:16.0.4, @types/yargs@npm:^16.0.0":
+  version: 16.0.4
+  resolution: "@types/yargs@npm:16.0.4"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 0968b06d2f6df764cb180a4089b293ae313a310b0c3524c296f93ac896ca1ed8d857b595db0388355f9f45772226d25d6a4f7df359302f245040a63ba057ae5a
+  checksum: caa21d2c957592fe2184a8368c8cbe5a82a6c2e2f2893722e489f842dc5963293d2f3120bc06fe3933d60a3a0d1e2eb269649fd6b1947fe1820f8841ba611dd9
   languageName: node
   linkType: hard
 
@@ -7184,15 +7184,6 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: 8e358aeb8f0c3758e59e2b8fcfdee5627ab2fe3d92f50f380503d966c7f33287be3322155516a50d27727fde1ad3878f48f60cd6648439126d4b0bbb1a1153ed
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:^16.0.0":
-  version: 16.0.4
-  resolution: "@types/yargs@npm:16.0.4"
-  dependencies:
-    "@types/yargs-parser": "*"
-  checksum: caa21d2c957592fe2184a8368c8cbe5a82a6c2e2f2893722e489f842dc5963293d2f3120bc06fe3933d60a3a0d1e2eb269649fd6b1947fe1820f8841ba611dd9
   languageName: node
   linkType: hard
 
@@ -11109,7 +11100,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cliui@npm:^7.0.0, cliui@npm:^7.0.2":
+"cliui@npm:^7.0.2":
   version: 7.0.4
   resolution: "cliui@npm:7.0.4"
   dependencies:
@@ -14912,7 +14903,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"escalade@npm:^3.0.2, escalade@npm:^3.1.1":
+"escalade@npm:^3.1.1":
   version: 3.1.1
   resolution: "escalade@npm:3.1.1"
   checksum: a3e2a99f07acb74b3ad4989c48ca0c3140f69f923e56d0cba0526240ee470b91010f9d39001f2a4a313841d237ede70a729e92125191ba5d21e74b106800b133
@@ -28258,17 +28249,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:16.9.0":
-  version: 16.9.0
-  resolution: "react-dom@npm:16.9.0"
+"react-dom@npm:16.14.0":
+  version: 16.14.0
+  resolution: "react-dom@npm:16.14.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
     prop-types: ^15.6.2
-    scheduler: ^0.15.0
+    scheduler: ^0.19.1
   peerDependencies:
-    react: ^16.0.0
-  checksum: a053a86f9bb30d7738cac21e399246d4399f163c5c272cfd1f92c8b80e381c5514d540fded733b15f1873810324765378d39b4105839ada48aff52cfaf17cbe3
+    react: ^16.14.0
+  checksum: 5a5c49da0f106b2655a69f96c622c347febcd10532db391c262b26aec225b235357d9da1834103457683482ab1b229af7a50f6927a6b70e53150275e31785544
   languageName: node
   linkType: hard
 
@@ -28705,14 +28696,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:16.13.1":
-  version: 16.13.1
-  resolution: "react@npm:16.13.1"
+"react@npm:16.14.0":
+  version: 16.14.0
+  resolution: "react@npm:16.14.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
     prop-types: ^15.6.2
-  checksum: 4508f4207caca6bef55736284cbf2ce18d2edfee4c1457fc0bb2086b34ed5bcf9b44acdb71e27574e73a5b5d4d093720b5b4ec0bf92bb89394ee3a0a7c42c2d4
+  checksum: 8484f3ecb13414526f2a7412190575fc134da785c02695eb92bb6028c930bfe1c238d7be2a125088fec663cc7cda0a3623373c46807cf2c281f49c34b79881ac
   languageName: node
   linkType: hard
 
@@ -30125,16 +30116,6 @@ __metadata:
   dependencies:
     xmlchars: ^2.2.0
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "scheduler@npm:0.15.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 75920a8288daac05d1c26a6aaa94cddfe302f03c7b1108191696b4cfcb2e2d2038810a4d44ac4d6c6687bb26fa1f8db4b19d0655a4e79ccf2a253749a394de1d
   languageName: node
   linkType: hard
 
@@ -35364,7 +35345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"y18n@npm:^5.0.1, y18n@npm:^5.0.5":
+"y18n@npm:^5.0.5":
   version: 5.0.8
   resolution: "y18n@npm:5.0.8"
   checksum: 54f0fb95621ee60898a38c572c515659e51cc9d9f787fb109cef6fde4befbe1c4602dc999d30110feee37456ad0f1660fa2edcfde6a9a740f86a290999550d30
@@ -35435,7 +35416,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^20.0.0, yargs-parser@npm:^20.2.2, yargs-parser@npm:^20.2.3":
+"yargs-parser@npm:^20.2.2, yargs-parser@npm:^20.2.3":
   version: 20.2.9
   resolution: "yargs-parser@npm:20.2.9"
   checksum: 8bb69015f2b0ff9e17b2c8e6bfe224ab463dd00ca211eece72a4cd8a906224d2703fb8a326d36fdd0e68701e201b2a60ed7cf81ce0fd9b3799f9fe7745977ae3
@@ -35513,18 +35494,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.0.3":
-  version: 16.0.3
-  resolution: "yargs@npm:16.0.3"
+"yargs@npm:16.2.0, yargs@npm:^16.0.3, yargs@npm:^16.2.0":
+  version: 16.2.0
+  resolution: "yargs@npm:16.2.0"
   dependencies:
-    cliui: ^7.0.0
-    escalade: ^3.0.2
+    cliui: ^7.0.2
+    escalade: ^3.1.1
     get-caller-file: ^2.0.5
     require-directory: ^2.1.1
     string-width: ^4.2.0
-    y18n: ^5.0.1
-    yargs-parser: ^20.0.0
-  checksum: e59676cfc84ae64c59200d066b9c9a736ef8c54bac909ea56e3578332f54aff4da64ce9ce9e595e25529cb3f4063a1902adf3bc08313ae1bf808563c8c6e348a
+    y18n: ^5.0.5
+    yargs-parser: ^20.2.2
+  checksum: b14afbb51e3251a204d81937c86a7e9d4bdbf9a2bcee38226c900d00f522969ab675703bee2a6f99f8e20103f608382936034e64d921b74df82b63c07c5e8f59
   languageName: node
   linkType: hard
 
@@ -35563,21 +35544,6 @@ __metadata:
     y18n: ^4.0.0
     yargs-parser: ^18.1.2
   checksum: 40b974f508d8aed28598087720e086ecd32a5fd3e945e95ea4457da04ee9bdb8bdd17fd91acff36dc5b7f0595a735929c514c40c402416bbb87c03f6fb782373
-  languageName: node
-  linkType: hard
-
-"yargs@npm:^16.0.3, yargs@npm:^16.2.0":
-  version: 16.2.0
-  resolution: "yargs@npm:16.2.0"
-  dependencies:
-    cliui: ^7.0.2
-    escalade: ^3.1.1
-    get-caller-file: ^2.0.5
-    require-directory: ^2.1.1
-    string-width: ^4.2.0
-    y18n: ^5.0.5
-    yargs-parser: ^20.2.2
-  checksum: b14afbb51e3251a204d81937c86a7e9d4bdbf9a2bcee38226c900d00f522969ab675703bee2a6f99f8e20103f608382936034e64d921b74df82b63c07c5e8f59
   languageName: node
   linkType: hard
 
