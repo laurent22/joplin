@@ -21,7 +21,7 @@
     "@types/js-yaml": "4.0.5",
     "@types/node": "14.18.0",
     "@types/node-rsa": "1.1.1",
-    "@types/react": "17.0.37",
+    "@types/react": "17.0.52",
     "clean-html": "1.5.0",
     "jest": "26.6.3",
     "sharp": "0.31.1",
