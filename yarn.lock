@@ -4439,7 +4439,7 @@ __metadata:
     "@types/fs-extra": 8.1.2
     "@types/jest": 26.0.24
     "@types/jest-expect-message": 1.0.3
-    "@types/jsdom": 16.2.13
+    "@types/jsdom": 16.2.15
     "@types/koa": 2.13.4
     "@types/markdown-it": 12.2.3
     "@types/mustache": 0.8.32
@@ -6706,18 +6706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsdom@npm:16.2.13":
-  version: 16.2.13
-  resolution: "@types/jsdom@npm:16.2.13"
-  dependencies:
-    "@types/node": "*"
-    "@types/parse5": "*"
-    "@types/tough-cookie": "*"
-  checksum: 2575d020e345f556a28208dad4d495e317e7364f1de222322c100841f49a815c73c0aa32d32d7a72a05fd7cd33551f4c0effc108fbaaf194ec42ed0f04d877b9
-  languageName: node
-  linkType: hard
-
-"@types/jsdom@npm:^16.2.4":
+"@types/jsdom@npm:16.2.15, @types/jsdom@npm:^16.2.4":
   version: 16.2.15
   resolution: "@types/jsdom@npm:16.2.15"
   dependencies:
@@ -6927,17 +6916,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/parse5@npm:*, @types/parse5@npm:^6.0.3":
-  version: 6.0.3
-  resolution: "@types/parse5@npm:6.0.3"
-  checksum: ddb59ee4144af5dfcc508a8dcf32f37879d11e12559561e65788756b95b33e6f03ea027d88e1f5408f9b7bfb656bf630ace31a2169edf44151daaf8dd58df1b7
-  languageName: node
-  linkType: hard
-
 "@types/parse5@npm:^5":
   version: 5.0.3
   resolution: "@types/parse5@npm:5.0.3"
   checksum: d6b7495cb1850f9f2e9c5e103ede9f2d30a5320669707b105c403868adc9e4bf8d3a7ff314cc23f67826bbbbbc0e6147346ce9062ab429f099dba7a01f463919
+  languageName: node
+  linkType: hard
+
+"@types/parse5@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@types/parse5@npm:6.0.3"
+  checksum: ddb59ee4144af5dfcc508a8dcf32f37879d11e12559561e65788756b95b33e6f03ea027d88e1f5408f9b7bfb656bf630ace31a2169edf44151daaf8dd58df1b7
   languageName: node
   linkType: hard
 
