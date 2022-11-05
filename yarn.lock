@@ -4298,7 +4298,7 @@ __metadata:
     relative: 3.0.2
     reselect: 4.1.5
     server-destroy: 1.0.1
-    sharp: 0.31.1
+    sharp: 0.31.2
     sprintf-js: 1.1.2
     sqlite3: 5.0.2
     string-padding: 1.0.2
@@ -4516,7 +4516,7 @@ __metadata:
     request: 2.88.2
     rss: 1.2.2
     sass: 1.44.0
-    sharp: 0.31.1
+    sharp: 0.31.2
     source-map-support: 0.5.21
     sqlite3: 5.0.2
     typescript: 4.5.2
@@ -21830,7 +21830,7 @@ __metadata:
     proper-lockfile: 2.0.1
     read-chunk: 2.1.0
     server-destroy: 1.0.1
-    sharp: 0.31.1
+    sharp: 0.31.2
     sprintf-js: 1.1.2
     sqlite3: 5.0.2
     string-padding: 1.0.2
@@ -30250,6 +30250,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:^7.3.8":
+  version: 7.3.8
+  resolution: "semver@npm:7.3.8"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: ba9c7cbbf2b7884696523450a61fee1a09930d888b7a8d7579025ad93d459b2d1949ee5bbfeb188b2be5f4ac163544c5e98491ad6152df34154feebc2cc337c1
+  languageName: node
+  linkType: hard
+
 "send@npm:0.17.1":
   version: 0.17.1
   resolution: "send@npm:0.17.1"
@@ -30412,20 +30423,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.31.1":
-  version: 0.31.1
-  resolution: "sharp@npm:0.31.1"
+"sharp@npm:0.31.2":
+  version: 0.31.2
+  resolution: "sharp@npm:0.31.2"
   dependencies:
     color: ^4.2.3
     detect-libc: ^2.0.1
     node-addon-api: ^5.0.0
     node-gyp: latest
     prebuild-install: ^7.1.1
-    semver: ^7.3.7
+    semver: ^7.3.8
     simple-get: ^4.0.1
     tar-fs: ^2.1.1
     tunnel-agent: ^0.6.0
-  checksum: 42d00c9c6c61e5cf752c29583253782b3d821ee15fc2648c1f59892b94e9bc170a47ee9d138aa0a61c1c2ee9b7573ee54444c857fff887908701c4208710480d
+  checksum: 076717b7a073ea47bb522ff2931b74b6608daeb6f7ae334e4848d47fdf4d23bcb18cd49044fd5fb27ef27a1a4aa87d141894d67d1c4bb15a6e2e63cf4dbe329e
   languageName: node
   linkType: hard
 
