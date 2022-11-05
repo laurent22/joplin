@@ -4020,7 +4020,7 @@ __metadata:
     "@joplin/tools": ~2.9
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 26.0.24
-    "@types/node": 14.18.0
+    "@types/node": 14.18.33
     "@types/react": 16.14.34
     "@types/react-redux": 7.1.24
     "@types/styled-components": 5.1.26
@@ -4251,7 +4251,7 @@ __metadata:
     "@types/jest": 26.0.24
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
-    "@types/node": 14.18.0
+    "@types/node": 14.18.33
     "@types/node-rsa": 1.1.1
     "@types/react": 17.0.37
     async-mutex: 0.4.0
@@ -4353,7 +4353,7 @@ __metadata:
     "@joplin/tools": ^2.9.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
-    "@types/node": 14.18.0
+    "@types/node": 14.18.33
     fs-extra: 9.1.0
     gh-release-assets: 2.0.0
     jest: 26.6.3
@@ -4398,7 +4398,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/fork-uslug": ^1.0.6
     "@types/jest": 26.0.24
-    "@types/node": 14.18.0
+    "@types/node": 14.18.33
     font-awesome-filetypes: 2.1.0
     fs-extra: 8.1.0
     highlight.js: 11.1.0
@@ -4496,7 +4496,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
     "@types/mustache": 0.8.32
-    "@types/node": 14.18.0
+    "@types/node": 14.18.33
     "@types/node-fetch": 2.6.2
     "@types/yargs": 16.0.4
     dayjs: 1.10.7
@@ -6880,10 +6880,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.18.0":
-  version: 14.18.0
-  resolution: "@types/node@npm:14.18.0"
-  checksum: b120c26fe5f30bc358e861db8d7e401e419d14bd9dd25c022f3c2ea8b0b429d4c9efd77ad5d6d2a8bde61702a6786fb74d409f1b2cbb61c79133e2a65aab4fb1
+"@types/node@npm:14.18.33":
+  version: 14.18.33
+  resolution: "@types/node@npm:14.18.33"
+  checksum: 4e23f95186d8ae1d38c999bc6b46fe94e790da88744b0a3bfeedcbd0d9ffe2cb0ff39e85f43014f6739e5270292c1a1f6f97a1fc606fd573a0c17fda9a1d42de
   languageName: node
   linkType: hard
 
@@ -21804,7 +21804,7 @@ __metadata:
     "@joplin/tools": ~2.9
     "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
-    "@types/node": 14.18.0
+    "@types/node": 14.18.33
     aws-sdk: 2.1043.0
     chalk: 4.1.2
     compare-version: 0.1.2
