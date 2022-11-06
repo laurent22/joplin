@@ -4153,7 +4153,7 @@ __metadata:
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 4.3.0
     react-native-dropdownalert: 3.11.0
-    react-native-file-viewer: 2.1.4
+    react-native-file-viewer: 2.1.5
     react-native-fs: 2.18.0
     react-native-get-random-values: 1.7.1
     react-native-image-picker: 4.10.0
@@ -28564,12 +28564,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-file-viewer@npm:2.1.4":
-  version: 2.1.4
-  resolution: "react-native-file-viewer@npm:2.1.4"
+"react-native-file-viewer@npm:2.1.5":
+  version: 2.1.5
+  resolution: "react-native-file-viewer@npm:2.1.5"
   peerDependencies:
     react-native: ">=0.47"
-  checksum: 2ad3687acdd932a9fca39dddf962306dd7e66492f9fcae1f0d6b0109b9d91c817ad4a5141ec1cabffbe3daeab74ecdf717447345619b0a2569c1ec63f5d3ebb5
+  checksum: 390e1e3ce20c3b2fb7d2394d6bedf1c6c5d25f799fb5b344c7ecb72267327403caf2528916a7419e094caecccf41dac8b62dd0d31fa5991725e36dcdd24b725e
   languageName: node
   linkType: hard
 
