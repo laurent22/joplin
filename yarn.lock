@@ -4472,7 +4472,7 @@ __metadata:
     markdown-it: 12.2.0
     mustache: 3.2.1
     nanoid: 2.1.11
-    node-cron: 3.0.0
+    node-cron: 3.0.2
     node-env-file: 0.1.8
     node-mocks-http: 1.11.0
     nodemailer: 6.7.2
@@ -25003,15 +25003,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-timezone@npm:^0.5.31":
-  version: 0.5.34
-  resolution: "moment-timezone@npm:0.5.34"
-  dependencies:
-    moment: ">= 2.9.0"
-  checksum: 12a1d3d52e4ba509cf1fa36bbda59d898a08fa80ab35f6c358747e93aec1f07e617cec647eaf2e8acf5f9132e581d4704d34a9edffa9a80c5cd04bf23b277595
-  languageName: node
-  linkType: hard
-
 "moment@npm:2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
@@ -25019,7 +25010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0, moment@npm:^2.15.1, moment@npm:^2.24.0, moment@npm:^2.8.4":
+"moment@npm:^2.15.1, moment@npm:^2.24.0, moment@npm:^2.8.4":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
@@ -25438,12 +25429,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-cron@npm:3.0.0":
-  version: 3.0.0
-  resolution: "node-cron@npm:3.0.0"
+"node-cron@npm:3.0.2":
+  version: 3.0.2
+  resolution: "node-cron@npm:3.0.2"
   dependencies:
-    moment-timezone: ^0.5.31
-  checksum: acae07d835f74636ec2bf598ffadf6b89aa2eae036671bffad336371b28fb1eefb11870912c965bb351cd958d4b62f9fa9b28cf922b5f681459ea4878837ffcf
+    uuid: 8.3.2
+  checksum: dd21585c0d4069a0752022dad9b8380a4393c4783ec78355ffa99ff32b018c3743a35d4ebf9d7c7863949e94e302b440f58c884eb4960e71c7260d817e2d3f25
   languageName: node
   linkType: hard
 
