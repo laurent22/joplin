@@ -4283,7 +4283,7 @@ __metadata:
     md5: 2.3.0
     md5-file: 4.0.0
     moment: 2.29.4
-    multiparty: 4.2.2
+    multiparty: 4.2.3
     mustache: 4.2.0
     nanoid: 3.1.30
     node-fetch: 1.7.3
@@ -18528,7 +18528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-errors@npm:1.8.1, http-errors@npm:^1.6.3, http-errors@npm:~1.8.0":
+"http-errors@npm:1.8.1, http-errors@npm:^1.6.3, http-errors@npm:~1.8.0, http-errors@npm:~1.8.1":
   version: 1.8.1
   resolution: "http-errors@npm:1.8.1"
   dependencies:
@@ -24979,14 +24979,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"multiparty@npm:4.2.2":
-  version: 4.2.2
-  resolution: "multiparty@npm:4.2.2"
+"multiparty@npm:4.2.3":
+  version: 4.2.3
+  resolution: "multiparty@npm:4.2.3"
   dependencies:
-    http-errors: ~1.8.0
+    http-errors: ~1.8.1
     safe-buffer: 5.2.1
     uid-safe: 2.1.5
-  checksum: 98a431e87c8bdfdb4fac1251997c1fb634cac79d11fa8cb6c9027a3e731185dc537b38258ad0f6a73fe4a26327036969ac25bc6392c55f3291783024158a05c3
+  checksum: 16be1f14280a78a220864e9209196ce3d9bc5e3342a5e14465e8664c8a3f0e217b370d70f0dfba953ae7f17c720f87573b7b3b01a6e9eb04330c19f547ec157a
   languageName: node
   linkType: hard
 
