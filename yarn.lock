@@ -4073,7 +4073,7 @@ __metadata:
     react-toggle-button: 2.2.0
     react-tooltip: 3.11.6
     redux: 3.7.2
-    reselect: 4.1.5
+    reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
     sqlite3: 5.0.2
@@ -4303,7 +4303,7 @@ __metadata:
     read-chunk: 2.1.0
     redux: 3.7.2
     relative: 3.0.2
-    reselect: 4.1.5
+    reselect: 4.1.7
     server-destroy: 1.0.1
     sharp: 0.31.2
     sprintf-js: 1.1.2
@@ -29658,7 +29658,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reselect@npm:4.1.5, reselect@npm:^4.0.0":
+"reselect@npm:4.1.7":
+  version: 4.1.7
+  resolution: "reselect@npm:4.1.7"
+  checksum: 738d8e2b8f0dca154ad29de6a209c9fbca2d70ae6788fd85df87f2c74b95a65bbf2d16d43a9e2faff39de34d17a29d706ba08a6b2ee5660c09589edbd19af7e1
+  languageName: node
+  linkType: hard
+
+"reselect@npm:^4.0.0":
   version: 4.1.5
   resolution: "reselect@npm:4.1.5"
   checksum: 54c13c1e795b2ea70cba8384138aebe78adda00cbea303cc94b64da0a70d74c896cc9a03115ae38b8bff990e7a60dcd6452ab68cbec01b0b38c1afda70714cf0
