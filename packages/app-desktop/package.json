@@ -120,7 +120,7 @@
     "electron": "19.1.4",
     "electron-builder": "23.0.8",
     "electron-notarize": "1.2.2",
-    "electron-rebuild": "3.2.7",
+    "electron-rebuild": "3.2.9",
     "glob": "7.2.3",
     "gulp": "4.0.2",
     "jest": "26.6.3",
