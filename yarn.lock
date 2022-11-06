@@ -4365,7 +4365,7 @@ __metadata:
     gh-release-assets: 2.0.1
     jest: 26.6.3
     node-fetch: 2.6.7
-    source-map-loader: 3.0.0
+    source-map-loader: 3.0.2
     source-map-support: 0.5.21
     typescript: 4.1.3
     webpack: 5.65.0
@@ -18810,7 +18810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.6, iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2":
+"iconv-lite@npm:0.6, iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:
@@ -31122,13 +31122,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "source-map-js@npm:0.6.2"
-  checksum: 9c8151a29e00fd8d3ba87709fdf9a9ce48313d653f4a29a39b4ae53d346ac79e005de624796ff42eff55cbaf26d2e87f4466001ca87831d400d818c5cf146a0e
-  languageName: node
-  linkType: hard
-
 "source-map-js@npm:^1.0.1":
   version: 1.0.1
   resolution: "source-map-js@npm:1.0.1"
@@ -31143,16 +31136,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-loader@npm:3.0.0":
-  version: 3.0.0
-  resolution: "source-map-loader@npm:3.0.0"
+"source-map-loader@npm:3.0.2":
+  version: 3.0.2
+  resolution: "source-map-loader@npm:3.0.2"
   dependencies:
     abab: ^2.0.5
-    iconv-lite: ^0.6.2
-    source-map-js: ^0.6.2
+    iconv-lite: ^0.6.3
+    source-map-js: ^1.0.1
   peerDependencies:
     webpack: ^5.0.0
-  checksum: c4459cef5a43917ca1c7ad53b106ba715d545daae1ace259c867c36b2b2443c3b9eebe8630cac8f193760db39965c22d1b44d8f69e9910b88c8aca1c836757b5
+  checksum: d5a4e2ab190c93ae5cba68c247fbaa9fd560333c91060602b634c399a8a4b3205b8c07714c3bcdb0a11c6cc5476c06256bd8e824e71fbbb7981e8fad5cba4a00
   languageName: node
   linkType: hard
 
