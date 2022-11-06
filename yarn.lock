@@ -17156,7 +17156,7 @@ __metadata:
   dependencies:
     chalk: 2.4.2
     jest: 26.6.3
-    slugify: 1.6.3
+    slugify: 1.6.5
     yeoman-generator: 2.0.5
     yosay: 2.0.2
   languageName: unknown
@@ -30971,10 +30971,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slugify@npm:1.6.3":
-  version: 1.6.3
-  resolution: "slugify@npm:1.6.3"
-  checksum: fc3861f41c0550ad7d2c48e7e5866bd51e9634bc0495b921c4b1112f6a8b76de51cc4ebb8210636878cad750238adf641548bb9b82432e520d039004b99a1bb6
+"slugify@npm:1.6.5":
+  version: 1.6.5
+  resolution: "slugify@npm:1.6.5"
+  checksum: a955a1b600201030f4c1daa9bb74a17d4402a0693fc40978bbd17e44e64fd72dad3bac4037422aa8aed55b5170edd57f3f4cd8f59ba331f5cf0f10f1a7795609
   languageName: node
   linkType: hard
 
