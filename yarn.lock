@@ -4050,7 +4050,7 @@ __metadata:
     keytar: 7.7.0
     mark.js: 8.11.1
     md5: 2.3.0
-    moment: 2.29.1
+    moment: 2.29.4
     nan: 2.17.0
     node-fetch: 1.7.3
     node-notifier: 8.0.2
@@ -4282,7 +4282,7 @@ __metadata:
     markdown-it: 10.0.0
     md5: 2.3.0
     md5-file: 4.0.0
-    moment: 2.29.1
+    moment: 2.29.4
     multiparty: 4.2.2
     mustache: 4.2.0
     nanoid: 3.1.30
@@ -4325,7 +4325,7 @@ __metadata:
     "@types/jest": 28.1.6
     "@types/pdfjs-dist": 2.10.378
     "@types/react": 16.14.34
-    "@types/react-dom": 16.9.16
+    "@types/react-dom": 16.9.17
     "@types/styled-components": 5.1.25
     async-mutex: 0.4.0
     babel-jest: 28.1.3
@@ -4509,7 +4509,7 @@ __metadata:
     jest: 26.6.3
     markdown-it: 8.4.2
     md5-file: 4.0.0
-    moment: 2.29.1
+    moment: 2.29.4
     mustache: 2.3.2
     node-fetch: 1.7.3
     relative: 3.0.2
@@ -6969,12 +6969,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:16.9.16":
-  version: 16.9.16
-  resolution: "@types/react-dom@npm:16.9.16"
+"@types/react-dom@npm:16.9.17":
+  version: 16.9.17
+  resolution: "@types/react-dom@npm:16.9.17"
   dependencies:
     "@types/react": ^16
-  checksum: ff65a2a36d493ed6a9032f8a96f06074d940ca63c82d400e21e6ba16d25762b4f5c8cd352b93eb3b7aa820e158b7a6b16e5daffec2a512fa6327b00036cde0a8
+  checksum: c9246eb4d35993463608de61111f2bdae5afbd22556c8b9918081516b67eafd1a9ef141c3ed459dd4c753dd7ea037b6a375a856e677c2586396c23732772831d
   languageName: node
   linkType: hard
 
@@ -24863,7 +24863,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:2.29.1, moment@npm:>= 2.9.0, moment@npm:^2.15.1, moment@npm:^2.24.0, moment@npm:^2.8.4":
+"moment@npm:2.29.4":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
+  languageName: node
+  linkType: hard
+
+"moment@npm:>= 2.9.0, moment@npm:^2.15.1, moment@npm:^2.24.0, moment@npm:^2.8.4":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
