@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.16.0",
-    "@babel/runtime": "7.16.3",
+    "@babel/runtime": "7.20.1",
     "@codemirror/commands": "6.0.0",
     "@codemirror/lang-cpp": "6.0.1",
     "@codemirror/lang-html": "6.0.0",
