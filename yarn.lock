@@ -4161,7 +4161,7 @@ __metadata:
     react-native-modal-datetime-picker: 9.2.3
     react-native-popup-menu: 0.15.13
     react-native-quick-actions: 0.3.13
-    react-native-rsa-native: 2.0.4
+    react-native-rsa-native: 2.0.5
     react-native-securerandom: 1.0.0
     react-native-share: 7.3.2
     react-native-side-menu-updated: 1.3.2
@@ -28641,10 +28641,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-rsa-native@npm:2.0.4":
-  version: 2.0.4
-  resolution: "react-native-rsa-native@npm:2.0.4"
-  checksum: 28d34929271d39c9d3d7732ae9fd1946871d6871c9e87406f610f0abf3d12a8c19da511357dc466760d5ae8bbf2a57060ccf8bd8f173568d0d60cc748f956780
+"react-native-rsa-native@npm:2.0.5":
+  version: 2.0.5
+  resolution: "react-native-rsa-native@npm:2.0.5"
+  checksum: 7a720ab3ef1898a4f365decc2913139dbfb090901806bf4c20932c1511bde32cd02586725142e9c273bb575c907a5ee87a84edc8c0b01cce252ad80436370740
   languageName: node
   linkType: hard
 
