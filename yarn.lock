@@ -4299,7 +4299,7 @@ __metadata:
     node-rsa: 1.1.1
     promise: 7.3.1
     query-string: 4.3.4
-    re-reselect: 4.0.0
+    re-reselect: 4.0.1
     read-chunk: 2.1.0
     redux: 3.7.2
     relative: 3.0.2
@@ -28388,12 +28388,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-reselect@npm:4.0.0":
-  version: 4.0.0
-  resolution: "re-reselect@npm:4.0.0"
+"re-reselect@npm:4.0.1":
+  version: 4.0.1
+  resolution: "re-reselect@npm:4.0.1"
   peerDependencies:
     reselect: ">1.0.0"
-  checksum: 50d272c2a5dd4a66d84b990aed92daefb8a8e07830b0ff6864f7c759955cabae710f66f54e66db44d1295ea73546bf747125bbe79bdfaf6161f84485248a9a6c
+  checksum: 6acb302c5a3d7aa44d32b329babaeed73a5d78eb832e2020d4f5f9515d38d3bebae5d0cfe853e5ceb2682abd8cdfe41b51ab76a997c18fcc8f1cfa4ab81ff58e
   languageName: node
   linkType: hard
 
