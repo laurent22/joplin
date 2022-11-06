@@ -4080,7 +4080,7 @@ __metadata:
     styled-components: 5.3.6
     styled-system: 5.1.5
     taboverride: 4.0.3
-    tinymce: 5.10.2
+    tinymce: 5.10.6
     typescript: 4.0.5
   dependenciesMeta:
     7zip-bin-linux:
@@ -32929,10 +32929,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinymce@npm:5.10.2":
-  version: 5.10.2
-  resolution: "tinymce@npm:5.10.2"
-  checksum: 6f80abd64f51f558a6135e48fb5061a5fed2badfc742c1560dfc1b56be2f9a30cfe48e48f8aaa14537dc9526ee70ece5408272245109114cdf894e07492497ff
+"tinymce@npm:5.10.6":
+  version: 5.10.6
+  resolution: "tinymce@npm:5.10.6"
+  checksum: 806cd733fde872f97d84b22ed267d2ee0404aa003d89b6c295b91867ac8b2bafc99542bf04924f253cf093c920a9da4b37a7ef73a00ff57b2b75490fb9705caf
   languageName: node
   linkType: hard
 
