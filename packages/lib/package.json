@@ -74,7 +74,7 @@
     "node-rsa": "1.1.1",
     "promise": "7.3.1",
     "query-string": "4.3.4",
-    "re-reselect": "4.0.0",
+    "re-reselect": "4.0.1",
     "read-chunk": "2.1.0",
     "redux": "3.7.2",
     "relative": "3.0.2",
