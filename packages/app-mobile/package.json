@@ -101,7 +101,7 @@
     "jetifier": "1.6.8",
     "jsdom": "20.0.0",
     "metro-react-native-babel-preset": "0.66.2",
-    "nodemon": "2.0.15",
+    "nodemon": "2.0.20",
     "ts-jest": "28.0.5",
     "ts-loader": "9.3.1",
     "ts-node": "10.9.1",

@@ -44,7 +44,7 @@
     "node-cron": "3.0.0",
     "node-env-file": "0.1.8",
     "nodemailer": "6.7.2",
-    "nodemon": "2.0.15",
+    "nodemon": "2.0.20",
     "pg": "8.7.1",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
