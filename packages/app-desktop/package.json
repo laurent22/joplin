@@ -119,7 +119,7 @@
     "babel-preset-react": "6.24.1",
     "electron": "19.1.4",
     "electron-builder": "23.0.8",
-    "electron-notarize": "1.2.1",
+    "electron-notarize": "1.2.2",
     "electron-rebuild": "3.2.7",
     "glob": "7.2.0",
     "gulp": "4.0.2",
