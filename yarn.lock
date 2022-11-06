@@ -4162,7 +4162,7 @@ __metadata:
     react-native-popup-menu: 0.15.13
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
-    react-native-securerandom: 1.0.0
+    react-native-securerandom: 1.0.1
     react-native-share: 7.3.2
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 5.0.0
@@ -28648,14 +28648,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-securerandom@npm:1.0.0":
-  version: 1.0.0
-  resolution: "react-native-securerandom@npm:1.0.0"
+"react-native-securerandom@npm:1.0.1":
+  version: 1.0.1
+  resolution: "react-native-securerandom@npm:1.0.1"
   dependencies:
     base64-js: "*"
   peerDependencies:
     react-native: "*"
-  checksum: 9c589c59632dc9b7b27979f7a26ebdacd337f9a9e7a67854c5bbb0438f2ce64c463367a4616622e8efe1b35f804e5b47a315d6fcbc911b3b007f83e3ada4d36a
+  checksum: ccf42b8a8a83809fd77097aa141efd2e9533e94c094e8dcb0054659707e276cbb6466d3408d0e0594f0bd67af4fbc5881f2ad2d93513b5b2aae25dfd2888274b
   languageName: node
   linkType: hard
 
