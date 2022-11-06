@@ -63,7 +63,7 @@
     "tcp-port-used": "1.0.2",
     "terminal-kit": "1.49.4",
     "tkwidgets": "0.5.27",
-    "url-parse": "1.5.3",
+    "url-parse": "1.5.10",
     "word-wrap": "1.2.3",
     "yargs-parser": "7.0.0"
   },
