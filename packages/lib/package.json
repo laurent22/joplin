@@ -78,7 +78,7 @@
     "read-chunk": "2.1.0",
     "redux": "3.7.2",
     "relative": "3.0.2",
-    "reselect": "4.1.5",
+    "reselect": "4.1.7",
     "server-destroy": "1.0.1",
     "sprintf-js": "1.1.2",
     "sqlite3": "5.0.2",
