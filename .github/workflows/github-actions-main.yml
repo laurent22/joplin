@@ -1,7 +1,24 @@
 name: Joplin Continuous Integration
 on: [push, pull_request]
 jobs:
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        # with:
+        #   # All of these options are optional, so you can remove them if you are happy with the defaults
+        #   concurrent_skipping: 'never'
+        #   skip_after_successful_duplicate: 'true'
+        #   paths_ignore: '["**/README.md", "**/docs/**"]'
+        #   do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
+
   Main:
+    needs: pre_job
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -122,6 +139,7 @@ jobs:
           yarn install && cd packages/app-desktop && yarn run dist --publish=never
 
   ServerDockerImage:
+    needs: pre_job
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
