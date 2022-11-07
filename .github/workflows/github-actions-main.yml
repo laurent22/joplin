@@ -15,6 +15,7 @@ jobs:
 
   Main:
     needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -136,6 +137,7 @@ jobs:
 
   ServerDockerImage:
     needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
