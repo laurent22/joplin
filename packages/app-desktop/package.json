@@ -118,7 +118,7 @@
     "babel-cli": "6.26.0",
     "babel-preset-react": "6.24.1",
     "electron": "19.1.4",
-    "electron-builder": "23.0.8",
+    "electron-builder": "23.6.0",
     "electron-notarize": "1.2.2",
     "electron-rebuild": "3.2.9",
     "glob": "7.2.3",
