@@ -4381,7 +4381,7 @@ __metadata:
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
-    markdown-it-multimd-table: 4.1.2
+    markdown-it-multimd-table: 4.2.0
     markdown-it-sub: 1.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
@@ -23298,12 +23298,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:4.1.2":
-  version: 4.1.2
-  resolution: "markdown-it-multimd-table@npm:4.1.2"
-  dependencies:
-    markdown-it: ^12.3.2
-  checksum: 8f4bff21c085732502803509d61dcb6035dde01670487c2033aa55941156013bdf126e923c11bc5c5eeba1d49dfa6a72bbbedd13bdb7a9df7ee2f0bc1a025e45
+"markdown-it-multimd-table@npm:4.2.0":
+  version: 4.2.0
+  resolution: "markdown-it-multimd-table@npm:4.2.0"
+  checksum: 07bdbdbf6d15dfd14d98e5daad79fe98fd30f8afe14cc8e87bec275c052dad5500320786949d588d9aa7970b9c84033e798ea3b131fbe182e5c60c72b0bcb87f
   languageName: node
   linkType: hard
 
@@ -23370,21 +23368,6 @@ __metadata:
   bin:
     markdown-it: bin/markdown-it.js
   checksum: ad171466933d6ce33fcdddf32f641fc7ff238820a11397f07d45ab293e3fd6d83de14eaa59bfdc67dc4a715e73aa08bae9b2a38e44b119d7340d8ae691ca4b2d
-  languageName: node
-  linkType: hard
-
-"markdown-it@npm:^12.3.2":
-  version: 12.3.2
-  resolution: "markdown-it@npm:12.3.2"
-  dependencies:
-    argparse: ^2.0.1
-    entities: ~2.1.0
-    linkify-it: ^3.0.1
-    mdurl: ^1.0.1
-    uc.micro: ^1.0.5
-  bin:
-    markdown-it: bin/markdown-it.js
-  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
   languageName: node
   linkType: hard
 
