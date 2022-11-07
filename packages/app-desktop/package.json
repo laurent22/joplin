@@ -142,7 +142,7 @@
     "@joplin/pdf-viewer": "~2.9",
     "@joplin/renderer": "~2.9",
     "async-mutex": "0.4.0",
-    "codemirror": "5.64.0",
+    "codemirror": "5.65.9",
     "color": "3.2.1",
     "compare-versions": "3.6.0",
     "countable": "3.0.1",

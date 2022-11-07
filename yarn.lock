@@ -3825,7 +3825,7 @@ __metadata:
     async-mutex: 0.4.0
     babel-cli: 6.26.0
     babel-preset-react: 6.24.1
-    codemirror: 5.64.0
+    codemirror: 5.65.9
     color: 3.2.1
     compare-versions: 3.6.0
     countable: 3.0.1
@@ -10973,10 +10973,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror@npm:5.64.0":
-  version: 5.64.0
-  resolution: "codemirror@npm:5.64.0"
-  checksum: e00b0a8fb1572935fc41e73ba22ac1ac334a275f143e9a68666576a8355da6d433ca5cc7d638fc080c2cbe65cf31b0fd579edbf4b462a8b5bd0e78db6fc191e9
+"codemirror@npm:5.65.9":
+  version: 5.65.9
+  resolution: "codemirror@npm:5.65.9"
+  checksum: bbdb3991d4641d5c2a044c53907fb7b0d856f67e1190b7063e6a164e7b17f1390faf961d8264394b1ef8ca7e1f21acea2117bb4a0ed8394b3a92875f07beae3d
   languageName: node
   linkType: hard
 
