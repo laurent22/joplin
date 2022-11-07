@@ -12,6 +12,7 @@ import useWindowCommandHandler from './utils/useWindowCommandHandler';
 import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
+import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
@@ -65,17 +66,7 @@ function NoteEditor(props: NoteEditorProps) {
 		setTitleHasBeenManuallyChanged(false);
 	}, []);
 
-	// When a notebook is changed without any selected note,
-	// no note is selected for a moment, and then a new note gets selected.
-	// In this short transient period, the last displayed note id should temporarily
-	// be used to prevent NoteEditor's body from being unmounted.
-	const lastDisplayedNoteId = useRef<string>(null);
-	const whenNoteIdIsTransientlyAbsent = !props.noteId && props.notes.length > 0;
-	const effectiveNoteId = whenNoteIdIsTransientlyAbsent ? lastDisplayedNoteId.current : props.noteId;
-
-	useEffect(() => {
-		if (props.noteId) lastDisplayedNoteId.current = props.noteId;
-	}, [props.noteId]);
+	const effectiveNoteId = useEffectiveNoteId(props);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
