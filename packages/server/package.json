@@ -21,7 +21,7 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.44.0",
+    "@aws-sdk/client-s3": "3.204.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joplin/lib": "~2.9",
     "@joplin/renderer": "~2.9",
