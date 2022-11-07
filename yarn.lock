@@ -4053,7 +4053,7 @@ __metadata:
     async-mutex: 0.4.0
     base-64: 0.1.0
     base64-stream: 1.0.0
-    builtin-modules: 3.2.0
+    builtin-modules: 3.3.0
     chokidar: 3.5.3
     clean-html: 1.5.0
     color: 3.2.1
@@ -9945,10 +9945,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"builtin-modules@npm:3.2.0":
-  version: 3.2.0
-  resolution: "builtin-modules@npm:3.2.0"
-  checksum: 0265aa1ba78e1a16f4e18668d815cb43fb364e6a6b8aa9189c6f44c7b894a551a43b323c40206959d2d4b2568c1f2805607ad6c88adc306a776ce6904cca6715
+"builtin-modules@npm:3.3.0":
+  version: 3.3.0
+  resolution: "builtin-modules@npm:3.3.0"
+  checksum: db021755d7ed8be048f25668fe2117620861ef6703ea2c65ed2779c9e3636d5c3b82325bd912244293959ff3ae303afa3471f6a15bf5060c103e4cc3a839749d
   languageName: node
   linkType: hard
 
