@@ -42,7 +42,7 @@
     "yargs": "16.2.0"
   },
   "devDependencies": {
-    "@rmp135/sql-ts": "1.12.1",
+    "@rmp135/sql-ts": "1.15.1",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "26.0.24",
     "@types/mustache": "0.8.32",
