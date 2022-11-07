@@ -4155,7 +4155,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 1.13.0
     "@typescript-eslint/parser": 1.13.0
     coveralls: 3.1.1
-    domelementtype: 2.2.0
+    domelementtype: 2.3.0
     domhandler: 3.3.0
     domutils: 2.8.0
     entities: 2.2.0
@@ -14015,7 +14015,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domelementtype@npm:2.2.0, domelementtype@npm:^2.0.1, domelementtype@npm:^2.2.0":
+"domelementtype@npm:2.3.0":
+  version: 2.3.0
+  resolution: "domelementtype@npm:2.3.0"
+  checksum: ee837a318ff702622f383409d1f5b25dd1024b692ef64d3096ff702e26339f8e345820f29a68bcdcea8cfee3531776b3382651232fbeae95612d6f0a75efb4f6
+  languageName: node
+  linkType: hard
+
+"domelementtype@npm:^2.0.1, domelementtype@npm:^2.2.0":
   version: 2.2.0
   resolution: "domelementtype@npm:2.2.0"
   checksum: 24cb386198640cd58aa36f8c987f2ea61859929106d06ffcc8f547e70cb2ed82a6dc56dcb8252b21fba1f1ea07df6e4356d60bfe57f77114ca1aed6828362629
