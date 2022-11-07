@@ -3904,7 +3904,7 @@ __metadata:
     "@joplin/react-native-saf-x": ~2.9
     "@joplin/renderer": ~2.9
     "@joplin/tools": ~2.9
-    "@lezer/highlight": 1.0.0
+    "@lezer/highlight": 1.1.2
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 6.5.4
     "@react-native-community/geolocation": 3.0.3
@@ -5251,7 +5251,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:1.0.0, @lezer/highlight@npm:^1.0.0":
+"@lezer/highlight@npm:1.1.2":
+  version: 1.1.2
+  resolution: "@lezer/highlight@npm:1.1.2"
+  dependencies:
+    "@lezer/common": ^1.0.0
+  checksum: b974c3f43c4338840f7f6110948d5f69ba8ce9d58b75e493bbef5183d63b3b531a1416398e9c7844914d134ea4e9ae717fae240629d937554fcc4cf1ab5385e8
+  languageName: node
+  linkType: hard
+
+"@lezer/highlight@npm:^1.0.0":
   version: 1.0.0
   resolution: "@lezer/highlight@npm:1.0.0"
   dependencies:
