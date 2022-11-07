@@ -4013,7 +4013,7 @@ __metadata:
     immer: 7.0.15
     jest: 26.6.3
     js-sha512: 0.8.0
-    keytar: 7.7.0
+    keytar: 7.9.0
     mark.js: 8.11.1
     md5: 2.3.0
     moment: 2.29.4
@@ -4236,7 +4236,7 @@ __metadata:
     follow-redirects: 1.15.2
     form-data: 2.5.1
     fs-extra: 5.0.0
-    hpagent: 1.0.0
+    hpagent: 1.2.0
     html-entities: 1.4.0
     html-minifier: 3.5.21
     image-data-uri: 2.0.1
@@ -13289,15 +13289,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decompress-response@npm:^4.2.0":
-  version: 4.2.1
-  resolution: "decompress-response@npm:4.2.1"
-  dependencies:
-    mimic-response: ^2.0.0
-  checksum: 4e783ca4dfe9417354d61349750fe05236f565a4415a6ca20983a311be2371debaedd9104c0b0e7b36e5f167aeaae04f84f1a0b3f8be4162f1d7d15598b8fdba
-  languageName: node
-  linkType: hard
-
 "decompress-response@npm:^6.0.0":
   version: 6.0.0
   resolution: "decompress-response@npm:6.0.0"
@@ -13636,7 +13627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detect-libc@npm:^1.0.2, detect-libc@npm:^1.0.3":
+"detect-libc@npm:^1.0.2":
   version: 1.0.3
   resolution: "detect-libc@npm:1.0.3"
   bin:
@@ -18410,10 +18401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hpagent@npm:1.0.0":
-  version: 1.0.0
-  resolution: "hpagent@npm:1.0.0"
-  checksum: 911a9ba612747f5c9403fb60c1abd0c47a27fa634826caad9aecad41b899533489da36c92758b5cd83576e2bf9e84e23a4374a40aa513106d5450f62856c4b2d
+"hpagent@npm:1.2.0":
+  version: 1.2.0
+  resolution: "hpagent@npm:1.2.0"
+  checksum: b029da695edae438cee4da2a437386f9db4ac27b3ceb7306d02e1b586c9c194741ed2e943c8a222e0cfefaf27ee3f863aca7ba1721b0950a2a19bf25bc0d85e2
   languageName: node
   linkType: hard
 
@@ -21415,7 +21406,7 @@ __metadata:
     html-entities: 1.4.0
     image-type: 3.1.0
     jest: 26.6.3
-    keytar: 7.7.0
+    keytar: 7.9.0
     md5: 2.3.0
     node-rsa: 1.1.1
     open: 7.4.2
@@ -22030,14 +22021,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"keytar@npm:7.7.0":
-  version: 7.7.0
-  resolution: "keytar@npm:7.7.0"
+"keytar@npm:7.9.0":
+  version: 7.9.0
+  resolution: "keytar@npm:7.9.0"
   dependencies:
-    node-addon-api: ^3.0.0
+    node-addon-api: ^4.3.0
     node-gyp: latest
-    prebuild-install: ^6.0.0
-  checksum: ea180b713a15e7baa52323d38940255d2df809ed5c2f91d132bf1c44c93515ad28e41119a4589786c28b1c2728010e2b259b8083c032484df1ced61655ea3d6e
+    prebuild-install: ^7.0.1
+  checksum: 4dbdd21f69e21a53032cbc949847f57338e42df763c5eec04e1b5d7142a689f95d8c3d74fb3b7dc321b5d678271d8d8d1a0dcaa919673ebc50ef8ce76f354e21
   languageName: node
   linkType: hard
 
@@ -24153,13 +24144,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mimic-response@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "mimic-response@npm:2.1.0"
-  checksum: 014fad6ab936657e5f2f48bd87af62a8e928ebe84472aaf9e14fec4fcb31257a5edff77324d8ac13ddc6685ba5135cf16e381efac324e5f174fb4ddbf902bf07
-  languageName: node
-  linkType: hard
-
 "mimic-response@npm:^3.1.0":
   version: 3.1.0
   resolution: "mimic-response@npm:3.1.0"
@@ -24856,15 +24840,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-abi@npm:^2.21.0":
-  version: 2.30.1
-  resolution: "node-abi@npm:2.30.1"
-  dependencies:
-    semver: ^5.4.1
-  checksum: 3f4b0c912ce4befcd7ceab4493ba90b51d60dfcc90f567c93f731d897ef8691add601cb64c181683b800f21d479d68f9a6e15d8ab8acd16a5706333b9e30a881
-  languageName: node
-  linkType: hard
-
 "node-abi@npm:^3.0.0":
   version: 3.5.0
   resolution: "node-abi@npm:3.5.0"
@@ -24898,6 +24873,15 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: 2369986bb0881ccd9ef6bacdf39550e07e089a9c8ede1cbc5fc7712d8e2faa4d50da0e487e333d4125f8c7a616c730131d1091676c9d499af1d74560756b4a18
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "node-addon-api@npm:4.3.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 3de396e23cc209f539c704583e8e99c148850226f6e389a641b92e8967953713228109f919765abc1f4355e801e8f41842f96210b8d61c7dcc10a477002dcf00
   languageName: node
   linkType: hard
 
@@ -25486,7 +25470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npmlog@npm:0 || 1 || 2 || 3 || 4, npmlog@npm:^4.0.1, npmlog@npm:^4.0.2, npmlog@npm:^4.1.2":
+"npmlog@npm:0 || 1 || 2 || 3 || 4, npmlog@npm:^4.0.2, npmlog@npm:^4.1.2":
   version: 4.1.2
   resolution: "npmlog@npm:4.1.2"
   dependencies:
@@ -27140,30 +27124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prebuild-install@npm:^6.0.0":
-  version: 6.1.4
-  resolution: "prebuild-install@npm:6.1.4"
-  dependencies:
-    detect-libc: ^1.0.3
-    expand-template: ^2.0.3
-    github-from-package: 0.0.0
-    minimist: ^1.2.3
-    mkdirp-classic: ^0.5.3
-    napi-build-utils: ^1.0.1
-    node-abi: ^2.21.0
-    npmlog: ^4.0.1
-    pump: ^3.0.0
-    rc: ^1.2.7
-    simple-get: ^3.0.3
-    tar-fs: ^2.0.0
-    tunnel-agent: ^0.6.0
-  bin:
-    prebuild-install: bin.js
-  checksum: de4313eda821305912af922700a2db04bb8e77fe8aa9c2788550f1000c026cbefc82da468ec0c0a37764c5417bd8169dbd540928535fb38d00bb9bbd673dd217
-  languageName: node
-  linkType: hard
-
-"prebuild-install@npm:^7.1.1":
+"prebuild-install@npm:^7.0.1, prebuild-install@npm:^7.1.1":
   version: 7.1.1
   resolution: "prebuild-install@npm:7.1.1"
   dependencies:
@@ -30294,17 +30255,6 @@ __metadata:
   version: 1.0.1
   resolution: "simple-concat@npm:1.0.1"
   checksum: 4d211042cc3d73a718c21ac6c4e7d7a0363e184be6a5ad25c8a1502e49df6d0a0253979e3d50dbdd3f60ef6c6c58d756b5d66ac1e05cda9cacd2e9fc59e3876a
-  languageName: node
-  linkType: hard
-
-"simple-get@npm:^3.0.3":
-  version: 3.1.0
-  resolution: "simple-get@npm:3.1.0"
-  dependencies:
-    decompress-response: ^4.2.0
-    once: ^1.3.1
-    simple-concat: ^1.0.0
-  checksum: cca91a9ab2b532fa8d367757c196b54e2dfe3325aab0298d66a3e2a45a29a9d335d1a3fb41f036dad14000f78baddd4170fbf9621d72869791d2912baf9469aa
   languageName: node
   linkType: hard
 

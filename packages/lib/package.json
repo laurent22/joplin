@@ -53,7 +53,7 @@
     "follow-redirects": "1.15.2",
     "form-data": "2.5.1",
     "fs-extra": "5.0.0",
-    "hpagent": "1.0.0",
+    "hpagent": "1.2.0",
     "html-entities": "1.4.0",
     "html-minifier": "3.5.21",
     "image-data-uri": "2.0.1",
