@@ -24,5 +24,11 @@
 		"typedoc",
 		"actions/stale",
 		"@svgr/webpack"
+	],
+	"packageRules": [
+		{
+			"matchUpdateTypes": ["patch"],
+			"automerge": true
+		}
 	]
 }
