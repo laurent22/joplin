@@ -4386,7 +4386,7 @@ __metadata:
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
     md5: 2.3.0
-    mermaid: 9.1.7
+    mermaid: 9.2.0
     typescript: 4.5.2
   languageName: unknown
   linkType: soft
@@ -15980,6 +15980,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-clone@npm:^1.5.13":
+  version: 1.5.13
+  resolution: "fast-clone@npm:1.5.13"
+  checksum: deb585594e82a0fc1f19c474e1749bb03ad9dd46ebdb2f676e5a9f234006692862de6c9d2d4fbdc962d96f4be11239de93f671cdc16ddf810ac79fd4c6e88487
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:3.1.3, fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -23645,20 +23652,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:9.1.7":
-  version: 9.1.7
-  resolution: "mermaid@npm:9.1.7"
+"mermaid@npm:9.2.0":
+  version: 9.2.0
+  resolution: "mermaid@npm:9.2.0"
   dependencies:
     "@braintree/sanitize-url": ^6.0.0
     d3: ^7.0.0
     dagre: ^0.8.5
     dagre-d3: ^0.6.4
     dompurify: 2.4.0
+    fast-clone: ^1.5.13
     graphlib: ^2.1.8
     khroma: ^2.0.0
-    moment-mini: 2.24.0
-    stylis: ^4.0.10
-  checksum: 7f3f4c55de9e290aa4fa37b01d37772bceae8b7fad888a034ba4cebbdba5e25632fcfbdcadc168d9c3589d173399b6bb74517bba91237f3b0ce7f945e62ab21c
+    lodash: ^4.17.21
+    moment-mini: ^2.24.0
+    non-layered-tidy-tree-layout: ^2.0.2
+    stylis: ^4.1.2
+    uuid: ^9.0.0
+  checksum: 23cf5ec4465cfb828053cea51e0c641c0925b60357b1e0dc3162bbb248bcd129c6593732d6e9bb465d781fd19f46bc94c3352459c2ac94c97add7a007de8a0b3
   languageName: node
   linkType: hard
 
@@ -24477,10 +24488,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-mini@npm:2.24.0":
-  version: 2.24.0
-  resolution: "moment-mini@npm:2.24.0"
-  checksum: c1162322fd05a305cf5d403107fe702a928e5a72c56a614142fae4882846f66bb21c423cef397fe56802564b0353386f1bca46c8bb080d2097e68cbd687d589e
+"moment-mini@npm:^2.24.0":
+  version: 2.29.4
+  resolution: "moment-mini@npm:2.29.4"
+  checksum: 5d386872d04202c36653442a65f0e06a4e33cf3b25cef4e9df17877a8e76e93f218a1dfd4ccc0946c228815a4e1e53d79ae340de82791ffce90007769eb85120
   languageName: node
   linkType: hard
 
@@ -25231,6 +25242,13 @@ __metadata:
   bin:
     nodemon: bin/nodemon.js
   checksum: 9fe858682414fe703179f4fe36c86e71f40d2693b5345c09803d7b191816a6589c5df8f1f9873bffee92893880183b95a031c86340e46b364ef1b0b7f619edbf
+  languageName: node
+  linkType: hard
+
+"non-layered-tidy-tree-layout@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "non-layered-tidy-tree-layout@npm:2.0.2"
+  checksum: 5defc1c459001b22816a4fb8b86259b9b76e7f3090df576122a41c760133ab2061934cacd6f176c98c2ae4fee3879b97941e8897e8882985cbfe830f155cd158
   languageName: node
   linkType: hard
 
@@ -31629,10 +31647,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylis@npm:^4.0.10":
-  version: 4.0.10
-  resolution: "stylis@npm:4.0.10"
-  checksum: 0fecaf5c234ec3ffcb0afc21478742a815a21cb964365259789be9c1692e72e13d8c081c1150fd76ed2146633a3251cdecd6e0c120b158f44bd74c38f81cafb3
+"stylis@npm:^4.1.2":
+  version: 4.1.3
+  resolution: "stylis@npm:4.1.3"
+  checksum: d04dbffcb9bf2c5ca8d8dc09534203c75df3bf711d33973ea22038a99cc475412a350b661ebd99cbc01daa50d7eedcf0d130d121800eb7318759a197023442a6
   languageName: node
   linkType: hard
 
@@ -33851,6 +33869,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
