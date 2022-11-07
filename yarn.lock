@@ -4428,7 +4428,7 @@ __metadata:
     jsdom: 16.7.0
     knex: 0.95.15
     koa: 2.13.4
-    markdown-it: 12.2.0
+    markdown-it: 12.3.2
     mustache: 3.2.1
     nanoid: 2.1.11
     node-cron: 3.0.2
@@ -23343,9 +23343,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:12.2.0":
-  version: 12.2.0
-  resolution: "markdown-it@npm:12.2.0"
+"markdown-it@npm:12.3.2, markdown-it@npm:^12.3.2":
+  version: 12.3.2
+  resolution: "markdown-it@npm:12.3.2"
   dependencies:
     argparse: ^2.0.1
     entities: ~2.1.0
@@ -23354,7 +23354,7 @@ __metadata:
     uc.micro: ^1.0.5
   bin:
     markdown-it: bin/markdown-it.js
-  checksum: 8e3d6646edf8e7ef19ed707c59d16741bd40804f1e7567407efd2f346ae0f7ddcdeada83e7affebd21b9d7d947b27fc60fd795a970461785030a4e52e750122b
+  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
   languageName: node
   linkType: hard
 
@@ -23370,21 +23370,6 @@ __metadata:
   bin:
     markdown-it: bin/markdown-it.js
   checksum: ad171466933d6ce33fcdddf32f641fc7ff238820a11397f07d45ab293e3fd6d83de14eaa59bfdc67dc4a715e73aa08bae9b2a38e44b119d7340d8ae691ca4b2d
-  languageName: node
-  linkType: hard
-
-"markdown-it@npm:^12.3.2":
-  version: 12.3.2
-  resolution: "markdown-it@npm:12.3.2"
-  dependencies:
-    argparse: ^2.0.1
-    entities: ~2.1.0
-    linkify-it: ^3.0.1
-    mdurl: ^1.0.1
-    uc.micro: ^1.0.5
-  bin:
-    markdown-it: bin/markdown-it.js
-  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
   languageName: node
   linkType: hard
 
