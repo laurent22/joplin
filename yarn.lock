@@ -8645,20 +8645,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:2.1043.0":
-  version: 2.1043.0
-  resolution: "aws-sdk@npm:2.1043.0"
+"aws-sdk@npm:2.1248.0":
+  version: 2.1248.0
+  resolution: "aws-sdk@npm:2.1248.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
     ieee754: 1.1.13
-    jmespath: 0.15.0
+    jmespath: 0.16.0
     querystring: 0.2.0
     sax: 1.2.1
     url: 0.10.3
-    uuid: 3.3.2
+    util: ^0.12.4
+    uuid: 8.0.0
     xml2js: 0.4.19
-  checksum: 12d00ce47a8c638cc5f0f30efc58ce39719a4f5fb19edeb7d8c4408694a524d0d5965dcdccf5399dd0e37fec788e0cda28eb51343c9ba0572d8b9c647897b918
+  checksum: ea6d37f788f1db5a0c0ef8c10b65953de8eae4c261db90ffb875130e9a1a7df74514c3a7de2431b18ed88fa587445aee93c12e724668bce965b5d879af6757c8
   languageName: node
   linkType: hard
 
@@ -21198,10 +21199,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jmespath@npm:0.15.0":
-  version: 0.15.0
-  resolution: "jmespath@npm:0.15.0"
-  checksum: 353bb9e69cc4c1560be0a4df43cb4020abc246e1c60cb5b55dcc76d8c858383f1633faf22ccaf6a5e09568a2077d0f4f1e989e6fcfd496b5cef87964cc8cb9e7
+"jmespath@npm:0.16.0":
+  version: 0.16.0
+  resolution: "jmespath@npm:0.16.0"
+  checksum: 2d602493a1e4addfd1350ac8c9d54b1b03ed09e305fd863bab84a4ee1f52868cf939dd1a08c5cdea29ce9ba8f86875ebb458b6ed45dab3e1c3f2694503fb2fd9
   languageName: node
   linkType: hard
 
@@ -21235,7 +21236,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
     "@types/node": 18.11.9
-    aws-sdk: 2.1043.0
+    aws-sdk: 2.1248.0
     chalk: 4.1.2
     compare-version: 0.1.2
     fs-extra: 5.0.0
@@ -33748,6 +33749,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"util@npm:^0.12.4":
+  version: 0.12.5
+  resolution: "util@npm:0.12.5"
+  dependencies:
+    inherits: ^2.0.3
+    is-arguments: ^1.0.4
+    is-generator-function: ^1.0.7
+    is-typed-array: ^1.1.3
+    which-typed-array: ^1.1.2
+  checksum: 705e51f0de5b446f4edec10739752ac25856541e0254ea1e7e45e5b9f9b0cb105bc4bd415736a6210edc68245a7f903bf085ffb08dd7deb8a0e847f60538a38a
+  languageName: node
+  linkType: hard
+
 "util@npm:~0.10.1":
   version: 0.10.4
   resolution: "util@npm:0.10.4"
@@ -33764,21 +33778,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:3.3.2":
-  version: 3.3.2
-  resolution: "uuid@npm:3.3.2"
-  bin:
-    uuid: ./bin/uuid
-  checksum: 8793629d2799f500aeea9fcd0aec6c4e9fbcc4d62ed42159ad96be345c3fffac1bbf61a23e18e2782600884fee05e6d4012ce4b70d0037c8e987533ae6a77870
-  languageName: node
-  linkType: hard
-
 "uuid@npm:3.4.0, uuid@npm:^3.0.0, uuid@npm:^3.0.1, uuid@npm:^3.3.2":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
   bin:
     uuid: ./bin/uuid
   checksum: 58de2feed61c59060b40f8203c0e4ed7fd6f99d42534a499f1741218a1dd0c129f4aa1de797bcf822c8ea5da7e4137aa3673431a96dae729047f7aca7b27866f
+  languageName: node
+  linkType: hard
+
+"uuid@npm:8.0.0":
+  version: 8.0.0
+  resolution: "uuid@npm:8.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 56d4e23aa7ac26fa2db6bd1778db34cb8c9f5a10df1770a27167874bf6705fc8f14a4ac414af58a0d96c7653b2bd4848510b29d1c2ef8c91ccb17429c1872b5e
   languageName: node
   linkType: hard
 
