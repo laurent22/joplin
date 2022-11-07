@@ -39,7 +39,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "domelementtype": "2.2.0",
+    "domelementtype": "2.3.0",
     "domhandler": "3.3.0",
     "domutils": "2.8.0",
     "entities": "2.2.0"
