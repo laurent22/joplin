@@ -31,7 +31,7 @@
     "bulma": "0.9.4",
     "bulma-prefers-dark": "0.1.0-beta.1",
     "compare-versions": "3.6.0",
-    "dayjs": "1.10.7",
+    "dayjs": "1.11.6",
     "formidable": "1.2.6",
     "fs-extra": "8.1.0",
     "html-entities": "1.4.0",
