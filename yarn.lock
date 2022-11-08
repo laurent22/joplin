@@ -3996,7 +3996,7 @@ __metadata:
     babel-cli: 6.26.0
     babel-preset-react: 6.24.1
     codemirror: 5.65.9
-    color: 3.2.1
+    color: 4.2.3
     compare-versions: 3.6.0
     countable: 3.0.1
     debounce: 1.2.1
@@ -4226,7 +4226,7 @@ __metadata:
     builtin-modules: 3.3.0
     chokidar: 3.5.3
     clean-html: 1.5.0
-    color: 3.2.1
+    color: 4.2.3
     compare-versions: 3.6.0
     css: 3.0.0
     diff-match-patch: 1.0.5
@@ -11152,7 +11152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
+"color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -11184,16 +11184,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-string@npm:^1.6.0":
-  version: 1.9.0
-  resolution: "color-string@npm:1.9.0"
-  dependencies:
-    color-name: ^1.0.0
-    simple-swizzle: ^0.2.2
-  checksum: 93c6678b847f8cfa47d19677fd19e1d4b19d7a33f100644400357c298266080b5bca64e5f874fa8ac8cc0aa0606ad44f7a838b4e6fd05e6affea190a68555bb4
-  languageName: node
-  linkType: hard
-
 "color-string@npm:^1.9.0":
   version: 1.9.1
   resolution: "color-string@npm:1.9.1"
@@ -11213,17 +11203,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color@npm:3.2.1":
-  version: 3.2.1
-  resolution: "color@npm:3.2.1"
-  dependencies:
-    color-convert: ^1.9.3
-    color-string: ^1.6.0
-  checksum: f81220e8b774d35865c2561be921f5652117638dcda7ca4029262046e37fc2444ac7bbfdd110cf1fd9c074a4ee5eda8f85944ffbdda26186b602dd9bb05f6400
-  languageName: node
-  linkType: hard
-
-"color@npm:^4.2.3":
+"color@npm:4.2.3, color@npm:^4.2.3":
   version: 4.2.3
   resolution: "color@npm:4.2.3"
   dependencies:
