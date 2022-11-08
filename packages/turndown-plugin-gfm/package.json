@@ -8,7 +8,7 @@
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
-    "browserify": "14.5.0",
+    "browserify": "17.0.0",
     "rollup": "0.50.1",
     "standard": "10.0.3",
     "turndown": "4.0.2",

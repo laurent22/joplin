@@ -16,7 +16,7 @@
     "jsdom": "15.2.1"
   },
   "devDependencies": {
-    "browserify": "14.5.0",
+    "browserify": "17.0.0",
     "rollup": "0.50.1",
     "rollup-plugin-commonjs": "8.4.1",
     "rollup-plugin-node-resolve": "3.4.0",
