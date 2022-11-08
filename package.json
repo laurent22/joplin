@@ -67,7 +67,7 @@
     "@typescript-eslint/parser": "5.33.1",
     "cspell": "5.21.2",
     "eslint": "8.22.0",
-    "eslint-interactive": "10.0.0",
+    "eslint-interactive": "10.2.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-promise": "6.0.1",
     "eslint-plugin-react": "7.30.1",
