@@ -3997,7 +3997,7 @@ __metadata:
     babel-preset-react: 6.24.1
     codemirror: 5.65.9
     color: 3.2.1
-    compare-versions: 3.6.0
+    compare-versions: 5.0.1
     countable: 3.0.1
     debounce: 1.2.1
     electron: 19.1.4
@@ -4227,7 +4227,7 @@ __metadata:
     chokidar: 3.5.3
     clean-html: 1.5.0
     color: 3.2.1
-    compare-versions: 3.6.0
+    compare-versions: 5.0.1
     css: 3.0.0
     diff-match-patch: 1.0.5
     es6-promise-pool: 2.5.0
@@ -4416,7 +4416,7 @@ __metadata:
     bcryptjs: 2.4.3
     bulma: 0.9.4
     bulma-prefers-dark: 0.1.0-beta.1
-    compare-versions: 3.6.0
+    compare-versions: 5.0.1
     dayjs: 1.11.6
     formidable: 1.2.6
     fs-extra: 8.1.0
@@ -11434,10 +11434,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compare-versions@npm:3.6.0":
-  version: 3.6.0
-  resolution: "compare-versions@npm:3.6.0"
-  checksum: 7492a50cdaa2c27f5254eee7c4b38856e1c164991bab3d98d7fd067fe4b570d47123ecb92523b78338be86aa221668fd3868bfe8caa5587dc3ebbe1a03d52b5d
+"compare-versions@npm:5.0.1":
+  version: 5.0.1
+  resolution: "compare-versions@npm:5.0.1"
+  checksum: 302a4e46224b47b9280cf894c6c87d8df912671fa391dcdbf0e63438d9b0a69fe20dd747fb439e8d54c43af016ff4eaaf0a4c9d8e7ca358bcd12dadf4ad2935e
   languageName: node
   linkType: hard
 
