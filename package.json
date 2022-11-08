@@ -69,7 +69,7 @@
     "eslint": "8.22.0",
     "eslint-interactive": "10.0.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-promise": "6.0.1",
+    "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.31.10",
     "fs-extra": "8.1.0",
     "glob": "7.2.3",
