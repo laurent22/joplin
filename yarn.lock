@@ -9654,19 +9654,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"boxen@npm:^6.2.1":
-  version: 6.2.1
-  resolution: "boxen@npm:6.2.1"
+"boxen@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "boxen@npm:7.0.0"
   dependencies:
     ansi-align: ^3.0.1
-    camelcase: ^6.2.0
-    chalk: ^4.1.2
+    camelcase: ^7.0.0
+    chalk: ^5.0.1
     cli-boxes: ^3.0.0
-    string-width: ^5.0.1
-    type-fest: ^2.5.0
+    string-width: ^5.1.2
+    type-fest: ^2.13.0
     widest-line: ^4.0.1
     wrap-ansi: ^8.0.1
-  checksum: 2b3226092f1ff8e149c02979098c976552afa15f9e0231c9ed2dfcaaf84604494d16a6f13b647f718439f64d3140a088e822d47c7db00d2266e9ffc8d7321774
+  checksum: b917cf7a168ef3149635a8c02d5c9717d66182348bd27038d85328ad12655151e3324db0f2815253846c33e5f0ddf28b6cd52d56a12b9f88617b7f8f722b946a
   languageName: node
   linkType: hard
 
@@ -10498,6 +10498,13 @@ __metadata:
   version: 6.2.1
   resolution: "camelcase@npm:6.2.1"
   checksum: d876272ef76391ebf8442fb7ea1d77e80ae179ce1339e021a8731b4895fd190dc19e148e045469cff5825d4c089089f3fff34d804d3f49115d55af97dd6ac0af
+  languageName: node
+  linkType: hard
+
+"camelcase@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "camelcase@npm:7.0.0"
+  checksum: 162d59607b3b46e910af151348d5e40af579048a5d07f3c06370b096ca0d42ba4a88bd92cf4e3482645ba1ffdd6f744d8273c1b9594e493fc10883d54adf7cbe
   languageName: node
   linkType: hard
 
@@ -15048,11 +15055,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-interactive@npm:10.0.0":
-  version: 10.0.0
-  resolution: "eslint-interactive@npm:10.0.0"
+"eslint-interactive@npm:10.2.0":
+  version: 10.2.0
+  resolution: "eslint-interactive@npm:10.2.0"
   dependencies:
-    boxen: ^6.2.1
+    boxen: ^7.0.0
     cachedir: ^2.3.0
     chalk: ^5.0.1
     comlink: ^4.3.1
@@ -15061,15 +15068,15 @@ __metadata:
     estraverse: ^5.3.0
     is-installed-globally: ^0.4.0
     node-pager: ^0.3.6
-    ora: ^6.0.1
+    ora: ^6.1.2
     table: ^6.8.0
     terminal-link: ^3.0.0
-    yargs: ^16.2.0
+    yargs: ^17.5.1
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
   bin:
     eslint-interactive: bin/eslint-interactive.js
-  checksum: 63d96881500e7af62618fe8614ae19b6f504f6f43fd6f01cf11accba969b563d4251c173da916ea86708fa423961afcc200ca054a29efbab949a5a812b52a7d4
+  checksum: 79222685ee71bf51a620dcbc4524f889ba651eafca23beba0dda2985fe12d4b62ac08a619058388629ec9ee14329a446a6015d142966a3d5d33ac986d9c48cbf
   languageName: node
   linkType: hard
 
@@ -25940,7 +25947,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ora@npm:^6.0.1":
+"ora@npm:^6.1.2":
   version: 6.1.2
   resolution: "ora@npm:6.1.2"
   dependencies:
@@ -29524,7 +29531,7 @@ __metadata:
     "@typescript-eslint/parser": 5.33.1
     cspell: 5.21.2
     eslint: 8.22.0
-    eslint-interactive: 10.0.0
+    eslint-interactive: 10.2.0
     eslint-plugin-import: 2.26.0
     eslint-plugin-promise: 6.0.1
     eslint-plugin-react: 7.31.10
@@ -31214,7 +31221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^5.0.1":
+"string-width@npm:^5.0.1, string-width@npm:^5.1.2":
   version: 5.1.2
   resolution: "string-width@npm:5.1.2"
   dependencies:
@@ -32999,10 +33006,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^2.5.0":
-  version: 2.18.1
-  resolution: "type-fest@npm:2.18.1"
-  checksum: 2aabebe88d4cfa8d9576058ee475f95efd878a85a6cbe0b4f4e1d45c891501d12b29057a0baddd5fc5652b128622308a499ac5eed68c69ebb05b1c960d2943cf
+"type-fest@npm:^2.13.0":
+  version: 2.19.0
+  resolution: "type-fest@npm:2.19.0"
+  checksum: a4ef07ece297c9fba78fc1bd6d85dff4472fe043ede98bd4710d2615d15776902b595abf62bd78339ed6278f021235fb28a96361f8be86ed754f778973a0d278
   languageName: node
   linkType: hard
 
@@ -35131,7 +35138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.2.0, yargs@npm:^16.2.0":
+"yargs@npm:16.2.0":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:
