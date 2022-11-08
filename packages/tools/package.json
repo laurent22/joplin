@@ -27,7 +27,7 @@
     "dayjs": "1.11.6",
     "execa": "4.1.0",
     "fs-extra": "4.0.3",
-    "gettext-parser": "1.4.0",
+    "gettext-parser": "6.0.0",
     "glob": "7.2.3",
     "markdown-it": "8.4.2",
     "md5-file": "4.0.0",
