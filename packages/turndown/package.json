@@ -11,7 +11,7 @@
     "jsdom": false
   },
   "dependencies": {
-    "css": "2.2.4",
+    "css": "3.0.0",
     "html-entities": "1.4.0",
     "jsdom": "15.2.1"
   },
