@@ -4221,7 +4221,7 @@ __metadata:
     "@types/node-rsa": 1.1.1
     "@types/react": 17.0.52
     async-mutex: 0.4.0
-    base-64: 0.1.0
+    base-64: 1.0.0
     base64-stream: 1.0.0
     builtin-modules: 3.3.0
     chokidar: 3.5.3
@@ -9430,6 +9430,13 @@ __metadata:
   version: 0.1.0
   resolution: "base-64@npm:0.1.0"
   checksum: 5a42938f82372ab5392cbacc85a5a78115cbbd9dbef9f7540fa47d78763a3a8bd7d598475f0d92341f66285afd377509851a9bb5c67bbecb89686e9255d5b3eb
+  languageName: node
+  linkType: hard
+
+"base-64@npm:1.0.0":
+  version: 1.0.0
+  resolution: "base-64@npm:1.0.0"
+  checksum: d10b64a1fc9b2c5a5f39f1ce1e6c9d1c5b249222bbfa3a0604c592d90623caf74419983feadd8a170f27dc0c3389704f72faafa3e645aeb56bfc030c93ff074a
   languageName: node
   linkType: hard
 
