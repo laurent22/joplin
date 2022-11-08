@@ -18,7 +18,7 @@
     "css-loader": "3.6.0",
     "dotenv": "8.6.0",
     "dotenv-expand": "5.1.0",
-    "file-loader": "4.3.0",
+    "file-loader": "6.2.0",
     "fs-extra": "8.1.0",
     "html-webpack-plugin": "4.0.0-beta.11",
     "identity-obj-proxy": "3.0.0",
