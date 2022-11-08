@@ -46,7 +46,7 @@
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
     "fs-extra": "5.0.0",
-    "html-entities": "1.4.0",
+    "html-entities": "2.3.3",
     "image-type": "3.1.0",
     "keytar": "7.9.0",
     "md5": "2.3.0",

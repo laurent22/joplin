@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "css": "3.0.0",
-    "html-entities": "1.4.0",
+    "html-entities": "2.3.3",
     "jsdom": "15.2.1"
   },
   "devDependencies": {

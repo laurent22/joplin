@@ -18,7 +18,7 @@
     "css": "3.0.0",
     "datauri": "4.1.0",
     "fs-extra": "10.0.0",
-    "html-entities": "1.4.0"
+    "html-entities": "2.3.3"
   },
   "devDependencies": {
     "@types/fs-extra": "9.0.13"
