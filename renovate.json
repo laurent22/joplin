@@ -34,6 +34,7 @@
 		"babel-loader",
 		"jsc-android",
 		"katex",
+		"mermaid",
 		"metro-react-native-babel-preset",
 		"react-native",
 		"rollup",
