@@ -2544,6 +2544,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/commands@npm:^6.0.0":
+  version: 6.1.2
+  resolution: "@codemirror/commands@npm:6.1.2"
+  dependencies:
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+  checksum: 3e00b02ea12a5bb8a07162aea006e13e6dcbf9be8535e2fd645dd75634f39d8de2d18bb6ccf302fd22bd0956e38490ccf0bafc60d44945df19e449876b09a0df
+  languageName: node
+  linkType: hard
+
 "@codemirror/lang-cpp@npm:6.0.1":
   version: 6.0.1
   resolution: "@codemirror/lang-cpp@npm:6.0.1"
@@ -2685,6 +2697,17 @@ __metadata:
     "@codemirror/view": ^6.0.0
     crelt: ^1.0.5
   checksum: e40b55f1ff1287a8b5b321f633bff638c9d4a411ada524b36b275344a13f9f4a66b7c5176d8a142a6a7761d1591d18dc535c88897f30b9885508a2890162fc72
+  languageName: node
+  linkType: hard
+
+"@codemirror/search@npm:^6.0.0":
+  version: 6.2.2
+  resolution: "@codemirror/search@npm:6.2.2"
+  dependencies:
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    crelt: ^1.0.5
+  checksum: ef5cdbd64a224a0f0ff7a12fa7500f79141d907f850835a2ae78c0a335fb95cd9dd7b0214afadb5aa190f7b34659cb6079da631e3393095b43218abbd6a4317c
   languageName: node
   linkType: hard
 
@@ -3995,7 +4018,7 @@ __metadata:
     async-mutex: 0.4.0
     babel-cli: 6.26.0
     babel-preset-react: 6.24.1
-    codemirror: 5.65.9
+    codemirror: 6.0.1
     color: 3.2.1
     compare-versions: 3.6.0
     countable: 3.0.1
@@ -11117,10 +11140,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror@npm:5.65.9":
-  version: 5.65.9
-  resolution: "codemirror@npm:5.65.9"
-  checksum: bbdb3991d4641d5c2a044c53907fb7b0d856f67e1190b7063e6a164e7b17f1390faf961d8264394b1ef8ca7e1f21acea2117bb4a0ed8394b3a92875f07beae3d
+"codemirror@npm:6.0.1":
+  version: 6.0.1
+  resolution: "codemirror@npm:6.0.1"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/commands": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/lint": ^6.0.0
+    "@codemirror/search": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+  checksum: 1a78f7077ac5801bdbff162aa0c61bf2b974603c7e9a477198c3ce50c789af674a061d7c293c58b73807eda345c2b5228c38ad2aabb9319d552d5486f785cbef
   languageName: node
   linkType: hard
 
