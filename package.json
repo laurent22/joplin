@@ -65,7 +65,7 @@
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-alpha.5",
     "@typescript-eslint/eslint-plugin": "5.42.1",
     "@typescript-eslint/parser": "5.42.1",
-    "cspell": "5.21.2",
+    "cspell": "6.14.1",
     "eslint": "8.22.0",
     "eslint-interactive": "10.2.0",
     "eslint-plugin-import": "2.26.0",
