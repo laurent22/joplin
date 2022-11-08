@@ -4140,7 +4140,7 @@ __metadata:
     ts-loader: 9.3.1
     ts-node: 10.9.1
     typescript: 4.7.4
-    uglify-js: 3.14.4
+    uglify-js: 3.17.4
     url: 0.11.0
     webpack: 5.74.0
   languageName: unknown
@@ -33252,12 +33252,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uglify-js@npm:3.14.4, uglify-js@npm:^3.1.4":
-  version: 3.14.4
-  resolution: "uglify-js@npm:3.14.4"
+"uglify-js@npm:3.17.4":
+  version: 3.17.4
+  resolution: "uglify-js@npm:3.17.4"
   bin:
     uglifyjs: bin/uglifyjs
-  checksum: 13217db5212a201de2ad89873a4e31b26a140c21c0239cefea4ee1c2861c71a5c133538312ce08c92bf97e5b00c8e170d0ef90213026c17ffa689d2e2cdbce73
+  checksum: 7b3897df38b6fc7d7d9f4dcd658599d81aa2b1fb0d074829dd4e5290f7318dbca1f4af2f45acb833b95b1fe0ed4698662ab61b87e94328eb4c0a0d3435baf924
   languageName: node
   linkType: hard
 
@@ -33270,6 +33270,15 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: dfc61c85b0660216432e021aac6a5f3ea0331720003d4d929b95f297daceb73bc9615875ca150516b49bc57ab60d3cf32415fc006cccf20f275c806f6686da0d
+  languageName: node
+  linkType: hard
+
+"uglify-js@npm:^3.1.4":
+  version: 3.14.4
+  resolution: "uglify-js@npm:3.14.4"
+  bin:
+    uglifyjs: bin/uglifyjs
+  checksum: 13217db5212a201de2ad89873a4e31b26a140c21c0239cefea4ee1c2861c71a5c133538312ce08c92bf97e5b00c8e170d0ef90213026c17ffa689d2e2cdbce73
   languageName: node
   linkType: hard
 
