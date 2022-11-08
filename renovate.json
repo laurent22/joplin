@@ -4,6 +4,7 @@
 		"config:base"
 	],
 	"prConcurrentLimit": 20,
+	"prHourlyLimit": 0,
 	"ignorePaths": [
 		"**/node_modules/**",
 		"**/bower_components/**",
