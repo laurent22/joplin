@@ -4113,7 +4113,7 @@ __metadata:
     react-native-document-picker: 4.3.0
     react-native-dropdownalert: 3.11.0
     react-native-file-viewer: 2.1.5
-    react-native-fs: 2.18.0
+    react-native-fs: 2.20.0
     react-native-get-random-values: 1.7.1
     react-native-image-picker: 4.10.0
     react-native-image-resizer: 1.4.5
@@ -28000,16 +28000,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-fs@npm:2.18.0":
-  version: 2.18.0
-  resolution: "react-native-fs@npm:2.18.0"
+"react-native-fs@npm:2.20.0":
+  version: 2.20.0
+  resolution: "react-native-fs@npm:2.20.0"
   dependencies:
     base-64: ^0.1.0
     utf8: ^3.0.0
   peerDependencies:
     react-native: "*"
     react-native-windows: "*"
-  checksum: e9442fda46b515c1b05752c95c63c7c7eb76b33569aac798a29d088be77f2d27353256da5128f15140ed0ee1bece1ff2063bb0230b35c78624f959d61475617d
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 0be9bb9a5c13b501d0a3006efc3aa5c0b5b211456ee04718297f4e522532f3527f1daa220bd67d3b82d819ed8fdab8f64b7d6e0d7b768c1fd1d8ec9122d94316
   languageName: node
   linkType: hard
 
