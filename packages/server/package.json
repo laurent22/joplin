@@ -50,7 +50,7 @@
     "prettycron": "0.10.0",
     "query-string": "6.14.1",
     "rate-limiter-flexible": "2.4.1",
-    "raw-body": "2.4.2",
+    "raw-body": "2.5.1",
     "sqlite3": "4.2.0",
     "stripe": "8.191.0",
     "uuid": "8.3.2",
