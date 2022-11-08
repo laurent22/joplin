@@ -52,7 +52,7 @@
     "rate-limiter-flexible": "2.4.1",
     "raw-body": "2.5.1",
     "sqlite3": "4.2.0",
-    "stripe": "8.191.0",
+    "stripe": "8.222.0",
     "uuid": "8.3.2",
     "yargs": "17.3.0",
     "zxcvbn": "4.4.2"
