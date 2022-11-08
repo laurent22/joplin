@@ -4114,7 +4114,7 @@ __metadata:
     react-native-dropdownalert: 3.11.0
     react-native-file-viewer: 2.1.5
     react-native-fs: 2.20.0
-    react-native-get-random-values: 1.7.1
+    react-native-get-random-values: 1.8.0
     react-native-image-picker: 4.10.0
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 9.2.3
@@ -28029,14 +28029,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-get-random-values@npm:1.7.1":
-  version: 1.7.1
-  resolution: "react-native-get-random-values@npm:1.7.1"
+"react-native-get-random-values@npm:1.8.0":
+  version: 1.8.0
+  resolution: "react-native-get-random-values@npm:1.8.0"
   dependencies:
     fast-base64-decode: ^1.0.0
   peerDependencies:
     react-native: ">=0.56"
-  checksum: cc1ca41151e62b06b51fc953ac71e1c7dde3d58cca5a1d621c0f8d5aea0c2744afa5a2e1a6f5662b17d5ebe55b39ad33c065b6fbcf20393112bf0ef01bbb81c6
+  checksum: 9163368ebd935d897f6ea0f9e95c476aa7608080e3848bb6c6f85db01b9de3498d857795c84df5492d6511a55aebf89492860ac886b652a9a7a3efdb19913f87
   languageName: node
   linkType: hard
 
