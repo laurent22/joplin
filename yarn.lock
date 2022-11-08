@@ -4508,7 +4508,7 @@ __metadata:
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
     browserify: 14.5.0
-    css: 2.2.4
+    css: 3.0.0
     html-entities: 1.4.0
     jsdom: 15.2.1
     rollup: 0.50.1
@@ -12208,18 +12208,6 @@ __metadata:
     css-color-keywords: ^1.0.0
     postcss-value-parser: ^4.0.2
   checksum: 98a2e9d4fbe9cabc8b744dfdd5ec108396ce497a7b860912a95b299bd52517461281810fcb707965a021a8be39adca9587184a26fb4e926211391a1557aca3c1
-  languageName: node
-  linkType: hard
-
-"css@npm:2.2.4":
-  version: 2.2.4
-  resolution: "css@npm:2.2.4"
-  dependencies:
-    inherits: ^2.0.3
-    source-map: ^0.6.1
-    source-map-resolve: ^0.5.2
-    urix: ^0.1.0
-  checksum: a35d483c5ccc04bcde3b1e7393d58ad3eee1dd6956df0f152de38e46a17c0ee193c30eec6b1e59831ad0e74599385732000e95987fcc9cb2b16c6d951bae49e1
   languageName: node
   linkType: hard
 
@@ -30575,7 +30563,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-resolve@npm:^0.5.0, source-map-resolve@npm:^0.5.2":
+"source-map-resolve@npm:^0.5.0":
   version: 0.5.3
   resolution: "source-map-resolve@npm:0.5.3"
   dependencies:
