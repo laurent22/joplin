@@ -3991,7 +3991,7 @@ __metadata:
     "@types/react-redux": 7.1.24
     "@types/styled-components": 5.1.26
     ajv: 6.12.6
-    app-builder-bin: 1.11.6
+    app-builder-bin: 4.1.2
     async-mutex: 0.4.0
     babel-cli: 6.26.0
     babel-preset-react: 6.24.1
@@ -8131,17 +8131,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"app-builder-bin@npm:1.11.6":
-  version: 1.11.6
-  resolution: "app-builder-bin@npm:1.11.6"
-  checksum: 445521af12111c0f6e40c7817a2a28cbcc5cad2468ca179933a0f45b9d2abb3ae8a25696fc8c9bfbfbcb3aa3ba74cf8eb25a9f545d8222e562b23eddc5d3f333
-  languageName: node
-  linkType: hard
-
 "app-builder-bin@npm:4.0.0":
   version: 4.0.0
   resolution: "app-builder-bin@npm:4.0.0"
   checksum: c3c8fd85c371b7a396c1bb1160ab2e3231ba4309abea5b36a5b366e42511e347c65a33ff50d56f4960b337833d539c263137b0ba131e2fa268c32edeb6c9f683
+  languageName: node
+  linkType: hard
+
+"app-builder-bin@npm:4.1.2":
+  version: 4.1.2
+  resolution: "app-builder-bin@npm:4.1.2"
+  checksum: 8f3f7198ede8b08e4b8acc2df312fcde406482342266298b92dd55ca0b25e8bbdecdfc2e9939bb41d4fdcd147d0d7983708fde18dfa78726e8a674eef8cb757b
   languageName: node
   linkType: hard
 
