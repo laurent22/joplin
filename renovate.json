@@ -3,6 +3,7 @@
 	"extends": [
 		"config:base"
 	],
+	"prConcurrentLimit": 20,
 	"ignorePaths": [
 		"**/node_modules/**",
 		"**/bower_components/**",
