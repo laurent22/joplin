@@ -46,6 +46,9 @@
 		"metro-react-native-babel-preset",
 		"react-native",
 		"rollup",
+		"file-loader",
+		"gradle",
+		"html-webpack-plugin",
 		"typedoc",
 		"webpack"
 	],
