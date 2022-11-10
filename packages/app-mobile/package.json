@@ -38,7 +38,7 @@
     "prop-types": "15.8.1",
     "punycode": "2.1.1",
     "react": "17.0.2",
-    "react-native": "0.66.1",
+    "react-native": "0.67.2",
     "react-native-action-button": "2.8.5",
     "react-native-camera": "3.44.3",
     "react-native-dialogbox": "0.6.10",
