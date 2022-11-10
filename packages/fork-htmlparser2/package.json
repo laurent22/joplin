@@ -39,22 +39,22 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "domelementtype": "^2.0.1",
+    "domelementtype": "2.3.0",
     "domhandler": "3.3.0",
-    "domutils": "^2.0.0",
-    "entities": "^2.0.0"
+    "domutils": "2.8.0",
+    "entities": "2.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.3",
-    "@types/node": "^13.1.1",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
-    "coveralls": "^3.0.1",
-    "eslint": "^6.0.0",
-    "eslint-config-prettier": "^6.0.0",
-    "jest": "^26.6.3",
-    "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
+    "@types/jest": "25.2.3",
+    "@types/node": "18.11.9",
+    "@typescript-eslint/eslint-plugin": "1.13.0",
+    "@typescript-eslint/parser": "1.13.0",
+    "coveralls": "3.1.1",
+    "eslint": "8.27.0",
+    "eslint-config-prettier": "6.15.0",
+    "jest": "26.6.3",
+    "prettier": "1.19.1",
+    "ts-jest": "24.3.0",
     "typescript": "3.9.10"
   },
   "jest": {

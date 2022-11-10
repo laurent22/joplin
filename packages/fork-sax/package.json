@@ -15,8 +15,8 @@
     "README.md"
   ],
   "devDependencies": {
-    "standard": "^8.6.0",
-    "tap": "^10.5.1"
+    "standard": "8.6.0",
+    "tap": "10.7.3"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }

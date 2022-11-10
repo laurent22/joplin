@@ -184,7 +184,7 @@ async function main() {
 	app.use(cors({
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
-			const origin = ctx.request.header.origin;
+			const origin = ctx.request.origin;
 
 			if (acceptOrigin(origin)) {
 				return origin;

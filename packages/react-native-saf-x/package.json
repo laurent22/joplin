@@ -39,12 +39,12 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@types/react": "^16.9.55",
-    "@types/react-native": "^0.64.4",
+    "@babel/core": "7.16.0",
+    "@types/react": "16.14.21",
+    "@types/react-native": "0.64.19",
     "react": "17.0.2",
     "react-native": "0.66.1",
-    "typescript": "^4.0.5"
+    "typescript": "4.5.2"
   },
   "peerDependencies": {
     "react": "*",

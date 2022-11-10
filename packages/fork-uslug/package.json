@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "node-emoji": "1.11.0",
-    "unorm": ">= 1.0.0"
+    "unorm": "1.6.0"
   },
   "devDependencies": {
-    "should": ">= 0.2.1"
+    "should": "13.2.3"
   },
   "repository": {
     "type": "git",
