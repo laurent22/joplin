@@ -4238,7 +4238,7 @@ __metadata:
     html-entities: 1.4.0
     html-minifier: 3.5.21
     image-data-uri: 2.0.1
-    image-type: 3.1.0
+    image-type: 5.1.0
     immer: 7.0.15
     jest: 26.6.3
     js-yaml: 4.1.0
@@ -6292,6 +6292,13 @@ __metadata:
     react-test-renderer:
       optional: true
   checksum: 7fe44352e920deb5cb1876f80d64e48615232072c9d5382f1e0284b3aab46bb1c659a040b774c45cdf084a5257b8fe463f7e08695ad8480d8a15635d4d3d1f6d
+  languageName: node
+  linkType: hard
+
+"@tokenizer/token@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@tokenizer/token@npm:0.3.0"
+  checksum: 1d575d02d2a9f0c5a4ca5180635ebd2ad59e0f18b42a65f3d04844148b49b3db35cf00b6012a1af2d59c2ab3caca59451c5689f747ba8667ee586ad717ee58e1
   languageName: node
   linkType: hard
 
@@ -16164,10 +16171,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-type@npm:^10.9.0":
-  version: 10.11.0
-  resolution: "file-type@npm:10.11.0"
-  checksum: cadd8cd187692dcde637a3ff53bb51c5d935633fc8085e7d25bfb3b4bf995e14a43f2baf71bdcb9d7235b3e725bd158b75d25911fa2f73e5812955382228c511
+"file-type@npm:^17.1.4":
+  version: 17.1.6
+  resolution: "file-type@npm:17.1.6"
+  dependencies:
+    readable-web-to-node-stream: ^3.0.2
+    strtok3: ^7.0.0-alpha.9
+    token-types: ^5.0.0-alpha.2
+  checksum: 797e0d155ecaf4b575d4569a0188bfed85af19d18cf3d93ec8bb66d797172a1fde9f13d56135c6a0b471cacd7ecc1adb0c9a45c6e3a19436f682a275d0be16cc
   languageName: node
   linkType: hard
 
@@ -18825,12 +18836,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"image-type@npm:3.1.0":
-  version: 3.1.0
-  resolution: "image-type@npm:3.1.0"
+"image-type@npm:5.1.0":
+  version: 5.1.0
+  resolution: "image-type@npm:5.1.0"
   dependencies:
-    file-type: ^10.9.0
-  checksum: c50ebc7fb90a512fa3b6c08a81d2d21eac8abab9194ed64e2dec65437bea2d23201f4de0a920c37dc996aba005f7bf7fadb76ff479176a61be169eaabdee5eb6
+    file-type: ^17.1.4
+  checksum: e1eff643a495fccd61561777e998f7135c759cdc637cd8a70f393467b3ad6b16e75422ab5c1bf16c18b88f0594bc2d13ea2ae61d375da11c05e481bf99d107f0
   languageName: node
   linkType: hard
 
@@ -21376,7 +21387,7 @@ __metadata:
     fs-extra: 5.0.0
     gulp: 4.0.2
     html-entities: 1.4.0
-    image-type: 3.1.0
+    image-type: 5.1.0
     jest: 26.6.3
     keytar: 7.9.0
     md5: 2.3.0
@@ -26656,6 +26667,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"peek-readable@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "peek-readable@npm:5.0.0"
+  checksum: bef5ceb50586eb42e14efba274ac57ffe97f0ed272df9239ce029f688f495d9bf74b2886fa27847c706a9db33acda4b7d23bbd09a2d21eb4c2a54da915117414
+  languageName: node
+  linkType: hard
+
 "pend@npm:~1.2.0":
   version: 1.2.0
   resolution: "pend@npm:1.2.0"
@@ -28533,6 +28551,15 @@ __metadata:
     string_decoder: ~0.10.x
     util-deprecate: ~1.0.1
   checksum: 5258b248531e58cbd855dab6a67dde3f4939f78a6d7707042ce61a74fe3421a7596405bc9c8970484dc9b2d929136e6cc40985f76759b9264a0a273f6136ed3b
+  languageName: node
+  linkType: hard
+
+"readable-web-to-node-stream@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "readable-web-to-node-stream@npm:3.0.2"
+  dependencies:
+    readable-stream: ^3.6.0
+  checksum: 8c56cc62c68513425ddfa721954875b382768f83fa20e6b31e365ee00cbe7a3d6296f66f7f1107b16cd3416d33aa9f1680475376400d62a081a88f81f0ea7f9c
   languageName: node
   linkType: hard
 
@@ -31529,6 +31556,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"strtok3@npm:^7.0.0-alpha.9":
+  version: 7.0.0
+  resolution: "strtok3@npm:7.0.0"
+  dependencies:
+    "@tokenizer/token": ^0.3.0
+    peek-readable: ^5.0.0
+  checksum: 2ebe7ad8f2aea611dec6742cf6a42e82764892a362907f7ce493faf334501bf981ce21c828dcc300457e6d460dc9c34d644ededb3b01dcb9e37559203cf1748c
+  languageName: node
+  linkType: hard
+
 "style-loader@npm:3.3.1":
   version: 3.3.1
   resolution: "style-loader@npm:3.3.1"
@@ -32502,6 +32539,16 @@ __metadata:
   version: 1.0.1
   resolution: "toidentifier@npm:1.0.1"
   checksum: 952c29e2a85d7123239b5cfdd889a0dde47ab0497f0913d70588f19c53f7e0b5327c95f4651e413c74b785147f9637b17410ac8c846d5d4a20a5a33eb6dc3a45
+  languageName: node
+  linkType: hard
+
+"token-types@npm:^5.0.0-alpha.2":
+  version: 5.0.1
+  resolution: "token-types@npm:5.0.1"
+  dependencies:
+    "@tokenizer/token": ^0.3.0
+    ieee754: ^1.2.1
+  checksum: 32780123bc6ce8b6a2231d860445c994a02a720abf38df5583ea957aa6626873cd1c4dd8af62314da4cf16ede00c379a765707a3b06f04b8808c38efdae1c785
   languageName: node
   linkType: hard
 
