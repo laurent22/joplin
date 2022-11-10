@@ -58,7 +58,7 @@
     "html-minifier": "3.5.21",
     "image-data-uri": "2.0.1",
     "image-type": "3.1.0",
-    "immer": "7.0.15",
+    "immer": "9.0.16",
     "js-yaml": "4.1.0",
     "levenshtein": "1.0.5",
     "markdown-it": "10.0.0",
