@@ -3990,7 +3990,6 @@ __metadata:
     "@types/react": 16.14.34
     "@types/react-redux": 7.1.24
     "@types/styled-components": 5.1.26
-    ajv: 6.12.6
     async-mutex: 0.4.0
     babel-cli: 6.26.0
     babel-preset-react: 6.24.1
@@ -4155,7 +4154,7 @@ __metadata:
     "@typescript-eslint/parser": 1.13.0
     coveralls: 3.1.1
     domelementtype: 2.3.0
-    domhandler: 5.0.3
+    domhandler: 3.3.0
     domutils: 2.8.0
     entities: 2.2.0
     eslint: 6.8.0
@@ -7867,7 +7866,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:6.12.6, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.0, ajv@npm:^6.12.3, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
+"ajv@npm:^4.7.0":
+  version: 4.11.8
+  resolution: "ajv@npm:4.11.8"
+  dependencies:
+    co: ^4.6.0
+    json-stable-stringify: ^1.0.1
+  checksum: 1a4fb38ebccc2ff3ab507d5507b133705d056f9db28cb00a59f0753a5f11e809d959b732edcd52c02fed628638ffb9486ee6bd13bf027400b5c9acf9c33e25f2
+  languageName: node
+  linkType: hard
+
+"ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.0, ajv@npm:^6.12.3, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
@@ -7876,16 +7885,6 @@ __metadata:
     json-schema-traverse: ^0.4.1
     uri-js: ^4.2.2
   checksum: 874972efe5c4202ab0a68379481fbd3d1b5d0a7bd6d3cc21d40d3536ebff3352a2a1fabb632d4fd2cc7fe4cbdcd5ed6782084c9bbf7f32a1536d18f9da5007d4
-  languageName: node
-  linkType: hard
-
-"ajv@npm:^4.7.0":
-  version: 4.11.8
-  resolution: "ajv@npm:4.11.8"
-  dependencies:
-    co: ^4.6.0
-    json-stable-stringify: ^1.0.1
-  checksum: 1a4fb38ebccc2ff3ab507d5507b133705d056f9db28cb00a59f0753a5f11e809d959b732edcd52c02fed628638ffb9486ee6bd13bf027400b5c9acf9c33e25f2
   languageName: node
   linkType: hard
 
@@ -8782,9 +8781,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:2.1249.0":
-  version: 2.1249.0
-  resolution: "aws-sdk@npm:2.1249.0"
+"aws-sdk@npm:2.1251.0":
+  version: 2.1251.0
+  resolution: "aws-sdk@npm:2.1251.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -8796,7 +8795,7 @@ __metadata:
     util: ^0.12.4
     uuid: 8.0.0
     xml2js: 0.4.19
-  checksum: 57149d80aaee66d1e6645b1036e9fca312859a977c62fb333fef20d1404b11245b7020e6d88bcc5598887aefde3f49d9419ecdc3d51a9bb771922e018c73e5aa
+  checksum: 5731901021d4cc3e5260ab015c6c75be62891897a61593f71a3c8edc4200479ce88a4269be343b74af4d98a2282d49971b25cc0bced1dc103311a4109563eccd
   languageName: node
   linkType: hard
 
@@ -13949,7 +13948,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domelementtype@npm:2.3.0, domelementtype@npm:^2.3.0":
+"domelementtype@npm:2.3.0":
   version: 2.3.0
   resolution: "domelementtype@npm:2.3.0"
   checksum: ee837a318ff702622f383409d1f5b25dd1024b692ef64d3096ff702e26339f8e345820f29a68bcdcea8cfee3531776b3382651232fbeae95612d6f0a75efb4f6
@@ -13990,12 +13989,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domhandler@npm:5.0.3":
-  version: 5.0.3
-  resolution: "domhandler@npm:5.0.3"
+"domhandler@npm:3.3.0":
+  version: 3.3.0
+  resolution: "domhandler@npm:3.3.0"
   dependencies:
-    domelementtype: ^2.3.0
-  checksum: 0f58f4a6af63e6f3a4320aa446d28b5790a009018707bce2859dcb1d21144c7876482b5188395a188dfa974238c019e0a1e610d2fc269a12b2c192ea2b0b131c
+    domelementtype: ^2.0.1
+  checksum: 850e5e9fee7834ab4314811e18bc1f4294d7eafbf6a79ad03cbe50cf964108935c97257ac248944d72a9312b4a18dfa8323e857d23278964dc83b1f124467fa3
   languageName: node
   linkType: hard
 
@@ -21357,7 +21356,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
     "@types/node": 18.11.9
-    aws-sdk: 2.1249.0
+    aws-sdk: 2.1251.0
     chalk: 4.1.2
     compare-version: 0.1.2
     fs-extra: 5.0.0
