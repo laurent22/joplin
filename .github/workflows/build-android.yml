@@ -1,8 +1,23 @@
+# The goal of this action is to compile the Android debug build. That should
+# tell us automatically if something got broken when a dependency was changed.
+
 name: react-native-android-build-apk
 on: [push, pull_request]
 
 jobs:
-  install-and-test:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+
+  BuildAndroidDebug:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Install Linux dependencies
