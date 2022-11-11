@@ -4075,7 +4075,7 @@ __metadata:
     "@lezer/highlight": 1.1.2
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 6.5.4
-    "@react-native-community/geolocation": 3.0.3
+    "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.6
     "@react-native-community/push-notification-ios": 1.10.1
     "@react-native-community/slider": 4.3.3
@@ -4095,6 +4095,7 @@ __metadata:
     jest: 28.1.3
     jest-environment-jsdom: 28.1.3
     jetifier: 1.6.8
+    joplin-rn-alarm-notification: 1.0.5
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
@@ -5944,13 +5945,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/geolocation@npm:3.0.3":
-  version: 3.0.3
-  resolution: "@react-native-community/geolocation@npm:3.0.3"
+"@react-native-community/geolocation@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@react-native-community/geolocation@npm:2.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: c57397a9a8fdc66368c2bd517c8f6b3cbf19f1cb1cfb758759b76dd4ecc0d5496ba2402554fc9bc86c4025ba1dc12d5ba307775e5206e1b21035b123b71965a5
+  checksum: 43dd95a8f643af613cd4c8d0a9a557690a70d072f5985c94aa5e09e5cab41e35682a5b022080bb2f276d00029dee1341b0451fcbd8ad8b55a67bc5d98c28f8cc
   languageName: node
   linkType: hard
 
@@ -21262,6 +21263,13 @@ __metadata:
     "@sideway/formula": ^3.0.0
     "@sideway/pinpoint": ^2.0.0
   checksum: 6a20d009d2fa8a72dbfd9bc739d240f678b09d3a16c05b4bfb4e2d0503e60f7d7914250f0bfc52fb79a537490739ba36a1ace00a05b8ddecaaacfcedafc5c8b9
+  languageName: node
+  linkType: hard
+
+"joplin-rn-alarm-notification@npm:1.0.5":
+  version: 1.0.5
+  resolution: "joplin-rn-alarm-notification@npm:1.0.5"
+  checksum: 82dfc1ffc14fdf411b55f088bc91f5ec661aceeb77a5061ecb98d6491deded1d809e9f2bc1d4127b4d52ec5a3f4c457894e345b448d059865c26ee5efae8b24f
   languageName: node
   linkType: hard
 
