@@ -51,7 +51,7 @@
     "@typescript-eslint/parser": "1.13.0",
     "coveralls": "3.1.1",
     "eslint": "8.27.0",
-    "eslint-config-prettier": "6.15.0",
+    "eslint-config-prettier": "8.5.0",
     "jest": "26.6.3",
     "prettier": "1.19.1",
     "ts-jest": "24.3.0",
