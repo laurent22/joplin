@@ -4095,7 +4095,6 @@ __metadata:
     jest: 28.1.3
     jest-environment-jsdom: 28.1.3
     jetifier: 1.6.8
-    joplin-rn-alarm-notification: 1.0.5
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
@@ -4104,7 +4103,7 @@ __metadata:
     prop-types: 15.8.1
     punycode: 2.1.1
     react: 17.0.2
-    react-native: 0.66.1
+    react-native: 0.67.2
     react-native-action-button: 2.8.5
     react-native-camera: 3.44.3
     react-native-dialogbox: 0.6.10
@@ -4119,14 +4118,14 @@ __metadata:
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
-    react-native-securerandom: 1.0.0
+    react-native-securerandom: 1.0.1
     react-native-share: 7.9.1
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 5.0.0
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 7.1.0
     react-native-version-info: 1.1.1
-    react-native-webview: 10.10.2
+    react-native-webview: 11.23.1
     react-redux: 5.1.2
     redux: 4.0.0
     rn-fetch-blob: 0.12.0
@@ -5994,6 +5993,13 @@ __metadata:
   version: 1.0.0
   resolution: "@react-native/normalize-color@npm:1.0.0"
   checksum: 22f1af279576ffd2609dc8362054dba2a7553d055f762f6dc7f6c9082c0e83c10260a99cb046d240fecde27a3858525a53d337f8c23d549b52f714dc599a1961
+  languageName: node
+  linkType: hard
+
+"@react-native/normalize-color@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@react-native/normalize-color@npm:2.0.0"
+  checksum: 2da373297f0d22b700edb9ab1b2cca34684e94a5dfe172e1cfd114e74ac17e139e802bc671e9868e0a580190eccbf3fa804f67be8cc1d9cbd0e216e994495931
   languageName: node
   linkType: hard
 
@@ -21259,13 +21265,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joplin-rn-alarm-notification@npm:1.0.5":
-  version: 1.0.5
-  resolution: "joplin-rn-alarm-notification@npm:1.0.5"
-  checksum: 82dfc1ffc14fdf411b55f088bc91f5ec661aceeb77a5061ecb98d6491deded1d809e9f2bc1d4127b4d52ec5a3f4c457894e345b448d059865c26ee5efae8b24f
-  languageName: node
-  linkType: hard
-
 "joplin@workspace:packages/app-cli":
   version: 0.0.0-use.local
   resolution: "joplin@workspace:packages/app-cli"
@@ -27759,6 +27758,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-devtools-core@npm:4.19.1":
+  version: 4.19.1
+  resolution: "react-devtools-core@npm:4.19.1"
+  dependencies:
+    shell-quote: ^1.6.1
+    ws: ^7
+  checksum: 20471dde740e25a6f51b7b2b719fb1e1a9213cfb2a14d6defb44eced93646f73c9c5e376fcfdc78827c4fb587bc030ca99a14a0154a94acf7a1e1496d2b59ef6
+  languageName: node
+  linkType: hard
+
 "react-devtools-core@npm:^4.13.0":
   version: 4.21.0
   resolution: "react-devtools-core@npm:4.21.0"
@@ -27874,6 +27883,17 @@ __metadata:
     jscodeshift: ^0.11.0
     nullthrows: ^1.1.1
   checksum: d550d6e985a0d564f0ac470b19c9a2e4e78ffc0f5769ba46992a4d10130928093e9c2ada7eda0ec8bd976db4ba4c21ef410280e979226f11844aa0215335cde5
+  languageName: node
+  linkType: hard
+
+"react-native-codegen@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "react-native-codegen@npm:0.0.8"
+  dependencies:
+    flow-parser: ^0.121.0
+    jscodeshift: ^0.11.0
+    nullthrows: ^1.1.1
+  checksum: c5ccdcb2a2f249756aca8e729cf96737368c8d33673b08d4c928a469bcb58ff37fbf3c7a070398f33b19846c4261948e2c5107c561934a41ac034620f7207bbd
   languageName: node
   linkType: hard
 
@@ -27994,14 +28014,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-securerandom@npm:1.0.0":
-  version: 1.0.0
-  resolution: "react-native-securerandom@npm:1.0.0"
+"react-native-securerandom@npm:1.0.1":
+  version: 1.0.1
+  resolution: "react-native-securerandom@npm:1.0.1"
   dependencies:
     base64-js: "*"
   peerDependencies:
     react-native: "*"
-  checksum: 9c589c59632dc9b7b27979f7a26ebdacd337f9a9e7a67854c5bbb0438f2ce64c463367a4616622e8efe1b35f804e5b47a315d6fcbc911b3b007f83e3ada4d36a
+  checksum: ccf42b8a8a83809fd77097aa141efd2e9533e94c094e8dcb0054659707e276cbb6466d3408d0e0594f0bd67af4fbc5881f2ad2d93513b5b2aae25dfd2888274b
   languageName: node
   linkType: hard
 
@@ -28069,15 +28089,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:10.10.2":
-  version: 10.10.2
-  resolution: "react-native-webview@npm:10.10.2"
+"react-native-webview@npm:11.23.1":
+  version: 11.23.1
+  resolution: "react-native-webview@npm:11.23.1"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
-    react-native: ">=0.60 <0.64"
-  checksum: c25c6d49b800ce3b57ff6952c5807df2b13a1b6ad42dd721e569efa4a6d18ad0945b74d864d89754d5a9ea82b67622e96f794e4e6e98faea05077a6310c0af28
+    react: "*"
+    react-native: "*"
+  checksum: 58367276b4457a12c0ecb24084c237048a31a8b4d49f53615634052c2dfcb318824e9239909b6bfb80cc8abacab658d278f480f7ff96267d10d5ff84a8ff1373
   languageName: node
   linkType: hard
 
@@ -28121,6 +28142,48 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: fe1701bb398d8f533c51aaf05dabb1c5d11caf80cb39c79fd38f4dbf13a27e8497080216ffdb19aa72f222d5bc75b32b8673bef504fab711f65a8d84dbdb5ddf
+  languageName: node
+  linkType: hard
+
+"react-native@npm:0.67.2":
+  version: 0.67.2
+  resolution: "react-native@npm:0.67.2"
+  dependencies:
+    "@jest/create-cache-key-function": ^27.0.1
+    "@react-native-community/cli": ^6.0.0
+    "@react-native-community/cli-platform-android": ^6.0.0
+    "@react-native-community/cli-platform-ios": ^6.0.0
+    "@react-native/assets": 1.0.0
+    "@react-native/normalize-color": 2.0.0
+    "@react-native/polyfills": 2.0.0
+    abort-controller: ^3.0.0
+    anser: ^1.4.9
+    base64-js: ^1.1.2
+    event-target-shim: ^5.0.1
+    hermes-engine: ~0.9.0
+    invariant: ^2.2.4
+    jsc-android: ^250230.2.1
+    metro-react-native-babel-transformer: 0.66.2
+    metro-runtime: 0.66.2
+    metro-source-map: 0.66.2
+    nullthrows: ^1.1.1
+    pretty-format: ^26.5.2
+    promise: ^8.0.3
+    prop-types: ^15.7.2
+    react-devtools-core: 4.19.1
+    react-native-codegen: ^0.0.8
+    react-refresh: ^0.4.0
+    regenerator-runtime: ^0.13.2
+    scheduler: ^0.20.2
+    stacktrace-parser: ^0.1.3
+    use-subscription: ^1.0.0
+    whatwg-fetch: ^3.0.0
+    ws: ^6.1.4
+  peerDependencies:
+    react: 17.0.2
+  bin:
+    react-native: cli.js
+  checksum: 6e8bd1a8ab1c8fad2928fd1aa921363fd2d49d4622c6edea38c3f80e67cf43253347661a545b69637f149fbc3a762f0a0e26a3bcf0003ac3c46dd83adb63b2b2
   languageName: node
   linkType: hard
 
