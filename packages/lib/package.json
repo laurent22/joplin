@@ -52,7 +52,7 @@
     "fast-xml-parser": "3.21.1",
     "follow-redirects": "1.15.2",
     "form-data": "4.0.0",
-    "fs-extra": "5.0.0",
+    "fs-extra": "10.1.0",
     "hpagent": "1.2.0",
     "html-entities": "1.4.0",
     "html-minifier": "3.5.21",
