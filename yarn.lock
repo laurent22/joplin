@@ -4094,7 +4094,7 @@ __metadata:
     gulp: 4.0.2
     jest: 28.1.3
     jest-environment-jsdom: 28.1.3
-    jetifier: 1.6.8
+    jetifier: 2.0.0
     joplin-rn-alarm-notification: 1.0.5
     jsc-android: 241213.1.0
     jsdom: 20.0.0
@@ -21231,7 +21231,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jetifier@npm:1.6.8, jetifier@npm:^1.6.2":
+"jetifier@npm:2.0.0":
+  version: 2.0.0
+  resolution: "jetifier@npm:2.0.0"
+  bin:
+    jetifier: bin/jetify
+    jetifier-standalone: bin/jetifier-standalone
+    jetify: bin/jetify
+  checksum: 57886c2bb7eddd1c697f0cd8f54162c037a50688d55d994a88918ca2018c3996fe6b5e9a56a57b067348260bb728e71d36e0d28d5dba87316fdb3b227d29af0e
+  languageName: node
+  linkType: hard
+
+"jetifier@npm:^1.6.2":
   version: 1.6.8
   resolution: "jetifier@npm:1.6.8"
   bin:
