@@ -50,6 +50,9 @@
 		"gradle",
 		"html-webpack-plugin",
 		"typedoc",
+		"com.facebook.flipper:flipper",
+		"com.facebook.flipper:flipper-fresco-plugin",
+		"com.facebook.flipper:flipper-network-plugin",
 		"webpack"
 	],
 	"packageRules": [
