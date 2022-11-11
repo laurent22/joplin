@@ -84,7 +84,7 @@
   "dependencies": {
     "@types/fs-extra": "9.0.13",
     "http-server": "0.13.0",
-    "node-gyp": "8.4.1",
+    "node-gyp": "9.3.0",
     "nodemon": "2.0.20"
   },
   "packageManager": "yarn@3.2.4",
