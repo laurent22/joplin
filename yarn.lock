@@ -4467,7 +4467,7 @@ __metadata:
     execa: 4.1.0
     fs-extra: 4.0.3
     gettext-extractor: 3.6.0
-    gettext-parser: 1.4.0
+    gettext-parser: 6.0.0
     glob: 7.2.3
     gulp: 4.0.2
     jest: 26.6.3
@@ -15581,7 +15581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events@npm:3.3.0, events@npm:^3.2.0":
+"events@npm:3.3.0, events@npm:^3.2.0, events@npm:^3.3.0":
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
@@ -17185,13 +17185,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-parser@npm:1.4.0":
-  version: 1.4.0
-  resolution: "gettext-parser@npm:1.4.0"
+"gettext-parser@npm:6.0.0":
+  version: 6.0.0
+  resolution: "gettext-parser@npm:6.0.0"
   dependencies:
-    encoding: ^0.1.12
-    safe-buffer: ^5.1.1
-  checksum: 56cab1800feead2a3038bf9f1956a8218b4c011303948345168adfcf2bf21682330b336143fd82a602e32c7d0c106d6776602a63852d1307c2b8d9ae2df28ff5
+    content-type: ^1.0.4
+    encoding: ^0.1.13
+    readable-stream: ^4.1.0
+    safe-buffer: ^5.2.1
+  checksum: e6938755d914e886c780a71e58390af0a5ea5698aab2777654733da4c4b96e02fcc9d40c50df0987e4d4a12bd6b99291a268805edb8c99a83a639606ab73e40e
   languageName: node
   linkType: hard
 
@@ -27269,7 +27271,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"process@npm:~0.11.0":
+"process@npm:^0.11.10, process@npm:~0.11.0":
   version: 0.11.10
   resolution: "process@npm:0.11.10"
   checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
@@ -28525,6 +28527,18 @@ __metadata:
     string_decoder: ^1.1.1
     util-deprecate: ^1.0.1
   checksum: d4ea81502d3799439bb955a3a5d1d808592cf3133350ed352aeaa499647858b27b1c4013984900238b0873ec8d0d8defce72469fb7a83e61d53f5ad61cb80dc8
+  languageName: node
+  linkType: hard
+
+"readable-stream@npm:^4.1.0":
+  version: 4.2.0
+  resolution: "readable-stream@npm:4.2.0"
+  dependencies:
+    abort-controller: ^3.0.0
+    buffer: ^6.0.3
+    events: ^3.3.0
+    process: ^0.11.10
+  checksum: aa8447f781e6df90af78f6b0b9b9a77da2816dcf6c8220e7021c4de36e04f8129fed7ead81eac0baad2f42098209f9e7d7cd43169e1c156efcd2613828a37439
   languageName: node
   linkType: hard
 
