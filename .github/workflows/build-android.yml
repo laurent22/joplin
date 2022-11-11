@@ -1,0 +1,29 @@
+name: react-native-android-build-apk
+on: [push, pull_request]
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Linux dependencies
+          run: |
+            sudo apt-get update || true
+            sudo apt-get install -y libsecret-1-dev
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Yarn
+        run: |
+          corepack enable
+
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run:  yarn install
+
+      - name: Build Android Release
+        run: |
+          cd packages/app-mobile/android && ./gradlew assembleDebug
+          
