@@ -27,7 +27,7 @@
     "@joplin/fork-htmlparser2": "^4.1.41",
     "@joplin/fork-uslug": "^1.0.6",
     "font-awesome-filetypes": "2.1.0",
-    "fs-extra": "8.1.0",
+    "fs-extra": "10.1.0",
     "highlight.js": "11.1.0",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
