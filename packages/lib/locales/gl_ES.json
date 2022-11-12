@@ -148,7 +148,6 @@
  "Missing required argument: %s": "Falta un argumento requirido: %s",
  "More than one item match \"%s\". Please narrow down your query.": "Hai máis dun elemento que coincide con «%s». Refine a busca.",
  "Move %d notes to notebook \"%s\"?": "Mover %d notas para o caderno \"%s\"?",
- "Moves the notes matching <note> to [notebook].": "Move as notas que coinciden con <note> a [notebook].",
  "n": "n",
  "N": "N",
  "New note": "Nova nota",

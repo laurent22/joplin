@@ -60,7 +60,7 @@ export function headerSessionId(headers: any): string {
 }
 
 export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {
-	if (ctx.headers['x-api-auth']) return ctx.headers['x-api-auth'];
+	if (ctx.headers['x-api-auth']) return ctx.headers['x-api-auth'] as string;
 
 	const id = cookieGet(ctx, 'sessionId');
 	if (!id && throwIfNotFound) throw new ErrorForbidden('Invalid or missing session');
@@ -76,6 +76,6 @@ export function isAdminRequest(ctx: AppContext): boolean {
 }
 
 export function userIp(ctx: AppContext): string {
-	if (ctx.headers['x-real-ip']) return ctx.headers['x-real-ip'];
+	if (ctx.headers['x-real-ip']) return ctx.headers['x-real-ip'] as string;
 	return ctx.ip;
 }

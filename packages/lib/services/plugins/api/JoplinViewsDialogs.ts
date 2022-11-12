@@ -2,6 +2,7 @@ import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ButtonSpec, ViewHandle, DialogResult } from './types';
+import { _ } from '@joplin/lib/locale';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that
@@ -67,7 +68,7 @@ export default class JoplinViewsDialogs {
 	 * Displays a message box with OK/Cancel buttons. Returns the button index that was clicked - "0" for OK and "1" for "Cancel"
 	 */
 	async showMessageBox(message: string): Promise<number> {
-		return this.implementation_.showMessageBox(message);
+		return this.implementation_.showMessageBox(`${_('(In plugin: %s)', this.plugin.manifest.name)}\n\n${message}`);
 	}
 
 	/**

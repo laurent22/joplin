@@ -13,7 +13,7 @@ router.get('terms', async (_path: SubPath, _ctx: AppContext) => {
 	const markdownIt = new MarkdownIt();
 	return markdownIt.render(`# **Joplin Cloud** usage terms and conditions
 
-Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern Cozic Ltd’s relationship with you in relation to this website. Cozic Ltd is the owner of this website, Joplin Cloud. If you disagree with any part of these terms and conditions, please do not use our website.
+Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern JOPLIN’s relationship with you in relation to this website. JOPLIN is the owner of this website, Joplin Cloud. If you disagree with any part of these terms and conditions, please do not use our website.
 
 The term ‘Joplin Cloud’ or ‘us’ or ‘we’ refers to the owner of the website whose registered office is 32 Greenfield Gardens, London, NW2 1HX. Our company registration number is 06547799. The term ‘you’ refers to the user or viewer of our website.
 

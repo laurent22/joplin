@@ -35,7 +35,7 @@ export default function MiniViewerApp(props: MiniViewerAppProps) {
 	if (!pdfDocument) {
 		return (
 			<div className="mini-app loading">
-				<div>Loading pdf..</div>
+				<div></div>
 			</div>);
 	}
 

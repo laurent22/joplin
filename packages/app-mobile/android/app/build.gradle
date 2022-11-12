@@ -117,7 +117,7 @@ def jscFlavor = 'org.webkit:android-jsc-intl:+'
 /**
  * Whether to enable the Hermes VM.
  *
- * This should be set on project.ext.react and mirrored here.  If it is not set
+ * This should be set on project.ext.react and that value will be read here. If it is not set
  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
@@ -146,8 +146,8 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097671
-		versionName "2.9.3"
+		versionCode 2097676
+		versionName "2.9.8"
 		ndk {
 			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		}

@@ -1,5 +1,27 @@
 # Joplin Android app changelog
 
+## [android-v2.9.8](https://github.com/laurent22/joplin/releases/tag/android-v2.9.8) (Pre-release) - 2022-11-01T15:45:36Z
+
+- Updated translations
+
+## [android-v2.9.7](https://github.com/laurent22/joplin/releases/tag/android-v2.9.7) (Pre-release) - 2022-10-30T10:25:01Z
+
+- Fixed: Fixed notebook icons alignment (ea6b7ca)
+- Fixed: Fixed crash when attaching a file.
+
+## [android-v2.9.6](https://github.com/laurent22/joplin/releases/tag/android-v2.9.6) (Pre-release) - 2022-10-23T16:23:25Z
+
+- New: Add monochrome icon (#6954 by Tom Bursch)
+- Fixed: Fix file system sync issues (#6943 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fix note attachment issue (#6932 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixed notebook icon spacing (633c9ac)
+- Fixed: Support non-ASCII characters in OneDrive (#6916) (#6838 by Self Not Found)
+
+## [android-v2.9.5](https://github.com/laurent22/joplin/releases/tag/android-v2.9.5) (Pre-release) - 2022-10-11T13:52:00Z
+
+- Improved: Disable multi-highlighting to fix context menu (9b348fd)
+- Improved: Display icon for all notebooks if at least one notebook has an icon (ec97dd8)
+
 ## [android-v2.9.3](https://github.com/laurent22/joplin/releases/tag/android-v2.9.3) (Pre-release) - 2022-10-07T11:12:56Z
 
 - Improved: Convert empty bolded regions to bold-italic regions in beta editor (#6807) (#6808 by Henry Heino)

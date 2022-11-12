@@ -622,7 +622,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					});
 
 					editor.ui.registry.addButton('joplinInsertDateTime', {
-						tooltip: _('Insert Date Time'),
+						tooltip: _('Insert time'),
 						icon: 'insert-time',
 						onAction: function() {
 							void CommandService.instance().execute('insertDateTime');

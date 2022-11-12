@@ -30,7 +30,7 @@ const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> 
 	for (const mirrorUrl of mirrorUrls) {
 		try {
 			// We try to fetch .gitignore, which is smaller than the whole manifest
-			await fetch(`${mirrorUrl}/.gitignore`);
+			await shim.fetch(`${mirrorUrl}/.gitignore`);
 		} catch (error) {
 			logger.info(`findWorkingMirror: Could not connect to ${mirrorUrl}:`, error);
 			continue;
@@ -121,7 +121,7 @@ export default class RepositoryApi {
 		if (this.isLocalRepo) return;
 
 		try {
-			const response = await fetch(`${this.githubApiUrl}/releases`);
+			const response = await shim.fetch(`${this.githubApiUrl}/releases`);
 			const releases = await response.json();
 			if (!releases.length) throw new Error('No release was found');
 			this.release_ = releases[0];

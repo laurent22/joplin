@@ -1,8 +1,7 @@
 const React = require('react');
 
-import { _ } from '@joplin/lib/locale';
 import { ReactElement, useCallback, useState } from 'react';
-import { AccessibilityInfo, LayoutChangeEvent, ScrollView, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, ScrollView, View, ViewStyle } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
 import ToolbarOverflowRows from './ToolbarOverflowRows';
@@ -55,11 +54,6 @@ const Toolbar = (props: ToolbarProps) => {
 	}, [allButtonSpecs.length]);
 
 	const onToggleOverflowVisible = useCallback(() => {
-		AccessibilityInfo.announceForAccessibility(
-			!overflowButtonsVisible
-				? _('Opened toolbar overflow menu')
-				: _('Closed toolbar overflow menu')
-		);
 		setOverflowPopupVisible(!overflowButtonsVisible);
 	}, [overflowButtonsVisible]);
 

@@ -4,15 +4,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.44",
+  "version": "1.0.45",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
-    "browserify": "^14.5.0",
-    "rollup": "^0.50.0",
-    "standard": "^10.0.3",
-    "turndown": "4.0.1",
-    "turndown-attendant": "0.0.2"
+    "browserify": "14.5.0",
+    "rollup": "0.50.1",
+    "standard": "10.0.3",
+    "turndown": "4.0.2",
+    "turndown-attendant": "0.0.3"
   },
   "files": [
     "lib",

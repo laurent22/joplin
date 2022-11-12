@@ -1,4 +1,4 @@
-import { createPaginationLinks, filterPaginationQueryParams, PageLink, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, PaginationQueryParams, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
+import { createPaginationLinks, PageLink, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, PaginationQueryParams, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../urlUtils';
 
 const defaultSortOrder = PaginationOrderDir.ASC;
@@ -45,9 +45,13 @@ interface RowItem {
 	stretch?: boolean;
 	hint?: string;
 	render?: RowItemRenderCallback;
+	classNames?: string[];
 }
 
-export type Row = RowItem[];
+export interface Row {
+	classNames?: string[];
+	items: RowItem[];
+}
 
 interface RowItemView {
 	value: string;
@@ -58,7 +62,10 @@ interface RowItemView {
 	hint: string;
 }
 
-type RowView = RowItemView[];
+interface RowView {
+	classNames: string[];
+	items: RowItemView[];
+}
 
 export interface Table {
 	headers: Header[];
@@ -97,16 +104,22 @@ function makeHeaderView(header: Header, parentBaseUrl: string, baseUrlQuery: Pag
 }
 
 function makeRowView(row: Row): RowView {
-	return row.map(rowItem => {
-		return {
-			value: rowItem.value,
-			valueHtml: rowItem.render ? rowItem.render() : '',
-			classNames: [rowItem.stretch ? 'stretch' : 'nowrap'],
-			url: rowItem.url,
-			checkbox: rowItem.checkbox,
-			hint: rowItem.hint,
-		};
-	});
+	return {
+		classNames: row.classNames,
+		items: row.items.map(rowItem => {
+			let classNames = [rowItem.stretch ? 'stretch' : 'nowrap'];
+			if (rowItem.classNames) classNames = classNames.concat(rowItem.classNames);
+
+			return {
+				value: rowItem.value,
+				valueHtml: rowItem.render ? rowItem.render() : '',
+				classNames,
+				url: rowItem.url,
+				checkbox: rowItem.checkbox,
+				hint: rowItem.hint,
+			};
+		}),
+	};
 }
 
 export function makeTableView(table: Table): TableView {
@@ -117,7 +130,7 @@ export function makeTableView(table: Table): TableView {
 	if (table.pageCount) {
 		if (!table.baseUrl || !table.requestQuery) throw new Error('Table.baseUrl and Table.requestQuery are required for pagination when there is more than one page');
 
-		baseUrlQuery = filterPaginationQueryParams(table.requestQuery);
+		baseUrlQuery = table.requestQuery; // filterPaginationQueryParams(table.requestQuery);
 		pagination = table.pagination;
 		paginationLinks = createPaginationLinks(pagination.page, table.pageCount, setQueryParameters(table.baseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
 	}
@@ -132,3 +145,7 @@ export function makeTableView(table: Table): TableView {
 export function tablePartials(): string[] {
 	return ['pagination', 'table', 'tableHeader', 'tableRowItem'];
 }
+
+export const renderUserIcon = () => {
+	return '<i class="fas fa-user-alt"></i>';
+};

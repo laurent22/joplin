@@ -3,6 +3,7 @@ import { ResourceEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
 import { CachesDirectoryPath } from 'react-native-fs';
 
+// when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 const DIR_NAME = 'sharedFiles';
 
 /**

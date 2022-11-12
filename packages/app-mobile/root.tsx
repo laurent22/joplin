@@ -28,7 +28,8 @@ import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 const VersionInfo = require('react-native-version-info').default;
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+const RNAppState = require('react-native').AppState;
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -66,7 +67,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
 import SideMenu from './components/SideMenu';
-const { SideMenuContent } = require('./components/side-menu-content.js');
+import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
@@ -106,6 +107,7 @@ import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { AppState } from './utils/types';
 
 let storeDispatch = function(_action: any) {};
 
@@ -201,7 +203,7 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState = Object.assign({}, defaultState, {
+const appDefaultState: AppState = Object.assign({}, defaultState, {
 	sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
@@ -477,7 +479,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-1.sqlite' });
+			await db.open({ name: 'joplin-101.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -774,7 +776,7 @@ class AppComponent extends React.Component {
 			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
 		});
 
-		AppState.addEventListener('change', this.onAppStateChange_);
+		RNAppState.addEventListener('change', this.onAppStateChange_);
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		await this.handleShareData();
@@ -788,7 +790,7 @@ class AppComponent extends React.Component {
 	}
 
 	public componentWillUnmount() {
-		AppState.removeEventListener('change', this.onAppStateChange_);
+		RNAppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
 
 		if (this.unsubscribeScreenWidthChangeHandler_) {
