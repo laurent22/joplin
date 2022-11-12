@@ -4406,7 +4406,7 @@ __metadata:
     "@types/jsdom": 16.2.15
     "@types/koa": 2.13.4
     "@types/markdown-it": 12.2.3
-    "@types/mustache": 0.8.32
+    "@types/mustache": 4.2.1
     "@types/nodemailer": 6.4.6
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.7
@@ -4427,7 +4427,7 @@ __metadata:
     knex: 0.95.15
     koa: 2.13.4
     markdown-it: 13.0.1
-    mustache: 3.2.1
+    mustache: 4.2.0
     nanoid: 2.1.11
     node-cron: 3.0.2
     node-env-file: 0.1.8
@@ -4459,7 +4459,7 @@ __metadata:
     "@rmp135/sql-ts": 1.15.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 26.0.24
-    "@types/mustache": 0.8.32
+    "@types/mustache": 4.2.1
     "@types/node": 18.11.9
     "@types/node-fetch": 2.6.2
     "@types/yargs": 16.0.4
@@ -4474,7 +4474,7 @@ __metadata:
     markdown-it: 13.0.1
     md5-file: 4.0.0
     moment: 2.29.4
-    mustache: 2.3.2
+    mustache: 4.2.0
     node-fetch: 1.7.3
     relative: 3.0.2
     request: 2.88.2
@@ -6801,10 +6801,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mustache@npm:0.8.32":
-  version: 0.8.32
-  resolution: "@types/mustache@npm:0.8.32"
-  checksum: 390fb7dc873932b9b07d8a3c09c2cf5708232ca01be71ddac8d58a145735909687f9fd661ed3ff9037f4051abf3e010f109c91baa5e704d87aad80d6cd377562
+"@types/mustache@npm:4.2.1":
+  version: 4.2.1
+  resolution: "@types/mustache@npm:4.2.1"
+  checksum: 27e84f17a32f18ba1bc2fc08360a66687a9436233a6c1b48c6e8d6766644ebbeb2538b7f40edcc760dc0023a8f773cef0d60092870aeef86b1d1e744e4a99480
   languageName: node
   linkType: hard
 
@@ -24305,24 +24305,6 @@ __metadata:
     safe-buffer: 5.2.1
     uid-safe: 2.1.5
   checksum: 16be1f14280a78a220864e9209196ce3d9bc5e3342a5e14465e8664c8a3f0e217b370d70f0dfba953ae7f17c720f87573b7b3b01a6e9eb04330c19f547ec157a
-  languageName: node
-  linkType: hard
-
-"mustache@npm:2.3.2":
-  version: 2.3.2
-  resolution: "mustache@npm:2.3.2"
-  bin:
-    mustache: ./bin/mustache
-  checksum: e3073355fe8efc4c36eb18af9985812aa7ab216d2b07246b407320b0f93acebeae14719ade700e817393c27e2168a4a1092d6c2f65efb3e26f0be84747a81e78
-  languageName: node
-  linkType: hard
-
-"mustache@npm:3.2.1":
-  version: 3.2.1
-  resolution: "mustache@npm:3.2.1"
-  bin:
-    mustache: bin/mustache
-  checksum: d008c18f870ddffc7440b3848e2d9f549a7460042e2660ea407adf0cdf6292b9dd2f32757e483d72abe1791b3341ec1fb65340510586c3757b1c3ca07ee7f354
   languageName: node
   linkType: hard
 
