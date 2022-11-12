@@ -32,7 +32,7 @@
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.0",
     "events": "3.3.0",
-    "joplin-rn-alarm-notification": "1.0.5",
+    "joplin-rn-alarm-notification": "1.0.6",
     "jsc-android": "241213.1.0",
     "md5": "2.3.0",
     "prop-types": "15.8.1",
