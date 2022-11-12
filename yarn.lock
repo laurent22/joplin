@@ -4137,7 +4137,7 @@ __metadata:
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 4.3.0
+    react-native-document-picker: 8.1.2
     react-native-dropdownalert: 4.5.1
     react-native-file-viewer: 2.1.5
     react-native-fs: 2.20.0
@@ -27809,12 +27809,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:4.3.0":
-  version: 4.3.0
-  resolution: "react-native-document-picker@npm:4.3.0"
+"react-native-document-picker@npm:8.1.2":
+  version: 8.1.2
+  resolution: "react-native-document-picker@npm:8.1.2"
+  dependencies:
+    invariant: ^2.2.4
   peerDependencies:
-    react-native: ">= 0.33"
-  checksum: 696a5aecc46f472cf41665f92ac97a7b25c557f356a8636ab135531be362e3e636430e05efc0594f2b731a5b72fc859ddf4d909e29ee4ba2a401db1e132c5a5e
+    react: "*"
+    react-native: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 1b5c39fb081639569f4d8e3dd557ca5b6ee03913221b4e3e3a0321ae7028748ef9328ed34fd988d0ee69fd83e1943b88f3bfdcf237cf53b23117f3563c6024b5
   languageName: node
   linkType: hard
 
