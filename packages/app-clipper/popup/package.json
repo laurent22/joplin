@@ -30,7 +30,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.8",
     "pnp-webpack-plugin": "1.6.0",
     "postcss-flexbugs-fixes": "4.1.0",
-    "postcss-loader": "3.0.0",
+    "postcss-loader": "7.0.1",
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.1",
     "postcss-safe-parser": "4.0.2",
