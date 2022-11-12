@@ -72,7 +72,7 @@
     "node-notifier": "10.0.1",
     "node-persist": "2.1.0",
     "node-rsa": "1.1.1",
-    "promise": "7.3.1",
+    "promise": "8.3.0",
     "query-string": "4.3.4",
     "re-reselect": "4.0.1",
     "read-chunk": "2.1.0",
