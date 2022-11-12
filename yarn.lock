@@ -4138,7 +4138,7 @@ __metadata:
     react-native-camera: 3.44.3
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 4.3.0
-    react-native-dropdownalert: 3.11.0
+    react-native-dropdownalert: 4.5.1
     react-native-file-viewer: 2.1.5
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.8.0
@@ -27839,12 +27839,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-dropdownalert@npm:3.11.0":
-  version: 3.11.0
-  resolution: "react-native-dropdownalert@npm:3.11.0"
+"react-native-dropdownalert@npm:4.5.1":
+  version: 4.5.1
+  resolution: "react-native-dropdownalert@npm:4.5.1"
   dependencies:
     prop-types: 15.5.10
-  checksum: 64df3e9ce332e220f23abfa7f495153fb6f52534231a0867fea40f57869a0a462822409c32db005c46fa8d80dda93036e6c91ae6840f96da192daea953fb21db
+  checksum: 16346105f130f1aefe8ed4c9171524ce931f2a924c6fa95b41291f99a5613a7c4fb9a3f75b19ef280ac8d47f8ba13ebadf596174d83a92cbbdd00c278c2e2b9f
   languageName: node
   linkType: hard
 
