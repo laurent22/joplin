@@ -4048,7 +4048,7 @@ __metadata:
     node-fetch: 1.7.3
     node-notifier: 10.0.1
     node-rsa: 1.1.1
-    pretty-bytes: 5.6.0
+    pretty-bytes: 6.0.0
     re-resizable: 6.9.9
     react: 16.14.0
     react-datetime: 2.16.3
@@ -4464,7 +4464,7 @@ __metadata:
     nodemailer: 6.8.0
     nodemon: 2.0.20
     pg: 8.8.0
-    pretty-bytes: 5.6.0
+    pretty-bytes: 6.0.0
     prettycron: 0.10.0
     query-string: 6.14.1
     rate-limiter-flexible: 2.4.1
@@ -27073,10 +27073,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:5.6.0, pretty-bytes@npm:^5.2.0":
-  version: 5.6.0
-  resolution: "pretty-bytes@npm:5.6.0"
-  checksum: 9c082500d1e93434b5b291bd651662936b8bd6204ec9fa17d563116a192d6d86b98f6d328526b4e8d783c07d5499e2614a807520249692da9ec81564b2f439cd
+"pretty-bytes@npm:6.0.0":
+  version: 6.0.0
+  resolution: "pretty-bytes@npm:6.0.0"
+  checksum: 0bb9f95e617236404b29a8392c6efd82d65805f622f5e809ecd70068102be857d4e3276c86d2a32fa2ef851cc29472e380945dab7bec83ec79bd57a19a10faf7
   languageName: node
   linkType: hard
 
@@ -27084,6 +27084,13 @@ __metadata:
   version: 4.0.2
   resolution: "pretty-bytes@npm:4.0.2"
   checksum: bdc7b33808a706498451c89c3ecc6784778c02de4ab6841de6cbdb6b27fa9ec6e5708a275d06876fe8df08f88a6c196de881d969ac21e5211f5a46b07cae4a80
+  languageName: node
+  linkType: hard
+
+"pretty-bytes@npm:^5.2.0":
+  version: 5.6.0
+  resolution: "pretty-bytes@npm:5.6.0"
+  checksum: 9c082500d1e93434b5b291bd651662936b8bd6204ec9fa17d563116a192d6d86b98f6d328526b4e8d783c07d5499e2614a807520249692da9ec81564b2f439cd
   languageName: node
   linkType: hard
 
