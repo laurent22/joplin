@@ -69,7 +69,7 @@
     "mustache": "4.2.0",
     "nanoid": "3.3.4",
     "node-fetch": "1.7.3",
-    "node-notifier": "8.0.2",
+    "node-notifier": "10.0.1",
     "node-persist": "2.1.0",
     "node-rsa": "1.1.1",
     "promise": "7.3.1",
