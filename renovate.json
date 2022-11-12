@@ -6,11 +6,12 @@
 	"prConcurrentLimit": 20,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
-		"**/node_modules/**",
 		"**/bower_components/**",
+		"**/node_modules/**",
+		"Assets/**",
 		"packages/app-cli/tests/**",
-		"packages/plugins/**",
-		"Assets/**"
+		"packages/app-clipper/popup",
+		"packages/plugins/**"
 	],
 	"ignoreDeps": [
 		"@babel/core",
@@ -40,6 +41,7 @@
 		"com.android.tools.build:gradle",
 		"cspell",
 		"electron",
+		"mini-css-extract-plugin",
 		"jsc-android",
 		"katex",
 		"mermaid",

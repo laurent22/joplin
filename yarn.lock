@@ -4046,7 +4046,7 @@ __metadata:
     moment: 2.29.4
     nan: 2.17.0
     node-fetch: 1.7.3
-    node-notifier: 8.0.2
+    node-notifier: 10.0.1
     node-rsa: 1.1.1
     pretty-bytes: 5.6.0
     re-resizable: 6.9.9
@@ -4189,7 +4189,7 @@ __metadata:
     eslint: 8.27.0
     eslint-config-prettier: 8.5.0
     jest: 26.6.3
-    prettier: 1.19.1
+    prettier: 2.7.1
     ts-jest: 24.3.0
     typescript: 3.9.10
   languageName: unknown
@@ -4280,7 +4280,7 @@ __metadata:
     mustache: 4.2.0
     nanoid: 3.3.4
     node-fetch: 1.7.3
-    node-notifier: 8.0.2
+    node-notifier: 10.0.1
     node-persist: 2.1.0
     node-rsa: 1.1.1
     promise: 7.3.1
@@ -13394,6 +13394,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"define-lazy-prop@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "define-lazy-prop@npm:2.0.0"
+  checksum: 0115fdb065e0490918ba271d7339c42453d209d4cb619dfe635870d906731eff3e1ade8028bb461ea27ce8264ec5e22c6980612d332895977e89c1bbc80fcee2
+  languageName: node
+  linkType: hard
+
 "define-properties@npm:^1.1.3":
   version: 1.1.3
   resolution: "define-properties@npm:1.1.3"
@@ -19339,7 +19346,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-docker@npm:^2.0.0":
+"is-docker@npm:^2.0.0, is-docker@npm:^2.1.1":
   version: 2.2.1
   resolution: "is-docker@npm:2.2.1"
   bin:
@@ -19947,7 +19954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-wsl@npm:^2.1.1, is-wsl@npm:^2.2.0":
+"is-wsl@npm:^2.2.0":
   version: 2.2.0
   resolution: "is-wsl@npm:2.2.0"
   dependencies:
@@ -21270,7 +21277,7 @@ __metadata:
     keytar: 7.9.0
     md5: 2.3.0
     node-rsa: 1.1.1
-    open: 7.4.2
+    open: 8.4.0
     proper-lockfile: 2.0.1
     read-chunk: 2.1.0
     server-destroy: 1.0.1
@@ -24889,7 +24896,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-notifier@npm:8.0.2, node-notifier@npm:^8.0.0":
+"node-notifier@npm:10.0.1":
+  version: 10.0.1
+  resolution: "node-notifier@npm:10.0.1"
+  dependencies:
+    growly: ^1.3.0
+    is-wsl: ^2.2.0
+    semver: ^7.3.5
+    shellwords: ^0.1.1
+    uuid: ^8.3.2
+    which: ^2.0.2
+  checksum: ac09456152e433462dd3ca277048de7a60c6d63fc657e00ac72805841baf9bb2573e8d3f64c4b64af73546d1ed39733af6b0036c38b57a83c883aa33fff35a2e
+  languageName: node
+  linkType: hard
+
+"node-notifier@npm:^8.0.0":
   version: 8.0.2
   resolution: "node-notifier@npm:8.0.2"
   dependencies:
@@ -25625,13 +25646,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"open@npm:7.4.2":
-  version: 7.4.2
-  resolution: "open@npm:7.4.2"
+"open@npm:8.4.0":
+  version: 8.4.0
+  resolution: "open@npm:8.4.0"
   dependencies:
-    is-docker: ^2.0.0
-    is-wsl: ^2.1.1
-  checksum: 3333900ec0e420d64c23b831bc3467e57031461d843c801f569b2204a1acc3cd7b3ec3c7897afc9dde86491dfa289708eb92bba164093d8bd88fb2c231843c91
+    define-lazy-prop: ^2.0.0
+    is-docker: ^2.1.1
+    is-wsl: ^2.2.0
+  checksum: e9545bec64cdbf30a0c35c1bdc310344adf8428a117f7d8df3c0af0a0a24c513b304916a6d9b11db0190ff7225c2d578885080b761ed46a3d5f6f1eebb98b63c
   languageName: node
   linkType: hard
 
@@ -27050,12 +27072,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:1.19.1":
-  version: 1.19.1
-  resolution: "prettier@npm:1.19.1"
+"prettier@npm:2.7.1":
+  version: 2.7.1
+  resolution: "prettier@npm:2.7.1"
   bin:
-    prettier: ./bin-prettier.js
-  checksum: bc78219e0f8173a808f4c6c8e0a137dd8ebd4fbe013e63fe1a37a82b48612f17b8ae8e18a992adf802ee2cf7428f14f084e7c2846ca5759cf4013c6e54810e1f
+    prettier: bin-prettier.js
+  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
   languageName: node
   linkType: hard
 
