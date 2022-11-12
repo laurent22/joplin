@@ -4051,7 +4051,7 @@ __metadata:
     pretty-bytes: 5.6.0
     re-resizable: 6.9.9
     react: 16.14.0
-    react-datetime: 2.16.3
+    react-datetime: 3.2.0
     react-dom: 16.14.0
     react-redux: 5.1.2
     react-select: 2.4.4
@@ -4124,7 +4124,7 @@ __metadata:
     jest: 28.1.3
     jest-environment-jsdom: 28.1.3
     jetifier: 2.0.0
-    joplin-rn-alarm-notification: 1.0.5
+    joplin-rn-alarm-notification: 1.0.6
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
@@ -4135,25 +4135,25 @@ __metadata:
     react: 17.0.2
     react-native: 0.67.2
     react-native-action-button: 2.8.5
-    react-native-camera: 3.44.3
+    react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 4.3.0
-    react-native-dropdownalert: 3.11.0
+    react-native-dropdownalert: 4.5.1
     react-native-file-viewer: 2.1.5
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.8.0
     react-native-image-picker: 4.10.0
     react-native-image-resizer: 1.4.5
-    react-native-modal-datetime-picker: 9.2.3
+    react-native-modal-datetime-picker: 14.0.0
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
     react-native-securerandom: 1.0.1
-    react-native-share: 7.9.1
+    react-native-share: 8.0.0
     react-native-side-menu-updated: 1.3.2
-    react-native-sqlite-storage: 5.0.0
+    react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 1.3.0
-    react-native-vector-icons: 7.1.0
+    react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
     react-native-webview: 11.23.1
     react-redux: 5.1.2
@@ -4283,7 +4283,7 @@ __metadata:
     node-notifier: 10.0.1
     node-persist: 2.1.0
     node-rsa: 1.1.1
-    promise: 7.3.1
+    promise: 8.3.0
     query-string: 4.3.4
     re-reselect: 4.0.1
     read-chunk: 2.1.0
@@ -11975,16 +11975,6 @@ __metadata:
     safe-buffer: ^5.0.1
     sha.js: ^2.4.8
   checksum: ba12bb2257b585a0396108c72830e85f882ab659c3320c83584b1037f8ab72415095167ced80dc4ce8e446a8ecc4b2acf36d87befe0707d73b26cf9dc77440ed
-  languageName: node
-  linkType: hard
-
-"create-react-class@npm:^15.5.2":
-  version: 15.7.0
-  resolution: "create-react-class@npm:15.7.0"
-  dependencies:
-    loose-envify: ^1.3.1
-    object-assign: ^4.1.1
-  checksum: 0c5f43da705fa9f67ec289051dd5780792652d440dfa17cd2c7d8423c1f604609596f895dabf46fda1960ddd93ee96fe1b61ef4d55a94fc4271b07d515486714
   languageName: node
   linkType: hard
 
@@ -21223,17 +21213,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joplin-rn-alarm-notification@npm:1.0.5":
-  version: 1.0.5
-  resolution: "joplin-rn-alarm-notification@npm:1.0.5"
-  checksum: 82dfc1ffc14fdf411b55f088bc91f5ec661aceeb77a5061ecb98d6491deded1d809e9f2bc1d4127b4d52ec5a3f4c457894e345b448d059865c26ee5efae8b24f
-  languageName: node
-  linkType: hard
-
-"joplin-rn-alarm-notification@patch:joplin-rn-alarm-notification@npm:1.0.5#.yarn/patches/joplin-rn-alarm-notification-npm-1.0.5-662e871c03::locator=root%40workspace%3A.":
-  version: 1.0.5
-  resolution: "joplin-rn-alarm-notification@patch:joplin-rn-alarm-notification@npm%3A1.0.5#.yarn/patches/joplin-rn-alarm-notification-npm-1.0.5-662e871c03::version=1.0.5&hash=532722&locator=root%40workspace%3A."
-  checksum: 9ceb16d19ae231998248fe10b16a1881f767b03c297f4dcf2d54432c35396bae86d611f90dadaca70a1da122e6b92449860434db51fd99b51795268fdf5bf719
+"joplin-rn-alarm-notification@npm:1.0.6":
+  version: 1.0.6
+  resolution: "joplin-rn-alarm-notification@npm:1.0.6"
+  checksum: 878682cbb9772cea14f385d331c3993988b7bb75e40d5618b95c7077b79fb72d00f4dbebb5c49f51f9e9f3cb0e65283c6577a71632cb9744b21acbf22eaea5ee
   languageName: node
   linkType: hard
 
@@ -22453,13 +22436,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.frompairs@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "lodash.frompairs@npm:4.0.1"
-  checksum: 8ff2d857f0764325dba5825ef8776cfc6992a504d75d668889bdd617c62fc3f179f1590042e127c98ed14d3fb14b71e66697b0fe8b10f73879c3a46e2d1c23d3
-  languageName: node
-  linkType: hard
-
 "lodash.get@npm:^4.4.2":
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
@@ -22467,24 +22443,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.isequal@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.isequal@npm:4.5.0"
-  checksum: da27515dc5230eb1140ba65ff8de3613649620e8656b19a6270afe4866b7bd461d9ba2ac8a48dcc57f7adac4ee80e1de9f965d89d4d81a0ad52bb3eec2609644
-  languageName: node
-  linkType: hard
-
 "lodash.ismatch@npm:^4.4.0":
   version: 4.4.0
   resolution: "lodash.ismatch@npm:4.4.0"
   checksum: a393917578842705c7fc1a30fb80613d1ac42d20b67eb26a2a6004d6d61ee90b419f9eb320508ddcd608e328d91eeaa2651411727eaa9a12534ed6ccb02fc705
-  languageName: node
-  linkType: hard
-
-"lodash.isstring@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "lodash.isstring@npm:4.0.1"
-  checksum: eaac87ae9636848af08021083d796e2eea3d02e80082ab8a9955309569cb3a463ce97fd281d7dc119e402b2e7d8c54a23914b15d2fc7fff56461511dc8937ba0
   languageName: node
   linkType: hard
 
@@ -22509,24 +22471,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.omit@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.omit@npm:4.5.0"
-  checksum: 434645e49fe84ab315719bd5a9a3a585a0f624aa4160bc09157dd041a414bcc287c15840365c1379476a3f3eda41fbe838976c3f7bdecbbf4c5478e86c471a30
-  languageName: node
-  linkType: hard
-
 "lodash.padend@npm:^4.6.1":
   version: 4.6.1
   resolution: "lodash.padend@npm:4.6.1"
   checksum: c2e6e789debf83b98f5c085305cdcfff1067e7a31bda2a110fd765d3c11a99edfbeef570d9ef737ab3212006bdb8114e77622e518c18c1fce52b8fdfd9dab685
-  languageName: node
-  linkType: hard
-
-"lodash.pick@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "lodash.pick@npm:4.4.0"
-  checksum: 2c36cab7da6b999a20bd3373b40e31a3ef81fa264f34a6979c852c5bc8ac039379686b27380f0cb8e3781610844fafec6949c6fbbebc059c98f8fa8570e3675f
   languageName: node
   linkType: hard
 
@@ -25353,13 +25301,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "object-assign@npm:3.0.0"
-  checksum: 56c66a77318aea95b11bd16a65c313e98786cea1db673a7fdd3bc92aced671b35f62a9819ad9cf7846921c773818329636cda5cd1b7c4fa0ce9908440e091dac
-  languageName: node
-  linkType: hard
-
 "object-assign@npm:^4.0.1, object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
@@ -27244,7 +27185,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise@npm:7.3.1, promise@npm:^7.1.1":
+"promise@npm:8.3.0":
+  version: 8.3.0
+  resolution: "promise@npm:8.3.0"
+  dependencies:
+    asap: ~2.0.6
+  checksum: a69f0ddbddf78ffc529cffee7ad950d307347615970564b17988ce43fbe767af5c738a9439660b24a9a8cbea106c0dcbb6c2b20e23b7e96a8e89e5c2679e94d5
+  languageName: node
+  linkType: hard
+
+"promise@npm:^7.1.1":
   version: 7.3.1
   resolution: "promise@npm:7.3.1"
   dependencies:
@@ -27696,19 +27646,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datetime@npm:2.16.3":
-  version: 2.16.3
-  resolution: "react-datetime@npm:2.16.3"
+"react-datetime@npm:3.2.0":
+  version: 3.2.0
+  resolution: "react-datetime@npm:3.2.0"
   dependencies:
-    create-react-class: ^15.5.2
-    object-assign: ^3.0.0
     prop-types: ^15.5.7
-    react-onclickoutside: ^6.5.0
   peerDependencies:
-    moment: ">=2.16.0"
-    react: ">=0.13"
-    react-dom: ">=0.13"
-  checksum: 802616a8dedd1eb7e39f0a0afb837a15df5529233f39905d9bebef0cb12ceefbb683f17d52de81c8a379ae01d814b2ba05b6eec35e23a7d860b797cac5eb8d94
+    moment: ^2.16.0
+    react: ^16.5.0 || ^17.0.0 || ^18.0.0
+  checksum: c3407beb64f44cd5944252bee1c4565fc138e3f1e81d8e4fd00d2aeac564a18848ee9af5f51fbbb39bba588f8c2d659570384af1ce8378d4e0049a6bdb083655
   languageName: node
   linkType: hard
 
@@ -27820,12 +27766,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-camera@npm:3.44.3":
-  version: 3.44.3
-  resolution: "react-native-camera@npm:3.44.3"
+"react-native-camera@npm:4.2.1":
+  version: 4.2.1
+  resolution: "react-native-camera@npm:4.2.1"
   dependencies:
     prop-types: ^15.6.2
-  checksum: 3c9757e2c75f5083c966394234c06fce9b87b9580e9421720e49de72e5f53aa70d2135bbea304e1b1c07ab443bbd8d62dee87eeec19feb7c37ddf328f140552e
+  checksum: 0e84ce657774694d1cc49395c43a8f2caabc03df36aa77aacfb5c797ad8cfe0368f4807deccc54e82ff2b193e8c2d1ce7ad504eedf7a9fc4719b38e39958a804
   languageName: node
   linkType: hard
 
@@ -27872,12 +27818,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-dropdownalert@npm:3.11.0":
-  version: 3.11.0
-  resolution: "react-native-dropdownalert@npm:3.11.0"
+"react-native-dropdownalert@npm:4.5.1":
+  version: 4.5.1
+  resolution: "react-native-dropdownalert@npm:4.5.1"
   dependencies:
     prop-types: 15.5.10
-  checksum: 64df3e9ce332e220f23abfa7f495153fb6f52534231a0867fea40f57869a0a462822409c32db005c46fa8d80dda93036e6c91ae6840f96da192daea953fb21db
+  checksum: 16346105f130f1aefe8ed4c9171524ce931f2a924c6fa95b41291f99a5613a7c4fb9a3f75b19ef280ac8d47f8ba13ebadf596174d83a92cbbdd00c278c2e2b9f
   languageName: node
   linkType: hard
 
@@ -27936,14 +27882,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-modal-datetime-picker@npm:9.2.3":
-  version: 9.2.3
-  resolution: "react-native-modal-datetime-picker@npm:9.2.3"
+"react-native-modal-datetime-picker@npm:14.0.0":
+  version: 14.0.0
+  resolution: "react-native-modal-datetime-picker@npm:14.0.0"
   dependencies:
     prop-types: ^15.7.2
   peerDependencies:
     "@react-native-community/datetimepicker": ">=3.0.0"
-  checksum: 5dd4c1b685845c1dc09355cec6fd95b40f76e2e1be73015426adc4bc15f501c48543db5e3e2405441ee1f199e7aa1c768e149549a32b40e58b50e4b06a49e72a
+    react-native: ">=0.65.0"
+  checksum: 8a3742ca17356ed2a305094625bc9707d94e583d7f06c41532a768e3c32252133205b9bd7bfd058fc3a4ad70db10146ac7c773d590f54c5680f7b0bd19fbfa58
   languageName: node
   linkType: hard
 
@@ -27979,10 +27926,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:7.9.1":
-  version: 7.9.1
-  resolution: "react-native-share@npm:7.9.1"
-  checksum: 276f872de7342eacb6f3524bd276d25e43731359c10820630eac6a3869d69e85147b378fde0bceaa6315a8fea9585c20798bce2ff027fdf1c7b225a8d0a38b07
+"react-native-share@npm:8.0.0":
+  version: 8.0.0
+  resolution: "react-native-share@npm:8.0.0"
+  checksum: f22e672bae9eb5da793b1a2296d45a4554440a537e479b21ecfcc61fc5619ba7e7d238a3b69f5276709bb47e2758705cf47763b7c9c80fee84241b04b410d86e
   languageName: node
   linkType: hard
 
@@ -27995,12 +27942,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-sqlite-storage@npm:5.0.0":
-  version: 5.0.0
-  resolution: "react-native-sqlite-storage@npm:5.0.0"
+"react-native-sqlite-storage@npm:6.0.1":
+  version: 6.0.1
+  resolution: "react-native-sqlite-storage@npm:6.0.1"
   peerDependencies:
     react-native: ">=0.14.0"
-  checksum: b8c12aa980736d29dd15297f8f337f3b28b81a5d4e6449794f81eb438dae5fbbe4671d3200475783877cd919bec5c8f682ff25fc7908d8f5d2e5292d349aaa11
+  checksum: 79bd454682beb22cdfb5a234b9d52b454d0451dccf03a3c15b70b9c331b32cf0066703652b0d23707bda9b9b4c8063e92d31084171af3ea647855b5d727746e0
   languageName: node
   linkType: hard
 
@@ -28015,22 +27962,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:7.1.0":
-  version: 7.1.0
-  resolution: "react-native-vector-icons@npm:7.1.0"
+"react-native-vector-icons@npm:9.2.0":
+  version: 9.2.0
+  resolution: "react-native-vector-icons@npm:9.2.0"
   dependencies:
-    lodash.frompairs: ^4.0.1
-    lodash.isequal: ^4.5.0
-    lodash.isstring: ^4.0.1
-    lodash.omit: ^4.5.0
-    lodash.pick: ^4.4.0
-    lodash.template: ^4.5.0
     prop-types: ^15.7.2
-    yargs: ^15.0.2
+    yargs: ^16.1.1
   bin:
     fa5-upgrade: bin/fa5-upgrade.sh
     generate-icon: bin/generate-icon.js
-  checksum: f4e07a4dad4b237675443c51c8054ca49877ad76ba3c7ee350b1adf469e0ca1a891323898fe737923435a8f71c8946771e82d79d564edc50576db66855892582
+  checksum: 222baf88c3f269234c08a41680e6400a4bf1f4c170f7c2ffac34b2c1c089cdb1084223db2a7d9cc54ee212eec20ff1478f3f482df19062e3057c328642da0be2
   languageName: node
   linkType: hard
 
@@ -28138,16 +28079,6 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: 6e8bd1a8ab1c8fad2928fd1aa921363fd2d49d4622c6edea38c3f80e67cf43253347661a545b69637f149fbc3a762f0a0e26a3bcf0003ac3c46dd83adb63b2b2
-  languageName: node
-  linkType: hard
-
-"react-onclickoutside@npm:^6.5.0":
-  version: 6.12.1
-  resolution: "react-onclickoutside@npm:6.12.1"
-  peerDependencies:
-    react: ^15.5.x || ^16.x || ^17.x
-    react-dom: ^15.5.x || ^16.x || ^17.x
-  checksum: aae4c1c2e77a4c601d53ba0aa0fbb4ab295a518b3f522ea29e7712c2310c57f2a051a70bdb0bc62424ca124b804a1a007ea1c32319e8c0cfbac417c601ff0f1a
   languageName: node
   linkType: hard
 
@@ -35030,7 +34961,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.2.0":
+"yargs@npm:16.2.0, yargs@npm:^16.1.1":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:
@@ -35079,7 +35010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.0.2, yargs@npm:^15.1.0, yargs@npm:^15.3.1, yargs@npm:^15.4.1":
+"yargs@npm:^15.1.0, yargs@npm:^15.3.1, yargs@npm:^15.4.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:
