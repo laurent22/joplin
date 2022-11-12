@@ -21,7 +21,7 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.208.0",
+    "@aws-sdk/client-s3": "3.209.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joplin/lib": "~2.9",
     "@joplin/renderer": "~2.9",
@@ -39,7 +39,7 @@
     "knex": "0.95.15",
     "koa": "2.13.4",
     "markdown-it": "13.0.1",
-    "mustache": "3.2.1",
+    "mustache": "4.2.0",
     "nanoid": "2.1.11",
     "node-cron": "3.0.2",
     "node-env-file": "0.1.8",
@@ -66,7 +66,7 @@
     "@types/jsdom": "16.2.15",
     "@types/koa": "2.13.4",
     "@types/markdown-it": "12.2.3",
-    "@types/mustache": "0.8.32",
+    "@types/mustache": "4.2.1",
     "@types/nodemailer": "6.4.6",
     "@types/yargs": "17.0.7",
     "@types/zxcvbn": "4.4.1",

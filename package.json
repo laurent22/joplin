@@ -72,18 +72,18 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.31.10",
     "fs-extra": "10.1.0",
-    "glob": "7.2.3",
+    "glob": "8.0.3",
     "gulp": "4.0.2",
     "husky": "3.1.0",
     "lerna": "3.22.1",
     "lint-staged": "13.0.3",
-    "madge": "4.0.2",
+    "madge": "5.0.1",
     "typedoc": "0.17.8",
     "typescript": "4.7.4"
   },
   "dependencies": {
     "@types/fs-extra": "9.0.13",
-    "http-server": "0.13.0",
+    "http-server": "14.1.1",
     "node-gyp": "9.3.0",
     "nodemon": "2.0.20"
   },
