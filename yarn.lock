@@ -4245,7 +4245,7 @@ __metadata:
     levenshtein: 1.0.5
     markdown-it: 13.0.1
     md5: 2.3.0
-    md5-file: 4.0.0
+    md5-file: 5.0.0
     moment: 2.29.4
     multiparty: 4.2.3
     mustache: 4.2.0
@@ -4472,7 +4472,7 @@ __metadata:
     gulp: 4.0.2
     jest: 26.6.3
     markdown-it: 13.0.1
-    md5-file: 4.0.0
+    md5-file: 5.0.0
     moment: 2.29.4
     mustache: 2.3.2
     node-fetch: 1.7.3
@@ -23129,12 +23129,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"md5-file@npm:4.0.0":
-  version: 4.0.0
-  resolution: "md5-file@npm:4.0.0"
+"md5-file@npm:5.0.0":
+  version: 5.0.0
+  resolution: "md5-file@npm:5.0.0"
   bin:
     md5-file: cli.js
-  checksum: ead6ca260eee366e0298e9a42d8e5b96b71624978362e17dac0992d036dfab2187fbd12236bcb49fce1c3ba8bf01aa27308735ed1e2d82e6e3cad5ff6316000e
+  checksum: c606a00ff58adf5428e8e2f36d86e5d3c7029f9688126faca302cd83b5e92cac183a62e1d1f05fae7c2614e80f993326fd0a8d6a3a913c41ec7ea0eefc25aa76
   languageName: node
   linkType: hard
 

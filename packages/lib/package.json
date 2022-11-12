@@ -63,7 +63,7 @@
     "levenshtein": "1.0.5",
     "markdown-it": "13.0.1",
     "md5": "2.3.0",
-    "md5-file": "4.0.0",
+    "md5-file": "5.0.0",
     "moment": "2.29.4",
     "multiparty": "4.2.3",
     "mustache": "4.2.0",

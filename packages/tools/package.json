@@ -30,7 +30,7 @@
     "gettext-parser": "6.0.0",
     "glob": "7.2.3",
     "markdown-it": "13.0.1",
-    "md5-file": "4.0.0",
+    "md5-file": "5.0.0",
     "moment": "2.29.4",
     "mustache": "2.3.2",
     "node-fetch": "1.7.3",
