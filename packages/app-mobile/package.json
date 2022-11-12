@@ -40,7 +40,7 @@
     "react": "17.0.2",
     "react-native": "0.67.2",
     "react-native-action-button": "2.8.5",
-    "react-native-camera": "3.44.3",
+    "react-native-camera": "4.2.1",
     "react-native-dialogbox": "0.6.10",
     "react-native-document-picker": "4.3.0",
     "react-native-dropdownalert": "4.5.1",
