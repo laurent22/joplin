@@ -4124,7 +4124,7 @@ __metadata:
     jest: 28.1.3
     jest-environment-jsdom: 28.1.3
     jetifier: 2.0.0
-    joplin-rn-alarm-notification: 1.0.5
+    joplin-rn-alarm-notification: 1.0.6
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
@@ -21223,17 +21223,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joplin-rn-alarm-notification@npm:1.0.5":
-  version: 1.0.5
-  resolution: "joplin-rn-alarm-notification@npm:1.0.5"
-  checksum: 82dfc1ffc14fdf411b55f088bc91f5ec661aceeb77a5061ecb98d6491deded1d809e9f2bc1d4127b4d52ec5a3f4c457894e345b448d059865c26ee5efae8b24f
-  languageName: node
-  linkType: hard
-
-"joplin-rn-alarm-notification@patch:joplin-rn-alarm-notification@npm:1.0.5#.yarn/patches/joplin-rn-alarm-notification-npm-1.0.5-662e871c03::locator=root%40workspace%3A.":
-  version: 1.0.5
-  resolution: "joplin-rn-alarm-notification@patch:joplin-rn-alarm-notification@npm%3A1.0.5#.yarn/patches/joplin-rn-alarm-notification-npm-1.0.5-662e871c03::version=1.0.5&hash=532722&locator=root%40workspace%3A."
-  checksum: 9ceb16d19ae231998248fe10b16a1881f767b03c297f4dcf2d54432c35396bae86d611f90dadaca70a1da122e6b92449860434db51fd99b51795268fdf5bf719
+"joplin-rn-alarm-notification@npm:1.0.6":
+  version: 1.0.6
+  resolution: "joplin-rn-alarm-notification@npm:1.0.6"
+  checksum: 878682cbb9772cea14f385d331c3993988b7bb75e40d5618b95c7077b79fb72d00f4dbebb5c49f51f9e9f3cb0e65283c6577a71632cb9744b21acbf22eaea5ee
   languageName: node
   linkType: hard
 
