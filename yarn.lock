@@ -4151,7 +4151,7 @@ __metadata:
     react-native-securerandom: 1.0.1
     react-native-share: 7.9.1
     react-native-side-menu-updated: 1.3.2
-    react-native-sqlite-storage: 5.0.0
+    react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
@@ -27962,12 +27962,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-sqlite-storage@npm:5.0.0":
-  version: 5.0.0
-  resolution: "react-native-sqlite-storage@npm:5.0.0"
+"react-native-sqlite-storage@npm:6.0.1":
+  version: 6.0.1
+  resolution: "react-native-sqlite-storage@npm:6.0.1"
   peerDependencies:
     react-native: ">=0.14.0"
-  checksum: b8c12aa980736d29dd15297f8f337f3b28b81a5d4e6449794f81eb438dae5fbbe4671d3200475783877cd919bec5c8f682ff25fc7908d8f5d2e5292d349aaa11
+  checksum: 79bd454682beb22cdfb5a234b9d52b454d0451dccf03a3c15b70b9c331b32cf0066703652b0d23707bda9b9b4c8063e92d31084171af3ea647855b5d727746e0
   languageName: node
   linkType: hard
 
