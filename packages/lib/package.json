@@ -67,7 +67,7 @@
     "moment": "2.29.4",
     "multiparty": "4.2.3",
     "mustache": "4.2.0",
-    "nanoid": "3.3.4",
+    "nanoid": "4.0.0",
     "node-fetch": "1.7.3",
     "node-notifier": "8.0.2",
     "node-persist": "2.1.0",

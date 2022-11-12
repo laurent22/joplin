@@ -40,7 +40,7 @@
     "koa": "2.13.4",
     "markdown-it": "13.0.1",
     "mustache": "3.2.1",
-    "nanoid": "2.1.11",
+    "nanoid": "4.0.0",
     "node-cron": "3.0.2",
     "node-env-file": "0.1.8",
     "nodemailer": "6.8.0",
