@@ -4058,7 +4058,7 @@ __metadata:
     react-test-renderer: 16.14.0
     react-toggle-button: 2.2.0
     react-tooltip: 3.11.6
-    redux: 3.7.2
+    redux: 4.2.0
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
@@ -4157,7 +4157,7 @@ __metadata:
     react-native-version-info: 1.1.1
     react-native-webview: 11.23.1
     react-redux: 5.1.2
-    redux: 4.0.0
+    redux: 4.2.0
     rn-fetch-blob: 0.12.0
     stream: 0.0.2
     stream-browserify: 3.0.0
@@ -4287,7 +4287,7 @@ __metadata:
     query-string: 4.3.4
     re-reselect: 4.0.1
     read-chunk: 2.1.0
-    redux: 3.7.2
+    redux: 4.2.0
     relative: 3.0.2
     reselect: 4.1.7
     server-destroy: 1.0.1
@@ -22411,13 +22411,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.2.1":
-  version: 4.17.21
-  resolution: "lodash-es@npm:4.17.21"
-  checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
-  languageName: node
-  linkType: hard
-
 "lodash._reinterpolate@npm:^3.0.0":
   version: 3.0.0
   resolution: "lodash._reinterpolate@npm:3.0.0"
@@ -28565,25 +28558,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:3.7.2":
-  version: 3.7.2
-  resolution: "redux@npm:3.7.2"
+"redux@npm:4.2.0":
+  version: 4.2.0
+  resolution: "redux@npm:4.2.0"
   dependencies:
-    lodash: ^4.2.1
-    lodash-es: ^4.2.1
-    loose-envify: ^1.1.0
-    symbol-observable: ^1.0.3
-  checksum: c349b77e68d009bc530d3cb6252a6a3e43e20a6e52f9483a048b24cd2f266d9bfa6f0bbd4769d40fe36795e2f7a7a884c3ddc92c13e82efd3328890f94821091
-  languageName: node
-  linkType: hard
-
-"redux@npm:4.0.0":
-  version: 4.0.0
-  resolution: "redux@npm:4.0.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    symbol-observable: ^1.2.0
-  checksum: ed50a72b0e9c72a0f8b7ce7b23b669412d705fdcfbfd9283dddb1f5bbe1838be2f09803deebbae4a1b401b6e899ea2838ad2f5401517eccc3fa581e2aedbd28d
+    "@babel/runtime": ^7.9.2
+  checksum: 75f3955c89b3f18edf5411e5fb482aa2e4f41a416183e8802a6bf6472c4fc3d47675b8b321d147f8af8e0f616436ac507bf5a25f1c4d6180e797b549c7db2c1d
   languageName: node
   linkType: hard
 
@@ -31664,13 +31644,6 @@ __metadata:
     es6-iterator: ^2.0.1
     es6-symbol: ^3.1.1
   checksum: d6cddb86bd921d105f33b60faa85ebe6cee128e468f983a1f3da00d486f35c0ca4226d14edac5f3f0ffcac0f5ca6afd4e55e4eb1c7db4e81135d2a7d662f9365
-  languageName: node
-  linkType: hard
-
-"symbol-observable@npm:^1.0.3, symbol-observable@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "symbol-observable@npm:1.2.0"
-  checksum: 48ffbc22e3d75f9853b3ff2ae94a44d84f386415110aea5effc24d84c502e03a4a6b7a8f75ebaf7b585780bda34eb5d6da3121f826a6f93398429d30032971b6
   languageName: node
   linkType: hard
 

@@ -166,7 +166,7 @@
     "react-select": "2.4.4",
     "react-toggle-button": "2.2.0",
     "react-tooltip": "3.11.6",
-    "redux": "3.7.2",
+    "redux": "4.2.0",
     "reselect": "4.1.7",
     "roboto-fontface": "0.10.0",
     "smalltalk": "2.5.1",
