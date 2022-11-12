@@ -4283,7 +4283,7 @@ __metadata:
     node-notifier: 10.0.1
     node-persist: 2.1.0
     node-rsa: 1.1.1
-    promise: 7.3.1
+    promise: 8.3.0
     query-string: 4.3.4
     re-reselect: 4.0.1
     read-chunk: 2.1.0
@@ -27202,7 +27202,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise@npm:7.3.1, promise@npm:^7.1.1":
+"promise@npm:8.3.0":
+  version: 8.3.0
+  resolution: "promise@npm:8.3.0"
+  dependencies:
+    asap: ~2.0.6
+  checksum: a69f0ddbddf78ffc529cffee7ad950d307347615970564b17988ce43fbe767af5c738a9439660b24a9a8cbea106c0dcbb6c2b20e23b7e96a8e89e5c2679e94d5
+  languageName: node
+  linkType: hard
+
+"promise@npm:^7.1.1":
   version: 7.3.1
   resolution: "promise@npm:7.3.1"
   dependencies:
