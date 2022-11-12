@@ -4017,7 +4017,7 @@ __metadata:
     moment: 2.29.4
     nan: 2.17.0
     node-fetch: 1.7.3
-    node-notifier: 8.0.2
+    node-notifier: 10.0.1
     node-rsa: 1.1.1
     pretty-bytes: 5.6.0
     re-resizable: 6.9.9
@@ -4251,7 +4251,7 @@ __metadata:
     mustache: 4.2.0
     nanoid: 3.3.4
     node-fetch: 1.7.3
-    node-notifier: 8.0.2
+    node-notifier: 10.0.1
     node-persist: 2.1.0
     node-rsa: 1.1.1
     promise: 7.3.1
@@ -24841,7 +24841,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-notifier@npm:8.0.2, node-notifier@npm:^8.0.0":
+"node-notifier@npm:10.0.1":
+  version: 10.0.1
+  resolution: "node-notifier@npm:10.0.1"
+  dependencies:
+    growly: ^1.3.0
+    is-wsl: ^2.2.0
+    semver: ^7.3.5
+    shellwords: ^0.1.1
+    uuid: ^8.3.2
+    which: ^2.0.2
+  checksum: ac09456152e433462dd3ca277048de7a60c6d63fc657e00ac72805841baf9bb2573e8d3f64c4b64af73546d1ed39733af6b0036c38b57a83c883aa33fff35a2e
+  languageName: node
+  linkType: hard
+
+"node-notifier@npm:^8.0.0":
   version: 8.0.2
   resolution: "node-notifier@npm:8.0.2"
   dependencies:
