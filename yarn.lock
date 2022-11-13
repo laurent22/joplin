@@ -4396,7 +4396,7 @@ __metadata:
     sprintf-js: 1.1.2
     sqlite3: 5.1.2
     string-padding: 1.0.2
-    string-to-stream: 1.1.1
+    string-to-stream: 3.0.1
     tar: 4.4.19
     tcp-port-used: 0.1.2
     typescript: 4.5.2
@@ -27791,7 +27791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:1 || 2, readable-stream@npm:^2, readable-stream@npm:^2.0.0, readable-stream@npm:^2.0.1, readable-stream@npm:^2.0.2, readable-stream@npm:^2.0.5, readable-stream@npm:^2.0.6, readable-stream@npm:^2.1.0, readable-stream@npm:^2.1.5, readable-stream@npm:^2.2.2, readable-stream@npm:^2.3.2, readable-stream@npm:^2.3.3, readable-stream@npm:^2.3.5, readable-stream@npm:^2.3.6, readable-stream@npm:~2.3.6":
+"readable-stream@npm:1 || 2, readable-stream@npm:^2, readable-stream@npm:^2.0.0, readable-stream@npm:^2.0.1, readable-stream@npm:^2.0.2, readable-stream@npm:^2.0.5, readable-stream@npm:^2.0.6, readable-stream@npm:^2.1.5, readable-stream@npm:^2.2.2, readable-stream@npm:^2.3.2, readable-stream@npm:^2.3.3, readable-stream@npm:^2.3.5, readable-stream@npm:^2.3.6, readable-stream@npm:~2.3.6":
   version: 2.3.7
   resolution: "readable-stream@npm:2.3.7"
   dependencies:
@@ -30338,13 +30338,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-to-stream@npm:1.1.1":
-  version: 1.1.1
-  resolution: "string-to-stream@npm:1.1.1"
+"string-to-stream@npm:3.0.1":
+  version: 3.0.1
+  resolution: "string-to-stream@npm:3.0.1"
   dependencies:
-    inherits: ^2.0.1
-    readable-stream: ^2.1.0
-  checksum: d42393639c21259e866772d215f0b73d21d62f5ad8318ad039da9857605fe955523a8a885a36729ea7aa25563580a18bdc8e4bfc1f83f2369945849f87498c9d
+    readable-stream: ^3.4.0
+  checksum: e8ac7f7497f8f101196e39dd529e98bb97165c532cc4cae5003083a420db62f46ffd67ddff7112b45f9f8d0f9ff1cc6cda9b06362236d43fa6b1685e8b0d446e
   languageName: node
   linkType: hard
 
