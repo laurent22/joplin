@@ -4281,7 +4281,7 @@ __metadata:
     nanoid: 3.3.4
     node-fetch: 1.7.3
     node-notifier: 10.0.1
-    node-persist: 2.1.0
+    node-persist: 3.1.0
     node-rsa: 1.1.1
     promise: 8.3.0
     query-string: 4.3.4
@@ -19114,16 +19114,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-absolute@npm:^0.2.6":
-  version: 0.2.6
-  resolution: "is-absolute@npm:0.2.6"
-  dependencies:
-    is-relative: ^0.2.1
-    is-windows: ^0.2.0
-  checksum: 3451cf0591bb56c0837e8746d06662dd3afc277b76f6109e8446cb2a550f9d7d1dbd1e87b83c2e64d63327e0ee29d71ab19403376c84be712071309877d0a7d5
-  languageName: node
-  linkType: hard
-
 "is-absolute@npm:^1.0.0":
   version: 1.0.0
   resolution: "is-absolute@npm:1.0.0"
@@ -19698,15 +19688,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-relative@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "is-relative@npm:0.2.1"
-  dependencies:
-    is-unc-path: ^0.1.1
-  checksum: 9923fbec5fbd9354f757ff1a133638e7f9bb06f586b215dc747823fe90ba455c9392ac5b1e2cf0a5896138a5efd3ba35895116790e8737307dbd6e5398a50281
-  languageName: node
-  linkType: hard
-
 "is-relative@npm:^1.0.0":
   version: 1.0.0
   resolution: "is-relative@npm:1.0.0"
@@ -19832,15 +19813,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-unc-path@npm:^0.1.1":
-  version: 0.1.2
-  resolution: "is-unc-path@npm:0.1.2"
-  dependencies:
-    unc-path-regex: ^0.1.0
-  checksum: 47fd6f18294d9b107683322a4a659c1bf83f3a98c8e751c449e3b6d21def8d1f5b910e7e9ce28d08c3bb2897d5d494ebab5bcc224f328624d2a6d24d0a8d1e9b
-  languageName: node
-  linkType: hard
-
 "is-unc-path@npm:^1.0.0":
   version: 1.0.0
   resolution: "is-unc-path@npm:1.0.0"
@@ -19907,13 +19879,6 @@ __metadata:
   dependencies:
     call-bind: ^1.0.2
   checksum: 95bd9a57cdcb58c63b1c401c60a474b0f45b94719c30f548c891860f051bc2231575c290a6b420c6bc6e7ed99459d424c652bd5bf9a1d5259505dc35b4bf83de
-  languageName: node
-  linkType: hard
-
-"is-windows@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "is-windows@npm:0.2.0"
-  checksum: 3df25afda2fd9f3926b08cebacf1fc0a1fe7805a2cb73ef0f1b911c949e4e7648c4623979d74b4502bdd9af69471101eb6051b751595f7f88569148186cf7a7a
   languageName: node
   linkType: hard
 
@@ -24127,7 +24092,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:0.x, mkdirp@npm:^0.5.0, mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.4, mkdirp@npm:^0.5.5, mkdirp@npm:~0.5.1":
+"mkdirp@npm:0.x, mkdirp@npm:^0.5.0, mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.4, mkdirp@npm:^0.5.5":
   version: 0.5.5
   resolution: "mkdirp@npm:0.5.5"
   dependencies:
@@ -24836,14 +24801,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-persist@npm:2.1.0":
-  version: 2.1.0
-  resolution: "node-persist@npm:2.1.0"
-  dependencies:
-    is-absolute: ^0.2.6
-    mkdirp: ~0.5.1
-    q: ~1.1.1
-  checksum: c23bc48817ec0b7fbdd84225d6ae28dc4fa127a907b45b1dab0d3addb25bc05262c366c5676c08b114a86d8bcae1dac2fdd8b3fc356b46f40622e0ae4f9b0b2b
+"node-persist@npm:3.1.0":
+  version: 3.1.0
+  resolution: "node-persist@npm:3.1.0"
+  checksum: 8d99916f269272415474a6edd5e9323b59854807673e16e4c036c2b5fe7bd257c119d47f0bc9d19af8889241531c44b12a55a576cc33786ceab16faa3c20c951
   languageName: node
   linkType: hard
 
@@ -27357,13 +27318,6 @@ __metadata:
   version: 1.5.1
   resolution: "q@npm:1.5.1"
   checksum: 147baa93c805bc1200ed698bdf9c72e9e42c05f96d007e33a558b5fdfd63e5ea130e99313f28efc1783e90e6bdb4e48b67a36fcc026b7b09202437ae88a1fb12
-  languageName: node
-  linkType: hard
-
-"q@npm:~1.1.1":
-  version: 1.1.2
-  resolution: "q@npm:1.1.2"
-  checksum: 68eaa0c0ae93eebbd0bd6a135e37b2605c819208cdc4de8dc35d3fd5abb3f4afa5599371740ba95d483775b9a2e2b9530822f29fc60273a9f5471abcc867171a
   languageName: node
   linkType: hard
 
@@ -33127,7 +33081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unc-path-regex@npm:^0.1.0, unc-path-regex@npm:^0.1.2":
+"unc-path-regex@npm:^0.1.2":
   version: 0.1.2
   resolution: "unc-path-regex@npm:0.1.2"
   checksum: a05fa2006bf4606051c10fc7968f08ce7b28fa646befafa282813aeb1ac1a56f65cb1b577ca7851af2726198d59475bb49b11776036257b843eaacee2860a4ec
