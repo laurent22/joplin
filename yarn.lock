@@ -4471,7 +4471,7 @@ __metadata:
     raw-body: 2.5.1
     source-map-support: 0.5.21
     sqlite3: 5.1.2
-    stripe: 8.222.0
+    stripe: 10.17.0
     typescript: 4.1.2
     uuid: 8.3.2
     yargs: 17.3.0
@@ -26849,7 +26849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.10.3":
+"qs@npm:^6.11.0":
   version: 6.11.0
   resolution: "qs@npm:6.11.0"
   dependencies:
@@ -30679,13 +30679,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stripe@npm:8.222.0":
-  version: 8.222.0
-  resolution: "stripe@npm:8.222.0"
+"stripe@npm:10.17.0":
+  version: 10.17.0
+  resolution: "stripe@npm:10.17.0"
   dependencies:
     "@types/node": ">=8.1.0"
-    qs: ^6.10.3
-  checksum: ac9a5b569abf274a9f10cf5bad09d6cf47d457dad21191e8fc896c356608e75337b2e39b6e39526579d39f5b29c74a34e61c55e706def2498a079f7b4dbaea17
+    qs: ^6.11.0
+  checksum: edcd7233416aa1a4dacb656276cf3c9f3b2a87387634c8c25b46b6ac3d6d5f373d0df5c115adcdcc2d78a8b83b1b92a065bb88937e5c741d19f3ffd7557c9db5
   languageName: node
   linkType: hard
 
