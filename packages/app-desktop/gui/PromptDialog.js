@@ -8,6 +8,7 @@ const Datetime = require('react-datetime').default;
 const creatable_1 = require("react-select/creatable");
 const react_select_1 = require("react-select");
 const animated_1 = require("react-select/animated");
+const html_react_parser_1 = require("html-react-parser");
 class PromptDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -187,6 +188,12 @@ class PromptDialog extends React.Component {
                 onClose(false);
             }
         };
+        const handleHtmlParsedLabel = (label) => {
+            return (React.createElement("div", null, label.includes('div') ? html_react_parser_1.default(label) : React.createElement("span", null,
+                " ",
+                label,
+                " ")));
+        };
         const descComp = this.props.description ? React.createElement("div", { style: styles.desc }, this.props.description) : null;
         let inputComp = null;
         if (this.props.inputType === 'datetime') {
@@ -196,7 +203,7 @@ class PromptDialog extends React.Component {
             inputComp = React.createElement(creatable_1.default, { className: "tag-selector", styles: styles.select, theme: styles.selectTheme, ref: this.answerInput_, value: this.state.answer, placeholder: "", components: animated_1.default(), isMulti: true, isClearable: false, backspaceRemovesValue: true, options: this.props.autocomplete, onChange: onSelectChange, onKeyDown: (event) => onKeyDown(event) });
         }
         else if (this.props.inputType === 'dropdown') {
-            inputComp = React.createElement(react_select_1.default, { className: "item-selector", styles: styles.select, theme: styles.selectTheme, ref: this.answerInput_, components: animated_1.default(), value: this.props.answer, defaultValue: this.props.defaultValue, isClearable: false, options: this.props.autocomplete, onChange: onSelectChange, onKeyDown: (event) => onKeyDown(event) });
+            inputComp = React.createElement(react_select_1.default, { className: "item-selector", styles: styles.select, theme: styles.selectTheme, ref: this.answerInput_, components: animated_1.default(), value: this.props.answer, defaultValue: this.props.defaultValue, isClearable: false, options: this.props.autocomplete, formatOptionLabel: handleHtmlParsedLabel, onChange: onSelectChange, onKeyDown: (event) => onKeyDown(event) });
         }
         else {
             inputComp = React.createElement("input", { style: styles.input, ref: this.answerInput_, value: this.state.answer, type: "text", onChange: event => onChange(event), onKeyDown: event => onKeyDown(event) });
