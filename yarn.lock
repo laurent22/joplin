@@ -4284,7 +4284,7 @@ __metadata:
     node-persist: 2.1.0
     node-rsa: 1.1.1
     promise: 8.3.0
-    query-string: 4.3.4
+    query-string: 7.1.1
     re-reselect: 4.0.1
     read-chunk: 2.1.0
     redux: 3.7.2
@@ -4466,7 +4466,7 @@ __metadata:
     pg: 8.8.0
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
-    query-string: 6.14.1
+    query-string: 7.1.1
     rate-limiter-flexible: 2.4.1
     raw-body: 2.5.1
     source-map-support: 0.5.21
@@ -27406,17 +27406,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-string@npm:4.3.4":
-  version: 4.3.4
-  resolution: "query-string@npm:4.3.4"
+"query-string@npm:7.1.1":
+  version: 7.1.1
+  resolution: "query-string@npm:7.1.1"
   dependencies:
-    object-assign: ^4.1.0
-    strict-uri-encode: ^1.0.0
-  checksum: 3b2bae6a8454cf0edf11cf1aa4d1f920398bbdabc1c39222b9bb92147e746fcd97faf00e56f494728fb66b2961b495ba0fde699d5d3bd06b11472d664b36c6cf
+    decode-uri-component: ^0.2.0
+    filter-obj: ^1.1.0
+    split-on-first: ^1.0.0
+    strict-uri-encode: ^2.0.0
+  checksum: b227d1f588ae93f9f0ad078c6b811295fa151dc5a160a03bb2bac5fa0e6919cb1daa570aad1d288e77c8e89fde5362ba505b1014e6e793da9b1e885b59a690a6
   languageName: node
   linkType: hard
 
-"query-string@npm:6.14.1, query-string@npm:^6.13.8":
+"query-string@npm:^6.13.8":
   version: 6.14.1
   resolution: "query-string@npm:6.14.1"
   dependencies:
@@ -30922,13 +30924,6 @@ __metadata:
   dependencies:
     emitter-component: ^1.1.1
   checksum: 43d89e176c282234d452754f9b55a82c74ea68345bf6176af32c4c213801f88df7984c83ec5a735457705dddf4668373edb9f0ec270a7491e1d881631a763978
-  languageName: node
-  linkType: hard
-
-"strict-uri-encode@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "strict-uri-encode@npm:1.1.0"
-  checksum: 9466d371f7b36768d43f7803f26137657559e4c8b0161fb9e320efb8edba3ae22f8e99d4b0d91da023b05a13f62ec5412c3f4f764b5788fac11d1fea93720bb3
   languageName: node
   linkType: hard
 
