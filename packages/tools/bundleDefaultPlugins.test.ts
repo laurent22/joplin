@@ -6,6 +6,7 @@ import { downloadPlugins, extractPlugins, localPluginsVersion } from './bundleDe
 import { pathExists, readFile, remove } from 'fs-extra';
 import Setting from '@joplin/lib/models/Setting';
 import { createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
+import { rootDir } from './tool-utils';
 
 const fetch = require('node-fetch');
 
@@ -170,8 +171,6 @@ describe('bundleDefaultPlugins', function() {
 				.mockResolvedValueOnce({ text: () => Promise.resolve(NPM_Response2), ok: true })
 				.mockResolvedValueOnce({ buffer: () => Promise.resolve(tgzData), ok: true });
 
-			const tempDir = await createTempDir();
-
 			const downloadedPlugins = await downloadPlugins(testCase.localVersions, testDefaultPluginsInfo, manifests);
 
 			expect(downloadedPlugins[Object.keys(testDefaultPluginsInfo)[0]]).toBe(testCase.downloadedPlugin1);
@@ -182,9 +181,10 @@ describe('bundleDefaultPlugins', function() {
 			testCase.calledWith.forEach((callValue, index) => expect(mockFetch).toHaveBeenNthCalledWith(index + 1, callValue));
 
 			jest.clearAllMocks();
-			await remove(tempDir);
 		}
 
+		await remove(`${rootDir}/packages/tools/joplin-plugin-backup-1.1.0.tgz`);
+		await remove(`${rootDir}/packages/tools/joplin-plugin-rich-markdown-0.9.0.tgz`);
 	});
 
 	it('should extract plugins files', async () => {

@@ -86,7 +86,7 @@ export interface EditorProps {
 	style: any;
 	codeMirrorTheme: any;
 	readOnly: boolean;
-	autoMatchBraces: boolean;
+	autoMatchBraces: boolean | object;
 	keyMap: string;
 	plugins: PluginStates;
 	onChange: any;

@@ -28,7 +28,7 @@ describe('index/home', function() {
 
 		await routeHandler(context);
 
-		expect(context.response.body.indexOf(user.email) >= 0).toBe(true);
+		expect((context.response.body as any).indexOf(user.email) >= 0).toBe(true);
 	});
 
 });

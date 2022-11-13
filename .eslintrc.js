@@ -29,7 +29,6 @@ module.exports = {
 
 		// React Native variables
 		'__DEV__': 'readonly',
-		'JSX': 'readonly',
 
 		// Clipper variables
 		'browserSupportsPromises_': true,
@@ -91,6 +90,8 @@ module.exports = {
 		// Disable because of this: https://github.com/facebook/react/issues/16265
 		// "react-hooks/exhaustive-deps": "warn",
 
+		'promise/prefer-await-to-then': 'error',
+
 		// -------------------------------
 		// Formatting
 		// -------------------------------
@@ -142,6 +143,7 @@ module.exports = {
 		'@seiyab/eslint-plugin-react-hooks',
 		// 'react-hooks',
 		'import',
+		'promise',
 	],
 	'overrides': [
 		{

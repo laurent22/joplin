@@ -15,9 +15,5 @@ module.exports = {
 
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
 
-	'transformIgnorePatterns': [
-		'node_modules/(?!@codemirror)/',
-	],
-
 	slowTestThreshold: 40,
 };

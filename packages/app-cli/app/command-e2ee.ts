@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 import { _ } from '@joplin/lib/locale';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';

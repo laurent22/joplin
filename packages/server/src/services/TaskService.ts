@@ -2,24 +2,13 @@ import Logger from '@joplin/lib/Logger';
 import { Models } from '../models/factory';
 import { Config, Env } from '../utils/types';
 import BaseService from './BaseService';
-import { Event, EventType } from './database/types';
+import { Event, EventType, TaskId, TaskState } from './database/types';
 import { Services } from './types';
 import { _ } from '@joplin/lib/locale';
+import { ErrorNotFound } from '../utils/errors';
 const cron = require('node-cron');
 
 const logger = Logger.create('TaskService');
-
-export enum TaskId {
-	DeleteExpiredTokens = 1,
-	UpdateTotalSizes = 2,
-	HandleOversizedAccounts = 3,
-	HandleBetaUserEmails = 4,
-	HandleFailedPaymentSubscriptions = 5,
-	DeleteExpiredSessions = 6,
-	CompressOldChanges = 7,
-	ProcessUserDeletions = 8,
-	AutoAddDisabledAccountsForDeletion = 9,
-}
 
 export enum RunType {
 	Scheduled = 1,
@@ -60,14 +49,6 @@ export interface Task {
 
 export type Tasks = Record<number, Task>;
 
-interface TaskState {
-	running: boolean;
-}
-
-const defaultTaskState: TaskState = {
-	running: false,
-};
-
 interface TaskEvents {
 	taskStarted: Event;
 	taskCompleted: Event;
@@ -76,7 +57,6 @@ interface TaskEvents {
 export default class TaskService extends BaseService {
 
 	private tasks_: Tasks = {};
-	private taskStates_: Record<number, TaskState> = {};
 	private services_: Services;
 
 	public constructor(env: Env, models: Models, config: Config, services: Services) {
@@ -84,23 +64,32 @@ export default class TaskService extends BaseService {
 		this.services_ = services;
 	}
 
-	public registerTask(task: Task) {
+	public async registerTask(task: Task) {
 		if (this.tasks_[task.id]) throw new Error(`Already a task with this ID: ${task.id}`);
 		this.tasks_[task.id] = task;
-		this.taskStates_[task.id] = { ...defaultTaskState };
+		await this.models.taskState().init(task.id);
 	}
 
-	public registerTasks(tasks: Task[]) {
-		for (const task of tasks) this.registerTask(task);
+	public async registerTasks(tasks: Task[]) {
+		for (const task of tasks) await this.registerTask(task);
 	}
 
 	public get tasks(): Tasks {
 		return this.tasks_;
 	}
 
-	public taskState(id: TaskId): TaskState {
-		if (!this.taskStates_[id]) throw new Error(`No such task: ${id}`);
-		return this.taskStates_[id];
+	public get taskIds(): TaskId[] {
+		return Object.keys(this.tasks_).map(s => Number(s));
+	}
+
+	public async taskStates(ids: TaskId[]): Promise<TaskState[]> {
+		return this.models.taskState().loadByTaskIds(ids);
+	}
+
+	public async taskState(id: TaskId): Promise<TaskState> {
+		const r = await this.taskStates([id]);
+		if (!r.length) throw new ErrorNotFound(`No such task: ${id}`);
+		return r[0];
 	}
 
 	public async taskLastEvents(id: TaskId): Promise<TaskEvents> {
@@ -122,15 +111,15 @@ export default class TaskService extends BaseService {
 
 	public async runTask(id: TaskId, runType: RunType) {
 		const displayString = this.taskDisplayString(id);
-		const state = this.taskState(id);
-		if (state.running) throw new Error(`Already running: ${displayString}`);
+		const taskState = await this.models.taskState().loadByTaskId(id);
+		if (!taskState.enabled) {
+			logger.info(`Not running ${displayString} because the tasks is disabled`);
+			return;
+		}
+
+		await this.models.taskState().start(id);
 
 		const startTime = Date.now();
-
-		this.taskStates_[id] = {
-			...this.taskStates_[id],
-			running: true,
-		};
 
 		await this.models.event().create(EventType.TaskStarted, id.toString());
 
@@ -141,14 +130,14 @@ export default class TaskService extends BaseService {
 			logger.error(`On ${displayString}`, error);
 		}
 
-		this.taskStates_[id] = {
-			...this.taskStates_[id],
-			running: false,
-		};
-
+		await this.models.taskState().stop(id);
 		await this.models.event().create(EventType.TaskCompleted, id.toString());
 
 		logger.info(`Completed ${this.taskDisplayString(id)} in ${Date.now() - startTime}ms`);
+	}
+
+	public async enableTask(taskId: TaskId, enabled: boolean = true) {
+		await this.models.taskState().enable(taskId, enabled);
 	}
 
 	public async runInBackground() {

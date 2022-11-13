@@ -168,7 +168,7 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 		firstPages.push({ page: p });
 	}
 
-	if (firstPages.length && (output[0].page - firstPages[firstPages.length - 1].page) > 1) {
+	if (firstPages.length && output.length && (output[0].page - firstPages[firstPages.length - 1].page) > 1) {
 		firstPages.push({ isEllipsis: true });
 	}
 

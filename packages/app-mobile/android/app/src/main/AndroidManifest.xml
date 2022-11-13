@@ -84,6 +84,7 @@
 			android:configChanges="orientation"
 			android:label="@string/app_name"
 			android:excludeFromRecents="true"
+			android:launchMode="singleTask"
 			android:theme="@style/AppTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.SEND" />

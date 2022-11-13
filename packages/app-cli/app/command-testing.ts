@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import uuid from '@joplin/lib/uuid';

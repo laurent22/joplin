@@ -181,11 +181,13 @@ export default class ResourceFetcher extends BaseService {
 
 		fileApi
 			.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' })
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then(async () => {
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
 				this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
 				await completeDownload(true, localResourceContentPath);
 			})
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.catch(async (error: any) => {
 				this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });

@@ -45,6 +45,7 @@ class ClipperConfigScreenComponent extends React.Component {
 		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
 				.generateApiToken()
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then((token) => {
 					Setting.setValue('api.token', token);
 				});

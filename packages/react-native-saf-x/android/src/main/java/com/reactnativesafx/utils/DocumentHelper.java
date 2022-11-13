@@ -2,6 +2,7 @@ package com.reactnativesafx.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.UriPermission;
@@ -9,16 +10,19 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.documentfile.provider.DocumentFileHelper;
+
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -71,9 +75,9 @@ public class DocumentHelper {
 
                   try {
                     DocumentFile doc = goToDocument(uri.toString(), false);
-                    resolveWithDocument(doc, promise, uri.toString());
+                    resolveWithDocument(doc, uri.toString(), promise);
                   } catch (Exception e) {
-                    promise.resolve(null);
+                    promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
                   }
                 } else {
                   promise.resolve(null);
@@ -99,16 +103,19 @@ public class DocumentHelper {
       }
 
     } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
+      promise.reject("ERROR", e.getLocalizedMessage());
     }
   }
 
-  public void openDocument(final boolean persist, final Promise promise) {
+  public void openDocument(final boolean persist, final boolean multiple, final Promise promise) {
     try {
 
       Intent intent = new Intent();
       intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
       intent.addCategory(Intent.CATEGORY_OPENABLE);
+      if (multiple) {
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+      }
       intent.setType("*/*");
 
       if (activityEventListener != null) {
@@ -122,32 +129,54 @@ public class DocumentHelper {
             @Override
             public void onActivityResult(
                 Activity activity, int requestCode, int resultCode, Intent intent) {
-              if (requestCode == DOCUMENT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                if (intent != null) {
+              try {
+                WritableArray resolvedDocs = Arguments.createArray();
+                if (requestCode == DOCUMENT_REQUEST_CODE
+                    && resultCode == Activity.RESULT_OK
+                    && intent != null) {
                   Uri uri = intent.getData();
-                  if (persist) {
-                    final int takeFlags =
-                        intent.getFlags()
-                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                    context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
-                  }
+                  if (uri != null) {
+                    if (persist) {
+                      final int takeFlags =
+                          intent.getFlags()
+                              & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                  | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-                  try {
+                      context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                    }
+
                     DocumentFile doc = goToDocument(uri.toString(), false);
-                    resolveWithDocument(doc, promise, uri.toString());
-                  } catch (Exception e) {
-                    promise.resolve(null);
+                    WritableMap docInfo = resolveWithDocument(doc, uri.toString(), null);
+                    resolvedDocs.pushMap(docInfo);
+                  } else if (multiple) {
+                    ClipData clipData = intent.getClipData();
+                    if (clipData != null) {
+                      for (int i = 0; i < clipData.getItemCount(); ++i) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        Uri clipUri = item.getUri();
+                        DocumentFile doc = goToDocument(clipUri.toString(), false);
+                        WritableMap docInfo = resolveWithDocument(doc, clipUri.toString(), null);
+                        resolvedDocs.pushMap(docInfo);
+                      }
+                    } else {
+                      throw new Exception("Unexpected Error: ClipData was null");
+                    }
+                  } else {
+                    throw new Exception(
+                        "Unexpected Error: Could not retrieve information about selected documents");
                   }
                 } else {
                   promise.resolve(null);
+                  return;
                 }
-              } else {
-                promise.resolve(null);
+                promise.resolve(resolvedDocs);
+              } catch (Exception e) {
+                promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
+              } finally {
+                context.removeActivityEventListener(activityEventListener);
+                activityEventListener = null;
               }
-              context.removeActivityEventListener(activityEventListener);
-              activityEventListener = null;
             }
 
             @Override
@@ -160,11 +189,12 @@ public class DocumentHelper {
       if (activity != null) {
         activity.startActivityForResult(intent, DOCUMENT_REQUEST_CODE);
       } else {
-        promise.reject("ERROR", "Cannot get current activity, so cannot launch document picker");
+        promise.reject(
+            "EUNSPECIFIED", "Cannot get current activity, so cannot launch document picker");
       }
 
     } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
+      promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
     }
   }
 
@@ -211,7 +241,7 @@ public class DocumentHelper {
                       os.write(bytes);
                     }
                     assert doc != null;
-                    resolveWithDocument(doc, promise, uri.toString());
+                    resolveWithDocument(doc, uri.toString(), promise);
                   } catch (Exception e) {
                     promise.reject("ERROR", e.getLocalizedMessage());
                   }
@@ -239,7 +269,7 @@ public class DocumentHelper {
         promise.reject("ERROR", "Cannot get current activity, so cannot launch document picker");
       }
     } catch (Exception e) {
-      promise.reject("ERROR", e.getMessage());
+      promise.reject("ERROR", e.getLocalizedMessage());
     }
   }
 
@@ -272,18 +302,19 @@ public class DocumentHelper {
     }
   }
 
-  public boolean exists(final String uriString) {
+  public boolean exists(final String uriString) throws SecurityException {
     return this.exists(uriString, false);
   }
 
-  public boolean exists(final String uriString, final boolean shouldBeFile) {
+  public boolean exists(final String uriString, final boolean shouldBeFile)
+      throws SecurityException {
     try {
       DocumentFile fileOrFolder = goToDocument(uriString, false);
       if (shouldBeFile) {
         return !fileOrFolder.isDirectory();
       }
       return true;
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
   }
@@ -308,12 +339,8 @@ public class DocumentHelper {
         && permission.isWritePermission();
   }
 
-  private String getPermissionErrorMsg(final String uriString) {
-    return "You don't have read/write permission to access uri: " + uriString;
-  }
-
   public static WritableMap resolveWithDocument(
-      @NonNull DocumentFile file, Promise promise, String SimplifiedUri) {
+      @NonNull DocumentFile file, String SimplifiedUri, Promise promise) {
     WritableMap fileMap = Arguments.createMap();
     fileMap.putString("uri", UriHelper.denormalize(SimplifiedUri));
     fileMap.putString("name", file.getName());
@@ -362,12 +389,37 @@ public class DocumentHelper {
       throw new IOException(
           "Invalid file name: Could not extract filename from uri string provided");
     }
+
+    // maybe edited maybe not
+    String correctFileName = fileName;
+
+    // only files with mime type are special, so we treat it special
+    if (mimeType != null && !mimeType.equals("")) {
+      int indexOfDot = fileName.indexOf('.');
+      // len - 1 because there should be an extension that has at least 1 letter
+      if (indexOfDot != -1 && indexOfDot < fileName.length() - 1) {
+        correctFileName = fileName.substring(0, indexOfDot);
+      }
+    }
+
     DocumentFile createdFile =
         parentDirOfFile.createFile(
-            mimeType != null && !mimeType.equals("") ? mimeType : "*/*", fileName);
+            mimeType != null && !mimeType.equals("") ? mimeType : "*/*", correctFileName);
     if (createdFile == null) {
       throw new IOException(
           "File creation failed without any specific error for '" + fileName + "'");
+    }
+    // some times setting mimetypes causes name changes, this is to prevent that.
+    if (!createdFile.getName().equals(fileName)) {
+      if (!createdFile.renameTo(fileName) || !createdFile.getName().equals(fileName)) {
+        createdFile.delete();
+        throw new IOException(
+            "The created file name was not as expected: '"
+                + uriString
+                + "'"
+                + "but got: "
+                + createdFile.getUri());
+      }
     }
     return createdFile;
   }
@@ -380,19 +432,19 @@ public class DocumentHelper {
   public DocumentFile goToDocument(
       String unknownUriStr, boolean createIfDirectoryNotExist, boolean includeLastSegment)
       throws SecurityException, IOException, IllegalArgumentException {
-      String unknownUriString = UriHelper.getUnifiedUri(unknownUriStr);
+    String unknownUriString = UriHelper.getUnifiedUri(unknownUriStr);
     if (unknownUriString.startsWith(ContentResolver.SCHEME_FILE)) {
       Uri uri = Uri.parse(unknownUriString);
       if (uri == null) {
         throw new IllegalArgumentException("Invalid Uri String");
       }
       String path =
-        uri.getPath()
-          .substring(
-            0,
-            includeLastSegment
-              ? uri.getPath().length()
-              : uri.getPath().length() - uri.getLastPathSegment().length());
+          uri.getPath()
+              .substring(
+                  0,
+                  includeLastSegment
+                      ? uri.getPath().length()
+                      : uri.getPath().length() - uri.getLastPathSegment().length());
 
       if (createIfDirectoryNotExist) {
         File targetFile = new File(path);
@@ -406,40 +458,41 @@ public class DocumentHelper {
       DocumentFile targetFile = DocumentFile.fromFile(new File(path));
       if (!targetFile.exists()) {
         throw new FileNotFoundException(
-          "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
+            "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
       }
       return targetFile;
+    } else if (!UriHelper.isContentDocumentTreeUri(unknownUriString)) {
+      // It's a document picked by user
+      DocumentFile doc = DocumentFile.fromSingleUri(context, Uri.parse(unknownUriString));
+      if (doc != null) {
+        return doc;
+      }
+      throw new FileNotFoundException(
+          "Cannot find the given document. File does not exist at '" + unknownUriString + "'");
     }
+
     String uriString = UriHelper.normalize(unknownUriString);
     String baseUri = "";
     String appendUri;
     String[] strings = new String[0];
 
-    List<UriPermission> uriList = context.getContentResolver().getPersistedUriPermissions();
-
-    for (UriPermission uriPermission : uriList) {
-      String uriPath = uriPermission.getUri().toString();
-      if (this.permissionMatchesAndHasAccess(uriPermission, uriString)) {
-        baseUri = uriPath;
-        appendUri = Uri.decode(uriString.substring(uriPath.length()));
-        strings = appendUri.split("/");
-        break;
+    {
+      // Helps traversal and folder creation by knowing where to start traverse
+      List<UriPermission> uriList = context.getContentResolver().getPersistedUriPermissions();
+      for (UriPermission uriPermission : uriList) {
+        String uriPath = uriPermission.getUri().toString();
+        if (this.permissionMatchesAndHasAccess(uriPermission, uriString)) {
+          baseUri = uriPath;
+          appendUri = Uri.decode(uriString.substring(uriPath.length()));
+          strings = appendUri.split("/");
+          break;
+        }
       }
     }
 
     if (baseUri.equals("")) {
-      throw new SecurityException(getPermissionErrorMsg(uriString));
-    }
-
-    if (baseUri.matches("^content://[\\w.]+/document/.*")) {
-      // It's a document picked by user
-      DocumentFile doc = DocumentFile.fromSingleUri(context, Uri.parse(uriString));
-      if (doc != null && doc.isFile() && doc.exists()) {
-        return doc;
-      } else {
-        throw new FileNotFoundException(
-            "Cannot find the given document. File does not exist at '" + uriString + "'");
-      }
+      // It's possible that the file access is temporary
+      baseUri = uriString;
     }
 
     Uri uri = Uri.parse(baseUri);
@@ -479,7 +532,14 @@ public class DocumentHelper {
         }
       }
     }
+
     assert dir != null;
+
+    if (!dir.canRead() || !dir.canWrite()) {
+      throw new SecurityException(
+          "You don't have read/write permission to access uri: " + uriString);
+    }
+
     return dir;
   }
 
@@ -517,7 +577,7 @@ public class DocumentHelper {
         srcDoc.delete();
       }
 
-      promise.resolve(resolveWithDocument(destDoc, promise, destUri));
+      promise.resolve(resolveWithDocument(destDoc, destUri, promise));
     } catch (Exception e) {
       promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
     }

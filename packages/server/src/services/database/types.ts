@@ -111,6 +111,20 @@ interface DatabaseTables {
 	[key: string]: DatabaseTable;
 }
 
+export enum TaskId {
+	// Don't re-use any of these numbers, always add to it, as the ID is used in
+	// the database
+	DeleteExpiredTokens = 1,
+	UpdateTotalSizes = 2,
+	HandleOversizedAccounts = 3,
+	HandleBetaUserEmails = 4,
+	HandleFailedPaymentSubscriptions = 5,
+	DeleteExpiredSessions = 6,
+	CompressOldChanges = 7,
+	ProcessUserDeletions = 8,
+	AutoAddDisabledAccountsForDeletion = 9,
+}
+
 // AUTO-GENERATED-TYPES
 // Auto-generated using `yarn run generate-types`
 export interface Session extends WithDates, WithUuid {
@@ -298,6 +312,13 @@ export interface BackupItem extends WithCreatedDate {
 	key?: string;
 	user_id?: Uuid;
 	content?: Buffer;
+}
+
+export interface TaskState extends WithDates {
+	id?: number;
+	task_id?: TaskId;
+	running?: number;
+	enabled?: number;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -502,6 +523,14 @@ export const databaseSchema: DatabaseTables = {
 		key: { type: 'string' },
 		user_id: { type: 'string' },
 		content: { type: 'any' },
+		created_time: { type: 'string' },
+	},
+	task_states: {
+		id: { type: 'number' },
+		task_id: { type: 'number' },
+		running: { type: 'number' },
+		enabled: { type: 'number' },
+		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},
 };

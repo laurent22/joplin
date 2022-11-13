@@ -184,7 +184,7 @@ async function main() {
 	app.use(cors({
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
-			const origin = ctx.request.header.origin;
+			const origin = ctx.request.origin;
 
 			if (acceptOrigin(origin)) {
 				return origin;
@@ -285,17 +285,17 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
 
-		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
-
-		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
-
 		if (config().database.autoMigration) {
 			appLogger().info('Auto-migrating database...');
-			await migrateLatest(ctx.joplinBase.db);
-			appLogger().info('Latest migration:', await latestMigration(ctx.joplinBase.db));
+			await migrateLatest(connectionCheck.connection);
+			appLogger().info('Latest migration:', await latestMigration(connectionCheck.connection));
 		} else {
 			appLogger().info('Skipped database auto-migration.');
 		}
+
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+
+		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
 		appLogger().info('Performing main storage check...');
 		appLogger().info(await storageConnectionCheck(config().storageDriver, ctx.joplinBase.db, ctx.joplinBase.models));

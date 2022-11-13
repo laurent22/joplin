@@ -11,42 +11,61 @@ import { formatDateTime } from '../../utils/time';
 import { createCsrfTag } from '../../utils/csrf';
 import { RunType } from '../../services/TaskService';
 import { NotificationKey } from '../../models/NotificationModel';
-import { NotificationLevel } from '../../services/database/types';
+import { NotificationLevel, TaskId } from '../../services/database/types';
 const prettyCron = require('prettycron');
 
 const router: Router = new Router(RouteType.Web);
 
 router.post('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
+	interface FormFields {
+		startTaskButton: string;
+		enableTaskButton: string;
+		disableTaskButton: string;
+	}
+
 	const user = ctx.joplin.owner;
 	if (!user.is_admin) throw new ErrorForbidden();
 
 	const taskService = ctx.joplin.services.tasks;
-	const fields: any = await bodyFields(ctx.req);
+	const fields = await bodyFields<FormFields>(ctx.req);
+
+	const taskIds: TaskId[] = [];
+
+	for (const k of Object.keys(fields)) {
+		if (k.startsWith('checkbox_')) {
+			taskIds.push(Number(k.substr(9)));
+		}
+	}
+
+	const errors: Error[] = [];
 
 	if (fields.startTaskButton) {
-		const errors: Error[] = [];
-
-		for (const k of Object.keys(fields)) {
-			if (k.startsWith('checkbox_')) {
-				const taskId = Number(k.substr(9));
-				try {
-					void taskService.runTask(taskId, RunType.Manual);
-				} catch (error) {
-					errors.push(error);
-				}
+		for (const taskId of taskIds) {
+			try {
+				void taskService.runTask(taskId, RunType.Manual);
+			} catch (error) {
+				errors.push(error);
 			}
 		}
-
-		if (errors.length) {
-			await ctx.joplin.models.notification().add(
-				user.id,
-				NotificationKey.Any,
-				NotificationLevel.Error,
-				`Some tasks could not be started: ${errors.join('. ')}`
-			);
+	} else if (fields.enableTaskButton || fields.disableTaskButton) {
+		for (const taskId of taskIds) {
+			try {
+				await taskService.enableTask(taskId, !!fields.enableTaskButton);
+			} catch (error) {
+				errors.push(error);
+			}
 		}
 	} else {
 		throw new ErrorBadRequest('Invalid action');
+	}
+
+	if (errors.length) {
+		await ctx.joplin.models.notification().add(
+			user.id,
+			NotificationKey.Any,
+			NotificationLevel.Error,
+			`Some operations could not be performed: ${errors.join('. ')}`
+		);
 	}
 
 	return redirect(ctx, makeUrl(UrlType.Tasks));
@@ -57,38 +76,44 @@ router.get('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 	if (!user.is_admin) throw new ErrorForbidden();
 
 	const taskService = ctx.joplin.services.tasks;
+	const states = await ctx.joplin.models.taskState().loadByTaskIds(taskService.taskIds);
 
 	const taskRows: Row[] = [];
 	for (const [taskIdString, task] of Object.entries(taskService.tasks)) {
 		const taskId = Number(taskIdString);
-		const state = taskService.taskState(taskId);
+		const state = states.find(s => s.task_id === taskId);
 		const events = await taskService.taskLastEvents(taskId);
 
-		taskRows.push([
-			{
-				value: `checkbox_${taskId}`,
-				checkbox: true,
-			},
-			{
-				value: taskId.toString(),
-			},
-			{
-				value: task.description,
-			},
-			{
-				value: task.schedule,
-				hint: prettyCron.toString(task.schedule),
-			},
-			{
-				value: yesOrNo(state.running),
-			},
-			{
-				value: events.taskStarted ? formatDateTime(events.taskStarted.created_time) : '-',
-			},
-			{
-				value: events.taskCompleted ? formatDateTime(events.taskCompleted.created_time) : '-',
-			},
-		]);
+		taskRows.push({
+			items: [
+				{
+					value: `checkbox_${taskId}`,
+					checkbox: true,
+				},
+				{
+					value: taskId.toString(),
+				},
+				{
+					value: task.description,
+				},
+				{
+					value: task.schedule,
+					hint: prettyCron.toString(task.schedule),
+				},
+				{
+					value: yesOrNo(state.enabled),
+				},
+				{
+					value: yesOrNo(state.running),
+				},
+				{
+					value: events.taskStarted ? formatDateTime(events.taskStarted.created_time) : '-',
+				},
+				{
+					value: events.taskCompleted ? formatDateTime(events.taskCompleted.created_time) : '-',
+				},
+			],
+		});
 	}
 
 	const table: Table = {
@@ -108,6 +133,10 @@ router.get('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 			{
 				name: 'schedule',
 				label: 'Schedule',
+			},
+			{
+				name: 'enabled',
+				label: 'Enabled',
 			},
 			{
 				name: 'running',
@@ -132,7 +161,6 @@ router.get('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 			postUrl: makeUrl(UrlType.Tasks),
 			csrfTag: await createCsrfTag(ctx),
 		},
-		// cssFiles: ['index/tasks'],
 	};
 });
 

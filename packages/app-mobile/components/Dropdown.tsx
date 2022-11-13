@@ -122,7 +122,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		};
 
 		const itemRenderer = (item: DropdownListItem) => {
-			const key = item.value.toString();
+			const key = item.value ? item.value.toString() : '__null'; // The top item ("Move item to notebook...") has a null value.
 			return (
 				<TouchableOpacity
 					style={itemWrapperStyle}

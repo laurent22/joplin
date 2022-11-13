@@ -356,6 +356,8 @@ function NoteEditor(props: Props, ref: any) {
 		console.error('NoteEditor: webview error');
 	}, []);
 
+	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
+	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
 		<View style={{
 			...props.style,
@@ -376,6 +378,7 @@ function NoteEditor(props: Props, ref: any) {
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
 					themeId={props.themeId}
+					scrollEnabled={false}
 					ref={webviewRef}
 					html={html}
 					injectedJavaScript={injectedJavaScript}

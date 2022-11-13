@@ -41,19 +41,21 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 			},
 		],
 		rows: paginatedChanges.items.map(change => {
-			const row: Row = [
-				{
-					value: change.item_name,
-					stretch: true,
-					url: showItemUrls(config()) ? (items.find(i => i.id === change.item_id) ? ctx.joplin.models.item().itemContentUrl(change.item_id) : '') : null,
-				},
-				{
-					value: changeTypeToString(change.type),
-				},
-				{
-					value: formatDateTime(change.updated_time),
-				},
-			];
+			const row: Row = {
+				items: [
+					{
+						value: change.item_name,
+						stretch: true,
+						url: showItemUrls(config()) ? (items.find(i => i.id === change.item_id) ? ctx.joplin.models.item().itemContentUrl(change.item_id) : '') : null,
+					},
+					{
+						value: changeTypeToString(change.type),
+					},
+					{
+						value: formatDateTime(change.updated_time),
+					},
+				],
+			};
 
 			return row;
 		}),

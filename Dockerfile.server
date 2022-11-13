@@ -2,7 +2,7 @@
 # Build stage
 # =============================================================================
 
-FROM node:16-bullseye AS builder
+FROM node:18-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
@@ -51,7 +51,7 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
 # from a smaller base image.
 # =============================================================================
 
-FROM node:16-bullseye-slim
+FROM node:18-bullseye-slim
 
 ARG user=joplin
 RUN useradd --create-home --shell /bin/bash $user
