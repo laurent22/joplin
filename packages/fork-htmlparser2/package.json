@@ -41,7 +41,7 @@
   "dependencies": {
     "domelementtype": "2.3.0",
     "domhandler": "3.3.0",
-    "domutils": "2.8.0",
+    "domutils": "3.0.1",
     "entities": "2.2.0"
   },
   "devDependencies": {
@@ -51,9 +51,9 @@
     "@typescript-eslint/parser": "1.13.0",
     "coveralls": "3.1.1",
     "eslint": "8.27.0",
-    "eslint-config-prettier": "6.15.0",
+    "eslint-config-prettier": "8.5.0",
     "jest": "26.6.3",
-    "prettier": "1.19.1",
+    "prettier": "2.7.1",
     "ts-jest": "24.3.0",
     "typescript": "3.9.10"
   },
