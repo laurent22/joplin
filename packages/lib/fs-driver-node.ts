@@ -1,7 +1,7 @@
 import { resolve as nodeResolve } from 'path';
 import FsDriverBase, { Stat } from './fs-driver-base';
 import time from './time';
-const md5File = require('md5-file/promise');
+const md5File = require('md5-file');
 const fs = require('fs-extra');
 
 export default class FsDriverNode extends FsDriverBase {
