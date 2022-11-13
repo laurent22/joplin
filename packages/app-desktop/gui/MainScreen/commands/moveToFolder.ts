@@ -8,6 +8,18 @@ export const declaration: CommandDeclaration = {
 	label: () => _('Move to notebook'),
 };
 
+export interface folderObj {
+	id?:string,
+	title:string
+	icon?:string,
+	children?:string
+}
+
+export interface folderDetailsObj {
+	emoji:string,
+	dataUrl:string
+}
+
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
@@ -17,11 +29,21 @@ export const runtime = (comp: any): CommandRuntime => {
 			const startFolders: any[] = [];
 			const maxDepth = 15;
 
+			const getFolderJsonData = (folder:folderObj, folderDetails:folderDetailsObj):string => {
+				if(folderDetails.emoji){
+					return (`${folderDetails.emoji}  ${folder.title}`);
+				}else if(!!folderDetails.dataUrl){
+					return (`<div className="verticallyCenter">  <img className="MoveToNotebookCustomImageMargin" src=${folderDetails.dataUrl} height="20" width="20" alt="country-image"/> <span>${folder.title}</span>  </div>`);
+				}else{
+					return (`📁  ${folder.title}`);
+				}
+			}
+
 			const addOptions = (folders: any[], depth: number) => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
-					const getFolderDetails = folder.icon && JSON.parse(folder.icon)
-					startFolders.push({ key: folder.id, value: folder.id, label: folder.icon ? (getFolderDetails.emoji ? (`${getFolderDetails.emoji}  ${folder.title}`) : !!getFolderDetails.dataUrl &&  `<div className="verticallyCenter">  <img className="MoveToNotebookCustomImageMargin" src=${getFolderDetails.dataUrl} height="20" width="20" alt="country-image"/> <span>${folder.title}</span>  </div>` ) :  `📁  ${folder.title}` , indentDepth: depth });
+					const folderDetails = folder.icon && JSON.parse(folder.icon);
+					startFolders.push({ key: folder.id, value: folder.id, label: folder.icon ? getFolderJsonData(folder,folderDetails) :  `📁  ${folder.title}` , indentDepth: depth });
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}
 			};
