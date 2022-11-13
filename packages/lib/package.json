@@ -75,7 +75,7 @@
     "promise": "8.3.0",
     "query-string": "7.1.1",
     "re-reselect": "4.0.1",
-    "read-chunk": "2.1.0",
+    "read-chunk": "4.0.3",
     "redux": "4.2.0",
     "relative": "3.0.2",
     "reselect": "4.1.7",

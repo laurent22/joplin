@@ -4387,7 +4387,7 @@ __metadata:
     promise: 8.3.0
     query-string: 7.1.1
     re-reselect: 4.0.1
-    read-chunk: 2.1.0
+    read-chunk: 4.0.3
     redux: 4.2.0
     relative: 3.0.2
     reselect: 4.1.7
@@ -20835,7 +20835,7 @@ __metadata:
     node-rsa: 1.1.1
     open: 8.4.0
     proper-lockfile: 4.1.2
-    read-chunk: 2.1.0
+    read-chunk: 4.0.3
     server-destroy: 1.0.1
     sharp: 0.31.2
     sprintf-js: 1.1.2
@@ -26043,6 +26043,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pify@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "pify@npm:5.0.0"
+  checksum: 443e3e198ad6bfa8c0c533764cf75c9d5bc976387a163792fb553ffe6ce923887cf14eebf5aea9b7caa8eab930da8c33612990ae85bd8c2bc18bedb9eae94ecb
+  languageName: node
+  linkType: hard
+
 "pinkie-promise@npm:^2.0.0":
   version: 2.0.1
   resolution: "pinkie-promise@npm:2.0.1"
@@ -27641,7 +27648,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-chunk@npm:2.1.0, read-chunk@npm:^2.1.0":
+"read-chunk@npm:4.0.3":
+  version: 4.0.3
+  resolution: "read-chunk@npm:4.0.3"
+  dependencies:
+    pify: ^5.0.0
+  checksum: 25c27626d3329015bb0d5ed2e1e36c23839276fdd6cbf908a136bfdb354552bc858a8419d29aa01d697cec09dea0a5caf07817c4723ff336af0acd744351be08
+  languageName: node
+  linkType: hard
+
+"read-chunk@npm:^2.1.0":
   version: 2.1.0
   resolution: "read-chunk@npm:2.1.0"
   dependencies:
