@@ -4067,7 +4067,7 @@ __metadata:
     react-select: 2.4.4
     react-test-renderer: 16.14.0
     react-toggle-button: 2.2.0
-    react-tooltip: 3.11.6
+    react-tooltip: 4.5.0
     redux: 4.2.0
     reselect: 4.1.7
     roboto-fontface: 0.10.0
@@ -27597,15 +27597,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:3.11.6":
-  version: 3.11.6
-  resolution: "react-tooltip@npm:3.11.6"
+"react-tooltip@npm:4.5.0":
+  version: 4.5.0
+  resolution: "react-tooltip@npm:4.5.0"
   dependencies:
-    prop-types: ^15.6.0
+    prop-types: ^15.8.1
+    uuid: ^7.0.3
   peerDependencies:
-    react: "*"
-    react-dom: "*"
-  checksum: b107fb82919fa2431b7847f13a61bd2550d131abe49d65885c4f5245c7b2930da422c2e85c96bfd7a82c2a1b95f028d36dca3153d879647121d97cee9372e024
+    react: ">=16.0.0"
+    react-dom: ">=16.0.0"
+  checksum: 94b22b73332fc6b1b4889a3e4103d431b2f067bf2891d76effb54f3ad7fb8d8934f134a3dca50332415d9536ce9b98bdb460732dfa68d046adccca088ee723f7
   languageName: node
   linkType: hard
 
@@ -32982,6 +32983,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "uuid@npm:7.0.3"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: f5b7b5cc28accac68d5c083fd51cca64896639ebd4cca88c6cfb363801aaa83aa439c86dfc8446ea250a7a98d17afd2ad9e88d9d4958c79a412eccb93bae29de
   languageName: node
   linkType: hard
 
