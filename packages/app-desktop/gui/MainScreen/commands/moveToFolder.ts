@@ -20,7 +20,8 @@ export const runtime = (comp: any): CommandRuntime => {
 			const addOptions = (folders: any[], depth: number) => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
-					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
+					const getFolderDetails = folder.icon && JSON.parse(folder.icon)
+					startFolders.push({ key: folder.id, value: folder.id, label: folder.icon ? (getFolderDetails.emoji ? (`${getFolderDetails.emoji}  ${folder.title}`) : !!getFolderDetails.dataUrl &&  `<div className="verticallyCenter">  <img className="MoveToNotebookCustomImageMargin" src=${getFolderDetails.dataUrl} height="20" width="20" alt="country-image"/> <span>${folder.title}</span>  </div>` ) :  `📁  ${folder.title}` , indentDepth: depth });
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}
 			};

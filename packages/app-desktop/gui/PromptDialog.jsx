@@ -6,6 +6,7 @@ const Datetime = require('react-datetime');
 const CreatableSelect = require('react-select/lib/Creatable').default;
 const Select = require('react-select').default;
 const makeAnimated = require('react-select/lib/animated').default;
+const parse = require('html-react-parser');
 
 class PromptDialog extends React.Component {
 	constructor() {
@@ -216,6 +217,14 @@ class PromptDialog extends React.Component {
 			}
 		};
 
+		const handleHtmlParsedLabel = ({label }) => {
+			return (
+				<div>
+					{label.includes('div') ? parse(label) : <span> {label} </span>}
+				</div>
+			);
+    	};
+
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
 		let inputComp = null;
@@ -225,7 +234,7 @@ class PromptDialog extends React.Component {
 		} else if (this.props.inputType === 'tags') {
 			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} formatOptionLabel={handleHtmlParsedLabel} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}

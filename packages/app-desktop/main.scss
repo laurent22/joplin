@@ -234,6 +234,15 @@ p.info-text {
 	color: var(--joplin-color-faded);
 }
 
+.verticallyCenter{
+	display: flex;  
+	align-items: center;
+}
+
+.MoveToNotebookCustomImageMargin{
+	margin-right:5px
+}
+
 /* =========================================================================================
 Component-specific classes
 ========================================================================================= */
