@@ -4161,7 +4161,7 @@ __metadata:
     rn-fetch-blob: 0.12.0
     stream: 0.0.2
     stream-browserify: 3.0.0
-    string-natural-compare: 2.0.3
+    string-natural-compare: 3.0.1
     timers: 0.1.1
     ts-jest: 28.0.8
     ts-loader: 9.4.1
@@ -30945,10 +30945,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-natural-compare@npm:2.0.3":
-  version: 2.0.3
-  resolution: "string-natural-compare@npm:2.0.3"
-  checksum: e0f22bb0de432f60e2e33f2b10d2fa9dce557cf982337a1475a136cf250535135912ad066c25341fb56d7047ba175bfa76a2351ddabd79089dc9528ca247ff19
+"string-natural-compare@npm:3.0.1":
+  version: 3.0.1
+  resolution: "string-natural-compare@npm:3.0.1"
+  checksum: 65910d9995074086e769a68728395effbba9b7186be5b4c16a7fad4f4ef50cae95ca16e3e9086e019cbb636ae8daac9c7b8fe91b5f21865c5c0f26e3c0725406
   languageName: node
   linkType: hard
 
