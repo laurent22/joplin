@@ -19,7 +19,7 @@
     "browserify": "14.5.0",
     "rollup": "0.50.1",
     "rollup-plugin-commonjs": "8.4.1",
-    "rollup-plugin-node-resolve": "3.4.0",
+    "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
     "standard": "17.0.0",
     "turndown-attendant": "0.0.3"
