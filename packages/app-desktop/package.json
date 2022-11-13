@@ -162,7 +162,7 @@
     "react": "16.14.0",
     "react-datetime": "3.2.0",
     "react-dom": "16.14.0",
-    "react-redux": "5.1.2",
+    "react-redux": "8.0.5",
     "react-select": "5.6.0",
     "react-toggle-button": "2.2.0",
     "react-tooltip": "4.5.0",
