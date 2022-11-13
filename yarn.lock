@@ -4062,7 +4062,7 @@ __metadata:
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
-    sqlite3: 5.0.2
+    sqlite3: 5.1.2
     styled-components: 5.3.6
     styled-system: 5.1.5
     taboverride: 4.0.3
@@ -4293,7 +4293,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.2
     sprintf-js: 1.1.2
-    sqlite3: 5.0.2
+    sqlite3: 5.1.2
     string-padding: 1.0.2
     string-to-stream: 1.1.1
     tar: 4.4.19
@@ -4470,7 +4470,7 @@ __metadata:
     rate-limiter-flexible: 2.4.1
     raw-body: 2.5.1
     source-map-support: 0.5.21
-    sqlite3: 4.2.0
+    sqlite3: 5.1.2
     stripe: 8.222.0
     typescript: 4.1.2
     uuid: 8.3.2
@@ -4511,7 +4511,7 @@ __metadata:
     sass: 1.56.1
     sharp: 0.31.2
     source-map-support: 0.5.21
-    sqlite3: 5.0.2
+    sqlite3: 5.1.2
     typescript: 4.5.2
     uri-template: 1.0.3
     yargs: 16.2.0
@@ -5562,6 +5562,25 @@ __metadata:
     lodash: ^4.17.15
     tmp-promise: ^3.0.2
   checksum: 12527e42c2865504eb2a91cc419e52dd7a68c1eda1138c0713a1520a5413ef9dabfa9d21b7908d211998b75c60035d1d5ae87c00fe8ff5be8fa8449525235dd5
+  languageName: node
+  linkType: hard
+
+"@mapbox/node-pre-gyp@npm:^1.0.0":
+  version: 1.0.10
+  resolution: "@mapbox/node-pre-gyp@npm:1.0.10"
+  dependencies:
+    detect-libc: ^2.0.0
+    https-proxy-agent: ^5.0.0
+    make-dir: ^3.1.0
+    node-fetch: ^2.6.7
+    nopt: ^5.0.0
+    npmlog: ^5.0.1
+    rimraf: ^3.0.2
+    semver: ^7.3.5
+    tar: ^6.1.11
+  bin:
+    node-pre-gyp: bin/node-pre-gyp
+  checksum: 1a98db05d955b74dad3814679593df293b9194853698f3f5f1ed00ecd93128cdd4b14fb8767fe44ac6981ef05c23effcfdc88710e7c1de99ccb6f647890597c8
   languageName: node
   linkType: hard
 
@@ -9596,15 +9615,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"block-stream@npm:*":
-  version: 0.0.9
-  resolution: "block-stream@npm:0.0.9"
-  dependencies:
-    inherits: ~2.0.0
-  checksum: 72733cbb816181b7c92449e7b650247c02122f743526ce9d948ff68afc27d8709106cd62f2c876c6d8cd3977e0204a014f38d22805974008039bd3bed35f2cbd
-  languageName: node
-  linkType: hard
-
 "bluebird-lst@npm:^1.0.9":
   version: 1.0.9
   resolution: "bluebird-lst@npm:1.0.9"
@@ -13180,7 +13190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^3.1.0, debug@npm:^3.2.6, debug@npm:^3.2.7":
+"debug@npm:^3.1.0, debug@npm:^3.2.7":
   version: 3.2.7
   resolution: "debug@npm:3.2.7"
   dependencies:
@@ -13571,15 +13581,6 @@ __metadata:
   version: 5.0.0
   resolution: "detect-indent@npm:5.0.0"
   checksum: 61763211daa498e00eec073aba95d544ae5baed19286a0a655697fa4fffc9f4539c8376e2c7df8fa11d6f8eaa16c1e6a689f403ac41ee78a060278cdadefe2ff
-  languageName: node
-  linkType: hard
-
-"detect-libc@npm:^1.0.2":
-  version: 1.0.3
-  resolution: "detect-libc@npm:1.0.3"
-  bin:
-    detect-libc: ./bin/detect-libc.js
-  checksum: daaaed925ffa7889bd91d56e9624e6c8033911bb60f3a50a74a87500680652969dbaab9526d1e200a4c94acf80fc862a22131841145a0a8482d60a99c24f4a3e
   languageName: node
   linkType: hard
 
@@ -16793,18 +16794,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fstream@npm:^1.0.0, fstream@npm:^1.0.12":
-  version: 1.0.12
-  resolution: "fstream@npm:1.0.12"
-  dependencies:
-    graceful-fs: ^4.1.2
-    inherits: ~2.0.0
-    mkdirp: ">=0.5 0"
-    rimraf: 2
-  checksum: e6998651aeb85fd0f0a8a68cec4d05a3ada685ecc4e3f56e0d063d0564a4fc39ad11a856f9020f926daf869fc67f7a90e891def5d48e4cadab875dc313094536
-  languageName: node
-  linkType: hard
-
 "fullstore@npm:^1.0.0":
   version: 1.1.0
   resolution: "fullstore@npm:1.1.0"
@@ -16856,6 +16845,23 @@ __metadata:
   version: 1.1.4
   resolution: "fuzzysort@npm:1.1.4"
   checksum: 27f0d44fb820b782c1f12564de32e6cc560a6035e801e28221fca746ceaf541698d466b68144315f38dcd221c1f0d40146c76ab71ec907e513f39dc2804da800
+  languageName: node
+  linkType: hard
+
+"gauge@npm:^3.0.0":
+  version: 3.0.2
+  resolution: "gauge@npm:3.0.2"
+  dependencies:
+    aproba: ^1.0.3 || ^2.0.0
+    color-support: ^1.1.2
+    console-control-strings: ^1.0.0
+    has-unicode: ^2.0.1
+    object-assign: ^4.1.1
+    signal-exit: ^3.0.0
+    string-width: ^4.2.3
+    strip-ansi: ^6.0.1
+    wide-align: ^1.1.2
+  checksum: 81296c00c7410cdd48f997800155fbead4f32e4f82109be0719c63edc8560e6579946cc8abd04205297640691ec26d21b578837fd13a4e96288ab4b40b1dc3e9
   languageName: node
   linkType: hard
 
@@ -18550,7 +18556,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.4, iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24, iconv-lite@npm:^0.4.4":
+"iconv-lite@npm:0.4, iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
   dependencies:
@@ -18804,7 +18810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inherits@npm:2, inherits@npm:2.0.4, inherits@npm:^2.0.1, inherits@npm:^2.0.3, inherits@npm:^2.0.4, inherits@npm:~2.0.0, inherits@npm:~2.0.1, inherits@npm:~2.0.3, inherits@npm:~2.0.4":
+"inherits@npm:2, inherits@npm:2.0.4, inherits@npm:^2.0.1, inherits@npm:^2.0.3, inherits@npm:^2.0.4, inherits@npm:~2.0.1, inherits@npm:~2.0.3, inherits@npm:~2.0.4":
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 4a48a733847879d6cf6691860a6b1e3f0f4754176e4d71494c41f3475553768b10f84b5ce1d40fbd0e34e6bfbb864ee35858ad4dd2cf31e02fc4a154b724d7f1
@@ -21247,7 +21253,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.2
     sprintf-js: 1.1.2
-    sqlite3: 5.0.2
+    sqlite3: 5.1.2
     string-padding: 1.0.2
     strip-ansi: 4.0.0
     tcp-port-used: 1.0.2
@@ -22838,7 +22844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir@npm:^3.0.0":
+"make-dir@npm:^3.0.0, make-dir@npm:^3.1.0":
   version: 3.1.0
   resolution: "make-dir@npm:3.1.0"
   dependencies:
@@ -24121,7 +24127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:0.x, mkdirp@npm:>=0.5 0, mkdirp@npm:^0.5.0, mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.4, mkdirp@npm:^0.5.5, mkdirp@npm:~0.5.1":
+"mkdirp@npm:0.x, mkdirp@npm:^0.5.0, mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.4, mkdirp@npm:^0.5.5, mkdirp@npm:~0.5.1":
   version: 0.5.5
   resolution: "mkdirp@npm:0.5.5"
   dependencies:
@@ -24473,19 +24479,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"needle@npm:^2.2.1":
-  version: 2.9.1
-  resolution: "needle@npm:2.9.1"
-  dependencies:
-    debug: ^3.2.6
-    iconv-lite: ^0.4.4
-    sax: ^1.2.4
-  bin:
-    needle: ./bin/needle
-  checksum: 746ae3a3782f0a057ff304a98843cc6f2009f978a0fad0c3e641a9d46d0b5702bb3e197ba08aecd48678067874a991c4f5fc320c7e51a4c041d9dd3441146cf0
-  languageName: node
-  linkType: hard
-
 "negotiator@npm:0.6.2, negotiator@npm:^0.6.2":
   version: 0.6.2
   resolution: "negotiator@npm:0.6.2"
@@ -24581,7 +24574,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^3.0.0, node-addon-api@npm:^3.1.0":
+"node-addon-api@npm:^3.1.0":
   version: 3.2.1
   resolution: "node-addon-api@npm:3.2.1"
   dependencies:
@@ -24590,7 +24583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^4.3.0":
+"node-addon-api@npm:^4.2.0, node-addon-api@npm:^4.3.0":
   version: 4.3.0
   resolution: "node-addon-api@npm:4.3.0"
   dependencies:
@@ -24679,7 +24672,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.7":
+"node-fetch@npm:2.6.7, node-fetch@npm:^2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
@@ -24713,25 +24706,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:3.x":
-  version: 3.8.0
-  resolution: "node-gyp@npm:3.8.0"
+"node-gyp@npm:8.x, node-gyp@npm:latest":
+  version: 8.4.1
+  resolution: "node-gyp@npm:8.4.1"
   dependencies:
-    fstream: ^1.0.0
-    glob: ^7.0.3
-    graceful-fs: ^4.1.2
-    mkdirp: ^0.5.0
-    nopt: 2 || 3
-    npmlog: 0 || 1 || 2 || 3 || 4
-    osenv: 0
-    request: ^2.87.0
-    rimraf: 2
-    semver: ~5.3.0
-    tar: ^2.0.0
-    which: 1
+    env-paths: ^2.2.0
+    glob: ^7.1.4
+    graceful-fs: ^4.2.6
+    make-fetch-happen: ^9.1.0
+    nopt: ^5.0.0
+    npmlog: ^6.0.0
+    rimraf: ^3.0.2
+    semver: ^7.3.5
+    tar: ^6.1.2
+    which: ^2.0.2
   bin:
-    node-gyp: ./bin/node-gyp.js
-  checksum: e99d740db6f5462cfd2f03fdfa89bae7e509e37f158d78a2fec0c858984cceb801723510656110d8f1d0ecf69cc2ceba8b477d22aac3e69ce8094db19dff6b2b
+    node-gyp: bin/node-gyp.js
+  checksum: 341710b5da39d3660e6a886b37e210d33f8282047405c2e62c277bcc744c7552c5b8b972ebc3a7d5c2813794e60cc48c3ebd142c46d6e0321db4db6c92dd0355
   languageName: node
   linkType: hard
 
@@ -24773,26 +24764,6 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: 3a5e7970192a3cee858e6e78c2eb8b5220e631a5939c06667e085946510bf265133c3a02126a269d39eeb0c700fce8407f338e08ec17a35d35174c54ec122653
-  languageName: node
-  linkType: hard
-
-"node-gyp@npm:latest":
-  version: 8.4.1
-  resolution: "node-gyp@npm:8.4.1"
-  dependencies:
-    env-paths: ^2.2.0
-    glob: ^7.1.4
-    graceful-fs: ^4.2.6
-    make-fetch-happen: ^9.1.0
-    nopt: ^5.0.0
-    npmlog: ^6.0.0
-    rimraf: ^3.0.2
-    semver: ^7.3.5
-    tar: ^6.1.2
-    which: ^2.0.2
-  bin:
-    node-gyp: bin/node-gyp.js
-  checksum: 341710b5da39d3660e6a886b37e210d33f8282047405c2e62c277bcc744c7552c5b8b972ebc3a7d5c2813794e60cc48c3ebd142c46d6e0321db4db6c92dd0355
   languageName: node
   linkType: hard
 
@@ -24876,26 +24847,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-pre-gyp@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "node-pre-gyp@npm:0.11.0"
-  dependencies:
-    detect-libc: ^1.0.2
-    mkdirp: ^0.5.1
-    needle: ^2.2.1
-    nopt: ^4.0.1
-    npm-packlist: ^1.1.6
-    npmlog: ^4.0.2
-    rc: ^1.2.7
-    rimraf: ^2.6.1
-    semver: ^5.3.0
-    tar: ^4
-  bin:
-    node-pre-gyp: ./bin/node-pre-gyp
-  checksum: b0db47eb6594d6a6844efa2ee75a12c772a22109f67dd864d6bc14538752c1c336e8d640af3a6f92504ac67d68be5aa186a5de169e1e0626df58f003ff2a8133
-  languageName: node
-  linkType: hard
-
 "node-releases@npm:^2.0.1":
   version: 2.0.1
   resolution: "node-releases@npm:2.0.1"
@@ -24959,17 +24910,6 @@ __metadata:
   bin:
     nodemon: bin/nodemon.js
   checksum: 9fe858682414fe703179f4fe36c86e71f40d2693b5345c09803d7b191816a6589c5df8f1f9873bffee92893880183b95a031c86340e46b364ef1b0b7f619edbf
-  languageName: node
-  linkType: hard
-
-"nopt@npm:2 || 3":
-  version: 3.0.6
-  resolution: "nopt@npm:3.0.6"
-  dependencies:
-    abbrev: 1
-  bin:
-    nopt: ./bin/nopt.js
-  checksum: 7f8579029a0d7cb3341c6b1610b31e363f708b7aaaaf3580e3ec5ae8528d1f3a79d350d8bfa331776e6c6703a5a148b72edd9b9b4c1dd55874d8e70e963d1e20
   languageName: node
   linkType: hard
 
@@ -25149,7 +25089,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-packlist@npm:^1.1.6, npm-packlist@npm:^1.4.4":
+"npm-packlist@npm:^1.4.4":
   version: 1.4.8
   resolution: "npm-packlist@npm:1.4.8"
   dependencies:
@@ -25198,7 +25138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npmlog@npm:0 || 1 || 2 || 3 || 4, npmlog@npm:^4.0.2, npmlog@npm:^4.1.2":
+"npmlog@npm:^4.1.2":
   version: 4.1.2
   resolution: "npmlog@npm:4.1.2"
   dependencies:
@@ -25207,6 +25147,18 @@ __metadata:
     gauge: ~2.7.3
     set-blocking: ~2.0.0
   checksum: edbda9f95ec20957a892de1839afc6fb735054c3accf6fbefe767bac9a639fd5cea2baeac6bd2bcd50a85cb54924d57d9886c81c7fbc2332c2ddd19227504192
+  languageName: node
+  linkType: hard
+
+"npmlog@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "npmlog@npm:5.0.1"
+  dependencies:
+    are-we-there-yet: ^2.0.0
+    console-control-strings: ^1.1.0
+    gauge: ^3.0.0
+    set-blocking: ^2.0.0
+  checksum: 516b2663028761f062d13e8beb3f00069c5664925871a9b57989642ebe09f23ab02145bf3ab88da7866c4e112cafff72401f61a672c7c8a20edc585a7016ef5f
   languageName: node
   linkType: hard
 
@@ -25752,7 +25704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"osenv@npm:0, osenv@npm:^0.1.4, osenv@npm:^0.1.5":
+"osenv@npm:^0.1.4, osenv@npm:^0.1.5":
   version: 0.1.5
   resolution: "osenv@npm:0.1.5"
   dependencies:
@@ -29233,7 +29185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:2, rimraf@npm:^2.2.8, rimraf@npm:^2.5.4, rimraf@npm:^2.6.1, rimraf@npm:^2.6.2, rimraf@npm:^2.6.3":
+"rimraf@npm:^2.2.8, rimraf@npm:^2.5.4, rimraf@npm:^2.6.1, rimraf@npm:^2.6.2, rimraf@npm:^2.6.3":
   version: 2.7.1
   resolution: "rimraf@npm:2.7.1"
   dependencies:
@@ -29689,7 +29641,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:5.3.0, semver@npm:~5.3.0":
+"semver@npm:5.3.0":
   version: 5.3.0
   resolution: "semver@npm:5.3.0"
   bin:
@@ -30671,32 +30623,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:4.2.0":
-  version: 4.2.0
-  resolution: "sqlite3@npm:4.2.0"
+"sqlite3@npm:5.1.2":
+  version: 5.1.2
+  resolution: "sqlite3@npm:5.1.2"
   dependencies:
-    nan: ^2.12.1
-    node-pre-gyp: ^0.11.0
-  checksum: 4f378ec0ea6b878775af3c31d45925257273d5e13991fbbd28ac855584805c71c5de0e0f616aebadc6d6dea193817e02512d578ff47b99724987ac5c5d6ba222
-  languageName: node
-  linkType: hard
-
-"sqlite3@npm:5.0.2":
-  version: 5.0.2
-  resolution: "sqlite3@npm:5.0.2"
-  dependencies:
-    node-addon-api: ^3.0.0
-    node-gyp: 3.x
-    node-pre-gyp: ^0.11.0
+    "@mapbox/node-pre-gyp": ^1.0.0
+    node-addon-api: ^4.2.0
+    node-gyp: 8.x
+    tar: ^6.1.11
   peerDependencies:
-    node-gyp: 3.x
+    node-gyp: 8.x
   dependenciesMeta:
     node-gyp:
       optional: true
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: 28ef541b3289c3a154c538f268c9e2656d1f5cc6c768bb6173b83037c02d1b889047f88233bc2e801885cea7e4c184d3a0d5b23ddced6fd6e192dc69c21a8961
+  checksum: 5ed90068f27853c4fef9d01c2e18706b7f51351220cbcd34488772a8ee5438097a16955e7a9d462da81c93fdf1ed3c8cdb085b23ddda02fc863b48e6acc0ee6e
   languageName: node
   linkType: hard
 
@@ -31855,7 +31798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:4.4.19, tar@npm:^4, tar@npm:^4.4.10, tar@npm:^4.4.12, tar@npm:^4.4.8":
+"tar@npm:4.4.19, tar@npm:^4.4.10, tar@npm:^4.4.12, tar@npm:^4.4.8":
   version: 4.4.19
   resolution: "tar@npm:4.4.19"
   dependencies:
@@ -31867,17 +31810,6 @@ __metadata:
     safe-buffer: ^5.2.1
     yallist: ^3.1.1
   checksum: 423c8259b17f8f612cef9c96805d65f90ba9a28e19be582cd9d0fcb217038219f29b7547198e8fd617da5f436376d6a74b99827acd1238d2f49cf62330f9664e
-  languageName: node
-  linkType: hard
-
-"tar@npm:^2.0.0":
-  version: 2.2.2
-  resolution: "tar@npm:2.2.2"
-  dependencies:
-    block-stream: "*"
-    fstream: ^1.0.12
-    inherits: 2
-  checksum: c0c3727d529077423cf771f9f9c06edaaff82034d05d685806d3cee69d334ee8e6f394ee8d02dbd294cdecb95bb22625703279caff24bdb90b17e59de03a4733
   languageName: node
   linkType: hard
 
@@ -34356,7 +34288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"which@npm:1, which@npm:^1.2.14, which@npm:^1.2.9, which@npm:^1.3.0, which@npm:^1.3.1":
+"which@npm:^1.2.14, which@npm:^1.2.9, which@npm:^1.3.0, which@npm:^1.3.1":
   version: 1.3.1
   resolution: "which@npm:1.3.1"
   dependencies:
