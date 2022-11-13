@@ -10,8 +10,8 @@
   "devDependencies": {
     "browserify": "14.5.0",
     "rollup": "0.50.1",
-    "standard": "10.0.3",
-    "turndown": "4.0.2",
+    "standard": "17.0.0",
+    "turndown": "7.1.1",
     "turndown-attendant": "0.0.3"
   },
   "files": [
