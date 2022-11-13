@@ -57,7 +57,7 @@
     "server-destroy": "1.0.1",
     "sharp": "0.31.2",
     "sprintf-js": "1.1.2",
-    "sqlite3": "5.0.2",
+    "sqlite3": "5.1.2",
     "string-padding": "1.0.2",
     "strip-ansi": "4.0.0",
     "tcp-port-used": "1.0.2",
