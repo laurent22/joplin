@@ -66,7 +66,7 @@
     "rn-fetch-blob": "0.12.0",
     "stream": "0.0.2",
     "stream-browserify": "3.0.0",
-    "string-natural-compare": "2.0.3",
+    "string-natural-compare": "3.0.1",
     "timers": "0.1.1",
     "url": "0.11.0"
   },
