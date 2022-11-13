@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const { execCommand, rootDir } = require('./tool-utils.js');
-const md5File = require('md5-file/promise');
+const md5File = require('md5-file');
 const glob = require('glob');
 
 const clipperDir = `${rootDir}/packages/app-clipper`;

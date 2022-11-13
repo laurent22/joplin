@@ -1,10 +1,10 @@
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
-const stripAnsi = require('strip-ansi');
+import stripAnsi from 'strip-ansi';
 const { handleAutocompletion } = require('../autocompletion.js');
 
-class StatusBarWidget extends BaseWidget {
+export default class StatusBarWidget extends BaseWidget {
 	constructor() {
 		super();
 
@@ -27,7 +27,7 @@ class StatusBarWidget extends BaseWidget {
 		this.invalidate();
 	}
 
-	async prompt(initialText = '', promptString = null, options = null) {
+	async prompt(initialText = '', promptString: any = null, options: any = null) {
 		if (this.promptState_) throw new Error('Another prompt already active');
 		if (promptString === null) promptString = ':';
 		if (options === null) options = {};
@@ -36,7 +36,7 @@ class StatusBarWidget extends BaseWidget {
 
 		this.promptState_ = {
 			promise: null,
-			initialText: stripAnsi(initialText),
+			initialText: (initialText),
 			promptString: stripAnsi(promptString),
 		};
 
@@ -106,7 +106,7 @@ class StatusBarWidget extends BaseWidget {
 
 			const isSecurePrompt = !!this.promptState_.secure;
 
-			const options = {
+			const options: any = {
 				cancelable: true,
 				history: this.history,
 				default: this.promptState_.initialText,
@@ -161,5 +161,3 @@ class StatusBarWidget extends BaseWidget {
 		if (doSaveCursor) this.term.restoreCursor();
 	}
 }
-
-module.exports = StatusBarWidget;

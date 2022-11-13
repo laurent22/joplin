@@ -37,17 +37,8 @@ class Command extends BaseCommand {
 		];
 	}
 
-	static lockFile(filePath: string): Promise<Function> {
-		return new Promise((resolve, reject) => {
-			locker.lock(filePath, { stale: 1000 * 60 * 5 }, (error: any, release: any) => {
-				if (error) {
-					reject(error);
-					return;
-				}
-
-				resolve(release);
-			});
-		});
+	static async lockFile(filePath: string): Promise<Function> {
+		return locker.lock(filePath, { stale: 1000 * 60 * 5 });
 	}
 
 	static isLocked(filePath: string) {
