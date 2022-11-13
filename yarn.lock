@@ -20834,7 +20834,7 @@ __metadata:
     md5: 2.3.0
     node-rsa: 1.1.1
     open: 8.4.0
-    proper-lockfile: 2.0.1
+    proper-lockfile: 4.1.2
     read-chunk: 2.1.0
     server-destroy: 1.0.1
     sharp: 0.31.2
@@ -26703,13 +26703,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proper-lockfile@npm:2.0.1":
-  version: 2.0.1
-  resolution: "proper-lockfile@npm:2.0.1"
+"proper-lockfile@npm:4.1.2":
+  version: 4.1.2
+  resolution: "proper-lockfile@npm:4.1.2"
   dependencies:
-    graceful-fs: ^4.1.2
-    retry: ^0.10.0
-  checksum: 3cadc4fb7139e521df5ef63b54693fa26b22ad130728f32e768c4a360791ba3ba294b0ad389388ba91db89e34895ecad16a67a02202302cb7e42216f3c906526
+    graceful-fs: ^4.2.4
+    retry: ^0.12.0
+    signal-exit: ^3.0.2
+  checksum: 00078ee6a61c216a56a6140c7d2a98c6c733b3678503002dc073ab8beca5d50ca271de4c85fca13b9b8ee2ff546c36674d1850509b84a04a5d0363bcb8638939
   languageName: node
   linkType: hard
 
