@@ -84,6 +84,9 @@ packages/app-cli/app/command-sync.js.map
 packages/app-cli/app/command-testing.d.ts
 packages/app-cli/app/command-testing.js
 packages/app-cli/app/command-testing.js.map
+packages/app-cli/app/gui/StatusBarWidget.d.ts
+packages/app-cli/app/gui/StatusBarWidget.js
+packages/app-cli/app/gui/StatusBarWidget.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
