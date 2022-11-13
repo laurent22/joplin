@@ -1,7 +1,7 @@
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
-import stripAnsi from 'strip-ansi';
+const stripAnsi = require('strip-ansi');
 const { handleAutocompletion } = require('../autocompletion.js');
 
 export default class StatusBarWidget extends BaseWidget {
@@ -22,7 +22,7 @@ export default class StatusBarWidget extends BaseWidget {
 		return false;
 	}
 
-	setItemAt(index, text) {
+	setItemAt(index: number, text: string) {
 		this.items_[index] = stripAnsi(text).trim();
 		this.invalidate();
 	}
@@ -86,7 +86,7 @@ export default class StatusBarWidget extends BaseWidget {
 
 		// const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
 		// const textStyle = (s) => s;
-		const textStyle = this.promptActive ? s => s : chalk.gray;
+		const textStyle = this.promptActive ? (s: any) => s : chalk.gray;
 
 		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));
 
@@ -118,7 +118,7 @@ export default class StatusBarWidget extends BaseWidget {
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
 			if (isSecurePrompt) options.echoChar = true;
 
-			this.inputEventEmitter_ = this.term.inputField(options, (error, input) => {
+			this.inputEventEmitter_ = this.term.inputField(options, (error: any, input: any) => {
 				let resolveResult = null;
 				const resolveFn = this.promptState_.resolve;
 
