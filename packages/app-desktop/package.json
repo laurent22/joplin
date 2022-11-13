@@ -157,7 +157,7 @@
     "node-fetch": "1.7.3",
     "node-notifier": "10.0.1",
     "node-rsa": "1.1.1",
-    "pretty-bytes": "6.0.0",
+    "pretty-bytes": "5.6.0",
     "re-resizable": "6.9.9",
     "react": "16.14.0",
     "react-datetime": "3.2.0",
