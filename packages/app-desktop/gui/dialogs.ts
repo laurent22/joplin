@@ -1,4 +1,4 @@
-const smalltalk = require('smalltalk');
+const smalltalk = require('smalltalk/bundle');
 
 class Dialogs {
 	async alert(message: string, title = '') {

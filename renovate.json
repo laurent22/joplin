@@ -50,6 +50,7 @@
 		"rollup-plugin-node-resolve",
 		"metro-react-native-babel-preset",
 		"react-native",
+		"stripe",
 		"rollup",
 		"file-loader",
 		"gradle",
