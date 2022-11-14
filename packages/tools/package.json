@@ -23,7 +23,7 @@
     "@joplin/lib": "^2.9.1",
     "@joplin/renderer": "^2.9.1",
     "@types/node-fetch": "2.6.2",
-    "@types/yargs": "16.0.4",
+    "@types/yargs": "17.0.13",
     "dayjs": "1.11.6",
     "execa": "4.1.0",
     "fs-extra": "10.1.0",
@@ -39,7 +39,7 @@
     "sharp": "0.31.2",
     "source-map-support": "0.5.21",
     "uri-template": "1.0.3",
-    "yargs": "16.2.0"
+    "yargs": "17.6.2"
   },
   "devDependencies": {
     "@rmp135/sql-ts": "1.15.1",
