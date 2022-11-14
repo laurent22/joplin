@@ -540,6 +540,9 @@ packages/app-desktop/gui/NoteEditor/utils/types.js.map
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.d.ts
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js.map
+packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.d.ts
+packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js
+packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js.map
 packages/app-desktop/gui/NoteEditor/utils/useFolder.d.ts
 packages/app-desktop/gui/NoteEditor/utils/useFolder.js
 packages/app-desktop/gui/NoteEditor/utils/useFolder.js.map
