@@ -4413,7 +4413,7 @@ __metadata:
     string-padding: 1.0.2
     string-to-stream: 3.0.1
     tar: 6.1.12
-    tcp-port-used: 0.1.2
+    tcp-port-used: 1.0.2
     typescript: 4.5.2
     uglifycss: 0.0.29
     url-parse: 1.5.10
@@ -13112,13 +13112,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:0.7.4":
-  version: 0.7.4
-  resolution: "debug@npm:0.7.4"
-  checksum: 5646bf2bb349381e1363f1107513270f29092df1a1a7c0f331b23867867c517da5acbd31f828101bef61969fe558b81f044288624dbadaccb2c088329450a74f
-  languageName: node
-  linkType: hard
-
 "debug@npm:2.6.9, debug@npm:^2.1.3, debug@npm:^2.2.0, debug@npm:^2.3.3, debug@npm:^2.6.8, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -13279,13 +13272,6 @@ __metadata:
   version: 0.6.0
   resolution: "deep-extend@npm:0.6.0"
   checksum: 7be7e5a8d468d6b10e6a67c3de828f55001b6eb515d014f7aeb9066ce36bd5717161eb47d6a0f7bed8a9083935b465bc163ee2581c8b128d29bf61092fdf57a7
-  languageName: node
-  linkType: hard
-
-"deep-is@npm:0.1.2":
-  version: 0.1.2
-  resolution: "deep-is@npm:0.1.2"
-  checksum: 2152f20746a6936b87d8a3e2c99dfd1359b66bc245769508f1f76b44d9ea931e4318a0962e731359d6acd4f27adefdf660ab47e14a5ed47f1963d4b2ef280be3
   languageName: node
   linkType: hard
 
@@ -19544,15 +19530,6 @@ __metadata:
   dependencies:
     is-docker: ^2.0.0
   checksum: 20849846ae414997d290b75e16868e5261e86ff5047f104027026fd61d8b5a9b0b3ade16239f35e1a067b3c7cc02f70183cb661010ed16f4b6c7c93dad1b19d8
-  languageName: node
-  linkType: hard
-
-"is2@npm:0.0.9":
-  version: 0.0.9
-  resolution: "is2@npm:0.0.9"
-  dependencies:
-    deep-is: 0.1.2
-  checksum: 1411b816e89d8de80626cb4172f9020ee940b2faadbaeefa72cbe1834022093f07dcea0923f929b71163a9286021ac7ee6cafd6195690e4dd3452d36b076bc07
   languageName: node
   linkType: hard
 
@@ -26797,13 +26774,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"q@npm:0.9.7":
-  version: 0.9.7
-  resolution: "q@npm:0.9.7"
-  checksum: 58c3587d3cdc7f7d417cd7fa3173e3ce3d94b76d74d3dd59ba90ed13357e47cc9c74397b2d7d8eadab224684a493f8fc314d5c9a8590eb9adea8eff92652aa12
-  languageName: node
-  linkType: hard
-
 "q@npm:^1.5.1":
   version: 1.5.1
   resolution: "q@npm:1.5.1"
@@ -31125,17 +31095,6 @@ __metadata:
   version: 3.0.2
   resolution: "tarn@npm:3.0.2"
   checksum: 27a69658f02504979c5b02e500522e78ec12ef893b90cb00fdef794f9d847a92ed78f6c0ad12e82b8919519bded6a8d6d0000442cd0c6d6ea83cd9b7297729af
-  languageName: node
-  linkType: hard
-
-"tcp-port-used@npm:0.1.2":
-  version: 0.1.2
-  resolution: "tcp-port-used@npm:0.1.2"
-  dependencies:
-    debug: 0.7.4
-    is2: 0.0.9
-    q: 0.9.7
-  checksum: 949fbbd2c993aa4abd97c2d071129fe241168668724bb44bb11630b4ca3bd730f99390b61c250ceccb8d06b91bdc80f44b84b0c95b4be7834fc5f9e772c4e272
   languageName: node
   linkType: hard
 

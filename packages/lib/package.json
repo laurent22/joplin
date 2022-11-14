@@ -85,7 +85,7 @@
     "string-padding": "1.0.2",
     "string-to-stream": "3.0.1",
     "tar": "6.1.12",
-    "tcp-port-used": "0.1.2",
+    "tcp-port-used": "1.0.2",
     "uglifycss": "0.0.29",
     "url-parse": "1.5.10",
     "uuid": "3.4.0",
