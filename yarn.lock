@@ -2794,6 +2794,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cronvel/get-pixels@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "@cronvel/get-pixels@npm:3.4.1"
+  dependencies:
+    jpeg-js: ^0.4.4
+    ndarray: ^1.0.19
+    ndarray-pack: ^1.1.1
+    node-bitmap: 0.0.1
+    omggif: ^1.0.10
+    pngjs: ^6.0.0
+  checksum: 97c5e1de77693973db6b7bbb0c171f87a180618012755c871f16243fd1857d15c400cb629b43efb532877f8d8c78f76ca71af7f263b31b15531b1ce23a0da04c
+  languageName: node
+  linkType: hard
+
 "@cspell/cspell-bundled-dicts@npm:^5.21.2":
   version: 5.21.2
   resolution: "@cspell/cspell-bundled-dicts@npm:5.21.2"
@@ -10821,6 +10835,13 @@ __metadata:
   dependencies:
     cross-env: ^6.0.3
   checksum: abbd70377446e3cc401ac58c40cdac6c70c41a349e6aca08881d0deb775051ba69c93099f4d47ef83c41b4562b0480b5dfd56d77e2e6f3a81ebb6667ce8d4627
+  languageName: node
+  linkType: hard
+
+"chroma-js@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "chroma-js@npm:2.4.2"
+  checksum: cf9884c02d406286e4370599bcd1afbf089384407df46b3a69edfedcba7bb99e8f959a5cfdbfec750b305c441c06ca40cd1f70ba3a6c2ce739ac09a92520ddae
   languageName: node
   linkType: hard
 
@@ -20842,7 +20863,7 @@ __metadata:
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
     temp: 0.9.4
-    terminal-kit: 1.49.4
+    terminal-kit: 3.0.0
     tkwidgets: 0.5.27
     typescript: 4.5.2
     url-parse: 1.5.10
@@ -20857,6 +20878,13 @@ __metadata:
   version: 0.4.3
   resolution: "jpeg-js@npm:0.4.3"
   checksum: 9e5bacc9135efa7da340b62e81fa56fab0c8516ef617228758132af5b7d31b516cc6e1500cdffb82d3161629be341be980099f2b37eb76b81e26db6e3e848c77
+  languageName: node
+  linkType: hard
+
+"jpeg-js@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "jpeg-js@npm:0.4.4"
+  checksum: bd7cb61aa8df40a9ee2c2106839c3df6054891e56cfc22c0ac581402e06c6295f962a4754b0b2ac50a401789131b1c6dc9df8d24400f1352168be1894833c590
   languageName: node
   linkType: hard
 
@@ -24020,6 +24048,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nextgen-events@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "nextgen-events@npm:1.5.3"
+  checksum: 74d70fcfe413c8a5b1644a654213dacd75b06dca5f6a0763e03f9b752e25394f929a014a3df6d270813cfd0927371fbbb210dd110e26dfa61822237b3975e7a9
+  languageName: node
+  linkType: hard
+
 "nice-try@npm:^1.0.4":
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
@@ -26115,6 +26150,13 @@ __metadata:
   version: 5.0.0
   resolution: "pngjs@npm:5.0.0"
   checksum: 04e912cc45fb9601564e2284efaf0c5d20d131d9b596244f8a6789fc6cdb6b18d2975a6bbf7a001858d7e159d5c5c5dd7b11592e97629b7137f7f5cef05904c8
+  languageName: node
+  linkType: hard
+
+"pngjs@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "pngjs@npm:6.0.0"
+  checksum: ab6c285086060087097eab9fe6b5a528a24f9e79c03dea2b4fd6264ed4fdb5beff4a3257eeeaf2a9dc18249b539609c2a4e4013c567164a1f6b5ba2c974d5ecb
   languageName: node
   linkType: hard
 
@@ -29193,6 +29235,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"seventh@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "seventh@npm:0.8.1"
+  dependencies:
+    setimmediate: ^1.0.5
+  checksum: e54ef2c55590920679f957ba1a37d46ff2541b283fa1add88bc9d9d388793edb98ae215e7f3d9f685e87ecd2070f99ad089d45d0714c0e2fddb2c7d6e17a4016
+  languageName: node
+  linkType: hard
+
 "sha.js@npm:^2.4.0, sha.js@npm:^2.4.8, sha.js@npm:~2.4.4":
   version: 2.4.11
   resolution: "sha.js@npm:2.4.11"
@@ -30243,6 +30294,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"string-kit@npm:^0.17.6":
+  version: 0.17.6
+  resolution: "string-kit@npm:0.17.6"
+  checksum: bc18904f53339abd4c5e11c420dad81eb9dca94979b0bf9d16094709eb524f9a4d9897b7e060cbef15aa81bbf8721e4b9ba2378b2a52e27bb3940669cf28cd39
+  languageName: node
+  linkType: hard
+
 "string-length@npm:^4.0.1":
   version: 4.0.2
   resolution: "string-length@npm:4.0.2"
@@ -31175,7 +31233,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terminal-kit@npm:1.49.4, terminal-kit@npm:^1.13.11":
+"terminal-kit@npm:3.0.0":
+  version: 3.0.0
+  resolution: "terminal-kit@npm:3.0.0"
+  dependencies:
+    "@cronvel/get-pixels": ^3.4.1
+    chroma-js: ^2.4.2
+    lazyness: ^1.2.0
+    ndarray: ^1.0.19
+    nextgen-events: ^1.5.3
+    seventh: ^0.8.1
+    string-kit: ^0.17.6
+    tree-kit: ^0.7.4
+  checksum: bf33b9b8bcb2419d457c2f409a08d1cd378d054f588cf5e2972857cbfead6281121e6d84cd96bbd9078fdf7664d4346d794ddbe4b51794f5617f141c08bdcb31
+  languageName: node
+  linkType: hard
+
+"terminal-kit@npm:^1.13.11":
   version: 1.49.4
   resolution: "terminal-kit@npm:1.49.4"
   dependencies:
@@ -31661,7 +31735,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tree-kit@npm:^0.7.0":
+"tree-kit@npm:^0.7.0, tree-kit@npm:^0.7.4":
   version: 0.7.4
   resolution: "tree-kit@npm:0.7.4"
   checksum: 922c6569ba0856d29a9728cdef5c3673aa34c405254f483d7c2459e1f4178e1348445712df561f06519ed42773e2944b12f95b4f5707206dc0fdcd6338f584a9
