@@ -33,7 +33,7 @@
     "md5-file": "5.0.0",
     "moment": "2.29.4",
     "mustache": "4.2.0",
-    "node-fetch": "1.7.3",
+    "node-fetch": "3.3.0",
     "relative": "3.0.2",
     "request": "2.88.2",
     "sharp": "0.31.2",
