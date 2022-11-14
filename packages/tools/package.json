@@ -38,7 +38,7 @@
     "request": "2.88.2",
     "sharp": "0.31.2",
     "source-map-support": "0.5.21",
-    "uri-template": "1.0.3",
+    "uri-template": "2.0.0",
     "yargs": "17.6.2"
   },
   "devDependencies": {
