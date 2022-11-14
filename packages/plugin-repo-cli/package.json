@@ -24,7 +24,7 @@
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",
     "source-map-support": "0.5.21",
-    "yargs": "16.2.0"
+    "yargs": "17.6.2"
   },
   "devDependencies": {
     "@types/fs-extra": "9.0.13",

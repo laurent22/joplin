@@ -54,7 +54,7 @@
     "sqlite3": "5.1.2",
     "stripe": "8.222.0",
     "uuid": "8.3.2",
-    "yargs": "17.3.0",
+    "yargs": "17.6.2",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
@@ -68,7 +68,7 @@
     "@types/markdown-it": "12.2.3",
     "@types/mustache": "4.2.1",
     "@types/nodemailer": "6.4.6",
-    "@types/yargs": "17.0.7",
+    "@types/yargs": "17.0.13",
     "@types/zxcvbn": "4.4.1",
     "gulp": "4.0.2",
     "jest": "26.6.3",
