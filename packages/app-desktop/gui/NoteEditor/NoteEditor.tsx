@@ -495,6 +495,7 @@ function NoteEditor(props: NoteEditorProps) {
 		return (
 			<NoteSearchBar
 				ref={noteSearchBarRef}
+				themeId={props.themeId}
 				style={{
 					display: 'flex',
 					height: 35,
