@@ -11,7 +11,7 @@ import { Size } from './ResizableLayout/utils/types';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
 const React = require('react');
-const { render } = require('react-dom');
+const { createRoot } = require('react-dom/client');
 const { connect, Provider } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
@@ -259,11 +259,11 @@ const Root = connect(mapStateToProps)(RootComponent);
 
 const store = app().store();
 
-render(
+const root = createRoot(document.getElementById('react-root'));
+root.render(
 	<Provider store={store}>
 		<ErrorBoundary>
 			<Root />
 		</ErrorBoundary>
-	</Provider>,
-	document.getElementById('react-root')
+	</Provider>
 );
