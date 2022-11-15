@@ -11,7 +11,8 @@
 		"Assets/**",
 		"packages/app-cli/tests/**",
 		"packages/app-clipper/popup",
-		"packages/plugins/**"
+		"packages/app-mobile/android/app/build.gradle",
+		"packages/plugins/**",
 	],
 	"ignoreDeps": [
 		"@babel/core",
