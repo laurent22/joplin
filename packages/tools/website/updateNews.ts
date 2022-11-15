@@ -73,18 +73,23 @@ const getPosts = async (newsDir: string): Promise<Post[]> => {
 };
 
 const getPostContent = async (post: Post): Promise<PostContent> => {
-	const raw = await readFile(post.path, 'utf8');
-	const parsed = stripOffFrontMatter(raw);
-	const lines = parsed.doc.split('\n');
-	const titleLine = lines[0];
-	if (!titleLine.startsWith('# ')) throw new Error('Cannot extract title from post: no header detected');
-	lines.splice(0, 1);
+	try {
+		const raw = await readFile(post.path, 'utf8');
+		const parsed = stripOffFrontMatter(raw);
+		const lines = parsed.doc.split('\n');
+		const titleLine = lines[0];
+		if (!titleLine.startsWith('# ')) throw new Error('Cannot extract title from post: no header detected');
+		lines.splice(0, 1);
 
-	return {
-		title: titleLine.substr(1).trim(),
-		body: lines.join('\n').trim(),
-		parsed,
-	};
+		return {
+			title: titleLine.substr(1).trim(),
+			body: lines.join('\n').trim(),
+			parsed,
+		};
+	} catch (error) {
+		error.message = `Could not get post content: ${post.id}: ${post.path}: ${error.message}`;
+		throw error;
+	}
 };
 
 const execApi = async (method: HttpMethod, path: string, body: Record<string, string | number> = null) => {
