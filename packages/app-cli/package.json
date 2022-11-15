@@ -61,7 +61,7 @@
     "string-padding": "1.0.2",
     "strip-ansi": "6.0.1",
     "tcp-port-used": "1.0.2",
-    "terminal-kit": "1.49.4",
+    "terminal-kit": "3.0.0",
     "tkwidgets": "0.5.27",
     "url-parse": "1.5.10",
     "word-wrap": "1.2.3",
