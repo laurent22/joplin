@@ -67,6 +67,11 @@
 		{
 			"matchUpdateTypes": ["patch"],
 			"automerge": true
+		},
+		{
+			"matchPackageNames": ["@aws-sdk/client-s3", "@aws-sdk/s3-request-presigner"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true
 		}
 	]
 }
