@@ -41,7 +41,7 @@
     "@fortawesome/react-fontawesome": "0.2.0",
     "@joplin/lib": "~2.9",
     "async-mutex": "0.4.0",
-    "pdfjs-dist": "2.16.105",
+    "pdfjs-dist": "3.0.279",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "5.3.5"
