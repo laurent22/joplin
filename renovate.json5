@@ -3,7 +3,7 @@
 	"extends": [
 		"config:base"
 	],
-	"prConcurrentLimit": 20,
+	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
 		"**/bower_components/**",
