@@ -4175,7 +4175,7 @@ __metadata:
     md5: 2.3.0
     moment: 2.29.4
     nan: 2.17.0
-    node-fetch: 1.7.3
+    node-fetch: 2.6.7
     node-notifier: 10.0.1
     node-rsa: 1.1.1
     pretty-bytes: 5.6.0
@@ -4409,7 +4409,7 @@ __metadata:
     multiparty: 4.2.3
     mustache: 4.2.0
     nanoid: 3.3.4
-    node-fetch: 1.7.3
+    node-fetch: 2.6.7
     node-notifier: 10.0.1
     node-persist: 3.1.0
     node-rsa: 1.1.1
@@ -4634,7 +4634,7 @@ __metadata:
     md5-file: 5.0.0
     moment: 2.29.4
     mustache: 4.2.0
-    node-fetch: 1.7.3
+    node-fetch: 2.6.7
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
@@ -24110,16 +24110,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:1.7.3, node-fetch@npm:^1.0.1":
-  version: 1.7.3
-  resolution: "node-fetch@npm:1.7.3"
-  dependencies:
-    encoding: ^0.1.11
-    is-stream: ^1.0.1
-  checksum: 3bb0528c05d541316ebe52770d71ee25a6dce334df4231fd55df41a644143e07f068637488c18a5b0c43f05041dbd3346752f9e19b50df50569a802484544d5b
-  languageName: node
-  linkType: hard
-
 "node-fetch@npm:2.6.7, node-fetch@npm:^2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
@@ -24131,6 +24121,16 @@ __metadata:
     encoding:
       optional: true
   checksum: 8d816ffd1ee22cab8301c7756ef04f3437f18dace86a1dae22cf81db8ef29c0bf6655f3215cb0cdb22b420b6fe141e64b26905e7f33f9377a7fa59135ea3e10b
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^1.0.1":
+  version: 1.7.3
+  resolution: "node-fetch@npm:1.7.3"
+  dependencies:
+    encoding: ^0.1.11
+    is-stream: ^1.0.1
+  checksum: 3bb0528c05d541316ebe52770d71ee25a6dce334df4231fd55df41a644143e07f068637488c18a5b0c43f05041dbd3346752f9e19b50df50569a802484544d5b
   languageName: node
   linkType: hard
 

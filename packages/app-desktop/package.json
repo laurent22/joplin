@@ -154,7 +154,7 @@
     "mark.js": "8.11.1",
     "md5": "2.3.0",
     "moment": "2.29.4",
-    "node-fetch": "1.7.3",
+    "node-fetch": "2.6.7",
     "node-notifier": "10.0.1",
     "node-rsa": "1.1.1",
     "pretty-bytes": "5.6.0",
