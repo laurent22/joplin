@@ -35,10 +35,9 @@ function mockService(api: any) {
 
 describe('ShareService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should not change the note user timestamps when sharing or unsharing', async () => {

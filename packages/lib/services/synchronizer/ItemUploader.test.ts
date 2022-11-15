@@ -43,11 +43,10 @@ function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = nu
 
 describe('synchronizer/ItemUploader', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
 	it('should batch uploads and use the cache afterwards', (async () => {

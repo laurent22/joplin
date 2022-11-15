@@ -28,10 +28,9 @@ describe('defaultPluginsUtils', function() {
 
 	const pluginsId = ['joplin.plugin.ambrt.backlinksToNote', 'org.joplinapp.plugins.ToggleSidebars'];
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should install default plugins with no previous default plugins installed', (async () => {

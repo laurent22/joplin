@@ -16,14 +16,12 @@ let engine: any = null;
 const ids = (array: NoteEntity[]) => array.map(a => a.id);
 
 describe('services_SearchFilter', function() {
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
 		engine = new SearchEngine();
 		engine.setDb(db());
-
-		done();
 	});
 
 	// Outside of for loop because this does not apply to to SEARCH_TYPE_NONLATIN_SCRIPT

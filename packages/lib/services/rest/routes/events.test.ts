@@ -9,11 +9,10 @@ let api: Api = null;
 
 describe('routes/events', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		api = new Api();
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should retrieve the latest events', async () => {

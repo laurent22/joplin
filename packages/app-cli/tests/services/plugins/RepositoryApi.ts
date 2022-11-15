@@ -10,10 +10,9 @@ async function newRepoApi(): Promise<RepositoryApi> {
 
 describe('services_plugins_RepositoryApi', function() {
 
-	beforeEach(async (done: Function) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should get the manifests', (async () => {

@@ -14,10 +14,9 @@ const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
 describe('HtmlToHtml', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should convert from Html to Html', (async () => {

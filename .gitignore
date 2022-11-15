@@ -525,9 +525,6 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.js.map
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.d.ts
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js.map
-packages/app-desktop/gui/NoteEditor/utils/contextMenu.test.d.ts
-packages/app-desktop/gui/NoteEditor/utils/contextMenu.test.js
-packages/app-desktop/gui/NoteEditor/utils/contextMenu.test.js.map
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.d.ts
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js.map
@@ -777,9 +774,6 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
 packages/app-desktop/gui/utils/loadScript.d.ts
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gui/utils/loadScript.js.map
-packages/app-desktop/loadResources.testEnv.d.ts
-packages/app-desktop/loadResources.testEnv.js
-packages/app-desktop/loadResources.testEnv.js.map
 packages/app-desktop/plugins/GotoAnything.d.ts
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/plugins/GotoAnything.js.map
