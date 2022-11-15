@@ -4629,7 +4629,7 @@ __metadata:
     source-map-support: 0.5.21
     sqlite3: 5.1.2
     typescript: 4.5.2
-    uri-template: 1.0.3
+    uri-template: 2.0.0
     yargs: 17.6.2
   languageName: unknown
   linkType: soft
@@ -32568,12 +32568,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uri-template@npm:1.0.3":
-  version: 1.0.3
-  resolution: "uri-template@npm:1.0.3"
+"uri-template@npm:2.0.0":
+  version: 2.0.0
+  resolution: "uri-template@npm:2.0.0"
   dependencies:
     pct-encode: ~1.0.0
-  checksum: 5f7e812052145543aebeb928f1f7c97e564b775766106771748303638b2449d34513b801a496c5a1993b7f441aca9fc16ac129a3b1b89f63cad20c94e8300dff
+  checksum: 6eb3254368ca11330502525c6c0ab42af3cb646bfc96a4021666d6ac6653ede1ac0df7fde84a2e35e7f03f42d91b41251963122cfb3de9b54b84bc0ef3583ffc
   languageName: node
   linkType: hard
 
