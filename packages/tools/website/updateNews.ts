@@ -114,7 +114,7 @@ const execApi = async (method: HttpMethod, path: string, body: Record<string, st
 		throw error;
 	}
 
-	return response.json();
+	return response.json() as any;
 };
 
 const getForumTopPostByExternalId = async (externalId: string): Promise<ForumTopPost> => {
