@@ -55,6 +55,10 @@
 		"typedoc",
 		"webpack",
 
+		// Too complex to upgrade past TinyMCE 5
+		// https://www.tiny.cloud/docs/tinymce/6/migration-from-5x/
+		"tinymce",
+
 		// React Native stuff should be updated only when
 		// upgrading React Native.
 		"@types/react-native",
