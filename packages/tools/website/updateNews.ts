@@ -93,6 +93,12 @@ const getPostContent = async (post: Post): Promise<PostContent> => {
 };
 
 const execApi = async (method: HttpMethod, path: string, body: Record<string, string | number> = null) => {
+	interface Request {
+		method: HttpMethod;
+		headers: Record<string, string>;
+		body?: string;
+	}
+
 	const headers: Record<string, string> = {
 		'Api-Key': config.key,
 		'Api-Username': config.username,
@@ -100,11 +106,14 @@ const execApi = async (method: HttpMethod, path: string, body: Record<string, st
 
 	if (method !== HttpMethod.GET) headers['Content-Type'] = 'application/json;';
 
-	const response = await fetch(`${config.baseUrl}/${path}`, {
+	const request: Request = {
 		method,
 		headers,
-		body: JSON.stringify(body),
-	});
+	};
+
+	if (body) request.body = JSON.stringify(body);
+
+	const response = await fetch(`${config.baseUrl}/${path}`, request);
 
 	if (!response.ok) {
 		const errorText = await response.text();
