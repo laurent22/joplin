@@ -3,9 +3,9 @@ import path = require('path');
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
-import Logger from '@joplin/lib/Logger';
+import Logger from '../../../Logger';
 import * as React from 'react';
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@../../../components/shared/config-shared.js');
 
 const logger = Logger.create('defaultPluginsUtils');
 

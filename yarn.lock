@@ -4421,6 +4421,7 @@ __metadata:
     "@types/node": 18.11.9
     "@types/node-rsa": 1.1.1
     "@types/react": 17.0.52
+    "@types/uuid": ^8.3.4
     async-mutex: 0.4.0
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -7360,7 +7361,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:8.3.4":
+"@types/uuid@npm:8.3.4, @types/uuid@npm:^8.3.4":
   version: 8.3.4
   resolution: "@types/uuid@npm:8.3.4"
   checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
