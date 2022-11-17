@@ -3,7 +3,7 @@
 	"extends": [
 		"config:base"
 	],
-	"prConcurrentLimit": 20,
+	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
 		"**/bower_components/**",
@@ -54,6 +54,22 @@
 		"stripe",
 		"typedoc",
 		"webpack",
+
+		// pdfjs-dist requires the canvas package, which cannot be built in Windows.
+		//
+		// An unhandled error occurred inside electron-rebuild
+		// node-gyp failed to rebuild 'D:\a\joplin\joplin\packages\pdf-viewer\node_modules\canvas'.
+		//
+		// https://github.com/mozilla/pdf.js/issues/15112
+		//
+		// Maybe need to install Canvas separately and follow the instruction here to setup the build properly on Windows:
+		// https://github.com/Automattic/node-canvas#compiling
+
+		"pdfjs-dist",
+
+		// Too complex to upgrade past TinyMCE 5
+		// https://www.tiny.cloud/docs/tinymce/6/migration-from-5x/
+		"tinymce",
 
 		// React Native stuff should be updated only when
 		// upgrading React Native.
