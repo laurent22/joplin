@@ -53,6 +53,7 @@
 		"ruby",
 		"stripe",
 		"typedoc",
+		"webpack-cli",
 		"webpack",
 
 		// pdfjs-dist requires the canvas package, which cannot be built in
