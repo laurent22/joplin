@@ -55,16 +55,18 @@
 		"typedoc",
 		"webpack",
 
-		// pdfjs-dist requires the canvas package, which cannot be built in Windows.
+		// pdfjs-dist requires the canvas package, which cannot be built in
+		// Windows.
 		//
-		// An unhandled error occurred inside electron-rebuild
-		// node-gyp failed to rebuild 'D:\a\joplin\joplin\packages\pdf-viewer\node_modules\canvas'.
+		// An unhandled error occurred inside electron-rebuild node-gyp failed
+		// to rebuild
+		// 'D:\a\joplin\joplin\packages\pdf-viewer\node_modules\canvas'.
 		//
 		// https://github.com/mozilla/pdf.js/issues/15112
 		//
-		// Maybe need to install Canvas separately and follow the instruction here to setup the build properly on Windows:
+		// Maybe need to install Canvas separately and follow the instruction
+		// here to setup the build properly on Windows:
 		// https://github.com/Automattic/node-canvas#compiling
-
 		"pdfjs-dist",
 
 		// Too complex to upgrade past TinyMCE 5
@@ -94,9 +96,18 @@
 			"automerge": true
 		},
 		{
-			// AWS packages are updated too frequently and we can assume minor
-			// updates are stable.
-			"matchPackageNames": ["@aws-sdk/client-s3", "@aws-sdk/s3-request-presigner"],
+			"matchPackageNames": [
+				// AWS packages are updated too frequently and we can assume minor
+				// updates are stable.
+				"@aws-sdk/client-s3",
+				"@aws-sdk/s3-request-presigner",
+
+				// If the apps build and all tests pass, we can assume that Yarn
+				// and TypeScript are safe to upgrade. They are frequently
+				// updated so having them here reduces noise.
+				"yarn",
+				"typescript",
+			],
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true
 		}
