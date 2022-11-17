@@ -126,7 +126,7 @@
     "js-sha512": "0.8.0",
     "nan": "2.17.0",
     "react-test-renderer": "18.2.0",
-    "typescript": "4.8.4"
+    "typescript": "4.9.3"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
