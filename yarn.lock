@@ -6113,12 +6113,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@seiyab/eslint-plugin-react-hooks@npm:4.5.1-alpha.5":
-  version: 4.5.1-alpha.5
-  resolution: "@seiyab/eslint-plugin-react-hooks@npm:4.5.1-alpha.5"
+"@seiyab/eslint-plugin-react-hooks@npm:4.5.1-beta.0":
+  version: 4.5.1-beta.0
+  resolution: "@seiyab/eslint-plugin-react-hooks@npm:4.5.1-beta.0"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
-  checksum: b9840dd3a454c68f6da7b5281d9d4bfe618567b2a2f6228379a9215cffef39eed8d7164dd8f9d809c8a74ea0b8c9e5633dfb747897ae189e5a3e1fede99e6d37
+  checksum: a21dd03873ac9022cfc9e8a35023b126722ff5a37a93d511eed3b6bf8148fbac43897731ed5775b7b283eb6fdbb79297f6d9e1fadd521614d7f34a11bffbec5a
   languageName: node
   linkType: hard
 
@@ -27445,7 +27445,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@seiyab/eslint-plugin-react-hooks": 4.5.1-alpha.5
+    "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 9.0.13
     "@typescript-eslint/eslint-plugin": 5.43.0
     "@typescript-eslint/parser": 5.43.0
