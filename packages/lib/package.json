@@ -88,7 +88,7 @@
     "tcp-port-used": "1.0.2",
     "uglifycss": "0.0.29",
     "url-parse": "1.5.10",
-    "uuid": "3.4.0",
+    "uuid": "9.0.0",
     "word-wrap": "1.2.3",
     "xml2js": "0.4.23"
   },
