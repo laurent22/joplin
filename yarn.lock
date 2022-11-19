@@ -164,14 +164,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:3.212.0":
-  version: 3.212.0
-  resolution: "@aws-sdk/client-s3@npm:3.212.0"
+"@aws-sdk/client-s3@npm:3.213.0":
+  version: 3.213.0
+  resolution: "@aws-sdk/client-s3@npm:3.213.0"
   dependencies:
     "@aws-crypto/sha1-browser": 2.0.0
     "@aws-crypto/sha256-browser": 2.0.0
     "@aws-crypto/sha256-js": 2.0.0
-    "@aws-sdk/client-sts": 3.212.0
+    "@aws-sdk/client-sts": 3.213.0
     "@aws-sdk/config-resolver": 3.212.0
     "@aws-sdk/credential-provider-node": 3.212.0
     "@aws-sdk/eventstream-serde-browser": 3.212.0
@@ -222,7 +222,7 @@ __metadata:
     "@aws-sdk/xml-builder": 3.201.0
     fast-xml-parser: 4.0.11
     tslib: ^2.3.1
-  checksum: 53611b675fe537b8a878559253c9b850a47304a9db51dc219f7b80b1378e6e8b30f0bfeee4eb81d7fc227de920232ff9a900c57120f55ec6c8d2b8b17cc32fa2
+  checksum: f795b01de20f90f12ac8aaeaf8a546dc8d674b6bc4298ba69959b8a7879e1c2e0d6adc45f0ad52b54c7cba1fde5b1c412cd0871c753ba46a69b75481aaaa9383
   languageName: node
   linkType: hard
 
@@ -306,9 +306,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sts@npm:3.212.0":
-  version: 3.212.0
-  resolution: "@aws-sdk/client-sts@npm:3.212.0"
+"@aws-sdk/client-sts@npm:3.213.0":
+  version: 3.213.0
+  resolution: "@aws-sdk/client-sts@npm:3.213.0"
   dependencies:
     "@aws-crypto/sha256-browser": 2.0.0
     "@aws-crypto/sha256-js": 2.0.0
@@ -346,7 +346,7 @@ __metadata:
     "@aws-sdk/util-utf8-node": 3.208.0
     fast-xml-parser: 4.0.11
     tslib: ^2.3.1
-  checksum: 6ac588957b3546dc4996201bd25c7903ab5fbe533cf74d210753164ef67a87198e82efba19943518189b7aa587e6dfa0b592efd46f67718b23becf849421fdec
+  checksum: 6d375d8d22bdd08130ea624d6b980e366ce556b3178a4dbfcfd7ec7b9ab629dd57d34b350129231bd96be078778df0de6c61783c49a739142b055882f943f7d2
   languageName: node
   linkType: hard
 
@@ -858,9 +858,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/s3-request-presigner@npm:3.212.0":
-  version: 3.212.0
-  resolution: "@aws-sdk/s3-request-presigner@npm:3.212.0"
+"@aws-sdk/s3-request-presigner@npm:3.213.0":
+  version: 3.213.0
+  resolution: "@aws-sdk/s3-request-presigner@npm:3.213.0"
   dependencies:
     "@aws-sdk/middleware-endpoint": 3.212.0
     "@aws-sdk/middleware-sdk-s3": 3.212.0
@@ -871,7 +871,7 @@ __metadata:
     "@aws-sdk/util-create-request": 3.212.0
     "@aws-sdk/util-format-url": 3.212.0
     tslib: ^2.3.1
-  checksum: 7415165d168ab44951188b2abc16273082437aef1dbff9e5ebe886fb40cadd83b82f6125365fe6de0c06f678ba7668d9a0072790722e6de239e323c7d8e162c9
+  checksum: acd77b9e617f42c977ed809ff8e682cb2d814bafc2f9016af8a2eaf44de6482a3438015537e8709cdde02fa7543b521b70bd31c92b92e91872f3202bd06df07c
   languageName: node
   linkType: hard
 
@@ -4405,8 +4405,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
-    "@aws-sdk/client-s3": 3.212.0
-    "@aws-sdk/s3-request-presigner": 3.212.0
+    "@aws-sdk/client-s3": 3.213.0
+    "@aws-sdk/s3-request-presigner": 3.213.0
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/fork-sax": ^1.2.45
     "@joplin/fork-uslug": ^1.0.6
@@ -4597,7 +4597,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/server@workspace:packages/server"
   dependencies:
-    "@aws-sdk/client-s3": 3.212.0
+    "@aws-sdk/client-s3": 3.213.0
     "@fortawesome/fontawesome-free": 5.15.4
     "@joplin/lib": ~2.9
     "@joplin/renderer": ~2.9
