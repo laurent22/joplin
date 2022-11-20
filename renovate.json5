@@ -107,6 +107,7 @@
 				// If the apps build and all tests pass, we can assume that Yarn
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
+				"eslint",
 				"yarn",
 				"typescript",
 			],
