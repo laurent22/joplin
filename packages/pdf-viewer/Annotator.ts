@@ -71,7 +71,6 @@ export default class Annotator {
 			const y1 = points[1];
 			const x2 = points[2];
 			const y2 = points[3];
-			// console.log('checking', x1, y1, x2, y2, 'pt:', x, y);
 			if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
 				// console.log('found annotation', annotation);
 				return true;
@@ -149,13 +148,11 @@ export default class Annotator {
 		} else {
 			throw new Error(`Invalid text tool: ${tool}`);
 		}
-		console.log('annotation added');
 		await this.save();
 		return true;
 	};
 
 	public save = async () => {
-		console.log('save');
 		this.hasChange = true;
 		const driver = await this.getDriver();
 		const annotatedBytes = driver.write();

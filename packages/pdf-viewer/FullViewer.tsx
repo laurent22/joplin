@@ -76,7 +76,6 @@ export default function FullViewer(props: FullViewerProps) {
 
 	const onClose = useCallback(async () => {
 		if (annotator.hasChanges) {
-			// console.log('has changes');
 			const data = await pdfDocument.getData();
 			props.messageService.saveFile(data, true);
 		} else {
@@ -99,7 +98,7 @@ export default function FullViewer(props: FullViewerProps) {
 						<Title title={props.title}>{props.title}</Title>
 						<div>
 							<span>{selectedPage} of {pdfDocument.pageCount} pages</span>
-							<span title='Changes will be saved when viewer closed.' style={{ color: 'var(--blue)' }}>{isEdited ? '  (Edited)' : ''}</span>
+							<span title='Changes will be saved when viewer is closed.' style={{ color: 'var(--blue)' }}>{isEdited ? '  (Edited)' : ''}</span>
 						</div>
 					</TitleWrapper>
 				</div>

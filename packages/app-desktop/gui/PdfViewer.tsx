@@ -69,11 +69,8 @@ export default function PdfViewer(props: Props) {
 	const saveFile = useCallback(async (file: Uint8Array) => {
 		const tempPath = `${tmpdir()}/${props.resource.id}.pdf`;
 		await shim.fsDriver().writeFile(tempPath, file);
-		console.log('tempPath', tempPath);
 		await Resource.updateResourceBlobContent(props.resource.id, tempPath);
-		console.log('updated resource');
 		await shim.fsDriver().remove(tempPath);
-		console.log('deleted temp file');
 	}, [props.resource]);
 
 	useEffect(() => {
@@ -104,7 +101,7 @@ export default function PdfViewer(props: Props) {
 		const iframe = iframeRef.current;
 		iframe.contentWindow.addEventListener('message', onMessage_);
 		return () => {
-			iframe.contentWindow.removeEventListener('message', onMessage_);
+			iframe.contentWindow?.removeEventListener('message', onMessage_);
 		};
 	}, [onClose, openExternalViewer, props.dispatch, saveFile, textSelected]);
 

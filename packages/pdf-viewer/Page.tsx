@@ -100,7 +100,6 @@ export default function Page(props: PageProps) {
 			if (isCancelled()) return;
 			error.message = `Error rendering page no. ${props.pageNo}: ${error.message}`;
 			setError(error);
-			throw error;
 		}
 	}, [props.pageNo, props.pdfDocument, props.scaledSize, props.textSelectable]);
 
