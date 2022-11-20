@@ -3,7 +3,7 @@ const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
 const { createSelector } = require('reselect');
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('../../Logger').default;
 
 const logger = Logger.create('config/lib');
 
