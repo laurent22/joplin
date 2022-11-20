@@ -114,7 +114,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 					markupState={props.markupState}
 					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
 			}
-			) : 'Calculating size...'
+			) : ''
 		}
 	</PagesHolder>);
 }

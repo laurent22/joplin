@@ -128,7 +128,6 @@ export default class PdfDocument {
 			textLayerDiv.style.width = `${viewport.width}px`;
 			await pdfjsLib.renderTextLayer({
 				textContent: txtContext,
-				enhanceTextSelection: true,
 				container: textFragment,
 				viewport: viewport,
 				textDivs: [],

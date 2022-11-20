@@ -442,8 +442,8 @@ const SidebarComponent = (props: Props) => {
 	}, [props.dispatch]);
 
 	const onHeaderClick_ = useCallback((key: string) => {
-		const isExpanded = key === 'tag' ? props.tagHeaderIsExpanded : props.folderHeaderIsExpanded;
-		Setting.setValue(key === 'tag' ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded', !isExpanded);
+		const isExpanded = key === 'tagHeader' ? props.tagHeaderIsExpanded : props.folderHeaderIsExpanded;
+		Setting.setValue(key === 'tagHeader' ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded', !isExpanded);
 	}, [props.folderHeaderIsExpanded, props.tagHeaderIsExpanded]);
 
 	const onAllNotesClick_ = () => {

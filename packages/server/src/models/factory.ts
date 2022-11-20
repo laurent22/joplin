@@ -76,6 +76,7 @@ import LockModel from './LockModel';
 import StorageModel from './StorageModel';
 import UserDeletionModel from './UserDeletionModel';
 import BackupItemModel from './BackupItemModel';
+import TaskStateModel from './TaskStateModel';
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -173,6 +174,10 @@ export class Models {
 
 	public backupItem() {
 		return new BackupItemModel(this.db_, this.newModelFactory, this.config_);
+	}
+
+	public taskState() {
+		return new TaskStateModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 }

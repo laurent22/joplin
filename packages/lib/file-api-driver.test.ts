@@ -2,11 +2,10 @@ import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } 
 
 describe('file-api-driver', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		await fileApi().clearRoot();
-		done();
 	});
 
 	afterAll(async () => {

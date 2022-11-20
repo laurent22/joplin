@@ -16,11 +16,10 @@ async function recreateExportDir() {
 
 describe('interop/InteropService_Exporter_Html', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		await recreateExportDir();
-		done();
 	});
 
 	test('should export HTML file', (async () => {

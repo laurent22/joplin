@@ -4,10 +4,9 @@ import Revision, { ObjectPatch } from '../models/Revision';
 
 describe('models/Revision', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should create patches of text and apply it', (async () => {

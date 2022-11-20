@@ -4,10 +4,9 @@ const Note = require('../models/Note').default;
 
 describe('models/BaseItem', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	// This is to handle the case where a property is removed from a BaseItem table - in that case files in

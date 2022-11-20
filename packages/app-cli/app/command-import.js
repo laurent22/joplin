@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const InteropService = require('@joplin/lib/services/interop/InteropService').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { cliUtils } = require('./cli-utils.js');

@@ -1,12 +1,40 @@
 name: Joplin Continuous Integration
 on: [push, pull_request]
 jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+
   Main:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-2019]
     steps:
+
+      # Trying to fix random networking issues on Windows
+      # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
+      - name: Disable TCP/UDP offload on Windows
+        if: runner.os == 'Windows'
+        run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
+
+      - name: Disable TCP/UDP offload on Linux
+        if: runner.os == 'Linux'
+        run: sudo ethtool -K eth0 tx off rx off
+
+      - name: Disable TCP/UDP offload on macOS
+        if: runner.os == 'macOS'
+        run: |
+          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
+          sudo sysctl -w net.link.generic.system.hwcksum_rx=0
 
       # Silence apt-get update errors (for example when a module doesn't
       # exist) since otherwise it will make the whole build fails, even though
@@ -20,13 +48,6 @@ jobs:
           sudo apt-get install -y gettext
           sudo apt-get install -y libsecret-1-dev
           sudo apt-get install -y translate-toolkit
-
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew update
-          brew install gettext
-          brew install translate-toolkit
 
       - name: Install Docker Engine
         # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
@@ -48,7 +69,7 @@ jobs:
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Yarn
         run: |
@@ -58,7 +79,7 @@ jobs:
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
       # secrets
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v2
         if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -106,6 +127,8 @@ jobs:
           yarn install && cd packages/app-desktop && yarn run dist --publish=never
 
   ServerDockerImage:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -130,7 +153,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Yarn
         run: |
@@ -143,4 +166,7 @@ jobs:
         run: |
           yarn install
           yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
-          
+
+          # Basic test to ensure that the created build is valid. It should exit with
+          # code 0  if it works.
+          docker run joplin/server:0.0.0-beta node dist/app.js migrate list

@@ -5,6 +5,7 @@ import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
 import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
 import { stripePortalUrl } from '../utils/urlUtils';
+import { Day } from '../utils/time';
 
 describe('UserModel', function() {
 
@@ -401,6 +402,56 @@ describe('UserModel', function() {
 
 		await models().user().handleOversizedAccounts();
 		expect(await models().userFlag().byUserId(user1.id, UserFlagType.AccountOverLimit)).toBeFalsy();
+	});
+
+	test('should disable and enable users', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+
+		jest.useFakeTimers();
+
+		const t0 = new Date('2022-01-01').getTime();
+		jest.setSystemTime(t0);
+
+		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
+
+		expect((await models().user().load(user1.id)).enabled).toBe(0);
+		expect((await models().user().load(user2.id)).enabled).toBe(1);
+
+		const t1 = new Date('2022-02-01').getTime();
+		jest.setSystemTime(t1);
+
+		// If we run the user deletion service at this point, it should add the
+		// disabled account
+		await models().userDeletion().autoAdd(10, 10 * Day, t1 + 3 * Day);
+		expect(await models().userDeletion().count()).toBe(1);
+
+		// If we make the account enabled again, the user should be immediately
+		// removed from the queue
+		await models().userFlag().remove(user1.id, UserFlagType.ManuallyDisabled);
+		expect(await models().userDeletion().count()).toBe(0);
+
+		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
+
+		const t2 = new Date('2022-03-01').getTime();
+		jest.setSystemTime(t2);
+
+		// Should be added again
+		await models().userDeletion().autoAdd(10, 10 * Day, t2 + 3 * Day);
+		expect(await models().userDeletion().count()).toBe(1);
+
+		const t3 = new Date('2022-04-01').getTime();
+		jest.setSystemTime(t3);
+
+		// Now if the service were to run, the user deletion would start and it
+		// should no longer be possible to remove it from the queue. And it
+		// shouldn't be possible to enable the user either.
+		const job = await models().userDeletion().next();
+		expect(job.user_id).toBe(user1.id);
+		await models().userDeletion().start(job.id);
+
+		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
+		expect((await models().user().load(user1.id)).enabled).toBe(0);
 	});
 
 });

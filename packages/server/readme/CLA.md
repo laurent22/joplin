@@ -1,6 +1,6 @@
 # Individual Contributor License Agreement
 
-Thank you for your interest in Joplin Server, owned by Cozic Ltd (the
+Thank you for your interest in Joplin Server, owned by JOPLIN (the
 "Company"). In order to clarify the intellectual property license granted with
 Contributions from any person or entity, the Company must have a Contributor
 License Agreement ("CLA") on file that has been signed by each Contributor,

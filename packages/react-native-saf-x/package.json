@@ -18,6 +18,8 @@
     "!ios/build"
   ],
   "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "linter-precommit": "yarn --cwd ../../ eslint --resolve-plugins-relative-to . --fix packages/react-native-saf-x/**/*.{js,ts,tsx}",
     "tsc": "tsc --project tsconfig.json"
   },
@@ -37,12 +39,12 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@types/react": "^16.9.55",
-    "@types/react-native": "^0.64.4",
-    "react": "17.0.2",
+    "@babel/core": "7.16.0",
+    "@types/react": "16.14.21",
+    "@types/react-native": "0.64.19",
+    "react": "18.2.0",
     "react-native": "0.66.1",
-    "typescript": "^4.0.5"
+    "typescript": "4.9.3"
   },
   "peerDependencies": {
     "react": "*",

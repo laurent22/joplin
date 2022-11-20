@@ -21,7 +21,7 @@ describe('LockModel', function() {
 	});
 
 	test('should allow exclusive lock if the sync locks have expired', async function() {
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const { user } = await createUserAndSession(1);
 
@@ -70,7 +70,7 @@ describe('LockModel', function() {
 	test('should expire locks', async function() {
 		const { user } = await createUserAndSession(1);
 
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t1 = new Date('2020-01-01').getTime();
 		jest.setSystemTime(t1);

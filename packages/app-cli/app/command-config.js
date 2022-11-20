@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const { _, setLocale } = require('@joplin/lib/locale');
 const { app } = require('./app.js');
 const fs = require('fs-extra');

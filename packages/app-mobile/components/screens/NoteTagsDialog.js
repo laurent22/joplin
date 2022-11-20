@@ -114,7 +114,7 @@ class NoteTagsDialogComponent extends React.Component {
 		});
 
 		tagListData.sort((a, b) => {
-			if (a.selected === b.selected) return naturalCompare.caseInsensitive(a.title, b.title);
+			if (a.selected === b.selected) return naturalCompare(a.title, b.title, { caseInsensitive: true });
 			else if (b.selected === true) return 1;
 			else return -1;
 		});

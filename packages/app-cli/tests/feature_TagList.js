@@ -10,16 +10,14 @@ let testApp = null;
 
 describe('integration_TagList', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
-		done();
 	});
 
-	afterEach(async (done) => {
+	afterEach(async () => {
 		if (testApp !== null) await testApp.destroy();
 		testApp = null;
-		done();
 	});
 
 	// the tag list should be cleared if the next note has no tags

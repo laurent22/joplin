@@ -145,7 +145,7 @@ let previousSyncTargetName: string = '';
 
 describe('MigrationHandler', function() {
 
-	beforeEach(async (done: Function) => {
+	beforeEach(async () => {
 		// Note that, for undocumented reasons, the timeout argument passed
 		// to `test()` (or `it()`) is ignored if it is higher than the
 		// global Jest timeout. So we need to set it globally.
@@ -163,12 +163,10 @@ describe('MigrationHandler', function() {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
-	afterEach(async (done: Function) => {
+	afterEach(async () => {
 		setSyncTargetName(previousSyncTargetName);
-		done();
 	});
 
 	it('should init a new sync target', (async () => {

@@ -87,7 +87,7 @@ export default function FullViewer(props: FullViewerProps) {
 	if (!pdfDocument) {
 		return (
 			<div className="full-app loading">
-				<div>Loading pdf..</div>
+				<div></div>
 			</div>);
 	}
 

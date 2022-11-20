@@ -3,7 +3,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import defaultView from '../../utils/defaultView';
-import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
+import { makeTablePagination, makeTableView, Row, Table, renderUserIcon } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
 import { adminEmailsUrl, adminEmailUrl, adminUserUrl } from '../../utils/urlUtils';
@@ -69,40 +69,39 @@ router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {
 				error = d.error ? d.error : '(Unspecified error)';
 			}
 
-			const row: Row = [
-				{
-					value: d.id.toString(),
-				},
-				{
-					value: senderName,
-					url: sender.email ? `mailto:${escape(sender.email)}` : '',
-				},
-				{
-					value: d.recipient_name || d.recipient_email,
-					url: `mailto:${escape(d.recipient_email)}`,
-				},
-				{
-					value: d.recipient_id,
-					url: d.recipient_id ? adminUserUrl(d.recipient_id) : '',
-					render: (): string => {
-						return '<i class="fas fa-user-alt"></i>';
+			const row: Row = {
+				items: [
+					{
+						value: d.id.toString(),
 					},
-				},
-				{
-					value: substrWithEllipsis(d.subject, 0, 32),
-					url: adminEmailUrl(d.id),
-				},
-				{
-					value: formatDateTime(d.created_time),
-				},
-				{
-					value: formatDateTime(d.sent_time),
-				},
-				{
-					value: error,
-				},
-
-			];
+					{
+						value: senderName,
+						url: sender.email ? `mailto:${escape(sender.email)}` : '',
+					},
+					{
+						value: d.recipient_name || d.recipient_email,
+						url: `mailto:${escape(d.recipient_email)}`,
+					},
+					{
+						value: d.recipient_id,
+						url: d.recipient_id ? adminUserUrl(d.recipient_id) : '',
+						render: renderUserIcon,
+					},
+					{
+						value: substrWithEllipsis(d.subject, 0, 32),
+						url: adminEmailUrl(d.id),
+					},
+					{
+						value: formatDateTime(d.created_time),
+					},
+					{
+						value: formatDateTime(d.sent_time),
+					},
+					{
+						value: error,
+					},
+				],
+			};
 
 			return row;
 		}),

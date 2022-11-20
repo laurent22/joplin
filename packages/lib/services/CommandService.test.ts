@@ -42,13 +42,12 @@ function registerCommand(service: CommandService, cmd: TestCommand) {
 
 describe('services_CommandService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		KeymapService.destroyInstance();
 		KeymapService.instance().initialize();
 
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should create toolbar button infos from commands', (async () => {
