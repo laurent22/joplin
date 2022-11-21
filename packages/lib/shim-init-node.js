@@ -9,7 +9,6 @@ const FsDriverNode = require('./fs-driver-node').default;
 const mimeUtils = require('./mime-utils.js').mime;
 const Note = require('./models/Note').default;
 const Resource = require('./models/Resource').default;
-const urlValidator = require('valid-url');
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
@@ -446,8 +445,11 @@ function shimInit(options = null) {
 	};
 
 	shim.fetch = async function(url, options = {}) {
-		const validatedUrl = urlValidator.isUri(url);
-		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
+		try { // Check if the url is valid
+			new URL(url);
+		} catch (error) { // If the url is not valid, a TypeError will be thrown
+			throw new Error(`Not a valid URL: ${url}`);
+		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
 		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
 		return shim.fetchWithRetry(() => {
@@ -502,7 +504,9 @@ function shimInit(options = null) {
 				const cleanUpOnError = error => {
 					// We ignore any unlink error as we only want to report on the main error
 					fs.unlink(filePath)
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.catch(() => {})
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.then(() => {
 							if (file) {
 								file.close(() => {

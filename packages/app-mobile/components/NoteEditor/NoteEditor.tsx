@@ -3,11 +3,11 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
+import ExtendedWebView from '../ExtendedWebView';
 
 const React = require('react');
 import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
-const { WebView } = require('react-native-webview');
 import { View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
@@ -207,7 +207,6 @@ const useEditorControl = (
 };
 
 function NoteEditor(props: Props, ref: any) {
-	const [source, setSource] = useState(undefined);
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
@@ -284,18 +283,9 @@ function NoteEditor(props: Props, ref: any) {
 		searchStateRef.current = searchState;
 	}, [searchState]);
 
-	// Runs [js] in the context of the CodeMirror frame.
+	// / Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
-		webviewRef.current.injectJavaScript(`
-			try {
-				${js}
-			}
-			catch(e) {
-				logMessage('Error in injected JS:' + e, e);
-				throw e;
-			};
-
-			true;`);
+		webviewRef.current.injectJS(js);
 	};
 
 	const editorControl = useEditorControl(
@@ -305,26 +295,6 @@ function NoteEditor(props: Props, ref: any) {
 	useImperativeHandle(ref, () => {
 		return editorControl;
 	});
-
-	useEffect(() => {
-		let cancelled = false;
-		async function createHtmlFile() {
-			const tempFile = `${Setting.value('resourceDir')}/NoteEditor.html`;
-			await shim.fsDriver().writeFile(tempFile, html, 'utf8');
-			if (cancelled) return;
-
-			setSource({
-				uri: `file://${tempFile}?r=${Math.round(Math.random() * 100000000)}`,
-				baseUrl: `file://${Setting.value('resourceDir')}/`,
-			});
-		}
-
-		void createHtmlFile();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [html]);
 
 	const onMessage = useCallback((event: any) => {
 		const data = event.nativeEvent.data;
@@ -382,16 +352,12 @@ function NoteEditor(props: Props, ref: any) {
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
 
-	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	const onError = useCallback(() => {
 		console.error('NoteEditor: webview error');
 	}, []);
 
-
-	// - `setSupportMultipleWindows` must be `true` for security reasons:
-	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
-	//    when the editor is focused.
+	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
 		<View style={{
 			...props.style,
@@ -409,19 +375,12 @@ function NoteEditor(props: Props, ref: any) {
 				minHeight: '30%',
 				...props.contentStyle,
 			}}>
-				<WebView
-					style={{
-						backgroundColor: editorSettings.themeData.backgroundColor,
-					}}
-					ref={webviewRef}
+				<ExtendedWebView
+					webviewInstanceId='NoteEditor'
+					themeId={props.themeId}
 					scrollEnabled={false}
-					useWebKit={true}
-					source={source}
-					setSupportMultipleWindows={true}
-					hideKeyboardAccessoryView={true}
-					allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
-					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
-					allowFileAccess={true}
+					ref={webviewRef}
+					html={html}
 					injectedJavaScript={injectedJavaScript}
 					onMessage={onMessage}
 					onError={onError}

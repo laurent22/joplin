@@ -41,7 +41,7 @@ async function downloadFile(url: string, outputPath: string) {
 
 export async function extractPlugins(currentDir: string, defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName): Promise<void> {
 	for (const pluginId of Object.keys(downloadedPluginsNames)) {
-		await execCommand2(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`);
+		await execCommand2(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`, { quiet: true });
 		await move(`package/publish/${pluginId}.jpl`,`${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
 		await move(`package/publish/${pluginId}.json`,`${defaultPluginDir}/${pluginId}/manifest.json`, { overwrite: true });
 		await remove(`${downloadedPluginsNames[pluginId]}`);
@@ -87,6 +87,7 @@ async function start(): Promise<void> {
 }
 
 if (require.main === module) {
+// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	start().catch((error) => {
 		console.error('Fatal error');
 		console.error(error);

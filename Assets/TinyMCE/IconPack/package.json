@@ -10,9 +10,9 @@
   "license": "ISC",
   "devDependencies": {
     "@ephox/oxide-icons-tools": "^2.1.1",
-    "gulp": "^4.0.2",
+    "gulp": "4.0.2",
     "gulp-clean": "^0.4.0",
     "prompts": "^2.2.1"
   },
   "iconPackName": "Joplin"
-}
+}

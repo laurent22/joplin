@@ -82,19 +82,6 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 	});
 }
 
-async function md5FileAsync(filePath: string): Promise<string> {
-	return new Promise((resolve, reject) => {
-		md5File(filePath, (error: any, hash: string) => {
-			if (error) {
-				reject(error);
-				return;
-			}
-
-			resolve(hash);
-		});
-	});
-}
-
 function removeUndefinedProperties(note: NoteEntity) {
 	const output: any = {};
 	for (const n in note) {
@@ -184,7 +171,7 @@ async function processNoteResource(resource: ExtractedResource) {
 			// If no resource ID is present, the resource ID is actually the MD5 of the data.
 			// This ID will match the "hash" attribute of the corresponding <en-media> tag.
 			// resourceId = md5(decodedData);
-			resource.id = await md5FileAsync(resource.dataFilePath);
+			resource.id = await md5File(resource.dataFilePath);
 		}
 
 		if (!resource.id || !resource.size) {
@@ -588,6 +575,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 				notes.push(note);
 
 				if (notes.length >= 10) {
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					processNotes().catch(error => {
 						importOptions.onError(createErrorWithNoteTitle(this, error));
 					});
@@ -648,6 +636,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 		saxStream.on('end', handleSaxStreamEvent(function() {
 			// Wait till there is no more notes to process.
 			const iid = shim.setInterval(() => {
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				void processNotes().then(allDone => {
 					if (allDone) {
 						shim.clearTimeout(iid);

@@ -130,12 +130,11 @@ fi
 # =============================================================================
 # Check that we didn't lose any string due to gettext not being able to parse
 # newly modified or added scripts. This is convenient to quickly view on GitHub
-# what commit may have broken translation building. We run this on macOS because
-# we need the latest version of gettext (and stable Ubuntu doesn't have it).
+# what commit may have broken translation building.
 # =============================================================================
 
 if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
-	if [ "$IS_MACOS" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
 		echo "Step: Checking for lost translation strings..."
 
 		xgettext --version
@@ -175,8 +174,8 @@ cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
-	cd "$ROOT_DIR/packages/tools"
-	node bundleDefaultPlugins.js
+	# cd "$ROOT_DIR/packages/tools"
+	# node bundleDefaultPlugins.js
 	cd "$ROOT_DIR/packages/app-desktop"
 	USE_HARD_LINKS=false yarn run dist
 elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then

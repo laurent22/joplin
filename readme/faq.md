@@ -84,7 +84,7 @@ You may use a special keyboard such as [Multiling O Keyboard](https://play.googl
 
 ## The initial sync is very slow, how can I speed it up?
 
-Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplinapp.org/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
+Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed this up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplinapp.org/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
 
 ## Not all notes, folders, or tags are displayed on the mobile app
 
@@ -107,7 +107,7 @@ Unfortunately it is not possible. Joplin synchronises with file systems using an
 
 The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
 
-On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.
+On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted VeraCrypt drive for instance.
 
 For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.
 

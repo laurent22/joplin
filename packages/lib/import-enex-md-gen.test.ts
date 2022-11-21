@@ -15,10 +15,9 @@ const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
 describe('import-enex-md-gen', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should convert ENEX content to Markdown', async () => {

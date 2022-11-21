@@ -1,60 +1,33 @@
 <div class="block">
-	<a class="button is-primary" href="{{{global.baseUrl}}}/admin/users/new">Add user</a>
-	<a class="button is-link toggle-disabled-button hide-disabled" href="#">Hide disabled</a>
-</div>
+	<form method="GET" action="{{searchUrl}}">
+		<div class="field">
+			<label class="label">Search user</label>
+			<div class="control">
+				<input name="query" id="query" class="input" type="text" placeholder="User name or email" value="{{query}}">
+				{{#queryArray}}
+					<input type="hidden" name="{{name}}" value="{{value}}" />
+				{{/queryArray}}
+			</div>
+		</div>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>Full name</th>
-			<th>Email</th>
-			<th>Account</th>
-			<th>Max Item Size</th>
-			<th>Total Size</th>
-			<th>Max Total Size</th>
-			<th>Can share</th>
-		</tr>
-	</thead>
-	<tbody>
-		{{#users}}
-			<tr class="{{rowClassName}}">
-				<td><a href="{{{url}}}">{{displayName}}</a></td>
-				<td>{{email}}</td>
-				<td>{{formattedAccountType}}</td>
-				<td>{{formattedItemMaxSize}}</td>
-				<td class="{{totalSizeClass}}">{{formattedTotalSize}} ({{formattedTotalSizePercent}})</td>
-				<td>{{formattedMaxTotalSize}}</td>
-				<td>{{formattedCanShareFolder}}</td>
-			</tr>
-		{{/users}}
-	</tbody>
-</table>
+		<div class="field is-grouped">
+			<div class="control">
+				<button class="button is-link">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
 
 <div class="block">
 	<a class="button is-primary" href="{{{global.baseUrl}}}/admin/users/new">Add user</a>
-	<a class="button is-link toggle-disabled-button hide-disabled" href="#">Hide disabled</a>
+	<a class="button is-link toggle-disabled-button hide-disabled" href="{{disabledToggleButtonUrl}}">{{disabledToggleButtonLabel}}</a>
 </div>
 
-<script>
-$(() => {
-	function toggleDisabled() {
-		if ($('.hide-disabled').length) {
-			$('.hide-disabled').addClass('show-disabled');
-			$('.hide-disabled').removeClass('hide-disabled');
-			$('.show-disabled').text('Show disabled');
-			$('table tr.is-disabled').hide();
-		} else {
-			$('.show-disabled').addClass('hide-disabled');
-			$('.show-disabled').removeClass('show-disabled');
-			$('.hide-disabled').text('Hide disabled');
-			$('table tr.is-disabled').show();
-		}
-	}
+{{#userTable}}
+	{{>table}}
+{{/userTable}}
 
-	toggleDisabled();
-
-	$('.toggle-disabled-button').click(() => {
-		toggleDisabled();
-	});
-});
-</script>
+<div class="block">
+	<a class="button is-primary" href="{{{global.baseUrl}}}/admin/users/new">Add user</a>
+	<a class="button is-link toggle-disabled-button hide-disabled" href="{{disabledToggleButtonUrl}}">{{disabledToggleButtonLabel}}</a>
+</div>

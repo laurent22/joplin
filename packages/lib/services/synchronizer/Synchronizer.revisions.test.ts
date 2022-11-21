@@ -7,11 +7,10 @@ import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/ut
 
 describe('Synchronizer.revisions', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
 	it('should not save revisions when updating a note via sync', (async () => {

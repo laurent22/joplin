@@ -21,7 +21,7 @@ const buildConfig = readCredentialFileJson<BuildConfig>('website-build.json', {
 
 const glob = require('glob');
 const path = require('path');
-const md5File = require('md5-file/promise');
+const md5File = require('md5-file');
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
 if (!pathExistsSync(docDir)) throw new Error(`Doc directory does not exist: ${docDir}`);
@@ -144,12 +144,17 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 }
 
 function renderFileToHtml(sourcePath: string, targetPath: string, templateParams: TemplateParams) {
-	let md = readFileSync(sourcePath, 'utf8');
-	if (templateParams.isNews) {
-		md = processNewsMarkdown(md, sourcePath);
+	try {
+		let md = readFileSync(sourcePath, 'utf8');
+		if (templateParams.isNews) {
+			md = processNewsMarkdown(md, sourcePath);
+		}
+		md = stripOffFrontMatter(md).doc;
+		return renderPageToHtml(md, targetPath, templateParams);
+	} catch (error) {
+		error.message = `Could not render file: ${sourcePath}: ${error.message}`;
+		throw error;
 	}
-	md = stripOffFrontMatter(md).doc;
-	return renderPageToHtml(md, targetPath, templateParams);
 }
 
 function makeHomePageMd() {

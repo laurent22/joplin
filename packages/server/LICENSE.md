@@ -3,11 +3,11 @@
 v.1: 21 December 2021
 
 This Joplin Server Personal Use License (the "**License**") is a legally binding
-agreement between  Cozic Ltd. registered under the laws of England and Wales
-(the "**Licensor**"), the owner of the server entitled ‘Joplin Server,’ the
-related software applications, and services  (collectively, the "**Software**")
-and an individual user accessing the Software (the "**Licensee**")  (each
-individually a "**Party**" and collectively, the "**Parties**").
+agreement between JOPLIN registered under the laws of France (the
+"**Licensor**"), the owner of the server entitled ‘Joplin Server,’ the related
+software applications, and services  (collectively, the "**Software**") and an
+individual user accessing the Software (the "**Licensee**")  (each individually
+a "**Party**" and collectively, the "**Parties**").
 
 # 1. Acceptance of the License
 

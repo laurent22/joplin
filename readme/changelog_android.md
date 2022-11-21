@@ -1,5 +1,39 @@
 # Joplin Android app changelog
 
+## [android-v2.9.8](https://github.com/laurent22/joplin/releases/tag/android-v2.9.8) (Pre-release) - 2022-11-01T15:45:36Z
+
+- Updated translations
+
+## [android-v2.9.7](https://github.com/laurent22/joplin/releases/tag/android-v2.9.7) (Pre-release) - 2022-10-30T10:25:01Z
+
+- Fixed: Fixed notebook icons alignment (ea6b7ca)
+- Fixed: Fixed crash when attaching a file.
+
+## [android-v2.9.6](https://github.com/laurent22/joplin/releases/tag/android-v2.9.6) (Pre-release) - 2022-10-23T16:23:25Z
+
+- New: Add monochrome icon (#6954 by Tom Bursch)
+- Fixed: Fix file system sync issues (#6943 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fix note attachment issue (#6932 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixed notebook icon spacing (633c9ac)
+- Fixed: Support non-ASCII characters in OneDrive (#6916) (#6838 by Self Not Found)
+
+## [android-v2.9.5](https://github.com/laurent22/joplin/releases/tag/android-v2.9.5) (Pre-release) - 2022-10-11T13:52:00Z
+
+- Improved: Disable multi-highlighting to fix context menu (9b348fd)
+- Improved: Display icon for all notebooks if at least one notebook has an icon (ec97dd8)
+
+## [android-v2.9.3](https://github.com/laurent22/joplin/releases/tag/android-v2.9.3) (Pre-release) - 2022-10-07T11:12:56Z
+
+- Improved: Convert empty bolded regions to bold-italic regions in beta editor (#6807) (#6808 by Henry Heino)
+- Improved: Increase the attachment size limit to 200MB (#6848 by Self Not Found)
+- Improved: Show client ID in log (#6897 by Self Not Found)
+- Improved: Supports attaching multiple files to a note at once (#6831 by Self Not Found)
+- Improved: Update Mermaid 8.13.9 to 9.1.7 (#6849 by Helmut K. C. Tessarek)
+- Fixed: Double/triple-tap selection doesn't show context menu  (#6803) (#6802 by Henry Heino)
+- Fixed: Fix multiple webview instances (#6841 by Henry Heino)
+- Fixed: Fix resources sync when proxy is set (#6817) (#6688 by Self Not Found)
+- Fixed: Fixed crash when trying to move note to notebook (#6898)
+
 ## [android-v2.9.2](https://github.com/laurent22/joplin/releases/tag/android-v2.9.2) (Pre-release) - 2022-09-01T11:14:58Z
 
 - New: Add Markdown toolbar (#6753 by Henry Heino)
@@ -18,7 +52,7 @@
 - New: Add keyboard-activatable markdown commands (e.g. bold, italicize) on text editor (#6707 by Henry Heino)
 - Improved: Ctrl+F search support in beta editor (#6587 by Henry Heino)
 - Improved: Improve syntax highlighting on mobile beta editor (#6684 by Henry Heino)
-- Improved: Removes whitespace above navigation component (#6597 by [@tom](https://github.com/tom))
+- Improved: Removes whitespace above navigation component (#6597 by [@tmclo](https://github.com/tmclo))
 - Fixed: Do not encrypt non-owned note if it was not shared encrypted (#6645)
 - Fixed: Fix checklist continuation in beta editor (#6577) (#6576 by Henry Heino)
 - Fixed: Fixed android filesystem sync (#6395) (#5779 by [@jd1378](https://github.com/jd1378))

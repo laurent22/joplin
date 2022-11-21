@@ -48,6 +48,7 @@ const main = async () => {
 };
 
 if (require.main === module) {
+// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	main().catch((error) => {
 		console.error(error);
 		process.exit(1);

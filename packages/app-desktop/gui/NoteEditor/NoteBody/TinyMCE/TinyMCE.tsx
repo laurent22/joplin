@@ -622,7 +622,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					});
 
 					editor.ui.registry.addButton('joplinInsertDateTime', {
-						tooltip: _('Insert Date Time'),
+						tooltip: _('Insert time'),
 						icon: 'insert-time',
 						onAction: function() {
 							void CommandService.instance().execute('insertDateTime');
@@ -1008,7 +1008,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text
-					const pastedHtml = event.clipboardData.getData('text/html');
+					// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>,
+					// which seems to be not supported in editor.insertContent().
+					//
+					// when pasting text with Ctrl+Shift+V, the format should be ignored.
+					// In this case, event.clopboardData.getData('text/html') returns an empty string, but the clipboard.readHTML() still returns the formatted text.
+					const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
 					if (pastedHtml) { // Handles HTML
 						const modifiedHtml = await processPastedHtml(pastedHtml);
 						editor.insertContent(modifiedHtml);

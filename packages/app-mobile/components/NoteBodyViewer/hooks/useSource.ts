@@ -5,13 +5,9 @@ const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 const { assetsToHeaders } = require('@joplin/renderer');
 
-interface Source {
-	uri: string;
-	baseUrl: string;
-}
-
 interface UseSourceResult {
-	source: Source;
+	// [html] can be null if the note is still being rendered.
+	html: string|null;
 	injectedJs: string[];
 }
 
@@ -24,7 +20,7 @@ function usePrevious(value: any, initialValue: any = null): any {
 }
 
 export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
-	const [source, setSource] = useState<Source>(undefined);
+	const [html, setHtml] = useState<string>('');
 	const [injectedJs, setInjectedJs] = useState<string[]>([]);
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
 	const [isFirstRender, setIsFirstRender] = useState(true);
@@ -169,20 +165,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				</html>
 			`;
 
-			const tempFile = `${Setting.value('resourceDir')}/NoteBodyViewer.html`;
-			await shim.fsDriver().writeFile(tempFile, html, 'utf8');
-
-			if (cancelled) return;
-
-			// Now that we are sending back a file instead of an HTML string, we're always sending back the
-			// same file. So we add a cache busting query parameter to it, to make sure that the WebView re-renders.
-			//
-			// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
-			setSource({
-				uri: `file://${tempFile}?r=${Math.round(Math.random() * 100000000)}`,
-				baseUrl: `file://${Setting.value('resourceDir')}/`,
-			});
-
+			setHtml(html);
 			setInjectedJs(js);
 		}
 
@@ -194,7 +177,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 		if (isFirstRender) {
 			setIsFirstRender(false);
-			setSource(undefined);
+			setHtml('');
 			setInjectedJs([]);
 		} else {
 			void renderNote();
@@ -206,5 +189,5 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, effectDependencies);
 
-	return { source, injectedJs };
+	return { html, injectedJs };
 }

@@ -7,19 +7,24 @@ interface ReadmeDoc {
 }
 
 export async function readmeFileTitleAndBody(sourcePath: string): Promise<ReadmeDoc> {
-	let md = await readFile(sourcePath, 'utf8');
-	md = stripOffFrontMatter(md).doc.trim();
-	const r = md.match(/^# (.*)/);
+	try {
+		let md = await readFile(sourcePath, 'utf8');
+		md = stripOffFrontMatter(md).doc.trim();
+		const r = md.match(/^# (.*)/);
 
-	if (!r) {
-		throw new Error(`Could not determine title for Markdown file: ${sourcePath}`);
-	} else {
-		const lines = md.split('\n');
-		lines.splice(0, 1);
-		return {
-			title: r[1],
-			body: lines.join('\n'),
-		};
+		if (!r) {
+			throw new Error('Could not determine title');
+		} else {
+			const lines = md.split('\n');
+			lines.splice(0, 1);
+			return {
+				title: r[1],
+				body: lines.join('\n'),
+			};
+		}
+	} catch (error) {
+		error.message = `On ${sourcePath}: ${error.message}`;
+		throw error;
 	}
 }
 

@@ -10,11 +10,10 @@ import { MarkupLanguage } from '../../renderer';
 
 describe('services/RevisionService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		Setting.setValue('revisionService.intervalBetweenRevisions', 0);
-		done();
 	});
 
 	it('should create diff and rebuild notes', (async () => {

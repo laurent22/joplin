@@ -246,7 +246,7 @@ export class Bridge {
 	}
 
 	async openItem(fullPath: string) {
-		return require('electron').shell.openPath(fullPath);
+		return require('electron').shell.openPath(toSystemSlashes(fullPath));
 	}
 
 	screen() {

@@ -12,8 +12,8 @@ const PagesHolder = styled.div<{ pageGap: number }>`
 	justify-content: center;
 	align-items: center;
 	flex-flow: column;
-	width: fit-content;
 	min-width: 100%;
+	width: fit-content;
 	min-height: fit-content;
 	row-gap: ${(props)=> props.pageGap || 2}px;
 `;
@@ -22,13 +22,19 @@ export interface VerticalPagesProps {
 	pdfDocument: PdfDocument;
 	isDarkTheme: boolean;
 	anchorPage?: number;
-	rememberScroll?: boolean;
+	rememberScroll: boolean;
 	pdfId?: string;
-	zoom?: number;
+	zoom: number;
 	container: MutableRefObject<HTMLElement>;
 	pageGap: number;
-	showPageNumbers?: boolean;
-	onActivePageChange: (page: number)=> void;
+	widthPercent?: number;
+	showPageNumbers: boolean;
+	selectedPage?: number;
+	textSelectable: boolean;
+	onTextSelect?: (text: string)=> void;
+	onPageClick?: (page: number)=> void;
+	onActivePageChange?: (page: number)=> void;
+	onDoubleClick?: (page: number)=> void;
 }
 
 export default function VerticalPages(props: VerticalPagesProps) {
@@ -63,7 +69,8 @@ export default function VerticalPages(props: VerticalPagesProps) {
 
 		const updateWidth = () => {
 			if (cancelled) return;
-			setContainerWidth(props.container.current.clientWidth);
+			const factor = (props.widthPercent || 100) / 100;
+			setContainerWidth(props.container.current.clientWidth * factor);
 		};
 
 		const onResize = () => {
@@ -85,7 +92,7 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				resizeTimer = null;
 			}
 		};
-	}, [props.container, props.pdfDocument]);
+	}, [props.container, props.pdfDocument, props.widthPercent]);
 
 	return (<PagesHolder pageGap={props.pageGap || 2} ref={innerContainerEl} >
 		{scaledSize ?
@@ -94,9 +101,14 @@ export default function VerticalPages(props: VerticalPagesProps) {
 				return <Page pdfDocument={props.pdfDocument} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
 					isAnchored={props.anchorPage && props.anchorPage === i + 1}
 					showPageNumbers={props.showPageNumbers}
+					isSelected={scaledSize && props.selectedPage && props.selectedPage === i + 1}
+					onClick={props.onPageClick}
+					textSelectable={props.textSelectable}
+					onTextSelect={props.onTextSelect}
+					onDoubleClick={props.onDoubleClick}
 					isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
 			}
-			) : 'Calculating size...'
+			) : ''
 		}
 	</PagesHolder>);
 }

@@ -1,3 +1,5 @@
+import debounce from './debounce';
+
 const { NativeModules, Platform } = require('react-native');
 
 export interface SharedData {
@@ -9,7 +11,9 @@ export interface SharedData {
 const ShareExtension = (NativeModules.ShareExtension) ?
 	{
 		data: () => NativeModules.ShareExtension.data(),
-		close: () => NativeModules.ShareExtension.close(),
+		// we debounce the `close` method, to keep alive permissions of Uris received from the share activity
+		// this is to prevent getting permission denied error while sharing the same file to joplin multiple times in a row
+		close: () => debounce(() => NativeModules.ShareExtension.close(), 3 * 60 * 1000), // close it after 3 minutes
 		shareURL: (Platform.OS === 'ios') ? NativeModules.ShareExtension.getConstants().SHARE_EXTENSION_SHARE_URL : '',
 	} :
 	{

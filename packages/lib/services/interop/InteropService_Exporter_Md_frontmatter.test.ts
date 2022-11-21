@@ -25,11 +25,10 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		return await fs.readFile(path, 'utf8');
 	}
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		await recreateExportDir();
-		done();
 	});
 
 	test('should export MD file with YAML header', (async () => {

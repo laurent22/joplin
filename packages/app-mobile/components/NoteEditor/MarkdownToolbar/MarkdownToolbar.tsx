@@ -1,7 +1,7 @@
 // A toolbar for the markdown editor.
 
 const React = require('react');
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useMemo, useState, useCallback } from 'react';
 
 // See https://oblador.github.io/react-native-vector-icons/ for a list of
@@ -20,6 +20,7 @@ import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
+import ToggleSpaceButton from './ToggleSpaceButton';
 
 type OnAttachCallback = ()=> void;
 
@@ -41,16 +42,10 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	const headerButtons: ButtonSpec[] = [];
 	for (let level = 1; level <= 5; level++) {
 		const active = selState.headerLevel === level;
-		let label;
-		if (!active) {
-			label = _('Create header level %d', level);
-		} else {
-			label = _('Remove level %d header', level);
-		}
 
 		headerButtons.push({
 			icon: `H${level}`,
-			description: label,
+			description: _('Header %d', level),
 			active,
 
 			// We only call addHeaderButton 5 times and in the same order, so
@@ -71,8 +66,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="list-ul" style={styles.text}/>
 		),
-		description:
-			selState.inUnorderedList ? _('Remove unordered list') : _('Create unordered list'),
+		description: _('Unordered list'),
 		active: selState.inUnorderedList,
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.UnorderedList);
@@ -85,8 +79,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="list-ol" style={styles.text}/>
 		),
-		description:
-			selState.inOrderedList ? _('Remove ordered list') : _('Create ordered list'),
+		description: _('Ordered list'),
 		active: selState.inOrderedList,
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.OrderedList);
@@ -99,8 +92,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="tasks" style={styles.text}/>
 		),
-		description:
-			selState.inChecklist ? _('Remove task list') : _('Create task list'),
+		description: _('Task list'),
 		active: selState.inChecklist,
 		onPress: useCallback(() => {
 			editorControl.toggleList(ListType.CheckList);
@@ -137,8 +129,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="bold" style={styles.text}/>
 		),
-		description:
-			selState.bolded ? _('Unbold') : _('Bold text'),
+		description: _('Bold'),
 		active: selState.bolded,
 		onPress: editorControl.toggleBolded,
 
@@ -149,8 +140,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="italic" style={styles.text}/>
 		),
-		description:
-			selState.italicized ? _('Unitalicize') : _('Italicize'),
+		description: _('Italic'),
 		active: selState.italicized,
 		onPress: editorControl.toggleItalicized,
 
@@ -159,8 +149,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 
 	inlineFormattingBtns.push({
 		icon: '{;}',
-		description:
-			selState.inCode ? _('Remove code formatting') : _('Format as code'),
+		description: _('Code'),
 		active: selState.inCode,
 		onPress: editorControl.toggleCode,
 
@@ -170,8 +159,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	if (props.editorSettings.katexEnabled) {
 		inlineFormattingBtns.push({
 			icon: '∑',
-			description:
-				selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
+			description: _('KaTeX'),
 			active: selState.inMath,
 			onPress: editorControl.toggleMath,
 
@@ -183,8 +171,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		icon: (
 			<FontAwesomeIcon name="link" style={styles.text}/>
 		),
-		description:
-			selState.inLink ? _('Edit link') : _('Create link'),
+		description: _('Link'),
 		active: selState.inLink,
 		onPress: editorControl.showLinkDialog,
 
@@ -228,7 +215,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			<MaterialIcon name="search" style={styles.text}/>
 		),
 		description: (
-			props.searchState.dialogVisible ? _('Close find and replace') : _('Find and replace')
+			props.searchState.dialogVisible ? _('Close') : _('Find and replace')
 		),
 		active: props.searchState.dialogVisible,
 		onPress: useCallback(() => {
@@ -277,7 +264,11 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	};
 
 	return (
-		<>
+		<ToggleSpaceButton
+			spaceApplicable={ Platform.OS === 'ios' && keyboardVisible }
+			themeId={props.editorSettings.themeId}
+			style={styles.container}
+		>
 			<Toolbar
 				styleSheet={styleData}
 				buttons={[
@@ -299,21 +290,16 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 					},
 				]}
 			/>
-
-			<View style={{
-				// The keyboard on iOS can overlap the markdown toolbar.
-				// Add additional padding to prevent this.
-				height: (
-					Platform.OS === 'ios' && keyboardVisible ? 16 : 0
-				),
-			}}/>
-		</>
+		</ToggleSpaceButton>
 	);
 };
 
 const useStyles = (styleProps: any, theme: Theme) => {
 	return useMemo(() => {
 		return StyleSheet.create({
+			container: {
+				...styleProps,
+			},
 			button: {
 				width: buttonSize,
 				height: buttonSize,
@@ -348,10 +334,8 @@ const useStyles = (styleProps: any, theme: Theme) => {
 
 				// Add a small amount of additional padding for button borders
 				height: buttonSize + 6,
-				...styleProps,
 			},
 			toolbarContainer: {
-				maxHeight: '65%',
 				flexShrink: 1,
 			},
 			toolbarContent: {

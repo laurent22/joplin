@@ -174,9 +174,11 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			return;
 		}
 		Resource.delete(resource.id)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.catch((error: Error) => {
 				bridge().showErrorMessageBox(error.message);
 			})
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.finally(() => {
 				void this.reloadResources(this.state.sorting);
 			});

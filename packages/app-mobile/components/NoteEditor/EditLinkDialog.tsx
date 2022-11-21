@@ -89,10 +89,10 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	// for more about creating accessible RN inputs.
 	const linkTextInput = (
 		<View style={styles.inputContainer} accessible>
-			<Text style={styles.text}>{_('Link Text')}</Text>
+			<Text style={styles.text}>{_('Link text')}</Text>
 			<TextInput
 				style={styles.input}
-				placeholder={_('Description of the link')}
+				placeholder={_('Link description')}
 				placeholderTextColor={placeholderColor}
 				value={linkLabel}
 
@@ -138,7 +138,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				props.editorControl.hideLinkDialog();
 			}}>
 			<View style={styles.modalContent}>
-				<Text style={styles.header}>{_('Edit Link')}</Text>
+				<Text style={styles.header}>{_('Edit link')}</Text>
 				<View>
 					{linkTextInput}
 					{linkURLInput}

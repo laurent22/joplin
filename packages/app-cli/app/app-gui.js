@@ -33,7 +33,7 @@ const ResourceServer = require('./ResourceServer.js');
 const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
-const StatusBarWidget = require('./gui/StatusBarWidget.js');
+const StatusBarWidget = require('./gui/StatusBarWidget').default;
 const ConsoleWidget = require('./gui/ConsoleWidget.js');
 const LinkSelector = require('./LinkSelector.js').default;
 

@@ -1,7 +1,7 @@
 import { installDefaultPlugins, getDefaultPluginsInstallState, setSettingsForDefaultPlugins, checkPreInstalledDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
 import { pathExists } from 'fs-extra';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
+import { checkThrow, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 
@@ -28,10 +28,9 @@ describe('defaultPluginsUtils', function() {
 
 	const pluginsId = ['joplin.plugin.ambrt.backlinksToNote', 'org.joplinapp.plugins.ToggleSidebars'];
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should install default plugins with no previous default plugins installed', (async () => {
@@ -209,6 +208,59 @@ describe('defaultPluginsUtils', function() {
 		// with no pre-installed default plugin
 		Setting.setValue('installedDefaultPlugins', ['']);
 		setSettingsForDefaultPlugins(defaultPluginsInfo);
+		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}`);
+		await service.destroy();
+	});
+
+	it('should not throw error on missing setting key', async () => {
+
+		const service = newPluginService();
+
+		const pluginScript = `
+		/* joplin-manifest:
+		{
+			"id": "io.github.jackgruber.backup",
+			"manifest_version": 1,
+			"app_min_version": "1.4",
+			"name": "JS Bundle test",
+			"version": "1.0.0"
+		}
+		*/
+		joplin.plugins.register({
+			onStart: async function() {
+				await joplin.settings.registerSettings({
+					path: {
+						value: "initial-path",
+						type: 2,
+						section: "backupSection",
+						public: true,
+						label: "Backup path",
+					  },
+				})
+			},
+		});`;
+
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		const defaultPluginsInfo: DefaultPluginsInfo = {
+			'io.github.jackgruber.backup': {
+				version: '1.0.2',
+				settings: {
+					'path': `${Setting.value('profileDir')}`,
+					'missing-key1': 'someValue',
+				},
+			},
+			'plugin.calebjohn.rich-markdown': {
+				version: '0.8.3',
+				settings: {
+					'missing-key2': 'someValue',
+				},
+			},
+		};
+
+		Setting.setValue('installedDefaultPlugins', ['']);
+		expect(checkThrow(() => setSettingsForDefaultPlugins(defaultPluginsInfo))).toBe(false);
 		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}`);
 		await service.destroy();
 	});

@@ -15,7 +15,7 @@ router.get('privacy', async (_path: SubPath, _ctx: AppContext) => {
 
 ## Who are we?
 
-The Joplin Cloud web service is owned by Cozic Ltd, registered in England and Wales.
+The Joplin Cloud web service is owned by Joplin, registered in France.
 
 ## What information do we collect?
 

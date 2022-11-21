@@ -77,6 +77,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	let tagBatch = [];
 	for (let i = 0; i < options.tagCount; i++) {
 		const tagTitle = randomElement(wordList); // `tag${i}`
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		tagBatch.push(Tag.save({ title: tagTitle }, { dispatchUpdateAction: false }).then((savedTag: any) => {
 			createdTagIds.push(savedTag.id);
 			if (!options.silent) console.info(`Tags: ${i} / ${options.tagCount}`);
@@ -99,6 +100,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 		const parentIndex = randomIndex(createdFolderIds);
 		note.parent_id = createdFolderIds[parentIndex];
 
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		noteBatch.push(Note.save(note, { dispatchUpdateAction: false }).then((savedNote: any) => {
 			createdNoteIds.push(savedNote.id);
 			console.info(`Notes: ${i} / ${options.noteCount}`);

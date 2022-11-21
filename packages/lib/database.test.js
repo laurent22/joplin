@@ -2,10 +2,9 @@ const { setupDatabaseAndSynchronizer, switchClient } = require('./testing/test-u
 const BaseModel = require('./BaseModel').default;
 
 describe('database', function() {
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should not modify cached field names', (async () => {
