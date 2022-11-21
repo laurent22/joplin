@@ -84,6 +84,9 @@ packages/app-cli/app/command-sync.js.map
 packages/app-cli/app/command-testing.d.ts
 packages/app-cli/app/command-testing.js
 packages/app-cli/app/command-testing.js.map
+packages/app-cli/app/gui/StatusBarWidget.d.ts
+packages/app-cli/app/gui/StatusBarWidget.js
+packages/app-cli/app/gui/StatusBarWidget.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
@@ -522,9 +525,6 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.js.map
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.d.ts
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js.map
-packages/app-desktop/gui/NoteEditor/utils/contextMenu.test.d.ts
-packages/app-desktop/gui/NoteEditor/utils/contextMenu.test.js
-packages/app-desktop/gui/NoteEditor/utils/contextMenu.test.js.map
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.d.ts
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js.map
@@ -540,6 +540,9 @@ packages/app-desktop/gui/NoteEditor/utils/types.js.map
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.d.ts
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js.map
+packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.d.ts
+packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js
+packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js.map
 packages/app-desktop/gui/NoteEditor/utils/useFolder.d.ts
 packages/app-desktop/gui/NoteEditor/utils/useFolder.js
 packages/app-desktop/gui/NoteEditor/utils/useFolder.js.map
@@ -606,6 +609,9 @@ packages/app-desktop/gui/PasswordInput/PasswordInput.js.map
 packages/app-desktop/gui/PdfViewer.d.ts
 packages/app-desktop/gui/PdfViewer.js
 packages/app-desktop/gui/PdfViewer.js.map
+packages/app-desktop/gui/PromptDialog.d.ts
+packages/app-desktop/gui/PromptDialog.js
+packages/app-desktop/gui/PromptDialog.js.map
 packages/app-desktop/gui/ResizableLayout/MoveButtons.d.ts
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js.map
@@ -768,9 +774,6 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
 packages/app-desktop/gui/utils/loadScript.d.ts
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gui/utils/loadScript.js.map
-packages/app-desktop/loadResources.testEnv.d.ts
-packages/app-desktop/loadResources.testEnv.js
-packages/app-desktop/loadResources.testEnv.js.map
 packages/app-desktop/plugins/GotoAnything.d.ts
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/plugins/GotoAnything.js.map

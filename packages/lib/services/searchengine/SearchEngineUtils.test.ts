@@ -8,12 +8,11 @@ const Note = require('../../models/Note').default;
 let searchEngine: any = null;
 
 describe('services_SearchEngineUtils', function() {
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		searchEngine = new SearchEngine();
 		searchEngine.setDb(db());
-		done();
 	});
 
 	describe('filter todos based on showCompletedTodos', function() {

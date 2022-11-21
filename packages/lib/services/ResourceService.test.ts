@@ -11,11 +11,10 @@ import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/uti
 
 describe('services/ResourceService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
 	it('should delete orphaned resources', (async () => {

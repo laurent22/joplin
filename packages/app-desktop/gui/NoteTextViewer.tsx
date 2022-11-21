@@ -1,15 +1,15 @@
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import * as React from 'react';
-const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	onDomReady: Function;
 	onIpcMessage: Function;
 	viewerStyle: any;
+	contentMaxWidth: number;
 }
 
-class NoteTextViewerComponent extends React.Component<Props, any> {
+export default class NoteTextViewerComponent extends React.Component<Props, any> {
 
 	private initialized_: boolean = false;
 	private domReady_: boolean = false;
@@ -176,18 +176,3 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 		return <iframe className="noteTextViewer" ref={this.webviewRef_} style={viewerStyle} src="gui/note-viewer/index.html"></iframe>;
 	}
 }
-
-const mapStateToProps = (state: any) => {
-	return {
-		themeId: state.settings.theme,
-	};
-};
-
-const NoteTextViewer = connect(
-	mapStateToProps,
-	null,
-	null,
-	{ withRef: true }
-)(NoteTextViewerComponent);
-
-export default NoteTextViewer;

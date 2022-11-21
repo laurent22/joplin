@@ -13,13 +13,12 @@ import { fileExtension } from '../../path-utils.js';
 
 describe('interop/InteropService_Exporter_Md', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
 		await fs.remove(exportDir());
 		await fs.mkdirp(exportDir());
-		done();
 	});
 
 	it('should create resources directory', (async () => {

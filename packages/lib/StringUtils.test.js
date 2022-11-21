@@ -5,9 +5,7 @@ const StringUtils = require('./string-utils');
 
 describe('StringUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should surround keywords with strings', (async () => {
 		const testCases = [

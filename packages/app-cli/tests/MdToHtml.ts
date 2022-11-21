@@ -18,10 +18,9 @@ function newTestMdToHtml(options: any = null) {
 
 describe('MdToHtml', function() {
 
-	beforeEach(async (done: Function) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should convert from Markdown to Html', (async () => {

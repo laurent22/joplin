@@ -2,9 +2,7 @@ const ArrayUtils = require('./ArrayUtils');
 
 describe('ArrayUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should remove array elements', (async () => {
 		let a = ['un', 'deux', 'trois'];

@@ -82,11 +82,10 @@ function memoryExportModule() {
 
 describe('services_InteropService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		await recreateExportDir();
-		done();
 	});
 
 	it('should export and import folders', (async () => {

@@ -20,13 +20,12 @@ function newResourceFetcher(synchronizer: Synchronizer) {
 
 describe('Synchronizer.e2ee', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		insideBeforeEach = true;
 
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 
 		insideBeforeEach = false;
 	});

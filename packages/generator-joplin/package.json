@@ -1,6 +1,6 @@
 {
   "name": "generator-joplin",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "Scaffolds out a new Joplin plugin",
   "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin",
   "author": {
@@ -24,12 +24,12 @@
   },
   "dependencies": {
     "chalk": "2.4.2",
-    "slugify": "1.6.3",
-    "yeoman-generator": "2.0.5",
+    "slugify": "1.6.5",
+    "yeoman-generator": "5.7.0",
     "yosay": "2.0.2"
   },
   "devDependencies": {
-    "jest": "26.6.3"
+    "jest": "29.3.1"
   },
   "repository": "https://github.com/laurent22/generator-joplin",
   "license": "MIT",

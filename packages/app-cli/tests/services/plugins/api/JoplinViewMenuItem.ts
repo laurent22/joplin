@@ -4,10 +4,9 @@ import { newPluginScript, newPluginService } from '../../../testUtils';
 
 describe('JoplinViewMenuItem', () => {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	afterEach(async () => {

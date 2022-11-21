@@ -56,7 +56,7 @@ describe('UserDeletionModel', function() {
 	test('should provide the next deletion operation', async function() {
 		expect(await models().userDeletion().next()).toBeFalsy();
 
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t0 = new Date('2021-12-14').getTime();
 		jest.setSystemTime(t0);
@@ -92,7 +92,7 @@ describe('UserDeletionModel', function() {
 	});
 
 	test('should start and stop deletion jobs', async function() {
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t0 = new Date('2021-12-14').getTime();
 		jest.setSystemTime(t0);
@@ -145,7 +145,7 @@ describe('UserDeletionModel', function() {
 	});
 
 	test('should auto-add users for deletion', async function() {
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t0 = new Date('2022-02-22').getTime();
 		jest.setSystemTime(t0);

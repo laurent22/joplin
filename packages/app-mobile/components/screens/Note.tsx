@@ -541,7 +541,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async pickDocuments() {
-		const result = await shim.fsDriver().pickDocument();
+		const result = await shim.fsDriver().pickDocument({ multiple: true });
 		if (!result) {
 			console.info('pickDocuments: user has cancelled');
 		}

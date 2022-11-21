@@ -83,11 +83,10 @@ function getIds(items, indexes = null) {
 
 describe('reducer', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
-		done();
 	});
 
 	// tests for NOTE_DELETE

@@ -12,6 +12,7 @@ module.exports = class extends Generator {
 
 		this.option('silent');
 		this.option('update');
+		this.option('nodePackageManager', 'npm');
 
 		if (this.options.update) {
 			// When updating, overwrite files without prompting
@@ -174,11 +175,4 @@ module.exports = class extends Generator {
 		);
 	}
 
-	install() {
-		this.installDependencies({
-			npm: true,
-			bower: false,
-			yarn: false,
-		});
-	}
 };
