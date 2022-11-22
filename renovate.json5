@@ -108,6 +108,8 @@
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
 				"eslint",
+				"@typescript-eslint/eslint-plugin",
+				"@typescript-eslint/parser",
 				"yarn",
 				"typescript",
 			],
