@@ -1,19 +1,29 @@
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:196
 msgid ""
-"<span class=\"frame-bg frame-bg-yellow-lg\">Customise</span> it\n"
-"<br>\n"
-"to your needs"
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:193
+msgid "<span class=\"frame-bg frame-bg-yellow-lg\">Customise</span> it"
 msgstr ""
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:91
 msgid "<span class=\"frame-bg frame-bg-yellow\">Multimedia</span> notes"
-msgstr ""
+msgstr "<span class=\"frame-bg frame-bg-yellow\">多媒体</span>说明"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:251
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:244
 msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:231
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:224
 msgid ""
 "Access your notes from your computer, phone or tablet by synchronising with "
 "various services, including Joplin Cloud, Dropbox and OneDrive. The app is "
@@ -21,42 +31,44 @@ msgid ""
 "available!"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:201
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:196
 msgid ""
-"Customise the app with plugins, custom themes and multiple\n"
-"text editors (Rich Text or Markdown). Or create your own\n"
-"scripts and plugins using the Extension API."
+"Customise the app with plugins, custom themes and multiple text editors "
+"(Rich Text or Markdown). Or create your own scripts and plugins using the "
+"Extension API."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:237
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:230
 msgid "Download it now"
-msgstr ""
+msgstr "下载该应用程序"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:101
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:63
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:99
 msgid "Download the app"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:208
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:201
 msgid "Find out more"
 msgstr ""
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:54
 msgid "Free your <span class=\"frame-bg frame-bg-blue\">notes</span>"
-msgstr ""
+msgstr "释放你的<span class=\"frame-bg frame-bg-blue\">笔记</span>"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:166
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:163
 msgid "Get the clipper"
 msgstr ""
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:94
 msgid ""
-"Images, videos, PDFs and audio files are supported. Create\n"
-"math expressions and diagrams directly from the app. Take\n"
-"photos with the mobile app and save them to a note."
+"Images, videos, PDFs and audio files are supported. Create math expressions "
+"and diagrams directly from the app. Take photos with the mobile app and save "
+"them to a note."
 msgstr ""
+"Joplin，由于其起源和设计，适应并尊重中国的标准和规则。这保证了您的使用不受限"
+"制，以及您的使用数据的完全透明和安全。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:282
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:273
 msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
 msgstr ""
 
@@ -65,62 +77,62 @@ msgid ""
 "Joplin is an open source note-taking app. Capture your thoughts and securely "
 "access them from any device."
 msgstr ""
+"Joplin是一个开源的记事本应用程序。捕捉你的想法并从任何设备上安全地访问它们。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:259
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:250
 msgid "More about E2EE"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:346
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:337
 msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:157
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:155
 msgid ""
 "Save <span class=\"frame-bg frame-bg-blue\">web pages</span> <br>as notes"
 msgstr ""
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:65
 msgid "Sign up with Joplin Cloud"
-msgstr ""
+msgstr "与乔布林云签约"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:349
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:340
 msgid "Thank you for your support!"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:252
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:245
 msgid ""
-"The app is open source and your notes are saved to an open\n"
-"format, so you'll always have access to them. Uses End-To-End Encryption "
-"(E2EE) to secure your notes and ensure no-one but\n"
-"yourself can access them."
+"The app is open source and your notes are saved to an open format, so you'll "
+"always have access to them. Uses End-To-End Encryption (E2EE) to secure your "
+"notes and ensure no-one but yourself can access them."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:134
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:132
 msgid "Try it now"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:160
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:158
 msgid ""
-"Use the web clipper extension, available on Chrome and\n"
-"Firefox, to save web pages or take screenshots as notes."
+"Use the web clipper extension, available on Chrome and Firefox, to save web "
+"pages or take screenshots as notes."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:127
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:125
 msgid ""
 "With Joplin Cloud, share your notes with your friends, family\n"
 "or colleagues and collaborate on them."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:126
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:124
 msgid "Work <span class=\"frame-bg frame-bg-yellow\">together</span>"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:131
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:129
 msgid ""
 "You can also publish a note to the internet and share the URL with others."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:228
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:221
 msgid ""
 "Your notes, <span class=\"frame-bg frame-bg-blue-lg\">everywhere</span> you "
 "are"
