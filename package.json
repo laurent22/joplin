@@ -21,6 +21,7 @@
     "updateNews": "node ./packages/tools/website/updateNews",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
+    "buildWebsiteTranslations": "node packages/tools/website/buildTranslations.js",
     "buildWebsite": "node ./packages/tools/website/build.js && yarn run buildPluginDoc && yarn run buildSettingJsonSchema",
     "checkLibPaths": "node ./packages/tools/checkLibPaths.js",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",

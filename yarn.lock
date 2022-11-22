@@ -4658,6 +4658,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
+    "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/lib": ^2.9.1
     "@joplin/renderer": ^2.9.1
     "@rmp135/sql-ts": 1.15.1
@@ -4674,6 +4675,7 @@ __metadata:
     gettext-parser: 6.0.0
     glob: 8.0.3
     gulp: 4.0.2
+    html-entities: 1.4.0
     jest: 29.3.1
     markdown-it: 13.0.1
     md5-file: 5.0.0

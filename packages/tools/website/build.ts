@@ -10,6 +10,8 @@ import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags } from './utils/openGraph';
 import { readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
 import { getNewsDateString } from './utils/news';
+import { parsePoFile, parseTranslations } from '../utils/translation';
+import processTranslations from './utils/processTranslations';
 
 interface BuildConfig {
 	env: Env;
@@ -389,6 +391,9 @@ async function main() {
 			url: 'https://joplinapp.org/news/',
 		},
 	});
+
+	const translations = parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`));
+	await processTranslations(`${docDir}/index.html`, `${docDir}/cn/index.html`, translations);
 }
 
 main().catch((error) => {
