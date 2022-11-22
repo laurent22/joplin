@@ -23,6 +23,13 @@ describe('applyTranslations', () => {
 				},
 				htmlTranslated: '<h1 translate class="text-center">\nLibérez vos <span class="frame-bg frame-bg-blue">notes</span>\n</h1>',
 			},
+			{
+				html: '<div translate>Save <span class="frame-bg frame-bg-blue">web pages</span> <br />as notes</div>',
+				translations: {
+					'Save <span class="frame-bg frame-bg-blue">web pages</span> <br>as notes': 'Sauvegardez vos <span class="frame-bg frame-bg-blue">pages web</span> <br>en notes',
+				},
+				htmlTranslated: '<div translate>\nSauvegardez vos <span class="frame-bg frame-bg-blue">pages web</span> <br>en notes\n</div>',
+			},
 		];
 
 		for (const test of tests) {

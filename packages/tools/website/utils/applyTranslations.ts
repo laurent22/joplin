@@ -1,7 +1,35 @@
+import { unique } from '@joplin/lib/ArrayUtils';
 import htmlUtils from '@joplin/renderer/htmlUtils';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
+
+const trimHtml = (content: string) => {
+	return content
+		.replace(/\n/g, '')
+		.replace(/^(&tab;)+/i, '')
+		.replace(/^(&nbsp;)+/i, '')
+		.replace(/(&tab;)+$/i, '')
+		.replace(/(&nbsp;)+$/i, '');
+};
+
+const findTranslation = (englishString: string, translations: Record<string, string>): string => {
+	const stringsToTry = unique([
+		englishString,
+		englishString.replace(/<br\/>/gi, '<br>'),
+		englishString.replace(/<br \/>/gi, '<br>'),
+		englishString
+			.replace(/&apos;/gi, '\'')
+			.replace(/&quot;/gi, '"'),
+	]) as string[];
+
+	for (const stringToTry of stringsToTry) {
+		if (translations[stringToTry]) return translations[stringToTry];
+	}
+
+	return englishString;
+};
+
 
 export default (html: string, translations: Record<string, string>) => {
 	const output: string[] = [];
@@ -39,15 +67,6 @@ export default (html: string, translations: Record<string, string>) => {
 		currentTranslationTag: [],
 		currentTranslationContent: [],
 		translateIsOpening: false,
-	};
-
-	const trimHtml = (content: string) => {
-		return content
-			.replace(/\n/g, '')
-			.replace(/^(&tab;)+/i, '')
-			.replace(/^(&nbsp;)+/i, '')
-			.replace(/(&tab;)+$/i, '')
-			.replace(/(&nbsp;)+$/i, '');
 	};
 
 	const pushContent = (state: State, content: string) => {
@@ -93,7 +112,7 @@ export default (html: string, translations: Record<string, string>) => {
 
 				if (!state.translateStack.length) {
 					const stringToTranslate = trimHtml(state.currentTranslationContent.join(''));
-					const translation = translations[stringToTranslate] ? translations[stringToTranslate] : stringToTranslate;
+					const translation = findTranslation(stringToTranslate, translations);
 					output.push(state.currentTranslationTag[0]);
 					output.push(translation);
 				}
