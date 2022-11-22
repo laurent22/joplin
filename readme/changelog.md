@@ -505,11 +505,6 @@ Attention: The default font size has been changed in the Markdown editor. You ca
 - Improved: Prevent sync process from being stuck when the download state of a resource is invalid ([5c6fd93](https://github.com/laurent22/joplin/commit/5c6fd93))
 - Fixed: Prevent app from crashing when loading a setting value that has been removed ([[#5086](https://github.com/laurent22/joplin/issues/5086)](https://github.com/laurent22/joplin/issues/5086))
 
-## [v2.0.10](https://github.com/laurent22/joplin/releases/tag/v2.0.10) - 2021-06-16T07:58:29Z
-
-- Fixed: Ensure resources are decrypted when sharing a notebook with Joplin Server ([#5080](https://github.com/laurent22/joplin/issues/5080))
-- Fixed: Fixed user content URLs when sharing note via Joplin Server ([2cf7067](https://github.com/laurent22/joplin/commit/2cf7067))
-
 ## [v2.0.9](https://github.com/laurent22/joplin/releases/tag/v2.0.9) (Pre-release) - 2021-06-12T09:30:30Z
 
 - Improved: Conflict notes will now populate a new field with the ID of the conflict note. ([#5049](https://github.com/laurent22/joplin/issues/5049) by [@Ahmad45123](https://github.com/Ahmad45123))
@@ -684,10 +679,6 @@ Attention: The default font size has been changed in the Markdown editor. You ca
 - Improved: In config screen, click on a plugin name to open its home page
 - Improved: Move plugin settings under separate section in config menu
 - Improved: Some imported ENEX files incorrectly had invisible sections
-
-## [v1.7.9](https://github.com/laurent22/joplin/releases/tag/v1.7.9) (Pre-release) - 2021-01-28T09:50:21Z
-
-- New: Plugins: Add support for `joplin.plugins.installationDir` to allow accessing external files packaged with the plugin
 
 ## [v1.7.6](https://github.com/laurent22/joplin/releases/tag/v1.7.6) (Pre-release) - 2021-01-27T10:36:05Z
 
@@ -883,6 +874,42 @@ Fixed ENEX import regression: Fix issue when importing ENEX file that contains i
 - Fixed: Fixed context menu when the UI is zoomed in or out ([#4201](https://github.com/laurent22/joplin/issues/4201))
 - Fixed: Fixed issues when importing hidden tables within hidden sections in Enex files
 - Fixed: Prevent double paste when using Shift+Ctrl+V ([#4243](https://github.com/laurent22/joplin/issues/4243))
+
+## [v1.5.8](https://github.com/laurent22/joplin/releases/tag/v1.5.8) (Pre-release) - 2020-12-20T09:45:19Z
+
+- New: Plugins: Add support for content script asset files, for Markdown-it plugins
+- New: Plugins: Add support for context menu items on notebooks and tags
+- New: Plugins: Added a way to execute commands from Markdown-it content scripts
+- Improved: Use plugins whenever printing or exporting notes
+- Fixed: Fix End key behavior with Codemirror spellcheck ([#4215](https://github.com/laurent22/joplin/issues/4215) by Caleb John)
+- Fixed: Fixed importing ENEX files that contain resources with invalid mime type
+- Fixed: Fixed importing certain code blocks from ENEX
+- Fixed: Plugins: Fixed disabling plugin files that start with "_"
+- Fixed: Register Markdown editor commands with the Keyboard Shortcut editor ([#4136](https://github.com/laurent22/joplin/issues/4136)) ([#4130](https://github.com/laurent22/joplin/issues/4130) by Caleb John)
+
+## [v1.5.7](https://github.com/laurent22/joplin/releases/tag/v1.5.7) (Pre-release) - 2020-12-10T12:58:33Z
+
+- New: MacOS: Notarize application
+- New: Add support for media players (video, audio and PDF)
+- New: Added doc about Rich Text editor and added way to dismiss warning banner
+- New: Plugins: Add support for workspace.onSyncStart event
+- Improved: Improved warning banner colors
+- Improved: Plugins: Commands would not show up in keymap editor when no shortcut was associated with them
+- Improved: Restrict auto-detection of links, and added option to toggle linkify ([#4205](https://github.com/laurent22/joplin/issues/4205))
+- Improved: Rich Text: Do not converts to markdown links URLs that would be linkified
+- Improved: Translation: Update zh_CN ([#4195](https://github.com/laurent22/joplin/issues/4195) by Zhang YANG)
+- Improved: Update Mermaid: 8.8.1 -&gt; 8.8.4 ([#4193](https://github.com/laurent22/joplin/issues/4193) by Helmut K. C. Tessarek)
+- Improved: Plugins: Improved note change event handling.
+- Fixed: Fixed basic search when executing a query in Chinese ([#4034](https://github.com/laurent22/joplin/issues/4034) by Naveen M V)
+- Fixed: Fixed importing ENEX files that contain empty resources
+- Fixed: Fixed issue with note not being saved when a column is added or remove from Rich Text editor
+- Fixed: Fixed numbered list bug in markdown editor ([#4116](https://github.com/laurent22/joplin/issues/4116)) ([#3917](https://github.com/laurent22/joplin/issues/3917) by [@MichBoi](https://github.com/MichBoi))
+- Fixed: Fixed potential crash when watching note files or resources
+- Fixed: Focus editor after pressing toolbar buttons ([#4037](https://github.com/laurent22/joplin/issues/4037)) ([#4036](https://github.com/laurent22/joplin/issues/4036) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Prevents crash when invalid spell checker language is selected, and provide fallback for invalid language codes ([#4146](https://github.com/laurent22/joplin/issues/4146))
+- Fixed: Fixed issue when searching for text that contains diacritic ([#4152](https://github.com/laurent22/joplin/issues/4152)) ([#4025](https://github.com/laurent22/joplin/issues/4025) by Roman Musin)
+- Fixed: Fixed issue with attachment paths being invalid when user has spaces in home directory path.
+- Fixed: Fixed title input field width on small windows
 
 ## [v1.5.9](https://github.com/laurent22/joplin/releases/tag/v1.5.9) (Pre-release) - 2020-12-23T18:01:08Z
 
