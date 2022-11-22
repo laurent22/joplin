@@ -393,7 +393,7 @@ async function main() {
 	});
 
 	const translations = parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`));
-	await processTranslations(`${docDir}/index.html`, `${docDir}/cn/index.html`, translations);
+	await processTranslations(`${docDir}/index.html`, `${docDir}/cn/index.html`, 'zh-cn', translations);
 }
 
 main().catch((error) => {

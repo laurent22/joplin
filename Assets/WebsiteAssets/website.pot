@@ -14,6 +14,10 @@ msgstr ""
 msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
 msgstr ""
 
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:271
+msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
+msgstr ""
+
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:223
 msgid "Access your notes from your computer, phone or tablet by synchronising with various services, including Joplin Cloud, Dropbox and OneDrive. The app is available on Windows, macOS, Linux, Android and iOS. A terminal app is also available!"
 msgstr ""
@@ -47,7 +51,7 @@ msgstr ""
 msgid "Images, videos, PDFs and audio files are supported. Create math expressions and diagrams directly from the app. Take photos with the mobile app and save them to a note."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:272
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:288
 msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
 msgstr ""
 
@@ -55,11 +59,15 @@ msgstr ""
 msgid "Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device."
 msgstr ""
 
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:274
+msgid "Joplin, due to its origin and design, adapts and respects Chinese standards and rules. This guarantees your unrestricted use and complete transparency and security of your usage data."
+msgstr ""
+
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:249
 msgid "More about E2EE"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:336
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:352
 msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
 msgstr ""
 
@@ -71,7 +79,7 @@ msgstr ""
 msgid "Sign up with Joplin Cloud"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:339
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:355
 msgid "Thank you for your support!"
 msgstr ""
 

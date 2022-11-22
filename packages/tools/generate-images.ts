@@ -51,6 +51,10 @@ const sources: Source[] = [
 		id: 8,
 		name: 'WebsiteTopImage.png',
 	},
+	{
+		id: 9,
+		name: 'WebsiteTopImageCn.png',
+	},
 ];
 
 function sourceById(id: number) {
@@ -329,6 +333,41 @@ const operations: Operation[] = [
 	{
 		source: 8,
 		dest: 'Assets/WebsiteAssets/images/home-top-img.webp',
+		width: 1205,
+		height: 734,
+	},
+
+	// ============================================================================
+	// Website images CN
+	// ============================================================================
+
+	{
+		source: 9,
+		dest: 'Assets/WebsiteAssets/images/home-top-img-cn-4x.webp',
+		width: 4820,
+		height: 2938,
+	},
+	{
+		source: 9,
+		dest: 'Assets/WebsiteAssets/images/home-top-img-cn-2x.png',
+		width: 2388,
+		height: 1456,
+	},
+	{
+		source: 9,
+		dest: 'Assets/WebsiteAssets/images/home-top-img-cn-2x.webp',
+		width: 2388,
+		height: 1456,
+	},
+	{
+		source: 9,
+		dest: 'Assets/WebsiteAssets/images/home-top-img-cn.png',
+		width: 1205,
+		height: 734,
+	},
+	{
+		source: 9,
+		dest: 'Assets/WebsiteAssets/images/home-top-img-cn.webp',
 		width: 1205,
 		height: 734,
 	},

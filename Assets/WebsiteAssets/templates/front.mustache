@@ -66,7 +66,7 @@
 								{{/showJoplinCloudLinks}}
 							</p>
 
-							<picture class="img-fluid img-center" id="top-section-img">
+							<picture class="img-fluid img-center top-section-img top-section-img-en">
 								<source type="image/webp" srcset="
 									{{imageBaseUrl}}/home-top-img-4x.webp 4820w,
 									{{imageBaseUrl}}/home-top-img-2x.webp 2388w,
@@ -76,7 +76,20 @@
 									{{imageBaseUrl}}/home-top-img-2x.png 2388w,
 									{{imageBaseUrl}}/home-top-img.png 1205w
 								">
-								<img id="top-section-img-img" src="{{imageBaseUrl}}/home-top-img-2x.png">
+								<img src="{{imageBaseUrl}}/home-top-img-2x.png">
+							</picture>
+
+							<picture class="img-fluid img-center top-section-img top-section-img-cn">
+								<source type="image/webp" srcset="
+									{{imageBaseUrl}}/home-top-img-cn-4x.webp 4820w,
+									{{imageBaseUrl}}/home-top-img-cn-2x.webp 2388w,
+									{{imageBaseUrl}}/home-top-img-cn.webp 1205w
+								">
+								<source type="image/png" srcset="
+									{{imageBaseUrl}}/home-top-img-cn-2x.png 2388w,
+									{{imageBaseUrl}}/home-top-img-cn.png 1205w
+								">
+								<img src="{{imageBaseUrl}}/home-top-img-cn-2x.png">
 							</picture>
 						</div>
 					</div>
@@ -259,6 +272,22 @@
 								alt=""
 								class="img-fluid"
 							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="made-in-france-section" class="blue-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<h2 translate class="text-center">
+								A <span class="frame-bg frame-bg-yellow-lg">French</span> Alternative
+							</h2>
+							<p translate class="text-center">
+								Joplin, due to its origin and design, adapts and respects Chinese standards and rules. This guarantees your unrestricted use and complete transparency and security of your usage data.
+							</p>
+							<br /><br /><br /><br />
 						</div>
 					</div>
 				</div>

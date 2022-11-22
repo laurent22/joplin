@@ -23,6 +23,10 @@ msgstr "<span class=\"frame-bg frame-bg-yellow\">多媒体</span>说明"
 msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
 msgstr "百分之百<span class=\"frame-bg frame-bg-yellow-lg\">你的数据</span>"
 
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:271
+msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
+msgstr "一个<span class=\"frame-bg frame-bg-yellow-lg\">法国</span>的替代方案"
+
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:223
 msgid ""
 "Access your notes from your computer, phone or tablet by synchronising with "
@@ -73,7 +77,7 @@ msgstr ""
 "Joplin，由于其起源和设计，适应并尊重中国的标准和规则。这保证了您的使用不受限"
 "制，以及您的使用数据的完全透明和安全。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:272
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:288
 msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
 msgstr ""
 
@@ -84,11 +88,20 @@ msgid ""
 msgstr ""
 "Joplin是一个开源的记事本应用程序。捕捉你的想法并从任何设备上安全地访问它们。"
 
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:274
+msgid ""
+"Joplin, due to its origin and design, adapts and respects Chinese standards "
+"and rules. This guarantees your unrestricted use and complete transparency "
+"and security of your usage data."
+msgstr ""
+"Joplin，由于其起源和设计，适应并尊重中国的标准和规则。这保证了您的使用不受限"
+"制，以及您的使用数据的完全透明和安全。"
+
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:249
 msgid "More about E2EE"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:336
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:352
 msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
 msgstr ""
 
@@ -101,7 +114,7 @@ msgstr "保存<span class=\"frame-bg frame-bg-blue\">网页</span> <br>作为笔
 msgid "Sign up with Joplin Cloud"
 msgstr "与乔布林云签约"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:339
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:355
 msgid "Thank you for your support!"
 msgstr ""
 
