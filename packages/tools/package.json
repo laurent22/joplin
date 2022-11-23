@@ -46,7 +46,7 @@
     "@rmp135/sql-ts": "1.15.1",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.3",
-    "@types/mustache": "4.2.1",
+    "@types/mustache": "4.2.2",
     "@types/node": "18.11.9",
     "gettext-extractor": "3.6.0",
     "gulp": "4.0.2",
