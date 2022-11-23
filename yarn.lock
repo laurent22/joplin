@@ -4231,7 +4231,7 @@ __metadata:
     react-select: 5.6.1
     react-test-renderer: 18.2.0
     react-toggle-button: 2.2.0
-    react-tooltip: 4.5.0
+    react-tooltip: 4.5.1
     redux: 4.2.0
     reselect: 4.1.7
     roboto-fontface: 0.10.0
@@ -26676,16 +26676,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:4.5.0":
-  version: 4.5.0
-  resolution: "react-tooltip@npm:4.5.0"
+"react-tooltip@npm:4.5.1":
+  version: 4.5.1
+  resolution: "react-tooltip@npm:4.5.1"
   dependencies:
     prop-types: ^15.8.1
     uuid: ^7.0.3
   peerDependencies:
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
-  checksum: 94b22b73332fc6b1b4889a3e4103d431b2f067bf2891d76effb54f3ad7fb8d8934f134a3dca50332415d9536ce9b98bdb460732dfa68d046adccca088ee723f7
+  checksum: bb2065b6aec5d860627e1459cd193889a236093c484f32a021b7b3c8c36c2144d1077932b5d74bc0262f1e24a3e0fd8251df2107c348a913a9b236467ed2185d
   languageName: node
   linkType: hard
 
