@@ -35,8 +35,10 @@ interface ParserStateTag {
 	isHighlight: boolean;
 }
 
+type ListTag = 'ul' | 'ol' | 'checkboxList';
+
 interface ParserStateList {
-	tag: string;
+	tag: ListTag;
 	counter: number;
 	startedText: boolean;
 }
@@ -738,7 +740,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(BLOCK_OPEN);
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
-				state.lists.push({ tag: n, counter: 1, startedText: false });
+				const tag = nodeAttributes?.style?.toLowerCase().includes('--en-todo:true') ? 'checkboxList' : n as ListTag;
+				state.lists.push({ tag: tag, counter: 1, startedText: false });
 			} else if (n === 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
@@ -750,7 +753,11 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				container.startedText = false;
 
 				const indent = '    '.repeat(state.lists.length - 1);
-				if (container.tag === 'ul') {
+
+				if (container.tag === 'checkboxList') {
+					const x = nodeAttributes?.style?.toLowerCase().includes('--en-checked:true') ? 'X' : ' ';
+					section.lines.push(`${indent}- [${x}] `);
+				} else if (container.tag === 'ul') {
 					section.lines.push(`${indent}- `);
 				} else {
 					section.lines.push(`${indent + container.counter}. `);
