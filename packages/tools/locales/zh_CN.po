@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: KaneGreen <737445366KG@Gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -13,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -40,7 +42,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:71
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(在插件%s中)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -223,7 +225,7 @@ msgstr "接受"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "账号"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -313,12 +315,14 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"不明确的笔记本“%s”。请改用短笔记本id - 按\"ti\"查看短笔记本id,或使用 $b 选择"
+"当前笔记本"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
 "\" to see the short notebook id"
-msgstr ""
+msgstr "不明确的笔记本“%s”。请改用短笔记本id - 按\"ti\"查看短笔记本id"
 
 #: packages/app-desktop/checkForUpdates.ts:197
 msgid "An update is available, do you want to download it now?"
@@ -350,9 +354,8 @@ msgid "Aritim Dark"
 msgstr "暗黑 (Aritim)"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
-#, fuzzy
 msgid "Attach"
-msgstr "附加..."
+msgstr "附加"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
@@ -590,7 +593,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "大小写敏感"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -698,7 +701,7 @@ msgstr "与他人共同协作笔记本"
 
 #: packages/app-mobile/components/side-menu-content.tsx:331
 msgid "Collapse"
-msgstr ""
+msgstr "折叠"
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -1021,7 +1024,7 @@ msgstr "天"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:109
 msgid "Decrease indent level"
-msgstr ""
+msgstr "减少缩进级别"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1268,7 +1271,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 msgid "Done"
-msgstr ""
+msgstr "完成"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1625,7 +1628,7 @@ msgstr "退出应用。"
 
 #: packages/app-mobile/components/side-menu-content.tsx:331
 msgid "Expand"
-msgstr ""
+msgstr "展开"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:375
@@ -1717,7 +1720,7 @@ msgstr "筛选标签"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
-msgstr ""
+msgstr "查找和替换"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 #, fuzzy
@@ -1762,7 +1765,7 @@ msgstr "仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 
 #: packages/lib/models/Setting.ts:1449
 msgid "For example \"%s\""
-msgstr ""
+msgstr "例如\"%s\""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -1877,12 +1880,11 @@ msgstr "隐藏 %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
 msgid "Hide advanced"
-msgstr ""
+msgstr "隐藏高级的"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Hide disabled"
-msgstr "隐藏禁用的密钥"
+msgstr "隐藏禁用的"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
@@ -1894,11 +1896,11 @@ msgstr "隐藏 Joplin"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:253
 msgid "Hide keyboard"
-msgstr ""
+msgstr "隐藏键盘"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
 msgid "Hide more actions"
-msgstr ""
+msgstr "隐藏更多动作"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2050,7 +2052,7 @@ msgstr "位于：%s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:119
 msgid "Increase indent level"
-msgstr ""
+msgstr "增加缩进级别"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 msgid "Indent less"
@@ -2223,7 +2225,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1494
 msgid "Keep note history for"
@@ -2551,7 +2553,7 @@ msgstr "新版本：%s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "下次匹配"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3039,7 +3041,7 @@ msgstr "点按设置解密密码。"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "上次匹配"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
@@ -3088,11 +3090,11 @@ msgstr "已启用"
 
 #: packages/lib/models/Setting.ts:1459
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "代理超时(秒)"
 
 #: packages/lib/models/Setting.ts:1448
 msgid "Proxy URL"
-msgstr ""
+msgstr "代理URL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
@@ -3211,7 +3213,7 @@ msgstr "更新令牌"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "替换"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
 #, fuzzy
@@ -3224,7 +3226,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "替换: "
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3515,7 +3517,7 @@ msgstr "显示托盘图标"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:287
 msgid "Show/hide the sidebar"
-msgstr ""
+msgstr "显示/隐藏侧边栏"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:286

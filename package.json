@@ -21,6 +21,7 @@
     "updateNews": "node ./packages/tools/website/updateNews",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
+    "buildWebsiteTranslations": "node packages/tools/website/buildTranslations.js",
     "buildWebsite": "node ./packages/tools/website/build.js && yarn run buildPluginDoc && yarn run buildSettingJsonSchema",
     "checkLibPaths": "node ./packages/tools/checkLibPaths.js",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
@@ -63,8 +64,8 @@
   },
   "devDependencies": {
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "@typescript-eslint/parser": "5.43.0",
+    "@typescript-eslint/eslint-plugin": "5.44.0",
+    "@typescript-eslint/parser": "5.44.0",
     "cspell": "5.21.2",
     "eslint": "8.28.0",
     "eslint-interactive": "10.2.0",

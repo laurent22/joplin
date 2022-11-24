@@ -37,7 +37,12 @@ class HtmlUtils {
 
 		for (const n in attr) {
 			if (!attr.hasOwnProperty(n)) continue;
-			output.push(`${n}="${htmlentities(attr[n])}"`);
+
+			if (!attr[n]) {
+				output.push(n);
+			} else {
+				output.push(`${n}="${htmlentities(attr[n])}"`);
+			}
 		}
 
 		return output.join(' ');

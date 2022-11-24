@@ -1,0 +1,112 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:192
+msgid "<span class=\"frame-bg frame-bg-yellow-lg\">Customise</span> it"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:91
+msgid "<span class=\"frame-bg frame-bg-yellow\">Multimedia</span> notes"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:243
+msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:271
+msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:223
+msgid "Access your notes from your computer, phone or tablet by synchronising with various services, including Joplin Cloud, Dropbox and OneDrive. The app is available on Windows, macOS, Linux, Android and iOS. A terminal app is also available!"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:195
+msgid "Customise the app with plugins, custom themes and multiple text editors (Rich Text or Markdown). Or create your own scripts and plugins using the Extension API."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:229
+msgid "Download it now"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:63
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:99
+msgid "Download the app"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:200
+msgid "Find out more"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:54
+msgid "Free your <span class=\"frame-bg frame-bg-blue\">notes</span>"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:162
+msgid "Get the clipper"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:94
+msgid "Images, videos, PDFs and audio files are supported. Create math expressions and diagrams directly from the app. Take photos with the mobile app and save them to a note."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:288
+msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:57
+msgid "Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:274
+msgid "Joplin, due to its origin and design, adapts and respects Chinese standards and rules. This guarantees your unrestricted use and complete transparency and security of your usage data."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:249
+msgid "More about E2EE"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:352
+msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:154
+msgid "Save <span class=\"frame-bg frame-bg-blue\">web pages</span> <br>as notes"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:65
+msgid "Sign up with Joplin Cloud"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:355
+msgid "Thank you for your support!"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:244
+msgid "The app is open source and your notes are saved to an open format, so you'll always have access to them. Uses End-To-End Encryption (E2EE) to secure your notes and ensure no-one but yourself can access them."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:131
+msgid "Try it now"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:157
+msgid "Use the web clipper extension, available on Chrome and Firefox, to save web pages or take screenshots as notes."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:125
+msgid "With Joplin Cloud, share your notes with your friends, family or colleagues and collaborate on them."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:124
+msgid "Work <span class=\"frame-bg frame-bg-yellow\">together</span>"
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:128
+msgid "You can also publish a note to the internet and share the URL with others."
+msgstr ""
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:220
+msgid "Your notes, <span class=\"frame-bg frame-bg-blue-lg\">everywhere</span> you are"
+msgstr ""
