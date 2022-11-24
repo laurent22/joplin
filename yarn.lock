@@ -4209,7 +4209,7 @@ __metadata:
     fs-extra: 10.1.0
     glob: 8.0.3
     gulp: 4.0.2
-    highlight.js: 11.6.0
+    highlight.js: 11.7.0
     immer: 7.0.15
     jest: 29.3.1
     jest-environment-jsdom: 29.3.1
@@ -4569,7 +4569,7 @@ __metadata:
     "@types/node": 18.11.9
     font-awesome-filetypes: 2.1.0
     fs-extra: 10.1.0
-    highlight.js: 11.6.0
+    highlight.js: 11.7.0
     html-entities: 1.4.0
     jest: 29.3.1
     json-stringify-safe: 5.0.1
@@ -17545,10 +17545,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"highlight.js@npm:11.6.0":
-  version: 11.6.0
-  resolution: "highlight.js@npm:11.6.0"
-  checksum: 3908eb34a4b442ca1e20c1ae6415ea935fbbcdb2b532a89948d82b0fa4ad41fc5de3802a0de4e88a0bcb7d97d4445579048cd2aab1d105ac47f59dd58a9a98ae
+"highlight.js@npm:11.7.0":
+  version: 11.7.0
+  resolution: "highlight.js@npm:11.7.0"
+  checksum: 19e3fb8b56f4b361b057a8523b989dfeb6479bbd1e29cec3fac6fa5c78d09927d5fa61b7dba6631fdb57cfdca9b3084aa4da49405ceaf4a67f67beae2ed5b77d
   languageName: node
   linkType: hard
 
