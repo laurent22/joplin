@@ -399,12 +399,12 @@ div.navbar-mobile-content a.sponsor-button {
 	margin: auto;
 }
 
-#top-section-img {
+.top-section-img {
 	margin-bottom: -280px;
 	margin-top: 40px;
 }
 
-#top-section-img img {
+.top-section-img img {
 	width: 100%;
 }
 
@@ -910,7 +910,7 @@ footer .bottom-links-row p {
 		padding-top: 80px;
 	}
 
-	#top-section-img {
+	.top-section-img {
 		margin-bottom: -90px;
 		margin-top: 50px;
 	}
@@ -1154,7 +1154,7 @@ footer .bottom-links-row p {
 		background-position: bottom;
 		padding-bottom: 160px;
 	}
-	#top-section-img {
+	.top-section-img {
 		margin-bottom: -240px;
 		margin-top: 130px;
 	}
@@ -1181,4 +1181,26 @@ footer .bottom-links-row p {
 		font-size: 18px;
 		margin-top: -15p;
 	}
+}
+
+/*****************************************************************
+ ENGLISH VERSION
+*****************************************************************/
+
+:lang(en-gb) #made-in-france-section {
+	display: none;
+}
+
+:lang(en-gb) .top-section-img-cn {
+	display: none;
+}
+
+/*****************************************************************
+ CHINESE VERSION
+*****************************************************************/
+
+:lang(zh-cn) #in-the-press-section,
+:lang(zh-cn) #sponsors-section,
+:lang(zh-cn) .top-section-img-en {
+	display: none;
 }
