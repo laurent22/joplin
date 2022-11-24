@@ -4231,7 +4231,7 @@ __metadata:
     react-select: 5.6.1
     react-test-renderer: 18.2.0
     react-toggle-button: 2.2.0
-    react-tooltip: 4.5.0
+    react-tooltip: 4.5.1
     redux: 4.2.0
     reselect: 4.1.7
     roboto-fontface: 0.10.0
@@ -4329,7 +4329,7 @@ __metadata:
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
-    react-native-webview: 11.23.1
+    react-native-webview: 11.24.0
     react-redux: 8.0.5
     redux: 4.2.0
     rn-fetch-blob: 0.12.0
@@ -4363,7 +4363,7 @@ __metadata:
     eslint: 8.28.0
     eslint-config-prettier: 8.5.0
     jest: 29.3.1
-    prettier: 2.7.1
+    prettier: 2.8.0
     ts-jest: 29.0.3
     typescript: 4.9.3
   languageName: unknown
@@ -4588,7 +4588,7 @@ __metadata:
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
     md5: 2.3.0
-    mermaid: 9.1.7
+    mermaid: 9.2.2
     typescript: 4.9.3
   languageName: unknown
   linkType: soft
@@ -4610,10 +4610,10 @@ __metadata:
     "@types/jsdom": 16.2.15
     "@types/koa": 2.13.4
     "@types/markdown-it": 12.2.3
-    "@types/mustache": 4.2.1
+    "@types/mustache": 4.2.2
     "@types/nodemailer": 6.4.6
     "@types/uuid": 8.3.4
-    "@types/yargs": 17.0.13
+    "@types/yargs": 17.0.14
     "@types/zxcvbn": 4.4.1
     bcryptjs: 2.4.3
     bulma: 0.9.4
@@ -4664,10 +4664,10 @@ __metadata:
     "@rmp135/sql-ts": 1.15.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.3
-    "@types/mustache": 4.2.1
+    "@types/mustache": 4.2.2
     "@types/node": 18.11.9
     "@types/node-fetch": 2.6.2
-    "@types/yargs": 17.0.13
+    "@types/yargs": 17.0.14
     dayjs: 1.11.6
     execa: 4.1.0
     fs-extra: 10.1.0
@@ -7064,10 +7064,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mustache@npm:4.2.1":
-  version: 4.2.1
-  resolution: "@types/mustache@npm:4.2.1"
-  checksum: 27e84f17a32f18ba1bc2fc08360a66687a9436233a6c1b48c6e8d6766644ebbeb2538b7f40edcc760dc0023a8f773cef0d60092870aeef86b1d1e744e4a99480
+"@types/mustache@npm:4.2.2":
+  version: 4.2.2
+  resolution: "@types/mustache@npm:4.2.2"
+  checksum: 1fa67a519f4302c96615524be4c8248067da02ca047bae9d4c4bb79977135ac7c15dcc388e7c70b8a817b9497004d5ca5c77a155dcb096bea16d53d4cdbe75d2
   languageName: node
   linkType: hard
 
@@ -7384,12 +7384,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.13":
-  version: 17.0.13
-  resolution: "@types/yargs@npm:17.0.13"
+"@types/yargs@npm:17.0.14":
+  version: 17.0.14
+  resolution: "@types/yargs@npm:17.0.14"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 0ab269abc2da2223cf0a8c16d578850fbe327d40fb85724b5c3f9f6cf38d03656ef699518c05d4df3bc337339ec6d0aad7df01682a9dca4783ad1ccc7336cf12
+  checksum: 7c571560434e1295b31dfd7f8d3b4a88dbb8bfe8db0054cea35f829f86b1251f67e41eaa0cb5990f17e5ed9b1a508c686b2b9f15c3bafc467ba58989ac9223e8
   languageName: node
   linkType: hard
 
@@ -9004,9 +9004,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:2.1260.0":
-  version: 2.1260.0
-  resolution: "aws-sdk@npm:2.1260.0"
+"aws-sdk@npm:2.1261.0":
+  version: 2.1261.0
+  resolution: "aws-sdk@npm:2.1261.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -9018,7 +9018,7 @@ __metadata:
     util: ^0.12.4
     uuid: 8.0.0
     xml2js: 0.4.19
-  checksum: 103ffd23a14668094c947a7b07f7e42269efd01f9d12cf20a901b6e18c3daa8b9c9b064979e824d601d9d6dc8f879f7814b68bfe573fd3f64ceecab763cee054
+  checksum: e2b8f3cf17e4e4f94375d6df4a5125d0201464c363ddd08788714428efa2d77dc148bed09627a576ee0215f95f98d8504b012f33640fe642c2b781ffda5f62cc
   languageName: node
   linkType: hard
 
@@ -15504,6 +15504,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-clone@npm:^1.5.13":
+  version: 1.5.13
+  resolution: "fast-clone@npm:1.5.13"
+  checksum: deb585594e82a0fc1f19c474e1749bb03ad9dd46ebdb2f676e5a9f234006692862de6c9d2d4fbdc962d96f4be11239de93f671cdc16ddf810ac79fd4c6e88487
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:3.1.3, fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -20108,7 +20115,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.3
     "@types/node": 18.11.9
-    aws-sdk: 2.1260.0
+    aws-sdk: 2.1261.0
     chalk: 4.1.2
     compare-version: 0.1.2
     fs-extra: 10.1.0
@@ -22032,20 +22039,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:9.1.7":
-  version: 9.1.7
-  resolution: "mermaid@npm:9.1.7"
+"mermaid@npm:9.2.2":
+  version: 9.2.2
+  resolution: "mermaid@npm:9.2.2"
   dependencies:
     "@braintree/sanitize-url": ^6.0.0
     d3: ^7.0.0
     dagre: ^0.8.5
     dagre-d3: ^0.6.4
     dompurify: 2.4.0
+    fast-clone: ^1.5.13
     graphlib: ^2.1.8
     khroma: ^2.0.0
-    moment-mini: 2.24.0
-    stylis: ^4.0.10
-  checksum: 7f3f4c55de9e290aa4fa37b01d37772bceae8b7fad888a034ba4cebbdba5e25632fcfbdcadc168d9c3589d173399b6bb74517bba91237f3b0ce7f945e62ab21c
+    lodash: ^4.17.21
+    moment-mini: ^2.24.0
+    non-layered-tidy-tree-layout: ^2.0.2
+    stylis: ^4.1.2
+    uuid: ^9.0.0
+  checksum: 866573c13d92af3098dbbeb7afbd852645b641a45f8106a5bcbbd3eaf8da33453aac4471da8149f15f29126e4ea86c747d81e8fe6de8f877b6d178f83639edc4
   languageName: node
   linkType: hard
 
@@ -22875,10 +22886,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-mini@npm:2.24.0":
-  version: 2.24.0
-  resolution: "moment-mini@npm:2.24.0"
-  checksum: c1162322fd05a305cf5d403107fe702a928e5a72c56a614142fae4882846f66bb21c423cef397fe56802564b0353386f1bca46c8bb080d2097e68cbd687d589e
+"moment-mini@npm:^2.24.0":
+  version: 2.29.4
+  resolution: "moment-mini@npm:2.29.4"
+  checksum: 5d386872d04202c36653442a65f0e06a4e33cf3b25cef4e9df17877a8e76e93f218a1dfd4ccc0946c228815a4e1e53d79ae340de82791ffce90007769eb85120
   languageName: node
   linkType: hard
 
@@ -23543,6 +23554,13 @@ __metadata:
   bin:
     nodemon: bin/nodemon.js
   checksum: 9fe858682414fe703179f4fe36c86e71f40d2693b5345c09803d7b191816a6589c5df8f1f9873bffee92893880183b95a031c86340e46b364ef1b0b7f619edbf
+  languageName: node
+  linkType: hard
+
+"non-layered-tidy-tree-layout@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "non-layered-tidy-tree-layout@npm:2.0.2"
+  checksum: 5defc1c459001b22816a4fb8b86259b9b76e7f3090df576122a41c760133ab2061934cacd6f176c98c2ae4fee3879b97941e8897e8882985cbfe830f155cd158
   languageName: node
   linkType: hard
 
@@ -25540,12 +25558,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.7.1":
-  version: 2.7.1
-  resolution: "prettier@npm:2.7.1"
+"prettier@npm:2.8.0":
+  version: 2.8.0
+  resolution: "prettier@npm:2.8.0"
   bin:
     prettier: bin-prettier.js
-  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
+  checksum: 72004ce0cc9bb097daf3e3833f62495768724392c1d5b178dd47372337616e9e50ecbb0804f236596223f7b5eb1bbe69cefc8957dca21112c5777e77ef73a564
   languageName: node
   linkType: hard
 
@@ -26469,16 +26487,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:11.23.1":
-  version: 11.23.1
-  resolution: "react-native-webview@npm:11.23.1"
+"react-native-webview@npm:11.24.0":
+  version: 11.24.0
+  resolution: "react-native-webview@npm:11.24.0"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 58367276b4457a12c0ecb24084c237048a31a8b4d49f53615634052c2dfcb318824e9239909b6bfb80cc8abacab658d278f480f7ff96267d10d5ff84a8ff1373
+  checksum: 40881b4724cfbfb8d3f648823bc9785e439b95a7937fda9d6d1dae261dc6797cc5e9a0a5a85829023e7e2dd30436d8e9e03a2510cea4e00435977a63abd22344
   languageName: node
   linkType: hard
 
@@ -26676,16 +26694,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:4.5.0":
-  version: 4.5.0
-  resolution: "react-tooltip@npm:4.5.0"
+"react-tooltip@npm:4.5.1":
+  version: 4.5.1
+  resolution: "react-tooltip@npm:4.5.1"
   dependencies:
     prop-types: ^15.8.1
     uuid: ^7.0.3
   peerDependencies:
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
-  checksum: 94b22b73332fc6b1b4889a3e4103d431b2f067bf2891d76effb54f3ad7fb8d8934f134a3dca50332415d9536ce9b98bdb460732dfa68d046adccca088ee723f7
+  checksum: bb2065b6aec5d860627e1459cd193889a236093c484f32a021b7b3c8c36c2144d1077932b5d74bc0262f1e24a3e0fd8251df2107c348a913a9b236467ed2185d
   languageName: node
   linkType: hard
 
@@ -29837,17 +29855,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylis@npm:4.1.3":
+"stylis@npm:4.1.3, stylis@npm:^4.1.2":
   version: 4.1.3
   resolution: "stylis@npm:4.1.3"
   checksum: d04dbffcb9bf2c5ca8d8dc09534203c75df3bf711d33973ea22038a99cc475412a350b661ebd99cbc01daa50d7eedcf0d130d121800eb7318759a197023442a6
-  languageName: node
-  linkType: hard
-
-"stylis@npm:^4.0.10":
-  version: 4.0.10
-  resolution: "stylis@npm:4.0.10"
-  checksum: 0fecaf5c234ec3ffcb0afc21478742a815a21cb964365259789be9c1692e72e13d8c081c1150fd76ed2146633a3251cdecd6e0c120b158f44bd74c38f81cafb3
   languageName: node
   linkType: hard
 
@@ -31927,7 +31938,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.0":
+"uuid@npm:9.0.0, uuid@npm:^9.0.0":
   version: 9.0.0
   resolution: "uuid@npm:9.0.0"
   bin:

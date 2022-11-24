@@ -112,6 +112,7 @@
 				"@typescript-eslint/parser",
 				"yarn",
 				"typescript",
+				"prettier",
 			],
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true
