@@ -35,7 +35,11 @@ interface ParserStateTag {
 	isHighlight: boolean;
 }
 
-type ListTag = 'ul' | 'ol' | 'checkboxList';
+enum ListTag {
+	Ul = 'ul',
+	Ol = 'ol',
+	CheckboxList = 'checkboxList',
+}
 
 interface ParserStateList {
 	tag: ListTag;
@@ -740,7 +744,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(BLOCK_OPEN);
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
-				const tag = nodeAttributes?.style?.toLowerCase().includes('--en-todo:true') ? 'checkboxList' : n as ListTag;
+				const isCheckboxList = cssValue(this, nodeAttributes?.style, '--en-todo') === 'true';
+				const tag = isCheckboxList ? ListTag.CheckboxList : n as ListTag;
 				state.lists.push({ tag: tag, counter: 1, startedText: false });
 			} else if (n === 'li') {
 				section.lines.push(BLOCK_OPEN);
@@ -754,10 +759,10 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 
 				const indent = '    '.repeat(state.lists.length - 1);
 
-				if (container.tag === 'checkboxList') {
-					const x = nodeAttributes?.style?.toLowerCase().includes('--en-checked:true') ? 'X' : ' ';
+				if (container.tag === ListTag.CheckboxList) {
+					const x = cssValue(this, nodeAttributes?.style, '--en-checked') === 'true' ? 'X' : ' ';
 					section.lines.push(`${indent}- [${x}] `);
-				} else if (container.tag === 'ul') {
+				} else if (container.tag === ListTag.Ul) {
 					section.lines.push(`${indent}- `);
 				} else {
 					section.lines.push(`${indent + container.counter}. `);
