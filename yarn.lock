@@ -4329,7 +4329,7 @@ __metadata:
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
-    react-native-webview: 11.24.0
+    react-native-webview: 11.25.0
     react-redux: 8.0.5
     redux: 4.2.0
     rn-fetch-blob: 0.12.0
@@ -26496,16 +26496,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:11.24.0":
-  version: 11.24.0
-  resolution: "react-native-webview@npm:11.24.0"
+"react-native-webview@npm:11.25.0":
+  version: 11.25.0
+  resolution: "react-native-webview@npm:11.25.0"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 40881b4724cfbfb8d3f648823bc9785e439b95a7937fda9d6d1dae261dc6797cc5e9a0a5a85829023e7e2dd30436d8e9e03a2510cea4e00435977a63abd22344
+  checksum: 50b0d61c1550594657e9dba5fc7b87eb3446b2ad67cb8b7e5226233d26c88845d26cc4c5b5abf0091f3ca98a6ebe49ac697ac6803718e5ffd32e46ad3c014114
   languageName: node
   linkType: hard
 
