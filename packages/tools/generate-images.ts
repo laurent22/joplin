@@ -250,6 +250,77 @@ const operations: Operation[] = [
 	},
 
 	// ============================================================================
+	// Linux icons
+	// ============================================================================
+
+	{
+		source: 2,
+		dest: 'Assets/LinuxIcons/16x16.png',
+		width: 16,
+		height: 16,
+	},
+	{
+		source: 3,
+		dest: 'Assets/LinuxIcons/24x24.png',
+		width: 24,
+		height: 24,
+	},
+	{
+		source: 3,
+		dest: 'Assets/LinuxIcons/32x32.png',
+		width: 32,
+		height: 32,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/48x48.png',
+		width: 48,
+		height: 48,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/72x72.png',
+		width: 72,
+		height: 72,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/96x96.png',
+		width: 96,
+		height: 96,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/128x128.png',
+		width: 128,
+		height: 128,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/144x144.png',
+		width: 144,
+		height: 144,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/256x256.png',
+		width: 256,
+		height: 256,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/512x512.png',
+		width: 512,
+		height: 512,
+	},
+	{
+		source: 7,
+		dest: 'Assets/LinuxIcons/1024x1024.png',
+		width: 1024,
+		height: 1024,
+	},
+
+	// ============================================================================
 	// PortableApps launcher
 	// ============================================================================
 
@@ -428,6 +499,7 @@ async function main() {
 		const operationKey = await makeOperationKey(source, sourcePath, operation);
 		if (results.done[operationKey]) {
 			console.info(`Skipping: ${operation.dest} (Already done)`);
+			continue;
 		} else {
 			console.info(`Processing: ${operation.dest}`);
 		}
