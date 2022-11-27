@@ -1,7 +1,8 @@
-import * as fs from 'fs-extra';
+import { pathExists, readFile, writeFile, copyFile, readdir } from 'fs-extra';
 import { dirname } from 'path';
 import { execCommand } from './tool-utils';
 import { fileExtension } from '@joplin/lib/path-utils';
+const md5File = require('md5-file');
 const sharp = require('sharp');
 
 interface Source {
@@ -16,6 +17,10 @@ interface Operation {
 	height?: number;
 	iconWidth?: number;
 	iconHeight?: number;
+}
+
+interface Results {
+	done: Record<string, boolean>;
 }
 
 const sources: Source[] = [
@@ -373,9 +378,43 @@ const operations: Operation[] = [
 	},
 ];
 
+const md5Dir = async (dirPath: string): Promise<string> => {
+	const files = await readdir(dirPath);
+	files.sort();
+	const output: string[] = [];
+	for (const file of files) {
+		output.push(await md5File(`${dirPath}/${file}`));
+	}
+	return output.join('_');
+};
+
+const readResults = async (filePath: string): Promise<Results> => {
+	if (!(await pathExists(filePath))) return { done: {} };
+	const content = await readFile(filePath, 'utf8');
+	return JSON.parse(content) as Results;
+};
+
+const saveResults = async (filePath: string, results: Results) => {
+	await writeFile(filePath, JSON.stringify(results, null, '\t'), 'utf8');
+};
+
+const makeOperationKey = async (source: Source, sourcePath: string, operation: Operation): Promise<string> => {
+	const output: any[] = [];
+	output.push(source.id);
+	output.push(await md5File(sourcePath));
+	output.push(operation.dest);
+	output.push(operation.width);
+	output.push(operation.height);
+	output.push(operation.iconWidth);
+	output.push(operation.iconHeight);
+	return output.join('_');
+};
+
 async function main() {
 	const rootDir = dirname(dirname(__dirname));
 	const sourceImageDir = `${rootDir}/Assets/ImageSources`;
+	const resultFilePath = `${__dirname}/generate-images.json`;
+	const results: Results = await readResults(resultFilePath);
 
 	for (const operation of operations) {
 		const source = sourceById(operation.source);
@@ -385,6 +424,13 @@ async function main() {
 
 		const sourceExt = fileExtension(sourcePath).toLowerCase();
 		const destExt = fileExtension(destPath).toLowerCase();
+
+		const operationKey = await makeOperationKey(source, sourcePath, operation);
+		if (results.done[operationKey]) {
+			console.info(`Skipping: ${operation.dest} (Already done)`);
+		} else {
+			console.info(`Processing: ${operation.dest}`);
+		}
 
 		if ((operation.width && operation.height) || (sourceExt !== destExt)) {
 			let s = sharp(sourcePath);
@@ -422,18 +468,30 @@ async function main() {
 
 			s = s.toFile(destPath);
 		} else {
-			await fs.copyFile(sourcePath, destPath);
+			await copyFile(sourcePath, destPath);
 		}
+
+		results.done[operationKey] = true;
 	}
 
 	if (process && process.platform === 'darwin') {
 		const icnsDest = `${rootDir}/Assets/macOs.icns`;
 		const icnsSource = `${rootDir}/Assets/macOs.iconset`;
-		console.info(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
-		await execCommand(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+		const operationKey = ['icns_to_icon_set', await md5Dir(icnsSource)].join('_');
+		if (!results.done[operationKey]) {
+			console.info(`Processing: ${icnsDest}`);
+			console.info(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+			await execCommand(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+			results.done[operationKey] = true;
+		} else {
+			console.info(`Skipping: ${icnsDest} (Already done)`);
+		}
 	} else {
 		console.info('If the macOS icon has been updated, this script should be run on macOS too');
 	}
+
+	console.info(`Saving results to ${resultFilePath}`);
+	await saveResults(resultFilePath, results);
 }
 
 main().catch((error) => {
