@@ -26,7 +26,7 @@
     "@types/yargs": "17.0.14",
     "dayjs": "1.11.6",
     "execa": "4.1.0",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.0.0",
     "gettext-parser": "6.0.0",
     "glob": "8.0.3",
     "markdown-it": "13.0.1",

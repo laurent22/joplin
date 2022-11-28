@@ -4206,7 +4206,7 @@ __metadata:
     electron-rebuild: 3.2.9
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     glob: 8.0.3
     gulp: 4.0.2
     highlight.js: 11.7.0
@@ -4293,7 +4293,7 @@ __metadata:
     crypto-browserify: 3.12.0
     events: 3.3.0
     execa: 4.1.0
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     gulp: 4.0.2
     jest: 29.3.1
     jest-environment-jsdom: 29.3.1
@@ -4396,7 +4396,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     css: 3.0.0
     datauri: 4.1.0
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     html-entities: 1.4.0
   languageName: unknown
   linkType: soft
@@ -4437,7 +4437,7 @@ __metadata:
     fast-xml-parser: 3.21.1
     follow-redirects: 1.15.2
     form-data: 4.0.0
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     hpagent: 1.2.0
     html-entities: 1.4.0
     html-minifier: 4.0.0
@@ -4522,7 +4522,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.3
     "@types/node": 18.11.9
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     gh-release-assets: 2.0.1
     jest: 29.3.1
     node-fetch: 2.6.7
@@ -4568,7 +4568,7 @@ __metadata:
     "@types/jest": 29.2.3
     "@types/node": 18.11.9
     font-awesome-filetypes: 2.1.0
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     highlight.js: 11.7.0
     html-entities: 1.4.0
     jest: 29.3.1
@@ -4621,7 +4621,7 @@ __metadata:
     compare-versions: 3.6.0
     dayjs: 1.11.6
     formidable: 2.0.1
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     gulp: 4.0.2
     html-entities: 1.4.0
     jest: 29.3.1
@@ -4670,7 +4670,7 @@ __metadata:
     "@types/yargs": 17.0.14
     dayjs: 1.11.6
     execa: 4.1.0
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     gettext-extractor: 3.6.0
     gettext-parser: 6.0.0
     glob: 8.0.3
@@ -16221,14 +16221,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:10.1.0, fs-extra@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "fs-extra@npm:10.1.0"
+"fs-extra@npm:11.0.0":
+  version: 11.0.0
+  resolution: "fs-extra@npm:11.0.0"
   dependencies:
     graceful-fs: ^4.2.0
     jsonfile: ^6.0.1
     universalify: ^2.0.0
-  checksum: dc94ab37096f813cc3ca12f0f1b5ad6744dfed9ed21e953d72530d103cea193c2f81584a39e9dee1bea36de5ee66805678c0dddc048e8af1427ac19c00fffc50
+  checksum: fd29fc5b4f26f91f8adfd3c6e5e87eb73df92630c132765d63a62a3cf41ee706a45533dda75e6be9e2e4d1fc3667e0dcdfcc20e44f957d71cdcf138a4369ce4a
   languageName: node
   linkType: hard
 
@@ -16264,6 +16264,17 @@ __metadata:
     jsonfile: ^6.0.1
     universalify: ^2.0.0
   checksum: 5285a3d8f34b917cf2b66af8c231a40c1623626e9d701a20051d3337be16c6d7cac94441c8b3732d47a92a2a027886ca93c69b6a4ae6aee3c89650d2a8880c0a
+  languageName: node
+  linkType: hard
+
+"fs-extra@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "fs-extra@npm:10.1.0"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: dc94ab37096f813cc3ca12f0f1b5ad6744dfed9ed21e953d72530d103cea193c2f81584a39e9dee1bea36de5ee66805678c0dddc048e8af1427ac19c00fffc50
   languageName: node
   linkType: hard
 
@@ -20127,7 +20138,7 @@ __metadata:
     aws-sdk: 2.1262.0
     chalk: 4.1.2
     compare-version: 0.1.2
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     gulp: 4.0.2
     html-entities: 1.4.0
     image-type: 3.1.0
@@ -27852,7 +27863,7 @@ __metadata:
     eslint-plugin-import: 2.26.0
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.31.11
-    fs-extra: 10.1.0
+    fs-extra: 11.0.0
     glob: 8.0.3
     gulp: 4.0.2
     http-server: 14.1.1
