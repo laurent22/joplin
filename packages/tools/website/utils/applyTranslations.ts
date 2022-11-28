@@ -38,7 +38,7 @@ const encodeHtml = (decodedText: string): string => {
 		.replace(/{{&gt; /gi, '{{> '); // Don't break Mustache partials
 };
 
-export default (html: string, languageCode: string, translations: Record<string, string>) => {
+export default (html: string, _languageCode: string, translations: Record<string, string>) => {
 	const output: string[] = [];
 
 	interface State {
