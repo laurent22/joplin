@@ -2714,7 +2714,7 @@ msgstr "注意：笔记分享后，便不再在服务器上加密。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:757
 msgid "Note&book"
-msgstr "笔记&笔记本"
+msgstr "笔记本 (&B)"
 
 #: packages/lib/models/Setting.ts:2402
 msgid "Notebook"
