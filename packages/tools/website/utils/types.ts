@@ -82,3 +82,5 @@ export interface PlanPageParams extends TemplateParams {
 	featureListHtml: string;
 	stripeConfig: StripePublicConfig;
 }
+
+export type Partials = Record<string, string>;

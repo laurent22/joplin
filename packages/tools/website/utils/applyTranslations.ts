@@ -10,7 +10,9 @@ const trimHtml = (content: string) => {
 		.replace(/^(&tab;)+/i, '')
 		.replace(/^(&nbsp;)+/i, '')
 		.replace(/(&tab;)+$/i, '')
-		.replace(/(&nbsp;)+$/i, '');
+		.replace(/(&nbsp;)+$/i, '')
+		.replace(/^\t+/, '')
+		.replace(/\t+$/, '');
 };
 
 const findTranslation = (englishString: string, translations: Record<string, string>): string => {
@@ -30,8 +32,13 @@ const findTranslation = (englishString: string, translations: Record<string, str
 	return englishString;
 };
 
+const encodeHtml = (decodedText: string): string => {
+	return htmlentities(decodedText)
+		.replace(/&Tab;/gi, '\t')
+		.replace(/{{&gt; /gi, '{{> '); // Don't break Mustache partials
+};
 
-export default (html: string, translations: Record<string, string>) => {
+export default (html: string, languageCode: string, translations: Record<string, string>) => {
 	const output: string[] = [];
 
 	interface State {
@@ -60,6 +67,8 @@ export default (html: string, translations: Record<string, string>) => {
 
 		// Tells if we're at the beginning of a translable block.
 		translateIsOpening: boolean;
+
+		inScript: boolean;
 	}
 
 	const state: State = {
@@ -67,6 +76,7 @@ export default (html: string, translations: Record<string, string>) => {
 		currentTranslationTag: [],
 		currentTranslationContent: [],
 		translateIsOpening: false,
+		inScript: false,
 	};
 
 	const pushContent = (state: State, content: string) => {
@@ -84,6 +94,8 @@ export default (html: string, translations: Record<string, string>) => {
 	const parser = new htmlparser2.Parser({
 
 		onopentag: (name: string, attrs: any) => {
+			if (name === 'script') state.inScript = true;
+
 			if ('translate' in attrs) {
 				if (state.translateStack.length) throw new Error(`Cannot have a translate block within another translate block. At tag "${name}" attrs: ${JSON.stringify(attrs)}`);
 				state.translateStack.push(name);
@@ -103,7 +115,8 @@ export default (html: string, translations: Record<string, string>) => {
 		},
 
 		ontext: (decodedText: string) => {
-			pushContent(state, htmlentities(decodedText));
+			const encodedText = state.inScript ? decodedText : encodeHtml(decodedText);
+			pushContent(state, encodedText);
 		},
 
 		onclosetag: (name: string) => {
@@ -117,6 +130,8 @@ export default (html: string, translations: Record<string, string>) => {
 					output.push(translation);
 				}
 			}
+
+			if (name === 'script') state.inScript = false;
 
 			if (htmlUtils.isSelfClosingTag(name)) return;
 			pushContent(state, `</${name}>`);
