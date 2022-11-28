@@ -83,6 +83,7 @@
 		"com.facebook.flipper:flipper",
 		"jsc-android",
 		"react-native",
+		"@babel/runtime",
 
 		// Need special processing when upgrading
 		"katex",
