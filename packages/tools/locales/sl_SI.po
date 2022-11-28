@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: .\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3);\n"
 "X-Poedit-SourceCharset: https://raw.githubusercontent.com/laurent22/joplin/"
 "master/CliClient/locales/joplin.pot\n"
 
@@ -93,6 +93,16 @@ msgstr "&Pogled"
 msgid "%d days"
 msgstr "%d dnevi"
 
+#: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
+#: packages/lib/utils/joplinCloud.ts:138
+msgid "%d GB"
+msgstr ""
+
+#: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
+#: packages/lib/utils/joplinCloud.ts:135
+msgid "%d GB storage space"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1322
 msgid "%d hour"
 msgstr "%d ur"
@@ -100,6 +110,17 @@ msgstr "%d ur"
 #: packages/lib/models/Setting.ts:1323 packages/lib/models/Setting.ts:1324
 msgid "%d hours"
 msgstr "%d ur"
+
+#: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
+#: packages/lib/utils/joplinCloud.ts:126
+msgid "%d MB"
+msgstr ""
+
+#: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
+#: packages/lib/utils/joplinCloud.ts:123
+#, fuzzy
+msgid "%d MB per note or attachment"
+msgstr "Priponke beležke"
 
 #: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
 #: packages/lib/models/Setting.ts:1321
@@ -189,10 +210,11 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> je lahko le \"spremeni\" ali \"počisti\". Uporabite \"spremeni"
-"\" da spremenite dani seznam opravil iz opravljeno v neopravljeno ali "
-"obratno. (Če je cilj navadna beležka, bo ta pretvorjena v seznam opravil). "
-"Uporabite \"počisti\" da povrnete seznam opravil nazaj v običajno beležko."
+"<todo-command> je lahko le \"spremeni\" ali \"počisti\". Uporabite "
+"\"spremeni\" da spremenite dani seznam opravil iz opravljeno v neopravljeno "
+"ali obratno. (Če je cilj navadna beležka, bo ta pretvorjena v seznam "
+"opravil). Uporabite \"počisti\" da povrnete seznam opravil nazaj v običajno "
+"beležko."
 
 #: packages/lib/models/Setting.ts:1348
 msgid "A3"
@@ -288,7 +310,6 @@ msgstr ""
 msgid "Admin dashboard"
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
 msgid "Advanced options"
 msgstr "Napredne možnosti"
@@ -299,7 +320,7 @@ msgstr "Napredne možnosti"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:485
 #: packages/app-mobile/components/screens/notes.js:191
-#: packages/app-mobile/components/side-menu-content.tsx:453
+#: packages/app-mobile/components/side-menu-content.tsx:455
 msgid "All notes"
 msgstr "Vse beležke"
 
@@ -329,8 +350,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
 
 #: packages/app-desktop/checkForUpdates.ts:197
@@ -349,7 +370,6 @@ msgstr "Aplikacija"
 msgid "Apply"
 msgstr "Shrani"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:45
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Ali ste prepričani, da želite obnoviti avtorizacijski žeton?"
@@ -416,14 +436,13 @@ msgstr ""
 "preden sinhronizirate, drugače bodo vse vaše datoteke odstranjene! Oglejte "
 "si FAQ za več podrobnosti: %s"
 
-#: packages/app-cli/app/command-sync.ts:82
-#: packages/app-cli/app/command-sync.ts:96
+#: packages/app-cli/app/command-sync.ts:73
+#: packages/app-cli/app/command-sync.ts:87
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Avtentikacija ni bila uspešna (avtentikacijski žeton ni bil prejet)."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:149
 msgid "Authorisation token:"
 msgstr "Avtorizacijski žeton:"
@@ -457,6 +476,10 @@ msgstr "Avtomatsko zamenjaj teme glede na sistemski način teme"
 msgid "Back"
 msgstr "Nazaj"
 
+#: packages/lib/utils/joplinCloud.ts:294
+msgid "Basic"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
 msgid "Bold"
@@ -483,11 +506,10 @@ msgstr "Deli"
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:728
-#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
+#: packages/app-desktop/gui/PromptDialog.tsx:270
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:318
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:665
@@ -499,14 +521,14 @@ msgstr "Deli"
 #: packages/app-mobile/components/screens/Note.tsx:104
 #: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
-#: packages/app-mobile/components/side-menu-content.tsx:163
-#: packages/app-mobile/components/side-menu-content.tsx:172
-#: packages/app-mobile/components/side-menu-content.tsx:424
+#: packages/app-mobile/components/side-menu-content.tsx:165
+#: packages/app-mobile/components/side-menu-content.tsx:174
+#: packages/app-mobile/components/side-menu-content.tsx:426
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: packages/app-cli/app/app.js:171
+#: packages/app-cli/app/app.js:138
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Sinhronizacija v ozadju se preklicuje... Prosimo počakajte."
 
@@ -514,7 +536,7 @@ msgstr "Sinhronizacija v ozadju se preklicuje... Prosimo počakajte."
 msgid "Cancelling..."
 msgstr "V preklicu..."
 
-#: packages/app-cli/app/command-sync.ts:269
+#: packages/app-cli/app/command-sync.ts:260
 msgid "Cancelling... Please wait."
 msgstr "V preklicu... Prosim počakajte."
 
@@ -522,7 +544,7 @@ msgstr "V preklicu... Prosim počakajte."
 msgid "Cannot access %s"
 msgstr "Ne morem dostopati %s"
 
-#: packages/app-cli/app/base-command.js:15
+#: packages/app-cli/app/base-command.ts:15
 msgid "Cannot change encrypted item"
 msgstr "Ni mogoče spremeniti šifriranega predmeta"
 
@@ -558,7 +580,7 @@ msgstr "Ni možno kopirati beležke v \"%s\" zvezek"
 msgid "Cannot find \"%s\"."
 msgstr "Ni možno najti \"%s\"."
 
-#: packages/app-cli/app/command-sync.ts:182
+#: packages/app-cli/app/command-sync.ts:173
 msgid "Cannot initialise synchroniser."
 msgstr "Ni mogoče zagnati sinhronizatorja."
 
@@ -656,7 +678,7 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web trgovina"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
+#: packages/app-desktop/gui/PromptDialog.tsx:277
 msgid "Clear"
 msgstr "Počisti"
 
@@ -672,7 +694,7 @@ msgstr ""
 "Pritisni \"%s\" za obnovitev beležke. Beležka bo kopirana v zvezek imenovan "
 "\"%s\". Trenutna verzija beležke ne bo zamenjana ali spremenjena."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:384
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:387
 msgid "Click to add tags..."
 msgstr "Klikni za dodajanje oznak..."
 
@@ -705,7 +727,7 @@ msgstr "Koda"
 msgid "Code Block"
 msgstr "Blok kode"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1172
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
 msgid "Code View"
 msgstr "Pogled kode"
 
@@ -713,7 +735,7 @@ msgstr "Pogled kode"
 msgid "Collaborate on notebooks with others"
 msgstr "Sodelujte v zvezkih z drugimi"
 
-#: packages/app-mobile/components/side-menu-content.tsx:331
+#: packages/app-mobile/components/side-menu-content.tsx:333
 msgid "Collapse"
 msgstr ""
 
@@ -766,7 +788,7 @@ msgid "Compress old changes"
 msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:681
-#: packages/app-mobile/components/side-menu-content.tsx:402
+#: packages/app-mobile/components/side-menu-content.tsx:404
 msgid "Configuration"
 msgstr "Nastavitve"
 
@@ -795,6 +817,10 @@ msgstr "Konfikti"
 msgid "Conflicts (attachments)"
 msgstr "Spori (priponke)"
 
+#: packages/lib/utils/joplinCloud.ts:171
+msgid "Consolidated billing"
+msgstr ""
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 #, fuzzy
 msgid "Content provided by %s"
@@ -810,7 +836,7 @@ msgstr "Pretvori v list z opravili"
 
 #: packages/app-desktop/gui/MenuBar.tsx:492
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:782
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:783
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:157
 msgid "Copy"
 msgstr "Kopiraj"
@@ -852,7 +878,6 @@ msgstr[1] "Kopiraj povezave za delitev"
 msgstr[2] "Kopiraj povezave za delitev"
 msgstr[3] "Kopiraj povezave za delitev"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:153
 msgid "Copy token"
 msgstr "Kopiraj žeton"
@@ -913,7 +938,7 @@ msgid ""
 "again when you are connected to the internet."
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/PromptDialog.tsx:256
 #, fuzzy
 msgid "Create"
 msgstr "Ustvarjeno"
@@ -1016,7 +1041,7 @@ msgid "Custom TLS certificates"
 msgstr "Poljubni TLS certifikati"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:772
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:773
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:149
 msgid "Cut"
 msgstr "Izreži"
@@ -1058,7 +1083,7 @@ msgid "Decrypted items: %s / %s"
 msgstr "Dešifrirani predmeti: %s / %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:734
-#: packages/app-mobile/components/side-menu-content.tsx:411
+#: packages/app-mobile/components/side-menu-content.tsx:413
 msgid "Decrypting items: %d/%d"
 msgstr "Dešifrirani predmeti: %d/%d"
 
@@ -1080,7 +1105,7 @@ msgstr "Privzeto: %s"
 #: packages/app-mobile/components/ScreenHeader.tsx:415
 #: packages/app-mobile/components/ScreenHeader.tsx:482
 #: packages/app-mobile/components/screens/Note.tsx:960
-#: packages/app-mobile/components/side-menu-content.tsx:153
+#: packages/app-mobile/components/side-menu-content.tsx:155
 msgid "Delete"
 msgstr "Izbriši"
 
@@ -1117,7 +1142,7 @@ msgid "Delete note?"
 msgstr "Želite izbrisati beležko?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
-#: packages/app-mobile/components/side-menu-content.tsx:155
+#: packages/app-mobile/components/side-menu-content.tsx:157
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
@@ -1205,7 +1230,6 @@ msgstr "Onemogoči šifriranje"
 msgid "Disable safe mode and restart"
 msgstr "Onemogoči varni način in ponovno zaženi"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:102
 msgid "Disable Web Clipper Service"
 msgstr "Onemogoči Web Clipper storitev"
@@ -1233,7 +1257,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Opusti spremembe"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:451
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:454
 msgid "Dismiss"
 msgstr "Prezri"
 
@@ -1313,7 +1337,6 @@ msgstr ""
 msgid "Download"
 msgstr "Naloži"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Naložite in namestite si primerno razširitev za vaš brskalnik:"
@@ -1334,7 +1357,7 @@ msgstr "Naloženo in šifrirano"
 msgid "Downloading"
 msgstr "Nalaganje"
 
-#: packages/app-cli/app/command-sync.ts:236
+#: packages/app-cli/app/command-sync.ts:227
 msgid "Downloading resources..."
 msgstr "Nalaganje virov..."
 
@@ -1342,7 +1365,7 @@ msgstr "Nalaganje virov..."
 msgid "Dracula"
 msgstr "Drakula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1172
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
 msgid "Drop notes or files here"
 msgstr "Spusti beležke ali datoteke tukaj"
 
@@ -1456,7 +1479,7 @@ msgstr ""
 msgid "Emails"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:195
 msgid "emphasised text"
 msgstr "poudarjen tekst"
 
@@ -1550,7 +1573,6 @@ msgstr "Omogoči podporo tiskarja"
 msgid "Enable video player"
 msgstr "Omogoči video predvajalnik"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:113
 msgid "Enable Web Clipper Service"
 msgstr "Omogoči Web Clipper storitev"
@@ -1579,7 +1601,7 @@ msgstr "Šifrirano"
 msgid "Encrypted items cannot be modified"
 msgstr "Šifrirane predmeti ni možno spreminjati"
 
-#: packages/app-mobile/components/side-menu-content.tsx:139
+#: packages/app-mobile/components/side-menu-content.tsx:141
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Šifrirane zvezke ni možno preimenovati"
 
@@ -1669,7 +1691,7 @@ msgstr "Evernote izvozna datoteka (kot Markdown)"
 msgid "Exits the application."
 msgstr "Izhod iz aplikacije."
 
-#: packages/app-mobile/components/side-menu-content.tsx:331
+#: packages/app-mobile/components/side-menu-content.tsx:333
 msgid "Expand"
 msgstr ""
 
@@ -1745,7 +1767,7 @@ msgid "Fetched items: %d/%d."
 msgstr "Preneseni predmeti: %d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
-#: packages/app-mobile/components/side-menu-content.tsx:416
+#: packages/app-mobile/components/side-menu-content.tsx:418
 msgid "Fetching resources: %d/%d"
 msgstr "Prenašanje virov: %d/%d"
 
@@ -2104,7 +2126,6 @@ msgstr ""
 "Če želite uporabljati sinhronizacijo datotečnega sistema je vaše dovoljenje "
 "potrebno za zapisovanje na zunanji prostor."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Za uporabo web clipper, morate storiti slednje:"
@@ -2113,7 +2134,7 @@ msgstr "Za uporabo web clipper, morate storiti slednje:"
 msgid "In progress"
 msgstr "V postopku"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:535
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:539
 msgid "In: %s"
 msgstr "V: %s"
 
@@ -2141,7 +2162,7 @@ msgstr "Koda v vrstici"
 msgid "Insert"
 msgstr "Vstavi"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:197
 msgid "Insert Hyperlink"
 msgstr "Vstavi hiperpovezavo"
 
@@ -2275,7 +2296,6 @@ msgstr "Joplin strežnik geslo"
 msgid "Joplin Server URL"
 msgstr "Joplin strežnik URL"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -2342,7 +2362,7 @@ msgstr "Zadnja napaka: %s"
 msgid "Later"
 msgstr "Kasneje"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:614
 msgid "Layout"
 msgstr "Izgled"
 
@@ -2398,9 +2418,9 @@ msgstr "krepek tekst"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Povezave s protokolom \"%s\" niso podprte"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:233
 msgid "List item"
 msgstr "Element seznama"
 
@@ -2416,7 +2436,7 @@ msgstr "Naloženo"
 msgid "Location"
 msgstr "Lokacija"
 
-#: packages/app-cli/app/command-sync.ts:137
+#: packages/app-cli/app/command-sync.ts:128
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2469,6 +2489,11 @@ msgstr "Vnesite glavno geslo:"
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
 #, fuzzy
 msgid "Manage master password..."
+msgstr "Vnesite glavno geslo:"
+
+#: packages/lib/utils/joplinCloud.ts:165
+#, fuzzy
+msgid "Manage multiple users"
 msgstr "Vnesite glavno geslo:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
@@ -2535,6 +2560,11 @@ msgstr "Maksimalno število sočasnih povezav"
 msgid "Max Item Size"
 msgstr ""
 
+#: packages/lib/utils/joplinCloud.ts:117
+#, fuzzy
+msgid "Max note or attachment size"
+msgstr "Priponke beležke"
+
 #: packages/server/src/routes/admin/users.ts:150
 #, fuzzy
 msgid "Max Total Size"
@@ -2553,7 +2583,7 @@ msgstr "Manjkajoča glavna gesla"
 msgid "Missing required argument: %s"
 msgstr "Manjka zahtevani argument %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:437
+#: packages/app-mobile/components/side-menu-content.tsx:439
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobilni podatki - avtomatsko sinhroniziranje onemogočeno"
 
@@ -2565,7 +2595,7 @@ msgstr "Več informacij"
 msgid "More information"
 msgstr "Več informacij"
 
-#: packages/app-cli/app/app.js:63
+#: packages/app-cli/app/app.js:64
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Več kot en predmet se ujema z \"%s\". Prosim zožite iskani niz besed."
 
@@ -2590,11 +2620,12 @@ msgstr "Premakni v beležnico..."
 msgid "Moves the given <item> to [notebook]"
 msgstr "Premakne ustrezno beležko, ki ustreza <note> v [notebook]."
 
-#: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
+#: packages/app-cli/app/cli-utils.js:161
+#: packages/app-cli/app/setupCommand.ts:20
 msgid "n"
 msgstr "n"
 
-#: packages/app-cli/app/app.js:138
+#: packages/app-cli/app/setupCommand.ts:20
 msgid "N"
 msgstr "N"
 
@@ -2608,7 +2639,7 @@ msgstr "Nova beležka"
 msgid "New notebook"
 msgstr "Nov zvezek"
 
-#: packages/app-mobile/components/side-menu-content.tsx:398
+#: packages/app-mobile/components/side-menu-content.tsx:400
 msgid "New Notebook"
 msgstr "Nov zvezek"
 
@@ -2673,11 +2704,11 @@ msgstr "Ni aktivnih zvezkov."
 msgid "No item with ID %s"
 msgstr "Ni predmeta z ID %s"
 
-#: packages/app-cli/app/app.js:99
+#: packages/app-cli/app/app.js:100
 msgid "No notebook has been specified."
 msgstr "Noben zvezek ni bil naveden."
 
-#: packages/app-cli/app/app.js:93
+#: packages/app-cli/app/app.js:94
 msgid "No notebook selected."
 msgstr "Noben zvezek ni bil izbran."
 
@@ -2694,7 +2725,7 @@ msgstr "Ni virov!"
 msgid "No results"
 msgstr "Ni rezultatov"
 
-#: packages/app-cli/app/app.js:256
+#: packages/app-cli/app/app.js:224
 msgid "No such command: %s"
 msgstr "Noben tak ukaz ni bil najden: %s"
 
@@ -2713,7 +2744,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:106
+#: packages/app-cli/app/command-sync.ts:97
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Ni avtenticirano z %s. Prosim podajte manjkajoče podatke."
 
@@ -2812,12 +2843,12 @@ msgstr "Zvezki"
 msgid "Notebook list growth factor"
 msgstr "Rastoči faktor seznamov zvezkov"
 
-#: packages/app-mobile/components/side-menu-content.tsx:133
+#: packages/app-mobile/components/side-menu-content.tsx:135
 msgid "Notebook: %s"
 msgstr "Zvezki: %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:691
-#: packages/app-mobile/components/side-menu-content.tsx:457
+#: packages/app-mobile/components/side-menu-content.tsx:459
 msgid "Notebooks"
 msgstr "Zvezki"
 
@@ -2847,15 +2878,14 @@ msgstr "Oštevilčen seznam"
 #: packages/app-desktop/bridge.ts:190 packages/app-desktop/bridge.ts:196
 #: packages/app-desktop/bridge.ts:217 packages/app-desktop/bridge.ts:227
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
-#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:492
-#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/PromptDialog.tsx:263
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:203
-#: packages/app-mobile/components/side-menu-content.tsx:157
+#: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "OK"
 msgstr "Vredu"
 
@@ -2982,7 +3012,7 @@ msgid "Passwords do not match!"
 msgstr "Gesli se ne ujemata!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:792
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:793
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Paste"
 msgstr "Prilepi"
@@ -2995,6 +3025,10 @@ msgstr "Pot:"
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.ts:24
 msgid "PDF File"
 msgstr "PDF datoteka"
+
+#: packages/lib/utils/joplinCloud.ts:355
+msgid "Per user. Minimum of %d users."
+msgstr ""
 
 #: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
@@ -3067,7 +3101,7 @@ msgstr "Prosim navedite zvezek, kamor želite uvoziti beležke."
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "Prosimo nadgradite Joplin za uporabo tega dodatka"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1172
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -3149,9 +3183,17 @@ msgstr "Prejšnje verzije te beležke"
 msgid "Print"
 msgstr "Natisni"
 
+#: packages/lib/utils/joplinCloud.ts:183
+msgid "Priority support"
+msgstr ""
+
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:655
 msgid "Privacy Policy"
 msgstr "Pravilnik o zasebnosti"
+
+#: packages/lib/utils/joplinCloud.ts:316
+msgid "Pro"
+msgstr ""
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3208,6 +3250,7 @@ msgid "Publish Notes"
 msgstr "Objavi Beležko"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:178
+#: packages/lib/utils/joplinCloud.ts:141
 msgid "Publish notes to the internet"
 msgstr "Objavi beležko na internetu"
 
@@ -3229,7 +3272,7 @@ msgstr "Ponovno šifriranje"
 msgid "Re-upload local data to sync target"
 msgstr "Ponovno naloži lokalne datoteke na sinhronizacijski cilj"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:450
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:453
 msgid "Read more about it"
 msgstr "Preberi si več o tem"
 
@@ -3289,7 +3332,7 @@ msgstr "Želite odstraniti ta iskalni niz iz stranske vrstice?"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.ts:8
-#: packages/app-mobile/components/side-menu-content.tsx:136
+#: packages/app-mobile/components/side-menu-content.tsx:138
 msgid "Rename"
 msgstr "Preimenuj"
 
@@ -3305,7 +3348,6 @@ msgstr "Preimenuj oznako:"
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr "Preimenuje dano <item> (beležko ali zvezek) v <name>."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid "Renew token"
 msgstr "Obnovi žeton"
@@ -3486,7 +3528,7 @@ msgstr "Išči:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:165
+#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 msgid "Search..."
 msgstr "Išči..."
 
@@ -3568,6 +3610,11 @@ msgstr ""
 msgid "Share"
 msgstr "Deli"
 
+#: packages/lib/utils/joplinCloud.ts:159
+#, fuzzy
+msgid "Share and collaborate on a notebook"
+msgstr "Beležke so lahko ustvarjene samo znotraj zvezka."
+
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
 msgstr "Deli zvezek"
@@ -3575,6 +3622,10 @@ msgstr "Deli zvezek"
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.ts:6
 msgid "Share notebook..."
 msgstr "Deli zvezek..."
+
+#: packages/lib/utils/joplinCloud.ts:177
+msgid "Sharing access control"
+msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3742,7 +3793,7 @@ msgstr ""
 "Dešifriranje se začenja... Prosim počakajte. Vse skupaj lahko vzame nekaj "
 "minut, glede na količino materiala, ki jo je potrebno dešifrirati."
 
-#: packages/app-cli/app/command-sync.ts:213
+#: packages/app-cli/app/command-sync.ts:204
 msgid "Starting synchronisation..."
 msgstr "Sinhronizacija se začenja..."
 
@@ -3765,35 +3816,31 @@ msgstr "Statistika..."
 msgid "Status"
 msgstr "Stanje"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:96
 msgid "Status: %s"
 msgstr "Stanje: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:90
 msgid "Status: Started on port %d"
 msgstr "Stanje: Začetek na vratih %d"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "Step 1: Enable the clipper service"
 msgstr "Korak 1: Omogoči clipper storitev"
 
-#: packages/app-cli/app/command-sync.ts:92
+#: packages/app-cli/app/command-sync.ts:83
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Korak 1: Odprite ta URL v vašem brskalniku, da avtorizirate aplikacijo:"
 
-#: packages/app-cli/app/command-sync.ts:94
+#: packages/app-cli/app/command-sync.ts:85
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Korak 2: Vnesite kodo, ki vam jo je izdal Dropbox:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid "Step 2: Install the extension"
 msgstr "Korak 2: Naložite si razširitev"
@@ -3810,7 +3857,7 @@ msgstr "Ustavi zunanje urejanje"
 msgid "Strikethrough"
 msgstr "Prečrtaj"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:193
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "strong text"
 msgstr "krepek tekst"
 
@@ -3871,6 +3918,10 @@ msgstr ""
 "Se premakne v [notebook] - vse nadaljnje operacije se bodo zgodile znotraj "
 "tega zvezka."
 
+#: packages/lib/utils/joplinCloud.ts:147
+msgid "Sync as many devices as you want"
+msgstr ""
+
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:564
 msgid "Sync Status"
 msgstr "Sinhronizacijsko stanje"
@@ -3879,7 +3930,7 @@ msgstr "Sinhronizacijsko stanje"
 msgid "Sync status (synced items / total items)"
 msgstr "Stanje sinhronizacije (sinhronizirani predmeti / vse datoteke)"
 
-#: packages/app-cli/app/command-sync.ts:251
+#: packages/app-cli/app/command-sync.ts:242
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 "Sinhronizacijski cilj mora biti nadgrajen! Poženite `%s` za nadaljevanje."
@@ -3910,7 +3961,7 @@ msgstr "Sinhronizacija"
 msgid "Synchronisation interval"
 msgstr "Časovni interval sinhronizacije"
 
-#: packages/app-cli/app/command-sync.ts:132
+#: packages/app-cli/app/command-sync.ts:123
 msgid "Synchronisation is already in progress."
 msgstr "Sinhronizacija je že v postopku."
 
@@ -3923,12 +3974,12 @@ msgstr "Sinhronizacijski status"
 msgid "Synchronisation target"
 msgstr "Sinhronizacijski cilj"
 
-#: packages/app-cli/app/command-sync.ts:180
+#: packages/app-cli/app/command-sync.ts:171
 msgid "Synchronisation target: %s (%s)"
 msgstr "Mesto sinhronizacije: %s(%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:665
-#: packages/app-mobile/components/side-menu-content.tsx:424
+#: packages/app-mobile/components/side-menu-content.tsx:426
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Sinhroniziraj"
@@ -3966,7 +4017,7 @@ msgstr "Označeno: %d."
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:715
 #: packages/app-mobile/components/screens/Note.tsx:933
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.tsx:400
+#: packages/app-mobile/components/side-menu-content.tsx:402
 msgid "Tags"
 msgstr "Oznake"
 
@@ -3982,6 +4033,10 @@ msgstr "Ustvari nov zvezek"
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
 msgid "Tasks"
+msgstr ""
+
+#: packages/lib/utils/joplinCloud.ts:338
+msgid "Teams"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:1343
@@ -4020,13 +4075,13 @@ msgstr "Aplikacija je bila uspešno avtorizirana."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Aplikacija mora biti ponovno zagnana, da se spremembe uveljavijo."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:522
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:526
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr "Priponke ne bodo več gledane, ko se premaknete na drugo beležko."
 
-#: packages/app-cli/app/app.js:304
+#: packages/app-cli/app/app.js:272
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Ukaz \"%s\" je na voljo samo v GUI načinu"
 
@@ -4075,7 +4130,7 @@ msgstr ""
 "Tako bodo predmeti s faktorjem 2 dvakrat bolj zasedli prostor kot predmeti s "
 "faktorjem 1. Ponovno zaženite aplikacijo za ogled sprememb."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:525
 msgid "The following attachments are being watched for changes:"
 msgstr "Naslednje priponke se gledajo za spremembe:"
 
@@ -4183,13 +4238,11 @@ msgstr ""
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr "Web Clipper rabi vašo odobritev za dostop do vaših podatkov."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:84
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "Web clipper storitev je omogočena in nastavljena na avtomatski začetek."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:108
 msgid "The web clipper service is not enabled."
 msgstr "Web clipper storitev ni omogočena."
@@ -4275,7 +4328,6 @@ msgstr "Ta priponka se ni naložila ali pa še ni dekodirana"
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Ta priponka ni bila naložena ali še ni dekodirana."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -4302,7 +4354,7 @@ msgstr "Ta beležka nima geografske lokacije."
 msgid "This note has been modified:"
 msgstr "Ta beležka je bila spremenjena:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:614
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4314,7 +4366,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Ta beležka nima nobene zgodovine"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:449
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:452
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4322,7 +4374,6 @@ msgstr ""
 "Ta Bogat urejevalnik ima število omejitev in je priporočljivo, da se z njimi "
 "seznanite predno začnete uporabljati."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:134
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -4369,7 +4420,7 @@ msgstr "naslov"
 msgid "Title"
 msgstr "Naslov"
 
-#: packages/app-cli/app/command-sync.ts:91
+#: packages/app-cli/app/command-sync.ts:82
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -4414,8 +4465,8 @@ msgstr "Če želite povečati/pomanjšati konzolo, pritisnite \"tc\"."
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
-"Če se želite premakniti iz enega sklopa v drugega, pritisnite Tab ali Shift"
-"+Tab."
+"Če se želite premakniti iz enega sklopa v drugega, pritisnite Tab ali "
+"Shift+Tab."
 
 #: packages/app-cli/app/command-status.js:44
 msgid ""
@@ -4483,7 +4534,6 @@ msgstr "Preklopi stransko vrstice"
 msgid "Toggle sort order field"
 msgstr "Preklopi varni način"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
 msgid "Token has been copied to the clipboard!"
 msgstr "Žeton je bil kopiran v odložišče!"
@@ -4504,6 +4554,12 @@ msgstr "Skupno: %d/%d"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
 msgid "Try again"
 msgstr "Poizkusi znova"
+
+#: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
+#: packages/lib/utils/joplinCloud.ts:353
+#, fuzzy
+msgid "Try it now"
+msgstr "Stori sedaj"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4757,7 +4813,7 @@ msgstr "Opozorilo"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "Opozorilo: vsi viri niso prikazani zaradi učinkovitosti (omejitev: %s)"
 
-#: packages/lib/models/Setting.ts:2408
+#: packages/lib/models/Setting.ts:2408 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4811,11 +4867,12 @@ msgstr "Ob ustvarjanju novega seznama opravil:"
 msgid "Words"
 msgstr "Besede"
 
-#: packages/app-cli/app/app.js:138
+#: packages/app-cli/app/setupCommand.ts:20
 msgid "y"
 msgstr "d"
 
-#: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
+#: packages/app-cli/app/cli-utils.js:161
+#: packages/app-cli/app/setupCommand.ts:20
 msgid "Y"
 msgstr "D"
 
@@ -4871,7 +4928,7 @@ msgstr "Vaši podatki bodo ponovni šifrirani in sinhronizirani."
 msgid "Your password is needed to decrypt some of your data."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

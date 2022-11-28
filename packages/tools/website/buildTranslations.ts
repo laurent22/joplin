@@ -8,11 +8,14 @@ const localesDir = `${websiteAssetsDir}/locales`;
 const createPotFile = async (potFilePath: string) => {
 	const extractor = new GettextExtractor();
 
-	extractor
+	const htmlParser = extractor
 		.createHtmlParser([
 			HtmlExtractors.elementContent('[translate]'),
-		])
-		.parseFile(`${websiteAssetsDir}/templates/front.mustache`);
+		]);
+
+	htmlParser.parseFile(`${websiteAssetsDir}/templates/front.mustache`);
+	htmlParser.parseFile(`${websiteAssetsDir}/templates/plans.mustache`);
+	htmlParser.parseFile(`${websiteAssetsDir}/templates/partials/plan.mustache`);
 
 	extractor.savePotFile(potFilePath);
 };

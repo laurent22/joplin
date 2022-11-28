@@ -164,16 +164,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/client-s3@npm:3.216.0"
+"@aws-sdk/client-s3@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/client-s3@npm:3.218.0"
   dependencies:
     "@aws-crypto/sha1-browser": 2.0.0
     "@aws-crypto/sha256-browser": 2.0.0
     "@aws-crypto/sha256-js": 2.0.0
-    "@aws-sdk/client-sts": 3.216.0
+    "@aws-sdk/client-sts": 3.218.0
     "@aws-sdk/config-resolver": 3.215.0
-    "@aws-sdk/credential-provider-node": 3.216.0
+    "@aws-sdk/credential-provider-node": 3.218.0
     "@aws-sdk/eventstream-serde-browser": 3.215.0
     "@aws-sdk/eventstream-serde-config-resolver": 3.215.0
     "@aws-sdk/eventstream-serde-node": 3.215.0
@@ -222,7 +222,7 @@ __metadata:
     "@aws-sdk/xml-builder": 3.201.0
     fast-xml-parser: 4.0.11
     tslib: ^2.3.1
-  checksum: eeda691d35fd784cc15689e407f41f2539bc1c8b4508ae624df335dfd313e7e268d406e22c7f3d37f81de481f694ee03556d6ca3fe7e7957f4cb301cbf78da4d
+  checksum: a747efc45e20a309dc856a01770f95d3503ab3d144d356ef8b37125023b735e98d429e4b7bf3f37fd0686e59132573d9b0703e9dcf0986e08c843eefa10d8aaa
   languageName: node
   linkType: hard
 
@@ -266,9 +266,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sso@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/client-sso@npm:3.216.0"
+"@aws-sdk/client-sso@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/client-sso@npm:3.218.0"
   dependencies:
     "@aws-crypto/sha256-browser": 2.0.0
     "@aws-crypto/sha256-js": 2.0.0
@@ -302,18 +302,18 @@ __metadata:
     "@aws-sdk/util-utf8-browser": 3.188.0
     "@aws-sdk/util-utf8-node": 3.208.0
     tslib: ^2.3.1
-  checksum: 9bb7924a2feab7297b101de4cc530ed8c4c0ce43ef1b7ca1302bfa31bda00a329f74a24fc33794e24a7b693744dd2b58ac2adf9569d828ed9a07a74f2662c2af
+  checksum: 2ef01b0cf87ca4af9fb728e01674a765b84111a6e4030f8aa4dff3dbacc2a3c55861bdb3d992be84e49b625e50d497aa0f611e7e0c1de844392ee3089b9fe879
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sts@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/client-sts@npm:3.216.0"
+"@aws-sdk/client-sts@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/client-sts@npm:3.218.0"
   dependencies:
     "@aws-crypto/sha256-browser": 2.0.0
     "@aws-crypto/sha256-js": 2.0.0
     "@aws-sdk/config-resolver": 3.215.0
-    "@aws-sdk/credential-provider-node": 3.216.0
+    "@aws-sdk/credential-provider-node": 3.218.0
     "@aws-sdk/fetch-http-handler": 3.215.0
     "@aws-sdk/hash-node": 3.215.0
     "@aws-sdk/invalid-dependency": 3.215.0
@@ -346,7 +346,7 @@ __metadata:
     "@aws-sdk/util-utf8-node": 3.208.0
     fast-xml-parser: 4.0.11
     tslib: ^2.3.1
-  checksum: 5da916bbed994792a3d6dcb979771d5361a96bc658849e4c9c00e894e47545fe109389fe27773ad3cb961560e6a538650f0259388b79ae703d057ab4adb79a76
+  checksum: 1619e054c23ef3b103fe1427faad454f6dced3e8daf98c91bc2bfd93386864ae25df90b13a3e8cbe4a9d75670e42815ce414401294c99de0b3cd475d3e85167e
   languageName: node
   linkType: hard
 
@@ -387,37 +387,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-ini@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/credential-provider-ini@npm:3.216.0"
+"@aws-sdk/credential-provider-ini@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/credential-provider-ini@npm:3.218.0"
   dependencies:
     "@aws-sdk/credential-provider-env": 3.215.0
     "@aws-sdk/credential-provider-imds": 3.215.0
-    "@aws-sdk/credential-provider-sso": 3.216.0
+    "@aws-sdk/credential-provider-sso": 3.218.0
     "@aws-sdk/credential-provider-web-identity": 3.215.0
     "@aws-sdk/property-provider": 3.215.0
     "@aws-sdk/shared-ini-file-loader": 3.215.0
     "@aws-sdk/types": 3.215.0
     tslib: ^2.3.1
-  checksum: a4aadb0bbc019cda9751bcc1ea08b5f8b6219daada0f4ef318e99425088cee28a46f5f41ca68cd86685c067c3bbff1c69b32e6e673dce25c8747757398a78de6
+  checksum: d48d601c89bb35330ddd3a9c976cad6caaf484468ac5819d21d34550a653b8ff54de616973e4b79b09f3e12d404582d4e4b46977eac465411d1bae79a7db370d
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-node@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/credential-provider-node@npm:3.216.0"
+"@aws-sdk/credential-provider-node@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/credential-provider-node@npm:3.218.0"
   dependencies:
     "@aws-sdk/credential-provider-env": 3.215.0
     "@aws-sdk/credential-provider-imds": 3.215.0
-    "@aws-sdk/credential-provider-ini": 3.216.0
+    "@aws-sdk/credential-provider-ini": 3.218.0
     "@aws-sdk/credential-provider-process": 3.215.0
-    "@aws-sdk/credential-provider-sso": 3.216.0
+    "@aws-sdk/credential-provider-sso": 3.218.0
     "@aws-sdk/credential-provider-web-identity": 3.215.0
     "@aws-sdk/property-provider": 3.215.0
     "@aws-sdk/shared-ini-file-loader": 3.215.0
     "@aws-sdk/types": 3.215.0
     tslib: ^2.3.1
-  checksum: d6f85e4c83d551abad6e4b8fd26171bce692e818c8c30abaf191484fbcfce21901813f9290a3ac36dc32f87f817dbd4682067e74c2a7881af8a0b35b5cbd813b
+  checksum: da8da825da1fca84fdb8ca3d9958be1059a3b93c868e19b0c4d6a8c628de881cf95701beec3fd107218c37e7726587197ab5a5cdf437d5c628436d17506cb1d1
   languageName: node
   linkType: hard
 
@@ -433,17 +433,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-sso@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/credential-provider-sso@npm:3.216.0"
+"@aws-sdk/credential-provider-sso@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/credential-provider-sso@npm:3.218.0"
   dependencies:
-    "@aws-sdk/client-sso": 3.216.0
+    "@aws-sdk/client-sso": 3.218.0
     "@aws-sdk/property-provider": 3.215.0
     "@aws-sdk/shared-ini-file-loader": 3.215.0
     "@aws-sdk/token-providers": 3.216.0
     "@aws-sdk/types": 3.215.0
     tslib: ^2.3.1
-  checksum: d48f869c4a2596e1731db389b4932ffa14d32aa006ae645ab24c809df9e78f30cf40e079575df82c441725f622e5cc1fcb6a01cdbf718b6ac89fc55459f698b3
+  checksum: 1d6b26776c83d7256336f89b33ae1a5cf7ba252af6ea54b2daaa9c5ce77a1d7b7afb08a49ef10dccbb900f12b40522e87b6561f5128b2869530f8a86ad2c6654
   languageName: node
   linkType: hard
 
@@ -858,9 +858,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/s3-request-presigner@npm:3.216.0":
-  version: 3.216.0
-  resolution: "@aws-sdk/s3-request-presigner@npm:3.216.0"
+"@aws-sdk/s3-request-presigner@npm:3.218.0":
+  version: 3.218.0
+  resolution: "@aws-sdk/s3-request-presigner@npm:3.218.0"
   dependencies:
     "@aws-sdk/middleware-endpoint": 3.215.0
     "@aws-sdk/middleware-sdk-s3": 3.215.0
@@ -871,7 +871,7 @@ __metadata:
     "@aws-sdk/util-create-request": 3.215.0
     "@aws-sdk/util-format-url": 3.215.0
     tslib: ^2.3.1
-  checksum: c4452ac87d7cc8c1ed82edc34ebf83701b82890b2d2373101f9ec43ed80657d3d6d38b302fece9245f841d58a645d19d0f75720f61d1e491df78c1fe80b5be78
+  checksum: b168f3b27a07fcab746e7d3fddda51c9e7b468c934ac75c381b4cf5bee433989c0b8b5e44b0e97e8b037b0f91347f97227253789ad57b97c3f7ea883ff0294fc
   languageName: node
   linkType: hard
 
@@ -4275,9 +4275,9 @@ __metadata:
     "@joplin/react-native-saf-x": ~2.9
     "@joplin/renderer": ~2.9
     "@joplin/tools": ~2.9
-    "@lezer/highlight": 1.1.2
+    "@lezer/highlight": 1.1.3
     "@react-native-community/clipboard": 1.5.1
-    "@react-native-community/datetimepicker": 6.7.0
+    "@react-native-community/datetimepicker": 6.7.1
     "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.6
     "@react-native-community/push-notification-ios": 1.10.1
@@ -4311,7 +4311,7 @@ __metadata:
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 8.1.2
+    react-native-document-picker: 8.1.3
     react-native-dropdownalert: 4.5.1
     react-native-file-viewer: 2.1.5
     react-native-fs: 2.20.0
@@ -4329,7 +4329,7 @@ __metadata:
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
-    react-native-webview: 11.24.0
+    react-native-webview: 11.25.0
     react-redux: 8.0.5
     redux: 4.2.0
     rn-fetch-blob: 0.12.0
@@ -4405,8 +4405,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
-    "@aws-sdk/client-s3": 3.216.0
-    "@aws-sdk/s3-request-presigner": 3.216.0
+    "@aws-sdk/client-s3": 3.218.0
+    "@aws-sdk/s3-request-presigner": 3.218.0
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/fork-sax": ^1.2.45
     "@joplin/fork-uslug": ^1.0.6
@@ -4597,7 +4597,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/server@workspace:packages/server"
   dependencies:
-    "@aws-sdk/client-s3": 3.216.0
+    "@aws-sdk/client-s3": 3.218.0
     "@fortawesome/fontawesome-free": 5.15.4
     "@joplin/lib": ~2.9
     "@joplin/renderer": ~2.9
@@ -5635,7 +5635,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:1.1.2, @lezer/highlight@npm:^1.0.0":
+"@lezer/highlight@npm:1.1.3":
+  version: 1.1.3
+  resolution: "@lezer/highlight@npm:1.1.3"
+  dependencies:
+    "@lezer/common": ^1.0.0
+  checksum: 90ec143ce46b32f6779c3b245f1b5a540d66686939816d3daed8318821acc4bc719466dc222336cfd483bf04a8de4fdc6f279e904cf114d4d9f786f9feccbbd8
+  languageName: node
+  linkType: hard
+
+"@lezer/highlight@npm:^1.0.0":
   version: 1.1.2
   resolution: "@lezer/highlight@npm:1.1.2"
   dependencies:
@@ -6254,12 +6263,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@react-native-community/datetimepicker@npm:6.7.0"
+"@react-native-community/datetimepicker@npm:6.7.1":
+  version: 6.7.1
+  resolution: "@react-native-community/datetimepicker@npm:6.7.1"
   dependencies:
     invariant: ^2.2.4
-  checksum: 21fc01cb62d2a0a9eeae7cac7e038e3ae59a01799c8f5bf8002cb7e81cb9435ec933c8719b26d92bba6ca25f64867c9da451adede428cfea9229a4178ee22ee1
+  checksum: b2eadbf7080ce6d131200e0189b260a6991cba7ce2ddc7a1f23bbb2e15a77288b847109bdad43b09eac11d376c8bea3e0934143c661ef350e3fe3f716111ac75
   languageName: node
   linkType: hard
 
@@ -9004,9 +9013,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:2.1261.0":
-  version: 2.1261.0
-  resolution: "aws-sdk@npm:2.1261.0"
+"aws-sdk@npm:2.1262.0":
+  version: 2.1262.0
+  resolution: "aws-sdk@npm:2.1262.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -9018,7 +9027,7 @@ __metadata:
     util: ^0.12.4
     uuid: 8.0.0
     xml2js: 0.4.19
-  checksum: e2b8f3cf17e4e4f94375d6df4a5125d0201464c363ddd08788714428efa2d77dc148bed09627a576ee0215f95f98d8504b012f33640fe642c2b781ffda5f62cc
+  checksum: 2407baac41a88acc7ef4d29ad15dfdf3d014508062e0eac0f90562045a4123b37a846c531b307a370ee3538b4123de208d8899e363cd39f862a013fcbbf10ea5
   languageName: node
   linkType: hard
 
@@ -11350,7 +11359,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:2.0.19, colorette@npm:^2.0.16, colorette@npm:^2.0.17":
+"colorette@npm:2.0.19, colorette@npm:^2.0.19":
   version: 2.0.19
   resolution: "colorette@npm:2.0.19"
   checksum: 888cf5493f781e5fcf54ce4d49e9d7d698f96ea2b2ef67906834bb319a392c667f9ec69f4a10e268d2946d13a9503d2d19b3abaaaf174e3451bfe91fb9d82427
@@ -11472,7 +11481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^9.1.0, commander@npm:^9.3.0":
+"commander@npm:^9.1.0, commander@npm:^9.4.1":
   version: 9.4.1
   resolution: "commander@npm:9.4.1"
   checksum: bfb18e325a5bdf772763c2213d5c7d9e77144d944124e988bcd8e5e65fb6d45d5d4e86b09155d0f2556c9a59c31e428720e57968bcd050b2306e910a0bf3cf13
@@ -20115,7 +20124,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.3
     "@types/node": 18.11.9
-    aws-sdk: 2.1261.0
+    aws-sdk: 2.1262.0
     chalk: 4.1.2
     compare-version: 0.1.2
     fs-extra: 10.1.0
@@ -21071,10 +21080,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lilconfig@npm:2.0.5":
-  version: 2.0.5
-  resolution: "lilconfig@npm:2.0.5"
-  checksum: f7bb9e42656f06930ad04e583026f087508ae408d3526b8b54895e934eb2a966b7aafae569656f2c79a29fe6d779b3ec44ba577e80814734c8655d6f71cdf2d1
+"lilconfig@npm:2.0.6":
+  version: 2.0.6
+  resolution: "lilconfig@npm:2.0.6"
+  checksum: 40a3cd72f103b1be5975f2ac1850810b61d4053e20ab09be8d3aeddfe042187e1ba70b4651a7e70f95efa1642e7dc8b2ae395b317b7d7753b241b43cef7c0f7d
   languageName: node
   linkType: hard
 
@@ -21094,39 +21103,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:13.0.3":
-  version: 13.0.3
-  resolution: "lint-staged@npm:13.0.3"
+"lint-staged@npm:13.0.4":
+  version: 13.0.4
+  resolution: "lint-staged@npm:13.0.4"
   dependencies:
     cli-truncate: ^3.1.0
-    colorette: ^2.0.17
-    commander: ^9.3.0
+    colorette: ^2.0.19
+    commander: ^9.4.1
     debug: ^4.3.4
     execa: ^6.1.0
-    lilconfig: 2.0.5
-    listr2: ^4.0.5
+    lilconfig: 2.0.6
+    listr2: ^5.0.5
     micromatch: ^4.0.5
     normalize-path: ^3.0.0
     object-inspect: ^1.12.2
     pidtree: ^0.6.0
     string-argv: ^0.3.1
-    yaml: ^2.1.1
+    yaml: ^2.1.3
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 53d585007df06e162febab6b0836b55016d902586a267823c8a1158529d8c742dc7297e523f7023dff02250bef3eb0d6934f4ec4f9961adfc2ebbed5f54162d0
+  checksum: 4676172df5dc734a7f409ad786a72d39bd2239de8b2e5eb1d99eaa751479f60f7b4ef85c8508698855b51b125a512f395ac6a3c7d2d57de8e8221e0aaaab6f4f
   languageName: node
   linkType: hard
 
-"listr2@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "listr2@npm:4.0.5"
+"listr2@npm:^5.0.5":
+  version: 5.0.5
+  resolution: "listr2@npm:5.0.5"
   dependencies:
     cli-truncate: ^2.1.0
-    colorette: ^2.0.16
+    colorette: ^2.0.19
     log-update: ^4.0.0
     p-map: ^4.0.0
     rfdc: ^1.3.0
-    rxjs: ^7.5.5
+    rxjs: ^7.5.6
     through: ^2.3.8
     wrap-ansi: ^7.0.0
   peerDependencies:
@@ -21134,7 +21143,7 @@ __metadata:
   peerDependenciesMeta:
     enquirer:
       optional: true
-  checksum: 7af31851abe25969ef0581c6db808117e36af15b131401795182427769d9824f451ba9e8aff6ccd25b6a4f6c8796f816292caf08e5f1f9b1775e8e9c313dc6c5
+  checksum: 71c44eb648405d2725f248747ef8d5e192dd16938ec81df854c4a7e74ff1b3f4c3149461b1cff31c761bfbdf110f7f2603c9957c908294a1c6db299c9168608c
   languageName: node
   linkType: hard
 
@@ -26305,9 +26314,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:8.1.2":
-  version: 8.1.2
-  resolution: "react-native-document-picker@npm:8.1.2"
+"react-native-document-picker@npm:8.1.3":
+  version: 8.1.3
+  resolution: "react-native-document-picker@npm:8.1.3"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -26317,7 +26326,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: 1b5c39fb081639569f4d8e3dd557ca5b6ee03913221b4e3e3a0321ae7028748ef9328ed34fd988d0ee69fd83e1943b88f3bfdcf237cf53b23117f3563c6024b5
+  checksum: fe2523dd1e6fa54a374240c03b27332cc37532811fd664ee98296564fd863cc559046e6c175275e1061df71e053f04562acd144bb6043f9d63fb0df8f2615029
   languageName: node
   linkType: hard
 
@@ -26487,16 +26496,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:11.24.0":
-  version: 11.24.0
-  resolution: "react-native-webview@npm:11.24.0"
+"react-native-webview@npm:11.25.0":
+  version: 11.25.0
+  resolution: "react-native-webview@npm:11.25.0"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 40881b4724cfbfb8d3f648823bc9785e439b95a7937fda9d6d1dae261dc6797cc5e9a0a5a85829023e7e2dd30436d8e9e03a2510cea4e00435977a63abd22344
+  checksum: 50b0d61c1550594657e9dba5fc7b87eb3446b2ad67cb8b7e5226233d26c88845d26cc4c5b5abf0091f3ca98a6ebe49ac697ac6803718e5ffd32e46ad3c014114
   languageName: node
   linkType: hard
 
@@ -27849,7 +27858,7 @@ __metadata:
     http-server: 14.1.1
     husky: 3.1.0
     lerna: 3.22.1
-    lint-staged: 13.0.3
+    lint-staged: 13.0.4
     madge: 5.0.1
     node-gyp: 9.3.0
     nodemon: 2.0.20
@@ -27925,7 +27934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:^7.5.6":
   version: 7.5.7
   resolution: "rxjs@npm:7.5.7"
   dependencies:
@@ -32997,7 +33006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.1.1":
+"yaml@npm:^2.1.3":
   version: 2.1.3
   resolution: "yaml@npm:2.1.3"
   checksum: 91316062324a93f9cb547469092392e7d004ff8f70c40fecb420f042a4870b2181557350da56c92f07bd44b8f7a252b0be26e6ade1f548e1f4351bdd01c9d3c7
