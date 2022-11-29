@@ -4421,7 +4421,7 @@ __metadata:
     "@types/node": 18.11.9
     "@types/node-rsa": 1.1.1
     "@types/react": 17.0.52
-    "@types/uuid": ^8.3.4
+    "@types/uuid": ^9.0.0
     async-mutex: 0.4.0
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -4612,7 +4612,7 @@ __metadata:
     "@types/markdown-it": 12.2.3
     "@types/mustache": 4.2.2
     "@types/nodemailer": 6.4.6
-    "@types/uuid": 8.3.4
+    "@types/uuid": 9.0.0
     "@types/yargs": 17.0.15
     "@types/zxcvbn": 4.4.1
     bcryptjs: 2.4.3
@@ -7372,10 +7372,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:8.3.4, @types/uuid@npm:^8.3.4":
-  version: 8.3.4
-  resolution: "@types/uuid@npm:8.3.4"
-  checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
+"@types/uuid@npm:9.0.0, @types/uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@types/uuid@npm:9.0.0"
+  checksum: 59ae56d9547c8758588659da2a2b4c97cce79c2aae1798c892bb29452ef08e87859dea2ec3a66bfa88d0d2153147520be2b1893be920f9f0bc9c53a3207ea6aa
   languageName: node
   linkType: hard
 
