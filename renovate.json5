@@ -98,6 +98,8 @@
 			"automerge": true
 		},
 		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
@@ -114,9 +116,10 @@
 				"yarn",
 				"typescript",
 				"prettier",
+				
+				// If it builds, it should be safe to merge @types/* packages
+				"@types/*",
 			],
-			"matchUpdateTypes": ["minor", "patch"],
-			"automerge": true
 		}
 	]
 }
