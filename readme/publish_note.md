@@ -13,3 +13,11 @@ After that a dialog opens showing you the note - from there you just need to cli
 You can then share this link with anyone and they will be able to see the note in their browser:
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/publish_note/Browser.jpg" width="75%"/>
+
+# Unpublishing a note
+
+After publishing a note, it can be unpublished by right-clicking on it in the Joplin desktop application, and selecting "Publish note..."
+
+<img src="C:\Users\matt\Documents\GitHub\joplin\Assets\Screenshots\joplin_unpublish_note.png" width="75%">
+
+From there, clicking on the "Share" icon will remove the icon, and unpublish the note.
