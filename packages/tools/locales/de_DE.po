@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -92,12 +94,12 @@ msgstr "%d Tage"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB Speicherplatz"
 
 #: packages/lib/models/Setting.ts:1322
 msgid "%d hour"
@@ -110,13 +112,12 @@ msgstr "%d Stunden"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "&d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Anhänge"
+msgstr "%d MB pro Notiz oder Anhang"
 
 #: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
 #: packages/lib/models/Setting.ts:1321
@@ -491,7 +492,7 @@ msgstr "Zurück"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Standard"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -841,7 +842,7 @@ msgstr "Konflikte (Anhänge)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Konsolidierte Rechnung"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 msgid "Content provided by %s"
@@ -2490,9 +2491,8 @@ msgid "Manage master password..."
 msgstr "Master-Passwort verwalten..."
 
 #: packages/lib/utils/joplinCloud.ts:165
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "Master-Passwort verwalten"
+msgstr "Verwalte mehrere Nutzer"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2558,9 +2558,8 @@ msgid "Max Item Size"
 msgstr "Maximale Elementgröße"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Anhänge"
+msgstr "Maximale Notiz- oder Anhanggröße"
 
 #: packages/server/src/routes/admin/users.ts:150
 msgid "Max Total Size"
@@ -3027,7 +3026,7 @@ msgstr "PDF-Datei"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Pro Nutzer. Minimum von %d Nutzern."
 
 #: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
@@ -3200,16 +3199,15 @@ msgstr "Drucken"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr ""
+msgstr "Premium Support"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:655
 msgid "Privacy Policy"
 msgstr "Datenschutzrichtlinie"
 
 #: packages/lib/utils/joplinCloud.ts:316
-#, fuzzy
 msgid "Pro"
-msgstr "Profil"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3616,10 +3614,10 @@ msgstr ""
 msgid "Share"
 msgstr "Teilen"
 
+# Plural klingt subjektiv besser als Singular.
 #: packages/lib/utils/joplinCloud.ts:159
-#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "Die Notiz zu einem Notizbuch verschieben."
+msgstr "Teile Notizbücher und kollaboriere an ihnen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
@@ -3629,9 +3627,10 @@ msgstr "Notizbuch teilen"
 msgid "Share notebook..."
 msgstr "Notizbuch teilen..."
 
+# Schwierige Übersetzung. Habe es nach https://discourse.joplinapp.org/t/joplin-cloud-question-access-control/27723/3 bestmöglich versucht.
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr ""
+msgstr "Kontrolle der Zugriffsfreigaben"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3924,7 +3923,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "Synchronisierung beliebig vieler Geräte"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:564
 msgid "Sync Status"
@@ -4041,7 +4040,7 @@ msgstr "Aufgaben"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "Teams"
 
 #: packages/lib/models/Setting.ts:1343
 msgid "Text editor command"
@@ -4583,9 +4582,8 @@ msgstr "Versuche es erneut"
 
 #: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
 #: packages/lib/utils/joplinCloud.ts:353
-#, fuzzy
 msgid "Try it now"
-msgstr "Mach es jetzt"
+msgstr "Jetzt testen"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
