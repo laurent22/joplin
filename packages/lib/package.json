@@ -74,7 +74,7 @@
     "node-persist": "3.1.0",
     "node-rsa": "1.1.1",
     "promise": "8.3.0",
-    "query-string": "7.1.1",
+    "query-string": "7.1.2",
     "re-reselect": "4.0.1",
     "read-chunk": "2.1.0",
     "redux": "4.2.0",

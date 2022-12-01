@@ -48,7 +48,7 @@
     "pg": "8.8.0",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
-    "query-string": "7.1.1",
+    "query-string": "7.1.2",
     "rate-limiter-flexible": "2.4.1",
     "raw-body": "2.5.1",
     "sqlite3": "5.1.2",
