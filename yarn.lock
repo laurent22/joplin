@@ -4468,7 +4468,7 @@ __metadata:
     node-persist: 3.1.0
     node-rsa: 1.1.1
     promise: 8.3.0
-    query-string: 7.1.1
+    query-string: 7.1.2
     re-reselect: 4.0.1
     read-chunk: 2.1.0
     redux: 4.2.0
@@ -4650,7 +4650,7 @@ __metadata:
     pg: 8.8.0
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
-    query-string: 7.1.1
+    query-string: 7.1.2
     rate-limiter-flexible: 2.4.1
     raw-body: 2.5.1
     source-map-support: 0.5.21
@@ -13222,6 +13222,13 @@ __metadata:
   version: 0.2.0
   resolution: "decode-uri-component@npm:0.2.0"
   checksum: f3749344ab9305ffcfe4bfe300e2dbb61fc6359e2b736812100a3b1b6db0a5668cba31a05e4b45d4d63dbf1a18dfa354cd3ca5bb3ededddabb8cd293f4404f94
+  languageName: node
+  linkType: hard
+
+"decode-uri-component@npm:^0.2.1":
+  version: 0.2.2
+  resolution: "decode-uri-component@npm:0.2.2"
+  checksum: 95476a7d28f267292ce745eac3524a9079058bbb35767b76e3ee87d42e34cd0275d2eb19d9d08c3e167f97556e8a2872747f5e65cbebcac8b0c98d83e285f139
   languageName: node
   linkType: hard
 
@@ -25987,15 +25994,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-string@npm:7.1.1":
-  version: 7.1.1
-  resolution: "query-string@npm:7.1.1"
+"query-string@npm:7.1.2":
+  version: 7.1.2
+  resolution: "query-string@npm:7.1.2"
   dependencies:
-    decode-uri-component: ^0.2.0
+    decode-uri-component: ^0.2.1
     filter-obj: ^1.1.0
     split-on-first: ^1.0.0
     strict-uri-encode: ^2.0.0
-  checksum: b227d1f588ae93f9f0ad078c6b811295fa151dc5a160a03bb2bac5fa0e6919cb1daa570aad1d288e77c8e89fde5362ba505b1014e6e793da9b1e885b59a690a6
+  checksum: 38d8da407cfd434bb248625011a9a12ece33e652794e275db2cc5b5a2d8992a163109cde009fcae3785dd5ad7d1f0274ecda5d314bb708dff45b037cef46c824
   languageName: node
   linkType: hard
 
