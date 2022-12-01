@@ -5,11 +5,12 @@ import { SelectionRange, EditorSelection, EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view';
 import { MarkdownMathExtension } from './markdownMathParser';
 
-// Creates and returns a minimal editor with markdown extensions
-const createEditor = (initialText: string, initialSelection: SelectionRange): EditorView => {
+// Creates and returns a minimal editor with markdown math and GFM extensions
+const createEditor = (initialText: string, initialSelection?: SelectionRange): EditorView => {
+	const selection = initialSelection ? EditorSelection.create([initialSelection]) : undefined;
 	const editor = new EditorView({
 		doc: initialText,
-		selection: EditorSelection.create([initialSelection]),
+		selection,
 		extensions: [
 			markdown({
 				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
