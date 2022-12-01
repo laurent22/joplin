@@ -4237,7 +4237,7 @@ __metadata:
     react-datetime: 3.2.0
     react-dom: 18.2.0
     react-redux: 8.0.5
-    react-select: 5.6.1
+    react-select: 5.7.0
     react-test-renderer: 18.2.0
     react-toggle-button: 2.2.0
     react-tooltip: 4.5.1
@@ -26687,9 +26687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:5.6.1":
-  version: 5.6.1
-  resolution: "react-select@npm:5.6.1"
+"react-select@npm:5.7.0":
+  version: 5.7.0
+  resolution: "react-select@npm:5.7.0"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
@@ -26703,7 +26703,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 89daa3c121beea1ae1e003018c38b57c7a63571def105678d1aa0d9ad36d9fb8c2697bdac941778b9662a0cb605f7e1f3b8490c6a9a6ce83032ab0945f8e0f91
+  checksum: 3d29f7bb6dd66ad55396d820f05da6112f1d21b67526422a8ff5aa6cd47c783804c1b73042ac2949ba0871056a3dc68c06a73a8281abb61571e475d72bbd80dc
   languageName: node
   linkType: hard
 
