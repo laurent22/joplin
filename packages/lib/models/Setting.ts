@@ -712,7 +712,41 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
-			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
+			'sync.11.url': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('ocis');
+				},
+				public: true,
+				label: () => _('Ocis URL'),
+				description: () => emptyDirWarning,
+				storage: SettingStorage.File,
+			},
+			'sync.11.clientid': {
+				value: 'xdXOt13JKxym1B1QcEncf2XDkLAexMBFwiT9j6EfhhHFJhs2KM9jbjTmf8JBXE69',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('ocis');
+				},
+				public: true,
+				label: () => _('Ocis client ID'),
+				storage: SettingStorage.File,
+			},
+			'sync.11.clientsecret': {
+				value: 'UBntmLjC2yYCeHwsyj73Uwo9TAaecAetRwMw0xYcvNL9yRdLSUi0hUAHfvCHFeFh',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] === SyncTargetRegistry.nameToId('ocis');
+				},
+				public: true,
+				label: () => _('Ocis client Secret'),
+			},
+
+			'sync.11.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
 				value: 'always',
@@ -740,6 +774,7 @@ class Setting extends BaseModel {
 			'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.10.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.11.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.1.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.2.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.3.context': { value: '', type: SettingItemType.String, public: false },
@@ -750,6 +785,7 @@ class Setting extends BaseModel {
 			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.10.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.11.context': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, isGlobal: true, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -1415,6 +1451,7 @@ class Setting extends BaseModel {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 						[
 							SyncTargetRegistry.nameToId('nextcloud'),
+							SyncTargetRegistry.nameToId('ocis'),
 							SyncTargetRegistry.nameToId('webdav'),
 							SyncTargetRegistry.nameToId('joplinServer'),
 							// Needs to be enabled for Joplin Cloud too because

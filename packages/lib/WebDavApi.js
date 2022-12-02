@@ -343,7 +343,11 @@ class WebDavApi {
 
 		const authToken = this.authToken();
 
-		if (authToken) headers['Authorization'] = `Basic ${authToken}`;
+		if (authToken) {
+			headers['Authorization'] = `Basic ${authToken}`;
+		} else if (this.options_.token) {
+			headers['Authorization'] = `Bearer ${this.options_.token()}`;
+		}
 
 		// That should not be needed, but it is required for React Native 0.63+
 		// https://github.com/facebook/react-native/issues/30176

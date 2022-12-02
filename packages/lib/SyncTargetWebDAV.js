@@ -36,6 +36,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 			baseUrl: () => options.path(),
 			username: () => options.username(),
 			password: () => options.password(),
+			token: () => options.token(),
 			ignoreTlsErrors: () => options.ignoreTlsErrors(),
 		};
 

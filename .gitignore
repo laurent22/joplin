@@ -600,6 +600,9 @@ packages/app-desktop/gui/NoteTextViewer.js.map
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.d.ts
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.js
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.js.map
+packages/app-desktop/gui/OcisLoginScreen.d.ts
+packages/app-desktop/gui/OcisLoginScreen.js
+packages/app-desktop/gui/OcisLoginScreen.js.map
 packages/app-desktop/gui/OneDriveLoginScreen.d.ts
 packages/app-desktop/gui/OneDriveLoginScreen.js
 packages/app-desktop/gui/OneDriveLoginScreen.js.map

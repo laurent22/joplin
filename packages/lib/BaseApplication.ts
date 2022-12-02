@@ -33,6 +33,7 @@ const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
+const SyncTargetOcis = require('./SyncTargetOcis.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
@@ -763,6 +764,7 @@ export default class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);
+		SyncTargetRegistry.addClass(SyncTargetOcis);
 		SyncTargetRegistry.addClass(SyncTargetWebDAV);
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
