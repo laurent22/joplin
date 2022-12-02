@@ -82,13 +82,25 @@ describe('models/Note', function() {
 
 		note1 = await Note.load(note1.id);
 		changedNote = Note.changeNoteType(note1, 'todo');
-		expect(changedNote === note1).toBe(true);
+		expect(changedNote).toStrictEqual(note1);
 		expect(!!changedNote.is_todo).toBe(true);
 
 		note1 = await Note.load(note1.id);
 		changedNote = Note.changeNoteType(note1, 'note');
 		expect(changedNote === note1).toBe(false);
 		expect(!!changedNote.is_todo).toBe(false);
+	}));
+
+	it('should remove todo properties switching from todo to note', (async () => {
+		let note = await Note.save({ title: 'some todo', is_todo: 1, todo_due: 2, todo_completed: 3 });
+
+		note = await Note.save(note, { 'title': 'still a todo' });
+		expect(note.todo_due).toBe(2);
+		expect(note.todo_completed).toBe(3);
+
+		note = await Note.save(note, { 'is_todo': 0 });
+		expect(note.todo_completed).toBe(0);
+		expect(note.todo_due).toBe(0);
 	}));
 
 	it('should serialize and unserialize without modifying data', (async () => {
