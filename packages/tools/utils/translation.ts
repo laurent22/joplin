@@ -2,6 +2,8 @@ import { execCommand, isMac } from '../tool-utils';
 import { existsSync, readFile } from 'fs-extra';
 const gettextParser = require('gettext-parser');
 
+export type Translations = Record<string, string>;
+
 export const removePoHeaderDate = async (filePath: string) => {
 	let sedPrefix = 'sed -i';
 	if (isMac()) sedPrefix += ' ""'; // Note: on macOS it has to be 'sed -i ""' (BSD quirk)
@@ -46,7 +48,7 @@ export const parsePoFile = async (filePath: string) => {
 // translation on the right. If a particular translation is missing, no entry
 // will be returned. The caller should display the English text in this case.
 export const parseTranslations = (gettextTranslations: any) => {
-	const output: Record<string, string> = {};
+	const output: Translations = {};
 
 	// Translations are grouped by "msgctxt"
 

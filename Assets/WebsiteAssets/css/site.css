@@ -1204,3 +1204,7 @@ footer .bottom-links-row p {
 :lang(zh-cn) .top-section-img-en {
 	display: none;
 }
+
+:lang(zh-cn) #plans-section .faq {
+	display: none;
+}

@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../markdownUtils';
+import { _ } from '../locale';
 
 type FeatureId = string;
 
@@ -110,85 +111,87 @@ export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQue
 	return output;
 }
 
-const features: Record<FeatureId, PlanFeature> = {
-	maxItemSize: {
-		title: 'Max note or attachment size',
-		basic: true,
-		pro: true,
-		teams: true,
-		basicInfo: '10 MB per note or attachment',
-		proInfo: '200 MB per note or attachment',
-		teamsInfo: '200 MB per note or attachment',
-		basicInfoShort: '10 MB',
-		proInfoShort: '200 MB',
-		teamsInfoShort: '200 MB',
-	},
-	maxStorage: {
-		title: 'Storage space',
-		basic: true,
-		pro: true,
-		teams: true,
-		basicInfo: '1 GB storage space',
-		proInfo: '10 GB storage space',
-		teamsInfo: '10 GB storage space',
-		basicInfoShort: '1 GB',
-		proInfoShort: '10 GB',
-		teamsInfoShort: '10 GB',
-	},
-	publishNote: {
-		title: 'Publish notes to the internet',
-		basic: true,
-		pro: true,
-		teams: true,
-	},
-	sync: {
-		title: 'Sync as many devices as you want',
-		basic: true,
-		pro: true,
-		teams: true,
-	},
-	clipper: {
-		title: 'Web Clipper',
-		basic: true,
-		pro: true,
-		teams: true,
-	},
-	collaborate: {
-		title: 'Share and collaborate on a notebook',
-		basic: false,
-		pro: true,
-		teams: true,
-	},
-	multiUsers: {
-		title: 'Manage multiple users',
-		basic: false,
-		pro: false,
-		teams: true,
-	},
-	consolidatedBilling: {
-		title: 'Consolidated billing',
-		basic: false,
-		pro: false,
-		teams: true,
-	},
-	sharingAccessControl: {
-		title: 'Sharing access control',
-		basic: false,
-		pro: false,
-		teams: true,
-	},
-	prioritySupport: {
-		title: 'Priority support',
-		basic: false,
-		pro: false,
-		teams: true,
-	},
+const features = (): Record<FeatureId, PlanFeature> => {
+	return {
+		maxItemSize: {
+			title: _('Max note or attachment size'),
+			basic: true,
+			pro: true,
+			teams: true,
+			basicInfo: _('%d MB per note or attachment', 10),
+			proInfo: _('%d MB per note or attachment', 200),
+			teamsInfo: _('%d MB per note or attachment', 200),
+			basicInfoShort: _('%d MB', 10),
+			proInfoShort: _('%d MB', 200),
+			teamsInfoShort: _('%d MB', 200),
+		},
+		maxStorage: {
+			title: 'Storage space',
+			basic: true,
+			pro: true,
+			teams: true,
+			basicInfo: _('%d GB storage space', 1),
+			proInfo: _('%d GB storage space', 10),
+			teamsInfo: _('%d GB storage space', 10),
+			basicInfoShort: _('%d GB', 1),
+			proInfoShort: _('%d GB', 10),
+			teamsInfoShort: _('%d GB', 10),
+		},
+		publishNote: {
+			title: _('Publish notes to the internet'),
+			basic: true,
+			pro: true,
+			teams: true,
+		},
+		sync: {
+			title: _('Sync as many devices as you want'),
+			basic: true,
+			pro: true,
+			teams: true,
+		},
+		clipper: {
+			title: _('Web Clipper'),
+			basic: true,
+			pro: true,
+			teams: true,
+		},
+		collaborate: {
+			title: _('Share and collaborate on a notebook'),
+			basic: false,
+			pro: true,
+			teams: true,
+		},
+		multiUsers: {
+			title: _('Manage multiple users'),
+			basic: false,
+			pro: false,
+			teams: true,
+		},
+		consolidatedBilling: {
+			title: _('Consolidated billing'),
+			basic: false,
+			pro: false,
+			teams: true,
+		},
+		sharingAccessControl: {
+			title: _('Sharing access control'),
+			basic: false,
+			pro: false,
+			teams: true,
+		},
+		prioritySupport: {
+			title: _('Priority support'),
+			basic: false,
+			pro: false,
+			teams: true,
+		},
+	};
 };
 
 export const getFeatureIdsByPlan = (planName: PlanName, featureOn: boolean): FeatureId[] => {
 	const output: FeatureId[] = [];
 
-	for (const [k, v] of Object.entries(features)) {
+	for (const [k, v] of Object.entries(features())) {
 		if (v[planName] === featureOn) {
 			output.push(k);
 		}
@@ -200,7 +203,7 @@ export const getFeatureIdsByPlan = (planName: PlanName, featureOn: boolean): Fea
 export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): string[] => {
 	const output: FeatureId[] = [];
 
-	for (const [featureId, v] of Object.entries(features)) {
+	for (const [featureId, v] of Object.entries(features())) {
 		if (v[planName] === featureOn) {
 			output.push(getFeatureLabel(planName, featureId));
 		}
@@ -214,7 +217,7 @@ export const getAllFeatureIds = (): FeatureId[] => {
 };
 
 export const getFeatureById = (featureId: FeatureId): PlanFeature => {
-	return features[featureId];
+	return features()[featureId];
 };
 
 export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanFeature[] => {
@@ -230,14 +233,14 @@ export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanF
 };
 
 export const getFeatureLabel = (planName: PlanName, featureId: FeatureId): string => {
-	const feature = features[featureId];
+	const feature = features()[featureId];
 	const k = `${planName}Info`;
 	if ((feature as any)[k]) return (feature as any)[k];
 	return feature.title;
 };
 
 export const getFeatureEnabled = (planName: PlanName, featureId: FeatureId): boolean => {
-	const feature = features[featureId];
+	const feature = features()[featureId];
 	return feature[planName];
 };
 
@@ -270,7 +273,7 @@ export const createFeatureTableMd = () => {
 		return '✔️';
 	};
 
-	for (const [, feature] of Object.entries(features)) {
+	for (const [, feature] of Object.entries(features())) {
 		const row: MarkdownTableRow = {
 			featureLabel: feature.title,
 			basic: getCellInfo(PlanName.Basic, feature),
@@ -288,7 +291,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 	return {
 		basic: {
 			name: 'basic',
-			title: 'Basic',
+			title: _('Basic'),
 			priceMonthly: findPrice(stripeConfig.prices, {
 				accountType: 1,
 				period: PricePeriod.Monthly,
@@ -303,14 +306,14 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
-			cfaLabel: 'Try it now',
+			cfaLabel: _('Try it now'),
 			cfaUrl: '',
 			footnote: '',
 		},
 
 		pro: {
 			name: 'pro',
-			title: 'Pro',
+			title: _('Pro'),
 			priceMonthly: findPrice(stripeConfig.prices, {
 				accountType: 2,
 				period: PricePeriod.Monthly,
@@ -325,14 +328,14 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
-			cfaLabel: 'Try it now',
+			cfaLabel: _('Try it now'),
 			cfaUrl: '',
 			footnote: '',
 		},
 
 		teams: {
 			name: 'teams',
-			title: 'Teams',
+			title: _('Teams'),
 			priceMonthly: findPrice(stripeConfig.prices, {
 				accountType: 3,
 				period: PricePeriod.Monthly,
@@ -347,9 +350,9 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
-			cfaLabel: 'Try it now',
+			cfaLabel: _('Try it now'),
 			cfaUrl: '',
-			footnote: 'Per user. Minimum of 2 users.',
+			footnote: _('Per user. Minimum of %d users.', 2),
 		},
 	};
 }

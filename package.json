@@ -55,7 +55,7 @@
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
-    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
+    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
   "husky": {
     "hooks": {
@@ -64,20 +64,20 @@
   },
   "devDependencies": {
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
-    "@typescript-eslint/eslint-plugin": "5.44.0",
-    "@typescript-eslint/parser": "5.44.0",
+    "@typescript-eslint/eslint-plugin": "5.45.0",
+    "@typescript-eslint/parser": "5.45.0",
     "cspell": "5.21.2",
-    "eslint": "8.28.0",
+    "eslint": "8.29.0",
     "eslint-interactive": "10.2.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.31.11",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.1.0",
     "glob": "8.0.3",
     "gulp": "4.0.2",
     "husky": "3.1.0",
     "lerna": "3.22.1",
-    "lint-staged": "13.0.3",
+    "lint-staged": "13.0.4",
     "madge": "5.0.1",
     "typedoc": "0.17.8",
     "typescript": "4.9.3"
