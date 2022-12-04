@@ -14,10 +14,8 @@ You can then share this link with anyone and they will be able to see the note i
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/publish_note/Browser.jpg" width="75%"/>
 
-# Unpublishing a note
+## Unpublishing a note
 
-After publishing a note, it can be unpublished by right-clicking on it in the Joplin desktop application, and selecting "Publish note..."
+After publishing a note, it can be unpublished by right-clicking on it in the desktop application, and selecting "Publish note..."
 
-<img src="https://raw.githubusercontent.com/MattDemers/joplin/dev/Assets/Screenshots/joplin_unpublish_note.png" width="75%">
-
-From there, clicking on the "Share" icon will remove the icon, and unpublish the note.
+From there, clicking on the "Share" icon to unpublish the note. The icon will be removed.
