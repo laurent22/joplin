@@ -4629,7 +4629,7 @@ __metadata:
     bulma-prefers-dark: 0.1.0-beta.1
     compare-versions: 3.6.0
     dayjs: 1.11.6
-    formidable: 2.0.1
+    formidable: 2.1.1
     fs-extra: 11.1.0
     gulp: 4.0.2
     html-entities: 1.4.0
@@ -13713,13 +13713,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dezalgo@npm:1.0.3, dezalgo@npm:^1.0.0":
+"dezalgo@npm:^1.0.0":
   version: 1.0.3
   resolution: "dezalgo@npm:1.0.3"
   dependencies:
     asap: ^2.0.0
     wrappy: 1
   checksum: 8b26238db91423b2702a7a6d9629d0019c37c415e7b6e75d4b3e8d27e9464e21cac3618dd145f4d4ee96c70cc6ff034227b5b8a0e9c09015a8bdbe6dace3cfb9
+  languageName: node
+  linkType: hard
+
+"dezalgo@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "dezalgo@npm:1.0.4"
+  dependencies:
+    asap: ^2.0.0
+    wrappy: 1
+  checksum: 895389c6aead740d2ab5da4d3466d20fa30f738010a4d3f4dcccc9fc645ca31c9d10b7e1804ae489b1eb02c7986f9f1f34ba132d409b043082a86d9a4e745624
   languageName: node
   linkType: hard
 
@@ -16178,15 +16188,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:2.0.1":
-  version: 2.0.1
-  resolution: "formidable@npm:2.0.1"
+"formidable@npm:2.1.1":
+  version: 2.1.1
+  resolution: "formidable@npm:2.1.1"
   dependencies:
-    dezalgo: 1.0.3
-    hexoid: 1.0.0
-    once: 1.4.0
-    qs: 6.9.3
-  checksum: b35445444e7b6f6f3cacbadd5e6fadd6b5b2e83162e7c41fa22586df584cc515bbd1ee0dc2b701ce031fcb000d71769bc77bd0958db8a89a0ceb8b2227bdc695
+    dezalgo: ^1.0.4
+    hexoid: ^1.0.0
+    once: ^1.4.0
+    qs: ^6.11.0
+  checksum: b407bf89abf0dc40e00efe20edd80aa60ff7e7f4928b3a7048b630d3bb61012f316b69cd3350ccc9aab2d4c682516fea917bc31aef3479d4a652ed97cf8ba9aa
   languageName: node
   linkType: hard
 
@@ -17574,7 +17584,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexoid@npm:1.0.0":
+"hexoid@npm:^1.0.0":
   version: 1.0.0
   resolution: "hexoid@npm:1.0.0"
   checksum: 27a148ca76a2358287f40445870116baaff4a0ed0acc99900bf167f0f708ffd82e044ff55e9949c71963852b580fc024146d3ac6d5d76b508b78d927fa48ae2d
@@ -24201,7 +24211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"once@npm:1.4.0, once@npm:^1.3.0, once@npm:^1.3.1, once@npm:^1.3.2, once@npm:^1.4.0":
+"once@npm:^1.3.0, once@npm:^1.3.1, once@npm:^1.3.2, once@npm:^1.4.0":
   version: 1.4.0
   resolution: "once@npm:1.4.0"
   dependencies:
@@ -25962,14 +25972,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.9.3":
-  version: 6.9.3
-  resolution: "qs@npm:6.9.3"
-  checksum: 89cd1b5e521c19a7e0a7a056ddc261c5c30889664608cf9ce6085f9f25606fc48568cf6a6249e641b4b5c04dac7889e3b82133142523abf397228eb4f488fc38
-  languageName: node
-  linkType: hard
-
-"qs@npm:^6.10.3":
+"qs@npm:^6.10.3, qs@npm:^6.11.0":
   version: 6.11.0
   resolution: "qs@npm:6.11.0"
   dependencies:
