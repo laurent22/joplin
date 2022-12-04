@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -93,12 +95,12 @@ msgstr "%d dage"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB lagerplads"
 
 #: packages/lib/models/Setting.ts:1322
 msgid "%d hour"
@@ -111,13 +113,12 @@ msgstr "%d timer"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Note vedhæftninger"
+msgstr "%d MB pr. note eller vedhæftning"
 
 #: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
 #: packages/lib/models/Setting.ts:1321
@@ -196,11 +197,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), "
-"\"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] "
-"fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-"
-"list` kan bruges til at vise alle etiketter (brug -l for at vise den lange "
-"udgave)."
+"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove"
+"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra "
+"[note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` "
+"kan bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -342,14 +342,14 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på "
-"\"ti\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
+"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på \"ti"
+"\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
 "notesbog"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Tvetydig notesbog \"%s\". Brug venligst kort notesbog-id i stedet - tryk på "
 "\"ti\" for at se det korte notebogs-id"
@@ -476,7 +476,7 @@ msgstr "Tilbage"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Grundlæggende"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -821,7 +821,7 @@ msgstr "Konflikter (vedhæftninger)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Konsolideret fakturering"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 msgid "Content provided by %s"
@@ -2044,8 +2044,8 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. "
-"`$c` kan bruges som reference til aktuel/valgt emne."
+"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
+"$c` kan bruges som reference til aktuel/valgt emne."
 
 #: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
@@ -2451,9 +2451,8 @@ msgid "Manage master password..."
 msgstr "Administrer hovedadgangskode..."
 
 #: packages/lib/utils/joplinCloud.ts:165
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "Administrer hovedadgangskode"
+msgstr "Administrer flere brugere"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2520,9 +2519,8 @@ msgid "Max Item Size"
 msgstr "Maks elementstørrelse"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Note vedhæftninger"
+msgstr "Maksimal størrelse af note eller vedhæftning"
 
 #: packages/server/src/routes/admin/users.ts:150
 msgid "Max Total Size"
@@ -2981,7 +2979,7 @@ msgstr "PDF-fil"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Pr. bruger. Minimum %d brugere."
 
 #: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
@@ -3141,16 +3139,15 @@ msgstr "Udskriv"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr ""
+msgstr "Prioriteret support"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:655
 msgid "Privacy Policy"
 msgstr "Privatlivspolitik"
 
 #: packages/lib/utils/joplinCloud.ts:316
-#, fuzzy
 msgid "Pro"
-msgstr "Profil"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3320,7 +3317,7 @@ msgstr "Erstat med..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr "Erstat:"
+msgstr "Erstat: "
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3357,7 +3354,7 @@ msgstr "Prøv igen"
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:80
 #: packages/app-mobile/components/screens/status.js:112
 msgid "Retry All"
-msgstr "Prøv Alle"
+msgstr "Prøv alle"
 
 #: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:117
@@ -3556,9 +3553,8 @@ msgid "Share"
 msgstr "Del"
 
 #: packages/lib/utils/joplinCloud.ts:159
-#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "Noter kan kun oprettes i en notesbog."
+msgstr "Del og samarbejd om en notesbog"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
@@ -3570,7 +3566,7 @@ msgstr "Del notesbog..."
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr ""
+msgstr "Adgangskontrol ved deling"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3855,7 +3851,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "Synkroniser så mange enheder, du vil"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:564
 msgid "Sync Status"
@@ -3968,7 +3964,7 @@ msgstr "Opgaver"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "Teams"
 
 #: packages/lib/models/Setting.ts:1343
 msgid "Text editor command"
@@ -4483,9 +4479,8 @@ msgstr "Prøv igen"
 
 #: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
 #: packages/lib/utils/joplinCloud.ts:353
-#, fuzzy
 msgid "Try it now"
-msgstr "Gør det nu"
+msgstr "Prøv det nu"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
