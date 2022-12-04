@@ -6,7 +6,6 @@ import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'mkbook <new-notebook> [notebook]';
 	}
@@ -26,7 +25,7 @@ class Command extends BaseCommand {
 
 		const destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetFolder);
 		if (!destinationFolder) {
-			throw new Error(_('Cannot find "%s", please create it first.', targetFolder));
+			throw new Error(_('Can not find "%s", please create it first.', targetFolder));
 		}
 
 		const destinationDups = await Folder.search({ titlePattern: targetFolder, limit: 2 });
@@ -37,6 +36,13 @@ class Command extends BaseCommand {
 		return destinationFolder;
 	}
 
+	async saveAndSwitchFolder(newFolder: FolderEntity) {
+
+		const folder = await Folder.save(newFolder, { userSideValidation: true });
+		app().switchCurrentFolder(folder);
+
+	}
+
 	async action(args: any) {
 		const createSubFolder = args.options && args.options.sub === true;
 		const targetFolder = args['notebook'];
@@ -45,23 +51,23 @@ class Command extends BaseCommand {
 		};
 		// this.logger().debug('mkbook-command-args: ', args);
 
+		if (createSubFolder && targetFolder) {
+			this.stdout(_('Error: Multiple instructions. Please use the instructions of the command - Press "help mkbook"'));
+			return;
+		}
+
 		if (createSubFolder) {
-			if (targetFolder) {
-				const destinationFolder = await this.validDestinationSubFolder(targetFolder);
-				newFolder.parent_id = destinationFolder.id;
+			newFolder.parent_id = app().currentFolder().id;
+			await this.saveAndSwitchFolder(newFolder);
 
-				const folder = await Folder.save(newFolder, { userSideValidation: true });
-				app().switchCurrentFolder(folder);
+		} else if (targetFolder) {
+			const destinationFolder = await this.validDestinationSubFolder(targetFolder);
 
-			} else {
-				newFolder.parent_id = app().currentFolder().id;
-				const folder = await Folder.save(newFolder, { userSideValidation: true });
-				app().switchCurrentFolder(folder);
-			}
+			newFolder.parent_id = destinationFolder.id;
+			await this.saveAndSwitchFolder(newFolder);
 
 		} else {
-			const folder = await Folder.save(newFolder, { userSideValidation: true });
-			app().switchCurrentFolder(folder);
+			await this.saveAndSwitchFolder(newFolder);
 		}
 	}
 }
