@@ -1,12 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
 import { ensureSyntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
-import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './markdownMathParser';
-import createEditor from './createEditor';
+import { blockMathTagName, inlineMathContentTagName, inlineMathTagName, MarkdownMathExtension } from './markdownMathParser';
+import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
+import { markdown } from '@codemirror/lang-markdown';
 
 const syntaxTreeCreateTimeout = 100; // ms
 
@@ -25,10 +22,22 @@ const findNodesWithName = (editor: EditorState, nodeName: string) => {
 	return result;
 };
 
+// Creates an EditorState with math and markdown extensions
+const createEditorState = (initialText: string): EditorState => {
+	return EditorState.create({
+		doc: initialText,
+		extensions: [
+			markdown({
+				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
+			}),
+		],
+	});
+};
+
 describe('markdownMathParser', () => {
 	it('should parse inline math that contains space characters, numbers, and symbols', () => {
 		const documentText = '$3 + 3$';
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		const inlineMathNodes = findNodesWithName(editor, inlineMathTagName);
 		const inlineMathContentNodes = findNodesWithName(editor, inlineMathContentTagName);
 
@@ -48,7 +57,7 @@ describe('markdownMathParser', () => {
 		const afterMath = ' formatting.';
 		const documentText = `${beforeMath}${mathRegion}${afterMath}`;
 
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		const inlineMathNodes = findNodesWithName(editor, inlineMathTagName);
 		const blockMathNodes = findNodesWithName(editor, blockMathTagName);
 		const commentNodes = findNodesWithName(editor, 'comment');
@@ -63,7 +72,7 @@ describe('markdownMathParser', () => {
 
 	it('shouldn\'t start inline math if there is no ending $', () => {
 		const documentText = 'This is a $test\n\nof inline math$...';
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		const inlineMathNodes = findNodesWithName(editor, inlineMathTagName);
 
 		// Math should end if there is no matching '$'.
@@ -72,19 +81,19 @@ describe('markdownMathParser', () => {
 
 	it('shouldn\'t start if math would have a space just after the $', () => {
 		const documentText = 'This is a $ test of inline math$...\n\n$Testing... $...';
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		expect(findNodesWithName(editor, inlineMathTagName).length).toBe(0);
 	});
 
 	it('shouldn\'t start inline math if $ is escaped', () => {
 		const documentText = 'This is a \\$test of inline math$...';
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		expect(findNodesWithName(editor, inlineMathTagName).length).toBe(0);
 	});
 
 	it('should correctly parse document containing just block math', () => {
 		const documentText = '$$\n\t\\{ 1, 1, 2, 3, 5, ... \\}\n$$';
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		const inlineMathNodes = findNodesWithName(editor, inlineMathTagName);
 		const blockMathNodes = findNodesWithName(editor, blockMathTagName);
 
@@ -98,7 +107,7 @@ describe('markdownMathParser', () => {
 	it('should correctly parse comment in block math', () => {
 		const startingText = '$$ % Testing...\n\t\\text{Test.}\n$$';
 		const afterMath = '\nTest.';
-		const editor = createEditor(startingText + afterMath).state;
+		const editor = createEditorState(startingText + afterMath);
 		const inlineMathNodes = findNodesWithName(editor, inlineMathTagName);
 		const blockMathNodes = findNodesWithName(editor, blockMathTagName);
 		const texParserComments = findNodesWithName(editor, 'comment');
@@ -119,7 +128,7 @@ describe('markdownMathParser', () => {
 	it('should extend block math without ending tag to end of document', () => {
 		const beforeMath = '# Testing...\n\n';
 		const documentText = `${beforeMath}$$\n\t\\text{Testing...}\n\n\t3 + 3 = 6`;
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		const blockMathNodes = findNodesWithName(editor, blockMathTagName);
 
 		expect(blockMathNodes.length).toBe(1);
@@ -129,7 +138,7 @@ describe('markdownMathParser', () => {
 
 	it('should parse block math declared on a single line', () => {
 		const documentText = '$$ Test. $$';
-		const editor = createEditor(documentText).state;
+		const editor = createEditorState(documentText);
 		const blockMathNodes = findNodesWithName(editor, blockMathTagName);
 
 		expect(blockMathNodes.length).toBe(1);
