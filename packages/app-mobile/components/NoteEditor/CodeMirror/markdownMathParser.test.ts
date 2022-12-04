@@ -5,7 +5,7 @@ import { EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName, MarkdownMathExtension } from './markdownMathParser';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 
-const syntaxTreeCreateTimeout = 100; // ms
+const syntaxTreeCreateTimeout = 500; // ms
 
 /** Create an EditorState with markdown extensions */
 const createEditorState = (initialText: string): EditorState => {
