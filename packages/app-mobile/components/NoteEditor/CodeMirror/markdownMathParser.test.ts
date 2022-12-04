@@ -1,15 +1,14 @@
 import { markdown } from '@codemirror/lang-markdown';
-import { ensureSyntaxTree } from '@codemirror/language';
+import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName, MarkdownMathExtension } from './markdownMathParser';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-
-const syntaxTreeCreateTimeout = 100; // ms
+import forceFullParse from './testUtil/forceFullParse';
 
 /** Create an EditorState with markdown extensions */
 const createEditorState = (initialText: string): EditorState => {
-	return EditorState.create({
+	const editorState = EditorState.create({
 		doc: initialText,
 		extensions: [
 			markdown({
@@ -17,6 +16,9 @@ const createEditorState = (initialText: string): EditorState => {
 			}),
 		],
 	});
+	forceFullParse(editorState);
+
+	return editorState;
 };
 
 /**
@@ -25,7 +27,7 @@ const createEditorState = (initialText: string): EditorState => {
  */
 const findNodesWithName = (editor: EditorState, nodeName: string) => {
 	const result: SyntaxNode[] = [];
-	ensureSyntaxTree(editor, syntaxTreeCreateTimeout)?.iterate({
+	syntaxTree(editor).iterate({
 		enter: (node) => {
 			if (node.name === nodeName) {
 				result.push(node.node);

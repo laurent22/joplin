@@ -1,9 +1,10 @@
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-import { forceParsing, indentUnit } from '@codemirror/language';
+import { indentUnit } from '@codemirror/language';
 import { SelectionRange, EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { MarkdownMathExtension } from './markdownMathParser';
+import { MarkdownMathExtension } from '../markdownMathParser';
+import forceFullParse from './forceFullParse';
 
 // Creates and returns a minimal editor with markdown extensions
 const createEditor = (initialText: string, initialSelection: SelectionRange): EditorView => {
@@ -19,7 +20,7 @@ const createEditor = (initialText: string, initialSelection: SelectionRange): Ed
 		],
 	});
 
-	forceParsing(editor);
+	forceFullParse(editor.state);
 	return editor;
 };
 
