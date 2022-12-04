@@ -7,6 +7,18 @@ import { markdown } from '@codemirror/lang-markdown';
 
 const syntaxTreeCreateTimeout = 100; // ms
 
+// Creates an EditorState with math and markdown extensions
+const createEditorState = (initialText: string): EditorState => {
+	return EditorState.create({
+		doc: initialText,
+		extensions: [
+			markdown({
+				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
+			}),
+		],
+	});
+};
+
 // Returns a list of all nodes with the given name in the given editor's syntax tree.
 // Attempts to create the syntax tree if it doesn't exist.
 const findNodesWithName = (editor: EditorState, nodeName: string) => {
@@ -20,18 +32,6 @@ const findNodesWithName = (editor: EditorState, nodeName: string) => {
 	});
 
 	return result;
-};
-
-// Creates an EditorState with math and markdown extensions
-const createEditorState = (initialText: string): EditorState => {
-	return EditorState.create({
-		doc: initialText,
-		extensions: [
-			markdown({
-				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
-			}),
-		],
-	});
 };
 
 describe('markdownMathParser', () => {
