@@ -5,8 +5,6 @@ import { EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName, MarkdownMathExtension } from './markdownMathParser';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 
-const syntaxTreeCreateTimeout = 500; // ms
-
 /** Create an EditorState with markdown extensions */
 const createEditorState = (initialText: string): EditorState => {
 	return EditorState.create({
@@ -25,7 +23,9 @@ const createEditorState = (initialText: string): EditorState => {
  */
 const findNodesWithName = (editor: EditorState, nodeName: string) => {
 	const result: SyntaxNode[] = [];
-	ensureSyntaxTree(editor, syntaxTreeCreateTimeout)?.iterate({
+	const syntaxTreeCreateTimeout = 500; // ms
+
+	ensureSyntaxTree(editor, editor.doc.length, syntaxTreeCreateTimeout)?.iterate({
 		enter: (node) => {
 			if (node.name === nodeName) {
 				result.push(node.node);
