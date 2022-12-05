@@ -19,7 +19,7 @@
   "author": "Joplin",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "29.2.3",
+    "@types/jest": "29.2.4",
     "@types/pdfjs-dist": "2.10.378",
     "@types/react": "16.14.34",
     "@types/react-dom": "18.0.9",
