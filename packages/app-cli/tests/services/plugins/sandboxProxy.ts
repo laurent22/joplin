@@ -3,10 +3,9 @@ import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/
 
 describe('services_plugins_sandboxProxy', function() {
 
-	beforeEach(async (done: Function) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should create a new sandbox proxy', (async () => {

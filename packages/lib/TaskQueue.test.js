@@ -3,10 +3,9 @@ const TaskQueue = require('./TaskQueue').default;
 
 describe('TaskQueue', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should queue and execute tasks', (async () => {

@@ -55,7 +55,7 @@ describe('errorsHaveChanged', () => {
 		];
 
 		for (const t of testCases) {
-			const [oldErrors, newErrors, expected] = t;
+			const [oldErrors, newErrors, expected] = t as any;
 
 			const result = errorsHaveChanged(oldErrors, newErrors);
 			expect(result).toBe(expected);

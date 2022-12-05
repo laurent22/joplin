@@ -2,7 +2,7 @@ import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy, pathEx
 import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
-import { AssetUrls, Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
+import { AssetUrls, Env, Partials, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { createFeatureTableMd, getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
@@ -10,6 +10,9 @@ import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags } from './utils/openGraph';
 import { readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
 import { getNewsDateString } from './utils/news';
+import { parsePoFile, parseTranslations, Translations } from '../utils/translation';
+import { countryCodeOnly, setLocale } from '@joplin/lib/locale';
+import applyTranslations from './utils/applyTranslations';
 
 interface BuildConfig {
 	env: Env;
@@ -144,12 +147,17 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 }
 
 function renderFileToHtml(sourcePath: string, targetPath: string, templateParams: TemplateParams) {
-	let md = readFileSync(sourcePath, 'utf8');
-	if (templateParams.isNews) {
-		md = processNewsMarkdown(md, sourcePath);
+	try {
+		let md = readFileSync(sourcePath, 'utf8');
+		if (templateParams.isNews) {
+			md = processNewsMarkdown(md, sourcePath);
+		}
+		md = stripOffFrontMatter(md).doc;
+		return renderPageToHtml(md, targetPath, templateParams);
+	} catch (error) {
+		error.message = `Could not render file: ${sourcePath}: ${error.message}`;
+		throw error;
 	}
-	md = stripOffFrontMatter(md).doc;
-	return renderPageToHtml(md, targetPath, templateParams);
 }
 
 function makeHomePageMd() {
@@ -205,7 +213,32 @@ const isNewsFile = (filePath: string): boolean => {
 	return filePath.includes('readme/news/');
 };
 
+const translatePartials = (partials: Partials, languageCode: string, translations: Translations): Partials => {
+	const output: Partials = {};
+	for (const [key, value] of Object.entries(partials)) {
+		output[key] = applyTranslations(value, languageCode, translations);
+	}
+	return output;
+};
+
+const updatePageLanguage = (html: string, lang: string): string => {
+	return html.replace('<html lang="en-gb">', `<html lang="${lang}">`);
+};
+
 async function main() {
+	const supportedLocales = {
+		'en_GB': {
+			htmlTranslations: {},
+			lang: 'en-gb',
+		},
+		'zh_CN': {
+			htmlTranslations: parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`)),
+			lang: 'zh-cn',
+		},
+	};
+
+	setLocale('en_GB');
+
 	await remove(`${docDir}`);
 	await copy(websiteAssetDir, `${docDir}`);
 
@@ -237,58 +270,81 @@ async function main() {
 	// FRONT PAGE
 	// =============================================================
 
-	renderPageToHtml('', `${docDir}/index.html`, {
-		templateHtml: frontTemplateHtml,
-		partials,
-		pressCarouselRegular: {
-			id: 'carouselRegular',
-			items: pressCarouselItems(),
-		},
-		pressCarouselMobile: {
-			id: 'carouselMobile',
-			items: pressCarouselItems(),
-		},
-		sponsors,
-		navbar: {
-			isFrontPage: true,
-		},
-		showToc: false,
-		assetUrls,
-		openGraph: {
-			title: 'Joplin website',
-			description: 'Joplin, the open source note-taking application',
-			url: 'https://joplinapp.org',
-		},
-	});
+	for (const [localeName, locale] of Object.entries(supportedLocales)) {
+		setLocale(localeName);
+
+		const pathPrefix = localeName !== 'en_GB' ? `/${countryCodeOnly(localeName).toLowerCase()}` : '';
+
+		let templateHtml = updatePageLanguage(applyTranslations(frontTemplateHtml, localeName, locale.htmlTranslations), locale.lang);
+		if (localeName === 'zh_CN') templateHtml = templateHtml.replace(/\/plans/g, '/cn/plans');
+
+		renderPageToHtml('', `${docDir}${pathPrefix}/index.html`, {
+			templateHtml,
+			partials: translatePartials(partials, localeName, locale.htmlTranslations),
+			pressCarouselRegular: {
+				id: 'carouselRegular',
+				items: pressCarouselItems(),
+			},
+			pressCarouselMobile: {
+				id: 'carouselMobile',
+				items: pressCarouselItems(),
+			},
+			sponsors,
+			navbar: {
+				isFrontPage: true,
+			},
+			showToc: false,
+			assetUrls,
+			openGraph: {
+				title: 'Joplin website',
+				description: 'Joplin, the open source note-taking application',
+				url: 'https://joplinapp.org',
+			},
+		});
+	}
+
+	setLocale('en_GB');
 
 	// =============================================================
 	// PLANS PAGE
 	// =============================================================
 
-	const planPageFaqMd = await readFile(`${readmeDir}/faq_joplin_cloud.md`, 'utf8');
-	const planPageFaqHtml = getMarkdownIt().render(planPageFaqMd, {});
+	for (const [localeName, locale] of Object.entries(supportedLocales)) {
+		setLocale(localeName);
 
-	const planPageParams: PlanPageParams = {
-		...defaultTemplateParams(assetUrls),
-		partials,
-		templateHtml: plansTemplateHtml,
-		plans: getPlans(stripeConfig),
-		faqHtml: planPageFaqHtml,
-		featureListHtml: getMarkdownIt().render(createFeatureTableMd(), {}),
-		stripeConfig,
-	};
+		const planPageFaqMd = await readFile(`${readmeDir}/faq_joplin_cloud.md`, 'utf8');
+		const planPageFaqHtml = getMarkdownIt().render(planPageFaqMd, {});
 
-	const planPageContentHtml = renderMustache('', planPageParams);
+		const planPageParams: PlanPageParams = {
+			...defaultTemplateParams(assetUrls),
+			partials: translatePartials(partials, localeName, locale.htmlTranslations),
+			templateHtml: applyTranslations(plansTemplateHtml, localeName, locale.htmlTranslations),
+			plans: getPlans(stripeConfig),
+			faqHtml: planPageFaqHtml,
+			featureListHtml: getMarkdownIt().render(createFeatureTableMd(), {}),
+			stripeConfig,
+		};
 
-	renderPageToHtml('', `${docDir}/plans/index.html`, {
-		...defaultTemplateParams(assetUrls),
-		pageName: 'plans',
-		partials,
-		showToc: false,
-		showImproveThisDoc: false,
-		contentHtml: planPageContentHtml,
-		title: 'Joplin Cloud Plans',
-	});
+		const planPageContentHtml = renderMustache('', planPageParams);
+
+		const pathPrefix = localeName !== 'en_GB' ? `/${countryCodeOnly(localeName).toLowerCase()}` : '';
+
+		const templateParams = {
+			...defaultTemplateParams(assetUrls),
+			pageName: 'plans',
+			partials,
+			showToc: false,
+			showImproveThisDoc: false,
+			contentHtml: planPageContentHtml,
+			title: 'Joplin Cloud Plans',
+		};
+
+		templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
+
+		renderPageToHtml('', `${docDir}${pathPrefix}/plans/index.html`, templateParams);
+	}
+
+	setLocale('en_GB');
 
 	// =============================================================
 	// All other pages are generated dynamically from the
@@ -384,6 +440,12 @@ async function main() {
 			url: 'https://joplinapp.org/news/',
 		},
 	});
+
+	// setLocale('zh_CN');
+	// const translations = parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`));
+	// await processTranslations(`${docDir}/index.html`, `${docDir}/cn/index.html`, 'zh-cn', translations);
+	// await processTranslations(`${docDir}/plans/index.html`, `${docDir}/cn/plans/index.html`, 'zh-cn', translations);
+	// setLocale('en_GB');
 }
 
 main().catch((error) => {

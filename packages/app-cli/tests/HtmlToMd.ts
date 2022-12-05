@@ -5,12 +5,6 @@ import HtmlToMd from '@joplin/lib/HtmlToMd';
 
 describe('HtmlToMd', function() {
 
-	// beforeEach(async (done) => {
-	// 	await setupDatabaseAndSynchronizer(1);
-	// 	await switchClient(1);
-	// 	done();
-	// });
-
 	it('should convert from Html to Markdown', (async () => {
 		const basePath = `${__dirname}/html_to_md`;
 		const files = await shim.fsDriver().readDirStats(basePath);

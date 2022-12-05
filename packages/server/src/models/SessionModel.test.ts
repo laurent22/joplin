@@ -16,7 +16,7 @@ describe('SessionModel', function() {
 	});
 
 	test('should delete expired sessions', async function() {
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t0 = new Date('2020-01-01T00:00:00').getTime();
 		jest.setSystemTime(t0);

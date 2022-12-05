@@ -6,7 +6,7 @@ version: '3'
 
 services:
     db:
-        image: postgres:13
+        image: postgres:15
         command: postgres -c work_mem=100000
         ports:
             - "5432:5432"

@@ -37,11 +37,10 @@ let api: Api = null;
 
 describe('services_rest_Api', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		api = new Api();
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should ping', (async () => {

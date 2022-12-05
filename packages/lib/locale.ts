@@ -563,6 +563,10 @@ function localeStrings(canonicalName: string) {
 	return loadedLocales_[locale];
 }
 
+const currentLocale = () => {
+	return currentLocale_;
+};
+
 function setLocale(canonicalName: string) {
 	if (currentLocale_ === canonicalName) return;
 	currentLocale_ = closestSupportedLocale(canonicalName);
@@ -594,4 +598,4 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	return _(singular, ...args);
 }
 
-export { _, _n, supportedLocales, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

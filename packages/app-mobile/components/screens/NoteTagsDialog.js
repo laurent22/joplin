@@ -91,7 +91,7 @@ class NoteTagsDialogComponent extends React.Component {
 		};
 
 		this.filterTags = (allTags) => {
-			return allTags.filter((tag) => tag.title.includes(this.state.tagFilter.toLowerCase()), allTags);
+			return allTags.filter((tag) => tag.title.toLowerCase().includes(this.state.tagFilter.toLowerCase()), allTags);
 		};
 	}
 

@@ -117,7 +117,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
 					if (!webviewRef.current) return;
-					webviewRef.current.wrappedInstance.send('scrollToHash', options.value as string);
+					webviewRef.current.send('scrollToHash', options.value as string);
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const percent = options.value as number;
 					setEditorPercentScroll(percent);
@@ -152,9 +152,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (props.visiblePanes.indexOf('editor') >= 0) {
 						editorRef.current.focus();
 					} else {
-						// If we just call wrappedInstance.focus() then the iframe is focused,
-						// but not its content, such that scrolling up / down with arrow keys fails
-						webviewRef.current.wrappedInstance.send('focus');
+						// If we just call focus() then the iframe is focused,
+						// but not its content, such that scrolling up / down
+						// with arrow keys fails
+						webviewRef.current.send('focus');
 					}
 				} else {
 					commandProcessed = false;
@@ -658,13 +659,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// mounted, webviewReady might be true, but webviewRef.current will be
 		// undefined. Maybe due to the error boundary that unmount components.
 		// Since we can't do much about it we just print an error.
-		if (webviewRef.current && webviewRef.current.wrappedInstance) {
+		if (webviewRef.current) {
 			// To keep consistency among CodeMirror's editing and scroll percents
 			// of Editor and Viewer.
 			const percent = getLineScrollPercent();
 			setEditorPercentScroll(percent);
 			options.percent = percent;
-			webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+			webviewRef.current.send('setHtml', renderedBody.html, options);
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');
 		}
@@ -683,8 +684,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// props.content has been updated).
 		const textChanged = props.searchMarkers.keywords.length > 0 && (props.content !== previousContent || renderedBody !== previousRenderedBody);
 
-		if (webviewRef.current?.wrappedInstance && (props.searchMarkers !== previousSearchMarkers || textChanged)) {
-			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
+		if (webviewRef.current && (props.searchMarkers !== previousSearchMarkers || textChanged)) {
+			webviewRef.current.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
 				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);

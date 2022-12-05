@@ -26,10 +26,9 @@ const switchToSubProfileSettings = async () => {
 
 describe('models/Setting', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should return only sub-values', (async () => {

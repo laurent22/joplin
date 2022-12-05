@@ -73,21 +73,32 @@ const getPosts = async (newsDir: string): Promise<Post[]> => {
 };
 
 const getPostContent = async (post: Post): Promise<PostContent> => {
-	const raw = await readFile(post.path, 'utf8');
-	const parsed = stripOffFrontMatter(raw);
-	const lines = parsed.doc.split('\n');
-	const titleLine = lines[0];
-	if (!titleLine.startsWith('# ')) throw new Error('Cannot extract title from post: no header detected');
-	lines.splice(0, 1);
+	try {
+		const raw = await readFile(post.path, 'utf8');
+		const parsed = stripOffFrontMatter(raw);
+		const lines = parsed.doc.split('\n');
+		const titleLine = lines[0];
+		if (!titleLine.startsWith('# ')) throw new Error('Cannot extract title from post: no header detected');
+		lines.splice(0, 1);
 
-	return {
-		title: titleLine.substr(1).trim(),
-		body: lines.join('\n').trim(),
-		parsed,
-	};
+		return {
+			title: titleLine.substr(1).trim(),
+			body: lines.join('\n').trim(),
+			parsed,
+		};
+	} catch (error) {
+		error.message = `Could not get post content: ${post.id}: ${post.path}: ${error.message}`;
+		throw error;
+	}
 };
 
 const execApi = async (method: HttpMethod, path: string, body: Record<string, string | number> = null) => {
+	interface Request {
+		method: HttpMethod;
+		headers: Record<string, string>;
+		body?: string;
+	}
+
 	const headers: Record<string, string> = {
 		'Api-Key': config.key,
 		'Api-Username': config.username,
@@ -95,11 +106,14 @@ const execApi = async (method: HttpMethod, path: string, body: Record<string, st
 
 	if (method !== HttpMethod.GET) headers['Content-Type'] = 'application/json;';
 
-	const response = await fetch(`${config.baseUrl}/${path}`, {
+	const request: Request = {
 		method,
 		headers,
-		body: JSON.stringify(body),
-	});
+	};
+
+	if (body) request.body = JSON.stringify(body);
+
+	const response = await fetch(`${config.baseUrl}/${path}`, request);
 
 	if (!response.ok) {
 		const errorText = await response.text();
@@ -114,7 +128,7 @@ const execApi = async (method: HttpMethod, path: string, body: Record<string, st
 		throw error;
 	}
 
-	return response.json();
+	return response.json() as any;
 };
 
 const getForumTopPostByExternalId = async (externalId: string): Promise<ForumTopPost> => {

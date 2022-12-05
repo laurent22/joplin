@@ -19,11 +19,10 @@ describe('InteropService_Importer_Md', function() {
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
 		return await importer.importDirectory(path, 'notebook');
 	}
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		tempDir = await createTempDir();
-		done();
 	});
 	afterEach(async () => {
 		await fs.remove(tempDir);

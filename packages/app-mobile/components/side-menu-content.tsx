@@ -125,8 +125,10 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
-	const folder_longPress = async (folder: FolderEntity) => {
-		if (folder === 'all') return;
+	const folder_longPress = async (folderOrAll: FolderEntity | string) => {
+		if (folderOrAll === 'all') return;
+
+		const folder = folderOrAll as FolderEntity;
 
 		Alert.alert(
 			'',

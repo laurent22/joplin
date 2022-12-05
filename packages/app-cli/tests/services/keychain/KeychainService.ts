@@ -13,16 +13,14 @@ function describeIfCompatible(name: string, fn: any, elseFn: any) {
 
 describeIfCompatible('services_KeychainService', function() {
 
-	beforeEach(async (done: Function) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1, { keychainEnabled: true });
 		await switchClient(1, { keychainEnabled: true });
 		await Setting.deleteKeychainPasswords();
-		done();
 	});
 
-	afterEach(async (done: Function) => {
+	afterEach(async () => {
 		await Setting.deleteKeychainPasswords();
-		done();
 	});
 
 	it('should be enabled on macOS and Windows', (async () => {

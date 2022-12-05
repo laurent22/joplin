@@ -4,10 +4,9 @@ import { masterKeyEnabled, mergeSyncInfos, setMasterKeyEnabled, SyncInfo, syncIn
 
 describe('syncInfoUtils', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	afterAll(async () => {

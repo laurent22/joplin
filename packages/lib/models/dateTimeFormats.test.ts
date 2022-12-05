@@ -3,9 +3,7 @@ import time from '../time';
 
 describe('dateFormats', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should format date according to DATE_FORMAT', (async () => {
 

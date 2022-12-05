@@ -408,7 +408,7 @@ describe('UserModel', function() {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t0 = new Date('2022-01-01').getTime();
 		jest.setSystemTime(t0);

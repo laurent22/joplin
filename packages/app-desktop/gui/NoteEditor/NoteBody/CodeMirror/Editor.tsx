@@ -220,7 +220,7 @@ function Editor(props: EditorProps, ref: any) {
 			cm.off('refresh', editor_resize);
 			cm.off('update', editor_update);
 			// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-			editorParent.current.removeChild(cm.getWrapperElement());
+			if (editorParent.current) editorParent.current.removeChild(cm.getWrapperElement());
 			setEditor(null);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
