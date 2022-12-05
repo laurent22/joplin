@@ -18,4 +18,4 @@ You can then share this link with anyone and they will be able to see the note i
 
 After publishing a note, it can be unpublished by right-clicking on it in the desktop application, and selecting "Publish note..."
 
-From there, clicking on the "Share" icon to unpublish the note. The icon will be removed.
+From there, clicking on the "Share" icon to unpublish the note.
