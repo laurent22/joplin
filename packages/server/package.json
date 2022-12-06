@@ -68,7 +68,7 @@
     "@types/markdown-it": "12.2.3",
     "@types/mustache": "4.2.2",
     "@types/nodemailer": "6.4.6",
-    "@types/yargs": "17.0.15",
+    "@types/yargs": "17.0.16",
     "@types/zxcvbn": "4.4.1",
     "gulp": "4.0.2",
     "jest": "29.3.1",
