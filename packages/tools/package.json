@@ -24,7 +24,7 @@
     "@joplin/renderer": "^2.9.1",
     "@types/node-fetch": "2.6.2",
     "@types/yargs": "17.0.16",
-    "dayjs": "1.11.6",
+    "dayjs": "1.11.7",
     "execa": "4.1.0",
     "fs-extra": "11.1.0",
     "gettext-parser": "6.0.0",
