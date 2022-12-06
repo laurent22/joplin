@@ -45,12 +45,12 @@
     "entities": "2.2.0"
   },
   "devDependencies": {
-    "@types/jest": "29.2.3",
-    "@types/node": "18.11.10",
-    "@typescript-eslint/eslint-plugin": "5.45.0",
-    "@typescript-eslint/parser": "5.45.0",
+    "@types/jest": "29.2.4",
+    "@types/node": "18.11.11",
+    "@typescript-eslint/eslint-plugin": "5.45.1",
+    "@typescript-eslint/parser": "5.45.1",
     "coveralls": "3.1.1",
-    "eslint": "8.28.0",
+    "eslint": "8.29.0",
     "eslint-config-prettier": "8.5.0",
     "jest": "29.3.1",
     "prettier": "2.8.0",

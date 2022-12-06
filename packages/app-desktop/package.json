@@ -108,8 +108,8 @@
   "devDependencies": {
     "@joplin/tools": "~2.9",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.2.3",
-    "@types/node": "18.11.10",
+    "@types/jest": "29.2.4",
+    "@types/node": "18.11.11",
     "@types/react": "16.14.34",
     "@types/react-redux": "7.1.24",
     "@types/styled-components": "5.1.26",
@@ -134,7 +134,7 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
-    "@electron/remote": "2.0.8",
+    "@electron/remote": "2.0.9",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
     "@joplin/lib": "~2.9",
@@ -164,7 +164,7 @@
     "react-datetime": "3.2.0",
     "react-dom": "18.2.0",
     "react-redux": "8.0.5",
-    "react-select": "5.6.1",
+    "react-select": "5.7.0",
     "react-toggle-button": "2.2.0",
     "react-tooltip": "4.5.1",
     "redux": "4.2.0",
