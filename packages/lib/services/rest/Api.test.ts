@@ -305,6 +305,22 @@ describe('services_rest_Api', function() {
 		expect(response.todo_completed).toBe(3);
 	}));
 
+	it('should remove todo properties switching from todo to note', (async () => {
+		let response = null;
+		const note = await Note.save({ title: 'some todo', is_todo: 1, todo_due: 2, todo_completed: 3 });
+		response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
+			title: 'still a todo',
+		}));
+		expect(response.todo_due).toBe(2);
+		expect(response.todo_completed).toBe(3);
+
+		response = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({
+			is_todo: 0,
+		}));
+		expect(response.todo_completed).toBe(0);
+		expect(response.todo_due).toBe(0);
+	}));
+
 	it('should create folders with supplied ID', (async () => {
 		const response = await api.route(RequestMethod.POST, 'folders', null, JSON.stringify({
 			id: '12345678123456781234567812345678',
