@@ -3,14 +3,16 @@ import { EditorState } from '@codemirror/state';
 
 // Forces a full parse of a CodeMirror editor. This is intended for unit testing.
 // If not in a unit-test consider using ensureSyntaxTree or forceParsing.
+// This will throw if no language is configured for the editor.
 const forceFullParse = (editorState: EditorState) => {
-	// Call ensureSyntaxTree at least once. Not doing so seems to occasionally
-	// result in an outdated syntax tree being used.
-	do {
-		const timeout = 100; // ms
-		ensureSyntaxTree(editorState, editorState.doc.length, timeout);
+	const timeout = 3000; // ms
+	ensureSyntaxTree(editorState, editorState.doc.length, timeout);
+
+	if (!syntaxTreeAvailable(editorState)) {
+		throw new Error(
+			`Unable to generate a syntax tree in ${timeout}. Is the editor configured to parse a language?`
+		);
 	}
-	while (!syntaxTreeAvailable(editorState));
 };
 
 export default forceFullParse;
