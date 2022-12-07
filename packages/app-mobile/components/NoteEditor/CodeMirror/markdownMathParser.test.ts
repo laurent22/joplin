@@ -1,15 +1,14 @@
-import { ensureSyntaxTree } from '@codemirror/language';
+import { markdown } from '@codemirror/lang-markdown';
+import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName, MarkdownMathExtension } from './markdownMathParser';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-import { markdown } from '@codemirror/lang-markdown';
-
-const syntaxTreeCreateTimeout = 100; // ms
+import forceFullParse from './testUtil/forceFullParse';
 
 // Creates an EditorState with math and markdown extensions
 const createEditorState = (initialText: string): EditorState => {
-	return EditorState.create({
+	const editorState = EditorState.create({
 		doc: initialText,
 		extensions: [
 			markdown({
@@ -17,13 +16,16 @@ const createEditorState = (initialText: string): EditorState => {
 			}),
 		],
 	});
+	forceFullParse(editorState);
+
+	return editorState;
 };
 
 // Returns a list of all nodes with the given name in the given editor's syntax tree.
 // Attempts to create the syntax tree if it doesn't exist.
 const findNodesWithName = (editor: EditorState, nodeName: string) => {
 	const result: SyntaxNode[] = [];
-	ensureSyntaxTree(editor, syntaxTreeCreateTimeout)?.iterate({
+	syntaxTree(editor).iterate({
 		enter: (node) => {
 			if (node.name === nodeName) {
 				result.push(node.node);

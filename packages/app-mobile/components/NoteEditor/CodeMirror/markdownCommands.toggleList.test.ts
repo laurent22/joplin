@@ -7,7 +7,7 @@ import {
 	increaseIndent, toggleList,
 } from './markdownCommands';
 import { ListType } from '../types';
-import createEditor from './createEditor';
+import createEditor from './testUtil/createEditor';
 
 describe('markdownCommands.toggleList', () => {
 	it('should remove the same type of list', () => {
