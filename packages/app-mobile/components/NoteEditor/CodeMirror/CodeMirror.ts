@@ -45,9 +45,14 @@ import {
 	toggleList, toggleMath, updateLink,
 } from './markdownCommands';
 
+
+interface CodeMirrorResult extends CodeMirrorControl {
+	editor: EditorView;
+}
+
 export function initCodeMirror(
 	parentElement: any, initialText: string, settings: EditorSettings
-): CodeMirrorControl {
+): CodeMirrorResult {
 	logMessage('Initializing CodeMirror...');
 	const theme = settings.themeData;
 
