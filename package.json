@@ -64,8 +64,8 @@
   },
   "devDependencies": {
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
-    "@typescript-eslint/eslint-plugin": "5.45.0",
-    "@typescript-eslint/parser": "5.45.0",
+    "@typescript-eslint/eslint-plugin": "5.45.1",
+    "@typescript-eslint/parser": "5.45.1",
     "cspell": "5.21.2",
     "eslint": "8.29.0",
     "eslint-interactive": "10.2.0",

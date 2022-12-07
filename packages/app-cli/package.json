@@ -42,7 +42,7 @@
   "dependencies": {
     "@joplin/lib": "~2.9",
     "@joplin/renderer": "~2.9",
-    "aws-sdk": "2.1267.0",
+    "aws-sdk": "2.1269.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
     "fs-extra": "11.1.0",
@@ -70,8 +70,8 @@
   "devDependencies": {
     "@joplin/tools": "~2.9",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.2.3",
-    "@types/node": "18.11.10",
+    "@types/jest": "29.2.4",
+    "@types/node": "18.11.11",
     "gulp": "4.0.2",
     "jest": "29.3.1",
     "temp": "0.9.4",
