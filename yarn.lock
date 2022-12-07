@@ -4617,7 +4617,7 @@ __metadata:
     "@types/jest": 29.2.4
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 16.2.15
-    "@types/koa": 2.13.4
+    "@types/koa": 2.13.5
     "@types/markdown-it": 12.2.3
     "@types/mustache": 4.2.2
     "@types/nodemailer": 6.4.6
@@ -4638,7 +4638,7 @@ __metadata:
     jquery: 3.6.1
     jsdom: 16.7.0
     knex: 2.3.0
-    koa: 2.13.4
+    koa: 2.14.1
     markdown-it: 13.0.1
     mustache: 4.2.0
     nanoid: 2.1.11
@@ -7014,7 +7014,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:*, @types/koa@npm:2.13.4":
+"@types/koa@npm:*":
   version: 2.13.4
   resolution: "@types/koa@npm:2.13.4"
   dependencies:
@@ -7027,6 +7027,22 @@ __metadata:
     "@types/koa-compose": "*"
     "@types/node": "*"
   checksum: 35a54e68944f74d6763537d55d01f8ed870d0ef816b5f27fce97a317b237540b7c249dc4a54abab44ad0afd0ce010b335122c9efb490b9589affe7929201d707
+  languageName: node
+  linkType: hard
+
+"@types/koa@npm:2.13.5":
+  version: 2.13.5
+  resolution: "@types/koa@npm:2.13.5"
+  dependencies:
+    "@types/accepts": "*"
+    "@types/content-disposition": "*"
+    "@types/cookies": "*"
+    "@types/http-assert": "*"
+    "@types/http-errors": "*"
+    "@types/keygrip": "*"
+    "@types/koa-compose": "*"
+    "@types/node": "*"
+  checksum: e3b634d934b79ce8f394bf4130511596081f9c073dbfb4309aa32e4c421c47049a002b65111f8d9687eabec55d5a27b1b9ae0699afa83894cb7032c3536bfa17
   languageName: node
   linkType: hard
 
@@ -20910,9 +20926,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.13.4":
-  version: 2.13.4
-  resolution: "koa@npm:2.13.4"
+"koa@npm:2.14.1":
+  version: 2.14.1
+  resolution: "koa@npm:2.14.1"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
@@ -20937,7 +20953,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: c9a6f9c803433b2d143a0788308048c1432a71c5febcfea2af7f2e8bd732b9bfd75c2c220d553752ee9ab9a3f52490f006cfd521db97cd01d8461d67cc1ccc1f
+  checksum: 84cfce48d72cf434831bd9f4f06beb3815da030325a7e89b13ee684f5afd158221e16c2d450ca637b221aa0c4a0ab235edd129e4efea656dc5d8384801d3e90f
   languageName: node
   linkType: hard
 
