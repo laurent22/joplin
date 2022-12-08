@@ -4333,7 +4333,7 @@ __metadata:
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
     react-native-securerandom: 1.0.1
-    react-native-share: 8.0.0
+    react-native-share: 8.0.1
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 1.3.0
@@ -26485,10 +26485,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:8.0.0":
-  version: 8.0.0
-  resolution: "react-native-share@npm:8.0.0"
-  checksum: f22e672bae9eb5da793b1a2296d45a4554440a537e479b21ecfcc61fc5619ba7e7d238a3b69f5276709bb47e2758705cf47763b7c9c80fee84241b04b410d86e
+"react-native-share@npm:8.0.1":
+  version: 8.0.1
+  resolution: "react-native-share@npm:8.0.1"
+  checksum: b5582afb9c1b78e505162dff1ba2c05bf0ed6f955e3ba1b1144700d6018b23eb05d0b3a97b5db495062f226d3cebe95d71d4293d0dad8913d7c5a8b9ca4f61a5
   languageName: node
   linkType: hard
 
