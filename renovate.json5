@@ -96,10 +96,12 @@
 		{
 			"matchUpdateTypes": ["patch"],
 			"automerge": true
+			"labels": ["automerge"],
 		},
 		{
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
+			"labels": ["automerge"],
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
