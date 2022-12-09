@@ -14841,9 +14841,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-interactive@npm:10.2.0":
-  version: 10.2.0
-  resolution: "eslint-interactive@npm:10.2.0"
+"eslint-interactive@npm:10.3.0":
+  version: 10.3.0
+  resolution: "eslint-interactive@npm:10.3.0"
   dependencies:
     boxen: ^7.0.0
     cachedir: ^2.3.0
@@ -14855,14 +14855,14 @@ __metadata:
     is-installed-globally: ^0.4.0
     node-pager: ^0.3.6
     ora: ^6.1.2
-    table: ^6.8.0
+    table: ^6.8.1
     terminal-link: ^3.0.0
     yargs: ^17.5.1
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
   bin:
     eslint-interactive: bin/eslint-interactive.js
-  checksum: 79222685ee71bf51a620dcbc4524f889ba651eafca23beba0dda2985fe12d4b62ac08a619058388629ec9ee14329a446a6015d142966a3d5d33ac986d9c48cbf
+  checksum: 89757f5ef653060c4d3fd7d2f17dbc9b455e8d90a931fe40e0503dcab1f9e888afb5fe247d1d401251762faae7375d0ea8faca56f545132446ea2d5657d85f15
   languageName: node
   linkType: hard
 
@@ -27925,7 +27925,7 @@ __metadata:
     "@typescript-eslint/parser": 5.45.1
     cspell: 5.21.2
     eslint: 8.29.0
-    eslint-interactive: 10.2.0
+    eslint-interactive: 10.3.0
     eslint-plugin-import: 2.26.0
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.31.11
@@ -30082,16 +30082,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"table@npm:^6.8.0":
-  version: 6.8.0
-  resolution: "table@npm:6.8.0"
+"table@npm:^6.8.1":
+  version: 6.8.1
+  resolution: "table@npm:6.8.1"
   dependencies:
     ajv: ^8.0.1
     lodash.truncate: ^4.4.2
     slice-ansi: ^4.0.0
     string-width: ^4.2.3
     strip-ansi: ^6.0.1
-  checksum: 5b07fe462ee03d2e1fac02cbb578efd2e0b55ac07e3d3db2e950aa9570ade5a4a2b8d3c15e9f25c89e4e50b646bc4269934601ee1eef4ca7968ad31960977690
+  checksum: 08249c7046125d9d0a944a6e96cfe9ec66908d6b8a9db125531be6eb05fa0de047fd5542e9d43b4f987057f00a093b276b8d3e19af162a9c40db2681058fd306
   languageName: node
   linkType: hard
 
