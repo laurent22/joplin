@@ -109,7 +109,7 @@
     "@joplin/tools": "~2.9",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.2.4",
-    "@types/node": "18.11.13",
+    "@types/node": "18.11.14",
     "@types/react": "16.14.34",
     "@types/react-redux": "7.1.24",
     "@types/styled-components": "5.1.26",
