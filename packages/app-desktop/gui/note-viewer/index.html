@@ -158,19 +158,30 @@
 
 			for (let i = 0; i < assets.length; i++) {
 				const asset = assets[i];
-
-				const assetId = asset.name ? asset.name : asset.path;
+				// encode everything that encodeURIComponent does, except forward slash
+				// since these chars might be used in file paths, and shouldn't be treated as special characters
+				const encodedPath = encodeURI(asset.path)
+						.replaceAll('#','%23')
+						.replaceAll('$','%24')
+						.replaceAll('+','%2B')
+						.replaceAll(',','%2C')
+						.replaceAll(':','%3A')
+						.replaceAll(';','%3B')
+						.replaceAll('=','%3D')
+						.replaceAll('?','%3F')
+						.replaceAll('@','%40')
+				const assetId = asset.name ? asset.name : encodedPath;
 				if (pluginAssetsAdded_[assetId]) continue;
 				pluginAssetsAdded_[assetId] = true;
 
 				if (asset.mime === 'application/javascript') {
 					const script = document.createElement('script');
-					script.src = asset.path;
+					script.src = encodedPath;
 					pluginAssetsContainer.appendChild(script);
 				} else if (asset.mime === 'text/css') {
 					const link = document.createElement('link');
 					link.rel = 'stylesheet';
-					link.href = asset.path;
+					link.href = encodedPath
 					pluginAssetsContainer.appendChild(link);
 				}
 			}
@@ -343,6 +354,7 @@
 				setPercentScroll(event.options.percent);
 			}
 
+			console.log(event.options)
 			addPluginAssets(event.options.pluginAssets);
 
 			if (event.options.downloadResources === 'manual') {
