@@ -158,18 +158,11 @@
 
 			for (let i = 0; i < assets.length; i++) {
 				const asset = assets[i];
-				// encode everything that encodeURIComponent does, except forward slash
-				// since these chars might be used in file paths, and shouldn't be treated as special characters
-				const encodedPath = encodeURI(asset.path)
+				// # and ? can be used in valid paths and shouldn't be treated as the start of a query or fragment
+				const encodedPath = asset.path
 						.replaceAll('#','%23')
-						.replaceAll('$','%24')
-						.replaceAll('+','%2B')
-						.replaceAll(',','%2C')
-						.replaceAll(':','%3A')
-						.replaceAll(';','%3B')
-						.replaceAll('=','%3D')
 						.replaceAll('?','%3F')
-						.replaceAll('@','%40')
+
 				const assetId = asset.name ? asset.name : encodedPath;
 				if (pluginAssetsAdded_[assetId]) continue;
 				pluginAssetsAdded_[assetId] = true;
