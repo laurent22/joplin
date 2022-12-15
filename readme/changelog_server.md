@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.10.2](https://github.com/laurent22/joplin/releases/tag/server-v2.10.2) - 2022-12-15T23:26:26Z
+## [server-v2.10.3](https://github.com/laurent22/joplin/releases/tag/server-v2.10.3) - 2022-12-15T23:32:16Z
 
 - Upgraded packages for performance and security improvements.
 
