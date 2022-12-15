@@ -13,7 +13,9 @@ jobs:
 
   Main:
     needs: pre_job
-    if: needs.pre_job.outputs.should_skip != 'true'
+    # We always process server tags, because that's when the Docker image is
+    # built
+    if: needs.pre_job.outputs.should_skip != 'true' && !startsWith(github.ref, 'refs/tags/server-v')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
