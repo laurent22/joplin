@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.10.1](https://github.com/laurent22/joplin/releases/tag/server-v2.10.1) - 2022-12-15T22:38:22Z
+
+- Upgraded packages for performance and security improvements.
+
 ## [server-v2.9.7](https://github.com/laurent22/joplin/releases/tag/server-v2.9.7) - 2022-11-05T16:51:39Z
 
 - Improved: Allow enabling and disabling tasks (1379c9c)
