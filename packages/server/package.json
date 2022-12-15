@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.9.7",
+  "version": "2.10.0",
   "private": true,
   "scripts": {
     "start-dev": "yarn run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -23,8 +23,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "3.231.0",
     "@fortawesome/fontawesome-free": "5.15.4",
-    "@joplin/lib": "~2.9",
-    "@joplin/renderer": "~2.9",
+    "@joplin/lib": "~2.10",
+    "@joplin/renderer": "~2.10",
     "@koa/cors": "4.0.0",
     "@types/uuid": "9.0.0",
     "bcryptjs": "2.4.3",
@@ -58,7 +58,7 @@
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
-    "@joplin/tools": "~2.9",
+    "@joplin/tools": "~2.10",
     "@rmp135/sql-ts": "1.15.1",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.4",
