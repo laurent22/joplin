@@ -13,9 +13,8 @@ jobs:
 
   Main:
     needs: pre_job
-    # We always process server tags, because that's when the Docker image is
-    # built
-    if: needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/server-v')
+    # We always process server or desktop release tags, because they also publish the release
+    if: needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/server-v') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
