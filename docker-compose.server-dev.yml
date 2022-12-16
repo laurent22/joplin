@@ -18,9 +18,9 @@ services:
       - POSTGRES_HOST=localhost
     depends_on:
       - db
-    command: <command to run when the container starts>
+    command: npm run start
     healthcheck:
-      test: <command to use to check the health of the service>
+      test: curl -f http://localhost:22300 || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
@@ -29,12 +29,11 @@ services:
   db:
     image: postgres:15
     ports:
-        - "5432:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=joplin
       - POSTGRES_USER=joplin
       - POSTGRES_DB=joplin
     volumes:
-      - <local path>:<container path>:<mode>
+      - /path/on/host:/path/in/container:rw
     restart: always
-
