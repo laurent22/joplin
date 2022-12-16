@@ -1,27 +1,40 @@
 # This compose file can be used in development to run both the database and app
 # within Docker.
-
 version: '3'
 
 services:
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile.server
-        ports:
-            - "22300:22300"
-        environment:
-            - DB_CLIENT=pg
-            - POSTGRES_PASSWORD=joplin
-            - POSTGRES_DATABASE=joplin
-            - POSTGRES_USER=joplin
-            - POSTGRES_PORT=5432
-            - POSTGRES_HOST=localhost
-    db:
-        image: postgres:15
-        ports:
-            - "5432:5432"
-        environment:
-            - POSTGRES_PASSWORD=joplin
-            - POSTGRES_USER=joplin
-            - POSTGRES_DB=joplin
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "22300:22300"
+    environment:
+      - DB_CLIENT=pg
+      - POSTGRES_PASSWORD=joplin
+      - POSTGRES_DATABASE=joplin
+      - POSTGRES_USER=joplin
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=localhost
+    depends_on:
+      - db
+    command: <command to run when the container starts>
+    healthcheck:
+      test: <command to use to check the health of the service>
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: always
+  db:
+    image: postgres:15
+    ports:
+        - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=joplin
+      - POSTGRES_USER=joplin
+      - POSTGRES_DB=joplin
+    volumes:
+      - <local path>:<container path>:<mode>
+    restart: always
+
