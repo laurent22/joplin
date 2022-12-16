@@ -88,7 +88,7 @@ msgstr "%d 天"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
@@ -106,7 +106,7 @@ msgstr "%d 小时"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
@@ -462,7 +462,7 @@ msgstr "返回"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "基本"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -907,7 +907,7 @@ msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:220
 msgid "Could not upgrade master key: %s"
-msgstr "无法升级主密钥：%s"
+msgstr "无法升级主密钥(master key)：%s"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
@@ -1878,11 +1878,11 @@ msgstr "批准授权"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Header %d"
-msgstr ""
+msgstr "Header %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
-msgstr ""
+msgstr "Headers"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -2343,7 +2343,7 @@ msgstr "列表项"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
-msgstr ""
+msgstr "列表"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
@@ -2451,7 +2451,7 @@ msgstr "标记语言"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:117
 msgid "Master Key %s"
-msgstr "主密钥 %s"
+msgstr "主密钥(Master Key) %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
@@ -2470,17 +2470,17 @@ msgstr "最大并发连接数"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "最大条目数"
 
 #: packages/lib/utils/joplinCloud.ts:117
 #, fuzzy
 msgid "Max note or attachment size"
-msgstr "笔记附件"
+msgstr "最大笔记或附件大小"
 
 #: packages/server/src/routes/admin/users.ts:150
 #, fuzzy
 msgid "Max Total Size"
-msgstr "实际大小"
+msgstr "最大大小"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 msgid "Missing keys"
@@ -2488,7 +2488,7 @@ msgstr "缺少密钥"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
-msgstr "缺少主密钥"
+msgstr "缺少主密钥(Master Key)"
 
 #: packages/app-cli/app/cli-utils.js:109
 msgid "Missing required argument: %s"
@@ -2697,7 +2697,7 @@ msgstr "笔记不存在：“%s” 。是否创建？"
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
 #, fuzzy
 msgid "Note editor"
-msgstr "笔记历史"
+msgstr "笔记编辑器"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -2805,7 +2805,7 @@ msgstr "位于 %s: %s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:602
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "您的主密钥之一使用了过时的加密方法。"
+msgstr "您的主密钥(Master Key)之一使用了过时的加密方法。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
@@ -2819,7 +2819,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 msgid "One or more master keys need a password."
-msgstr "一个或多个主密钥需要密码。"
+msgstr "一个或多个主密钥(Master Key)需要密码。"
 
 #: packages/lib/SyncTargetOneDrive.ts:29
 msgid "OneDrive"
@@ -2956,7 +2956,7 @@ msgstr "请确认您要重新加密整个数据库。"
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr "在升级密钥之前，请在下面的主密钥列表中输入您的密码。"
+msgstr "在升级密钥之前，请在下面的主密钥(Master Key)列表中输入您的密码。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:321
 msgid ""
@@ -3260,7 +3260,7 @@ msgstr "全选"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "替换为..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
@@ -3269,7 +3269,7 @@ msgstr "替换: "
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
 msgid "Reset master password"
-msgstr "重置主密码"
+msgstr "重置主密码(master password)"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3278,7 +3278,7 @@ msgstr "资源：%d。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid "Restart and upgrade"
-msgstr "重启后升级"
+msgstr "重启并升级"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:708
 msgid "Restart now"
@@ -3901,7 +3901,7 @@ msgstr "任务"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "团队"
 
 #: packages/lib/models/Setting.ts:1343
 msgid "Text editor command"
@@ -3964,7 +3964,7 @@ msgstr "默认的加密方法已更改为一种更安全的方法，建议您将
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr "默认的加密方法已更改，您应当重新加密数据。"
+msgstr "默认的加密方式已变更，您应当重新加密数据。"
 
 #: packages/lib/models/Setting.ts:1343
 msgid ""
@@ -4019,7 +4019,7 @@ msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:218
 msgid "The master key has been upgraded successfully!"
-msgstr "主密钥已成功升级！"
+msgstr "主密钥(Master Key)已成功升级！"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:272
 msgid ""
@@ -4027,7 +4027,7 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥正被用于加密某些项，但应用程序目前无法访问它们。项目最终"
+"具有这些 ID 的主密钥(Master Key)正被用于加密某些项，但应用程序目前无法访问它们。项目最终"
 "会通过同步获取，但目前可能仍未被同步。"
 
 #: packages/lib/services/RevisionService.ts:267
