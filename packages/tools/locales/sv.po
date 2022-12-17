@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -47,7 +49,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:71
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(I tillägg: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -95,12 +97,12 @@ msgstr "%d dagar"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB lagringsutrymme"
 
 #: packages/lib/models/Setting.ts:1322
 msgid "%d hour"
@@ -113,13 +115,12 @@ msgstr "%d timmar"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Anteckningsbilagor"
+msgstr "%d MB per anteckning eller bilaga"
 
 #: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
 #: packages/lib/models/Setting.ts:1321
@@ -210,11 +211,11 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd "
-"\"toggle\" för att växla mellan givna uppgifter mellan slutförda och inte "
-"slutförda tillstånd (Om målet är en vanlig anteckning kommer den att "
-"konverteras till en att-göra). Använd \"clear\" för att konvertera uppgiften "
-"att-göra tillbaka till en vanlig anteckning."
+"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd \"toggle"
+"\" för att växla mellan givna uppgifter mellan slutförda och inte slutförda "
+"tillstånd (Om målet är en vanlig anteckning kommer den att konverteras till "
+"en att-göra). Använd \"clear\" för att konvertera uppgiften att-göra "
+"tillbaka till en vanlig anteckning."
 
 #: packages/lib/models/Setting.ts:1348
 msgid "A3"
@@ -256,7 +257,7 @@ msgstr "Acceptera"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -281,9 +282,8 @@ msgid "Add body"
 msgstr "Lägg till brödtext"
 
 #: packages/app-mobile/components/action-button.js:76
-#, fuzzy
 msgid "Add new"
-msgstr "Lägg till titel"
+msgstr "Lägg till ny"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -345,12 +345,17 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"Tvetydig anteckningsbok \"%s\". Använd anteckningsbok-id istället - tryck på "
+"\"ti\" för att se det korta anteckningsbok-id:t eller använd $b för aktuellt "
+"vald anteckningsbok"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
+"Tvetydig anteckningsbok \"%s\". Använd kort anteckningsbok-id istället - "
+"tryck på \"ti\" för att se det korta anteckningsbok-id:t"
 
 #: packages/app-desktop/checkForUpdates.ts:197
 msgid "An update is available, do you want to download it now?"
@@ -381,9 +386,8 @@ msgid "Aritim Dark"
 msgstr "Aritim mörkt"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
-#, fuzzy
 msgid "Attach"
-msgstr "Bifoga..."
+msgstr "Bifoga"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
@@ -475,7 +479,7 @@ msgstr "Tillbaka"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Grundläggande"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -496,9 +500,8 @@ msgid "Bulleted List"
 msgstr "Punktlista"
 
 #: packages/server/src/routes/admin/users.ts:154
-#, fuzzy
 msgid "Can Share"
-msgstr "Dela"
+msgstr "Kan dela"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
@@ -634,7 +637,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Skiftlägeskänslig"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -743,7 +746,7 @@ msgstr "Samarbeta på anteckningsböcker tillsammans med andra"
 
 #: packages/app-mobile/components/side-menu-content.tsx:333
 msgid "Collapse"
-msgstr ""
+msgstr "Fäll in"
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -1076,7 +1079,7 @@ msgstr "dagar"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:109
 msgid "Decrease indent level"
-msgstr ""
+msgstr "Minska indragsnivå"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1168,9 +1171,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Ta bort insticksmodulen \"%s\"?"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:417
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "Ta bort dessa anteckningar?"
+msgstr "Ta bort valda anteckningar"
 
 #: packages/lib/models/Note.ts:771
 msgid "Delete these %d notes?"
@@ -1332,7 +1334,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 msgid "Done"
-msgstr ""
+msgstr "Klar"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1389,9 +1391,8 @@ msgid "Duplicate line"
 msgstr "Duplicera rad"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:435
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "Duplicera rad"
+msgstr "Duplicera valda anteckningar"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -1413,9 +1414,8 @@ msgid "Edit in external editor"
 msgstr "Redigera i extern redigerare"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
-#, fuzzy
 msgid "Edit link"
-msgstr "Redigera anteckningsbok"
+msgstr "Redigera länk"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -1689,7 +1689,7 @@ msgstr "Avslutar programmet."
 
 #: packages/app-mobile/components/side-menu-content.tsx:333
 msgid "Expand"
-msgstr ""
+msgstr "Fäll ut"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:375
@@ -1782,12 +1782,11 @@ msgstr "Filtrera taggar"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
-msgstr ""
+msgstr "Hitta och ersätt"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "Hittad: %d."
+msgstr "Hitta: "
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1827,7 +1826,7 @@ msgstr "Endast för felsökning: exportera din profil till ett externt SD-kort."
 
 #: packages/lib/models/Setting.ts:1449
 msgid "For example \"%s\""
-msgstr ""
+msgstr "Till exempel \"%s\""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -1853,9 +1852,8 @@ msgid "Force path style"
 msgstr "Tvinga sökvägsstil"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:276
-#, fuzzy
 msgid "Formatting"
-msgstr "Information"
+msgstr "Formatering"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1875,9 +1873,8 @@ msgid "Full changelog"
 msgstr "Fullständig ändringslogg"
 
 #: packages/server/src/routes/admin/users.ts:130
-#, fuzzy
 msgid "Full name"
-msgstr "Fullständig ändringslogg"
+msgstr "Fullständigt namn"
 
 #: packages/lib/models/Setting.ts:2398
 #: packages/server/src/services/MustacheService.ts:108
@@ -1927,11 +1924,11 @@ msgstr "Bevilja auktorisation"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Header %d"
-msgstr ""
+msgstr "Rubrik %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
-msgstr ""
+msgstr "Rubriker"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -1946,14 +1943,12 @@ msgid "Hide %s"
 msgstr "Dölj %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
-#, fuzzy
 msgid "Hide advanced"
-msgstr "Dölj metadata"
+msgstr "Dölj avancerade"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Hide disabled"
-msgstr "Dölj inaktiverade nycklar"
+msgstr "Dölj inaktiverade"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
@@ -1964,14 +1959,12 @@ msgid "Hide Joplin"
 msgstr "Dölj Joplin"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:253
-#, fuzzy
 msgid "Hide keyboard"
-msgstr "Dölj metadata"
+msgstr "Dölj tangentbord"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Hide more actions"
-msgstr "Dölj metadata"
+msgstr "Dölj fler åtgärder"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2132,7 +2125,7 @@ msgstr "I: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:119
 msgid "Increase indent level"
-msgstr ""
+msgstr "Öka indragsnivå"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 msgid "Indent less"
@@ -2161,9 +2154,8 @@ msgstr "Infoga hyperlänk"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:625
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
-#, fuzzy
 msgid "Insert time"
-msgstr "Infoga datumtid"
+msgstr "Infoga tid"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 msgid "Install"
@@ -2310,7 +2302,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1494
 msgid "Keep note history for"
@@ -2381,14 +2373,12 @@ msgid "Lines"
 msgstr "Rader"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:174
-#, fuzzy
 msgid "Link"
 msgstr "Länk"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "Kryptering"
+msgstr "Länkbeskrivning"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:185
 msgid "Link has been copied to clipboard!"
@@ -2397,9 +2387,8 @@ msgstr[0] "Länken har kopierats till urklipp!"
 msgstr[1] "Länkarna har kopierats till urklipp!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "Länk"
+msgstr "Länktext"
 
 #: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
@@ -2413,7 +2402,7 @@ msgstr "Listobjekt"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
-msgstr ""
+msgstr "Listor"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
@@ -2476,9 +2465,8 @@ msgid "Manage master password..."
 msgstr "Hantera huvudlösenord..."
 
 #: packages/lib/utils/joplinCloud.ts:165
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "Hantera huvudlösenord"
+msgstr "Hantera flera användare"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2541,17 +2529,15 @@ msgstr "Max antal samtida anslutningar"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "Max objektstorlek"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Anteckningsbilagor"
+msgstr "Max storlek för anteckning eller bilaga"
 
 #: packages/server/src/routes/admin/users.ts:150
-#, fuzzy
 msgid "Max Total Size"
-msgstr "Faktiskt storlek"
+msgstr "Max total storlek"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 msgid "Missing keys"
@@ -2598,9 +2584,8 @@ msgid "Move to notebook..."
 msgstr "Flytta till anteckningsbok..."
 
 #: packages/app-cli/app/command-mv.js:14
-#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr "Flyttar anteckningarna som matchar <note> till [notebook]."
+msgstr "Flyttar det givna <item> till [notebook]"
 
 #: packages/app-cli/app/cli-utils.js:161
 #: packages/app-cli/app/setupCommand.ts:20
@@ -2652,7 +2637,7 @@ msgstr "Ny version: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "Nästa träff"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -2770,9 +2755,8 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Anteckning finns inte: \"%s\". Skapa den?"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
-#, fuzzy
 msgid "Note editor"
-msgstr "Anteckningshistorik"
+msgstr "Anteckningsredigerare"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -2921,9 +2905,8 @@ msgid "Open %s"
 msgstr "Öppna %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
-msgstr "Aktivera PDF-visare"
+msgstr "Öppna PDF-visare"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -2954,9 +2937,8 @@ msgid "Or create an account."
 msgstr "Eller skapa ett konto."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
-#, fuzzy
 msgid "Ordered list"
-msgstr "Skapa användare"
+msgstr "Ordnad lista"
 
 #: packages/app-desktop/gui/MenuBar.tsx:407
 msgid "Other applications..."
@@ -3010,7 +2992,7 @@ msgstr "PDF-fil"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Per användare. Minst %d användare."
 
 #: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
@@ -3025,8 +3007,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
-"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan "
-"\"%s\" nedan."
+"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan \"%s"
+"\" nedan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -3158,7 +3140,7 @@ msgstr "Tryck för att ställa in dekrypteringslösenordet."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "Föregående träff"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
@@ -3170,16 +3152,15 @@ msgstr "Skriv ut"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr ""
+msgstr "Prioriterat stöd"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:655
 msgid "Privacy Policy"
 msgstr "Integritetspolicy"
 
 #: packages/lib/utils/joplinCloud.ts:316
-#, fuzzy
 msgid "Pro"
-msgstr "Profil"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3210,17 +3191,16 @@ msgid "Properties"
 msgstr "Egenskaper"
 
 #: packages/lib/models/Setting.ts:1438
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "Aktiverad"
+msgstr "Proxy aktiverad"
 
 #: packages/lib/models/Setting.ts:1459
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "Proxy tidsgräns (sekunder)"
 
 #: packages/lib/models/Setting.ts:1448
 msgid "Proxy URL"
-msgstr ""
+msgstr "Proxy-URL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
@@ -3294,9 +3274,8 @@ msgid "Refresh"
 msgstr "Uppdatera"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
-#, fuzzy
 msgid "Regular expression"
-msgstr "Aktivera matematiska uttryck"
+msgstr "Reguljärt uttryck"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
 #: packages/app-desktop/gui/Root.tsx:179
@@ -3341,20 +3320,19 @@ msgstr "Förnya token"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "Ersätt"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
-#, fuzzy
 msgid "Replace all"
-msgstr "Välj alla"
+msgstr "Ersätt alla"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "Ersätt alla..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "Ersätt: "
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3489,9 +3467,8 @@ msgid "Search for plugins..."
 msgstr "Sök efter insticksmoduler..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
-#, fuzzy
 msgid "Search for..."
-msgstr "Sök..."
+msgstr "Sök efter..."
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3590,9 +3567,8 @@ msgid "Share"
 msgstr "Dela"
 
 #: packages/lib/utils/joplinCloud.ts:159
-#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "Anteckningar kan bara skapas i en anteckningsbok."
+msgstr "Dela och samarbeta i en anteckningsbok"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
@@ -3604,7 +3580,7 @@ msgstr "Dela anteckningsbok..."
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr ""
+msgstr "Dela åtkomstkontroll"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3615,9 +3591,8 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "Snabbkommandon är inte tillgängliga i läge för kommandotolk."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
-#, fuzzy
 msgid "Show advanced"
-msgstr "Visa avancerade inställningar"
+msgstr "Visa avancerade"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:217
 msgid "Show Advanced Settings"
@@ -3632,18 +3607,16 @@ msgid "Show completed to-dos"
 msgstr "Visa slutförda att-göra"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Show disabled"
-msgstr "Visa inaktiverade nycklar"
+msgstr "Visa inaktiverade"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Show disabled keys"
 msgstr "Visa inaktiverade nycklar"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Show more actions"
-msgstr "Visa anteckningsantal"
+msgstr "Visa fler åtgärder"
 
 #: packages/lib/models/Setting.ts:883
 msgid "Show note counts"
@@ -3659,7 +3632,7 @@ msgstr "Visa fältikon"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:287
 msgid "Show/hide the sidebar"
-msgstr ""
+msgstr "Visa/dölj sidofältet"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:286
@@ -3896,7 +3869,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "Synkronisera så många enheter du vill"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:564
 msgid "Sync Status"
@@ -4001,9 +3974,8 @@ msgid "Take photo"
 msgstr "Ta ett foto"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:95
-#, fuzzy
 msgid "Task list"
-msgstr "Uppgifter"
+msgstr "Uppgiftslista"
 
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
@@ -4012,7 +3984,7 @@ msgstr "Uppgifter"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "Team"
 
 #: packages/lib/models/Setting.ts:1343
 msgid "Text editor command"
@@ -4466,9 +4438,8 @@ msgid "to-do"
 msgstr "att-göra"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "att-göra"
+msgstr "att-göra: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
 msgid "Toggle comment"
@@ -4519,9 +4490,8 @@ msgid "Tools"
 msgstr "Verktyg"
 
 #: packages/server/src/routes/admin/users.ts:146
-#, fuzzy
 msgid "Total Size"
-msgstr "Faktiskt storlek"
+msgstr "Total storlek"
 
 #: packages/lib/services/ReportService.ts:282
 msgid "Total: %d/%d"
@@ -4533,9 +4503,8 @@ msgstr "Försök igen"
 
 #: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
 #: packages/lib/utils/joplinCloud.ts:353
-#, fuzzy
 msgid "Try it now"
-msgstr "Gör det nu"
+msgstr "Testa det nu"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4587,9 +4556,8 @@ msgid ""
 msgstr "Okänd objekttyp hämtad - uppgradera Joplin till den senaste versionen"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
-#, fuzzy
 msgid "Unordered list"
-msgstr "Skapa användare"
+msgstr "Oordnad lista"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:164
 msgid "Unpublish note"
@@ -4849,7 +4817,7 @@ msgstr "y"
 #: packages/app-cli/app/cli-utils.js:161
 #: packages/app-cli/app/setupCommand.ts:20
 msgid "Y"
-msgstr "Y"
+msgstr "J"
 
 #: packages/lib/models/Setting.ts:386
 msgid "yes"
