@@ -150,7 +150,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				 iOS seems to increase inertial scrolling friction when the WebView body/root elements
 				 scroll. Scroll the main container instead.
 				*/
-				#rendered-md {
+				body > #rendered-md {
 					width: 100vw;
 					height: 100vh;
 					overflow: auto;
