@@ -41,12 +41,12 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>api.joplincloud.local</key>
+			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-			<key>localhost</key>
+			<key>api.joplincloud.local</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
