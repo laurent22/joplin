@@ -60,6 +60,7 @@
   "devDependencies": {
     "@joplin/tools": "~2.10",
     "@rmp135/sql-ts": "1.15.1",
+    "@types/formidable": "2.0.5",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.4",
     "@types/jest-expect-message": "1.0.4",

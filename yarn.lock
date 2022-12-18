@@ -4657,6 +4657,7 @@ __metadata:
     "@joplin/tools": ~2.10
     "@koa/cors": 4.0.0
     "@rmp135/sql-ts": 1.15.1
+    "@types/formidable": 2.0.5
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
     "@types/jest-expect-message": 1.0.4
@@ -6858,6 +6859,15 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 12a2a0e6c4b993fc0854bec665906788aea0d8ee4392389d7a98a5de1eefdd33c9e1e40a91f3afd274011119c506f7b4126acb97fae62ae20b654974d44cba12
+  languageName: node
+  linkType: hard
+
+"@types/formidable@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@types/formidable@npm:2.0.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 2de9a08a539309229f0d15074dc9587b7e1316f29da1092ef2eb1e7c9f10ce4b02f1a0b7da5fe21391a5946c9fe5d2be7bfabd5bc6b93005acda22bcc424a456
   languageName: node
   linkType: hard
 
