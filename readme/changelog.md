@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v2.10.2](https://github.com/laurent22/joplin/releases/tag/v2.10.2) (Pre-release) - 2022-12-18T18:05:08Z
+
+- Improved: Update Mermaid: 9.1.7 to 9.2.2 ([#7330](https://github.com/laurent22/joplin/issues/7330) by Helmut K. C. Tessarek)
+- Fixed: Fix pasting plain text ([#7045](https://github.com/laurent22/joplin/issues/7045)) ([#7036](https://github.com/laurent22/joplin/issues/7036) by Self Not Found)
+- Fixed: Open callback URLs from within the application ([#7354](https://github.com/laurent22/joplin/issues/7354))
+
 ## [v2.9.17](https://github.com/laurent22/joplin/releases/tag/v2.9.17) - 2022-11-15T10:28:37Z
 
 - Fixed: Switching a note using Sidebar is slow and grayed out ([#6430](https://github.com/laurent22/joplin/issues/6430)) ([#6416](https://github.com/laurent22/joplin/issues/6416) by Kenichi Kobayashi)
