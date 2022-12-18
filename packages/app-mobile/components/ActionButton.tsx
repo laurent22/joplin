@@ -17,7 +17,7 @@ interface ButtonSpec {
 interface ActionButtonProps {
 	buttons?: ButtonSpec[];
 
-    // If not given, an "add" button will be used.
+	// If not given, an "add" button will be used.
 	mainButton?: ButtonSpec;
 }
 
