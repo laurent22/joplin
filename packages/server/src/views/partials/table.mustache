@@ -9,10 +9,10 @@
 		</thead>
 		<tbody>
 			{{#rows}}
-				<tr>
-					{{#.}}
+				<tr class="{{#classNames}}{{.}} {{/classNames}}">
+					{{#items}}
 						{{>tableRowItem}}
-					{{/.}}
+					{{/items}}
 				</tr>
 			{{/rows}}
 		</tbody>

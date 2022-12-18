@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
+import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog, execCommand2 } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -150,6 +150,9 @@ async function main() {
 	await gitPullTry(false);
 
 	const isPreRelease = argv.type === 'prerelease';
+
+	process.chdir(rnDir);
+	await execCommand2('yarn run build', { showStdout: false });
 
 	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');

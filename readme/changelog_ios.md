@@ -1,5 +1,42 @@
 # Joplin iOS app changelog
 
+## [ios-v12.9.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.9.1) - 2022-12-04T18:03:02Z
+
+- New: Add Markdown toolbar (#6753 by Henry Heino)
+- New: Add alt text/roles to some buttons to improve accessibility (#6616 by Henry Heino)
+- New: Add keyboard-activatable markdown commands (e.g. bold, italicize) (#6707 by Henry Heino)
+- New: Add long-press tooltips (#6758 by Henry Heino)
+- New: Add note bar (#6772 by Tolulope Malomo)
+- Improved: Convert empty bolded regions to bold-italic regions in beta editor (#6807) (#6808 by Henry Heino)
+- Improved: Ctrl+F search support in beta editor (#6587 by Henry Heino)
+- Improved: Disable multi-highlighting to fix context menu (9b348fd)
+- Improved: Display icon for all notebooks if at least one notebook has an icon (ec97dd8)
+- Improved: Enable long-press menu (#6738 by Henry Heino)
+- Improved: Improve syntax highlighting on mobile beta editor (#6684 by Henry Heino)
+- Improved: Increase the attachment size limit to 200MB (#6848 by Self Not Found)
+- Improved: Removes whitespace above navigation component (#6597 by [@tom](https://github.com/tom))
+- Improved: Respect system accessibility font size in rendered markdown (#6686) (#6685 by Henry Heino)
+- Improved: Setting to disable spellcheck in beta editor (#6780 by Henry Heino)
+- Improved: Show client ID in log (#6897 by Self Not Found)
+- Improved: Supports attaching multiple files to a note at once (#6831 by Self Not Found)
+- Improved: Translation: Update zh_TW (#6727 by Kevin Hsu)
+- Improved: Update Mermaid 8.13.9 to 9.1.7 (#6849 by Helmut K. C. Tessarek)
+- Fixed: Add button to reduce space below markdown toolbar (#6823) (#6805 by Henry Heino)
+- Fixed: Do not encrypt non-owned note if it was not shared encrypted (#6645)
+- Fixed: Fix checklist continuation in beta editor (#6577) (#6576 by Henry Heino)
+- Fixed: Fix default font in beta editor (#6760) (#6759 by Henry Heino)
+- Fixed: Fix multiple webview instances (#6841 by Henry Heino)
+- Fixed: Fix occasional overscroll when opening the keyboard (#6700) (#6636 by Henry Heino)
+- Fixed: Fix resources sync when proxy is set (#6817) (#6688 by Self Not Found)
+- Fixed: Fix side menu width on wide screen devices (#6662 by Tolulope Malomo)
+- Fixed: Fixed crash when trying to move note to notebook (#6898)
+- Fixed: Fixed notebook icon spacing (633c9ac)
+- Fixed: Fixed notebook icons alignment (ea6b7ca)
+- Fixed: Note links with HTML notation did not work (#6515)
+- Fixed: Scroll selection into view in beta editor when window resizes (#6610) (#5949 by Henry Heino)
+- Fixed: Support non-ASCII characters in OneDrive (#6916) (#6838 by Self Not Found)
+- Security: Fix XSS when a specially crafted string is passed to the renderer (762b4e8)
+
 ## [ios-v12.8.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.8.1) - 2022-06-06T10:56:27Z
 
 - Improved: Automatically start sync after setting the sync parameters (ff066ba)

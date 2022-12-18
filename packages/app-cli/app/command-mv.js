@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');
 const BaseModel = require('@joplin/lib/BaseModel').default;
@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Moves the given <item> (notes matching pattern in current notebook or one notebook) to [notebook]. If <item> is subnotebook and [notebook] is "root", will make <item> parent notebook');
+		return _('Moves the given <item> to [notebook]');
 	}
 
 	async action(args) {

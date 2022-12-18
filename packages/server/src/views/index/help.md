@@ -34,7 +34,7 @@ If you have been charged and you didn't expect it the most likely explanation is
 
 ## Further information
 
-- [Joplin Offical Website](https://joplinapp.org)
+- [Joplin Official Website](https://joplinapp.org)
 - [Joplin Support Forum](https://discourse.joplinapp.org/)
 - [Joplin Cloud Privacy Policy](/privacy)
 - [Joplin Cloud Terms & Conditions](/terms)

@@ -13,7 +13,6 @@ const React = require('react');
 const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
-const RNFS = require('react-native-fs');
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -37,7 +36,6 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
@@ -543,18 +541,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async pickDocuments() {
-		try {
-			// the result is an array
-			const result = await DocumentPicker.pickMultiple();
-			return result;
-		} catch (error) {
-			if (DocumentPicker.isCancel(error)) {
-				console.info('pickDocuments: user has cancelled');
-				return null;
-			} else {
-				throw error;
-			}
+		const result = await shim.fsDriver().pickDocument({ multiple: true });
+		if (!result) {
+			console.info('pickDocuments: user has cancelled');
 		}
+		return result;
 	}
 
 	async imageDimensions(uri: string) {
@@ -614,15 +605,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 			reg.logger().info('Resized image ', resizedImagePath);
 			reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
 
-			await RNFS.copyFile(resizedImagePath, targetPath);
+			await shim.fsDriver().copy(resizedImagePath, targetPath);
 
 			try {
-				await RNFS.unlink(resizedImagePath);
+				await shim.fsDriver().unlink(resizedImagePath);
 			} catch (error) {
 				reg.logger().warn('Error when unlinking cached file: ', error);
 			}
 		} else {
-			await RNFS.copyFile(localFilePath, targetPath);
+			await shim.fsDriver().copy(localFilePath, targetPath);
 		}
 
 		return true;
@@ -678,8 +669,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					return;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
-
 					const stat = await shim.fsDriver().stat(targetPath);
+
 					if (stat.size >= 200 * 1024 * 1024) {
 						await shim.fsDriver().remove(targetPath);
 						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');

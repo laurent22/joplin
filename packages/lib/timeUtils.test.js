@@ -2,9 +2,7 @@ const time = require('./time').default;
 
 describe('timeUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should go back in time', (async () => {
 		let startDate = new Date('3 Aug 2020');

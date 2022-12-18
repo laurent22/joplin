@@ -197,7 +197,7 @@ describe('ChangeModel', function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		const t1 = new Date('2020-01-01').getTime();
 		jest.setSystemTime(t1);

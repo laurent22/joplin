@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 // This contains the CodeMirror instance, which needs to be built into a bundle
-// using `npm run buildInjectedJs`. This bundle is then loaded from
+// using `yarn run buildInjectedJs`. This bundle is then loaded from
 // NoteEditor.tsx into the webview.
 //
 // In general, since this file is harder to debug due to the intermediate built
@@ -21,7 +21,7 @@ import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,
-	highlightSelectionMatches, search, findNext, findPrevious, replaceAll, replaceNext,
+	/* highlightSelectionMatches, */ search, findNext, findPrevious, replaceAll, replaceNext,
 } from '@codemirror/search';
 
 import {
@@ -45,9 +45,14 @@ import {
 	toggleList, toggleMath, updateLink,
 } from './markdownCommands';
 
+
+interface CodeMirrorResult extends CodeMirrorControl {
+	editor: EditorView;
+}
+
 export function initCodeMirror(
 	parentElement: any, initialText: string, settings: EditorSettings
-): CodeMirrorControl {
+): CodeMirrorResult {
 	logMessage('Initializing CodeMirror...');
 	const theme = settings.themeData;
 
@@ -291,7 +296,7 @@ export function initCodeMirror(
 				}),
 				drawSelection(),
 				highlightSpecialChars(),
-				highlightSelectionMatches(),
+				// highlightSelectionMatches(),
 				indentOnInput(),
 
 				// By default, indent with four spaces

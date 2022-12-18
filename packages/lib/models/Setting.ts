@@ -1034,7 +1034,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile],
 				show: (settings: any) => settings['editor.beta'],
-				label: () => _('Enable spellcheck in the beta editor'),
+				label: () => 'Enable spellcheck in the beta editor',
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1435,7 +1435,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				isGlobal: true,
 				public: true,
-				label: () => _('Proxy enabled (beta)'),
+				label: () => _('Proxy enabled'),
 				storage: SettingStorage.File,
 			},
 			'net.proxyUrl': {
@@ -1445,8 +1445,8 @@ class Setting extends BaseModel {
 				section: 'sync',
 				isGlobal: true,
 				public: true,
-				label: () => _('Proxy URL (beta)'),
-				description: () => _('e.g "http://my.proxy.com:80". You can also set via environment variables'),
+				label: () => _('Proxy URL'),
+				description: () => _('For example "%s"', 'http://my.proxy.com:80'),
 				storage: SettingStorage.File,
 			},
 			'net.proxyTimeout': {
@@ -1456,7 +1456,7 @@ class Setting extends BaseModel {
 				section: 'sync',
 				isGlobal: true,
 				public: true,
-				label: () => _('proxy timeout (seconds) (beta)'),
+				label: () => _('Proxy timeout (seconds)'),
 				storage: SettingStorage.File,
 			},
 			'sync.wipeOutFailSafe': {

@@ -28,14 +28,15 @@ import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 const VersionInfo = require('react-native-version-info').default;
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+const RNAppState = require('react-native').AppState;
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
-import { Provider as PaperProvider, DefaultTheme as DefaultPaperTheme } from 'react-native-paper';
+import { Provider as PaperProvider, MD2DarkTheme as PaperDarkTheme, MD2LightTheme as PaperLightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
@@ -67,7 +68,7 @@ import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
 import SideMenu from './components/SideMenu';
-const { SideMenuContent } = require('./components/side-menu-content.js');
+import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
@@ -108,6 +109,7 @@ import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
+import { AppState } from './utils/types';
 
 let storeDispatch = function(_action: any) {};
 
@@ -203,7 +205,7 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState = Object.assign({}, defaultState, {
+const appDefaultState: AppState = Object.assign({}, defaultState, {
 	sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
@@ -479,7 +481,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-1.sqlite' });
+			await db.open({ name: 'joplin-101.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -776,7 +778,7 @@ class AppComponent extends React.Component {
 			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
 		});
 
-		AppState.addEventListener('change', this.onAppStateChange_);
+		RNAppState.addEventListener('change', this.onAppStateChange_);
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		await this.handleShareData();
@@ -790,7 +792,7 @@ class AppComponent extends React.Component {
 	}
 
 	public componentWillUnmount() {
-		AppState.removeEventListener('change', this.onAppStateChange_);
+		RNAppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
 
 		if (this.unsubscribeScreenWidthChangeHandler_) {
@@ -937,13 +939,16 @@ class AppComponent extends React.Component {
 			</View>
 		);
 
+
+		const paperTheme = theme.appearance === ThemeAppearance.Dark ? PaperDarkTheme : PaperLightTheme;
+
 		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
 		return (
 			<PaperProvider theme={{
-				...DefaultPaperTheme,
-				dark: theme.appearance === ThemeAppearance.Dark,
+				...paperTheme,
+				version: 2,
 				colors: {
-					...DefaultPaperTheme.colors,
+					...paperTheme.colors,
 					primary: theme.backgroundColor,
 					accent: theme.backgroundColor2,
 				},

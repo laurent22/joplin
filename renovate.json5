@@ -1,0 +1,128 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:base"
+	],
+	"prConcurrentLimit": 5,
+	"prHourlyLimit": 0,
+	"ignorePaths": [
+		"**/bower_components/**",
+		"**/node_modules/**",
+		"Assets/**",
+		"packages/app-cli/tests/**",
+		"packages/app-clipper/popup",
+		"packages/app-mobile/android/app/build.gradle",
+		"packages/plugins/**",
+	],
+	"ignoreDeps": [
+		"@babel/core",
+		"@codemirror/commands",
+		"@codemirror/lang-cpp",
+		"@codemirror/lang-html",
+		"@codemirror/lang-java",
+		"@codemirror/lang-javascript",
+		"@codemirror/lang-markdown",
+		"@codemirror/lang-php",
+		"@codemirror/lang-rust",
+		"@codemirror/language",
+		"@codemirror/legacy-modes",
+		"@codemirror/search",
+		"@codemirror/state",
+		"@codemirror/view",
+		"@fortawesome/fontawesome-svg-core",
+		"@fortawesome/free-solid-svg-icons",
+		"@svgr/webpack",
+		"actions/stale",
+		"babel-eslint",
+		"babel-loader",
+		"babel-preset-react-app",
+		"browserify",
+		"codemirror",
+		"cspell",
+		"electron",
+		"file-loader",
+		"gradle",
+		"html-webpack-plugin",
+		"husky",
+		"lerna",
+		"metro-react-native-babel-preset",
+		"mini-css-extract-plugin",
+		"rollup-plugin-commonjs",
+		"rollup-plugin-node-resolve",
+		"rollup",
+		"ruby",
+		"stripe",
+		"typedoc",
+		"webpack-cli",
+		"webpack",
+
+		// pdfjs-dist requires the canvas package, which cannot be built in
+		// Windows.
+		//
+		// An unhandled error occurred inside electron-rebuild node-gyp failed
+		// to rebuild
+		// 'D:\a\joplin\joplin\packages\pdf-viewer\node_modules\canvas'.
+		//
+		// https://github.com/mozilla/pdf.js/issues/15112
+		//
+		// Maybe need to install Canvas separately and follow the instruction
+		// here to setup the build properly on Windows:
+		// https://github.com/Automattic/node-canvas#compiling
+		"pdfjs-dist",
+
+		// Too complex to upgrade past TinyMCE 5
+		// https://www.tiny.cloud/docs/tinymce/6/migration-from-5x/
+		"tinymce",
+
+		// React Native stuff should be updated only when
+		// upgrading React Native.
+		"@types/react-native",
+		"com.android.tools.build:gradle",
+		"com.facebook.flipper:flipper-fresco-plugin",
+		"com.facebook.flipper:flipper-network-plugin",
+		"com.facebook.flipper:flipper",
+		"jsc-android",
+		"react-native",
+		"@babel/runtime",
+
+		// Need special processing when upgrading
+		"katex",
+		"mermaid",
+
+		// Cannot upgrade further due to ESM support
+		"node-fetch",
+	],
+	"packageRules": [
+		{
+			"matchUpdateTypes": ["patch"],
+			"automerge": true,
+			"labels": ["automerge"],
+		},
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
+			"labels": ["automerge"],
+			"matchPackageNames": [
+				// AWS packages are updated too frequently and we can assume minor
+				// updates are stable.
+				"@aws-sdk/client-s3",
+				"@aws-sdk/s3-request-presigner",
+				"aws-sdk",
+
+				// If the apps build and all tests pass, we can assume that Yarn
+				// and TypeScript are safe to upgrade. They are frequently
+				// updated so having them here reduces noise.
+				"eslint",
+				"eslint-interactive",
+				"@typescript-eslint/eslint-plugin",
+				"@typescript-eslint/parser",
+				"yarn",
+				"typescript",
+				"prettier",
+				
+				// If it builds, it should be safe to merge @types/* packages
+				"@types/*",
+			],
+		}
+	]
+}

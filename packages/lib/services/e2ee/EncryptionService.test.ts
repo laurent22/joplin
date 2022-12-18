@@ -11,13 +11,12 @@ let service: EncryptionService = null;
 
 describe('services_EncryptionService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		service = new EncryptionService();
 		BaseItem.encryptionService_ = service;
 		setEncryptionEnabled(true);
-		done();
 	});
 
 	it('should encode and decode header', (async () => {

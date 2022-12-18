@@ -121,11 +121,10 @@ const createFiles = async () => {
 
 describe('InteropService_Importer_Raw', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		tempDir = await createTempDir();
-		done();
 	});
 
 	afterEach(async () => {

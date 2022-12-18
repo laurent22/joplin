@@ -22,7 +22,6 @@ const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
-const RNFS = require('react-native-fs');
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions(): any {
@@ -114,11 +113,18 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const logItemCsv = service.csvCreate(logItemRows);
 
 			const itemListCsv = await service.basicItemList({ format: 'csv' });
-			const filePath = `${RNFS.ExternalDirectoryPath}/syncReport-${new Date().getTime()}.txt`;
+
+			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
+
+			if (!externalDir) {
+				this.setState({ creatingReport: false });
+				return;
+			}
+
+			const filePath = `${externalDir}/syncReport-${new Date().getTime()}.txt`;
 
 			const finalText = [logItemCsv, itemListCsv].join('\n================================================================================\n');
-
-			await RNFS.writeFile(filePath, finalText);
+			await shim.fsDriver().writeFile(filePath, finalText, 'utf8');
 			alert(`Debug report exported to ${filePath}`);
 			this.setState({ creatingReport: false });
 		};
@@ -130,7 +136,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.exportProfileButtonPress_ = async () => {
-			const p = this.state.profileExportPath ? this.state.profileExportPath : `${RNFS.ExternalStorageDirectoryPath}/JoplinProfileExport`;
+			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
+			if (!externalDir) {
+				return;
+			}
+			const p = this.state.profileExportPath ? this.state.profileExportPath : `${externalDir}/JoplinProfileExport`;
+
 			this.setState({
 				profileExportStatus: 'prompt',
 				profileExportPath: p,
@@ -500,7 +511,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			if (md.key === 'sync.2.path' && Platform.OS === 'android' && Platform.Version > 28) {
+			if (md.key === 'sync.2.path' && shim.fsDriver().isUsingAndroidSAF()) {
 				return (
 					<TouchableNativeFeedback key={key} onPress={this.selectDirectoryButtonPress} style={this.styles().settingContainer}>
 						<View style={this.styles().settingContainer}>

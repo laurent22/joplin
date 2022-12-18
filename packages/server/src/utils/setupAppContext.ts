@@ -20,7 +20,7 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 		tasks: null,
 	};
 
-	output.tasks = setupTaskService(env, models, config, output),
+	output.tasks = await setupTaskService(env, models, config, output),
 
 	await output.mustache.loadPartials();
 

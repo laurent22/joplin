@@ -37,7 +37,7 @@ async function getShareContent(shareId: string, query: any = {}): Promise<string
 	});
 	await routeHandler(context);
 	await checkContextError(context);
-	return context.response.body;
+	return context.response.body as any;
 }
 
 describe('shares.link', function() {

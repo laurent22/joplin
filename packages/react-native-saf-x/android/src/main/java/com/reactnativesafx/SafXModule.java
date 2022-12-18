@@ -3,9 +3,11 @@ package com.reactnativesafx;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build.VERSION_CODES;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.documentfile.provider.DocumentFile;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -17,6 +19,7 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.reactnativesafx.utils.DocumentHelper;
 import com.reactnativesafx.utils.GeneralHelper;
 import com.reactnativesafx.utils.UriHelper;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,8 +50,8 @@ public class SafXModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void openDocument(final boolean persist, final Promise promise) {
-    this.documentHelper.openDocument(persist, promise);
+  public void openDocument(final boolean persist, final boolean multiple, final Promise promise) {
+    this.documentHelper.openDocument(persist, multiple, promise);
   }
 
   @ReactMethod
@@ -74,6 +77,8 @@ public class SafXModule extends ReactContextBaseJavaModule {
   public void exists(String uriString, final Promise promise) {
     try {
       promise.resolve(this.documentHelper.exists(uriString));
+    } catch (SecurityException e) {
+      promise.reject("EPERM", e.getLocalizedMessage());
     } catch (Exception e) {
       promise.reject("ERROR", e.getLocalizedMessage());
     }
@@ -176,7 +181,7 @@ public class SafXModule extends ReactContextBaseJavaModule {
       }
       promise.resolve(true);
     } catch (FileNotFoundException e) {
-      promise.reject("ENOENT", e.getLocalizedMessage());
+      promise.resolve(true);
     } catch (SecurityException e) {
       promise.reject("EPERM", e.getLocalizedMessage());
     } catch (Exception e) {
@@ -188,7 +193,7 @@ public class SafXModule extends ReactContextBaseJavaModule {
   public void mkdir(String uriString, final Promise promise) {
     try {
       DocumentFile dir = this.documentHelper.mkdir(uriString);
-      DocumentHelper.resolveWithDocument(dir, promise, uriString);
+      DocumentHelper.resolveWithDocument(dir, uriString, promise);
     } catch (IOException e) {
       promise.reject("EEXIST", e.getLocalizedMessage());
     } catch (SecurityException e) {
@@ -202,7 +207,11 @@ public class SafXModule extends ReactContextBaseJavaModule {
   public void createFile(String uriString, String mimeType, final Promise promise) {
     try {
       DocumentFile createdFile = this.documentHelper.createFile(uriString, mimeType);
-      DocumentHelper.resolveWithDocument(createdFile, promise, uriString);
+      DocumentHelper.resolveWithDocument(createdFile, uriString, promise);
+    } catch (IOException e) {
+      promise.reject("EEXIST", e.getLocalizedMessage());
+    } catch (SecurityException e) {
+      promise.reject("EPERM", e.getLocalizedMessage());
     } catch (Exception e) {
       promise.reject("EUNSPECIFIED", e.getLocalizedMessage());
     }
@@ -236,16 +245,16 @@ public class SafXModule extends ReactContextBaseJavaModule {
       DocumentFile doc = this.documentHelper.goToDocument(uriString, false, true);
 
       WritableMap[] resolvedDocs =
-        Arrays.stream(doc.listFiles())
-          .map(
-            docEntry ->
-              DocumentHelper.resolveWithDocument(
-                docEntry,
-                null,
-                trailingSlash.matcher(uriString).replaceFirst("")
-                  + "/"
-                  + docEntry.getName()))
-          .toArray(WritableMap[]::new);
+          Arrays.stream(doc.listFiles())
+              .map(
+                  docEntry ->
+                      DocumentHelper.resolveWithDocument(
+                          docEntry,
+                          trailingSlash.matcher(uriString).replaceFirst("")
+                              + "/"
+                              + docEntry.getName(),
+                          null))
+              .toArray(WritableMap[]::new);
       WritableArray resolveData = Arguments.fromJavaArgs(resolvedDocs);
       promise.resolve(resolveData);
     } catch (FileNotFoundException e) {
@@ -262,7 +271,7 @@ public class SafXModule extends ReactContextBaseJavaModule {
     try {
       DocumentFile doc = this.documentHelper.goToDocument(uriString, false, true);
 
-      DocumentHelper.resolveWithDocument(doc, promise, uriString);
+      DocumentHelper.resolveWithDocument(doc, uriString, promise);
     } catch (FileNotFoundException e) {
       promise.reject("ENOENT", e.getLocalizedMessage());
     } catch (SecurityException e) {

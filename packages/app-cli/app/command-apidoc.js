@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { toTitleCase } = require('@joplin/lib/string-utils.js');

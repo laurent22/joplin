@@ -782,4 +782,12 @@ export default class Folder extends BaseItem {
 		};
 	}
 
+	public static shouldShowFolderIcons(folders: FolderEntity[]) {
+		// If at least one of the folder has an icon, then we display icons for all
+		// folders (those without one will get the default icon). This is so that
+		// visual alignment is correct for all folders, otherwise the folder tree
+		// looks messy.
+		return !!folders.find(f => !!f.icon);
+	}
+
 }

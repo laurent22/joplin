@@ -23,16 +23,14 @@ const goToNote = (testApp, note) => {
 };
 
 describe('feature_NoteHistory', function() {
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
-		done();
 	});
 
-	afterEach(async (done) => {
+	afterEach(async () => {
 		if (testApp) await testApp.destroy();
 		testApp = null;
-		done();
 	});
 
 	it('should save history when navigating through notes', (async () => {

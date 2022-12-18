@@ -1,5 +1,38 @@
 # Joplin Server Changelog
 
+## [server-v2.10.3](https://github.com/laurent22/joplin/releases/tag/server-v2.10.3) - 2022-12-15T23:32:16Z
+
+- Upgraded packages for performance and security improvements.
+
+## [server-v2.9.7](https://github.com/laurent22/joplin/releases/tag/server-v2.9.7) - 2022-11-05T16:51:39Z
+
+- Improved: Allow enabling and disabling tasks (1379c9c)
+- Improved: Allow searching user by email or name (1cfbefb)
+- Improved: Fail-safe when trying to delete a non-disabled account (21883b4)
+- Improved: Paginate users (8ac8d53)
+- Improved: Refactor table structure (8ea6d89)
+- Improved: Update sender email (bf92ee7)
+- Improved: Upgrade Koa framework to 2.13.4 (dc92546)
+- Improved: Upgrade to Node 18 (f34078b)
+- Improved: When re-activating an account, remove it from the deletion queue (bbc4228)
+- Fixed: Fixed account activation logic (ccf5d20)
+
+## [server-v2.9.5](https://github.com/laurent22/joplin/releases/tag/server-v2.9.5) - 2022-10-11T10:44:01Z
+
+- New: Add support for sidebar in user pages (053dbab)
+- Improved: Automatically delete expired sessions (d5dfecc)
+- Improved: Cannot sort user deletions by email (8e18024)
+- Improved: Do not make checkboxes in published notes clickable (cb637e8)
+- Improved: Improve admin email UI (e3c9bcb)
+- Improved: Process user deletions once an hour (f99b8df)
+- Improved: Use apt to install tini to enable multi-platform support (#6097 by Erik Thomsen)
+- Fixed: Could not manually start task (#6491)
+- Fixed: Fixed Unsupported File Type error when sharing certain notes (#6531)
+- Fixed: Fixed removal of user deletion tasks (8f8cc12)
+- Fixed: Fixed sidebar menu selection (422a5bf)
+- Fixed: Fixed user deletion schedule (bfe5ee8)
+- Fixed: Published note must be scrollable when it contains a large table (#6370)
+
 ## [server-v2.7.4](https://github.com/laurent22/joplin/releases/tag/server-v2.7.4) - 2022-02-02T19:23:34Z
 
 - New: Add task to automate deletion of disabled accounts (1afcb27)

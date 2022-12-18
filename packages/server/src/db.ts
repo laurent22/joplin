@@ -295,10 +295,14 @@ export async function migrateList(db: DbConnection, asString: boolean = true) {
 	//   ]
 	// ]
 
-	const formatName = (migrationInfo: any) => {
-		const name = migrationInfo.file ? migrationInfo.file : migrationInfo;
+	const getMigrationName = (migrationInfo: any) => {
+		if (migrationInfo && migrationInfo.name) return migrationInfo.name;
+		if (migrationInfo && migrationInfo.file) return migrationInfo.file;
+		return migrationInfo;
+	};
 
-		const s = name.split('.');
+	const formatName = (migrationInfo: any) => {
+		const s = getMigrationName(migrationInfo).split('.');
 		s.pop();
 		return s.join('.');
 	};
