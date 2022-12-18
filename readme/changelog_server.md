@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.10.4](https://github.com/laurent22/joplin/releases/tag/server-v2.10.4) - 2022-12-18T16:02:06Z
+
+- Fixed: Fixed regression introduced by form-parse lib update (#7463)
+
 ## [server-v2.10.3](https://github.com/laurent22/joplin/releases/tag/server-v2.10.3) - 2022-12-15T23:32:16Z
 
 - Upgraded packages for performance and security improvements.

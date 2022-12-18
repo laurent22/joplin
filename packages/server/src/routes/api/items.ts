@@ -38,7 +38,7 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 
 		if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items (${formatBytes(totalSize)}) is over the limit (${formatBytes(batchMaxSize)})`);
 	} else {
-		const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
+		const filePath = parsedBody?.files?.file ? parsedBody.files.file.filepath : null;
 
 		try {
 			const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);

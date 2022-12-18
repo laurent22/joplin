@@ -158,19 +158,23 @@
 
 			for (let i = 0; i < assets.length; i++) {
 				const asset = assets[i];
+				// # and ? can be used in valid paths and shouldn't be treated as the start of a query or fragment
+				const encodedPath = asset.path
+						.replaceAll('#','%23')
+						.replaceAll('?','%3F')
 
-				const assetId = asset.name ? asset.name : asset.path;
+				const assetId = asset.name ? asset.name : encodedPath;
 				if (pluginAssetsAdded_[assetId]) continue;
 				pluginAssetsAdded_[assetId] = true;
 
 				if (asset.mime === 'application/javascript') {
 					const script = document.createElement('script');
-					script.src = asset.path;
+					script.src = encodedPath;
 					pluginAssetsContainer.appendChild(script);
 				} else if (asset.mime === 'text/css') {
 					const link = document.createElement('link');
 					link.rel = 'stylesheet';
-					link.href = asset.path;
+					link.href = encodedPath
 					pluginAssetsContainer.appendChild(link);
 				}
 			}

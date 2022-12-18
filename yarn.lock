@@ -4253,7 +4253,7 @@ __metadata:
     "@joplin/tools": ~2.10
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.2.4
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     "@types/react": 16.14.34
     "@types/react-redux": 7.1.24
     "@types/styled-components": 5.1.26
@@ -4346,7 +4346,7 @@ __metadata:
     "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.7
     "@react-native-community/push-notification-ios": 1.10.1
-    "@react-native-community/slider": 4.3.3
+    "@react-native-community/slider": 4.4.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
     "@types/react-native": 0.64.19
@@ -4419,7 +4419,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.2.4
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     "@typescript-eslint/eslint-plugin": 5.46.1
     "@typescript-eslint/parser": 5.46.1
     coveralls: 3.1.1
@@ -4485,7 +4485,7 @@ __metadata:
     "@types/jest": 29.2.4
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     "@types/node-rsa": 1.1.1
     "@types/react": 17.0.52
     "@types/uuid": ^9.0.0
@@ -4588,7 +4588,7 @@ __metadata:
     "@joplin/tools": ~2.10
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     fs-extra: 11.1.0
     gh-release-assets: 2.0.1
     jest: 29.3.1
@@ -4633,7 +4633,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/fork-uslug": ^1.0.6
     "@types/jest": 29.2.4
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.0
     highlight.js: 11.7.0
@@ -4671,6 +4671,7 @@ __metadata:
     "@joplin/tools": ~2.10
     "@koa/cors": 4.0.0
     "@rmp135/sql-ts": 1.15.1
+    "@types/formidable": 2.0.5
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
     "@types/jest-expect-message": 1.0.4
@@ -4732,7 +4733,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
     "@types/mustache": 4.2.2
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     "@types/node-fetch": 2.6.2
     "@types/yargs": 17.0.17
     dayjs: 1.11.7
@@ -6361,10 +6362,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/slider@npm:4.3.3":
-  version: 4.3.3
-  resolution: "@react-native-community/slider@npm:4.3.3"
-  checksum: 2329dbefd678f848b9660793dff3a2f81ab65880821fbd208d240d1049c875f8dc67cf82218fdb89177ccbf9ac3120974569383e1a4eaf749d921f0076619ead
+"@react-native-community/slider@npm:4.4.0":
+  version: 4.4.0
+  resolution: "@react-native-community/slider@npm:4.4.0"
+  checksum: 61d14a28d28221fea44f9a1e85363af8dbec27459131d26ef8c28a4fa01b8c3718bca6cfb0e7adb34847e2b513493f986f8403cb48425a8777dc8bead69271f8
   languageName: node
   linkType: hard
 
@@ -6875,6 +6876,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/formidable@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@types/formidable@npm:2.0.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 2de9a08a539309229f0d15074dc9587b7e1316f29da1092ef2eb1e7c9f10ce4b02f1a0b7da5fe21391a5946c9fe5d2be7bfabd5bc6b93005acda22bcc424a456
+  languageName: node
+  linkType: hard
+
 "@types/fs-extra@npm:9.0.13, @types/fs-extra@npm:^9.0.11":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
@@ -7189,10 +7199,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.11.16":
-  version: 18.11.16
-  resolution: "@types/node@npm:18.11.16"
-  checksum: 23603ecc1cc5afdd2311671565e1bd1a8905e18ed7f05857089eebe524824a3347dd0c3de9c1c291839f7cf21bcf5633903cdf7905efa0fdc7464cc7606fc9fa
+"@types/node@npm:18.11.17":
+  version: 18.11.17
+  resolution: "@types/node@npm:18.11.17"
+  checksum: 1933afd068d5c75c068c6c4df6d10edb3b0b2bb6503d544e2f0496ac007c90596e6a5e284a8ef032451bc16f871b7e46719d7d2bea60e9b25d13a77d52161cac
   languageName: node
   linkType: hard
 
@@ -20234,7 +20244,7 @@ __metadata:
     "@joplin/tools": ~2.10
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
-    "@types/node": 18.11.16
+    "@types/node": 18.11.17
     aws-sdk: 2.1277.0
     chalk: 4.1.2
     compare-version: 0.1.2
