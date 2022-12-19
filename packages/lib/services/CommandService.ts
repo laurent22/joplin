@@ -124,9 +124,12 @@ export default class CommandService extends BaseService {
 
 		const output = [];
 
+		const whenClauseContext = this.currentWhenClauseContext();
+
 		for (const commandName of this.commandNames()) {
 			const label = this.label(commandName, true);
 			if (!label && excludeWithoutLabel) continue;
+			if (!this.isEnabled(commandName, whenClauseContext)) continue;
 
 			const title = label ? `${label} (${commandName})` : commandName;
 
@@ -194,6 +197,18 @@ export default class CommandService extends BaseService {
 		runtime = Object.assign({}, runtime);
 		if (!runtime.enabledCondition) runtime.enabledCondition = 'true';
 		command.runtime = runtime;
+	}
+
+	public registerCommands(commands: any[]) {
+		for (const command of commands) {
+			CommandService.instance().registerRuntime(command.declaration.name, command.runtime());
+		}
+	}
+
+	public unregisterCommands(commands: any[]) {
+		for (const command of commands) {
+			CommandService.instance().unregisterRuntime(command.declaration.name);
+		}
 	}
 
 	public componentRegisterCommands(component: any, commands: any[]) {

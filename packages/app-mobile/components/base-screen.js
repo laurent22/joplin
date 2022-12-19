@@ -1,5 +1,4 @@
 const React = require('react');
-
 const { StyleSheet } = require('react-native');
 const { themeStyle } = require('./global-style.js');
 

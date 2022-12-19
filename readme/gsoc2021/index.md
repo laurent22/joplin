@@ -31,7 +31,7 @@ We suggest you read carefully these important documents and bookmark the links a
 
 In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.
 
-The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/#installation) is done using Electron and React.
+The desktop GUI, as listed on the [Joplin's website](https://joplinapp.org/help/#installation) is done using Electron and React.
 
 The mobile app is done using React Native.
 

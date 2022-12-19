@@ -1,6 +1,7 @@
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
 import { reg } from '../registry';
+import Setting from '../models/Setting';
 
 export const declaration: CommandDeclaration = {
 	name: 'synchronize',
@@ -17,6 +18,14 @@ export const runtime = (): CommandRuntime => {
 
 			const action = syncStarted ? 'cancel' : 'start';
 
+			if (!Setting.value('sync.target')) {
+				context.dispatch({
+					type: 'DIALOG_OPEN',
+					name: 'syncWizard',
+				});
+				return 'init';
+			}
+
 			if (!(await reg.syncTarget().isAuthenticated())) {
 				if (reg.syncTarget().authRouteName()) {
 					utils.store.dispatch({
@@ -26,7 +35,7 @@ export const runtime = (): CommandRuntime => {
 					return 'auth';
 				}
 
-				reg.logger().info('Not authentified with sync target - please check your credential.');
+				reg.logger().error('Not authenticated with sync target - please check your credentials.');
 				return 'error';
 			}
 
@@ -34,12 +43,17 @@ export const runtime = (): CommandRuntime => {
 			try {
 				sync = await reg.syncTarget().synchronizer();
 			} catch (error) {
-				reg.logger().info('Could not acquire synchroniser:');
-				reg.logger().info(error);
+				reg.logger().error('Could not initialise synchroniser: ');
+				reg.logger().error(error);
+				error.message = `Could not initialise synchroniser: ${error.message}`;
+				utils.store.dispatch({
+					type: 'SYNC_REPORT_UPDATE',
+					report: { errors: [error] },
+				});
 				return 'error';
 			}
 
-			if (action == 'cancel') {
+			if (action === 'cancel') {
 				sync.cancel();
 				return 'cancel';
 			} else {

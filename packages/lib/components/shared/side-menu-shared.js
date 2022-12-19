@@ -31,7 +31,7 @@ function renderFoldersRecursive_(props, renderItem, items, parentId, depth, orde
 		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
 		order.push(folder.id);
-		items.push(renderItem(folder, props.selectedFolderId == folder.id && props.notesParentType == 'Folder', hasChildren, depth));
+		items.push(renderItem(folder, props.selectedFolderId === folder.id && props.notesParentType === 'Folder', hasChildren, depth));
 		if (hasChildren) {
 			const result = renderFoldersRecursive_(props, renderItem, items, folder.id, depth + 1, order);
 			items = result.items;
@@ -68,48 +68,12 @@ shared.renderTags = function(props, renderItem) {
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];
 		order.push(tag.id);
-		tagItems.push(renderItem(tag, props.selectedTagId == tag.id && props.notesParentType == 'Tag'));
+		tagItems.push(renderItem(tag, props.selectedTagId === tag.id && props.notesParentType === 'Tag'));
 	}
 	return {
 		items: tagItems,
 		order: order,
 	};
-};
-
-shared.synchronize_press = async function(comp) {
-	const { reg } = require('../../registry.js');
-
-	const action = comp.props.syncStarted ? 'cancel' : 'start';
-
-	if (!(await reg.syncTarget().isAuthenticated())) {
-		if (reg.syncTarget().authRouteName()) {
-			comp.props.dispatch({
-				type: 'NAV_GO',
-				routeName: reg.syncTarget().authRouteName(),
-			});
-			return 'auth';
-		}
-
-		reg.logger().info('Not authentified with sync target - please check your credential.');
-		return 'error';
-	}
-
-	let sync = null;
-	try {
-		sync = await reg.syncTarget().synchronizer();
-	} catch (error) {
-		reg.logger().info('Could not acquire synchroniser:');
-		reg.logger().info(error);
-		return 'error';
-	}
-
-	if (action == 'cancel') {
-		sync.cancel();
-		return 'cancel';
-	} else {
-		reg.scheduleSync(0);
-		return 'sync';
-	}
 };
 
 module.exports = shared;

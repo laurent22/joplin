@@ -13,6 +13,31 @@ Name | Type | Required? | Description
 `keywords` | string[] | No | Keywords associated with the plugins. They are used in search in particular.
 `homepage_url` | string | No | Homepage URL of the plugin. It can also be, for example, a link to a GitHub repository.
 `repository_url` | string | No | Repository URL where the plugin source code is hosted.
+`categories` | string[] | No | [Categories](#categories) that describes the functionality of the plugin. 
+`screenshots` | Screenshot[] | No  | [Screenshots](#Screenshot) are used for listing on Joplin Plugin website.
+
+## Categories
+
+| Category | Description |
+| --- | --- |
+| appearance | dealing with appearance of some element/s of the app. For example line numbers, layout, etc. |
+| developer tools |  built for the developers. |
+| editor |  enhancing note editor. |
+| files |  dealing with files. For example import, export, backup, etc. |
+| integrations | integrating third party services or apps. |
+| personal knowledge management | managing and organizing notes. |
+| productivity | making Joplin more productive to use. |
+| search |  enhancing search inside the app. |
+| tags |  dealing with note tags. |
+| themes |  changing theme of the app. |
+| viewer | enhancing the rendering of a note. |
+
+## Screenshot
+
+| Properties | Description |
+| --- | --- |
+| src | a relative path to src dir. |
+| label | description of the image. |
 
 ## Manifest example
 
@@ -24,6 +49,10 @@ Name | Type | Required? | Description
     "version": "1.0.0",
     "author": "John Smith",
     "app_min_version": "1.4",
-    "homepage_url": "https://joplinapp.org"
+    "homepage_url": "https://joplinapp.org",
+    "screenshots": [{
+        "src": "path/to/image.png",
+        "label": "image description"
+    }]
 }
 ```

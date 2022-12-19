@@ -39,7 +39,7 @@ const imageMimeTypes = [
 	'image/vnd.xiff',
 ];
 
-const escapeQuotes = (str) => str.replace(/"/g, '"');
+const escapeQuotes = (str) => str.replace(/"/g, '&quot;');
 
 const attributesToStr = (attributes) =>
 	Object.entries(attributes)

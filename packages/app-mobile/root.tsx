@@ -14,7 +14,7 @@ import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
@@ -25,10 +25,12 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
 import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
-
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
-
+const VersionInfo = require('react-native-version-info').default;
+const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+const RNAppState = require('react-native').AppState;
+import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -55,34 +57,34 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 const { NotesScreen } = require('./components/screens/notes.js');
 const { TagsScreen } = require('./components/screens/tags.js');
-const { ConfigScreen } = require('./components/screens/config.js');
+import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
 const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
-const { EncryptionConfigScreen } = require('./components/screens/encryption-config.js');
+import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
-const { SideMenu } = require('./components/side-menu.js');
-const { SideMenuContent } = require('./components/side-menu-content.js');
+import SideMenu from './components/SideMenu';
+import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
-
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 
+SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
@@ -90,15 +92,22 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import SyncTargetNone from '@joplin/lib/SyncTargetNone';
+import { setRSA } from '@joplin/lib/services/e2ee/ppk';
+import RSA from './services/e2ee/RSA.react-native';
+import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { AppState } from './utils/types';
 
 let storeDispatch = function(_action: any) {};
 
@@ -120,7 +129,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	await reduxSharedMiddleware(store, next, action);
 
-	if (action.type == 'NAV_GO') Keyboard.dismiss();
+	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
@@ -131,21 +140,21 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 	}
 
-	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
+	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'sync.interval' || action.type === 'SETTING_UPDATE_ALL') {
 		reg.setupRecurrentSync();
 	}
 
-	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
+	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key === 'dateFormat' || action.key === 'timeFormat')) || (action.type === 'SETTING_UPDATE_ALL')) {
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
 	}
 
-	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
+	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 		setLocale(Setting.value('locale'));
 	}
 
-	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type === 'SETTING_UPDATE_ALL')) {
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		void DecryptionWorker.instance().scheduleStart();
 		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -159,7 +168,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		void reg.scheduleSync(null, null, true);
 	}
 
-	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
+	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
 		Setting.setValue('activeFolderId', newState.selectedFolderId);
 	}
 
@@ -194,7 +203,7 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState = Object.assign({}, defaultState, {
+const appDefaultState: AppState = Object.assign({}, defaultState, {
 	sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
@@ -218,7 +227,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 			let newAction = null;
 			while (navHistory.length) {
 				newAction = navHistory.pop();
-				if (newAction.routeName != state.route.routeName) break;
+				if (newAction.routeName !== state.route.routeName) break;
 			}
 
 			action = newAction ? newAction : navHistory.pop();
@@ -237,7 +246,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				// If the route *name* is the same (even if the other parameters are different), we
 				// overwrite the last route in the history with the current one. If the route name
 				// is different, we push a new history entry.
-					if (currentRoute.routeName == action.routeName) {
+					if (currentRoute.routeName === action.routeName) {
 					// nothing
 					} else {
 						navHistory.push(currentRoute);
@@ -252,7 +261,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				// is probably not a common workflow.
 				for (let i = 0; i < navHistory.length; i++) {
 					const n = navHistory[i];
-					if (n.routeName == action.routeName) {
+					if (n.routeName === action.routeName) {
 						navHistory[i] = Object.assign({}, action);
 					}
 				}
@@ -410,7 +419,7 @@ async function initialize(dispatch: Function) {
 	mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 	mainLogger.setLevel(Logger.LEVEL_INFO);
 
-	if (Setting.value('env') == 'dev') {
+	if (Setting.value('env') === 'dev') {
 		mainLogger.addTarget(TargetType.Console);
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
 	}
@@ -424,11 +433,11 @@ async function initialize(dispatch: Function) {
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
 
 	reg.logger().info('====================================');
-	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);
+	reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);
 
 	const dbLogger = new Logger();
 	dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
-	if (Setting.value('env') == 'dev') {
+	if (Setting.value('env') === 'dev') {
 		dbLogger.addTarget(TargetType.Console);
 		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
 	} else {
@@ -464,11 +473,13 @@ async function initialize(dispatch: Function) {
 	AlarmService.setDriver(new AlarmServiceDriver(mainLogger));
 	AlarmService.setLogger(mainLogger);
 
+	setRSA(RSA);
+
 	try {
-		if (Setting.value('env') == 'prod') {
+		if (Setting.value('env') === 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-100.sqlite' });
+			await db.open({ name: 'joplin-101.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -477,14 +488,30 @@ async function initialize(dispatch: Function) {
 		reg.logger().info('Loading settings...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
+		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			let locale = NativeModules.I18nManager.localeIdentifier;
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
+			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', 0);
+		} else {
+			Setting.applyDefaultMigrations();
+		}
+
+		if (Setting.value('env') === Env.Dev) {
+			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
+			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
+			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
+			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+
+			// Setting.setValue('sync.target', 10);
+			// Setting.setValue('sync.10.username', 'user1@example.com');
+			// Setting.setValue('sync.10.password', '111111');
 		}
 
 		if (Setting.value('db.ftsEnabled') === -1) {
@@ -524,22 +551,22 @@ async function initialize(dispatch: Function) {
 		// ----------------------------------------------------------------
 
 		EncryptionService.fsDriver_ = fsDriver;
-		EncryptionService.instance().setLogger(mainLogger);
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();
+		Resource.shareService_ = ShareService.instance();
 		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		// ----------------------------------------------------------------
 		// / E2EE SETUP
 		// ----------------------------------------------------------------
 
-		await ShareService.instance().initialize(store);
+		await ShareService.instance().initialize(store, EncryptionService.instance());
 
 		reg.logger().info('Loading folders...');
 
@@ -552,12 +579,12 @@ async function initialize(dispatch: Function) {
 			items: tags,
 		});
 
-		const masterKeys = await MasterKey.all();
+		// const masterKeys = await MasterKey.all();
 
-		dispatch({
-			type: 'MASTERKEY_UPDATE_ALL',
-			items: masterKeys,
-		});
+		// dispatch({
+		// 	type: 'MASTERKEY_UPDATE_ALL',
+		// 	items: masterKeys,
+		// });
 
 		const folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);
@@ -609,6 +636,7 @@ async function initialize(dispatch: Function) {
 	// start almost immediately to get the latest data.
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
+	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 	void reg.scheduleSync(1000, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
@@ -623,16 +651,45 @@ async function initialize(dispatch: Function) {
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
 
+	// ----------------------------------------------------------------------------
+	// Keep this below to test react-native-rsa-native
+	// ----------------------------------------------------------------------------
+
+	// const testData = await createTestData();
+	// await checkTestData(testData);
+
+	// const testData = {
+	// 	"publicKey": "-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAoMx9NBioka8DUjO3bKrWMn8uJ23LH1xySogQFR6yh6qbl6i5LKTw\nPgqvv55FUuQtYTMtUTVLggYQhdCBvwbBrD1OqO4xU6Ew7x5/TQKPV3MSgYaps3FF\nOdipC4FyA00jBe6Z1CIpL+ZaSnvjDbMUf5lW8bmfRuXfdBGAcdSBjqm9ttajOws+\n7BBSQ9nI5dnBnWRIVEUb7e9bulgANzM1LMUOE+gaef7T3uKzc+Cx3BhHgw1JdFbL\nZAndYtP52KI5N3oiFM4II26DxmDrO1tQokNM88l5xT0BXPhYiEl1CeBpo5VHZBY2\nRHr4MM/OyAXSUdulsDzbntpE+Y85zv7gpQIDAQAB\n-----END RSA PUBLIC KEY-----",
+	// 	"privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAoMx9NBioka8DUjO3bKrWMn8uJ23LH1xySogQFR6yh6qbl6i5\nLKTwPgqvv55FUuQtYTMtUTVLggYQhdCBvwbBrD1OqO4xU6Ew7x5/TQKPV3MSgYap\ns3FFOdipC4FyA00jBe6Z1CIpL+ZaSnvjDbMUf5lW8bmfRuXfdBGAcdSBjqm9ttaj\nOws+7BBSQ9nI5dnBnWRIVEUb7e9bulgANzM1LMUOE+gaef7T3uKzc+Cx3BhHgw1J\ndFbLZAndYtP52KI5N3oiFM4II26DxmDrO1tQokNM88l5xT0BXPhYiEl1CeBpo5VH\nZBY2RHr4MM/OyAXSUdulsDzbntpE+Y85zv7gpQIDAQABAoIBAEA0Zmm+ztAcyX6x\nF7RUImLXVV55AHntN9V6rrFAKJjzDl1oCUhCM4sSSUqBr7yBT31YKegbF6M7OK21\nq5jS4dIcSKQ7N4bk/dz8mGfvdby9Pc5qLqhvuex3DkiBzzxyOGHN+64wVbHCkJrd\nDLQTpUOtvoGWVHrCno6Bzn+lEnYbvdr0hqI5H4D0ubk6TYed1/4ZlJf0R/o/4jnl\nou0UG2hpJN4ur506cttkZJSTxLjzdO38JuQIAkCEglrMYVY61lBNPxC11Kr3ZN7o\ncm7gWZVyP26KoU27t/g+2FoiBGsWLqGYiuTaqT6dKZ2vHyJGjJIZZStv5ye2Ez8V\nKQwpjQECgYEA3xtwYu4n/G5UjEMumkXHNd/bDamelo1aQvvjkVvxKeASNBqV8cM0\n6Jb2FCuT9Y3mWbFTM0jpqXehpHUOCCnrPKGKnJ0ZS4/SRIrtw0iM6q17fTAqmuOt\nhX0pJ77Il8lVCtx4ItsW+LUGbm6CwotlYLVUuyluhKe0pGw2yafi2N0CgYEAuIFk\ng4p7x0i1LFAlIP0YQ07bJQ0E6FEWbCfMgrV3VjtbnT99EaqPOHhMasITCuoEFlh8\ncgyZ6oH7GEy4IRWrM+Mlm47S+NTrr6KgnTGf570ZAFuqnJac97oFB7BvlQsQot6F\n0L2JKM7dQKIMlvwA9DoXZdKX/9ykiqqIpawNxmkCgYEAuyJOwAw2ads4+3UWT7wb\nfarIF8ugA3OItAqHNFNEEvWpDx8FigVMCZMl0IFE14AwKCc+PBP6OXTolgLAxEQ0\n1WRB2V9D6kc1/Nvy1guydt0QaU7PTZ+O2hrDPF0f74Cl3jhSZBoUSIO+Yz46W2eE\nnvs5mMsFsirgr9E8myRAd9kCgYAGMCDE4KIiHugkolN8dcCYkU58QaGGgSG1YuhT\nAe8Mr1T1QynYq9W92RsHAZdN6GdWsIUL9iw7VzyqpfgO9AEX7mhWfUXKHqoA6/1j\nCEUKqqbqAikIs2x0SoLcrSgw4XwfWkM2qwSsn7N/9W9iqPUHO+OJALUkWawTEoEe\nvVSA8QKBgQCEYCPnxgeQSZkrv7x5soXzgF1YN5EZRa1mTUqPBubs564ZjIIY66mI\nCTaHl7U1cPAhx7mHkSzP/i5NjjLqPZZNOyawWDEEmOzxX69OIzKImb6mEQNyS3do\nI8jnpN5q9pw5TvuEIYSrGqQVnHeaEjSvcT48W9GuzjNVscGfw76fPg==\n-----END RSA PRIVATE KEY-----",
+	// 	"plaintext": "just testing",
+	// 	"ciphertext": "BfkKLdrmd2UX4sPf0bzhfqrg3rKwH5DS7dPAqdmoQuHlrvEBrYKqheekwpnWQgGggGcm/orlrsQRwlexLv7jfRbb0bMnElkySMu4w6wTxILB66RX9H3vXCz02SwHKFRcuGJxlzTPUC23ki6f/McYJ2n/2L8qYxBO8fncTKutIWV54jY19RS1wQ4IdVDBqzji8D0QsRxUhVlpRk4qxsVnyuoyg9AyDe91LOYKfRc6NdapFij996nKzjxFcKOdBqpis34fN3Cg7avcs2Dm5vi7zlRhyGqJJhORXTU3x6hVwOBkVAisgaB7xS3lHiYp6Fs5tP3hBd0kFwVVx8gALbHsgg=="
+	// };
+	// await checkTestData(testData);
+
+	// await printTestData();
+
+	// ----------------------------------------------------------------------------
+	// On desktop and CLI we run various tests to check that node-rsa is working
+	// as expected. On mobile however we cannot run test units directly on
+	// device, and that's what would be needed to automatically verify
+	// react-native-rsa-native. So instead we run the tests every time the
+	// mobile app is started in dev mode. If there's any regression the below
+	// call will throw an error, alerting us of the issue. Otherwise it will
+	// just print some messages in the console.
+	// ----------------------------------------------------------------------------
+	if (Setting.value('env') === 'dev') await runIntegrationTests();
+
 	reg.logger().info('Application initialized');
 }
 
 class AppComponent extends React.Component {
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
+			sideMenuWidth: this.getSideMenuWidth(),
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -646,10 +703,12 @@ class AppComponent extends React.Component {
 		};
 
 		this.handleOpenURL_ = (event: any) => {
-			if (event.url == ShareExtension.shareURL) {
+			if (event.url === ShareExtension.shareURL) {
 				void this.handleShareData();
 			}
 		};
+
+		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
 	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
@@ -671,14 +730,19 @@ class AppComponent extends React.Component {
 	// https://github.com/laurent22/joplin/issues/3807
 	// https://discourse.joplinapp.org/t/webdav-config-encryption-config-randomly-lost-on-android/11364
 	// https://discourse.joplinapp.org/t/android-keeps-on-resetting-my-sync-and-theme/11443
-	async componentDidMount() {
-		if (this.props.appState == 'starting') {
+	public async componentDidMount() {
+		if (this.props.appState === 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'initializing',
 			});
 
 			try {
+				NetInfo.configure({
+					reachabilityUrl: 'https://joplinapp.org/connection_check/',
+					reachabilityTest: async (response) => response.status === 200,
+				});
+
 				// This will be called right after adding the event listener
 				// so there's no need to check netinfo on startup
 				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
@@ -712,22 +776,32 @@ class AppComponent extends React.Component {
 			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
 		});
 
-		AppState.addEventListener('change', this.onAppStateChange_);
+		RNAppState.addEventListener('change', this.onAppStateChange_);
+		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		await this.handleShareData();
 
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
+
+		// Setting.setValue('encryption.masterPassword', 'WRONG');
+		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
 	}
 
-	componentWillUnmount() {
-		AppState.removeEventListener('change', this.onAppStateChange_);
+	public componentWillUnmount() {
+		RNAppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
+
+		if (this.unsubscribeScreenWidthChangeHandler_) {
+			this.unsubscribeScreenWidthChangeHandler_.remove();
+			this.unsubscribeScreenWidthChangeHandler_ = null;
+		}
+
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
-	componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -736,7 +810,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	async backButtonHandler() {
+	private async backButtonHandler() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -757,7 +831,7 @@ class AppComponent extends React.Component {
 		return false;
 	}
 
-	async handleShareData() {
+	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
 		if (sharedData) {
 			reg.logger().info('Received shared data');
@@ -769,14 +843,18 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: any) {
-		if (newProps.syncStarted != this.lastSyncStarted_) {
+	private async handleScreenWidthChange_() {
+		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
+	}
+
+	public UNSAFE_componentWillReceiveProps(newProps: any) {
+		if (newProps.syncStarted !== this.lastSyncStarted_) {
 			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
 
-	sideMenu_change(isOpen: boolean) {
+	private sideMenu_change(isOpen: boolean) {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
 		this.props.dispatch({
@@ -784,8 +862,20 @@ class AppComponent extends React.Component {
 		});
 	}
 
-	render() {
-		if (this.props.appState != 'ready') return null;
+	private getSideMenuWidth = () => {
+		const sideMenuWidth = getResponsiveValue({
+			sm: 250,
+			md: 260,
+			lg: 270,
+			xl: 280,
+			xxl: 290,
+		});
+
+		return sideMenuWidth;
+	};
+
+	public render() {
+		if (this.props.appState !== 'ready') return null;
 		const theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent = null;
@@ -813,13 +903,16 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
-		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+
+		// const statusBarStyle = theme.appearance === 'light-content';
+		const statusBarStyle = 'light-content';
 
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
 					edgeHitWidth={5}
+					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					onSliding={(percent: number) => {
@@ -830,7 +923,8 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+					<MenuContext style={{ flex: 1 }}>
+						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />
@@ -862,7 +956,7 @@ const mapStateToProps = (state: any) => {
 const App = connect(mapStateToProps)(AppComponent);
 
 export default class Root extends React.Component {
-	render() {
+	public render() {
 		return (
 			<Provider store={store}>
 				<App/>

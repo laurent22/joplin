@@ -1,5 +1,4 @@
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
-// import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
@@ -11,25 +10,31 @@ import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import { Config } from './types';
 import * as fs from 'fs-extra';
-import { Item, Share, Uuid } from '../db';
+import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { formatDateTime } from './time';
-import { ErrorNotFound } from './errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
+import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
+import Logger from '@joplin/lib/Logger';
+import config from '../config';
+import { TreeItem } from '../models/ItemResourceModel';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
-// const logger = Logger.create('JoplinUtils');
+const logger = Logger.create('JoplinUtils');
 
 export interface FileViewerResponse {
 	body: any;
 	mime: string;
 	size: number;
+	filename: string;
 }
 
 interface ResourceInfo {
@@ -78,9 +83,6 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
-
-	// mustache_ = new MustacheService(config.viewDir, config.baseUrl);
-	// mustache_.prefersDarkEnabled = false;
 }
 
 export function linkedResourceIds(body: string): string[] {
@@ -135,28 +137,42 @@ async function getResourceInfos(linkedItemInfos: LinkedItemInfos): Promise<Resou
 	return output;
 }
 
-async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, note: NoteEntity): Promise<LinkedItemInfos> {
-	const jopIds = await Note.linkedItemIds(note.body);
+async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, noteBody: string): Promise<LinkedItemInfos> {
+	const jopIds = await Note.linkedItemIds(noteBody);
 	const output: LinkedItemInfos = {};
 
 	for (const jopId of jopIds) {
-		const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'] });
+		const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'], withContent: true });
 		if (!item) continue;
 
 		output[jopId] = {
 			item: itemModel.itemToJoplinItem(item),
-			file: null,// itemFileWithContent.file,
+			file: null,
 		};
 	}
 
 	return output;
 }
 
-async function renderResource(item: Item, content: any): Promise<FileViewerResponse> {
+async function renderResource(userId: string, resourceId: string, item: Item, content: Buffer): Promise<FileViewerResponse> {
+	// The item passed to this function is the resource blob, which is
+	// sufficient to download the resource. However, if we want a more user
+	// friendly download, we need to know the resource original name and mime
+	// type. So below, we try to get that information.
+	let jopItem: any = null;
+
+	try {
+		const resourceItem = await models_.item().loadByJopId(userId, resourceId);
+		jopItem = await models_.item().loadAsJoplinItem(resourceItem.id);
+	} catch (error) {
+		logger.error(`Could not load Joplin item ${resourceId} associated with item: ${item.id}`);
+	}
+
 	return {
 		body: content,
-		mime: item.mime_type,
-		size: item.content_size,
+		mime: jopItem ? jopItem.mime : item.mime_type,
+		size: content ? content.byteLength : 0,
+		filename: jopItem ? jopItem.title : '',
 	};
 }
 
@@ -175,11 +191,18 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			if (!item) throw new Error(`No such item in this note: ${itemId}`);
 
 			if (item.type_ === ModelType.Note) {
-				return '#';
+				return `${models_.share().shareUrl(share.owner_id, share.id)}?note_id=${item.id}&t=${item.updated_time}`;
 			} else if (item.type_ === ModelType.Resource) {
-				return `${models_.share().shareUrl(share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
+				return `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
 			} else {
-				throw new Error(`Unsupported item type: ${item.type_}`);
+				// In theory, there can only be links to notes or resources. But
+				// in practice nothing's stopping a plugin for example to create
+				// a link to a folder. In this case, we don't want to throw an
+				// exception as that would break rendering. Instead we just
+				// disable the link.
+				// https://github.com/laurent22/joplin/issues/6531
+				logger.warn(`Unsupported type in share ${share.id}. Item: ${itemId}`);
+				return '#';
 			}
 		},
 
@@ -188,6 +211,9 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		audioPlayerEnabled: false,
 		videoPlayerEnabled: false,
 		pdfViewerEnabled: false,
+		checkboxDisabled: true,
+
+		linkRenderingType: 2,
 	};
 
 	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
@@ -196,6 +222,8 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		cssFiles: ['items/note'],
 		jsFiles: ['items/note'],
 		name: 'note',
+		title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
+		titleOverride: true,
 		path: 'index/items/note',
 		content: {
 			note: {
@@ -216,37 +244,137 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 	return {
 		body: bodyHtml,
 		mime: 'text/html',
-		size: bodyHtml.length,
+		size: Buffer.byteLength(bodyHtml, 'utf-8'),
+		filename: '',
 	};
 }
 
-export async function renderItem(userId: Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
-	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item); // await this.unserializeItem(content);
-	const linkedItemInfos: LinkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), rootNote);
-	const resourceInfos = await getResourceInfos(linkedItemInfos);
+export function itemIsEncrypted(item: Item): boolean {
+	if ('jop_encryption_applied' in item) return !!item.jop_encryption_applied;
+	if (!('content' in item)) throw new Error('Cannot check encryption - item is missing both "content" and "jop_encryption_applied" property');
+	const header = item.content.toString('utf8', 0, 5);
+	return isValidHeaderIdentifier(header);
+}
 
-	const fileToRender = {
-		item: item,
-		content: null as any,
-		itemId: rootNote.id,
+const findParentNote = async (itemTree: TreeItem, resourceId: string) => {
+	const find_ = (parentItem: TreeItem, currentTreeItems: TreeItem[], resourceId: string): TreeItem => {
+		for (const it of currentTreeItems) {
+			if (it.resource_id === resourceId) return parentItem;
+			const child = find_(it, it.children, resourceId);
+			if (child) return it;
+		}
+		return null;
 	};
 
+	const result = find_(itemTree, itemTree.children, resourceId);
+	if (!result) throw new ErrorBadRequest(`Cannot find parent of ${resourceId}`);
+
+	const item = await models_.item().loadWithContent(result.item_id);
+	if (!item) throw new ErrorNotFound(`Cannot load item with ID ${result.item_id}`);
+
+	return models_.item().itemToJoplinItem(item);
+};
+
+const isInTree = (itemTree: TreeItem, jopId: string) => {
+	if (itemTree.resource_id === jopId) return true;
+	for (const child of itemTree.children) {
+		if (child.resource_id === jopId) return true;
+		const found = isInTree(child, jopId);
+		if (found) return true;
+	}
+	return false;
+};
+
+interface RenderItemQuery {
+	resource_id?: string;
+	note_id?: string;
+}
+
+// "item" is always the item associated with the share (the "root item"). It may
+// be different from the item that will eventually get rendered - for example
+// for resources or linked notes.
+export async function renderItem(userId: Uuid, item: Item, share: Share, query: RenderItemQuery): Promise<FileViewerResponse> {
+	interface FileToRender {
+		item: Item;
+		content: any;
+		jopItemId: string;
+	}
+
+	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item);
+	const itemTree = await models_.itemResource().itemTree(item.id, rootNote.id);
+
+	let linkedItemInfos: LinkedItemInfos = {};
+	let resourceInfos: ResourceInfos = {};
+	let fileToRender: FileToRender;
+	let itemToRender: any = null;
+
 	if (query.resource_id) {
-		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'] });
-		fileToRender.item = resourceItem;
-		fileToRender.content = resourceItem.content;
-		fileToRender.itemId = query.resource_id;
+		// ------------------------------------------------------------------------------------------
+		// Render a resource that is attached to a note
+		// ------------------------------------------------------------------------------------------
+
+		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: true });
+		if (!resourceItem) throw new ErrorNotFound(`No such resource: ${query.resource_id}`);
+
+		fileToRender = {
+			item: resourceItem,
+			content: resourceItem.content,
+			jopItemId: query.resource_id,
+		};
+
+		const parentNote = await findParentNote(itemTree, fileToRender.jopItemId);
+		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), parentNote.body);
+		itemToRender = linkedItemInfos[fileToRender.jopItemId].item;
+	} else if (query.note_id) {
+		// ------------------------------------------------------------------------------------------
+		// Render a linked note
+		// ------------------------------------------------------------------------------------------
+
+
+		if (!share.recursive) throw new ErrorForbidden('This linked note has not been published');
+
+		const noteItem = await models_.item().loadByName(userId, `${query.note_id}.md`, { fields: ['*'], withContent: true });
+		if (!noteItem) throw new ErrorNotFound(`No such note: ${query.note_id}`);
+
+		fileToRender = {
+			item: noteItem,
+			content: noteItem.content,
+			jopItemId: query.note_id,
+		};
+
+		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), noteItem.content.toString());
+		resourceInfos = await getResourceInfos(linkedItemInfos);
+		itemToRender = models_.item().itemToJoplinItem(noteItem);
+	} else {
+		// ------------------------------------------------------------------------------------------
+		// Render the root note
+		// ------------------------------------------------------------------------------------------
+
+		fileToRender = {
+			item: item,
+			content: null as any,
+			jopItemId: rootNote.id,
+		};
+
+		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), rootNote.body);
+		resourceInfos = await getResourceInfos(linkedItemInfos);
+		itemToRender = rootNote;
 	}
 
-	if (fileToRender.item !== item && !linkedItemInfos[fileToRender.itemId]) {
-		throw new ErrorNotFound(`Item "${fileToRender.itemId}" does not belong to this note`);
+	if (!itemToRender) throw new ErrorNotFound(`Cannot render item: ${item.id}: ${JSON.stringify(query)}`);
+
+	// Verify that the item we're going to render is indeed part of the item
+	// tree (i.e. it is either the root note, or one of the ancestor is the root
+	// note). This is for security reason - otherwise it would be possible to
+	// display any note by setting note_id to an arbitrary ID.
+	if (!isInTree(itemTree, fileToRender.jopItemId)) {
+		throw new ErrorNotFound(`Item "${fileToRender.jopItemId}" does not belong to this share`);
 	}
 
-	const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.itemId].item;
 	const itemType: ModelType = itemToRender.type_;
 
 	if (itemType === ModelType.Resource) {
-		return renderResource(fileToRender.item, fileToRender.content);
+		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
 	} else if (itemType === ModelType.Note) {
 		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
 	} else {

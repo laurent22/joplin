@@ -33,7 +33,7 @@ const ResourceServer = require('./ResourceServer.js');
 const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
-const StatusBarWidget = require('./gui/StatusBarWidget.js');
+const StatusBarWidget = require('./gui/StatusBarWidget').default;
 const ConsoleWidget = require('./gui/ConsoleWidget.js');
 const LinkSelector = require('./LinkSelector.js').default;
 
@@ -375,6 +375,11 @@ class AppGui {
 		this.showNoteMetadata(!this.widget('noteMetadata').shown);
 	}
 
+	toggleFolderIds() {
+		this.widget('folderList').toggleShowIds();
+		this.widget('noteList').toggleShowIds();
+	}
+
 	widget(name) {
 		if (name === 'root') return this.rootWidget_;
 		return this.rootWidget_.childByName(name);
@@ -412,7 +417,7 @@ class AppGui {
 		const widget = this.widget('mainWindow').focusedWidget;
 		if (!widget) return null;
 
-		if (widget.name == 'noteList' || widget.name == 'folderList') {
+		if (widget.name === 'noteList' || widget.name === 'folderList') {
 			return widget.currentItem;
 		}
 
@@ -498,6 +503,8 @@ class AppGui {
 			}
 		} else if (cmd === 'toggle_metadata') {
 			this.toggleNoteMetadata();
+		} else if (cmd === 'toggle_ids') {
+			this.toggleFolderIds();
 		} else if (cmd === 'enter_command_line_mode') {
 			const cmd = await this.widget('statusBar').prompt();
 			if (!cmd) return;
@@ -521,11 +528,11 @@ class AppGui {
 			const args = splitCommandString(cmd);
 
 			for (let i = 0; i < args.length; i++) {
-				if (args[i] == '$n') {
+				if (args[i] === '$n') {
 					args[i] = note ? note.id : '';
-				} else if (args[i] == '$b') {
+				} else if (args[i] === '$b') {
 					args[i] = folder ? folder.id : '';
-				} else if (args[i] == '$c') {
+				} else if (args[i] === '$c') {
 					const item = this.activeListItem();
 					args[i] = item ? item.id : '';
 				}

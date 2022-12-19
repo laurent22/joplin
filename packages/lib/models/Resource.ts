@@ -12,6 +12,9 @@ const { mime } = require('../mime-utils.js');
 const { filename, safeFilename } = require('../path-utils');
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
+import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import ShareService from '../services/share/ShareService';
 
 export default class Resource extends BaseItem {
 
@@ -21,6 +24,8 @@ export default class Resource extends BaseItem {
 	public static FETCH_STATUS_STARTED = 1;
 	public static FETCH_STATUS_DONE = 2;
 	public static FETCH_STATUS_ERROR = 3;
+
+	public static shareService_: ShareService = null;
 
 	public static fsDriver_: any;
 
@@ -35,6 +40,11 @@ export default class Resource extends BaseItem {
 	static encryptionService() {
 		if (!this.encryptionService_) throw new Error('Resource.encryptionService_ is not set!!');
 		return this.encryptionService_;
+	}
+
+	protected static shareService() {
+		if (!this.shareService_) throw new Error('Resource.shareService_ is not set!!');
+		return this.shareService_;
 	}
 
 	static isSupportedImageMimeType(type: string) {
@@ -192,10 +202,12 @@ export default class Resource extends BaseItem {
 	// as it should be uploaded to the sync target. Note that this may be different from what is stored
 	// in the database. In particular, the flag encryption_blob_encrypted might be 1 on the sync target
 	// if the resource is encrypted, but will be 0 locally because the device has the decrypted resource.
-	static async fullPathForSyncUpload(resource: ResourceEntity) {
+	public static async fullPathForSyncUpload(resource: ResourceEntity) {
 		const plainTextPath = this.fullPath(resource);
 
-		if (!Setting.value('encryption.enabled')) {
+		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
+
+		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };
@@ -205,7 +217,9 @@ export default class Resource extends BaseItem {
 		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 
 		try {
-			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
+			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
+				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
+			});
 		} catch (error) {
 			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
 			throw error;
@@ -242,10 +256,6 @@ export default class Resource extends BaseItem {
 
 	static async content(resource: ResourceEntity) {
 		return this.fsDriver().readFile(this.fullPath(resource), 'Buffer');
-	}
-
-	static setContent(resource: ResourceEntity, content: any) {
-		return this.fsDriver().writeBinaryFile(this.fullPath(resource), content);
 	}
 
 	static isResourceUrl(url: string) {
@@ -366,7 +376,7 @@ export default class Resource extends BaseItem {
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
 	}
 
-	static async duplicateResource(resourceId: string) {
+	public static async duplicateResource(resourceId: string): Promise<ResourceEntity> {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
@@ -388,15 +398,31 @@ export default class Resource extends BaseItem {
 		return newResource;
 	}
 
-	static async createConflictResourceNote(resource: ResourceEntity) {
-		const Note = this.getClass('Note');
+	public static async resourceConflictFolderId(): Promise<string> {
+		const folder = await this.resourceConflictFolder();
+		return folder.id;
+	}
 
+	private static async resourceConflictFolder(): Promise<any> {
+		const conflictFolderTitle = _('Conflicts (attachments)');
+		const Folder = this.getClass('Folder');
+
+		const folder = await Folder.loadByTitle(conflictFolderTitle);
+		if (!folder || folder.parent_id) {
+			return Folder.save({ title: conflictFolderTitle });
+		}
+
+		return folder;
+	}
+
+	public static async createConflictResourceNote(resource: ResourceEntity) {
+		const Note = this.getClass('Note');
 		const conflictResource = await Resource.duplicateResource(resource.id);
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
 			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
-			is_conflict: 1,
+			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 

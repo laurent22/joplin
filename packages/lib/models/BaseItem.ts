@@ -1,29 +1,42 @@
-import { ModelType } from '../BaseModel';
-import { NoteEntity } from '../services/database/types';
+import { ModelType, DeleteOptions } from '../BaseModel';
+import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-
 import Database from '../database';
 import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
-const JoplinError = require('../JoplinError.js');
+import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
-
-export interface BaseItemEntity {
-	id?: string;
-	encryption_applied?: boolean;
-	is_shared?: number;
-	share_id?: string;
-	type_?: ModelType;
-}
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
 	items: any[];
+}
+
+export interface ItemThatNeedSync {
+	id: string;
+	sync_time: number;
+	type_: ModelType;
+	updated_time: number;
+	encryption_applied: number;
+	share_id: string;
+}
+
+export interface ItemsThatNeedSyncResult {
+	hasMore: boolean;
+	items: ItemThatNeedSync[];
+	neverSyncedItemIds: string[];
+}
+
+export interface EncryptedItemsStats {
+	encrypted: number;
+	total: number;
 }
 
 export default class BaseItem extends BaseModel {
@@ -60,7 +73,7 @@ export default class BaseItem extends BaseModel {
 
 	static loadClass(className: string, classRef: any) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-			if (BaseItem.syncItemDefinitions_[i].className == className) {
+			if (BaseItem.syncItemDefinitions_[i].className === className) {
 				BaseItem.syncItemDefinitions_[i].classRef = classRef;
 				return;
 			}
@@ -95,7 +108,7 @@ export default class BaseItem extends BaseModel {
 	// Need to dynamically load the classes like this to avoid circular dependencies
 	static getClass(name: string) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-			if (BaseItem.syncItemDefinitions_[i].className == name) {
+			if (BaseItem.syncItemDefinitions_[i].className === name) {
 				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
 				if (!classRef) throw new Error(`Class has not been loaded: ${name}`);
 				return BaseItem.syncItemDefinitions_[i].classRef;
@@ -107,7 +120,7 @@ export default class BaseItem extends BaseModel {
 
 	static getClassByItemType(itemType: ModelType) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-			if (BaseItem.syncItemDefinitions_[i].type == itemType) {
+			if (BaseItem.syncItemDefinitions_[i].type === itemType) {
 				return BaseItem.syncItemDefinitions_[i].classRef;
 			}
 		}
@@ -138,8 +151,8 @@ export default class BaseItem extends BaseModel {
 		let p: any = path.split('/');
 		p = p[p.length - 1];
 		p = p.split('.');
-		if (p.length != 2) return false;
-		return p[0].length == 32 && p[1] == 'md';
+		if (p.length !== 2) return false;
+		return p[0].length === 32 && p[1] === 'md';
 	}
 
 	static itemClass(item: any): any {
@@ -151,7 +164,7 @@ export default class BaseItem extends BaseModel {
 		} else {
 			for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 				const d = BaseItem.syncItemDefinitions_[i];
-				if (Number(item) == d.type) return this.getClass(d.className);
+				if (Number(item) === d.type) return this.getClass(d.className);
 			}
 			throw new JoplinError(`Unknown type: ${item}`, 'unknownItemType');
 		}
@@ -224,11 +237,11 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.delete(id);
 	}
 
-	static async delete(id: string, options: any = null) {
+	static async delete(id: string, options: DeleteOptions = null) {
 		return this.batchDelete([id], options);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!options) options = {};
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
@@ -236,7 +249,7 @@ export default class BaseItem extends BaseModel {
 		// Don't create a deleted_items entry when conflicted notes are deleted
 		// since no other client have (or should have) them.
 		let conflictNoteIds: string[] = [];
-		if (this.modelType() == BaseModel.TYPE_NOTE) {
+		if (this.modelType() === BaseModel.TYPE_NOTE) {
 			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ("${ids.join('","')}") AND is_conflict = 1`);
 			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
 				return n.id;
@@ -310,7 +323,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	static unserialize_format(type: ModelType, propName: string, propValue: any) {
-		if (propName[propName.length - 1] == '_') return propValue; // Private property
+		if (propName[propName.length - 1] === '_') return propValue; // Private property
 
 		const ItemClass = this.itemClass(type);
 
@@ -359,7 +372,7 @@ export default class BaseItem extends BaseModel {
 
 		for (let i = 0; i < shownKeys.length; i++) {
 			let key = shownKeys[i];
-			if (key == 'title' || key == 'body') continue;
+			if (key === 'title' || key === 'body') continue;
 
 			let value = null;
 			if (typeof key === 'function') {
@@ -397,14 +410,15 @@ export default class BaseItem extends BaseModel {
 		return this.shareService_;
 	}
 
-	public static async serializeForSync(item: BaseItemEntity) {
+	public static async serializeForSync(item: BaseItemEntity): Promise<string> {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
+		const share = item.share_id ? await this.shareService().shareById(item.share_id) : null;
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared || item.share_id) {
+		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -419,7 +433,9 @@ export default class BaseItem extends BaseModel {
 		let cipherText = null;
 
 		try {
-			cipherText = await this.encryptionService().encryptString(serialized);
+			cipherText = await this.encryptionService().encryptString(serialized, {
+				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
+			});
 		} catch (error) {
 			const msg = [`Could not encrypt item ${item.id}`];
 			if (error && error.message) msg.push(error.message);
@@ -467,10 +483,10 @@ export default class BaseItem extends BaseModel {
 		for (let i = lines.length - 1; i >= 0; i--) {
 			let line = lines[i];
 
-			if (state == 'readingProps') {
+			if (state === 'readingProps') {
 				line = line.trim();
 
-				if (line == '') {
+				if (line === '') {
 					state = 'readingBody';
 					continue;
 				}
@@ -480,7 +496,7 @@ export default class BaseItem extends BaseModel {
 				const key = line.substr(0, p).trim();
 				const value = line.substr(p + 1).trim();
 				output[key] = value;
-			} else if (state == 'readingBody') {
+			} else if (state === 'readingBody') {
 				body.splice(0, 0, line);
 			}
 		}
@@ -506,7 +522,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static async encryptedItemsStats() {
+	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {
 		const classNames = this.encryptableItemClassNames();
 		let encryptedCount = 0;
 		let totalCount = 0;
@@ -591,8 +607,14 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
-	static async itemsThatNeedSync(syncTarget: number, limit = 100) {
-		const classNames = this.syncItemClassNames();
+	public static async itemHasBeenSynced(itemId: string): Promise<boolean> {
+		const r = await this.db().selectOne('SELECT item_id FROM sync_items WHERE item_id = ?', [itemId]);
+		return !!r;
+	}
+
+	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
+		// Although we keep the master keys in the database, we no longer sync them
+		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');
 
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
@@ -606,8 +628,8 @@ export default class BaseItem extends BaseModel {
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
 			let extraWhere: any = [];
-			if (className == 'Note') extraWhere.push('is_conflict = 0');
-			if (className == 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
+			if (className === 'Note') extraWhere.push('is_conflict = 0');
+			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
 
 			extraWhere = extraWhere.length ? `AND ${extraWhere.join(' AND ')}` : '';
@@ -668,19 +690,20 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
+			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
-				return { hasMore: items.length >= limit, items: items };
+				return { hasMore: items.length >= limit, items: items, neverSyncedItemIds };
 			} else {
-				if (items.length) return { hasMore: true, items: items };
+				if (items.length) return { hasMore: true, items: items, neverSyncedItemIds };
 			}
 		}
 
 		throw new Error('Unreachable');
 	}
 
-	static syncItemClassNames() {
+	static syncItemClassNames(): string[] {
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.className;
 		});
@@ -704,7 +727,7 @@ export default class BaseItem extends BaseModel {
 
 	static modelTypeToClassName(type: number) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-			if (BaseItem.syncItemDefinitions_[i].type == type) return BaseItem.syncItemDefinitions_[i].className;
+			if (BaseItem.syncItemDefinitions_[i].type === type) return BaseItem.syncItemDefinitions_[i].className;
 		}
 		throw new Error(`Invalid type: ${type}`);
 	}
@@ -772,7 +795,7 @@ export default class BaseItem extends BaseModel {
 			const ItemClass = this.getClass(className);
 
 			let selectSql = `SELECT id FROM ${ItemClass.tableName()}`;
-			if (ItemClass.modelType() == this.TYPE_NOTE) selectSql += ' WHERE is_conflict = 0';
+			if (ItemClass.modelType() === this.TYPE_NOTE) selectSql += ' WHERE is_conflict = 0';
 
 			queries.push(`DELETE FROM sync_items WHERE item_location = ${BaseItem.SYNC_ITEM_LOCATION_LOCAL} AND item_type = ${ItemClass.modelType()} AND item_id NOT IN (${selectSql})`);
 		}

@@ -30,7 +30,7 @@ This is a quick summary of the Markdown syntax.
 
 ### Tables
 
-Tables are created using pipes `|` and and hyphens `-`. This is a Markdown table:
+Tables are created using pipes `|` and hyphens `-`. This is a Markdown table:
 
 	| First Header  | Second Header |
 	| ------------- | ------------- |
@@ -70,7 +70,7 @@ You can create a link to a note by specifying its ID in the URL. For example:
 
 	[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
 
-Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, right click on a note an select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
+Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, drag and drop a note into another note to create a link. Or right click on a note and select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
 
 ### Math notation
 
@@ -90,13 +90,13 @@ For example:
 
 Here is an example with the Markdown and rendered result side by side:
 
-<img src="https://joplinapp.org/images/Katex.png" height="345px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/Katex.png" height="345px">
 
 ### Chemical equations
 
 Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the [mhchem documentation](https://mhchem.github.io/MathJax-mhchem/) for the syntax.
 
-<img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/Katex_mhchem.png" height="196px">
 
 ### Diagrams
 
@@ -112,7 +112,7 @@ You can create diagrams in Joplin using the [Mermaid syntax](https://mermaidjs.g
 
 This is how it would look with the Markdown on the left, and rendered graph on the right:
 
-![Mermaid support in Joplin](https://joplinapp.org/images/Mermaid.png)
+![Mermaid support in Joplin](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/Mermaid.png)
 
 Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
 
@@ -126,7 +126,7 @@ Checkboxes can be added like so:
 
 Which would turn into:
 
-![Checkbox support in Joplin](https://joplinapp.org/images/Markdown_checkbox.jpg)
+![Checkbox support in Joplin](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/Markdown_checkbox.jpg)
 
 The checkboxes can then be ticked in the mobile and desktop applications.
 
@@ -136,27 +136,27 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 	This is <s>strikethrough text</s> mixed with regular **Markdown**.
 
-### Plugins
+### Markdown Plugins
 
-Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
+Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Unlike regular plugins, Markdown plugins must be enabled in the markdown section of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). Not all of the plugins are enabled by default, if the "enabled" field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
 
-Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
+The functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
 
 | Plugin | Syntax | Description | Enabled | Screenshot |
 |--------|--------|-------------|---------|------------|
-| Soft breaks | See [breaks](https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D) markdown-it demo| Joplin uses hard breaks by default, which means that a line break is rendered as `<br>`. Enable soft breaks for traditional markdown line-break behaviour. | no | [View](https://joplinapp.org/images/md_plugins/softbreaks_plugin.jpg)
-| Typographer | See [typographer](https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D) markdown-it demo | Does typographic replacements, (c) -&gt; © and so on | no | [View](https://joplinapp.org/images/md_plugins/typographer_plugin.jpg) |
+| Soft breaks | See [breaks](https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D) markdown-it demo| Joplin uses hard breaks by default, which means that a line break is rendered as `<br>`. Enable soft breaks for traditional markdown line-break behaviour. | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/softbreaks_plugin.jpg)
+| Typographer | See [typographer](https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D) markdown-it demo | Does typographic replacements, (c) -&gt; © and so on | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/typographer_plugin.jpg) |
 | Linkify | See [linkify](https://markdown-it.github.io/#md3=%7B%22source%22%3A%22Use%20the%20Linkify%20checkbox%20to%20switch%20link-detection%20on%20and%20off.%5Cn%5Cn%2A%2AThese%20links%20are%20auto-detected%3A%2A%2A%5Cn%5Cnhttps%3A%2F%2Fexample.com%5Cn%5Cnexample.com%5Cn%5Cntest%40example.com%5Cn%5Cn%2A%2AThese%20are%20always%20links%3A%2A%2A%5Cn%5Cn%5Blink%5D%28https%3A%2F%2Fjoplinapp.org%29%5Cn%5Cn%3Chttps%3A%2F%2Fexample.com%3E%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D) markdown-it demo | Auto-detects URLs and convert them to clickable links | yes |     |
-| [Katex](https://katex.org) | `$$math expr$$` or `$math$` | [See above](#math-notation) | yes | [View](https://joplinapp.org/images/md_plugins/katex_plugin.jpg) |
-| [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no | [View](https://joplinapp.org/images/md_plugins/fountain_plugin.jpg) |
-| [Mermaid](https://mermaid-js.github.io/mermaid/) | <code>\`\`\`mermaid</code><br/>mermaid syntax...<br/><code>\`\`\`</code> | See [plugin page](https://mermaid-js.github.io/mermaid/#/examples) for full description | yes | [View](https://joplinapp.org/images/md_plugins/mermaid.jpg) |
-| [Mark](https://github.com/markdown-it/markdown-it-mark) | `==marked==` | Transforms into `<mark>marked</mark>` (highlighted) | yes | [View](https://joplinapp.org/images/md_plugins/mark_plugin.jpg) |
-| [Footnote](https://github.com/markdown-it/markdown-it-footnote) | `Simples inline footnote ^[I'm inline!]` | See [plugin page](https://github.com/markdown-it/markdown-it-footnote) for full description | yes | [View](https://joplinapp.org/images/md_plugins/footnote_plugin.jpg) |
-| [TOC](https://github.com/nagaozen/markdown-it-toc-done-right) | Any of `${toc}, [[toc]], [toc], [[_toc_]]` | Adds a table of contents to the location of the toc page. Based on headings and sub-headings | yes | [View](https://joplinapp.org/images/md_plugins/toc_plugin.jpg) |
-| [Sub](https://github.com/markdown-it/markdown-it-sub) | `X~1~` | Transforms into X<sub>1</sub> | no | [View](https://joplinapp.org/images/md_plugins/sub_plugin.jpg) |
-| [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no | [View](https://joplinapp.org/images/md_plugins/sup_plugin.jpg) |
-| [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no | [View](https://joplinapp.org/images/md_plugins/deflist_plugin.jpg) |
-| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language<br/>The HTML specification | Allows definition of abbreviations that can be hovered over later for a full expansion | no | [View](https://joplinapp.org/images/md_plugins/abbr_plugin.jpg) |
-| [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |[View](https://joplinapp.org/images/md_plugins/emoji_plugin.jpg) |
-| [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no | [View](https://joplinapp.org/images/md_plugins/insert_plugin.jpg) |
-| [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no | [View](https://joplinapp.org/images/md_plugins/multitable_plugin.jpg) |
+| [Katex](https://katex.org) | `$$math expr$$` or `$math$` | [See above](#math-notation) | yes | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/katex_plugin.jpg) |
+| [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/fountain_plugin.jpg) |
+| [Mermaid](https://mermaid-js.github.io/mermaid/) | <code>\`\`\`mermaid</code><br/>mermaid syntax...<br/><code>\`\`\`</code> | See [plugin page](https://mermaid-js.github.io/mermaid/#/examples) for full description | yes | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/mermaid.jpg) |
+| [Mark](https://github.com/markdown-it/markdown-it-mark) | `==marked==` | Transforms into `<mark>marked</mark>` (highlighted) | yes | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/mark_plugin.jpg) |
+| [Footnote](https://github.com/markdown-it/markdown-it-footnote) | `Simples inline footnote ^[I'm inline!]` | See [plugin page](https://github.com/markdown-it/markdown-it-footnote) for full description | yes | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/footnote_plugin.jpg) |
+| [TOC](https://github.com/nagaozen/markdown-it-toc-done-right) | Any of `${toc}, [[toc]], [toc], [[_toc_]]` | Adds a table of contents to the location of the toc page. Based on headings and sub-headings | yes | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/toc_plugin.jpg) |
+| [Sub](https://github.com/markdown-it/markdown-it-sub) | `X~1~` | Transforms into X<sub>1</sub> | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/sub_plugin.jpg) |
+| [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/sup_plugin.jpg) |
+| [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/deflist_plugin.jpg) |
+| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language<br/>The HTML specification | Allows definition of abbreviations that can be hovered over later for a full expansion | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/abbr_plugin.jpg) |
+| [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |[View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/emoji_plugin.jpg) |
+| [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/insert_plugin.jpg) |
+| [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/multitable_plugin.jpg) |

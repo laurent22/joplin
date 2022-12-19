@@ -1,31 +1,31 @@
 const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('./testing/test-utils.js');
 const reducer = require('./reducer').default;
 const { defaultState, MAX_HISTORY } = require('./reducer');
-const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
+// const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
 
-	if (selectedFolderIndex != null) {
+	if (selectedFolderIndex !== null) {
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[selectedFolderIndex].id });
 	}
-	if (folders != null) {
+	if (folders !== null) {
 		state = reducer(state, { type: 'FOLDER_UPDATE_ALL', items: folders });
 	}
-	if (notes != null) {
+	if (notes !== null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
 	}
-	if (selectedNoteIndexes != null) {
+	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
 		}
 		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
 	}
-	if (tags != null) {
+	if (tags !== null) {
 		state = reducer(state, { type: 'TAG_UPDATE_ALL', items: tags });
 	}
-	if (selectedTagIndex != null) {
+	if (selectedTagIndex !== null) {
 		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
 	}
 
@@ -33,7 +33,7 @@ function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes,
 }
 
 function goToNote(notes, selectedNoteIndexes, state) {
-	if (selectedNoteIndexes != null) {
+	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
@@ -74,7 +74,7 @@ function createExpectedState(items, keepIndexes, selectedIndexes) {
 function getIds(items, indexes = null) {
 	const ids = [];
 	for (let i = 0; i < items.length; i++) {
-		if (indexes == null || i in indexes) {
+		if (!indexes || i in indexes) {
 			ids.push(items[i].id);
 		}
 	}
@@ -83,11 +83,10 @@ function getIds(items, indexes = null) {
 
 describe('reducer', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
-		done();
 	});
 
 	// tests for NOTE_DELETE
@@ -571,22 +570,65 @@ describe('reducer', function() {
 		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
 	}));
 
-	it('should not change folders when all notes filter is on', async () => {
-		const folders = await createNTestFolders(2);
-		const notes = [];
-		for (let i = 0; i < folders.length; i++) {
-			notes.push(...await createNTestNotes(1, folders[i]));
+	// it('should not change folders when all notes filter is on', async () => {
+	// 	const folders = await createNTestFolders(2);
+	// 	const notes = [];
+	// 	for (let i = 0; i < folders.length; i++) {
+	// 		notes.push(...await createNTestNotes(1, folders[i]));
+	// 	}
+	// 	// initialize state with no folders selected
+	// 	let state = initTestState(folders, null, notes.slice(0,2), null);
+
+	// 	// turn on 'All Notes' filter
+	// 	state = reducer(state, { type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
+
+	// 	// change folder
+	// 	state = reducer(state, { type: 'FOLDER_AND_NOTE_SELECT', folderId: folders[1].id, noteId: notes[1].id });
+
+	// 	expect(state.selectedFolderId).toEqual(null);
+	// 	expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
+	// });
+
+	// tests for NOTE_UPDATE_ALL about issue #5447
+	it('should not change selectedNoteIds object when selections are not changed', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(5, folders[0]);
+		{
+			// Case 1. Selected notes are changed when one of selected notes is deleted.
+			let state = initTestState(folders, 0, notes, [0, 2, 4]);
+			state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes.slice(0, 4), notesSource: 'test' });
+			const expected = [notes[0].id, notes[2].id].sort();
+			expect([...state.selectedNoteIds].sort()).toEqual(expected);
 		}
-		// initialize state with no folders selected
-		let state = initTestState(folders, null, notes.slice(0,2), null);
+		{
+			// Case 2. Selected notes and object identity are unchanged when notes are not changed.
+			let state = initTestState(folders, 0, notes, [0, 2, 4]);
+			const expected = state.selectedNoteIds;
+			state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, notesSource: 'test' });
+			// Object identity is checked. Don't use toEqual() or toStrictEqual() here.
+			expect(state.selectedNoteIds).toBe(expected);
+		}
+	});
 
-		// turn on 'All Notes' filter
-		state = reducer(state, { type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-
-		// change folder
-		state = reducer(state, { type: 'FOLDER_AND_NOTE_SELECT', folderId: folders[1].id, noteId: notes[1].id });
-
-		expect(state.selectedFolderId).toEqual(null);
-		expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
+	// tests for TAG_UPDATE_ALL about PR #6451
+	it('should not change tags when a new value is deep equal to the old value', async () => {
+		const tags = await createNTestTags(6);
+		const oldTags = tags.slice(0, 5);
+		{
+			// Case 1. The input which is deep equal to the current state.tags doesn't change state.tags.
+			const oldState = initTestState(null, null, null, null, oldTags, [2]);
+			const newTags = oldTags.slice();
+			// test action
+			const newState = reducer(oldState, { type: 'TAG_UPDATE_ALL', items: newTags });
+			expect(newState.tags).toBe(oldState.tags);
+		}
+		{
+			// Case 2. A different input changes state.tags.
+			const oldState = initTestState(null, null, null, null, oldTags, [2]);
+			const newTags = oldTags.slice().splice(3, 1, tags[5]);
+			// test action
+			const newState = reducer(oldState, { type: 'TAG_UPDATE_ALL', items: newTags });
+			expect(newState.tags).not.toBe(oldState.tags);
+		}
 	});
 });

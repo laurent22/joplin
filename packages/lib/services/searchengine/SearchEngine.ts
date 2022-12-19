@@ -17,6 +17,7 @@ export default class SearchEngine {
 	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
 	public static SEARCH_TYPE_AUTO = 'auto';
 	public static SEARCH_TYPE_BASIC = 'basic';
+	public static SEARCH_TYPE_NONLATIN_SCRIPT = 'nonlatin';
 	public static SEARCH_TYPE_FTS = 'fts';
 
 	public dispatch: Function = (_o: any) => {};
@@ -533,6 +534,7 @@ export default class SearchEngine {
 
 	determineSearchType_(query: string, preferredSearchType: any) {
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
+		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
@@ -544,11 +546,16 @@ export default class SearchEngine {
 			console.warn(error);
 		}
 
-		const textQuery = allTerms.filter(x => x.name === 'text' || x.name == 'title' || x.name == 'body').map(x => x.value).join(' ');
+		const textQuery = allTerms.filter(x => x.name === 'text' || x.name === 'title' || x.name === 'body').map(x => x.value).join(' ');
 		const st = scriptType(textQuery);
 
-		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
+		if (!Setting.value('db.ftsEnabled')) {
 			return SearchEngine.SEARCH_TYPE_BASIC;
+		}
+
+		// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
+		if (['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
+			return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 		}
 
 		return SearchEngine.SEARCH_TYPE_FTS;
@@ -565,7 +572,6 @@ export default class SearchEngine {
 		const parsedQuery = await this.parseQuery(searchString);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
-			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			searchString = this.normalizeText_(searchString);
 			const rows = await this.basicSearch(searchString);
 
@@ -579,10 +585,11 @@ export default class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
+			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
-				const { query, params } = queryBuilder(parsedQuery.allTerms);
+				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
 				const rows = await this.db().selectAll(query, params);
-				this.processResults_(rows, parsedQuery);
+				this.processResults_(rows, parsedQuery, !useFts);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);

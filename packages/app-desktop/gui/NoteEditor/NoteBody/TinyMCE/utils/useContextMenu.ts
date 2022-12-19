@@ -3,7 +3,8 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import { useEffect } from 'react';
 import bridge from '../../../../../services/bridge';
-import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenu';
+import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenuUtils';
+import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordinates';
@@ -67,6 +68,8 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 			contextMenuActionOptions.current = {
 				itemType,
 				resourceId,
+				filename: null,
+				mime: null,
 				linkToCopy,
 				textToCopy: null,
 				htmlToCopy: editor.selection ? editor.selection.getContent() : '',

@@ -1,0 +1,40 @@
+{{> errorBanner}}
+<section class="section login-box">
+	<h1 class="title">Sign up for {{global.appName}}</h1>
+	<p class="subtitle">Please input your details to sign up for {{global.appName}}</p>
+
+	<div class="container block">
+		<form action="{{{postUrl}}}" method="POST">
+			<div class="field">
+				<label class="label">Full name</label>
+				<div class="control">
+					<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Email</label>
+				<div class="control">
+					<input class="input" type="email" name="email" value="{{user.email}}"/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Password</label>
+				<div class="control">
+					<input class="input" type="password" name="password" autocomplete="new-password"/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Repeat password</label>
+				<div class="control">
+					<input class="input" type="password" name="password2" autocomplete="new-password"/>
+				</div>
+			</div>
+			<div class="control">
+				<input type="submit" name="post_button" class="button is-primary" value="Sign up" />
+			</div>
+		</form>
+	</div>
+	<div class="container block">
+		Or <a href="{{loginUrl}}">login</a> if you already have an account.
+	</div>
+</div>

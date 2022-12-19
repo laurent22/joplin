@@ -33,14 +33,24 @@ export interface PluginStates {
 	[key: string]: PluginState;
 }
 
+export interface PluginHtmlContent {
+	[viewId: string]: string;
+}
+
+export interface PluginHtmlContents {
+	[pluginId: string]: PluginHtmlContent;
+}
+
 export interface State {
 	plugins: PluginStates;
+	pluginHtmlContents: PluginHtmlContents;
 }
 
 export const stateRootKey = 'pluginService';
 
 export const defaultState: State = {
 	plugins: {},
+	pluginHtmlContents: {},
 };
 
 export const utils = {
@@ -139,7 +149,12 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_VIEW_PROP_SET':
 
-			(draft.plugins[action.pluginId].views[action.id] as any)[action.name] = action.value;
+			if (action.name !== 'html') {
+				(draft.plugins[action.pluginId].views[action.id] as any)[action.name] = action.value;
+			} else {
+				draft.pluginHtmlContents[action.pluginId] ??= {};
+				draft.pluginHtmlContents[action.pluginId][action.id] = action.value;
+			}
 			break;
 
 		case 'PLUGIN_VIEW_PROP_PUSH':

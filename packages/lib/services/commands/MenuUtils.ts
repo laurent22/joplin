@@ -6,12 +6,15 @@ import propsHaveChanged from './propsHaveChanged';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
-interface MenuItem {
-	id: string;
-	label: string;
-	click: Function;
+export interface MenuItem {
+	id?: string;
+	label?: string;
+	click?: Function;
 	role?: any;
+	type?: string;
 	accelerator?: string;
+	checked?: boolean;
+	enabled?: boolean;
 }
 
 interface MenuItems {
@@ -78,6 +81,7 @@ export default class MenuUtils {
 			id: command.declaration.name,
 			label: this.service.label(commandName),
 			click: () => onClick(command.declaration.name),
+			enabled: true,
 		};
 
 		if (command.declaration.role) item.role = command.declaration.role;
@@ -95,8 +99,8 @@ export default class MenuUtils {
 		});
 	}
 
-	public commandsToMenuItems(commandNames: string[], onClick: Function): MenuItems {
-		const key: string = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}`;
+	public commandsToMenuItems(commandNames: string[], onClick: Function, locale: string): MenuItems {
+		const key: string = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}_${locale}`;
 		if (this.menuItemCache_[key]) return this.menuItemCache_[key];
 
 		const output: MenuItems = {};
@@ -105,7 +109,9 @@ export default class MenuUtils {
 			output[commandName] = this.commandToMenuItem(commandName, onClick);
 		}
 
-		this.menuItemCache_[key] = output;
+		this.menuItemCache_ = {
+			[key]: output,
+		};
 
 		return output;
 	}
@@ -132,10 +138,13 @@ export default class MenuUtils {
 	public pluginContextMenuItems(plugins: PluginStates, location: MenuItemLocation): MenuItem[] {
 		const output: MenuItem[] = [];
 		const pluginViewInfos = pluginUtils.viewInfosByType(plugins, 'menuItem');
+		const whenClauseContext = this.service.currentWhenClauseContext();
 
 		for (const info of pluginViewInfos) {
 			if (info.view.location !== location) continue;
-			output.push(this.commandToStatefulMenuItem(info.view.commandName));
+			const menuItem = this.commandToStatefulMenuItem(info.view.commandName);
+			menuItem.enabled = this.service.isEnabled(info.view.commandName, whenClauseContext);
+			output.push(menuItem);
 		}
 
 		if (output.length) output.splice(0, 0, { type: 'separator' } as any);

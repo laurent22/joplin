@@ -9,7 +9,7 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Note = require('@joplin/lib/models/Note').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { themeStyle } = require('../global-style.js');
-const { ScreenHeader } = require('../screen-header.js');
+const { ScreenHeader } = require('../ScreenHeader');
 const { _ } = require('@joplin/lib/locale');
 const { ActionButton } = require('../action-button.js');
 const { dialogs } = require('../../utils/dialogs.js');
@@ -109,7 +109,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	async componentDidUpdate(prevProps) {
-		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId != this.props.selectedFolderId || prevProps.selectedTagId != this.props.selectedTagId || prevProps.selectedSmartFilterId != this.props.selectedSmartFilterId || prevProps.notesParentType != this.props.notesParentType) {
+		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
 			await this.refreshNotes(this.props);
 		}
 	}
@@ -132,7 +132,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			parentId: parent.id,
 		});
 
-		if (source == props.notesSource) return;
+		if (source === props.notesSource) return;
 
 		let notes = [];
 		if (props.notesParentType === 'Folder') {
@@ -151,10 +151,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 
 	deleteFolder_onPress(folderId) {
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
 			if (!ok) return;
 
 			Folder.delete(folderId)
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then(() => {
 					this.props.dispatch({
 						type: 'NAV_GO',
@@ -162,6 +164,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 						smartFilterId: 'c3176726992c11e9ac940492261af972',
 					});
 				})
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.catch(error => {
 					alert(error.message);
 				});
@@ -180,11 +183,11 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (!props) props = this.props;
 
 		let output = null;
-		if (props.notesParentType == 'Folder') {
+		if (props.notesParentType === 'Folder') {
 			output = Folder.byId(props.folders, props.selectedFolderId);
-		} else if (props.notesParentType == 'Tag') {
+		} else if (props.notesParentType === 'Tag') {
 			output = Tag.byId(props.tags, props.selectedTagId);
-		} else if (props.notesParentType == 'SmartFilter') {
+		} else if (props.notesParentType === 'SmartFilter') {
 			output = { id: this.props.selectedSmartFilterId, title: _('All notes') };
 		} else {
 			return null;
@@ -227,7 +230,10 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		let buttonFolderId = this.props.selectedFolderId != Folder.conflictFolderId() ? this.props.selectedFolderId : null;
+		const icon = Folder.unserializeIcon(parent.icon);
+		const iconString = icon ? `${icon.emoji} ` : '';
+
+		let buttonFolderId = this.props.selectedFolderId !== Folder.conflictFolderId() ? this.props.selectedFolderId : null;
 		if (!buttonFolderId) buttonFolderId = this.props.activeFolderId;
 
 		const addFolderNoteButtons = !!buttonFolderId;
@@ -236,7 +242,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader title={title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
 				<DialogBox

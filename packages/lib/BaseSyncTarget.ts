@@ -1,6 +1,6 @@
 import Logger from './Logger';
 import Synchronizer from './Synchronizer';
-import EncryptionService from './services/EncryptionService';
+import EncryptionService from './services/e2ee/EncryptionService';
 import shim from './shim';
 import ResourceService from './services/ResourceService';
 import ShareService from './services/share/ShareService';
@@ -22,6 +22,18 @@ export default class BaseSyncTarget {
 	}
 
 	public static supportsConfigCheck() {
+		return false;
+	}
+
+	public static description(): string {
+		return '';
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return true;
+	}
+
+	public static supportsRecursiveLinkedNotes(): boolean {
 		return false;
 	}
 
@@ -92,15 +104,15 @@ export default class BaseSyncTarget {
 	public async synchronizer(): Promise<Synchronizer> {
 		if (this.synchronizer_) return this.synchronizer_;
 
-		if (this.initState_ == 'started') {
+		if (this.initState_ === 'started') {
 			// Synchronizer is already being initialized, so wait here till it's done.
 			return new Promise((resolve, reject) => {
 				const iid = shim.setInterval(() => {
-					if (this.initState_ == 'ready') {
+					if (this.initState_ === 'ready') {
 						shim.clearInterval(iid);
 						resolve(this.synchronizer_);
 					}
-					if (this.initState_ == 'error') {
+					if (this.initState_ === 'error') {
 						shim.clearInterval(iid);
 						reject(new Error('Could not initialise synchroniser'));
 					}
@@ -129,6 +141,6 @@ export default class BaseSyncTarget {
 		if (!this.synchronizer_) return false;
 		if (!(await this.isAuthenticated())) return false;
 		const sync = await this.synchronizer();
-		return sync.state() != 'idle';
+		return sync.state() !== 'idle';
 	}
 }

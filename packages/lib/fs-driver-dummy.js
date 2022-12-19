@@ -1,7 +1,6 @@
 class FsDriverDummy {
 	constructor() {}
 	appendFileSync() {}
-	writeBinaryFile() {}
 	readFile() {}
 }
 

@@ -32,6 +32,15 @@
 		}
 	}
 
+	function escapeHtml(s) {
+		return s
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
+
 	function pageTitle() {
 		const titleElements = document.getElementsByTagName('title');
 		if (titleElements.length) return titleElements[0].text.trim();
@@ -204,6 +213,16 @@
 					}
 				}
 
+				if (nodeName === 'embed') {
+					const src = absoluteUrl(node.src);
+					node.setAttribute('src', src);
+				}
+
+				if (nodeName === 'object') {
+					const data = absoluteUrl(node.data);
+					node.setAttribute('data', data);
+				}
+
 				cleanUpElement(convertToMarkup, node, imageSizes, imageIndexes);
 			}
 		}
@@ -317,6 +336,9 @@
 	}
 
 	function readabilityProcess() {
+
+		if (isPagePdf()) throw new Error('Could not parse PDF document with Readability');
+
 		// eslint-disable-next-line no-undef
 		const readability = new Readability(documentForReadability());
 		const article = readability.parse();
@@ -327,6 +349,14 @@
 			title: article.title,
 			body: article.content,
 		};
+	}
+
+	function isPagePdf() {
+		return document.contentType === 'application/pdf';
+	}
+
+	function embedPageUrl() {
+		return `<embed src="${escapeHtml(window.location.href)}" type="${escapeHtml(document.contentType)}" />`;
 	}
 
 	async function prepareCommandResponse(command) {
@@ -374,6 +404,10 @@
 			return { name: 'isProbablyReaderable', value: ok };
 
 		} else if (command.name === 'completePageHtml') {
+
+			if (isPagePdf()) {
+				return clippedContentResponse(pageTitle(), embedPageUrl(), getImageSizes(document), getAnchorNames(document));
+			}
 
 			hardcodePreStyles(document);
 			addSvgClass(document);
@@ -521,6 +555,7 @@
 						name: 'screenshotArea',
 						content: content,
 						api_base_url: command.api_base_url,
+						token: command.token,
 					});
 				}, 100);
 			};

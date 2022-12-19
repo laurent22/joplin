@@ -1,7 +1,50 @@
+import Logger from '../../Logger';
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 const md5 = require('md5');
 const compareVersions = require('compare-versions');
+
+const logger = Logger.create('RepositoryApi');
+
+interface ReleaseAsset {
+	name: string;
+	browser_download_url: string;
+}
+
+interface Release {
+	upload_url: string;
+	assets: ReleaseAsset[];
+}
+
+const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> => {
+	// From: https://github.com/laurent22/joplin/issues/5161#issuecomment-921642721
+
+	const mirrorUrls = [
+		defaultContentUrl,
+		'https://cdn.staticaly.com/gh/joplin/plugins/master',
+		'https://ghproxy.com/https://raw.githubusercontent.com/joplin/plugins/master',
+		'https://cdn.jsdelivr.net/gh/joplin/plugins@master',
+		'https://raw.fastgit.org/joplin/plugins/master',
+	];
+
+	for (const mirrorUrl of mirrorUrls) {
+		try {
+			// We try to fetch .gitignore, which is smaller than the whole manifest
+			await shim.fetch(`${mirrorUrl}/.gitignore`);
+		} catch (error) {
+			logger.info(`findWorkingMirror: Could not connect to ${mirrorUrl}:`, error);
+			continue;
+		}
+
+		logger.info(`findWorkingMirror: Using: ${mirrorUrl}`);
+
+		return mirrorUrl;
+	}
+
+	logger.info('findWorkingMirror: Could not find any working GitHub URL');
+
+	return defaultContentUrl;
+};
 
 export default class RepositoryApi {
 
@@ -14,23 +57,76 @@ export default class RepositoryApi {
 	// Later on, other repo types could be supported.
 	private baseUrl_: string;
 	private tempDir_: string;
+	private release_: Release = null;
 	private manifests_: PluginManifest[] = null;
+	private githubApiUrl_: string;
+	private contentBaseUrl_: string;
+	private isUsingDefaultContentUrl_: boolean = true;
 
 	public constructor(baseUrl: string, tempDir: string) {
 		this.baseUrl_ = baseUrl;
 		this.tempDir_ = tempDir;
 	}
 
-	public async loadManifests() {
+	public async initialize() {
+		// https://github.com/joplin/plugins
+		// https://api.github.com/repos/joplin/plugins/releases
+		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
+		const defaultContentBaseUrl = `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
+		this.contentBaseUrl_ = await findWorkingGitHubUrl(defaultContentBaseUrl);
+
+		this.isUsingDefaultContentUrl_ = this.contentBaseUrl_ === defaultContentBaseUrl;
+
+		await this.loadManifests();
+		await this.loadRelease();
+	}
+
+	private async loadManifests() {
 		const manifestsText = await this.fetchText('manifests.json');
 		try {
 			const manifests = JSON.parse(manifestsText);
 			if (!manifests) throw new Error('Invalid or missing JSON');
+
 			this.manifests_ = Object.keys(manifests).map(id => {
-				return manifests[id];
+				const m: PluginManifest = manifests[id];
+				// If we don't control the repository, we can't recommend
+				// anything on it since it could have been modified.
+				if (!this.isUsingDefaultContentUrl) m._recommended = false;
+				return m;
 			});
 		} catch (error) {
 			throw new Error(`Could not parse JSON: ${error.message}`);
+		}
+	}
+
+	public get isUsingDefaultContentUrl() {
+		return this.isUsingDefaultContentUrl_;
+	}
+
+	private get githubApiUrl(): string {
+		return this.githubApiUrl_;
+	}
+
+	public get contentBaseUrl(): string {
+		if (this.isLocalRepo) {
+			return this.baseUrl_;
+		} else {
+			return this.contentBaseUrl_;
+		}
+	}
+
+	private async loadRelease() {
+		this.release_ = null;
+
+		if (this.isLocalRepo) return;
+
+		try {
+			const response = await shim.fetch(`${this.githubApiUrl}/releases`);
+			const releases = await response.json();
+			if (!releases.length) throw new Error('No release was found');
+			this.release_ = releases[0];
+		} catch (error) {
+			logger.warn('Could not load release - files will be downloaded from the repository directly:', error);
 		}
 	}
 
@@ -38,23 +134,34 @@ export default class RepositoryApi {
 		return this.baseUrl_.indexOf('http') !== 0;
 	}
 
-	private get contentBaseUrl(): string {
-		if (this.isLocalRepo) {
-			return this.baseUrl_;
-		} else {
-			return `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
+	private assetFileUrl(pluginId: string): string {
+		if (this.release_) {
+			const asset = this.release_.assets.find(asset => {
+				const s = asset.name.split('@');
+				s.pop();
+				const id = s.join('@');
+				return id === pluginId;
+			});
+
+			if (asset) return asset.browser_download_url;
+
+			logger.warn(`Could not get plugin from release: ${pluginId}`);
 		}
+
+		// If we couldn't get the plugin file from the release, get it directly
+		// from the repository instead.
+		return this.repoFileUrl(`plugins/${pluginId}/plugin.jpl`);
 	}
 
-	private fileUrl(relativePath: string): string {
+	private repoFileUrl(relativePath: string): string {
 		return `${this.contentBaseUrl}/${relativePath}`;
 	}
 
 	private async fetchText(path: string): Promise<string> {
 		if (this.isLocalRepo) {
-			return shim.fsDriver().readFile(this.fileUrl(path), 'utf8');
+			return shim.fsDriver().readFile(this.repoFileUrl(path), 'utf8');
 		} else {
-			return shim.fetchText(this.fileUrl(path));
+			return shim.fetchText(this.repoFileUrl(path));
 		}
 	}
 
@@ -86,7 +193,7 @@ export default class RepositoryApi {
 		const manifest = manifests.find(m => m.id === pluginId);
 		if (!manifest) throw new Error(`No manifest for plugin ID "${pluginId}"`);
 
-		const fileUrl = this.fileUrl(`plugins/${manifest.id}/plugin.jpl`);
+		const fileUrl = this.assetFileUrl(manifest.id); // this.repoFileUrl(`plugins/${manifest.id}/plugin.jpl`);
 		const hash = md5(Date.now() + Math.random());
 		const targetPath = `${this.tempDir_}/${hash}_${manifest.id}.jpl`;
 

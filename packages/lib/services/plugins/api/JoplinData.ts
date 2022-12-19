@@ -1,3 +1,6 @@
+import { ModelType } from '../../../BaseModel';
+import BaseItem from '../../../models/BaseItem';
+import Resource from '../../../models/Resource';
 import Api from '../../rest/Api';
 import { Path } from './types';
 
@@ -63,19 +66,32 @@ export default class JoplinData {
 		return path.join('/');
 	}
 
-	async get(path: Path, query: any = null) {
+	public async get(path: Path, query: any = null) {
 		return this.api_.route('GET', this.pathToString(path), query);
 	}
 
-	async post(path: Path, query: any = null, body: any = null, files: any[] = null) {
+	public async post(path: Path, query: any = null, body: any = null, files: any[] = null) {
 		return this.api_.route('POST', this.pathToString(path), query, this.serializeApiBody(body), files);
 	}
 
-	async put(path: Path, query: any = null, body: any = null, files: any[] = null) {
+	public async put(path: Path, query: any = null, body: any = null, files: any[] = null) {
 		return this.api_.route('PUT', this.pathToString(path), query, this.serializeApiBody(body), files);
 	}
 
-	async delete(path: Path, query: any = null) {
+	public async delete(path: Path, query: any = null) {
 		return this.api_.route('DELETE', this.pathToString(path), query);
 	}
+
+	public async itemType(itemId: string): Promise<ModelType> {
+		const item = await BaseItem.loadItemById(itemId);
+		if (!item) return null;
+		return item.type_;
+	}
+
+	public async resourcePath(resourceId: string): Promise<string> {
+		const item = await Resource.load(resourceId);
+		if (!item) throw new Error(`No such resource: ${resourceId}`);
+		return Resource.fullPath(item);
+	}
+
 }

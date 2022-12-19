@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
-import editorCommandDeclarations from '../commands/editorCommandDeclarations';
+import editorCommandDeclarations from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
 import { reg } from '@joplin/lib/registry';
@@ -56,7 +56,15 @@ function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, s
 				});
 			}
 		},
-		enabledCondition: '!modalDialogVisible && markdownEditorPaneVisible && oneNoteSelected && noteIsMarkdown',
+
+		// We disable the editor commands whenever a modal dialog is visible,
+		// otherwise the user might type something in a dialog and accidentally
+		// change something in the editor. However, we still enable them for
+		// GotoAnything so that it's possible to type eg `textBold` and bold the
+		// currently selected text.
+		//
+		// https://github.com/laurent22/joplin/issues/5707
+		enabledCondition: '(!modalDialogVisible || gotoAnythingVisible) && markdownEditorPaneVisible && oneNoteSelected && noteIsMarkdown',
 	};
 }
 
@@ -88,5 +96,6 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 				CommandService.instance().unregisterRuntime(command.declaration.name);
 			}
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef]);
 }

@@ -24,3 +24,5 @@ tests/support/nextcloud-auth.json
 tests/support/onedrive-auth.txt
 build/
 patches/
+createUsers-*.txt
+tools/temp/

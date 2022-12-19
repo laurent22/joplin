@@ -17,9 +17,9 @@ Then, in the directory where you plan to develop the plugin, run:
 
 	yo joplin
 
-This will generate the basic scafolding of the plugin. At the root of it, there are a number of configuration files which you normally won't need to change. Then the `src/` directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.
+This will generate the basic scaffolding of the plugin. At the root of it, there are a number of configuration files which you normally won't need to change. Then the `src/` directory will contain your code. By default, the project uses TypeScript, but you are free to use plain JavaScript too - eventually the project is compiled to plain JS in any case.
 
-The `src/` directory also contains a [manifest.json](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md) file, which contains the various information about the plugin that was set in the inital generation of the scaffolding, such as its name, homepage URL, etc. You can edit this at any time, but editing it after it has been published may cause users to have to download it again.
+The `src/` directory also contains a [manifest.json](https://github.com/laurent22/joplin/blob/dev/readme/api/references/plugin_manifest.md) file, which contains the various information about the plugin that was set in the initial generation of the scaffolding, such as its name, homepage URL, etc. You can edit this at any time, but editing it after it has been published may cause users to have to download it again.
 
 ## Setup Source Control 
 
@@ -32,7 +32,7 @@ This will setup source control.
 
 ## Run Joplin in Development Mode
 
-You should test your plugin in Development Mode. Doing so means that Joplin will run using a different profile, so you can experiment with the plugin without risking to accidentally change or delete your data.
+You should test your plugin in [Development Mode](https://github.com/laurent22/joplin/blob/dev/readme/api/references/development_mode.md). Doing so means that Joplin will run using a different profile, so you can experiment with the plugin without risking to accidentally change or delete your data.
 
 ## Building the plugin
 

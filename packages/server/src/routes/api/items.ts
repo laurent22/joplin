@@ -1,17 +1,77 @@
-import { Item, Uuid } from '../../db';
+import { Item, Uuid } from '../../services/database/types';
 import { formParse } from '../../utils/requestUtils';
 import { respondWithItemContent, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorMethodNotAllowed, ErrorNotFound } from '../../utils/errors';
-import ItemModel, { ItemSaveOption } from '../../models/ItemModel';
-import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
+import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
+import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
+import { requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
+import { formatBytes, MB } from '../../utils/bytes';
+import { requestDeltaPagination } from '../../models/ChangeModel';
 
 const router = new Router(RouteType.Api);
+
+const batchMaxSize = 1 * MB;
+
+export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
+	if (!ctx.joplin.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
+
+	const parsedBody = await formParse(ctx.req);
+	const bodyFields = parsedBody.fields;
+	const saveOptions: ItemSaveOption = {};
+
+	let items: SaveFromRawContentItem[] = [];
+
+	if (isBatch) {
+		let totalSize = 0;
+		items = bodyFields.items.map((item: any) => {
+			totalSize += item.name.length + (item.body ? item.body.length : 0);
+			return {
+				name: item.name,
+				body: item.body ? Buffer.from(item.body, 'utf8') : Buffer.alloc(0),
+			};
+		});
+
+		if (totalSize > batchMaxSize) throw new ErrorPayloadTooLarge(`Size of items (${formatBytes(totalSize)}) is over the limit (${formatBytes(batchMaxSize)})`);
+	} else {
+		const filePath = parsedBody?.files?.file ? parsedBody.files.file.filepath : null;
+
+		try {
+			const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);
+
+			// This end point can optionally set the associated jop_share_id field. It
+			// is only useful when uploading resource blob (under .resource folder)
+			// since they can't have metadata. Note, Folder and Resource items all
+			// include the "share_id" field property so it doesn't need to be set via
+			// query parameter.
+			if (ctx.query['share_id']) {
+				saveOptions.shareId = ctx.query['share_id'] as string;
+				await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
+			}
+
+			items = [
+				{
+					name: ctx.joplin.models.item().pathToName(path.id),
+					body: buffer,
+				},
+			];
+		} finally {
+			if (filePath) await safeRemove(filePath);
+		}
+	}
+
+	const output = await ctx.joplin.models.item().saveFromRawContent(ctx.joplin.owner, items, saveOptions);
+	for (const [name] of Object.entries(output)) {
+		if (output[name].item) output[name].item = ctx.joplin.models.item().toApiOutput(output[name].item) as Item;
+		if (output[name].error) output[name].error = errorToPlainObject(output[name].error);
+	}
+
+	return output;
+}
 
 // Note about access control:
 //
@@ -32,8 +92,8 @@ async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, m
 }
 
 router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
-	const item = await itemFromPath(ctx.owner.id, itemModel, path);
+	const itemModel = ctx.joplin.models.item();
+	const item = await itemFromPath(ctx.joplin.owner.id, itemModel, path);
 	return itemModel.toApiOutput(item);
 });
 
@@ -42,12 +102,12 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 		if (path.id === 'root' || path.id === 'root:/:') {
 			// We use this for testing only and for safety reasons it's probably
 			// best to disable it on production.
-			if (ctx.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
-			await ctx.models.item().deleteAll(ctx.owner.id);
+			if (ctx.joplin.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
+			await ctx.joplin.models.item().deleteAll(ctx.joplin.owner.id);
 		} else {
-			const item = await itemFromPath(ctx.owner.id, ctx.models.item(), path);
-			await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Delete, item);
-			await ctx.models.item().deleteForUser(ctx.owner.id, item);
+			const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
+			await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
+			await ctx.joplin.models.item().deleteForUser(ctx.joplin.owner.id, item);
 		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {
@@ -59,52 +119,28 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
-	const item = await itemFromPath(ctx.owner.id, itemModel, path);
+	const itemModel = ctx.joplin.models.item();
+	const item = await itemFromPath(ctx.joplin.owner.id, itemModel, path);
 	const serializedContent = await itemModel.serializedContent(item.id);
 	return respondWithItemContent(ctx.response, item, serializedContent);
 });
 
 router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
-	const name = itemModel.pathToName(path.id);
-	const parsedBody = await formParse(ctx.req);
-	const filePath = parsedBody?.files?.file ? parsedBody.files.file.path : null;
-
-	let outputItem: Item = null;
-
-	try {
-		const buffer = filePath ? await fs.readFile(filePath) : Buffer.alloc(0);
-		const saveOptions: ItemSaveOption = {};
-
-		// This end point can optionally set the associated jop_share_id field. It
-		// is only useful when uploading resource blob (under .resource folder)
-		// since they can't have metadata. Note, Folder and Resource items all
-		// include the "share_id" field property so it doesn't need to be set via
-		// query parameter.
-		if (ctx.query['share_id']) {
-			saveOptions.shareId = ctx.query['share_id'];
-			await itemModel.checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
-		}
-
-		const item = await itemModel.saveFromRawContent(ctx.owner, name, buffer, saveOptions);
-		outputItem = itemModel.toApiOutput(item) as Item;
-	} finally {
-		if (filePath) await safeRemove(filePath);
-	}
-
-	return outputItem;
+	const results = await putItemContents(path, ctx, false);
+	const result = results[Object.keys(results)[0]];
+	if (result.error) throw result.error;
+	return result.item;
 });
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
-	const changeModel = ctx.models.change();
-	return changeModel.delta(ctx.owner.id, requestDeltaPagination(ctx.query));
+	const changeModel = ctx.joplin.models.change();
+	return changeModel.delta(ctx.joplin.owner.id, requestDeltaPagination(ctx.query));
 });
 
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
+	const itemModel = ctx.joplin.models.item();
 	const parentName = itemModel.pathToName(path.id);
-	const result = await itemModel.children(ctx.owner.id, parentName, requestPagination(ctx.query));
+	const result = await itemModel.children(ctx.joplin.owner.id, parentName, requestPagination(ctx.query));
 	return result;
 });
 

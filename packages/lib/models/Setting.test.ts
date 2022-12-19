@@ -1,18 +1,34 @@
-import Setting, { SettingSectionSource } from '../models/Setting';
+import Setting, { SettingSectionSource, SettingStorage } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
-import * as fs from 'fs-extra';
+import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
 import Logger from '../Logger';
+import { defaultProfileConfig } from '../services/profileConfig/types';
+import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
+import initProfile from '../services/profileConfig/initProfile';
 
 async function loadSettingsFromFile(): Promise<any> {
-	return JSON.parse(await fs.readFile(Setting.settingFilePath, 'utf8'));
+	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
 }
 
-describe('models_Setting', function() {
+const switchToSubProfileSettings = async () => {
+	await Setting.reset();
+	const rootProfileDir = Setting.value('profileDir');
+	const profileConfigPath = `${rootProfileDir}/profiles.json`;
+	let profileConfig = defaultProfileConfig();
+	const { newConfig, newProfile } = createNewProfile(profileConfig, 'Sub-profile');
+	profileConfig = newConfig;
+	profileConfig.currentProfileId = newProfile.id;
+	await saveProfileConfig(profileConfigPath, profileConfig);
+	const { profileDir } = await initProfile(rootProfileDir);
+	await mkdirp(profileDir);
+	await Setting.load();
+};
 
-	beforeEach(async (done) => {
+describe('models/Setting', function() {
+
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should return only sub-values', (async () => {
@@ -28,6 +44,24 @@ describe('models_Setting', function() {
 		output = Setting.subValues('sync.4', settings);
 		expect('path' in output).toBe(false);
 		expect('username' in output).toBe(false);
+	}));
+
+	it('should not fail when trying to load a key that no longer exist from the setting file', (async () => {
+		// To handle the case where a setting value exists in the database but
+		// the metadata has been removed in a new Joplin version.
+		// https://github.com/laurent22/joplin/issues/5086
+
+		Setting.setValue('sync.target', 9); // Saved to file
+		await Setting.saveAll();
+
+		const settingValues = await Setting.fileHandler.load();
+		settingValues['itsgone'] = 'myvalue';
+		await Setting.fileHandler.save(settingValues);
+
+		await Setting.reset();
+
+		await expectNotThrow(async () => Setting.load());
+		await expectThrow(async () => Setting.value('itsgone'));
 	}));
 
 	it('should allow registering new settings dynamically', (async () => {
@@ -156,25 +190,25 @@ describe('models_Setting', function() {
 	}));
 
 	it('should not save to file if nothing has changed', (async () => {
-		Setting.setValue('sync.target', 9);
+		Setting.setValue('sync.mobileWifiOnly', true);
 		await Setting.saveAll();
 
 		{
 			// Double-check that timestamp is indeed changed when the content is
 			// changed.
-			const beforeStat = await fs.stat(Setting.settingFilePath);
+			const beforeStat = await stat(Setting.settingFilePath);
 			await msleep(1001);
-			Setting.setValue('sync.target', 8);
+			Setting.setValue('sync.mobileWifiOnly', false);
 			await Setting.saveAll();
-			const afterStat = await fs.stat(Setting.settingFilePath);
+			const afterStat = await stat(Setting.settingFilePath);
 			expect(afterStat.mtime.getTime()).toBeGreaterThan(beforeStat.mtime.getTime());
 		}
 
 		{
-			const beforeStat = await fs.stat(Setting.settingFilePath);
+			const beforeStat = await stat(Setting.settingFilePath);
 			await msleep(1001);
-			Setting.setValue('sync.target', 8);
-			const afterStat = await fs.stat(Setting.settingFilePath);
+			Setting.setValue('sync.mobileWifiOnly', false);
+			const afterStat = await stat(Setting.settingFilePath);
 			await Setting.saveAll();
 			expect(afterStat.mtime.getTime()).toBe(beforeStat.mtime.getTime());
 		}
@@ -182,7 +216,7 @@ describe('models_Setting', function() {
 
 	it('should handle invalid JSON', (async () => {
 		const badContent = '{ oopsIforgotTheQuotes: true}';
-		await fs.writeFile(Setting.settingFilePath, badContent, 'utf8');
+		await writeFile(Setting.settingFilePath, badContent, 'utf8');
 		await Setting.reset();
 
 		Logger.globalLogger.enabled = false;
@@ -190,12 +224,159 @@ describe('models_Setting', function() {
 		Logger.globalLogger.enabled = true;
 
 		// Invalid JSON file has been moved to .bak file
-		expect(await fs.pathExists(Setting.settingFilePath)).toBe(false);
+		expect(await pathExists(Setting.settingFilePath)).toBe(false);
 
-		const files = await fs.readdir(Setting.value('profileDir'));
+		const files = await readdir(Setting.value('profileDir'));
 		expect(files.length).toBe(1);
 		expect(files[0].endsWith('.bak')).toBe(true);
-		expect(await fs.readFile(`${Setting.value('profileDir')}/${files[0]}`, 'utf8')).toBe(badContent);
+		expect(await readFile(`${Setting.value('profileDir')}/${files[0]}`, 'utf8')).toBe(badContent);
 	}));
+
+	it('should allow applying default migrations', (async () => {
+		await Setting.reset();
+
+		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(7); // Changed
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
+	}));
+
+	it('should skip values that are already set', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('sync.target', 9);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(9); // Not changed
+	}));
+
+	it('should allow skipping default migrations', (async () => {
+		await Setting.reset();
+
+		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
+		Setting.skipDefaultMigrations();
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(0); // Not changed
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0); // Not changed
+	}));
+
+	it('should not apply migrations that have already been applied', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('lastSettingDefaultMigration', 0);
+		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(0); // Not changed
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
+	}));
+
+	it('should migrate to new setting', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('spellChecker.language', 'fr-FR');
+		Setting.applyUserSettingMigration();
+		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR']);
+	}));
+
+	it('should not override new setting, if it already set', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('spellChecker.languages', ['fr-FR', 'en-US']);
+		Setting.setValue('spellChecker.language', 'fr-FR');
+		Setting.applyUserSettingMigration();
+		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR', 'en-US']);
+	}));
+
+	it('should not set new setting, if old setting is not set', (async () => {
+		await Setting.reset();
+
+		expect(Setting.isSet('spellChecker.language')).toBe(false);
+		Setting.applyUserSettingMigration();
+		expect(Setting.isSet('spellChecker.languages')).toBe(false);
+	}));
+
+	it('should load sub-profile settings - 1', async () => {
+		await Setting.reset();
+
+		Setting.setValue('locale', 'fr_FR'); // Global setting
+		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
+		Setting.setValue('sync.target', 9); // Local setting
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+
+		expect(Setting.value('locale')).toBe('fr_FR'); // Should come from the root profile
+		expect(Setting.value('theme')).toBe(Setting.THEME_DARK); // Should come from the root profile
+		expect(Setting.value('sync.target')).toBe(0); // Should come from the local profile
+
+		// Also check that the special loadOne() function works as expected
+
+		expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
+		expect((await Setting.loadOne('theme')).value).toBe(Setting.THEME_DARK);
+		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
+	});
+
+	it('should save sub-profile settings - 2', async () => {
+		await Setting.reset();
+		Setting.setValue('locale', 'fr_FR'); // Global setting
+		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+
+		Setting.setValue('locale', 'en_GB'); // Should be saved to global
+		Setting.setValue('sync.target', 8); // Should be saved to local
+
+		await Setting.saveAll();
+		await Setting.reset();
+		await Setting.load();
+
+		expect(Setting.value('locale')).toBe('en_GB');
+		expect(Setting.value('theme')).toBe(Setting.THEME_DARK);
+		expect(Setting.value('sync.target')).toBe(8);
+
+		// Double-check that actual file content is correct
+
+		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		const localSettings = JSON.parse(await readFile(`${Setting.value('profileDir')}/settings-1.json`, 'utf8'));
+
+		expect(globalSettings).toEqual({
+			'$schema': 'https://joplinapp.org/schema/settings.json',
+			locale: 'en_GB',
+			theme: 2,
+		});
+
+		expect(localSettings).toEqual({
+			'$schema': 'https://joplinapp.org/schema/settings.json',
+			'sync.target': 8,
+		});
+	});
+
+	it('should not erase settings of parent profile', async () => {
+		// When a sub-profile settings are saved, we should ensure that the
+		// local settings of the root profiles are not lost.
+		// https://github.com/laurent22/joplin/issues/6459
+
+		await Setting.reset();
+
+		Setting.setValue('sync.target', 9); // Local setting (Root profile)
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+
+		Setting.setValue('sync.target', 2); // Local setting (Sub-profile)
+		await Setting.saveAll();
+
+		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		expect(globalSettings['sync.target']).toBe(9);
+	});
+
+	it('all global settings should be saved to file', async () => {
+		for (const [k, v] of Object.entries(Setting.metadata())) {
+			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
+		}
+	});
 
 });

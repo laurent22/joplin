@@ -1,3 +1,5 @@
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = new Entities().encode;
 const stringUtilsCommon = require('./string-utils-common.js');
 
 const defaultDiacriticsRemovalMap = [
@@ -109,7 +111,7 @@ function escapeFilename(s, maxLength = 32) {
 		output = output.replace(unsafe[i], '_');
 	}
 
-	if (output.toLowerCase() == 'nul') output = 'n_l'; // For Windows...
+	if (output.toLowerCase() === 'nul') output = 'n_l'; // For Windows...
 
 	return output.substr(0, maxLength);
 }
@@ -150,8 +152,8 @@ function splitCommandString(command, options = null) {
 	for (let i = 0; i < command.length; i++) {
 		const c = command[i];
 
-		if (state == 'quotes') {
-			if (c != quote) {
+		if (state === 'quotes') {
+			if (c !== quote) {
 				current += c;
 			} else {
 				args.push(current);
@@ -167,19 +169,19 @@ function splitCommandString(command, options = null) {
 			continue;
 		}
 
-		if (c == '\\' && options.handleEscape) {
+		if (c === '\\' && options.handleEscape) {
 			escapeNext = true;
 			continue;
 		}
 
-		if (c == '"' || c == '\'') {
+		if (c === '"' || c === '\'') {
 			state = 'quotes';
 			quote = c;
 			continue;
 		}
 
-		if (state == 'arg') {
-			if (c == ' ' || c == '\t') {
+		if (state === 'arg') {
+			if (c === ' ' || c === '\t') {
 				args.push(current);
 				current = '';
 				state = 'start';
@@ -189,17 +191,17 @@ function splitCommandString(command, options = null) {
 			continue;
 		}
 
-		if (c != ' ' && c != '\t') {
+		if (c !== ' ' && c !== '\t') {
 			state = 'arg';
 			current += c;
 		}
 	}
 
-	if (state == 'quotes') {
+	if (state === 'quotes') {
 		throw new Error(`Unclosed quote in command line: ${command}`);
 	}
 
-	if (current != '') {
+	if (current !== '') {
 		args.push(current);
 	}
 
@@ -208,6 +210,59 @@ function splitCommandString(command, options = null) {
 	}
 
 	return args;
+}
+
+function splitCommandBatch(commandBatch) {
+	const commandLines = [];
+	const eol = '\n';
+
+	let state = 'command';
+	let current = '';
+	let quote = '';
+	for (let i = 0; i < commandBatch.length; i++) {
+		const c = commandBatch[i];
+
+		if (state === 'command') {
+			if (c === eol) {
+				commandLines.push(current);
+				current = '';
+			} else if (c === '"' || c === '\'') {
+				quote = c;
+				current += c;
+				state = 'quoted';
+			} else if (c === '\\') {
+				current += c;
+				if (i + 1 < commandBatch.length) {
+					current += commandBatch[i + 1];
+					i++;
+				}
+			} else {
+				current += c;
+			}
+		} else if (state === 'quoted') {
+			if (c === quote) {
+				quote = '';
+				current += c;
+				state = 'command';
+			} else if (c === '\\') {
+				current += c;
+				if (i + 1 < commandBatch.length) {
+					current += commandBatch[i + 1];
+					i++;
+				}
+			} else {
+				current += c;
+			}
+		}
+	}
+	if (current.length > 0) {
+		commandLines.push(current);
+	}
+	if (commandLines.length === 0) {
+		commandLines.push('');
+	}
+
+	return commandLines;
 }
 
 function padLeft(string, length, padString) {
@@ -241,16 +296,25 @@ function escapeHtml(s) {
 // keywords can either be a list of strings, or a list of objects with the format:
 // { value: 'actualkeyword', type: 'regex/string' }
 // The function surrounds the keywords wherever they are, even within other words.
-function surroundKeywords(keywords, text, prefix, suffix) {
+function surroundKeywords(keywords, text, prefix, suffix, options = null) {
+	options = Object.assign({}, {
+		escapeHtml: false,
+	}, options);
+
 	if (!keywords.length) return text;
+
+	function escapeHtml(s) {
+		if (!options.escapeHtml) return s;
+		return htmlentities(s);
+	}
 
 	let regexString = keywords
 		.map(k => {
 			if (k.type === 'regex') {
-				return stringUtilsCommon.replaceRegexDiacritics(k.valueRegex);
+				return escapeHtml(stringUtilsCommon.replaceRegexDiacritics(k.valueRegex));
 			} else {
 				const value = typeof k === 'string' ? k : k.value;
-				return stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(value));
+				return escapeHtml(stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(value)));
 			}
 		})
 		.join('|');
@@ -307,4 +371,4 @@ function scriptType(s) {
 	return 'en';
 }
 
-module.exports = Object.assign({ formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);
+module.exports = Object.assign({ formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, splitCommandBatch, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);

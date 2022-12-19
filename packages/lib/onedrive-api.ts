@@ -89,6 +89,7 @@ export default class OneDriveApi {
 			scope: 'files.readwrite offline_access sites.readwrite.all',
 			response_type: 'code',
 			redirect_uri: redirectUri,
+			prompt: 'login',
 		};
 		return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${stringify(query)}`;
 	}
@@ -235,11 +236,11 @@ export default class OneDriveApi {
 		if (!options.headers) options.headers = {};
 		if (!options.target) options.target = 'string';
 
-		if (method != 'GET') {
+		if (method !== 'GET') {
 			options.method = method;
 		}
 
-		if (method == 'PATCH' || method == 'POST') {
+		if (method === 'PATCH' || method === 'POST') {
 			options.headers['Content-Type'] = 'application/json';
 			if (data) data = JSON.stringify(data);
 		}
@@ -265,20 +266,22 @@ export default class OneDriveApi {
 
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = `bearer ${this.token()}`;
+			options.headers['User-Agent'] = `ISV|Joplin|Joplin/${shim.appVersion()}`;
 
-			const handleRequestRepeat = async (error: any) => {
+			const handleRequestRepeat = async (error: any, sleepSeconds: number = null) => {
+				sleepSeconds ??= (i + 1) * 5;
 				logger.info(`Got error below - retrying (${i})...`);
 				logger.info(error);
-				await time.sleep((i + 1) * 5);
+				await time.sleep(sleepSeconds);
 			};
 
 			let response = null;
 			try {
 				if (path.includes('/createUploadSession')) {
 					response = await this.uploadBigFile(url, options);
-				} else if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+				} else if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
 					response = await shim.uploadBlob(url, options);
-				} else if (options.target == 'string') {
+				} else if (options.target === 'string') {
 					response = await shim.fetch(url, options);
 				} else {
 					// file
@@ -308,11 +311,11 @@ export default class OneDriveApi {
 
 				const error = this.oneDriveErrorResponseToError(errorResponse);
 
-				if (error.code == 'InvalidAuthenticationToken' || error.code == 'unauthenticated') {
+				if (error.code === 'InvalidAuthenticationToken' || error.code === 'unauthenticated') {
 					logger.info('Token expired: refreshing...');
 					await this.refreshAccessToken();
 					continue;
-				} else if (error && ((error.error && error.error.code == 'generalException') || error.code == 'generalException' || error.code == 'EAGAIN')) {
+				} else if (error && ((error.error && error.error.code === 'generalException') || error.code === 'generalException' || error.code === 'EAGAIN')) {
 					// Rare error (one Google hit) - I guess the request can be repeated
 					// { error:
 					//    { code: 'generalException',
@@ -339,7 +342,16 @@ export default class OneDriveApi {
 
 					await handleRequestRepeat(error);
 					continue;
-				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
+				} else if (error?.code === 'activityLimitReached' && response?.headers?._headers['retry-after'][0] && !isNaN(Number(response?.headers?._headers['retry-after'][0]))) {
+					// Wait for OneDrive throttling
+					// Relavent Microsoft Docs: https://docs.microsoft.com/en-us/sharepoint/dev/general-development/how-to-avoid-getting-throttled-or-blocked-in-sharepoint-online#best-practices-to-handle-throttling
+					// Decrement retry count as multiple sync threads will cause repeated throttling errors - this will wait until throttling is resolved to continue, preventing a hard stop on the sync
+					i--;
+					const sleepSeconds = response.headers._headers['retry-after'][0];
+					logger.info(`OneDrive Throttle, sync thread sleeping for ${sleepSeconds} seconds...`);
+					await handleRequestRepeat(error, Number(sleepSeconds));
+					continue;
+				} else if (error.code === 'itemNotFound' && method === 'DELETE') {
 					// Deleting a non-existing item is ok - noop
 					return;
 				} else {

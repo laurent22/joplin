@@ -41,7 +41,7 @@ const calculateScore = (searchString, notes) => {
 	};
 
 	let titleBM25WeightedByLastUpdate = new Array(notes.length).fill(-1);
-	if (avgTokens != 0) {
+	if (avgTokens !== 0) {
 		for (let i = 0; i < notes.length; i++) {
 			titleBM25WeightedByLastUpdate[i] = IDF(notes.length, notesWithWord) * ((freqTitle[i] * (K1 + 1)) / (freqTitle[i] + K1 * (1 - B + B * (numTokens[i] / avgTokens))));
 			titleBM25WeightedByLastUpdate[i] += weightForDaysSinceLastUpdate(notes[i]);
@@ -59,14 +59,12 @@ const calculateScore = (searchString, notes) => {
 
 describe('services_SearchEngine', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
 		engine = new SearchEngine();
 		engine.setDb(db());
-
-		done();
 	});
 
 	it('should keep the content and FTS table in sync', (async () => {
@@ -386,6 +384,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('测试')).length).toBe(1);
 		expect((await engine.search('测试'))[0].fields).toEqual(['body']);
 		expect((await engine.search('测试*'))[0].fields).toEqual(['body']);
+		expect((await engine.search('any:1 type:todo 测试')).length).toBe(1);
 	}));
 
 	it('should support queries with Japanese characters', (async () => {
@@ -398,7 +397,7 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('できません')).length).toBe(1);
 		expect((await engine.search('できません*'))[0].fields.sort()).toEqual(['body', 'title']); // usually assume that keyword was matched in body
 		expect((await engine.search('テスト'))[0].fields.sort()).toEqual(['body']);
-
+		expect((await engine.search('any:1 type:todo テスト')).length).toBe(1);
 	}));
 
 	it('should support queries with Korean characters', (async () => {
@@ -409,6 +408,7 @@ describe('services_SearchEngine', function() {
 
 		expect((await engine.search('이것은')).length).toBe(1);
 		expect((await engine.search('말')).length).toBe(1);
+		expect((await engine.search('any:1 type:todo 말')).length).toBe(1);
 	}));
 
 	it('should support queries with Thai characters', (async () => {
@@ -419,28 +419,7 @@ describe('services_SearchEngine', function() {
 
 		expect((await engine.search('นี่คือค')).length).toBe(1);
 		expect((await engine.search('ไทย')).length).toBe(1);
-	}));
-
-	it('should support field restricted queries with Chinese characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '你好', body: '我是法国人' });
-
-		await engine.syncTables();
-
-		expect((await engine.search('title:你好*')).length).toBe(1);
-		expect((await engine.search('title:你好*'))[0].fields).toEqual(['title']);
-		expect((await engine.search('body:法国人')).length).toBe(1);
-		expect((await engine.search('body:法国人'))[0].fields).toEqual(['body']);
-		expect((await engine.search('body:你好')).length).toBe(0);
-		expect((await engine.search('title:你好 body:法国人')).length).toBe(1);
-		expect((await engine.search('title:你好 body:法国人'))[0].fields.sort()).toEqual(['body', 'title']);
-		expect((await engine.search('title:你好 body:bla')).length).toBe(0);
-		expect((await engine.search('title:你好 我是')).length).toBe(1);
-		expect((await engine.search('title:你好 我是'))[0].fields.sort()).toEqual(['body', 'title']);
-		expect((await engine.search('title:bla 我是')).length).toBe(0);
-
-		// For non-alpha char, only the first field is looked at, the following ones are ignored
-		// expect((await engine.search('title:你好 title:hello')).length).toBe(1);
+		expect((await engine.search('any:1 type:todo ไทย')).length).toBe(1);
 	}));
 
 	it('should parse normal query strings', (async () => {

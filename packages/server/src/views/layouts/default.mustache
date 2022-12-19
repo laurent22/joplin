@@ -1,13 +1,16 @@
 <!doctype html>
 <html>
 <head>
+	<title>{{pageTitle}}</title>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma.min.css" crossorigin="anonymous">
 	{{#global.prefersDarkEnabled}}
-		<link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma-prefers-dark.min.css" crossorigin="anonymous">
+		<!-- <link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma-prefers-dark.min.css" crossorigin="anonymous"> -->
 	{{/global.prefersDarkEnabled}}
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/main.css" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/fontawesome/css/all.min.css" crossorigin="anonymous">
+	<script src="{{{global.baseUrl}}}/js/jquery.min.js"></script>
 	<script src="{{{global.baseUrl}}}/js/main.js"></script>
 	{{#cssFiles}}
 		<link rel="stylesheet" href="{{{.}}}" crossorigin="anonymous">
@@ -16,11 +19,33 @@
 		<script src="{{{.}}}"></script>
 	{{/jsFiles}}
 </head>
-	<body class="page-{{{pageName}}}">
+	<body class="page-{{{pageName}}} {{#global.isAdminPage}}is-admin-page{{/global.isAdminPage}}">
 		{{> navbar}}
 		<main class="main">
-			{{> notifications}}
-			{{{contentHtml}}}
+			<div class="container main-container">
+				{{> notifications}}
+
+				{{! ADMIN PAGE }}
+
+				{{#global.isAdminPage}}
+					{{> adminLayout}}
+				{{/global.isAdminPage}}
+
+				{{! USER PAGE - WITH SIDEBAR }}
+
+				{{^sidebarMenu}}
+					{{^global.isAdminPage}}
+						{{{contentHtml}}}
+					{{/global.isAdminPage}}
+				{{/sidebarMenu}}
+
+				{{! USER PAGE - NO SIDEBAR }}
+
+				{{#sidebarMenu}}
+					{{> sidebarLayout}}
+				{{/sidebarMenu}}
+			</div>
 		</main>
+		{{> footer}}
 	</body>
 </html>

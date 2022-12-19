@@ -6,7 +6,11 @@ import { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
-const ArrayUtils = require('../ArrayUtils.js');
+import ItemChange from './ItemChange';
+import Resource from './Resource';
+import { ResourceEntity } from '../services/database/types';
+import { toForwardSlashes } from '../path-utils';
+import * as ArrayUtils from '../ArrayUtils';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -14,11 +18,10 @@ async function allItems() {
 	return folders.concat(notes);
 }
 
-describe('models_Note', function() {
-	beforeEach(async (done) => {
+describe('models/Note', function() {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should find resource and note IDs', (async () => {
@@ -57,8 +60,8 @@ describe('models_Note', function() {
 			const t = testCases[i];
 
 			const input = t[0] as string;
-			const expected = t[1];
-			const actual = Note.linkedItemIds(input);
+			const expected = t[1] as string[];
+			const actual = Note.linkedItemIds(input) as string[];
 			const contentEquals = ArrayUtils.contentEquals(actual, expected);
 
 			// console.info(contentEquals, input, expected, actual);
@@ -140,6 +143,27 @@ describe('models_Note', function() {
 		expect(duplicatedNoteTags.find(o => o.id === tag1.id)).toBeDefined();
 		expect(duplicatedNoteTags.find(o => o.id === tag2.id)).toBeDefined();
 		expect(duplicatedNoteTags.length).toBe(2);
+	}));
+
+	it('should also duplicate resources when duplicating a note', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		const resource = (await Resource.all())[0];
+		expect((await Resource.all()).length).toBe(1);
+
+		const duplicatedNote = await Note.duplicate(note.id, { duplicateResources: true });
+
+		const resources: ResourceEntity[] = await Resource.all();
+		expect(resources.length).toBe(2);
+
+		const duplicatedResource = resources.find(r => r.id !== resource.id);
+
+		note = await Note.load(note.id);
+
+		expect(note.body).toContain(resource.id);
+		expect(duplicatedNote.body).toContain(duplicatedResource.id);
 	}));
 
 	it('should delete a set of notes', (async () => {
@@ -235,7 +259,8 @@ describe('models_Note', function() {
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;
 
-		const resourceDirE = markdownUtils.escapeLinkUrl(resourceDir);
+		const resourceDirE = markdownUtils.escapeLinkUrl(toForwardSlashes(resourceDir));
+		const fileProtocol = `file://${process.platform === 'win32' ? '/' : ''}`;
 
 		const testCases = [
 			[
@@ -261,17 +286,17 @@ describe('models_Note', function() {
 			[
 				true,
 				`![](:/${r1.id})`,
-				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1})`,
+				`![](${fileProtocol}${resourceDirE}/${r1.id}.jpg?t=${t1})`,
 			],
 			[
 				true,
 				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
-				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r2.id}.jpg?t=${t2})`,
+				`![](${fileProtocol}${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](${fileProtocol}${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](${fileProtocol}${resourceDirE}/${r2.id}.jpg?t=${t2})`,
 			],
 			[
 				true,
 				`![](:/${r3.id})`,
-				`![](file://${resourceDirE}/${r3.id}.pdf)`,
+				`![](${fileProtocol}${resourceDirE}/${r3.id}.pdf)`,
 			],
 		];
 
@@ -284,8 +309,20 @@ describe('models_Note', function() {
 			expect(externalToInternal).toBe(input);
 		}
 
-		const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
-		expect(result).toBe(`[](:/${note1.id})`);
+		{
+			const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
+			expect(result).toBe(`[](:/${note1.id})`);
+		}
+
+		{
+			// This is a regular file path that contains the resourceDirName
+			// inside but it shouldn't be changed.
+			//
+			// https://github.com/laurent22/joplin/issues/5034
+			const noChangeInput = `[docs](file:///c:/foo/${resourceDirName}/docs)`;
+			const result = await Note.replaceResourceExternalToInternalLinks(noChangeInput, { useAbsolutePaths: false });
+			expect(result).toBe(noChangeInput);
+		}
 	}));
 
 	it('should perform natural sorting', (async () => {
@@ -332,4 +369,78 @@ describe('models_Note', function() {
 		expect(sortedNotes3[4].id).toBe(note2.id);
 	}));
 
+	it('should create a conflict note', async () => {
+		const folder = await Folder.save({ title: 'Source Folder' });
+		const origNote = await Note.save({ title: 'note', parent_id: folder.id });
+		const conflictedNote = await Note.createConflictNote(origNote, ItemChange.SOURCE_SYNC);
+
+		expect(conflictedNote.is_conflict).toBe(1);
+		expect(conflictedNote.conflict_original_id).toBe(origNote.id);
+		expect(conflictedNote.parent_id).toBe(folder.id);
+	});
+
+	it('should copy conflicted note to target folder and cancel conflict', (async () => {
+		const srcfolder = await Folder.save({ title: 'Source Folder' });
+		const targetfolder = await Folder.save({ title: 'Target Folder' });
+
+		const note1 = await Note.save({ title: 'note', parent_id: srcfolder.id });
+		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
+
+		const note2 = await Note.copyToFolder(conflictedNote.id, targetfolder.id);
+
+		expect(note2.id === conflictedNote.id).toBe(false);
+		expect(note2.title).toBe(conflictedNote.title);
+		expect(note2.is_conflict).toBe(0);
+		expect(note2.conflict_original_id).toBe('');
+		expect(note2.parent_id).toBe(targetfolder.id);
+	}));
+
+	it('should move conflicted note to target folder and cancel conflict', (async () => {
+		const srcFolder = await Folder.save({ title: 'Source Folder' });
+		const targetFolder = await Folder.save({ title: 'Target Folder' });
+		const note1 = await Note.save({ title: 'note', parent_id: srcFolder.id });
+
+		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
+
+		const movedNote = await Note.moveToFolder(conflictedNote.id, targetFolder.id);
+
+		expect(movedNote.parent_id).toBe(targetFolder.id);
+		expect(movedNote.is_conflict).toBe(0);
+		expect(movedNote.conflict_original_id).toBe('');
+	}));
+
+});
+
+describe('models/Note_replacePaths', function() {
+
+	function testResourceReplacment(body: string, pathsToTry: string[], expected: string) {
+		expect(Note['replaceResourceExternalToInternalLinks_'](pathsToTry, body)).toBe(expected);
+	}
+	test('Basic replacement', () => {
+		const body = '![image.png](file:///C:Users/Username/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/Username/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+
+	test('Replacement with spaces', () => {
+		const body = '![image.png](file:///C:Users/Username%20with%20spaces/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/Username with spaces/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+
+	test('Replacement with Non-ASCII', () => {
+		const body = '![image.png](file:///C:Users/UsernameWith%C3%A9%C3%A0%C3%B6/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/UsernameWithéàö/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
+
+	test('Replacement with Non-ASCII and spaces', () => {
+		const body = '![image.png](file:///C:Users/Username%20With%20%C3%A9%C3%A0%C3%B6/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';
+		const pathsToTry = ['file:///C:Users/Username With éàö/resources'];
+		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
+		testResourceReplacment(body, pathsToTry, expected);
+	});
 });

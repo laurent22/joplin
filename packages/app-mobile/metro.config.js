@@ -21,7 +21,7 @@ module.exports = {
 		getTransformOptions: async () => ({
 			transform: {
 				experimentalImportSupport: false,
-				inlineRequires: false,
+				inlineRequires: true,
 			},
 		}),
 	},
@@ -43,6 +43,8 @@ module.exports = {
 				'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
 				'@joplin/tools': path.resolve(__dirname, '../tools/'),
 				'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
+				'@joplin/fork-uslug': path.resolve(__dirname, '../fork-uslug/'),
+				'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
 			},
 			{
 				get: (target, name) => {
@@ -60,5 +62,7 @@ module.exports = {
 		path.resolve(__dirname, '../renderer'),
 		path.resolve(__dirname, '../tools'),
 		path.resolve(__dirname, '../fork-htmlparser2'),
+		path.resolve(__dirname, '../fork-uslug'),
+		path.resolve(__dirname, '../react-native-saf-x'),
 	],
 };

@@ -1,11 +1,13 @@
 import MdToHtml from './MdToHtml';
 import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
+import { Options as NoteStyleOptions } from './noteStyle';
 const MarkdownIt = require('markdown-it');
 
 export enum MarkupLanguage {
 	Markdown = 1,
 	Html = 2,
+	Any = 3,
 }
 
 export interface RenderResultPluginAsset {
@@ -24,7 +26,7 @@ export interface RenderResultPluginAsset {
 export interface RenderResult {
 	html: string;
 	pluginAssets: RenderResultPluginAsset[];
-	cssStrings?: string[];
+	cssStrings: string[];
 }
 
 export interface OptionsResourceModel {
@@ -48,7 +50,7 @@ export default class MarkupToHtml {
 	private options_: Options;
 	private rawMarkdownIt_: any;
 
-	public constructor(options: Options) {
+	public constructor(options: Options = null) {
 		this.options_ = {
 			ResourceModel: {
 				isResourceUrl: () => false,
@@ -119,7 +121,7 @@ export default class MarkupToHtml {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 
-	public async allAssets(markupLanguage: MarkupLanguage, theme: any) {
-		return this.renderer(markupLanguage).allAssets(theme);
+	public async allAssets(markupLanguage: MarkupLanguage, theme: any, noteStyleOptions: NoteStyleOptions = null) {
+		return this.renderer(markupLanguage).allAssets(theme, noteStyleOptions);
 	}
 }

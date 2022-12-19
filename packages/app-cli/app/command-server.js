@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const { _ } = require('@joplin/lib/locale');
 const Setting = require('@joplin/lib/models/Setting').default;
 const Logger = require('@joplin/lib/Logger').default;
@@ -17,7 +17,7 @@ class Command extends BaseCommand {
 	async action(args) {
 		const command = args.command;
 
-		const ClipperServer = require('@joplin/lib/ClipperServer');
+		const ClipperServer = require('@joplin/lib/ClipperServer').default;
 		ClipperServer.instance().initialize();
 		const stdoutFn = (...s) => this.stdout(s.join(' '));
 		const clipperLogger = new Logger();

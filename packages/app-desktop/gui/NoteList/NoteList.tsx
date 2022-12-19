@@ -1,4 +1,6 @@
-import { AppState } from '../../app';
+import * as React from 'react';
+import { useMemo, useEffect, useState, useRef, useCallback } from 'react';
+import { AppState } from '../../app.reducer';
 import eventManager from '@joplin/lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
 import { _ } from '@joplin/lib/locale';
@@ -11,12 +13,12 @@ import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
-const React = require('react');
-
 const { ItemList } = require('../ItemList.min.js');
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import { Props } from './types';
+import usePrevious from '../hooks/usePrevious';
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -29,50 +31,48 @@ const StyledRoot = styled.div`
 	border-right: 1px solid ${(props: any) => props.theme.dividerColor};
 `;
 
-class NoteListComponent extends React.Component {
-	constructor() {
-		super();
+const itemAnchorRefs_: any = {
+	current: {},
+};
 
-		CommandService.instance().componentRegisterCommands(this, commands);
+export const itemAnchorRef = (itemId: string) => {
+	if (itemAnchorRefs_.current[itemId] && itemAnchorRefs_.current[itemId].current) return itemAnchorRefs_.current[itemId].current;
+	return null;
+};
 
-		this.itemHeight = 34;
+const NoteListComponent = (props: Props) => {
+	const [dragOverTargetNoteIndex, setDragOverTargetNoteIndex] = useState(null);
+	const [width, setWidth] = useState(0);
+	const [, setHeight] = useState(0);
 
-		this.state = {
-			dragOverTargetNoteIndex: null,
-			width: 0,
-			height: 0,
+	useEffect(() => {
+		itemAnchorRefs_.current = {};
+		CommandService.instance().registerCommands(commands);
+
+		return () => {
+			itemAnchorRefs_.current = {};
+			CommandService.instance().unregisterCommands(commands);
 		};
+	}, []);
 
-		this.noteListRef = React.createRef();
-		this.itemListRef = React.createRef();
-		this.itemAnchorRefs_ = {};
+	const [itemHeight, setItemHeight] = useState(34);
 
-		this.renderItem = this.renderItem.bind(this);
-		this.onKeyDown = this.onKeyDown.bind(this);
-		this.noteItem_titleClick = this.noteItem_titleClick.bind(this);
-		this.noteItem_noteDragOver = this.noteItem_noteDragOver.bind(this);
-		this.noteItem_noteDrop = this.noteItem_noteDrop.bind(this);
-		this.noteItem_checkboxClick = this.noteItem_checkboxClick.bind(this);
-		this.noteItem_dragStart = this.noteItem_dragStart.bind(this);
-		this.onGlobalDrop_ = this.onGlobalDrop_.bind(this);
-		this.registerGlobalDragEndEvent_ = this.registerGlobalDragEndEvent_.bind(this);
-		this.unregisterGlobalDragEndEvent_ = this.unregisterGlobalDragEndEvent_.bind(this);
-		this.itemContextMenu = this.itemContextMenu.bind(this);
-		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
-	}
+	const focusItemIID_ = useRef<any>(null);
+	const noteListRef = useRef(null);
+	const itemListRef = useRef(null);
 
-	style() {
-		if (this.styleCache_ && this.styleCache_[this.props.themeId]) return this.styleCache_[this.props.themeId];
+	let globalDragEndEventRegistered_ = false;
 
-		const theme = themeStyle(this.props.themeId);
+	const style = useMemo(() => {
+		const theme = themeStyle(props.themeId);
 
-		const style = {
+		return {
 			root: {
 				backgroundColor: theme.backgroundColor,
 			},
 			listItem: {
 				maxWidth: '100%',
-				height: this.itemHeight,
+				height: itemHeight,
 				boxSizing: 'border-box',
 				display: 'flex',
 				alignItems: 'stretch',
@@ -99,76 +99,71 @@ class NoteListComponent extends React.Component {
 				textDecoration: 'line-through',
 			},
 		};
+	}, [props.themeId, itemHeight]);
 
-		this.styleCache_ = {};
-		this.styleCache_[this.props.themeId] = style;
-
-		return style;
-	}
-
-	itemContextMenu(event: any) {
+	const itemContextMenu = useCallback((event: any) => {
 		const currentItemId = event.currentTarget.getAttribute('data-id');
 		if (!currentItemId) return;
 
 		let noteIds = [];
-		if (this.props.selectedNoteIds.indexOf(currentItemId) < 0) {
+		if (props.selectedNoteIds.indexOf(currentItemId) < 0) {
 			noteIds = [currentItemId];
 		} else {
-			noteIds = this.props.selectedNoteIds;
+			noteIds = props.selectedNoteIds;
 		}
 
 		if (!noteIds.length) return;
 
 		const menu = NoteListUtils.makeContextMenu(noteIds, {
-			notes: this.props.notes,
-			dispatch: this.props.dispatch,
-			watchedNoteFiles: this.props.watchedNoteFiles,
-			plugins: this.props.plugins,
-			inConflictFolder: this.props.selectedFolderId === Folder.conflictFolderId(),
-			customCss: this.props.customCss,
+			notes: props.notes,
+			dispatch: props.dispatch,
+			watchedNoteFiles: props.watchedNoteFiles,
+			plugins: props.plugins,
+			inConflictFolder: props.selectedFolderId === Folder.conflictFolderId(),
+			customCss: props.customCss,
 		});
 
 		menu.popup(bridge().window());
-	}
+	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles,props.plugins, props.selectedFolderId, props.customCss]);
 
-	onGlobalDrop_() {
-		this.unregisterGlobalDragEndEvent_();
-		this.setState({ dragOverTargetNoteIndex: null });
-	}
+	const onGlobalDrop_ = () => {
+		unregisterGlobalDragEndEvent_();
+		setDragOverTargetNoteIndex(null);
+	};
 
-	registerGlobalDragEndEvent_() {
-		if (this.globalDragEndEventRegistered_) return;
-		this.globalDragEndEventRegistered_ = true;
-		document.addEventListener('dragend', this.onGlobalDrop_);
-	}
+	const registerGlobalDragEndEvent_ = () => {
+		if (globalDragEndEventRegistered_) return;
+		globalDragEndEventRegistered_ = true;
+		document.addEventListener('dragend', onGlobalDrop_);
+	};
 
-	unregisterGlobalDragEndEvent_() {
-		this.globalDragEndEventRegistered_ = false;
-		document.removeEventListener('dragend', this.onGlobalDrop_);
-	}
+	const unregisterGlobalDragEndEvent_ = () => {
+		globalDragEndEventRegistered_ = false;
+		document.removeEventListener('dragend', onGlobalDrop_);
+	};
 
-	dragTargetNoteIndex_(event: any) {
-		return Math.abs(Math.round((event.clientY - this.itemListRef.current.offsetTop() + this.itemListRef.current.offsetScroll()) / this.itemHeight));
-	}
+	const dragTargetNoteIndex_ = (event: any) => {
+		return Math.abs(Math.round((event.clientY - itemListRef.current.offsetTop() + itemListRef.current.offsetScroll()) / itemHeight));
+	};
 
-	noteItem_noteDragOver(event: any) {
-		if (this.props.notesParentType !== 'Folder') return;
+	const noteItem_noteDragOver = (event: any) => {
+		if (props.notesParentType !== 'Folder') return;
 
 		const dt = event.dataTransfer;
 
 		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 			event.preventDefault();
-			const newIndex = this.dragTargetNoteIndex_(event);
-			if (this.state.dragOverTargetNoteIndex === newIndex) return;
-			this.registerGlobalDragEndEvent_();
-			this.setState({ dragOverTargetNoteIndex: newIndex });
+			const newIndex = dragTargetNoteIndex_(event);
+			if (dragOverTargetNoteIndex === newIndex) return;
+			registerGlobalDragEndEvent_();
+			setDragOverTargetNoteIndex(newIndex);
 		}
-	}
+	};
 
-	async noteItem_noteDrop(event: any) {
-		if (this.props.notesParentType !== 'Folder') return;
+	const noteItem_noteDrop = async (event: any) => {
+		if (props.notesParentType !== 'Folder') return;
 
-		if (this.props.noteSortOrder !== 'order') {
+		if (props.noteSortOrder !== 'order') {
 			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
 				buttons: [_('Do it now'), _('Cancel')],
 			});
@@ -181,17 +176,17 @@ class NoteListComponent extends React.Component {
 		// TODO: check that parent type is folder
 
 		const dt = event.dataTransfer;
-		this.unregisterGlobalDragEndEvent_();
-		this.setState({ dragOverTargetNoteIndex: null });
+		unregisterGlobalDragEndEvent_();
+		setDragOverTargetNoteIndex(null);
 
-		const targetNoteIndex = this.dragTargetNoteIndex_(event);
+		const targetNoteIndex = dragTargetNoteIndex_(event);
 		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
-		void Note.insertNotesAt(this.props.selectedFolderId, noteIds, targetNoteIndex);
-	}
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+	};
 
 
-	async noteItem_checkboxClick(event: any, item: any) {
+	const noteItem_checkboxClick = async (event: any, item: any) => {
 		const checked = event.target.checked;
 		const newNote = {
 			id: item.id,
@@ -199,37 +194,37 @@ class NoteListComponent extends React.Component {
 		};
 		await Note.save(newNote, { userSideValidation: true });
 		eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
-	}
+	};
 
-	async noteItem_titleClick(event: any, item: any) {
+	const noteItem_titleClick = async (event: any, item: any) => {
 		if (event.ctrlKey || event.metaKey) {
 			event.preventDefault();
-			this.props.dispatch({
+			props.dispatch({
 				type: 'NOTE_SELECT_TOGGLE',
 				id: item.id,
 			});
 		} else if (event.shiftKey) {
 			event.preventDefault();
-			this.props.dispatch({
+			props.dispatch({
 				type: 'NOTE_SELECT_EXTEND',
 				id: item.id,
 			});
 		} else {
-			this.props.dispatch({
+			props.dispatch({
 				type: 'NOTE_SELECT',
 				id: item.id,
 			});
 		}
-	}
+	};
 
-	noteItem_dragStart(event: any) {
+	const noteItem_dragStart = (event: any) => {
 		let noteIds = [];
 
 		// Here there is two cases:
 		// - If multiple notes are selected, we drag the group
 		// - If only one note is selected, we drag the note that was clicked on (which might be different from the currently selected note)
-		if (this.props.selectedNoteIds.length >= 2) {
-			noteIds = this.props.selectedNoteIds;
+		if (props.selectedNoteIds.length >= 2) {
+			noteIds = props.selectedNoteIds;
 		} else {
 			const clickedNoteId = event.currentTarget.getAttribute('data-id');
 			if (clickedNoteId) noteIds.push(clickedNoteId);
@@ -240,61 +235,67 @@ class NoteListComponent extends React.Component {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
-	}
+	};
 
-	renderItem(item: any, index: number) {
+	const renderItem = useCallback((item: any, index: number) => {
 		const highlightedWords = () => {
-			if (this.props.notesParentType === 'Search') {
-				const query = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
+			if (props.notesParentType === 'Search') {
+				const query = BaseModel.byId(props.searches, props.selectedSearchId);
 				if (query) {
-					return this.props.highlightedWords;
+					return props.highlightedWords;
 				}
 			}
 			return [];
 		};
 
-		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
-		const ref = this.itemAnchorRefs_[item.id];
+		if (!itemAnchorRefs_.current[item.id]) itemAnchorRefs_.current[item.id] = React.createRef();
+		const ref = itemAnchorRefs_.current[item.id];
 
 		return <NoteListItem
 			ref={ref}
 			key={item.id}
-			style={this.style()}
+			style={style}
 			item={item}
 			index={index}
-			themeId={this.props.themeId}
-			width={this.state.width}
-			height={this.itemHeight}
-			dragItemIndex={this.state.dragOverTargetNoteIndex}
+			themeId={props.themeId}
+			width={width}
+			height={itemHeight}
+			dragItemIndex={dragOverTargetNoteIndex}
 			highlightedWords={highlightedWords()}
-			isProvisional={this.props.provisionalNoteIds.includes(item.id)}
-			isSelected={this.props.selectedNoteIds.indexOf(item.id) >= 0}
-			isWatched={this.props.watchedNoteFiles.indexOf(item.id) < 0}
-			itemCount={this.props.notes.length}
-			onCheckboxClick={this.noteItem_checkboxClick}
-			onDragStart={this.noteItem_dragStart}
-			onNoteDragOver={this.noteItem_noteDragOver}
-			onNoteDrop={this.noteItem_noteDrop}
-			onTitleClick={this.noteItem_titleClick}
-			onContextMenu={this.itemContextMenu}
+			isProvisional={props.provisionalNoteIds.includes(item.id)}
+			isSelected={props.selectedNoteIds.indexOf(item.id) >= 0}
+			isWatched={props.watchedNoteFiles.indexOf(item.id) < 0}
+			itemCount={props.notes.length}
+			onCheckboxClick={noteItem_checkboxClick}
+			onDragStart={noteItem_dragStart}
+			onNoteDragOver={noteItem_noteDragOver}
+			onNoteDrop={noteItem_noteDrop}
+			onTitleClick={noteItem_titleClick}
+			onContextMenu={itemContextMenu}
 		/>;
-	}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [style, props.themeId, width, itemHeight, dragOverTargetNoteIndex, props.provisionalNoteIds, props.selectedNoteIds, props.watchedNoteFiles,
+		props.notes,
+		props.notesParentType,
+		props.searches,
+		props.selectedSearchId,
+		props.highlightedWords,
+	]);
 
-	itemAnchorRef(itemId: string) {
-		if (this.itemAnchorRefs_[itemId] && this.itemAnchorRefs_[itemId].current) return this.itemAnchorRefs_[itemId].current;
-		return null;
-	}
+	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
+	const previousNotes = usePrevious(props.notes, []);
+	const previousVisible = usePrevious(props.visible, false);
 
-	componentDidUpdate(prevProps: any) {
-		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
-			const id = this.props.selectedNoteIds[0];
-			const doRefocus = this.props.notes.length < prevProps.notes.length;
+	useEffect(() => {
+		if (previousSelectedNoteIds !== props.selectedNoteIds && props.selectedNoteIds.length === 1) {
+			const id = props.selectedNoteIds[0];
+			const doRefocus = props.notes.length < previousNotes.length;
 
-			for (let i = 0; i < this.props.notes.length; i++) {
-				if (this.props.notes[i].id === id) {
-					this.itemListRef.current.makeItemIndexVisible(i);
+			for (let i = 0; i < props.notes.length; i++) {
+				if (props.notes[i].id === id) {
+					itemListRef.current.makeItemIndexVisible(i);
 					if (doRefocus) {
-						const ref = this.itemAnchorRef(id);
+						const ref = itemAnchorRef(id);
 						if (ref) ref.focus();
 					}
 					break;
@@ -302,24 +303,25 @@ class NoteListComponent extends React.Component {
 			}
 		}
 
-		if (prevProps.visible !== this.props.visible) {
-			this.updateSizeState();
+		if (previousVisible !== props.visible) {
+			updateSizeState();
 		}
-	}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [previousSelectedNoteIds,previousNotes, previousVisible, props.selectedNoteIds, props.notes]);
 
-	scrollNoteIndex_(keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) {
+	const scrollNoteIndex_ = (keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) => {
 
 		if (keyCode === 33) {
 			// Page Up
-			noteIndex -= (this.itemListRef.current.visibleItemCount() - 1);
+			noteIndex -= (itemListRef.current.visibleItemCount() - 1);
 
 		} else if (keyCode === 34) {
 			// Page Down
-			noteIndex += (this.itemListRef.current.visibleItemCount() - 1);
+			noteIndex += (itemListRef.current.visibleItemCount() - 1);
 
 		} else if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
 			// CTRL+End, CMD+Down
-			noteIndex = this.props.notes.length - 1;
+			noteIndex = props.notes.length - 1;
 
 		} else if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
 			// CTRL+Home, CMD+Up
@@ -334,31 +336,31 @@ class NoteListComponent extends React.Component {
 			noteIndex += 1;
 		}
 		if (noteIndex < 0) noteIndex = 0;
-		if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
+		if (noteIndex > props.notes.length - 1) noteIndex = props.notes.length - 1;
 		return noteIndex;
-	}
+	};
 
-	async onKeyDown(event: any) {
+	const onKeyDown = async (event: any) => {
 		const keyCode = event.keyCode;
-		const noteIds = this.props.selectedNoteIds;
+		const noteIds = props.selectedNoteIds;
 
-		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
+		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
-			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
+			let noteIndex = BaseModel.modelIndexById(props.notes, noteId);
 
-			noteIndex = this.scrollNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
+			noteIndex = scrollNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
 
-			const newSelectedNote = this.props.notes[noteIndex];
+			const newSelectedNote = props.notes[noteIndex];
 
-			this.props.dispatch({
+			props.dispatch({
 				type: 'NOTE_SELECT',
 				id: newSelectedNote.id,
 			});
 
-			this.itemListRef.current.makeItemIndexVisible(noteIndex);
+			itemListRef.current.makeItemIndexVisible(noteIndex);
 
-			this.focusNoteId_(newSelectedNote.id);
+			focusNoteId_(newSelectedNote.id);
 
 			event.preventDefault();
 		}
@@ -373,7 +375,7 @@ class NoteListComponent extends React.Component {
 			// SPACE
 			event.preventDefault();
 
-			const notes = BaseModel.modelsByIds(this.props.notes, noteIds);
+			const notes = BaseModel.modelsByIds(props.notes, noteIds);
 			const todos = notes.filter((n: any) => !!n.is_todo);
 			if (!todos.length) return;
 
@@ -382,7 +384,7 @@ class NoteListComponent extends React.Component {
 				await Note.save(toggledTodo);
 			}
 
-			this.focusNoteId_(todos[0].id);
+			focusNoteId_(todos[0].id);
 		}
 
 		if (keyCode === 9) {
@@ -400,62 +402,80 @@ class NoteListComponent extends React.Component {
 			// Ctrl+A key
 			event.preventDefault();
 
-			this.props.dispatch({
+			props.dispatch({
 				type: 'NOTE_SELECT_ALL',
 			});
 		}
-	}
+	};
 
-	focusNoteId_(noteId: string) {
+	const focusNoteId_ = (noteId: string) => {
 		// - We need to focus the item manually otherwise focus might be lost when the
 		//   list is scrolled and items within it are being rebuilt.
 		// - We need to use an interval because when leaving the arrow pressed, the rendering
 		//   of items might lag behind and so the ref is not yet available at this point.
-		if (!this.itemAnchorRef(noteId)) {
-			if (this.focusItemIID_) shim.clearInterval(this.focusItemIID_);
-			this.focusItemIID_ = shim.setInterval(() => {
-				if (this.itemAnchorRef(noteId)) {
-					this.itemAnchorRef(noteId).focus();
-					shim.clearInterval(this.focusItemIID_);
-					this.focusItemIID_ = null;
+		if (!itemAnchorRef(noteId)) {
+			if (focusItemIID_.current) shim.clearInterval(focusItemIID_.current);
+			focusItemIID_.current = shim.setInterval(() => {
+				if (itemAnchorRef(noteId)) {
+					itemAnchorRef(noteId).focus();
+					shim.clearInterval(focusItemIID_.current);
+					focusItemIID_.current = null;
 				}
 			}, 10);
 		} else {
-			this.itemAnchorRef(noteId).focus();
+			itemAnchorRef(noteId).focus();
 		}
-	}
+	};
 
-	updateSizeState() {
-		this.setState({
-			width: this.noteListRef.current.clientWidth,
-			height: this.noteListRef.current.clientHeight,
-		});
-	}
+	const updateSizeState = () => {
+		setWidth(noteListRef.current.clientWidth);
+		setHeight(noteListRef.current.clientHeight);
+	};
 
-	resizableLayout_resize() {
-		this.updateSizeState();
-	}
+	const resizableLayout_resize = () => {
+		updateSizeState();
+	};
 
-	componentDidMount() {
-		this.props.resizableLayoutEventEmitter.on('resize', this.resizableLayout_resize);
-		this.updateSizeState();
-	}
+	useEffect(() => {
+		props.resizableLayoutEventEmitter.on('resize', resizableLayout_resize);
+		return () => {
+			props.resizableLayoutEventEmitter.off('resize', resizableLayout_resize);
+		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [props.resizableLayoutEventEmitter]);
 
-	componentWillUnmount() {
-		if (this.focusItemIID_) {
-			shim.clearInterval(this.focusItemIID_);
-			this.focusItemIID_ = null;
+	useEffect(() => {
+		updateSizeState();
+
+		return () => {
+			if (focusItemIID_.current) {
+				shim.clearInterval(focusItemIID_.current);
+				focusItemIID_.current = null;
+			}
+			CommandService.instance().componentUnregisterCommands(commands);
+		};
+	}, []);
+
+	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	useEffect(() => {
+		// When a note list item is styled by userchrome.css, its height is reflected.
+		// Ref. https://github.com/laurent22/joplin/pull/6542
+		if (dragOverTargetNoteIndex !== null) {
+			// When dragged, its height should not be considered.
+			// Ref. https://github.com/laurent22/joplin/issues/6639
+			return;
 		}
+		const noteItem = Object.values<any>(itemAnchorRefs_.current)[0]?.current;
+		const actualItemHeight = noteItem?.getHeight() ?? 0;
+		if (actualItemHeight >= 8) { // To avoid generating too many narrow items
+			setItemHeight(actualItemHeight);
+		}
+	});
 
-		this.props.resizableLayoutEventEmitter.off('resize', this.resizableLayout_resize);
+	const renderEmptyList = () => {
+		if (props.notes.length) return null;
 
-		CommandService.instance().componentUnregisterCommands(commands);
-	}
-
-	renderEmptyList() {
-		if (this.props.notes.length) return null;
-
-		const theme = themeStyle(this.props.themeId);
+		const theme = themeStyle(props.themeId);
 		const padding = 10;
 		const emptyDivStyle = {
 			padding: `${padding}px`,
@@ -464,39 +484,35 @@ class NoteListComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			fontFamily: theme.fontFamily,
 		};
-		// emptyDivStyle.width = emptyDivStyle.width - padding * 2;
-		// emptyDivStyle.height = emptyDivStyle.height - padding * 2;
-		return <div style={emptyDivStyle}>{this.props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
-	}
+		return <div style={emptyDivStyle}>{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+	};
 
-	renderItemList(style: any) {
-		if (!this.props.notes.length) return null;
+	const renderItemList = () => {
+		if (!props.notes.length) return null;
 
 		return (
 			<ItemList
-				ref={this.itemListRef}
-				disabled={this.props.isInsertingNotes}
-				itemHeight={this.style().listItem.height}
+				ref={itemListRef}
+				disabled={props.isInsertingNotes}
+				itemHeight={style.listItem.height}
 				className={'note-list'}
-				items={this.props.notes}
-				style={style}
-				itemRenderer={this.renderItem}
-				onKeyDown={this.onKeyDown}
+				items={props.notes}
+				style={props.size}
+				itemRenderer={renderItem}
+				onKeyDown={onKeyDown}
 			/>
 		);
-	}
+	};
 
-	render() {
-		if (!this.props.size) throw new Error('props.size is required');
+	if (!props.size) throw new Error('props.size is required');
 
-		return (
-			<StyledRoot ref={this.noteListRef}>
-				{this.renderEmptyList()}
-				{this.renderItemList(this.props.size)}
-			</StyledRoot>
-		);
-	}
-}
+	return (
+		<StyledRoot ref={noteListRef}>
+			{renderEmptyList()}
+			{renderItemList()}
+		</StyledRoot>
+	);
+};
 
 const mapStateToProps = (state: AppState) => {
 	return {

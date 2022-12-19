@@ -1,15 +1,24 @@
 # For development this compose file starts the database only. The app can then
-# be started using `npm run start-dev`, which is useful for development, because
+# be started using `yarn run start-dev`, which is useful for development, because
 # it means the app Docker file doesn't have to be rebuilt on each change.
 
 version: '3'
 
 services:
     db:
-        image: postgres:13.1
+        image: postgres:15
+        command: postgres -c work_mem=100000
         ports:
             - "5432:5432"
         environment:
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_USER=joplin
             - POSTGRES_DB=joplin
+     
+        # Use this to specify additional Postgres
+        # config parameters:
+        #
+        # command:
+        #     - "postgres"
+        #     - "-c"
+        #     - "log_min_duration_statement=0"

@@ -25,6 +25,8 @@ This would be an example of valid cURL call using a token:
 
 In the documentation below, the token will not be specified every time however you will need to include it.
 
+If needed you may also [request the token programmatically](https://github.com/laurent22/joplin/blob/dev/readme/spec/clipper_auth.md)
+
 # Using the API
 
 All the calls, unless noted otherwise, receives and send **JSON data**. For example to create a new note:
@@ -55,6 +57,7 @@ To get the IDs only of all the tags:
 	curl http://localhost:41184/tags?fields=id
 
 By default API results will contain the following fields: **id**, **parent_id**, **title**
+
 # Pagination
 
 All API calls that return multiple results will be paginated and will return the following structure:
@@ -113,7 +116,7 @@ Call **GET /ping** to check if the service is available. It should return "Jopli
 
 # Searching
 
-Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/#searching
 
 To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.
 
@@ -148,38 +151,40 @@ command | 16
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-parent_id | text | ID of the notebook that contains this note. Change this ID to move the note to a different notebook.
-title | text | The note title.
-body | text | The note body, in Markdown. May also contain HTML.
-created_time | int | When the note was created.
-updated_time | int | When the note was last updated.
-is_conflict | int | Tells whether the note is a conflict or not.
-latitude | numeric |    
-longitude | numeric |    
-altitude | numeric |    
-author | text |    
-source_url | text | The full URL where the note comes from.
-is_todo | int | Tells whether this note is a todo or not.
-todo_due | int | When the todo is due. An alarm will be triggered on that date.
-todo_completed | int | Tells whether todo is completed or not. This is a timestamp in milliseconds.
-source | text |    
-source_application | text |    
-application_data | text |    
-order | numeric |    
-user_created_time | int | When the note was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the note was last updated. It may differ from updated_time as it can be manually set by the user.
-encryption_cipher_text | text |    
-encryption_applied | int |    
-markup_language | int |    
-is_shared | int |    
-share_id | text |    
-body_html | text | Note body, in HTML format
-base_url | text | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.
-image_data_url | text | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.
-crop_rect | text | If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format `{ x: x, y: y, width: width, height: height }`
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| parent_id | text  | ID of the notebook that contains this note. Change this ID to move the note to a different notebook. |
+| title | text  | The note title. |
+| body  | text  | The note body, in Markdown. May also contain HTML. |
+| created_time | int   | When the note was created. |
+| updated_time | int   | When the note was last updated. |
+| is_conflict | int   | Tells whether the note is a conflict or not. |
+| latitude | numeric |       |
+| longitude | numeric |       |
+| altitude | numeric |       |
+| author | text  |       |
+| source_url | text  | The full URL where the note comes from. |
+| is_todo | int   | Tells whether this note is a todo or not. |
+| todo_due | int   | When the todo is due. An alarm will be triggered on that date. |
+| todo_completed | int   | Tells whether todo is completed or not. This is a timestamp in milliseconds. |
+| source | text  |       |
+| source_application | text  |       |
+| application_data | text  |       |
+| order | numeric |       |
+| user_created_time | int   | When the note was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the note was last updated. It may differ from updated_time as it can be manually set by the user. |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| markup_language | int   |       |
+| is_shared | int   |       |
+| share_id | text  |       |
+| conflict_original_id | text  |       |
+| master_key_id | text  |       |
+| body_html | text  | Note body, in HTML format |
+| base_url | text  | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`. |
+| image_data_url | text  | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format. |
+| crop_rect | text  | If an image is provided, you can also specify an optional rectangle that will be used to crop the image. In format `{ x: x, y: y, width: width, height: height }` |
 
 ## GET /notes
 
@@ -237,19 +242,21 @@ This is actually a notebook. Internally notebooks are called "folders".
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-title | text | The folder title.
-created_time | int | When the folder was created.
-updated_time | int | When the folder was last updated.
-user_created_time | int | When the folder was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the folder was last updated. It may differ from updated_time as it can be manually set by the user.
-encryption_cipher_text | text |    
-encryption_applied | int |    
-parent_id | text |    
-is_shared | int |    
-share_id | text |    
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| title | text  | The folder title. |
+| created_time | int   | When the folder was created. |
+| updated_time | int   | When the folder was last updated. |
+| user_created_time | int   | When the folder was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the folder was last updated. It may differ from updated_time as it can be manually set by the user. |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| parent_id | text  |       |
+| is_shared | int   |       |
+| share_id | text  |       |
+| master_key_id | text  |       |
+| icon  | text  |       |
 
 ## GET /folders
 
@@ -281,23 +288,24 @@ Deletes the folder with ID :id
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-title | text | The resource title.
-mime | text |    
-filename | text |    
-created_time | int | When the resource was created.
-updated_time | int | When the resource was last updated.
-user_created_time | int | When the resource was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the resource was last updated. It may differ from updated_time as it can be manually set by the user.
-file_extension | text |    
-encryption_cipher_text | text |    
-encryption_applied | int |    
-encryption_blob_encrypted | int |    
-size | int |    
-is_shared | int |    
-share_id | text |    
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| title | text  | The resource title. |
+| mime  | text  |       |
+| filename | text  |       |
+| created_time | int   | When the resource was created. |
+| updated_time | int   | When the resource was last updated. |
+| user_created_time | int   | When the resource was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the resource was last updated. It may differ from updated_time as it can be manually set by the user. |
+| file_extension | text  |       |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| encryption_blob_encrypted | int   |       |
+| size  | int   |       |
+| is_shared | int   |       |
+| share_id | text  |       |
+| master_key_id | text  |       |
 
 ## GET /resources
 
@@ -323,7 +331,15 @@ Creating a new resource is special because you also need to upload the file. Unl
 
 	curl -F 'data=@/path/to/file.jpg' -F 'props={"title":"my resource title"}' http://localhost:41184/resources
 
+To **update** the resource content, you can make a PUT request with the same arguments:
+
+	curl -X PUT -F 'data=@/path/to/file.jpg' -F 'props={"title":"my modified title"}' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696
+
 The "data" field is required, while the "props" one is not. If not specified, default values will be used.
+
+Or if you only need to update the resource properties (title, etc.), without changing the content, you can make a regular PUT request:
+
+	curl -X PUT --data '{"title": "My new title"}' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696
 
 **From a plugin** the syntax to create a resource is also a bit special:
 
@@ -343,6 +359,8 @@ The "data" field is required, while the "props" one is not. If not specified, de
 
 Sets the properties of the resource with ID :id
 
+You may also update the file data by specifying a file (See `POST /resources` example).
+
 ## DELETE /resources/:id
 
 Deletes the resource with ID :id
@@ -351,18 +369,18 @@ Deletes the resource with ID :id
 
 ## Properties
 
-Name | Type | Description
---- | --- | ---
-id  | text |    
-title | text | The tag title.
-created_time | int | When the tag was created.
-updated_time | int | When the tag was last updated.
-user_created_time | int | When the tag was created. It may differ from created_time as it can be manually set by the user.
-user_updated_time | int | When the tag was last updated. It may differ from updated_time as it can be manually set by the user.
-encryption_cipher_text | text |    
-encryption_applied | int |    
-is_shared | int |    
-parent_id | text |    
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| title | text  | The tag title. |
+| created_time | int   | When the tag was created. |
+| updated_time | int   | When the tag was last updated. |
+| user_created_time | int   | When the tag was created. It may differ from created_time as it can be manually set by the user. |
+| user_updated_time | int   | When the tag was last updated. It may differ from updated_time as it can be manually set by the user. |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| is_shared | int   |       |
+| parent_id | text  |       |
 
 ## GET /tags
 
@@ -395,3 +413,31 @@ Deletes the tag with ID :id
 ## DELETE /tags/:id/notes/:note_id
 
 Remove the tag from the note.
+
+# Events
+
+This end point can be used to retrieve the latest note changes. Currently only note changes are tracked.
+
+## Properties
+
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | int   |       |
+| item_type | int   | The item type (see table above for the list of item types) |
+| item_id | text  | The item ID |
+| type  | int   | The type of change - either 1 (created), 2 (updated) or 3 (deleted) |
+| created_time | int   | When the event was generated |
+| source | int   | Unused |
+| before_change_item | text  | Unused |
+
+## GET /events
+
+Returns a paginated list of recent events. A `cursor` property should be provided, which tells from what point in time the events should be returned. The API will return a `cursor` property, to tell from where to resume retrieving events, as well as an `has_more` (tells if more changes can be retrieved) and `items` property, which will contain the list of events. Events are kept for up to 90 days.
+
+If no `cursor` property is provided, the API will respond with the latest change ID. That can be used to retrieve future events later on.
+
+The results are paginated so will need to may multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.
+
+## GET /events/:id
+
+Returns the event with the given ID.

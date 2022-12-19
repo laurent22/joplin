@@ -6,7 +6,7 @@ Various scripts are provided to deploy the Joplin applications, scripts and tool
 
 Before new releases are created, all version numbers must be updated. This is done using the `setupNewRelease` script and passing it the new major.minor version number. For example:
 
-	npm run setupNewRelease -- 1.8
+	yarn run setupNewRelease 1.8
 
 Patch numbers are going to be incremented automatically when releasing each individual package.
 
@@ -14,13 +14,13 @@ Patch numbers are going to be incremented automatically when releasing each indi
 
 The desktop application is built for Windows, macOS and Linux via continuous integration, by pushing a version tag to GitHub. The process is automated using:
 
-	npm run releaseDesktop
+	yarn run releaseDesktop
 
 ## Android application
 
 The app is built and upload to GitHub using:
 
-	npm run releaseAndroid -- --type=prerelease
+	yarn run releaseAndroid --type=prerelease
 
 The "type" parameter can be either "release" or "prerelease"
 
@@ -32,7 +32,7 @@ It must be built and released manually using XCode.
 
 Unlike the mobile or desktop application, the CLI app doesn't bundle its dependencies and is always installed from source. For that reason, all its `@joplin` dependencies must be deployed publicly first. This is done using:
 
-	npm run publishAll
+	yarn run publishAll
 
 This is going to publish all the Joplin libraries, such as `@joplin/lib`, `@joplin/tools`, etc.
 
@@ -52,26 +52,28 @@ Then in `app-cli/package.json`, all `@joplin` dependencies and devdependencies m
 
 Finally, to release the actual app, run:
 
-	npm run releaseCli
+	yarn run releaseCli
 
 ## Joplin Server
 
 Run:
 
-	npm run releaseServer
+	yarn run releaseServer
 
 ## Web clipper
 
 Run:
 
-	npm run releaseClipper
+	yarn run releaseClipper
 
 ## Plugin generator
 
 First the types should generally be updated, using `./updateTypes.sh`. Then run:
 
-	npm run releasePluginGenerator
+	yarn run releasePluginGenerator
 
 ## Plugin Repo Cli
 
-Since it has dependencies to the `@joplin` packages, it is released when running `npm run publishAll`
+This tool is packaged using Webpack so it can be released with a single command:
+
+	yarn run releasePluginRepoCli

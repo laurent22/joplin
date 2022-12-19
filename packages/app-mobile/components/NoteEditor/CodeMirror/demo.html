@@ -1,0 +1,48 @@
+<!--
+	Open this file in a web browser to more easily debug the CodeMirror editor.
+	Messages will show up in the console when posted.
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		<meta charset="utf-8"/>
+		<title>CodeMirror test</title>
+	</head>
+	<body>
+		<div class="CodeMirror"></div>
+		<script>
+			// Override the default postMessage — codeMirrorBundle expects
+			// this to be present.
+			window.ReactNativeWebView = {
+				postMessage: message => {
+					console.log('postMessage:', message);
+				},
+			};
+		</script>
+		<script src="./CodeMirror.bundle.js"></script>
+		<script>
+			const parent = document.querySelector('.CodeMirror');
+			const initialText = 'Testing...';
+
+			const settings = {
+				katexEnabled: true,
+				themeData: {
+					fontSize: 1, // em
+					fontFamily: 'serif',
+					backgroundColor: 'black',
+					color: 'white',
+					backgroundColor2: '#330',
+					color2: '#ff0',
+					backgroundColor3: '#404',
+					color3: '#f0f',
+					backgroundColor4: '#555',
+					color4: '#0ff',
+					appearance: 'dark',
+				},
+			};
+
+			window.cm = codeMirrorBundle.initCodeMirror(parent, initialText, settings);
+		</script>
+	</body>
+</html>

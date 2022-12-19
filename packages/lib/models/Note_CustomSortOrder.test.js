@@ -3,11 +3,10 @@ const { setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-
 const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 
-describe('models_Note_CustomSortOrder', function() {
-	beforeEach(async (done) => {
+describe('models/Note_CustomSortOrder', function() {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should set the order property when saving a note', (async () => {

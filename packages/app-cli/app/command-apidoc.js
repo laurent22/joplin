@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { toTitleCase } = require('@joplin/lib/string-utils.js');
@@ -82,6 +82,8 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('In the documentation below, the token will not be specified every time however you will need to include it.');
 		lines.push('');
+		lines.push('If needed you may also [request the token programmatically](https://github.com/laurent22/joplin/blob/dev/readme/spec/clipper_auth.md)');
+		lines.push('');
 
 		lines.push('# Using the API');
 		lines.push('');
@@ -114,6 +116,7 @@ class Command extends BaseCommand {
 		lines.push('\tcurl http://localhost:41184/tags?fields=id');
 		lines.push('');
 		lines.push('By default API results will contain the following fields: **id**, **parent_id**, **title**');
+		lines.push('');
 
 		lines.push('# Pagination');
 		lines.push('');
@@ -177,7 +180,7 @@ async function fetchAllNotes() {
 
 		lines.push('# Searching');
 		lines.push('');
-		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching');
+		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/#searching');
 		lines.push('');
 		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
 		lines.push('');
@@ -310,7 +313,15 @@ async function fetchAllNotes() {
 				lines.push('');
 				lines.push('\tcurl -F \'data=@/path/to/file.jpg\' -F \'props={"title":"my resource title"}\' http://localhost:41184/resources');
 				lines.push('');
+				lines.push('To **update** the resource content, you can make a PUT request with the same arguments:');
+				lines.push('');
+				lines.push('\tcurl -X PUT -F \'data=@/path/to/file.jpg\' -F \'props={"title":"my modified title"}\' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696');
+				lines.push('');
 				lines.push('The "data" field is required, while the "props" one is not. If not specified, default values will be used.');
+				lines.push('');
+				lines.push('Or if you only need to update the resource properties (title, etc.), without changing the content, you can make a regular PUT request:');
+				lines.push('');
+				lines.push('\tcurl -X PUT --data \'{"title": "My new title"}\' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696');
 				lines.push('');
 				lines.push('**From a plugin** the syntax to create a resource is also a bit special:');
 				lines.push('');
@@ -365,6 +376,11 @@ async function fetchAllNotes() {
 			lines.push(`Sets the properties of the ${singular} with ID :id`);
 			lines.push('');
 
+			if (model.type === BaseModel.TYPE_RESOURCE) {
+				lines.push('You may also update the file data by specifying a file (See `POST /resources` example).');
+				lines.push('');
+			}
+
 			lines.push(`## DELETE /${tableName}/:id`);
 			lines.push('');
 			lines.push(`Deletes the ${singular} with ID :id`);
@@ -376,6 +392,30 @@ async function fetchAllNotes() {
 				lines.push('Remove the tag from the note.');
 				lines.push('');
 			}
+		}
+
+		{
+			const tableFields = reg.db().tableFields('item_changes', { includeDescription: true });
+
+			lines.push('# Events');
+			lines.push('');
+			lines.push('This end point can be used to retrieve the latest note changes. Currently only note changes are tracked.');
+			lines.push('');
+			lines.push('## Properties');
+			lines.push('');
+			lines.push(this.createPropertiesTable(tableFields));
+			lines.push('');
+			lines.push('## GET /events');
+			lines.push('');
+			lines.push('Returns a paginated list of recent events. A `cursor` property should be provided, which tells from what point in time the events should be returned. The API will return a `cursor` property, to tell from where to resume retrieving events, as well as an `has_more` (tells if more changes can be retrieved) and `items` property, which will contain the list of events. Events are kept for up to 90 days.');
+			lines.push('');
+			lines.push('If no `cursor` property is provided, the API will respond with the latest change ID. That can be used to retrieve future events later on.');
+			lines.push('');
+			lines.push('The results are paginated so will need to may multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.');
+			lines.push('');
+			lines.push('## GET /events/:id');
+			lines.push('');
+			lines.push('Returns the event with the given ID.');
 		}
 
 		const outFilePath = args['file'];

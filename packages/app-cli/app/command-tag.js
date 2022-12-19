@@ -1,4 +1,4 @@
-const { BaseCommand } = require('./base-command.js');
+const BaseCommand = require('./base-command').default;
 const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');
 const Tag = require('@joplin/lib/models/Tag').default;
@@ -30,21 +30,21 @@ class Command extends BaseCommand {
 
 		const command = args['tag-command'];
 
-		if (command == 'remove' && !tag) throw new Error(_('Cannot find "%s".', args.tag));
+		if (command === 'remove' && !tag) throw new Error(_('Cannot find "%s".', args.tag));
 
-		if (command == 'add') {
+		if (command === 'add') {
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
 			if (!tag) tag = await Tag.save({ title: args.tag }, { userSideValidation: true });
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.addNote(tag.id, notes[i].id);
 			}
-		} else if (command == 'remove') {
+		} else if (command === 'remove') {
 			if (!tag) throw new Error(_('Cannot find "%s".', args.tag));
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.note));
 			for (let i = 0; i < notes.length; i++) {
 				await Tag.removeNote(tag.id, notes[i].id);
 			}
-		} else if (command == 'list') {
+		} else if (command === 'list') {
 			if (tag) {
 				const notes = await Tag.notes(tag.id);
 				notes.map(note => {
@@ -75,7 +75,7 @@ class Command extends BaseCommand {
 					this.stdout(tag.title);
 				});
 			}
-		} else if (command == 'notetags') {
+		} else if (command === 'notetags') {
 			if (args.tag) {
 				const note = await app().loadItem(BaseModel.TYPE_NOTE, args.tag);
 				if (!note) throw new Error(_('Cannot find "%s".', args.tag));

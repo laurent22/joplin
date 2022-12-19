@@ -1,19 +1,17 @@
 import time from '../../time';
-import Setting from '../../models/Setting';
 import { allNotesFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-
-const { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } = require('../../testing/test-utils.js');
+import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
+import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 describe('Synchronizer.conflicts', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
 	it('should resolve note conflicts', (async () => {
@@ -43,10 +41,11 @@ describe('Synchronizer.conflicts', function() {
 		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
 		// the conflicted and original note must be the same in every way, to make sure no data has been lost.
 		const conflictedNote = conflictedNotes[0];
-		expect(conflictedNote.id == note2conf.id).toBe(false);
+		expect(conflictedNote.id === note2conf.id).toBe(false);
+		expect(conflictedNote.conflict_original_id).toBe(note2conf.id);
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
-			if (n == 'id' || n == 'is_conflict') continue;
+			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
 			expect(conflictedNote[n]).toBe(note2conf[n]);
 		}
 
@@ -226,7 +225,7 @@ describe('Synchronizer.conflicts', function() {
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {
 		if (withEncryption) {
-			Setting.setValue('encryption.enabled', true);
+			setEncryptionEnabled(true);
 			await loadEncryptionMasterKey();
 		}
 

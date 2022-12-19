@@ -50,17 +50,6 @@ class PreviewComponent extends React.PureComponent {
 				<a className={'Confirm Button'} href="#" onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
-
-		// return (
-		// 	<div className="Preview">
-		// 		<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
-		// 		<h2>Preview:</h2>
-		// 		<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
-		// 		<div className={"BodyWrapper"}>
-		// 			<div className={"Body"} ref={this.bodyRef} dangerouslySetInnerHTML={{__html: this.props.body_html}}></div>
-		// 		</div>
-		// 	</div>
-		// );
 	}
 
 }
@@ -74,13 +63,15 @@ class AppComponent extends Component {
 			contentScriptLoaded: false,
 			selectedTags: [],
 			contentScriptError: '',
+			newNoteId: null,
 		});
 
-		this.confirm_click = () => {
+		this.confirm_click = async () => {
 			const content = Object.assign({}, this.props.clippedContent);
 			content.tags = this.state.selectedTags.join(',');
 			content.parent_id = this.props.selectedFolderId;
-			bridge().sendContentToJoplin(content);
+			const response = await bridge().sendContentToJoplin(content);
+			this.setState({ newNoteId: response.id });
 		};
 
 		this.contentTitle_change = (event) => {
@@ -131,6 +122,7 @@ class AppComponent extends Component {
 					api_base_url: baseUrl,
 					parent_id: this.props.selectedFolderId,
 					tags: this.state.selectedTags.join(','),
+					token: bridge().token(),
 				});
 
 				window.close();
@@ -194,6 +186,8 @@ class AppComponent extends Component {
 	}
 
 	async componentDidMount() {
+		bridge().onReactAppStarts();
+
 		try {
 			await this.loadContentScripts();
 		} catch (error) {
@@ -242,7 +236,52 @@ class AppComponent extends Component {
 		}
 	}
 
+	renderStartupScreen() {
+		const messages = {
+			serverFoundState: {
+				// We need to display the "Connecting to the Joplin
+				// application..." message because if the app doesn't currently
+				// allow access to the clipper API, the clipper tries several
+				// ports and it takes time before failing. So if we don't
+				// display any message, it looks like it's not doing anything
+				// when clicking on the extension button.
+				'searching': 'Connecting to the Joplin application...',
+				'not_found': 'Error: Could not connect to the Joplin application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
+			},
+			authState: {
+				'starting': 'Starting...',
+				'waiting': 'The Joplin Web Clipper requires your authorisation in order to access your data. To proceed, please open the Joplin desktop application and grant permission. Note: Joplin 2.1+ is needed to use this version of the Web Clipper.',
+				'rejected': 'Permission to access your data was not granted. To try again please close this popup and open it again.',
+			},
+		};
+
+		const foundState = this.props.clipperServer.foundState;
+
+		let msg = '';
+		let title = '';
+
+		if (messages.serverFoundState[foundState]) {
+			msg = messages.serverFoundState[foundState];
+		} else {
+			msg = messages.authState[this.props.authStatus];
+			title = <h1>{'Permission needed'}</h1>;
+		}
+
+		if (!msg) throw new Error(`Invalidate state: ${foundState} / ${this.props.authStatus}`);
+
+		return (
+			<div className="App Startup">
+				{title}
+				{msg}
+			</div>
+		);
+	}
+
 	render() {
+		if (this.props.authStatus !== 'accepted') {
+			return this.renderStartupScreen();
+		}
+
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
 			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
@@ -365,6 +404,24 @@ class AppComponent extends Component {
 			);
 		};
 
+		const openNewNoteButton = () => {
+
+			if (!this.state.newNoteId) { return null; } else {
+				return (
+					// The jopin:// link must be opened in a new tab. When it's opened for the first time, a system dialog will ask for the user's permission.
+					// The system dialog is too big to fit into the popup so the user will not be able to see the dialog buttons and get stuck.
+					<a
+						className="Button"
+						href={`joplin://x-callback-url/openNote?id=${encodeURIComponent(this.state.newNoteId)}`}
+						target="_blank"
+						onClick={() => this.setState({ newNoteId: null })}
+					>
+          Open newly created note
+					</a>
+				);
+			}
+		};
+
 		const tagDataListOptions = [];
 		for (let i = 0; i < this.props.tags.length; i++) {
 			const tag = this.props.tags[i];
@@ -383,8 +440,8 @@ class AppComponent extends Component {
 				<div className="Controls">
 					<ul>
 						<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
-						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page</a></li>
-						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
+						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page (Markdown)</a></li>
+						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML)</a></li>
 						<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
 						<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
 						<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
@@ -400,6 +457,7 @@ class AppComponent extends Component {
 				</div>
 				{ warningComponent }
 				{ previewComponent }
+				{ openNewNoteButton() }
 				{ clipperStatusComp() }
 			</div>
 		);
@@ -417,6 +475,7 @@ const mapStateToProps = (state) => {
 		tags: state.tags,
 		selectedFolderId: state.selectedFolderId,
 		isProbablyReaderable: state.isProbablyReaderable,
+		authStatus: state.authStatus,
 	};
 };
 

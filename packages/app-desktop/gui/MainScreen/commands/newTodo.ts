@@ -9,8 +9,8 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, template: string = null) => {
-			return CommandService.instance().execute('newNote', template, true);
+		execute: async (_context: CommandContext, body: string = '') => {
+			return CommandService.instance().execute('newNote', body, true);
 		},
 		enabledCondition: 'oneFolderSelected && !inConflictFolder',
 	};

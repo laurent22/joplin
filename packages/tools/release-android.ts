@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
+import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog, execCommand2 } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -151,6 +151,9 @@ async function main() {
 
 	const isPreRelease = argv.type === 'prerelease';
 
+	process.chdir(rnDir);
+	await execCommand2('yarn run build', { showStdout: false });
+
 	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');
 
@@ -164,21 +167,14 @@ async function main() {
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
 
-	if (!isPreRelease) {
-		console.info('Updating Readme URL...');
+	// NOT TESTED: These commands should not be necessary anymore since they are
+	// done in completeReleaseWithChangelog()
 
-		let readmeContent = await fs.readFile(`${rootDir}/README.md`, 'utf8');
-		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
-		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
-		await fs.writeFile(`${rootDir}/README.md`, readmeContent);
-	}
-
-	await execCommandVerbose('git', ['pull']);
-	await execCommandVerbose('git', ['add', '-A']);
-	await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
-	await execCommandVerbose('git', ['tag', tagName]);
-	await execCommandVerbose('git', ['push']);
-	await execCommandVerbose('git', ['push', '--tags']);
+	// await execCommandVerbose('git', ['add', '-A']);
+	// await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
+	// await execCommandVerbose('git', ['tag', tagName]);
+	// await execCommandVerbose('git', ['push']);
+	// await execCommandVerbose('git', ['push', '--tags']);
 
 	console.info(`Creating GitHub release ${tagName}...`);
 

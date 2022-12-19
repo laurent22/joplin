@@ -29,15 +29,24 @@ export default function() {
 		'textLink',
 		'textPaste',
 		'textSelectAll',
+		'textBulletedList',
 		'toggleExternalEditing',
 		'toggleLayoutMoveMode',
 		'toggleNoteList',
+		'toggleNotesSortOrderField',
+		'toggleNotesSortOrderReverse',
+		'togglePerFolderSortOrder',
 		'toggleSideBar',
 		'toggleVisiblePanes',
 		'editor.deleteLine',
 		'editor.duplicateLine',
-		'editor.undo',
-		'editor.redo',
+		// We cannot put the undo/redo commands in the menu because they are
+		// editor-specific commands. If we put them there it will break the
+		// undo/redo in regular text fields.
+		// https://github.com/laurent22/joplin/issues/6214
+
+		// 'editor.undo',
+		// 'editor.redo',
 		'editor.indentLess',
 		'editor.indentMore',
 		'editor.toggleComment',
@@ -47,5 +56,14 @@ export default function() {
 		'toggleSafeMode',
 		'showShareNoteDialog',
 		'showShareFolderDialog',
+		'leaveSharedFolder',
+		'gotoAnything',
+		'commandPalette',
+		'openMasterPasswordDialog',
+		'addProfile',
+		'editProfileConfig',
+		'switchProfile1',
+		'switchProfile2',
+		'switchProfile3',
 	];
 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from {{{sourceMarkdownFile}}} and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
+
+-->
+
+	<head>
+		{{> gtmHead}}
+		{{> gaOptimize}}
+		<meta
+			charset="utf-8"
+			http-equiv="X-UA-Compatible"
+			content="IE=edge,chrome=1"
+		/>
+		<link rel="icon" href="{{imageBaseUrl}}/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		{{> openGraphTags}}
+		{{> rssFeedLink}}
+		<link
+			rel="stylesheet"
+			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
+			as="style"
+		/>
+		<link rel="stylesheet" href="{{{assetUrls.css.fontawesome}}}">
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+			as="style"
+			media="all"
+			onload="this.media='all'; this.onload = null"
+		/>
+		<link rel="stylesheet" href="{{{assetUrls.css.site}}}" as="style" />
+		<title>{{pageTitle}}</title>
+
+		<script
+			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
+	</head>
+	<body class="website-env-{{env}}">
+		{{> gtmBody}}
+		
+		<div class="container-fluid generic-template {{pageName}}-page" id="main-container">
+
+			{{#navbar}}
+				{{> navbar}}
+			{{/navbar}}
+
+			<div class="help-page-container page-{{sourceMarkdownName}}">
+				<div class="container">
+					<div class="row content-wrapper">
+						{{#showToc}}<div id="toc">{{{tocHtml}}}</div>{{/showToc}}
+
+						<div class="main-content">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in {{env}} mode!
+							</div>
+							{{{contentHtml}}}
+							{{#showBottomLinks}}
+								<div class="bottom-links">
+									{{#showImproveThisDoc}}
+										<a class="bottom-link" href="https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}">
+											<i class="fab fa-github"></i> Improve this doc
+										</a>
+									{{/showImproveThisDoc}}
+								</div>
+							{{/showBottomLinks}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+			{{> footer}}
+		</div>
+
+		<script src="{{{assetUrls.js.script}}}"></script>
+
+		{{> analytics}}
+	</body>
+</html>

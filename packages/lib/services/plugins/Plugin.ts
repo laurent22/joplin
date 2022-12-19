@@ -143,8 +143,12 @@ export default class Plugin {
 		return this.viewControllers_[handle];
 	}
 
-	public deprecationNotice(goneInVersion: string, message: string) {
-		logger.warn(`"${this.id}": DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
+	public deprecationNotice(goneInVersion: string, message: string, isError: boolean = false) {
+		if (isError) {
+			throw new Error(`"${this.id}": No longer supported: ${message} (deprecated since version ${goneInVersion})`);
+		} else {
+			logger.warn(`"${this.id}": DEPRECATION NOTICE: ${message} This will stop working in version ${goneInVersion}.`);
+		}
 	}
 
 	public emitMessage(message: any) {

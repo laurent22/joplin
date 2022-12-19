@@ -9,6 +9,7 @@ import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
+import { themeStyle } from '@joplin/lib/theme';
 
 const Root = styled.div`
 `;
@@ -30,6 +31,14 @@ interface Props {
 	disabled: boolean;
 }
 
+function sortManifestResults(results: PluginManifest[]): PluginManifest[] {
+	return results.sort((m1, m2) => {
+		if (m1._recommended && !m2._recommended) return -1;
+		if (!m1._recommended && m2._recommended) return +1;
+		return m1.name.toLowerCase() < m2.name.toLowerCase() ? -1 : +1;
+	});
+}
+
 export default function(props: Props) {
 	const [searchStarted, setSearchStarted] = useState(false);
 	const [manifests, setManifests] = useState<PluginManifest[]>([]);
@@ -47,10 +56,11 @@ export default function(props: Props) {
 				setSearchResultCount(null);
 			} else {
 				const r = await props.repoApi().search(props.searchQuery);
-				setManifests(r);
+				setManifests(sortManifestResults(r));
 				setSearchResultCount(r.length);
 			}
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchQuery]);
 
 	const onChange = useCallback((event: OnChangeEvent) => {
@@ -61,6 +71,7 @@ export default function(props: Props) {
 	const onSearchButtonClick = useCallback(() => {
 		setSearchStarted(false);
 		props.onSearchQueryChange({ value: '' });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	function installState(pluginId: string): InstallState {
@@ -92,6 +103,13 @@ export default function(props: Props) {
 		}
 	}
 
+	const renderContentSourceInfo = () => {
+		if (props.repoApi().isUsingDefaultContentUrl) return null;
+		const theme = themeStyle(props.themeId);
+		const url = new URL(props.repoApi().contentBaseUrl);
+		return <div style={{ ...theme.textStyleMinor, marginTop: 5, fontSize: theme.fontSize }}>{_('Content provided by %s', url.hostname)}</div>;
+	};
+
 	return (
 		<Root>
 			<div style={{ marginBottom: 10, width: props.maxWidth }}>
@@ -104,6 +122,7 @@ export default function(props: Props) {
 					placeholder={props.disabled ? _('Please wait...') : _('Search for plugins...')}
 					disabled={props.disabled}
 				/>
+				{renderContentSourceInfo()}
 			</div>
 
 			<ResultsRoot>

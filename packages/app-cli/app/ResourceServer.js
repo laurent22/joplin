@@ -1,5 +1,5 @@
 const Logger = require('@joplin/lib/Logger').default;
-const { netUtils } = require('@joplin/lib/net-utils.js');
+const { findAvailablePort } = require('@joplin/lib/net-utils');
 
 const http = require('http');
 const urlParser = require('url');
@@ -36,7 +36,7 @@ class ResourceServer {
 	}
 
 	async start() {
-		this.port_ = await netUtils.findAvailablePort([9167, 9267, 8167, 8267]);
+		this.port_ = await findAvailablePort(require('tcp-port-used'), [9167, 9267, 8167, 8267]);
 		if (!this.port_) {
 			this.logger().error('Could not find available port to start resource server. Please report the error at https://github.com/laurent22/joplin');
 			return;

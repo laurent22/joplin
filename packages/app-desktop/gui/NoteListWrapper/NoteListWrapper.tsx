@@ -10,7 +10,6 @@ interface Props {
 	resizableLayoutEventEmitter: any;
 	size: Size;
 	visible: boolean;
-	focusedField: string;
 	themeId: number;
 }
 
@@ -18,6 +17,7 @@ const StyledRoot = styled.div`
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	width: 100%;
 `;
 
 export default function NoteListWrapper(props: Props) {
@@ -33,7 +33,7 @@ export default function NoteListWrapper(props: Props) {
 
 	return (
 		<StyledRoot>
-			<NoteListControls showNewNoteButtons={props.focusedField !== 'globalSearch'} height={controlHeight} />
+			<NoteListControls height={controlHeight} />
 			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>
 	);

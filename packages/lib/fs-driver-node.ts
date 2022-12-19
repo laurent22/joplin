@@ -1,7 +1,7 @@
 import { resolve as nodeResolve } from 'path';
 import FsDriverBase, { Stat } from './fs-driver-base';
 import time from './time';
-const md5File = require('md5-file/promise');
+const md5File = require('md5-file');
 const fs = require('fs-extra');
 
 export default class FsDriverNode extends FsDriverBase {
@@ -21,16 +21,6 @@ export default class FsDriverNode extends FsDriverBase {
 	public async appendFile(path: string, string: string, encoding: string = 'base64') {
 		try {
 			return await fs.appendFile(path, string, { encoding: encoding });
-		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
-		}
-	}
-
-	public async writeBinaryFile(path: string, content: any) {
-		try {
-			// let buffer = new Buffer(content);
-			const buffer = Buffer.from(content);
-			return await fs.writeFile(path, buffer);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
@@ -69,7 +59,7 @@ export default class FsDriverNode extends FsDriverBase {
 				lastError = error;
 				// Normally cannot happen with the `overwrite` flag but sometime it still does.
 				// In this case, retry.
-				if (error.code == 'EEXIST') {
+				if (error.code === 'EEXIST') {
 					await time.sleep(1);
 					continue;
 				}
@@ -105,7 +95,7 @@ export default class FsDriverNode extends FsDriverBase {
 				size: stat.size,
 			};
 		} catch (error) {
-			if (error.code == 'ENOENT') return null;
+			if (error.code === 'ENOENT') return null;
 			throw error;
 		}
 	}

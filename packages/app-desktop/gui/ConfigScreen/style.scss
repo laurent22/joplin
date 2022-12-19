@@ -1,0 +1,14 @@
+.config-screen-content-wrapper {
+	padding: 24px;
+	overflow: auto;
+	background-color: var(--joplin-background-color3);
+}
+
+.config-screen-content > .section {
+	padding-bottom: 20px;
+	border-bottom: 1px solid var(--joplin-divider-color);
+}
+
+.config-screen-content > .section:last-child {
+	border-bottom: 0;
+}

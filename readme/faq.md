@@ -20,6 +20,12 @@ You can pass [arguments](https://github.com/laurent22/joplin/blob/dev/Joplin_ins
 
 <pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash -s -- --argument1 --argument2</code></pre>
 
+## Desktop application will not launch on Linux
+
+If you downloaded the AppImage directly and therefore did not install via the recommended script then it may not be currently allowed to execute and needs to have these permissions set manually (see [AppImage User Guide](https://docs.appimage.org/introduction/quickstart.html#how-to-run-an-AppImage)).
+
+If execution permissions are correct and it still does not launch then your system may not have the `libfuse2` library that AppImages require to run. This library requirement is inherent to the AppImage format and not Joplin specifically. For more info see [this forum thread](https://discourse.joplinapp.org/t/appimage-incompatibility-in-ubuntu-22-04/25173) which has further detail on the issue and an [Ubuntu specific fix](https://discourse.joplinapp.org/t/appimage-incompatibility-in-ubuntu-22-04/25173/12).
+
 ## How can I edit my note in an external text editor?
 
 The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
@@ -65,13 +71,20 @@ When changing the WebDAV URL, make sure that the new location has the same exact
 6. Synchronise to verify that everything is working.
 7. Do step 5 and 6 for all the other Joplin clients you need to sync.
 
+## I deleted some notes by accident and don't have a backup
+
+If you know the `NOTE_ID` and have note history enabled you can run the command `restoreNoteRevision` from the command palette e.g. `restoreNoteRevision 66457326a6ba4adeb4be8ce05e37af0d`. Joplin will then confirm if the restore was successful and place the note in a "Restored Note" notebook.
+If you do not know the `NOTE_ID` then you can find this within the Joplin sqlite database as the `item_id` within the `deleted_items` or `revisions` tables. It will require some manual checking of the `title_diff` and `body_diff` fields to check if the `ITEM/NOTE_ID` you are targeting is the correct one.
+You should first take a copy of the database to avoid making any accidental changes in the live one.
+For further information go [here](https://discourse.joplinapp.org/t/restoring-deleted-notes/21304).
+
 ## How can I easily enter Markdown tags in Android?
 
 You may use a special keyboard such as [Multiling O Keyboard](https://play.google.com/store/apps/details?id=kl.ime.oh&hl=en), which has shortcuts to create Markdown tags. [More information in this post](https://discourse.joplinapp.org/t/android-create-new-list-item-with-enter/585/2?u=laurent).
 
 ## The initial sync is very slow, how can I speed it up?
 
-Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplinapp.org/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
+Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed this up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplinapp.org/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
 
 ## Not all notes, folders, or tags are displayed on the mobile app
 
@@ -94,7 +107,7 @@ Unfortunately it is not possible. Joplin synchronises with file systems using an
 
 The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
 
-On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.
+On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted VeraCrypt drive for instance.
 
 For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.
 
@@ -119,13 +132,14 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 ### The following WebDAV hosts are not supported
 
-- Jianguoyun.com (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
+- Jianguoyun (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
+- pCloud (see [Forum thread](https://discourse.joplinapp.org/t/feature-request-pcloud-synchronisation/3530/51))
 
 ### Nextcloud sync is not working
 
 - Check your username and password. **Type it manually** (without copying and pasting it) and try again.
 - Check the WebDAV URL - to get the correct URL, go to Nextcloud and, in the left sidebar, click on "Settings" and copy the WebDAV URL from there. **Do not forget to add the folder you've created to that URL**. For example, if the base the WebDAV URL is "https://example.com/nextcloud/remote.php/webdav/" and you want the notes to be synced in the "Joplin" directory, you need to give the URL "https://example.com/nextcloud/remote.php/webdav/Joplin" **and you need to create the "Joplin" directory yourself**.
-- Did you enable **2FA** (Multi-factor authentication) on Nextcloud? In that case, you need to [create a one-time password for Joplin on the Nextcloud admin interface](https://github.com/laurent22/joplin/issues/1453#issuecomment-486640902).
+- Did you enable **2FA** (Multi-factor authentication) on Nextcloud? In that case, you need to [create an app password for Joplin in the Nextcloud admin interface](https://github.com/laurent22/joplin/issues/1453#issuecomment-486640902).
 
 ## How can I use self-signed SSL certificates on Android?
 
@@ -142,4 +156,4 @@ Additionally the Windows Task Manager can be used to verify whether Joplin is st
 
 ## Why is it named Joplin?
 
-The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it felt like a good choice. And, to quote a user on Hacker News, "though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized".
+The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it felt like a good choice.

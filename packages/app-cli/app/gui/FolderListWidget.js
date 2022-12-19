@@ -2,6 +2,7 @@ const Folder = require('@joplin/lib/models/Folder').default;
 const Tag = require('@joplin/lib/models/Tag').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const ListWidget = require('tkwidgets/ListWidget.js');
+const Setting = require('@joplin/lib/models/Setting').default;
 const _ = require('@joplin/lib/locale')._;
 
 class FolderListWidget extends ListWidget {
@@ -18,13 +19,32 @@ class FolderListWidget extends ListWidget {
 		this.updateIndexFromSelectedFolderId_ = false;
 		this.updateItems_ = false;
 		this.trimItemTitle = false;
+		this.showIds = false;
 
 		this.itemRenderer = item => {
 			const output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(' '.repeat(this.folderDepth(this.folders, item.id)) + Folder.displayTitle(item));
+				output.push(' '.repeat(this.folderDepth(this.folders, item.id)));
+
+				if (this.showIds) {
+					output.push(Folder.shortId(item.id));
+				}
+				output.push(Folder.displayTitle(item));
+
+				if (Setting.value('showNoteCounts')) {
+					let noteCount = item.note_count;
+					// Subtract children note_count from parent folder.
+					if (this.folderHasChildren_(this.folders,item.id)) {
+						for (let i = 0; i < this.folders.length; i++) {
+							if (this.folders[i].parent_id === item.id) {
+								noteCount -= this.folders[i].note_count;
+							}
+						}
+					}
+					output.push(noteCount);
+				}
 			} else if (item.type_ === Tag.modelType()) {
 				output.push(`[${Folder.displayTitle(item)}]`);
 			} else if (item.type_ === BaseModel.TYPE_SEARCH) {
@@ -116,6 +136,11 @@ class FolderListWidget extends ListWidget {
 		this.folders_ = v;
 		this.updateItems_ = true;
 		this.updateIndexFromSelectedItemId();
+		this.invalidate();
+	}
+
+	toggleShowIds() {
+		this.showIds = !this.showIds;
 		this.invalidate();
 	}
 

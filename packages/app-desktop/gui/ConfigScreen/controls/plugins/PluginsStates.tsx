@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
 import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
-import Button, { ButtonLevel } from '../../../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
@@ -27,7 +27,7 @@ const Root = styled.div`
 	flex-direction: column;
 `;
 
-const UserPluginsRoot = styled.div`
+const UserPluginsRoot = styled.div<any>`
 	${space}
 	display: flex;
 	flex-wrap: wrap;
@@ -37,7 +37,7 @@ const ToolsButton = styled(Button)`
 	margin-right: 6px;
 `;
 
-const RepoApiErrorMessage = styled(StyledMessage)`
+const RepoApiErrorMessage = styled(StyledMessage)<any>`
 	max-width: ${props => props.maxWidth}px;
 	margin-bottom: 10px;
 `;
@@ -101,6 +101,7 @@ export default function(props: Props) {
 
 	const pluginSettings = useMemo(() => {
 		return pluginService.unserializePluginSettings(props.value);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.value]);
 
 	const pluginItems = usePluginItems(pluginService.plugins, pluginSettings);
@@ -113,7 +114,7 @@ export default function(props: Props) {
 
 			let loadError: Error = null;
 			try {
-				await repoApi().loadManifests();
+				await repoApi().initialize();
 			} catch (error) {
 				logger.error(error);
 				loadError = error;
@@ -167,6 +168,7 @@ export default function(props: Props) {
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [pluginSettings, props.onChange]);
 
 	const onToggle = useCallback((event: ItemEvent) => {
@@ -178,10 +180,11 @@ export default function(props: Props) {
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [pluginSettings, props.onChange]);
 
 	const onInstall = useCallback(async () => {
-		const result = bridge().showOpenDialog({
+		const result = await bridge().showOpenDialog({
 			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
 		});
 
@@ -195,14 +198,16 @@ export default function(props: Props) {
 		});
 
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [pluginSettings, props.onChange]);
 
 	const onBrowsePlugins = useCallback(() => {
-		bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
 	}, []);
 
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
@@ -229,6 +234,7 @@ export default function(props: Props) {
 
 	const onSearchPluginSettingsChange = useCallback((event: any) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onChange]);
 
 	function renderCells(items: PluginItem[]) {
@@ -299,7 +305,7 @@ export default function(props: Props) {
 	function renderRepoApiError() {
 		if (!repoApiError) return null;
 
-		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository')} - <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now()); }}>{_('Try again')}</StyledLink></RepoApiErrorMessage>;
+		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository.')}<br/><br/>- <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now()); }}>{_('Try again')}</StyledLink><br/><br/>- <StyledLink href="#" onClick={onBrowsePlugins}>{_('Browse all plugins')}</StyledLink></RepoApiErrorMessage>;
 	}
 
 	function renderBottomArea() {
@@ -309,7 +315,7 @@ export default function(props: Props) {
 			<div>
 				{renderRepoApiError()}
 				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
-					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
+					<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
 					<div style={{ display: 'flex', flex: 1 }}>
 						{props.renderHeader(props.themeId, _('Manage your plugins'))}
 					</div>

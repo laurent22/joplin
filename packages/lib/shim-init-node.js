@@ -2,20 +2,24 @@
 
 const fs = require('fs-extra');
 const shim = require('./shim').default;
-const { GeolocationNode } = require('./geolocation-node.js');
-const { FileApiDriverLocal } = require('./file-api-driver-local.js');
+const GeolocationNode = require('./geolocation-node').default;
+const { FileApiDriverLocal } = require('./file-api-driver-local');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('./locale');
 const FsDriverNode = require('./fs-driver-node').default;
 const mimeUtils = require('./mime-utils.js').mime;
 const Note = require('./models/Note').default;
 const Resource = require('./models/Resource').default;
-const urlValidator = require('valid-url');
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
+const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
+const dgram = require('dgram');
+const { basename, fileExtension, safeFileExtension } = require('./path-utils');
+
+const proxySettings = {};
 
 function fileExists(filePath) {
 	try {
@@ -23,6 +27,20 @@ function fileExists(filePath) {
 	} catch (err) {
 		return false;
 	}
+}
+
+function isUrlHttps(url) {
+	return url.startsWith('https');
+}
+
+function resolveProxyUrl(proxyUrl) {
+	return (
+		proxyUrl ||
+		process.env['http_proxy'] ||
+		process.env['https_proxy'] ||
+		process.env['HTTP_PROXY'] ||
+		process.env['HTTPS_PROXY']
+	);
 }
 
 // https://github.com/sindresorhus/callsites/blob/main/index.js
@@ -62,8 +80,30 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit(sharp = null, keytar = null, React = null, appVersion = null) {
-	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
+function setupProxySettings(options) {
+	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
+	proxySettings.proxyTimeout = options.proxyTimeout;
+	proxySettings.proxyEnabled = options.proxyEnabled;
+	proxySettings.proxyUrl = options.proxyUrl;
+}
+
+function shimInit(options = null) {
+	options = {
+		sharp: null,
+		keytar: null,
+		React: null,
+		appVersion: null,
+		electronBridge: null,
+		nodeSqlite: null,
+		...options,
+	};
+
+	const sharp = options.sharp;
+	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
+	const appVersion = options.appVersion;
+
+
+	shim.setNodeSqlite(options.nodeSqlite);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -72,17 +112,26 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
+	shim.electronBridge_ = options.electronBridge;
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
 	};
 
-	if (React) {
+	shim.dgram = () => {
+		return dgram;
+	};
+
+	if (options.React) {
 		shim.react = () => {
-			return React;
+			return options.React;
 		};
 	}
+
+	shim.electronBridge = () => {
+		return shim.electronBridge_;
+	};
 
 	shim.randomBytes = async count => {
 		const buffer = require('crypto').randomBytes(count);
@@ -123,8 +172,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 	shim.showMessageBox = (message, options = null) => {
 		if (shim.isElectron()) {
-			const bridge = require('electron').remote.require('./bridge').default;
-			return bridge().showMessageBox(message, options);
+			return shim.electronBridge().showMessageBox(message, options);
 		} else {
 			throw new Error('Not implemented');
 		}
@@ -154,7 +202,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			}
 
 			if (!mustResize) {
-				shim.fsDriver().copy(filePath, targetPath);
+				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
 
@@ -197,28 +245,39 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return true;
 	};
 
+	// This is a bit of an ugly method that's used to both create a new resource
+	// from a file, and update one. To update a resource, pass the
+	// destinationResourceId option. This method is indirectly tested in
+	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
 		options = Object.assign({
 			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
+			destinationResourceId: '',
 		}, options);
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
+		const isUpdate = !!options.destinationResourceId;
+
 		const uuid = require('./uuid').default;
-		const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
 		defaultProps = defaultProps ? defaultProps : {};
 
-		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		let resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		if (isUpdate) resourceId = options.destinationResourceId;
 
-		const resource = Resource.new();
+		let resource = isUpdate ? {} : Resource.new();
 		resource.id = resourceId;
+
+		// When this is an update we auto-update the mime type, in case the
+		// content type has changed, but we keep the title. It is still possible
+		// to modify the title on update using defaultProps.
 		resource.mime = mimeUtils.fromFilename(filePath);
-		resource.title = basename(filePath);
+		if (!isUpdate) resource.title = basename(filePath);
 
 		let fileExt = safeFileExtension(fileExtension(filePath));
 
@@ -258,7 +317,18 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		const saveOptions = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
-		return Resource.save(resource, saveOptions);
+
+		if (isUpdate) {
+			saveOptions.isNew = false;
+			const tempPath = `${targetPath}.tmp`;
+			await shim.fsDriver().move(targetPath, tempPath);
+			resource = await Resource.save(resource, saveOptions);
+			await Resource.updateResourceBlobContent(resource.id, tempPath);
+			await shim.fsDriver().remove(tempPath);
+			return resource;
+		} else {
+			return Resource.save(resource, saveOptions);
+		}
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
@@ -307,6 +377,38 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return Note.save(newNote);
 	};
 
+	shim.imageToDataUrl = async (filePath, maxSize) => {
+		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
+			let image = nativeImage.createFromPath(filePath);
+			if (!image) throw new Error(`Could not load image: ${filePath}`);
+
+			const ext = fileExtension(filePath).toLowerCase();
+			if (!['jpg', 'jpeg', 'png'].includes(ext)) throw new Error(`Unsupported file format: ${ext}`);
+
+			if (maxSize) {
+				const size = image.getSize();
+
+				if (size.width > maxSize || size.height > maxSize) {
+					console.warn(`Image is over ${maxSize}px - resizing it: ${filePath}`);
+
+					const options = {};
+					if (size.width > size.height) {
+						options.width = maxSize;
+					} else {
+						options.height = maxSize;
+					}
+
+					image = image.resize(options);
+				}
+			}
+
+			return image.toDataURL();
+		} else {
+			throw new Error('Unsupported method');
+		}
+	},
+
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
 		if (options === null) options = {};
 
@@ -342,10 +444,14 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return new Buffer(data).toString('base64');
 	};
 
-	shim.fetch = async function(url, options = null) {
-		const validatedUrl = urlValidator.isUri(url);
-		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
-
+	shim.fetch = async function(url, options = {}) {
+		try { // Check if the url is valid
+			new URL(url);
+		} catch (error) { // If the url is not valid, a TypeError will be thrown
+			throw new Error(`Not a valid URL: ${url}`);
+		}
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -360,7 +466,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		url = urlParse(url.trim());
 		const method = options.method ? options.method : 'GET';
-		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
+		const http = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 
@@ -388,6 +494,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			headers: headers,
 		};
 
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : null;
+
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
 				let file = null;
@@ -395,7 +504,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				const cleanUpOnError = error => {
 					// We ignore any unlink error as we only want to report on the main error
 					fs.unlink(filePath)
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.catch(() => {})
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.then(() => {
 							if (file) {
 								file.close(() => {
@@ -472,10 +583,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	shim.Buffer = Buffer;
 
 	shim.openUrl = url => {
-		const bridge = require('electron').remote.require('./bridge').default;
 		// Returns true if it opens the file successfully; returns false if it could
 		// not find the file.
-		return bridge().openExternal(url);
+		return shim.electronBridge().openExternal(url);
 	};
 
 	shim.httpAgent_ = null;
@@ -487,13 +597,33 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
 			};
-			if (url.startsWith('https')) {
-				shim.httpAgent_ = new https.Agent(AgentSettings);
-			} else {
-				shim.httpAgent_ = new http.Agent(AgentSettings);
-			}
+			shim.httpAgent_ = {
+				http: new http.Agent(AgentSettings),
+				https: new https.Agent(AgentSettings),
+			};
 		}
-		return shim.httpAgent_;
+		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
+	};
+
+	shim.proxyAgent = (serverUrl, proxyUrl) => {
+		const proxyAgentConfig = {
+			keepAlive: true,
+			maxSockets: proxySettings.maxConcurrentConnections,
+			keepAliveMsecs: 5000,
+			proxy: proxyUrl,
+			timeout: proxySettings.proxyTimeout * 1000,
+		};
+
+		// Based on https://github.com/delvedor/hpagent#usage
+		if (!isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
+			return new HttpProxyAgent(proxyAgentConfig);
+		} else if (isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
+			return new HttpProxyAgent(proxyAgentConfig);
+		} else if (!isUrlHttps(proxyUrl) && isUrlHttps(serverUrl)) {
+			return new HttpsProxyAgent(proxyAgentConfig);
+		} else {
+			return new HttpsProxyAgent(proxyAgentConfig);
+		}
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {
@@ -558,4 +688,4 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	};
 }
 
-module.exports = { shimInit };
+module.exports = { shimInit, setupProxySettings };

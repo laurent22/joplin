@@ -9,13 +9,14 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
-const { splitCommandString } = require('@joplin/lib/string-utils');
+const { splitCommandString, splitCommandBatch } = require('@joplin/lib/string-utils');
 const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
 const RevisionService = require('@joplin/lib/services/RevisionService').default;
 const shim = require('@joplin/lib/shim').default;
+const setupCommand = require('./setupCommand').default;
 
 class Application extends BaseApplication {
 	constructor() {
@@ -81,21 +82,21 @@ class Application extends BaseApplication {
 
 		pattern = pattern ? pattern.toString() : '';
 
-		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];
+		if (type === BaseModel.TYPE_FOLDER && (pattern === Folder.conflictFolderTitle() || pattern === Folder.conflictFolderId())) return [Folder.conflictFolder()];
 
 		if (!options) options = {};
 
 		const parent = options.parent ? options.parent : app().currentFolder();
 		const ItemClass = BaseItem.itemClass(type);
 
-		if (type == BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) {
+		if (type === BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) {
 			// Handle it as pattern
 			if (!parent) throw new Error(_('No notebook selected.'));
 			return await Note.previews(parent.id, { titlePattern: pattern });
 		} else {
 			// Single item
 			let item = null;
-			if (type == BaseModel.TYPE_NOTE) {
+			if (type === BaseModel.TYPE_NOTE) {
 				if (!parent) throw new Error(_('No notebook has been specified.'));
 				item = await ItemClass.loadFolderNoteByField(parent.id, 'title', pattern);
 			} else {
@@ -114,46 +115,12 @@ class Application extends BaseApplication {
 		return [];
 	}
 
-	stdout(text) {
-		return this.gui().stdout(text);
+	setupCommand(cmd) {
+		return setupCommand(cmd, t => this.stdout(t), () => this.store(), () => this.gui());
 	}
 
-	setupCommand(cmd) {
-		cmd.setStdout(text => {
-			return this.stdout(text);
-		});
-
-		cmd.setDispatcher(action => {
-			if (this.store()) {
-				return this.store().dispatch(action);
-			} else {
-				return () => {};
-			}
-		});
-
-		cmd.setPrompt(async (message, options) => {
-			if (!options) options = {};
-			if (!options.type) options.type = 'boolean';
-			if (!options.booleanAnswerDefault) options.booleanAnswerDefault = 'y';
-			if (!options.answers) options.answers = options.booleanAnswerDefault === 'y' ? [_('Y'), _('n')] : [_('N'), _('y')];
-
-			if (options.type == 'boolean') {
-				message += ` (${options.answers.join('/')})`;
-			}
-
-			let answer = await this.gui().prompt('', `${message} `, options);
-
-			if (options.type === 'boolean') {
-				if (answer === null) return false; // Pressed ESCAPE
-				if (!answer) answer = options.answers[0];
-				const positiveIndex = options.booleanAnswerDefault == 'y' ? 0 : 1;
-				return answer.toLowerCase() === options.answers[positiveIndex].toLowerCase();
-			} else {
-				return answer;
-			}
-		});
-
-		return cmd;
+	stdout(text) {
+		return this.gui().stdout(text);
 	}
 
 	async exit(code = 0) {
@@ -180,8 +147,9 @@ class Application extends BaseApplication {
 		if (!this.allCommandsLoaded_) {
 			fs.readdirSync(__dirname).forEach(path => {
 				if (path.indexOf('command-') !== 0) return;
+				if (path.endsWith('.test.js')) return;
 				const ext = fileExtension(path);
-				if (ext != 'js') return;
+				if (ext !== 'js') return;
 
 				const CommandClass = require(`./${path}`);
 				let cmd = new CommandClass();
@@ -332,6 +300,7 @@ class Application extends BaseApplication {
 			{ keys: [' '], command: 'todo toggle $n' },
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
+			{ keys: ['ti'], type: 'function', command: 'toggle_ids' },
 			{ keys: ['/'], type: 'prompt', command: 'search ""', cursorPosition: -2 },
 			{ keys: ['mn'], type: 'prompt', command: 'mknote ""', cursorPosition: -2 },
 			{ keys: ['mt'], type: 'prompt', command: 'mktodo ""', cursorPosition: -2 },
@@ -390,7 +359,8 @@ class Application extends BaseApplication {
 	async commandList(argv) {
 		if (argv.length && argv[0] === 'batch') {
 			const commands = [];
-			const commandLines = (await fs.readFile(argv[1], 'utf-8')).split('\n');
+			const commandLines = splitCommandBatch(await fs.readFile(argv[1], 'utf-8'));
+
 			for (const commandLine of commandLines) {
 				if (!commandLine.trim()) continue;
 				const splitted = splitCommandString(commandLine.trim());
@@ -402,12 +372,22 @@ class Application extends BaseApplication {
 		}
 	}
 
+	// We need this special case here because by the time the `version` command
+	// runs, the keychain has already been setup.
+	checkIfKeychainEnabled(argv) {
+		return argv.indexOf('version') < 0;
+	}
+
 	async start(argv) {
-		argv = await super.start(argv);
+		const keychainEnabled = this.checkIfKeychainEnabled(argv);
+
+		argv = await super.start(argv, { keychainEnabled });
 
 		cliUtils.setStdout(object => {
 			return this.stdout(object);
 		});
+
+		this.initRedux();
 
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
@@ -439,8 +419,6 @@ class Application extends BaseApplication {
 			process.exit(0);
 		} else {
 			// Otherwise open the GUI
-			this.initRedux();
-
 			const keymap = await this.loadKeymaps();
 
 			const AppGui = require('./app-gui.js');

@@ -12,15 +12,16 @@ import useWindowCommandHandler from './utils/useWindowCommandHandler';
 import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
+import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from '@joplin/lib/eventManager';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _ } from '@joplin/lib/locale';
 import TagList from '../TagList';
@@ -37,7 +38,7 @@ const NoteSearchBar = require('../NoteSearchBar.min.js');
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [
@@ -59,15 +60,18 @@ function NoteEditor(props: NoteEditorProps) {
 	const formNote_beforeLoad = useCallback(async (event: OnLoadEvent) => {
 		await saveNoteIfWillChange(event.formNote);
 		setShowRevisions(false);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const formNote_afterLoad = useCallback(async () => {
 		setTitleHasBeenManuallyChanged(false);
 	}, []);
 
+	const effectiveNoteId = useEffectiveNoteId(props);
+
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
-		noteId: props.noteId,
+		noteId: effectiveNoteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
 		editorRef: editorRef,
@@ -110,7 +114,7 @@ function NoteEditor(props: NoteEditorProps) {
 				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
-					return { ...prev, user_updated_time: savedNote.user_updated_time };
+					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
 				});
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
@@ -151,7 +155,12 @@ function NoteEditor(props: NoteEditorProps) {
 		plugins: props.plugins,
 	});
 
-	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
+	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+		options = {
+			contentMaxWidthTarget: '',
+			...options,
+		};
+
 		const theme = themeStyle(props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
@@ -159,8 +168,11 @@ function NoteEditor(props: NoteEditorProps) {
 			customCss: props.customCss,
 		});
 
-		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.themeId, props.customCss]);
+		return markupToHtml.allAssets(markupLanguage, theme, {
+			contentMaxWidth: props.contentMaxWidth,
+			contentMaxWidthTarget: options.contentMaxWidthTarget,
+		});
+	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -169,6 +181,7 @@ function NoteEditor(props: NoteEditorProps) {
 				id: formNote.id,
 			});
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.isProvisional, formNote.id]);
 
 	const previousNoteId = usePrevious(formNote.id);
@@ -182,10 +195,11 @@ function NoteEditor(props: NoteEditorProps) {
 
 		setScrollWhenReady({
 			type: props.selectedNoteHash ? ScrollOptionTypes.Hash : ScrollOptionTypes.Percent,
-			value: props.selectedNoteHash ? props.selectedNoteHash : props.lastEditorScrollPercents[props.noteId] || 0,
+			value: props.selectedNoteHash ? props.selectedNoteHash : props.lastEditorScrollPercents[formNote.id] || 0,
 		});
 
 		void ResourceEditWatcher.instance().stopWatchingAll();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote.id, previousNoteId]);
 
 	const onFieldChange = useCallback((field: string, value: any, changeId = 0) => {
@@ -230,6 +244,7 @@ function NoteEditor(props: NoteEditorProps) {
 			setFormNote(newNote);
 			scheduleSaveNote(newNote);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [handleProvisionalFlag, formNote, isNewNote, titleHasBeenManuallyChanged]);
 
 	useWindowCommandHandler({
@@ -280,6 +295,7 @@ function NoteEditor(props: NoteEditorProps) {
 			id: formNote.id,
 			status: 'saving',
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote, handleProvisionalFlag]);
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
@@ -294,6 +310,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 			setFormNote(newFormNote);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote]);
 
 	const onNotePropertyChange = useCallback((event) => {
@@ -309,6 +326,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 			return newFormNote;
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	useEffect(() => {
@@ -336,9 +354,13 @@ function NoteEditor(props: NoteEditorProps) {
 	const onScroll = useCallback((event: any) => {
 		props.dispatch({
 			type: 'EDITOR_SCROLL_PERCENT_SET',
-			noteId: formNote.id,
+			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
+			// to refer the current value, since they would be one or more generations old.
+			// For the purpose, useRef value should be used.
+			noteId: formNoteRef.current.id,
 			percent: event.percent,
 		});
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.dispatch, formNote]);
 
 	function renderNoNotes(rootStyle: any) {
@@ -400,6 +422,11 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		contentMaxWidth: props.contentMaxWidth,
+		isSafeMode: props.isSafeMode,
+		// We need it to identify the context for which media is rendered.
+		// It is currently used to remember pdf scroll position for each attacments of each note uniquely.
+		noteId: props.noteId,
 	};
 
 	let editor = null;
@@ -471,6 +498,7 @@ function NoteEditor(props: NoteEditorProps) {
 		return (
 			<NoteSearchBar
 				ref={noteSearchBarRef}
+				themeId={props.themeId}
 				style={{
 					display: 'flex',
 					height: 35,
@@ -525,7 +553,7 @@ function NoteEditor(props: NoteEditorProps) {
 		}
 	}
 
-	if (formNote.encryption_applied || !formNote.id || !props.noteId) {
+	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
 
@@ -545,7 +573,7 @@ function NoteEditor(props: NoteEditorProps) {
 					onTitleChange={onTitleChange}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -572,7 +600,6 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		noteId: noteId,
 		notes: state.notes,
-		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedFolderId: state.selectedFolderId,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
@@ -601,6 +628,8 @@ const mapStateToProps = (state: AppState) => {
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
 		], whenClauseContext)[0],
+		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
+		isSafeMode: state.settings.isSafeMode,
 	};
 };
 

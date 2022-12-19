@@ -6,6 +6,7 @@ const { Checkbox } = require('./checkbox.js');
 const Note = require('@joplin/lib/models/Note').default;
 const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('./global-style.js');
+const { _ } = require('@joplin/lib/locale');
 
 class NoteItemComponent extends Component {
 	constructor() {
@@ -128,13 +129,20 @@ class NoteItemComponent extends Component {
 
 		const selectionWrapperStyle = isSelected ? this.styles().selectionWrapperSelected : this.styles().selectionWrapper;
 
+		const noteTitle = Note.displayTitle(note);
+
 		return (
 			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()} activeOpacity={0.5}>
 				<View style={selectionWrapperStyle}>
 					<View style={opacityStyle}>
 						<View style={listItemStyle}>
-							<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={checked => this.todoCheckbox_change(checked)} />
-							<Text style={listItemTextStyle}>{Note.displayTitle(note)}</Text>
+							<Checkbox
+								style={checkboxStyle}
+								checked={checkboxChecked}
+								onChange={checked => this.todoCheckbox_change(checked)}
+								accessibilityLabel={_('to-do: %s', noteTitle)}
+							/>
+							<Text style={listItemTextStyle}>{noteTitle}</Text>
 						</View>
 					</View>
 				</View>

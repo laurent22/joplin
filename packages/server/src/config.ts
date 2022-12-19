@@ -1,34 +1,15 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, MailerConfig, RouteType } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
+import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+import { EnvVariables } from './env';
+import parseStorageDriverConnectionString from './models/items/storage/parseStorageConnectionString';
 
-export interface EnvVariables {
-	APP_BASE_URL?: string;
-	USER_CONTENT_BASE_URL?: string;
-	API_BASE_URL?: string;
-
-	APP_PORT?: string;
-	DB_CLIENT?: string;
-	RUNNING_IN_DOCKER?: string;
-
-	POSTGRES_PASSWORD?: string;
-	POSTGRES_DATABASE?: string;
-	POSTGRES_USER?: string;
-	POSTGRES_HOST?: string;
-	POSTGRES_PORT?: string;
-
-	MAILER_ENABLED?: string;
-	MAILER_HOST?: string;
-	MAILER_PORT?: string;
-	MAILER_SECURE?: string;
-	MAILER_AUTH_USER?: string;
-	MAILER_AUTH_PASSWORD?: string;
-	MAILER_NOREPLY_NAME?: string;
-	MAILER_NOREPLY_EMAIL?: string;
-
-	// This must be the full path to the database file
-	SQLITE_DATABASE?: string;
+interface PackageJson {
+	version: string;
 }
+
+const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
 
 let runningInDocker_: boolean = false;
 
@@ -52,18 +33,28 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 }
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
+	const baseConfig: DatabaseConfig = {
+		client: DatabaseConfigClient.Null,
+		name: '',
+		slowQueryLogEnabled: env.DB_SLOW_QUERY_LOG_ENABLED,
+		slowQueryLogMinDuration: env.DB_SLOW_QUERY_LOG_MIN_DURATION,
+		autoMigration: env.DB_AUTO_MIGRATION,
+	};
+
 	if (env.DB_CLIENT === 'pg') {
 		return {
+			...baseConfig,
 			client: DatabaseConfigClient.PostgreSQL,
-			name: env.POSTGRES_DATABASE || 'joplin',
-			user: env.POSTGRES_USER || 'joplin',
-			password: env.POSTGRES_PASSWORD || 'joplin',
-			port: env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
+			name: env.POSTGRES_DATABASE,
+			user: env.POSTGRES_USER,
+			password: env.POSTGRES_PASSWORD,
+			port: env.POSTGRES_PORT,
 			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
 		};
 	}
 
 	return {
+		...baseConfig,
 		client: DatabaseConfigClient.SQLite,
 		name: env.SQLITE_DATABASE,
 		asyncStackTraces: true,
@@ -72,18 +63,27 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 
 function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 	return {
-		enabled: env.MAILER_ENABLED !== '0',
-		host: env.MAILER_HOST || '',
-		port: Number(env.MAILER_PORT || 587),
-		secure: !!Number(env.MAILER_SECURE) || true,
-		authUser: env.MAILER_AUTH_USER || '',
-		authPassword: env.MAILER_AUTH_PASSWORD || '',
-		noReplyName: env.MAILER_NOREPLY_NAME || '',
-		noReplyEmail: env.MAILER_NOREPLY_EMAIL || '',
+		enabled: env.MAILER_ENABLED,
+		host: env.MAILER_HOST,
+		port: env.MAILER_PORT,
+		security: env.MAILER_SECURITY,
+		authUser: env.MAILER_AUTH_USER,
+		authPassword: env.MAILER_AUTH_PASSWORD,
+		noReplyName: env.MAILER_NOREPLY_NAME,
+		noReplyEmail: env.MAILER_NOREPLY_EMAIL,
 	};
 }
 
-function baseUrlFromEnv(env: any, appPort: number): string {
+function stripeConfigFromEnv(publicConfig: StripePublicConfig, env: EnvVariables): StripeConfig {
+	return {
+		...publicConfig,
+		enabled: !!env.STRIPE_SECRET_KEY,
+		secretKey: env.STRIPE_SECRET_KEY,
+		webhookSecret: env.STRIPE_WEBHOOK_SECRET,
+	};
+}
+
+function baseUrlFromEnv(env: EnvVariables, appPort: number): string {
 	if (env.APP_BASE_URL) {
 		return rtrimSlashes(env.APP_BASE_URL);
 	} else {
@@ -93,15 +93,24 @@ function baseUrlFromEnv(env: any, appPort: number): string {
 
 let config_: Config = null;
 
-export function initConfig(env: EnvVariables, overrides: any = null) {
+export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
 	const rootDir = pathUtils.dirname(__dirname);
-	const viewDir = `${pathUtils.dirname(__dirname)}/src/views`;
-	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
+	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
+	const appName = env.APP_NAME;
+	const viewDir = `${rootDir}/src/views`;
+	const appPort = env.APP_PORT;
 	const baseUrl = baseUrlFromEnv(env, appPort);
+	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
+	const supportEmail = env.SUPPORT_EMAIL;
 
 	config_ = {
+		...env,
+		appVersion: packageJson.version,
+		appName,
+		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
+		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,
 		layoutDir: `${viewDir}/layouts`,
@@ -109,10 +118,25 @@ export function initConfig(env: EnvVariables, overrides: any = null) {
 		logDir: `${rootDir}/logs`,
 		database: databaseConfigFromEnv(runningInDocker_, env),
 		mailer: mailerConfigFromEnv(env),
+		stripe: stripeConfigFromEnv(stripePublicConfig, env),
 		port: appPort,
 		baseUrl,
-		apiBaseUrl: env.API_BASE_URL ? env.API_BASE_URL : baseUrl,
+		adminBaseUrl: `${baseUrl}/admin`,
+		showErrorStackTraces: env.ERROR_STACK_TRACES,
+		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
+		joplinAppBaseUrl: env.JOPLINAPP_BASE_URL,
+		signupEnabled: env.SIGNUP_ENABLED,
+		termsEnabled: env.TERMS_ENABLED,
+		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED,
+		supportEmail,
+		supportName: env.SUPPORT_NAME || appName,
+		businessEmail: env.BUSINESS_EMAIL || supportEmail,
+		cookieSecure: env.COOKIES_SECURE,
+		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
+		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
+		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
+		maxTimeDrift: env.MAX_TIME_DRIFT,
 		...overrides,
 	};
 }

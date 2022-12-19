@@ -1,4 +1,4 @@
-import DomHandler, { DomHandlerOptions, Node, Element } from "domhandler";
+import DomHandler, { DomHandlerOptions, Element } from "domhandler";
 import * as DomUtils from "domutils";
 import { Parser, ParserOptions } from "./Parser";
 
@@ -147,16 +147,16 @@ export class FeedHandler extends DomHandler {
     }
 }
 
-function getElements(what: string, where: Node | Node[]) {
+function getElements(what: string, where: any) {
     return DomUtils.getElementsByTagName(what, where, true);
 }
 function getOneElement(
     what: string | ((name: string) => boolean),
-    where: Node | Node[]
+    where: any
 ) {
     return DomUtils.getElementsByTagName(what, where, true, 1)[0];
 }
-function fetch(what: string, where: Node | Node[], recurse = false): string {
+function fetch(what: string, where: any, recurse = false): string {
     return DomUtils.getText(
         DomUtils.getElementsByTagName(what, where, recurse, 1)
     ).trim();
@@ -175,7 +175,7 @@ function addConditionally<T>(
     obj: T,
     prop: keyof T,
     what: string,
-    where: Node | Node[],
+    where: any,
     recurse = false
 ) {
     const tmp = fetch(what, where, recurse);

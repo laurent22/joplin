@@ -1,0 +1,85 @@
+// AUTO-GENERATED using `gulp buildCommandIndex`
+import * as addProfile from './addProfile';
+import * as commandPalette from './commandPalette';
+import * as editAlarm from './editAlarm';
+import * as exportPdf from './exportPdf';
+import * as gotoAnything from './gotoAnything';
+import * as hideModalMessage from './hideModalMessage';
+import * as leaveSharedFolder from './leaveSharedFolder';
+import * as moveToFolder from './moveToFolder';
+import * as newFolder from './newFolder';
+import * as newNote from './newNote';
+import * as newSubFolder from './newSubFolder';
+import * as newTodo from './newTodo';
+import * as openFolder from './openFolder';
+import * as openFolderDialog from './openFolderDialog';
+import * as openItem from './openItem';
+import * as openNote from './openNote';
+import * as openPdfViewer from './openPdfViewer';
+import * as openTag from './openTag';
+import * as print from './print';
+import * as renameFolder from './renameFolder';
+import * as renameTag from './renameTag';
+import * as revealResourceFile from './revealResourceFile';
+import * as search from './search';
+import * as setTags from './setTags';
+import * as showModalMessage from './showModalMessage';
+import * as showNoteContentProperties from './showNoteContentProperties';
+import * as showNoteProperties from './showNoteProperties';
+import * as showPrompt from './showPrompt';
+import * as showShareFolderDialog from './showShareFolderDialog';
+import * as showShareNoteDialog from './showShareNoteDialog';
+import * as showSpellCheckerMenu from './showSpellCheckerMenu';
+import * as toggleEditors from './toggleEditors';
+import * as toggleLayoutMoveMode from './toggleLayoutMoveMode';
+import * as toggleNoteList from './toggleNoteList';
+import * as toggleNotesSortOrderField from './toggleNotesSortOrderField';
+import * as toggleNotesSortOrderReverse from './toggleNotesSortOrderReverse';
+import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
+import * as toggleSideBar from './toggleSideBar';
+import * as toggleVisiblePanes from './toggleVisiblePanes';
+
+const index:any[] = [
+	addProfile,
+	commandPalette,
+	editAlarm,
+	exportPdf,
+	gotoAnything,
+	hideModalMessage,
+	leaveSharedFolder,
+	moveToFolder,
+	newFolder,
+	newNote,
+	newSubFolder,
+	newTodo,
+	openFolder,
+	openFolderDialog,
+	openItem,
+	openNote,
+	openPdfViewer,
+	openTag,
+	print,
+	renameFolder,
+	renameTag,
+	revealResourceFile,
+	search,
+	setTags,
+	showModalMessage,
+	showNoteContentProperties,
+	showNoteProperties,
+	showPrompt,
+	showShareFolderDialog,
+	showShareNoteDialog,
+	showSpellCheckerMenu,
+	toggleEditors,
+	toggleLayoutMoveMode,
+	toggleNoteList,
+	toggleNotesSortOrderField,
+	toggleNotesSortOrderReverse,
+	togglePerFolderSortOrder,
+	toggleSideBar,
+	toggleVisiblePanes,
+];
+
+export default index;
+// AUTO-GENERATED using `gulp buildCommandIndex`

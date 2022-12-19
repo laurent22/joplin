@@ -1,4 +1,4 @@
-import { User } from '../../db';
+import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models } from '../../utils/testing/testUtils';
 
@@ -23,7 +23,7 @@ describe('api_users', function() {
 			full_name: 'Toto',
 			email: 'toto@example.com',
 			max_item_size: 1000,
-			can_share: 0,
+			can_share_folder: 0,
 		};
 
 		await postApi(adminSession.id, 'users', userToSave);
@@ -31,8 +31,10 @@ describe('api_users', function() {
 		const savedUser = await models().user().loadByEmail('toto@example.com');
 		expect(savedUser.full_name).toBe('Toto');
 		expect(savedUser.email).toBe('toto@example.com');
-		expect(savedUser.can_share).toBe(0);
+		expect(savedUser.can_share_folder).toBe(0);
 		expect(savedUser.max_item_size).toBe(1000);
+		expect(savedUser.email_confirmed).toBe(0);
+		expect(savedUser.must_set_password).toBe(1);
 	});
 
 	test('should patch a user', async function() {

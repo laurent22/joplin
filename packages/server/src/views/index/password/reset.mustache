@@ -1,0 +1,45 @@
+<section class="section">
+	<div class="container">
+		{{#successMessage}}
+			<div class="notification is-info">
+				{{successMessage}}
+			</div>
+		{{/successMessage}}
+
+		{{#error}}
+			<div class="notification is-danger">
+				{{error.message}}
+			</div>
+		{{/error}}
+		
+		<h1 class="title">Reset your password</h1>
+		<p class="block">Enter your new password below:</p>
+
+		<form action="{{postUrl}}" method="POST">
+			<div class="field">
+				<label class="label">Password</label>
+				<div class="control">
+					<input id="password" name="password" class="input" type="password"/>
+				</div>
+				<p id="password_strength" class="help"></p>
+			</div>
+
+			<div class="field">
+				<label class="label">Repeat password</label>
+				<div class="control">
+					<input name="password2" class="input" type="password"/>
+				</div>
+			</div>
+
+			<div class="control">
+				<button class="button is-primary">Reset password</button>
+			</div>
+		</form>
+	</div>
+</section>
+
+<script>
+	$(() => {
+		setupPasswordStrengthHandler();
+	});
+</script>

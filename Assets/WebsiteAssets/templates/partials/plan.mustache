@@ -1,0 +1,73 @@
+<div class="col-12 col-lg-4 account-type-{{priceMonthly.accountType}}">
+	<div class="price-container {{#featured}}price-container-blue{{/featured}}">
+		<div class="price-row">
+			<div class="plan-type">
+				<img src="{{imageBaseUrl}}/{{iconName}}.png"/>&nbsp;{{title}}
+			</div>
+
+			<div class="plan-price plan-price-monthly">
+				{{priceMonthly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;<span translate>/month</span>{{#footnote}} (*){{/footnote}}</sub>
+			</div>
+
+			<div class="plan-price plan-price-yearly">
+				{{priceYearly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;<span translate>/month</span>{{#footnote}} (*){{/footnote}}</sub>
+			</div>
+		</div>
+
+		<div class="plan-price-yearly-per-year">
+			<div>
+				({{priceYearly.formattedAmount}}<sub class="per-year">&nbsp;<span translate>/year</span></sub>)
+			</div>
+		</div>
+
+		{{#featureLabelsOn}}
+			<p><i class="fas fa-check feature feature-on"></i>{{.}}</p>
+		{{/featureLabelsOn}}
+
+		{{#featureLabelsOff}}
+			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{.}}</p>
+		{{/featureLabelsOff}}
+		
+		<p class="text-center subscribe-wrapper">
+			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white subscribeButton">{{cfaLabel}}</a>
+		</p>
+
+		{{#footnote}}<sub>(*) {{.}}</sub>{{/footnote}}
+	</div>
+
+	<script>
+		(function() {
+			const stripePricesIds = {
+				monthly: '{{{priceMonthly.id}}}',
+				yearly: '{{{priceYearly.id}}}',
+			};
+			const planName = '{{{name}}}';
+			const buttonId = 'subscribeButton-' + planName;
+			const buttonElement = document.getElementById(buttonId);
+
+			if (stripePricesIds.monthly) {
+				function handleResult() {
+					console.info('Redirected to checkout');
+				}
+
+				buttonElement.addEventListener("click", function(evt) {
+					evt.preventDefault();
+
+					const priceId = stripePricesIds[subscriptionPeriod];
+
+					if (!priceId) {
+						console.error('Invalid period: ' + subscriptionPeriod);
+						return;
+					}
+
+					createCheckoutSession(priceId).then(function(data) {
+						stripe.redirectToCheckout({
+							sessionId: data.sessionId
+						})
+						.then(handleResult);
+					});
+				});
+			}
+		})();
+	</script>
+</div>

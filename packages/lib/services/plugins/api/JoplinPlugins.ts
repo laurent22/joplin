@@ -36,6 +36,7 @@ export default class JoplinPlugins {
 			// We don't use `await` when calling onStart because the plugin might be awaiting
 			// in that call too (for example, when opening a dialog on startup) so we don't
 			// want to get stuck here.
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			void script.onStart({}).catch((error: any) => {
 				// For some reason, error thrown from the executed script do not have the type "Error"
 				// but are instead plain object. So recreate the Error object here so that it can
@@ -43,6 +44,7 @@ export default class JoplinPlugins {
 				const newError: Error = new Error(error.message);
 				newError.stack = error.stack;
 				logger.error(`Uncaught exception in plugin "${this.plugin.id}":`, newError);
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			}).then(() => {
 				logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
 				this.plugin.emit('started');
@@ -54,7 +56,7 @@ export default class JoplinPlugins {
 	 * @deprecated Use joplin.contentScripts.register()
 	 */
 	public async registerContentScript(type: ContentScriptType, id: string, scriptPath: string) {
-		this.plugin.deprecationNotice('1.8', 'joplin.plugins.registerContentScript() is deprecated in favour of joplin.contentScripts.register()');
+		this.plugin.deprecationNotice('1.8', 'joplin.plugins.registerContentScript() is deprecated in favour of joplin.contentScripts.register()', true);
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 

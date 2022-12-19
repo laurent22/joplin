@@ -1,19 +1,23 @@
 import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
-import Button, { ButtonLevel } from '../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
-
+import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
+import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
-const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
-const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
+import ClipperConfigScreen from '../ClipperConfigScreen';
+import restart from '../../services/restart';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
+import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -27,7 +31,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
 
-		shared.init(this);
+		shared.init(this, reg);
 
 		this.state = {
 			selectedSectionName: 'general',
@@ -42,9 +46,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-		// this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
-		this.showLogButton_click = this.showLogButton_click.bind(this);
-		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
 		this.onCancelClick = this.onCancelClick.bind(this);
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
@@ -58,19 +59,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
-	// async checkNextcloudAppButton_click() {
-	// 	this.setState({ showNextcloudAppLog: true });
-	// 	await shared.checkNextcloudApp(this, this.state.settings);
-	// }
-
-	showLogButton_click() {
-		this.setState({ showNextcloudAppLog: true });
-	}
-
-	nextcloudAppHelpLink_click() {
-		bridge().openExternal('https://joplinapp.org/nextcloud_app');
-	}
-
 	UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
@@ -81,6 +69,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				this.switchSection(this.props.defaultSection);
 			});
 		}
+		updateDefaultPluginsInstallState(getDefaultPluginsInstallState(PluginService.instance(), Object.keys(getDefaultPluginsInfo())), this);
 	}
 
 	private async handleSettingButton(key: string) {
@@ -88,12 +77,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		} else if (key === 'sync.clearLocalDataButton') {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
+		} else if (key === 'sync.openSyncWizard') {
+			this.props.dispatch({
+				type: 'DIALOG_OPEN',
+				name: 'syncWizard',
+			});
 		} else {
 			throw new Error(`Unhandled key: ${key}`);
 		}
@@ -109,7 +103,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	screenFromName(screenName: string) {
-		if (screenName === 'encryption') return <EncryptionConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
 
@@ -133,19 +127,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	sidebar_selectionChange(event: any) {
 		this.switchSection(event.section.name);
-	}
-
-	keyValueToArray(kv: any) {
-		const output = [];
-		for (const k in kv) {
-			if (!kv.hasOwnProperty(k)) continue;
-			output.push({
-				key: k,
-				label: kv[k],
-			});
-		}
-
-		return output;
 	}
 
 	renderSectionDescription(section: any) {
@@ -360,7 +341,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const md = Setting.settingMetadata(key);
 
-		const descriptionText = Setting.keyDescription(key, 'desktop');
+		const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 		const descriptionComp = this.renderDescription(this.props.themeId, descriptionText);
 
 		if (settingKeyToControl[key]) {
@@ -386,7 +367,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		} else if (md.isEnum) {
 			const items = [];
 			const settingOptions = md.options();
-			const array = this.keyValueToArray(settingOptions);
+			const array = Setting.enumOptionsToValueLabels(settingOptions, md.optionsOrder ? md.optionsOrder() : [], {
+				valueKey: 'key',
+				labelKey: 'label',
+			});
+
 			for (let i = 0; i < array.length; i++) {
 				const e = array[i];
 				items.push(
@@ -464,7 +449,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 			const inputType = md.secure === true ? 'password' : 'text';
 
-			if (md.subType === 'file_path_and_args') {
+			if (md.subType === 'file_path_and_args' || md.subType === 'file_path' || md.subType === 'directory_path') {
 				inputStyle.marginBottom = subLabel.marginBottom;
 
 				const splitCmd = (cmdString: string) => {
@@ -493,15 +478,47 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					updateSettingValue(key, joinCmd(cmd));
 				};
 
-				const browseButtonClick = () => {
-					const paths = bridge().showOpenDialog();
-					if (!paths || !paths.length) return;
-					const cmd = splitCmd(this.state.settings[key]);
-					cmd[0] = paths[0];
-					updateSettingValue(key, joinCmd(cmd));
+				const browseButtonClick = async () => {
+					if (md.subType === 'directory_path') {
+						const paths = await bridge().showOpenDialog({
+							properties: ['openDirectory'],
+						});
+						if (!paths || !paths.length) return;
+						updateSettingValue(key, paths[0]);
+					} else {
+						const paths = await bridge().showOpenDialog();
+						if (!paths || !paths.length) return;
+
+						if (md.subType === 'file_path') {
+							updateSettingValue(key, paths[0]);
+						} else {
+							const cmd = splitCmd(this.state.settings[key]);
+							cmd[0] = paths[0];
+							updateSettingValue(key, joinCmd(cmd));
+						}
+					}
 				};
 
 				const cmd = splitCmd(this.state.settings[key]);
+				const path = md.subType === 'file_path_and_args' ? cmd[0] : this.state.settings[key];
+
+				const argComp = md.subType !== 'file_path_and_args' ? null : (
+					<div style={{ ...rowStyle, marginBottom: 5 }}>
+						<div style={subLabel}>{_('Arguments:')}</div>
+						<input
+							type={inputType}
+							style={inputStyle}
+							onChange={(event: any) => {
+								onArgsChange(event);
+							}}
+							value={cmd[1]}
+							spellCheck={false}
+						/>
+						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
+							{descriptionComp}
+						</div>
+					</div>
+				);
 
 				return (
 					<div key={key} style={rowStyle}>
@@ -519,35 +536,20 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											onChange={(event: any) => {
 												onPathChange(event);
 											}}
-											value={cmd[0]}
+											value={path}
 											spellCheck={false}
 										/>
 										<Button
 											level={ButtonLevel.Secondary}
 											title={_('Browse...')}
 											onClick={browseButtonClick}
+											size={ButtonSize.Small}
 										/>
-									</div>
-								</div>
-								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>{_('Arguments:')}</div>
-									<input
-										type={inputType}
-										style={inputStyle}
-										onChange={(event: any) => {
-											onArgsChange(event);
-										}}
-										value={cmd[1]}
-										spellCheck={false}
-									/>
-									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
-										{descriptionComp}
 									</div>
 								</div>
 							</div>
 						</div>
-
-
+						{argComp}
 					</div>
 				);
 			} else {
@@ -606,11 +608,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BUTTON) {
+			const labelComp = md.hideLabel ? null : (
+				<div style={labelStyle}>
+					<label>{md.label()}</label>
+				</div>
+			);
+
 			return (
 				<div key={key} style={rowStyle}>
-					<div style={labelStyle}>
-						<label>{md.label()}</label>
-					</div>
+					{labelComp}
 					<Button level={ButtonLevel.Secondary} title={md.label()} onClick={md.onClick ? md.onClick : () => this.handleSettingButton(key)}/>
 					{descriptionComp}
 				</div>
@@ -628,7 +634,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private async restartApp() {
 		await Setting.saveAll();
-		bridge().restart();
+		await restart();
 	}
 
 	private async checkNeedRestart() {
@@ -690,7 +696,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
 
@@ -707,7 +713,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete style.width;
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+			<div className="config-screen" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}

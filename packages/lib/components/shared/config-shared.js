@@ -1,19 +1,37 @@
 const Setting = require('../../models/Setting').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry');
+const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
 const { createSelector } = require('reselect');
+const Logger = require('../../Logger').default;
+
+const logger = Logger.create('config/lib');
 
 const shared = {};
 
-shared.init = function(comp) {
+shared.onSettingsSaved = () => {};
+
+shared.init = function(comp, reg) {
 	if (!comp.state) comp.state = {};
 	comp.state.checkSyncConfigResult = null;
-	comp.state.checkNextcloudAppResult = null;
 	comp.state.settings = {};
 	comp.state.changedSettingKeys = [];
-	comp.state.showNextcloudAppLog = false;
 	comp.state.showAdvancedSettings = false;
+
+	shared.onSettingsSaved = (event) => {
+		const savedSettingKeys = event.savedSettingKeys;
+
+		// After changing the sync settings we immediately trigger a sync
+		// operation. This will ensure that the client gets the sync info as
+		// early as possible, in particular the encryption state (encryption
+		// keys, whether it's enabled, etc.). This should prevent situations
+		// where the user tried to setup E2EE on the client even though it's
+		// already been done on another client.
+		if (savedSettingKeys.find(s => s.startsWith('sync.'))) {
+			logger.info('Sync settings have been changed - scheduling a sync');
+			void reg.scheduleSync();
+		}
+	};
 };
 
 shared.advancedSettingsButton_click = (comp) => {
@@ -35,7 +53,6 @@ shared.checkSyncConfig = async function(comp, settings) {
 	comp.setState({ checkSyncConfigResult: result });
 
 	if (result.ok) {
-		// await shared.checkNextcloudApp(comp, settings);
 		// Users often expect config to be auto-saved at this point, if the config check was successful
 		shared.saveSettings(comp);
 	}
@@ -82,14 +99,17 @@ shared.scheduleSaveSettings = function(comp) {
 };
 
 shared.saveSettings = function(comp) {
+	const savedSettingKeys = comp.state.changedSettingKeys.slice();
+
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
 		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
-		console.info('Saving', key, comp.state.settings[key]);
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 
 	comp.setState({ changedSettingKeys: [] });
+
+	shared.onSettingsSaved({ savedSettingKeys });
 };
 
 shared.settingsToComponents = function(comp, device, settings) {

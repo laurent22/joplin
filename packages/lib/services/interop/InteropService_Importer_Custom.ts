@@ -5,15 +5,27 @@ export default class InteropService_Importer_Custom extends InteropService_Impor
 
 	private module_: Module = null;
 
-	constructor(handler: Module) {
+	public constructor(handler: Module) {
 		super();
 		this.module_ = handler;
 	}
 
-	async exec(result: ImportExportResult): Promise<ImportExportResult> {
+	public async exec(result: ImportExportResult): Promise<ImportExportResult> {
+		// When passing the options to the plugin, we strip off any function
+		// because they won't serialized over ipc.
+
+		const processedOptions: any = {};
+
+		if (this.options_) {
+			for (const [k, v] of Object.entries(this.options_)) {
+				if (typeof v === 'function') continue;
+				processedOptions[k] = v;
+			}
+		}
+
 		return this.module_.onExec({
 			sourcePath: this.sourcePath_,
-			options: this.options_,
+			options: processedOptions,
 			warnings: result.warnings,
 		});
 	}

@@ -64,4 +64,4 @@ If it's lower than the client supported version, the client does not allow sync 
 
 If the user click on the link to upgrade, upgradeState becomes MUST_UPGRADE, and the app restarts.
 
-On startup, the app check the upgradeState setting. If it is MUST_UPGRADE it displays the upgrade screen and starts upgrarding. Once done it sets upgradeState back to IDLE, and restart the app.
+On startup, the app check the upgradeState setting. If it is MUST_UPGRADE it displays the upgrade screen and starts upgrading. Once done it sets upgradeState back to IDLE, and restart the app.

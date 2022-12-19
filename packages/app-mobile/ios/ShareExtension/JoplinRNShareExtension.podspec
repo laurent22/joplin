@@ -9,6 +9,6 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "9.0"
   spec.source       = { :path => "." }
   spec.source_files = "Source/RNShareExtension/**/*.{h,m}"
-  spec.dependency     "React", "0.63.3"
+  spec.dependency     "React"
   spec.dependency     "JoplinCommonShareExtension"
 end

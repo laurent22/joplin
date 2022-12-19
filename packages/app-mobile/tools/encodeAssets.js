@@ -21,33 +21,55 @@ const walk = function(dir) {
 };
 
 async function encodeFile(sourcePath, destPath) {
-	const buffer = await fs.readFile(sourcePath);
-	const hash = md5(buffer.toString('base64'));
-	const js = `module.exports = \`${buffer.toString('base64')}\`;`;
-	const outputPath = `${outputDir}/${destPath}.base64.js`;
-	await fs.mkdirp(utils.dirname(outputPath));
-	await fs.writeFile(outputPath, js);
+	for (let i = 0; i < 3; i++) {
+		try {
+			const buffer = await fs.readFile(sourcePath);
+			const hash = md5(buffer.toString('base64'));
+			const js = `module.exports = \`${buffer.toString('base64')}\`;`;
+			const outputPath = `${outputDir}/${destPath}.base64.js`;
+			console.info(`Encoding "${sourcePath}" => "${outputPath}"`);
+			await utils.mkdirp(utils.dirname(outputPath));
+			await fs.writeFile(outputPath, js);
 
-	const ext = utils.fileExtension(sourcePath).toLowerCase();
-	let mime = 'application/octet-stream';
-	if (ext === 'js') mime = 'application/javascript';
-	if (ext === 'css') mime = 'text/css';
+			const ext = utils.fileExtension(sourcePath).toLowerCase();
+			let mime = 'application/octet-stream';
+			if (ext === 'js') mime = 'application/javascript';
+			if (ext === 'css') mime = 'text/css';
 
-	return {
-		encoding: 'base64',
-		name: destPath,
-		encodedName: `${destPath}.base64.js`,
-		mime: mime,
-		hash: hash,
-	};
+			return {
+				encoding: 'base64',
+				name: destPath,
+				encodedName: `${destPath}.base64.js`,
+				mime: mime,
+				hash: hash,
+			};
+		} catch (error) {
+			// Although it makes no sense, the above function sometimes fails on CI
+			// with error "DEST does not exist", which of course it doesn't
+			// since we are trying to create it. So here we retry when it happens.
+			//
+			// Full error:
+			//
+			// Encoding "/home/runner/work/joplin/joplin/packages/app-mobile/tools/../../renderer/assets/katex/fonts/KaTeX_Math-BoldItalic.woff2" => "/home/runner/work/joplin/joplin/packages/app-mobile/tools/../pluginAssets/katex/fonts/KaTeX_Math-BoldItalic.woff2.base64.js"
+			// 'encodeAssets' errored after 115 ms
+			// Error: ENOENT: no such file or directory, open '/home/runner/work/joplin/joplin/packages/app-mobile/tools/../pluginAssets/katex/fonts/KaTeX_Math-BoldItalic.woff2.base64.js'
+
+			console.warn(`Could not encode file (${i}). Will try again...`);
+			console.warn('Error was:', error);
+			await utils.msleep(1000 + 1000 * i);
+			continue;
+		}
+	}
+
+	throw new Error('Could not encode file after multiple attempts. See above for errors.');
 }
 
 async function main() {
 	await fs.remove(outputDir);
-	await fs.mkdirp(outputDir);
+	await utils.mkdirp(outputDir);
 
 	const encodedFiles = [];
-	const sourceAssetDir = `${rootDir}/node_modules/@joplin/renderer/assets`;
+	const sourceAssetDir = `${rootDir}/../renderer/assets`;
 	const files = walk(sourceAssetDir);
 
 	for (const file of files) {

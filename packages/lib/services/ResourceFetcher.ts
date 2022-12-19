@@ -161,6 +161,13 @@ export default class ResourceFetcher extends BaseService {
 			return;
 		}
 
+		const fileApi = await this.fileApi();
+
+		if (!fileApi) {
+			this.logger().debug('ResourceFetcher: Disabled because fileApi is not set');
+			return;
+		}
+
 		this.fetchingItems_[resourceId] = resource;
 
 		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
@@ -168,19 +175,19 @@ export default class ResourceFetcher extends BaseService {
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
 
-		const fileApi = await this.fileApi();
-
 		this.logger().debug(`ResourceFetcher: Downloading resource: ${resource.id}`);
 
 		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
 		fileApi
 			.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' })
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then(async () => {
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
 				this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
 				await completeDownload(true, localResourceContentPath);
 			})
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.catch(async (error: any) => {
 				this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });

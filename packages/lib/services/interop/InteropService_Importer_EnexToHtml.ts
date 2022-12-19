@@ -1,12 +1,11 @@
 import { ImportExportResult } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
+import importEnex from '../../import-enex';
 const { filename } = require('../../path-utils');
 
 export default class InteropService_Importer_EnexToHtml extends InteropService_Importer_Base {
-	async exec(result: ImportExportResult): Promise<ImportExportResult> {
-		const { importEnex } = require('../../import-enex');
-
+	public async exec(result: ImportExportResult): Promise<ImportExportResult> {
 		let folder = this.options_.destinationFolder;
 
 		if (!folder) {

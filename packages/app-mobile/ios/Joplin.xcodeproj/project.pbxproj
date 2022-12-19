@@ -11,6 +11,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */; };
+		4D122473270878D700DE23E8 /* wtf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D122472270878D700DE23E8 /* wtf.swift */; };
 		5E556FC75AECECB13464A724 /* libPods-ShareExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AE152142260F770400217DCB /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE152141260F770400217DCB /* ShareViewController.m */; };
@@ -60,6 +61,8 @@
 		2C91CD1424C7137D07789148 /* Pods-Joplin-JoplinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-JoplinTests.release.xcconfig"; path = "Target Support Files/Pods-Joplin-JoplinTests/Pods-Joplin-JoplinTests.release.xcconfig"; sourceTree = "<group>"; };
 		2DA44D9A347489A29B995F73 /* Pods-Joplin-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOSTests/Pods-Joplin-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		37DBC181C4AD99CBE0D07EEB /* Pods-Joplin-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOSTests/Pods-Joplin-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		4D122471270878D600DE23E8 /* Joplin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Joplin-Bridging-Header.h"; sourceTree = "<group>"; };
+		4D122472270878D700DE23E8 /* wtf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wtf.swift; sourceTree = "<group>"; };
 		505CB61090817F4453631957 /* Pods-Joplin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.debug.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig"; sourceTree = "<group>"; };
 		5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.debug.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Joplin/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				4D122472270878D700DE23E8 /* wtf.swift */,
+				4D122471270878D600DE23E8 /* Joplin-Bridging-Header.h */,
 			);
 			name = Joplin;
 			sourceTree = "<group>";
@@ -261,7 +266,7 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = A9BXAFS6CT;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1300;
 					};
 					AE82E4A72599FA3A0013551B = {
 						CreatedOnToolsVersion = 12.0.1;
@@ -322,7 +327,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=/usr/local/opt/node@12/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=/usr/local/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		027E2AA6B101F8CFCA582EC1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -445,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				4D122473270878D700DE23E8 /* wtf.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -486,13 +492,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
-				CURRENT_PROJECT_VERSION = 65;
+				CURRENT_PROJECT_VERSION = 83;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Joplin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 20.0.0;
+				MARKETING_VERSION = 12.10.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -500,6 +506,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
+				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -514,12 +521,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
-				CURRENT_PROJECT_VERSION = 65;
+				CURRENT_PROJECT_VERSION = 83;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				INFOPLIST_FILE = Joplin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 20.0.0;
+				MARKETING_VERSION = 12.10.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -527,6 +534,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
+				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -580,7 +588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -633,7 +641,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -659,14 +667,14 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 65;
+				CURRENT_PROJECT_VERSION = 83;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 20.0.0;
+				MARKETING_VERSION = 12.10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
@@ -690,14 +698,14 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 65;
+				CURRENT_PROJECT_VERSION = 83;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 20.0.0;
+				MARKETING_VERSION = 12.10.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";

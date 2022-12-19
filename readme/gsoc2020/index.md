@@ -15,7 +15,7 @@ All participants will need a Google account in order to join the program. So, sa
 
 All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.
 
-The GUI's, as listed on the [Joplin's website](https://joplinapp.org/#installation) are:
+The GUI's, as listed on the [Joplin's website](https://joplinapp.org/help/#installation) are:
 
 - CLI: terminal-kit
 - Desktop: Electron

@@ -7,6 +7,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import uuid from '@joplin/lib/uuid';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
+import { AppState } from '../../app.reducer';
 const debounce = require('debounce');
 const styled = require('styled-components').default;
 
@@ -14,6 +15,7 @@ export const Root = styled.div`
 	position: relative;
 	display: flex;
 	width: 100%;
+	min-width: 30px;
 `;
 
 interface Props {
@@ -21,6 +23,7 @@ interface Props {
 	notesParentType: string;
 	dispatch?: Function;
 	selectedNoteId: string;
+	isFocused?: boolean;
 }
 
 function SearchBar(props: Props) {
@@ -52,6 +55,7 @@ function SearchBar(props: Props) {
 		return () => {
 			debouncedSearch.clear();
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [query, searchStarted]);
 
 	const onExitSearch = useCallback(async (navigateAway = true) => {
@@ -77,6 +81,7 @@ function SearchBar(props: Props) {
 				}
 			}
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedNoteId]);
 
 	function onChange(event: any) {
@@ -116,14 +121,40 @@ function SearchBar(props: Props) {
 	}, [onExitSearch]);
 
 	const onSearchButtonClick = useCallback(() => {
-		void onExitSearch();
-	}, [onExitSearch]);
+		if (props.isFocused || searchStarted) {
+			void onExitSearch();
+		} else {
+			setSearchStarted(true);
+			props.inputRef.current.focus();
+			props.dispatch({
+				type: 'FOCUS_SET',
+				field: 'globalSearch',
+			});
+		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [onExitSearch, props.isFocused, searchStarted]);
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {
 			void onExitSearch(false);
 		}
 	}, [props.notesParentType, onExitSearch]);
+
+	// When the searchbar is remounted, exit the search if it was previously open
+	// or else other buttons stay hidden (e.g. when opening Layout Editor and closing it)
+	// https://github.com/laurent22/joplin/issues/5953
+	useEffect(() => {
+		if (props.notesParentType === 'Search' || props.isFocused) {
+			if (props.isFocused) {
+				props.dispatch({
+					type: 'FOCUS_CLEAR',
+					field: 'globalSearch',
+				});
+			}
+			void onExitSearch(true);
+		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, []);
 
 	return (
 		<Root className="search-bar">
@@ -141,10 +172,11 @@ function SearchBar(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		notesParentType: state.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(state),
+		isFocused: state.focusedField === 'globalSearch',
 	};
 };
 

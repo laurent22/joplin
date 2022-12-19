@@ -26,6 +26,6 @@ To restore a note, simply click on the "Restore" button. The old version of the 
 
 ### How to configure the note history feature?
 
-Additional options are available in the `Note History` page of the Configuration screen. It is possible to enable/disable the note history feature. It is also possible to specify for how long the history of a note should be kept (by default, for 90 days).
+Additional options are available in the `Note History` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). It is possible to enable/disable the note history feature. It is also possible to specify for how long the history of a note should be kept (by default, for 90 days).
 
 **IMPORTANT**: Please note that since all the revisions are synced across all devices, it means these settings are kind of global. So for example, if on one device you set it to keep revisions for 30 days, and on another to 100 days, the revisions older than 30 days will be deleted, and then this deletion will be synced. So in practice it means revisions are kept for whatever is the minimum number of days as set on any of the devices. In that particular case, the 100 days setting will be essentially ignored, and only the 30 days one will apply.

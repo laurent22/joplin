@@ -2,10 +2,11 @@ import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ButtonSpec, ViewHandle, DialogResult } from './types';
+import { _ } from '../../../locale';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that
- * contains a webview and a row of buttons. You can update the update the
+ * contains a webview and a row of buttons. You can update the
  * webview using the `setHtml` method. Dialogs are hidden by default and
  * you need to call `open()` to open them. Once the user clicks on a
  * button, the `open` call will return an object indicating what button was
@@ -53,7 +54,7 @@ export default class JoplinViewsDialogs {
 	 */
 	async create(id: string): Promise<ViewHandle> {
 		if (!id) {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`', true);
 			id = `${this.plugin.viewCount}`;
 		}
 
@@ -67,7 +68,7 @@ export default class JoplinViewsDialogs {
 	 * Displays a message box with OK/Cancel buttons. Returns the button index that was clicked - "0" for OK and "1" for "Cancel"
 	 */
 	async showMessageBox(message: string): Promise<number> {
-		return this.implementation_.showMessageBox(message);
+		return this.implementation_.showMessageBox(`${_('(In plugin: %s)', this.plugin.manifest.name)}\n\n${message}`);
 	}
 
 	/**
@@ -98,4 +99,12 @@ export default class JoplinViewsDialogs {
 		return this.controller(handle).open();
 	}
 
+	/**
+	 * Toggle on whether to fit the dialog size to the content or not.
+	 * When set to false, the dialog is set to 90vw and 80vh
+	 * @default true
+	 */
+	async setFitToContent(handle: ViewHandle, status: boolean) {
+		return this.controller(handle).fitToContent = status;
+	}
 }

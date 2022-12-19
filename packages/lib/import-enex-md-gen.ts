@@ -32,6 +32,7 @@ interface ParserStateTag {
 	name: string;
 	visible: boolean;
 	isCodeBlock: boolean;
+	isHighlight: boolean;
 }
 
 interface ParserStateList {
@@ -57,11 +58,11 @@ interface EnexXmlToMdArrayResult {
 }
 
 function processMdArrayNewLines(md: string[]): string {
-	while (md.length && md[0] == BLOCK_OPEN) {
+	while (md.length && md[0] === BLOCK_OPEN) {
 		md.shift();
 	}
 
-	while (md.length && md[md.length - 1] == BLOCK_CLOSE) {
+	while (md.length && md[md.length - 1] === BLOCK_CLOSE) {
 		md.pop();
 	}
 
@@ -69,7 +70,7 @@ function processMdArrayNewLines(md: string[]): string {
 	let last = '';
 	for (let i = 0; i < md.length; i++) {
 		const v = md[i];
-		if (isNewLineBlock(last) && isNewLineBlock(v) && last == v) {
+		if (isNewLineBlock(last) && isNewLineBlock(v) && last === v) {
 			// Skip it
 		} else {
 			temp.push(v);
@@ -82,7 +83,7 @@ function processMdArrayNewLines(md: string[]): string {
 	last = '';
 	for (let i = 0; i < md.length; i++) {
 		const v = md[i];
-		if (last == BLOCK_CLOSE && v == BLOCK_OPEN) {
+		if (last === BLOCK_CLOSE && v === BLOCK_OPEN) {
 			temp.pop();
 			temp.push(NEWLINE_MERGED);
 		} else {
@@ -96,7 +97,7 @@ function processMdArrayNewLines(md: string[]): string {
 	last = '';
 	for (let i = 0; i < md.length; i++) {
 		const v = md[i];
-		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_CLOSE)) {
+		if (last === NEWLINE && (v === NEWLINE_MERGED || v === BLOCK_CLOSE)) {
 			// Skip it
 		} else {
 			temp.push(v);
@@ -110,7 +111,7 @@ function processMdArrayNewLines(md: string[]): string {
 	last = '';
 	for (let i = 0; i < md.length; i++) {
 		const v = md[i];
-		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_OPEN)) {
+		if (last === NEWLINE && (v === NEWLINE_MERGED || v === BLOCK_OPEN)) {
 			// Skip it
 		} else {
 			temp.push(v);
@@ -120,7 +121,7 @@ function processMdArrayNewLines(md: string[]): string {
 	md = temp;
 
 	if (md.length > 2) {
-		if (md[md.length - 2] == NEWLINE_MERGED && md[md.length - 1] == NEWLINE) {
+		if (md[md.length - 2] === NEWLINE_MERGED && md[md.length - 1] === NEWLINE) {
 			md.pop();
 		}
 	}
@@ -131,10 +132,10 @@ function processMdArrayNewLines(md: string[]): string {
 	for (let i = 0; i < md.length; i++) {
 		const v = md[i];
 		let add = '';
-		if (v == BLOCK_CLOSE || v == BLOCK_OPEN || v == NEWLINE || v == NEWLINE_MERGED) {
+		if (v === BLOCK_CLOSE || v === BLOCK_OPEN || v === NEWLINE || v === NEWLINE_MERGED) {
 			add = '\n';
-		} else if (v == SPACE) {
-			if (previous == SPACE || previous == '\n' || start) {
+		} else if (v === SPACE) {
+			if (previous === SPACE || previous === '\n' || start) {
 				continue; // skip
 			} else {
 				add = ' ';
@@ -284,7 +285,7 @@ function formatMdLayout(lines: string[]) {
 }
 
 function isWhiteSpace(c: string): boolean {
-	return c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == '\t' || c == ' ';
+	return c === '\n' || c === '\r' || c === '\v' || c === '\f' || c === '\t' || c === ' ';
 }
 
 // Like QString::simpified(), except that it preserves non-breaking spaces (which
@@ -314,16 +315,16 @@ function collapseWhiteSpaceAndAppend(lines: string[], state: any, text: string) 
 		lines.push(text);
 	} else {
 		// Remove all \n and \r from the left and right of the text
-		while (text.length && (text[0] == '\n' || text[0] == '\r')) text = text.substr(1);
-		while (text.length && (text[text.length - 1] == '\n' || text[text.length - 1] == '\r')) text = text.substr(0, text.length - 1);
+		while (text.length && (text[0] === '\n' || text[0] === '\r')) text = text.substr(1);
+		while (text.length && (text[text.length - 1] === '\n' || text[text.length - 1] === '\r')) text = text.substr(0, text.length - 1);
 
 		// Collapse all white spaces to just one. If there are spaces to the left and right of the string
 		// also collapse them to just one space.
-		const spaceLeft = text.length && text[0] == ' ';
-		const spaceRight = text.length && text[text.length - 1] == ' ';
+		const spaceLeft = text.length && text[0] === ' ';
+		const spaceRight = text.length && text[text.length - 1] === ' ';
 		text = simplifyString(text);
 
-		if (!spaceLeft && !spaceRight && text == '') return lines;
+		if (!spaceLeft && !spaceRight && text === '') return lines;
 
 		if (state.inQuote) {
 			// Add a ">" at the beginning of the block then at the beginning of each lines. So it turns this:
@@ -379,19 +380,19 @@ function isBlockTag(n: string) {
 }
 
 function isStrongTag(n: string) {
-	return n == 'strong' || n == 'b' || n == 'big';
+	return n === 'strong' || n === 'b' || n === 'big';
 }
 
 function isStrikeTag(n: string) {
-	return n == 'strike' || n == 's' || n == 'del';
+	return n === 'strike' || n === 's' || n === 'del';
 }
 
 function isEmTag(n: string) {
-	return n == 'em' || n == 'i' || n == 'u';
+	return n === 'em' || n === 'i' || n === 'u';
 }
 
 function isAnchor(n: string) {
-	return n == 'a';
+	return n === 'a';
 }
 
 function isIgnoredEndTag(n: string) {
@@ -399,7 +400,7 @@ function isIgnoredEndTag(n: string) {
 }
 
 function isListTag(n: string) {
-	return n == 'ol' || n == 'ul';
+	return n === 'ol' || n === 'ul';
 }
 
 // Elements that don't require any special treatment beside adding a newline character
@@ -412,7 +413,7 @@ function isInlineCodeTag(n: string) {
 }
 
 function isNewLineBlock(s: string) {
-	return s == BLOCK_OPEN || s == BLOCK_CLOSE;
+	return s === BLOCK_OPEN || s === BLOCK_CLOSE;
 }
 
 function attributeToLowerCase(node: any) {
@@ -425,14 +426,21 @@ function attributeToLowerCase(node: any) {
 	return output;
 }
 
-function cssValue(context: any, style: string, propName: string): string {
+function cssValue(context: any, style: string, propName: string | string[]): string {
 	if (!style) return null;
+
+	const propNames = Array.isArray(propName) ? propName : [propName];
 
 	try {
 		const o = cssParser.parse(`pre {${style}}`);
 		if (!o.stylesheet.rules.length) return null;
-		const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
-		return prop && prop.value ? prop.value.trim().toLowerCase() : null;
+
+		for (const propName of propNames) {
+			const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
+			if (prop && prop.value) return prop.value.trim().toLowerCase();
+		}
+
+		return null;
 	} catch (error) {
 		displaySaxWarning(context, error.message);
 		return null;
@@ -459,7 +467,7 @@ function trimBlockOpenAndClose(lines: string[]): string[] {
 }
 
 function isSpanWithStyle(attributes: any) {
-	if (attributes != undefined) {
+	if (attributes) {
 		if ('style' in attributes) {
 			return true;
 		} else {
@@ -476,7 +484,7 @@ function isSpanStyleBold(attributes: any) {
 	style = style.replace(/\s+/g, '');
 	if (style.includes('font-weight:bold') || style.includes('font-weight:700') || style.includes('font-weight:800') || style.includes('font-weight:900')) {
 		return true;
-	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
+	} else if (style.search(/font-family:.*,Bold.*;/) !== -1) {
 		return true;
 	} else {
 		return false;
@@ -503,30 +511,42 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	if (nodeName === 'code') return true;
 
 	if (attributes && attributes.style) {
-		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock');
+		// Yes, this property sometimes appears as -en-codeblock, sometimes as
+		// --en-codeblock. Would be too easy to import ENEX data otherwise.
+		// https://github.com/laurent22/joplin/issues/4965
+		const enCodeBlock = cssValue(context, attributes.style, [
+			'-en-codeblock',
+			'--en-codeblock',
+			'-evernote-codeblock',
+			'--evernote-codeblock',
+		]);
+
 		if (enCodeBlock && enCodeBlock.toLowerCase() === 'true') return true;
 	}
 	return false;
 }
 
-// function removeSectionParent(section:Section | string) {
-// 	if (typeof section === 'string') return section;
+function isHighlight(context: any, _nodeName: string, attributes: any) {
+	if (attributes && attributes.style) {
+		// Evernote uses various inconsistent CSS prefixes: so far I've found
+		// "--en", "-en", "-evernote", so I'm guessing "--evernote" probably
+		// exists too.
 
-// 	section = { ...section };
-// 	delete section.parent;
+		const enHighlight = cssValue(context, attributes.style, [
+			'-evernote-highlight',
+			'--evernote-highlight',
+			'-en-highlight',
+			'--en-highlight',
+		]);
 
-// 	section.lines = section.lines.slice();
+		// Value can be any colour or "true". I guess if it's set at all it
+		// should be highlighted but just in case handle case where it's
+		// "false".
 
-// 	for (let i = 0; i < section.lines.length; i++) {
-// 		section.lines[i] = removeSectionParent(section.lines[i]);
-// 	}
-
-// 	return section;
-// }
-
-// function printSection(section:Section) {
-// 	console.info(JSON.stringify(removeSectionParent(section), null, 4));
-// }
+		if (enHighlight && enHighlight.toLowerCase() !== 'false') return true;
+	}
+	return false;
+}
 
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
@@ -604,6 +624,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				name: n,
 				visible: isVisible,
 				isCodeBlock: isCodeBlock(this, n, nodeAttributes),
+				isHighlight: isHighlight(this, n, nodeAttributes),
 			};
 
 			state.tags.push(tagInfo);
@@ -626,9 +647,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			// handled as table-related. This is to ensure that the table
 			// structure is valid.
 
-			if (n == 'en-note') {
+			if (n === 'en-note') {
 				// Start of note
-			} else if (n == 'table') {
+			} else if (n === 'table') {
 				const newSection: Section = {
 					type: SectionType.Table,
 					lines: [],
@@ -636,9 +657,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				};
 				section.lines.push(newSection);
 				section = newSection;
-			} else if (n == 'tbody' || n == 'thead') {
+			} else if (n === 'tbody' || n === 'thead') {
 				// Ignore it
-			} else if (n == 'tr') {
+			} else if (n === 'tr') {
 				// Note: Even if we encounter tags in the wrong place, we
 				// create the sections anyway so that the data is imported.
 				// Invalid HTML like would most likely be from clipped
@@ -650,7 +671,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				// error in drawTable() later on.
 				//
 				// https://discourse.joplinapp.org/t/not-all-notes-imported-from-evernote/13056/12?u=laurent
-				if (section.type != 'table') {
+				if (section.type !== 'table') {
 					displaySaxWarning(this, 'Found a <tr> tag outside of a table');
 					// return;
 				}
@@ -664,13 +685,13 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 
 				section.lines.push(newSection);
 				section = newSection;
-			} else if (n == 'td' || n == 'th') {
-				if (section.type != 'tr') {
+			} else if (n === 'td' || n === 'th') {
+				if (section.type !== 'tr') {
 					displaySaxWarning(this, 'Found a <td> tag outside of a <tr>');
 					// return;
 				}
 
-				if (n == 'th') section.isHeader = true;
+				if (n === 'th') section.isHeader = true;
 
 				const newSection: Section = {
 					type: SectionType.Td,
@@ -680,10 +701,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 
 				section.lines.push(newSection);
 				section = newSection;
-			} else if (n == 'caption') {
-				if (section.type != 'table') {
+			} else if (n === 'caption') {
+				if (section.type !== 'table') {
 					displaySaxWarning(this, 'Found a <caption> tag outside of a <table>');
-					// return;
 				}
 
 				const newSection: Section = {
@@ -703,13 +723,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (tagInfo.isCodeBlock) {
-				// state.inPre = false;
-
-				// const previousIsPre = state.tags.length ? state.tags[state.tags.length - 1].name === 'pre' : false;
-				// if (previousIsPre) {
-				// 	section.lines.pop();
-				// }
-
 				state.inCode.push(true);
 				state.currentCode = '';
 
@@ -726,7 +739,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 				state.lists.push({ tag: n, counter: 1, startedText: false });
-			} else if (n == 'li') {
+			} else if (n === 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
 					displaySaxWarning(this, 'Found <li> tag without being inside a list');
@@ -737,21 +750,23 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				container.startedText = false;
 
 				const indent = '    '.repeat(state.lists.length - 1);
-				if (container.tag == 'ul') {
+				if (container.tag === 'ul') {
 					section.lines.push(`${indent}- `);
 				} else {
 					section.lines.push(`${indent + container.counter}. `);
 					container.counter++;
 				}
+			} else if (tagInfo.isHighlight) {
+				section.lines.push('==');
 			} else if (isStrongTag(n)) {
 				section.lines.push('**');
 			} else if (isStrikeTag(n)) {
 				section.lines.push('<s>');
 			} else if (isInlineCodeTag(n)) {
 				section.lines.push('`');
-			} else if (n == 'q') {
+			} else if (n === 'q') {
 				section.lines.push('"');
-			} else if (n == 'img') {
+			} else if (n === 'img') {
 				if (nodeAttributes.src) {
 					// Many (most?) img tags don't have no source associated, especially when they were imported from HTML
 					let s = '![';
@@ -766,48 +781,48 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				collapseWhiteSpaceAndAppend(section.lines, state, '[');
 			} else if (isEmTag(n)) {
 				section.lines.push('*');
-			} else if (n == 'en-todo') {
-				const x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
+			} else if (n === 'en-todo') {
+				const x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() === 'true' ? 'X' : ' ';
 				section.lines.push(`- [${x}] `);
-			} else if (n == 'hr') {
+			} else if (n === 'hr') {
 				// Needs to be surrounded by new lines so that it's properly rendered as a line when converting to HTML
 				section.lines.push(NEWLINE);
 				section.lines.push('* * *');
 				section.lines.push(NEWLINE);
 				section.lines.push(NEWLINE);
-			} else if (n == 'h1') {
+			} else if (n === 'h1') {
 				section.lines.push(BLOCK_OPEN);
 				section.lines.push('# ');
-			} else if (n == 'h2') {
+			} else if (n === 'h2') {
 				section.lines.push(BLOCK_OPEN);
 				section.lines.push('## ');
-			} else if (n == 'h3') {
+			} else if (n === 'h3') {
 				section.lines.push(BLOCK_OPEN);
 				section.lines.push('### ');
-			} else if (n == 'h4') {
+			} else if (n === 'h4') {
 				section.lines.push(BLOCK_OPEN);
 				section.lines.push('#### ');
-			} else if (n == 'h5') {
+			} else if (n === 'h5') {
 				section.lines.push(BLOCK_OPEN);
 				section.lines.push('##### ');
-			} else if (n == 'h6') {
+			} else if (n === 'h6') {
 				section.lines.push(BLOCK_OPEN);
 				section.lines.push('###### ');
-			} else if (n == 'blockquote') {
+			} else if (n === 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = true;
 			} else if (n === 'pre') {
 				section.lines.push(BLOCK_OPEN);
 				state.inPre = true;
-			} else if (n == 'br') {
+			} else if (n === 'br') {
 				section.lines.push(NEWLINE);
-			} else if (n == 'en-media') {
+			} else if (n === 'en-media') {
 				const hash = nodeAttributes.hash;
 
 				let resource = null;
 				for (let i = 0; i < resources.length; i++) {
 					const r = resources[i];
-					if (r.id == hash) {
+					if (r.id === hash) {
 						resource = r;
 						removeRemainingResource(r.id);
 						break;
@@ -876,7 +891,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
-			} else if (n == 'span') {
+			} else if (n === 'span') {
 				if (isSpanWithStyle(nodeAttributes)) {
 					// Found style(s) in span tag
 					state.spanAttributes.push(nodeAttributes);
@@ -901,10 +916,12 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 
 			const poppedTag = state.tags.pop();
 
-			if (n == 'en-note') {
+			if (n === 'en-note') {
 				// End of note
 			} else if (!poppedTag.visible) {
 				if (section && section.parent) section = section.parent;
+			} else if (poppedTag.isHighlight) {
+				section.lines.push('==');
 			} else if (poppedTag.isCodeBlock) {
 				state.inCode.pop();
 
@@ -929,11 +946,11 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				}
 			} else if (isNewLineOnlyEndTag(n)) {
 				section.lines.push(BLOCK_CLOSE);
-			} else if (n == 'td' || n == 'th') {
+			} else if (n === 'td' || n === 'th') {
 				if (section && section.parent) section = section.parent;
-			} else if (n == 'tr' || n == 'caption') {
+			} else if (n === 'tr' || n === 'caption') {
 				if (section && section.parent) section = section.parent;
-			} else if (n == 'table') {
+			} else if (n === 'table') {
 				if (section && section.parent) section = section.parent;
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
@@ -948,9 +965,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push('`');
 			} else if (isEmTag(n)) {
 				section.lines.push('*');
-			} else if (n == 'q') {
+			} else if (n === 'q') {
 				section.lines.push('"');
-			} else if (n == 'blockquote') {
+			} else if (n === 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = false;
 			} else if (n === 'pre') {
@@ -978,7 +995,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 					}
 				}
 
-				if (previous == '[') {
+				if (previous === '[') {
 					// We have a link that had some content but, after parsing, nothing is left. The content was most likely
 					// something that shows up via CSS and which we cannot support. For example:
 					//
@@ -1007,7 +1024,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 						section.lines.push('(L)');
 						section.lines.push(`](${url})`);
 					}
-				} else if (!previous || previous == url) {
+				} else if (!previous || previous === url) {
 					section.lines.pop();
 					section.lines.pop();
 					section.lines.push(url);
@@ -1073,9 +1090,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 						section.lines.push(`](${url})`);
 					}
 				}
-			} else if (n == 'en-media') {
+			} else if (n === 'en-media') {
 				// Skip
-			} else if (n == 'span') {
+			} else if (n === 'span') {
 				const attributes = state.spanAttributes.pop();
 				if (isSpanWithStyle(attributes)) {
 					if (isSpanStyleBold(attributes)) {

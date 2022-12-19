@@ -7,10 +7,18 @@ const MarkdownIt = require('markdown-it');
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 
+export enum MarkdownTableJustify {
+	Left = 'left',
+	Center = 'center',
+	Right = 'right,',
+}
+
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
 	filter?: Function;
+	disableEscape?: boolean;
+	justify?: MarkdownTableJustify;
 }
 
 export interface MarkdownTableRow {
@@ -61,7 +69,7 @@ const markdownUtils = {
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractFileUrls(md: string, onlyImage: boolean = false): Array<string> {
+	extractFileUrls(md: string, onlyType: string = null): Array<string> {
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
@@ -69,10 +77,16 @@ const markdownUtils = {
 		const tokens = markdownIt.parse(md, env);
 		const output: string[] = [];
 
+		let linkType = onlyType;
+		if (linkType === 'pdf') linkType = 'link_open';
+
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
-				if ((onlyImage === true && token.type === 'image') || (onlyImage === false && (token.type === 'image' || token.type === 'link_open'))) {
+				if ((!onlyType && (token.type === 'link_open' || token.type === 'image')) || (!!onlyType && token.type === onlyType) || (onlyType === 'pdf' && token.type === 'link_open')) {
+					// Pdf embeds are a special case, they are represented as 'link_open' tokens but are marked with 'embedded_pdf' as link name by the parser
+					// We are making sure if its in the proper pdf link format, only then we add it to the list
+					if (onlyType === 'pdf' && !(tokens.length > i + 1 && tokens[i + 1].type === 'text' && tokens[i + 1].content === 'embedded_pdf')) continue;
 					for (let j = 0; j < token.attrs.length; j++) {
 						const a = token.attrs[j];
 						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
@@ -92,8 +106,18 @@ const markdownUtils = {
 		return output;
 	},
 
+	replaceResourceUrl(md: string, urlToReplace: string, id: string) {
+		const linkRegex = `(?<=\\]\\()\\<?${urlToReplace}\\>?(?=.*\\))`;
+		const reg = new RegExp(linkRegex, 'g');
+		return md.replace(reg, `:/${id}`);
+	},
+
 	extractImageUrls(md: string) {
-		return markdownUtils.extractFileUrls(md,true);
+		return markdownUtils.extractFileUrls(md, 'image');
+	},
+
+	extractPdfUrls(md: string) {
+		return markdownUtils.extractFileUrls(md, 'pdf');
 	},
 
 	// The match results has 5 items
@@ -120,26 +144,38 @@ const markdownUtils = {
 	createMarkdownTable(headers: MarkdownTableHeader[], rows: MarkdownTableRow[]): string {
 		const output = [];
 
+		const minCellWidth = 5;
+
 		const headersMd = [];
 		const lineMd = [];
 		for (let i = 0; i < headers.length; i++) {
 			const h = headers[i];
-			headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
-			lineMd.push('---');
+			headersMd.push(stringPadding(h.label, minCellWidth, ' ', stringPadding.RIGHT));
+
+			const justify = h.justify ? h.justify : MarkdownTableJustify.Left;
+
+			if (justify === MarkdownTableJustify.Left) {
+				lineMd.push('-----');
+			} else if (justify === MarkdownTableJustify.Center) {
+				lineMd.push(':---:');
+			} else {
+				lineMd.push('----:');
+			}
 		}
 
-		output.push(headersMd.join(' | '));
-		output.push(lineMd.join(' | '));
+		output.push(`| ${headersMd.join(' | ')} |`);
+		output.push(`| ${lineMd.join(' | ')} |`);
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const rowMd = [];
 			for (let j = 0; j < headers.length; j++) {
 				const h = headers[j];
-				const valueMd = markdownUtils.escapeTableCell(h.filter ? h.filter(row[h.name]) : row[h.name]);
-				rowMd.push(stringPadding(valueMd, 3, ' ', stringPadding.RIGHT));
+				const value = (h.filter ? h.filter(row[h.name]) : row[h.name]) || '';
+				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value);
+				rowMd.push(stringPadding(valueMd, minCellWidth, ' ', stringPadding.RIGHT));
 			}
-			output.push(rowMd.join(' | '));
+			output.push(`| ${rowMd.join(' | ')} |`);
 		}
 
 		return output.join('\n');

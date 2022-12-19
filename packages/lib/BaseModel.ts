@@ -26,6 +26,19 @@ export enum ModelType {
 	Command = 16,
 }
 
+export interface DeleteOptions {
+	idFieldName?: string;
+	changeSource?: number;
+	deleteChildren?: boolean;
+
+	// By default the application tracks item deletions, so that they can be
+	// applied to the remote items during synchronisation. However, in some
+	// cases, we don't want this. In particular when an item is deleted via
+	// sync, we don't need to track the deletion, because the operation doesn't
+	// need to applied again on next sync.
+	trackDeleted?: boolean;
+}
+
 class BaseModel {
 
 	// TODO: This ancient part of Joplin about model types is a bit of a
@@ -110,7 +123,7 @@ class BaseModel {
 
 	static byId(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
-			if (items[i].id == id) return items[i];
+			if (items[i].id === id) return items[i];
 		}
 		return null;
 	}
@@ -125,7 +138,7 @@ class BaseModel {
 
 	static modelIndexById(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
-			if (items[i].id == id) return i;
+			if (items[i].id === id) return i;
 		}
 		return -1;
 	}
@@ -187,7 +200,7 @@ class BaseModel {
 	static fieldType(name: string, defaultValue: any = null) {
 		const fields = this.fields();
 		for (let i = 0; i < fields.length; i++) {
-			if (fields[i].name == name) return fields[i].type;
+			if (fields[i].name === name) return fields[i].type;
 		}
 		if (defaultValue !== null) return defaultValue;
 		throw new Error(`Unknown field: ${name}`);
@@ -235,6 +248,7 @@ class BaseModel {
 		if (options.where) sql += ` WHERE ${options.where}`;
 		return this.db()
 			.selectOne(sql)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((r: any) => {
 				return r ? r['total'] : 0;
 			});
@@ -322,6 +336,7 @@ class BaseModel {
 		if (params === null) params = [];
 		return this.db()
 			.selectOne(sql, params)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((model: any) => {
 				return this.filter(this.addModelMd(model));
 			});
@@ -331,6 +346,7 @@ class BaseModel {
 		if (params === null) params = [];
 		return this.db()
 			.selectAll(sql, params)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((models: any[]) => {
 				return this.filterArray(this.addModelMd(models));
 			});
@@ -378,7 +394,7 @@ class BaseModel {
 		const output = [];
 		for (const n in newModel) {
 			if (!newModel.hasOwnProperty(n)) continue;
-			if (n == 'type_') continue;
+			if (n === 'type_') continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
 				output.push(n);
 			}
@@ -632,7 +648,7 @@ class BaseModel {
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';

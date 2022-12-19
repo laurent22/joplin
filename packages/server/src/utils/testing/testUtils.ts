@@ -1,5 +1,6 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, Item, Uuid } from '../../db';
-import { createDb } from '../../tools/dbTools';
+import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db';
+import { User, Session, Item, Uuid } from '../../services/database/types';
+import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
@@ -14,11 +15,16 @@ import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
-import { putApi } from './apiUtils';
+import { getApi, putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
 import MustacheService from '../../services/MustacheService';
+import uuidgen from '../uuidgen';
+import { createCsrfToken } from '../csrf';
+import { cookieSet } from '../cookies';
+import { parseEnv } from '../../env';
+import { URL } from 'url';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -32,12 +38,16 @@ export function randomHash(): string {
 	return crypto.createHash('md5').update(`${Date.now()}-${Math.random()}`).digest('hex');
 }
 
+export function tempDirPath(): string {
+	return `${packageRootDir}/temp/${randomHash()}`;
+}
+
 let tempDir_: string = null;
-export async function tempDir(): Promise<string> {
-	if (tempDir_) return tempDir_;
-	tempDir_ = `${packageRootDir}/temp/${randomHash()}`;
-	await fs.mkdirp(tempDir_);
-	return tempDir_;
+export async function tempDir(subDir: string = null): Promise<string> {
+	if (!tempDir_) tempDir_ = tempDirPath();
+	const fullDir = tempDir_ + (subDir ? `/${subDir}` : '');
+	await fs.mkdirp(fullDir);
+	return fullDir;
 }
 
 export async function makeTempFileWithContent(content: string | Buffer): Promise<string> {
@@ -57,33 +67,40 @@ function initGlobalLogger() {
 }
 
 let createdDbPath_: string = null;
-export async function beforeAllDb(unitName: string) {
+export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
+	unitName = unitName.replace(/\//g, '_');
+
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
-	// Uncomment the code below to run the test units with Postgres. Run first
-	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
+	// Uncomment the code below to run the test units with Postgres. Run this:
+	//
+	// sudo docker compose -f docker-compose.db-dev.yml up
 
-	// initConfig({
-	// 	DB_CLIENT: 'pg',
-	// 	POSTGRES_DATABASE: createdDbPath_,
-	// 	POSTGRES_USER: 'joplin',
-	// 	POSTGRES_PASSWORD: 'joplin',
-	// }, {
-	// 	tempDir: tempDir,
-	// });
-
-	initConfig({
-		SQLITE_DATABASE: createdDbPath_,
-	}, {
-		tempDir: tempDir,
-	});
+	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
+		await initConfig(Env.Dev, parseEnv({
+			DB_CLIENT: 'pg',
+			POSTGRES_DATABASE: unitName,
+			POSTGRES_USER: 'joplin',
+			POSTGRES_PASSWORD: 'joplin',
+			SUPPORT_EMAIL: 'testing@localhost',
+		}), {
+			tempDir: tempDir,
+		});
+	} else {
+		await initConfig(Env.Dev, parseEnv({
+			SQLITE_DATABASE: createdDbPath_,
+			SUPPORT_EMAIL: 'testing@localhost',
+		}), {
+			tempDir: tempDir,
+		});
+	}
 
 	initGlobalLogger();
 
-	await createDb(config().database, { dropIfExists: true });
+	await createDb(config().database, { dropIfExists: true, ...createDbOptions });
 	db_ = await connectDb(config().database);
 
 	const mustache = new MustacheService(config().viewDir, config().baseUrl);
@@ -159,6 +176,13 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 		...options.request,
 	};
 
+	const owner = options.sessionId ? await models().session().sessionUser(options.sessionId) : null;
+
+	// To pass the CSRF check, we create the token here and assign it
+	// automatically if it's a POST request with a body.
+	const csrfToken = owner ? await createCsrfToken(models(), owner) : '';
+	if (typeof reqOptions.body === 'object') reqOptions.body._csrf = csrfToken;
+
 	if (!reqOptions.method) reqOptions.method = 'GET';
 	if (!reqOptions.url) reqOptions.url = '/home';
 	if (!reqOptions.headers) reqOptions.headers = {};
@@ -171,32 +195,35 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	const req = httpMocks.createRequest(reqOptions);
 	req.__isMocked = true;
 
-	const owner = options.sessionId ? await models().session().sessionUser(options.sessionId) : null;
-
 	const appLogger = Logger.create('AppTest');
+
+	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger);
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
-	const appContext: any = {};
-
-	await setupAppContext(appContext, Env.Dev, db_, () => appLogger);
-
-	appContext.env = Env.Dev;
-	appContext.db = db_;
-	appContext.models = models();
-	appContext.appLogger = () => appLogger;
-	appContext.path = req.url;
-	appContext.owner = owner;
-	appContext.cookies = new FakeCookies();
-	appContext.request = new FakeRequest(req);
-	appContext.response = new FakeResponse();
-	appContext.headers = { ...reqOptions.headers };
-	appContext.req = req;
-	appContext.query = req.query;
-	appContext.method = req.method;
+	const appContext: any = {
+		baseAppContext,
+		joplin: {
+			...baseAppContext.joplinBase,
+			env: Env.Dev,
+			db: db_,
+			models: models(),
+			owner: owner,
+		},
+		path: req.url,
+		cookies: new FakeCookies(),
+		request: new FakeRequest(req),
+		response: new FakeResponse(),
+		headers: { ...reqOptions.headers },
+		req: req,
+		query: req.query,
+		method: req.method,
+		redirect: () => {},
+		URL: new URL(config().baseUrl), // origin
+	};
 
 	if (options.sessionId) {
-		appContext.cookies.set('sessionId', options.sessionId);
+		cookieSet(appContext, 'sessionId', options.sessionId);
 	}
 
 	return appContext as AppContext;
@@ -211,18 +238,15 @@ export const testAssetDir = `${packageRootDir}/assets/tests`;
 interface UserAndSession {
 	user: User;
 	session: Session;
+	password: string;
 }
 
 export function db() {
 	return db_;
 }
 
-function baseUrl() {
-	return 'http://localhost:22300';
-}
-
 export function models() {
-	return modelFactory(db(), baseUrl());
+	return modelFactory(db(), config());
 }
 
 export function parseHtml(html: string): Document {
@@ -236,9 +260,11 @@ interface CreateUserAndSessionOptions {
 }
 
 export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
+	const password = uuidgen();
+
 	options = {
 		email: `user${index}@localhost`,
-		password: '123456',
+		password,
 		...options,
 	};
 
@@ -247,7 +273,8 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 
 	return {
 		user: await models().user().load(user.id),
-		session: session,
+		session,
+		password,
 	};
 };
 
@@ -274,19 +301,20 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 	}
 }
 
-export async function createItemTree2(userId: Uuid, parentFolderId: string, tree: any[]): Promise<void> {
-	const itemModel = models().item();
-	const user = await models().user().load(userId);
+// export async function createItemTree2(userId: Uuid, parentFolderId: string, tree: any[]): Promise<void> {
+// 	const itemModel = models().item();
+// 	const user = await models().user().load(userId);
 
-	for (const jopItem of tree) {
-		const isFolder = !!jopItem.children;
-		const serializedBody = isFolder ?
-			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
-			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
-		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
-		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
-	}
-}
+// 	for (const jopItem of tree) {
+// 		const isFolder = !!jopItem.children;
+// 		const serializedBody = isFolder ?
+// 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
+// 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
+// 		const result = await itemModel.saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+// 		const newItem = result[`${jopItem.id}.md`].item;
+// 		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
+// 	}
+// }
 
 export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
 	const itemModel = models().item();
@@ -297,9 +325,15 @@ export async function createItemTree3(userId: Uuid, parentFolderId: string, shar
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId });
-		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const result = await itemModel.saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
 	}
+}
+
+export async function getItem(sessionId: string, path: string): Promise<string> {
+	const item: Buffer = await getApi(sessionId, `items/${path}/content`);
+	return item.toString();
 }
 
 export async function createItem(sessionId: string, path: string, content: string | Buffer): Promise<Item> {
@@ -367,6 +401,40 @@ export function checkContextError(context: AppContext) {
 	}
 }
 
+export async function credentialFile(filename: string): Promise<string> {
+	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
+	if (await fs.pathExists(filePath)) return filePath;
+	return '';
+}
+
+export async function readCredentialFile(filename: string, defaultValue: string = null) {
+	const filePath = await credentialFile(filename);
+	if (!filePath) {
+		if (defaultValue === null) throw new Error(`File not found: ${filename}`);
+		return defaultValue;
+	}
+
+	const r = await fs.readFile(filePath);
+	return r.toString();
+}
+
+export function credentialFileSync(filename: string): string {
+	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
+	if (fs.pathExistsSync(filePath)) return filePath;
+	return '';
+}
+
+export function readCredentialFileSync(filename: string, defaultValue: string = null) {
+	const filePath = credentialFileSync(filename);
+	if (!filePath) {
+		if (defaultValue === null) throw new Error(`File not found: ${filename}`);
+		return defaultValue;
+	}
+
+	const r = fs.readFileSync(filePath);
+	return r.toString();
+}
+
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {
 		await asyncFn();
@@ -388,7 +456,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 
 	if (!hasThrown) {
 		expect('not throw').toBe('throw');
-	} else if (thrownError.code !== errorCode) {
+	} else if (errorCode !== undefined && thrownError.code !== errorCode) {
 		console.error(thrownError);
 		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
 	} else {
@@ -459,6 +527,8 @@ encryption_applied: 0
 markup_language: 1
 is_shared: 1
 share_id: ${note.share_id || ''}
+conflict_original_id: 
+master_key_id: 
 type_: 1`;
 }
 

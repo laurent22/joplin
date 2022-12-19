@@ -2,9 +2,7 @@ const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toF
 
 describe('pathUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should create friendly safe filename', (async () => {
 		const testCases = [
@@ -15,6 +13,7 @@ describe('pathUtils', function() {
 			['no space at the end ', 'no space at the end'],
 			['nor dots...', 'nor dots'],
 			['  no space before either', 'no space before either'],
+			['no\nnewline\n\rplease', 'no_newline__please'],
 			['thatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylong', 'thatsreallylongthatsreallylongthatsreallylongthats'],
 		];
 
@@ -25,6 +24,12 @@ describe('pathUtils', function() {
 
 		expect(!!friendlySafeFilename('')).toBe(true);
 		expect(!!friendlySafeFilename('...')).toBe(true);
+
+		// Check that it optionally handles filenames with extension
+		expect(friendlySafeFilename('file', null, true)).toBe('file');
+		expect(friendlySafeFilename('  testing.md', null, true)).toBe('testing.md');
+		expect(friendlySafeFilename('testing.safe??ext##', null, true)).toBe('testing.safeext');
+		expect(friendlySafeFilename('thatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylong.md', null, true)).toBe('thatsreallylongthatsreallylongthatsreallylongthats.md');
 	}));
 
 	it('should quote and unquote paths', (async () => {

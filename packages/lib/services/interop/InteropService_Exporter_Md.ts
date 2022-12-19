@@ -4,7 +4,9 @@ import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
+import { NoteEntity, ResourceEntity } from '../database/types';
 import { basename, dirname, friendlySafeFilename } from '../../path-utils';
+import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
@@ -29,7 +31,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 					output = `${pathPart}/${output}`;
 				} else {
 					output = `${friendlySafeFilename(item.title, null)}/${output}`;
-					if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output);
+					if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output, null, true);
 				}
 			}
 			if (!item.parent_id) return output;
@@ -46,7 +48,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 	async replaceResourceIdsByRelativePaths_(noteBody: string, relativePathToRoot: string) {
 		const linkedResourceIds = await Note.linkedResourceIds(noteBody);
-		const resourcePaths = this.context() && this.context().resourcePaths ? this.context().resourcePaths : {};
+		const resourcePaths = this.context() && this.context().destResourcePaths ? this.context().destResourcePaths : {};
 
 		const createRelativePath = function(resourcePath: string) {
 			return `${relativePathToRoot}_resources/${basename(resourcePath)}`;
@@ -70,7 +72,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		for (let i = 0; i < linkedItemIds.length; i++) {
 			const id = linkedItemIds[i];
 			const itemPath = fn_createRelativePath(paths[id]);
-			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), itemPath);
+			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), markdownUtils.escapeLinkUrl(itemPath));
 		}
 
 		return newBody;
@@ -83,17 +85,18 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				notePaths: {},
 			};
 			for (let i = 0; i < itemsToExport.length; i++) {
-				const itemType = itemsToExport[i].type;
+				const it = itemsToExport[i].type;
 
-				if (itemType !== itemType) continue;
+				if (it !== itemType) continue;
 
 				const itemOrId = itemsToExport[i].itemOrId;
 				const note = typeof itemOrId === 'object' ? itemOrId : await Note.load(itemOrId);
 
 				if (!note) continue;
 
-				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null)}.md`;
-				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths));
+				const ext = note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'html' : 'md';
+				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null)}.${ext}`;
+				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths), true);
 				context.notePaths[note.id] = notePath;
 			}
 
@@ -105,6 +108,10 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 			this.updateContext(context);
 		}
+	}
+
+	protected async getNoteExportContent_(modNote: NoteEntity) {
+		return await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	}
 
 	async processItem(_itemType: number, item: any) {
@@ -124,15 +131,36 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 			const noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
 			const modNote = Object.assign({}, item, { body: noteBody });
-			const noteContent = await Note.serializeForEdit(modNote);
+			const noteContent = await this.getNoteExportContent_(modNote);
 			await shim.fsDriver().mkdir(dirname(noteFilePath));
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');
 		}
 	}
 
-	async processResource(_resource: any, filePath: string) {
-		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
+	private async findReasonableFilename(resource: ResourceEntity, filePath: string) {
+		let fileName = basename(filePath);
+
+		if (resource.filename) {
+			fileName = resource.filename;
+		} else if (resource.title) {
+			fileName = friendlySafeFilename(resource.title, null, true);
+		}
+
+		// Fall back on the resource filename saved in the users resource folder
+		return fileName;
+	}
+
+	async processResource(resource: ResourceEntity, filePath: string) {
+		const context = this.context();
+		if (!context.destResourcePaths) context.destResourcePaths = {};
+
+		const fileName = await this.findReasonableFilename(resource, filePath);
+		let destResourcePath = `${this.resourceDir_}/${fileName}`;
+		destResourcePath = await shim.fsDriver().findUniqueFilename(destResourcePath, Object.values(context.destResourcePaths), true);
 		await shim.fsDriver().copy(filePath, destResourcePath);
+
+		context.destResourcePaths[resource.id] = destResourcePath;
+		this.updateContext(context);
 	}
 
 	async close() {}

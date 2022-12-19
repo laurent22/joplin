@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+	<title>{{pageTitle}}</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/main.css" crossorigin="anonymous">
+	{{#cssFiles}}
+		<link rel="stylesheet" href="{{{.}}}" crossorigin="anonymous">
+	{{/cssFiles}}
+	{{#jsFiles}}
+		<script src="{{{.}}}"></script>
+	{{/jsFiles}}
+</head>
+	<body class="page-{{{pageName}}}">
+		<main class="main">
+			<div class="container">
+				{{{contentHtml}}}
+			</div>
+		</main>
+		{{> footer}}
+	</body>
+</html>

@@ -1,14 +1,15 @@
-import Setting from './models/Setting';
+import Setting, { Env } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
+const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
 import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
-
 import { createStore, applyMiddleware, Store } from 'redux';
 const { defaultState, stateUtils } = require('./reducer');
 import JoplinDatabase from './JoplinDatabase';
@@ -29,36 +30,50 @@ const fs = require('fs-extra');
 import JoplinError from './JoplinError';
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
-const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+import SyncTargetRegistry from './SyncTargetRegistry';
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
-import EncryptionService from './services/EncryptionService';
+import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
 import SearchEngine from './services/searchengine/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
-const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
+import { loadKeychainServiceAndSettings } from './services/SettingUtils';
 import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
+import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
+import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
+import SyncTargetNone from './SyncTargetNone';
+import { setRSA } from './services/e2ee/ppk';
+import RSA from './services/e2ee/RSA.node';
+import Resource from './models/Resource';
+import { ProfileConfig } from './services/profileConfig/types';
+import initProfile from './services/profileConfig/initProfile';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
 
+interface StartOptions {
+	keychainEnabled?: boolean;
+}
+
 export default class BaseApplication {
 
 	private eventEmitter_: any;
 	private scheduleAutoAddResourcesIID_: any = null;
 	private database_: any = null;
+	private profileConfig_: ProfileConfig = null;
 
 	protected showStackTraces_: boolean = false;
 	protected showPromptString_: boolean = false;
@@ -70,12 +85,12 @@ export default class BaseApplication {
 
 	protected store_: Store<any> = null;
 
-	constructor() {
+	public constructor() {
 		this.eventEmitter_ = new EventEmitter();
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
-	async destroy() {
+	public async destroy() {
 		if (this.scheduleAutoAddResourcesIID_) {
 			shim.clearTimeout(this.scheduleAutoAddResourcesIID_);
 			this.scheduleAutoAddResourcesIID_ = null;
@@ -107,7 +122,7 @@ export default class BaseApplication {
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
 	}
 
-	logger(): LoggerWrapper {
+	public logger(): LoggerWrapper {
 		return appLogger;
 	}
 
@@ -115,11 +130,11 @@ export default class BaseApplication {
 		return this.store_;
 	}
 
-	currentFolder() {
+	public currentFolder() {
 		return this.currentFolder_;
 	}
 
-	async refreshCurrentFolder() {
+	public async refreshCurrentFolder() {
 		let newFolder = null;
 
 		if (this.currentFolder_) newFolder = await Folder.load(this.currentFolder_.id);
@@ -128,7 +143,7 @@ export default class BaseApplication {
 		this.switchCurrentFolder(newFolder);
 	}
 
-	switchCurrentFolder(folder: any) {
+	public switchCurrentFolder(folder: any) {
 		if (!this.hasGui()) {
 			this.currentFolder_ = Object.assign({}, folder);
 			Setting.setValue('activeFolderId', folder ? folder.id : '');
@@ -142,7 +157,7 @@ export default class BaseApplication {
 
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
-	async handleStartFlags_(argv: string[], setDefaults: boolean = true) {
+	private async handleStartFlags_(argv: string[], setDefaults: boolean = true) {
 		const matched: any = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
@@ -151,57 +166,57 @@ export default class BaseApplication {
 			const arg = argv[0];
 			const nextArg = argv.length >= 2 ? argv[1] : null;
 
-			if (arg == '--profile') {
+			if (arg === '--profile') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
 				matched.profileDir = nextArg;
 				argv.splice(0, 2);
 				continue;
 			}
 
-			if (arg == '--no-welcome') {
+			if (arg === '--no-welcome') {
 				matched.welcomeDisabled = true;
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--env') {
+			if (arg === '--env') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--env <dev|prod>'), 'flagError');
 				matched.env = nextArg;
 				argv.splice(0, 2);
 				continue;
 			}
 
-			if (arg == '--is-demo') {
+			if (arg === '--is-demo') {
 				Setting.setConstant('isDemo', true);
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--open-dev-tools') {
+			if (arg === '--open-dev-tools') {
 				Setting.setConstant('flagOpenDevTools', true);
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--debug') {
+			if (arg === '--debug') {
 				// Currently only handled by ElectronAppWrapper (isDebugMode property)
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--update-geolocation-disabled') {
+			if (arg === '--update-geolocation-disabled') {
 				Note.updateGeolocationEnabled_ = false;
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--stack-trace-enabled') {
+			if (arg === '--stack-trace-enabled') {
 				this.showStackTraces_ = true;
 				argv.splice(0, 1);
 				continue;
 			}
 
-			if (arg == '--log-level') {
+			if (arg === '--log-level') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--log-level <none|error|warn|info|debug>'), 'flagError');
 				matched.logLevel = Logger.levelStringToId(nextArg);
 				argv.splice(0, 2);
@@ -242,7 +257,34 @@ export default class BaseApplication {
 				continue;
 			}
 
-			if (arg.length && arg[0] == '-') {
+			if (arg.indexOf('--user-data-dir=') === 0) {
+				// Electron-specific flag. Allows users to run the app with chromedriver.
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.indexOf('--enable-features=') === 0) {
+				// Electron-specific flag - ignore it
+				// Allows users to run the app on native wayland
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.indexOf('--ozone-platform=') === 0) {
+				// Electron-specific flag - ignore it
+				// Allows users to run the app on native wayland
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg === '--disable-smooth-scrolling') {
+				// Electron-specific flag - ignore it
+				// Allows users to disable smooth scrolling
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.length && arg[0] === '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
 				break;
@@ -261,16 +303,16 @@ export default class BaseApplication {
 		};
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	async exit(code = 0) {
+	public async exit(code = 0) {
 		await Setting.saveAll();
 		process.exit(code);
 	}
 
-	async refreshNotes(state: any, useSelectedNoteId: boolean = false, noteHash: string = '') {
+	public async refreshNotes(state: any, useSelectedNoteId: boolean = false, noteHash: string = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -312,7 +354,7 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, true);
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
@@ -366,13 +408,13 @@ export default class BaseApplication {
 		}
 	}
 
-	resourceFetcher_downloadComplete(event: any) {
+	private resourceFetcher_downloadComplete(event: any) {
 		if (event.encrypted) {
 			void DecryptionWorker.instance().scheduleStart();
 		}
 	}
 
-	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
+	private async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
@@ -388,15 +430,15 @@ export default class BaseApplication {
 		return o.join(', ');
 	}
 
-	hasGui() {
+	public hasGui() {
 		return false;
 	}
 
-	uiType() {
+	public uiType() {
 		return this.hasGui() ? 'gui' : 'cli';
 	}
 
-	generalMiddlewareFn() {
+	public generalMiddlewareFn() {
 		const middleware = (store: any) => (next: any) => (action: any) => {
 			return this.generalMiddleware(store, next, action);
 		};
@@ -404,7 +446,7 @@ export default class BaseApplication {
 		return middleware;
 	}
 
-	async applySettingsSideEffects(action: any = null) {
+	protected async applySettingsSideEffects(action: any = null) {
 		const sideEffects: any = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
@@ -422,9 +464,26 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
-			'encryption.enabled': async () => {
+			'net.proxyEnabled': async () => {
+				setupProxySettings({
+					maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
+					proxyTimeout: Setting.value('net.proxyTimeout'),
+					proxyEnabled: Setting.value('net.proxyEnabled'),
+					proxyUrl: Setting.value('net.proxyUrl'),
+				});
+			},
+
+			// Note: this used to run when "encryption.enabled" was changed, but
+			// now we run it anytime any property of the sync target info is
+			// changed. This is not optimal but:
+			// - The sync target info rarely changes.
+			// - All the calls below are cheap or do nothing if there's nothing
+			//   to do.
+			'syncInfoCache': async () => {
 				if (this.hasGui()) {
-					await EncryptionService.instance().loadMasterKeysFromSettings();
+					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -438,6 +497,7 @@ export default class BaseApplication {
 					void reg.scheduleSync();
 				}
 			},
+
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
@@ -445,8 +505,11 @@ export default class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
+		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
+		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
+		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
+		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -458,11 +521,10 @@ export default class BaseApplication {
 		}
 	}
 
-	async generalMiddleware(store: any, next: any, action: any) {
+	protected async generalMiddleware(store: any, next: any, action: any) {
 		// appLogger.debug('Reducer action', this.reducerActionToString(action));
 
 		const result = next(action);
-		const newState = store.getState();
 		let refreshNotes = false;
 		let refreshFolders: boolean | string = false;
 		// let refreshTags = false;
@@ -470,6 +532,7 @@ export default class BaseApplication {
 		let refreshNotesHash = '';
 
 		await reduxSharedMiddleware(store, next, action);
+		const newState = store.getState();
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
 			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
@@ -482,12 +545,12 @@ export default class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD') {
+		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
 		}
 
-		if (action.type == 'HISTORY_BACKWARD' || action.type == 'HISTORY_FORWARD' || action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+		if (action.type === 'HISTORY_BACKWARD' || action.type === 'HISTORY_FORWARD' || action.type === 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
@@ -498,23 +561,23 @@ export default class BaseApplication {
 			}
 		}
 
-		if (this.hasGui() && (action.type == 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
+		if (this.hasGui() && (action.type === 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'uncompletedTodosOnTop') || action.type === 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showCompletedTodos') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'showCompletedTodos') || action.type === 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type === 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'SMART_FILTER_SELECT') {
+		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
 		}
@@ -527,11 +590,11 @@ export default class BaseApplication {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
+		if (action.type === 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
 			refreshNotes = true;
 		}
 
-		if (action.type == 'NOTE_TAG_REMOVE') {
+		if (action.type === 'NOTE_TAG_REMOVE') {
 			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
 				if (newState.notes.length === newState.selectedNoteIds.length) {
 					await this.refreshCurrentFolder();
@@ -559,14 +622,14 @@ export default class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
+		if (this.hasGui() && action.type === 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+		if (this.hasGui() && action.type === 'SETTING_UPDATE_ONE' && (
 			action.key.indexOf('folders.sortOrder') === 0 ||
-			action.key == 'showNoteCounts' ||
-			action.key == 'showCompletedTodos')) {
+			action.key === 'showNoteCounts' ||
+			action.key === 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 
@@ -578,9 +641,9 @@ export default class BaseApplication {
 			void ResourceFetcher.instance().autoAddResources();
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE') {
+		if (action.type === 'SETTING_UPDATE_ONE') {
 			await this.applySettingsSideEffects(action);
-		} else if (action.type == 'SETTING_UPDATE_ALL') {
+		} else if (action.type === 'SETTING_UPDATE_ALL') {
 			await this.applySettingsSideEffects();
 		}
 
@@ -594,27 +657,33 @@ export default class BaseApplication {
 		return result;
 	}
 
-	dispatch(action: any) {
+	public dispatch(action: any) {
 		if (this.store()) return this.store().dispatch(action);
 	}
 
-	reducer(state: any = defaultState, action: any) {
+	public reducer(state: any = defaultState, action: any) {
 		return reducer(state, action);
 	}
 
-	initRedux() {
+	public initRedux() {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
 		setStore(this.store_);
+
+		this.store_.dispatch({
+			type: 'PROFILE_CONFIG_SET',
+			value: this.profileConfig_,
+		});
+
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		// reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
-		ShareService.instance().initialize(this.store());
+		ShareService.instance().initialize(this.store(), EncryptionService.instance());
 	}
 
-	deinitRedux() {
+	public deinitRedux() {
 		this.store_ = null;
 		BaseModel.dispatch = function() {};
 		FoldersScreenUtils.dispatch = function() {};
@@ -624,7 +693,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().dispatch = function() {};
 	}
 
-	async readFlagsFromFile(flagPath: string) {
+	public async readFlagsFromFile(flagPath: string) {
 		if (!fs.existsSync(flagPath)) return {};
 		let flagContent = fs.readFileSync(flagPath, 'utf8');
 		if (!flagContent) return {};
@@ -640,7 +709,7 @@ export default class BaseApplication {
 		return flags.matched;
 	}
 
-	determineProfileDir(initArgs: any) {
+	public determineProfileDir(initArgs: any) {
 		let output = '';
 
 		if (initArgs.profileDir) {
@@ -654,36 +723,43 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
-	async start(argv: string[]): Promise<any> {
+	public async start(argv: string[], options: StartOptions = null): Promise<any> {
+		options = {
+			keychainEnabled: true,
+			...options,
+		};
+
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
 		if (argv.length) this.showPromptString_ = false;
 
-		let appName = initArgs.env == 'dev' ? 'joplindev' : 'joplin';
+		let appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
 		if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
 		Setting.setConstant('appName', appName);
 
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const profileDir = this.determineProfileDir(initArgs);
+		const rootProfileDir = this.determineProfileDir(initArgs);
+		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
+		this.profileConfig_ = profileConfig;
+
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
 		Setting.setConstant('env', initArgs.env);
-		Setting.setConstant('profileDir', profileDir);
-		Setting.setConstant('templateDir', `${profileDir}/templates`);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
-		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
+		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
 
+		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);
@@ -691,6 +767,7 @@ export default class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 		SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+		SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 		try {
 			await shim.fsDriver().remove(tempDir);
@@ -731,6 +808,7 @@ export default class BaseApplication {
 
 
 		appLogger.info(`Profile directory: ${profileDir}`);
+		appLogger.info(`Root profile directory: ${rootProfileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
@@ -743,14 +821,23 @@ export default class BaseApplication {
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
 
-		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+		setRSA(RSA);
+
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await migrateMasterPassword();
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
-			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info(`First start: detected locale as ${locale}`);
+			// If it's a sub-profile, the locale must come from the root
+			// profile.
+			if (!Setting.value('isSubProfile')) {
+				const locale = shim.detectAndSetLocale(Setting);
+				reg.logger().info(`First start: detected locale as ${locale}`);
+			}
+
+			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', 0);
@@ -760,7 +847,17 @@ export default class BaseApplication {
 
 			Setting.setValue('firstStart', 0);
 		} else {
-			setLocale(Setting.value('locale'));
+			Setting.applyDefaultMigrations();
+			Setting.applyUserSettingMigration();
+		}
+
+		setLocale(Setting.value('locale'));
+
+		if (Setting.value('env') === Env.Dev) {
+			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
+			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
+			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
+			Setting.setValue('sync.10.userContentPath', 'http://joplincloud.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:
@@ -773,15 +870,17 @@ export default class BaseApplication {
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
 			// which can be set by a maintenance script for example.
 			const folderCount = await Folder.count();
-			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			const itShould = getEncryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
 			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
+		if (isSubProfile) Setting.setValue('welcome.enabled', false);
 
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()
 				.generateApiToken()
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				.then((token: string) => {
 					Setting.setValue('api.token', token);
 				});
@@ -794,13 +893,13 @@ export default class BaseApplication {
 
 		KvStore.instance().setDb(reg.db());
 
-		EncryptionService.instance().setLogger(globalLogger);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();
+		Resource.shareService_ = ShareService.instance();
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => {

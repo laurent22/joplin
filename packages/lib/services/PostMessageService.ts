@@ -27,7 +27,7 @@ import PluginService from './plugins/PluginService';
 
 const logger = Logger.create('PostMessageService');
 
-enum MessageParticipant {
+export enum MessageParticipant {
 	ContentScript = 'contentScript',
 	Plugin = 'plugin',
 	UserWebview = 'userWebview',
@@ -46,6 +46,8 @@ export interface MessageResponse {
 
 type MessageResponder = (message: MessageResponse)=> void;
 
+type ViewMessageHandler = (message: any)=> void;
+
 interface Message {
 	pluginId: string;
 	contentScriptId: string;
@@ -60,6 +62,7 @@ export default class PostMessageService {
 
 	private static instance_: PostMessageService;
 	private responders_: Record<string, MessageResponder> = {};
+	private viewMessageHandlers_: Record<string, ViewMessageHandler> = {};
 
 	public static instance(): PostMessageService {
 		if (this.instance_) return this.instance_;
@@ -68,26 +71,26 @@ export default class PostMessageService {
 	}
 
 	public async postMessage(message: Message) {
-		logger.debug('postMessage:', message);
 
 		let response = null;
 		let error = null;
 
+		if (message.from === MessageParticipant.Plugin && message.to === MessageParticipant.UserWebview) {
+			this.viewMessageHandler(message);
+			return;
+		}
+
 		try {
 			if (message.from === MessageParticipant.ContentScript && message.to === MessageParticipant.Plugin) {
-
 				const pluginId = PluginService.instance().pluginIdByContentScriptId(message.contentScriptId);
 				if (!pluginId) throw new Error(`Could not find plugin associated with content script "${message.contentScriptId}"`);
 				response = await PluginService.instance().pluginById(pluginId).emitContentScriptMessage(message.contentScriptId, message.content);
 
 			} else if (message.from === MessageParticipant.UserWebview && message.to === MessageParticipant.Plugin) {
-
 				response = await PluginService.instance().pluginById(message.pluginId).viewController(message.viewId).emitMessage({ message: message.content });
 
 			} else {
-
 				throw new Error(`Unhandled message: ${JSON.stringify(message)}`);
-
 			}
 		} catch (e) {
 			error = e;
@@ -96,8 +99,18 @@ export default class PostMessageService {
 		this.sendResponse(message, response, error);
 	}
 
+	private viewMessageHandler(message: Message) {
+
+		const viewMessageHandler = this.viewMessageHandlers_[[ResponderComponentType.UserWebview, message.viewId].join(':')];
+
+		if (!viewMessageHandler) {
+			logger.warn('Cannot receive message because no viewMessageHandler was found', message);
+		} else {
+			viewMessageHandler(message.content);
+		}
+	}
+
 	private sendResponse(message: Message, responseContent: any, error: any) {
-		logger.debug('sendResponse', message, responseContent, error);
 
 		let responder: MessageResponder = null;
 
@@ -124,6 +137,14 @@ export default class PostMessageService {
 
 	public registerResponder(type: ResponderComponentType, viewId: string, responder: MessageResponder) {
 		this.responders_[[type, viewId].join(':')] = responder;
+	}
+
+	public registerViewMessageHandler(type: ResponderComponentType, viewId: string, callback: ViewMessageHandler) {
+		this.viewMessageHandlers_[[type, viewId].join(':')] = callback;
+	}
+
+	public unregisterViewMessageHandler(type: ResponderComponentType, viewId: string) {
+		delete this.viewMessageHandlers_[[type, viewId].join(':')];
 	}
 
 	public unregisterResponder(type: ResponderComponentType, viewId: string) {

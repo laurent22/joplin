@@ -1,5 +1,6 @@
 import BaseModel from '../BaseModel';
 import { SqlQuery } from '../database';
+import BaseItem from './BaseItem';
 
 // - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id
 // - If is_associated = 0, note_resources indicates which note_id *was* associated with the given resource_id
@@ -104,7 +105,22 @@ export default class NoteResource extends BaseModel {
 		const queries = [];
 		for (let i = 0; i < missingResources.length; i++) {
 			const id = missingResources[i].id;
-			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ['', id, 0, 0] });
+
+			// If the resource is not associated with any note, and has never
+			// been synced, it means it's a local resource that was removed from
+			// a note (or the note was deleted). In which case, we set a
+			// "last_seen_time", so that it can be considered an orphan reosurce
+			// that can be auto-deleted.
+			//
+			// https://github.com/laurent22/joplin/issues/932#issuecomment-933736405
+
+			const hasBeenSynced = await BaseItem.itemHasBeenSynced(id);
+			const lastSeenTime = hasBeenSynced ? 0 : Date.now();
+
+			queries.push({
+				sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)',
+				params: ['', id, 0, lastSeenTime] }
+			);
 		}
 		await this.db().transactionExecBatch(queries);
 	}

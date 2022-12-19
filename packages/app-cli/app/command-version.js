@@ -1,6 +1,6 @@
-const { BaseCommand } = require('./base-command.js');
-const Setting = require('@joplin/lib/models/Setting').default;
+const BaseCommand = require('./base-command').default;
 const { _ } = require('@joplin/lib/locale');
+const versionInfo = require('@joplin/lib/versionInfo').default;
 
 class Command extends BaseCommand {
 	usage() {
@@ -12,8 +12,7 @@ class Command extends BaseCommand {
 	}
 
 	async action() {
-		const p = require('./package.json');
-		this.stdout(_('%s %s (%s)', p.name, p.version, Setting.value('env')));
+		this.stdout(versionInfo(require('./package.json')).message);
 	}
 }
 

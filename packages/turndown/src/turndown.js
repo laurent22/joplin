@@ -23,6 +23,7 @@ export default function TurndownService (options) {
     linkReferenceStyle: 'full',
     anchorNames: [],
     br: '  ',
+    disableEscapeContent: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
@@ -181,6 +182,8 @@ TurndownService.prototype = {
  */
 
 function process (parentNode, escapeContent = 'auto') {
+  if (this.options.disableEscapeContent) escapeContent = false;
+
   var self = this
   return reduce.call(parentNode.childNodes, function (output, node) {
     node = new Node(node)

@@ -2,6 +2,15 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 
+export interface Options {
+	folderCount?: number;
+	noteCount?: number;
+	tagCount?: number;
+	tagsPerNote?: number;
+	silent?: number;
+	clearDatabase?: boolean;
+}
+
 function randomIndex(array: any[]): number {
 	return Math.round(Math.random() * (array.length - 1));
 }
@@ -31,19 +40,23 @@ function randomElement(array: any[]): any {
 
 // Use the constants below to define how many folders, notes and tags
 // should be created.
-export default async function populateDatabase(db: any) {
-	await db.clearForTesting();
+export default async function populateDatabase(db: any, options: Options = null) {
+	options = {
+		folderCount: 0,
+		noteCount: 0,
+		tagCount: 0,
+		tagsPerNote: 0,
+		clearDatabase: false,
+		...options,
+	};
 
-	const folderCount = 20;
-	const noteCount = 200;
-	const tagCount = 2000;
-	const tagsPerNote = 3;
+	if (options.clearDatabase) await db.clearForTesting();
 
 	const createdFolderIds: string[] = [];
 	const createdNoteIds: string[] = [];
 	const createdTagIds: string[] = [];
 
-	for (let i = 0; i < folderCount; i++) {
+	for (let i = 0; i < options.folderCount; i++) {
 		const folder: any = {
 			title: `folder${i}`,
 		};
@@ -58,15 +71,16 @@ export default async function populateDatabase(db: any) {
 		const savedFolder = await Folder.save(folder);
 		createdFolderIds.push(savedFolder.id);
 
-		console.info(`Folders: ${i} / ${folderCount}`);
+		if (!options.silent) console.info(`Folders: ${i} / ${options.folderCount}`);
 	}
 
 	let tagBatch = [];
-	for (let i = 0; i < tagCount; i++) {
+	for (let i = 0; i < options.tagCount; i++) {
 		const tagTitle = randomElement(wordList); // `tag${i}`
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		tagBatch.push(Tag.save({ title: tagTitle }, { dispatchUpdateAction: false }).then((savedTag: any) => {
 			createdTagIds.push(savedTag.id);
-			console.info(`Tags: ${i} / ${tagCount}`);
+			if (!options.silent) console.info(`Tags: ${i} / ${options.tagCount}`);
 		}));
 
 		if (tagBatch.length > 1000) {
@@ -81,14 +95,15 @@ export default async function populateDatabase(db: any) {
 	}
 
 	let noteBatch = [];
-	for (let i = 0; i < noteCount; i++) {
+	for (let i = 0; i < options.noteCount; i++) {
 		const note: any = { title: `note${i}`, body: `This is note num. ${i}` };
 		const parentIndex = randomIndex(createdFolderIds);
 		note.parent_id = createdFolderIds[parentIndex];
 
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		noteBatch.push(Note.save(note, { dispatchUpdateAction: false }).then((savedNote: any) => {
 			createdNoteIds.push(savedNote.id);
-			console.info(`Notes: ${i} / ${noteCount}`);
+			console.info(`Notes: ${i} / ${options.noteCount}`);
 		}));
 
 		if (noteBatch.length > 1000) {
@@ -102,20 +117,22 @@ export default async function populateDatabase(db: any) {
 		noteBatch = [];
 	}
 
-	let noteTagBatch = [];
-	for (const noteId of createdNoteIds) {
-		const tagIds = randomElements(createdTagIds, tagsPerNote);
-		noteTagBatch.push(Tag.setNoteTagsByIds(noteId, tagIds));
+	if (options.tagsPerNote) {
+		let noteTagBatch = [];
+		for (const noteId of createdNoteIds) {
+			const tagIds = randomElements(createdTagIds, options.tagsPerNote);
+			noteTagBatch.push(Tag.setNoteTagsByIds(noteId, tagIds));
 
-		if (noteTagBatch.length > 1000) {
+			if (noteTagBatch.length > 1000) {
+				await Promise.all(noteTagBatch);
+				noteTagBatch = [];
+			}
+		}
+
+		if (noteTagBatch.length) {
 			await Promise.all(noteTagBatch);
 			noteTagBatch = [];
 		}
-	}
-
-	if (noteTagBatch.length) {
-		await Promise.all(noteTagBatch);
-		noteTagBatch = [];
 	}
 }
 

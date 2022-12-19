@@ -28,7 +28,7 @@ export default async function(request: Request) {
 		options.caseInsensitive = true;
 		results = await ModelClass.all(options);
 	} else {
-		results = await SearchEngineUtils.notesForQuery(query, defaultLoadOptions(request, ModelType.Note));
+		results = await SearchEngineUtils.notesForQuery(query, false, defaultLoadOptions(request, ModelType.Note));
 	}
 
 	return collectionToPaginatedResults(modelType, results, request);

@@ -29,6 +29,14 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		return _('OneDrive');
 	}
 
+	public static description() {
+		return 'A file hosting service operated by Microsoft as part of its web version of Office.';
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return false;
+	}
+
 	async isAuthenticated() {
 		return !!this.api().auth();
 	}
@@ -59,7 +67,7 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 
 		if (this.api_) return this.api_;
 
-		const isPublic = Setting.value('appType') != 'cli' && Setting.value('appType') != 'desktop';
+		const isPublic = Setting.value('appType') !== 'cli' && Setting.value('appType') !== 'desktop';
 
 		this.api_ = new OneDriveApi(this.oneDriveParameters().id, this.oneDriveParameters().secret, isPublic);
 

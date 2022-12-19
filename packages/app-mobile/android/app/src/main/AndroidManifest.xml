@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.cozic.joplin"
-    android:installLocation="auto">
+	package="net.cozic.joplin"
+	android:installLocation="auto">
 
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -8,18 +8,24 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <!-- Make these features optional to enable Chromebooks -->
+	<!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+	<!-- Need this block to support viewing files in with Android API 30 -->
+	<!-- https://github.com/vinzscam/react-native-file-viewer/issues/94#issuecomment-767743365 -->
+	<queries>
+		<intent>
+			<action android:name="android.intent.action.VIEW" />
+			<data android:mimeType="*/*" />
+		</intent>
+	</queries>
 
 	<!--
 		android:requestLegacyExternalStorage: Android 10 introduced new "scoped storage" mechanism.
 		Apps targeting Android 10 (sdk 29) can no longer freely access arbitrary paths on the shared storage.
 		This attribute allows to opt out of this restriction.
-
-		android:allowBackup: used to enable Android Backup which some users need:
-		https://github.com/laurent22/joplin/issues/4020
 
 		android:resizeableActivity: allows user to resize Joplin window
 		https://github.com/laurent22/joplin/issues/3547
@@ -29,7 +35,7 @@
 		android:label="@string/app_name"
 		android:icon="@mipmap/ic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round"
-		android:allowBackup="true"
+		android:allowBackup="false"
 		android:networkSecurityConfig="@xml/network_security_config"
 		android:requestLegacyExternalStorage="true"
 		android:resizeableActivity="true"
@@ -47,21 +53,29 @@
 
 		2020-10-08: Changed back again to "singleTop" as it has worked so far. The multiple instance bug was "fixed" in a different way
 					See packages/app-mobile/root.js for more info about the bug.
+
+		2021-11-20: Changed to "singleTask" to ensure deep linking doesn't cause multiple instances.
+					This is recommended in the React docs: https://reactnavigation.org/docs/deep-linking. In practice, "singleTask" and "singleTop" are
+					largely similar, but "singleTask" is more strict in preventing multiple instances of the app from being created if another app
+					explicitly requests it.
+
+		2022-08-12: Added `screenLayout` and `smallestScreenSize` to `android:configChanges`.
+					This prevents the application from being re-constructed on
+					screen orientation change/window resizes on some devices.
+					See https://github.com/laurent22/joplin/pull/6737.
 		-->
 
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-			android:launchMode="singleTop"
-				android:windowSoftInputMode="adjustResize">
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+			android:launchMode="singleTask"
+			android:windowSoftInputMode="adjustResize">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-
-		<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
 		<!-- SHARE EXTENSION -->
 		<activity
@@ -70,6 +84,7 @@
 			android:configChanges="orientation"
 			android:label="@string/app_name"
 			android:excludeFromRecents="true"
+			android:launchMode="singleTask"
 			android:theme="@style/AppTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.SEND" />
@@ -84,6 +99,6 @@
 		</activity>
 		<!-- /SHARE EXTENSION -->
 
-    </application>
+	</application>
 
 </manifest>

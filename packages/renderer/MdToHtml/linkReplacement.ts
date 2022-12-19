@@ -122,7 +122,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 		icon = '';
 		attrHtml.push(`href='${htmlentities(href)}'`);
 	} else {
-		attrHtml.push(`href='${hrefAttr}'`);
+		attrHtml.push(`href='${htmlentities(hrefAttr)}'`);
 		if (js) attrHtml.push(js);
 	}
 

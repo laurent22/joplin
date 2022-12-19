@@ -8,6 +8,7 @@ export default function useEditorSearch(CodeMirror: any) {
 	const [scrollbarMarks, setScrollbarMarks] = useState(null);
 	const [previousKeywordValue, setPreviousKeywordValue] = useState(null);
 	const [previousIndex, setPreviousIndex] = useState(null);
+	const [previousSearchTimestamp, setPreviousSearchTimestamp] = useState(0);
 	const [overlayTimeout, setOverlayTimeout] = useState(null);
 	const overlayTimeoutRef = useRef(null);
 	overlayTimeoutRef.current = overlayTimeout;
@@ -36,7 +37,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		return { token: function(stream: any) {
 			query.lastIndex = stream.pos;
 			const match = query.exec(stream.string);
-			if (match && match.index == stream.pos) {
+			if (match && match.index === stream.pos) {
 				stream.pos += match[0].length || 1;
 				return 'search-marker';
 			} else if (match) {
@@ -51,7 +52,7 @@ export default function useEditorSearch(CodeMirror: any) {
 	// Highlights the currently active found work
 	// It's possible to get tricky with this fucntions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
-	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean) {
+	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
 
 		let match: any = null;
@@ -64,7 +65,13 @@ export default function useEditorSearch(CodeMirror: any) {
 		}
 
 		if (match) {
-			if (scrollTo) cm.scrollIntoView(match);
+			if (scrollTo) {
+				if (withSelection) {
+					cm.setSelection(match.from, match.to);
+				} else {
+					cm.scrollTo(match);
+				}
+			}
 			return cm.markText(match.from, match.to, { className: 'cm-search-marker-selected' });
 		}
 
@@ -90,7 +97,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 	CodeMirror.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
-			options = { selectedIndex: 0 };
+			options = { selectedIndex: 0, searchTimestamp: 0 };
 		}
 
 		clearMarkers();
@@ -107,18 +114,19 @@ export default function useEditorSearch(CodeMirror: any) {
 			const searchTerm = getSearchTerm(keyword);
 
 			// We only want to scroll the first keyword into view in the case of a multi keyword search
-			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex);
+			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
 
-			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo);
+			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
 			if (match) marks.push(match);
 		}
 
 		setMarkers(marks);
 		setPreviousIndex(options.selectedIndex);
+		setPreviousSearchTimestamp(options.searchTimestamp);
 
 		// SEARCHOVERLAY
 		// We only want to highlight all matches when there is only 1 search term
-		if (keywords.length !== 1 || keywords[0].value == '') {
+		if (keywords.length !== 1 || keywords[0].value === '') {
 			clearOverlay(this);
 			const prev = keywords.length > 1 ? keywords[0].value : '';
 			setPreviousKeywordValue(prev);

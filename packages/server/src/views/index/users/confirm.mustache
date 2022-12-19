@@ -15,7 +15,8 @@
 			<div class="field">
 				<label class="label">Password</label>
 				<div class="control">
-					<input class="input" type="password" name="password"/>
+					<input id="password" class="input" type="password" name="password"/>
+					<p id="password_strength" class="help"></p>
 				</div>
 			</div>
 			<div class="field">
@@ -31,3 +32,9 @@
 		</form>
 	</div>
 </section>
+
+<script>
+$(() => {
+	setupPasswordStrengthHandler();
+});
+</script>

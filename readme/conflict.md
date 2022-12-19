@@ -1,6 +1,6 @@
 # What is a conflict?
 
-A conflict happens when one note or one attachment is modified in two different places, and then synchronised. In that case, it not possible to determine which version of the note or attachment you want to keep, and thus a conflict is generated.
+A conflict happens when one note or one attachment is modified in two different places, and then synchronised. In that case, it is not possible to determine which version of the note or attachment you want to keep, and thus a conflict is generated.
 
 # What happens in case of a conflict?
 

@@ -19,6 +19,7 @@ utils.execCommandVerbose = function(commandName, args = []) {
 	console.info(`> ${commandName}`, args && args.length ? args : '');
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
+	promise.stderr.pipe(process.stderr);
 	return promise;
 };
 
@@ -37,7 +38,7 @@ utils.execCommand = function(command) {
 					return;
 				}
 
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					const newError = new Error(`Code: ${error.code}: ${error.message}: ${stdout.trim()}`);
@@ -133,12 +134,31 @@ utils.copyDir = async function(src, dest, options) {
 	}
 };
 
+// Occasionally, fs.mkdirp throws a "EEXIST" error if the directory already
+// exists, while it should actually ignore the error. So we have this wrapper
+// that actually handle the error. It means in general this method should be
+// preferred to avoid random failures on CI or when building the app.
+//
+// https://github.com/laurent22/joplin/issues/6935#issuecomment-1274404470
 utils.mkdir = async function(dir) {
 	if (utils.isWindows()) {
 		return utils.execCommand(`if not exist "${utils.toSystemSlashes(dir)}" mkdir "${utils.toSystemSlashes(dir)}"`);
 	} else {
-		return fs.mkdirp(dir);
+		try {
+			// Can't return right away, or the exception won't be caught
+			const result = await fs.mkdirp(dir);
+			return result;
+		} catch (error) {
+			// Shouldn't happen but sometimes does. So we ignore the error in
+			// this case.
+			if (error.code === 'EEXIST') return;
+			throw error;
+		}
 	}
+};
+
+utils.mkdirp = async function(dir) {
+	return utils.mkdir(dir);
 };
 
 utils.copyFile = async function(src, dest) {
@@ -164,6 +184,39 @@ utils.setPackagePrivateField = async function(filePath, value) {
 		obj.private = true;
 	}
 	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
+};
+
+utils.insertContentIntoFile = async (filePath, marker, contentToInsert, createIfNotExist = false) => {
+	const fs = require('fs-extra');
+	const fileExists = await fs.pathExists(filePath);
+
+	if (!fileExists) {
+		if (!createIfNotExist) throw new Error(`File not found: ${filePath}`);
+		await fs.writeFile(filePath, `${marker}\n${contentToInsert}\n${marker}`);
+	} else {
+		let content = await fs.readFile(filePath, 'utf-8');
+		// [^]* matches any character including new lines
+		const regex = new RegExp(`${marker}[^]*?${marker}`);
+		content = content.replace(regex, `${marker}\n${contentToInsert}\n${marker}`);
+		await fs.writeFile(filePath, content);
+	}
+};
+
+utils.getFilename = (path) => {
+	const lastPart = path.split('/').pop();
+	if (lastPart.indexOf('.') < 0) return lastPart;
+
+	const splitted = lastPart.split('.');
+	splitted.pop();
+	return splitted.join('.');
+};
+
+utils.msleep = (ms) => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
 };
 
 module.exports = utils;

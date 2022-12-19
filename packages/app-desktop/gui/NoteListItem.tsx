@@ -73,6 +73,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 			focus: function() {
 				if (anchorRef.current) anchorRef.current.focus();
 			},
+			getHeight: () => anchorRef.current?.clientHeight,
 		};
 	});
 
@@ -110,7 +111,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 
 	let listItemTitleStyle = Object.assign({}, props.style.listItemTitle);
 	listItemTitleStyle.paddingLeft = !item.is_todo ? hPadding : 4;
-	if (item.is_shared) listItemTitleStyle.color = theme.colorWarn;
+	if (item.is_shared) listItemTitleStyle.color = theme.colorWarn3;
 	if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, props.style.listItemTitleCompleted);
 
 	const displayTitle = Note.displayTitle(item);

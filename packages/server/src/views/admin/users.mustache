@@ -1,0 +1,33 @@
+<div class="block">
+	<form method="GET" action="{{searchUrl}}">
+		<div class="field">
+			<label class="label">Search user</label>
+			<div class="control">
+				<input name="query" id="query" class="input" type="text" placeholder="User name or email" value="{{query}}">
+				{{#queryArray}}
+					<input type="hidden" name="{{name}}" value="{{value}}" />
+				{{/queryArray}}
+			</div>
+		</div>
+
+		<div class="field is-grouped">
+			<div class="control">
+				<button class="button is-link">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="block">
+	<a class="button is-primary" href="{{{global.baseUrl}}}/admin/users/new">Add user</a>
+	<a class="button is-link toggle-disabled-button hide-disabled" href="{{disabledToggleButtonUrl}}">{{disabledToggleButtonLabel}}</a>
+</div>
+
+{{#userTable}}
+	{{>table}}
+{{/userTable}}
+
+<div class="block">
+	<a class="button is-primary" href="{{{global.baseUrl}}}/admin/users/new">Add user</a>
+	<a class="button is-link toggle-disabled-button hide-disabled" href="{{disabledToggleButtonUrl}}">{{disabledToggleButtonLabel}}</a>
+</div>

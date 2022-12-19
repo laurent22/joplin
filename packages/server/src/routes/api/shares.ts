@@ -1,5 +1,5 @@
 import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType } from '../../db';
+import { Share, ShareType } from '../../services/database/types';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
@@ -10,6 +10,7 @@ import { AclAction } from '../../models/BaseModel';
 interface ShareApiInput extends Share {
 	folder_id?: string;
 	note_id?: string;
+	recursive?: number;
 }
 
 const router = new Router(RouteType.Api);
@@ -19,11 +20,19 @@ router.public = true;
 router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const shareModel = ctx.models.share();
-	const fields = await bodyFields<any>(ctx.req);
+	interface Fields {
+		folder_id?: string;
+		note_id?: string;
+		master_key_id?: string;
+		recursive?: number;
+	}
+
+	const shareModel = ctx.joplin.models.share();
+	const fields = await bodyFields<Fields>(ctx.req);
 	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
 	if (fields.note_id) shareInput.note_id = fields.note_id;
+	const masterKeyId = fields.master_key_id || '';
 
 	// - The API end point should only expose two ways of sharing:
 	//     - By folder_id (JoplinRootFolder)
@@ -31,9 +40,9 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	// - Additionally, the App method is available, but not exposed via the API.
 
 	if (shareInput.folder_id) {
-		return ctx.models.share().shareFolder(ctx.owner, shareInput.folder_id);
+		return ctx.joplin.models.share().shareFolder(ctx.joplin.owner, shareInput.folder_id, masterKeyId);
 	} else if (shareInput.note_id) {
-		return ctx.models.share().shareNote(ctx.owner, shareInput.note_id);
+		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id, masterKeyId, fields.recursive === 1);
 	} else {
 		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
 	}
@@ -44,31 +53,34 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 
 	interface UserInput {
 		email: string;
+		master_key?: string;
 	}
 
 	const fields = await bodyFields(ctx.req) as UserInput;
-	const user = await ctx.models.user().loadByEmail(fields.email);
+	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
 	if (!user) throw new ErrorNotFound('User not found');
 
+	const masterKey = fields.master_key || '';
 	const shareId = path.id;
 
-	await ctx.models.shareUser().checkIfAllowed(ctx.owner, AclAction.Create, {
+	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, {
 		share_id: shareId,
 		user_id: user.id,
+		master_key: masterKey,
 	});
 
-	return ctx.models.shareUser().addByEmail(shareId, user.email);
+	return ctx.joplin.models.shareUser().addByEmail(shareId, user.email, masterKey);
 });
 
 router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
 	const shareId = path.id;
-	const share = await ctx.models.share().load(shareId);
-	await ctx.models.share().checkIfAllowed(ctx.owner, AclAction.Read, share);
+	const share = await ctx.joplin.models.share().load(shareId);
+	await ctx.joplin.models.share().checkIfAllowed(ctx.joplin.owner, AclAction.Read, share);
 
-	const shareUsers = await ctx.models.shareUser().byShareId(shareId, null);
-	const users = await ctx.models.user().loadByIds(shareUsers.map(su => su.user_id));
+	const shareUsers = await ctx.joplin.models.shareUser().byShareId(shareId, null);
+	const users = await ctx.joplin.models.user().loadByIds(shareUsers.map(su => su.user_id));
 
 	const items = shareUsers.map(su => {
 		const user = users.find(u => u.id === su.user_id);
@@ -90,7 +102,7 @@ router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
-	const shareModel = ctx.models.share();
+	const shareModel = ctx.joplin.models.share();
 	const share = await shareModel.load(path.id);
 
 	if (share && share.type === ShareType.Note) {
@@ -102,17 +114,21 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	throw new ErrorNotFound();
 });
 
+// This end points returns both the shares owned by the user, and those they
+// participate in.
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const items = ctx.models.share().toApiOutput(await ctx.models.share().sharesByUser(ctx.owner.id)) as Share[];
+	const ownedShares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id)) as Share[];
+	const participatedShares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id));
+
 	// Fake paginated results so that it can be added later on, if needed.
 	return {
-		items: items.map(i => {
+		items: ownedShares.concat(participatedShares).map(share => {
 			return {
-				...i,
+				...share,
 				user: {
-					id: i.owner_id,
+					id: share.owner_id,
 				},
 			};
 		}),
@@ -123,9 +139,9 @@ router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 router.del('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const share = await ctx.models.share().load(path.id);
-	await ctx.models.share().checkIfAllowed(ctx.owner, AclAction.Delete, share);
-	await ctx.models.share().delete(share.id);
+	const share = await ctx.joplin.models.share().load(path.id);
+	await ctx.joplin.models.share().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, share);
+	await ctx.joplin.models.share().delete(share.id);
 });
 
 export default router;

@@ -1,11 +1,11 @@
 import * as vm from 'vm';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
-import sandboxProxy from '@joplin/lib/services/plugins/sandboxProxy';
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandboxCall';
 import Global from '@joplin/lib/services/plugins/api/Global';
 import mapEventHandlersToIds, { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import uuid from '@joplin/lib/uuid';
+const sandboxProxy = require('@joplin/lib/services/plugins/sandboxProxy');
 
 function createConsoleWrapper(pluginId: string) {
 	const wrapper: any = {};
@@ -50,6 +50,7 @@ export default class PluginRunner extends BasePluginRunner {
 			const callId = `${pluginId}::${path}::${uuid.createNano()}`;
 			this.activeSandboxCalls_[callId] = true;
 			const promise = executeSandboxCall(pluginId, sandbox, `joplin.${path}`, mapEventHandlersToIds(args, this.eventHandlers_), this.eventHandler);
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			promise.finally(() => {
 				delete this.activeSandboxCalls_[callId];
 			});

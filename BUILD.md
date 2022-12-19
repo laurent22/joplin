@@ -1,8 +1,6 @@
- [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
-
 # Building the applications
 
-The Joplin source code is hosted on a [monorepo](https://en.wikipedia.org/wiki/Monorepo) managed by Lerna. The usage of Lerna is mostly transparent as the needed commands have been moved to the root package.json and thus are invoked for example when running `npm install` or `npm run watch`. The main thing to know about Lerna is that it links the packages in the monorepo using `npm link`, so if you check the node_modules directory you will see links instead of actual directories for certain packages. This is something to keep in mind as these links can cause issues in some cases.
+The Joplin source code is hosted on a [monorepo](https://en.wikipedia.org/wiki/Monorepo) and is managed using Yarn workspaces (as well as Lerna for publishing the packages).
 
 The list of the main sub-packages is below:
 
@@ -20,34 +18,36 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
-- Install node 10+ - https://nodejs.org/en/
-- macOS: Install Cocoapods - `brew install cocoapods`
-- Windows: Install Windows Build Tools - `npm install -g windows-build-tools --vs2015`
-- Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev python rsync`
+- Install Node 16+. On Windows, also install the build tools - https://nodejs.org/en/
+  - [Enable Yarn](https://yarnpkg.com/getting-started/install): `corepack enable`
+- macOS: Install Cocoapods - `brew install cocoapods`. Apple Silicon [may require libvips](https://github.com/laurent22/joplin/pull/5966#issuecomment-1007158597) - `brew install vips`.
+- Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync`
 
 ## Building
 
+Make sure the path to the project directory does not contain spaces or the build may fail.
+
 Before doing anything else, from the root of the project, run:
 
-	npm install
+	yarn install
 
 Then you can test the various applications:
 
 ## Testing the desktop application
 
 	cd packages/app-desktop
-	npm start
+	yarn start
 
 You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
 
 ## Testing the Terminal application
 
 	cd packages/app-cli
-	npm start
+	yarn start
 
 ## Testing the Mobile application
 
-First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
+First you need to setup React Native to build projects with native code. For this, follow the instructions in the [Setting up the development environment](https://reactnative.dev/docs/environment-setup) tutorial, in the "React Native CLI Quickstart" tab.
 
 Then, for **Android**:
 
@@ -56,37 +56,28 @@ Then, for **Android**:
 
 On **iOS**, open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
-Normally the **bundler** should start automatically with the application. If it doesn't, run `npm start` from `packages/app-mobile`.
+Normally the **bundler** should start automatically with the application. If it doesn't, run `yarn start` from `packages/app-mobile`.
 
 ## Building the clipper
 
 	cd packages/app-clipper/popup
-	npm install
 	npm run watch # To watch for changes
 
-To test the extension please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/extensions/faq#faq-dev-01). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
+To test the extension please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/docs/extensions/mv3/getstarted/). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
 
 ## Watching files
 
 To make changes to the application, you'll need to rebuild any TypeScript file you've changed. The simplest way to do this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
 
-	npm run watch
+	yarn run watch
 
-Running `npm run tsc` would have the same effect, but without watching.
+Running `yarn run tsc` would have the same effect, but without watching.
 
 ## Running an application with additional parameters
 
-You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `npm start` command, followed by your flags. For example:
+You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `yarn start` command, followed by your flags. For example:
 
-	npm start -- --debug
-
-## Adding a new dependency
-
-Since Joplin uses Lerna, adding a new dependency should not be done using `npm i -s ...`. Instead you should use the `lerna add` command, which will take care of adding the package while handling the linked packages correctly. For example, to add the package "leftpad" to the "app-desktop" sub-package, you would run:
-
-	npx lerna add leftpad --scope=@joplin/app-desktop
-
-Note that you should most likely always specify a scope because otherwise it will add the package to all the sub-packages.
+	yarn start --debug
 
 ## TypeScript
 
@@ -98,14 +89,14 @@ If you'd like to auto-reload the desktop app on changes rather than having to qu
 
 ```sh
 cd packages/app-desktop
-watchman-make -p '**/*.js' '**/*.jsx' --run "npm start"
+watchman-make -p '**/*.js' '**/*.jsx' --run "yarn start"
 ```
 
-It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"npm start"` each time. Here's what the workflow loop looks like in practice:
+It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"yarn start"` each time. Here's what the workflow loop looks like in practice:
 
 1. Edit and save files in your text editor.
 2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
-3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm start"`, and hit enter).
+3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"yarn start"`, and hit enter).
 
 # Troubleshooting
 

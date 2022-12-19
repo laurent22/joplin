@@ -4,10 +4,16 @@ It is possible to get the apps to display or log more information that might hel
 
 ## Desktop application
 
+If the application starts with a white screen, open **Help &gt; Toggle Development Tools** in the menu. Then check in the console if there is any error or warning and please let us know about it.
+
+Otherwise, follow these instructions:
+
 - Click on menu **Help &gt; Open Profile Directory** and add a file named "flags.txt" in your directory with the following content: `--open-dev-tools --debug --log-level debug`
 - Restart the application
 - The development tools should now be opened. Click the "Console" tab
 - Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.
+
+Make sure you disable debugging once you've finished. Leaving it enabled can cause your log.txt to grow very quickly. To disable debugging, simply delete the "flags.txt" file created.
 
 ## CLI application
 
@@ -16,7 +22,7 @@ It is possible to get the apps to display or log more information that might hel
 
 ## Mobile application
 
-- In the Configuration screen, press on the **Log button** and post a screenshot of any error/warning.
+- In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md), press on the **Log button** and post a screenshot of any error/warning.
 
 # Creating a low-level bug report on Android
 

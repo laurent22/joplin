@@ -97,14 +97,31 @@ export interface ExportOptions {
 	includeConflicts?: boolean;
 	plugins?: PluginStates;
 	customCss?: string;
+	packIntoSingleFile?: boolean;
 }
 
 export interface ImportExportResult {
 	warnings: string[];
 }
 
+// These are the fields that will be included in an exported Md+Front Matter note
+export interface MdFrontMatterExport {
+	'title'?: string;
+	'source'?: string;
+	'author'?: string;
+	'latitude'?: number;
+	'longitude'?: number;
+	'altitude'?: number;
+	'completed?'?: string;
+	'due'?: string;
+	'updated'?: string;
+	'created'?: string;
+	'tags'?: string[];
+}
+
 function moduleFullLabel(moduleSource: FileSystemItem = null): string {
-	const label = [`${this.format.toUpperCase()} - ${this.description}`];
+	const format = this.format.split('_')[0];
+	const label = [`${format.toUpperCase()} - ${this.description}`];
 	if (moduleSource && this.sources.length > 1) {
 		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
 	}

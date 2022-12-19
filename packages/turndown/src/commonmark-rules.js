@@ -1,4 +1,4 @@
-import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock } from './utilities'
+import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
@@ -73,7 +73,15 @@ rules.highlight = {
 // HTML to avoid any ambiguity.
 
 rules.insert = {
-  filter: 'ins',
+  filter: function (node, options) {
+    // TinyMCE represents this either with an <INS> tag (when pressing the
+    // toolbar button) or using style "text-decoration" (when using shortcut
+    // Cmd+U)
+    //
+    // https://github.com/laurent22/joplin/issues/5480
+    if (node.nodeName === 'INS') return true;
+    return getStyleProp(node, 'text-decoration') === 'underline';
+  },
 
   replacement: function (content, node, options) {
     return '<ins>' + content + '</ins>'
@@ -608,6 +616,7 @@ function joplinEditableBlockInfo(node) {
   if (!node.classList.contains('joplin-editable')) return null;
 
   let sourceNode = null;
+  let isInline = false;
   for (const childNode of node.childNodes) {
     if (childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
@@ -616,11 +625,13 @@ function joplinEditableBlockInfo(node) {
   }
 
   if (!sourceNode) return null;
+  if (!node.isBlock) isInline = true;
 
   return {
     openCharacters: sourceNode.getAttribute('data-joplin-source-open'),
     closeCharacters: sourceNode.getAttribute('data-joplin-source-close'),
     content: sourceNode.textContent,
+    isInline
   };
 }
 
@@ -637,7 +648,8 @@ rules.joplinSourceBlock = {
     const info = joplinEditableBlockInfo(node);
     if (!info) return;
 
-    return '\n\n' + info.openCharacters + info.content + info.closeCharacters + '\n\n';
+    const surroundingCharacter = info.isInline? '' : '\n\n';
+    return surroundingCharacter + info.openCharacters + info.content + info.closeCharacters + surroundingCharacter;
   }
 }
 

@@ -1,0 +1,24 @@
+<section class="section">
+	<div class="container">
+		{{#confirmationMessage}}
+			<div class="notification is-info">
+				{{confirmationMessage}}
+			</div>
+		{{/confirmationMessage}}
+		
+		<h1 class="title">Reset your password</h1>
+		<p class="block">Enter your email address, and we'll send you a password reset email.</p>
+
+		<form action="{{postUrl}}" method="POST">
+			<div class="field">
+				<label class="label">Email</label>
+				<div class="control">
+					<input name="email" class="input" type="email"/>
+				</div>
+			</div>
+			<div class="control">
+				<button class="button is-primary">Reset password</button>
+			</div>
+		</form>
+	</div>
+</section>

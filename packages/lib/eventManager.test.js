@@ -6,14 +6,12 @@ const eventManager = require('./eventManager').default;
 
 describe('eventManager', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		eventManager.reset();
-		done();
 	});
 
-	afterEach(async (done) => {
+	afterEach(async () => {
 		eventManager.reset();
-		done();
 	});
 
 	it('should watch state props', (async () => {

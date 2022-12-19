@@ -53,7 +53,7 @@ function pluginAssets(theme: any) {
 	];
 }
 
-function createPrefixTokens(Token: any, id: string, checked: boolean, label: string, postMessageSyntax: string, sourceToken: any): any[] {
+function createPrefixTokens(Token: any, id: string, checked: boolean, label: string, postMessageSyntax: string, sourceToken: any, disabled: boolean): any[] {
 	let token = null;
 	const tokens = [];
 
@@ -89,6 +89,7 @@ function createPrefixTokens(Token: any, id: string, checked: boolean, label: str
 
 	token = new Token('checkbox_input', 'input', 0);
 	token.attrs = [['type', 'checkbox'], ['id', id], ['onclick', js]];
+	if (disabled) token.attrs.push(['disabled', 'disabled']);
 	if (checked) token.attrs.push(['checked', 'checked']);
 	tokens.push(token);
 
@@ -169,7 +170,7 @@ function checkboxPlugin(markdownIt: any, options: RuleOptions) {
 					// Prepend the text content with the checkbox markup and the opening <label> tag
 					// then append the </label> tag at the end of the text content.
 
-					const prefix = createPrefixTokens(Token, id, checked, label, options.postMessageSyntax, token);
+					const prefix = createPrefixTokens(Token, id, checked, label, options.postMessageSyntax, token, !!options.checkboxDisabled);
 					const suffix = createSuffixTokens(Token);
 
 					token.children = markdownIt.utils.arrayReplaceAt(token.children, 0, prefix);

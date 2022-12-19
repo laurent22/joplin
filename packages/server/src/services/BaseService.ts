@@ -10,6 +10,7 @@ export default class BaseService {
 	private env_: Env;
 	private models_: Models;
 	private config_: Config;
+	protected name_: string = 'Untitled';
 	protected enabled_: boolean = true;
 	private destroyed_: boolean = false;
 	protected maintenanceInterval_: number = 10000;
@@ -23,8 +24,12 @@ export default class BaseService {
 		this.scheduleMaintenance = this.scheduleMaintenance.bind(this);
 	}
 
+	protected get name(): string {
+		return this.name_;
+	}
+
 	public async destroy() {
-		if (this.destroyed_) throw new Error('Already destroyed');
+		if (this.destroyed_) throw new Error(`${this.name}: Already destroyed`);
 		this.destroyed_ = true;
 		this.scheduledMaintenances_ = [];
 
@@ -75,12 +80,17 @@ export default class BaseService {
 		}
 	}
 
-	private async runMaintenance() {
+	public async runMaintenance() {
+		if (this.maintenanceInProgress_) {
+			logger.warn(`${this.name}: Skipping maintenance because it is already in progress`);
+			return;
+		}
+
 		this.maintenanceInProgress_ = true;
 		try {
 			await this.maintenance();
 		} catch (error) {
-			logger.error('Could not run maintenance', error);
+			logger.error(`${this.name}: Could not run maintenance`, error);
 		}
 		this.maintenanceInProgress_ = false;
 	}

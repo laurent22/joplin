@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 
@@ -174,9 +174,11 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			return;
 		}
 		Resource.delete(resource.id)
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.catch((error: Error) => {
 				bridge().showErrorMessageBox(error.message);
 			})
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.finally(() => {
 				void this.reloadResources(this.state.sorting);
 			});

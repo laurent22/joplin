@@ -9,11 +9,11 @@ import { AclAction } from '../../models/BaseModel';
 const router = new Router(RouteType.Api);
 
 router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
-	const shareUserModel = ctx.models.shareUser();
+	const shareUserModel = ctx.joplin.models.shareUser();
 	const shareUser = await shareUserModel.load(path.id);
 	if (!shareUser) throw new ErrorNotFound();
 
-	await shareUserModel.checkIfAllowed(ctx.owner, AclAction.Update, shareUser);
+	await shareUserModel.checkIfAllowed(ctx.joplin.owner, AclAction.Update, shareUser);
 
 	const body = await bodyFields<any>(ctx.req);
 
@@ -25,24 +25,25 @@ router.patch('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.del('api/share_users/:id', async (path: SubPath, ctx: AppContext) => {
-	const shareUser = await ctx.models.shareUser().load(path.id);
+	const shareUser = await ctx.joplin.models.shareUser().load(path.id);
 	if (!shareUser) throw new ErrorNotFound();
 
-	await ctx.models.shareUser().checkIfAllowed(ctx.owner, AclAction.Delete, shareUser);
-	await ctx.models.shareUser().delete(shareUser.id);
+	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, shareUser);
+	await ctx.joplin.models.shareUser().delete(shareUser.id);
 });
 
 router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
-	const shareUsers = await ctx.models.shareUser().byUserId(ctx.owner.id);
+	const shareUsers = await ctx.joplin.models.shareUser().byUserId(ctx.joplin.owner.id);
 
 	const items: any[] = [];
 	for (const su of shareUsers) {
-		const share = await ctx.models.share().load(su.share_id);
-		const sharer = await ctx.models.user().load(share.owner_id);
+		const share = await ctx.joplin.models.share().load(su.share_id);
+		const sharer = await ctx.joplin.models.user().load(share.owner_id);
 
 		items.push({
 			id: su.id,
 			status: su.status,
+			master_key: su.master_key,
 			share: {
 				id: share.id,
 				folder_id: share.folder_id,

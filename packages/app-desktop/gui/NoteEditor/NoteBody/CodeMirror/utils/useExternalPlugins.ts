@@ -8,12 +8,12 @@ import uuid from '@joplin/lib/uuid';
 import { reg } from '@joplin/lib/registry';
 
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
-
 	const [options, setOptions] = useState({});
 	useEffect(() => {
 		let newOptions = {};
 
 		const contentScripts = contentScriptsToCodeMirrorPlugin(plugins);
+		const addedElements: HTMLElement[] = [];
 
 		for (const contentScript of contentScripts) {
 			try {
@@ -52,12 +52,12 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 						if (asset.inline) {
 							cssStrings.push(asset.text);
 						} else {
-							addScript(shim.fsDriver().resolveRelativePathWithinDir(contentScript.assetPath, asset.name), contentScript.id);
+							addedElements.push(addScript(shim.fsDriver().resolveRelativePathWithinDir(contentScript.assetPath, asset.name), contentScript.id));
 						}
 					}
 
 					if (cssStrings.length > 0) {
-						addInlineCss(cssStrings, contentScript.id);
+						addedElements.push(addInlineCss(cssStrings, contentScript.id));
 					}
 				}
 
@@ -69,13 +69,20 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 			}
 		}
 		setOptions(newOptions);
-	}, [plugins]);
+
+		return () => {
+			for (const element of addedElements) {
+				element.remove();
+			}
+		};
+	}, [plugins, CodeMirror]);
 
 	function addInlineCss(cssStrings: string[], id: string) {
 		const element = document.createElement('style');
 		element.setAttribute('id', `content-script-${id}-inline-${uuid.createNano()}`);
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(cssStrings.join('\n')));
+		return element;
 	}
 
 	function addScript(path: string, id: string) {
@@ -84,6 +91,7 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 		element.setAttribute('rel', 'stylesheet');
 		element.setAttribute('href', path);
 		document.head.appendChild(element);
+		return element;
 	}
 
 	return options;

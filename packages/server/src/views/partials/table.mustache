@@ -1,20 +1,22 @@
-<table class="table is-fullwidth is-hoverable">
-	<thead>
-		<tr>
-			{{#headers}}
-				{{>tableHeader}}
-			{{/headers}}
-		</tr>
-	</thead>
-	<tbody>
-		{{#rows}}
+<div class="table-container">
+	<table class="table is-fullwidth is-hoverable ">
+		<thead>
 			<tr>
-				{{#.}}
-					{{>tableRowItem}}
-				{{/.}}
+				{{#headers}}
+					{{>tableHeader}}
+				{{/headers}}
 			</tr>
-		{{/rows}}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{{#rows}}
+				<tr class="{{#classNames}}{{.}} {{/classNames}}">
+					{{#items}}
+						{{>tableRowItem}}
+					{{/items}}
+				</tr>
+			{{/rows}}
+		</tbody>
+	</table>
+</div>
 
 {{>pagination}}

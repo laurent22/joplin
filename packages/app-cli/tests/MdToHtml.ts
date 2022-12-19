@@ -1,7 +1,6 @@
 import MdToHtml from '@joplin/renderer/MdToHtml';
-const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient } = require('@joplin/lib/testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -19,10 +18,9 @@ function newTestMdToHtml(options: any = null) {
 
 describe('MdToHtml', function() {
 
-	beforeEach(async (done: Function) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should convert from Markdown to Html', (async () => {
@@ -57,22 +55,24 @@ describe('MdToHtml', function() {
 			const result = await mdToHtml.render(markdown, null, mdToHtmlOptions);
 			let actualHtml = result.html;
 
-			if (os.EOL === '\r\n') {
-				expectedHtml = expectedHtml.replace(/\r\n/g, '\n');
-				actualHtml = actualHtml.replace(/\r\n/g, '\n');
-			}
+			expectedHtml = expectedHtml.replace(/\r?\n/g, '\n');
+			actualHtml = actualHtml.replace(/\r?\n/g, '\n');
 
 			if (actualHtml !== expectedHtml) {
-				console.info('');
-				console.info(`Error converting file: ${mdFilename}`);
-				console.info('--------------------------------- Got:');
-				console.info(actualHtml);
-				console.info('--------------------------------- Raw:');
-				console.info(actualHtml.split('\n'));
-				console.info('--------------------------------- Expected:');
-				console.info(expectedHtml.split('\n'));
-				console.info('--------------------------------------------');
-				console.info('');
+				const msg: string[] = [
+					'',
+					`Error converting file: ${mdFilename}`,
+					'--------------------------------- Got:',
+					actualHtml,
+					'--------------------------------- Raw:',
+					actualHtml.split('\n'),
+					'--------------------------------- Expected:',
+					expectedHtml.split('\n'),
+					'--------------------------------------------',
+					'',
+				];
+
+				console.info(msg.join('\n'));
 
 				expect(false).toBe(true);
 				// return;
@@ -237,4 +237,18 @@ describe('MdToHtml', function() {
 		}
 	}));
 
+	it('should return attributes of line numbers', (async () => {
+		const mdToHtml = newTestMdToHtml();
+
+		// Mapping information between source lines and html elements is
+		// annotated.
+		{
+			const input = '# Head\nFruits\n- Apple\n';
+			const result = await mdToHtml.render(input, null, { bodyOnly: true, mapsToLine: true });
+			expect(result.html.trim()).toBe('<h1 id="head" class="maps-to-line" source-line="0" source-line-end="1">Head</h1>\n' +
+				'<p class="maps-to-line" source-line="1" source-line-end="2">Fruits</p>\n' +
+				'<ul>\n<li class="maps-to-line" source-line="2" source-line-end="3">Apple</li>\n</ul>'
+			);
+		}
+	}));
 });

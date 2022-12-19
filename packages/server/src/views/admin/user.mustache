@@ -1,0 +1,170 @@
+<h1 class="title">{{pageTitle}}</h1>
+
+<form id="user_form" action="{{{postUrl}}}" method="POST" class="block">
+
+	<div class="block">
+		{{> errorBanner}}
+		{{{csrfTag}}}
+		<input type="hidden" name="id" value="{{user.id}}"/>
+		<input type="hidden" name="is_new" value="{{isNew}}"/>
+		<div class="field">
+			<label class="label">Full name</label>
+			<div class="control">
+				<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+			</div>
+		</div>
+		<div class="field">
+			<label class="label">Email</label>
+			<div class="control">
+				<input class="input" type="email" name="email" value="{{user.email}}"/>
+			</div>
+		</div>
+
+		{{#showAccountTypes}}
+			<div class="field">
+				<label class="label">Account type</label>
+				<div class="select">
+					<select name="account_type">
+						{{#accountTypes}}
+							<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+						{{/accountTypes}}
+					</select>
+				</div>
+				<p class="help">If the below properties are left to their default (empty) values, the account-specific properties will apply.</p>
+			</div>
+		{{/showAccountTypes}}
+
+		<div class="field">
+			<label class="label">Max item size</label>
+			<div class="control">
+				<input class="input" type="number" placeholder="Default" name="max_item_size" value="{{user.max_item_size}}"/>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Max total size</label>
+			<div class="control">
+				<input class="input" type="number" placeholder="Default" name="max_total_item_size" value="{{user.max_total_item_size}}"/>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Can share notebook</label>
+			<div class="select">
+				<select name="can_share_folder">
+					{{#canShareFolderOptions}}
+						<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+					{{/canShareFolderOptions}}
+				</select>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Can upload</label>
+			<div class="select">
+				<select name="can_upload">
+					{{#canUploadOptions}}
+						<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+					{{/canUploadOptions}}
+				</select>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Password</label>
+			<div class="control">
+				<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
+			</div>
+			<p id="password_strength" class="help"></p>
+		</div>
+		
+		<div class="field">
+			<label class="label">Repeat password</label>
+			<div class="control">
+				<input class="input" type="password" name="password2" autocomplete="new-password"/>
+			</div>
+			<p class="help">When creating a new user, if no password is specified the user will have to set it by following the link in their email.</p>
+		</div>	
+
+		<div class="control block">
+			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
+			{{#showImpersonateButton}}
+				<input type="submit" name="impersonate_button" class="button is-link" value="Impersonate user" />
+			{{/showImpersonateButton}}
+			{{#showResetPasswordButton}}
+				<input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
+			{{/showResetPasswordButton}}
+			{{#showDisableButton}}
+				<input type="submit" name="disable_button" class="button is-danger" value="Disable" />
+			{{/showDisableButton}}
+			{{#showRestoreButton}}
+				<input type="submit" name="restore_button" class="button is-danger" value="Restore" />
+			{{/showRestoreButton}}
+			{{#showScheduleDeletionButton}}
+				<input type="submit" name="schedule_deletion_button" class="button is-danger" value="Schedule for deletion" />
+			{{/showScheduleDeletionButton}}
+		</div>
+	</div>
+
+	{{#subscription}}
+		<h1 class="title">Your subscription</h1>
+
+		<div class="block">
+			<div class="control block">
+				<p class="block">Stripe Subscription ID: <a href="https://dashboard.stripe.com/subscriptions/{{subscription.stripe_subscription_id}}">{{subscription.stripe_subscription_id}}</a></p>
+				<p class="block">Last payment status: <strong>{{subLastPaymentStatus}}</strong> on <strong>{{subLastPaymentDate}}</strong></p>
+				{{#showUpdateSubscriptionBasic}}
+					<input type="submit" name="update_subscription_basic_button" class="button is-warning" value="Downgrade to Basic" />
+				{{/showUpdateSubscriptionBasic}}
+				{{#showUpdateSubscriptionPro}}
+					<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Upgrade to Pro" />
+				{{/showUpdateSubscriptionPro}}
+			</div>
+		</div>
+	{{/subscription}}
+
+</form>
+
+{{#hasFlags}}
+	<div class="content user-flags block">
+		<h1 class="title">Flags</h1>
+		<form action="{{{postUrl}}}" method="POST">
+			{{{csrfTag}}}
+			{{#userFlagViews}}
+				<ul>
+					<li><label class="checkbox"><input type="checkbox" name="user_flag_{{type}}"> {{message}}</label></li>
+				</ul>
+			{{/userFlagViews}}
+			<input type="submit" name="delete_user_flags" class="button is-warning" value="Delete selected flags" />
+			<p class="help">Note: normally it should not be needed to manually delete a flag because that's automatically handled by the system. So if it's necessary it means there's a bug that should be fixed.</p>
+		</form>
+	</div>
+{{/hasFlags}}
+
+<script>
+	$(() => {
+		document.getElementById("user_form").addEventListener('submit', function(event) {
+			if (event.submitter.getAttribute('name') === 'disable_button') {
+				const ok = confirm('Disable this account?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'restore_button') {
+				const ok = confirm('Restore this account?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'update_subscription_basic_button') {
+				const ok = confirm('Downgrade to Basic subscription?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'update_subscription_pro_button') {
+				const ok = confirm('Upgrade to Pro subscription?');
+				if (!ok) event.preventDefault();
+			}
+		});
+
+		setupPasswordStrengthHandler();
+	});
+</script>

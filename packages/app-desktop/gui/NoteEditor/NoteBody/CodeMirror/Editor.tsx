@@ -20,6 +20,7 @@ import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';
+import useJoplinCommands from './utils/useJoplinCommands';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -85,17 +86,21 @@ export interface EditorProps {
 	style: any;
 	codeMirrorTheme: any;
 	readOnly: boolean;
-	autoMatchBraces: boolean;
+	autoMatchBraces: boolean | object;
 	keyMap: string;
 	plugins: PluginStates;
 	onChange: any;
 	onScroll: any;
 	onEditorPaste: any;
+	isSafeMode: boolean;
+	onResize: any;
+	onUpdate: any;
 }
 
 function Editor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const editorParent = useRef(null);
+	const lastEditTime = useRef(NaN);
 
 	// Codemirror plugins add new commands to codemirror (or change it's behavior)
 	// This command adds the smartListIndent function which will be bound to tab
@@ -107,6 +112,7 @@ function Editor(props: EditorProps, ref: any) {
 	useJoplinMode(CodeMirror);
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
 	useKeymap(CodeMirror);
+	useJoplinCommands(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -115,6 +121,7 @@ function Editor(props: EditorProps, ref: any) {
 	const editor_change = useCallback((cm: any, change: any) => {
 		if (props.onChange && change.origin !== 'setValue') {
 			props.onChange(cm.getValue());
+			lastEditTime.current = Date.now();
 		}
 	}, [props.onChange]);
 
@@ -144,14 +151,25 @@ function Editor(props: EditorProps, ref: any) {
 		event.dataTransfer.dropEffect = 'copy';
 	}, []);
 
+	const editor_resize = useCallback((cm: any) => {
+		props.onResize(cm);
+	}, [props.onResize]);
+
+	const editor_update = useCallback((cm: any) => {
+		const edited = Date.now() - lastEditTime.current <= 100;
+		props.onUpdate(cm, edited);
+	}, [props.onUpdate]);
+
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		// const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
 		const userOptions = {};
 
-		const cmOptions = Object.assign({}, {
+		const safeOptions: Record<string, any> = {
 			value: props.value,
+		};
+
+		const unsafeOptions: Record<string, any> = {
 			screenReaderLabel: props.value,
 			theme: props.codeMirrorTheme,
 			mode: props.mode,
@@ -165,7 +183,17 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-		}, userOptions);
+		};
+
+		let cmOptions: Record<string, any> = { ...safeOptions };
+
+		if (!props.isSafeMode) {
+			cmOptions = {
+				...cmOptions,
+				...unsafeOptions,
+				...userOptions,
+			};
+		}
 
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);
@@ -174,6 +202,8 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
+		cm.on('refresh', editor_resize);
+		cm.on('update', editor_update);
 
 		// It's possible for searchMarkers to be available before the editor
 		// In these cases we set the markers asap so the user can see them as
@@ -187,9 +217,13 @@ function Editor(props: EditorProps, ref: any) {
 			cm.off('paste', editor_paste);
 			cm.off('drop', editor_drop);
 			cm.off('dragover', editor_drag);
-			editorParent.current.removeChild(cm.getWrapperElement());
+			cm.off('refresh', editor_resize);
+			cm.off('update', editor_update);
+			// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+			if (editorParent.current) editorParent.current.removeChild(cm.getWrapperElement());
 			setEditor(null);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	useEffect(() => {
@@ -202,36 +236,42 @@ function Editor(props: EditorProps, ref: any) {
 			}
 			editor.setOption('screenReaderLabel', props.value);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.value]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('theme', props.codeMirrorTheme);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.codeMirrorTheme]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('mode', props.mode);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.mode]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('readOnly', props.readOnly);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.readOnly]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('autoCloseBrackets', props.autoMatchBraces);
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.autoMatchBraces]);
 
 	useEffect(() => {
 		if (editor) {
 			editor.setOption('keyMap', props.keyMap ? props.keyMap : 'default');
 		}
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.keyMap]);
 
 	useEffect(() => {

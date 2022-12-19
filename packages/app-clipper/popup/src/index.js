@@ -19,6 +19,7 @@ const defaultState = {
 	selectedFolderId: null,
 	env: 'prod',
 	isProbablyReaderable: true,
+	authStatus: 'starting',
 };
 
 const reduxMiddleware = store => next => async (action) => {
@@ -93,6 +94,11 @@ function reducer(state = defaultState, action) {
 
 		newState = Object.assign({}, state);
 		newState.env = action.env;
+
+	} else if (action.type === 'AUTH_STATE_SET') {
+
+		newState = Object.assign({}, state);
+		newState.authStatus = action.value;
 
 	}
 

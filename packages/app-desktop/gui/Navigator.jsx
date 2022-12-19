@@ -2,13 +2,13 @@ const React = require('react');
 const Component = React.Component;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 class NavigatorComponent extends Component {
 	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
 			const screenInfo = this.props.screens[newProps.route.routeName];
-			const devMarker = Setting.value('env') === 'dev' ? ' (DEV)' : '';
+			const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
 			const windowTitle = [`Joplin${devMarker}`];
 			if (screenInfo.title) {
 				windowTitle.push(screenInfo.title());
@@ -39,7 +39,7 @@ class NavigatorComponent extends Component {
 		};
 
 		return (
-			<div style={this.props.style}>
+			<div style={this.props.style} className={this.props.className}>
 				<Screen style={screenStyle} {...screenProps} />
 			</div>
 		);

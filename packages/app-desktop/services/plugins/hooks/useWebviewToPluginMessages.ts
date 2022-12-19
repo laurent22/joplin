@@ -10,19 +10,29 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 		return () => {
 			PostMessageService.instance().unregisterResponder(ResponderComponentType.UserWebview, viewId);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [viewId]);
 
 	useEffect(() => {
 		if (!frameWindow) return () => {};
 
 		function onMessage_(event: any) {
-			if (!event.data || event.data.target !== 'postMessageService.message') return;
 
-			void PostMessageService.instance().postMessage({
-				pluginId,
-				viewId,
-				...event.data.message,
-			});
+			if (!event.data || !event.data.target) {
+				return;
+			}
+
+			if (event.data.target === 'postMessageService.registerViewMessageHandler') {
+				PostMessageService.instance().registerViewMessageHandler(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
+					postMessage('postMessageService.plugin_message', { message });
+				});
+			} else if (event.data.target === 'postMessageService.message') {
+				void PostMessageService.instance().postMessage({
+					pluginId,
+					viewId,
+					...event.data.message,
+				});
+			}
 		}
 
 		frameWindow.addEventListener('message', onMessage_);
@@ -30,5 +40,6 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 		return () => {
 			frameWindow.removeEventListener('message', onMessage_);
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [frameWindow, isReady, pluginId, viewId]);
 }

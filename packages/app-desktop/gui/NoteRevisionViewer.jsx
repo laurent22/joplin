@@ -13,8 +13,8 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const { MarkupToHtml } = require('@joplin/renderer');
 const time = require('@joplin/lib/time').default;
 const ReactTooltip = require('react-tooltip');
-const { urlDecode, substrWithEllipsis } = require('@joplin/lib/string-utils');
-const bridge = require('electron').remote.require('./bridge').default;
+const { urlDecode } = require('@joplin/lib/string-utils');
+const bridge = require('@electron/remote').require('./bridge').default;
 const markupLanguageUtils = require('../utils/markupLanguageUtils').default;
 
 class NoteRevisionViewerComponent extends React.PureComponent {
@@ -55,7 +55,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	}
 
 	async viewer_domReady() {
-		// this.viewerRef_.current.wrappedInstance.openDevTools();
+		// this.viewerRef_.current.openDevTools();
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, this.props.noteId);
 
@@ -75,7 +75,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		this.setState({ restoring: true });
 		await RevisionService.instance().importRevisionNote(this.state.note);
 		this.setState({ restoring: false });
-		alert(_('The note "%s" has been successfully restored to the notebook "%s".', substrWithEllipsis(this.state.note.title, 0, 32), RevisionService.instance().restoreFolderTitle()));
+		alert(RevisionService.instance().restoreSuccessMessage(this.state.note));
 	}
 
 	backButton_click() {
@@ -127,7 +127,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			postMessageSyntax: 'ipcProxySendToHost',
 		});
 
-		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, {
+		this.viewerRef_.current.send('setHtml', result.html, {
 			cssFiles: result.cssFiles,
 			pluginAssets: result.pluginAssets,
 		});
@@ -199,7 +199,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			</div>
 		);
 
-		const viewer = <NoteTextViewer viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
+		const viewer = <NoteTextViewer themeId={this.props.themeId} viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
 
 		return (
 			<div style={style.root}>

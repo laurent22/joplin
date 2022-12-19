@@ -1,6 +1,7 @@
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../db';
-import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
+import { getCanShareFolder } from './utils/user';
 
 export default class ShareUserModel extends BaseModel<ShareUser> {
 
@@ -10,8 +11,9 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: ShareUser = null): Promise<void> {
 		if (action === AclAction.Create) {
-			const recipient = await this.models().user().load(resource.user_id, { fields: ['can_share'] });
-			if (!recipient.can_share) throw new ErrorForbidden('The sharing feature is not enabled for the recipient account');
+			const recipient = await this.models().user().load(resource.user_id, { fields: ['account_type', 'can_share_folder', 'enabled'] });
+			if (!recipient.enabled) throw new ErrorForbidden('the recipient account is disabled');
+			if (!getCanShareFolder(recipient)) throw new ErrorForbidden('The sharing feature is not enabled for the recipient account');
 
 			const share = await this.models().share().load(resource.share_id);
 			if (share.owner_id !== user.id) throw new ErrorForbidden('no access to the share object');
@@ -48,7 +50,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			.select(this.defaultFields)
 			.whereIn('share_id', shareIds);
 
-		if (status !== null) query.where('status', status);
+		if (status !== null) void query.where('status', status);
 
 		const rows: ShareUser[] = await query;
 
@@ -78,14 +80,14 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.db(this.tableName).where(link).first();
 	}
 
-	public async shareWithUserAndAccept(share: Share, shareeId: Uuid) {
-		await this.models().shareUser().addById(share.id, shareeId);
+	public async shareWithUserAndAccept(share: Share, shareeId: Uuid, masterKey: string = '') {
+		await this.models().shareUser().addById(share.id, shareeId, masterKey);
 		await this.models().shareUser().setStatus(share.id, shareeId, ShareUserStatus.Accepted);
 	}
 
-	public async addById(shareId: Uuid, userId: Uuid): Promise<ShareUser> {
+	public async addById(shareId: Uuid, userId: Uuid, masterKey: string): Promise<ShareUser> {
 		const user = await this.models().user().load(userId);
-		return this.addByEmail(shareId, user.email);
+		return this.addByEmail(shareId, user.email, masterKey);
 	}
 
 	public async byShareAndEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
@@ -98,7 +100,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			.first();
 	}
 
-	public async addByEmail(shareId: Uuid, userEmail: string): Promise<ShareUser> {
+	public async addByEmail(shareId: Uuid, userEmail: string, masterKey: string): Promise<ShareUser> {
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
@@ -108,12 +110,15 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.save({
 			share_id: shareId,
 			user_id: user.id,
+			master_key: masterKey,
 		});
 	}
 
 	public async setStatus(shareId: Uuid, userId: Uuid, status: ShareUserStatus): Promise<Item> {
 		const shareUser = await this.byShareAndUserId(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
+
+		if (shareUser.status === status) throw new ErrorBadRequest(`Share ${shareId} status is already ${status}`);
 
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
@@ -124,7 +129,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			}
 
 			return this.save({ ...shareUser, status });
-		});
+		}, 'ShareUserModel::setStatus');
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {
@@ -137,7 +142,17 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));
-		}, 'ShareUserModel::delete');
+		}, 'ShareUserModel::deleteByShare');
+	}
+
+	public async deleteByUserId(userId: Uuid) {
+		const shareUsers = await this.byUserId(userId);
+
+		await this.withTransaction(async () => {
+			for (const shareUser of shareUsers) {
+				await this.delete(shareUser.id);
+			}
+		}, 'UserShareModel::deleteByUserId');
 	}
 
 	public async delete(id: string | string[], _options: DeleteOptions = {}): Promise<void> {

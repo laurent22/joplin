@@ -11,13 +11,13 @@ import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRoot
 import { Resizable } from 're-resizable';
 const EventEmitter = require('events');
 
-interface onResizeEvent {
+interface OnResizeEvent {
 	layout: LayoutItem;
 }
 
 interface Props {
 	layout: LayoutItem;
-	onResize(event: onResizeEvent): void;
+	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
 	renderItem: Function;
@@ -143,7 +143,7 @@ function ResizableLayout(props: Props) {
 			setResizedItem(null);
 		}
 
-		const resizedItemMaxSize = item.key === resizedItem?.key ? resizedItem.maxSize : null;
+		const resizedItemMaxSize = resizedItem && item.key === resizedItem.key ? resizedItem.maxSize : null;
 		if (!item.children) {
 			const size = itemSize(item, parent, sizes, false);
 

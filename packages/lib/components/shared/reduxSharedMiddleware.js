@@ -14,7 +14,7 @@ const reduxSharedMiddleware = async function(store, next, action) {
 
 	let refreshTags = false;
 
-	if (action.type == 'FOLDER_SET_COLLAPSED' || action.type == 'FOLDER_TOGGLE') {
+	if (action.type === 'FOLDER_SET_COLLAPSED' || action.type === 'FOLDER_TOGGLE') {
 		Setting.setValue('collapsedFolderIds', newState.collapsedFolderIds);
 	}
 
@@ -43,16 +43,16 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		DecryptionWorker.instance().scheduleStart();
 	}
 
-	if (action.type == 'NOTE_DELETE' ||
-		action.type == 'NOTE_UPDATE_ALL' ||
-		action.type == 'NOTE_TAG_REMOVE' ||
-		action.type == 'TAG_UPDATE_ONE') {
+	if (action.type === 'NOTE_DELETE' ||
+		action.type === 'NOTE_UPDATE_ALL' ||
+		action.type === 'NOTE_TAG_REMOVE' ||
+		action.type === 'TAG_UPDATE_ONE') {
 		refreshTags = true;
 	}
 
 	// handle the case when the selected note has been moved to another
 	// folder and a new one is now selected, need to show correct tags for it
-	if (action.type == 'NOTE_UPDATE_ONE' && action.changedFields.indexOf('parent_id') >= 0) {
+	if (action.type === 'NOTE_UPDATE_ONE' && action.changedFields.indexOf('parent_id') >= 0) {
 		refreshTags = true;
 	}
 

@@ -1,5 +1,6 @@
-import { NotificationLevel } from '../../db';
+import { NotificationLevel } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
+import { NotificationKey } from '../../models/NotificationModel';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, createUserAndSession } from '../../utils/testing/testUtils';
 
 describe('index_notification', function() {
@@ -21,9 +22,9 @@ describe('index_notification', function() {
 
 		const model = models().notification();
 
-		await model.add(user.id, 'my_notification', NotificationLevel.Normal, 'testing notification');
+		await model.add(user.id, NotificationKey.EmailConfirmed, NotificationLevel.Normal, 'testing notification');
 
-		const notification = await model.loadByKey(user.id, 'my_notification');
+		const notification = await model.loadByKey(user.id, NotificationKey.EmailConfirmed);
 
 		expect(notification.read).toBe(0);
 
@@ -40,7 +41,7 @@ describe('index_notification', function() {
 
 		await routeHandler(context);
 
-		expect((await model.loadByKey(user.id, 'my_notification')).read).toBe(1);
+		expect((await model.loadByKey(user.id, NotificationKey.EmailConfirmed)).read).toBe(1);
 	});
 
 });

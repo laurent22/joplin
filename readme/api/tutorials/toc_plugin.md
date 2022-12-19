@@ -130,7 +130,7 @@ Later you will also need a way to generate the slug for each header. A slug is a
 Then this is the function you will need for Joplin, so copy it somewhere in your file:
 
 ```typescript
-const uslug = require('uslug');
+const uslug = require('@joplin/fork-uslug');
 
 let slugs = {};
 

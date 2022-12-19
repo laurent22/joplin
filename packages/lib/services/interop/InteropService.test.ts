@@ -1,14 +1,15 @@
 import InteropService from '../../services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, Module, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
-
-const { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } = require('../../testing/test-utils.js');
+import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import Resource from '../../models/Resource';
-const fs = require('fs-extra');
-const ArrayUtils = require('../../ArrayUtils');
+import * as fs from 'fs-extra';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
+import { ModelType } from '../../BaseModel';
+import * as ArrayUtils from '../../ArrayUtils';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -23,13 +24,68 @@ function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 	}
 }
 
+function memoryExportModule() {
+	interface Item {
+		type: number;
+		object: any;
+	}
+
+	interface Resource {
+		filePath: string;
+		object: ResourceEntity;
+	}
+
+	interface Result {
+		destPath: string;
+		items: Item[];
+		resources: Resource[];
+	}
+
+	const result: Result = {
+		destPath: '',
+		items: [],
+		resources: [],
+	};
+
+	const module: Module = {
+		type: ModuleType.Exporter,
+		description: 'Memory Export Module',
+		format: 'memory',
+		fileExtensions: ['memory'],
+		isCustom: true,
+
+		onInit: async (context: CustomExportContext) => {
+			result.destPath = context.destPath;
+		},
+
+		onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
+			result.items.push({
+				type: itemType,
+				object: item,
+			});
+		},
+
+		onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
+			result.resources.push({
+				filePath: filePath,
+				object: resource,
+			});
+		},
+
+		onClose: async (_context: CustomExportContext) => {
+			// nothing
+		},
+	};
+
+	return { result, module };
+}
+
 describe('services_InteropService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		await recreateExportDir();
-		done();
 	});
 
 	it('should export and import folders', (async () => {
@@ -385,10 +441,10 @@ describe('services_InteropService', function() {
 		await service.export({ path: outDir, format: 'md' });
 
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活.md`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活 (1).md`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活 (2).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活-1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活-2.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled.md`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled (1).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled-1.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/salut, ça roule _.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
 	}));
@@ -460,6 +516,34 @@ describe('services_InteropService', function() {
 		});
 
 		expect(result.warnings.length).toBe(0);
+	}));
+
+	it('should not export certain note properties', (async () => {
+		const folder = await Folder.save({ title: 'folder', share_id: 'some_id', is_shared: 1 });
+		let note = await Note.save({ title: 'note', is_shared: 1, share_id: 'someid', parent_id: folder.id });
+		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		const resourceId = (await Note.linkedResourceIds(note.body))[0];
+		await Resource.save({ id: resourceId, share_id: 'some_id', is_shared: 1 });
+
+		const service = InteropService.instance();
+		const { result, module } = memoryExportModule();
+		service.registerModule(module);
+
+		await service.export({
+			format: 'memory',
+		});
+
+		const exportedNote = (result.items.find(i => i.type === ModelType.Note)).object as NoteEntity;
+		expect(exportedNote.share_id).toBe('');
+		expect(exportedNote.is_shared).toBe(0);
+
+		const exportedFolder = (result.items.find(i => i.type === ModelType.Folder)).object as FolderEntity;
+		expect(exportedFolder.share_id).toBe('');
+		expect(exportedFolder.is_shared).toBe(0);
+
+		const exportedResource = (result.items.find(i => i.type === ModelType.Resource)).object as ResourceEntity;
+		expect(exportedResource.share_id).toBe('');
+		expect(exportedResource.is_shared).toBe(0);
 	}));
 
 	it('should allow registering new import modules', (async () => {

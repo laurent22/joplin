@@ -124,8 +124,15 @@ class FileApiDriverDropbox {
 		if (!options.responseFormat) options.responseFormat = 'text';
 
 		try {
+			// IMPORTANT:
+			//
+			// We cannot use POST here, because iOS (as of version 14?) doesn't
+			// support POST requests with an empty body:
+			//
+			// https://www.dropboxforum.com/t5/Dropbox-API-Support-Feedback/Error-1017-quot-cannot-parse-response-quot/td-p/589595
+
 			const response = await this.api().exec(
-				'POST',
+				'GET',
 				'files/download',
 				null,
 				{

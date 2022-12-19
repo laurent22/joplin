@@ -1,6 +1,5 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
-import { ChangePagination as DeltaPagination, defaultDeltaPagination } from '../ChangeModel';
 import { Knex } from 'knex';
 
 export enum PaginationOrderDir {
@@ -28,8 +27,8 @@ export interface PaginationQueryParams {
 	cursor?: string;
 }
 
-export interface PaginatedResults {
-	items: any[];
+export interface PaginatedResults<T> {
+	items: T[];
 	has_more: boolean;
 	cursor?: string;
 	page_count?: number;
@@ -107,15 +106,6 @@ export function requestPagination(query: any): Pagination {
 	return validatePagination({ limit, order, page });
 }
 
-export function requestDeltaPagination(query: any): DeltaPagination {
-	if (!query) return defaultDeltaPagination();
-
-	const output: DeltaPagination = {};
-	if ('limit' in query) output.limit = query.limit;
-	if ('cursor' in query) output.cursor = query.cursor;
-	return output;
-}
-
 export function paginationToQueryParams(pagination: Pagination): PaginationQueryParams {
 	const output: PaginationQueryParams = {};
 	if (!pagination) return {};
@@ -152,6 +142,8 @@ export interface PageLink {
 }
 
 export function filterPaginationQueryParams(query: any): PaginationQueryParams {
+	if (!query) return {};
+
 	const baseUrlQuery: PaginationQueryParams = {};
 	if (query.limit) baseUrlQuery.limit = query.limit;
 	if (query.order_by) baseUrlQuery.order_by = query.order_by;
@@ -176,7 +168,7 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 		firstPages.push({ page: p });
 	}
 
-	if (firstPages.length && (output[0].page - firstPages[firstPages.length - 1].page) > 1) {
+	if (firstPages.length && output.length && (output[0].page - firstPages[firstPages.length - 1].page) > 1) {
 		firstPages.push({ isEllipsis: true });
 	}
 
@@ -221,7 +213,13 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 // 	return output;
 // }
 
-export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable: string = ''): Promise<PaginatedResults> {
+
+export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable: string = ''): Promise<PaginatedResults<any>> {
+	pagination = {
+		...defaultPagination(),
+		...pagination,
+	};
+
 	pagination = processCursor(pagination);
 
 	const orderSql: any[] = pagination.order.map(o => {

@@ -6,6 +6,7 @@ import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
 import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
+import { homeUrl, loginUrl } from '../utils/urlUtils';
 const { mime } = require('@joplin/lib/mime-utils.js');
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
@@ -20,6 +21,10 @@ const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
 	'css/bulma-prefers-dark.min.css': 'node_modules/bulma-prefers-dark/css/bulma-prefers-dark.min.css',
 	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+	'js/zxcvbn.js': 'node_modules/zxcvbn/dist/zxcvbn.js',
+	'js/zxcvbn.js.map': 'node_modules/zxcvbn/dist/zxcvbn.js.map',
+	'js/jquery.min.js': 'node_modules/jquery/dist/jquery.min.js',
+	'js/jquery.min.map': 'node_modules/jquery/dist/jquery.min.map',
 
 	// Hard-coded for now but it could be made dynamic later on
 	// 'apps/joplin/css/note.css': 'src/apps/joplin/css/note.css',
@@ -53,10 +58,10 @@ router.public = true;
 router.get('', async (path: SubPath, ctx: AppContext) => {
 	// Redirect to either /login or /home when trying to access the root
 	if (!path.id && !path.link) {
-		if (ctx.owner) {
-			return redirect(ctx, 'home');
+		if (ctx.joplin.owner) {
+			return redirect(ctx, homeUrl());
 		} else {
-			return redirect(ctx, 'login');
+			return redirect(ctx, loginUrl());
 		}
 	}
 

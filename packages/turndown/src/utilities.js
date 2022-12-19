@@ -78,3 +78,16 @@ export function isCodeBlock(node) {
     node.firstChild.nodeName === 'CODE'
   )
 }
+
+export function getStyleProp(node, name) {
+  const style = node.getAttribute('style');
+  if (!style) return null;
+
+  name = name.toLowerCase();
+  if (!style.toLowerCase().includes(name)) return null;
+
+  const o = css.parse('div {' + style + '}');
+  if (!o.stylesheet.rules.length) return null;
+  const prop = o.stylesheet.rules[0].declarations.find(d => d.property.toLowerCase() === name);
+  return prop ? prop.value : null;
+}

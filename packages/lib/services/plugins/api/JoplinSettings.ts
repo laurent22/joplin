@@ -3,6 +3,62 @@ import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } fro
 import Plugin from '../Plugin';
 import { SettingItem, SettingSection } from './types';
 
+// That's all the plugin as of 27/08/21 - any new plugin after that will not be
+// able to use the registerSetting API. Fixes in particular all the ambrt
+// plugins. Some of them don't need this hack but it's easier that way.
+const registerSettingAllowedPluginIds: string[] = [
+	'b53da1f6-868c-468d-b60c-2897a27166ac',
+	'com.andrejilderda.macOSTheme',
+	'com.export-to-ssg.aman-d-1-n-only',
+	'com.github.BeatLink.joplin-plugin-untagged',
+	'com.github.joplin.kanban',
+	'com.github.marc0l92.joplin-plugin-jira-issue',
+	'com.github.uphy.PlantUmlPlugin',
+	'com.gitlab.BeatLink.joplin-plugin-repeating-todos',
+	'com.joplin_plugin.nlr',
+	'com.lki.homenote',
+	'com.plugin.randomNotePlugin',
+	'com.shantanugoel.JoplinCMLineNumbersPlugin',
+	'com.whatever.inline-tags',
+	'com.whatever.quick-links',
+	'com.xUser5000.bibtex',
+	'cx.evermeet.tessus.menu-shortcut-toolbar',
+	'fd117a99-b165-4824-893c-5825439a842d',
+	'io.github.jackgruber.backup',
+	'io.github.jackgruber.combine-notes',
+	'io.github.jackgruber.copytags',
+	'io.github.jackgruber.hotfolder',
+	'io.github.jackgruber.note-overview',
+	'io.treymo.LinkGraph',
+	'joplin-insert-date',
+	'joplin-plugin-conflict-resolution',
+	'joplin.plugin.ambrt.backlinksToNote',
+	'joplin.plugin.ambrt.convertToNewNote',
+	'joplin.plugin.ambrt.copyNoteLink',
+	'joplin.plugin.ambrt.embedSearch',
+	'joplin.plugin.ambrt.fold-cm',
+	'joplin.plugin.ambrt.goToItem',
+	'joplin.plugin.anki-sync',
+	'joplin.plugin.benji.favorites',
+	'joplin.plugin.benji.persistentLayout',
+	'joplin.plugin.benji.quick-move',
+	'joplin.plugin.forcewake.tags-generator',
+	'joplin.plugin.note.tabs',
+	'joplin.plugin.quick.html.tags',
+	'joplin.plugin.spoiler.cards',
+	'joplin.plugin.templates',
+	'net.rmusin.joplin-table-formatter',
+	'net.rmusin.resource-search',
+	'org.joplinapp.plugins.AbcSheetMusic',
+	'org.joplinapp.plugins.admonition',
+	'org.joplinapp.plugins.ToggleSidebars',
+	'osw.joplin.markdowncalc',
+	'outline',
+	'plugin.azamahJunior.note-statistics',
+	'plugin.calebjohn.MathMode',
+	'plugin.calebjohn.rich-markdown',
+];
+
 export interface ChangeEvent {
 	/**
 	 * Setting keys that have been changed
@@ -56,6 +112,7 @@ export default class JoplinSettings {
 				description: (_appType: string) => setting.description,
 			};
 
+			if ('subType' in setting) internalSettingItem.subType = setting.subType;
 			if ('isEnum' in setting) internalSettingItem.isEnum = setting.isEnum;
 			if ('section' in setting) internalSettingItem.section = this.namespacedKey(setting.section);
 			if ('options' in setting) internalSettingItem.options = () => setting.options;
@@ -65,6 +122,7 @@ export default class JoplinSettings {
 			if ('minimum' in setting) internalSettingItem.minimum = setting.minimum;
 			if ('maximum' in setting) internalSettingItem.maximum = setting.maximum;
 			if ('step' in setting) internalSettingItem.step = setting.step;
+			if ('storage' in setting) internalSettingItem.storage = setting.storage;
 
 			await Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
 		}
@@ -76,7 +134,13 @@ export default class JoplinSettings {
 	 * Registers a new setting.
 	 */
 	public async registerSetting(key: string, settingItem: SettingItem) {
-		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()');
+		// It's a warning for older plugins and an error for new ones.
+		this.plugin_.deprecationNotice(
+			'1.8',
+			'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()',
+			!registerSettingAllowedPluginIds.includes(this.plugin_.id)
+		);
+
 		await this.registerSettings({ [key]: settingItem });
 	}
 

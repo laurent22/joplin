@@ -60,12 +60,31 @@ class ActionButtonComponent extends React.Component {
 
 	renderIconMultiStates() {
 		const button = this.props.buttons[this.state.buttonIndex];
-		return <Icon name={button.icon} style={styles.actionButtonIcon} />;
+
+		return <Icon
+			name={button.icon}
+			style={styles.actionButtonIcon}
+			accessibilityLabel={button.title}
+		/>;
 	}
 
 	renderIcon() {
 		const mainButton = this.props.mainButton ? this.props.mainButton : {};
-		return mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Icon name="md-add" style={styles.actionButtonIcon} />;
+		const iconName = mainButton.icon ?? 'md-add';
+
+		// Icons don't have alt text by default. We need to add it:
+		const iconTitle = mainButton.title ?? _('Add new');
+
+		// TODO: If the button toggles a sub-menu, state whether the submenu is open
+		//    or closed.
+
+		return (
+			<Icon
+				name={iconName}
+				style={styles.actionButtonIcon}
+				accessibilityLabel={iconTitle}
+			/>
+		);
 	}
 
 	render() {
@@ -99,8 +118,14 @@ class ActionButtonComponent extends React.Component {
 			const buttonTitle = button.title ? button.title : '';
 			const key = `${buttonTitle.replace(/\s/g, '_')}_${button.icon}`;
 			buttonComps.push(
+				// TODO: By default, ReactNativeActionButton also adds a title, which is focusable
+				// by the screen reader. As such, each item currently is double-focusable
 				<ReactNativeActionButton.Item key={key} buttonColor={button.color} title={buttonTitle} onPress={button.onPress}>
-					<Icon name={button.icon} style={styles.actionButtonIcon} />
+					<Icon
+						name={button.icon}
+						style={styles.actionButtonIcon}
+						accessibilityLabel={buttonTitle}
+					/>
 				</ReactNativeActionButton.Item>
 			);
 		}

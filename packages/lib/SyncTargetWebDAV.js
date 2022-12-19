@@ -23,6 +23,10 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 		return _('WebDAV');
 	}
 
+	static description() {
+		return 'The WebDAV protocol allows users to create, change and move documents on a server. There are many WebDAV compatible servers, including SeaFile, Nginx or Apache.';
+	}
+
 	async isAuthenticated() {
 		return true;
 	}

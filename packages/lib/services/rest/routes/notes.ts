@@ -22,10 +22,10 @@ const mimeUtils = require('../../../mime-utils.js').mime;
 const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
-const ArrayUtils = require('../../../ArrayUtils.js');
-const { netUtils } = require('../../../net-utils');
+import * as ArrayUtils from '../../../ArrayUtils';
+const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const uri2path = require('file-uri-to-path');
+const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 
@@ -89,6 +89,7 @@ async function requestNoteToNote(requestNote: any) {
 			output.body = await htmlToMdParser().parse(`<div>${requestNote.body_html}</div>`, {
 				baseUrl: baseUrl,
 				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
+				convertEmbeddedPdfsToLinks: true,
 			});
 			output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		}
@@ -143,25 +144,32 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 	return output;
 }
 
-async function tryToGuessImageExtFromMimeType(response: any, imagePath: string) {
-	const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
-	if (!mimeType) return imagePath;
+async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
+	const mimeType = mimeTypeFromHeaders(response.headers);
+	if (!mimeType) return mediaPath;
 
 	const newExt = mimeUtils.toFileExtension(mimeType);
-	if (!newExt) return imagePath;
+	if (!newExt) return mediaPath;
 
-	const newImagePath = `${imagePath}.${newExt}`;
-	await shim.fsDriver().move(imagePath, newImagePath);
-	return newImagePath;
+	const newMediaPath = `${mediaPath}.${newExt}`;
+	await shim.fsDriver().move(mediaPath, newMediaPath);
+	return newMediaPath;
 }
 
-async function downloadImage(url: string /* , allowFileProtocolImages */) {
+async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
+
 	const tempDir = Setting.value('tempDir');
 
 	// The URL we get to download have been extracted from the Markdown document
 	url = markdownUtils.unescapeLinkUrl(url);
 
 	const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
+
+	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
+	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
+		reg.logger().warn(`Resources in data URL format is only supported for images ${url}`);
+		return '';
+	}
 
 	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
 	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
@@ -170,38 +178,38 @@ async function downloadImage(url: string /* , allowFileProtocolImages */) {
 
 	// Append a UUID because simply checking if the file exists is not enough since
 	// multiple resources can be downloaded at the same time (race condition).
-	let imagePath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	let mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
 
 	try {
 		if (isDataUrl) {
-			await shim.imageFromDataUrl(url, imagePath);
+			await shim.imageFromDataUrl(url, mediaPath);
 		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
 			// Can't think of any reason to disallow this at this point
 			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
-			const localPath = uri2path(url);
-			await shim.fsDriver().copy(localPath, imagePath);
+			const localPath = fileUriToPath(url);
+			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
-			const response = await shim.fetchBlob(url, { path: imagePath, maxRetry: 1 });
+			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1 });
 
 			// If we could not find the file extension from the URL, try to get it
 			// now based on the Content-Type header.
-			if (!fileExt) imagePath = await tryToGuessImageExtFromMimeType(response, imagePath);
+			if (!fileExt) mediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
 		}
-		return imagePath;
+		return mediaPath;
 	} catch (error) {
 		reg.logger().warn(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
 
-async function downloadImages(urls: string[] /* , allowFileProtocolImages:boolean */) {
+async function downloadMediaFiles(urls: string[] /* , allowFileProtocolImages:boolean */) {
 	const PromisePool = require('es6-promise-pool');
 
 	const output: any = {};
 
 	const downloadOne = async (url: string) => {
-		const imagePath = await downloadImage(url); // , allowFileProtocolImages);
-		if (imagePath) output[url] = { path: imagePath, originalUrl: url };
+		const mediaPath = await downloadMediaFile(url); // , allowFileProtocolImages);
+		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
 	};
 
 	let urlIndex = 0;
@@ -245,27 +253,38 @@ async function removeTempFiles(urls: string[]) {
 	}
 }
 
-function replaceImageUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
-		return htmlUtils.replaceImageUrls(md, (imageUrl: string) => {
-			const urlInfo: any = urls[imageUrl];
-			if (!urlInfo || !urlInfo.resource) return imageUrl;
+		return htmlUtils.replaceMediaUrls(md, (url: string) => {
+			const urlInfo: any = urls[url];
+			if (!urlInfo || !urlInfo.resource) return url;
 			return Resource.internalUrl(urlInfo.resource);
 		});
 	} else {
 		// eslint-disable-next-line no-useless-escape
-		return md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, imageUrl: string, after: string) => {
-			const urlInfo = urls[imageUrl];
-			if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
-			if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
+		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+			let type = 'link';
+			if (before.startsWith('[embedded_pdf]')) {
+				type = 'pdf';
+			} else if (before.startsWith('![')) {
+				type = 'image';
+			}
+
+			const urlInfo = urls[url];
+			if (type === 'link' || !urlInfo || !urlInfo.resource) return before + url + after;
 
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
-			const imageSizesCollection = imageSizes[urlInfo.originalUrl];
+			if (type === 'pdf') {
+				return `[${markdownUtils.escapeLinkUrl(url)}](${resourceUrl}${after}`;
+			}
 
+			if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
+			const imageSizesCollection = imageSizes[urlInfo.originalUrl];
 			if (!imageSizesCollection) {
-				// In some cases, we won't find the image size information for that particular URL. Normally
+				// Either its not an image or we don't know the size of the image
+				// In some cases, we won't find the image size information for that particular image URL. Normally
 				// it will only happen when using the "Clip simplified page" feature, which can modify the
 				// image URLs (for example it will select a smaller size resolution). In that case, it's
 				// fine to return the image as-is because it has already good dimensions.
@@ -282,6 +301,13 @@ function replaceImageUrlsByResources(markupLanguage: number, md: string, urls: a
 			}
 		});
 	}
+}
+
+export function extractMediaUrls(markupLanguage: number, text: string): string[] {
+	const urls: string[] = [];
+	urls.push(...ArrayUtils.unique(markupLanguageUtils.extractImageUrls(markupLanguage, text)));
+	urls.push(...ArrayUtils.unique(markupLanguageUtils.extractPdfUrls(markupLanguage, text)));
+	return urls;
 }
 
 // Note must have been saved first
@@ -328,17 +354,17 @@ export default async function(request: Request, id: string = null, link: string 
 
 		let note: any = await requestNoteToNote(requestNote);
 
-		const imageUrls = ArrayUtils.unique(markupLanguageUtils.extractImageUrls(note.markup_language, note.body));
+		const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
-		reg.logger().info(`Request (${requestId}): Downloading images: ${imageUrls.length}`);
+		reg.logger().info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
-		let result = await downloadImages(imageUrls); // , allowFileProtocolImages);
+		let result = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
 
 		reg.logger().info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
 
 		result = await createResourcesFromPaths(result);
 		await removeTempFiles(result);
-		note.body = replaceImageUrlsByResources(note.markup_language, note.body, result, imageSizes);
+		note.body = replaceUrlsByResources(note.markup_language, note.body, result, imageSizes);
 
 		reg.logger().info(`Request (${requestId}): Saving note...`);
 

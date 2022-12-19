@@ -1,4 +1,4 @@
-const {main} = require('@joplin/lib/testing/syncTargetUtils');
+const { main } = require('@joplin/lib/testing/syncTargetUtils');
 
 const syncTargetType = process.argv.length <= 2 ? 'normal' : process.argv[2];
 

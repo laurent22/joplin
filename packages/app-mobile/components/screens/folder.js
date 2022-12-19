@@ -4,7 +4,7 @@ const { View, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
 const Folder = require('@joplin/lib/models/Folder').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
-const { ScreenHeader } = require('../screen-header.js');
+const { ScreenHeader } = require('../ScreenHeader');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const { themeStyle } = require('../global-style.js');
@@ -50,6 +50,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 				lastSavedFolder: Object.assign({}, folder),
 			});
 		} else {
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			Folder.load(this.props.folderId).then(folder => {
 				this.setState({
 					folder: folder,

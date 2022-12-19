@@ -1,14 +1,12 @@
 import Logger from '../Logger';
 import Setting from '../models/Setting';
 import shim from '../shim';
-import { fileExtension, basename, toSystemSlashes } from '../path-utils';
+import { basename, toSystemSlashes } from '../path-utils';
 import time from '../time';
 import { NoteEntity } from './database/types';
-
 import Note from '../models/Note';
+import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
 const EventEmitter = require('events');
-const { splitCommandString } = require('../string-utils');
-const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
 const { ErrorNotFound } = require('./rest/utils/errors');
 
@@ -133,11 +131,15 @@ export default class ExternalEditWatcher {
 							if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
 						}
 
+						this.logger().debug('ExternalEditWatcher: Updating note object.');
+
 						const updatedNote = await Note.unserializeForEdit(noteContent);
 						updatedNote.id = id;
 						updatedNote.parent_id = note.parent_id;
 						await Note.save(updatedNote);
 						this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
+					} else {
+						this.logger().debug('ExternalEditWatcher: Skipping this event.');
 					}
 
 					this.skipNextChangeEvent_ = {};
@@ -213,68 +215,6 @@ export default class ExternalEditWatcher {
 		return false;
 	}
 
-	textEditorCommand() {
-		const editorCommand = Setting.value('editor');
-		if (!editorCommand) return null;
-
-		const s = splitCommandString(editorCommand, { handleEscape: false });
-		const path = s.splice(0, 1);
-		if (!path.length) throw new Error(`Invalid editor command: ${editorCommand}`);
-
-		return {
-			path: path[0],
-			args: s,
-		};
-	}
-
-	async spawnCommand(path: string, args: string[], options: any) {
-		return new Promise((resolve, reject) => {
-			// App bundles need to be opened using the `open` command.
-			// Additional args can be specified after --args, and the
-			// -n flag is needed to ensure that the app is always launched
-			// with the arguments. Without it, if the app is already opened,
-			// it will just bring it to the foreground without opening the file.
-			// So the full command is:
-			//
-			// open -n /path/to/editor.app --args -app-flag -bla /path/to/file.md
-			//
-			if (shim.isMac() && fileExtension(path) === 'app') {
-				args = args.slice();
-				args.splice(0, 0, '--args');
-				args.splice(0, 0, path);
-				args.splice(0, 0, '-n');
-				path = 'open';
-			}
-
-			const wrapError = (error: any) => {
-				if (!error) return error;
-				const msg = error.message ? [error.message] : [];
-				msg.push(`Command was: "${path}" ${args.join(' ')}`);
-				error.message = msg.join('\n\n');
-				return error;
-			};
-
-			try {
-				const subProcess = spawn(path, args, options);
-
-				const iid = shim.setInterval(() => {
-					if (subProcess && subProcess.pid) {
-						this.logger().debug(`Started editor with PID ${subProcess.pid}`);
-						shim.clearInterval(iid);
-						resolve();
-					}
-				}, 100);
-
-				subProcess.on('error', (error: any) => {
-					shim.clearInterval(iid);
-					reject(wrapError(error));
-				});
-			} catch (error) {
-				throw wrapError(error);
-			}
-		});
-	}
-
 	async openAndWatch(note: NoteEntity) {
 		if (!note || !note.id) {
 			this.logger().warn('ExternalEditWatcher: Cannot open note: ', note);
@@ -285,13 +225,7 @@ export default class ExternalEditWatcher {
 		if (!filePath) return;
 		this.watch(filePath);
 
-		const cmd = this.textEditorCommand();
-		if (!cmd) {
-			this.bridge_().openExternal(`file://${filePath}`);
-		} else {
-			cmd.args.push(filePath);
-			await this.spawnCommand(cmd.path, cmd.args, { detached: true });
-		}
+		await openFileWithExternalEditor(filePath, this.bridge_());
 
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_ADD',

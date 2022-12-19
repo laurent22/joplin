@@ -10,7 +10,7 @@ import Logger from '../../Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
 const compareVersions = require('compare-versions');
-const uslug = require('uslug');
+const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
 
@@ -26,6 +26,19 @@ const logger = Logger.create('PluginService');
 
 export interface Plugins {
 	[key: string]: Plugin;
+}
+
+export interface SettingAndValue {
+	[settingName: string]: string;
+}
+
+export interface DefaultPluginSettings {
+	version: string;
+	settings?: SettingAndValue;
+}
+
+export interface DefaultPluginsInfo {
+    [pluginId: string]: DefaultPluginSettings;
 }
 
 export interface PluginSetting {
@@ -85,6 +98,10 @@ export default class PluginService extends BaseService {
 
 	public get plugins(): Plugins {
 		return this.plugins_;
+	}
+
+	public get pluginIds(): string[] {
+		return Object.keys(this.plugins_);
 	}
 
 	public get isSafeMode(): boolean {
@@ -262,16 +279,30 @@ export default class PluginService extends BaseService {
 
 		const manifestObj = JSON.parse(manifestText);
 
-		const deprecationNotices = [];
+		interface DeprecationNotice {
+			goneInVersion: string;
+			message: string;
+			isError: boolean;
+		}
+
+		const deprecationNotices: DeprecationNotice[] = [];
 
 		if (!manifestObj.app_min_version) {
 			manifestObj.app_min_version = '1.4';
-			deprecationNotices.push('The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support. It was automatically set to "1.4", but please update your manifest.json file.');
+			deprecationNotices.push({
+				message: 'The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support.',
+				goneInVersion: '1.4',
+				isError: true,
+			});
 		}
 
 		if (!manifestObj.id) {
 			manifestObj.id = pluginIdIfNotSpecified;
-			deprecationNotices.push(`The manifest must contain an "id" key, which should be a globally unique ID for your plugin, such as "com.example.MyPlugin" or a UUID. It was automatically set to "${manifestObj.id}", but please update your manifest.json file.`);
+			deprecationNotices.push({
+				message: 'The manifest must contain an "id" key, which should be a globally unique ID for your plugin, such as "com.example.MyPlugin" or a UUID.',
+				goneInVersion: '1.4',
+				isError: true,
+			});
 		}
 
 		const manifest = manifestFromObject(manifestObj);
@@ -280,8 +311,8 @@ export default class PluginService extends BaseService {
 
 		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
 
-		for (const msg of deprecationNotices) {
-			plugin.deprecationNotice('1.5', msg);
+		for (const notice of deprecationNotices) {
+			plugin.deprecationNotice(notice.goneInVersion, notice.message, notice.isError);
 		}
 
 		// Sanity check, although at that point the plugin ID should have
@@ -295,6 +326,10 @@ export default class PluginService extends BaseService {
 	private pluginEnabled(settings: PluginSettings, pluginId: string): boolean {
 		if (!settings[pluginId]) return true;
 		return settings[pluginId].enabled !== false;
+	}
+
+	public callStatsSummary(pluginId: string, duration: number) {
+		return this.runner_.callStatsSummary(pluginId, duration);
 	}
 
 	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode: boolean = false) {
@@ -394,7 +429,7 @@ export default class PluginService extends BaseService {
 		return this.installPluginFromRepo(repoApi, pluginId);
 	}
 
-	public async installPlugin(jplPath: string): Promise<Plugin> {
+	public async installPlugin(jplPath: string, loadPlugin: boolean = true): Promise<Plugin | null> {
 		logger.info(`Installing plugin: "${jplPath}"`);
 
 		// Before moving the plugin to the profile directory, we load it
@@ -407,9 +442,11 @@ export default class PluginService extends BaseService {
 		await shim.fsDriver().copy(jplPath, destPath);
 
 		// Now load it from the profile directory
-		const plugin = await this.loadPluginFromPath(destPath);
-		if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
-		return plugin;
+		if (loadPlugin) {
+			const plugin = await this.loadPluginFromPath(destPath);
+			if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
+			return plugin;
+		} else { return null; }
 	}
 
 	private async pluginPath(pluginId: string) {

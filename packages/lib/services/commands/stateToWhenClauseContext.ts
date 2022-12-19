@@ -25,9 +25,12 @@ export interface WhenClauseContext {
 	noteTodoCompleted: boolean;
 	noteIsMarkdown: boolean;
 	noteIsHtml: boolean;
+	folderIsShareRootAndNotOwnedByUser: boolean;
 	folderIsShareRootAndOwnedByUser: boolean;
 	folderIsShared: boolean;
+	folderIsShareRoot: boolean;
 	joplinServerConnected: boolean;
+	hasMultiProfiles: boolean;
 }
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
@@ -74,9 +77,13 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
 
 		// Current context folder
+		folderIsShareRoot: commandFolder ? isRootSharedFolder(commandFolder) : false,
+		folderIsShareRootAndNotOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && !isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 
-		joplinServerConnected: state.settings['sync.target'] === 9,
+		joplinServerConnected: [9, 10].includes(state.settings['sync.target']),
+
+		hasMultiProfiles: state.profileConfig && state.profileConfig.profiles.length > 1,
 	};
 }

@@ -52,7 +52,7 @@ function getCommands() {
 	fs.readdirSync(__dirname).forEach(path => {
 		if (path.indexOf('command-') !== 0) return;
 		const ext = fileExtension(path);
-		if (ext != 'js') return;
+		if (ext !== 'js') return;
 
 		const CommandClass = require(`./${path}`);
 		const cmd = new CommandClass();

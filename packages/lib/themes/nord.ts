@@ -57,7 +57,6 @@ const theme: Theme = {
 	colorError: nord[11],
 	colorWarn: nord[12],
 	colorFaded: nord[4], // For less important text;
-	colorBright: nord[6], // For important text;
 	dividerColor: nord[10],
 	selectedColor: nord[9],
 	urlColor: nord[8],

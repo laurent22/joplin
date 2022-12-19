@@ -4,7 +4,7 @@ import styled from 'styled-components';
 // Need to use `attrs` otherwise styled-components creates many instances of the
 // style when the component is resized.
 // https://github.com/styled-components/styled-components/issues/1212
-export const StyledWrapperRoot = styled.div.attrs((props: any) => ({
+export const StyledWrapperRoot: any = styled.div.attrs((props: any) => ({
 	style: {
 		width: props.size.width,
 		height: props.size.height,

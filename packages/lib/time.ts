@@ -80,6 +80,15 @@ class Time {
 		);
 	}
 
+	public unixMsToRfc3339Sec(ms: number) {
+		return (
+			`${moment
+				.unix(ms / 1000)
+				.utc()
+				.format('YYYY-MM-DD HH:mm:ss')}Z`
+		);
+	}
+
 	public unixMsToLocalDateTime(ms: number) {
 		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
 	}
@@ -108,6 +117,19 @@ class Time {
 		if (m.isValid()) return m.toDate();
 		m = moment(o, time.dateFormat());
 		return m.isValid() ? m.toDate() : defaultValue;
+	}
+
+	public anythingToMs(o: any, defaultValue: number = null) {
+		if (o && o.toDate) return o.toDate();
+		if (!o) return defaultValue;
+		// There are a few date formats supported by Joplin that are not supported by
+		// moment without an explicit format specifier. The typical case is that a user
+		// has a preferred data format. This means we should try the currently assigned
+		// date first, and then attempt to load a generic date string.
+		const m = moment(o, this.dateTimeFormat());
+		if (m.isValid()) return m.toDate().getTime();
+		const d = moment(o);
+		return d.isValid() ? d.toDate().getTime() : defaultValue;
 	}
 
 	public msleep(ms: number) {
@@ -144,7 +166,6 @@ class Time {
 			}, 1000);
 		});
 	}
-
 }
 
 const time = new Time();

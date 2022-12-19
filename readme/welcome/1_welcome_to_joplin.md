@@ -1,6 +1,6 @@
-# Welcome to Joplin! 🗒️
+# Welcome to Joplin!
 
-Joplin is a free, open source note taking and to-do application, which helps you write and organise your notes, and synchronise them between your devices. The notes are searchable, can be copied, tagged and modified either from the application directly or from your own text editor. The notes are in [Markdown format](https://joplinapp.org/#markdown). Joplin is available as a **💻 desktop**, **📱 mobile** and **🔡 terminal** application.
+Joplin is a free, open source note taking and to-do application, which helps you write and organise your notes, and synchronise them between your devices. The notes are searchable, can be copied, tagged and modified either from the application directly or from your own text editor. The notes are in [Markdown format](https://joplinapp.org/help/#markdown). Joplin is available as a **desktop**, **mobile** and **terminal** application.
 
 The notes in this notebook give an overview of what Joplin can do and how to use it. In general, the three applications share roughly the same functionalities; any differences will be clearly indicated.
 
@@ -11,8 +11,10 @@ The notes in this notebook give an overview of what Joplin can do and how to use
 Joplin has three main columns:
 
 - **Sidebar** contains the list of your notebooks and tags, as well as the synchronisation status.
+
 - **Note List** contains the current list of notes - either the notes in the currently selected notebook, the notes in the currently selected tag, or search results.
-- **Note Editor** is the place where you write your notes. There is a **WYSIWYG editor** and a **Markdown editor** - click on **Code View** to switch between both! You may also use an [external editor](https://joplinapp.org/#external-text-editor) to edit notes. For example you can use something like Typora as an external editor and it will display the note as well as any embedded images.
+
+- **Note Editor** is the place where you write your notes. There is a **Rich Text editor** and a **Markdown editor** - click on the **Toggle editor** button in the top right hand corner to switch between both! You may also use an [external editor](https://joplinapp.org/help/#external-text-editor) to edit notes. For example you can use Typora as an external editor and it will display the note as well as any embedded images.
 
 ## Writing notes in Markdown
 
@@ -42,11 +44,11 @@ This is a [link](https://joplinapp.org) and, finally, below is a horizontal rule
 
 * * *
 
-A lot more is possible including adding code samples, math formulae or checkbox lists - see the [Markdown documentation](https://joplinapp.org/#markdown) for more information.
+A lot more is possible including adding code samples, math formulae or checkbox lists - see the [Markdown documentation](https://joplinapp.org/help/#markdown) for more information.
 
 ## Organising your notes
 
-### With notebooks 📔
+### With notebooks
 
 Joplin notes are organised into a tree of notebooks and sub-notebooks.
 
@@ -56,7 +58,7 @@ Joplin notes are organised into a tree of notebooks and sub-notebooks.
 
 ![](./SubNotebooks.png)
 
-### With tags 🏷️
+### With tags
 
 The second way to organise your notes is using tags:
 

@@ -1,9 +1,8 @@
 const React = require('react');
-const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
 
-class NoteSearchBarComponent extends React.Component {
+class NoteSearchBar extends React.Component {
 	constructor() {
 		super();
 
@@ -27,10 +26,6 @@ class NoteSearchBarComponent extends React.Component {
 		};
 
 		return style;
-	}
-
-	componentDidMount() {
-		this.refs.searchInput.focus();
 	}
 
 	buttonIconComponent(iconName, clickHandler, isEnabled) {
@@ -143,9 +138,10 @@ class NoteSearchBarComponent extends React.Component {
 			color: theme.colorFaded,
 			backgroundColor: theme.backgroundColor,
 		});
-		const matchesFoundString = (query.length > 0 && this.props.resultCount > 0) ? (
+
+		const matchesFoundString = (query.length > 0) ? (
 			<div style={textStyle}>
-				{`${this.props.selectedIndex + 1} / ${this.props.resultCount}`}
+				{`${this.props.resultCount === 0 ? 0 : this.props.selectedIndex + 1} / ${this.props.resultCount}`}
 			</div>
 		) : null;
 
@@ -170,8 +166,8 @@ class NoteSearchBarComponent extends React.Component {
 						type="text"
 						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor, color: theme.color }}
 					/>
-					{allowScrolling ? nextButton : null}
 					{allowScrolling ? previousButton : null}
+					{allowScrolling ? nextButton : null}
 					{allowScrolling ? matchesFoundString : null}
 					{!allowScrolling ? viewerWarning : null}
 				</div>
@@ -179,18 +175,5 @@ class NoteSearchBarComponent extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = state => {
-	return {
-		themeId: state.settings.theme,
-	};
-};
-
-const NoteSearchBar = connect(
-	mapStateToProps,
-	null,
-	null,
-	{ withRef: true }
-)(NoteSearchBarComponent);
 
 module.exports = NoteSearchBar;

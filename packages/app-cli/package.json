@@ -10,8 +10,9 @@
     "test-ci": "jest --config=jest.config.js --forceExit",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json"
+    "start-no-build": "node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
@@ -27,50 +28,53 @@
       2017,
       2018,
       2019,
-      2020
+      2020,
+      2021,
+      2022
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.0.0",
-  "bin": {
-    "joplin": "./main.js"
-  },
+  "version": "2.10.0",
+  "bin": "./main.js",
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplin/lib": "1.8",
-    "@joplin/renderer": "1.8",
-    "aws-sdk": "^2.588.0",
-    "chalk": "^4.1.0",
-    "compare-version": "^0.1.2",
-    "fs-extra": "^5.0.0",
-    "html-entities": "^1.2.1",
-    "image-type": "^3.0.0",
-    "keytar": "^7.0.0",
-    "md5": "^2.2.1",
-    "open": "^7.0.4",
-    "proper-lockfile": "^2.0.1",
-    "read-chunk": "^2.1.0",
-    "server-destroy": "^1.0.1",
-    "sharp": "^0.26.2",
-    "sprintf-js": "^1.1.2",
-    "string-padding": "^1.0.2",
-    "strip-ansi": "^4.0.0",
-    "terminal-kit": "^1.30.0",
-    "tkwidgets": "^0.5.26",
-    "url-parse": "^1.4.7",
-    "word-wrap": "^1.2.3",
-    "yargs-parser": "^7.0.0"
+    "@joplin/lib": "~2.10",
+    "@joplin/renderer": "~2.10",
+    "aws-sdk": "2.1277.0",
+    "chalk": "4.1.2",
+    "compare-version": "0.1.2",
+    "fs-extra": "11.1.0",
+    "html-entities": "1.4.0",
+    "image-type": "3.1.0",
+    "keytar": "7.9.0",
+    "md5": "2.3.0",
+    "node-rsa": "1.1.1",
+    "open": "8.4.0",
+    "proper-lockfile": "4.1.2",
+    "read-chunk": "2.1.0",
+    "server-destroy": "1.0.1",
+    "sharp": "0.31.2",
+    "sprintf-js": "1.1.2",
+    "sqlite3": "5.1.4",
+    "string-padding": "1.0.2",
+    "strip-ansi": "6.0.1",
+    "tcp-port-used": "1.0.2",
+    "terminal-kit": "3.0.0",
+    "tkwidgets": "0.5.27",
+    "url-parse": "1.5.10",
+    "word-wrap": "1.2.3",
+    "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@joplin/tools": "1.8",
-    "@types/fs-extra": "^9.0.6",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.6",
-    "gulp": "^4.0.2",
-    "jest": "^26.6.3",
-    "temp": "^0.9.1",
-    "typescript": "^4.0.5"
+    "@joplin/tools": "~2.10",
+    "@types/fs-extra": "9.0.13",
+    "@types/jest": "29.2.4",
+    "@types/node": "18.11.17",
+    "gulp": "4.0.2",
+    "jest": "29.3.1",
+    "temp": "0.9.4",
+    "typescript": "4.9.4"
   }
 }

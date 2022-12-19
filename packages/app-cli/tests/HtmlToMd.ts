@@ -5,12 +5,6 @@ import HtmlToMd from '@joplin/lib/HtmlToMd';
 
 describe('HtmlToMd', function() {
 
-	// beforeEach(async (done) => {
-	// 	await setupDatabaseAndSynchronizer(1);
-	// 	await switchClient(1);
-	// 	done();
-	// });
-
 	it('should convert from Html to Markdown', (async () => {
 		const basePath = `${__dirname}/html_to_md`;
 		const files = await shim.fsDriver().readDirStats(basePath);
@@ -83,5 +77,11 @@ describe('HtmlToMd', function() {
 			}
 		}
 	}));
+
+	it('should allow disabling escape', async () => {
+		const htmlToMd = new HtmlToMd();
+		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: true })).toBe('https://test.com/1_2_3.pdf');
+		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: false })).toBe('https://test.com/1\\_2\\_3.pdf');
+	});
 
 });

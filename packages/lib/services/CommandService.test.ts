@@ -3,8 +3,7 @@ import ToolbarButtonUtils from '../services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from '../services/CommandService';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import KeymapService from '../services/KeymapService';
-
-const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../testing/test-utils';
 
 interface TestCommand {
 	declaration: CommandDeclaration;
@@ -43,13 +42,12 @@ function registerCommand(service: CommandService, cmd: TestCommand) {
 
 describe('services_CommandService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		KeymapService.destroyInstance();
 		KeymapService.instance().initialize();
 
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should create toolbar button infos from commands', (async () => {
@@ -164,6 +162,7 @@ describe('services_CommandService', function() {
 	it('should create menu items from commands', (async () => {
 		const service = newService();
 		const utils = new MenuUtils(service);
+		const locale = 'fr_FR';
 
 		registerCommand(service, createCommand('test1', {
 			execute: () => {},
@@ -179,7 +178,7 @@ describe('services_CommandService', function() {
 			clickedCommands.push(commandName);
 		};
 
-		const menuItems = utils.commandsToMenuItems(['test1', 'test2'], onClick);
+		const menuItems = utils.commandsToMenuItems(['test1', 'test2'], onClick, locale);
 
 		menuItems.test1.click();
 		menuItems.test2.click();
@@ -187,7 +186,10 @@ describe('services_CommandService', function() {
 		expect(clickedCommands.join('_')).toBe('test1_test2');
 
 		// Also check that the same commands always return strictly the same menu
-		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick)).toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick));
+		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick, locale)).toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick, locale));
+
+		// And check that if the locale changes, new menu items are returned
+		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick, locale)).not.toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick, 'en_GB'));
 	}));
 
 	it('should give menu item props from state', (async () => {

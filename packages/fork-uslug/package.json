@@ -1,0 +1,33 @@
+{
+  "name": "@joplin/fork-uslug",
+  "version": "1.0.6",
+  "description": "A permissive slug generator that works with unicode.",
+  "author": "Jeremy Selier <jerem.selier@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "node-emoji": "1.11.0",
+    "unorm": "1.6.0"
+  },
+  "devDependencies": {
+    "should": "13.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/jeremys/uslug.git"
+  },
+  "main": "./index",
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "bugs": {
+    "url": "http://github.com/jeremys/uslug/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/jeremys/uslug/raw/master/LICENSE"
+    }
+  ]
+}

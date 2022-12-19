@@ -5,11 +5,41 @@ import time from './time';
 
 const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
-const ArrayUtils = require('./ArrayUtils');
+import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
+import * as ArrayUtils from './ArrayUtils';
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
 const logger = Logger.create('FileApi');
+
+export interface MultiPutItem {
+	name: string;
+	body: string;
+}
+
+export interface RemoteItem {
+	id: string;
+	path?: string;
+	type_?: number;
+	isDeleted?: boolean;
+
+	// This the time when the file was created on the server. It is used for
+	// example for the locking mechanim or any file that's not an actual Joplin
+	// item.
+	updated_time?: number;
+
+	// This is the time that corresponds to the actual Joplin item updated_time
+	// value. A note is always uploaded with a delay so the server updated_time
+	// value will always be ahead. However for synchronising we need to know the
+	// exact Joplin item updated_time value.
+	jop_updated_time?: number;
+}
+
+export interface PaginatedList {
+	items: RemoteItem[];
+	hasMore: boolean;
+	context: any;
+}
 
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
@@ -79,6 +109,30 @@ class FileApi {
 		if (this.initialized_) return;
 		this.initialized_ = true;
 		if (this.driver_.initialize) return this.driver_.initialize(this.fullPath(''));
+	}
+
+	// This can be true if the driver implements uploading items in batch. Will
+	// probably only be supported by Joplin Server.
+	public get supportsMultiPut(): boolean {
+		return !!this.driver().supportsMultiPut;
+	}
+
+	// This can be true when the sync target timestamps (updated_time) provided
+	// in the delta call are guaranteed to be accurate. That requires
+	// explicitely setting the timestamp, which is not done anymore on any sync
+	// target as it wasn't accurate (for example, the file system can't be
+	// relied on, and even OneDrive for some reason doesn't guarantee that the
+	// timestamp you set is what you get back).
+	//
+	// The only reliable one at the moment is Joplin Server since it reads the
+	// updated_time property directly from the item (it unserializes it
+	// server-side).
+	public get supportsAccurateTimestamp(): boolean {
+		return !!this.driver().supportsAccurateTimestamp;
+	}
+
+	public get supportsLocks(): boolean {
+		return !!this.driver().supportsLocks;
 	}
 
 	async fetchRemoteDateOffset_() {
@@ -201,7 +255,7 @@ class FileApi {
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async list(path = '', options: any = null) {
+	public async list(path = '', options: any = null): Promise<PaginatedList> {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
@@ -210,7 +264,7 @@ class FileApi {
 
 		logger.debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath(path), options), this.requestRepeatCount());
+		const result: PaginatedList = await tryAndRepeat(() => this.driver_.list(this.fullPath(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			const temp = [];
@@ -251,12 +305,6 @@ class FileApi {
 		if (!output) return output;
 		output.path = path;
 		return output;
-
-		// return this.driver_.stat(this.fullPath(path)).then((output) => {
-		// 	if (!output) return output;
-		// 	output.path = path;
-		// 	return output;
-		// });
 	}
 
 	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
@@ -275,6 +323,11 @@ class FileApi {
 		}
 
 		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
+	}
+
+	public async multiPut(items: MultiPutItem[], options: any = null) {
+		if (!this.driver().supportsMultiPut) throw new Error('Multi PUT not supported');
+		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
 	}
 
 	delete(path: string) {
@@ -301,6 +354,22 @@ class FileApi {
 		logger.debug(`delta ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}
+
+	public async acquireLock(type: LockType, clientType: LockClientType, clientId: string): Promise<Lock> {
+		if (!this.supportsLocks) throw new Error('Sync target does not support built-in locks');
+		return tryAndRepeat(() => this.driver_.acquireLock(type, clientType, clientId), this.requestRepeatCount());
+	}
+
+	public async releaseLock(type: LockType, clientType: LockClientType, clientId: string) {
+		if (!this.supportsLocks) throw new Error('Sync target does not support built-in locks');
+		return tryAndRepeat(() => this.driver_.releaseLock(type, clientType, clientId), this.requestRepeatCount());
+	}
+
+	public async listLocks() {
+		if (!this.supportsLocks) throw new Error('Sync target does not support built-in locks');
+		return tryAndRepeat(() => this.driver_.listLocks(), this.requestRepeatCount());
+	}
+
 }
 
 function basicDeltaContextFromOptions_(options: any) {

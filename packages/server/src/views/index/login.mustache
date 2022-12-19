@@ -1,5 +1,8 @@
 <section class="section login-box">
-	<div class="container">
+	<h1 class="title">Login to {{global.appName}}</h1>
+	<p class="subtitle">Please input your details to login to {{global.appName}}</p>
+
+	<div class="container block">
 		{{> errorBanner}}
 		<form action="{{{global.baseUrl}}}/login" method="POST">
 			<div class="field">
@@ -13,10 +16,16 @@
 				<div class="control">
 					<input class="input" type="password" name="password"/>
 				</div>
+				<p class="help"><a href="{{{global.baseUrl}}}/password/forgot">I forgot my password</a></p>
 			</div>
 			<div class="control">
 				<button class="button is-primary">Login</button>
 			</div>
 		</form>
 	</div>
+	{{#signupUrl}}
+		<div class="container block">
+			Or <a href="{{signupUrl}}">sign up</a> to create a new account.
+		</div>
+	{{/signupUrl}}
 </section>

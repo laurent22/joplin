@@ -55,7 +55,7 @@ export interface PluginItem {
 	hasBeenUpdated: boolean;
 }
 
-const CellRoot = styled.div`
+const CellRoot = styled.div<{isCompatible: boolean}>`
 	display: flex;
 	box-sizing: border-box;
 	background-color: ${props => props.theme.backgroundColor};
@@ -104,7 +104,7 @@ const DevModeLabel = styled.div`
 	color: ${props => props.theme.color};
 `;
 
-const StyledNameAndVersion = styled.div`
+const StyledNameAndVersion = styled.div<{mb: any}>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;
@@ -133,6 +133,20 @@ const StyledDescription = styled.div`
 	line-height: 1.6em;
 `;
 
+const RecommendedBadge = styled.a`
+	font-family: ${props => props.theme.fontFamily};
+	color: ${props => props.theme.colorWarn};
+	font-size: ${props => props.theme.fontSize}px;
+	border: 1px solid ${props => props.theme.colorWarn};
+	padding: 5px;
+	border-radius: 50px;
+	opacity: 0.8;
+	
+	&:hover {
+		opacity: 1;
+	}
+`;
+
 export default function(props: Props) {
 	const item = useMemo(() => {
 		return props.item ? props.item : manifestToItem(props.manifest);
@@ -141,8 +155,12 @@ export default function(props: Props) {
 	const onNameClick = useCallback(() => {
 		const manifest = item.manifest;
 		if (!manifest.homepage_url) return;
-		bridge().openExternal(manifest.homepage_url);
+		void bridge().openExternal(manifest.homepage_url);
 	}, [item]);
+
+	const onRecommendedClick = useCallback(() => {
+		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/readme/recommended.md#recommended-plugins');
+	}, []);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
@@ -222,11 +240,18 @@ export default function(props: Props) {
 		);
 	}
 
+	function renderRecommendedBadge() {
+		if (props.onToggle) return null;
+		if (!item.manifest._recommended) return null;
+		return <RecommendedBadge href="#" title={_('The Joplin team has vetted this plugin and it meets our standards for security and performance.')} onClick={onRecommendedClick}><i className="fas fa-crown"></i></RecommendedBadge>;
+	}
+
 	return (
 		<CellRoot isCompatible={props.isCompatible}>
 			<CellTop>
 				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.manifest.version}</StyledVersion></StyledNameAndVersion>
 				{renderToggleButton()}
+				{renderRecommendedBadge()}
 			</CellTop>
 			<CellContent>
 				<StyledDescription>{item.manifest.description}</StyledDescription>

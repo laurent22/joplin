@@ -8,13 +8,14 @@ const changelogPath = `${rootDir}/readme/changelog_cli.md`;
 async function main() {
 	process.chdir(appDir);
 
+	await execCommand2('git pull');
+
 	const newVersion = (await execCommand2('npm version patch')).trim();
 	console.info(`Building ${newVersion}...`);
 	const newTag = `cli-${newVersion}`;
 
-	await execCommand2('git pull');
 	await execCommand2('touch app/main.js');
-	await execCommand2('npm run build');
+	await execCommand2('yarn run build');
 	await execCommand2('cp ../../README.md build/');
 
 	process.chdir(`${appDir}/build`);

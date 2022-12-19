@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { AppState } from '../app';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { stateUtils } from '@joplin/lib/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -18,14 +18,12 @@ import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import bridge from '../services/bridge';
 import checkForUpdates from '../checkForUpdates';
-
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
+import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
-const PluginManager = require('@joplin/lib/services/PluginManager');
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -41,7 +39,7 @@ function pluginMenuItemsCommandNames(menuItems: MenuItem[]): string[] {
 	return output;
 }
 
-function pluginCommandNames(plugins: PluginStates): string[] {
+function getPluginCommandNames(plugins: PluginStates): string[] {
 	let output: string[] = [];
 
 	for (const view of pluginUtils.viewsByType(plugins, 'menu')) {
@@ -72,6 +70,42 @@ function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemCl
 	return output;
 }
 
+const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: any) => {
+	return useMemo(() => {
+		const switchProfileMenuItems: any[] = [];
+
+		for (let i = 0; i < profileConfig.profiles.length; i++) {
+			const profile = profileConfig.profiles[i];
+
+			let menuItem: any = {};
+			const profileNum = i + 1;
+
+			if (menuItemDic[`switchProfile${profileNum}`]) {
+				menuItem = { ...menuItemDic[`switchProfile${profileNum}`] };
+			} else {
+				menuItem = {
+					label: profile.name,
+					click: () => {
+						void CommandService.instance().execute('switchProfile', profile.id);
+					},
+				};
+			}
+
+			menuItem.label = profile.name;
+			menuItem.type = 'checkbox';
+			menuItem.checked = profileConfig.currentProfileId === profile.id;
+
+			switchProfileMenuItems.push(menuItem);
+		}
+
+		switchProfileMenuItems.push({ type: 'separator' });
+		switchProfileMenuItems.push(menuItemDic.addProfile);
+		switchProfileMenuItems.push(menuItemDic.editProfileConfig);
+
+		return switchProfileMenuItems;
+	}, [profileConfig, menuItemDic]);
+};
+
 interface Props {
 	dispatch: Function;
 	menuItemProps: any;
@@ -88,9 +122,11 @@ interface Props {
 	pluginMenuItems: any[];
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
-	['spellChecker.language']: string;
+	['spellChecker.languages']: string[];
 	plugins: PluginStates;
 	customCss: string;
+	locale: string;
+	profileConfig: ProfileConfig;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -138,7 +174,8 @@ function useMenuStates(menu: any, props: Props) {
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
-				menuItemSetChecked(`sort:${type}:reverse`, (props as any)[`${type}.sortOrder.reverse`]);
+				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
+				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
 			applySortItemCheckState('notes');
@@ -155,12 +192,17 @@ function useMenuStates(menu: any, props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [
 		props.menuItemProps,
 		props.layoutButtonSequence,
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.reverse'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
 		props.showNoteCounts,
 		props.uncompletedTodosOnTop,
@@ -174,6 +216,12 @@ function useMenu(props: Props) {
 	const [keymapLastChangeTime, setKeymapLastChangeTime] = useState(Date.now());
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
 
+	// We use a ref here because the plugin state can change frequently when
+	// switching note since any plugin view might be rendered again. However we
+	// need this plugin state only in a click handler when exporting notes, and
+	// for that a ref is sufficient.
+	const pluginsRef = useRef(props.plugins);
+
 	const onMenuItemClick = useCallback((commandName: string) => {
 		void CommandService.instance().execute(commandName);
 	}, []);
@@ -182,11 +230,11 @@ function useMenu(props: Props) {
 		let path = null;
 
 		if (moduleSource === 'file') {
-			path = bridge().showOpenDialog({
+			path = await bridge().showOpenDialog({
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
 			});
 		} else {
-			path = bridge().showOpenDialog({
+			path = await bridge().showOpenDialog({
 				properties: ['openDirectory', 'createDirectory'],
 			});
 		}
@@ -233,6 +281,7 @@ function useMenu(props: Props) {
 		}
 
 		void CommandService.instance().execute('hideModalMessage');
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
@@ -241,6 +290,19 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
+	const pluginCommandNames = useMemo(() => props.pluginMenuItems.map((view: any) => view.commandName), [props.pluginMenuItems]);
+
+	const menuItemDic = useMemo(() => {
+		return menuUtils.commandsToMenuItems(
+			commandNames.concat(pluginCommandNames),
+			(commandName: string) => onMenuItemClickRef.current(commandName),
+			props.locale
+		);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [commandNames, pluginCommandNames, props.locale]);
+
+	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
+
 	useEffect(() => {
 		let timeoutId: any = null;
 
@@ -248,9 +310,6 @@ function useMenu(props: Props) {
 			if (!timeoutId) return; // Has been cancelled
 
 			const keymapService = KeymapService.instance();
-
-			const pluginCommandNames = props.pluginMenuItems.map((view: any) => view.commandName);
-			const menuItemDic = menuUtils.commandsToMenuItems(commandNames.concat(pluginCommandNames), (commandName: string) => onMenuItemClickRef.current(commandName));
 
 			const quitMenuItem = {
 				label: _('Quit'),
@@ -269,22 +328,33 @@ function useMenu(props: Props) {
 						type: 'checkbox',
 						// checked: Setting.value(`${type}.sortOrder.field`) === field,
 						click: () => {
-							Setting.setValue(`${type}.sortOrder.field`, field);
+							if (type === 'notes') {
+								void CommandService.instance().execute('toggleNotesSortOrderField', field);
+							} else {
+								Setting.setValue(`${type}.sortOrder.field`, field);
+							}
 						},
 					});
 				}
 
 				sortItems.push({ type: 'separator' });
 
-				sortItems.push({
-					id: `sort:${type}:reverse`,
-					label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
-					type: 'checkbox',
-					// checked: Setting.value(`${type}.sortOrder.reverse`),
-					click: () => {
-						Setting.setValue(`${type}.sortOrder.reverse`, !Setting.value(`${type}.sortOrder.reverse`));
-					},
-				});
+				if (type === 'notes') {
+					sortItems.push(
+						{ ...menuItemDic.toggleNotesSortOrderReverse, type: 'checkbox' },
+						{ ...menuItemDic.toggleNotesSortOrderField, visible: false }
+					);
+				} else {
+					sortItems.push({
+						id: `sort:${type}:reverse`,
+						label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
+						type: 'checkbox',
+						// checked: Setting.value(`${type}.sortOrder.reverse`),
+						click: () => {
+							Setting.setValue(`${type}.sortOrder.reverse`, !Setting.value(`${type}.sortOrder.reverse`));
+						},
+					});
+				}
 
 				return sortItems;
 			};
@@ -301,7 +371,6 @@ function useMenu(props: Props) {
 
 			const importItems = [];
 			const exportItems = [];
-			const templateItems: any[] = [];
 			const ioService = InteropService.instance();
 			const ioModules = ioService.modules();
 			for (let i = 0; i < ioModules.length; i++) {
@@ -315,7 +384,7 @@ function useMenu(props: Props) {
 									(action: any) => props.dispatch(action),
 									module,
 									{
-										plugins: props.plugins,
+										plugins: pluginsRef.current,
 										customCss: props.customCss,
 									}
 								);
@@ -332,6 +401,12 @@ function useMenu(props: Props) {
 					}
 				}
 			}
+
+			importItems.push({ type: 'separator' });
+			importItems.push({
+				label: _('Other applications...'),
+				click: () => { void bridge().openExternal('https://discourse.joplinapp.org/t/importing-notes-from-other-notebook-applications/22425'); },
+			});
 
 			exportItems.push(
 				menuItemDic.exportPdf
@@ -365,39 +440,10 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
-
-			templateItems.push({
-				label: _('Create note from template'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate', 'note');
-				},
-			}, {
-				label: _('Create to-do from template'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate', 'todo');
-				},
-			}, {
-				label: _('Insert template'),
-				accelerator: keymapService.getAccelerator('insertTemplate'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate');
-				},
-			}, {
-				label: _('Open template directory'),
-				click: () => {
-					void bridge().openItem(Setting.value('templateDir'));
-				},
-			}, {
-				label: _('Refresh templates'),
-				click: async () => {
-					const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-					props.dispatch({
-						type: 'TEMPLATE_UPDATE_ALL',
-						templates: templates,
-					});
-				},
-			});
+			const switchProfileItem = {
+				label: _('Switch profile'),
+				submenu: switchProfileMenuItems,
+			};
 
 			let toolsItems: any[] = [];
 
@@ -432,7 +478,7 @@ function useMenu(props: Props) {
 			}
 			toolsItems = toolsItems.concat(toolsItemsAll);
 
-			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
+			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.languages'], props['spellChecker.enabled']));
 
 			function _checkForUpdates() {
 				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -494,13 +540,6 @@ function useMenu(props: Props) {
 					type: 'separator',
 					visible: shim.isMac() ? false : true,
 				}, {
-					label: _('Templates'),
-					visible: shim.isMac() ? false : true,
-					submenu: templateItems,
-				}, {
-					type: 'separator',
-					visible: shim.isMac() ? false : true,
-				}, {
 					label: _('Import'),
 					visible: shim.isMac() ? false : true,
 					submenu: importItems,
@@ -519,11 +558,21 @@ function useMenu(props: Props) {
 					platforms: ['darwin'],
 				},
 
+				shim.isMac() ? noItem : switchProfileItem,
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
 					accelerator: shim.isMac() && keymapService.getAccelerator('hideApp'),
 					click: () => { bridge().electronApp().hide(); },
+				} : noItem,
+
+				shim.isMac() ? {
+					role: 'hideothers',
+				} : noItem,
+
+				shim.isMac() ? {
+					role: 'unhide',
 				} : noItem,
 
 				{
@@ -548,11 +597,6 @@ function useMenu(props: Props) {
 					}, {
 						type: 'separator',
 					}, {
-						label: _('Templates'),
-						submenu: templateItems,
-					}, {
-						type: 'separator',
-					}, {
 						label: _('Import'),
 						submenu: importItems,
 					}, {
@@ -562,6 +606,7 @@ function useMenu(props: Props) {
 						type: 'separator',
 					},
 					printItem,
+					switchProfileItem,
 				],
 			};
 
@@ -589,8 +634,17 @@ function useMenu(props: Props) {
 						menuItemDic.textPaste,
 						menuItemDic.textSelectAll,
 						separator(),
-						menuItemDic['editor.undo'],
-						menuItemDic['editor.redo'],
+						// Using the generic "undo"/"redo" roles mean the menu
+						// item will work in every text fields, whether it's the
+						// editor or a regular text field.
+						{
+							role: 'undo',
+							label: _('Undo'),
+						},
+						{
+							role: 'redo',
+							label: _('Redo'),
+						},
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
@@ -725,13 +779,13 @@ function useMenu(props: Props) {
 					submenu: [{
 						label: _('Website and documentation'),
 						accelerator: keymapService.getAccelerator('help'),
-						click() { bridge().openExternal('https://joplinapp.org'); },
+						click() { void bridge().openExternal('https://joplinapp.org'); },
 					}, {
 						label: _('Joplin Forum'),
-						click() { bridge().openExternal('https://discourse.joplinapp.org'); },
+						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
 						label: _('Make a donation'),
-						click() { bridge().openExternal('https://joplinapp.org/donate/'); },
+						click() { void bridge().openExternal('https://joplinapp.org/donate/'); },
 					}, {
 						label: _('Check for updates...'),
 						visible: shim.isMac() ? false : true,
@@ -790,15 +844,9 @@ function useMenu(props: Props) {
 				rootMenus[key].submenu = cleanUpSeparators(rootMenus[key].submenu);
 			}
 
-			{
-				// This is for GotoAnything only - should be refactored since this plugin manager is not used otherwise
-				const pluginMenuItems = PluginManager.instance().menuItems();
-				for (const item of pluginMenuItems) {
-					const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
-					itemParent.submenu.push(separator());
-					itemParent.submenu.push(item);
-				}
-			}
+			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
+			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
+			rootMenus.tools.submenu.push(menuItemDic.openMasterPasswordDialog);
 
 			for (const view of props.pluginMenuItems) {
 				const location: MenuItemLocation = view.location;
@@ -850,7 +898,7 @@ function useMenu(props: Props) {
 							menuItemDic.textCut,
 							menuItemDic.textPaste,
 							menuItemDic.textSelectAll,
-						],
+						] as any,
 					},
 				]));
 			} else {
@@ -864,7 +912,23 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins, props.customCss]);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [
+		props.routeName,
+		props.pluginMenuItems,
+		props.pluginMenus,
+		keymapLastChangeTime,
+		modulesLastChangeTime,
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+		props['spellChecker.languages'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+		props['spellChecker.enabled'],
+		props.customCss,
+		props.locale,
+		props.profileConfig,
+		switchProfileMenuItems,
+		menuItemDic,
+	]);
 
 	useMenuStates(menu, props);
 
@@ -905,7 +969,8 @@ const mapStateToProps = (state: AppState) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
-		menuItemProps: menuUtils.commandsToMenuItemProps(commandNames.concat(pluginCommandNames(state.pluginService.plugins)), whenClauseContext),
+		menuItemProps: menuUtils.commandsToMenuItemProps(commandNames.concat(getPluginCommandNames(state.pluginService.plugins)), whenClauseContext),
+		locale: state.settings.locale,
 		routeName: state.route.routeName,
 		selectedFolderId: state.selectedFolderId,
 		layoutButtonSequence: state.settings.layoutButtonSequence,
@@ -918,10 +983,11 @@ const mapStateToProps = (state: AppState) => {
 		showCompletedTodos: state.settings.showCompletedTodos,
 		pluginMenuItems: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menuItem') }, 'menuBar.pluginMenuItems'),
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
-		['spellChecker.language']: state.settings['spellChecker.language'],
+		['spellChecker.languages']: state.settings['spellChecker.languages'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
+		profileConfig: state.profileConfig,
 	};
 };
 

@@ -1,6 +1,7 @@
 import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
 import { FolderEntity } from '../database/types';
+import { MasterKeyEntity } from '../e2ee/types';
 
 interface StateShareUserUser {
 	id: string;
@@ -25,11 +26,13 @@ export interface StateShare {
 	type: number;
 	folder_id: string;
 	note_id: string;
+	master_key_id: string;
 	user?: StateShareUserUser;
 }
 
 export interface ShareInvitation {
 	id: string;
+	master_key: MasterKeyEntity;
 	share: StateShare;
 	status: ShareUserStatus;
 }
@@ -38,6 +41,7 @@ export interface State {
 	shares: StateShare[];
 	shareUsers: Record<string, StateShareUser>;
 	shareInvitations: ShareInvitation[];
+	processingShareInvitationResponse: boolean;
 }
 
 export const stateRootKey = 'shareService';
@@ -46,6 +50,7 @@ export const defaultState: State = {
 	shares: [],
 	shareUsers: {},
 	shareInvitations: [],
+	processingShareInvitationResponse: false,
 };
 
 export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
@@ -80,6 +85,11 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 		case 'SHARE_INVITATION_SET':
 
 			draft.shareInvitations = action.shareInvitations;
+			break;
+
+		case 'SHARE_INVITATION_RESPONSE_PROCESSING':
+
+			draft.processingShareInvitationResponse = action.value;
 			break;
 
 		}

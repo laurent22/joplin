@@ -5,19 +5,24 @@ import { _ } from '@joplin/lib/locale';
 import { useEffect, useState } from 'react';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
-import ShareService from '@joplin/lib/services/share/ShareService';
+import ShareService, { ApiShare } from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
 import StyledInput from '../style/StyledInput';
-import Button from '../Button/Button';
+import Button, { ButtonSize } from '../Button/Button';
 import Logger from '@joplin/lib/Logger';
 import StyledMessage from '../style/StyledMessage';
 import { ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
 import { State } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
+import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 
 const logger = Logger.create('ShareFolderDialog');
+
+const StyledRoot = styled.div`
+	min-width: 500px;
+`;
 
 const StyledFolder = styled.div`
 	border: 1px solid ${(props) => props.theme.dividerColor};
@@ -41,7 +46,7 @@ const StyledAddRecipient = styled.div`
 	margin-bottom: 1em;
 `;
 
-const StyledRecipient = styled(StyledMessage)`
+const StyledRecipient = styled(StyledMessage)<any>`
 	display: flex;
 	flex-direction: row;
 	padding: .6em 1em;
@@ -59,7 +64,7 @@ const StyledRecipientStatusIcon = styled.i`
 `;
 
 const StyledRecipients = styled.div`
-	
+	margin-bottom: 10px;
 `;
 
 const StyledRecipientList = styled.div`
@@ -75,7 +80,7 @@ const StyledError = styled(StyledMessage)`
 	margin-bottom: 1em;
 `;
 
-const StyledShareState = styled(StyledMessage)`
+const StyledShareState = styled(StyledMessage)<any>`
 	word-break: break-all;
 	margin-bottom: 1em;
 `;
@@ -94,20 +99,6 @@ interface Props {
 
 interface RecipientDeleteEvent {
 	shareUserId: string;
-}
-
-interface AsyncEffectEvent {
-	cancelled: boolean;
-}
-
-function useAsyncEffect(effect: Function, dependencies: any[]) {
-	useEffect(() => {
-		const event = { cancelled: false };
-		effect(event);
-		return () => {
-			event.cancelled = true;
-		};
-	}, dependencies);
 }
 
 enum ShareState {
@@ -149,6 +140,7 @@ function ShareFolderDialog(props: Props) {
 	useEffect(() => {
 		const s = props.shares.find(s => s.folder_id === props.folderId);
 		setShare(s);
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.shares]);
 
 	useEffect(() => {
@@ -176,11 +168,38 @@ function ShareFolderDialog(props: Props) {
 
 	async function shareRecipient_click() {
 		setShareState(ShareState.Creating);
+		setLatestError(null);
+
+		let errorSet = false;
+
+		const handleError = (error: any) => {
+			if (!errorSet) setLatestError(error);
+			errorSet = true;
+			logger.error(error);
+		};
+
+		const defer = (error: any) => {
+			if (error) handleError(error);
+			setShareState(ShareState.Idle);
+		};
+
+		let share: ApiShare = null;
 
 		try {
-			setLatestError(null);
-			const share = await ShareService.instance().shareFolder(props.folderId);
-			await ShareService.instance().addShareRecipient(share.id, recipientEmail);
+			share = await ShareService.instance().shareFolder(props.folderId);
+		} catch (error) {
+			return defer(error);
+		}
+
+		try {
+			await ShareService.instance().addShareRecipient(share.id, share.master_key_id, recipientEmail);
+		} catch (error) {
+			// Handle the error but continue the process because we need to at
+			// least refresh the shares since one has been created above.
+			handleError(error);
+		}
+
+		try {
 			await Promise.all([
 				ShareService.instance().refreshShares(),
 				ShareService.instance().refreshShareUsers(share.id),
@@ -189,10 +208,9 @@ function ShareFolderDialog(props: Props) {
 
 			await synchronize();
 		} catch (error) {
-			logger.error(error);
-			setLatestError(error);
+			handleError(error);
 		} finally {
-			setShareState(ShareState.Idle);
+			defer(null);
 		}
 	}
 
@@ -203,7 +221,13 @@ function ShareFolderDialog(props: Props) {
 	async function recipient_delete(event: RecipientDeleteEvent) {
 		if (!confirm(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
 
-		await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		try {
+			await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		} catch (error) {
+			logger.error(error);
+			alert(_('The recipient could not be removed from the list. Please try again.\n\nThe error was: "%s"', error.message));
+		}
+
 		await ShareService.instance().refreshShareUsers(share.id);
 	}
 
@@ -222,7 +246,7 @@ function ShareFolderDialog(props: Props) {
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
 				<StyledRecipientControls>
 					<StyledRecipientInput disabled={disabled} type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
-					<Button disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
+					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
 			</StyledAddRecipient>
 		);
@@ -245,7 +269,7 @@ function ShareFolderDialog(props: Props) {
 			<StyledRecipient key={shareUser.user.email} index={index}>
 				<StyledRecipientName>{shareUser.user.email}</StyledRecipientName>
 				<StyledRecipientStatusIcon title={statusToMessage[shareUser.status]} className={statusToIcon[shareUser.status]}></StyledRecipientStatusIcon>
-				<Button iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
+				<Button size={ButtonSize.Small} iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
 			</StyledRecipient>
 		);
 	}
@@ -291,6 +315,14 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
+	const renderInfo = () => {
+		return (
+			<p className="info-text -small">
+				{_('Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient\'s device.')}
+			</p>
+		);
+	};
+
 	async function buttonRow_click(event: ClickEvent) {
 		if (event.buttonName === 'unshare') {
 			if (!confirm(_('Unshare this notebook? The recipients will no longer have access to its content.'))) return;
@@ -303,13 +335,14 @@ function ShareFolderDialog(props: Props) {
 
 	function renderContent() {
 		return (
-			<div>
+			<StyledRoot>
 				<DialogTitle title={_('Share Notebook')}/>
 				{renderFolder()}
 				{renderAddRecipient()}
 				{renderShareState()}
 				{renderError()}
 				{renderRecipients()}
+				{renderInfo()}
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={buttonRow_click}
@@ -317,7 +350,7 @@ function ShareFolderDialog(props: Props) {
 					cancelButtonLabel={_('Close')}
 					customButtons={customButtons}
 				/>
-			</div>
+			</StyledRoot>
 		);
 	}
 

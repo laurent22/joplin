@@ -1,4 +1,4 @@
-import { Session } from '../../db';
+import { Session } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
@@ -20,10 +20,10 @@ async function postSession(email: string, password: string): Promise<AppContext>
 	return context;
 }
 
-describe('api_sessions', function() {
+describe('api/sessions', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('api_sessions');
+		await beforeAllDb('api/sessions');
 	});
 
 	afterAll(async () => {
@@ -35,13 +35,13 @@ describe('api_sessions', function() {
 	});
 
 	test('should login user', async function() {
-		const { user } = await createUserAndSession(1, false);
+		const { user, password } = await createUserAndSession(1, false);
 
-		const context = await postSession(user.email, '123456');
+		const context = await postSession(user.email, password);
 		expect(context.response.status).toBe(200);
-		expect(!!context.response.body.id).toBe(true);
+		expect(!!(context.response.body as any).id).toBe(true);
 
-		const session: Session = await models().session().load(context.response.body.id);
+		const session: Session = await models().session().load((context.response.body as any).id);
 		expect(session.user_id).toBe(user.id);
 	});
 

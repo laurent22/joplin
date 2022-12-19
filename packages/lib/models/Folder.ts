@@ -1,5 +1,5 @@
-import { FolderEntity } from '../services/database/types';
-import BaseModel from '../BaseModel';
+import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity } from '../services/database/types';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
 import Note from './Note';
@@ -7,9 +7,14 @@ import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
 import { isRootSharedFolder } from '../services/share/reducer';
+import Logger from '../Logger';
+import syncDebugLog from '../services/synchronizer/syncDebugLog';
+import ResourceService from '../services/ResourceService';
 const { substrWithEllipsis } = require('../string-utils.js');
 
-interface FolderEntityWithChildren extends FolderEntity {
+const logger = Logger.create('models/Folder');
+
+export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
 
@@ -50,6 +55,7 @@ export default class Folder extends BaseItem {
 
 		return this.db()
 			.selectAll(`SELECT id FROM notes WHERE ${where.join(' AND ')}`, [parentId])
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((rows: any[]) => {
 				const output = [];
 				for (let i = 0; i < rows.length; i++) {
@@ -75,7 +81,7 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
-	static async delete(folderId: string, options: any = null) {
+	public static async delete(folderId: string, options: DeleteOptions = null) {
 		options = {
 			deleteChildren: true,
 			...options,
@@ -277,8 +283,12 @@ export default class Folder extends BaseItem {
 		return this.db().selectAll(sql, [folderId]);
 	}
 
-	private static async rootSharedFolders(): Promise<FolderEntity[]> {
+	public static async rootSharedFolders(): Promise<FolderEntity[]> {
 		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
+	}
+
+	public static async rootShareFoldersByKeyId(keyId: string): Promise<FolderEntity[]> {
+		return this.db().selectAll('SELECT id, share_id FROM folders WHERE master_key_id = ?', [keyId]);
 	}
 
 	public static async updateFolderShareIds(): Promise<void> {
@@ -288,8 +298,15 @@ export default class Folder extends BaseItem {
 
 		let sharedFolderIds: string[] = [];
 
+		const report = {
+			shareUpdateCount: 0,
+			unshareUpdateCount: 0,
+		};
+
 		for (const rootFolder of rootFolders) {
 			const children = await this.allChildrenFolders(rootFolder.id);
+
+			report.shareUpdateCount += children.length;
 
 			for (const child of children) {
 				if (child.share_id !== rootFolder.share_id) {
@@ -310,72 +327,229 @@ export default class Folder extends BaseItem {
 		// if they've been moved out of a shared folder.
 		// await this.unshareItems(ModelType.Folder, sharedFolderIds);
 
-		const sql = ['SELECT id FROM folders WHERE share_id != ""'];
+		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != ""'];
 		if (sharedFolderIds.length) {
 			sql.push(` AND id NOT IN ("${sharedFolderIds.join('","')}")`);
 		}
 
-		const foldersToUnshare = await this.db().selectAll(sql.join(' '));
+		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
+
+		report.unshareUpdateCount += foldersToUnshare.length;
+
 		for (const item of foldersToUnshare) {
 			await this.save({
 				id: item.id,
 				share_id: '',
 				updated_time: Date.now(),
+				parent_id: item.parent_id,
 			}, { autoTimestamp: false });
 		}
+
+		logger.debug('updateFolderShareIds:', report);
 	}
 
 	public static async updateNoteShareIds() {
 		// Find all the notes where the share_id is not the same as the
 		// parent share_id because we only need to update those.
 		const rows = await this.db().selectAll(`
-			SELECT notes.id, folders.share_id
+			SELECT notes.id, folders.share_id, notes.parent_id
 			FROM notes
 			LEFT JOIN folders ON notes.parent_id = folders.id
 			WHERE notes.share_id != folders.share_id
 		`);
 
+		logger.debug('updateNoteShareIds: notes to update:', rows.length);
+
 		for (const row of rows) {
 			await Note.save({
 				id: row.id,
 				share_id: row.share_id || '',
+				parent_id: row.parent_id,
 				updated_time: Date.now(),
 			}, { autoTimestamp: false });
 		}
 	}
 
-	public static async updateResourceShareIds() {
-		// Find all resources where share_id is different from parent note
-		// share_id. Then update share_id on all these resources. Essentially it
-		// makes it match the resource share_id to the note share_id. At the
-		// same time we also process the is_shared property.
-		const rows = await this.db().selectAll(`
-			SELECT r.id, n.share_id, n.is_shared
-			FROM note_resources nr
-			LEFT JOIN resources r ON nr.resource_id = r.id
-			LEFT JOIN notes n ON nr.note_id = n.id
-			WHERE n.share_id != r.share_id
-			OR n.is_shared != r.is_shared
-		`);
+	public static async updateResourceShareIds(resourceService: ResourceService) {
+		// Updating the share_id property of the resources is complex because:
+		//
+		// The resource association to the note is done indirectly via the
+		// ResourceService
+		//
+		// And a given resource can appear inside multiple notes. However, for
+		// sharing we make the assumption that a resource can be part of only
+		// one share (one-to-one relationship because "share_id" is part of the
+		// "resources" table), which is usually the case. By copying and pasting
+		// note content from one note to another it's however possible to have
+		// the same resource in multiple shares (or in a non-shared and a shared
+		// folder).
+		//
+		// So in this function we take this into account - if a shared resource
+		// is part of multiple notes, we duplicate that resource so that each
+		// note has its own instance. When such duplication happens, we need to
+		// resume the process from the start (thus the loop) so that we deal
+		// with the right note/resource associations.
 
-		for (const row of rows) {
-			await Resource.save({
-				id: row.id,
-				share_id: row.share_id || '',
-				is_shared: row.is_shared,
-				updated_time: Date.now(),
-			}, { autoTimestamp: false });
+		for (let i = 0; i < 5; i++) {
+			// Find all resources where share_id is different from parent note
+			// share_id. Then update share_id on all these resources. Essentially it
+			// makes it match the resource share_id to the note share_id. At the
+			// same time we also process the is_shared property.
+
+			const rows = await this.db().selectAll(`
+				SELECT r.id, n.share_id, n.is_shared
+				FROM note_resources nr
+				LEFT JOIN resources r ON nr.resource_id = r.id
+				LEFT JOIN notes n ON nr.note_id = n.id
+				WHERE (
+					n.share_id != r.share_id
+					OR n.is_shared != r.is_shared
+				) AND nr.is_associated = 1
+			`);
+
+			if (!rows.length) return;
+
+			logger.debug('updateResourceShareIds: resources to update:', rows.length);
+
+			const resourceIds = rows.map(r => r.id);
+
+			interface Row {
+				resource_id: string;
+				note_id: string;
+				share_id: string;
+			}
+
+			// Now we check, for each resource, that it is associated with only
+			// one note. If it is not, we create duplicate resources so that
+			// each note has its own separate resource.
+
+			const noteResourceAssociations = await this.db().selectAll(`
+				SELECT resource_id, note_id, notes.share_id
+				FROM note_resources
+				LEFT JOIN notes ON notes.id = note_resources.note_id
+				WHERE resource_id IN ('${resourceIds.join('\',\'')}')
+				AND is_associated = 1
+			`) as Row[];
+
+			const resourceIdToNotes: Record<string, Row[]> = {};
+
+			for (const r of noteResourceAssociations) {
+				if (!resourceIdToNotes[r.resource_id]) resourceIdToNotes[r.resource_id] = [];
+				resourceIdToNotes[r.resource_id].push(r);
+			}
+
+			let hasCreatedResources = false;
+
+			for (const [resourceId, rows] of Object.entries(resourceIdToNotes)) {
+				if (rows.length <= 1) continue;
+
+				for (let i = 0; i < rows.length - 1; i++) {
+					const row = rows[i];
+					const note: NoteEntity = await Note.load(row.note_id);
+					if (!note) continue; // probably got deleted in the meantime?
+					const newResource = await Resource.duplicateResource(resourceId);
+					logger.info(`updateResourceShareIds: Automatically created resource "${newResource.id}" to replace resource "${resourceId}" because it is shared and duplicate across notes:`, row);
+					const regex = new RegExp(resourceId, 'gi');
+					const newBody = note.body.replace(regex, newResource.id);
+					await Note.save({
+						id: note.id,
+						body: newBody,
+						parent_id: note.parent_id,
+						updated_time: Date.now(),
+					}, {
+						autoTimestamp: false,
+					});
+					hasCreatedResources = true;
+				}
+			}
+
+			// If we have created resources, we refresh the note/resource
+			// associations using ResourceService and we resume the process.
+			// Normally, if the user didn't create any new notes or resources in
+			// the meantime, the second loop should find that each shared
+			// resource is associated with only one note.
+
+			if (hasCreatedResources) {
+				await resourceService.indexNoteResources();
+				continue;
+			} else {
+				// If all is good, we can set the share_id and is_shared
+				// property of the resource.
+				for (const row of rows) {
+					await Resource.save({
+						id: row.id,
+						share_id: row.share_id || '',
+						is_shared: row.is_shared,
+						updated_time: Date.now(),
+					}, { autoTimestamp: false });
+				}
+				return;
+			}
 		}
+
+		throw new Error('Failed to update resource share IDs');
 	}
 
-	public static async updateAllShareIds() {
+	public static async updateAllShareIds(resourceService: ResourceService) {
 		await this.updateFolderShareIds();
 		await this.updateNoteShareIds();
-		await this.updateResourceShareIds();
+		await this.updateResourceShareIds(resourceService);
+	}
+
+	// Clear the "share_id" property for the items that are associated with a
+	// share that no longer exists.
+	public static async updateNoLongerSharedItems(activeShareIds: string[]) {
+		const tableNameToClasses: Record<string, any> = {
+			'folders': Folder,
+			'notes': Note,
+			'resources': Resource,
+		};
+
+		const report: any = {};
+
+		for (const tableName of ['folders', 'notes', 'resources']) {
+			const ItemClass = tableNameToClasses[tableName];
+			const hasParentId = tableName !== 'resources';
+
+			const fields = ['id'];
+			if (hasParentId) fields.push('parent_id');
+
+			const query = activeShareIds.length ? `
+				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
+				WHERE share_id != "" AND share_id NOT IN ("${activeShareIds.join('","')}")
+			` : `
+				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
+				WHERE share_id != ''
+			`;
+
+			const rows = await this.db().selectAll(query);
+
+			report[tableName] = rows.length;
+
+			for (const row of rows) {
+				const toSave: any = {
+					id: row.id,
+					share_id: '',
+					updated_time: Date.now(),
+				};
+
+				if (hasParentId) toSave.parent_id = row.parent_id;
+
+				await ItemClass.save(toSave, { autoTimestamp: false });
+			}
+		}
+
+		logger.debug('updateNoLongerSharedItems:', report);
 	}
 
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
+
+		if (options && options.includeNotes) {
+			for (const folder of all) {
+				folder.notes = await Note.previews(folder.id);
+			}
+		}
 
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models: FolderEntityWithChildren[], parentId: string) {
@@ -385,7 +559,7 @@ export default class Folder extends BaseItem {
 			for (let i = 0; i < length; i++) {
 				const model = models[i];
 
-				if (model.parent_id == parentId) {
+				if (model.parent_id === parentId) {
 					const children = getNestedChildren(models, model.id);
 
 					if (children.length > 0) {
@@ -442,7 +616,7 @@ export default class Folder extends BaseItem {
 		return output.join(' / ');
 	}
 
-	static buildTree(folders: FolderEntity[]) {
+	static buildTree(folders: FolderEntity[]): FolderEntityWithChildren[] {
 		const idToFolders: Record<string, any> = {};
 		for (let i = 0; i < folders.length; i++) {
 			idToFolders[folders[i].id] = Object.assign({}, folders[i]);
@@ -499,7 +673,7 @@ export default class Folder extends BaseItem {
 	}
 
 	static load(id: string, _options: any = null): Promise<FolderEntity> {
-		if (id == this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
+		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
 		return super.load(id);
 	}
 
@@ -514,7 +688,7 @@ export default class Folder extends BaseItem {
 		if (isRootSharedFolder(folder)) return false;
 
 		const conflictFolderId = Folder.conflictFolderId();
-		if (folderId == conflictFolderId || targetFolderId == conflictFolderId) return false;
+		if (folderId === conflictFolderId || targetFolderId === conflictFolderId) return false;
 
 		if (!targetFolderId) return true;
 
@@ -561,7 +735,7 @@ export default class Folder extends BaseItem {
 		}
 
 		if (options.stripLeftSlashes === true && o.title) {
-			while (o.title.length && (o.title[0] == '/' || o.title[0] == '\\')) {
+			while (o.title.length && (o.title[0] === '/' || o.title[0] === '\\')) {
 				o.title = o.title.substr(1);
 			}
 		}
@@ -581,9 +755,12 @@ export default class Folder extends BaseItem {
 		// }
 
 		if (options.reservedTitleCheck === true && o.title) {
-			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
+			if (o.title === Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
 
+		syncDebugLog.info('Folder Save:', o);
+
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(o, options).then((folder: FolderEntity) => {
 			this.dispatch({
 				type: 'FOLDER_UPDATE_ONE',
@@ -592,4 +769,25 @@ export default class Folder extends BaseItem {
 			return folder;
 		});
 	}
+
+	public static serializeIcon(icon: FolderIcon): string {
+		return icon ? JSON.stringify(icon) : '';
+	}
+
+	public static unserializeIcon(icon: string): FolderIcon {
+		if (!icon) return null;
+		return {
+			...defaultFolderIcon(),
+			...JSON.parse(icon),
+		};
+	}
+
+	public static shouldShowFolderIcons(folders: FolderEntity[]) {
+		// If at least one of the folder has an icon, then we display icons for all
+		// folders (those without one will get the default icon). This is so that
+		// visual alignment is correct for all folders, otherwise the folder tree
+		// looks messy.
+		return !!folders.find(f => !!f.icon);
+	}
+
 }

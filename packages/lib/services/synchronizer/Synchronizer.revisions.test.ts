@@ -1,17 +1,16 @@
 import Setting from '../../models/Setting';
 import BaseModel from '../../BaseModel';
-
-const { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } = require('../../testing/test-utils.js');
+import { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
 import Note from '../../models/Note';
 import Revision from '../../models/Revision';
+import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
 
 describe('Synchronizer.revisions', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
 	it('should not save revisions when updating a note via sync', (async () => {
@@ -165,8 +164,8 @@ describe('Synchronizer.revisions', function() {
 
 		await Note.save({ title: 'ma note', updated_time: dateInPast, created_time: dateInPast }, { autoTimestamp: false });
 		const masterKey = await loadEncryptionMasterKey();
-		await encryptionService().enableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -174,7 +173,7 @@ describe('Synchronizer.revisions', function() {
 		await synchronizerStart();
 
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 
 		await revisionService().collectRevisions();

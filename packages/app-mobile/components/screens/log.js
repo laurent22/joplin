@@ -3,7 +3,7 @@ const React = require('react');
 const { FlatList, View, Text, Button, StyleSheet, Platform } = require('react-native');
 const { connect } = require('react-redux');
 const { reg } = require('@joplin/lib/registry.js');
-const { ScreenHeader } = require('../screen-header.js');
+const { ScreenHeader } = require('../ScreenHeader');
 const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('../global-style.js');
 const Logger = require('@joplin/lib/Logger').default;
@@ -83,8 +83,8 @@ class LogScreenComponent extends BaseScreenComponent {
 	render() {
 		const renderRow = ({ item }) => {
 			let textStyle = this.styles().rowText;
-			if (item.level == Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
-			if (item.level == Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
+			if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
+			if (item.level === Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
 
 			return (
 				<View style={this.styles().row}>

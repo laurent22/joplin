@@ -1,17 +1,56 @@
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
-const { View, Button, Text } = require('react-native');
-
-const PopupDialog = require('react-native-popup-dialog').default;
-const { DialogTitle, DialogButton } = require('react-native-popup-dialog');
+const { Modal, View, Button, Text, StyleSheet } = require('react-native');
 import time from '@joplin/lib/time';
 const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
 
-export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
+const styles = StyleSheet.create({
+	centeredView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 22,
+	},
+	modalView: {
+		display: 'flex',
+		flexDirection: 'column',
+		margin: 10,
+		backgroundColor: 'white',
+		borderRadius: 10,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+	},
+	buttonOpen: {
+		backgroundColor: '#F194FF',
+	},
+	buttonClose: {
+		backgroundColor: '#2196F3',
+	},
+	textStyle: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: 'center',
+	},
+});
 
-	private dialog_: any = null;
-	private shown_: boolean = false;
+export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
 
 	constructor(props: any) {
 		super(props);
@@ -29,27 +68,9 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps: any) {
-		if (newProps.date != this.state.date) {
+		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
 		}
-
-		if ('shown' in newProps && newProps.shown != this.shown_) {
-			this.show(newProps.shown);
-		}
-	}
-
-	show(doShow: boolean = true) {
-		if (doShow) {
-			this.dialog_.show();
-		} else {
-			this.dialog_.dismiss();
-		}
-
-		this.shown_ = doShow;
-	}
-
-	dismiss() {
-		this.show(false);
 	}
 
 	onAccept() {
@@ -77,14 +98,12 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 	renderContent() {
-		if (!this.shown_) return <View/>;
-
 		const theme = themeStyle(this.props.themeId);
 
 		return (
-			<View style={{ flex: 1, margin: 20, alignItems: 'center' }}>
+			<View style={{ flex: 0, margin: 20, alignItems: 'center' }}>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					{ this.state.date && <Text style={{ ...theme.normalText, marginRight: 10 }}>{time.formatDateToLocal(this.state.date)}</Text> }
+					{ this.state.date && <Text style={{ ...theme.normalText,color: theme.color, marginRight: 10 }}>{time.formatDateToLocal(this.state.date)}</Text> }
 					<Button title="Set date" onPress={this.onSetDate} />
 				</View>
 				<DateTimePickerModal
@@ -100,25 +119,43 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 	render() {
-		const clearAlarmText = _('Clear alarm'); // For unknown reasons, this particular string doesn't get translated if it's directly in the text property below
+		const modalVisible = this.props.shown;
 
-		const popupActions = [
-			<DialogButton text={_('Save alarm')} align="center" onPress={() => this.onAccept()} key="saveButton" />,
-			<DialogButton text={clearAlarmText} align="center" onPress={() => this.onClear()} key="clearButton" />,
-			<DialogButton text={_('Cancel')} align="center" onPress={() => this.onReject()} key="cancelButton" />,
-		];
+		if (!modalVisible) return null;
+
+		const theme = themeStyle(this.props.themeId);
 
 		return (
-			<PopupDialog
-				ref={(dialog: any) => { this.dialog_ = dialog; }}
-				dialogTitle={<DialogTitle title={_('Set alarm')} />}
-				actions={popupActions}
-				dismissOnTouchOutside={false}
-				width={0.9}
-				height={350}
-			>
-				{this.renderContent()}
-			</PopupDialog>
+			<View style={styles.centeredView}>
+				<Modal
+
+					transparent={true}
+					visible={modalVisible}
+					onRequestClose={() => {
+						this.onReject();
+					}}
+				>
+					<View style={styles.centeredView}>
+						<View style={{ ...styles.modalView, backgroundColor: theme.backgroundColor }}>
+							<View style={{ padding: 15, paddingBottom: 0, flex: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor, borderBottomStyle: 'solid' }}>
+								<Text style={{ ...styles.modalText, color: theme.color, fontSize: 14, fontWeight: 'bold' }}>{_('Set alarm')}</Text>
+							</View>
+							{this.renderContent()}
+							<View style={{ padding: 20, borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: theme.dividerColor }}>
+								<View style={{ marginBottom: 10 }}>
+									<Button title={_('Save alarm')} onPress={() => this.onAccept()} key="saveButton" />
+								</View>
+								<View style={{ marginBottom: 10 }}>
+									<Button title={_('Clear alarm')} onPress={() => this.onClear()} key="clearButton" />
+								</View>
+								<View style={{ marginBottom: 10 }}>
+									<Button title={_('Cancel')} onPress={() => this.onReject()} key="cancelButton" />
+								</View>
+							</View>
+						</View>
+					</View>
+				</Modal>
+			</View>
 		);
 	}
 

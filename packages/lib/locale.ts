@@ -491,7 +491,7 @@ function closestSupportedLocale(canonicalName: string, defaultToEnglish: boolean
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 		const language = locale.split('_')[0];
-		if (requiredLanguage == language) return locale;
+		if (requiredLanguage === language) return locale;
 	}
 
 	return defaultToEnglish ? 'en_GB' : null;
@@ -532,14 +532,14 @@ function countryDisplayName(canonicalName: string) {
 	let extraString;
 
 	if (countryCode) {
-		if (languageCode == 'zh' && countryCode == 'CN') {
+		if (languageCode === 'zh' && countryCode === 'CN') {
 			extraString = '简体'; // "Simplified" in "Simplified Chinese"
 		} else {
 			extraString = countryName(countryCode);
 		}
 	}
 
-	if (languageCode == 'zh' && (countryCode == '' || countryCode == 'TW')) extraString = '繁體'; // "Traditional" in "Traditional Chinese"
+	if (languageCode === 'zh' && (countryCode === '' || countryCode === 'TW')) extraString = '繁體'; // "Traditional" in "Traditional Chinese"
 
 	if (extraString) {
 		output += ` (${extraString})`;
@@ -563,8 +563,12 @@ function localeStrings(canonicalName: string) {
 	return loadedLocales_[locale];
 }
 
+const currentLocale = () => {
+	return currentLocale_;
+};
+
 function setLocale(canonicalName: string) {
-	if (currentLocale_ == canonicalName) return;
+	if (currentLocale_ === canonicalName) return;
 	currentLocale_ = closestSupportedLocale(canonicalName);
 }
 
@@ -594,4 +598,4 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	return _(singular, ...args);
 }
 
-export { _, _n, supportedLocales, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

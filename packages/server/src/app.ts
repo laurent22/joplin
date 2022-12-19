@@ -3,29 +3,48 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, runningInDocker, EnvVariables } from './config';
-import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteDefaultDir } from './db';
-import { AppContext, Env } from './utils/types';
+import config, { initConfig, runningInDocker } from './config';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
+import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
+import { getDeviceTimeDrift } from '@joplin/lib/ntp';
 import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
 import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
-// import { createItemTree } from './utils/testing/testUtils';
+import { credentialFile } from './utils/testing/testUtils';
+import apiVersionHandler from './middleware/apiVersionHandler';
+import clickJackingHandler from './middleware/clickJackingHandler';
+import newModelFactory from './models/factory';
+import setupCommands from './utils/setupCommands';
+import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
+import { parseEnv } from './env';
+import storageConnectionCheck from './utils/storageConnectionCheck';
+import { setLocale } from '@joplin/lib/locale';
+import checkAdminHandler from './middleware/checkAdminHandler';
 
+interface Argv {
+	env?: Env;
+	pidfile?: string;
+	envFile?: string;
+}
+
+const nodeSqlite = require('sqlite3');
+const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-shimInit();
+shimInit({ nodeSqlite });
 
-const env: Env = argv.env as Env || Env.Prod;
-
-const envVariables: Record<Env, EnvVariables> = {
+const defaultEnvVariables: Record<Env, any> = {
 	dev: {
+		// To test with the Postgres database, uncomment DB_CLIENT below and
+		// comment out SQLITE_DATABASE. Then start the Postgres server using
+		// `docker-compose --file docker-compose.db-dev.yml up`
+
+		// DB_CLIENT: 'pg',
 		SQLITE_DATABASE: `${sqliteDefaultDir}/db-dev.sqlite`,
 	},
 	buildTypes: {
@@ -45,21 +64,13 @@ function appLogger(): LoggerWrapper {
 	return appLogger_;
 }
 
-const app = new Koa();
-
-// Note: the order of middlewares is important. For example, ownerHandler
-// loads the user, which is then used by notificationHandler. And finally
-// routeHandler uses data from both previous middlewares. It would be good to
-// layout these dependencies in code but not clear how to do this.
-app.use(ownerHandler);
-app.use(notificationHandler);
-app.use(routeHandler);
-
 function markPasswords(o: Record<string, any>): Record<string, any> {
+	if (!o) return o;
+
 	const output: Record<string, any> = {};
 
 	for (const k of Object.keys(o)) {
-		if (k.toLowerCase().includes('password')) {
+		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret')) {
 			output[k] = '********';
 		} else {
 			output[k] = o[k];
@@ -73,24 +84,125 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 	if (argv.envFile) return argv.envFile;
 
 	if (env === Env.Dev) {
-		const envFilePath = `${require('os').homedir()}/joplin-credentials/server.env`;
-		if (await fs.pathExists(envFilePath)) return envFilePath;
+		return credentialFile('server.env');
 	}
 
 	return '';
 }
 
 async function main() {
+	const { selectedCommand, argv: yargsArgv } = await setupCommands();
+
+	const argv: Argv = yargsArgv as any;
+	const env: Env = argv.env as Env || Env.Prod;
+
 	const envFilePath = await getEnvFilePath(env, argv);
 
 	if (envFilePath) nodeEnvFile(envFilePath);
 
-	if (!envVariables[env]) throw new Error(`Invalid env: ${env}`);
+	if (!defaultEnvVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	initConfig({
-		...envVariables[env],
-		...process.env,
+	const envVariables = parseEnv(process.env, defaultEnvVariables[env]);
+
+	const app = new Koa();
+
+	// Note: the order of middlewares is important. For example, ownerHandler
+	// loads the user, which is then used by notificationHandler. And finally
+	// routeHandler uses data from both previous middlewares. It would be good to
+	// layout these dependencies in code but not clear how to do this.
+	const corsAllowedDomains = [
+		'https://joplinapp.org',
+	];
+
+	if (env === Env.Dev) {
+		corsAllowedDomains.push('http://localhost:8077');
+	}
+
+	function acceptOrigin(origin: string): boolean {
+		const hostname = (new URL(origin)).hostname;
+		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
+
+		if (hostname === userContentDomain) return true;
+
+		const hostnameNoSub = hostname.split('.').slice(1).join('.');
+
+		// console.info('CORS check for origin', origin, 'Allowed domains', corsAllowedDomains);
+
+		if (hostnameNoSub === userContentDomain) return true;
+
+		if (corsAllowedDomains.includes(origin)) return true;
+
+		return false;
+	}
+
+	// This is used to catch any low level error thrown from a middleware. It
+	// won't deal with errors from routeHandler, which catches and handles its
+	// own errors.
+	app.use(async (ctx: AppContext, next: KoaNext) => {
+		try {
+			await next();
+		} catch (error) {
+			ctx.status = error.httpCode || 500;
+
+			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+
+			const responseFormat = routeResponseFormat(ctx);
+
+			if (responseFormat === RouteResponseFormat.Html) {
+				// Since this is a low level error, rendering a view might fail too,
+				// so catch this and default to rendering JSON.
+				try {
+					ctx.response.set('Content-Type', 'text/html');
+					ctx.body = await ctx.joplin.services.mustache.renderView({
+						name: 'error',
+						title: 'Error',
+						path: 'index/error',
+						content: { error },
+					});
+				} catch (anotherError) {
+					ctx.response.set('Content-Type', 'application/json');
+					ctx.body = JSON.stringify({ error: `${error.message} (Check the server log for more information)` });
+				}
+			} else {
+				ctx.response.set('Content-Type', 'application/json');
+				ctx.body = JSON.stringify({ error: error.message });
+			}
+		}
 	});
+
+	// Creates the request-specific "joplin" context property.
+	app.use(async (ctx: AppContext, next: KoaNext) => {
+		ctx.joplin = {
+			...ctx.joplinBase,
+			owner: null,
+			notifications: [],
+		};
+
+		return next();
+	});
+
+	app.use(cors({
+		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
+		origin: (ctx: AppContext) => {
+			const origin = ctx.request.origin;
+
+			if (acceptOrigin(origin)) {
+				return origin;
+			} else {
+				// we can't return void, so let's return one of the valid domains
+				return corsAllowedDomains[0];
+			}
+		},
+	}));
+
+	app.use(apiVersionHandler);
+	app.use(ownerHandler);
+	app.use(checkAdminHandler);
+	app.use(notificationHandler);
+	app.use(clickJackingHandler);
+	app.use(routeHandler);
+
+	await initConfig(env, envVariables);
 
 	await fs.mkdirp(config().logDir);
 	await fs.mkdirp(config().tempDir);
@@ -114,26 +226,55 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
-	if (argv.migrateDb) {
-		const db = await connectDb(config().database);
-		await migrateDb(db);
-		await disconnectDb(db);
-	} else if (argv.dropDb) {
-		await dropDb(config().database, { ignoreIfNotExists: true });
-	} else if (argv.dropTables) {
-		const db = await connectDb(config().database);
-		await dropTables(db);
-		await disconnectDb(db);
-	} else if (argv.createDb) {
-		await createDb(config().database);
+	let runCommandAndExitApp = true;
+
+	if (selectedCommand) {
+		const commandArgv = {
+			...argv,
+			_: (argv as any)._.slice(),
+		};
+		commandArgv._.splice(0, 1);
+
+		if (selectedCommand.commandName() === 'db') {
+			await selectedCommand.run(commandArgv, {
+				db: null,
+				models: null,
+			});
+		} else {
+			const connectionCheck = await waitForConnection(config().database);
+			const models = newModelFactory(connectionCheck.connection, config());
+
+			await selectedCommand.run(commandArgv, {
+				db: connectionCheck.connection,
+				models,
+			});
+		}
 	} else {
-		appLogger().info(`Starting server (${env}) on port ${config().port} and PID ${process.pid}...`);
+		runCommandAndExitApp = false;
+
+		appLogger().info(`Starting server v${config().appVersion} (${env}) on port ${config().port} and PID ${process.pid}...`);
+
+		if (config().maxTimeDrift) {
+			const timeDrift = await getDeviceTimeDrift();
+			if (Math.abs(timeDrift) > config().maxTimeDrift) {
+				throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check, or set to 0 to disabled the check.`);
+			}
+			appLogger().info(`NTP time offset: ${timeDrift}ms`);
+		} else {
+			appLogger().info('Skipping NTP time check because MAX_TIME_DRIFT is 0.');
+		}
+
+		setLocale('en_GB');
+
 		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('API base URL:', config().apiBaseUrl);
 		appLogger().info('User content base URL:', config().userContentBaseUrl);
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
+		appLogger().info('Mailer Config:', markPasswords(config().mailer));
+		appLogger().info('Content driver:', markPasswords(config().storageDriver));
+		appLogger().info('Content driver (fallback):', markPasswords(config().storageDriverFallback));
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);
@@ -142,51 +283,37 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		const appContext = app.context as AppContext;
+		const ctx = app.context as AppContext;
 
-		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
-		await initializeJoplinUtils(config(), appContext.models, appContext.services.mustache);
+		if (config().database.autoMigration) {
+			appLogger().info('Auto-migrating database...');
+			await migrateLatest(connectionCheck.connection);
+			appLogger().info('Latest migration:', await latestMigration(connectionCheck.connection));
+		} else {
+			appLogger().info('Skipped database auto-migration.');
+		}
 
-		appLogger().info('Migrating database...');
-		await migrateDb(appContext.db);
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+
+		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
+
+		appLogger().info('Performing main storage check...');
+		appLogger().info(await storageConnectionCheck(config().storageDriver, ctx.joplinBase.db, ctx.joplinBase.models));
+
+		if (config().storageDriverFallback) {
+			appLogger().info('Performing fallback storage check...');
+			appLogger().info(await storageConnectionCheck(config().storageDriverFallback, ctx.joplinBase.db, ctx.joplinBase.models));
+		}
 
 		appLogger().info('Starting services...');
-		await startServices(appContext);
-
-		// if (env !== Env.Prod) {
-		// 	const done = await handleDebugCommands(argv, appContext.db, config());
-		// 	if (done) {
-		// 		appLogger().info('Debug command has been executed. Now starting server...');
-		// 	}
-		// }
+		await startServices(ctx.joplinBase.services);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 
-		// const tree: any = {
-		// 	'000000000000000000000000000000F1': {},
-		// 	'000000000000000000000000000000F2': {
-		// 		'00000000000000000000000000000001': null,
-		// 		'00000000000000000000000000000002': null,
-		// 	},
-		// 	'000000000000000000000000000000F3': {
-		// 		'00000000000000000000000000000003': null,
-		// 		'000000000000000000000000000000F4': {
-		// 			'00000000000000000000000000000004': null,
-		// 			'00000000000000000000000000000005': null,
-		// 		},
-		// 	},
-		// 	'00000000000000000000000000000006': null,
-		// 	'00000000000000000000000000000007': null,
-		// };
-
-		// const users = await appContext.models.user().all();
-
-		// const itemModel = appContext.models.item({ userId: users[0].id });
-
-		// await createItemTree(itemModel, '', tree);
-
 		app.listen(config().port);
 	}
+
+	if (runCommandAndExitApp) process.exit(0);
 }
 
 main().catch((error: any) => {

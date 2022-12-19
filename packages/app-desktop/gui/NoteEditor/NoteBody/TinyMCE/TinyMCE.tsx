@@ -14,18 +14,20 @@ import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
 import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
-
-const { MarkupToHtml } = require('@joplin/renderer');
-const taboverride = require('taboverride');
+import { MarkupToHtml } from '@joplin/renderer';
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
-const { themeStyle } = require('@joplin/lib/theme');
+import openEditDialog from './utils/openEditDialog';
+import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
+import { themeStyle } from '@joplin/lib/theme';
+import { loadScript } from '../../../utils/loadScript';
+import bridge from '../../../../services/bridge';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
-function markupRenderOptions(override: any = null) {
+function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return {
 		plugins: {
 			checkbox: {
@@ -37,33 +39,6 @@ function markupRenderOptions(override: any = null) {
 		},
 		replaceResourceInternalToExternalLinks: true,
 		...override,
-	};
-}
-
-function findBlockSource(node: any) {
-	const sources = node.getElementsByClassName('joplin-source');
-	if (!sources.length) throw new Error('No source for node');
-	const source = sources[0];
-
-	return {
-		openCharacters: source.getAttribute('data-joplin-source-open'),
-		closeCharacters: source.getAttribute('data-joplin-source-close'),
-		content: source.textContent,
-		node: source,
-		language: source.getAttribute('data-joplin-language') || '',
-	};
-}
-
-function newBlockSource(language: string = '', content: string = ''): any {
-	const fence = language === 'katex' ? '$$' : '```';
-	const fenceLanguage = language === 'katex' ? '' : language;
-
-	return {
-		openCharacters: `\n${fence}${fenceLanguage}\n`,
-		closeCharacters: `\n${fence}\n`,
-		content: content,
-		node: null,
-		language: language,
 	};
 }
 
@@ -95,40 +70,10 @@ function findEditableContainer(node: any): any {
 	return null;
 }
 
-function editableInnerHtml(html: string): string {
-	const temp = document.createElement('div');
-	temp.innerHTML = html;
-	const editable = temp.getElementsByClassName('joplin-editable');
-	if (!editable.length) throw new Error(`Invalid joplin-editable: ${html}`);
-	return editable[0].innerHTML;
-}
-
-function dialogTextArea_keyDown(event: any) {
-	if (event.key === 'Tab') {
-		window.requestAnimationFrame(() => event.target.focus());
-	}
-}
-
 let markupToHtml_ = new MarkupToHtml();
 function stripMarkup(markupLanguage: number, markup: string, options: any = null) {
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
-}
-
-// Allows pressing tab in a textarea to input an actual tab (instead of changing focus)
-// taboverride will take care of actually inserting the tab character, while the keydown
-// event listener will override the default behaviour, which is to focus the next field.
-function enableTextAreaTab(enable: boolean) {
-	const textAreas = document.getElementsByClassName('tox-textarea');
-	for (const textArea of textAreas) {
-		taboverride.set(textArea, enable);
-
-		if (enable) {
-			textArea.addEventListener('keydown', dialogTextArea_keyDown);
-		} else {
-			textArea.removeEventListener('keydown', dialogTextArea_keyDown);
-		}
-	}
 }
 
 interface TinyMceCommand {
@@ -205,8 +150,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
 		editor.insertContent(result.html);
-		// editor.fire('joplinChange');
-		// dispatchDidUpdate(editor);
 	}, [props.markupToHtml, editor]);
 
 	const insertResourcesIntoContentRef = useRef(null);
@@ -337,6 +280,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				return true;
 			},
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss]);
 
 	// -----------------------------------------------------------------------------------------
@@ -345,32 +289,32 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// module would not load these extra files.
 	// -----------------------------------------------------------------------------------------
 
-	const loadScript = async (script: any) => {
-		return new Promise((resolve) => {
-			let element: any = document.createElement('script');
-			if (script.src.indexOf('.css') >= 0) {
-				element = document.createElement('link');
-				element.rel = 'stylesheet';
-				element.href = script.src;
-			} else {
-				element.src = script.src;
+	// const loadScript = async (script: any) => {
+	// 	return new Promise((resolve) => {
+	// 		let element: any = document.createElement('script');
+	// 		if (script.src.indexOf('.css') >= 0) {
+	// 			element = document.createElement('link');
+	// 			element.rel = 'stylesheet';
+	// 			element.href = script.src;
+	// 		} else {
+	// 			element.src = script.src;
 
-				if (script.attrs) {
-					for (const attr in script.attrs) {
-						element[attr] = script.attrs[attr];
-					}
-				}
-			}
+	// 			if (script.attrs) {
+	// 				for (const attr in script.attrs) {
+	// 					element[attr] = script.attrs[attr];
+	// 				}
+	// 			}
+	// 		}
 
-			element.id = script.id;
+	// 		element.id = script.id;
 
-			element.onload = () => {
-				resolve(null);
-			};
+	// 		element.onload = () => {
+	// 			resolve(null);
+	// 		};
 
-			document.getElementsByTagName('head')[0].appendChild(element);
-		});
-	};
+	// 		document.getElementsByTagName('head')[0].appendChild(element);
+	// 	});
+	// };
 
 	useEffect(() => {
 		let cancelled = false;
@@ -378,7 +322,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function loadScripts() {
 			const scriptsToLoad: any[] = [
 				{
-					src: 'node_modules/tinymce/tinymce.min.js',
+					src: `${bridge().vendorDir()}/lib/tinymce/tinymce.min.js`,
 					id: 'tinyMceScript',
 					loaded: false,
 				},
@@ -414,8 +358,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	}, []);
 
 	useEffect(() => {
-		if (!editorReady) return () => {};
-
 		const theme = themeStyle(props.themeId);
 
 		const element = document.createElement('style');
@@ -442,6 +384,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background-color: ${theme.backgroundColor} !important;
 			}
 
+			.tox .tox-dialog__body-content {
+				color: ${theme.color};
+			}
+
+			/*
+			When creating dialogs, TinyMCE doesn't seem to offer a way to style the components or to assign classes to them.
+			We want the code dialog box text area to be monospace, and since we can't target this precisely, we apply the style
+			to all textareas of all dialogs. As I think only the code dialog displays a textarea that should be fine.
+			*/
+			
+			.tox .tox-dialog textarea {
+				font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+			}
+
+			.tox .tox-dialog-wrap__backdrop {
+				background-color: ${theme.backgroundColor} !important;
+				opacity:0.7
+			}
+			
 			.tox .tox-editor-header {
 				border: none;
 			}
@@ -530,11 +491,29 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				padding-top: ${theme.toolbarPadding}px;
 				padding-bottom: ${theme.toolbarPadding}px;
 			}
+
+			.joplin-tinymce .tox .tox-edit-area__iframe {
+				background-color: ${theme.backgroundColor} !important;
+			}
+
+			.joplin-tinymce .tox .tox-toolbar__primary {
+				/* This component sets an empty svg with a white background as the background
+				 * which needs to be cleared to prevent it from flashing white in dark themes */
+				background: none;
+				background-color: ${theme.backgroundColor3} !important;
+			}
 		`));
 
 		return () => {
 			document.head.removeChild(element);
 		};
+		// editorReady is here because TinyMCE starts by initializing a blank iframe, which needs to be
+		// styled by us, otherwise users in dark mode get a bright white flash. During initialization
+		// our styling is overwritten which causes some elements to have the wrong styling. Removing the
+		// style and re-applying it on editorReady gives our styles precedence and prevents any flashing
+		//
+		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editorReady, props.themeId]);
 
 	// -----------------------------------------------------------------------------------------
@@ -595,7 +574,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				statusbar: false,
 				target_list: false,
 				table_resize_bars: false,
-				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
+				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
 				contextmenu: false,
@@ -608,70 +587,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSup: { inline: 'sup', remove: 'all' },
 				},
 				setup: (editor: any) => {
-
-					function openEditDialog(editable: any) {
-						const source = editable ? findBlockSource(editable) : newBlockSource();
-
-						editor.windowManager.open({
-							title: _('Edit'),
-							size: 'large',
-							initialData: {
-								codeTextArea: source.content,
-								languageInput: source.language,
-							},
-							onSubmit: async (dialogApi: any) => {
-								const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea);
-								const md = `${newSource.openCharacters}${newSource.content.trim()}${newSource.closeCharacters}`;
-								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
-
-								// markupToHtml will return the complete editable HTML, but we only
-								// want to update the inner HTML, so as not to break additional props that
-								// are added by TinyMCE on the main node.
-
-								if (editable) {
-									editable.innerHTML = editableInnerHtml(result.html);
-								} else {
-									editor.insertContent(result.html);
-								}
-
-								dialogApi.close();
-								editor.fire('joplinChange');
-								dispatchDidUpdate(editor);
-							},
-							onClose: () => {
-								enableTextAreaTab(false);
-							},
-							body: {
-								type: 'panel',
-								items: [
-									{
-										type: 'input',
-										name: 'languageInput',
-										label: 'Language',
-										// Katex is a special case with special opening/closing tags
-										// and we don't currently handle switching the language in this case.
-										disabled: source.language === 'katex',
-									},
-									{
-										type: 'textarea',
-										name: 'codeTextArea',
-										value: source.content,
-									},
-								],
-							},
-							buttons: [
-								{
-									type: 'submit',
-									text: 'OK',
-								},
-							],
-						});
-
-						window.requestAnimationFrame(() => {
-							enableTextAreaTab(true);
-						});
-					}
-
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: _('Attach file'),
 						icon: 'paperclip',
@@ -686,7 +601,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						tooltip: _('Code Block'),
 						icon: 'code-sample',
 						onAction: async function() {
-							openEditDialog(null);
+							openEditDialog(editor, markupToHtml, dispatchDidUpdate, null);
 						},
 					});
 
@@ -707,7 +622,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					});
 
 					editor.ui.registry.addButton('joplinInsertDateTime', {
-						tooltip: _('Insert Date Time'),
+						tooltip: _('Insert time'),
 						icon: 'insert-time',
 						onAction: function() {
 							void CommandService.instance().execute('insertDateTime');
@@ -724,16 +639,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						});
 					}
 
-					// setupContextMenu(editor);
+					editor.addShortcut('Meta+Shift+7', '', () => editor.execCommand('InsertOrderedList'));
+					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
+					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
 					// TODO: remove event on unmount?
 					editor.on('DblClick', (event: any) => {
 						const editable = findEditableContainer(event.target);
-						if (editable) openEditDialog(editable);
+						if (editable) openEditDialog(editor, markupToHtml, dispatchDidUpdate, editable);
 					});
 
 					// This is triggered when an external file is dropped on the editor
 					editor.on('drop', (event: any) => {
+						// Prevent the message "Dropped file type is not
+						// supported" to show up. It was added in a recent
+						// TinyMCE version and doesn't apply since we do support
+						// the file type.
+						// https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
+						event.preventDefault();
+
 						props_onDrop.current(event);
 					});
 
@@ -758,6 +682,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 
 		void loadEditor();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [scriptLoaded]);
 
 	// -----------------------------------------------------------------------------------------
@@ -787,7 +712,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		const cssFiles = [
-			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
@@ -897,7 +822,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				};
 			}
 
-			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
+			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage, { contentMaxWidthTarget: '.mce-content-body' }));
 
 			dispatchDidUpdate(editor);
 		};
@@ -907,6 +832,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			cancelled = true;
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey]);
 
 	useEffect(() => {
@@ -987,6 +913,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			void execOnChangeEvent();
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
@@ -1081,7 +1008,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text
-					const pastedHtml = event.clipboardData.getData('text/html');
+					// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>,
+					// which seems to be not supported in editor.insertContent().
+					//
+					// when pasting text with Ctrl+Shift+V, the format should be ignored.
+					// In this case, event.clopboardData.getData('text/html') returns an empty string, but the clipboard.readHTML() still returns the formatted text.
+					const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
 					if (pastedHtml) { // Handles HTML
 						const modifiedHtml = await processPastedHtml(pastedHtml);
 						editor.insertContent(modifiedHtml);
@@ -1123,16 +1055,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		function onKeyDown(event: any) {
-			// It seems "paste as text" is handled automatically by
-			// on Windows so the code below so we need to run the below
-			// code only on macOS (and maybe Linux). If we were to run
-			// this on Windows we would have this double-paste issue:
+			// It seems "paste as text" is handled automatically on Windows and Linux,
+			// so we need to run the below code only on macOS. If we were to run this
+			// on Windows/Linux, we would have this double-paste issue:
 			// https://github.com/laurent22/joplin/issues/4243
 
 			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
 			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
 			// it here and we don't need to do anything special in onPaste
-			if (!shim.isWindows()) {
+			if (!shim.isWindows() && !shim.isLinux()) {
 				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 					pasteAsPlainText();
 				}
@@ -1170,6 +1101,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				console.warn('Error removing events', error);
 			}
 		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor]);
 
 	// -----------------------------------------------------------------------------------------

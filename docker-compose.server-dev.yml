@@ -18,7 +18,7 @@ services:
             - POSTGRES_PORT=5432
             - POSTGRES_HOST=localhost
     db:
-        image: postgres:13.1
+        image: postgres:15
         ports:
             - "5432:5432"
         environment:

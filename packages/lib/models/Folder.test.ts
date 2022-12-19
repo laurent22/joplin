@@ -9,12 +9,11 @@ async function allItems() {
 	return folders.concat(notes);
 }
 
-describe('models_Folder', function() {
+describe('models/Folder', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should tell if a notebook can be nested under another one', (async () => {

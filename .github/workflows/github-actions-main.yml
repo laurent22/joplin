@@ -1,0 +1,173 @@
+name: Joplin Continuous Integration
+on: [push, pull_request]
+jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+
+  Main:
+    needs: pre_job
+    # We always process server or desktop release tags, because they also publish the release
+    if: needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/server-v') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-2019]
+    steps:
+
+      # Trying to fix random networking issues on Windows
+      # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
+      - name: Disable TCP/UDP offload on Windows
+        if: runner.os == 'Windows'
+        run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
+
+      - name: Disable TCP/UDP offload on Linux
+        if: runner.os == 'Linux'
+        run: sudo ethtool -K eth0 tx off rx off
+
+      - name: Disable TCP/UDP offload on macOS
+        if: runner.os == 'macOS'
+        run: |
+          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
+          sudo sysctl -w net.link.generic.system.hwcksum_rx=0
+
+      # Silence apt-get update errors (for example when a module doesn't
+      # exist) since otherwise it will make the whole build fails, even though
+      # it might work without update. libsecret-1-dev is required for keytar -
+      # https://github.com/atom/node-keytar
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update || true
+          sudo apt-get install -y gettext
+          sudo apt-get install -y libsecret-1-dev
+          sudo apt-get install -y translate-toolkit
+
+      - name: Install Docker Engine
+        # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y apt-transport-https
+          sudo apt-get install -y ca-certificates
+          sudo apt-get install -y curl
+          sudo apt-get install -y gnupg
+          sudo apt-get install -y lsb-release
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo \
+              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update || true
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+      - uses: actions/checkout@v2
+      - uses: olegtarasov/get-tag@v2.1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Yarn
+        run: |
+          # https://yarnpkg.com/getting-started/install
+          corepack enable
+      
+      # Login to Docker only if we're on a server release tag. If we run this on
+      # a pull request it will fail because the PR doesn't have access to
+      # secrets
+      - uses: docker/login-action@v2
+        if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Run tests, build and publish Linux and macOS apps
+        if: runner.os == 'Linux' || runner.os == 'macOs'
+        env:
+          APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
+          SERVER_REPOSITORY: joplin/server
+          SERVER_TAG_PREFIX: server
+        run: |
+          "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
+
+      - name: Build and publish Windows app
+        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
+        # To ensure that the operations stop on failure, all commands
+        # should be on one line with "&&" in between.
+        run: |
+          yarn install && cd packages/app-desktop && yarn run dist
+
+      # Build and package the Windows app, without publishing it, just to
+      # verify that the build process hasn't been broken.
+      - name: Build Windows app (no publishing)
+        if: runner.os == 'Windows' && !startsWith(github.ref, 'refs/tags/v')
+        env:
+          IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
+          SERVER_REPOSITORY: joplin/server
+          SERVER_TAG_PREFIX: server
+        run: |
+          yarn install && cd packages/app-desktop && yarn run dist --publish=never
+
+  ServerDockerImage:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+
+      - name: Install Docker Engine
+        run: |
+          sudo apt-get install -y apt-transport-https
+          sudo apt-get install -y ca-certificates
+          sudo apt-get install -y curl
+          sudo apt-get install -y gnupg
+          sudo apt-get install -y lsb-release
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo \
+              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update || true
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Yarn
+        run: |
+          # https://yarnpkg.com/getting-started/install
+          corepack enable
+
+      - name: Build Docker Image
+        env:
+          BUILD_SEQUENCIAL: 1
+        run: |
+          yarn install
+          yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+
+          # Basic test to ensure that the created build is valid. It should exit with
+          # code 0  if it works.
+          docker run joplin/server:0.0.0-beta node dist/app.js migrate list

@@ -1,19 +1,19 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.0.2",
+  "version": "2.10.2",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "npm run electronRebuild && npx electron-builder",
+    "dist": "yarn run electronRebuild && npx electron-builder",
     "build": "gulp build",
-    "postinstall": "npm run build",
+    "postinstall": "yarn run build",
     "electronRebuild": "gulp electronRebuild",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "yarn test"
   },
   "repository": {
     "type": "git",
@@ -30,14 +30,15 @@
     "npmRebuild": false,
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
-      "build/icons/*",
-      "build/images/*"
+      "build/icons/**",
+      "build/images/**",
+      "build/defaultPlugins/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
-      "rfc3161TimeStampServer": "http://timestamp.comodoca.com/rfc3161",
+      "rfc3161TimeStampServer": "http://timestamp.digicert.com",
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
@@ -67,7 +68,7 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "allowToChangeInstallationDirectory": false,
       "differentialPackage": false
     },
     "portable": {
@@ -77,13 +78,25 @@
       "icon": "../../Assets/macOs.icns",
       "target": "dmg",
       "hardenedRuntime": true,
-      "entitlements": "./build-mac/entitlements.mac.inherit.plist"
+      "entitlements": "./build-mac/entitlements.mac.inherit.plist",
+      "extendInfo": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "joplin"
+            ],
+            "CFBundleTypeRole": "Editor",
+            "CFBundleURLName": "org.joplinapp.x-callback-url"
+          }
+        ]
+      }
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
-        "Icon": "joplin"
+        "Icon": "@joplinapp-desktop",
+        "MimeType": "x-scheme-handler/joplin;"
       },
       "target": "AppImage"
     },
@@ -93,27 +106,27 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@joplin/tools": "^1.0.9",
-    "@testing-library/react-hooks": "^3.4.2",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.6",
-    "@types/react": "16.9.55",
-    "@types/react-redux": "^7.1.9",
-    "@types/styled-components": "^5.1.4",
-    "ajv": "^6.5.0",
-    "app-builder-bin": "^1.9.11",
-    "babel-cli": "^6.26.0",
-    "babel-preset-react": "^6.24.1",
-    "electron": "^10.1.6",
-    "electron-builder": "22.9.1",
-    "electron-notarize": "^1.0.0",
-    "electron-rebuild": "^2.3.2",
-    "glob": "^7.1.6",
-    "gulp": "^4.0.2",
-    "jest": "^26.6.3",
-    "js-sha512": "^0.8.0",
-    "react-test-renderer": "^16.14.0",
-    "typescript": "^4.0.5"
+    "@joplin/tools": "~2.10",
+    "@testing-library/react-hooks": "8.0.1",
+    "@types/jest": "29.2.4",
+    "@types/node": "18.11.17",
+    "@types/react": "16.14.34",
+    "@types/react-redux": "7.1.24",
+    "@types/styled-components": "5.1.26",
+    "babel-cli": "6.26.0",
+    "babel-preset-react": "6.24.1",
+    "electron": "19.1.4",
+    "electron-builder": "23.6.0",
+    "electron-notarize": "1.2.2",
+    "electron-rebuild": "3.2.9",
+    "glob": "8.0.3",
+    "gulp": "4.0.2",
+    "jest": "29.3.1",
+    "jest-environment-jsdom": "29.3.1",
+    "js-sha512": "0.8.0",
+    "nan": "2.17.0",
+    "react-test-renderer": "18.2.0",
+    "typescript": "4.9.4"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -121,45 +134,47 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
-    "@joplin/lib": "^1.0.9",
-    "@joplin/renderer": "^1.0.17",
-    "async-mutex": "^0.1.3",
-    "codemirror": "^5.56.0",
-    "color": "^3.1.2",
-    "compare-versions": "^3.2.1",
-    "countable": "^3.0.1",
-    "debounce": "^1.2.0",
-    "electron-context-menu": "^0.15.0",
-    "electron-is-dev": "^0.3.0",
-    "electron-window-state": "^4.1.1",
-    "file-uri-to-path": "^2.0.0",
-    "formatcoords": "^1.1.3",
-    "fs-extra": "^5.0.0",
-    "highlight.js": "^10.2.1",
-    "immer": "^7.0.5",
-    "keytar": "^7.0.0",
-    "mark.js": "^8.11.1",
-    "md5": "^2.2.1",
-    "moment": "^2.22.2",
-    "node-fetch": "^1.7.3",
-    "node-notifier": "^8.0.0",
-    "pretty-bytes": "^5.3.0",
-    "re-resizable": "^6.5.4",
-    "react": "16.13.1",
-    "react-datetime": "^2.14.0",
-    "react-dom": "16.9.0",
-    "react-redux": "^5.0.7",
-    "react-select": "^2.4.3",
-    "react-toggle-button": "^2.2.0",
-    "react-tooltip": "^3.10.0",
-    "redux": "^3.7.2",
-    "reselect": "^4.0.0",
-    "roboto-fontface": "^0.10.0",
-    "smalltalk": "^2.5.1",
-    "styled-components": "^5.1.1",
-    "styled-system": "^5.1.5",
-    "taboverride": "^4.0.3",
-    "tinymce": "^5.2.0"
+    "@electron/remote": "2.0.9",
+    "@fortawesome/fontawesome-free": "5.15.4",
+    "@joeattardi/emoji-button": "4.6.4",
+    "@joplin/lib": "~2.10",
+    "@joplin/pdf-viewer": "~2.10",
+    "@joplin/renderer": "~2.10",
+    "async-mutex": "0.4.0",
+    "codemirror": "5.65.9",
+    "color": "3.2.1",
+    "compare-versions": "3.6.0",
+    "countable": "3.0.1",
+    "debounce": "1.2.1",
+    "electron-window-state": "5.0.3",
+    "formatcoords": "1.1.3",
+    "fs-extra": "11.1.0",
+    "highlight.js": "11.7.0",
+    "immer": "7.0.15",
+    "keytar": "7.9.0",
+    "mark.js": "8.11.1",
+    "md5": "2.3.0",
+    "moment": "2.29.4",
+    "node-fetch": "2.6.7",
+    "node-notifier": "10.0.1",
+    "node-rsa": "1.1.1",
+    "pretty-bytes": "5.6.0",
+    "re-resizable": "6.9.9",
+    "react": "18.2.0",
+    "react-datetime": "3.2.0",
+    "react-dom": "18.2.0",
+    "react-redux": "8.0.5",
+    "react-select": "5.7.0",
+    "react-toggle-button": "2.2.0",
+    "react-tooltip": "4.5.1",
+    "redux": "4.2.0",
+    "reselect": "4.1.7",
+    "roboto-fontface": "0.10.0",
+    "smalltalk": "4.1.1",
+    "sqlite3": "5.1.4",
+    "styled-components": "5.3.6",
+    "styled-system": "5.1.5",
+    "taboverride": "4.0.3",
+    "tinymce": "5.10.6"
   }
 }

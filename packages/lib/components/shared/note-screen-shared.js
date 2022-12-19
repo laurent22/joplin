@@ -102,6 +102,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	comp.setState(newState);
 
 	if (isProvisionalNote) {
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		Note.updateGeolocation(note.id).then(geoNote => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
@@ -248,7 +249,7 @@ shared.toggleIsTodo_onPress = function(comp) {
 	comp.setState(newState);
 };
 
-shared.toggleCheckbox = function(ipcMessage, noteBody) {
+function toggleCheckboxLine(ipcMessage, noteBody) {
 	const newBody = noteBody.split('\n');
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
@@ -281,7 +282,18 @@ shared.toggleCheckbox = function(ipcMessage, noteBody) {
 	} else {
 		line = line.replace(/- \[x\] /i, '- [ ] ');
 	}
+	return [newBody, lineIndex, line];
+}
 
+shared.toggleCheckboxRange = function(ipcMessage, noteBody) {
+	const [lineIndex, line] = toggleCheckboxLine(ipcMessage, noteBody).slice(1);
+	const from = { line: lineIndex, ch: 0 };
+	const to = { line: lineIndex, ch: line.length };
+	return { line, from, to };
+};
+
+shared.toggleCheckbox = function(ipcMessage, noteBody) {
+	const [newBody, lineIndex, line] = toggleCheckboxLine(ipcMessage, noteBody);
 	newBody[lineIndex] = line;
 	return newBody.join('\n');
 };

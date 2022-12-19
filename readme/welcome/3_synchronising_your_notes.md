@@ -1,18 +1,20 @@
-# Synchronising your notes 🔄
+# Synchronising your notes
 
-One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. You basically choose the service you prefer among those supported, setup the configuration, and the app will be able to sync between your computers or mobile devices.
+Joplin allows you to synchronise your data using various file hosting services. The supported cloud services are the following:
 
-The supported cloud services are the following:
+## Setting up Joplin Cloud synchronisation
+
+[Joplin Cloud](https://joplinapp.org/plans/) is a web service specifically designed for Joplin. Besides synchronising your data, it also allows you to publish a note to the internet, or share a notebook with your friends, family or colleagues. Joplin Cloud, compared to other services, also features a number of performance improvements allowing for faster synchronisation.
+
+To use it, go to the config screen, then to the Synchronisation section. In the list of sync target, select "Joplin Cloud". Enter your email and password, and you're ready to use Joplin Cloud.
 
 ## Setting up Dropbox synchronisation
 
-Select "Dropbox" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
+Select "Dropbox" as the synchronisation target in the config screen. Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
 ## Setting up Nextcloud synchronisation
 
-Nextcloud is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin.
-
-To set it up, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, go to your Nextcloud page, click on Settings in the bottom left corner of the page and copy the URL). Note that it has to be the **full URL**, so for example if you want the notes to be under `/Joplin`, the URL would be something like `https://example.com/remote.php/webdav/Joplin` (note that "/Joplin" part). And **make sure to create the "/Joplin" directory in Nextcloud**. Finally set the username and password. If it does not work, please [see this explanation](https://github.com/laurent22/joplin/issues/61#issuecomment-373282608) for more details.
+Nextcloud is a self-hosted, private cloud solution. To set it up, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, go to your Nextcloud page, click on Settings in the bottom left corner of the page and copy the URL). Note that it has to be the **full URL**, so for example if you want the notes to be under `/Joplin`, the URL would be something like `https://example.com/remote.php/webdav/Joplin` (note that "/Joplin" part). And **make sure to create the "/Joplin" directory in Nextcloud**. Finally set the username and password. If it does not work, please [see this explanation](https://github.com/laurent22/joplin/issues/61#issuecomment-373282608) for more details.
 
 ## Setting up OneDrive or WebDAV synchronisation
 

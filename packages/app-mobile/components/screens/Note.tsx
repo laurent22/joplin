@@ -1,17 +1,18 @@
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
-import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
+import NoteEditor from '../NoteEditor/NoteEditor';
+import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
-const RNFS = require('react-native-fs');
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -24,7 +25,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 const { ActionButton } = require('../action-button.js');
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-const { ScreenHeader } = require('../screen-header.js');
+import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
@@ -35,16 +36,20 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const DocumentPicker = require('react-native-document-picker').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker').default;
+import { ImagePickerResponse } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
+
+const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions(): any {
@@ -88,19 +93,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.doFocusUpdate_ = false;
 
-		// iOS doesn't support multiline text fields properly so disable it
-		this.enableMultilineTitle_ = Platform.OS !== 'ios';
-
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
+
+		this.editorRef = React.createRef();
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
 				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
-				if (buttonId == 'cancel') return true;
-				if (buttonId == 'save') await this.saveNoteButton_press();
+				if (buttonId === 'cancel') return true;
+				if (buttonId === 'save') await this.saveNoteButton_press();
 			}
 
 			return false;
@@ -122,7 +126,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				return false;
 			}
 
-			if (this.state.mode == 'edit') {
+			if (this.state.mode === 'edit') {
 				Keyboard.dismiss();
 
 				this.setState({
@@ -157,8 +161,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.onJoplinLinkClick_ = async (msg: string) => {
 			try {
-				if (msg.indexOf('joplin://') === 0) {
-					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+				const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+				if (resourceUrlInfo) {
 					const itemId = resourceUrlInfo.itemId;
 					const item = await BaseItem.loadItemById(itemId);
 					if (!item) throw new Error(_('No item with ID %s', itemId));
@@ -182,6 +186,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 						const resourcePath = Resource.fullPath(item);
+
+						logger.info(`Opening resource: ${resourcePath}`);
 						await FileViewer.open(resourcePath);
 					} else {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
@@ -210,12 +216,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		};
 
-		this.useBetaEditor = () => {
-			// Disable for now
-			return false;
-			// return Setting.value('editor.beta') && Platform.OS !== 'android';
-		};
-
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
@@ -228,7 +228,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
 		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
-		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
 		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
@@ -236,16 +235,38 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.body_selectionChange = this.body_selectionChange.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
+		this.onBodyChange = this.onBodyChange.bind(this);
+		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 	}
 
-	undoRedoService_stackChange() {
-		this.setState({ undoRedoButtonState: {
-			canUndo: this.undoRedoService_.canUndo,
-			canRedo: this.undoRedoService_.canRedo,
-		} });
+	private useEditorBeta(): boolean {
+		return this.props.useEditorBeta;
 	}
 
-	async undoRedo(type: string) {
+	private onBodyChange(event: ChangeEvent) {
+		shared.noteComponent_change(this, 'body', event.value);
+		this.scheduleSave();
+	}
+
+	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
+		if (this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: !!event.undoDepth,
+				canRedo: !!event.redoDepth,
+			} });
+		}
+	}
+
+	private undoRedoService_stackChange() {
+		if (!this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: this.undoRedoService_.canUndo,
+				canRedo: this.undoRedoService_.canRedo,
+			} });
+		}
+	}
+
+	private async undoRedo(type: string) {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
@@ -259,11 +280,25 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	screenHeader_undoButtonPress() {
-		void this.undoRedo('undo');
+		if (this.useEditorBeta()) {
+			this.editorRef.current.undo();
+		} else {
+			void this.undoRedo('undo');
+		}
 	}
 
 	screenHeader_redoButtonPress() {
-		void this.undoRedo('redo');
+		if (this.useEditorBeta()) {
+			this.editorRef.current.redo();
+		} else {
+			void this.undoRedo('redo');
+		}
+	}
+
+	undoState(noteBody: string = null) {
+		return {
+			body: noteBody === null ? this.state.note.body : noteBody,
+		};
 	}
 
 	styles() {
@@ -350,7 +385,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
-		if (this.enableMultilineTitle_) styles.titleTextInput.height = this.state.titleTextInputHeight;
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -359,12 +393,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	isModified() {
 		return shared.isModified(this);
-	}
-
-	undoState(noteBody: string = null) {
-		return {
-			body: noteBody === null ? this.state.note.body : noteBody,
-		};
 	}
 
 	async requestGeoLocationPermissions() {
@@ -454,12 +482,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} else {
 			this.undoRedoService_.schedulePush(this.undoState());
 		}
+
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
 	}
 
 	body_selectionChange(event: any) {
-		this.selection = event.nativeEvent.selection;
+		if (this.useEditorBeta()) {
+			this.selection = event.selection;
+		} else {
+			this.selection = event.nativeEvent.selection;
+		}
 	}
 
 	makeSaveAction() {
@@ -507,18 +540,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async pickDocument() {
-		try {
-			const result = await DocumentPicker.pick();
-			return result;
-		} catch (error) {
-			if (DocumentPicker.isCancel(error)) {
-				console.info('pickDocument: user has cancelled');
-				return null;
-			} else {
-				throw error;
-			}
+	private async pickDocuments() {
+		const result = await shim.fsDriver().pickDocument({ multiple: true });
+		if (!result) {
+			console.info('pickDocuments: user has cancelled');
 		}
+		return result;
 	}
 
 	async imageDimensions(uri: string) {
@@ -570,7 +597,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			reg.logger().info('New dimensions ', dimensions);
 
-			const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info(`Resizing image ${localFilePath}`);
 			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
 
@@ -578,15 +605,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 			reg.logger().info('Resized image ', resizedImagePath);
 			reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
 
-			await RNFS.copyFile(resizedImagePath, targetPath);
+			await shim.fsDriver().copy(resizedImagePath, targetPath);
 
 			try {
-				await RNFS.unlink(resizedImagePath);
+				await shim.fsDriver().unlink(resizedImagePath);
 			} catch (error) {
 				reg.logger().warn('Error when unlinking cached file: ', error);
 			}
 		} else {
-			await RNFS.copyFile(localFilePath, targetPath);
+			await shim.fsDriver().copy(localFilePath, targetPath);
 		}
 
 		return true;
@@ -595,16 +622,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async attachFile(pickerResponse: any, fileType: string) {
 		if (!pickerResponse) {
 			// User has cancelled
-			return;
-		}
-
-		if (pickerResponse.error) {
-			reg.logger().warn('Got error from picker', pickerResponse.error);
-			return;
-		}
-
-		if (pickerResponse.didCancel) {
-			reg.logger().info('User cancelled picker');
 			return;
 		}
 
@@ -643,7 +660,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const targetPath = Resource.fullPath(resource);
 
 		try {
-			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
+			if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
 				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
@@ -652,11 +669,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 					return;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
-
 					const stat = await shim.fsDriver().stat(targetPath);
-					if (stat.size >= 10000000) {
+
+					if (stat.size >= 200 * 1024 * 1024) {
 						await shim.fsDriver().remove(targetPath);
-						throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 					}
 				}
 			}
@@ -678,10 +695,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !this.useBetaEditor() && !!this.selection) {
+		if (this.state.mode === 'edit' && !!this.selection) {
+			const newText = `\n${resourceTag}\n`;
+
 			const prefix = newNote.body.substring(0, this.selection.start);
 			const suffix = newNote.body.substring(this.selection.end);
-			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
+			newNote.body = `${prefix}${newText}${suffix}`;
+
+			if (this.useEditorBeta()) {
+				// The beta editor needs to be explicitly informed of changes
+				// to the note's body
+				this.editorRef.current.insertText(newText);
+			}
 		} else {
 			newNote.body += `\n${resourceTag}`;
 		}
@@ -693,9 +718,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
-		await this.attachFile(response, 'image');
+	private async attachPhoto_onPress() {
+		// the selection Limit should be specfied. I think 200 is enough?
+		const response: ImagePickerResponse = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+
+		if (response.errorCode) {
+			reg.logger().warn('Got error from picker', response.errorCode);
+			return;
+		}
+
+		if (response.didCancel) {
+			reg.logger().info('User cancelled picker');
+			return;
+		}
+
+		for (const asset of response.assets) {
+			await this.attachFile(asset, 'image');
+		}
 	}
 
 	takePhoto_onPress() {
@@ -706,8 +745,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void this.attachFile(
 			{
 				uri: data.uri,
-				didCancel: false,
-				error: null,
 				type: 'image/jpg',
 			},
 			'image'
@@ -720,9 +757,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	async attachFile_onPress() {
-		const response = await this.pickDocument();
-		await this.attachFile(response, 'all');
+	private async attachFile_onPress() {
+		const response = await this.pickDocuments();
+		for (const asset of response) {
+			await this.attachFile(asset, 'all');
+		}
 	}
 
 	toggleIsTodo_onPress() {
@@ -825,6 +864,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
+	async showAttachMenu() {
+		const buttons = [];
+
+		// On iOS, it will show "local files", which means certain files saved from the browser
+		// and the iCloud files, but it doesn't include photos and images from the CameraRoll
+		//
+		// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+		buttons.push({ text: _('Attach file'), id: 'attachFile' });
+
+		// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
+		// because that's only way to browse photos from the camera roll.
+		if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
+		buttons.push({ text: _('Take photo'), id: 'takePhoto' });
+
+		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
+
+		if (buttonId === 'takePhoto') this.takePhoto_onPress();
+		if (buttonId === 'attachFile') void this.attachFile_onPress();
+		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+	}
+
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -849,26 +909,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
-				onPress: async () => {
-					const buttons = [];
-
-					// On iOS, it will show "local files", which means certain files saved from the browser
-					// and the iCloud files, but it doesn't include photos and images from the CameraRoll
-					//
-					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
-					buttons.push({ text: _('Attach file'), id: 'attachFile' });
-
-					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
-					// because that's only way to browse photos from the camera roll.
-					if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
-					buttons.push({ text: _('Take photo'), id: 'takePhoto' });
-
-					const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
-
-					if (buttonId === 'takePhoto') this.takePhoto_onPress();
-					if (buttonId === 'attachFile') void this.attachFile_onPress();
-					if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
-				},
+				onPress: () => this.showAttachMenu(),
 			});
 		}
 
@@ -930,13 +971,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
-	}
-
-	titleTextInput_contentSizeChange(event: any) {
-		if (!this.enableMultilineTitle_) return;
-
-		const height = event.nativeEvent.contentSize.height;
-		this.setState({ titleTextInputHeight: height });
 	}
 
 	scheduleFocusUpdate() {
@@ -1023,7 +1057,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const theme = themeStyle(this.props.themeId);
-		const note = this.state.note;
+		const note: NoteEntity = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
@@ -1034,7 +1068,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view' && !this.useBetaEditor()) {
+		if (this.state.mode === 'view') {
 			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
 			// to avoid the HACK_webviewLoadingState related bug.
 			bodyComponent =
@@ -1057,95 +1091,66 @@ class NoteScreenComponent extends BaseScreenComponent {
 					/>
 				);
 		} else {
-			// bodyComponent = this.useBetaEditor()
-			// 	// Note: blurOnSubmit is necessary to get multiline to work.
-			// 	// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			// 	//
-			// 	// 2020-10-16: As of React Native 0.63, the Markdown Editor no longer crashes in Android, however the
-			// 	// cursor is still too unreliable to be usable, so we disable it in Android.
-			// 	? <MarkdownEditor
-			// 		ref={this.markdownEditorRef} // For focusing the Markdown editor
-			// 		editorFont={editorFont(this.props.editorFont)}
-			// 		style={this.styles().bodyTextInput}
-			// 		previewStyles={this.styles().noteBodyViewer}
-			// 		value={note.body}
-			// 		borderColor={this.styles().markdownButtons.borderColor}
-			// 		markdownButtonsColor={this.styles().markdownButtons.color}
-			// 		saveText={(text:string) => this.body_changeText(text)}
-			// 		blurOnSubmit={false}
-			// 		selectionColor={theme.textSelectionColor}
-			// 		keyboardAppearance={theme.keyboardAppearance}
-			// 		placeholder={_('Add body')}
-			// 		placeholderTextColor={theme.colorFaded}
-			// 		noteBodyViewer={{
-			// 			onJoplinLinkClick: this.onJoplinLinkClick_,
-			// 			style: this.styles().noteBodyViewerPreview,
-			// 			paddingBottom: 0,
-			// 			webViewStyle: theme,
-			// 			noteBody: note.body,
-			// 			noteMarkupLanguage: note.markup_language,
-			// 			noteResources: this.state.noteResources,
-			// 			highlightedKeywords: keywords,
-			// 			themeId: this.props.themeId,
-			// 			noteHash: this.props.noteHash,
-			// 			onCheckboxChange: this.onBodyViewerCheckboxChange,
-			// 			onMarkForDownload: this.onMarkForDownload,
-			// 			onLoadEnd: this.onBodyViewerLoadEnd,
-			// 		}}
+			// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+			// However it causes memory or rendering issues on older Android devices, probably because
+			// the whole text input has to be in memory for the scrollview to work. So we keep it as
+			// a plain TextInput for now.
+			// See https://github.com/laurent22/joplin/issues/3041
 
-			// 	/>
-			// 	:
-			// 	// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
-			// 	// However it causes memory or rendering issues on older Android devices, probably because
-			// 	// the whole text input has to be in memory for the scrollview to work. So we keep it as
-			// 	// a plain TextInput for now.
-			// 	// See https://github.com/laurent22/joplin/issues/3041
+			// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+			// context. In other words, the selection should be considered read-only. For example, if the seleciton
+			// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+			// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+			// later the real selection will be different from what is stored in the state, thus making
+			// the cursor jump around. Eg, when typing "abcdef", it will do this:
+			//     abcd|
+			//     abcde|
+			//     abcde|f
 
-			// 	// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
-			// 	// context. In other words, the selection should be considered read-only. For example, if the seleciton
-			// 	// is saved to the state in onSelectionChange and the current text in onChangeText, then set
-			// 	// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
-			// 	// later the real selection will be different from what is stored in the state, thus making
-			// 	// the cursor jump around. Eg, when typing "abcdef", it will do this:
-			// 	//     abcd|
-			// 	//     abcde|
-			// 	//     abcde|f
-			// 	(
-			// 		<TextInput
-			// 			autoCapitalize="sentences"
-			// 			style={this.styles().bodyTextInput}
-			// 			ref="noteBodyTextField"
-			// 			multiline={true}
-			// 			value={note.body}
-			// 			onChangeText={(text:string) => this.body_changeText(text)}
-			// 			onSelectionChange={this.body_selectionChange}
-			// 			blurOnSubmit={false}
-			// 			selectionColor={theme.textSelectionColor}
-			// 			keyboardAppearance={theme.keyboardAppearance}
-			// 			placeholder={_('Add body')}
-			// 			placeholderTextColor={theme.colorFaded}
-			// 		/>
-			// 	);
+			if (!this.useEditorBeta()) {
+				bodyComponent = (
+					<TextInput
+						autoCapitalize="sentences"
+						style={this.styles().bodyTextInput}
+						ref="noteBodyTextField"
+						multiline={true}
+						value={note.body}
+						onChangeText={(text: string) => this.body_changeText(text)}
+						onSelectionChange={this.body_selectionChange}
+						blurOnSubmit={false}
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						placeholder={_('Add body')}
+						placeholderTextColor={theme.colorFaded}
+						// need some extra padding for iOS so that the keyboard won't cover last line of the note
+						// see https://github.com/laurent22/joplin/issues/3607
+						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+					/>
+				);
+			} else {
+				const editorStyle = this.styles().bodyTextInput;
 
-			bodyComponent = (
-				<TextInput
-					autoCapitalize="sentences"
-					style={this.styles().bodyTextInput}
-					ref="noteBodyTextField"
-					multiline={true}
-					value={note.body}
-					onChangeText={(text: string) => this.body_changeText(text)}
+				bodyComponent = <NoteEditor
+					ref={this.editorRef}
+					themeId={this.props.themeId}
+					initialText={note.body}
+					initialSelection={this.selection}
+					onChange={this.onBodyChange}
 					onSelectionChange={this.body_selectionChange}
-					blurOnSubmit={false}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					placeholder={_('Add body')}
-					placeholderTextColor={theme.colorFaded}
-					// need some extra padding for iOS so that the keyboard won't cover last line of the note
-					// see https://github.com/laurent22/joplin/issues/3607
-					paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
-				/>
-			);
+					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+					onAttach={() => this.showAttachMenu()}
+					style={{
+						...editorStyle,
+						paddingLeft: 0,
+						paddingRight: 0,
+					}}
+					contentStyle={{
+						// Apply padding to the editor's content, but not the toolbar.
+						paddingLeft: editorStyle.paddingLeft,
+						paddingRight: editorStyle.paddingRight,
+					}}
+				/>;
+			}
 		}
 
 		const renderActionButton = () => {
@@ -1161,7 +1166,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
-			if (this.state.mode == 'edit') return null;
+			if (this.state.mode === 'edit') return null;
 
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
 		};
@@ -1169,7 +1174,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
-		const showSaveButton = false; // this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
@@ -1182,8 +1187,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
-					onContentSizeChange={this.titleTextInput_contentSizeChange}
-					multiline={this.enableMultilineTitle_}
 					ref="titleTextField"
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
@@ -1210,15 +1213,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSaveButtonPress={this.saveNoteButton_press}
 					showSideMenuButton={false}
 					showSearchButton={false}
-					showUndoButton={this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo}
-					showRedoButton={this.state.undoRedoButtonState.canRedo}
+					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
 				/>
 				{titleComp}
 				{bodyComponent}
-				{!this.useBetaEditor() && actionButtonComp}
+				{actionButtonComp}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1248,6 +1251,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+		useEditorBeta: state.settings['editor.beta'],
 	};
 })(NoteScreenComponent);
 

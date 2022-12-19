@@ -9,8 +9,13 @@ import shim from '../shim';
 import BaseService from './BaseService';
 import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
+import Logger from '../Logger';
+import { MarkupLanguage } from '../../renderer';
+const { substrWithEllipsis } = require('../string-utils');
 const { sprintf } = require('sprintf-js');
 const { wrapError } = require('../errorUtils');
+
+const logger = Logger.create('RevisionService');
 
 export default class RevisionService extends BaseService {
 
@@ -59,18 +64,7 @@ export default class RevisionService extends BaseService {
 		return md;
 	}
 
-	isEmptyRevision_(rev: RevisionEntity) {
-		if (rev.title_diff) return false;
-		if (rev.body_diff) return false;
-
-		const md = JSON.parse(rev.metadata_diff);
-		if (md.new && Object.keys(md.new).length) return false;
-		if (md.deleted && Object.keys(md.deleted).length) return false;
-
-		return true;
-	}
-
-	async createNoteRevision_(note: NoteEntity, parentRevId: string = null) {
+	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null): Promise<RevisionEntity> {
 		try {
 			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
@@ -99,7 +93,7 @@ export default class RevisionService extends BaseService {
 				output.metadata_diff = Revision.createObjectPatch(merged.metadata, noteMd);
 			}
 
-			if (this.isEmptyRevision_(output)) return null;
+			if (Revision.isEmptyRevision(output)) return null;
 
 			return Revision.save(output);
 		} catch (error) {
@@ -108,7 +102,7 @@ export default class RevisionService extends BaseService {
 		}
 	}
 
-	async collectRevisions() {
+	public async collectRevisions() {
 		if (this.isCollecting_) return;
 
 		this.isCollecting_ = true;
@@ -144,32 +138,56 @@ export default class RevisionService extends BaseService {
 					const change = changes[i];
 					const noteId = change.item_id;
 
-					if (change.type === ItemChange.TYPE_UPDATE && doneNoteIds.indexOf(noteId) < 0) {
-						const note = BaseModel.byId(notes, noteId);
-						const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
+					try {
+						if (change.type === ItemChange.TYPE_UPDATE && doneNoteIds.indexOf(noteId) < 0) {
+							const note = BaseModel.byId(notes, noteId);
+							const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
 
-						if (note) {
-							if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
-								// This is where we save the original version of this old note
-								const rev = await this.createNoteRevision_(oldNote);
-								if (rev) this.logger().debug(sprintf('RevisionService::collectRevisions: Saved revision %s (old note)', rev.id));
+							if (note) {
+								if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
+									// This is where we save the original version of this old note
+									const rev = await this.createNoteRevision_(oldNote);
+									if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+								}
+
+								const rev = await this.createNoteRevision_(note);
+								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
+								doneNoteIds.push(noteId);
+								this.isOldNotesCache_[noteId] = false;
 							}
+						}
 
-							const rev = await this.createNoteRevision_(note);
-							if (rev) this.logger().debug(sprintf('RevisionService::collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
+						if (change.type === ItemChange.TYPE_DELETE && !!change.before_change_item) {
+							const note = JSON.parse(change.before_change_item);
+							const revExists = await Revision.revisionExists(BaseModel.TYPE_NOTE, note.id, note.updated_time);
+							if (!revExists) {
+								const rev = await this.createNoteRevision_(note);
+								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (for deleted note)', rev.id));
+							}
 							doneNoteIds.push(noteId);
-							this.isOldNotesCache_[noteId] = false;
 						}
-					}
+					} catch (error) {
+						if (error.code === 'revision_encrypted') {
+							throw error;
+						} else {
+							// If any revision creation fails, we continue
+							// processing the other changes. It seems a rare bug
+							// in diff-match-patch can cause the creation of
+							// revisions to fail in some case. It should be rare
+							// and it's best to continue processing the other
+							// changes. The alternative would be to stop here
+							// and fix the bug, but in the meantime revisions
+							// will no longer be generated.
 
-					if (change.type === ItemChange.TYPE_DELETE && !!change.before_change_item) {
-						const note = JSON.parse(change.before_change_item);
-						const revExists = await Revision.revisionExists(BaseModel.TYPE_NOTE, note.id, note.updated_time);
-						if (!revExists) {
-							const rev = await this.createNoteRevision_(note);
-							if (rev) this.logger().debug(sprintf('RevisionService::collectRevisions: Saved revision %s (for deleted note)', rev.id));
+							// The drawback is that once a change has been
+							// skipped it will never be processed again because
+							// the error will be in the past (before
+							// revisionService.lastProcessedChangeId)
+							//
+							// https://github.com/laurent22/joplin/issues/5531
+							logger.error(`collectRevisions: Processing one of the changes for note ${noteId} failed. Other changes will still be processed. Error was: `, error);
+							logger.error('collectRevisions: Change was:', change);
 						}
-						doneNoteIds.push(noteId);
 					}
 
 					Setting.setValue('revisionService.lastProcessedChangeId', change.id);
@@ -180,9 +198,11 @@ export default class RevisionService extends BaseService {
 				// One or more revisions are encrypted - stop processing for now
 				// and these revisions will be processed next time the revision
 				// collector runs.
-				this.logger().info('RevisionService::collectRevisions: One or more revision was encrypted. Processing was stopped but will resume later when the revision is decrypted.', error);
+				logger.info('collectRevisions: One or more revision was encrypted. Processing was stopped but will resume later when the revision is decrypted.', error);
 			} else {
-				this.logger().error('RevisionService::collectRevisions:', error);
+				// This should not happen anymore because we handle the error in
+				// the loop above.
+				logger.error('collectRevisions:', error);
 			}
 		}
 
@@ -191,14 +211,14 @@ export default class RevisionService extends BaseService {
 
 		this.isCollecting_ = false;
 
-		this.logger().info(`RevisionService::collectRevisions: Created revisions for ${doneNoteIds.length} notes`);
+		logger.info(`collectRevisions: Created revisions for ${doneNoteIds.length} notes`);
 	}
 
 	async deleteOldRevisions(ttl: number) {
 		return Revision.deleteOldRevisions(ttl);
 	}
 
-	async revisionNote(revisions: RevisionEntity[], index: number) {
+	public async revisionNote(revisions: RevisionEntity[], index: number) {
 		if (index < 0 || index >= revisions.length) throw new Error(`Invalid revision index: ${index}`);
 
 		const rev = revisions[index];
@@ -214,6 +234,7 @@ export default class RevisionService extends BaseService {
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
 		(output as any).type_ = BaseModel.TYPE_NOTE;
+		if (!('markup_language' in output)) output.markup_language = MarkupLanguage.Markdown;
 
 		return output;
 	}
@@ -230,7 +251,23 @@ export default class RevisionService extends BaseService {
 		return folder;
 	}
 
-	async importRevisionNote(note: NoteEntity) {
+	// reverseRevIndex = 0 means restoring the latest version. reverseRevIndex =
+	// 1 means the version before that, etc.
+	public async restoreNoteById(noteId: string, reverseRevIndex: number): Promise<NoteEntity> {
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
+		if (!revisions.length) throw new Error(`No revision for note "${noteId}"`);
+
+		const revIndex = revisions.length - 1 - reverseRevIndex;
+
+		const note = await this.revisionNote(revisions, revIndex);
+		return this.importRevisionNote(note);
+	}
+
+	public restoreSuccessMessage(note: NoteEntity): string {
+		return _('The note "%s" has been successfully restored to the notebook "%s".', substrWithEllipsis(note.title, 0, 32), this.restoreFolderTitle());
+	}
+
+	async importRevisionNote(note: NoteEntity): Promise<NoteEntity> {
 		const toImport = Object.assign({}, note);
 		delete toImport.id;
 		delete toImport.updated_time;
@@ -242,30 +279,30 @@ export default class RevisionService extends BaseService {
 
 		toImport.parent_id = folder.id;
 
-		await Note.save(toImport);
+		return Note.save(toImport);
 	}
 
 	async maintenance() {
 		this.maintenanceCalls_.push(true);
 		try {
 			const startTime = Date.now();
-			this.logger().info('RevisionService::maintenance: Starting...');
+			logger.info('maintenance: Starting...');
 
 			if (!Setting.value('revisionService.enabled')) {
-				this.logger().info('RevisionService::maintenance: Service is disabled');
+				logger.info('maintenance: Service is disabled');
 				// We do as if we had processed all the latest changes so that they can be cleaned up
 				// later on by ItemChangeUtils.deleteProcessedChanges().
 				Setting.setValue('revisionService.lastProcessedChangeId', await ItemChange.lastChangeId());
 				await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
 			} else {
-				this.logger().info('RevisionService::maintenance: Service is enabled');
+				logger.info('maintenance: Service is enabled');
 				await this.collectRevisions();
 				await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
 
-				this.logger().info(`RevisionService::maintenance: Done in ${Date.now() - startTime}ms`);
+				logger.info(`maintenance: Done in ${Date.now() - startTime}ms`);
 			}
 		} catch (error) {
-			this.logger().error('RevisionService::maintenance:', error);
+			logger.error('maintenance:', error);
 		} finally {
 			this.maintenanceCalls_.pop();
 		}
@@ -277,7 +314,7 @@ export default class RevisionService extends BaseService {
 
 		if (collectRevisionInterval === null) collectRevisionInterval = 1000 * 60 * 10;
 
-		this.logger().info(`RevisionService::runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
+		logger.info(`runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
 
 		this.maintenanceTimer1_ = shim.setTimeout(() => {
 			void this.maintenance();

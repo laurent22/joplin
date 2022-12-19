@@ -69,8 +69,17 @@ export function htmlToClipboardData(html: string): ClipboardData {
 	// In that case we need to set both HTML and Text context, otherwise it
 	// won't be possible to paste the text in, for example, a text editor.
 	// https://github.com/laurent22/joplin/issues/4788
+	//
+	// Also we don't escape the content produced in HTML to MD conversion
+	// because it's not what would be expected. For example, if the content is
+	// `* something`, strictly speaking it would be correct to escape to `\*
+	// something`, however this is not what the user would expect when copying
+	// text. Likewise for URLs that contain "_". So the resulting Markdown might
+	// not be perfectly valid but would be closer to what a user would expect.
+	// If they want accurate MArkdown they can switch to the MD editor.
+	// https://github.com/laurent22/joplin/issues/5440
 	return {
-		text: htmlToMd().parse(copyableContent),
+		text: htmlToMd().parse(copyableContent, { disableEscapeContent: true }),
 		html: cleanUpCodeBlocks(copyableContent),
 	};
 }

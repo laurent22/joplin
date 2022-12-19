@@ -1,26 +1,46 @@
 {{#navbar}}
-	<nav class="navbar" role="navigation" aria-label="main navigation">
-		<div class="navbar-brand logo-container">
-			<a class="navbar-item" href="{{{global.baseUrl}}}/home">
-				<img class="logo" src="{{{global.baseUrl}}}/images/Logo.png"/>
-			</a>
-		</div>
-		<div class="navbar-menu is-active">
-			<div class="navbar-start">
-				<a class="navbar-item" href="{{{global.baseUrl}}}/home">Home</a>
-				{{#global.owner.is_admin}}
-					<a class="navbar-item" href="{{{global.baseUrl}}}/users">Users</a>
-				{{/global.owner.is_admin}}
-				<a class="navbar-item" href="{{{global.baseUrl}}}/items">Items</a>
-				<a class="navbar-item" href="{{{global.baseUrl}}}/changes">Log</a>
+	<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+		<div class="container navbar-container">
+			<div class="navbar-brand logo-container">
+				<a class="navbar-item" href="{{{global.baseUrl}}}">
+					<img class="logo" src="{{{global.baseUrl}}}/images/Logo.png"/>
+					{{^global.owner}}
+						<span class="navbar-appname">{{global.appName}}</span>
+					{{/global.owner}}
+				</a>
 			</div>
-			<div class="navbar-end">
-				<div class="navbar-item">{{global.owner.email}}</div>
-				<a class="navbar-item" href="{{{global.baseUrl}}}/users/me">Profile</a>
-				<div class="navbar-item">
-					<form method="post" action="{{{global.baseUrl}}}/logout">
-						<button class="button is-primary">Logout</button>
-					</form>
+
+			<div class="navbar-menu is-active">
+				{{#global.owner}}
+					<div class="navbar-start">
+						{{#global.navbarMenu}}
+							<a class="navbar-item {{#selected}}is-active{{/selected}}" href="{{{url}}}">{{#icon}}<i class="{{.}}"></i>&nbsp;&nbsp;{{/icon}}{{title}}</a>
+						{{/global.navbarMenu}}
+					</div>
+				{{/global.owner}}
+
+				<div class="navbar-end">
+					{{#global.isJoplinCloud}}
+						<a class="navbar-item" href="{{{global.baseUrl}}}/help">{{global.s.help}}</a>
+					{{/global.isJoplinCloud}}
+					{{#global.owner}}
+						<div class="navbar-item">
+							<form method="post" action="{{{global.baseUrl}}}/logout">
+								<button class="button is-dark">{{global.s.logout}}</button>
+							</form>
+						</div>
+						<div class="navbar-item">
+							<a class="button is-info navbar-item" href="{{{global.baseUrl}}}/users/me"><i class="fas fa-user-alt"></i>&nbsp;&nbsp;{{global.userDisplayName}}</a>
+						</div>
+						{{#global.impersonatorAdminSessionId}}
+							<div class="navbar-item">
+								<form method="post" action="{{{global.baseUrl}}}/users">
+									{{{global.csrfTag}}}
+									<button name="stop_impersonate_button" value="stop_impersonate_button" class="button is-danger navbar-item"><i class="fas fa-times"></i>&nbsp;&nbsp;Back To Admin</a>
+								</form>
+							</div>
+						{{/global.impersonatorAdminSessionId}}
+					{{/global.owner}}
 				</div>
 			</div>
 		</div>

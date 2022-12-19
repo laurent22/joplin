@@ -1,8 +1,10 @@
 {{#error}}
 	<div class="notification is-danger">
 		<strong>{{message}}</strong>
-		{{#stack}}
-			<pre>{{.}}</pre>
-		{{/stack}}
+		{{#global.showErrorStackTraces}}
+			{{#stack}}
+				<pre>{{.}}</pre>
+			{{/stack}}
+		{{/global.showErrorStackTraces}}
 	</div>
 {{/error}}

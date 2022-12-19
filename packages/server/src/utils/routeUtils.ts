@@ -1,8 +1,12 @@
-import { baseUrl } from '../config';
-import { Item, ItemAddressingType } from '../db';
+import config, { baseUrl } from '../config';
+import { Item, ItemAddressingType, User, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
-import { AppContext, HttpMethod } from './types';
+import { AppContext, HttpMethod, RouteType } from './types';
+import { URL } from 'url';
+import { csrfCheck } from './csrf';
+import { contextSessionId } from './requestUtils';
+import { stripOffQueryParameters } from './urlUtils';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -109,6 +113,12 @@ export function isPathBasedAddressing(fileId: string): boolean {
 	return fileId.indexOf(':') >= 0;
 }
 
+export const urlMatchesSchema = (url: string, schema: string): boolean => {
+	url = stripOffQueryParameters(url);
+	const regex = new RegExp(`${schema.replace(/:id/, '[a-zA-Z0-9]+')}$`);
+	return !!url.match(regex);
+};
+
 // Allows parsing the two types of paths supported by the API:
 //
 // root:/Documents/MyFile.md:/content
@@ -133,12 +143,12 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 		if (colonIndex2 < 0) {
 			throw new ErrorBadRequest(`Invalid path format: ${p}`);
 		} else {
-			output.id = p.substr(0, colonIndex2 + 1);
+			output.id = decodeURIComponent(p.substr(0, colonIndex2 + 1));
 			output.link = ltrimSlashes(p.substr(colonIndex2 + 1));
 		}
 	} else {
 		const s = p.split('/');
-		if (s.length >= 1) output.id = s[0];
+		if (s.length >= 1) output.id = decodeURIComponent(s[0]);
 		if (s.length >= 2) output.link = s[1];
 	}
 
@@ -152,30 +162,75 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 	return output;
 }
 
+export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
+	const host1 = (new URL(requestOrigin)).host;
+	const host2 = (new URL(endPointBaseUrl)).host;
+
+	if (routeType === RouteType.UserContent) {
+		// At this point we only check if eg usercontent.com has been accessed
+		// with origin usercontent.com, or something.usercontent.com. We don't
+		// check that the user ID is valid or is event present. This will be
+		// done by the /share end point, which will also check that the share
+		// owner ID matches the origin URL.
+		if (host1 === host2) return true;
+		const hostNoPrefix = host1.split('.').slice(1).join('.');
+		return hostNoPrefix === host2;
+	} else {
+		return host1 === host2;
+	}
+}
+
+export function userIdFromUserContentUrl(url: string): Uuid {
+	const s = (new URL(url)).hostname.split('.');
+	return s[0].toLowerCase();
+}
+
 export function routeResponseFormat(context: AppContext): RouteResponseFormat {
-	// const rawPath = context.path;
-	// if (match && match.route.responseFormat) return match.route.responseFormat;
-
-	// let path = rawPath;
-	// if (match) path = match.basePath ? match.basePath : match.subPath.raw;
-
 	const path = context.path;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
-export async function execRequest(routes: Routers, ctx: AppContext) {
+function disabledAccountCheck(route: MatchedRoute, user: User) {
+	if (!user || user.enabled) return;
+
+	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
+}
+
+interface ExecRequestResult {
+	response: any;
+	path: SubPath;
+}
+
+export async function execRequest(routes: Routers, ctx: AppContext): Promise<ExecRequestResult> {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
-	if (ctx.URL && ctx.URL.origin !== baseUrl(endPoint.type)) throw new ErrorNotFound('Invalid origin', 'invalidOrigin');
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, 'invalidOrigin');
+
+	const isPublicRoute = match.route.isPublic(match.subPath.schema);
 
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
 	// might have additional permission checks depending on the action.
-	if (!match.route.isPublic(match.subPath.schema) && !ctx.owner) throw new ErrorForbidden();
+	if (!isPublicRoute && !ctx.joplin.owner) {
+		if (contextSessionId(ctx, false)) {
+			// If we have a session but not a user it means the session was
+			// invalid or has expired, so display a special message, since this
+			// is also going to be displayed on the website.
+			throw new ErrorForbidden('Your session has expired. Please login again.');
+		} else {
+			throw new ErrorForbidden();
+		}
+	}
 
-	return endPoint.handler(match.subPath, ctx);
+	await csrfCheck(ctx, isPublicRoute);
+	disabledAccountCheck(match, ctx.joplin.owner);
+
+	return {
+		response: await endPoint.handler(match.subPath, ctx),
+		path: match.subPath,
+	};
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:
@@ -183,6 +238,10 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 // - The ID: "SOME_ID"
 // - The link: "content"
 export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
+	// Enforce that path starts with "/" because if it doesn't, the function
+	// will return strange but valid results.
+	if (path.length && path[0] !== '/') throw new Error(`Expected path to start with "/": ${path}`);
+
 	const splittedPath = path.split('/');
 
 	// Because the path starts with "/", we remove the first element, which is
@@ -241,4 +300,21 @@ export function respondWithItemContent(koaResponse: any, item: Item, content: Bu
 	koaResponse.set('Content-Type', item.mime_type);
 	koaResponse.set('Content-Length', content.byteLength);
 	return new Response(ResponseType.KoaResponse, koaResponse);
+}
+
+export enum UrlType {
+	Signup = 'signup',
+	Login = 'login',
+	Terms = 'terms',
+	Privacy = 'privacy',
+	Tasks = 'admin/tasks',
+	UserDeletions = 'admin/user_deletions',
+}
+
+export function makeUrl(urlType: UrlType): string {
+	if (config().isJoplinCloud && urlType === UrlType.Signup) {
+		return `${config().joplinAppBaseUrl}/plans`;
+	} else {
+		return `${baseUrl(RouteType.Web)}/${urlType}`;
+	}
 }

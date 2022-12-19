@@ -14,6 +14,8 @@
 	max-width: 840px;
 	margin-left: auto;
 	margin-right: auto;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
 }
 
 .page-note .last-updated {
@@ -25,4 +27,14 @@
 	font-size: 2.2em;
 	margin-top: 0.4em;
 	border-bottom: none;
+}
+
+/* Need to set overflow so that long tables for example are scrollable. We put
+it here and not in noteStyle because the desktop app handles scrolling
+differently at the viewer level.
+
+https://github.com/laurent22/joplin/issues/6370
+*/
+#rendered-md {
+	overflow-x: auto;
 }

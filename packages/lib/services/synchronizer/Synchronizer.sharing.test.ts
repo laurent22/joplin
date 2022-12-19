@@ -15,10 +15,9 @@ describe('Synchronizer.sharing', function() {
 
 // describe('Synchronizer.sharing', function() {
 
-// 	beforeEach(async (done) => {
+// 	beforeEach(async () => {
 // 		await setupDatabaseAndSynchronizer(1);
 // 		await switchClient(1);
-// 		done();
 // 	});
 
 // 	afterAll(async () => {

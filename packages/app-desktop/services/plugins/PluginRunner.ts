@@ -7,6 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/lib/Logger';
+import BackOffHandler from './BackOffHandler';
 const ipcRenderer = require('electron').ipcRenderer;
 
 const logger = Logger.create('PluginRunner');
@@ -83,8 +84,9 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 export default class PluginRunner extends BasePluginRunner {
 
 	protected eventHandlers_: EventHandlers = {};
+	private backOffHandlers_: Record<string, BackOffHandler> = {};
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.eventHandler = this.eventHandler.bind(this);
@@ -95,7 +97,15 @@ export default class PluginRunner extends BasePluginRunner {
 		return cb(...args);
 	}
 
-	async run(plugin: Plugin, pluginApi: Global) {
+	// @ts-ignore
+	private backOffHandler(pluginId: string): BackOffHandler {
+		if (!this.backOffHandlers_[pluginId]) {
+			this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
+		}
+		return this.backOffHandlers_[pluginId];
+	}
+
+	public async run(plugin: Plugin, pluginApi: Global) {
 		const scriptPath = `${Setting.value('tempDir')}/plugin_${plugin.id}.js`;
 		await shim.fsDriver().writeFile(scriptPath, plugin.scriptText, 'utf8');
 
@@ -103,12 +113,15 @@ export default class PluginRunner extends BasePluginRunner {
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
+				contextIsolation: false,
 			},
 		});
 
+		require('@electron/remote/main').enable(pluginWindow.webContents);
+
 		bridge().electronApp().registerPluginWindow(plugin.id, pluginWindow);
 
-		pluginWindow.loadURL(`${require('url').format({
+		void pluginWindow.loadURL(`${require('url').format({
 			pathname: require('path').join(__dirname, 'plugin_index.html'),
 			protocol: 'file:',
 			slashes: true,
@@ -144,6 +157,15 @@ export default class PluginRunner extends BasePluginRunner {
 				// Don't log complete HTML code, which can be long, for setHtml calls
 				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
 				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
+
+				this.recordCallStat(plugin.id);
+
+				// try {
+				// 	await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
+				// } catch (error) {
+				// 	logger.error(error);
+				// 	return;
+				// }
 
 				let result: any = null;
 				let error: any = null;

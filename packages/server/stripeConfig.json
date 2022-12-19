@@ -1,0 +1,98 @@
+{
+	"dev": {
+		"publishableKey": "pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q",
+		"webhookBaseUrl": "http://joplincloud.local:22300",
+		"prices": [
+			{
+				"accountType": 1,
+				"id": "price_1JAx31Lx4fybOTqJRcGdsSfg",
+				"period": "monthly",
+				"amount": "1.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 1,
+				"id": "price_1JIb4fLx4fybOTqJHnOUPVdf",
+				"period": "yearly",
+				"amount": "17.88",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 2,
+				"id": "price_1JAx1eLx4fybOTqJ5VhkxaKC",
+				"period": "monthly",
+				"amount": "5.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 2,
+				"id": "price_1JJFp7Lx4fybOTqJ0f4w2UvY",
+				"period": "yearly",
+				"amount": "57.48",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9uBLx4fybOTqJhx7q4zzj",
+				"period": "monthly",
+				"amount": "7.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9uNLx4fybOTqJpsB2l3Kg",
+				"period": "yearly",
+				"amount": "80.28",
+				"currency": "EUR"
+			}
+		]		
+	},
+	"prod": {
+		"publishableKey": "pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C",
+		"webhookBaseUrl": "https://joplincloud.com",
+		"prices": [
+			{
+				"accountType": 1,
+				"id": "price_1JAzWBLx4fybOTqJw64zxJRJ",
+				"period": "monthly",
+				"amount": "1.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 1,
+				"id": "price_1JJIPZLx4fybOTqJHvxiQ7bV",
+				"period": "yearly",
+				"amount": "17.88",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 2,
+				"id": "price_1JB1OVLx4fybOTqJOvp3NGM6",
+				"period": "monthly",
+				"amount": "5.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 2,
+				"id": "price_1JJIQ7Lx4fybOTqJsQNv1QUp",
+				"period": "yearly",
+				"amount": "57.48",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9jyLx4fybOTqJN0i1A88B",
+				"period": "monthly",
+				"amount": "7.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9nLLx4fybOTqJYTtts35z",
+				"period": "yearly",
+				"amount": "80.28",
+				"currency": "EUR"
+			}
+		]
+	}
+}

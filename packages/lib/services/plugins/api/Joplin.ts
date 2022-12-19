@@ -8,21 +8,21 @@ import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
 import JoplinContentScripts from './JoplinContentScripts';
+import JoplinClipboard from './JoplinClipboard';
+import JoplinWindow from './JoplinWindow';
+import BasePlatformImplementation from '../BasePlatformImplementation';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
  *
- * **This is a beta API**
+ * The API is now relatively stable and in general maintaining backward compatibility is a top priority, so you shouldn't except much breakages.
  *
- * Please note that the plugin API is relatively new and should be considered Beta state. Besides possible bugs, what it means is that there might be necessary breaking changes from one version to the next. Whenever such change is needed, best effort will be done to:
+ * If a breaking change ever becomes needed, best effort will be done to:
  *
- * - Maintain backward compatibility;
- * - When possible, deprecate features instead of removing them;
+ * - Deprecate features instead of removing them, so as to give you time to fix the issue;
  * - Document breaking changes in the changelog;
  *
- * So if you are developing a plugin, please keep an eye on the changelog as everything will be in there with information about how to update your code. There won't be any major API rewrite or architecture changes, but possibly small tweaks like function signature change, type change, etc.
- *
- * Eventually, the plugin API will be versioned to make this process smoother.
+ * So if you are developing a plugin, please keep an eye on the changelog as everything will be in there with information about how to update your code.
  */
 export default class Joplin {
 
@@ -35,32 +35,46 @@ export default class Joplin {
 	private interop_: JoplinInterop = null;
 	private settings_: JoplinSettings = null;
 	private contentScripts_: JoplinContentScripts = null;
+	private clipboard_: JoplinClipboard = null;
+	private window_: JoplinWindow = null;
+	private implementation_: BasePlatformImplementation = null;
 
-	constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any) {
+		this.implementation_ = implementation;
 		this.data_ = new JoplinData();
 		this.plugins_ = new JoplinPlugins(plugin);
 		this.workspace_ = new JoplinWorkspace(store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
-		this.views_ = new JoplinViews(implementation.views, plugin, store);
+		this.views_ = new JoplinViews(implementation.joplin.views, plugin, store);
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 		this.contentScripts_ = new JoplinContentScripts(plugin);
+		this.clipboard_ = new JoplinClipboard(implementation.clipboard, implementation.nativeImage);
+		this.window_ = new JoplinWindow(implementation.window, plugin, store);
 	}
 
-	get data(): JoplinData {
+	public get data(): JoplinData {
 		return this.data_;
 	}
 
-	get plugins(): JoplinPlugins {
+	public get clipboard(): JoplinClipboard {
+		return this.clipboard_;
+	}
+
+	public get window(): JoplinWindow {
+		return this.window_;
+	}
+
+	public get plugins(): JoplinPlugins {
 		return this.plugins_;
 	}
 
-	get workspace(): JoplinWorkspace {
+	public get workspace(): JoplinWorkspace {
 		return this.workspace_;
 	}
 
-	get contentScripts(): JoplinContentScripts {
+	public get contentScripts(): JoplinContentScripts {
 		return this.contentScripts_;
 	}
 
@@ -70,23 +84,23 @@ export default class Joplin {
 	 * Not sure if it's the best way to hook into the app
 	 * so for now disable filters.
 	 */
-	get filters(): JoplinFilters {
+	public get filters(): JoplinFilters {
 		return this.filters_;
 	}
 
-	get commands(): JoplinCommands {
+	public get commands(): JoplinCommands {
 		return this.commands_;
 	}
 
-	get views(): JoplinViews {
+	public get views(): JoplinViews {
 		return this.views_;
 	}
 
-	get interop(): JoplinInterop {
+	public get interop(): JoplinInterop {
 		return this.interop_;
 	}
 
-	get settings(): JoplinSettings {
+	public get settings(): JoplinSettings {
 		return this.settings_;
 	}
 
@@ -104,6 +118,10 @@ export default class Joplin {
 	 */
 	public require(_path: string): any {
 		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
+	}
+
+	public async versionInfo() {
+		return this.implementation_.versionInfo;
 	}
 
 }

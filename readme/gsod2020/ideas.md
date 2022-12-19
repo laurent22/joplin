@@ -1,4 +1,4 @@
-# 1.Idea - Create documenation hub
+# 1.Idea - Create documentation hub
 - Make a screening of available options of how apps to be utilized to organize documentation better and simplified access to information.
 You can start with:
     -  [Read the Docs](https://readthedocs.org/) 

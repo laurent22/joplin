@@ -5,6 +5,10 @@ document.addEventListener('click', async (event) => {
 		
 		console.info('webview.js: sending message');
 		const response = await webviewApi.postMessage('testingWebviewMessage');
-		console.info('webiew.js: got response:', response);
+		console.info('webview.js: got response:', response);
 	}
 })
+
+console.info('webview.js: registering message listener');
+webviewApi.onMessage((message) => console.info('webview.js: got message:', message));
+

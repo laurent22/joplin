@@ -1,0 +1,14 @@
+{{#openGraph}}
+	<meta name="description" content="{{openGraph.description}}" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@joplinapp" />
+	<meta property="og:url" content="{{{openGraph.url}}}" />
+	<meta property="og:title" content="{{openGraph.title}}" />
+	<meta property="twitter:title" content="{{openGraph.title}}" />
+	<meta property="og:description" content="{{openGraph.description}}" />
+	<meta property="twitter:description" content="{{openGraph.description}}" />
+	{{#openGraph.image}}
+		<meta property="og:image" content="{{{openGraph.image}}}" />
+		<meta property="twitter:image" content="{{{openGraph.image}}}" />
+	{{/openGraph.image}}
+{{/openGraph}}

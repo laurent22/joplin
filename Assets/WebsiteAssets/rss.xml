@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Fri, 16 Dec 2022 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 16 Dec 2022 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.9]]></title><description><![CDATA[<h2>Proxy support<a name="proxy-support" href="#proxy-support" class="heading-anchor">🔗</a></h2>
+<p>Both the desktop and mobile application now support proxies thanks to the work of Jason Williams. This will allow you to use the apps in particular when you are behind a company proxy.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20221216-proxy-support.png" alt=""></p>
+<h2>New PDF viewer<a name="new-pdf-viewer" href="#new-pdf-viewer" class="heading-anchor">🔗</a></h2>
+<p>The desktop application now features a new PDF viewer thanks to the work of Asrient during GSoC.</p>
+<p>The main advantage for now is that this viewer preserves the last PDF page that was read. In the next version, the viewer will also include a way to annotate PDF files.</p>
+<h2>Multi-language spell checking<a name="multi-language-spell-checking" href="#multi-language-spell-checking" class="heading-anchor">🔗</a></h2>
+<p>The desktop app include a multi-language spell checking features, which allows you, for example, to spell-check notes in your native language and in English.</p>
+<h2>New mobile text editor<a name="new-mobile-text-editor" href="#new-mobile-text-editor" class="heading-anchor">🔗</a></h2>
+<p>Writing formatted notes on mobile has always been cumbersome due to the need to enter special format characters like <code>*</code> or <code>[</code>, etc.</p>
+<p>Thanks to the work of Henry Heino during GSoC, writing notes on the go is now easier thanks to an improved Markdown editor.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20221216-mobile-beta-editor.png" alt=""></p>
+<p>The most visible feature is the addition of a toolbar, which helps input those special characters, like on desktop.</p>
+<p>Moreover Henry made a lot of subtle but useful improvements to the editor, for example to improve the note appearance, to improve list continuation, etc. Search within a note is now also supported as well as spell-checking.</p>
+<p>At a more technical level, Henry also added many test units to ensure that the editor remains robust and reliable.</p>
+<p>To enable the feature, go to the configuration screen and selected &quot;Opt-in to the editor beta&quot;. It is already very stable so we will probably promote it to be the main editor from the next version.</p>
+<h2>Improved alignment of notebook icons<a name="improved-alignment-of-notebook-icons" href="#improved-alignment-of-notebook-icons" class="heading-anchor">🔗</a></h2>
+<p>Previously, when you would assign an icon to a notebook, it would shift the title to the right, but notebook without an icon would not. It means that notebooks with and without an icon would not be vertically aligned.</p>
+<p>To tidy things up, this new version adds a default icons to notebooks without an explicitly assigned icon. This result in the notebook titles being correctly vertically aligned.</p>
+<p>Note that this feature is only enabled if you use custom icons - otherwise it will simply display the notebook titles without any default icons, as before.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20221216-notebook-icons.png" alt=""></p>
+<h2>Improved handling of file attachments<a name="improved-handling-of-file-attachments" href="#improved-handling-of-file-attachments" class="heading-anchor">🔗</a></h2>
+<p>Self Not Found made a number of small but useful improvements to attachment handling, including increasing the maximum size to 200MB, adding support for attaching multiple files, and fixing issues with synchronising attachments via proxy.</p>
+<h2>Fixed filesystem sync on mobile<a name="fixed-filesystem-sync-on-mobile" href="#fixed-filesystem-sync-on-mobile" class="heading-anchor">🔗</a></h2>
+<p>This was a long and complex change due to the need to support new Android APIs but hopefully that should now be working again, thanks to the work of jd1378.</p>
+<p>So you can now sync again your notes with Syncthing and other file-based synchronisation systems.</p>
+<h2>And more...<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h2>
+<p>In total this new desktop version includes 36 improvements, bug fixes, and security fixes.</p>
+<p>As always, a lot of work went into the Android and iOS app too, which include 37 improvements, bug fixes, and security fixes.</p>
+<p>See here for the changelogs:</p>
+<ul>
+<li><a href="https://joplinapp.org/changelog/">Desktop app changelog</a></li>
+<li><a href="https://joplinapp.org/changelog_android/">Android app changelog</a></li>
+</ul>
+<h2>About the Android version<a name="about-the-android-version" href="#about-the-android-version" class="heading-anchor">🔗</a></h2>
+<p>Unfortunately we cannot publish the Android version because it is based on a framework version that Google does not accept. To upgrade the app a lot of changes are needed and another round of pre-releases, and therefore there will not be a 2.9 version for Google Play. You may however download the official APK directly from there: <a href="https://github.com/laurent22/joplin-android/releases/tag/android-v2.9.8">Android 2.9 Official Release</a></p>
+<p>This is the reality of app stores in general - small developers being imposed never ending new requirements by all-powerful companies, and by the time a version is finally ready we can't even publish it because yet more requirements are in place.</p>
+<p>For the record the current 2.9 app works perfectly fine. It targets Android 11, which is only 2 years old and is still supported (and installed on millions of phones). Google requires us to target Android 12 which only came out last year.</p>
+]]></description><link>https://joplinapp.org/news/20221216-release-2-9/</link><guid isPermaLink="false">20221216-release-2-9</guid><pubDate>Fri, 16 Dec 2022 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.9</twitter-text></item><item><title><![CDATA[Joplin is hiring!]]></title><description><![CDATA[<p>Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device.</p>
+<p>We are looking to hire two JavaScript software developers to work on the desktop, mobile, and server applications. All those are built using modern technologies, including React, React Native and Electron with a strong focus on test units.</p>
+<p>You need to demonstrate some experience with at least some of these technologies, and willing to learn more and touch various different projects.</p>
+<p>You will be part of a small team, so you will have an opportunity for a high-impact role, targeting hundreds of thousands of users.</p>
+<p>If you're interested please contact us at job-AT-joplin.cloud</p>
+<p>No agencies please.</p>
+]]></description><link>https://joplinapp.org/news/20221209-job/</link><guid isPermaLink="false">20221209-job</guid><pubDate>Fri, 09 Dec 2022 00:00:00 GMT</pubDate><twitter-text>Joplin is hiring!</twitter-text></item><item><title><![CDATA[Modernising and securing Joplin, one package at a time]]></title><description><![CDATA[<p>If you watch the <a href="https://github.com/laurent22/joplin">Joplin source code repository</a>, you may have noticed a lot of Renovate pull requests lately. This <a href="https://www.mend.io/free-developer-tools/renovate/">Renovate tool</a> is a way to manage dependencies - it automatically finds what needs to be updated, then upgrade it to the latest version, and create a pull request. If all tests pass, we can then merge this pull request. So far we have merged 267 of these pull requests.</p>
+<p>Updating Joplin packages was long due. It is necessary so that we don't fall behind and end up using unsupported or deprecated packages. We also benefit from bug fixes and performance improvements. It is also important in terms of security, since recent package versions usually include various security fixes.</p>
+<p>We used to rely on a tool called &quot;npm audit&quot; to do this, however it no longer works on the Joplin codebase, and it was always risky to use it since it would update multiple packages in one command - so if something went wrong it was difficult to find the culprit.</p>
+<p>Renovate on the other hand upgrades packages one at a time, and run our test units to ensure everything is still working as expected. It also upgrades multiple instances of the same package across the monorepo, which is convenient to keep our code consistent. It also has a number of options to make our life easier, such as the ability to automatically merge a pull request for patch releases since this is usually safe (when a package is, for example upgraded from 1.0.1 to 1.0.3).</p>
+<p>Although Renovate automates the package upgrades it doesn't mean all upgrades are straightforward - our tests won't catch all issues, so the apps might end up being broken or cannot be compiled anymore. So there's manual work involved to get everything working after certain upgrades - for the most part this has been done and the apps appear to be stable so far.</p>
+<p>This will however be an important part of pre-release 2.10 (or should it be 3.0?) - we hope that everything works but we may need your support to try this version and report any glitch you may have found. As always pre-release regressions have the highest priority so we aim to fix them as quickly as possible.</p>
+]]></description><link>https://joplinapp.org/news/20221115-renovate/</link><guid isPermaLink="false">20221115-renovate</guid><pubDate>Tue, 15 Nov 2022 00:00:00 GMT</pubDate><twitter-text>Modernising and securing Joplin, one package at a time</twitter-text></item><item><title><![CDATA[Joplin Cloud is now part of the Joplin company]]></title><description><![CDATA[<p>As some of you may know Joplin Cloud so far has been operating under my own single-person limited company in the UK. This was mostly for convenience since it meant I could get things going quickly without having to setup a special structure for it.</p>
+<p>Now that Joplin Cloud is becoming more mature however a proper company, simply called Joplin, has been created. This company will be based in France, and will be used mainly to handle the commercial part of the project, which currently is mostly Joplin Cloud. I'm still heading the company so there won't be any major change to the way the project is managed.</p>
+<h2>What does it mean for Joplin Cloud?<a name="what-does-it-mean-for-joplin-cloud" href="#what-does-it-mean-for-joplin-cloud" class="heading-anchor">🔗</a></h2>
+<p>There will be no significant change - the website ownership simply moves from one company in the UK to one in France. The new company is still owned by myself so I will keep following the same roadmap.</p>
+<h2>What does it mean for the open source apps?<a name="what-does-it-mean-for-the-open-source-apps" href="#what-does-it-mean-for-the-open-source-apps" class="heading-anchor">🔗</a></h2>
+<p>On the short term, the only visible change will be moving the non-open source assets, such as logo or trademark from the UK company to the French one. So expect a few changes in copyright notices here and there.</p>
+<p>In the medium to long term, I would like to hire one or two software developers to help me with the Joplin Cloud development, because we reached a point where managing the whole project is difficult for a single person, so some help is needed. Some of their work might also touch the open source apps since both are quite related - but of course that work will remain open source too.</p>
+<p>As a general rule, there will be a permanent commitment to keep the apps open source and to derive value from Joplin Cloud/Server.</p>
+<p>Longer term I would like to create a non-profit organisation to handle the open source applications and to make decisions about the project, as well as to decide how to allocate any funding we receive (for example from GSoC).</p>
+<h2>Looking forward<a name="looking-forward" href="#looking-forward" class="heading-anchor">🔗</a></h2>
+<p>Those past 6 years of developing Joplin have been an exciting and rewarding experience, thank you to all of you of the friendly and vibrant Joplin community for your contribution toward making Joplin the software it is today, and looking forward to continuing the journey together!</p>
+]]></description><link>https://joplinapp.org/news/20221012-Joplin-Company/</link><guid isPermaLink="false">20221012-Joplin-Company</guid><pubDate>Wed, 12 Oct 2022 00:00:00 GMT</pubDate><twitter-text>Joplin Cloud is now operated by the Joplin company! More info on the announcement post.</twitter-text></item><item><title><![CDATA[Joplin interview on Website Planet]]></title><description><![CDATA[<p>Website Planet has recently conducted an interview about Joplin - it may give you some insight on the current status of the project, our priorities, and future plans! More on the article page - <a href="https://www.websiteplanet.com/blog/interview-joplin/">Organise Your Thoughts with Open Source Note-Taking App, Joplin</a></p>
+]]></description><link>https://joplinapp.org/news/20220906-interview-websiteplanet/</link><guid isPermaLink="false">20220906-interview-websiteplanet</guid><pubDate>Tue, 06 Sep 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin first meetup on 30 August!]]></title><description><![CDATA[<p>We are glad to announce <a href="https://www.meetup.com/joplin/events/287611873/">the first Joplin Meetup</a> that will take place on 30 August 2022 in London!</p>
+<p>This is an opportunity to meet other Joplin users as well as some of the main contributors, to discuss the apps, or to ask questions and exchange tips and tricks on how to use the app, develop plugins or contribute to the application. Everybody, technical or not, is welcome!</p>
+<p>We will meet at the Old Thameside Inn next to London Bridge. If the weather allows we will be on the terrace outside, if not inside.</p>
+<p>More information on the official Meetup page:</p>
+<p><a href="https://www.meetup.com/joplin/events/287611873/">https://www.meetup.com/joplin/events/287611873/</a></p>
+]]></description><link>https://joplinapp.org/news/20220808-first-meetup/</link><guid isPermaLink="false">20220808-first-meetup</guid><pubDate>Mon, 08 Aug 2022 00:00:00 GMT</pubDate><twitter-text>Joplin will have its first Meetup on 30 August! Come and join us at the Old Thameside Inn next to London Bridge! https://www.meetup.com/joplin/events/287611873/</twitter-text></item><item><title><![CDATA[Joplin 2.8 is available!]]></title><description><![CDATA[<p>As always a lot of changes and new features in this new version available on both desktop and mobile.</p>
+<h1>Multiple profile support<a name="multiple-profile-support" href="#multiple-profile-support" class="heading-anchor">🔗</a></h1>
+<p>Perhaps the most visible change in this version is the support for multiple profiles. You can now create as many application profile as you wish, each with their own settings, and easily switch from one to another. The main use case is to support for example a &quot;work&quot; profile and a &quot;personal&quot; profile, to allow you to keep things independent, and each profile can sync with a different sync target.</p>
+<p>To create a new profile, open <strong>File &gt; Switch profile</strong> and select <strong>Create new profile</strong>, enter the profile name and press OK. The app will automatically switch to this new profile, which you can now configure.</p>
+<p>To switch back to the previous profile, again open <strong>File &gt; Switch profile</strong> and select <strong>Default</strong>.</p>
+<p>Note that profiles all share certain settings, such as language, font size, theme, etc. This is done so that you don't have reconfigure every details when switching profiles. Other settings such as sync configuration is per profile.</p>
+<p>The feature is available on desktop only for now, and should be ported to mobile relatively soon.</p>
+<h1>Save Mermaid graph as PNG/SVG<a name="save-mermaid-graph-as-png-svg" href="#save-mermaid-graph-as-png-svg" class="heading-anchor">🔗</a></h1>
+<p>This convenient feature allows exporting a Mermaid graph as a PNG or SVG image, or allows copying the image as a DataUrl, which can then be pasted in any compatible text editor. Thanks Asrient for implementing this!</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-mermaid-as-png.png" alt=""></p>
+<h1>Publish a mini-website using Joplin Cloud<a name="publish-a-mini-website-using-joplin-cloud" href="#publish-a-mini-website-using-joplin-cloud" class="heading-anchor">🔗</a></h1>
+<p>Joplin Cloud now supports publishing a note &quot;recursively&quot;, which means the notes and all the notes it is linked to. This allows easily publishing a simple website made of multiples and images.</p>
+<p>To make use of this feature, simply select <strong>Also publish linked notes</strong> when publishing a note.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-publish-website.png" alt=""></p>
+<h1>And more!<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h1>
+<p>In total there are 38 changes to improve the app reliability, security and usability. Full changelog is at <a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
+]]></description><link>https://joplinapp.org/news/20220606-release-2-8/</link><guid isPermaLink="false">20220606-release-2-8</guid><pubDate>Mon, 06 Jun 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin received 6 Contributor Projects for GSoC 2022!]]></title><description><![CDATA[<p>We are glad to announce that Google allocated us six projects this year for Google Summer of Code! So this is six contributors who will be working on various parts of the apps, both desktop and mobile, over the summer.</p>
+<p>Over the next few weeks, till 13 June, will be the Community Bonding Period during which GSoC contributors get to know mentors, read documentation, and get up to speed to begin working on their projects.</p>
+<p>Here's the full list of projects, contributors and mentors.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Project Title</th>
+<th>Contributor</th>
+<th>Assigned Mentor(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Improve PDF previewer of Joplin</td>
+<td>asrient</td>
+<td>Roman, JackGruber</td>
+</tr>
+<tr>
+<td>Implement default plugins on desktop application</td>
+<td>mak2002</td>
+<td>CalebJohn, Laurent</td>
+</tr>
+<tr>
+<td>Mobile — Easier Editing</td>
+<td>Henry H</td>
+<td>Daeraxa, CalebJohn</td>
+</tr>
+<tr>
+<td>Improve plugin search and discoverability</td>
+<td>Retr0ve</td>
+<td>JackGruber, Stefan</td>
+</tr>
+<tr>
+<td>Tablet Layout Project</td>
+<td>Tolu-Mals</td>
+<td>Laurent, Daeraxa</td>
+</tr>
+<tr>
+<td>Email Plugin</td>
+<td>Bishoy Magdy Adeeb</td>
+<td>Stefan, Roman</td>
+</tr>
+</tbody>
+</table>
+]]></description><link>https://joplinapp.org/news/20220522-gsoc-contributors/</link><guid isPermaLink="false">20220522-gsoc-contributors</guid><pubDate>Sun, 22 May 2022 00:00:00 GMT</pubDate><twitter-text>Joplin received 6 Contributor Projects for GSoC 2022! Welcome to our new contributors who will be working on these projects over summer! #GSoC2022</twitter-text></item><item><title><![CDATA[GSoC "Contributor Proposals" phase is starting now!]]></title><description><![CDATA[<p>The &quot;Contributor Proposals&quot; phase of GSoC 2022 is starting today! If you would like to be a contributor, now is the time to choose your project idea, write your proposal, and upload it to <a href="https://summerofcode.withgoogle.com/">https://summerofcode.withgoogle.com/</a></p>
+<p>When it's done, please also let us know by posting an update on your forum introduction post.</p>
+<p>If you haven't created a pull request yet, it's still time to create one. Doing so will greatly increase your chances of being selected!</p>
+]]></description><link>https://joplinapp.org/news/20220405-gsoc-contributor-proposals/</link><guid isPermaLink="false">20220405-gsoc-contributor-proposals</guid><pubDate>Tue, 05 Apr 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin participates in Google Summer of Code 2022!]]></title><description><![CDATA[<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220308-gsoc-banner.png" alt=""></p>
+<p>For the third year, Joplin has been selected as a <strong>Google Summer of Code</strong> mentor organisation! We look forward to start working with the contributors on some great new projects. This year's main themes are:</p>
+<ul>
+<li><strong>Mobile and tablet development</strong> - we want to improve the mobile/tablet application on iOS and Android.</li>
+<li><strong>Plugin and external apps</strong> - leverage the Joplin API to create plugins and external apps.</li>
+<li>And of course contributors are welcome to suggest their own ideas.</li>
+</ul>
+<p>Our full idea list is available here: <a href="https://joplinapp.org/gsoc2022/ideas/">GSoC 2022 idea list</a></p>
+<p>In the coming month (<strong>March 7 - April 3</strong>), contributors will start getting involved in the forum and start discussing project ideas with the mentors and community. It's also a good time to start looking at Joplin's source code, perhaps work on fixing bugs or implement small features to get familiar with the source code, and to show us your skills.</p>
+<p>One difference with previous years is that anyone, not just students, are allowed to participate.</p>
+<p>Additionally, last year Google only allowed smaller projects, while this year they allow again small and large projects, so we've indicated this in the idea list - the small ones are <strong>175 hours</strong>, and the large ones <strong>350 hours</strong>.</p>
+]]></description><link>https://joplinapp.org/news/20220308-gsoc2022-start/</link><guid isPermaLink="false">20220308-gsoc2022-start</guid><pubDate>Tue, 08 Mar 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.7 is available!]]></title><description><![CDATA[<p>This new release is largely focused on bug fixing and optimising various parts of the apps. There's about 26 improvements and 25 bugs and security fixes included - as always many of these apply to both the mobile and desktop app (see the <a href="https://joplinapp.org/changelog/">desktop changelog</a> and <a href="https://joplinapp.org/changelog_android/">mobile changelog</a>).</p>
+<p>Many thanks to all the contributors who helped create this release!</p>
+<p>Below are some of the more noticeable changes:</p>
+<h1>Notebook custom icons<a name="notebook-custom-icons" href="#notebook-custom-icons" class="heading-anchor">🔗</a></h1>
+<p>Since version 2.6 it was possible to assign an emoji icon to a notebook, and with this new version it's now possible to assign any custom icon. The icon may be a PNG or JPG file of any size. The app will then import the file and resize it to the correct size. To use a custom icon, follow these steps:</p>
+<p>Right-click on a notebook, and select &quot;Edit&quot;:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220224-edit-notebook.png" alt=""></p>
+<p>In the &quot;Edit notebook&quot; dialog, click &quot;Select file...&quot; and browse to your icon image:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220224-edit-dialog.png" alt=""></p>
+<p>Click &quot;OK&quot; and the icon will now appear next to the notebook:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220224-notebook-icon.png" alt=""></p>
+<p>The icon can be changed only from the desktop application at the moment, but it will sync and be displayed correctly on the mobile app too.</p>
+<h1>Plugin API improvements<a name="plugin-api-improvements" href="#plugin-api-improvements" class="heading-anchor">🔗</a></h1>
+<p>This version also includes a number of improvements to the plugin API, in particular it is now easier to customise the editor context menu from a plugin and dynamically add items to it depending on the context. For example, with the Rich Markdown plugin it will be possible to right-click on an image and open it, or copy it to the clipboard.</p>
+<p>A few additional functions have also been added to make plugin development simpler - in particular a command to open any item, whether it's a notebook, note, tag or attachement; and functions to work with attachements, in particular to reveal an attachement in the system file explorer, and to track changes to an attachement.</p>
+]]></description><link>https://joplinapp.org/news/20220224-release-2-7/</link><guid isPermaLink="false">20220224-release-2-7</guid><pubDate>Thu, 24 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Automatic deletion of disabled accounts on Joplin Cloud]]></title><description><![CDATA[<p>As of 15 Feb 2022, disabled accounts on Joplin Cloud will be automatically deleted after 90 days. A disabled account is one where the Stripe subscription has been cancelled either by the user or automatically (eg for unpaid invoices).</p>
+<p>Although it is an automated system, I will manually verify each account that's queued for deletion over the next few days for additional safety (for now everything's working as expected).</p>
+<p>When an account is queued for deletion, all notes, notebooks, tags, etc are removed from the system within 2 days, and permanently deleted within 7 days. User information, in particular email and full name will be removed from the system within 2 days, but archived for an additional 90 days for legal reasons, after which they will be deleted too.</p>
+]]></description><link>https://joplinapp.org/news/20220215-142000/</link><guid isPermaLink="false">20220215-142000</guid><pubDate>Tue, 15 Feb 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.6 is available!]]></title><description><![CDATA[<p>Many changes in this new release, available on mobile, desktop and CLI:</p>
+<p><strong>Per-notebook sort order and sort buttons</strong></p>
+<p>This new feature adds a number of changes to the way notes are sorted. The most visible one is the addition of a sort button above the note list - it allows sorting by modification date, creation date, title or by custom order, in either ascending or descending order:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_0.png" alt=""></p>
+<p>By default, this sort order is going to apply to all notebooks, however you can now also assign a per-notebook sort order. In this case, any sort order will be apply to that notebook only. To enable this behaviour, simply right-click on a notebook and select &quot;Toggle own sort order&quot;:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_1.png" alt=""></p>
+<p>Thanks to Kenichi Kobayashi for developing this feature!</p>
+<p><strong>Support for notebook icons</strong></p>
+<p>It is now possible to associate icons with notebooks no both the desktop and mobile applications. To do so, right-click on a notebook and selected &quot;Edit&quot;.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_2.png" alt=""></p>
+<p>This will open the new notebook dialog from which can change the title and assign an icon. For now the icons are emojis but perhaps custom icons could be supported later on.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211217-120324_3.png" alt=""></p>
+<p><strong>Allow collaborating on encrypted notebooks using Joplin Cloud</strong></p>
+<p>Thanks to the encryption improvements in the previous Joplin versions it is now possible to share and collaborated on encrypted notebooks, when synchronising with Joplin Cloud (or Joplin Server).</p>
+<p>To get this working, you and the recipient will need to have Joplin 2.6 and the person who shares will need to have encryption enabled. After that most of the process is handled automatically by the apps - in particular it will automatically generate and share the required encryption keys for each users.</p>
+<p><strong>Improved synchronisation startup speed</strong></p>
+<p>Synchronisation is also a bit faster in this release due to an optimisation on the startup process. When syncing, the app needs to acquire a lock, which may be time consuming since it requires making multiple requests. This has now been optimised so that less requests are necessary and also each request consumes less resources. This will have a postive impact on Joplin Cloud in particular, but you should also see improvements with Joplin Server and smaller improvements with the other sync targets.</p>
+<p><strong>Improved Markdown editor split view scrolling</strong></p>
+<p>Kenichi Kobayashi made some great improvements to the Markdown editor scrolling in this release. The issue before was that the editor on the left and the viewer on the right would often not be in sync, in particular if the note contains several images and other media.</p>
+<p>With Kenichi's change the editor and viewer stay nicely in sync, regardless of the note content. In fact it looks a bit like magic when you scroll through large notes - notice in particular how each side appear to wait for the other or speed up in order to make sure both sides are aligned as well possible. Kenichi provides a nice technical documentation about the feature <a href="https://github.com/laurent22/joplin/pull/5512#issuecomment-931277022">here</a>.</p>
+<p><a href="https://www.youtube.com/watch?v=Wbs5XZR0oeU">https://www.youtube.com/watch?v=Wbs5XZR0oeU</a></p>
+<p><strong>Improved and optimised S3 synchronisation</strong></p>
+<p>Thanks to the efforts of Lee Matos, synchronisation with S3 is now more reliable and errors are also better handled. The underlying S3 SDK has also been upgraded from v2 to v3 which results in a smaller executable size (about 3-5 MB depending on the operating system)</p>
+<p><strong>Export notes as self-contained HTML files</strong></p>
+<p>Exporting a single note as HTML is now more user friendly as all images, scripts, styles and other attachments are all packed into a single HTML file (Previously it would create multiples files and directories). This makes it easier to share the complete note with someone who doesn't have Joplin.</p>
+<p><strong>Other changes and bug fixes</strong></p>
+<p>This release includes a total of 19 new features and improvements and 16 bug fixes. See the 2.6.x changelogs for more details:</p>
+<p><a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
+<p><a href="https://joplinapp.org/changelog_android/">https://joplinapp.org/changelog_android/</a></p>
+<p><a href="https://joplinapp.org/changelog_ios/">https://joplinapp.org/changelog_ios/</a></p>
+<p><a href="https://joplinapp.org/changelog_cli/">https://joplinapp.org/changelog_cli/</a></p>
+]]></description><link>https://joplinapp.org/news/20211217-120324/</link><guid isPermaLink="false">20211217-120324</guid><pubDate>Fri, 17 Dec 2021 12:03:24 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Potential breaking change in next Joplin Server update (2.5.10)]]></title><description><![CDATA[<p>Just a head up that the next Joplin Server update could potentially include a breaking change, depending on your data.</p>
+<p>One of the database migration is going to add an &quot;owner_id&quot; column to the &quot;items&quot; table (where all notes, notebooks, etc. are stored), and automatically populate it. Normally that shouldn't take too long but you might want to make sure you won't need the server right away when you process this.</p>
+<p>The second database migration will add a unique constraint on items.name and items.owner_id and that's where the breaking change might be. Normally this data is already unique because that's enforced by the application but in some rare cases, due a race condition, there could be duplicate data in there. If that happens the migration will fail and the server will not start.</p>
+<p>If that happens, you'll need to decide what to do with the data, as it's not possible to automatically decide. You can find all duplicates using this query:</p>
+<p><code><strong>select</strong> count(<em>), name, owner_id<br>
+<strong>from</strong> items <strong>group</strong> <strong>by</strong> name, owner_id<br>
+<strong>having</strong> count(</em>) &gt; 1;</code></p>
+<p>Once you have the list of IDs you have a few options:</p>
+<ul>
+<li>Find the corresponding item in Joplin (it can unfortunately be anything - a note, resource, folder, etc.), then delete it and sync.</li>
+<li>Or, just delete the data directly in the database. You'll want to delete the corresponding item_id from the user_items table too.</li>
+</ul>
+<p>But really in most cases you should be fine. Especially if you don't have that many notes it's unlikely you have duplicates.</p>
+]]></description><link>https://joplinapp.org/news/20211102-150403/</link><guid isPermaLink="false">20211102-150403</guid><pubDate>Tue, 02 Nov 2021 15:04:03 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin v2.5 is available for desktop and mobile!]]></title><description><![CDATA[<p><a href="https://joplinapp.org/download/">Joplin v2.5</a> is now available for desktop, mobile and CLI! Here's an overview of the changes:</p>
+<h3>Support for Markdown + Front Matter<a name="support-for-markdown-front-matter" href="#support-for-markdown-front-matter" class="heading-anchor">🔗</a></h3>
+<p>Markdown + Front Matter is a format that allows attaching metadata, such as tags, creation date, or geolocation to a Markdown file. This is done by adding a block of YAML code (a &quot;front matter&quot;) at the top of the file.</p>
+<p>Thansk to Caleb John's efforts the Joplin desktop and CLI applications now support importing and exporting these files. When exporting, we try to preserve as much metadata as possible, while still keeping it the formatting user friendly.</p>
+<p>Here's an example, with the Front Matter at the top, delimited by &quot;---&quot;, and the text below.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211031-115215_0.png" alt=""></p>
+<p>Markdown + Front Matter is an excellent way to share notes with someone who doesn't have Joplin, to backup notes in a durable format (since no third-party application is needed to read it), and also to export notes to other applications, or to import them.</p>
+<p>As with the regular Markdown exporter, the images and attachments are also exported.</p>
+<h3>Add support for callback URLs<a name="add-support-for-callback-urls" href="#add-support-for-callback-urls" class="heading-anchor">🔗</a></h3>
+<p>Callback URLs is a semi-standard that defines how certain resources in an application can be accessed via URLs. Either to view the resource, or to perform certain actions, such as deletion, creation, etc.</p>
+<p>Joplin now support callback URLs to open notes, notebooks and folders. To do so, right click on a note and select &quot;Copy external link&quot;:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211031-115215_1.png" alt=""></p>
+<p>That would give you a URL such as this:</p>
+<blockquote>
+<p>joplin://x-callback-url/openNote?id=b7a7b93281f54d928612eea550f33a7f</p>
+</blockquote>
+<p>Then if you click it from outside the app, the app will open and select this particular note. In practice such a feature allows third-party application to interact with Joplin by creating links that can be opened from outside. For example, you may use a different application for project planning, then link to the individual notes for more details about each task.</p>
+<p>Many thanks to Roman Musin for adding the feature!</p>
+<h3>Improved end-to-end encryption support<a name="improved-end-to-end-encryption-support" href="#improved-end-to-end-encryption-support" class="heading-anchor">🔗</a></h3>
+<p>The series of quiet but major changes to the end-to-end encryption support continue in this new verison. One goal is still to allow sharing notebooks while encryption is enabled.</p>
+<p>To that end, v2.5 includes support for RSA public-private key pairs. If you have encryption enabled, they will be automatically generated when you synchronise by the mobile, desktop or CLI applications. Later on, these keys will be used to allow sharing encrypted notebooks.</p>
+<p>The second goal of these E2EE changes is to simplify the system enough that it can be enabled by default. To that end, the master password dialog and encryption screen have been improved. An option to reset the master password is now also available.</p>
+<h3>Various other improvements and bug fixes<a name="various-other-improvements-and-bug-fixes" href="#various-other-improvements-and-bug-fixes" class="heading-anchor">🔗</a></h3>
+<p>In total this release includes about 11 other bug fixes and improvements. There was in particular several improvements to the share features. It is now also possible for a share recipient to leave the shared notebook.</p>
+<h3>Mobile app update<a name="mobile-app-update" href="#mobile-app-update" class="heading-anchor">🔗</a></h3>
+<p>As always the mobile apps (to be released soon) benefit from several of the above changes since they share the same codebase as the desktop app.</p>
+<p>Specific to the mobile version 2.5 are some improvements to the beta editor - in particular the layout has been cleaned up, and the first word of sentences is now automatically capitalised, which makes typing notes easier. If you haven't tried the beta editor yet, you can enable it from the Configuration screen.</p>
+<p>The full changelog is available there: <a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
+]]></description><link>https://joplinapp.org/news/20211031-115215/</link><guid isPermaLink="false">20211031-115215</guid><pubDate>Sun, 31 Oct 2021 11:52:15 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA["Certificate has expired" error with Joplin Cloud, and workaround]]></title><description><![CDATA[<p>Some of you might be experiencing an error &quot;Certificate has expired&quot; when synchronising with Joplin Cloud (and possibly other services) when using the desktop application.</p>
+<p>This is due to Let's Encrypt root certificate that expired on 30 September, and the new method they are using is not compatible with the Joplin desktop application.</p>
+<p>This actually affects thousands of applications, not just Joplin, so various solutions are being considered right now and hopefully a fix will be available relatively soon.</p>
+<p>For now, as a workaround, you can simply check &quot;<strong>Ignore TLS certificate errors</strong>&quot; in <strong>Configuration &gt; Synchronisation &gt; Advanced Options</strong></p>
+<p>I will let you know as soon as a fix is available so that you can clear that option.</p>
+<p>More info:</p>
+<p>- <a href="https://community.letsencrypt.org/t/issues-with-electron-and-expired-root/160991">Issue with Electron and expired root</a> on Let's Encrypt</p>
+<p>- <a href="https://github.com/electron/electron/issues/31212">Let's Encrypt root CA isn't working properly</a> on Electron GitHub repository</p>
+<p><strong>Update:</strong> I have implemented a temporary fix on Joplin Cloud which should solve the issue for now. If you're still having some issues please let me know. An updated desktop app will be available later on with a more permanent fix.</p>
+]]></description><link>https://joplinapp.org/news/20210930-163458/</link><guid isPermaLink="false">20210930-163458</guid><pubDate>Thu, 30 Sep 2021 16:34:58 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin 2.4 is available!]]></title><description><![CDATA[<p>Joplin 2.4 is now available on desktop, mobile and CLI. Here's what's new in this release:</p>
+<h3>Sync Wizard Dialog<a name="sync-wizard-dialog" href="#sync-wizard-dialog" class="heading-anchor">🔗</a></h3>
+<p>A new Sync Wizard Dialog has been added to simplify setting up sync on new clients.</p>
+<p>The dialog shows the main sync targets, their differences, and makes it easy to choose one and start synchronising. This is mostly aimed at new users or those perhaps less technical. Those who are self hosting or using complex setups will still easily find what they need from a link on that dialog (or in Config &gt; Synchronisation like before).</p>
+<p>Sync setup on mobile has been slightly improved too - now on a new client, instead of asking you to sync with Dropbox directly (which may not be what you want), it jumps to the Config &gt; Synchronisation section where you can select the sync target</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210929-144036_0.png" alt=""></p>
+<h3>Disable synchronisation<a name="disable-synchronisation" href="#disable-synchronisation" class="heading-anchor">🔗</a></h3>
+<p>It's a small change but something that's been asked many time - it's now possible to disable synchronisation entirely by selecting &quot;None&quot; as a sync target. Previously that could be done in a hacky way, by selecting a non-configured sync target. Now it's clearer and easier to do.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210929-144036_1.png" alt=""></p>
+<h3>Add back support for deprecated plugins<a name="add-back-support-for-deprecated-plugins" href="#add-back-support-for-deprecated-plugins" class="heading-anchor">🔗</a></h3>
+<p>Recently some plugins stopped working because deprecated plugin APIs had been removed. It had been planned for a long time but I suspect the warnings weren't visible enough so plugin developers didn't act on them, and as a result many plugins stopped working.</p>
+<p>This is now fixed in the latest version. A selected number of plugins will have access to these old deprecated APIs, which means they will start working again. This was mainly affecting ambrt's plugins such as &quot;Convert Text To New Note&quot; or the popular &quot;Embed Search&quot; plugin.</p>
+<h3>Add support for recommended plugins<a name="add-support-for-recommended-plugins" href="#add-support-for-recommended-plugins" class="heading-anchor">🔗</a></h3>
+<p>As mentioned in an earlier post, we now support <a href="https://www.patreon.com/posts/introducing-in-55618802">recommended plugins</a>. These recommended plugins appear on top when searching and are identified by a small crown.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210929-144036_2.png" alt=""></p>
+<h3>End to End Encryption improvements<a name="end-to-end-encryption-improvements" href="#end-to-end-encryption-improvements" class="heading-anchor">🔗</a></h3>
+<p>Like most recent releases, v2.4 includes a few improvement to the End to End Encryption (E2EE) system. The goal is to make it easier to use, to make it more reliable and to support the future use case of sharing encrypted notebooks or notes.</p>
+<p>One important change is the support for a master password. This single password will be responsible to encrypt various keys, including some that will be automatically generated. Thanks to this, it won't be necessary to ask to enter a new password every time a key needs to be encrypted, since the master password can be used. It will also be easier to manage since you'll only have one password to remember instead of a different one for each notebook you might have shared.</p>
+<p>Finally, it's now possible to disable a master key. What it means is that it will no longer show up in the list of master keys, and will also no longer generate a warning asking you to enter the password. In some case you might have forgotten it and no longer need it key, so you can now disable it.</p>
+<h3>Custom CSS<a name="custom-css" href="#custom-css" class="heading-anchor">🔗</a></h3>
+<p>This version also introduces a few internal change to better support custom CSS. In particular the colours now come from a CSS file, which could potentially be overridden, and new UI elements are styled using stylesheets, which likewise could be overridden.</p>
+<p>Those are just first steps, but eventually these changes will make it easier to style the UI and create new themes.</p>
+<h3>Bug fixes<a name="bug-fixes" href="#bug-fixes" class="heading-anchor">🔗</a></h3>
+<p>This release also includes about 30 various bug fixes and improvements.</p>
+<p>A notable one is a fix for GotoAnything, which recently wasn't working on first try.</p>
+<p>The plugin screen has also been improved so that search works even when GitHub is down or blocked, as it is in China in particular.</p>
+]]></description><link>https://joplinapp.org/news/20210929-144036/</link><guid isPermaLink="false">20210929-144036</guid><pubDate>Wed, 29 Sep 2021 14:40:36 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Introducing recommended plugins in the next Joplin version]]></title><description><![CDATA[<p>A common request from new users is how to know which plugin is safe to install or not. In fact probably all of them are safe but as a new user that's not necessarily easy to know. So to help with this, the next version of Joplin will support recommended plugins - those will be plugins that meet our standards of quality and performance, and they will be indicated by a small crown tag inside the plugin box. Recommended plugins will also appear on top when searching.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210901-113415_0.png" alt=""></p>
+<p>For now, since we don't have a review process, the recommended plugins are those developed by the Joplin team and frequent contributors, because we know those are safe to use.</p>
+<p>Later we might have a review process and add more recommended plugins. That being said, in the meantime even if a plugin is not marked as recommended, there's a good chance it is still safe and have good performance too. Often you can search for it on the forum and if it's active with many users commenting, you're most likely good to go.</p>
+<p>But if there's any doubt, the recommended tag is a good way to be sure.</p>
+]]></description><link>https://joplinapp.org/news/20210901-113415/</link><guid isPermaLink="false">20210901-113415</guid><pubDate>Wed, 01 Sep 2021 11:34:15 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin Cloud is officially production ready!]]></title><description><![CDATA[<p><a href="https://joplinapp.org/plans/">Joplin Cloud</a> has been out of beta for a few weeks now and since then it has been quietly running without any troubles. There is no known bugs and the service is running smoothly so it's now safe to say that it is production ready!</p>
+<p>As a reminder, Joplin Cloud is meant to provide a more seamless Joplin experience - if you want to quickly get started, it's as easy as downloading the app and getting a Joplin Cloud account. Besides improved sync performance, that will give you the ability to collaborate on notebooks with others, as well as publishing and sharing notes.</p>
+<p>Of course Joplin still supports other sync options such as Nextcloud, Dropbox and OneDrive or AWS S3. You can also self host using Joplin Server. The advantage of Joplin Cloud being that you don't need to maintain a server yourself - for a small fee you'll get that taken care of.</p>
+<p>Additionally, subscribing to Joplin Cloud is a great way to support the project as a whole, including the open source applications. Such support is needed in the long term to provide bug and security fixes, add new features, and provide support.</p>
+<p>At some level it is also an experiment, to see if such a service is financially viable and can allow me to work full time on the project. This is certainly something I would like, and perhaps Joplin Cloud combined with your donations will allow that.</p>
+]]></description><link>https://joplinapp.org/news/20210831-154354/</link><guid isPermaLink="false">20210831-154354</guid><pubDate>Tue, 31 Aug 2021 15:43:54 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[How to start your subscription if you have a free Joplin Cloud Beta account]]></title><description><![CDATA[<p>For anyone with a beta account, if you would like to keep using it after the end of the trial period, there is now a button to do this from the Joplin Cloud home page:</p>
+<img height="222" src="https://aws1.discourse-cdn.com/standard14/uploads/cozic/optimized/2X/e/e2b54352d0e401e692a75817f6faa0432322c405_2_517x222.png" width="517">
+<p>If you click on it you will be sent to the Plans page via a special link. Then once you click on &quot;Buy now&quot; you will be sent to the Stripe page where you can start the subscription.</p>
+<p>As mentioned in the message, the process takes into account your remaining beta trial days. So for example, if your beta account expires in 60 days, the subscription will have a free 60 days trial period. This is so you don't lose any of the beta trial days no matter when you start the subscription.</p>
+<p>If you have any question about it, please let me know.</p>
+]]></description><link>https://joplinapp.org/news/20210804-085003/</link><guid isPermaLink="false">20210804-085003</guid><pubDate>Wed, 04 Aug 2021 08:50:03 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>

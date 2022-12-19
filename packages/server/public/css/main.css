@@ -3,19 +3,28 @@
 }
 
 html {
-	font-size: 100%;
+	font-size: 14px;
+}
+
+.is-admin-page div.main-container,
+.is-admin-page div.navbar-container {
+	max-width: none !important;
+}
+
+div.navbar-container {
+	padding: 0 3rem;
 }
 
 input.form-control {
 	margin-bottom: 0.5rem;
 }
 
-.navbar {
-	padding: 1rem 3rem;
-}
-
 .navbar .logo-container {
 	align-items: center;
+}
+
+.navbar .logo-container .navbar-appname {
+	margin-left: 15px;
 }
 
 .navbar .logo-text {
@@ -24,17 +33,12 @@ input.form-control {
 	margin-left: 0.5em;
 }
 
-/* 
-.navbar .logo {
-	height: 50px;
-} */
-
 .navbar .navbar-item img {
 	max-height: 3em;
 }
 
 .main {
-	padding: 0 3rem;
+	padding: 2rem 3rem;
 }
 
 table.table .nowrap {
@@ -47,4 +51,54 @@ table.table .stretch {
 
 table.table th .sort-button i {
 	margin-left: 0.5rem;
+}
+
+table.table tr.is-disabled {
+	opacity: 0.5;
+}
+
+.footer {
+	background-color: transparent;
+}
+
+.footer .content {
+	opacity: 0.5;
+}
+
+ul li {
+	list-style-type: disc;
+}
+
+ul.pagination-list li,
+ul.menu-list li {
+	list-style-type: none;
+}
+
+.readable-block {
+	max-width: 740px;
+}
+
+a.heading-anchor {
+	display: inline-block;
+	opacity: 0;
+	width: 1.3em;
+	font-size: 0.7em;
+	margin-left: 0.4em;
+	line-height: 1em;
+	text-decoration: none;
+	transition: opacity 0.3s;
+}
+a.heading-anchor:hover,
+h1:hover a.heading-anchor,
+h2:hover a.heading-anchor,
+h3:hover a.heading-anchor,
+h4:hover a.heading-anchor,
+h5:hover a.heading-anchor,
+h6:hover a.heading-anchor {
+	opacity: 1;
+}
+
+abbr[title] {
+	text-underline-offset: 2px;
+	text-decoration: underline dotted;
 }

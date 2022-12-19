@@ -24,7 +24,7 @@ export default class JoplinViewsMenuItems {
 	 */
 	public async create(id: string, commandName: string, location: MenuItemLocation = MenuItemLocation.Tools, options: CreateMenuItemOptions = null) {
 		if (typeof location !== 'string') {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.menuItem.create("my-unique-id", ...)`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.menuItem.create("my-unique-id", ...)`', true);
 			options = location as any;
 			location = commandName as any || MenuItemLocation.Tools;
 			commandName = id as any;

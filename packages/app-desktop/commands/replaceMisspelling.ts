@@ -1,18 +1,11 @@
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import bridge from '../services/bridge';
+import { isInsideContainer } from '@joplin/lib/dom';
 
 export const declaration: CommandDeclaration = {
 	name: 'replaceMisspelling',
 };
-
-function isInsideContainer(node: any, className: string): boolean {
-	while (node) {
-		if (node.classList && node.classList.contains(className)) return true;
-		node = node.parentNode;
-	}
-	return false;
-}
 
 export const runtime = (): CommandRuntime => {
 	return {

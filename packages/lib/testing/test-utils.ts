@@ -17,7 +17,7 @@ import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
 import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const { DatabaseDriverNode } = require('../database-driver-node.js');
 import Folder from '../models/Folder';
 import Note from '../models/Note';
@@ -28,21 +28,21 @@ import NoteTag from '../models/NoteTag';
 import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-const { FileApi } = require('../file-api.js');
-const { FileApiDriverMemory } = require('../file-api-driver-memory.js');
-const { FileApiDriverLocal } = require('../file-api-driver-local.js');
+import { FileApi } from '../file-api';
+const FileApiDriverMemory = require('../file-api-driver-memory').default;
+const { FileApiDriverLocal } = require('../file-api-driver-local');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
 const { FileApiDriverAmazonS3 } = require('../file-api-driver-amazon-s3.js');
-const SyncTargetRegistry = require('../SyncTargetRegistry.js');
+import SyncTargetRegistry from '../SyncTargetRegistry';
 const SyncTargetMemory = require('../SyncTargetMemory.js');
 const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('../SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
-import EncryptionService from '../services/EncryptionService';
+import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
@@ -50,11 +50,18 @@ const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi from '../JoplinServerApi';
 import { FolderEntity } from '../services/database/types';
-import { credentialFile } from '../utils/credentialFiles';
-const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
+import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
+import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
+import KeychainService from '../services/keychain/KeychainService';
+import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
+import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import Synchronizer from '../Synchronizer';
+import SyncTargetNone from '../SyncTargetNone';
+import { setRSA } from '../services/e2ee/ppk';
 const md5 = require('md5');
-const S3 = require('aws-sdk/clients/s3');
+const { S3Client } = require('@aws-sdk/client-s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
+import RSA from '../services/e2ee/RSA.node';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -63,14 +70,14 @@ const { Dirnames } = require('../services/synchronizer/utils/types');
 // Jest, to make debugging easier, but it's not clear how to get this info).
 const suiteName_ = uuid.createNano();
 
-const databases_: any[] = [];
-let synchronizers_: any[] = [];
-const fileApis_: any = {};
-const encryptionServices_: any[] = [];
-const revisionServices_: any[] = [];
-const decryptionWorkers_: any[] = [];
-const resourceServices_: any[] = [];
-const resourceFetchers_: any[] = [];
+const databases_: JoplinDatabase[] = [];
+let synchronizers_: Synchronizer[] = [];
+const fileApis_: Record<number, FileApi> = {};
+const encryptionServices_: EncryptionService[] = [];
+const revisionServices_: RevisionService[] = [];
+const decryptionWorkers_: DecryptionWorker[] = [];
+const resourceServices_: ResourceService[] = [];
+const resourceFetchers_: ResourceFetcher[] = [];
 const kvStores_: KvStore[] = [];
 let currentClient_ = 1;
 
@@ -99,12 +106,14 @@ const supportDir = `${oldTestDir}/support`;
 // various space-in-path issues.
 const dataDir = `${oldTestDir}/test data/${suiteName_}`;
 const profileDir = `${dataDir}/profile`;
+const rootProfileDir = profileDir;
 
-fs.mkdirpSync(logDir, 0o755);
-fs.mkdirpSync(baseTempDir, 0o755);
+fs.mkdirpSync(logDir);
+fs.mkdirpSync(baseTempDir);
 fs.mkdirpSync(dataDir);
 fs.mkdirpSync(profileDir);
 
+SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -112,6 +121,7 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 let syncTargetName_ = '';
 let syncTargetId_: number = null;
@@ -127,13 +137,14 @@ function setSyncTargetName(name: string) {
 	const previousName = syncTargetName_;
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
-	sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
+	sleepTime = syncTargetId_ === SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
 	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
 
 setSyncTargetName('memory');
+// setSyncTargetName('filesystem');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
@@ -149,7 +160,7 @@ const syncDir = `${oldTestDir}/sync/${suiteName_}`;
 // anyway.
 let defaultJestTimeout = 90 * 1000;
 if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
-jest.setTimeout(defaultJestTimeout);
+if (typeof jest !== 'undefined') jest.setTimeout(defaultJestTimeout);
 
 const dbLogger = new Logger();
 dbLogger.addTarget(TargetType.Console);
@@ -175,6 +186,7 @@ Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
 Setting.setConstant('profileDir', profileDir);
+Setting.setConstant('rootProfileDir', rootProfileDir);
 Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;
@@ -243,6 +255,10 @@ async function afterAllCleanUp() {
 	}
 }
 
+const settingFilename = (id: number): string => {
+	return `settings-${id}.json`;
+};
+
 async function switchClient(id: number, options: any = null) {
 	options = Object.assign({}, { keychainEnabled: false }, options);
 
@@ -259,13 +275,23 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.revisionService_ = revisionServices_[id];
 
 	await Setting.reset();
+	Setting.settingFilename = settingFilename(id);
+
+	Setting.setConstant('profileDir', rootProfileDir);
+	Setting.setConstant('rootProfileDir', rootProfileDir);
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 	Setting.setConstant('pluginDir', pluginDir(id));
+	Setting.setConstant('isSubProfile', false);
 
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
-	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
+	Setting.setValue('sync.target', syncTargetId());
+	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitly set in the test itself
+
+	// More generally, this function should clear all data, and so that should
+	// include settings.json
+	await clearSettingFile(id);
 }
 
 async function clearDatabase(id: number = null) {
@@ -313,10 +339,15 @@ async function setupDatabase(id: number = null, options: any = null) {
 	// running.
 	await Setting.reset();
 
+	Setting.setConstant('profileDir', rootProfileDir);
+	Setting.setConstant('rootProfileDir', rootProfileDir);
+	Setting.setConstant('isSubProfile', false);
+
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
 		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		Setting.setValue('sync.target', syncTargetId());
 		return;
 	}
 
@@ -333,7 +364,15 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
+	await clearSettingFile(id);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+
+	Setting.setValue('sync.target', syncTargetId());
+}
+
+async function clearSettingFile(id: number) {
+	Setting.settingFilename = `settings-${id}.json`;
+	await fs.remove(Setting.settingFilePath);
 }
 
 export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {
@@ -390,10 +429,10 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	DecryptionWorker.instance_ = null;
 
 	await fs.remove(resourceDir(id));
-	await fs.mkdirp(resourceDir(id), 0o755);
+	await fs.mkdirp(resourceDir(id));
 
 	await fs.remove(pluginDir(id));
-	await fs.mkdirp(pluginDir(id), 0o755);
+	await fs.mkdirp(pluginDir(id));
 
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
@@ -402,6 +441,12 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
+
+		// For now unset the share service as it's not properly initialised.
+		// Share service tests are in ShareService.test.ts normally, and if it
+		// becomes necessary to test integration with the synchroniser we can
+		// initialize it here.
+		synchronizers_[id].setShareService(null);
 	}
 
 	encryptionServices_[id] = new EncryptionService();
@@ -411,6 +456,8 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	resourceServices_[id] = new ResourceService();
 	resourceFetchers_[id] = new ResourceFetcher(() => { return synchronizers_[id].api(); });
 	kvStores_[id] = new KvStore();
+
+	setRSA(RSA);
 
 	await fileApi().initialize();
 	await fileApi().clearRoot();
@@ -433,7 +480,8 @@ async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;
-	const context = Setting.value(contextKey);
+	const contextString = Setting.value(contextKey);
+	const context = contextString ? JSON.parse(contextString) : {};
 
 	const options = Object.assign({}, extraOptions);
 	if (context) options.context = context;
@@ -480,11 +528,12 @@ function resourceFetcher(id: number = null) {
 
 async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 	const service = encryptionService(id);
+	const password = '123456';
 
 	let masterKey = null;
 
 	if (!useExisting) { // Create it
-		masterKey = await service.generateMasterKey('123456');
+		masterKey = await service.generateMasterKey(password);
 		masterKey = await MasterKey.save(masterKey);
 	} else { // Use the one already available
 		const masterKeys = await MasterKey.all();
@@ -492,14 +541,21 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey_(masterKey, '123456', true);
+	const passwordCache = Setting.value('encryption.passwordCache');
+	passwordCache[masterKey.id] = password;
+	Setting.setValue('encryption.passwordCache', passwordCache);
+	await Setting.saveAll();
+
+	await service.loadMasterKey(masterKey, password, true);
+
+	setActiveMasterKeyId(masterKey.id);
 
 	return masterKey;
 }
 
 function mustRunInBand() {
 	if (!process.argv.includes('--runInBand')) {
-		throw new Error('Tests must be run sequentially for this sync target, with the --runInBand arg. eg `npm test -- --runInBand`');
+		throw new Error('Tests must be run sequentially for this sync target, with the --runInBand arg. eg `yarn test --runInBand`');
 	}
 }
 
@@ -507,13 +563,13 @@ async function initFileApi() {
 	if (fileApis_[syncTargetId_]) return;
 
 	let fileApi = null;
-	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
+	if (syncTargetId_ === SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir);
-		fs.mkdirpSync(syncDir, 0o755);
+		fs.mkdirpSync(syncDir);
 		fileApi = new FileApi(syncDir, new FileApiDriverLocal());
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('memory')) {
 		fileApi = new FileApi('/root', new FileApiDriverMemory());
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('nextcloud')) {
 		const options = require(`${oldTestDir}/support/nextcloud-auth.json`);
 		const api = new WebDavApi({
 			baseUrl: () => options.baseUrl,
@@ -521,7 +577,7 @@ async function initFileApi() {
 			password: () => options.password,
 		});
 		fileApi = new FileApi('', new FileApiDriverWebDav(api));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('dropbox')) {
 		// To get a token, go to the App Console:
 		// https://www.dropbox.com/developers/apps/
 		// Then select "JoplinTest" and click "Generated access token"
@@ -531,12 +587,16 @@ async function initFileApi() {
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi = new FileApi('', new FileApiDriverDropbox(api));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
-		// To get a token, open the URL below, then copy the *complete*
-		// redirection URL in onedrive-auth.txt. Keep in mind that auth
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('onedrive')) {
+		// To get a token, open the URL below corresponding to your account type,
+		// then copy the *complete* redirection URL in onedrive-auth.txt. Keep in mind that auth
 		// data only lasts 1h for OneDrive.
 		//
+		// Personal OneDrive Account:
 		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
+		//
+		// Business OneDrive Account:
+		// https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite offline_access&response_type=token&redirect_uri=https://joplinapp.org
 		//
 		// Also for now OneDrive tests cannot be run in parallel because
 		// for that each suite would need its own sub-directory within the
@@ -560,22 +620,38 @@ async function initFileApi() {
 
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('amazon_s3')) {
+
+		// We make sure for S3 tests run in band because tests
+		// share the same directory which will cause locking errors.
+
+		mustRunInBand();
+
 		const amazonS3CredsPath = `${oldTestDir}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
-		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
-		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
+		if (!amazonS3Creds || !amazonS3Creds.credentials) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "credentials": { "accessKeyId": "", "secretAccessKey": "", } "bucket": "mybucket", region: "", forcePathStyle: ""}`);
+		const api = new S3Client({ region: amazonS3Creds.region, credentials: amazonS3Creds.credentials, s3UseArnRegion: true, forcePathStyle: amazonS3Creds.forcePathStyle, endpoint: amazonS3Creds.endpoint });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('joplinServer')) {
 		mustRunInBand();
+
+		const joplinServerAuth = JSON.parse(await readCredentialFile('joplin-server-test-units-2.json'));
+
+		// const joplinServerAuth = {
+		//     "email": "admin@localhost",
+		//     "password": "admin",
+		//     "baseUrl": "http://api.joplincloud.local:22300",
+		//     "userContentBaseUrl": ""
+		// }
 
 		// Note that to test the API in parallel mode, you need to use Postgres
 		// as database, as the SQLite database is not reliable when being
 		// read/write from multiple processes at the same time.
 		const api = new JoplinServerApi({
-			baseUrl: () => 'http://localhost:22300',
-			username: () => 'admin@localhost',
-			password: () => 'admin',
+			baseUrl: () => joplinServerAuth.baseUrl,
+			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
+			username: () => joplinServerAuth.email,
+			password: () => joplinServerAuth.password,
 		});
 
 		fileApi = new FileApi('', new FileApiDriverJoplinServer(api));
@@ -775,6 +851,21 @@ async function waitForFolderCount(count: number) {
 	}
 }
 
+let naughtyStrings_: string[] = null;
+export async function naughtyStrings() {
+	if (naughtyStrings_) return naughtyStrings_;
+	const t = await fs.readFile(`${supportDir}/big-list-of-naughty-strings.txt`, 'utf8');
+	const lines = t.split('\n');
+	naughtyStrings_ = [];
+	for (const line of lines) {
+		const trimmed = line.trim();
+		if (!trimmed) continue;
+		if (trimmed.indexOf('#') === 0) continue;
+		naughtyStrings_.push(line);
+	}
+	return naughtyStrings_;
+}
+
 // TODO: Update for Jest
 
 // function mockDate(year, month, day, tick) {
@@ -795,6 +886,8 @@ class TestApp extends BaseApplication {
 	private logger_: LoggerWrapper;
 
 	public constructor(hasGui = true) {
+		KeychainService.instance().enabled = false;
+
 		super();
 		this.hasGui_ = hasGui;
 		this.middlewareCalls_ = [];
@@ -816,7 +909,7 @@ class TestApp extends BaseApplication {
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.
 		Setting.setValue('sync.interval', 0);
-		Setting.setValue('encryption.enabled', false);
+		setEncryptionEnabled(true);
 
 		this.initRedux();
 		Setting.dispatchUpdateAll();

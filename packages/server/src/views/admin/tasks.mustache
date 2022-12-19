@@ -1,0 +1,13 @@
+<form method='POST' action="{{postUrl}}">
+	{{{csrfTag}}}
+
+	{{#itemTable}}
+		{{>table}}
+	{{/itemTable}}
+
+	<div class="block">
+		<input class="button is-link" type="submit" value="Start selected tasks" name="startTaskButton"/>
+		<input class="button is-link" type="submit" value="Enabled selected tasks" name="enableTaskButton"/>
+		<input class="button is-link" type="submit" value="Disable selected tasks" name="disableTaskButton"/>
+	</div>
+</form>

@@ -32,13 +32,13 @@ function docReady(fn) {
 docReady(() => {
 	addPluginAssets(joplinNoteViewer.appBaseUrl, joplinNoteViewer.pluginAssets);
 
-	document.addEventListener('click', event => {
-		const element = event.target;
+	// document.addEventListener('click', event => {
+	// 	const element = event.target;
 
-		// Detects if it's a note link and, if so, display a message
-		if (element && element.getAttribute('href') === '#' && element.getAttribute('data-resource-id')) {
-			event.preventDefault();
-			alert('This note has not been shared');
-		}
-	});
+	// 	// Detects if it's a note link and, if so, display a message
+	// 	if (element && element.getAttribute('href') === '#' && element.getAttribute('data-resource-id')) {
+	// 		event.preventDefault();
+	// 		alert('This note has not been shared');
+	// 	}
+	// });
 });

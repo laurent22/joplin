@@ -11,70 +11,27 @@ const rootDir = `${__dirname}/../..`;
 
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
 const fs = require('fs-extra');
-const gettextParser = require('gettext-parser');
-
+const { translationExecutablePath, removePoHeaderDate, mergePotToPo, parsePoFile, parseTranslations } = require('./utils/translation');
 const localesDir = `${__dirname}/locales`;
 const libDir = `${rootDir}/packages/lib`;
-
-const { execCommand, isMac, insertContentIntoFile, filename, fileExtension } = require('./tool-utils.js');
+const { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('@joplin/lib/locale');
 
-function parsePoFile(filePath) {
-	const content = fs.readFileSync(filePath);
-	return gettextParser.po.parse(content);
-}
+const { GettextExtractor, JsExtractors } = require('gettext-extractor');
 
 function serializeTranslation(translation) {
-	const output = {};
-	const translations = translation.translations[''];
-	for (const n in translations) {
-		if (!translations.hasOwnProperty(n)) continue;
-		if (n == '') continue;
-		const t = translations[n];
-		let translated = '';
-		if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
-			// Don't include fuzzy translations
-		} else {
-			translated = t['msgstr'][0];
-		}
-
-		if (translated) output[n] = translated;
-	}
-
-	return JSON.stringify(output);
+	const output = parseTranslations(translation);
+	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), ' ');
 }
 
 function saveToFile(filePath, data) {
 	fs.writeFileSync(filePath, data);
 }
 
-function buildLocale(inputFile, outputFile) {
-	const r = parsePoFile(inputFile);
+async function buildLocale(inputFile, outputFile) {
+	const r = await parsePoFile(inputFile);
 	const translation = serializeTranslation(r);
 	saveToFile(outputFile, translation);
-}
-
-function executablePath(file) {
-	const potentialPaths = [
-		'/usr/local/opt/gettext/bin/',
-		'/opt/local/bin/',
-		'/usr/local/bin/',
-	];
-
-	for (const path of potentialPaths) {
-		const pathFile = path + file;
-		if (fs.existsSync(pathFile)) {
-			return pathFile;
-		}
-	}
-	throw new Error(`${file} could not be found. Please install via brew or MacPorts.\n`);
-}
-
-async function removePoHeaderDate(filePath) {
-	let sedPrefix = 'sed -i';
-	if (isMac()) sedPrefix += ' ""'; // Note: on macOS it has to be 'sed -i ""' (BSD quirk)
-	await execCommand(`${sedPrefix} -e'/POT-Creation-Date:/d' "${filePath}"`);
-	await execCommand(`${sedPrefix} -e'/PO-Revision-Date:/d' "${filePath}"`);
 }
 
 async function createPotFile(potFilePath) {
@@ -83,8 +40,8 @@ async function createPotFile(potFilePath) {
 		'./.github/*',
 		'./**/node_modules/*',
 		'./Assets/*',
-		'./docs/*',
 		'./Assets/TinyMCE/*',
+		'./docs/*',
 		'./node_modules/*',
 		'./packages/app-cli/build/*',
 		'./packages/app-cli/locales-build/*',
@@ -92,56 +49,127 @@ async function createPotFile(potFilePath) {
 		'./packages/app-cli/tests-build/*',
 		'./packages/app-cli/tests/*',
 		'./packages/app-clipper/*',
-		'./packages/fork-*/*',
+		'./packages/app-desktop/build/*',
 		'./packages/app-desktop/dist/*',
 		'./packages/app-desktop/gui/note-viewer/pluginAssets/*',
 		'./packages/app-desktop/gui/style/*',
 		'./packages/app-desktop/lib/*',
 		'./packages/app-desktop/pluginAssets/*',
 		'./packages/app-desktop/tools/*',
+		'./packages/app-desktop/vendor/*',
 		'./packages/app-mobile/android/*',
 		'./packages/app-mobile/ios/*',
 		'./packages/app-mobile/pluginAssets/*',
 		'./packages/app-mobile/tools/*',
+		'./packages/fork-*/*',
+		'./packages/lib/rnInjectedJs/*',
+		'./packages/lib/vendor/*',
 		'./packages/renderer/assets/*',
+		'./packages/server/dist/*',
 		'./packages/tools/*',
+		'./packages/turndown-plugin-gfm/*',
+		'./packages/turndown/*',
 		'./patches/*',
 		'./readme/*',
 	];
 
-	const findCommand = `find . -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
-
+	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts -o -iname \\*.tsx \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 	process.chdir(rootDir);
-	const files = (await execCommand(findCommand)).split('\n');
+	let files = (await execCommand(findCommand)).split('\n');
 
-	const baseArgs = [];
-	baseArgs.push('--from-code=utf-8');
-	baseArgs.push(`--output="${potFilePath}"`);
-	baseArgs.push('--language=JavaScript');
-	baseArgs.push('--copyright-holder="Laurent Cozic"');
-	baseArgs.push('--package-name=Joplin');
-	baseArgs.push('--package-version=1.0.0');
-	// baseArgs.push('--no-location');
-	baseArgs.push('--keyword=_n:1,2');
+	// Further filter files - in particular remove some specific files and
+	// extensions we don't need. Also, when there's two file with the same
+	// basename, such as "exmaple.js", and "example.ts", we only keep the file
+	// with ".ts" extension (since the .js should be the compiled file).
 
-	let args = baseArgs.slice();
-	args = args.concat(files);
-	let xgettextPath = 'xgettext';
-	if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-	const cmd = `${xgettextPath} ${args.join(' ')}`;
-	const result = await execCommand(cmd);
-	if (result && result.trim()) console.error(result.trim());
+	const toProcess = {};
+
+	for (const file of files) {
+		if (!file) continue;
+
+		const nameNoExt = `${dirname(file)}/${filename(file)}`;
+
+		if (nameNoExt.endsWith('CodeMirror.bundle.min')) continue;
+		if (nameNoExt.endsWith('CodeMirror.bundle')) continue;
+		if (nameNoExt.endsWith('.test')) continue;
+		if (nameNoExt.endsWith('.eslintrc')) continue;
+		if (nameNoExt.endsWith('jest.config')) continue;
+		if (nameNoExt.endsWith('jest.setup')) continue;
+		if (nameNoExt.endsWith('webpack.config')) continue;
+		if (nameNoExt.endsWith('.prettierrc')) continue;
+		if (file.endsWith('.d.ts')) continue;
+
+		if (toProcess[nameNoExt] && ['ts', 'tsx'].includes(fileExtension(toProcess[nameNoExt]))) {
+			continue;
+		}
+
+		toProcess[nameNoExt] = file;
+	}
+
+	files = [];
+	for (const key of Object.keys(toProcess)) {
+		files.push(toProcess[key]);
+	}
+
+	files.sort();
+
+	// console.info(files.join('\n'));
+	// process.exit(0);
+
+	// Note: we previously used the xgettext utility, but it only partially
+	// supports TypeScript and doesn't support .tsx files at all. Besides; the
+	// TypeScript compiler now converts some `_('some string')` calls to
+	// `(0,locale1._)('some string')`, which cannot be detected by xgettext.
+	//
+	// So now we use this gettext-extractor utility, which seems to do the job.
+	// It supports .ts and .tsx files and appears to find the same strings as
+	// xgettext.
+
+	const extractor = new GettextExtractor();
+
+	// In the following string:
+	//
+	//     _('Hello %s', 'Scott')
+	//
+	// "Hello %s" is the `text` (or "msgstr" in gettext parlance) , and "Scott"
+	// is the `context` ("msgctxt").
+	//
+	// gettext-extractor allows adding both the text and context to the pot
+	// file, however we should avoid this because a change in the context string
+	// would mark the associated string as fuzzy. We want to avoid this because
+	// the point of splitting into text and context is that even if the context
+	// changes we don't need to retranslate the text. We use this for URLs for
+	// instance.
+	//
+	// Because of this, below we don't set the "context" property.
+
+	const parser = extractor
+		.createJsParser([
+			JsExtractors.callExpression('_', {
+				arguments: {
+					text: 0,
+					// context: 1,
+				},
+			}),
+			JsExtractors.callExpression('_n', {
+				arguments: {
+					text: 0,
+					textPlural: 1,
+					// context: 2,
+				},
+			}),
+		]);
+
+	for (const file of files) {
+		parser.parseFile(file);
+	}
+
+	extractor.savePotFile(potFilePath, {
+		'Project-Id-Version': 'Joplin',
+		'Content-Type': 'text/plain; charset=UTF-8',
+	});
+
 	await removePoHeaderDate(potFilePath);
-}
-
-async function mergePotToPo(potFilePath, poFilePath) {
-	let msgmergePath = 'msgmerge';
-	if (isMac()) msgmergePath = executablePath('msgmerge'); // Needs to have been installed with `brew install gettext`
-
-	const command = `${msgmergePath} -U "${poFilePath}" "${potFilePath}"`;
-	const result = await execCommand(command);
-	if (result && result.trim()) console.info(result.trim());
-	await removePoHeaderDate(poFilePath);
 }
 
 function buildIndex(locales, stats) {
@@ -205,7 +233,7 @@ function translatorNameToMarkdown(translatorName) {
 async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
 	let pocountPath = 'pocount';
-	if (isMac()) pocountPath = executablePath('pocount');
+	if (isMac()) pocountPath = translationExecutablePath('pocount');
 
 	const command = `${pocountPath} "${poFile}"`;
 	const result = await execCommand(command);
@@ -257,7 +285,7 @@ function flagImageUrl(locale) {
 	if (locale === 'sv') return `${baseUrl}/country-4x3/se.png`;
 	if (locale === 'nb_NO') return `${baseUrl}/country-4x3/no.png`;
 	if (locale === 'ro') return `${baseUrl}/country-4x3/ro.png`;
-	if (locale === 'vi') return `${baseUrl}/country-4x3/vi.png`;
+	if (locale === 'vi') return `${baseUrl}/country-4x3/vn.png`;
 	if (locale === 'fa') return `${baseUrl}/country-4x3/ir.png`;
 	if (locale === 'eo') return `${baseUrl}/esperanto.png`;
 	return `${baseUrl}/country-4x3/${countryCodeOnly(locale).toLowerCase()}.png`;
@@ -274,7 +302,7 @@ function translationStatusToMdTable(status) {
 	for (let i = 0; i < status.length; i++) {
 		const stat = status[i];
 		const flagUrl = flagImageUrl(stat.locale);
-		output.push([`![](${flagUrl})`, stat.languageName, `[${stat.locale}](${poFileUrl(stat.locale)})`, stat.translatorName, `${stat.percentDone}%`].join('  |  '));
+		output.push([`<img src="${flagUrl}" width="16px"/>`, stat.languageName, `[${stat.locale}](${poFileUrl(stat.locale)})`, stat.translatorName, `${stat.percentDone}%`].join('  |  '));
 	}
 	return output.join('\n');
 }
@@ -305,7 +333,18 @@ function deletedStrings(oldStrings, newStrings) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	const potFilePath = `${localesDir}/joplin.pot`;
+	const missingStringsCheckOnly = !!argv['missing-strings-check-only'];
+
+	let potFilePath = `${localesDir}/joplin.pot`;
+
+	let tempPotFilePath = '';
+
+	if (missingStringsCheckOnly) {
+		tempPotFilePath = `${localesDir}/joplin-temp-${Math.floor(Math.random() * 10000000)}.pot`;
+		await fs.copy(potFilePath, tempPotFilePath);
+		potFilePath = tempPotFilePath;
+	}
+
 	const jsonLocalesDir = `${libDir}/locales`;
 	const defaultLocale = 'en_GB';
 
@@ -318,6 +357,8 @@ async function main() {
 	const newPotStatus = await translationStatus(false, potFilePath);
 
 	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
+
+	if (tempPotFilePath) await fs.remove(tempPotFilePath);
 
 	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
 	if (deletedCount >= 5) {
@@ -333,6 +374,8 @@ async function main() {
 		}
 	}
 
+	if (missingStringsCheckOnly) return;
+
 	await execCommand(`cp "${potFilePath}" ` + `"${localesDir}/${defaultLocale}.po"`);
 
 	fs.mkdirpSync(jsonLocalesDir, 0o755);
@@ -347,8 +390,8 @@ async function main() {
 
 		const poFilePäth = `${localesDir}/${locale}.po`;
 		const jsonFilePath = `${jsonLocalesDir}/${locale}.json`;
-		if (locale != defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
-		buildLocale(poFilePäth, jsonFilePath);
+		if (locale !== defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
+		await buildLocale(poFilePäth, jsonFilePath);
 
 		const stat = await translationStatus(defaultLocale === locale, poFilePäth);
 		stat.locale = locale;
@@ -359,16 +402,6 @@ async function main() {
 	stats.sort((a, b) => a.languageName < b.languageName ? -1 : +1);
 
 	saveToFile(`${jsonLocalesDir}/index.js`, buildIndex(locales, stats));
-
-	// const destDirs = [
-	// 	`${libDir}/locales`,
-	// 	`${electronDir}/locales`,
-	// 	`${cliDir}/locales-build`,
-	// ];
-
-	// for (const destDir of destDirs) {
-	// 	await execCommand(`rsync -a "${jsonLocalesDir}/" "${destDir}/"`);
-	// }
 
 	await updateReadmeWithStats(stats);
 }

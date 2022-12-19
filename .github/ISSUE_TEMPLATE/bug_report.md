@@ -9,7 +9,8 @@ assignees: ''
 
 <!--
   Please provide a clear and concise description of what the bug is. (In the section Steps To Reproduce.)
-  Include screenshots if needed.
+  Include screenshots for UI problems if needed.
+  DO NOT create screenshots of text !!! Copy and paste the text into a code block.
   Please test using the latest Joplin release to make sure your issue has not already been fixed.
 -->
 

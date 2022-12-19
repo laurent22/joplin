@@ -48,9 +48,9 @@ class AppNavComponent extends Component {
 		let notesScreenVisible = false;
 		let searchScreenVisible = false;
 
-		if (route.routeName == 'Notes') {
+		if (route.routeName === 'Notes') {
 			notesScreenVisible = true;
-		} else if (route.routeName == 'Search') {
+		} else if (route.routeName === 'Search') {
 			searchScreenVisible = true;
 		} else {
 			Screen = this.props.screens[route.routeName].screen;
@@ -59,7 +59,7 @@ class AppNavComponent extends Component {
 		// Keep the search screen loaded if the user is viewing a note from that search screen
 		// so that if the back button is pressed, the screen is still loaded. However, unload
 		// it if navigating away.
-		const searchScreenLoaded = searchScreenVisible || (this.previousRouteName_ == 'Search' && route.routeName == 'Note');
+		const searchScreenLoaded = searchScreenVisible || (this.previousRouteName_ === 'Search' && route.routeName === 'Note');
 
 		this.previousRouteName_ = route.routeName;
 

@@ -2,16 +2,30 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
-import { bodyFields, formParse } from '../../utils/requestUtils';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { NotificationLevel, User } from '../../db';
+import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
+import { User, UserFlag, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
-const prettyBytes = require('pretty-bytes');
+import { NotificationKey } from '../../models/NotificationModel';
+import { AccountType, accountTypeOptions } from '../../models/UserModel';
+import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
+import { updateCustomerEmail } from '../../utils/stripe';
+import { createCsrfTag } from '../../utils/csrf';
+import { formatDateTime } from '../../utils/time';
+import { cookieSet } from '../../utils/cookies';
+import { userFlagToString } from '../../models/UserFlagModel';
+import { stopImpersonating } from '../admin/utils/users/impersonate';
+import { _ } from '@joplin/lib/locale';
 
-function checkPassword(fields: SetPasswordFormData, required: boolean): string {
+export interface CheckRepeatPasswordInput {
+	password: string;
+	password2: string;
+}
+
+export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: boolean): string {
 	if (fields.password) {
 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
 		return fields.password;
@@ -22,84 +36,85 @@ function checkPassword(fields: SetPasswordFormData, required: boolean): string {
 	return '';
 }
 
-function makeUser(isNew: boolean, fields: any): User {
+function makeUser(userId: Uuid, fields: any): User {
 	const user: User = {};
 
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
-	if ('is_admin' in fields) user.is_admin = fields.is_admin;
-	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size;
-	user.can_share = fields.can_share ? 1 : 0;
 
-	const password = checkPassword(fields, false);
+	const password = checkRepeatPassword(fields, false);
 	if (password) user.password = password;
 
-	if (!isNew) user.id = fields.id;
+	user.id = userId;
 
 	return user;
 }
 
-function defaultUser(): User {
-	return {
-		can_share: 1,
-	};
-}
-
-function userIsNew(path: SubPath): boolean {
-	return path.id === 'new';
-}
-
-function userIsMe(path: SubPath): boolean {
-	return path.id === 'me';
-}
-
 const router = new Router(RouteType.Web);
 
-router.get('users', async (_path: SubPath, ctx: AppContext) => {
-	const userModel = ctx.models.user();
-	await userModel.checkIfAllowed(ctx.owner, AclAction.List);
+router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = null, error: any = null) => {
+	const owner = ctx.joplin.owner;
+	if (path.id !== 'me' && path.id !== owner.id) throw new ErrorForbidden();
 
-	const users = await userModel.all();
+	const models = ctx.joplin.models;
+	const userId = owner.id;
 
-	const view: View = defaultView('users');
-	view.content.users = users.map(user => {
-		return {
-			...user,
-			formattedItemMaxSize: user.max_item_size ? prettyBytes(user.max_item_size) : '∞',
-		};
-	});
-	return view;
-});
+	const user = await models.user().load(userId);
 
-router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
-	const owner = ctx.owner;
-	const isMe = userIsMe(path);
-	const isNew = userIsNew(path);
-	const userModel = ctx.models.user();
-	const userId = userIsMe(path) ? owner.id : path.id;
+	await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
 
-	user = !isNew ? user || await userModel.load(userId) : null;
-	if (isNew && !user) user = defaultUser();
+	const postUrl = `${config().baseUrl}/users/me`;
 
-	await userModel.checkIfAllowed(ctx.owner, AclAction.Read, user);
-
-	let postUrl = '';
-
-	if (isNew) {
-		postUrl = `${config().baseUrl}/users/new`;
-	} else if (isMe) {
-		postUrl = `${config().baseUrl}/users/me`;
-	} else {
-		postUrl = `${config().baseUrl}/users/${user.id}`;
+	interface UserFlagView extends UserFlag {
+		message: string;
 	}
 
-	const view: View = defaultView('user');
-	view.content.user = user;
-	view.content.isNew = isNew;
-	view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
+	let userFlagViews: UserFlagView[] = (await models.userFlag().allByUserId(user.id)).map(f => {
+		return {
+			...f,
+			message: userFlagToString(f),
+		};
+	});
+
+	userFlagViews.sort((a, b) => {
+		return a.created_time < b.created_time ? +1 : -1;
+	});
+
+	if (!owner.is_admin) userFlagViews = [];
+
+	const subscription = await ctx.joplin.models.subscription().byUserId(userId);
+
+	const view: View = defaultView('user', 'Profile');
+	view.content.user = formUser ? formUser : user;
+	view.content.buttonTitle = _('Update profile');
 	view.content.error = error;
 	view.content.postUrl = postUrl;
-	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
+	view.content.csrfTag = await createCsrfTag(ctx);
+
+	if (subscription) {
+		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
+
+		view.content.subscription = subscription;
+		view.content.showUpdateSubscriptionBasic = user.account_type !== AccountType.Basic;
+		view.content.showUpdateSubscriptionPro = user.account_type !== AccountType.Pro;
+		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
+		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
+	}
+
+	view.content.hasFlags = !!userFlagViews.length;
+	view.content.userFlagViews = userFlagViews;
+	view.content.stripePortalUrl = stripePortalUrl();
+
+	view.jsFiles.push('zxcvbn');
+	view.cssFiles.push('index/user');
+
+	if (config().accountTypesEnabled) {
+		view.content.showAccountTypes = true;
+		view.content.accountTypes = accountTypeOptions().map((o: any) => {
+			o.selected = user.account_type === o.value;
+			return o;
+		});
+	}
 
 	return view;
 });
@@ -107,24 +122,57 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 router.publicSchemas.push('users/:id/confirm');
 
 router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
+	const models = ctx.joplin.models;
 	const userId = path.id;
-	const token = ctx.query.token;
-	if (token) await ctx.models.user().confirmEmail(userId, token);
+	const token = ctx.query.token as string;
 
-	const user = await ctx.models.user().load(userId);
+	if (!token) throw new ErrorBadRequest('Missing token');
 
-	const view: View = {
-		...defaultView('users/confirm'),
-		content: {
-			user,
-			error,
-			token,
-			postUrl: ctx.models.user().confirmUrl(userId, token),
-		},
-		navbar: false,
+	const beforeChangingEmailHandler = async (newEmail: string) => {
+		if (config().stripe.enabled) {
+			try {
+				await updateCustomerEmail(models, userId, newEmail);
+			} catch (error) {
+				if (['no_sub', 'no_stripe_sub'].includes(error.code)) {
+					// ok - the user just doesn't have a subscription
+				} else {
+					error.message = `Your Stripe subscription email could not be updated. As a result your account email has not been changed. Please try again or contact support. Error was: ${error.message}`;
+					throw error;
+				}
+			}
+		}
 	};
 
-	return view;
+	if (ctx.query.confirm_email !== '0') await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
+
+	const user = await models.user().load(userId);
+	if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
+
+	if (user.must_set_password) {
+		const view: View = {
+			...defaultView('users/confirm', 'Confirmation'),
+			content: {
+				user,
+				error,
+				token,
+				postUrl: confirmUrl(userId, token),
+			},
+			navbar: false,
+		};
+
+		view.jsFiles.push('zxcvbn');
+
+		return view;
+	} else {
+		await models.token().deleteByValue(userId, token);
+		await models.notification().add(userId, NotificationKey.EmailConfirmed);
+
+		if (ctx.joplin.owner) {
+			return redirect(ctx, `${config().baseUrl}/home`);
+		} else {
+			return redirect(ctx, `${config().baseUrl}/login`);
+		}
+	}
 });
 
 interface SetPasswordFormData {
@@ -138,17 +186,17 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 	try {
 		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
-		await ctx.models.token().checkToken(userId, fields.token);
+		await ctx.joplin.models.token().checkToken(userId, fields.token);
 
-		const password = checkPassword(fields, true);
+		const password = checkRepeatPassword(fields, true);
 
-		await ctx.models.user().save({ id: userId, password });
-		await ctx.models.token().deleteByValue(userId, fields.token);
+		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
+		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
 
-		const session = await ctx.models.session().createUserSession(userId);
-		ctx.cookies.set('sessionId', session.id);
+		const session = await ctx.joplin.models.session().createUserSession(userId);
+		cookieSet(ctx, 'sessionId', session.id);
 
-		await ctx.models.notification().add(userId, 'passwordSet', NotificationLevel.Normal, 'Welcome to Joplin Cloud! Your password has been set successfully.');
+		await ctx.joplin.models.notification().add(userId, NotificationKey.PasswordSet);
 
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {
@@ -159,38 +207,55 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 router.alias(HttpMethod.POST, 'users/:id', 'users');
 
+interface FormFields {
+	id: Uuid;
+	post_button: string;
+	update_subscription_basic_button: string;
+	update_subscription_pro_button: string;
+	stop_impersonate_button: string;
+}
+
 router.post('users', async (path: SubPath, ctx: AppContext) => {
-	let user: User = {};
-	const userId = userIsMe(path) ? ctx.owner.id : path.id;
+	const owner = ctx.joplin.owner;
+
+	if (path.id && path.id !== 'me' && path.id !== owner.id) throw new ErrorForbidden();
+
+	const models = ctx.joplin.models;
+	let user: User = null;
 
 	try {
 		const body = await formParse(ctx.req);
-		const fields = body.fields;
-		const isNew = userIsNew(path);
-		if (userIsMe(path)) fields.id = userId;
-		user = makeUser(isNew, fields);
+		const fields = body.fields as FormFields;
 
-		const userModel = ctx.models.user();
+		if (fields.id && fields.id !== owner.id) throw new ErrorForbidden();
+
+		user = makeUser(owner.id, fields);
 
 		if (fields.post_button) {
-			const userToSave: User = userModel.fromApiInput(user);
-			await userModel.checkIfAllowed(ctx.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
+			const userToSave: User = models.user().fromApiInput(user);
+			await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
 
-			if (isNew) {
-				await userModel.save(userToSave);
-			} else {
-				await userModel.save(userToSave, { isNew: false });
+			if (userToSave.email && userToSave.email !== owner.email) {
+				await models.user().initiateEmailChange(owner.id, userToSave.email);
+				delete userToSave.email;
 			}
-		} else if (fields.delete_button) {
-			const user = await userModel.load(path.id);
-			await userModel.checkIfAllowed(ctx.owner, AclAction.Delete, user);
-			await userModel.delete(path.id);
+
+			await models.user().save(userToSave, { isNew: false });
+
+			// When changing the password, we also clear all session IDs for
+			// that user, except the current one (otherwise they would be
+			// logged out).
+			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+		} else if (fields.stop_impersonate_button) {
+			await stopImpersonating(ctx);
+			return redirect(ctx, config().baseUrl);
 		} else {
 			throw new Error('Invalid form button');
 		}
 
-		return redirect(ctx, `${config().baseUrl}/users${userIsMe(path) ? '/me' : ''}`);
+		return redirect(ctx, `${config().baseUrl}/users/me`);
 	} catch (error) {
+		error.message = `Error: Your changes were not saved: ${error.message}`;
 		if (error instanceof ErrorForbidden) throw error;
 		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id');
 		return endPoint.handler(path, ctx, user, error);

@@ -15,8 +15,28 @@ export class MarkupLanguageUtils {
 		throw new Error(`Unsupported markup language: ${language}`);
 	}
 
-	public extractImageUrls(language: MarkupLanguage, text: string) {
-		return this.lib_(language).extractImageUrls(text);
+	public extractImageUrls(language: MarkupLanguage, text: string): string[] {
+		let urls: string[] = [];
+
+		if (language === MarkupLanguage.Any) {
+			urls = urls.concat(this.lib_(MarkupLanguage.Markdown).extractImageUrls(text));
+			urls = urls.concat(this.lib_(MarkupLanguage.Html).extractImageUrls(text));
+		} else {
+			urls = this.lib_(language).extractImageUrls(text);
+		}
+
+		return urls;
+	}
+
+	public extractPdfUrls(language: MarkupLanguage, text: string): string[] {
+		let urls: string[] = [];
+		if (language === MarkupLanguage.Any) {
+			urls = urls.concat(this.lib_(MarkupLanguage.Markdown).extractPdfUrls(text));
+			urls = urls.concat(this.lib_(MarkupLanguage.Html).extractPdfUrls(text));
+		} else {
+			urls = this.lib_(language).extractPdfUrls(text);
+		}
+		return urls;
 	}
 
 	// Create a new MarkupToHtml instance while injecting options specific to Joplin

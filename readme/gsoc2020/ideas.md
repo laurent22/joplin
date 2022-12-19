@@ -1,6 +1,6 @@
 # GSoC 2020 Ideas
 
-2020 is Joplin first round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2020/index/) 
+2020 is Joplin first round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2020/) 
 
 **These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin.
 
@@ -84,7 +84,7 @@ More info: [Mobile - Add share menu #876](https://github.com/laurent22/joplin/is
 
 ## 5. Web client for Nextcloud
 
-There is the community's wish to have the notes integrated Nextcloud, so that Notes can be sought by Nextcloud itself. Although this idea focuses on Nextcloud it shall allow to extend it to other collaboration applications going beyond the current scope of  [Synchronisation](https://joplinapp.org/#synchronisation). There is already the [web application](https://github.com/foxmask/joplin-web) what may used as a starting point, but it is also fine to start from scratch.
+There is the community's wish to have the notes integrated Nextcloud, so that Notes can be sought by Nextcloud itself. Although this idea focuses on Nextcloud it shall allow to extend it to other collaboration applications going beyond the current scope of  [Synchronisation](https://joplinapp.org/help/#synchronisation). There is already the [web application](https://github.com/foxmask/joplin-web) what may used as a starting point, but it is also fine to start from scratch.
 
 Feature parity with the desktop client is not needed and would be out of scope. These are the features that would be needed to create a minimal web client:
 

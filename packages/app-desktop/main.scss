@@ -1,0 +1,279 @@
+body, textarea {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#react-root {
+	height: 100%;
+	overflow: hidden;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table th {
+	text-align: left;
+}
+
+table td, table th {
+	padding: .5em;
+	border: 1px solid #ccc;
+}
+
+a {
+	text-decoration: none;
+}
+
+::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+}
+
+::-webkit-scrollbar-corner {
+	background: none;
+}
+
+::-webkit-scrollbar-track {
+	border: none;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(100, 100, 100, 0.3);
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-track:hover {
+	background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 100, 100, 0.7);
+}
+
+.fade_out {
+	-webkit-transition: 0.15s;
+	transition: 0.15s;
+	opacity: 0;
+}
+
+.fade_in {
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	opacity: 1;
+}
+
+.editor-toolbar .button,
+.header .button {
+	border: 1px solid rgba(0,160,255,0);
+}
+
+.icon-button:hover {
+	background-color: rgba(0,0,0,0.05) !important;
+	border: 1px solid rgba(0,0,0,0.10);
+	border-radius: 5px;
+}
+
+.icon-button:active {
+	background-color: rgba(0,0,0,0.10) !important;
+	border: 1px solid rgba(0,0,0,0.15);
+	border-radius: 5px;
+}
+
+@keyframes icon-infinite-rotation{
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.rdtPicker {
+	min-width: 250px;
+	width: auto !important;
+}
+
+.smalltalk {
+	font-family: sans-serif;
+}
+
+.note-property-box .rdt {
+	display: inline-block;
+}
+
+.help-tooltip {
+	font-family: sans-serif;
+	max-width: 200px;
+}
+
+:disabled {
+	opacity: 0.6;
+}
+
+.config-menu-bar button:focus {
+	outline: 0 none;
+}
+
+.modal-message {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	color: grey;
+	font-size: 1.2em;
+	margin: 40px 20px;
+}
+
+.modal-message #loading-animation {
+	margin-right: 20px;
+	width: 20px;
+	height: 20px;
+	border: 5px solid lightgrey;
+	border-top: 4px solid white;
+	border-radius: 50%;
+	transition-property: transform;
+	animation-name: rotate;
+	animation-duration: 1.2s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes rotate {
+	from {transform: rotate(0deg);}
+	to {transform: rotate(360deg);}
+}
+
+*:focus {
+    outline: none;
+}
+
+/* =========================================================================================
+General classes
+========================================================================================= */
+
+body, button {
+	color: var(--joplin-color);
+	font-size: 13px;
+}
+
+div, span, a {
+	font-family: Roboto;
+}
+
+h2 {
+	font-size: 20px;
+
+	&.-no-top-margin {
+		margin-top: 0;
+	}
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+}
+
+.form > .form-input-group {
+	display: flex;
+	flex-direction: column;
+}
+
+.form > .form-input-group > label {
+	margin-bottom: 10px;
+}
+
+.form > .form-input-group-checkbox {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.form > .form-input-group-checkbox > input {
+	display: flex;
+	margin-right: 6px;
+}
+
+.form > .form-input-group-checkbox > label {
+	display: flex;
+	margin-bottom: 0;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+p,
+div.form,
+.form > .form-input-group {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+p {
+	&.-small {
+		font-size: 11px;
+	}
+}
+
+.form > .form-input-group:last-child {
+	margin-bottom: 0;
+}
+
+button {
+	cursor: pointer;
+}
+
+button:disabled {
+	cursor: default;
+}
+
+a {
+	color: var(--joplin-url-color);
+}
+
+p.info-text {
+	font-style: italic;
+	color: var(--joplin-color-faded);
+}
+
+/* =========================================================================================
+Component-specific classes
+========================================================================================= */
+
+.config-screen .config-section {
+	border-bottom: 1px solid var(--joplin-divider-color);
+	padding-bottom: 20px;
+}
+
+.master-password-dialog .dialog-root {
+	min-width: 500px;
+	max-width: 600px;
+}
+
+.master-password-dialog .dialog-content {
+	background-color: var(--joplin-background-color3);
+	padding: 1em;
+	padding-bottom: 1px;
+}
+
+.master-password-dialog .current-password-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	> .password-valid-icon {
+		margin-left: 10px;
+	}
+}
+
+// .master-password-dialog .current-password-wrapper input {
+// 	flex: 1;
+// 	margin-right: 10px;
+// }
+
+.master-password-dialog .fa-check {
+	color: var(--joplin-color-correct);
+}
+
+.master-password-dialog .fa-times {
+	color: var(--joplin-color-error);
+	margin-left: 5px;
+}

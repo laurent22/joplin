@@ -1,0 +1,13 @@
+.manage-password-section > .managebutton {
+	display: flex;
+}
+
+.manage-password-section > .status {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.manage-password-section > .needpassword {
+	color: var(--joplin-color-warn);
+}

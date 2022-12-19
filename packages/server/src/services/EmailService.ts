@@ -1,17 +1,16 @@
 import Logger from '@joplin/lib/Logger';
-import UserModel from '../models/UserModel';
 import BaseService from './BaseService';
 import Mail = require('nodemailer/lib/mailer');
+import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import { createTransport } from 'nodemailer';
-import { Email, EmailSender } from '../db';
+import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
+import EmailModel from '../models/EmailModel';
+import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';
+import { MailerSecurity } from '../env';
+import { senderInfo } from '../models/utils/email';
 
 const logger = Logger.create('EmailService');
-
-interface Participant {
-	name: string;
-	email: string;
-}
 
 export default class EmailService extends BaseService {
 
@@ -19,18 +18,31 @@ export default class EmailService extends BaseService {
 
 	private async transport(): Promise<Mail> {
 		if (!this.transport_) {
-			this.transport_ = createTransport({
-				host: this.config.mailer.host,
-				port: this.config.mailer.port,
-				secure: this.config.mailer.secure,
-				auth: {
-					user: this.config.mailer.authUser,
-					pass: this.config.mailer.authPassword,
-				},
-			});
-
 			try {
+				if (!senderInfo(EmailSender.NoReply).email) {
+					throw new Error('No-reply email must be set for email service to work (Set env variable MAILER_NOREPLY_EMAIL)');
+				}
+
+				// NodeMailer's TLS options are weird:
+				// https://nodemailer.com/smtp/#tls-options
+
+				const options: SMTPTransport.Options = {
+					host: this.config.mailer.host,
+					port: this.config.mailer.port,
+					secure: this.config.mailer.security === MailerSecurity.Tls,
+					ignoreTLS: this.config.mailer.security === MailerSecurity.None,
+					requireTLS: this.config.mailer.security === MailerSecurity.Starttls,
+				};
+				if (this.config.mailer.authUser || this.config.mailer.authPassword) {
+					options.auth = {
+						user: this.config.mailer.authUser,
+						pass: this.config.mailer.authPassword,
+					};
+				}
+				this.transport_ = createTransport(options);
+
 				await this.transport_.verify();
+				logger.info('Transporter is operational - service will be enabled');
 			} catch (error) {
 				this.enabled_ = false;
 				this.transport_ = null;
@@ -40,17 +52,6 @@ export default class EmailService extends BaseService {
 		}
 
 		return this.transport_;
-	}
-
-	private senderInfo(senderId: EmailSender): Participant {
-		if (senderId === EmailSender.NoReply) {
-			return {
-				name: this.config.mailer.noReplyName,
-				email: this.config.mailer.noReplyEmail,
-			};
-		}
-
-		throw new Error(`Invalid sender ID: ${senderId}`);
 	}
 
 	private escapeEmailField(f: string): string {
@@ -76,13 +77,14 @@ export default class EmailService extends BaseService {
 			const transport = await this.transport();
 
 			for (const email of emails) {
-				const sender = this.senderInfo(email.sender_id);
+				const sender = senderInfo(email.sender_id);
 
 				const mailOptions: Mail.Options = {
 					from: this.formatNameAndEmail(sender.email, sender.name),
 					to: this.formatNameAndEmail(email.recipient_email, email.recipient_name),
 					subject: email.subject,
-					text: email.body,
+					text: markdownBodyToPlainText(email.body),
+					html: markdownBodyToHtml(email.body),
 				};
 
 				const emailToSave: Email = {
@@ -115,7 +117,11 @@ export default class EmailService extends BaseService {
 			return;
 		}
 
-		UserModel.eventEmitter.on('created', this.scheduleMaintenance);
+		EmailModel.eventEmitter.on('queued', () => {
+			logger.info('Email was queued - scheduling maintenance');
+			void this.scheduleMaintenance();
+		});
+
 		await super.runInBackground();
 	}
 

@@ -4,27 +4,27 @@
 Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands.
 
 Joplin is about to make another big step to answers these demands by being an organization at Google Summer of Code 2020. 
-During the young history of the GSoC campaign it was noticed that it would be a greate help if documenation is centralized and making it a continuous read.  The current documentation tells when to do what and how clearly. In addition, the source code of Joplin is clean and well strucutred, so it is easy to understand. 
-Nevertheless, there are additional and essential information scattered around on the Forum and GitHub which rely on an active community, so that are being shared with them who need them. It can be said that this happens very well but it is aggreed that this situation has to be improved to free resources for working on the source coden and lower entry barriers for new contributors.
+During the young history of the GSoC campaign it was noticed that it would be a great help if documentation is centralized and making it a continuous read.  The current documentation tells when to do what and how clearly. In addition, the source code of Joplin is clean and well structured, so it is easy to understand. 
+Nevertheless, there are additional and essential information scattered around on the Forum and GitHub which rely on an active community, so that are being shared with them who need them. It can be said that this happens very well but it is agreed that this situation has to be improved to free resources for working on the source code and lower entry barriers for new contributors.
 
 For these reasons, all students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Docs program with Joplin. Here's how.
 
 Mentors, administrators and students: read [Season of Docs](https://developers.google.com/season-of-docs) occasionally. Also read the [Season of Docs FAQ](https://developers.google.com/season-of-docs/docs/faq).   
-**Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.   
-Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219) as this page here contains rather static content whereas the mentioned topic is updated much more freuqently.**
+**Most IMPORTANT, read this page carefully, line by line. We don't want to quote paragraphs from this page answering question in the forum.   
+Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219) as this page here contains rather static content whereas the mentioned topic is updated much more frequently.**
 
 All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org).
 
 ---
 
 # Instructions for students
-Students wishing to participate in Season of Docs must realize, that this is a important professional opportunity. You will be required to produce applicable and readable documenation for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
+Students wishing to participate in Season of Docs must realize, that this is a important professional opportunity. You will be required to produce applicable and readable documentation for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
 
-You don't have to be a proven technical writter - in fact, this whole program is meant to facilitate to support Joplin and other Open Source communities by techinal writters. However, experience in technical writting and/or coding experience is welcome.
+You don't have to be a proven technical writer - in fact, this whole program is meant to facilitate to support Joplin and other Open Source communities by technical writers. However, experience in technical writing and/or coding experience is welcome.
 
 In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.
 
-Before you can be accepted as a student we expect you to communicate very activily with the community and contributors and summerize what could help them most and link that work on your proposal. 
+Before you can be accepted as a student we expect you to communicate very actively with the community and contributors and summarize what could help them most and link that work on your proposal. 
 If your idea is related to codebase documentation it is welcome that you fix little bugs. You may browse the GitHub Issues to find some simple tasks. See the good first issues which are a good way to make yourself familiar with the code base.
 
 You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.
@@ -42,7 +42,7 @@ Students who neglect active communication will be failed!
 
 First of all, please read the above referenced resources and the [GSoC FAQ](https://developers.google.com/open-source/gsoc/faq). Pay special attention to the **Eligibility** section of the FAQ.
 
-We stronly recomment to follow the recommented steps, see next section, closley. It is slightly differs from the steps given for the closed GSoC application period. 
+We strongly recommend to follow the recommended steps, see next section, closely. It is slightly differs from the steps given for the closed GSoC application period. 
 The procedure reflects some of the lessons learnt in the GSOC 2020 campaign, so you may compare the recommended steps and scan the change history of the [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219).
 
 ## Recommended steps
@@ -52,10 +52,10 @@ The procedure reflects some of the lessons learnt in the GSOC 2020 campaign, so 
 3. Take a look at the [list of ideas](https://joplinapp.org/gsod2020/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features) if a corresponding does not already exist.
 5. Write a first draft and get someone to review it
-    1. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.  
-    1. If you want to add functionality to the codebase or documenation, have it approved  [Features category](https://discourse.joplinapp.org/c/features)
+    1. Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.  
+    1. If you want to add functionality to the codebase or documentation, have it approved  [Features category](https://discourse.joplinapp.org/c/features)
     1. **IMPORTANT**: If you contribute to the codebase do only one contribution at a time and wait until it is approved. 
-6. Submit your proposal to the mentors writting a private message at `@mentors` in the [Joplin Forum](https://discourse.joplinapp.org) and wait for their feedback
+6. Submit your proposal to the mentors writing a private message at `@mentors` in the [Joplin Forum](https://discourse.joplinapp.org) and wait for their feedback
 8. Submit proposal using [Google's web interface](https://summerofcode.withgoogle.com/) well ahead of the deadline. You can update it at anytime, even the final proposal.
 9. Submit proof of enrolment well ahead of the deadline
 

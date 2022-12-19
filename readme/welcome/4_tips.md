@@ -1,4 +1,4 @@
-# Tips 💡
+# Tips
 
 The first few notes should have given you an overview of the main functionalities of Joplin, but there's more it can do. See below for some of these features and how to get more help using the app:
 
@@ -10,21 +10,25 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 More info on the official website: https://joplinapp.org/clipper/
 
+## Plugins
+
+Joplin supports many plugins that allows you to add new features to the app, such as tabs, a table of content for your notes, a way to manage favourite notes, and many other ones. To add a plugin, go to the "Plugins" section in the config screen. From there you can search and install plugins, as well as search or update plugins.
+
 ## Attachments
 
 Any kind of file can be attached to a note. In Markdown, links to these files are represented as an ID. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
 
 Images can be attached either by clicking on "Attach file" or by pasting (with `Ctrl+V` or `Cmd+V`) an image directly in the editor, or by drag and dropping an image.
 
-More info about attachments: https://joplinapp.org#attachments--resources
+More info about attachments: https://joplinapp.org/help/#attachments
 
 ## Search
 
-Joplin supports advanced search queries, which are fully documented on the official website: https://joplinapp.org#searching
+Joplin supports advanced search queries, which are fully documented on the official website: https://joplinapp.org/help/#searching
 
 ## Alarms
 
-An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplinapp.org#notifications
+An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplinapp.org/help/#notifications
 
 ## Markdown advanced tips
 
@@ -52,7 +56,7 @@ f(x) = \int_{-\infty}^\infty
     \,d\xi
 $$
 
-Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplinapp.org#markdown
+Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplinapp.org/markdown/
 
 ## Community and further help
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -42,6 +42,7 @@ function TagList(props: Props) {
 		for (let i = 0; i < tags.length; i++) {
 			const props = {
 				title: tags[i].title,
+				id: tags[i].id,
 				key: tags[i].id,
 			};
 			output.push(<TagItem {...props} />);

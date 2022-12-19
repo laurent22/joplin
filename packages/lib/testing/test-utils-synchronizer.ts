@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-const { fileApi } = require('../testing/../testing/test-utils.js');
+import { fileApi } from '../testing/../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import BaseItem from '../models/BaseItem';
@@ -12,7 +12,7 @@ export async function allNotesFolders() {
 
 async function remoteItemsByTypes(types: number[]) {
 	const list = await fileApi().list('', { includeDirs: false, syncItemsOnly: true });
-	if (list.has_more) throw new Error('Not implemented!!!');
+	if (list.hasMore) throw new Error('Not implemented!!!');
 	const files = list.items;
 
 	const output = [];
@@ -53,7 +53,7 @@ export async function localNotesFoldersSameAsRemote(locals: any[], expect: Funct
 
 			let remoteContent = await fileApi().get(path);
 
-			remoteContent = dbItem.type_ == BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
+			remoteContent = dbItem.type_ === BaseModel.TYPE_NOTE ? await Note.unserialize(remoteContent) : await Folder.unserialize(remoteContent);
 			expect(remoteContent.title).toBe(dbItem.title);
 		}
 	} catch (e) {

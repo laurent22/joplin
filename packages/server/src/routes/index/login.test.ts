@@ -1,5 +1,6 @@
-import { Session } from '../../db';
+import { Session } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
+import { cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
 
@@ -43,7 +44,7 @@ describe('index_login', function() {
 
 		await routeHandler(context);
 
-		const doc = parseHtml(context.response.body);
+		const doc = parseHtml(context.response.body as string);
 		expect(!!doc.querySelector('input[name=email]')).toBe(true);
 		expect(!!doc.querySelector('input[name=password]')).toBe(true);
 	});
@@ -52,7 +53,7 @@ describe('index_login', function() {
 		const user = await createUser(1);
 
 		const context = await doLogin(user.email, '123456');
-		const sessionId = context.cookies.get('sessionId');
+		const sessionId = cookieGet(context, 'sessionId');
 		const session: Session = await models().session().load(sessionId);
 		expect(session.user_id).toBe(user.id);
 	});
@@ -62,12 +63,12 @@ describe('index_login', function() {
 
 		{
 			const context = await doLogin('bad', '123456');
-			expect(!context.cookies.get('sessionId')).toBe(true);
+			expect(!cookieGet(context, 'sessionId')).toBe(true);
 		}
 
 		{
 			const context = await doLogin(user.email, 'bad');
-			expect(!context.cookies.get('sessionId')).toBe(true);
+			expect(!cookieGet(context, 'sessionId')).toBe(true);
 		}
 	});
 

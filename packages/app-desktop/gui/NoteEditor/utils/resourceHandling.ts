@@ -3,16 +3,16 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import BaseModel from '@joplin/lib/BaseModel';
 import Resource from '@joplin/lib/models/Resource';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import Logger from '@joplin/lib/Logger';
+const { fileUriToPath } = require('@joplin/lib/urlUtils');
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const md5 = require('md5');
 const path = require('path');
-const uri2path = require('file-uri-to-path');
 
 const logger = Logger.create('resourceHandling');
 
@@ -65,7 +65,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	};
 
 	if (!filePaths) {
-		filePaths = bridge().showOpenDialog({
+		filePaths = await bridge().showOpenDialog({
 			properties: ['openFile', 'createDirectory', 'multiSelections'],
 		});
 		if (!filePaths || !filePaths.length) return null;
@@ -150,7 +150,7 @@ export async function processPastedHtml(html: string) {
 		if (!mappedResources[imageSrc]) {
 			try {
 				if (imageSrc.startsWith('file')) {
-					const imageFilePath = path.normalize(uri2path(imageSrc));
+					const imageFilePath = path.normalize(fileUriToPath(imageSrc));
 					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
 
 					if (imageFilePath.startsWith(resourceDirPath)) {

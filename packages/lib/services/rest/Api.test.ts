@@ -1,8 +1,8 @@
 import { PaginationOrderDir } from '../../models/utils/types';
 import Api, { RequestMethod } from '../../services/rest/Api';
+import { extractMediaUrls } from './routes/notes';
 import shim from '../../shim';
-
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep, supportDir } = require('../../testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Resource from '../../models/Resource';
 import Note from '../../models/Note';
@@ -10,6 +10,8 @@ import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../../services/searchengine/SearchEngine';
+const { MarkupToHtml } = require('@joplin/renderer');
+import { ResourceEntity } from '../database/types';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -35,11 +37,10 @@ let api: Api = null;
 
 describe('services_rest_Api', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		api = new Api();
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should ping', (async () => {
@@ -326,7 +327,7 @@ describe('services_rest_Api', function() {
 		expect(response.body.indexOf(resource.id) >= 0).toBe(true);
 	}));
 
-	it('should not compress images uploaded through resource api', (async () => {
+	it('should not compress images uploaded through resource API', (async () => {
 		const originalImagePath = `${supportDir}/photo-large.png`;
 		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
 			title: 'testing resource',
@@ -344,6 +345,80 @@ describe('services_rest_Api', function() {
 		const uploadedImageSize = (await shim.fsDriver().stat(uploadedImagePath)).size;
 
 		expect(originalImageSize).toEqual(uploadedImageSize);
+	}));
+
+	it('should update a resource', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [
+			{
+				path: `${supportDir}/photo.jpg`,
+			},
+		]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, JSON.stringify({
+			title: 'resource mod',
+		}), [
+			{
+				path: `${supportDir}/photo-large.png`,
+			},
+		]);
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		expect(resourceV2.title).toBe('resource mod');
+		expect(resourceV2.mime).toBe('image/png');
+		expect(resourceV2.file_extension).toBe('png');
+		expect(resourceV2.updated_time).toBeGreaterThan(resourceV1.updated_time);
+		expect(resourceV2.created_time).toBe(resourceV1.created_time);
+		expect(resourceV2.size).toBeGreaterThan(resourceV1.size);
+
+		expect(resourceV2.size).toBe((await shim.fsDriver().stat(Resource.fullPath(resourceV2))).size);
+	}));
+
+	it('should allow updating a resource file only', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [{ path: `${supportDir}/photo.jpg` }]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, null, [
+			{
+				path: `${supportDir}/photo-large.png`,
+			},
+		]);
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		// It should have updated the file content, but not the metadata
+		expect(resourceV2.title).toBe(resourceV1.title);
+		expect(resourceV2.size).toBeGreaterThan(resourceV1.size);
+	}));
+
+	it('should update resource properties', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [{ path: `${supportDir}/photo.jpg` }]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, JSON.stringify({
+			title: 'my new title',
+		}));
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		expect(resourceV2.title).toBe('my new title');
+		expect(resourceV2.mime).toBe(resourceV1.mime);
 	}));
 
 	it('should delete resources', (async () => {
@@ -376,6 +451,47 @@ describe('services_rest_Api', function() {
 		}));
 
 		expect(response.body).toBe('**Bold text**');
+	}));
+
+	it('should extract media urls from body', (() => {
+		const tests = [
+			{
+				language: MarkupToHtml.MARKUP_LANGUAGE_HTML,
+				body: '<div> <img src="https://example.com/img.png" /> <embed src="https://example.com/sample.pdf"/> <object data="https://example.com/file.PDF"></object> </div>',
+				result: ['https://example.com/img.png', 'https://example.com/sample.pdf', 'https://example.com/file.PDF'],
+			},
+			{
+				language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
+				body: 'test text \n ![img 1](https://example.com/img1.png) [embedded_pdf](https://example.com/sample1.pdf) [embedded_pdf](https://example.com/file.PDF)',
+				result: ['https://example.com/img1.png', 'https://example.com/sample1.pdf', 'https://example.com/file.PDF'],
+			},
+			{
+				language: MarkupToHtml.MARKUP_LANGUAGE_HTML,
+				body: '<div> <embed src="https://example.com/sample"/> <embed /> <object data="https://example.com/file.pdfff"></object> <a href="https://test.com/file.pdf">Link</a> </div>',
+				result: [],
+			},
+		];
+		tests.forEach((test) => {
+			const urls = extractMediaUrls(test.language, test.body);
+			expect(urls).toEqual(test.result);
+		});
+	}));
+
+	it('should create notes with pdf embeds', (async () => {
+		let response = null;
+		const f = await Folder.save({ title: 'pdf test1' });
+
+		response = await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({
+			title: 'testing PDF embeds',
+			parent_id: f.id,
+			body_html: `<div> <embed src="file://${supportDir}/welcome.pdf" type="application/pdf" /> </div>`,
+		}));
+
+		const resources = await Resource.all();
+		expect(resources.length).toBe(1);
+
+		const resource = resources[0];
+		expect(response.body.indexOf(resource.id) >= 0).toBe(true);
 	}));
 
 	it('should handle tokens', (async () => {

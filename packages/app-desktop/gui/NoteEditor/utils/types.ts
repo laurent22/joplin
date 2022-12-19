@@ -4,6 +4,11 @@ import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUt
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
+import { MarkupToHtmlOptions } from './useMarkupToHtml';
+
+export interface AllAssetsOptions {
+	contentMaxWidthTarget?: string;
+}
 
 export interface ToolbarButtonInfos {
 	[key: string]: ToolbarButtonInfo;
@@ -22,7 +27,6 @@ export interface NoteEditorProps {
 	editorNoteStatuses: any;
 	syncStarted: boolean;
 	bodyEditor: string;
-	folders: any[];
 	notesParentType: string;
 	selectedNoteTags: any[];
 	lastEditorScrollPercents: any;
@@ -37,6 +41,8 @@ export interface NoteEditorProps {
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	richTextBannerDismissed: boolean;
+	contentMaxWidth: number;
+	isSafeMode: boolean;
 }
 
 export interface NoteBodyEditorProps {
@@ -51,9 +57,9 @@ export interface NoteBodyEditorProps {
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
 	onScroll(event: any): void;
-	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: any)=> Promise<RenderResult>;
+	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	htmlToMarkdown: Function;
-	allAssets: (markupLanguage: MarkupLanguage)=> Promise<RenderResultPluginAsset[]>;
+	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;
@@ -67,6 +73,9 @@ export interface NoteBodyEditorProps {
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
+	contentMaxWidth: number;
+	isSafeMode: boolean;
+	noteId: string;
 }
 
 export interface FormNote {

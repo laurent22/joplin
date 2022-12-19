@@ -16,7 +16,7 @@ describe('index_items', function() {
 	});
 
 	test('should list the user items', async function() {
-		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user1, session: session1 } = await createUserAndSession(1, true);
 
 		const items: any = {};
 		for (let i = 1; i <= 150; i++) {

@@ -1,9 +1,18 @@
 const { randomClipperPort } = require('./randomClipperPort');
 
+function msleep(ms) {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+}
+
 class Bridge {
 
 	constructor() {
 		this.nounce_ = Date.now();
+		this.token_ = null;
 	}
 
 	async init(browser, browserSupportsPromises, store) {
@@ -76,8 +85,114 @@ class Bridge {
 			type: 'ENV_SET',
 			env: this.env(),
 		});
+	}
 
-		this.findClipperServerPort();
+	token() {
+		return this.token_;
+	}
+
+	async onReactAppStarts() {
+		await this.findClipperServerPort();
+
+		if (this.clipperServerPortStatus_ !== 'found') {
+			console.info('Skipping initialisation because server port was not found');
+			return;
+		}
+
+		const restoredState = await this.restoreState();
+
+		await this.checkAuth();
+		if (!this.token_) return; // Didn't get a token
+
+		const folders = await this.folderTree();
+		this.dispatch({ type: 'FOLDERS_SET', folders: folders.items ? folders.items : folders });
+
+		let tags = [];
+		for (let page = 1; page < 10000; page++) {
+			const result = await this.clipperApiExec('GET', 'tags', { page: page, order_by: 'title', order_dir: 'ASC' });
+			const resultTags = result.items ? result.items : result;
+			const hasMore = ('has_more' in result) && result.has_more;
+			tags = tags.concat(resultTags);
+			if (!hasMore) break;
+		}
+
+		this.dispatch({ type: 'TAGS_SET', tags: tags });
+		if (restoredState.selectedFolderId) this.dispatch({ type: 'SELECTED_FOLDER_SET', id: restoredState.selectedFolderId });
+	}
+
+	async checkAuth() {
+		this.dispatch({ type: 'AUTH_STATE_SET', value: 'starting' });
+
+		const existingToken = await this.storageGet(['token']);
+		this.token_ = existingToken.token;
+
+		const authCheckResponse = await this.clipperApiExec('GET', 'auth/check', { token: this.token_ });
+
+		if (authCheckResponse.valid) {
+			console.info('checkAuth: we already have a valid token - exiting');
+			this.dispatch({ type: 'AUTH_STATE_SET', value: 'accepted' });
+			return;
+		}
+
+		this.token_ = null;
+		await this.storageSet({ token: this.token_ });
+
+		this.dispatch({ type: 'AUTH_STATE_SET', value: 'waiting' });
+
+		// Note that Firefox and Chrome works differently for this:
+		//
+		// - In Chrome, the popup stays open, even when the user leaves the
+		//   browser to grant permission in the application.
+		//
+		// - In Firefox, as soon as the browser loses focus, the popup closes.
+		//
+		//   It means we can't rely on local state to get this working - instead
+		//   we request the auth token, and cache it to local storage (along
+		//   with a timestamp). Then next time the user opens the popup (after
+		//   it was automatically closed by Firefox), that cached auth token is
+		//   re-used and the auth process continues.
+		//
+		// https://github.com/laurent22/joplin/issues/5125#issuecomment-869547421
+
+		const existingAuthInfo = await this.storageGet(['authToken', 'authTokenTimestamp']);
+
+		let authToken = null;
+		if (existingAuthInfo.authToken && Date.now() - existingAuthInfo.authTokenTimestamp < 5 * 60 * 1000) {
+			console.info('checkAuth: we already have an auth token - reusing it');
+			authToken = existingAuthInfo.authToken;
+		} else {
+			console.info('checkAuth: we do not have an auth token - requesting it...');
+			const response = await this.clipperApiExec('POST', 'auth');
+			authToken = response.auth_token;
+
+			await this.storageSet({ authToken: authToken, authTokenTimestamp: Date.now() });
+		}
+
+		console.info('checkAuth: we do not have a token - requesting one using auth_token: ', authToken);
+
+		try {
+			while (true) {
+				const response = await this.clipperApiExec('GET', 'auth/check', { auth_token: authToken });
+
+				if (response.status === 'rejected') {
+					console.info('checkAuth: Auth request was not accepted', response);
+					this.dispatch({ type: 'AUTH_STATE_SET', value: 'rejected' });
+					break;
+				} else if (response.status === 'accepted') {
+					console.info('checkAuth: Auth request was accepted', response);
+					this.dispatch({ type: 'AUTH_STATE_SET', value: 'accepted' });
+					this.token_ = response.token;
+					await this.storageSet({ token: this.token_ });
+					break;
+				} else if (response.status === 'waiting') {
+					await msleep(1000);
+				} else {
+					throw new Error(`Unknown auth/check status: ${response.status}`);
+				}
+			}
+		} finally {
+			await this.storageSet({ authToken: '', authTokenTimestamp: 0 });
+		}
 	}
 
 	async backgroundPage(browser) {
@@ -125,9 +240,7 @@ class Bridge {
 	async restoreState() {
 		const s = await this.storageGet(null);
 		console.info('Popup: Restoring saved state:', s);
-		if (!s) return;
-
-		if (s.selectedFolderId) this.dispatch({ type: 'SELECTED_FOLDER_SET', id: s.selectedFolderId });
+		return s;
 	}
 
 	async findClipperServerPort() {
@@ -146,22 +259,6 @@ class Bridge {
 					this.clipperServerPortStatus_ = 'found';
 					this.clipperServerPort_ = state.port;
 					this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'found', port: state.port });
-
-					const folders = await this.folderTree();
-					this.dispatch({ type: 'FOLDERS_SET', folders: folders.items ? folders.items : folders });
-
-					let tags = [];
-					for (let page = 1; page < 10000; page++) {
-						const result = await this.clipperApiExec('GET', 'tags', { page: page, order_by: 'title', order_dir: 'ASC' });
-						const resultTags = result.items ? result.items : result;
-						const hasMore = ('has_more' in result) && result.has_more;
-						tags = tags.concat(resultTags);
-						if (!hasMore) break;
-					}
-
-					this.dispatch({ type: 'TAGS_SET', tags: tags });
-
-					bridge().restoreState();
 					return;
 				}
 			} catch (error) {
@@ -311,6 +408,8 @@ class Bridge {
 
 		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
 
+		query = Object.assign(query || {}, { token: this.token_ });
+
 		let queryString = '';
 		if (query) {
 			const s = [];
@@ -364,9 +463,11 @@ class Bridge {
 			// This is the perfect Heisenbug - it happens always when opening the popup the first time EXCEPT
 			// when the debugger is open. Then everything is working fine and the bug NEVER EVER happens,
 			// so it's impossible to understand what's going on.
-			await this.clipperApiExec('POST', 'notes', { nounce: this.nounce_++ }, content);
+			const response = await this.clipperApiExec('POST', 'notes', { nounce: this.nounce_++ }, content);
 
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
+
+			return response;
 		} catch (error) {
 			if (error.message === '{"error":"Duplicate Nounce"}') {
 				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });

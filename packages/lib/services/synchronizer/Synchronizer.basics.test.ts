@@ -1,7 +1,6 @@
 import Setting from '../../models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-
-const { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } = require('../../testing/test-utils.js');
+import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
@@ -9,11 +8,10 @@ const WelcomeUtils = require('../../WelcomeUtils');
 
 describe('Synchronizer.basics', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
-		done();
 	});
 
 	afterAll(async () => {
@@ -278,7 +276,7 @@ describe('Synchronizer.basics', function() {
 
 		const localF2 = await Folder.load(remoteF2.id);
 
-		expect(localF2.title == remoteF2.title).toBe(true);
+		expect(localF2.title === remoteF2.title).toBe(true);
 
 		// Then that folder that has been renamed locally should be set in such a way
 		// that synchronizing it applies the title change remotely, and that new title
@@ -293,7 +291,7 @@ describe('Synchronizer.basics', function() {
 
 		remoteF2 = await Folder.load(remoteF2.id);
 
-		expect(remoteF2.title == localF2.title).toBe(true);
+		expect(remoteF2.title === localF2.title).toBe(true);
 	}));
 
 	it('should create remote items with UTF-8 content', (async () => {
@@ -393,6 +391,51 @@ describe('Synchronizer.basics', function() {
 		await Note.save({ title: 'ma note encore' });
 		await synchronizerStart();
 		expect((await Note.all()).length).toBe(11);
+	}));
+
+	it('should not sync deletions that came via sync even when there is a conflict', (async () => {
+		// This test is mainly to simulate sharing, unsharing and sharing a note
+		// again. Previously, when doing so, the app would create deleted_items
+		// objects on the recipient when the owner unshares. It means that when
+		// sharing again, the recipient would apply the deletions and delete
+		// everything in the shared notebook.
+		//
+		// Specifically it was happening when a conflict was generated as a
+		// result of the items being deleted.
+		//
+		// - C1 creates a note and sync
+		// - C2 sync and get the note
+		// - C2 deletes the note and sync
+		// - C1 modify the note, and sync
+		//
+		// => A conflict is created. The note is deleted and a copy is created
+		// in the Conflict folder.
+		//
+		// After this, we recreate the note on the sync target (simulates the
+		// note being shared again), and we check that C2 doesn't attempt to
+		// delete that note.
+
+		const note = await Note.save({});
+		await synchronizerStart();
+		const noteSerialized = await fileApi().get(`${note.id}.md`);
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		await Note.delete(note.id);
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		await Note.save({ id: note.id });
+		await synchronizerStart();
+		expect((await Note.all())[0].is_conflict).toBe(1);
+		await fileApi().put(`${note.id}.md`, noteSerialized); // Recreate the note - simulate sharing again.
+		await synchronizerStart();
+
+		// Check that the client didn't delete the note
+		const remotes = (await fileApi().list()).items;
+		expect(remotes.find(r => r.path === `${note.id}.md`)).toBeTruthy();
 	}));
 
 });

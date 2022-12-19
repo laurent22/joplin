@@ -1,6 +1,12 @@
 import { resourceBlobPath } from '../utils/joplinUtils';
-import { Item, ItemResource, Uuid } from '../db';
+import { Item, ItemResource, Uuid } from '../services/database/types';
 import BaseModel from './BaseModel';
+
+export interface TreeItem {
+	item_id: Uuid;
+	resource_id: string;
+	children: TreeItem[];
+}
 
 export default class ItemResourceModel extends BaseModel<ItemResource> {
 
@@ -34,7 +40,7 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 					resource_id: resourceId,
 				});
 			}
-		});
+		}, 'ItemResourceModel::addResourceIds');
 	}
 
 	public async byItemId(itemId: Uuid): Promise<string[]> {
@@ -52,9 +58,53 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 		return output;
 	}
 
+	public async itemIdsByResourceId(resourceId: string): Promise<string[]> {
+		const rows: ItemResource[] = await this.db(this.tableName).select('item_id').where('resource_id', '=', resourceId);
+		return rows.map(r => r.item_id);
+	}
+
 	public async blobItemsByResourceIds(userIds: Uuid[], resourceIds: string[]): Promise<Item[]> {
 		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
 		return this.models().item().loadByNames(userIds, resourceBlobNames);
+	}
+
+	public async itemTree(rootItemId: Uuid, rootJopId: string, currentItemIds: string[] = []): Promise<TreeItem> {
+		interface Row {
+			id: Uuid;
+			jop_id: string;
+		}
+
+		const rows: Row[] = await this
+			.db('item_resources')
+			.leftJoin('items', 'item_resources.resource_id', 'items.jop_id')
+			.select('items.id', 'items.jop_id')
+			.where('item_resources.item_id', '=', rootItemId);
+
+		const output: TreeItem[] = [];
+
+		// Only process the children if the parent ID is not already in the
+		// tree. This is to prevent an infinite loop if one of the leaves links
+		// to a descendant note.
+
+		if (!currentItemIds.includes(rootJopId)) {
+			currentItemIds.push(rootJopId);
+
+			for (const row of rows) {
+				const subTree = await this.itemTree(row.id, row.jop_id, currentItemIds);
+
+				output.push({
+					item_id: row.id,
+					resource_id: row.jop_id,
+					children: subTree.children,
+				});
+			}
+		}
+
+		return {
+			item_id: rootItemId,
+			resource_id: rootJopId,
+			children: output,
+		};
 	}
 
 }

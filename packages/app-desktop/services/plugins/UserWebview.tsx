@@ -28,13 +28,13 @@ export interface Props {
 	onReady?: Function;
 }
 
-const StyledFrame = styled.iframe`
+const StyledFrame = styled.iframe<{fitToContent: boolean; borderBottom: boolean}>`
 	padding: 0;
 	margin: 0;
 	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '100%'};
 	height: ${(props: any) => props.fitToContent ? `${props.height}px` : '100%'};
 	border: none;
-	border-bottom: ${(props: Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
+	border-bottom: ${(props: any) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
 `;
 
 function serializeForm(form: any) {
@@ -69,6 +69,7 @@ function UserWebview(props: Props, ref: any) {
 
 	useEffect(() => {
 		if (isReady && props.onReady) props.onReady();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [isReady]);
 
 	function frameWindow() {

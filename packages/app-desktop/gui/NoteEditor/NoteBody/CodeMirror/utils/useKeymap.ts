@@ -171,6 +171,7 @@ export default function useKeymap(CodeMirror: any) {
 				'Cmd-Right': 'goLineRightSmart',
 				'Alt-Backspace': 'delGroupBefore',
 				'Alt-Delete': 'delGroupAfter',
+				'Cmd-Backspace': 'delWrappedLineLeft',
 
 				'fallthrough': 'basic',
 			};
@@ -183,5 +184,6 @@ export default function useKeymap(CodeMirror: any) {
 
 		setupEmacs();
 		setupVim();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

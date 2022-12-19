@@ -1,4 +1,4 @@
-import { Share, ShareType, ShareUserStatus } from '../../db';
+import { Share, ShareType, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree } from '../../utils/testing/testUtils';
 import { postApi, getApi } from '../../utils/testing/apiUtils';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
@@ -49,7 +49,7 @@ describe('shares', function() {
 		});
 
 		{
-			const shares = await getApi<PaginatedResults>(session1.id, 'shares');
+			const shares = await getApi<PaginatedResults<any>>(session1.id, 'shares');
 			expect(shares.items.length).toBe(2);
 
 			const share1: Share = shares.items.find(it => it.folder_id === '000000000000000000000000000000F1');
@@ -60,7 +60,7 @@ describe('shares', function() {
 			expect(share2).toBeTruthy();
 			expect(share2.type).toBe(ShareType.Note);
 
-			const shareUsers = await getApi<PaginatedResults>(session1.id, `shares/${share1.id}/users`);
+			const shareUsers = await getApi<PaginatedResults<any>>(session1.id, `shares/${share1.id}/users`);
 			expect(shareUsers.items.length).toBe(2);
 
 			const su2 = shareUsers.items.find(su => su.user.email === 'user2@localhost');
