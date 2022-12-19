@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Albano Battistella <albano_battistella@hotmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Manuel Tassi <mannivuwiki@gmail.com>\n"
 "Language-Team: italian\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -46,11 +48,11 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:71
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(Nel plugin: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
-msgstr ""
+msgstr "(Nessuno)"
 
 #: packages/lib/models/Setting.ts:386 packages/lib/models/Setting.ts:387
 msgid "(wysiwyg: %s)"
@@ -94,12 +96,12 @@ msgstr "%d giorni"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB di spazio di archiviazione"
 
 #: packages/lib/models/Setting.ts:1322
 msgid "%d hour"
@@ -112,13 +114,12 @@ msgstr "%d ore"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Allegati"
+msgstr "%d MB per nota o allegato"
 
 #: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
 #: packages/lib/models/Setting.ts:1321
@@ -261,7 +262,7 @@ msgstr "Accetta"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -269,9 +270,8 @@ msgstr "Azione"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:288
-#, fuzzy
 msgid "Actions"
-msgstr "Azione"
+msgstr "Azioni"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
 msgid "Active"
@@ -287,9 +287,8 @@ msgid "Add body"
 msgstr "Aggiungi corpo"
 
 #: packages/app-mobile/components/action-button.js:76
-#, fuzzy
 msgid "Add new"
-msgstr "Aggiungi titolo"
+msgstr "Aggiungi nuova"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -310,11 +309,11 @@ msgstr "Aggiungi al dizionario"
 #: packages/server/src/services/MustacheService.ts:156
 #: packages/server/src/services/MustacheService.ts:278
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Pannello di controllo admin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
 msgid "Advanced options"
@@ -340,9 +339,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "Mostra anche le variabili di configurazione non impostate o nascoste."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Annulla pubblicazione nota"
+msgstr "Pubblica anche le note collegate"
 
 #: packages/lib/models/Setting.ts:729
 msgid "Always"
@@ -353,12 +351,16 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"Taccuino ambiguo \"%s\". Per favore usa l'ID del taccuino - premi \"ti\" per "
+"cercare l'ID breve del taccuino o usa $b per il taccuino corrente"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
+"Taccuino ambiguo \"%s\". Per favore usa l'ID breve del taccuino - premi "
+"\"ti\" per cercare l'ID breve del taccuino"
 
 #: packages/app-desktop/checkForUpdates.ts:197
 msgid "An update is available, do you want to download it now?"
@@ -389,9 +391,8 @@ msgid "Aritim Dark"
 msgstr "Scuro Aritim"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
-#, fuzzy
 msgid "Attach"
-msgstr "Allega..."
+msgstr "Allega"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
@@ -413,9 +414,8 @@ msgstr "Allega il seguente file alla nota."
 
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
-#, fuzzy
 msgid "attachment"
-msgstr "Allegati"
+msgstr "allegato"
 
 #: packages/lib/models/Resource.ts:423
 msgid "Attachment conflict: \"%s\""
@@ -462,16 +462,15 @@ msgstr "Auto"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Aggiungi automaticamente gli account disabilitati per la cancellazione"
 
 #: packages/lib/models/Setting.ts:928
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto- accoppia parentesi graffe, parentesi, citazione, ecc."
 
 #: packages/lib/models/Setting.ts:1306
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Controlla aggiornamenti..."
+msgstr "Controlla aggiornamenti automaticamente"
 
 #: packages/lib/models/Setting.ts:840
 msgid "Automatically switch theme to match system theme"
@@ -487,7 +486,7 @@ msgstr "Indietro"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Base"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -508,9 +507,8 @@ msgid "Bulleted List"
 msgstr "Elenco puntato"
 
 #: packages/server/src/routes/admin/users.ts:154
-#, fuzzy
 msgid "Can Share"
-msgstr "Condividi"
+msgstr "Può condividere"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
@@ -626,12 +624,15 @@ msgstr ""
 #: packages/server/src/models/UserModel.ts:214
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
+"Impossibile salvare %s \"%s\" perché è più grande del limite consentito (%s)"
 
 #: packages/server/src/models/UserModel.ts:231
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
+"Impossibile salvare %s \"%s\" perché supererebbe la dimensione massima "
+"consentita (%s) per questo account"
 
 #: packages/lib/services/share/ShareService.ts:318
 msgid ""
@@ -639,10 +640,13 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
+"Impossibile condividere il taccuino crittato con %s perché non hanno "
+"abilitato la crittografia end-to-end. Possono attivarla da Opzioni > "
+"Crittografia"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Case sensitive"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -746,13 +750,12 @@ msgid "Code View"
 msgstr "Codice"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:179
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Per favore prima crea un Taccuino"
+msgstr "Collabora su un taccuino con altri"
 
 #: packages/app-mobile/components/side-menu-content.tsx:333
 msgid "Collapse"
-msgstr ""
+msgstr "Collassa"
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -784,9 +787,8 @@ msgid "Command palette"
 msgstr "Comandi"
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.ts:7
-#, fuzzy
 msgid "Command palette..."
-msgstr "Comandi"
+msgstr "Comandi..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
@@ -802,7 +804,7 @@ msgstr "Completato: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Compress old changes"
-msgstr ""
+msgstr "Comprimi le vecchie modifiche"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:681
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -831,18 +833,16 @@ msgid "Conflicts"
 msgstr "Conflitti"
 
 #: packages/lib/models/Resource.ts:407
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Allegati"
+msgstr "Conflitti (allegati)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "Proprietà del contenuto"
+msgstr "Contenuto fornito da %s"
 
 #: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to note"
@@ -866,14 +866,12 @@ msgstr "Copia il comando della modalità sviluppatore negli appunti"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:391
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:405
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "Interrompi modifiche esterne"
+msgstr "Copia link esterno"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
-#, fuzzy
 msgid "Copy image"
-msgstr "Copia token"
+msgstr "Copia immagine"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
 msgid "Copy Link Address"
@@ -926,9 +924,8 @@ msgstr ""
 "%s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Non è possibile connettersi al catalogo dei plugin"
+msgstr "Non è possibile connettersi al catalogo dei plugin."
 
 #: packages/app-desktop/InteropServiceHelper.ts:190
 msgid "Could not export notes: %s"
