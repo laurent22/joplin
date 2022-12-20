@@ -24,6 +24,8 @@ const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
 
+type ClickListener = ()=> void;
+
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions(): any {
 		return { header: null };
@@ -348,7 +350,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		return false;
-	}
+	};
 
 	public componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
@@ -377,7 +379,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	renderButton(key: string, title: string, clickHandler: Function, options: any = null) {
+	renderButton(key: string, title: string, clickHandler: ClickListener, options: any = null) {
 		if (!options) options = {};
 
 		let descriptionComp = null;
@@ -656,7 +658,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			<View key="donate_link" style={this.styles().settingContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						Linking.openURL('https://joplinapp.org/donate/');
+						void Linking.openURL('https://joplinapp.org/donate/');
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>
@@ -670,7 +672,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			<View key="website_link" style={this.styles().settingContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						Linking.openURL('https://joplinapp.org/');
+						void Linking.openURL('https://joplinapp.org/');
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>
@@ -684,7 +686,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			<View key="privacy_link" style={this.styles().settingContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						Linking.openURL('https://joplinapp.org/privacy/');
+						void Linking.openURL('https://joplinapp.org/privacy/');
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>
