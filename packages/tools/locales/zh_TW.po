@@ -3728,6 +3728,10 @@ msgstr "停止"
 msgid "Stop external editing"
 msgstr "停止外部編輯"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "刪除線"
@@ -4456,7 +4460,7 @@ msgstr "確定要停止共享嗎？此舉將會使共享對象無法再存取這
 msgid "Unsupported image type: %s"
 msgstr "不支援的圖像類型：%s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "未支援的鏈接或訊息: %s"

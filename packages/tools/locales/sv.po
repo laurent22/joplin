@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -211,11 +209,11 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd \"toggle"
-"\" för att växla mellan givna uppgifter mellan slutförda och inte slutförda "
-"tillstånd (Om målet är en vanlig anteckning kommer den att konverteras till "
-"en att-göra). Använd \"clear\" för att konvertera uppgiften att-göra "
-"tillbaka till en vanlig anteckning."
+"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd "
+"\"toggle\" för att växla mellan givna uppgifter mellan slutförda och inte "
+"slutförda tillstånd (Om målet är en vanlig anteckning kommer den att "
+"konverteras till en att-göra). Använd \"clear\" för att konvertera uppgiften "
+"att-göra tillbaka till en vanlig anteckning."
 
 #: packages/lib/models/Setting.ts:1348
 msgid "A3"
@@ -351,8 +349,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
 "Tvetydig anteckningsbok \"%s\". Använd kort anteckningsbok-id istället - "
 "tryck på \"ti\" för att se det korta anteckningsbok-id:t"
@@ -3007,8 +3005,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
-"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan \"%s"
-"\" nedan."
+"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan "
+"\"%s\" nedan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -3804,6 +3802,11 @@ msgstr "Sluta"
 msgid "Stop external editing"
 msgstr "Stoppa extern redigering"
 
+#: packages/lib/utils/joplinCloud.ts:129
+#, fuzzy
+msgid "Storage space"
+msgstr "%d GB lagringsutrymme"
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Genomstryk"
@@ -4579,7 +4582,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Bildstorlek som inte stöds: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Länk eller meddelande stöds inte: %s"
