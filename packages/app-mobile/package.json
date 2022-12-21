@@ -1,7 +1,7 @@
 {
   "name": "@joplin/app-mobile",
   "description": "Joplin for Mobile",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "version": "2.10.0",
   "private": true,
   "scripts": {

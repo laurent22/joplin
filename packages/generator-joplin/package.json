@@ -32,6 +32,6 @@
     "jest": "29.3.1"
   },
   "repository": "https://github.com/laurent22/generator-joplin",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "private": true
 }

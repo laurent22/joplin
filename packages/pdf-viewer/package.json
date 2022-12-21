@@ -17,7 +17,7 @@
     "postinstall": "yarn build"
   },
   "author": "Joplin",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/jest": "29.2.4",
     "@types/pdfjs-dist": "2.10.378",

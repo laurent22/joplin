@@ -1,7 +1,7 @@
 {
   "name": "joplin",
   "description": "Joplin CLI Client",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "author": "Laurent Cozic",
   "private": true,
   "scripts": {
