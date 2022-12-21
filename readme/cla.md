@@ -13,16 +13,6 @@ Please complete and sign this Agreement, and then email a copy to
 cla@joplinapp.org only (do not copy any other persons or lists). Read this
 document carefully before signing and keep a copy for your records.
 
-- Full name: **FULL NAME**
-
-- Postal Address: **POSTAL ADDRESS**
-
-- Country: **COUNTRY**
-
-- E-Mail: **EMAIL**
-
-- GitHub username: **GITHUB USERNAME**
-
 You accept and agree to the following terms and conditions for Your present and
 future Contributions submitted to the Company. In return, the Company shall not
 use Your Contributions in a way that is contrary to the public benefit or
@@ -108,9 +98,7 @@ Your Contributions.
    complete details of its source and of any license or other restriction
    (including, but not limited to, related patents, trademarks, and license
    agreements) of which you are personally aware, and conspicuously marking the
-   work as "Submitted on behalf of a third-party: **NAME HERE**".
+   work as "Submitted on behalf of a third-party: [named here]".
 
 8. You agree to notify the Company of any facts or circumstances of which you
    become aware that would make these representations inaccurate in any respect.
-
-Please sign: **SIGNATURE**          Date: **DATE**
