@@ -9,9 +9,7 @@ to the license terms below. This license is for your protection as a Contributor
 as well as the protection of the Company and its users; it does not change your
 rights to use your own Contributions for any other purpose.
 
-Please complete and sign this Agreement, and then email a copy to
-cla@joplinapp.org only (do not copy any other persons or lists). Read this
-document carefully before signing and keep a copy for your records.
+Read this document carefully before signing and keep a copy for your records.
 
 You accept and agree to the following terms and conditions for Your present and
 future Contributions submitted to the Company. In return, the Company shall not
