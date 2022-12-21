@@ -3839,6 +3839,10 @@ msgstr "Parar"
 msgid "Stop external editing"
 msgstr "Encerrar edição externa"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Tachado"
@@ -4621,7 +4625,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imagem não suportada: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Link ou mensagem não suportada: %s"

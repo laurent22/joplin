@@ -60,7 +60,7 @@ export async function execRequestC(sessionId: string, method: string, path: stri
 
 	if (body) appContextOptions.request.body = body;
 
-	if (options.filePath) appContextOptions.request.files = { file: { path: options.filePath } };
+	if (options.filePath) appContextOptions.request.files = { file: { filepath: options.filePath } };
 	if (options.query) appContextOptions.request.query = options.query;
 
 	const context = await koaAppContext(appContextOptions);

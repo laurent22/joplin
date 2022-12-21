@@ -27,7 +27,7 @@ msgstr ""
 msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:284
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:298
 msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Images, videos, PDFs and audio files are supported. Create math expressions and diagrams directly from the app. Take photos with the mobile app and save them to a note."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:301
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:327
 msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
 msgstr ""
 
@@ -76,19 +76,19 @@ msgstr ""
 msgid "Joplin Cloud <span class=\"frame-bg frame-bg-yellow\">plans</span>"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:57
-msgid "Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device."
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:301
+msgid "Joplin Cloud is based in France. This means your data is protected by strict European Union privacy laws. In addition, Joplin Cloud implements strong end-to-end encryption so that not even us can have access to your data."
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:287
-msgid "Joplin, due to its origin and design, adapts and respects Chinese standards and rules. This guarantees your unrestricted use and complete transparency and security of your usage data."
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:57
+msgid "Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device."
 msgstr ""
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:262
 msgid "More about E2EE"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:365
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:391
 msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
 msgstr ""
 
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Sign up with Joplin Cloud"
 msgstr ""
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:368
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:394
 msgid "Thank you for your support!"
 msgstr ""
 

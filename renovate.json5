@@ -95,11 +95,13 @@
 	"packageRules": [
 		{
 			"matchUpdateTypes": ["patch"],
-			"automerge": true
+			"automerge": true,
+			"labels": ["automerge"],
 		},
 		{
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
+			"labels": ["automerge"],
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
@@ -111,6 +113,7 @@
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
 				"eslint",
+				"eslint-interactive",
 				"@typescript-eslint/eslint-plugin",
 				"@typescript-eslint/parser",
 				"yarn",
