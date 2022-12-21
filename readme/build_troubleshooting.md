@@ -2,6 +2,8 @@
 
 ## On Windows
 
+test
+
 If `yarn dist` fails, it may need administrative rights.
 
 If you get an `error MSB8020: The build tools for v140 cannot be found.` try to run with a different toolset version, eg `npm install --toolset=v141` (See [here](https://github.com/mapbox/node-sqlite3/issues/1124) for more info). You may also try to install `npm --vs2015 install --global windows-build-tools` (the --vs2015 flag is to get toolkit "v140", which is what is used by default).
