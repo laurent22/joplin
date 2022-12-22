@@ -47,12 +47,12 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	const numberedListText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
+	const unorderedListText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
 
 	it('should correctly replace an unordered list with a numbered list', async () => {
 		const editor = await createEditor(
-			numberedListText,
-			EditorSelection.cursor(numberedListText.length)
+			unorderedListText,
+			EditorSelection.cursor(unorderedListText.length)
 		);
 
 		toggleList(ListType.OrderedList)(editor);
@@ -64,8 +64,8 @@ describe('markdownCommands.toggleList', () => {
 
 	it('should correctly replace an unordered list with a checklist', async () => {
 		const editor = await createEditor(
-			numberedListText,
-			EditorSelection.cursor(numberedListText.length)
+			unorderedListText,
+			EditorSelection.cursor(unorderedListText.length)
 		);
 
 		toggleList(ListType.CheckList)(editor);
