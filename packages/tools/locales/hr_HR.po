@@ -3817,6 +3817,10 @@ msgstr "Prekini"
 msgid "Stop external editing"
 msgstr "Prekini vanjsko uređivanje"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Precrtano"
@@ -4595,7 +4599,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nepodržana vrsta slike: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Nepodržana poveznica ili poruka: %s"

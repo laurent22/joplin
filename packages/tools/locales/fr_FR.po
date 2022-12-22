@@ -3823,6 +3823,10 @@ msgstr "Stopper"
 msgid "Stop external editing"
 msgstr "Arrêter l'édition externe"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Barrer"
@@ -4606,7 +4610,7 @@ msgstr "Annuler le partage ? Les destinataires n'auront plus accès au carnet."
 msgid "Unsupported image type: %s"
 msgstr "Type d'image non géré : %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Lien ou message non géré : %s"

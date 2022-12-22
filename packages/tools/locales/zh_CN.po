@@ -88,7 +88,7 @@ msgstr "%d 天"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
@@ -106,7 +106,7 @@ msgstr "%d 小时"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
@@ -247,12 +247,12 @@ msgstr "账号"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
-msgstr "动作"
+msgstr "操作"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:288
 msgid "Actions"
-msgstr "动作"
+msgstr "操作"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
 msgid "Active"
@@ -462,7 +462,7 @@ msgstr "返回"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "基本"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -907,7 +907,7 @@ msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:220
 msgid "Could not upgrade master key: %s"
-msgstr "无法升级主密钥：%s"
+msgstr "无法升级主密钥(master key)：%s"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
@@ -957,7 +957,7 @@ msgstr "已新建远程项目：%d。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Created: "
-msgstr "创建于： "
+msgstr "创建： "
 
 #: packages/app-cli/app/command-import.js:48
 #: packages/app-desktop/gui/ImportScreen.min.js:69
@@ -967,7 +967,7 @@ msgstr "已创建：%d 条。"
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
 #: packages/app-mobile/components/screens/Note.tsx:845
 msgid "Created: %s"
-msgstr "创建于：%s"
+msgstr "创建：%s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -1199,7 +1199,7 @@ msgstr "禁用安全模式并重启"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:102
 msgid "Disable Web Clipper Service"
-msgstr "禁用网页剪辑器"
+msgstr "禁用网页剪藏器"
 
 #: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
@@ -1323,7 +1323,7 @@ msgstr "下载资源中..."
 
 #: packages/lib/models/Setting.ts:400
 msgid "Dracula"
-msgstr "德古拉紫 (Dracula)"
+msgstr "德古拉紫(Dracula)"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
 msgid "Drop notes or files here"
@@ -1534,7 +1534,7 @@ msgstr "启用视频播放器"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:113
 msgid "Enable Web Clipper Service"
-msgstr "启用网页剪辑器"
+msgstr "启用网页剪藏器"
 
 #: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
@@ -1578,7 +1578,7 @@ msgstr "加密状态：%s"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Encryption keys"
-msgstr "加密密钥"
+msgstr "加密密钥(Encryption keys)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 msgid "Encryption:"
@@ -1595,7 +1595,7 @@ msgstr "在此输入代码"
 #: packages/app-cli/app/command-e2ee.ts:38
 #: packages/app-cli/app/command-e2ee.ts:84
 msgid "Enter master password:"
-msgstr "输入主密码："
+msgstr "输入主密码(master password)："
 
 #: packages/app-mobile/components/screens/folder.js:111
 msgid "Enter notebook title"
@@ -1697,15 +1697,15 @@ msgstr "仅导出选定笔记本。"
 
 #: packages/lib/models/Setting.ts:1468
 msgid "Fail-safe"
-msgstr "故障保护 (Fail-safe)"
+msgstr "故障保护(Fail-safe)"
 
 #: packages/lib/models/Setting.ts:1469
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"故障保护 (Fail-safe) ：当同步目标为空时（通常是配置错误或 Bug），不要删除本地"
-"数据"
+"故障保护(Fail-safe) ：当同步目标为空时（通常是配置错误或Bug），不要删除本地数"
+"据"
 
 #: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
@@ -1743,7 +1743,7 @@ msgstr "查找和替换"
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 #, fuzzy
 msgid "Find: "
-msgstr "已找到：%d 条。"
+msgstr "已找到："
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1835,7 +1835,7 @@ msgstr "完整更新记录"
 #: packages/lib/models/Setting.ts:2398
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
-msgstr "通用选项"
+msgstr "常规"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Generated"
@@ -1878,11 +1878,11 @@ msgstr "批准授权"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Header %d"
-msgstr ""
+msgstr "Header %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
-msgstr ""
+msgstr "Headers"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -1918,7 +1918,7 @@ msgstr "隐藏键盘"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
 msgid "Hide more actions"
-msgstr "隐藏更多动作"
+msgstr "隐藏更多操作"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -1931,7 +1931,7 @@ msgstr "主页"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
-msgstr "水平线"
+msgstr "分割线"
 
 #: packages/lib/services/interop/InteropService.ts:133
 msgid "HTML Directory"
@@ -2057,7 +2057,7 @@ msgstr "为使用文件系统同步，需要获取写入外部存储的权限。
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "要使用网页剪辑器，您需要执行以下步骤："
+msgstr "要使用网页剪藏器，您需要执行以下步骤："
 
 #: packages/lib/Synchronizer.ts:305
 msgid "In progress"
@@ -2225,7 +2225,7 @@ msgstr "Joplin 服务器 URL"
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr "Joplin 网页剪辑器可以让您将浏览器中的网页和屏幕截图保存到 Joplin。"
+msgstr "Joplin 网页剪藏器可以让您将浏览器中的网页和屏幕截图保存到 Joplin。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:641
 msgid "Joplin website"
@@ -2343,7 +2343,7 @@ msgstr "列表项"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
-msgstr ""
+msgstr "列表"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
@@ -2399,11 +2399,11 @@ msgstr "捐助"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 msgid "Manage master password"
-msgstr "管理主密码"
+msgstr "管理主密码(master password)"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
 msgid "Manage master password..."
-msgstr "管理主密码……"
+msgstr "管理主密码(master password)..."
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Manage multiple users"
@@ -2451,7 +2451,7 @@ msgstr "标记语言"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:117
 msgid "Master Key %s"
-msgstr "主密钥 %s"
+msgstr "主密钥(Master Key) %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
@@ -2462,7 +2462,7 @@ msgstr "主密码"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
 msgid "Master password:"
-msgstr "主密码："
+msgstr "主密码(Master password)："
 
 #: packages/lib/models/Setting.ts:754
 msgid "Max concurrent connections"
@@ -2470,25 +2470,24 @@ msgstr "最大并发连接数"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "最大条目数"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "笔记附件"
+msgstr "最大项目大小"
 
 #: packages/server/src/routes/admin/users.ts:150
 #, fuzzy
 msgid "Max Total Size"
-msgstr "实际大小"
+msgstr "最大总大小"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 msgid "Missing keys"
-msgstr "缺少密钥"
+msgstr "缺少密钥(keys)"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
-msgstr "缺少主密钥"
+msgstr "缺少主密钥(Master Keys)"
 
 #: packages/app-cli/app/cli-utils.js:109
 msgid "Missing required argument: %s"
@@ -2508,7 +2507,7 @@ msgstr "更多信息"
 
 #: packages/app-cli/app/app.js:64
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "有多条项目符合 “%s”。请缩小您的检索范围。"
+msgstr "不止一项匹配 “%s”。请缩小您的检索范围。"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:562
 msgid "Move %d notes to notebook \"%s\"?"
@@ -2697,7 +2696,7 @@ msgstr "笔记不存在：“%s” 。是否创建？"
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
 #, fuzzy
 msgid "Note editor"
-msgstr "笔记历史"
+msgstr "笔记编辑器"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -2770,7 +2769,7 @@ msgstr "笔记"
 
 #: packages/lib/models/Setting.ts:2418
 msgid "Notes and settings are stored in: %s"
-msgstr "笔记与设置储存于：%s"
+msgstr "笔记与配置信息存储于：%s"
 
 #: packages/app-cli/app/command-mknote.js:16
 #: packages/app-cli/app/command-mktodo.js:16
@@ -2805,7 +2804,7 @@ msgstr "位于 %s: %s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:602
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "您的主密钥之一使用了过时的加密方法。"
+msgstr "您的主密钥(Master Key)之一使用了过时的加密方法。"
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
@@ -2814,12 +2813,13 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"一个或多个项目当前已加密，您可能需要提供主密码。若需进行此操作请输入 `e2ee "
-"decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
+"一个或多个项目当前已加密，您可能需要提供主密码(master password)。若需进行此操"
+"作请输入 `e2ee decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后"
+"即可使用。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 msgid "One or more master keys need a password."
-msgstr "一个或多个主密钥需要密码。"
+msgstr "一个或多个主密钥(Master Key)需要密码。"
 
 #: packages/lib/SyncTargetOneDrive.ts:29
 msgid "OneDrive"
@@ -2844,7 +2844,7 @@ msgstr "打开 %s"
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
 #, fuzzy
 msgid "Open PDF viewer"
-msgstr "启用 PDF 查看器"
+msgstr "打开 PDF 查看器"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -2956,7 +2956,7 @@ msgstr "请确认您要重新加密整个数据库。"
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr "在升级密钥之前，请在下面的主密钥列表中输入您的密码。"
+msgstr "在升级密钥之前，请在下面的主密钥(Master Key)列表中输入您的密码。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:321
 msgid ""
@@ -3036,11 +3036,11 @@ msgstr "可用值：%s。"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 msgid "Preferences"
-msgstr "首选项"
+msgstr "偏好设置"
 
 #: packages/app-desktop/gui/MenuBar.tsx:518
 msgid "Preferences..."
-msgstr "首选项..."
+msgstr "偏好设置..."
 
 #: packages/lib/models/Setting.ts:870
 msgid "Preferred dark theme"
@@ -3074,7 +3074,7 @@ msgstr "上次匹配"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
-msgstr "此笔记的早期版本"
+msgstr "该笔记的历史版本"
 
 #: packages/app-desktop/gui/MainScreen/commands/print.ts:7
 msgid "Print"
@@ -3136,7 +3136,7 @@ msgstr "代理URL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr "公钥、私钥对："
+msgstr "公-私钥对："
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -3260,7 +3260,7 @@ msgstr "全选"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "替换为..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
@@ -3269,7 +3269,7 @@ msgstr "替换: "
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
 msgid "Reset master password"
-msgstr "重置主密码"
+msgstr "重置主密码(master password)"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3278,7 +3278,7 @@ msgstr "资源：%d。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid "Restart and upgrade"
-msgstr "重启后升级"
+msgstr "重启并升级"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:708
 msgid "Restart now"
@@ -3651,7 +3651,7 @@ msgstr "分栏视图"
 
 #: packages/lib/models/Setting.ts:1159
 msgid "Start application minimised in the tray icon"
-msgstr "应用程序启动时最小化到托盘"
+msgstr "程序启动时最小化到托盘"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
@@ -3698,7 +3698,7 @@ msgstr "状态：在 %d 端口运行"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "Step 1: Enable the clipper service"
-msgstr "步骤一：启用网页剪辑器"
+msgstr "步骤一：启用网页剪藏服务"
 
 #: packages/app-cli/app/command-sync.ts:83
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
@@ -3723,6 +3723,10 @@ msgstr "停止"
 #: packages/app-desktop/commands/stopExternalEditing.ts:8
 msgid "Stop external editing"
 msgstr "停止外部编辑"
+
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr "储存空间"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -3850,7 +3854,7 @@ msgstr "同步"
 
 #: packages/lib/models/Setting.ts:1335
 msgid "Synchronise only over WiFi connection"
-msgstr "只通过 WiFi 网络同步数据"
+msgstr "只通过 WiFi 同步"
 
 #: packages/app-cli/app/command-sync.ts:29
 msgid "Synchronises with remote storage."
@@ -3866,7 +3870,7 @@ msgstr "正在同步..."
 
 #: packages/lib/models/Setting.ts:1350
 msgid "Tabloid"
-msgstr "文摘 (Tabloid)"
+msgstr "文摘(Tabloid)"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
@@ -3892,7 +3896,7 @@ msgstr "拍照"
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:95
 #, fuzzy
 msgid "Task list"
-msgstr "任务"
+msgstr "任务列表"
 
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
@@ -3901,7 +3905,7 @@ msgstr "任务"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "团队"
 
 #: packages/lib/models/Setting.ts:1343
 msgid "Text editor command"
@@ -3919,7 +3923,7 @@ msgstr "应用将要关闭。请重新启动它以完成此过程。"
 #: packages/app-desktop/app.ts:340
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr "该应用程序没有正确关闭。你想在安全模式下启动吗？"
+msgstr "该程序没有正确关闭。你想在安全模式下启动吗？"
 
 #: packages/lib/onedrive-api-node-utils.js:87
 msgid ""
@@ -3964,7 +3968,7 @@ msgstr "默认的加密方法已更改为一种更安全的方法，建议您将
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr "默认的加密方法已更改，您应当重新加密数据。"
+msgstr "默认的加密方式已变更，您应当重新加密数据。"
 
 #: packages/lib/models/Setting.ts:1343
 msgid ""
@@ -4019,7 +4023,7 @@ msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:218
 msgid "The master key has been upgraded successfully!"
-msgstr "主密钥已成功升级！"
+msgstr "主密钥(Master Key)已成功升级！"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:272
 msgid ""
@@ -4027,8 +4031,8 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥正被用于加密某些项，但应用程序目前无法访问它们。项目最终"
-"会通过同步获取，但目前可能仍未被同步。"
+"具有这些 ID 的主密钥(Master Key)正被用于加密某些项，但应用程序目前无法访问它"
+"们。项目最终会通过同步获取，但目前可能仍未被同步。"
 
 #: packages/lib/services/RevisionService.ts:267
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -4084,15 +4088,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/Root.tsx:177
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr "网页剪辑器需要您的授权才能访问您的数据。"
+msgstr "网页剪藏器需要您的授权才能访问您的数据。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:84
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "网页剪辑器已启用并已设置为自动启动。"
+msgstr "网页剪藏器已启用并已设置为自动启动。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:108
 msgid "The web clipper service is not enabled."
-msgstr "网页剪辑未启用。"
+msgstr "网页剪藏未启用。"
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4258,7 +4262,7 @@ msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
 msgid "To continue, please enter your master password below."
-msgstr "若要继续，请在下面输入您的主密码。"
+msgstr "若要继续，请在下面输入您的主密码(master password)。"
 
 #: packages/app-cli/app/app-gui.js:457
 msgid "To delete a tag, untag the associated notes."
@@ -4449,7 +4453,7 @@ msgstr "取消分享这个笔记本？收件人将无法再访问到它的内容
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片类型：%s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "不被支持的链接或信息：%s"
@@ -4493,7 +4497,7 @@ msgstr "已更新远程项目：%d。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Updated: "
-msgstr "更新于： "
+msgstr "更新： "
 
 #: packages/app-cli/app/command-import.js:49
 #: packages/app-desktop/gui/ImportScreen.min.js:70
@@ -4620,7 +4624,7 @@ msgstr "警告：由于性能原因无法显示所有资源（最多：%s）。"
 
 #: packages/lib/models/Setting.ts:2408 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
-msgstr "网页剪辑器"
+msgstr "网页剪藏器"
 
 #: packages/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"

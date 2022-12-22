@@ -43,6 +43,10 @@ If you want to start contributing to the project's code, please follow these gui
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/dev/BUILD.md) for more details.
 
+## Signing the Individual Contributor License Agreement
+
+All contributors to the project must sign our [Individual Contributor License Agreement](https://github.com/laurent22/joplin/blob/dev/readme/cla.md).
+
 ## Coding style
 
 Please see [readme/coding_style.md](readme/coding_style.md).

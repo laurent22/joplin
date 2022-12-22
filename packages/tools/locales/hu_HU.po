@@ -3750,6 +3750,10 @@ msgstr "Stop"
 msgid "Stop external editing"
 msgstr "Külső szerkesztés leállítása"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Áthúzott"
@@ -4480,7 +4484,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nem támogatott kép típus: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Nem támogatott hivatkozás vagy üzenet: %s"

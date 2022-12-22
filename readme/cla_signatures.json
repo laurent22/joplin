@@ -1,0 +1,36 @@
+{
+  "signedContributors": [
+    {
+      "name": "laurent22",
+      "id": 1285584,
+      "comment_id": 1361665980,
+      "created_at": "2022-12-21T16:54:13Z",
+      "repoId": 79162682,
+      "pullRequestNo": 7510
+    },
+    {
+      "name": "wh201906",
+      "id": 62299611,
+      "comment_id": 1361737493,
+      "created_at": "2022-12-21T17:39:56Z",
+      "repoId": 79162682,
+      "pullRequestNo": 6865
+    },
+    {
+      "name": "personalizedrefrigerator",
+      "id": 46334387,
+      "comment_id": 1362101229,
+      "created_at": "2022-12-21T21:22:16Z",
+      "repoId": 79162682,
+      "pullRequestNo": 7470
+    },
+    {
+      "name": "gtlsgamr",
+      "id": 47787284,
+      "comment_id": 1362615340,
+      "created_at": "2022-12-22T09:34:59Z",
+      "repoId": 79162682,
+      "pullRequestNo": 7515
+    }
+  ]
+}

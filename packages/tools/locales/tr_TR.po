@@ -3822,6 +3822,10 @@ msgstr "Dur"
 msgid "Stop external editing"
 msgstr "Dış düzenlemeyi durdur"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Ortadan çizgili"
@@ -4607,7 +4611,7 @@ msgstr "Not paylaşımı kaldırılsın mı? Alıcı artık not içeriğine eri�
 msgid "Unsupported image type: %s"
 msgstr "Desteklenmeyen resim türü: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Desteklenmeyen bağlantı veya mesaj: %s"

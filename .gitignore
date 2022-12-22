@@ -882,9 +882,9 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js.map
-packages/app-mobile/components/NoteEditor/CodeMirror/createEditor.d.ts
-packages/app-mobile/components/NoteEditor/CodeMirror/createEditor.js
-packages/app-mobile/components/NoteEditor/CodeMirror/createEditor.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.test.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.test.js
+packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.test.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/decoratorExtension.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/decoratorExtension.js
 packages/app-mobile/components/NoteEditor/CodeMirror/decoratorExtension.js.map
@@ -915,6 +915,12 @@ packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.test.js
 packages/app-mobile/components/NoteEditor/CodeMirror/syntaxHighlightingLanguages.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/syntaxHighlightingLanguages.js
 packages/app-mobile/components/NoteEditor/CodeMirror/syntaxHighlightingLanguages.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/createEditor.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/createEditor.js
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/createEditor.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.js
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js.map

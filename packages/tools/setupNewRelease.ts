@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import yargs = require('yargs');
 
 const rootDir = path.dirname(path.dirname(__dirname));
 
@@ -107,8 +108,9 @@ function iosVersionHack(majorMinorVersion: string) {
 }
 
 async function main() {
-	const argv: any = require('yargs').parserConfiguration({
+	const argv: any = yargs.parserConfiguration({
 		'parse-numbers': false,
+		'parse-positional-numbers': false,
 	}).argv;
 
 	if (!argv._ || !argv._.length) throw new Error('Please specify the major.minor version, eg. 1.2');

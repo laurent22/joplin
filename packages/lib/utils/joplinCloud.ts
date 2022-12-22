@@ -126,7 +126,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			teamsInfoShort: _('%d MB', 200),
 		},
 		maxStorage: {
-			title: 'Storage space',
+			title: _('Storage space'),
 			basic: true,
 			pro: true,
 			teams: true,

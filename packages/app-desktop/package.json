@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.9.17",
+  "version": "2.10.2",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -20,7 +20,7 @@
     "url": "git+https://github.com/laurent22/joplin.git"
   },
   "author": "Laurent Cozic",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
@@ -106,10 +106,10 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@joplin/tools": "~2.9",
+    "@joplin/tools": "~2.10",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.2.3",
-    "@types/node": "18.11.10",
+    "@types/jest": "29.2.4",
+    "@types/node": "18.11.17",
     "@types/react": "16.14.34",
     "@types/react-redux": "7.1.24",
     "@types/styled-components": "5.1.26",
@@ -126,7 +126,7 @@
     "js-sha512": "0.8.0",
     "nan": "2.17.0",
     "react-test-renderer": "18.2.0",
-    "typescript": "4.9.3"
+    "typescript": "4.9.4"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -134,12 +134,12 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
-    "@electron/remote": "2.0.8",
+    "@electron/remote": "2.0.9",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
-    "@joplin/lib": "~2.9",
-    "@joplin/pdf-viewer": "~2.9",
-    "@joplin/renderer": "~2.9",
+    "@joplin/lib": "~2.10",
+    "@joplin/pdf-viewer": "~2.10",
+    "@joplin/renderer": "~2.10",
     "async-mutex": "0.4.0",
     "codemirror": "5.65.9",
     "color": "3.2.1",
@@ -171,7 +171,7 @@
     "reselect": "4.1.7",
     "roboto-fontface": "0.10.0",
     "smalltalk": "4.1.1",
-    "sqlite3": "5.1.2",
+    "sqlite3": "5.1.4",
     "styled-components": "5.3.6",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
