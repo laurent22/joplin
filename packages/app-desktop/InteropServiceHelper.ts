@@ -78,12 +78,10 @@ export default class InteropServiceHelper {
 					shim.setTimeout(async () => {
 						if (target === 'pdf') {
 							try {
-								const openDetails = '[].forEach.call( document.querySelectorAll( \'details\' ), el => el.setAttribute( \'open\', \'\' ) )';
-								win.webContents.executeJavaScript(openDetails);
+								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
 								const data = await win.webContents.printToPDF(options);
+								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.removeAttribute(\'open\',\'\'))');
 								resolve(data);
-								const closeDetails = '[].forEach.call( document.querySelectorAll( \'details\' ), el => el.removeAttribute( \'open\', \'\' ) )';
-								win.webContents.executeJavaScript(closeDetails);
 							} catch (error) {
 								reject(error);
 							} finally {
