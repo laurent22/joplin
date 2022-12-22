@@ -4371,7 +4371,7 @@ __metadata:
     react-native-file-viewer: 2.1.5
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.8.0
-    react-native-image-picker: 4.10.2
+    react-native-image-picker: 4.10.3
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
     react-native-popup-menu: 0.16.1
@@ -26517,13 +26517,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:4.10.2":
-  version: 4.10.2
-  resolution: "react-native-image-picker@npm:4.10.2"
+"react-native-image-picker@npm:4.10.3":
+  version: 4.10.3
+  resolution: "react-native-image-picker@npm:4.10.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: d6d1395a39756fad7b909c9ecd828b2d257698f5b0806be730fe56341f77de9db02b8930fb2bf5432fb726d14276cea5a7071c02753fa48dd38b0874a129abd9
+  checksum: 1f1c5cae5950790cfbdab2e1f547cfe065de9949c7cf0102dec512f43889f586eed1c265e1ecbc88df106696650b3dc5bf936b862078906787aca7e9ca2f145c
   languageName: node
   linkType: hard
 
