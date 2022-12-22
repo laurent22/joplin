@@ -5,9 +5,12 @@ import { SelectionRange, EditorSelection, EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view';
 import { MarkdownMathExtension } from '../markdownMathParser';
 import forceFullParse from './forceFullParse';
+import loadLangauges from './loadLanguages';
 
 // Creates and returns a minimal editor with markdown extensions
-const createEditor = (initialText: string, initialSelection: SelectionRange): EditorView => {
+const createEditor = async (initialText: string, initialSelection: SelectionRange): Promise<EditorView> => {
+	await loadLangauges();
+
 	const editor = new EditorView({
 		doc: initialText,
 		selection: EditorSelection.create([initialSelection]),

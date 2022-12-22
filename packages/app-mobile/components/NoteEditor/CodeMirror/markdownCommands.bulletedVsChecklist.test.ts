@@ -11,8 +11,8 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 	const checklistPart = '- [ ] This is a checklist\n- [ ] with multiple items.\n- [ ] ☑';
 	const initialDocText = `${bulletedListPart}\n\n${checklistPart}`;
 
-	it('should remove a checklist following a bulleted list without modifying the bulleted list', () => {
-		const editor = createEditor(
+	it('should remove a checklist following a bulleted list without modifying the bulleted list', async () => {
+		const editor = await createEditor(
 			initialDocText, EditorSelection.cursor(bulletedListPart.length + 5)
 		);
 
@@ -22,8 +22,8 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 		);
 	});
 
-	it('should remove an unordered list following a checklist without modifying the checklist', () => {
-		const editor = createEditor(
+	it('should remove an unordered list following a checklist without modifying the checklist', async () => {
+		const editor = await createEditor(
 			initialDocText, EditorSelection.cursor(bulletedListPart.length - 5)
 		);
 
@@ -33,8 +33,8 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 		);
 	});
 
-	it('should replace a selection of unordered and task lists with a correctly-numbered list', () => {
-		const editor = createEditor(
+	it('should replace a selection of unordered and task lists with a correctly-numbered list', async () => {
+		const editor = await createEditor(
 			initialDocText, EditorSelection.range(0, initialDocText.length)
 		);
 
