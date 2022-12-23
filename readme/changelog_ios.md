@@ -1,5 +1,9 @@
 # Joplin iOS app changelog
 
+## [ios-v12.9.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.9.2) - 2022-12-22T12:42:26Z
+
+- Fixed: Could not attach images to notes anymore (#7471)
+
 ## [ios-v12.9.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.9.1) - 2022-12-04T18:03:02Z
 
 - New: Add Markdown toolbar (#6753 by Henry Heino)
