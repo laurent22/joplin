@@ -13,7 +13,6 @@ export const runtime = (comp: any): CommandRuntime => {
 				comp.editorRef.current.execCommand({ name: 'search' });
 			} else {
 				comp.setShowLocalSearch(true);
-				if (comp.noteSearchBarRef.current) comp.noteSearchBarRef.current.wrappedInstance.focus();
 			}
 		},
 		enabledCondition: 'oneNoteSelected',
