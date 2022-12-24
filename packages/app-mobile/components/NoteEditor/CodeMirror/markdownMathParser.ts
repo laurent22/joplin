@@ -53,7 +53,7 @@ const wrappedTeXParser = (nodeTag: string): ParseWrapper => {
 	});
 };
 
-// Markdown extension for recognizing inline code
+// Markdown extension for recognizing inline math
 const InlineMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{

@@ -7,14 +7,15 @@ import { MarkdownMathExtension } from '../markdownMathParser';
 import forceFullParse from './forceFullParse';
 import loadLangauges from './loadLanguages';
 
-// Creates and returns a minimal editor with markdown extensions
-const createEditor = async (initialText: string, initialSelection: SelectionRange): Promise<EditorView> => {
+// Creates and returns a minimal editor with markdown extensions. Waits to return the editor
+// until all syntax tree tags in `expectedSyntaxTreeTags` exist.
+const createEditor = async (
+	initialText: string, initialSelection: SelectionRange, expectedSyntaxTreeTags: string[]
+): Promise<EditorView> => {
 	await loadLangauges();
 
-	const trailingText = '\n\nAdditional text that we know will be parsed: $3+\\text{3}$';
-
 	const editor = new EditorView({
-		doc: initialText + trailingText,
+		doc: initialText,
 		selection: EditorSelection.create([initialSelection]),
 		extensions: [
 			markdown({
@@ -25,45 +26,38 @@ const createEditor = async (initialText: string, initialSelection: SelectionRang
 		],
 	});
 
-	// HACK: Try to determine whether we've successfully finished parsing.
-	// This is imperfect as we ultimately remove the content we add, forcing at least a
-	// partial re-parse.
-	const addedTextFrom = initialText.length;
-	const addedTextTo = initialText.length + trailingText.length;
-
-	let sawExpectedText = false;
-
-	while (!sawExpectedText) {
+	let sawExpectedTagCount = 0;
+	while (sawExpectedTagCount < expectedSyntaxTreeTags.length) {
 		forceFullParse(editor.state);
+
+		sawExpectedTagCount = 0;
+		const seenTags = new Set<string>();
+
 		syntaxTree(editor.state).iterate({
-			from: addedTextFrom,
-			to: addedTextTo,
+			from: 0,
+			to: editor.state.doc.length,
 			enter: (node) => {
-				// Search for the TeX tag name (the \\text).
-				if (node.name === 'tagName') {
-					sawExpectedText = true;
+				for (const expectedTag of expectedSyntaxTreeTags) {
+					if (node.name === expectedTag) {
+						seenTags.add(node.name);
+						sawExpectedTagCount ++;
+						break;
+					}
 				}
 			},
 		});
 
-		if (!sawExpectedText) {
-			console.log('Extra tag not parsed. Retrying...');
+		if (sawExpectedTagCount < expectedSyntaxTreeTags.length) {
+			const missingTags = expectedSyntaxTreeTags.filter(tagName => {
+				return !seenTags.has(tagName);
+			});
+			console.warn(`Didn't find all expected tags. Missing ${missingTags}. Retrying...`);
 
 			await new Promise(resolve => {
 				setTimeout(resolve, 500);
 			});
 		}
 	}
-
-	// Remove the additional text we added
-	editor.dispatch(editor.state.update({
-		changes: {
-			from: addedTextFrom,
-			to: addedTextTo,
-		},
-	}));
-
-	forceFullParse(editor.state);
 
 	return editor;
 };
