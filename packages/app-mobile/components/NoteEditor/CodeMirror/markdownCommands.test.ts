@@ -7,8 +7,6 @@ import {
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from './markdownCommands';
 import createEditor from './testUtil/createEditor';
-
-import { describe, expect, it } from '@jest/globals';
 import { blockMathTagName } from './markdownMathParser';
 
 describe('markdownCommands', () => {

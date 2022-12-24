@@ -7,7 +7,6 @@ import { SyntaxNode } from '@lezer/common';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './markdownMathParser';
 
-import { describe, expect, it } from '@jest/globals';
 import createEditor from './testUtil/createEditor';
 
 // Creates an EditorState with math and markdown extensions

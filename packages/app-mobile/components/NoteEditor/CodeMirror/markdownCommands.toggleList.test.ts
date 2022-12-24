@@ -9,8 +9,6 @@ import {
 import { ListType } from '../types';
 import createEditor from './testUtil/createEditor';
 
-import { describe, it, expect } from '@jest/globals';
-
 describe('markdownCommands.toggleList', () => {
 	it('should remove the same type of list', async () => {
 		const initialDocText = '- testing\n- this is a `test`\n';
