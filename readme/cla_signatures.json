@@ -47,6 +47,22 @@
       "created_at": "2022-12-23T16:13:19Z",
       "repoId": 79162682,
       "pullRequestNo": 6886
+    },
+    {
+      "name": "betty-alagwu",
+      "id": 94234459,
+      "comment_id": 1364449008,
+      "created_at": "2022-12-24T03:08:45Z",
+      "repoId": 79162682,
+      "pullRequestNo": 7529
+    },
+    {
+      "name": "Mr-Kanister",
+      "id": 68117355,
+      "comment_id": 1364570129,
+      "created_at": "2022-12-24T18:40:22Z",
+      "repoId": 79162682,
+      "pullRequestNo": 7531
     }
   ]
 }
