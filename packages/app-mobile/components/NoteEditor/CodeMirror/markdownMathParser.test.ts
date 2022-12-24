@@ -1,27 +1,18 @@
-import { markdown } from '@codemirror/lang-markdown';
+/**
+ * @jest-environment jsdom
+ */
+
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
-import { EditorState } from '@codemirror/state';
-import { blockMathTagName, inlineMathContentTagName, inlineMathTagName, MarkdownMathExtension } from './markdownMathParser';
-import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-import forceFullParse from './testUtil/forceFullParse';
-import loadLangauges from './testUtil/loadLanguages';
+import { EditorSelection, EditorState } from '@codemirror/state';
+import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './markdownMathParser';
+
+import { describe, expect, it } from '@jest/globals';
+import createEditor from './testUtil/createEditor';
 
 // Creates an EditorState with math and markdown extensions
 const createEditorState = async (initialText: string): Promise<EditorState> => {
-	await loadLangauges();
-
-	const editorState = EditorState.create({
-		doc: initialText,
-		extensions: [
-			markdown({
-				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
-			}),
-		],
-	});
-	forceFullParse(editorState);
-
-	return editorState;
+	return (await createEditor(initialText, EditorSelection.cursor(0))).state;
 };
 
 // Returns a list of all nodes with the given name in the given editor's syntax tree.

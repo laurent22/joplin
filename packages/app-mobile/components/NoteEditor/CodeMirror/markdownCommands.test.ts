@@ -8,6 +8,9 @@ import {
 } from './markdownCommands';
 import createEditor from './testUtil/createEditor';
 
+import { describe, expect, it } from '@jest/globals';
+import forceFullParse from './testUtil/forceFullParse';
+
 describe('markdownCommands', () => {
 	it('should bold/italicize everything selected', async () => {
 		const initialDocText = 'Testing...';
@@ -155,6 +158,8 @@ describe('markdownCommands', () => {
 		editor.dispatch({
 			selection: EditorSelection.cursor('Testing...\n\n> $$\n> This is'.length),
 		});
+
+		forceFullParse(editor.state);
 
 		// Toggling math again should remove the '$$'s
 		toggleMath(editor);

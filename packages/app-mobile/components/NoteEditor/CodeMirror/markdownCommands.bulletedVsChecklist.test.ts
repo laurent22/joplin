@@ -6,6 +6,8 @@ import { ListType } from '../types';
 import createEditor from './testUtil/createEditor';
 import { toggleList } from './markdownCommands';
 
+import { describe, it, expect } from '@jest/globals';
+
 describe('markdownCommands.bulletedVsChecklist', () => {
 	const bulletedListPart = '- Test\n- This is a test.\n- 3\n- 4\n- 5';
 	const checklistPart = '- [ ] This is a checklist\n- [ ] with multiple items.\n- [ ] ☑';
