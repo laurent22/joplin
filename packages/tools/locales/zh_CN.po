@@ -1704,8 +1704,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"故障保护(Fail-safe) ：当同步目标为空时（通常是配置错误或Bug），不要删除本地"
-"数据"
+"故障保护(Fail-safe) ：当同步目标为空时（通常是配置错误或Bug），不要删除本地数"
+"据"
 
 #: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
@@ -2473,9 +2473,8 @@ msgid "Max Item Size"
 msgstr "最大条目数"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "最大笔记或附件大小"
+msgstr "最大项目大小"
 
 #: packages/server/src/routes/admin/users.ts:150
 #, fuzzy
@@ -2814,8 +2813,9 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"一个或多个项目当前已加密，您可能需要提供主密码(master password)。若需进行此操作请输入 `e2ee "
-"decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
+"一个或多个项目当前已加密，您可能需要提供主密码(master password)。若需进行此操"
+"作请输入 `e2ee decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后"
+"即可使用。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 msgid "One or more master keys need a password."
@@ -3724,6 +3724,10 @@ msgstr "停止"
 msgid "Stop external editing"
 msgstr "停止外部编辑"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr "储存空间"
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "删除线"
@@ -4027,8 +4031,8 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥(Master Key)正被用于加密某些项，但应用程序目前无法访问它们。项目最终"
-"会通过同步获取，但目前可能仍未被同步。"
+"具有这些 ID 的主密钥(Master Key)正被用于加密某些项，但应用程序目前无法访问它"
+"们。项目最终会通过同步获取，但目前可能仍未被同步。"
 
 #: packages/lib/services/RevisionService.ts:267
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -4449,7 +4453,7 @@ msgstr "取消分享这个笔记本？收件人将无法再访问到它的内容
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片类型：%s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "不被支持的链接或信息：%s"

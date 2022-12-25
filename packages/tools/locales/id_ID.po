@@ -3840,6 +3840,10 @@ msgstr "Berhenti"
 msgid "Stop external editing"
 msgstr "Hentikan pengeditan eksternal"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Dicoret"
@@ -4621,7 +4625,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tipe gambar tidak didukung: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Tautan atau pesan tidak didukung: %s"

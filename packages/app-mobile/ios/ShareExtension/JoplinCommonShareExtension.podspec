@@ -4,7 +4,7 @@ Pod::Spec.new do |spec|
   spec.summary      = "Common Share Extension code for Joplin."
   spec.description  = "Common Share Extension for Joplin"
   spec.homepage     = "https://github.com/laurent22/joplin"
-  spec.license      = { :type => "MIT" }
+  spec.license      = { :type => "AGPL-3.0-or-later" }
   spec.author       = { "Duncan Cunningham" => "duncanc4@gmail.com" }
   spec.platform     = :ios, "9.0"
   spec.source       = { :path => "." }

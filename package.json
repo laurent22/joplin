@@ -64,8 +64,8 @@
   },
   "devDependencies": {
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
-    "@typescript-eslint/eslint-plugin": "5.46.1",
-    "@typescript-eslint/parser": "5.46.1",
+    "@typescript-eslint/eslint-plugin": "5.47.0",
+    "@typescript-eslint/parser": "5.47.0",
     "cspell": "5.21.2",
     "eslint": "8.30.0",
     "eslint-interactive": "10.3.0",
@@ -85,10 +85,10 @@
   "dependencies": {
     "@types/fs-extra": "9.0.13",
     "http-server": "14.1.1",
-    "node-gyp": "9.3.0",
+    "node-gyp": "9.3.1",
     "nodemon": "2.0.20"
   },
-  "packageManager": "yarn@3.3.0",
+  "packageManager": "yarn@3.3.1",
   "resolutions": {
     "joplin-rn-alarm-notification@1.0.5": "patch:joplin-rn-alarm-notification@npm:1.0.5#.yarn/patches/joplin-rn-alarm-notification-npm-1.0.5-662e871c03"
   }

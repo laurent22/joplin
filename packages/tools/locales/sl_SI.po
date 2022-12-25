@@ -3853,6 +3853,10 @@ msgstr "Ustavi"
 msgid "Stop external editing"
 msgstr "Ustavi zunanje urejanje"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Prečrtaj"
@@ -4636,7 +4640,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nepodprt tip slike: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Nepodprta povezava ali sporočilo: %s"

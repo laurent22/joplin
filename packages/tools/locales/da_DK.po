@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -197,10 +195,11 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove"
-"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra "
-"[note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` "
-"kan bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
+"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), "
+"\"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] "
+"fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-"
+"list` kan bruges til at vise alle etiketter (brug -l for at vise den lange "
+"udgave)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -342,14 +341,14 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på \"ti"
-"\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
+"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på "
+"\"ti\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
 "notesbog"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
 "Tvetydig notesbog \"%s\". Brug venligst kort notesbog-id i stedet - tryk på "
 "\"ti\" for at se det korte notebogs-id"
@@ -2044,8 +2043,8 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
-"$c` kan bruges som reference til aktuel/valgt emne."
+"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. "
+"`$c` kan bruges som reference til aktuel/valgt emne."
 
 #: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
@@ -3787,6 +3786,11 @@ msgstr "Stop"
 msgid "Stop external editing"
 msgstr "Stop ekstern redigering"
 
+#: packages/lib/utils/joplinCloud.ts:129
+#, fuzzy
+msgid "Storage space"
+msgstr "%d GB lagerplads"
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Gennemstregning"
@@ -4557,7 +4561,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Ikke-understøttet billedtype: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Ugyldigt link eller besked: %s"

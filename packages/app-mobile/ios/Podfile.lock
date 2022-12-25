@@ -522,10 +522,10 @@ SPEC CHECKSUMS:
   FBLazyVector: 244195e30d63d7f564c55da4410b9a24e8fbceaa
   FBReactNativeSpec: c94002c1d93da3658f4d5119c6994d19961e3d52
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 5337263514dd6f09803962437687240c5dc39aa4
-  JoplinCommonShareExtension: 270b4f8eb4e22828eeda433a04ed689fc1fd09b5
-  JoplinRNShareExtension: 9cd07431e525b36344fcecfaeecff974efc78528
-  RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
+  glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
+  JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
+  JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
+  RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
   RCTRequired: cd47794163052d2b8318c891a7a14fcfaccc75ab
   RCTTypeSafety: 393bb40b3e357b224cde53d3fec26813c52428b1
   React: dec6476bc27155b250eeadfc11ea779265f53ebf

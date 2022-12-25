@@ -33,7 +33,7 @@
     "storage-access-framework"
   ],
   "author": "Javad Mnjd (https://github.com/jd1378)",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "homepage": "",
   "publishConfig": {
     "access": "public"

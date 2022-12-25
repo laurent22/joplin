@@ -3865,6 +3865,10 @@ msgstr ""
 msgid "Stop external editing"
 msgstr "Faceți click pentru a opri editarea în aplicația externă"
 
+#: packages/lib/utils/joplinCloud.ts:129
+msgid "Storage space"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr ""
@@ -4611,7 +4615,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Link sau mesaj neacceptat:% s"

@@ -9,7 +9,8 @@
 // If the userContentBaseUrl is an empty string, the baseUrl is returned instead.
 export default function(userId: string, baseUrl: string, userContentBaseUrl: string) {
 	// Special case for development, because it's difficult to get wildcard domains working locally.
-	if (userContentBaseUrl === 'http://joplincloud.local:22300') return 'http://joplincloud.local:22300';
+	// if (userContentBaseUrl === 'http://joplincloud.local:22300') return 'http://joplincloud.local:22300';
+	// if (userContentBaseUrl === 'http://joplincloud.local:22300') return 'http://abcd1234.joplinusercontent.local:22300';
 
 	if (userContentBaseUrl && baseUrl !== userContentBaseUrl) {
 		if (!userId) throw new Error('User ID must be specified');

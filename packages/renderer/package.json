@@ -16,7 +16,7 @@
     "test-ci": "yarn test"
   },
   "author": "",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/jest": "29.2.4",
     "@types/node": "18.11.17",

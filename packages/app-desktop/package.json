@@ -20,7 +20,7 @@
     "url": "git+https://github.com/laurent22/joplin.git"
   },
   "author": "Laurent Cozic",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },

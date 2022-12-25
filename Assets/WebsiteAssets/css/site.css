@@ -954,6 +954,10 @@ footer .bottom-links-row p {
 		display: none;
 	}
 
+	#nav-section a {
+		margin-left: 4px;
+	}
+
 }
 
 /*****************************************************************
