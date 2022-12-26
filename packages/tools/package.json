@@ -47,7 +47,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.4",
     "@types/mustache": "4.2.2",
-    "@types/node": "18.11.17",
+    "@types/node": "18.11.18",
     "gettext-extractor": "3.6.0",
     "gulp": "4.0.2",
     "html-entities": "1.4.0",
