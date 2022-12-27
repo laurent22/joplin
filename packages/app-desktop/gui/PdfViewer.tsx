@@ -83,7 +83,7 @@ export default function PdfViewer(props: Props) {
 		const iframe = iframeRef.current;
 		iframe.contentWindow.addEventListener('message', onMessage_);
 		return () => {
-			iframe.contentWindow.removeEventListener('message', onMessage_);
+			iframe?.contentWindow?.removeEventListener('message', onMessage_);
 		};
 	}, [onClose, openExternalViewer, textSelected]);
 
