@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.10.4",
+  "version": "2.10.5",
   "private": true,
   "scripts": {
     "start-dev": "yarn run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -21,11 +21,11 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.236.0",
+    "@aws-sdk/client-s3": "3.238.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joplin/lib": "~2.10",
     "@joplin/renderer": "~2.10",
-    "@koa/cors": "4.0.0",
+    "@koa/cors": "3.1.0",
     "@types/uuid": "9.0.0",
     "bcryptjs": "2.4.3",
     "bulma": "0.9.4",

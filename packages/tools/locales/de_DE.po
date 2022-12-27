@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -349,8 +351,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Zweideutiges Notizbuch „%s“. Bitte verwende stattdessen die kurze Notizbuch-"
 "ID - drücke „ti“, um die kurze Notizbuch-ID zu sehen"
@@ -3856,9 +3858,8 @@ msgid "Stop external editing"
 msgstr "Externe Bearbeitung stoppen"
 
 #: packages/lib/utils/joplinCloud.ts:129
-#, fuzzy
 msgid "Storage space"
-msgstr "%d GB Speicherplatz"
+msgstr "Speicherplatz"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4496,8 +4497,8 @@ msgstr "Um die Konsole zu maximieren/minimieren, drücke „tc“."
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
-"Um von einem Bereich zu einem anderen zu wechseln, drücke Tab oder "
-"Umschalt+Tab."
+"Um von einem Bereich zu einem anderen zu wechseln, drücke Tab oder Umschalt"
+"+Tab."
 
 #: packages/app-cli/app/command-status.js:44
 msgid ""
