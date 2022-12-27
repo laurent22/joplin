@@ -35,8 +35,14 @@ interface ParserStateTag {
 	isHighlight: boolean;
 }
 
+enum ListTag {
+	Ul = 'ul',
+	Ol = 'ol',
+	CheckboxList = 'checkboxList',
+}
+
 interface ParserStateList {
-	tag: string;
+	tag: ListTag;
 	counter: number;
 	startedText: boolean;
 }
@@ -738,7 +744,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(BLOCK_OPEN);
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
-				state.lists.push({ tag: n, counter: 1, startedText: false });
+				const isCheckboxList = cssValue(this, nodeAttributes.style, '--en-todo') === 'true';
+				const tag = isCheckboxList ? ListTag.CheckboxList : n as ListTag;
+				state.lists.push({ tag: tag, counter: 1, startedText: false });
 			} else if (n === 'li') {
 				section.lines.push(BLOCK_OPEN);
 				if (!state.lists.length) {
@@ -750,7 +758,11 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				container.startedText = false;
 
 				const indent = '    '.repeat(state.lists.length - 1);
-				if (container.tag === 'ul') {
+
+				if (container.tag === ListTag.CheckboxList) {
+					const x = cssValue(this, nodeAttributes.style, '--en-checked') === 'true' ? 'X' : ' ';
+					section.lines.push(`${indent}- [${x}] `);
+				} else if (container.tag === ListTag.Ul) {
 					section.lines.push(`${indent}- `);
 				} else {
 					section.lines.push(`${indent + container.counter}. `);
@@ -782,7 +794,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (isEmTag(n)) {
 				section.lines.push('*');
 			} else if (n === 'en-todo') {
-				const x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() === 'true' ? 'X' : ' ';
+				const x = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() === 'true' ? 'X' : ' ';
 				section.lines.push(`- [${x}] `);
 			} else if (n === 'hr') {
 				// Needs to be surrounded by new lines so that it's properly rendered as a line when converting to HTML
@@ -1380,4 +1392,4 @@ async function enexXmlToMd(xmlString: string, resources: ResourceEntity[]) {
 	return output.join('\n');
 }
 
-export { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag };
+export { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag, cssValue };
