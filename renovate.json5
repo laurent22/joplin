@@ -84,6 +84,7 @@
 		"jsc-android",
 		"react-native",
 		"@babel/runtime",
+		"de.undercouch:gradle-download-task",
 
 		// Need special processing when upgrading
 		"katex",
