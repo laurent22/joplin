@@ -80,7 +80,6 @@ export default class InteropServiceHelper {
 							try {
 								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
 								const data = await win.webContents.printToPDF(options);
-								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.removeAttribute(\'open\',\'\'))');
 								resolve(data);
 							} catch (error) {
 								reject(error);
