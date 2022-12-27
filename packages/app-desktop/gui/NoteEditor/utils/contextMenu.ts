@@ -2,7 +2,7 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
-import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng } from './contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions } from './contextMenuUtils';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
@@ -106,8 +106,12 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (!options.filename) {
 					throw new Error('Filename is needed to save as png');
 				}
+				const [width,height] = svgDimensions(options.textToCopy);
+				if (!Number.isInteger(width) || !Number.isInteger(height)) {
+					bridge().showErrorMessageBox(_('failed to get width and height of image'));
+				}
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
-				const png = await svgUriToPng(document, dataUri);
+				const png = await svgUriToPng(document, dataUri, width, height);
 				const filename = options.filename.replace('.svg', '.png');
 				await saveFileData(png, filename);
 			},

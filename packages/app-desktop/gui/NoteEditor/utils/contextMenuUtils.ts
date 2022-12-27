@@ -40,8 +40,20 @@ export async function resourceInfo(options: ContextMenuOptions) {
 export function textToDataUri(text: string, mime: string): string {
 	return `data:${mime};base64,${Buffer.from(text).toString('base64')}`;
 }
-
-export const svgUriToPng = (document: Document, svg: string) => {
+export const svgDimensions = (svg: string) => {
+	let width: number;
+	let height: number;
+	try {
+		[width, height] = svg.match(/viewBox="(.*?)"/)[1].split(/[ ,]+/).slice(2).map((n: string) => parseInt(n, 10));
+	} catch {
+		// do nothing
+	}
+	if (isNaN(width) || isNaN(height)) {
+		return [undefined,undefined];
+	}
+	return [width,height];
+};
+export const svgUriToPng = (document: Document, svg: string, width: number, height: number) => {
 	return new Promise<Uint8Array>((resolve, reject) => {
 		let canvas: HTMLCanvasElement;
 		let img: HTMLImageElement;
@@ -63,11 +75,11 @@ export const svgUriToPng = (document: Document, svg: string) => {
 			try {
 				canvas = document.createElement('canvas');
 				if (!canvas) throw new Error('Failed to create canvas element');
-				canvas.width = img.width;
-				canvas.height = img.height;
+				canvas.width = width || img.width;
+				canvas.height = height || img.height;
 				const ctx = canvas.getContext('2d');
 				if (!ctx) throw new Error('Failed to get context');
-				ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+				ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
 				const pngUri = canvas.toDataURL('image/png');
 				if (!pngUri) throw new Error('Failed to generate png uri');
 				const pngBase64 = pngUri.split(',')[1];

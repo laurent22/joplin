@@ -540,6 +540,9 @@ packages/app-desktop/gui/NoteEditor/utils/contextMenu.js.map
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.d.ts
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js.map
+packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.test.d.ts
+packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.test.js
+packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.test.js.map
 packages/app-desktop/gui/NoteEditor/utils/index.d.ts
 packages/app-desktop/gui/NoteEditor/utils/index.js
 packages/app-desktop/gui/NoteEditor/utils/index.js.map
