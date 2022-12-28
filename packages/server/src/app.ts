@@ -70,7 +70,7 @@ function markPasswords(o: Record<string, any>): Record<string, any> {
 	const output: Record<string, any> = {};
 
 	for (const k of Object.keys(o)) {
-		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret')) {
+		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret') || k.toLowerCase().includes('connectionstring')) {
 			output[k] = '********';
 		} else {
 			output[k] = o[k];
