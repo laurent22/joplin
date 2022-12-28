@@ -4694,7 +4694,7 @@ __metadata:
     jest: 29.3.1
     jest-environment-jsdom: 29.3.1
     jetifier: 2.0.0
-    joplin-rn-alarm-notification: 1.0.6
+    joplin-rn-alarm-notification: 1.0.7
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
@@ -20903,10 +20903,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joplin-rn-alarm-notification@npm:1.0.6":
-  version: 1.0.6
-  resolution: "joplin-rn-alarm-notification@npm:1.0.6"
-  checksum: 878682cbb9772cea14f385d331c3993988b7bb75e40d5618b95c7077b79fb72d00f4dbebb5c49f51f9e9f3cb0e65283c6577a71632cb9744b21acbf22eaea5ee
+"joplin-rn-alarm-notification@npm:1.0.7":
+  version: 1.0.7
+  resolution: "joplin-rn-alarm-notification@npm:1.0.7"
+  checksum: 68e9cb15fc9dcd4d6b7a523967adcad8bc120da260d80c9cb541128b3e499f529dd7b879f5e35edf81d8e992194ab20d61281a835e0a15cde114a2cc208f8128
   languageName: node
   linkType: hard
 
