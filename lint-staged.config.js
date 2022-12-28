@@ -13,7 +13,5 @@ module.exports = {
 	'*.{js,jsx,ts,tsx}': [
 		'yarn run linter-precommit',
 		'yarn run checkLibPaths',
-		// 'yarn run spellcheck',
-		// 'git add',
 	],
 };
