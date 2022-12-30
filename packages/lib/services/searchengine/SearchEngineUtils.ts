@@ -3,7 +3,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 
 export default class SearchEngineUtils {
-	static async notesForQuery(query: string, applyUserSettings: boolean, options: any = null, searchEngine: SearchEngine = null) {
+	public static async notesForQuery(query: string, applyUserSettings: boolean, options: any = null, searchEngine: SearchEngine = null) {
 		if (!options) options = {};
 
 		if (!searchEngine) {
