@@ -309,6 +309,7 @@ export function initCodeMirror(
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({
 					autocapitalize: 'sentence',
+					autocorrect: settings.spellcheckEnabled ? 'true' : 'false',
 					spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
 				}),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {

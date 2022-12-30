@@ -18,24 +18,26 @@ const regionStopDecoration = Decoration.line({
 	attributes: { class: 'cm-regionLastLine' },
 });
 
+const noSpellCheckAttrs = { spellcheck: 'false', autocorrect: 'false' };
+
 const codeBlockDecoration = Decoration.line({
-	attributes: { class: 'cm-codeBlock', spellcheck: 'false' },
+	attributes: { class: 'cm-codeBlock', ...noSpellCheckAttrs },
 });
 
 const inlineCodeDecoration = Decoration.mark({
-	attributes: { class: 'cm-inlineCode', spellcheck: 'false' },
+	attributes: { class: 'cm-inlineCode', ...noSpellCheckAttrs },
 });
 
 const mathBlockDecoration = Decoration.line({
-	attributes: { class: 'cm-mathBlock', spellcheck: 'false' },
+	attributes: { class: 'cm-mathBlock', ...noSpellCheckAttrs },
 });
 
 const inlineMathDecoration = Decoration.mark({
-	attributes: { class: 'cm-inlineMath', spellcheck: 'false' },
+	attributes: { class: 'cm-inlineMath', ...noSpellCheckAttrs },
 });
 
 const urlDecoration = Decoration.mark({
-	attributes: { class: 'cm-url', spellcheck: 'false' },
+	attributes: { class: 'cm-url', ...noSpellCheckAttrs },
 });
 
 const blockQuoteDecoration = Decoration.line({
