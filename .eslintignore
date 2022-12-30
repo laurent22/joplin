@@ -933,6 +933,9 @@ packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/createEditor.js.ma
 packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.js
 packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/loadLanguages.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/loadLanguages.js
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/loadLanguages.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js.map

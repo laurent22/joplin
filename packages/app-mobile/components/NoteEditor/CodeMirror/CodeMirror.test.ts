@@ -7,6 +7,7 @@ import { initCodeMirror } from './CodeMirror';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
+import loadLangauges from './testUtil/loadLanguages';
 
 
 const createEditorSettings = (themeId: number) => {
@@ -27,6 +28,7 @@ describe('CodeMirror', () => {
 		const initialText = `${headerLineText}\nThis is a test.`;
 		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
 
+		await loadLangauges();
 		const editor = initCodeMirror(document.body, initialText, editorSettings);
 
 		// Force the generation of the syntax tree now.
