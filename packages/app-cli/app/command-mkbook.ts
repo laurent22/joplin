@@ -25,12 +25,12 @@ class Command extends BaseCommand {
 
 		const destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetFolder);
 		if (!destinationFolder) {
-			throw new Error(_('Can not find "%s", please create it first.', targetFolder));
+			throw new Error(_('Cannot find: "%s"', targetFolder));
 		}
 
 		const destinationDups = await Folder.search({ titlePattern: targetFolder, limit: 2 });
 		if (destinationDups.length > 1) {
-			throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - press "ti" to see the short notebook id', targetFolder));
+			throw new Error(_('Ambiguous notebook "%s". Please use short notebook id instead - press "ti" to see the short notebook id', targetFolder));
 		}
 
 		return destinationFolder;
@@ -50,11 +50,6 @@ class Command extends BaseCommand {
 			title: args['new-notebook'],
 		};
 		// this.logger().debug('mkbook-command-args: ', args);
-
-		if (createSubFolder && targetFolder) {
-			this.stdout(_('Error: Multiple instructions. Please use the instructions of the command - Press "help mkbook"'));
-			return;
-		}
 
 		if (createSubFolder) {
 			newFolder.parent_id = app().currentFolder().id;

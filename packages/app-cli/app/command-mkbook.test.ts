@@ -15,8 +15,8 @@ describe('command-mkbook', function() {
 
 	it('should create a subfolder in first folder', async () => {
 		const command = setupCommandForTesting(Command);
-		await expect(command.action({ 'new-notebook': 'folder1' })).resolves.not.toThrowError();
-		await expect(command.action({ 'new-notebook': 'folder1_1' , options: { s: true, sub: true } })).resolves.not.toThrowError();
+		await command.action({ 'new-notebook': 'folder1' });
+		await command.action({ 'new-notebook': 'folder1_1' , options: { sub: true } });
 
 		const folder1 = await Folder.loadByTitle('folder1');
 		const folder1_1 = await Folder.loadByTitle('folder1_1');
@@ -27,8 +27,8 @@ describe('command-mkbook', function() {
 
 	it('should create a subfolder in the second destination folder', async () => {
 		const command = setupCommandForTesting(Command);
-		await expect(command.action({ 'new-notebook': 'folder2' })).resolves.not.toThrowError();
-		await expect(command.action({ 'new-notebook': 'folder2_1', 'notebook': 'folder2' })).resolves.not.toThrowError();
+		await command.action({ 'new-notebook': 'folder2' });
+		await command.action({ 'new-notebook': 'folder2_1', 'notebook': 'folder2' });
 
 		const folder2 = await Folder.loadByTitle('folder2');
 		const folder2_1 = await Folder.loadByTitle('folder2_1');
@@ -39,14 +39,14 @@ describe('command-mkbook', function() {
 
 	it('should not be possible to create subfolder in ambiguous destination folder', async () => {
 		const command = setupCommandForTesting(Command);
-		await expect(command.action({ 'new-notebook': 'folder3' })).resolves.not.toThrowError();
-		await expect(command.action({ 'new-notebook': 'folder3' })).resolves.not.toThrowError();	// ambiguous folder
+		await command.action({ 'new-notebook': 'folder3' });
+		await command.action({ 'new-notebook': 'folder3' });	// ambiguous folder
 		await expect(command.action({ 'new-notebook': 'folder3_1', 'notebook': 'folder3' })).rejects.toThrowError();
 
 		// check if duplicate entries have been created.
 		const folderAll = await Folder.all();
 		const folders3 = folderAll.filter(x => x.title === 'folder3');
-		expect(folders3.length).toBeGreaterThanOrEqual(2);
+		expect(folders3.length).toBe(2);
 
 		// check if something has been created in one of the duplicate entries.
 		expect(await Folder.childrenIds(folders3[0].id)).toEqual([]);
