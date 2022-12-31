@@ -4598,7 +4598,7 @@ __metadata:
     "@joplin/renderer": ~2.10
     "@joplin/tools": ~2.10
     "@testing-library/react-hooks": 8.0.1
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/node": 18.11.18
     "@types/react": 16.14.34
     "@types/react-redux": 7.1.24
@@ -4694,7 +4694,7 @@ __metadata:
     "@react-native-community/push-notification-ios": 1.10.1
     "@react-native-community/slider": 4.4.0
     "@types/fs-extra": 9.0.13
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/react-native": 0.64.19
     "@types/react-redux": 7.1.24
     assert-browserify: 2.0.0
@@ -4762,7 +4762,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/node": 18.11.18
     "@typescript-eslint/eslint-plugin": 5.47.1
     "@typescript-eslint/parser": 5.47.1
@@ -4826,7 +4826,7 @@ __metadata:
     "@joplin/turndown": ^4.0.63
     "@joplin/turndown-plugin-gfm": ^1.0.45
     "@types/fs-extra": 9.0.13
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
     "@types/node": 18.11.18
@@ -4901,7 +4901,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": 6.1.2
     "@fortawesome/react-fontawesome": 0.2.0
     "@joplin/lib": ~2.10
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/pdfjs-dist": 2.10.378
     "@types/react": 16.14.34
     "@types/react-dom": 18.0.10
@@ -4931,7 +4931,7 @@ __metadata:
     "@joplin/lib": ~2.10
     "@joplin/tools": ~2.10
     "@types/fs-extra": 9.0.13
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/node": 18.11.18
     fs-extra: 11.1.0
     gh-release-assets: 2.0.1
@@ -4976,7 +4976,7 @@ __metadata:
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/fork-uslug": ^1.0.6
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/node": 18.11.18
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.0
@@ -5017,7 +5017,7 @@ __metadata:
     "@rmp135/sql-ts": 1.15.1
     "@types/formidable": 2.0.5
     "@types/fs-extra": 9.0.13
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 16.2.15
     "@types/koa": 2.13.5
@@ -5075,7 +5075,7 @@ __metadata:
     "@joplin/renderer": ~2.10
     "@rmp135/sql-ts": 1.15.1
     "@types/fs-extra": 9.0.13
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/mustache": 4.2.2
     "@types/node": 18.11.18
     "@types/node-fetch": 2.6.2
@@ -7525,13 +7525,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:29.2.4":
-  version: 29.2.4
-  resolution: "@types/jest@npm:29.2.4"
+"@types/jest@npm:29.2.5":
+  version: 29.2.5
+  resolution: "@types/jest@npm:29.2.5"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: 9deb4756fe1b438d41ff1aae7d6c216c9e49e5fe60f539f8edb6698ffeb530ff7b25d37e223439b03602ca3a7397c9c2e53e1a39c7bd616353472fce0cc04107
+  checksum: d668470f00ec4cb8b8457f1fd90f7358fad8f22d74b85006dad6be522d6b9bf10f49f597e88d1d1a518d211c1b65be32a1f27f0e49ce0658d110a9206b8ea310
   languageName: node
   linkType: hard
 
@@ -20933,7 +20933,7 @@ __metadata:
     "@joplin/renderer": ~2.10
     "@joplin/tools": ~2.10
     "@types/fs-extra": 9.0.13
-    "@types/jest": 29.2.4
+    "@types/jest": 29.2.5
     "@types/node": 18.11.18
     aws-sdk: 2.1285.0
     chalk: 4.1.2
