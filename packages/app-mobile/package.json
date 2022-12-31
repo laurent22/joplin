@@ -91,7 +91,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.5",
     "@types/react-native": "0.64.19",
-    "@types/react-redux": "7.1.24",
+    "@types/react-redux": "7.1.25",
     "babel-plugin-module-resolver": "4.1.0",
     "execa": "4.1.0",
     "fs-extra": "11.1.0",
