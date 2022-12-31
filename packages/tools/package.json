@@ -48,7 +48,7 @@
     "@types/jest": "29.2.5",
     "@types/mustache": "4.2.2",
     "@types/node": "18.11.18",
-    "gettext-extractor": "3.6.0",
+    "gettext-extractor": "3.6.1",
     "gulp": "4.0.2",
     "html-entities": "1.4.0",
     "jest": "29.3.1",
