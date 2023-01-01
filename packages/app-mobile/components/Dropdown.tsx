@@ -1,5 +1,5 @@
 const React = require('react');
-import { TouchableOpacity, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle } from 'react-native';
 import { Component } from 'react';
 import { _ } from '@joplin/lib/locale';
 const { ItemList } = require('./ItemList.js');
