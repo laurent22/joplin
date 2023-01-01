@@ -10,16 +10,14 @@ let testApp = null;
 
 describe('integration_NoteList', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
-		done();
 	});
 
-	afterEach(async (done) => {
+	afterEach(async () => {
 		if (testApp !== null) await testApp.destroy();
 		testApp = null;
-		done();
 	});
 
 	// Reference: https://github.com/laurent22/joplin/issues/2709

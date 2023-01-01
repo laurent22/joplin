@@ -1,9 +1,8 @@
 const React = require('react');
-const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
 
-class NoteSearchBarComponent extends React.Component {
+class NoteSearchBar extends React.Component {
 	constructor() {
 		super();
 
@@ -12,6 +11,7 @@ class NoteSearchBarComponent extends React.Component {
 		this.previousButton_click = this.previousButton_click.bind(this);
 		this.nextButton_click = this.nextButton_click.bind(this);
 		this.closeButton_click = this.closeButton_click.bind(this);
+		this.focus = this.focus.bind(this);
 
 		this.backgroundColor = undefined;
 	}
@@ -176,18 +176,5 @@ class NoteSearchBarComponent extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = state => {
-	return {
-		themeId: state.settings.theme,
-	};
-};
-
-const NoteSearchBar = connect(
-	mapStateToProps,
-	null,
-	null,
-	{ withRef: true }
-)(NoteSearchBarComponent);
 
 module.exports = NoteSearchBar;

@@ -4,10 +4,9 @@ const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 
 describe('models/Note_CustomSortOrder', function() {
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should set the order property when saving a note', (async () => {

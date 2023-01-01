@@ -201,14 +201,16 @@ fi
 # If a new environment needs to be supported, then the command check section should be re-thought
 if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.*|.*i3.*|.*sway.* ]] || [[ `command -v update-desktop-database` ]]
 then
+    DATA_HOME=${XDG_DATA_HOME:-~/.local/share}
+    DESKTOP_FILE_LOCATION="$DATA_HOME/applications"
     # Only delete the desktop file if it will be replaced
-    rm -f ~/.local/share/applications/appimagekit-joplin.desktop
+    rm -f "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
 
     # On some systems this directory doesn't exist by default
-    mkdir -p ~/.local/share/applications
+    mkdir -p "$DESKTOP_FILE_LOCATION"
     
     # Tabs specifically, and not spaces, are needed for indentation with Bash heredocs
-    cat >> ~/.local/share/applications/appimagekit-joplin.desktop <<-EOF
+    cat >> "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop" <<-EOF
 	[Desktop Entry]
 	Encoding=UTF-8
 	Name=Joplin
@@ -224,7 +226,7 @@ then
 	EOF
     
     # Update application icons
-    [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
+    [[ `command -v update-desktop-database` ]] && update-desktop-database "$DESKTOP_FILE_LOCATION" && update-desktop-database "$DATA_HOME/icons"
     print "${COLOR_GREEN}OK${COLOR_RESET}"
 else
     print "${COLOR_RED}NOT DONE, unknown desktop '${DESKTOP}'${COLOR_RESET}"

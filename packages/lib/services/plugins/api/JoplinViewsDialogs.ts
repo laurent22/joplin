@@ -2,7 +2,7 @@ import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ButtonSpec, ViewHandle, DialogResult } from './types';
-import { _ } from '@joplin/lib/locale';
+import { _ } from '../../../locale';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that

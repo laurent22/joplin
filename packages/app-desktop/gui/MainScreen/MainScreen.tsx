@@ -42,7 +42,7 @@ import commands from './commands/index';
 import invitationRespond from '../../services/share/invitationRespond';
 import restart from '../../services/restart';
 const { connect } = require('react-redux');
-const { PromptDialog } = require('../PromptDialog.min.js');
+import PromptDialog from '../PromptDialog';
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;

@@ -2,9 +2,7 @@ const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toF
 
 describe('pathUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should create friendly safe filename', (async () => {
 		const testCases = [

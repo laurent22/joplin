@@ -4,7 +4,7 @@ const termutils = require('tkwidgets/framework/termutils.js');
 const stripAnsi = require('strip-ansi');
 const { handleAutocompletion } = require('../autocompletion.js');
 
-class StatusBarWidget extends BaseWidget {
+export default class StatusBarWidget extends BaseWidget {
 	constructor() {
 		super();
 
@@ -22,12 +22,12 @@ class StatusBarWidget extends BaseWidget {
 		return false;
 	}
 
-	setItemAt(index, text) {
+	setItemAt(index: number, text: string) {
 		this.items_[index] = stripAnsi(text).trim();
 		this.invalidate();
 	}
 
-	async prompt(initialText = '', promptString = null, options = null) {
+	async prompt(initialText = '', promptString: any = null, options: any = null) {
 		if (this.promptState_) throw new Error('Another prompt already active');
 		if (promptString === null) promptString = ':';
 		if (options === null) options = {};
@@ -36,7 +36,7 @@ class StatusBarWidget extends BaseWidget {
 
 		this.promptState_ = {
 			promise: null,
-			initialText: stripAnsi(initialText),
+			initialText: (initialText),
 			promptString: stripAnsi(promptString),
 		};
 
@@ -86,7 +86,7 @@ class StatusBarWidget extends BaseWidget {
 
 		// const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
 		// const textStyle = (s) => s;
-		const textStyle = this.promptActive ? s => s : chalk.gray;
+		const textStyle = this.promptActive ? (s: any) => s : chalk.gray;
 
 		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));
 
@@ -106,7 +106,7 @@ class StatusBarWidget extends BaseWidget {
 
 			const isSecurePrompt = !!this.promptState_.secure;
 
-			const options = {
+			const options: any = {
 				cancelable: true,
 				history: this.history,
 				default: this.promptState_.initialText,
@@ -118,7 +118,7 @@ class StatusBarWidget extends BaseWidget {
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
 			if (isSecurePrompt) options.echoChar = true;
 
-			this.inputEventEmitter_ = this.term.inputField(options, (error, input) => {
+			this.inputEventEmitter_ = this.term.inputField(options, (error: any, input: any) => {
 				let resolveResult = null;
 				const resolveFn = this.promptState_.resolve;
 
@@ -161,5 +161,3 @@ class StatusBarWidget extends BaseWidget {
 		if (doSaveCursor) this.term.restoreCursor();
 	}
 }
-
-module.exports = StatusBarWidget;

@@ -59,14 +59,12 @@ const calculateScore = (searchString, notes) => {
 
 describe('services_SearchEngine', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 
 		engine = new SearchEngine();
 		engine.setDb(db());
-
-		done();
 	});
 
 	it('should keep the content and FTS table in sync', (async () => {

@@ -2,9 +2,7 @@ import htmlUtils from './htmlUtils';
 
 describe('htmlUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should extract image URLs', (async () => {
 		const testCases = [

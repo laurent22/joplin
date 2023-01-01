@@ -31,10 +31,9 @@ function newPluginService(appVersion: string = '1.4') {
 
 describe('services_PluginService', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 
 	it('should load and run a simple plugin', (async () => {

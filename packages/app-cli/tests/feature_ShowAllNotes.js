@@ -24,16 +24,14 @@ let testApp = null;
 
 describe('integration_ShowAllNotes', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
-		done();
 	});
 
-	afterEach(async (done) => {
+	afterEach(async () => {
 		if (testApp !== null) await testApp.destroy();
 		testApp = null;
-		done();
 	});
 
 	it('should show all notes', (async () => {

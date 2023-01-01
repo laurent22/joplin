@@ -4,9 +4,7 @@ import markdownUtils from './markdownUtils';
 
 describe('markdownUtils', function() {
 
-	beforeEach(async (done) => {
-		done();
-	});
+
 
 	it('should prepend a base URL', (async () => {
 		const baseUrl = 'https://test.com/site';

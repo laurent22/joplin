@@ -22,7 +22,7 @@ describe('20220131185922_account_disabled_timestamp', function() {
 		const user3 = await createUser(3);
 		const user4 = await createUser(4);
 
-		jest.useFakeTimers('modern');
+		jest.useFakeTimers();
 
 		// -------------------------------------------------
 		// User 1

@@ -315,7 +315,7 @@ export default abstract class BaseModel<T> {
 	protected async isNew(object: T, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
-		if ('id' in object && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
+		if ('id' in (object as any) && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
 		return !(object as WithUuid).id;
 	}
 

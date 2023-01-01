@@ -7,7 +7,7 @@
 
 ## Configure Docker for Joplin Server
 
-1. Copy `.env-sample` (located [here](https://github.com/laurent22/joplin/blob/dev/.env-sample)) to the location of your Docker configuration files. Example: /home/[user]/docker
+1. Copy `.env-sample` (located [here](https://raw.githubusercontent.com/laurent22/joplin/dev/.env-sample)) to the location of your Docker configuration files. Example: /home/[user]/docker
 2. Rename the file `.env-sample` to `.env`.
 3. Run the following command to test starting the server using the default configuration:
 
@@ -34,7 +34,9 @@ You can setup the container to either use an existing PostgreSQL server, or conn
 
 ### Using an existing PostgreSQL server
 
-To use an existing PostgresSQL server, set the following environment variables in the .env file:
+To use an existing PostgresSQL server, you can variables in the .env file. Either:
+
+#### Individual variables
 
 ```conf
 DB_CLIENT=pg
@@ -45,11 +47,18 @@ POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
 ```
 
+#### Connection String
+
+```conf
+DB_CLIENT=pg
+POSTGRES_CONNECTION_STRING=postgresql://username:password@your_joplin_postgres_server:5432/joplin
+```
+
 Ensure that the provided database and user exist as Joplin Server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
 
 ### Using docker-compose
 
-1. Using the [sample docker-compose file](https://github.com/laurent22/joplin/blob/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
+1. Using the [sample docker-compose file](https://raw.githubusercontent.com/laurent22/joplin/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
 2. Update the fields in the docker-compose file as seen in the sample file.
 
 

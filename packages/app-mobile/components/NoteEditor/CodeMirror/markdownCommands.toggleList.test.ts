@@ -7,28 +7,30 @@ import {
 	increaseIndent, toggleList,
 } from './markdownCommands';
 import { ListType } from '../types';
-import createEditor from './createEditor';
+import createEditor from './testUtil/createEditor';
 
 describe('markdownCommands.toggleList', () => {
-	it('should remove the same type of list', () => {
-		const initialDocText = '- testing\n- this is a test';
+	it('should remove the same type of list', async () => {
+		const initialDocText = '- testing\n- this is a `test`\n';
 
-		const editor = createEditor(
+		const editor = await createEditor(
 			initialDocText,
-			EditorSelection.cursor(5)
+			EditorSelection.cursor(5),
+			['BulletList', 'InlineCode']
 		);
 
 		toggleList(ListType.UnorderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'testing\nthis is a test'
+			'testing\nthis is a `test`\n'
 		);
 	});
 
-	it('should insert a numbered list with correct numbering', () => {
+	it('should insert a numbered list with correct numbering', async () => {
 		const initialDocText = 'Testing...\nThis is a test\nof list toggling...';
-		const editor = createEditor(
+		const editor = await createEditor(
 			initialDocText,
-			EditorSelection.cursor('Testing...\nThis is a'.length)
+			EditorSelection.cursor('Testing...\nThis is a'.length),
+			[]
 		);
 
 		toggleList(ListType.OrderedList)(editor);
@@ -47,12 +49,13 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	const numberedListText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
+	const unorderedListText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
 
-	it('should correctly replace an unordered list with a numbered list', () => {
-		const editor = createEditor(
-			numberedListText,
-			EditorSelection.cursor(numberedListText.length)
+	it('should correctly replace an unordered list with a numbered list', async () => {
+		const editor = await createEditor(
+			unorderedListText,
+			EditorSelection.cursor(unorderedListText.length),
+			['BulletList']
 		);
 
 		toggleList(ListType.OrderedList)(editor);
@@ -62,10 +65,11 @@ describe('markdownCommands.toggleList', () => {
 	});
 
 
-	it('should correctly replace an unordered list with a checklist', () => {
-		const editor = createEditor(
-			numberedListText,
-			EditorSelection.cursor(numberedListText.length)
+	it('should correctly replace an unordered list with a checklist', async () => {
+		const editor = await createEditor(
+			unorderedListText,
+			EditorSelection.cursor(unorderedListText.length),
+			['BulletList']
 		);
 
 		toggleList(ListType.CheckList)(editor);
@@ -74,13 +78,14 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should properly toggle a sublist of a bulleted list', () => {
+	it('should properly toggle a sublist of a bulleted list', async () => {
 		const preSubListText = '# List test\n * This\n * is\n';
 		const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
 
-		const editor = createEditor(
+		const editor = await createEditor(
 			initialDocText,
-			EditorSelection.cursor(preSubListText.length + '\t* a'.length)
+			EditorSelection.cursor(preSubListText.length + '\t* a'.length),
+			['BulletList', 'ATXHeading1']
 		);
 
 		// Indentation should be preserved when changing list types
@@ -94,6 +99,17 @@ describe('markdownCommands.toggleList', () => {
 		expect(editor.state.selection.main.to).toBe(
 			`${preSubListText}\t1. a\n\t2. test`.length
 		);
+	});
+
+	it('should not preserve indentation when removing sublists', async () => {
+		const preSubListText = '# List test\n * This\n * is\n';
+		const initialDocText = `${preSubListText}\t1. a\n\t2. test\n * of list toggling`;
+
+		const editor = await createEditor(
+			initialDocText,
+			EditorSelection.range(preSubListText.length, `${preSubListText}\t1. a\n\t2. test`.length),
+			['ATXHeading1', 'BulletList', 'OrderedList']
+		);
 
 		// Indentation should not be preserved when removing lists
 		toggleList(ListType.OrderedList)(editor);
@@ -101,7 +117,6 @@ describe('markdownCommands.toggleList', () => {
 		expect(editor.state.doc.toString()).toBe(
 			'# List test\n * This\n * is\na\ntest\n * of list toggling'
 		);
-
 
 		// Put the cursor in the middle of the list
 		editor.dispatch({ selection: EditorSelection.cursor(preSubListText.length) });
@@ -137,12 +152,13 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should toggle a numbered list without changing its sublists', () => {
+	it('should toggle a numbered list without changing its sublists', async () => {
 		const initialDocText = '1. Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo';
 
-		const editor = createEditor(
+		const editor = await createEditor(
 			initialDocText,
-			EditorSelection.cursor(0)
+			EditorSelection.cursor(0),
+			['OrderedList', 'BulletList']
 		);
 
 		toggleList(ListType.CheckList)(editor);
@@ -151,12 +167,13 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should toggle a sublist without changing the parent list', () => {
+	it('should toggle a sublist without changing the parent list', async () => {
 		const initialDocText = '1. This\n2. is\n3. ';
 
-		const editor = createEditor(
+		const editor = await createEditor(
 			initialDocText,
-			EditorSelection.cursor(initialDocText.length)
+			EditorSelection.cursor(initialDocText.length),
+			['OrderedList']
 		);
 
 		increaseIndent(editor);
@@ -173,11 +190,12 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should toggle lists properly within block quotes', () => {
+	it('should toggle lists properly within block quotes', async () => {
 		const preSubListText = '> # List test\n> * This\n> * is\n';
 		const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
-		const editor = createEditor(
-			initialDocText, EditorSelection.cursor(preSubListText.length + 3)
+		const editor = await createEditor(
+			initialDocText, EditorSelection.cursor(preSubListText.length + 3),
+			['BlockQuote', 'BulletList']
 		);
 
 		toggleList(ListType.OrderedList)(editor);

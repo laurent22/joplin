@@ -12,10 +12,9 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		return await importer.importFile(path, 'notebook');
 	}
 
-	beforeEach(async (done) => {
+	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		done();
 	});
 	it('should import file and set all metadata correctly', async function() {
 		const note = await importNote(`${supportDir}/test_notes/yaml/full.md`);

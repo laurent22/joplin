@@ -99,7 +99,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 
 	const setViewerPercentScroll = useCallback((percent: number) => {
 		if (webviewRef.current) {
-			webviewRef.current.wrappedInstance.send('setPercentScroll', percent);
+			webviewRef.current.send('setPercentScroll', percent);
 			scheduleOnScroll({ percent });
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied

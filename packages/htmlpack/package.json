@@ -1,6 +1,6 @@
 {
   "name": "@joplin/htmlpack",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
   "main": "dist/index.js",
   "types": "src/index.ts",
@@ -15,13 +15,13 @@
   "license": "MIT",
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.41",
-    "css": "^3.0.0",
-    "datauri": "^4.1.0",
-    "fs-extra": "^10.0.0",
-    "html-entities": "^1.2.1"
+    "css": "3.0.0",
+    "datauri": "4.1.0",
+    "fs-extra": "11.1.0",
+    "html-entities": "1.4.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.6"
+    "@types/fs-extra": "9.0.13"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }

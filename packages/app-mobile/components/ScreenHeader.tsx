@@ -1,7 +1,7 @@
 const React = require('react');
 
 import { connect } from 'react-redux';
-import { PureComponent, Component } from 'react';
+import { PureComponent } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
@@ -46,7 +46,7 @@ type DispatchCommandType=(event: { type: string })=> void;
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	noteSelectionEnabled: boolean;
-	parentComponent: Component;
+	parentComponent: any;
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
@@ -55,8 +55,8 @@ interface ScreenHeaderProps {
 	folders: FolderEntity[];
 	folderPickerOptions?: {
 		enabled: boolean;
-		selectedFolderId: string;
-		onValueChange: OnValueChangedListener;
+		selectedFolderId?: string;
+		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
 

@@ -1,15 +1,34 @@
-const React = require('react');
-const { _ } = require('@joplin/lib/locale');
-const { themeStyle } = require('@joplin/lib/theme');
-const time = require('@joplin/lib/time').default;
-const Datetime = require('react-datetime');
-const CreatableSelect = require('react-select/lib/Creatable').default;
-const Select = require('react-select').default;
-const makeAnimated = require('react-select/lib/animated').default;
+import * as React from 'react';
+import { _ } from '@joplin/lib/locale';
+import { themeStyle } from '@joplin/lib/theme';
+import time from '@joplin/lib/time';
+const Datetime = require('react-datetime').default;
+import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+interface Props {
+	themeId: number;
+	defaultValue: any;
+	visible: boolean;
+	style: any;
+	buttons: any[];
+	onClose: Function;
+	inputType: string;
+	description: string;
+	answer?: any;
+	autocomplete: any;
+	label: string;
+}
 
-class PromptDialog extends React.Component {
-	constructor() {
-		super();
+export default class PromptDialog extends React.Component<Props, any> {
+
+	private answerInput_: any;
+	private focusInput_: boolean;
+	private styles_: any;
+	private styleKey_: string;
+
+	constructor(props: Props) {
+		super(props);
 
 		this.answerInput_ = React.createRef();
 	}
@@ -22,7 +41,7 @@ class PromptDialog extends React.Component {
 		this.focusInput_ = true;
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if ('visible' in newProps && newProps.visible !== this.props.visible) {
 			this.setState({ visible: newProps.visible });
 			if (newProps.visible) this.focusInput_ = true;
@@ -38,7 +57,7 @@ class PromptDialog extends React.Component {
 		this.focusInput_ = false;
 	}
 
-	styles(themeId, width, height, visible) {
+	styles(themeId: number, width: number, height: number, visible: boolean) {
 		const styleKey = `${themeId}_${width}_${height}_${visible}`;
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -100,40 +119,40 @@ class PromptDialog extends React.Component {
 		};
 
 		this.styles_.select = {
-			control: provided =>
+			control: (provided: any) =>
 				Object.assign(provided, {
 					minWidth: width * 0.2,
 					maxWidth: width * 0.5,
 					fontFamily: theme.fontFamily,
 				}),
-			input: provided =>
+			input: (provided: any) =>
 				Object.assign(provided, {
 					minWidth: '20px',
 					color: theme.color,
 				}),
-			menu: provided =>
+			menu: (provided: any) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
 				}),
-			option: (provided, state) =>
+			option: (provided: any, state: any) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
 				}),
-			multiValueLabel: provided =>
+			multiValueLabel: (provided: any) =>
 				Object.assign(provided, {
 					fontFamily: theme.fontFamily,
 				}),
-			multiValueRemove: provided =>
+			multiValueRemove: (provided: any) =>
 				Object.assign(provided, {
 					color: theme.color,
 				}),
 		};
 
-		this.styles_.selectTheme = tagTheme =>
+		this.styles_.selectTheme = (tagTheme: any) =>
 			Object.assign(tagTheme, {
 				borderRadius: 2,
 				colors: Object.assign(tagTheme.colors, {
@@ -169,7 +188,7 @@ class PromptDialog extends React.Component {
 
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.state.visible);
 
-		const onClose = (accept, buttonType) => {
+		const onClose = (accept: boolean, buttonType: string = null) => {
 			if (this.props.onClose) {
 				let outputAnswer = this.state.answer;
 				if (this.props.inputType === 'datetime') {
@@ -181,7 +200,7 @@ class PromptDialog extends React.Component {
 			this.setState({ visible: false, answer: '' });
 		};
 
-		const onChange = event => {
+		const onChange = (event: any) => {
 			this.setState({ answer: event.target.value });
 		};
 
@@ -194,23 +213,27 @@ class PromptDialog extends React.Component {
 		// 	return m.isValid() ? m.toDate() : null;
 		// }
 
-		const onDateTimeChange = momentObject => {
+		const onDateTimeChange = (momentObject: any) => {
 			this.setState({ answer: momentObject });
 		};
 
-		const onSelectChange = newValue => {
+		const onSelectChange = (newValue: any) => {
 			this.setState({ answer: newValue });
 			this.focusInput_ = true;
 		};
 
-		const onKeyDown = event => {
+		const onKeyDown = (event: any) => {
 			if (event.key === 'Enter') {
-				if (this.props.inputType !== 'tags' && this.props.inputType !== 'dropdown') {
-					onClose(true);
-				} else if (this.answerInput_.current && !this.answerInput_.current.state.menuIsOpen) {
-					// The menu will be open if the user is selecting a new item
+				if (this.props.inputType === 'tags' || this.props.inputType === 'dropdown') {
+					// Do nothing
+				} else {
 					onClose(true);
 				}
+
+				// } else if (this.answerInput_.current && !this.answerInput_.current.state.menuIsOpen) {
+				// 	// The menu will be open if the user is selecting a new item
+				// 	onClose(true);
+				// }
 			} else if (event.key === 'Escape') {
 				onClose(false);
 			}
@@ -221,11 +244,11 @@ class PromptDialog extends React.Component {
 		let inputComp = null;
 
 		if (this.props.inputType === 'datetime') {
-			inputComp = <Datetime className="datetime-picker" value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={momentObject => onDateTimeChange(momentObject)} />;
+			inputComp = <Datetime className="datetime-picker" value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={(momentObject: any) => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
-			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
@@ -274,5 +297,3 @@ class PromptDialog extends React.Component {
 		);
 	}
 }
-
-module.exports = { PromptDialog };

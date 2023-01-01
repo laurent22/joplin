@@ -38,8 +38,7 @@ const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
-const ImagePicker = require('react-native-image-picker').default;
-import { ImagePickerResponse } from 'react-native-image-picker';
+import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -541,7 +540,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private async pickDocuments() {
-		const result = await shim.fsDriver().pickDocument();
+		const result = await shim.fsDriver().pickDocument({ multiple: true });
 		if (!result) {
 			console.info('pickDocuments: user has cancelled');
 		}
@@ -559,14 +558,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					reject(error);
 				}
 			);
-		});
-	}
-
-	showImagePicker(options: any) {
-		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, (response: any) => {
-				resolve(response);
-			});
 		});
 	}
 
@@ -720,7 +711,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private async attachPhoto_onPress() {
 		// the selection Limit should be specfied. I think 200 is enough?
-		const response: ImagePickerResponse = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+		const response: ImagePickerResponse = await launchImageLibrary({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
 
 		if (response.errorCode) {
 			reg.logger().warn('Got error from picker', response.errorCode);

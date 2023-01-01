@@ -1,5 +1,30 @@
 # Joplin Server Changelog
 
+## [server-v2.10.5](https://github.com/laurent22/joplin/releases/tag/server-v2.10.5) - 2022-12-26T12:09:13Z
+
+- Fixed: Fixed regression that would prevent styles from being loaded in published notes (#7525)
+
+## [server-v2.10.4](https://github.com/laurent22/joplin/releases/tag/server-v2.10.4) - 2022-12-18T16:02:06Z
+
+- Fixed: Fixed regression introduced by form-parse lib update (#7463)
+
+## [server-v2.10.3](https://github.com/laurent22/joplin/releases/tag/server-v2.10.3) - 2022-12-15T23:32:16Z
+
+- Upgraded packages for performance and security improvements.
+
+## [server-v2.9.7](https://github.com/laurent22/joplin/releases/tag/server-v2.9.7) - 2022-11-05T16:51:39Z
+
+- Improved: Allow enabling and disabling tasks (1379c9c)
+- Improved: Allow searching user by email or name (1cfbefb)
+- Improved: Fail-safe when trying to delete a non-disabled account (21883b4)
+- Improved: Paginate users (8ac8d53)
+- Improved: Refactor table structure (8ea6d89)
+- Improved: Update sender email (bf92ee7)
+- Improved: Upgrade Koa framework to 2.13.4 (dc92546)
+- Improved: Upgrade to Node 18 (f34078b)
+- Improved: When re-activating an account, remove it from the deletion queue (bbc4228)
+- Fixed: Fixed account activation logic (ccf5d20)
+
 ## [server-v2.9.5](https://github.com/laurent22/joplin/releases/tag/server-v2.9.5) - 2022-10-11T10:44:01Z
 
 - New: Add support for sidebar in user pages (053dbab)
