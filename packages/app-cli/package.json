@@ -1,7 +1,7 @@
 {
   "name": "joplin",
   "description": "Joplin CLI Client",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "author": "Laurent Cozic",
   "private": true,
   "scripts": {
@@ -42,7 +42,7 @@
   "dependencies": {
     "@joplin/lib": "~2.10",
     "@joplin/renderer": "~2.10",
-    "aws-sdk": "2.1277.0",
+    "aws-sdk": "2.1286.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
     "fs-extra": "11.1.0",
@@ -55,7 +55,7 @@
     "proper-lockfile": "4.1.2",
     "read-chunk": "2.1.0",
     "server-destroy": "1.0.1",
-    "sharp": "0.31.2",
+    "sharp": "0.31.3",
     "sprintf-js": "1.1.2",
     "sqlite3": "5.1.4",
     "string-padding": "1.0.2",
@@ -70,8 +70,8 @@
   "devDependencies": {
     "@joplin/tools": "~2.10",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.2.4",
-    "@types/node": "18.11.17",
+    "@types/jest": "29.2.5",
+    "@types/node": "18.11.18",
     "gulp": "4.0.2",
     "jest": "29.3.1",
     "temp": "0.9.4",
