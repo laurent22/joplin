@@ -82,7 +82,7 @@ describe('models/Note', function() {
 
 		note1 = await Note.load(note1.id);
 		changedNote = Note.changeNoteType(note1, 'todo');
-		expect(changedNote).toStrictEqual(note1);
+		expect(changedNote === note1).toBe(true);
 		expect(!!changedNote.is_todo).toBe(true);
 
 		note1 = await Note.load(note1.id);

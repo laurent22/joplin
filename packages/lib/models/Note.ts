@@ -558,8 +558,14 @@ export default class Note extends BaseItem {
 	static changeNoteType(note: NoteEntity, type: string) {
 		if (!('is_todo' in note)) throw new Error('Missing "is_todo" property');
 
+		const newIsTodo = type === 'todo' ? 1 : 0;
+
+		if (Number(note.is_todo) === newIsTodo) return note;
+
 		const output = Object.assign({}, note);
-		output.is_todo = type === 'todo' ? 1 : 0;
+		output.is_todo = newIsTodo;
+		output.todo_due = 0;
+		output.todo_completed = 0;
 
 		return output;
 	}
@@ -689,11 +695,6 @@ export default class Note extends BaseItem {
 		let beforeNoteJson = null;
 		if (oldNote && this.revisionService().isOldNote(o.id)) {
 			beforeNoteJson = JSON.stringify(oldNote);
-		}
-
-		if ('is_todo' in o && o.is_todo === 0) {
-			o.todo_due = 0;
-			o.todo_completed = 0;
 		}
 
 		const changedFields = [];
