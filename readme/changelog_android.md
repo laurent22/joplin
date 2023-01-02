@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.10.2](https://github.com/laurent22/joplin/releases/tag/android-v2.10.2) (Pre-release) - 2023-01-02T17:44:15Z
+
+- New: Add support for realtime search (767213c)
+- Fixed: Enable autocorrect with spellcheck (#7532) (#6175 by Henry Heino)
+
 ## [android-v2.10.1](https://github.com/laurent22/joplin/releases/tag/android-v2.10.1) (Pre-release) - 2022-12-29T13:55:48Z
 
 - Improved: Switch license to AGPL-3.0 (faf0a4e)
