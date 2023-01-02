@@ -33,6 +33,7 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-interactive": "eslint-interactive --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "packageJsonLint": "npmPkgJsonLint --configFile .npmpackagejsonlintrc.json --quiet .",
     "postinstall": "gulp build",
     "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
@@ -59,15 +60,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && yarn run packageJsonLint"
     }
   },
   "devDependencies": {
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
-    "@typescript-eslint/eslint-plugin": "5.47.0",
-    "@typescript-eslint/parser": "5.47.0",
+    "@typescript-eslint/eslint-plugin": "5.47.1",
+    "@typescript-eslint/parser": "5.47.1",
     "cspell": "5.21.2",
-    "eslint": "8.30.0",
+    "eslint": "8.31.0",
     "eslint-interactive": "10.3.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-promise": "6.1.1",
@@ -79,6 +80,7 @@
     "lerna": "3.22.1",
     "lint-staged": "13.1.0",
     "madge": "5.0.1",
+    "npm-package-json-lint": "6.4.0",
     "typedoc": "0.17.8",
     "typescript": "4.9.4"
   },
@@ -88,8 +90,5 @@
     "node-gyp": "9.3.1",
     "nodemon": "2.0.20"
   },
-  "packageManager": "yarn@3.3.1",
-  "resolutions": {
-    "joplin-rn-alarm-notification@1.0.5": "patch:joplin-rn-alarm-notification@npm:1.0.5#.yarn/patches/joplin-rn-alarm-notification-npm-1.0.5-662e871c03"
-  }
+  "packageManager": "yarn@3.3.1"
 }

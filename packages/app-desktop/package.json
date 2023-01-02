@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -95,7 +95,7 @@
       "icon": "../../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
-        "Icon": "@joplinapp-desktop",
+        "Icon": "joplin",
         "MimeType": "x-scheme-handler/joplin;"
       },
       "target": "AppImage"
@@ -108,10 +108,10 @@
   "devDependencies": {
     "@joplin/tools": "~2.10",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.2.4",
-    "@types/node": "18.11.17",
+    "@types/jest": "29.2.5",
+    "@types/node": "18.11.18",
     "@types/react": "16.14.34",
-    "@types/react-redux": "7.1.24",
+    "@types/react-redux": "7.1.25",
     "@types/styled-components": "5.1.26",
     "babel-cli": "6.26.0",
     "babel-preset-react": "6.24.1",

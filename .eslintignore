@@ -936,6 +936,9 @@ packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/createEditor.js.ma
 packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.js
 packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/forceFullParse.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/loadLanguages.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/loadLanguages.js
+packages/app-mobile/components/NoteEditor/CodeMirror/testUtil/loadLanguages.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js.map
@@ -1008,6 +1011,9 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js.map
 packages/app-mobile/components/screens/encryption-config.d.ts
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/encryption-config.js.map
+packages/app-mobile/components/screens/search.d.ts
+packages/app-mobile/components/screens/search.js
+packages/app-mobile/components/screens/search.js.map
 packages/app-mobile/components/side-menu-content.d.ts
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/side-menu-content.js.map
@@ -1881,6 +1887,9 @@ packages/lib/services/searchengine/filterParser.js.map
 packages/lib/services/searchengine/filterParser.test.d.ts
 packages/lib/services/searchengine/filterParser.test.js
 packages/lib/services/searchengine/filterParser.test.js.map
+packages/lib/services/searchengine/gotoAnythingStyleQuery.d.ts
+packages/lib/services/searchengine/gotoAnythingStyleQuery.js
+packages/lib/services/searchengine/gotoAnythingStyleQuery.js.map
 packages/lib/services/searchengine/queryBuilder.d.ts
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/searchengine/queryBuilder.js.map

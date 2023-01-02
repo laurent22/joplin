@@ -1,5 +1,17 @@
 # Joplin iOS app changelog
 
+## [ios-v12.10.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.1) - 2022-12-28T15:08:39Z
+
+- Improved: Switch license to AGPL-3.0 (faf0a4e)
+- Improved: Tag search case insensitive (#7368 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Update Mermaid: 9.1.7 to 9.2.2 (#7330 by Helmut K. C. Tessarek)
+- Improved: Upgrade to react-native 0.68.5 (e2d59ee)
+- Fixed: Fix CodeMirror syntax highlighting (#7386 by Henry Heino)
+- Fixed: Fix attaching multiple files (#7196) (#7195 by Self Not Found)
+- Fixed: Note viewer inertial scroll is slower than native inertial scrolling (#7470) (#7469 by Henry Heino)
+- Fixed: Update CodeMirror (#7262) (#7253 by Henry Heino)
+- Security: Fix XSS when a specially crafted string is passed to the renderer (a2de167)
+
 ## [ios-v12.9.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.9.2) - 2022-12-22T12:42:26Z
 
 - Fixed: Could not attach images to notes anymore (#7471)

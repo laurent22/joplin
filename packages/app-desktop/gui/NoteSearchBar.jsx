@@ -11,6 +11,7 @@ class NoteSearchBar extends React.Component {
 		this.previousButton_click = this.previousButton_click.bind(this);
 		this.nextButton_click = this.nextButton_click.bind(this);
 		this.closeButton_click = this.closeButton_click.bind(this);
+		this.focus = this.focus.bind(this);
 
 		this.backgroundColor = undefined;
 	}
