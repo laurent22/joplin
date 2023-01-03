@@ -1468,7 +1468,6 @@ class Setting extends BaseModel {
 				section: 'sync',
 				isGlobal: true,
 				public: true,
-				maximum: 60,
 				label: () => _('Proxy timeout (seconds)'),
 				storage: SettingStorage.File,
 			},
@@ -1634,14 +1633,9 @@ class Setting extends BaseModel {
 		return this.metadata_;
 	}
 
-	private static isMobileSetting(md: SettingItem) {
-		return !md.appTypes || md.appTypes.includes(AppType.Mobile);
-	}
-
 	private static validateMetadata(md: SettingItems) {
 		for (const [k, v] of Object.entries(md)) {
-			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}": It is global but storage is not "file"`);
-			if (v.type === SettingItemType.Int && v.public && this.isMobileSetting(v) && !v.isEnum && !('maximum' in v)) throw new Error(`Setting "${k}": Public integer values must define a maximum value (minimum defaults to 0)`);
+			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
 		}
 	}
 
