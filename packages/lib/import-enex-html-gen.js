@@ -1,6 +1,7 @@
 const stringToStream = require('string-to-stream');
 // const cleanHtml = require('clean-html');
 const resourceUtils = require('./resourceUtils.js');
+const { cssValue } = require('./import-enex-md-gen');
 const htmlUtils = require('./htmlUtils').default;
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -80,6 +81,7 @@ function enexXmlToHtml_(stream, resources) {
 		saxStream.on('opentag', function(node) {
 			const tagName = node.name.toLowerCase();
 			const attributesStr = resourceUtils.attributesToStr(node.attributes);
+			const nodeAttributes = attributeToLowerCase(node);
 
 			if (tagName === 'en-media') {
 				const nodeAttributes = attributeToLowerCase(node);
@@ -121,9 +123,11 @@ function enexXmlToHtml_(stream, resources) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes);
 				}
 			} else if (tagName === 'en-todo') {
-				const nodeAttributes = attributeToLowerCase(node);
 				const checkedHtml = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() === 'true' ? ' checked="checked" ' : ' ';
 				section.lines.push(`<input${checkedHtml}type="checkbox" onclick="return false;" />`);
+			} else if (tagName === 'li' && cssValue(this, nodeAttributes.style, '--en-checked')) {
+				const checkedHtml = cssValue(this, nodeAttributes.style, '--en-checked') === 'true' ? ' checked="checked" ' : ' ';
+				section.lines.push(`<${tagName}${attributesStr}> <input${checkedHtml}type="checkbox" onclick="return false;" />`);
 			} else if (htmlUtils.isSelfClosingTag(tagName)) {
 				section.lines.push(`<${tagName}${attributesStr}/>`);
 			} else {

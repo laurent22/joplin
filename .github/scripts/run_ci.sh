@@ -107,6 +107,12 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
 	fi
+
+	yarn run packageJsonLint
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
 fi
 
 # =============================================================================

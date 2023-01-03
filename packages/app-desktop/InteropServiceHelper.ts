@@ -78,6 +78,12 @@ export default class InteropServiceHelper {
 					shim.setTimeout(async () => {
 						if (target === 'pdf') {
 							try {
+								// The below line "opens" all <details> tags
+								// before printing. This assures that the
+								// contents of the tag are visible in printed
+								// pdfs.
+								// https://github.com/laurent22/joplin/issues/6254.
+								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
 								const data = await win.webContents.printToPDF(options);
 								resolve(data);
 							} catch (error) {

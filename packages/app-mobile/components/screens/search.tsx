@@ -1,23 +1,31 @@
 const React = require('react');
 
-const { StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
+import { StyleSheet, View, TextInput, FlatList, TouchableHighlight } from 'react-native';
 const { connect } = require('react-redux');
-const { ScreenHeader } = require('../ScreenHeader');
+import ScreenHeader from '../ScreenHeader';
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { _ } = require('@joplin/lib/locale');
-const Note = require('@joplin/lib/models/Note').default;
+import { _ } from '@joplin/lib/locale';
+import Note from '@joplin/lib/models/Note';
+import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
 const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
-const SearchEngineUtils = require('@joplin/lib/services/searchengine/SearchEngineUtils').default;
-const SearchEngine = require('@joplin/lib/services/searchengine/SearchEngine').default;
+import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import { AppState } from '../../utils/types';
 
 Icon.loadFont();
 
 class SearchScreenComponent extends BaseScreenComponent {
+
+	private state: any = null;
+	private isMounted_ = false;
+	private styles_: any = {};
+	private scheduleSearchTimer_: any = null;
+
 	static navigationOptions() {
-		return { header: null };
+		return { header: null } as any;
 	}
 
 	constructor() {
@@ -26,8 +34,6 @@ class SearchScreenComponent extends BaseScreenComponent {
 			query: '',
 			notes: [],
 		};
-		this.isMounted_ = false;
-		this.styles_ = {};
 	}
 
 	styles() {
@@ -36,7 +42,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
-		const styles = {
+		const styles: any = {
 			body: {
 				flex: 1,
 			},
@@ -65,25 +71,12 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 	componentDidMount() {
 		this.setState({ query: this.props.query });
-		this.refreshSearch(this.props.query);
+		void this.refreshSearch(this.props.query);
 		this.isMounted_ = true;
 	}
 
 	componentWillUnmount() {
 		this.isMounted_ = false;
-	}
-
-	searchTextInput_submit() {
-		const query = this.state.query.trim();
-		if (!query) return;
-
-		this.props.dispatch({
-			type: 'SEARCH_QUERY',
-			query: query,
-		});
-
-		this.setState({ query: query });
-		this.refreshSearch(query);
 	}
 
 	clearButton_press() {
@@ -93,13 +86,13 @@ class SearchScreenComponent extends BaseScreenComponent {
 		});
 
 		this.setState({ query: '' });
-		this.refreshSearch('');
+		void this.refreshSearch('');
 	}
 
-	async refreshSearch(query = null) {
+	async refreshSearch(query: string = null) {
 		if (!this.props.visible) return;
 
-		query = query === null ? this.state.query.trim : query.trim();
+		query = gotoAnythingStyleQuery(query);
 
 		let notes = [];
 
@@ -134,8 +127,24 @@ class SearchScreenComponent extends BaseScreenComponent {
 		this.setState({ notes: notes });
 	}
 
-	searchTextInput_changeText(text) {
+	scheduleSearch() {
+		if (this.scheduleSearchTimer_) clearTimeout(this.scheduleSearchTimer_);
+
+		this.scheduleSearchTimer_ = setTimeout(() => {
+			this.scheduleSearchTimer_ = null;
+			void this.refreshSearch(this.state.query);
+		}, 200);
+	}
+
+	searchTextInput_changeText(text: string) {
 		this.setState({ query: text });
+
+		this.props.dispatch({
+			type: 'SEARCH_QUERY',
+			query: text,
+		});
+
+		this.scheduleSearch();
 	}
 
 	render() {
@@ -172,9 +181,6 @@ class SearchScreenComponent extends BaseScreenComponent {
 							style={this.styles().searchTextInput}
 							autoFocus={this.props.visible}
 							underlineColorAndroid="#ffffff00"
-							onSubmitEditing={() => {
-								this.searchTextInput_submit();
-							}}
 							onChangeText={text => this.searchTextInput_changeText(text)}
 							value={this.state.query}
 							selectionColor={theme.textSelectionColor}
@@ -188,7 +194,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -197,7 +203,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const SearchScreen = connect(state => {
+const SearchScreen = connect((state: AppState) => {
 	return {
 		query: state.searchQuery,
 		themeId: state.settings.theme,

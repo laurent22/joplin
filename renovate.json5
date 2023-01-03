@@ -84,6 +84,7 @@
 		"jsc-android",
 		"react-native",
 		"@babel/runtime",
+		"de.undercouch:gradle-download-task",
 
 		// Need special processing when upgrading
 		"katex",
@@ -113,6 +114,7 @@
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
 				"eslint",
+				"eslint-config-prettier",
 				"eslint-interactive",
 				"@typescript-eslint/eslint-plugin",
 				"@typescript-eslint/parser",

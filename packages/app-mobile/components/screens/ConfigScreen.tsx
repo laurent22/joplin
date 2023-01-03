@@ -532,6 +532,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			// );
 		} else if (md.type === Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
+			const minimum = 'minimum' in md ? md.minimum : 0;
+			const maximum = 'maximum' in md ? md.maximum : 10;
+
 			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
 			// on the Slider as they are buggy and can crash the app on certain devices.
 			// https://github.com/laurent22/joplin/issues/2733
@@ -543,7 +546,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={minimum} maximumValue={maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);

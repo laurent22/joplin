@@ -216,7 +216,7 @@ then
 	Name=Joplin
 	Comment=Joplin for Desktop
 	Exec=${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM} %u
-	Icon=@joplinapp-desktop
+	Icon=joplin
 	StartupWMClass=Joplin
 	Type=Application
 	Categories=Office;
