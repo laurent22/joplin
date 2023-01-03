@@ -1464,6 +1464,7 @@ class Setting extends BaseModel {
 			'net.proxyTimeout': {
 				value: 1,
 				type: SettingItemType.Int,
+				maximum: 60,
 				advanced: true,
 				section: 'sync',
 				isGlobal: true,
