@@ -24,8 +24,6 @@ const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
 
-type ClickListener = ()=> void;
-
 class ConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions(): any {
 		return { header: null };
@@ -326,12 +324,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	private handleBackButtonPress = (): boolean => {
 		const goBack = async () => {
 			BackButtonService.removeHandler(this.handleBackButtonPress);
-			BackButtonService.back();
+			await BackButtonService.back();
 		};
 
 		if (this.state.changedSettingKeys.length > 0) {
+			const dialogTitle: string|null = null;
 			Alert.alert(
-				_('Save changes?'),
+				dialogTitle,
 				_('There are unsaved changes.'),
 				[{
 					text: _('Save changes'),
@@ -379,7 +378,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	renderButton(key: string, title: string, clickHandler: ClickListener, options: any = null) {
+	renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		if (!options) options = {};
 
 		let descriptionComp = null;
