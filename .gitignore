@@ -936,6 +936,12 @@ packages/app-mobile/components/NoteEditor/CodeMirror/webviewLogger.js.map
 packages/app-mobile/components/NoteEditor/EditLinkDialog.d.ts
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.js.map
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.d.ts
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js.map

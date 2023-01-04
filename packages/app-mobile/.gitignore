@@ -64,7 +64,7 @@ buck-out/
 lib/csstojs/
 lib/rnInjectedJs/
 dist/
-components/NoteEditor/CodeMirror/CodeMirror.bundle.js
-components/NoteEditor/CodeMirror/CodeMirror.bundle.min.js
+components/NoteEditor/**/*.bundle.js
+components/NoteEditor/**/*.bundle.min.js
 
 utils/fs-driver-android.js

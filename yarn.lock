@@ -4710,6 +4710,7 @@ __metadata:
     jest-environment-jsdom: 29.3.1
     jetifier: 2.0.0
     joplin-rn-alarm-notification: 1.0.7
+    js-draw: 0.10.2
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
@@ -6172,6 +6173,13 @@ __metadata:
   bin:
     node-pre-gyp: bin/node-pre-gyp
   checksum: 1a98db05d955b74dad3814679593df293b9194853698f3f5f1ed00ecd93128cdd4b14fb8767fe44ac6981ef05c23effcfdc88710e7c1de99ccb6f647890597c8
+  languageName: node
+  linkType: hard
+
+"@melloware/coloris@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@melloware/coloris@npm:0.16.1"
+  checksum: 32b468ae92bba2b470896a3c3d8db71106e555f81e996dcb54a3d55557c95b1788c0f58d4cfd963b0ead8af85469459f3fcc6d3bb104dd689bdf5203715fd06d
   languageName: node
   linkType: hard
 
@@ -10292,6 +10300,13 @@ __metadata:
   version: 2.2.3
   resolution: "before-after-hook@npm:2.2.3"
   checksum: a1a2430976d9bdab4cd89cb50d27fa86b19e2b41812bf1315923b0cba03371ebca99449809226425dd3bcef20e010db61abdaff549278e111d6480034bebae87
+  languageName: node
+  linkType: hard
+
+"bezier-js@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "bezier-js@npm:6.1.0"
+  checksum: 46b4133c821df152cf12f392313a94cd4a1a4649277367990970a2aefb8275999a594d35cff3bada92947f5e6fee423a54ba89857a3954fdcd8f04f0d475e488
   languageName: node
   linkType: hard
 
@@ -20998,6 +21013,16 @@ __metadata:
   version: 3.6.3
   resolution: "jquery@npm:3.6.3"
   checksum: 0fd366bdcaa0c84a7a8751ce20f8192290141913978b5059574426d9b01f4365daa675f95aab3eec94fd794d27b08d32078a2236bef404b8ba78073009988ce6
+  languageName: node
+  linkType: hard
+
+"js-draw@npm:0.10.2":
+  version: 0.10.2
+  resolution: "js-draw@npm:0.10.2"
+  dependencies:
+    "@melloware/coloris": ^0.16.1
+    bezier-js: ^6.1.0
+  checksum: ac03fdcd78882845020a33a65d425e8d77fef234e633d60f56dba6a480cb263823a22b43a61ac5461534e071a5fff6af738fa6aad8b05d7aef301e6eed553c05
   languageName: node
   linkType: hard
 
