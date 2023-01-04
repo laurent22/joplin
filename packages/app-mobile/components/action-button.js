@@ -7,7 +7,9 @@ const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 
-Icon.loadFont();
+// We need this to suppress the useless warning
+// https://github.com/oblador/react-native-vector-icons/issues/1465
+Icon.loadFont().catch((error) => { console.info(error); });
 
 const styles = StyleSheet.create({
 	actionButtonIcon: {

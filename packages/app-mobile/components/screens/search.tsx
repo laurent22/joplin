@@ -15,7 +15,9 @@ import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUti
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import { AppState } from '../../utils/types';
 
-Icon.loadFont();
+// We need this to suppress the useless warning
+// https://github.com/oblador/react-native-vector-icons/issues/1465
+Icon.loadFont().catch((error) => { console.info(error); });
 
 class SearchScreenComponent extends BaseScreenComponent {
 
