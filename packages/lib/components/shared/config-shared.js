@@ -5,7 +5,7 @@ const { _ } = require('../../locale');
 const { createSelector } = require('reselect');
 const Logger = require('../../Logger').default;
 
-const logger = Logger.create('config/lib');
+const logger = Logger.create('config-shared');
 
 const shared = {};
 
@@ -77,6 +77,19 @@ shared.checkSyncConfigMessages = function(comp) {
 
 shared.updateSettingValue = function(comp, key, value) {
 	comp.setState(state => {
+		// @react-native-community/slider (4.4.0) will emit a valueChanged event
+		// when the component is mounted, even though the value hasn't changed.
+		// We should ignore this, otherwise it will mark the settings as
+		// unsaved.
+		//
+		// Upstream: https://github.com/callstack/react-native-slider/issues/395
+		//
+		// https://github.com/laurent22/joplin/issues/7503
+		if (state.settings[key] === value) {
+			logger.info('Trying to update a setting that has not changed - skipping it.', key, value);
+			return {};
+		}
+
 		const settings = Object.assign({}, state.settings);
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);
