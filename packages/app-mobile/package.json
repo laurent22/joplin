@@ -101,6 +101,7 @@
     "jest-environment-jsdom": "29.3.1",
     "jetifier": "2.0.0",
     "jsdom": "20.0.0",
+    "md5-file": "5.0.0",
     "metro-react-native-babel-preset": "0.67.0",
     "nodemon": "2.0.20",
     "ts-jest": "29.0.3",

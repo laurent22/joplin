@@ -4713,6 +4713,7 @@ __metadata:
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     md5: 2.3.0
+    md5-file: 5.0.0
     metro-react-native-babel-preset: 0.67.0
     nodemon: 2.0.20
     prop-types: 15.8.1
