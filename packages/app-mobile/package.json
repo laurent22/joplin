@@ -45,6 +45,7 @@
     "react-native-document-picker": "8.1.3",
     "react-native-dropdownalert": "4.5.1",
     "react-native-file-viewer": "2.1.5",
+    "react-native-fingerprint-scanner": "6.0.0",
     "react-native-fs": "2.20.0",
     "react-native-get-random-values": "1.8.0",
     "react-native-image-picker": "4.10.3",

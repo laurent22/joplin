@@ -4725,6 +4725,7 @@ __metadata:
     react-native-document-picker: 8.1.3
     react-native-dropdownalert: 4.5.1
     react-native-file-viewer: 2.1.5
+    react-native-fingerprint-scanner: ^6.0.0
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.8.0
     react-native-image-picker: 4.10.3
@@ -27608,6 +27609,15 @@ __metadata:
   peerDependencies:
     react-native: ">=0.47"
   checksum: 390e1e3ce20c3b2fb7d2394d6bedf1c6c5d25f799fb5b344c7ecb72267327403caf2528916a7419e094caecccf41dac8b62dd0d31fa5991725e36dcdd24b725e
+  languageName: node
+  linkType: hard
+
+"react-native-fingerprint-scanner@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "react-native-fingerprint-scanner@npm:6.0.0"
+  peerDependencies:
+    react-native: ">=0.60 <1.0.0"
+  checksum: 67e1dcbf20d1a6119db4667162ff87c6ba606132c0cda790ef5c4d315e403f3253f8f4827373313562a261fca2d7cb77c8598f5f32d805ac07956b5301bce238
   languageName: node
   linkType: hard
 
