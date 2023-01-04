@@ -17,7 +17,7 @@ import { AppState } from '../../utils/types';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
-Icon.loadFont().catch((error) => { console.info(error); });
+Icon.loadFont().catch((error: any) => { console.info(error); });
 
 class SearchScreenComponent extends BaseScreenComponent {
 

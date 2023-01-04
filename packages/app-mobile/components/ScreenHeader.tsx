@@ -23,7 +23,7 @@ import CustomButton from './CustomButton';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
-Icon.loadFont().catch((error) => { console.info(error); });
+Icon.loadFont().catch((error: any) => { console.info(error); });
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
