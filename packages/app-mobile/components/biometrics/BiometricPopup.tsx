@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default (props: Props) => {
-	const [initialPromptDone, setInitialPromptDone] = useState(false); // Setting.value('security.biometricsInitialPromptDone'));
+	const [initialPromptDone, setInitialPromptDone] = useState(Setting.value('security.biometricsInitialPromptDone'));
 	const [display, setDisplay] = useState(!!props.sensorInfo.supportedSensors && (props.sensorInfo.enabled || !initialPromptDone));
 	const [tryBiometricsCheck, setTryBiometricsCheck] = useState(initialPromptDone);
 
