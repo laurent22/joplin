@@ -151,6 +151,21 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			);
 		};
 
+		// Use a separate screen-reader-only button for closing the menu. If we
+		// allow the background to be focusable, instead, the focus order might be
+		// incorrect on some devices. For example, the background button might be focused
+		// when navigating near the middle of the dropdown's list.
+		const screenReaderCloseMenuBtn = (
+			<TouchableWithoutFeedback
+				accessibilityRole='button'
+				onPress={()=> closeList()}
+				style={{
+					opacity: 0,
+				}}>
+				<Text>{_('Close dropdown')}</Text>
+			</TouchableWithoutFeedback>
+		);
+
 		return (
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<TouchableOpacity
@@ -175,8 +190,8 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					}}
 				>
 					<TouchableWithoutFeedback
-						accessibilityRole='button'
-						accessibilityLabel={_('Cancel')}
+						accessibilityElementsHidden={true}
+						importantForAccessibility='no-hide-descendants'
 						onPress={() => {
 							closeList();
 						}}
@@ -195,6 +210,8 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 							itemRenderer={itemRenderer}
 						/>
 					</View>
+
+					{screenReaderCloseMenuBtn}
 				</Modal>
 			</View>
 		);
