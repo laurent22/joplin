@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.10.3](https://github.com/laurent22/joplin/releases/tag/android-v2.10.3) (Pre-release) - 2023-01-05T11:29:06Z
+
+- New: Add support for locking the app using biometrics (f10d9f7)
+- Improved: Make the new text editor the default one (f5ef318)
+- Fixed: Fixed proxy timeout setting UI (275c80a)
+- Fixed: Settings save button visible even when no settings have been changed (#7503)
+
 ## [android-v2.10.2](https://github.com/laurent22/joplin/releases/tag/android-v2.10.2) (Pre-release) - 2023-01-02T17:44:15Z
 
 - New: Add support for realtime search (767213c)
