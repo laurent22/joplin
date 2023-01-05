@@ -3150,6 +3150,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@callstack/react-theme-provider@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@callstack/react-theme-provider@npm:3.0.8"
+  dependencies:
+    deepmerge: ^3.2.0
+    hoist-non-react-statics: ^3.3.0
+  peerDependencies:
+    react: ">=16.3.0"
+  checksum: 6077a4795aea4eb06a2a2ffe5cf299c3fdcba56530aa68eba5c3ac0728ce02be2f6e9e71278be303065cb7fbe252c35639538477d5d05ee14f6325d550c8c696
+  languageName: node
+  linkType: hard
+
 "@cloudcmd/create-element@npm:^2.0.0":
   version: 2.0.2
   resolution: "@cloudcmd/create-element@npm:2.0.2"
@@ -4732,9 +4744,11 @@ __metadata:
     react-native-image-picker: 4.10.3
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
+    react-native-paper: 5.0.2
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
+    react-native-safe-area-context: 4.4.1
     react-native-securerandom: 1.0.1
     react-native-share: 8.1.0
     react-native-side-menu-updated: 1.3.2
@@ -11994,7 +12008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color@npm:3.2.1":
+"color@npm:3.2.1, color@npm:^3.1.2":
   version: 3.2.1
   resolution: "color@npm:3.2.1"
   dependencies:
@@ -27687,6 +27701,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-paper@npm:5.0.2":
+  version: 5.0.2
+  resolution: "react-native-paper@npm:5.0.2"
+  dependencies:
+    "@callstack/react-theme-provider": ^3.0.8
+    color: ^3.1.2
+    use-event-callback: ^0.1.0
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: "*"
+    react-native-vector-icons: "*"
+  checksum: 46481e3db2b297f2f02d1d05710d7ab329f901acc5a663e4c81fb7db83534e5d63067e9287bb396703e50d955ddfb8c41d7546cbd1ea2825a6888fd2e0fa80de
+  languageName: node
+  linkType: hard
+
 "react-native-popup-menu@npm:0.16.1":
   version: 0.16.1
   resolution: "react-native-popup-menu@npm:0.16.1"
@@ -27705,6 +27735,16 @@ __metadata:
   version: 2.0.5
   resolution: "react-native-rsa-native@npm:2.0.5"
   checksum: 7a720ab3ef1898a4f365decc2913139dbfb090901806bf4c20932c1511bde32cd02586725142e9c273bb575c907a5ee87a84edc8c0b01cce252ad80436370740
+  languageName: node
+  linkType: hard
+
+"react-native-safe-area-context@npm:4.4.1":
+  version: 4.4.1
+  resolution: "react-native-safe-area-context@npm:4.4.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: ef7c41ea59a34b114c6481fb130e66ef85e8d5b88acb46279131367761ca9fbf22cd310fe613f49b6c9b56dbd83e044be640f0532eda1d3856bf708e96335a35
   languageName: node
   linkType: hard
 
@@ -33138,6 +33178,15 @@ __metadata:
     punycode: 1.3.2
     querystring: 0.2.0
   checksum: 50d100d3dd2d98b9fe3ada48cadb0b08aa6be6d3ac64112b867b56b19be4bfcba03c2a9a0d7922bfd7ac17d4834e88537749fe182430dfd9b68e520175900d90
+  languageName: node
+  linkType: hard
+
+"use-event-callback@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "use-event-callback@npm:0.1.0"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 1e15fb21306c74f877e9d57686546c363165429412dcb9260254d2dd8f56692cb01ba2162f9169e6fc15b01cf3921b9cd8a9c60cf777d0143afcee92c1a7976a
   languageName: node
   linkType: hard
 
