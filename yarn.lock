@@ -9657,9 +9657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:2.1287.0":
-  version: 2.1287.0
-  resolution: "aws-sdk@npm:2.1287.0"
+"aws-sdk@npm:2.1288.0":
+  version: 2.1288.0
+  resolution: "aws-sdk@npm:2.1288.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -9671,7 +9671,7 @@ __metadata:
     util: ^0.12.4
     uuid: 8.0.0
     xml2js: 0.4.19
-  checksum: 528bbddd87b49782f50bfd4763c7d7c2b45f6c71ef3f303c72e0881e2799fff81d7fa24aa09af8e5fd493e9ce396437529d3dd6db6d53cde4ba78bd9ede53cd4
+  checksum: 47189c4de75fcfd5e9c87f2d39adc19448cd1caa82f9915d197c7c2cf2fbaa02d0eda7d6dae0b834af3e54ff7eff560d558f28e75c10a0ef22d53b11cc56101f
   languageName: node
   linkType: hard
 
@@ -20949,7 +20949,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.5
     "@types/node": 18.11.18
-    aws-sdk: 2.1287.0
+    aws-sdk: 2.1288.0
     chalk: 4.1.2
     compare-version: 0.1.2
     fs-extra: 11.1.0
