@@ -8,29 +8,26 @@ export interface SensorInfo {
 }
 
 export default async (): Promise<SensorInfo> => {
-	const enabled = Setting.value('security.biometricsEnabled');
 	let hasChanged = false;
 	let supportedSensors = '';
 
-	if (enabled) {
-		try {
-			const result = await FingerprintScanner.isSensorAvailable();
-			supportedSensors = result;
+	try {
+		const result = await FingerprintScanner.isSensorAvailable();
+		supportedSensors = result;
 
-			if (result) {
-				if (result !== Setting.value('security.biometricsSupportedSensors')) {
-					hasChanged = true;
-					Setting.setValue('security.biometricsSupportedSensors', result);
-				}
+		if (result) {
+			if (result !== Setting.value('security.biometricsSupportedSensors')) {
+				hasChanged = true;
+				Setting.setValue('security.biometricsSupportedSensors', result);
 			}
-		} catch (error) {
-			console.warn('Could not check for biometrics sensor:', error);
-			Setting.setValue('security.biometricsSupportedSensors', '');
 		}
+	} catch (error) {
+		console.warn('Could not check for biometrics sensor:', error);
+		Setting.setValue('security.biometricsSupportedSensors', '');
 	}
 
 	return {
-		enabled,
+		enabled: Setting.value('security.biometricsEnabled'),
 		sensorsHaveChanged: hasChanged,
 		supportedSensors,
 	};
