@@ -4,14 +4,14 @@
 		"config:base"
 	],
 	"major": {
-		"stabilityDays": 30
+		"stabilityDays": 30,
 	},
 	"minor": {
-		"stabilityDays": 20
+		"stabilityDays": 20,
 	},
 	"patch": {
-		"stabilityDays": 10
-	}
+		"stabilityDays": 10,
+	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
