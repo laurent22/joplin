@@ -65,6 +65,7 @@ lib/csstojs/
 lib/rnInjectedJs/
 dist/
 components/NoteEditor/**/*.bundle.js
+components/NoteEditor/**/*.bundle.js.md5
 components/NoteEditor/**/*.bundle.min.js
 
 utils/fs-driver-android.js
