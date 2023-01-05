@@ -46,6 +46,11 @@ allprojects {
                 excludeGroup "com.facebook.react"
             }
         }
+        maven {
+            // Required by react-native-fingerprint-scanner
+            // https://github.com/hieuvp/react-native-fingerprint-scanner/issues/192
+            url "https://maven.aliyun.com/repository/jcenter"
+        }
         google()
         maven { url 'https://www.jitpack.io' }
     }

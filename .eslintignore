@@ -990,6 +990,12 @@ packages/app-mobile/components/SelectDateTimeDialog.js.map
 packages/app-mobile/components/SideMenu.d.ts
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenu.js.map
+packages/app-mobile/components/biometrics/BiometricPopup.d.ts
+packages/app-mobile/components/biometrics/BiometricPopup.js
+packages/app-mobile/components/biometrics/BiometricPopup.js.map
+packages/app-mobile/components/biometrics/sensorInfo.d.ts
+packages/app-mobile/components/biometrics/sensorInfo.js
+packages/app-mobile/components/biometrics/sensorInfo.js.map
 packages/app-mobile/components/getResponsiveValue.d.ts
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.js.map
