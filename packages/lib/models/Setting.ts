@@ -1620,6 +1620,28 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
+			'security.biometricsEnabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				label: () => _('Use biometrics to secure access to the app'),
+				public: true,
+				appTypes: [AppType.Mobile],
+			},
+
+			'security.biometricsSupportedSensors': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+			},
+
+			'security.biometricsInitialPromptDone': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Mobile],
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,

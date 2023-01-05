@@ -3,8 +3,9 @@
 // files: First here we convert the JS file to a plain string, and that string
 // is then loaded by eg. the Mermaid plugin, and finally injected in the WebView.
 
-import { mkdirp, readFile, writeFile } from 'fs-extra';
+import { mkdirp, pathExists, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
+const md5File = require('md5-file');
 const execa = require('execa');
 
 // We need this to be transpiled to `const webpack = require('webpack')`.
@@ -77,19 +78,34 @@ class BundledFile {
 			resolve: {
 				extensions: ['.tsx', '.ts', '.js'],
 			},
+			cache: {
+				type: 'filesystem',
+			},
 		};
 
 		return config;
 	}
 
 	private async uglify() {
+		const md5Path = `${this.bundleOutputPath}.md5`;
+		const newMd5 = await md5File(this.bundleOutputPath);
+		const previousMd5 = await pathExists(md5Path) ? await readFile(md5Path, 'utf8') : '';
+
+		if (newMd5 === previousMd5 && await pathExists(this.bundleMinifiedPath)) {
+			console.info('Bundle has not changed - skipping minifying...');
+			return;
+		}
+
 		console.info(`Minifying bundle: ${this.bundleName}...`);
+
 		await execa('yarn', [
 			'run', 'uglifyjs',
 			'--compress',
 			'-o', this.bundleMinifiedPath,
 			this.bundleOutputPath,
 		]);
+
+		await writeFile(md5Path, newMd5, 'utf8');
 	}
 
 	private handleErrors(err: Error | undefined | null, stats: webpack.Stats | undefined): boolean {

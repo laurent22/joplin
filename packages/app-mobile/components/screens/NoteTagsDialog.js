@@ -9,7 +9,9 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 const ModalDialog = require('../ModalDialog');
 const naturalCompare = require('string-natural-compare');
 
-Icon.loadFont();
+// We need this to suppress the useless warning
+// https://github.com/oblador/react-native-vector-icons/issues/1465
+Icon.loadFont().catch((error) => { console.info(error); });
 
 class NoteTagsDialogComponent extends React.Component {
 	constructor() {

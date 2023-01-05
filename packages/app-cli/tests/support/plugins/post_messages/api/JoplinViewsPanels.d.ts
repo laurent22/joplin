@@ -47,6 +47,23 @@ export default class JoplinViewsPanels {
      */
     onMessage(handle: ViewHandle, callback: Function): Promise<void>;
     /**
+     * Sends a message to the webview.
+     *
+     * The webview must have registered a message handler prior, otherwise the message is ignored. Use;
+     *
+     * ```javascript
+     * webviewApi.onMessage((message) => { ... });
+     * ```
+     *
+     *  - `message` can be any JavaScript object, string or number
+     *
+     * The view API may have only one onMessage handler defined.
+     * This method is fire and forget so no response is returned.
+     *
+     * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
+     */
+    postMessage(handle: ViewHandle, message: any): void;
+    /**
      * Shows the panel
      */
     show(handle: ViewHandle, show?: boolean): Promise<void>;
