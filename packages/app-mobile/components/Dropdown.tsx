@@ -159,10 +159,11 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			<TouchableWithoutFeedback
 				accessibilityRole='button'
 				onPress={()=> closeList()}
-				style={{
+			>
+				<Text style={{
 					opacity: 0,
-				}}>
-				<Text>{_('Close dropdown')}</Text>
+					height: 0,
+				}}>{_('Close dropdown')}</Text>
 			</TouchableWithoutFeedback>
 		);
 
