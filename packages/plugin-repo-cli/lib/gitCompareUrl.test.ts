@@ -17,6 +17,17 @@ describe('gitCompareUrl', () => {
 			],
 			[
 				{
+					repository_url: 'https://github.com/JackGruber/joplin-plugin-copytags.git',
+					_publish_commit: 'master:9ec4a476a54440ac43422c34e179dcabfca1e5a0',
+				},
+				{
+					repository_url: 'https://github.com/JackGruber/joplin-plugin-copytags.git',
+					_publish_commit: 'master:b52b01f6d3b709a811ac214253636a7c207c87dd',
+				},
+				'https://github.com/JackGruber/joplin-plugin-copytags/compare/b52b01f6d3b709a811ac214253636a7c207c87dd..9ec4a476a54440ac43422c34e179dcabfca1e5a0',
+			],
+			[
+				{
 					repository_url: 'https://github.com/JackGruber/joplin-plugin-copytags',
 					_publish_commit: 'master:9ec4a476a54440ac43422c34e179dcabfca1e5a0',
 				},

@@ -65,6 +65,7 @@ export interface DatabaseConfig {
 	port?: number;
 	user?: string;
 	password?: string;
+	connectionString?: string;
 	asyncStackTraces?: boolean;
 	slowQueryLogEnabled?: boolean;
 	slowQueryLogMinDuration?: number;

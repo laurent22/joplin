@@ -1,7 +1,7 @@
 import React from 'react';
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
-import { render } from 'react-dom';
+const { createRoot } = require('react-dom/client');
 import * as pdfjsLib from 'pdfjs-dist';
 import MiniViewerApp from './miniViewer';
 import MessageService from './messageService';
@@ -42,7 +42,5 @@ function App() {
 	return <div>Error: Unknown app type "{type}"</div>;
 }
 
-render(
-	<App/>,
-	document.getElementById('pdf-root')
-);
+const root = createRoot(document.getElementById('pdf-root'));
+root.render(<App/>);

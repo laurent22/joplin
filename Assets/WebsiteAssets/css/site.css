@@ -954,6 +954,10 @@ footer .bottom-links-row p {
 		display: none;
 	}
 
+	#nav-section a {
+		margin-left: 4px;
+	}
+
 }
 
 /*****************************************************************
@@ -1202,5 +1206,9 @@ footer .bottom-links-row p {
 :lang(zh-cn) #in-the-press-section,
 :lang(zh-cn) #sponsors-section,
 :lang(zh-cn) .top-section-img-en {
+	display: none;
+}
+
+:lang(zh-cn) #plans-section .faq {
 	display: none;
 }

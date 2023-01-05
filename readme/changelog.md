@@ -1,6 +1,23 @@
 # Joplin changelog
 
-## [v2.9.17](https://github.com/laurent22/joplin/releases/tag/v2.9.17) (Pre-release) - 2022-11-15T10:28:37Z
+## [v2.10.3](https://github.com/laurent22/joplin/releases/tag/v2.10.3) (Pre-release) - 2022-12-31T15:53:23Z
+
+- Improved: Resolve [#6254](https://github.com/laurent22/joplin/issues/6254): &lt;details&gt; elements remain closed when exporting to PDF ([#7515](https://github.com/laurent22/joplin/issues/7515)) ([#6254](https://github.com/laurent22/joplin/issues/6254) by Hitarth Thummar)
+- Improved: Switch license to AGPL-3.0 ([faf0a4e](https://github.com/laurent22/joplin/commit/faf0a4e))
+- Fixed: Fixed crash when closing PDF ([#7528](https://github.com/laurent22/joplin/issues/7528))
+- Fixed: Fixes import of tasklists from enex files ([#7344](https://github.com/laurent22/joplin/issues/7344)) ([#7329](https://github.com/laurent22/joplin/issues/7329) by [@Wartijn](https://github.com/Wartijn))
+- Fixed: Press Enter to select a tag ([#7493](https://github.com/laurent22/joplin/issues/7493))
+- Fixed: Profile paths that contain special characters can break note rendering ([#7449](https://github.com/laurent22/joplin/issues/7449)) ([#7434](https://github.com/laurent22/joplin/issues/7434) by [@Wartijn](https://github.com/Wartijn))
+- Fixed: Random crash when searching ([#7499](https://github.com/laurent22/joplin/issues/7499))
+- Fixed: Search field doesn't get focus when pressing Ctrl+F ([#7529](https://github.com/laurent22/joplin/issues/7529)) ([#7520](https://github.com/laurent22/joplin/issues/7520) by Betty Alagwu)
+
+## [v2.10.2](https://github.com/laurent22/joplin/releases/tag/v2.10.2) (Pre-release) - 2022-12-18T18:05:08Z
+
+- Improved: Update Mermaid: 9.1.7 to 9.2.2 ([#7330](https://github.com/laurent22/joplin/issues/7330) by Helmut K. C. Tessarek)
+- Fixed: Fix pasting plain text ([#7045](https://github.com/laurent22/joplin/issues/7045)) ([#7036](https://github.com/laurent22/joplin/issues/7036) by Self Not Found)
+- Fixed: Open callback URLs from within the application ([#7354](https://github.com/laurent22/joplin/issues/7354))
+
+## [v2.9.17](https://github.com/laurent22/joplin/releases/tag/v2.9.17) - 2022-11-15T10:28:37Z
 
 - Fixed: Switching a note using Sidebar is slow and grayed out ([#6430](https://github.com/laurent22/joplin/issues/6430)) ([#6416](https://github.com/laurent22/joplin/issues/6416) by Kenichi Kobayashi)
 - Security: Fix XSS when a specially crafted string is passed to the renderer ([762b4e8](https://github.com/laurent22/joplin/commit/762b4e8)) (PoC by [@Alise](https://github.com/a1ise))

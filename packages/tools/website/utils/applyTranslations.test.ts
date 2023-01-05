@@ -33,7 +33,7 @@ describe('applyTranslations', () => {
 		];
 
 		for (const test of tests) {
-			const actual = applyTranslations(test.html, test.translations);
+			const actual = applyTranslations(test.html, 'fr_FR', test.translations);
 			expect(actual).toEqual(test.htmlTranslated);
 		}
 	});

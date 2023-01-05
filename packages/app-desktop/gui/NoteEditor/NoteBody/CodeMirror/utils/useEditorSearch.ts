@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('useEditorSearch');
 
 export default function useEditorSearch(CodeMirror: any) {
 
@@ -23,7 +26,16 @@ export default function useEditorSearch(CodeMirror: any) {
 
 	function clearOverlay(cm: any) {
 		if (overlay) cm.removeOverlay(overlay);
-		if (scrollbarMarks) scrollbarMarks.clear();
+		if (scrollbarMarks) {
+			try {
+				scrollbarMarks.clear();
+			} catch (error) {
+				// This can randomly crash the app so just print a warning since
+				// it's probably not critical.
+				// https://github.com/laurent22/joplin/issues/7499
+				logger.error('useEditorSearch: Could not clear scrollbar marks:', error);
+			}
+		}
 
 		if (overlayTimeout) shim.clearTimeout(overlayTimeout);
 

@@ -8,5 +8,5 @@
   "description": "Joplin Web Clipper",
   "main": "main.js",
   "author": "Laurent Cozic",
-  "license": "MIT"
+  "license": "AGPL-3.0-or-later"
 }

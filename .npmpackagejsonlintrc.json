@@ -1,0 +1,22 @@
+{
+	"rules": {
+		"prefer-absolute-version-dependencies": ["error",
+			{
+				"exceptions": [
+					"@joplin/lib",
+					"@joplin/renderer",
+					"@joplin/pdf-viewer",
+					"@joplin/fork-htmlparser2",
+					"@joplin/fork-sax",
+					"@joplin/fork-uslug",
+					"@joplin/htmlpack",
+					"@joplin/turndown",
+					"@joplin/turndown-plugin-gfm",
+					"@joplin/tools",
+					"@joplin/react-native-saf-x"
+				]
+		  	}
+		]
+	}
+}
+  

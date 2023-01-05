@@ -38,8 +38,7 @@ const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
-const ImagePicker = require('react-native-image-picker').default;
-import { ImagePickerResponse } from 'react-native-image-picker';
+import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -562,14 +561,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	showImagePicker(options: any) {
-		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, (response: any) => {
-				resolve(response);
-			});
-		});
-	}
-
 	async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
@@ -720,7 +711,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private async attachPhoto_onPress() {
 		// the selection Limit should be specfied. I think 200 is enough?
-		const response: ImagePickerResponse = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+		const response: ImagePickerResponse = await launchImageLibrary({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
 
 		if (response.errorCode) {
 			reg.logger().warn('Got error from picker', response.errorCode);
@@ -1251,7 +1242,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
-		useEditorBeta: state.settings['editor.beta'],
+		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);
 

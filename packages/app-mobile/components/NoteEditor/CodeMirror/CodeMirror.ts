@@ -45,9 +45,14 @@ import {
 	toggleList, toggleMath, updateLink,
 } from './markdownCommands';
 
+
+interface CodeMirrorResult extends CodeMirrorControl {
+	editor: EditorView;
+}
+
 export function initCodeMirror(
 	parentElement: any, initialText: string, settings: EditorSettings
-): CodeMirrorControl {
+): CodeMirrorResult {
 	logMessage('Initializing CodeMirror...');
 	const theme = settings.themeData;
 
@@ -304,6 +309,7 @@ export function initCodeMirror(
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({
 					autocapitalize: 'sentence',
+					autocorrect: settings.spellcheckEnabled ? 'true' : 'false',
 					spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
 				}),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {

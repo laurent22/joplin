@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, MutableRefObject, useEffect } from 'react';
 import Logger from '@joplin/lib/Logger';
 import { SearchMarkers } from './useSearchMarkers';
 const CommandService = require('@joplin/lib/services/CommandService').default;
@@ -25,9 +25,20 @@ function defaultLocalSearch(): LocalSearch {
 	};
 }
 
-export default function useNoteSearchBar() {
+export interface UseNoteSearchBarProps {
+	noteSearchBarRef: MutableRefObject<any>;
+}
+
+export default function useNoteSearchBar({ noteSearchBarRef }: UseNoteSearchBarProps) {
 	const [showLocalSearch, setShowLocalSearch] = useState(false);
 	const [localSearch, setLocalSearch] = useState<LocalSearch>(defaultLocalSearch());
+
+
+	useEffect(() => {
+		if (showLocalSearch && noteSearchBarRef.current) {
+			noteSearchBarRef.current.focus();
+		}
+	}, [showLocalSearch, noteSearchBarRef]);
 
 	const onChange = useCallback((query: string) => {
 		// A query that's too long would make CodeMirror throw an exception

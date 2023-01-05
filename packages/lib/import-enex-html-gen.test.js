@@ -65,7 +65,11 @@ describe('EnexToHtml', function() {
 	});
 
 	compareOutputToExpected({
-		testName: 'checklist-list',
+		testName: 'checkbox-list',
+	});
+
+	compareOutputToExpected({
+		testName: 'checklist',
 	});
 
 	compareOutputToExpected({
