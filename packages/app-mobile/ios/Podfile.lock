@@ -337,7 +337,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (8.0.1):
+  - RNShare (8.1.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -530,10 +530,10 @@ SPEC CHECKSUMS:
   FBLazyVector: 2b47ff52037bd9ae07cc9b051c9975797814b736
   FBReactNativeSpec: 0e0d384ef17a33b385f13f0c7f97702c7cd17858
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
+  glog: 476ee3e89abb49e07f822b48323c51c57124b572
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
-  RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
+  RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 0f06b6068f530932d10e1a01a5352fad4eaacb74
   RCTTypeSafety: b0ee81f10ef1b7d977605a2b266823dabd565e65
   React: 3becd12bd51ea8a43bdde7e09d0f40fba7820e03
@@ -580,7 +580,7 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
-  RNShare: d93e00e906e6174657f6370b480437e4702bc86e
+  RNShare: 48b3113cd089a2be8ff0515c3ae7a46a4db8a76b
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   Yoga: c4d61225a466f250c35c1ee78d2d0b3d41fe661c
 
