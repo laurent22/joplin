@@ -27,6 +27,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
 const RNAppState = require('react-native').AppState;
@@ -111,6 +112,8 @@ import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import sensorInfo from './components/biometrics/sensorInfo';
+import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
+import { Profile } from '@joplin/lib/services/profileConfig/types';
 
 let storeDispatch = function(_action: any) {};
 
@@ -405,14 +408,55 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
+const getResourceDir = (profile: Profile, isSubProfile: boolean) => {
+	const documentDir = RNFetchBlob.fs.dirs.DocumentDir;
+
+	if (!isSubProfile) return documentDir;
+	return `${documentDir}/resources-${profile.id}`;
+};
+
+const getDatabaseName = (profile: Profile, isSubProfile: boolean) => {
+	if (!isSubProfile) return 'joplin.sqlite';
+	return `joplin-${profile.id}.sqlite`;
+};
+
 async function initialize(dispatch: Function) {
 	shimInit();
+
+	const documentDir = RNFetchBlob.fs.dirs.DocumentDir;
+
+	// const profilesConfigPath = documentDir + '/profiles.json';
+	const profileInfo = await initProfile(documentDir);
+
+
+
+
+
+	// // profileInfo.profileConfig.currentProfileId = '8kterg2e';
+	// profileInfo.profileConfig.currentProfileId = 'default';
+	// await saveProfileConfig(profilesConfigPath, profileInfo.profileConfig);
+	// profileInfo = await initProfile(documentDir);
+
+
+
+
+	const { profileConfig, isSubProfile } = profileInfo;
+	const currentProfile = getCurrentProfile(profileConfig);
+
+
+
+
+
+
 
 	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
-	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
+	const resourceDir = getResourceDir(currentProfile, isSubProfile);
+	Setting.setConstant('resourceDir', resourceDir);
+
+	await shim.fsDriver().mkdir(resourceDir);
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());
 	await logDatabase.open({ name: 'log.sqlite' });
@@ -480,9 +524,9 @@ async function initialize(dispatch: Function) {
 
 	try {
 		if (Setting.value('env') === 'prod') {
-			await db.open({ name: 'joplin.sqlite' });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: 'joplin-101.sqlite' });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 
 			// await db.clearForTesting();
 		}
