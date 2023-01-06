@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView from '../../ExtendedWebView';
+import { clearAutosave, writeAutosave } from './autosave';
 
 type OnSaveCallback = (svgData: string)=> void;
 type OnCancelCallback = ()=> void;
@@ -47,12 +48,15 @@ const ImageEditor = (props: Props) => {
 	const editorTheme: Theme = themeStyle(props.themeId);
 	const webviewRef = useRef(null);
 
-	const onBackPress = useCallback(() => {
+	const onRequestCloseEditor = useCallback(() => {
 		Alert.alert(
 			_('Save changes?'), _('This drawing may have unsaved changes.'), [
 				{
 					text: _('Discard changes'),
-					onPress: () => props.onCancel(),
+					onPress: async () => {
+						await clearAutosave();
+						props.onCancel();
+					},
 					style: 'destructive',
 				},
 				{
@@ -69,12 +73,12 @@ const ImageEditor = (props: Props) => {
 	}, [webviewRef, props.onCancel]);
 
 	useEffect(() => {
-		BackHandler.addEventListener('hardwareBackPress', onBackPress);
+		BackHandler.addEventListener('hardwareBackPress', onRequestCloseEditor);
 
 		return () => {
-			BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+			BackHandler.removeEventListener('hardwareBackPress', onRequestCloseEditor);
 		};
-	}, [onBackPress]);
+	}, [onRequestCloseEditor]);
 
 	const css = useCss(editorTheme);
 	const html = useMemo(() => `
@@ -110,6 +114,10 @@ const ImageEditor = (props: Props) => {
 		};
 		window.saveDrawing = saveDrawing;
 
+		const closeDrawing = () => {
+			window.ReactNativeWebView.postMessage('{ "action": "close" }');
+		};
+
 		try {
 			if (window.editor === undefined) {
 				${shim.injectedJs('svgEditorBundle')}
@@ -122,6 +130,12 @@ const ImageEditor = (props: Props) => {
 				}
 
 				const toolbar = editor.addToolbar();
+
+				toolbar.addActionButton({
+					label: ${JSON.stringify(_('Close'))}, 
+					icon: svgEditorBundle.makeCloseIcon(),
+				}, () => closeDrawing());
+
 				toolbar.addActionButton({
 					label: ${JSON.stringify(_('Done'))},
 					icon: editor.icons.makeSaveIcon(),
@@ -135,8 +149,8 @@ const ImageEditor = (props: Props) => {
 				);
 				svgEditorBundle.listenToolbarState(editor, toolbar);
 
-				// Auto-save every four minutes.
-				const autoSaveInterval = 4 * 60 * 1000;
+				// Auto-save every two minutes.
+				const autoSaveInterval = 2 * 60 * 1000;
 				setInterval(() => {
 					saveDrawing(true);
 				}, autoSaveInterval);
@@ -158,17 +172,18 @@ const ImageEditor = (props: Props) => {
 
 		const json = JSON.parse(data);
 		if (json.action === 'save') {
+			await clearAutosave();
 			props.onSave(json.data);
 		} else if (json.action === 'autosave') {
-			const filePath = `${Setting.value('resourceDir')}/autosaved-drawing.joplin.svg`;
-			await shim.fsDriver().writeFile(filePath, json.data, 'utf8');
-			console.info('Auto-saved to %s', filePath);
+			await writeAutosave(json.data);
 		} else if (json.action === 'save-toolbar') {
 			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
+		} else if (json.action === 'close') {
+			onRequestCloseEditor();
 		} else {
 			console.error('Unknown action,', json.action);
 		}
-	}, [props.onSave]);
+	}, [props.onSave, onRequestCloseEditor]);
 
 	const onError = useCallback((event: any) => {
 		console.error('ImageEditor: WebView error: ', event);

@@ -6,6 +6,30 @@ declare namespace ReactNativeWebView {
 	const postMessage: (data: any)=> void;
 }
 
+export const makeCloseIcon = () => {
+	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	svg.innerHTML = `
+		<style>
+			.toolbar-close-icon {
+				stroke: var(--icon-color);
+				stroke-width: 10;
+				stroke-linejoin: round;
+				stroke-linecap: round;
+				fill: none;
+			}
+		</style>
+		<path
+			d='
+				M 15,15 85,85
+				M 15,85 85,15
+			'
+			class='toolbar-close-icon'
+		/>
+	`;
+	svg.setAttribute('viewBox', '0 0 100 100');
+	return svg;
+};
+
 export const createJsDrawEditor = (): Editor => {
 	const parentElement = document.body;
 	const editor = new Editor(parentElement);

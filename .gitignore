@@ -939,9 +939,15 @@ packages/app-mobile/components/NoteEditor/EditLinkDialog.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/autosave.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js
+packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.js
+packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.js.map
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.d.ts
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js.map

@@ -45,6 +45,7 @@ import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
+import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -446,7 +447,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate(prevProps: any) {
+	componentDidUpdate(prevProps: any, prevState: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -456,6 +457,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.props.dispatch({
 				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
 				options: this.sideMenuOptions(),
+			});
+		}
+
+		if (prevState.isLoading !== this.state.isLoading && !this.state.isLoading) {
+			// If there's autosave data, prompt the user to restore it.
+			void promptRestoreAutosave((drawingData: string) => {
+				void this.onSaveDrawing(drawingData);
 			});
 		}
 	}
