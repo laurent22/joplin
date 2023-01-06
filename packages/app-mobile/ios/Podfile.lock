@@ -337,7 +337,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (8.0.1):
+  - RNShare (8.1.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -580,7 +580,7 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
-  RNShare: d93e00e906e6174657f6370b480437e4702bc86e
+  RNShare: 48b3113cd089a2be8ff0515c3ae7a46a4db8a76b
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   Yoga: c4d61225a466f250c35c1ee78d2d0b3d41fe661c
 

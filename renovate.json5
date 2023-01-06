@@ -3,6 +3,15 @@
 	"extends": [
 		"config:base"
 	],
+	"major": {
+		"stabilityDays": 30,
+	},
+	"minor": {
+		"stabilityDays": 20,
+	},
+	"patch": {
+		"stabilityDays": 10,
+	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
@@ -103,6 +112,7 @@
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"labels": ["automerge"],
+			"schedule": "on the first day of the week",
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
