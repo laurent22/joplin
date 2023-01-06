@@ -1,6 +1,8 @@
 // Helper functions to reduce the boiler plate of loading and saving profiles on
 // mobile
 
+// import { BackHandler } from "react-native";
+const RNExitApp = require('react-native-exit-app').default;
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -29,4 +31,13 @@ export const loadProfileConfig = async () => {
 
 export const saveProfileConfig = async (profileConfig: ProfileConfig) => {
 	return libSaveProfileConfig(getProfilesConfigPath(), profileConfig);
+};
+
+export const switchProfile = async (profileId: string) => {
+	const config = await loadProfileConfig();
+	if (config.currentProfileId === profileId) throw new Error('This profile is already active');
+
+	config.currentProfileId = profileId;
+	await saveProfileConfig(config);
+	RNExitApp.exitApp();
 };

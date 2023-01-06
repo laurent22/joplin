@@ -3,7 +3,7 @@ import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { useState } from 'react';
 import { loadProfileConfig } from '../../services/profiles';
 
-export default (updateTime: number) => {
+export default (timestamp: number = 0) => {
 	const [profileConfig, setProfileConfig] = useState<ProfileConfig>(null);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
@@ -14,7 +14,7 @@ export default (updateTime: number) => {
 		};
 
 		void load();
-	}, [updateTime]);
+	}, [timestamp]);
 
 	return profileConfig;
 };

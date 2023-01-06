@@ -4,12 +4,12 @@ const { View, FlatList, StyleSheet } = require('react-native');
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
 const { FAB, List } = require('react-native-paper');
-import { DefaultProfileId, Profile } from '@joplin/lib/services/profileConfig/types';
+import { Profile } from '@joplin/lib/services/profileConfig/types';
 import useProfileConfig from './useProfileConfig';
 import { Alert } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { deleteProfileById } from '@joplin/lib/services/profileConfig';
-import { saveProfileConfig } from '../../services/profiles';
+import { saveProfileConfig, switchProfile } from '../../services/profiles';
 
 interface Props {
 	themeId: number;
@@ -40,13 +40,32 @@ export default (props: Props) => {
 		return profileConfig ? profileConfig.profiles : [];
 	}, [profileConfig]);
 
-	const onProfileItemPress = useCallback((profile: Profile) => {
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'ProfileEditor',
-			profileId: profile.id,
-		});
-	}, [props.dispatch]);
+	const onProfileItemPress = useCallback(async (profile: Profile) => {
+		const doIt = async () => {
+			try {
+				await switchProfile(profile.id);
+			} catch (error) {
+				Alert.alert(_('Could not switch profile: %s', error.message));
+			}
+		};
+
+		Alert.alert(
+			_('Confirmation'),
+			_('To switch the profile, the app is going to close and you will need to restart it.'),
+			[
+				{
+					text: _('Continue'),
+					onPress: () => doIt(),
+					style: 'default',
+				},
+				{
+					text: _('Cancel'),
+					onPress: () => {},
+					style: 'cancel',
+				},
+			]
+		);
+	}, []);
 
 	const onEditProfile = useCallback(async (profileId: string) => {
 		props.dispatch({
@@ -58,19 +77,18 @@ export default (props: Props) => {
 
 	const onDeleteProfile = useCallback(async (profile: Profile) => {
 		const doIt = async () => {
-			if (profile.id === DefaultProfileId) {
-				Alert.alert('The default profile cannot be deleted');
-				return;
+			try {
+				const newConfig = deleteProfileById(profileConfig, profile.id);
+				await saveProfileConfig(newConfig);
+				setProfileConfigTime(Date.now());
+			} catch (error) {
+				Alert.alert(error.message);
 			}
-
-			const newConfig = deleteProfileById(profileConfig, profile.id);
-			await saveProfileConfig(newConfig);
-			setProfileConfigTime(Date.now());
 		};
 
 		Alert.alert(
-			'Delete this profile?',
-			'All data, including notes, notebooks and tags will be permanently deleted.',
+			_('Delete this profile?'),
+			_('All data, including notes, notebooks and tags will be permanently deleted.'),
 			[
 				{
 					text: _('Delete profile "%s"', profile.name),
@@ -88,16 +106,18 @@ export default (props: Props) => {
 
 	const renderProfileItem = (event: any) => {
 		const profile = event.item as Profile;
+		const titleStyle = { fontWeight: profile.id === profileConfig.currentProfileId ? 'bold' : 'normal' };
 		return (
 			<List.Item
 				title={profile.name}
+				titleStyle={titleStyle}
 				left={() => <List.Icon icon="file-account-outline" />}
 				key={profile.id}
 				profileId={profile.id}
-				onPress={() => onProfileItemPress(profile)}
+				onPress={() => { void onProfileItemPress(profile); }}
 				onLongPress={() => {
 					Alert.alert(
-						'Configuration',
+						_('Configuration'),
 						'',
 						[
 							{

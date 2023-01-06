@@ -34,7 +34,7 @@ const useStyle = (themeId: number) => {
 export default (props: Props) => {
 	const profileId = props.navigation.state?.profileId;
 	const isNew = !profileId;
-	const profileConfig = useProfileConfig(Date.now());
+	const profileConfig = useProfileConfig();
 
 	const style = useStyle(props.themeId);
 	const [name, setName] = useState('');
