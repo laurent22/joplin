@@ -36,7 +36,7 @@ const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
-import { Provider as PaperProvider, MD2DarkTheme as PaperDarkTheme, MD2LightTheme as PaperLightTheme } from 'react-native-paper';
+import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
@@ -991,18 +991,21 @@ class AppComponent extends React.Component {
 		);
 
 
-		const paperTheme = theme.appearance === ThemeAppearance.Dark ? PaperDarkTheme : PaperLightTheme;
+		const paperTheme = theme.appearance === ThemeAppearance.Dark ? MD3DarkTheme : MD3LightTheme;
 
 		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
 		return (
 			<PaperProvider theme={{
 				...paperTheme,
-				version: 2,
-				// colors: {
-				// 	...paperTheme.colors,
-				// 	primary: theme.backgroundColor,&
-				// 	accent: theme.backgroundColor2,
-				// },
+				version: 3,
+				colors: {
+					...paperTheme.colors,
+					onPrimaryContainer: theme.color5,
+					primaryContainer: theme.backgroundColor5,
+					surfaceVariant: theme.backgroundColor,
+					onSurfaceVariant: theme.color,
+					primary: theme.color,
+				},
 			}}>
 				{mainContent}
 			</PaperProvider>

@@ -10,6 +10,7 @@ import { Alert } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { deleteProfileById } from '@joplin/lib/services/profileConfig';
 import { saveProfileConfig, switchProfile } from '../../services/profiles';
+const { themeStyle } = require('../global-style');
 
 interface Props {
 	themeId: number;
@@ -18,6 +19,8 @@ interface Props {
 
 const useStyle = (themeId: number) => {
 	return useMemo(() => {
+		const theme = themeStyle(themeId);
+
 		return StyleSheet.create({
 			...createRootStyle(themeId),
 			fab: {
@@ -25,6 +28,10 @@ const useStyle = (themeId: number) => {
 				margin: 16,
 				right: 0,
 				bottom: 0,
+			},
+			profileListItem: {
+				paddingLeft: theme.margin,
+				paddingRight: theme.margin,
 			},
 		});
 	}, [themeId]);
@@ -110,6 +117,7 @@ export default (props: Props) => {
 		return (
 			<List.Item
 				title={profile.name}
+				style={style.profileListItem}
 				titleStyle={titleStyle}
 				left={() => <List.Icon icon="file-account-outline" />}
 				key={profile.id}

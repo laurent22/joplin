@@ -61,9 +61,22 @@ export default (props: Props) => {
 		});
 	}, [name, isNew, profileConfig, profile, props.dispatch]);
 
+	const isModified = useMemo(() => {
+		if (isNew) return true;
+		if (!profile) return false;
+		return profile.name !== name;
+	}, [isNew, profile, name]);
+
 	return (
 		<View style={style.root}>
-			<ScreenHeader title={isNew ? _('Create new profile...') : _('Edit profile')} onSaveButtonPress={onSaveButtonPress} showSaveButton={true} showSideMenuButton={false} showSearchButton={false} />
+			<ScreenHeader
+				title={isNew ? _('Create new profile...') : _('Edit profile')}
+				onSaveButtonPress={onSaveButtonPress}
+				saveButtonDisabled={!isModified}
+				showSaveButton={true}
+				showSideMenuButton={false}
+				showSearchButton={false}
+			/>
 			<View style={{}}>
 				<TextInput label={_('Profile name')}
 					value={name}
