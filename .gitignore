@@ -978,6 +978,9 @@ packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js.map
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.d.ts
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js.map
+packages/app-mobile/components/ProfileSwitcher/useProfileConfig.d.ts
+packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js.map
 packages/app-mobile/components/ScreenHeader.d.ts
 packages/app-mobile/components/ScreenHeader.js
 packages/app-mobile/components/ScreenHeader.js.map
@@ -1035,6 +1038,9 @@ packages/app-mobile/services/AlarmServiceDriver.ios.js.map
 packages/app-mobile/services/e2ee/RSA.react-native.d.ts
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/e2ee/RSA.react-native.js.map
+packages/app-mobile/services/profiles/index.d.ts
+packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/profiles/index.js.map
 packages/app-mobile/setupQuickActions.d.ts
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/setupQuickActions.js.map

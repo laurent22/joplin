@@ -99,6 +99,14 @@ export const createNewProfile = (config: ProfileConfig, profileName: string) => 
 	};
 };
 
+export const deleteProfileById = (config: ProfileConfig, profileId: string): ProfileConfig => {
+	const newProfiles = config.profiles.filter(p => p.id !== profileId);
+	return {
+		...config,
+		profiles: newProfiles,
+	};
+};
+
 export const profileIdByIndex = (config: ProfileConfig, index: number): string => {
 	return config.profiles[index].id;
 };

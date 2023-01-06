@@ -15,7 +15,6 @@ import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
-import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
@@ -113,9 +112,10 @@ import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
+import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
-import { Profile } from '@joplin/lib/services/profileConfig/types';
+import { getDatabaseName, getProfilesRootDir, getResourceDir } from './services/profiles';
 
 let storeDispatch = function(_action: any) {};
 
@@ -410,25 +410,13 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
-const getResourceDir = (profile: Profile, isSubProfile: boolean) => {
-	const documentDir = RNFetchBlob.fs.dirs.DocumentDir;
-
-	if (!isSubProfile) return documentDir;
-	return `${documentDir}/resources-${profile.id}`;
-};
-
-const getDatabaseName = (profile: Profile, isSubProfile: boolean) => {
-	if (!isSubProfile) return 'joplin.sqlite';
-	return `joplin-${profile.id}.sqlite`;
-};
-
 async function initialize(dispatch: Function) {
 	shimInit();
 
-	const documentDir = RNFetchBlob.fs.dirs.DocumentDir;
+	const profileRootDir = getProfilesRootDir();
 
-	// const profilesConfigPath = documentDir + '/profiles.json';
-	const profileInfo = await initProfile(documentDir);
+	// const profilesConfigPath = profileRootDir + '/profiles.json';
+	const profileInfo = await initProfile(profileRootDir);
 
 
 
@@ -437,7 +425,7 @@ async function initialize(dispatch: Function) {
 	// // profileInfo.profileConfig.currentProfileId = '8kterg2e';
 	// profileInfo.profileConfig.currentProfileId = 'default';
 	// await saveProfileConfig(profilesConfigPath, profileInfo.profileConfig);
-	// profileInfo = await initProfile(documentDir);
+	// profileInfo = await initProfile(profileRootDir);
 
 
 
@@ -957,6 +945,7 @@ class AppComponent extends React.Component {
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ProfileSwitcher: { screen: ProfileSwitcher },
+			ProfileEditor: { screen: ProfileEditor },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
@@ -987,7 +976,7 @@ class AppComponent extends React.Component {
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								<AppNav screens={appNavInit} />
+								<AppNav screens={appNavInit} dispatch={this.props.dispatch} />
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
@@ -1009,11 +998,11 @@ class AppComponent extends React.Component {
 			<PaperProvider theme={{
 				...paperTheme,
 				version: 2,
-				colors: {
-					...paperTheme.colors,
-					primary: theme.backgroundColor,
-					accent: theme.backgroundColor2,
-				},
+				// colors: {
+				// 	...paperTheme.colors,
+				// 	primary: theme.backgroundColor,&
+				// 	accent: theme.backgroundColor2,
+				// },
 			}}>
 				{mainContent}
 			</PaperProvider>
