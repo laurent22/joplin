@@ -47,7 +47,7 @@ packages/app-desktop/packageInfo.js
 packages/app-desktop/services/electron-context-menu.js
 packages/app-desktop/vendor/lib/
 packages/app-mobile/android
-packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.bundle.js
+packages/app-mobile/components/NoteEditor/**/**.bundle.js
 packages/app-mobile/ios
 packages/app-mobile/lib/rnInjectedJs/
 packages/app-mobile/locales
