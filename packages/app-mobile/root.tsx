@@ -115,7 +115,7 @@ import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
-import { getDatabaseName, getProfilesRootDir, getResourceDir } from './services/profiles';
+import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 
 let storeDispatch = function(_action: any) {};
 
@@ -413,9 +413,14 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 async function initialize(dispatch: Function) {
 	shimInit();
 
-	const profileRootDir = getProfilesRootDir();
-	const { profileConfig, isSubProfile } = await initProfile(profileRootDir);
+	setDispatch(dispatch);
+	const { profileConfig, isSubProfile } = await initProfile(getProfilesRootDir());
 	const currentProfile = getCurrentProfile(profileConfig);
+
+	dispatch({
+		type: 'PROFILE_CONFIG_SET',
+		value: profileConfig,
+	});
 
 	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');

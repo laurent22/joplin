@@ -52,8 +52,22 @@ export default (props: Props) => {
 			const result = createNewProfile(profileConfig, name);
 			await saveProfileConfig(result.newConfig);
 		} else {
-			profile.name = name;
-			await saveProfileConfig(profileConfig);
+			const newProfiles = profileConfig.profiles.map(p => {
+				if (p.id === profile.id) {
+					return {
+						...profile,
+						name,
+					};
+				}
+				return p;
+			});
+
+			const newProfileConfig = {
+				...profileConfig,
+				profiles: newProfiles,
+			};
+
+			await saveProfileConfig(newProfileConfig);
 		}
 
 		props.dispatch({

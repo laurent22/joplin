@@ -6,6 +6,11 @@ import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
 import RNFetchBlob from 'rn-fetch-blob';
 
+let dispatch_: Function = null;
+export const setDispatch = (dispatch: Function) => {
+	dispatch_ = dispatch;
+};
+
 export const getProfilesRootDir = () => {
 	return RNFetchBlob.fs.dirs.DocumentDir;
 };
@@ -29,7 +34,11 @@ export const loadProfileConfig = async () => {
 };
 
 export const saveProfileConfig = async (profileConfig: ProfileConfig) => {
-	return libSaveProfileConfig(getProfilesConfigPath(), profileConfig);
+	await libSaveProfileConfig(getProfilesConfigPath(), profileConfig);
+	dispatch_({
+		type: 'PROFILE_CONFIG_SET',
+		value: profileConfig,
+	});
 };
 
 export const switchProfile = async (profileId: string) => {
