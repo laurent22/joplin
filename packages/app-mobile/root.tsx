@@ -414,30 +414,8 @@ async function initialize(dispatch: Function) {
 	shimInit();
 
 	const profileRootDir = getProfilesRootDir();
-
-	// const profilesConfigPath = profileRootDir + '/profiles.json';
-	const profileInfo = await initProfile(profileRootDir);
-
-
-
-
-
-	// // profileInfo.profileConfig.currentProfileId = '8kterg2e';
-	// profileInfo.profileConfig.currentProfileId = 'default';
-	// await saveProfileConfig(profilesConfigPath, profileInfo.profileConfig);
-	// profileInfo = await initProfile(profileRootDir);
-
-
-
-
-	const { profileConfig, isSubProfile } = profileInfo;
+	const { profileConfig, isSubProfile } = await initProfile(profileRootDir);
 	const currentProfile = getCurrentProfile(profileConfig);
-
-
-
-
-
-
 
 	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -805,12 +783,12 @@ class AppComponent extends React.Component {
 				state: 'ready',
 			});
 
-			setTimeout(() => {
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'ProfileSwitcher',
-				});
-			}, 1000);
+			// setTimeout(() => {
+			// 	this.props.dispatch({
+			// 		type: 'NAV_GO',
+			// 		routeName: 'ProfileSwitcher',
+			// 	});
+			// }, 1000);
 		}
 
 		Linking.addEventListener('url', this.handleOpenURL_);

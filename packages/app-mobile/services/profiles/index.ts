@@ -1,7 +1,6 @@
 // Helper functions to reduce the boiler plate of loading and saving profiles on
 // mobile
 
-// import { BackHandler } from "react-native";
 const RNExitApp = require('react-native-exit-app').default;
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
