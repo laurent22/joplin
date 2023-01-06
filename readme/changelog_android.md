@@ -1,5 +1,29 @@
 # Joplin Android app changelog
 
+## [android-v2.10.3](https://github.com/laurent22/joplin/releases/tag/android-v2.10.3) (Pre-release) - 2023-01-05T11:29:06Z
+
+- New: Add support for locking the app using biometrics (f10d9f7)
+- Improved: Make the new text editor the default one (f5ef318)
+- Fixed: Fixed proxy timeout setting UI (275c80a)
+- Fixed: Settings save button visible even when no settings have been changed (#7503)
+
+## [android-v2.10.2](https://github.com/laurent22/joplin/releases/tag/android-v2.10.2) (Pre-release) - 2023-01-02T17:44:15Z
+
+- New: Add support for realtime search (767213c)
+- Fixed: Enable autocorrect with spellcheck (#7532) (#6175 by Henry Heino)
+
+## [android-v2.10.1](https://github.com/laurent22/joplin/releases/tag/android-v2.10.1) (Pre-release) - 2022-12-29T13:55:48Z
+
+- Improved: Switch license to AGPL-3.0 (faf0a4e)
+- Improved: Tag search case insensitive (#7368 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Update Mermaid: 9.1.7 to 9.2.2 (#7330 by Helmut K. C. Tessarek)
+- Improved: Upgrade to react-native 0.68.5 (e2d59ee)
+- Fixed: Could not attach images to notes anymore (#7471)
+- Fixed: Fix CodeMirror syntax highlighting (#7386 by Henry Heino)
+- Fixed: Fix attaching multiple files (#7196) (#7195 by Self Not Found)
+- Fixed: Update CodeMirror (#7262) (#7253 by Henry Heino)
+- Security: Fix XSS when a specially crafted string is passed to the renderer (762b4e8)
+
 ## [android-v2.9.8](https://github.com/laurent22/joplin/releases/tag/android-v2.9.8) (Pre-release) - 2022-11-01T15:45:36Z
 
 - Updated translations

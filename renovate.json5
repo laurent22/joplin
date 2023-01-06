@@ -3,6 +3,15 @@
 	"extends": [
 		"config:base"
 	],
+	"major": {
+		"stabilityDays": 30,
+	},
+	"minor": {
+		"stabilityDays": 20,
+	},
+	"patch": {
+		"stabilityDays": 10,
+	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
@@ -84,6 +93,7 @@
 		"jsc-android",
 		"react-native",
 		"@babel/runtime",
+		"de.undercouch:gradle-download-task",
 
 		// Need special processing when upgrading
 		"katex",
@@ -102,6 +112,7 @@
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"labels": ["automerge"],
+			"schedule": "on the first day of the week",
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
@@ -113,6 +124,7 @@
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
 				"eslint",
+				"eslint-config-prettier",
 				"eslint-interactive",
 				"@typescript-eslint/eslint-plugin",
 				"@typescript-eslint/parser",

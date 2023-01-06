@@ -84,6 +84,7 @@ const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
+import BiometricPopup from './components/biometrics/BiometricPopup';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -110,6 +111,7 @@ import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
+import sensorInfo from './components/biometrics/sensorInfo';
 
 let storeDispatch = function(_action: any) {};
 
@@ -692,6 +694,7 @@ class AppComponent extends React.Component {
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
 			sideMenuWidth: this.getSideMenuWidth(),
+			sensorInfo: null,
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -761,6 +764,8 @@ class AppComponent extends React.Component {
 			}
 
 			await initialize(this.props.dispatch);
+
+			this.setState({ sensorInfo: await sensorInfo() });
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -933,6 +938,10 @@ class AppComponent extends React.Component {
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+							<BiometricPopup
+								themeId={this.props.themeId}
+								sensorInfo={this.state.sensorInfo}
+							/>
 						</SafeAreaView>
 					</MenuContext>
 				</SideMenu>

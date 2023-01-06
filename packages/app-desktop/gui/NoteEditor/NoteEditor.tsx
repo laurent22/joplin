@@ -94,7 +94,7 @@ function NoteEditor(props: NoteEditorProps) {
 		showLocalSearch,
 		setShowLocalSearch,
 		searchMarkers: localSearchMarkerOptions,
-	} = useNoteSearchBar();
+	} = useNoteSearchBar({ noteSearchBarRef });
 
 	// If the note has been modified in another editor, wait for it to be saved
 	// before loading it in this editor.

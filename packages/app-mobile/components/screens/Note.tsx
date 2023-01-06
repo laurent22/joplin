@@ -1240,7 +1240,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
-		useEditorBeta: state.settings['editor.beta'],
+		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);
 

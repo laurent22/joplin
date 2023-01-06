@@ -34,7 +34,9 @@ You can setup the container to either use an existing PostgreSQL server, or conn
 
 ### Using an existing PostgreSQL server
 
-To use an existing PostgresSQL server, set the following environment variables in the .env file:
+To use an existing PostgresSQL server, you can variables in the .env file. Either:
+
+#### Individual variables
 
 ```conf
 DB_CLIENT=pg
@@ -43,6 +45,13 @@ POSTGRES_DATABASE=joplin
 POSTGRES_USER=joplin
 POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
+```
+
+#### Connection String
+
+```conf
+DB_CLIENT=pg
+POSTGRES_CONNECTION_STRING=postgresql://username:password@your_joplin_postgres_server:5432/joplin
 ```
 
 Ensure that the provided database and user exist as Joplin Server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.

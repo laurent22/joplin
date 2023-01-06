@@ -1018,10 +1018,22 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'note',
-				public: true,
+				public: false,
 				appTypes: [AppType.Mobile],
 				label: () => 'Opt-in to the editor beta',
 				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
+			'editor.usePlainText': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				label: () => 'Use the plain text editor',
+				description: () => 'The plain text editor has various issues and is no longer supported. If you are having issues with the new editor however you can revert to the old one using this setting.',
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1452,6 +1464,7 @@ class Setting extends BaseModel {
 			'net.proxyTimeout': {
 				value: 1,
 				type: SettingItemType.Int,
+				maximum: 60,
 				advanced: true,
 				section: 'sync',
 				isGlobal: true,
@@ -1596,6 +1609,28 @@ class Setting extends BaseModel {
 				type: SettingItemType.Array,
 				public: false,
 				storage: SettingStorage.Database,
+			},
+
+			'security.biometricsEnabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				label: () => _('Use biometrics to secure access to the app'),
+				public: true,
+				appTypes: [AppType.Mobile],
+			},
+
+			'security.biometricsSupportedSensors': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+			},
+
+			'security.biometricsInitialPromptDone': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Mobile],
 			},
 
 			// 'featureFlag.syncAccurateTimestamps': {
