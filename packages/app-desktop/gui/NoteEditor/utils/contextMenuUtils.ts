@@ -40,18 +40,20 @@ export async function resourceInfo(options: ContextMenuOptions) {
 export function textToDataUri(text: string, mime: string): string {
 	return `data:${mime};base64,${Buffer.from(text).toString('base64')}`;
 }
-export const svgDimensions = (svg: string) => {
+export const svgDimensions = (document: Document, svg: string) => {
 	let width: number;
 	let height: number;
 	try {
-		[width, height] = svg.match(/viewBox="(.*?)"/)[1].split(/[ ,]+/).slice(2).map((n: string) => parseInt(n, 10));
+		const parser = new DOMParser();
+		const id = parser.parseFromString(svg, 'text/html').querySelector('svg').id;
+		({ width , height } = document.querySelector<HTMLIFrameElement>('.noteTextViewer').contentWindow.document.querySelector(`#${id}`).getBoundingClientRect());
 	} catch {
 		// do nothing
 	}
-	if (isNaN(width) || isNaN(height)) {
+	if (!width || !height) {
 		return [undefined,undefined];
 	}
-	return [width,height];
+	return [width, height];
 };
 export const svgUriToPng = (document: Document, svg: string, width: number, height: number) => {
 	return new Promise<Uint8Array>((resolve, reject) => {

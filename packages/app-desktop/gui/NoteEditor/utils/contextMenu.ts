@@ -106,10 +106,8 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (!options.filename) {
 					throw new Error('Filename is needed to save as png');
 				}
-				const [width,height] = svgDimensions(options.textToCopy);
-				if (!Number.isInteger(width) || !Number.isInteger(height)) {
-					bridge().showErrorMessageBox(_('failed to get width and height of image'));
-				}
+				// double dimensions to make sure it's always big enough even on hdpi screens
+				const [width,height] = svgDimensions(document,options.textToCopy).map((x: number) => x * 2);
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
 				const png = await svgUriToPng(document, dataUri, width, height);
 				const filename = options.filename.replace('.svg', '.png');
