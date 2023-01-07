@@ -6,10 +6,10 @@ index 4536402c5104f64051fb6a7a788dbbea887fea47..fdffefbe4e5b3c6707a81243508810c2
  
    _relativeKeyboardHeight(keyboardFrame: KeyboardEventCoordinates): number {
      const frame = this._frame;
++    // See https://github.com/facebook/react-native/issues/29974#issuecomment-723079859
++    // This may not be necessary after an upgrade to React Native 0.70 or greater.
 +    // with iOS 14 & Reduce Motion > Prefer Cross-Fade Transitions enabled, the keyboard position
 +    // & height is reported differently (0 instead of Y position value matching height of frame)
-+    // This may not be necessary after an upgrade to React Native 0.70 or greater.
-+    // See https://github.com/facebook/react-native/issues/29974#issuecomment-723079859
 +    if (!frame || !keyboardFrame || keyboardFrame.screenY === 0) {
 +       return 0;
 +    }

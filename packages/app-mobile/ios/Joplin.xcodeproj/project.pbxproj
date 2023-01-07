@@ -265,12 +265,12 @@
 				ORGANIZATIONNAME = joplinapp.org;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = A9BXAFS6CT;
+						DevelopmentTeam = 2FT8HR2Y7S;
 						LastSwiftMigration = 1300;
 					};
 					AE82E4A72599FA3A0013551B = {
 						CreatedOnToolsVersion = 12.0.1;
-						DevelopmentTeam = A9BXAFS6CT;
+						DevelopmentTeam = 2FT8HR2Y7S;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -493,7 +493,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				CURRENT_PROJECT_VERSION = 85;
-				DEVELOPMENT_TEAM = A9BXAFS6CT;
+				DEVELOPMENT_TEAM = 2FT8HR2Y7S;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Joplin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -504,7 +504,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
+				PRODUCT_BUNDLE_IDENTIFIER = net.personalizedrefrigerator.joplin;
 				PRODUCT_NAME = Joplin;
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -522,7 +522,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				CURRENT_PROJECT_VERSION = 85;
-				DEVELOPMENT_TEAM = A9BXAFS6CT;
+				DEVELOPMENT_TEAM = 2FT8HR2Y7S;
 				INFOPLIST_FILE = Joplin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -532,7 +532,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
+				PRODUCT_BUNDLE_IDENTIFIER = net.personalizedrefrigerator.joplin;
 				PRODUCT_NAME = Joplin;
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -669,7 +669,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 85;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = A9BXAFS6CT;
+				DEVELOPMENT_TEAM = 2FT8HR2Y7S;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -677,7 +677,7 @@
 				MARKETING_VERSION = 12.10.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = net.personalizedrefrigerator.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -700,14 +700,14 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 85;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = A9BXAFS6CT;
+				DEVELOPMENT_TEAM = 2FT8HR2Y7S;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 12.10.1;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = net.personalizedrefrigerator.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
