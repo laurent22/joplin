@@ -72,8 +72,8 @@ const createTheme = (theme: any): Extension[] => {
 		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
 		'.cm-selectionBackground': blurredSelectionStyle,
 
-		'&.cm-focused': {
-			outline: 'none',
+		'&.cm-editor.cm-focused': {
+			outline: 'none !important',
 		},
 
 		'& .cm-blockQuote': {
