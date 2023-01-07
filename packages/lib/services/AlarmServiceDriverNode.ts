@@ -53,6 +53,14 @@ export default class AlarmServiceDriverNode {
 		return title;
 	}
 
+	escapeLeadingDashFromBodyOnLinux(body: string) {
+
+		if (body.length !== 0 && body.charAt(0) === '-') {
+			body = `\\${body}`;
+		}
+		return body;
+	}
+
 	private displayDefaultNotification(notification: Notification) {
 
 		if (shim.isLinux()) {
@@ -66,7 +74,11 @@ export default class AlarmServiceDriverNode {
 		};
 
 		if ('body' in notification) {
-			if (notification.body.charAt(0) === '-' && shim.isLinux()) { o.message = `\\${notification.body}`; } else { o.message = notification.body; }
+			if (shim.isLinux()) {
+				o.message = this.escapeLeadingDashFromBodyOnLinux(notification.body);
+			} else {
+				o.message = notification.body;
+			}
 		}
 
 		// Message is required on Windows 7 however we don't want to repeat the title so
