@@ -331,7 +331,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
-				fontSize: theme.fontSize,
+				fontSize: this.props.editorFontSize,
 				fontFamily: editorFont(this.props.editorFont),
 			},
 			noteBodyViewer: {
@@ -1237,6 +1237,7 @@ const NoteScreen = connect((state: any) => {
 		searchQuery: state.searchQuery,
 		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
+		editorFontSize: state.settings['style.editor.fontSize'],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
