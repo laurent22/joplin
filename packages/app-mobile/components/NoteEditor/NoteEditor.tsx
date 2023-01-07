@@ -99,9 +99,16 @@ function useHtml(css: string): string {
 }
 
 function editorTheme(themeId: number) {
+	const fontSizeInPx = Setting.value('style.editor.fontSize');
+
+	// Convert from `px` to `em`. To support font size scaling based on
+	// system accessibility settings, we need to provide font sizes in `em`.
+	// 16px is about 1em with the default root font size.
+	const estimatedFontSizeInEm = fontSizeInPx / 16;
+
 	return {
 		...themeStyle(themeId),
-		fontSize: 0.85, // em
+		fontSize: estimatedFontSizeInEm,
 		fontFamily: fontFamilyFromSettings(),
 	};
 }
