@@ -20,3 +20,24 @@ describe('removeLeadingDashesFromTitle', () => {
 			.toEqual(expected);
 	});
 });
+
+describe('escapeLeadingDashFromBody', () => {
+
+	const alarmServiceDriverNode = new AlarmServiceDriverNode({ appName: packageInfo.build.appId });
+
+	const testCases = [
+		['-body', '\\-body'],
+		['-----body', '\\-----body'],
+		['- body', '\\- body'],
+		['---- ---- body', '\\---- ---- body'],
+		['-', '\\-'],
+		['', ''],
+		['- [ ] buy eggs', '\\- [ ] buy eggs'],
+		['3-2=1', '3-2=1'],
+	];
+
+	test.each(testCases)('%s should equal %s', (input, expected) => {
+		expect(alarmServiceDriverNode.escapeLeadingDashFromBodyOnLinux(input))
+			.toEqual(expected);
+	});
+});
