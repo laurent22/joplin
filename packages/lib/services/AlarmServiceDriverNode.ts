@@ -42,12 +42,21 @@ export default class AlarmServiceDriverNode {
 		delete this.notifications_[id];
 	}
 
+	removeLeadingDashesFromTitleOnLinux(title: string) {
+
+		if (title.length !== 0) {
+			let numOfLeadingDashes = 0;
+			while (numOfLeadingDashes < title.length && title.charAt(numOfLeadingDashes) === '-') { numOfLeadingDashes += 1; }
+			title = title.substring(numOfLeadingDashes);
+		}
+
+		return title;
+	}
+
 	private displayDefaultNotification(notification: Notification) {
 
-		if (shim.isLinux() && notification.title.length !== 0) {
-			let numOfLeadingDashes = 0;
-			while (numOfLeadingDashes < notification.title.length && notification.title.charAt(numOfLeadingDashes) === '-') { numOfLeadingDashes += 1; }
-			notification.title = notification.title.substring(numOfLeadingDashes);
+		if (shim.isLinux()) {
+			notification.title = this.removeLeadingDashesFromTitleOnLinux(notification.title);
 		}
 
 		const o: any = {
