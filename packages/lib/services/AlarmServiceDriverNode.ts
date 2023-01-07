@@ -43,12 +43,22 @@ export default class AlarmServiceDriverNode {
 	}
 
 	private displayDefaultNotification(notification: Notification) {
+
+		if (shim.isLinux() && notification.title.length !== 0) {
+			let numOfLeadingDashes = 0;
+			while (numOfLeadingDashes < notification.title.length && notification.title.charAt(numOfLeadingDashes) === '-') { numOfLeadingDashes += 1; }
+			notification.title = notification.title.substring(numOfLeadingDashes);
+		}
+
 		const o: any = {
 			appID: this.appName_,
 			title: notification.title,
 			icon: `${shim.electronBridge().electronApp().buildDir()}/icons/512x512.png`,
 		};
-		if ('body' in notification) o.message = notification.body;
+
+		if ('body' in notification) {
+			if (notification.body.charAt(0) === '-' && shim.isLinux()) { o.message = `\\${notification.body}`; } else { o.message = notification.body; }
+		}
 
 		// Message is required on Windows 7 however we don't want to repeat the title so
 		// make it an empty string.
