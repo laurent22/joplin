@@ -981,6 +981,9 @@ packages/app-mobile/components/SelectDateTimeDialog.js.map
 packages/app-mobile/components/SideMenu.d.ts
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenu.js.map
+packages/app-mobile/components/app-nav.d.ts
+packages/app-mobile/components/app-nav.js
+packages/app-mobile/components/app-nav.js.map
 packages/app-mobile/components/biometrics/BiometricPopup.d.ts
 packages/app-mobile/components/biometrics/BiometricPopup.js
 packages/app-mobile/components/biometrics/BiometricPopup.js.map
