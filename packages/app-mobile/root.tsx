@@ -36,6 +36,7 @@ const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
+import { Provider as PaperProvider, MD2DarkTheme as PaperDarkTheme, MD2LightTheme as PaperLightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
@@ -108,6 +109,7 @@ import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import sensorInfo from './components/biometrics/sensorInfo';
 
@@ -881,7 +883,7 @@ class AppComponent extends React.Component {
 
 	public render() {
 		if (this.props.appState !== 'ready') return null;
-		const theme = themeStyle(this.props.themeId);
+		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent = null;
 		let menuPosition = 'left';
@@ -912,7 +914,7 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
-		return (
+		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
@@ -944,6 +946,24 @@ class AppComponent extends React.Component {
 					</MenuContext>
 				</SideMenu>
 			</View>
+		);
+
+
+		const paperTheme = theme.appearance === ThemeAppearance.Dark ? PaperDarkTheme : PaperLightTheme;
+
+		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
+		return (
+			<PaperProvider theme={{
+				...paperTheme,
+				version: 2,
+				colors: {
+					...paperTheme.colors,
+					primary: theme.backgroundColor,
+					accent: theme.backgroundColor2,
+				},
+			}}>
+				{mainContent}
+			</PaperProvider>
 		);
 	}
 }
