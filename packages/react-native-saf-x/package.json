@@ -34,7 +34,7 @@
   ],
   "author": "Javad Mnjd (https://github.com/jd1378)",
   "license": "AGPL-3.0-or-later",
-  "homepage": "",
+  "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/react-native-saf-x",
   "publishConfig": {
     "access": "public"
   },
