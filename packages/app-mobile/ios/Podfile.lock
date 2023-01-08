@@ -675,7 +675,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
   FBReactNativeSpec: dd1186fd05255e3457baa2f4ca65e94c2cd1e3ac
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
@@ -688,7 +688,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
+  glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   hermes-engine: 2af7b7a59128f250adfd86f15aa1d5a2ecd39995
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
