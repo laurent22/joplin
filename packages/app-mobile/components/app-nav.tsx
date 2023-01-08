@@ -62,6 +62,9 @@ class AppNavComponent extends Component<Props, State> {
 
 	keyboardWillChangeFrame = (evt: KeyboardEvent) => {
 		const windowWidth = Dimensions.get('window').width;
+
+		// If the keyboard isn't as wide as the window, the floating keyboard is diabled.
+		// See https://github.com/facebook/react-native/issues/29473#issuecomment-696658937
 		this.setState({
 			floatingKeyboardEnabled: evt.endCoordinates.width < windowWidth,
 		});
@@ -99,7 +102,7 @@ class AppNavComponent extends Component<Props, State> {
 
 		// When the floating keybaord is enabled, the KeyboardAvoidingView can have a very small
 		// height. Don't use the KeyboardAvoidingView when the floating keyboard is enabled.
-		// See https://github.com/facebook/react-native/issues/29473#issuecomment-696658937
+		// See https://github.com/facebook/react-native/issues/29473
 		const keyboardAvoidingViewEnabled = !this.state.floatingKeyboardEnabled;
 
 		return (
