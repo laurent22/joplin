@@ -71,7 +71,7 @@ class AppNavComponent extends Component {
 			<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={style}>
 				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
 				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} />}
-				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} />}
+				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={this.props.themeId} dispatch={this.props.dispatch} />}
 				<View style={{ height: this.state.autoCompletionBarExtraHeight }} />
 			</KeyboardAvoidingView>
 		);

@@ -996,6 +996,15 @@ packages/app-mobile/components/NoteEditor/SelectionFormatting.js.map
 packages/app-mobile/components/NoteEditor/types.d.ts
 packages/app-mobile/components/NoteEditor/types.js
 packages/app-mobile/components/NoteEditor/types.js.map
+packages/app-mobile/components/ProfileSwitcher/ProfileEditor.d.ts
+packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
+packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js.map
+packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.d.ts
+packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
+packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js.map
+packages/app-mobile/components/ProfileSwitcher/useProfileConfig.d.ts
+packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js.map
 packages/app-mobile/components/ScreenHeader.d.ts
 packages/app-mobile/components/ScreenHeader.js
 packages/app-mobile/components/ScreenHeader.js.map
@@ -1005,6 +1014,9 @@ packages/app-mobile/components/SelectDateTimeDialog.js.map
 packages/app-mobile/components/SideMenu.d.ts
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenu.js.map
+packages/app-mobile/components/TextInput.d.ts
+packages/app-mobile/components/TextInput.js
+packages/app-mobile/components/TextInput.js.map
 packages/app-mobile/components/biometrics/BiometricPopup.d.ts
 packages/app-mobile/components/biometrics/BiometricPopup.js
 packages/app-mobile/components/biometrics/BiometricPopup.js.map
@@ -1050,6 +1062,9 @@ packages/app-mobile/services/AlarmServiceDriver.ios.js.map
 packages/app-mobile/services/e2ee/RSA.react-native.d.ts
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/e2ee/RSA.react-native.js.map
+packages/app-mobile/services/profiles/index.d.ts
+packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/profiles/index.js.map
 packages/app-mobile/setupQuickActions.d.ts
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/setupQuickActions.js.map
@@ -1068,6 +1083,9 @@ packages/app-mobile/utils/TlsUtils.js.map
 packages/app-mobile/utils/checkPermissions.d.ts
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/checkPermissions.js.map
+packages/app-mobile/utils/createRootStyle.d.ts
+packages/app-mobile/utils/createRootStyle.js
+packages/app-mobile/utils/createRootStyle.js.map
 packages/app-mobile/utils/debounce.d.ts
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/debounce.js.map
