@@ -1,5 +1,6 @@
 const React = require('react');
 import { _ } from '@joplin/lib/locale';
+import Logger from '@joplin/lib/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
@@ -9,6 +10,8 @@ import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
+
+const logger = Logger.create('ImageEditor');
 
 type OnSaveCallback = (svgData: string)=> void;
 type OnCancelCallback = ()=> void;
@@ -166,7 +169,7 @@ const ImageEditor = (props: Props) => {
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
 		if (data.startsWith('error:')) {
-			console.error('ImageEditor:', data);
+			logger.error('ImageEditor:', data);
 			return;
 		}
 
@@ -181,12 +184,12 @@ const ImageEditor = (props: Props) => {
 		} else if (json.action === 'close') {
 			onRequestCloseEditor();
 		} else {
-			console.error('Unknown action,', json.action);
+			logger.error('Unknown action,', json.action);
 		}
 	}, [props.onSave, onRequestCloseEditor]);
 
 	const onError = useCallback((event: any) => {
-		console.error('ImageEditor: WebView error: ', event);
+		logger.error('ImageEditor: WebView error: ', event);
 	}, []);
 
 	return (
