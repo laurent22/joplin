@@ -559,7 +559,12 @@ class Application extends BaseApplication {
 
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 
-		// await populateDatabase(reg.db());
+		// await populateDatabase(reg.db(), {
+		// 	clearDatabase: true,
+		// 	folderCount: 1000,
+		// 	rootFolderCount: 1,
+		// 	subFolderDepth: 1,
+		// });
 
 		// setTimeout(() => {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
