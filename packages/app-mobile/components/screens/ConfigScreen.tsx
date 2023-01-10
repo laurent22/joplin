@@ -100,6 +100,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			void NavService.go('Status');
 		};
 
+		this.manageProfilesButtonPress_ = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'ProfileSwitcher',
+			});
+		};
+
 		this.exportDebugButtonPress_ = async () => {
 			this.setState({ creatingReport: true });
 			const service = new ReportService();
@@ -564,6 +571,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(this.renderHeader('tools', _('Tools')));
 
+		settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
 		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
 		if (Platform.OS === 'android') {
