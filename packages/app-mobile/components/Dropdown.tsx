@@ -76,7 +76,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			position: 'absolute',
 		};
 
-		const backgroundCloseBtnStyle: ViewStyle = {
+		const backgroundCloseButtonStyle: ViewStyle = {
 			position: 'absolute',
 			top: 0,
 			left: 0,
@@ -155,7 +155,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		// allow the background to be focusable, instead, the focus order might be
 		// incorrect on some devices. For example, the background button might be focused
 		// when navigating near the middle of the dropdown's list.
-		const screenReaderCloseMenuBtn = (
+		const screenReaderCloseMenuButton = (
 			<TouchableWithoutFeedback
 				accessibilityRole='button'
 				onPress={()=> closeList()}
@@ -196,7 +196,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 						onPress={() => {
 							closeList();
 						}}
-						style={backgroundCloseBtnStyle}
+						style={backgroundCloseButtonStyle}
 					>
 						<View style={{ flex: 1 }}/>
 					</TouchableWithoutFeedback>
@@ -212,7 +212,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 						/>
 					</View>
 
-					{screenReaderCloseMenuBtn}
+					{screenReaderCloseMenuButton}
 				</Modal>
 			</View>
 		);
