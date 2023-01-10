@@ -780,7 +780,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const filePath = resourcePath ?? `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
 		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
-		console.info('Saved drawing to', filePath);
+		logger.info('Saved drawing to', filePath);
 
 		if (resource) {
 			resource = await Resource.save(resource, { isNew: false });

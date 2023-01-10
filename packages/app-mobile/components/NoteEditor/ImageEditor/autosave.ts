@@ -1,8 +1,10 @@
+import Logger from '@joplin/lib/Logger';
 import Setting from '@joplin/lib/models/Setting';
-import { reg } from '@joplin/lib/registry';
 import shim from '@joplin/lib/shim';
 
 export const autosaveFilename = 'autosaved-drawing.joplin.svg';
+
+const logger = Logger.create('ImageEditor/autosave');
 
 export const getAutosaveFilepath = () => {
 	return `${Setting.value('resourceDir')}/${autosaveFilename}`;
@@ -10,7 +12,7 @@ export const getAutosaveFilepath = () => {
 
 export const writeAutosave = async (data: string) => {
 	const filePath = getAutosaveFilepath();
-	reg.logger().info('Auto-saving drawing to %s', filePath);
+	logger.info('Auto-saving drawing to %s', filePath);
 
 	await shim.fsDriver().writeFile(filePath, data, 'utf8');
 };
