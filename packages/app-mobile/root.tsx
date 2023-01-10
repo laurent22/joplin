@@ -15,7 +15,6 @@ import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
-import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
@@ -27,6 +26,7 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
+import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
 const RNAppState = require('react-native').AppState;
@@ -36,6 +36,7 @@ const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
+import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
@@ -83,6 +84,7 @@ const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
+import BiometricPopup from './components/biometrics/BiometricPopup';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -107,7 +109,13 @@ import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
+import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
+import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
+import sensorInfo from './components/biometrics/sensorInfo';
+import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
+import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 
 let storeDispatch = function(_action: any) {};
 
@@ -405,11 +413,23 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 async function initialize(dispatch: Function) {
 	shimInit();
 
+	setDispatch(dispatch);
+	const { profileConfig, isSubProfile } = await initProfile(getProfilesRootDir());
+	const currentProfile = getCurrentProfile(profileConfig);
+
+	dispatch({
+		type: 'PROFILE_CONFIG_SET',
+		value: profileConfig,
+	});
+
 	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
-	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
+	const resourceDir = getResourceDir(currentProfile, isSubProfile);
+	Setting.setConstant('resourceDir', resourceDir);
+
+	await shim.fsDriver().mkdir(resourceDir);
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());
 	await logDatabase.open({ name: 'log.sqlite' });
@@ -477,9 +497,9 @@ async function initialize(dispatch: Function) {
 
 	try {
 		if (Setting.value('env') === 'prod') {
-			await db.open({ name: 'joplin.sqlite' });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: 'joplin-101.sqlite' });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 
 			// await db.clearForTesting();
 		}
@@ -690,6 +710,7 @@ class AppComponent extends React.Component {
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
 			sideMenuWidth: this.getSideMenuWidth(),
+			sensorInfo: null,
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -760,10 +781,19 @@ class AppComponent extends React.Component {
 
 			await initialize(this.props.dispatch);
 
+			this.setState({ sensorInfo: await sensorInfo() });
+
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
 				state: 'ready',
 			});
+
+			// setTimeout(() => {
+			// 	this.props.dispatch({
+			// 		type: 'NAV_GO',
+			// 		routeName: 'ProfileSwitcher',
+			// 	});
+			// }, 1000);
 		}
 
 		Linking.addEventListener('url', this.handleOpenURL_);
@@ -876,7 +906,7 @@ class AppComponent extends React.Component {
 
 	public render() {
 		if (this.props.appState !== 'ready') return null;
-		const theme = themeStyle(this.props.themeId);
+		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent = null;
 		let menuPosition = 'left';
@@ -897,6 +927,8 @@ class AppComponent extends React.Component {
 			DropboxLogin: { screen: DropboxLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
+			ProfileSwitcher: { screen: ProfileSwitcher },
+			ProfileEditor: { screen: ProfileEditor },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
@@ -907,7 +939,7 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
-		return (
+		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
@@ -927,14 +959,39 @@ class AppComponent extends React.Component {
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								<AppNav screens={appNavInit} />
+								<AppNav screens={appNavInit} dispatch={this.props.dispatch} />
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+							<BiometricPopup
+								themeId={this.props.themeId}
+								sensorInfo={this.state.sensorInfo}
+							/>
 						</SafeAreaView>
 					</MenuContext>
 				</SideMenu>
 			</View>
+		);
+
+
+		const paperTheme = theme.appearance === ThemeAppearance.Dark ? MD3DarkTheme : MD3LightTheme;
+
+		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
+		return (
+			<PaperProvider theme={{
+				...paperTheme,
+				version: 3,
+				colors: {
+					...paperTheme.colors,
+					onPrimaryContainer: theme.color5,
+					primaryContainer: theme.backgroundColor5,
+					surfaceVariant: theme.backgroundColor,
+					onSurfaceVariant: theme.color,
+					primary: theme.color,
+				},
+			}}>
+				{mainContent}
+			</PaperProvider>
 		);
 	}
 }

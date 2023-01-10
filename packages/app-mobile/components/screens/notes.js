@@ -11,7 +11,7 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const { themeStyle } = require('../global-style.js');
 const { ScreenHeader } = require('../ScreenHeader');
 const { _ } = require('@joplin/lib/locale');
-const { ActionButton } = require('../action-button.js');
+const ActionButton = require('../ActionButton').default;
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('../base-screen.js');
@@ -179,6 +179,19 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	newNoteNavigate = async (folderId, isTodo) => {
+		const newNote = await Note.save({
+			parent_id: folderId,
+			is_todo: isTodo ? 1 : 0,
+		}, { provisional: true });
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: newNote.id,
+		});
+	};
+
 	parentItem(props = null) {
 		if (!props) props = this.props;
 
@@ -238,7 +251,35 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 		const addFolderNoteButtons = !!buttonFolderId;
 		const thisComp = this;
-		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={buttonFolderId}></ActionButton>;
+
+		const makeActionButtonComp = () => {
+			if (addFolderNoteButtons && this.props.folders.length > 0) {
+				const buttons = [];
+				buttons.push({
+					label: _('New to-do'),
+					onPress: () => {
+						const isTodo = true;
+						this.newNoteNavigate(buttonFolderId, isTodo);
+					},
+					color: '#9b59b6',
+					icon: 'md-checkbox-outline',
+				});
+
+				buttons.push({
+					label: _('New note'),
+					onPress: () => {
+						const isTodo = false;
+						this.newNoteNavigate(buttonFolderId, isTodo);
+					},
+					color: '#9b59b6',
+					icon: 'md-document',
+				});
+				return <ActionButton buttons={buttons}/>;
+			}
+			return null;
+		};
+
+		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
 		return (
 			<View style={rootStyle}>

@@ -41,6 +41,9 @@ export interface Theme {
 	backgroundColor4: string;
 	color4: string;
 
+	backgroundColor5?: string;
+	color5?: string;
+
 	raisedBackgroundColor: string;
 	raisedColor: string;
 	searchMarkerBackgroundColor: string;
