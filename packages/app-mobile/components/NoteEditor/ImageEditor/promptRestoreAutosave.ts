@@ -11,7 +11,7 @@ const promptRestoreAutosave = async (onRestoreAutosave: RestoreAutosaveCallback)
 	if (await shim.fsDriver().exists(autosavePath)) {
 		const title: string|null = null;
 		const message = _(
-			'An autosaved drawing was found. It can either be discarded or attached to the current note.'
+			'An autosaved drawing was found. Attach a copy of it to the note?'
 		);
 
 		Alert.alert(title, message, [
