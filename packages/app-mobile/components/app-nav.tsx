@@ -15,6 +15,7 @@ interface State {
 interface Props {
 	route: any;
 	screens: any;
+	dispatch: (action: any)=> void;
 	themeId: number;
 }
 
@@ -113,7 +114,7 @@ class AppNavComponent extends Component<Props, State> {
 			>
 				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
 				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} />}
-				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} />}
+				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={this.props.themeId} dispatch={this.props.dispatch} />}
 				<View style={{ height: this.state.autoCompletionBarExtraHeight }} />
 			</KeyboardAvoidingView>
 		);
