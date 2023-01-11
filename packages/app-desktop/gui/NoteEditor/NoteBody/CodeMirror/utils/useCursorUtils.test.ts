@@ -35,14 +35,14 @@ describe('useCursorUtils', () => {
 	const numberedListWithEmptyLines = [
 		'1. item1',
 		'2. item2',
-		'3. ' ,
+		'3. ',
 		'4. item3',
 	];
 
 	const noPrefixListWithEmptyLines = [
 		'item1',
 		'item2',
-		'' ,
+		'',
 		'item3',
 	];
 
