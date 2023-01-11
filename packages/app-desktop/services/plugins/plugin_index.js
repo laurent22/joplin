@@ -53,7 +53,7 @@
 			// The sqlite3 is actually part of the lib package so we need to do
 			// something convoluted to get it working.
 			if (modulePath === 'sqlite3') {
-				return require('../../node_modules/@joplin/lib/node_modules/sqlite3/sqlite3.js');
+				return require('../../node_modules/@joplin/lib/node_modules/sqlite3/lib/sqlite3.js');
 			}
 
 			if (['fs-extra'].includes(modulePath)) return require(modulePath);

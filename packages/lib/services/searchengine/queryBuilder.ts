@@ -247,7 +247,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 };
 
 const biConditionalFilter = (terms: Term[], conditions: string[], relation: Relation, filterName: string, useFts: boolean) => {
-	const getCondition = (filterName: string , value: string, relation: Relation) => {
+	const getCondition = (filterName: string, value: string, relation: Relation) => {
 		const tableName = useFts ? (relation === 'AND' ? 'notes_fts' : 'notes_normalized') : 'notes';
 		if (filterName === 'type') {
 			return `${tableName}.is_todo IS ${value === 'todo' ? 1 : 0}`;
@@ -487,9 +487,9 @@ export default function queryBuilder(terms: Term[], useFts: boolean) {
 			// So we're first finding the OR of other filters and then combining them with the notebook filter using AND
 			// in-required-notebook AND (condition #1 OR condition #2  OR ... )
 			const queryString = `${queryParts.slice(0, 2).join(' ')} AND ROWID IN ( SELECT ROWID FROM notes_fts WHERE 1=0 ${queryParts.slice(2).join(' ')})`;
-			query = ['WITH RECURSIVE' , withs.join(',') , queryString].join(' ');
+			query = ['WITH RECURSIVE', withs.join(','), queryString].join(' ');
 		} else {
-			query = ['WITH RECURSIVE' , withs.join(',') ,queryParts.join(' ')].join(' ');
+			query = ['WITH RECURSIVE', withs.join(','), queryParts.join(' ')].join(' ');
 		}
 	} else {
 		query = queryParts.join(' ');

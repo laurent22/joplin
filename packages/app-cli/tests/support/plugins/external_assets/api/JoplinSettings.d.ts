@@ -6,7 +6,7 @@ export interface ChangeEvent {
      */
     keys: string[];
 }
-export declare type ChangeHandler = (event: ChangeEvent)=> void;
+export declare type ChangeHandler = (event: ChangeEvent) => void;
 /**
  * This API allows registering new settings and setting sections, as well as getting and setting settings. Once a setting has been registered it will appear in the config screen and be editable by the user.
  *

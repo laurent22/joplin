@@ -467,9 +467,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				};
 
 				const onPathChange = (event: any) => {
-					const cmd = splitCmd(this.state.settings[key]);
-					cmd[0] = event.target.value;
-					updateSettingValue(key, joinCmd(cmd));
+					if (md.subType === 'file_path_and_args') {
+						const cmd = splitCmd(this.state.settings[key]);
+						cmd[0] = event.target.value;
+						updateSettingValue(key, joinCmd(cmd));
+					} else {
+						updateSettingValue(key, event.target.value);
+					}
 				};
 
 				const onArgsChange = (event: any) => {

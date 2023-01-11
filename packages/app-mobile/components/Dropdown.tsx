@@ -1,6 +1,7 @@
 const React = require('react');
 import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle } from 'react-native';
 import { Component } from 'react';
+import { _ } from '@joplin/lib/locale';
 const { ItemList } = require('./ItemList.js');
 
 type ValueType = string;
@@ -58,6 +59,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const items = this.props.items;
 		const itemHeight = 60;
 		const windowHeight = Dimensions.get('window').height - 50;
+		const windowWidth = Dimensions.get('window').width;
 
 		// Dimensions doesn't return quite the right dimensions so leave an extra gap to make
 		// sure nothing is off screen.
@@ -66,11 +68,20 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const maxListTop = windowHeight - listHeight;
 		const listTop = Math.min(maxListTop, this.state.headerSize.y + this.state.headerSize.height);
 
-		const wrapperStyle = {
+		const wrapperStyle: ViewStyle = {
 			width: this.state.headerSize.width,
 			height: listHeight + 2, // +2 for the border (otherwise it makes the scrollbar appear)
-			marginTop: listTop,
-			marginLeft: this.state.headerSize.x,
+			top: listTop,
+			left: this.state.headerSize.x,
+			position: 'absolute',
+		};
+
+		const backgroundCloseButtonStyle: ViewStyle = {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			height: windowHeight,
+			width: windowWidth,
 		};
 
 		const itemListStyle = Object.assign({}, this.props.itemListStyle ? this.props.itemListStyle : {}, {
@@ -126,6 +137,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			return (
 				<TouchableOpacity
 					style={itemWrapperStyle}
+					accessibilityRole="menuitem"
 					key={key}
 					onPress={() => {
 						closeList();
@@ -138,6 +150,22 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 				</TouchableOpacity>
 			);
 		};
+
+		// Use a separate screen-reader-only button for closing the menu. If we
+		// allow the background to be focusable, instead, the focus order might be
+		// incorrect on some devices. For example, the background button might be focused
+		// when navigating near the middle of the dropdown's list.
+		const screenReaderCloseMenuButton = (
+			<TouchableWithoutFeedback
+				accessibilityRole='button'
+				onPress={()=> closeList()}
+			>
+				<Text style={{
+					opacity: 0,
+					height: 0,
+				}}>{_('Close dropdown')}</Text>
+			</TouchableWithoutFeedback>
+		);
 
 		return (
 			<View style={{ flex: 1, flexDirection: 'column' }}>
@@ -163,21 +191,28 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					}}
 				>
 					<TouchableWithoutFeedback
-						onPressOut={() => {
+						accessibilityElementsHidden={true}
+						importantForAccessibility='no-hide-descendants'
+						onPress={() => {
 							closeList();
 						}}
+						style={backgroundCloseButtonStyle}
 					>
-						<View style={{ flex: 1 }}>
-							<View style={wrapperStyle}>
-								<ItemList
-									style={itemListStyle}
-									items={this.props.items}
-									itemHeight={itemHeight}
-									itemRenderer={itemRenderer}
-								/>
-							</View>
-						</View>
+						<View style={{ flex: 1 }}/>
 					</TouchableWithoutFeedback>
+
+					<View
+						accessibilityRole='menu'
+						style={wrapperStyle}>
+						<ItemList
+							style={itemListStyle}
+							items={this.props.items}
+							itemHeight={itemHeight}
+							itemRenderer={itemRenderer}
+						/>
+					</View>
+
+					{screenReaderCloseMenuButton}
 				</Modal>
 			</View>
 		);

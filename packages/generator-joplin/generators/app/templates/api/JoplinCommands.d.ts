@@ -49,7 +49,7 @@ import { Command } from './types';
  *
  */
 export default class JoplinCommands {
-	/**
+    /**
      * <span class="platform-desktop">desktop</span> Executes the given
      * command.
      *
@@ -68,8 +68,8 @@ export default class JoplinCommands {
      * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
      * ```
      */
-	execute(commandName: string, ...args: any[]): Promise<any | void>;
-	/**
+    execute(commandName: string, ...args: any[]): Promise<any | void>;
+    /**
      * <span class="platform-desktop">desktop</span> Registers a new command.
      *
      * ```typescript
@@ -85,5 +85,5 @@ export default class JoplinCommands {
      * });
      * ```
      */
-	register(command: Command): Promise<void>;
+    register(command: Command): Promise<void>;
 }

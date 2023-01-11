@@ -22,7 +22,7 @@ const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import BaseModel from '@joplin/lib/BaseModel';
-const { ActionButton } = require('../action-button.js');
+import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 import ScreenHeader from '../ScreenHeader';
@@ -331,7 +331,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
-				fontSize: theme.fontSize,
+				fontSize: this.props.editorFontSize,
 				fontFamily: editorFont(this.props.editorFont),
 			},
 			noteBodyViewer: {
@@ -1145,21 +1145,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
-			const buttons = [];
-
-			buttons.push({
-				title: _('Edit'),
+			const editButton = {
+				label: _('Edit'),
 				icon: 'md-create',
 				onPress: () => {
 					this.setState({ mode: 'edit' });
 
 					this.doFocusUpdate_ = true;
 				},
-			});
+			};
 
 			if (this.state.mode === 'edit') return null;
 
-			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
+			return <ActionButton mainButton={editButton} />;
 		};
 
 		const actionButtonComp = renderActionButton();
@@ -1237,12 +1235,13 @@ const NoteScreen = connect((state: any) => {
 		searchQuery: state.searchQuery,
 		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
+		editorFontSize: state.settings['style.editor.fontSize'],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
-		useEditorBeta: state.settings['editor.beta'],
+		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);
 

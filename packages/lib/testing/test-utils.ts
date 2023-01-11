@@ -904,7 +904,7 @@ class TestApp extends BaseApplication {
 		if (!argv.includes('--profile')) {
 			argv = argv.concat(['--profile', `tests-build/profile/${uuid.create()}`]);
 		}
-		argv = await super.start(['',''].concat(argv));
+		argv = await super.start(['', ''].concat(argv));
 
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.

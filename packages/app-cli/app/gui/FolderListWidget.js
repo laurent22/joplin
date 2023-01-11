@@ -36,7 +36,7 @@ class FolderListWidget extends ListWidget {
 				if (Setting.value('showNoteCounts')) {
 					let noteCount = item.note_count;
 					// Subtract children note_count from parent folder.
-					if (this.folderHasChildren_(this.folders,item.id)) {
+					if (this.folderHasChildren_(this.folders, item.id)) {
 						for (let i = 0; i < this.folders.length; i++) {
 							if (this.folders[i].parent_id === item.id) {
 								noteCount -= this.folders[i].note_count;
