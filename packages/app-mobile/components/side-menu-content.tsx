@@ -13,6 +13,7 @@ import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
+import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -31,6 +32,7 @@ interface Props {
 	notesParentType: string;
 	folders: FolderEntity[];
 	opacity: number;
+	profileConfig: ProfileConfig;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -197,6 +199,15 @@ const SideMenuContentComponent = (props: Props) => {
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Tags',
+		});
+	};
+
+	const switchProfileButton_press = () => {
+		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'ProfileSwitcher',
 		});
 	};
 
@@ -403,6 +414,10 @@ const SideMenuContentComponent = (props: Props) => {
 
 		items.push(renderSidebarButton('tag_button', _('Tags'), 'md-pricetag', tagButton_press));
 
+		if (props.profileConfig && props.profileConfig.profiles.length > 1) {
+			items.push(renderSidebarButton('switchProfile_button', _('Switch profile'), 'md-people-circle-outline', switchProfileButton_press));
+		}
+
 		items.push(renderSidebarButton('config_button', _('Configuration'), 'md-settings', configButton_press));
 
 		items.push(makeDivider('divider_2'));
@@ -502,5 +517,6 @@ export default connect((state: AppState) => {
 		resourceFetcher: state.resourceFetcher,
 		isOnMobileData: state.isOnMobileData,
 		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
+		profileConfig: state.profileConfig,
 	};
 })(SideMenuContentComponent);

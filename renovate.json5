@@ -112,7 +112,7 @@
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"labels": ["automerge"],
-			"schedule": "on the first day of the week",
+			"extends": ["schedule:monthly"],
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
