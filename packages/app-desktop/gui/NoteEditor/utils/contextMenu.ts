@@ -107,7 +107,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 					throw new Error('Filename is needed to save as png');
 				}
 				// double dimensions to make sure it's always big enough even on hdpi screens
-				const [width,height] = svgDimensions(document,options.textToCopy).map((x: number) => x * 2);
+				const [width, height] = svgDimensions(document, options.textToCopy).map((x: number) => x * 2 || undefined);
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
 				const png = await svgUriToPng(document, dataUri, width, height);
 				const filename = options.filename.replace('.svg', '.png');

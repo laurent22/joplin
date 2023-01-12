@@ -1,5 +1,6 @@
 import Resource from '@joplin/lib/models/Resource';
-
+import Logger from '@joplin/lib/Logger';
+const logger = Logger.create('contextMenuUtils');
 export enum ContextMenuItemType {
 	None = '',
 	Image = 'image',
@@ -46,12 +47,13 @@ export const svgDimensions = (document: Document, svg: string) => {
 	try {
 		const parser = new DOMParser();
 		const id = parser.parseFromString(svg, 'text/html').querySelector('svg').id;
-		({ width , height } = document.querySelector<HTMLIFrameElement>('.noteTextViewer').contentWindow.document.querySelector(`#${id}`).getBoundingClientRect());
-	} catch {
-		// do nothing
+		({ width, height } = document.querySelector<HTMLIFrameElement>('.noteTextViewer').contentWindow.document.querySelector(`#${id}`).getBoundingClientRect());
+	} catch (error) {
+		logger.warn('Could not get SVG dimensions.');
+		logger.warn('Error was: ', error);
 	}
 	if (!width || !height) {
-		return [undefined,undefined];
+		return [undefined, undefined];
 	}
 	return [width, height];
 };
