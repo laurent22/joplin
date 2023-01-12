@@ -3721,3 +3721,11 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 
 ## [v0.10.21](https://github.com/laurent22/joplin/releases/tag/v0.10.21) - 2017-11-18T00:53:15Z
 
+
+
+## [v0.10.20](https://github.com/laurent22/joplin/releases/tag/v0.10.20) - 2017-11-17T17:18:25Z
+
+
+
+## [v0.10.19](https://github.com/laurent22/joplin/releases/tag/v0.10.19) - 2017-11-20T18:59:48Z
+
