@@ -4813,7 +4813,7 @@ __metadata:
     jest-environment-jsdom: 29.3.1
     jetifier: 2.0.0
     joplin-rn-alarm-notification: 1.0.7
-    js-draw: 0.11.3
+    js-draw: 0.12.0
     jsc-android: 241213.1.0
     jsdom: 20.0.0
     lodash: 4.17.21
@@ -21073,13 +21073,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:0.11.3":
-  version: 0.11.3
-  resolution: "js-draw@npm:0.11.3"
+"js-draw@npm:0.12.0":
+  version: 0.12.0
+  resolution: "js-draw@npm:0.12.0"
   dependencies:
     "@melloware/coloris": ^0.16.1
     bezier-js: ^6.1.0
-  checksum: 8c13ea167201ffc12385c5ef6daefb4ddb7f12f07899609e04c38285c97c67d803dc40bf71cd6af5b460cb329471e063a8790eea72cbeca4b23282f6eaed6a5d
+  checksum: 84a3d5cb2a1fb228fa41d37fad295c4ad4052cd19dd7689337a08d0324d080da84cfc42de9860a6e1eb942421ddaf0f0a93450a0cd87e6bd94f171b09ae64551
   languageName: node
   linkType: hard
 
