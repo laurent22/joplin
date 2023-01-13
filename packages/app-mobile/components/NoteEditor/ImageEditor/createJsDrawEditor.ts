@@ -60,4 +60,18 @@ export const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
 	});
 };
 
+type AutosaveCallback = ()=> Promise<void>|void;
+export const startAutosaveLoop = async (autosave: AutosaveCallback) => {
+	// Autosave every two minutes.
+	const delayTime = 1000 * 60 * 2; // ms
+
+	while (true) {
+		await (new Promise<void>(resolve => {
+			setTimeout(() => resolve(), delayTime);
+		}));
+
+		await autosave();
+	}
+};
+
 export default createJsDrawEditor;

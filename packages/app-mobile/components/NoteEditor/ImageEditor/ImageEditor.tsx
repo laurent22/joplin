@@ -152,11 +152,7 @@ const ImageEditor = (props: Props) => {
 				);
 				svgEditorBundle.listenToolbarState(editor, toolbar);
 
-				// Auto-save every two minutes.
-				const autoSaveInterval = 2 * 60 * 1000;
-				setInterval(() => {
-					saveDrawing(true);
-				}, autoSaveInterval);
+				svgEditorBundle.startAutosaveLoop(() => saveDrawing(true));
 			}
 		} catch(e) {
 			window.ReactNativeWebView.postMessage(
