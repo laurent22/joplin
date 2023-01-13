@@ -111,7 +111,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 
 					new HeadBucketCommand({
 						Bucket: options.path(),
-					}),(err, response) => {
+					}), (err, response) => {
 						if (err) reject(err);
 						else resolve(response);
 					});

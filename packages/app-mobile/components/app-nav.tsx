@@ -1,17 +1,37 @@
-const React = require('react');
-const Component = React.Component;
-const { connect } = require('react-redux');
+import * as React from 'react';
+import { connect } from 'react-redux';
 const { NotesScreen } = require('./screens/notes.js');
 const { SearchScreen } = require('./screens/search.js');
-const { KeyboardAvoidingView, Keyboard, Platform, View } = require('react-native');
+import { Component } from 'react';
+import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
+import { AppState } from '../utils/types';
 const { themeStyle } = require('./global-style.js');
 
-class AppNavComponent extends Component {
-	constructor() {
-		super();
+interface State {
+	autoCompletionBarExtraHeight: number;
+	floatingKeyboardEnabled: boolean;
+}
+
+interface Props {
+	route: any;
+	screens: any;
+	dispatch: (action: any)=> void;
+	themeId: number;
+}
+
+class AppNavComponent extends Component<Props, State> {
+	private previousRouteName_: string|null = null;
+	private keyboardDidShowListener: EmitterSubscription|null = null;
+	private keyboardDidHideListener: EmitterSubscription|null = null;
+	private keyboardWillChangeFrameListener: EmitterSubscription|null = null;
+
+	constructor(props: Props) {
+		super(props);
+
 		this.previousRouteName_ = null;
 		this.state = {
 			autoCompletionBarExtraHeight: 0, // Extra padding for the auto completion bar at the top of the keyboard
+			floatingKeyboardEnabled: false,
 		};
 	}
 
@@ -19,14 +39,18 @@ class AppNavComponent extends Component {
 		if (Platform.OS === 'ios') {
 			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow.bind(this));
 			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide.bind(this));
+			this.keyboardWillChangeFrameListener = Keyboard.addListener('keyboardWillChangeFrame', this.keyboardWillChangeFrame);
 		}
 	}
 
 	componentWillUnmount() {
-		if (this.keyboardDidShowListener) this.keyboardDidShowListener.remove();
-		if (this.keyboardDidHideListener) this.keyboardDidHideListener.remove();
+		this.keyboardDidShowListener?.remove();
+		this.keyboardDidHideListener?.remove();
+		this.keyboardWillChangeFrameListener?.remove();
+
 		this.keyboardDidShowListener = null;
 		this.keyboardDidHideListener = null;
+		this.keyboardWillChangeFrameListener = null;
 	}
 
 	keyboardDidShow() {
@@ -36,6 +60,16 @@ class AppNavComponent extends Component {
 	keyboardDidHide() {
 		this.setState({ autoCompletionBarExtraHeight: 0 });
 	}
+
+	keyboardWillChangeFrame = (evt: KeyboardEvent) => {
+		const windowWidth = Dimensions.get('window').width;
+
+		// If the keyboard isn't as wide as the window, the floating keyboard is diabled.
+		// See https://github.com/facebook/react-native/issues/29473#issuecomment-696658937
+		this.setState({
+			floatingKeyboardEnabled: evt.endCoordinates.width < windowWidth,
+		});
+	};
 
 	render() {
 		if (!this.props.route) throw new Error('Route must not be null');
@@ -67,8 +101,17 @@ class AppNavComponent extends Component {
 
 		const style = { flex: 1, backgroundColor: theme.backgroundColor };
 
+		// When the floating keybaord is enabled, the KeyboardAvoidingView can have a very small
+		// height. Don't use the KeyboardAvoidingView when the floating keyboard is enabled.
+		// See https://github.com/facebook/react-native/issues/29473
+		const keyboardAvoidingViewEnabled = !this.state.floatingKeyboardEnabled;
+
 		return (
-			<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={style}>
+			<KeyboardAvoidingView
+				enabled={keyboardAvoidingViewEnabled}
+				behavior={Platform.OS === 'ios' ? 'padding' : null}
+				style={style}
+			>
 				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
 				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} />}
 				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={this.props.themeId} dispatch={this.props.dispatch} />}
@@ -78,7 +121,7 @@ class AppNavComponent extends Component {
 	}
 }
 
-const AppNav = connect(state => {
+const AppNav = connect((state: AppState) => {
 	return {
 		route: state.route,
 		themeId: state.settings.theme,

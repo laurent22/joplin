@@ -111,7 +111,7 @@ export default function useCursorUtils(CodeMirror: any) {
 				const lines = selected.split(/\r?\n/);
 				//  Save the newline character to restore it later
 				const newLines = selected.match(/\r?\n/);
-				modifyListLines(lines,num,string1);
+				modifyListLines(lines, num, string1);
 				const newLine = newLines !== null ? newLines[0] : '\n';
 				selectedStrings[i] = lines.join(newLine);
 			}

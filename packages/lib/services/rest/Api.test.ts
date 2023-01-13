@@ -298,7 +298,11 @@ describe('services_rest_Api', function() {
 			title: 'testing 4',
 			parent_id: f.id,
 			is_todo: '1',
+			todo_due: '2',
+			todo_completed: '3',
 		}));
+		expect(response.todo_due).toBe(2);
+		expect(response.todo_completed).toBe(3);
 	}));
 
 	it('should create folders with supplied ID', (async () => {
