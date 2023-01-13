@@ -134,10 +134,21 @@ const ImageEditor = (props: Props) => {
 
 				const toolbar = editor.addToolbar();
 
+				const maxSpacerSize = '20px';
+				toolbar.addSpacer({
+					grow: 1,
+					maxSize: maxSpacerSize,
+				});
+
 				toolbar.addActionButton({
 					label: ${JSON.stringify(_('Close'))}, 
 					icon: svgEditorBundle.makeCloseIcon(),
 				}, () => closeDrawing());
+
+				toolbar.addSpacer({
+					grow: 1,
+					maxSize: maxSpacerSize,
+				});
 
 				toolbar.addActionButton({
 					label: ${JSON.stringify(_('Done'))},
