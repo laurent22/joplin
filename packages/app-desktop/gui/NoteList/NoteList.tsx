@@ -528,6 +528,7 @@ const mapStateToProps = (state: AppState) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
+		searchSortOrder: state.settings['search.sortOrder.field'],
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,

@@ -113,8 +113,10 @@ interface Props {
 	selectedFolderId: string;
 	layoutButtonSequence: number;
 	['notes.sortOrder.field']: string;
+	['search.sortOrder.field']: string;
 	['folders.sortOrder.field']: string;
 	['notes.sortOrder.reverse']: boolean;
+	['search.sortOrder.reverse']: boolean;
 	['folders.sortOrder.reverse']: boolean;
 	showNoteCounts: boolean;
 	uncompletedTodosOnTop: boolean;
@@ -179,6 +181,7 @@ function useMenuStates(menu: any, props: Props) {
 			}
 
 			applySortItemCheckState('notes');
+			applySortItemCheckState('search');
 			applySortItemCheckState('folders');
 
 			menuItemSetChecked('showNoteCounts', props.showNoteCounts);
@@ -199,9 +202,13 @@ function useMenuStates(menu: any, props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.field'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+		props['search.sortOrder.field'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.field'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['notes.sortOrder.reverse'],
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+		props['search.sortOrder.reverse'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
 		props.showNoteCounts,
@@ -360,6 +367,7 @@ function useMenu(props: Props) {
 			};
 
 			const sortNoteItems = sortNoteFolderItems('notes');
+			const sortNoteSearch = sortNoteFolderItems('search');
 			const sortFolderItems = sortNoteFolderItems('folders');
 
 			const focusItems = [
@@ -684,6 +692,9 @@ function useMenu(props: Props) {
 							label: Setting.settingMetadata('notes.sortOrder.field').label(),
 							submenu: sortNoteItems,
 						}, {
+							label: Setting.settingMetadata('search.sortOrder.field').label(),
+							submenu: sortNoteSearch,
+						}, {
 							label: Setting.settingMetadata('folders.sortOrder.field').label(),
 							submenu: sortFolderItems,
 						}, {
@@ -975,8 +986,10 @@ const mapStateToProps = (state: AppState) => {
 		selectedFolderId: state.selectedFolderId,
 		layoutButtonSequence: state.settings.layoutButtonSequence,
 		['notes.sortOrder.field']: state.settings['notes.sortOrder.field'],
+		['search.sortOrder.field']: state.settings['search.sortOrder.field'],
 		['folders.sortOrder.field']: state.settings['folders.sortOrder.field'],
 		['notes.sortOrder.reverse']: state.settings['notes.sortOrder.reverse'],
+		['search.sortOrder.reverse']: state.settings['search.sortOrder.reverse'],
 		['folders.sortOrder.reverse']: state.settings['folders.sortOrder.reverse'],
 		showNoteCounts: state.settings.showNoteCounts,
 		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,

@@ -11,6 +11,14 @@ export const notesSortOrderFieldArray = (): string[] => {
 	return fields;
 };
 
+export const searchSortOrderFieldArray = (): string[] => {
+	// The order of the fields is strictly determinate.
+	if (fields === null) {
+		fields = Setting.enumOptionValues('search.sortOrder.field').sort().reverse();
+	}
+	return fields;
+};
+
 export const notesSortOrderNextField = (currentField: string) => {
 	const fields = notesSortOrderFieldArray();
 	const index = fields.indexOf(currentField);

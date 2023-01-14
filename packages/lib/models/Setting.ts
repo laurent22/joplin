@@ -919,6 +919,26 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+			'search.sortOrder.field': {
+				value: 'bmp25',
+				type: SettingItemType.String,
+				section: 'note',
+				isEnum: true,
+				public: true,
+				appTypes: [AppType.Cli, AppType.Desktop],
+				label: () => _('Sort search by'),
+				options: () => {
+					const Note = require('./Note').default;
+					const noteSortFields = ['bmp25', 'user_updated_time', 'user_created_time', 'title'];
+					const options: any = {};
+					for (let i = 0; i < noteSortFields.length; i++) {
+						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
+					}
+					return options;
+				},
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
 			'editor.autoMatchingBraces': {
 				value: true,
 				type: SettingItemType.Bool,
@@ -930,6 +950,7 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+			'search.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
 			// which implies changing the setting automatically triggers the refresh of notes.
 			// See lib/BaseApplication.ts/generalMiddleware() for details.
