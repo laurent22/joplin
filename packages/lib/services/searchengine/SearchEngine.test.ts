@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-const { setupDatabaseAndSynchronizer, db, sleep, switchClient } = require('../../testing/test-utils.js');
-const SearchEngine = require('../../services/searchengine/SearchEngine').default;
-const Note = require('../../models/Note').default;
-const ItemChange = require('../../models/ItemChange').default;
-const Setting = require('../../models/Setting').default;
+import { setupDatabaseAndSynchronizer, db, sleep, switchClient } from '../../testing/test-utils';
+import SearchEngine from '../../services/searchengine/SearchEngine';
+import Note from '../../models/Note';
+import ItemChange from '../../models/ItemChange';
+import Setting from '../../models/Setting';
 
 let engine = null;
 
