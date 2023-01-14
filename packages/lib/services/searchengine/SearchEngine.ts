@@ -385,17 +385,34 @@ export default class SearchEngine {
 			}
 		}
 
-		rows.sort((a, b) => {
-			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
-			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
-			if (a.weight < b.weight) return +1;
-			if (a.weight > b.weight) return -1;
-			if (a.is_todo && a.todo_completed) return +1;
-			if (b.is_todo && b.todo_completed) return -1;
-			if (a.user_updated_time < b.user_updated_time) return +1;
-			if (a.user_updated_time > b.user_updated_time) return -1;
-			return 0;
-		});
+		if (Setting.value('search.sortOrder.field') === 'bmp25') {
+			rows.sort((a, b) => {
+				if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
+				if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
+				if (a.weight < b.weight) return +1;
+				if (a.weight > b.weight) return -1;
+				if (a.is_todo && a.todo_completed) return +1;
+				if (b.is_todo && b.todo_completed) return -1;
+				if (a.user_updated_time < b.user_updated_time) return +1;
+				if (a.user_updated_time > b.user_updated_time) return -1;
+				return 0;
+			});
+		} else {
+			rows.sort((a, b) => {
+				const field = Setting.value('search.sortOrder.field');
+				if (Setting.value('search.sortOrder.field') === 'title') {
+					if (a[field] > b[field]) return +1;
+					if (a[field] < b[field]) return -1;
+					return 0;
+				} else {
+					if (a[field] > b[field]) return -1;
+					if (a[field] < b[field]) return +1;
+					return 0;
+				}
+			});
+		}
+
+		if (Setting.value('search.sortOrder.reverse')) rows.reverse();
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
