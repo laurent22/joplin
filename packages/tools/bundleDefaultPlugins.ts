@@ -34,7 +34,7 @@ async function downloadFile(url: string, outputPath: string) {
 	const response = await fetch(url);
 	if (!response.ok) {
 		const responseText = await response.text();
-		throw new Error(`Cannot download file from ${url} : ${responseText.substr(0,500)}`);
+		throw new Error(`Cannot download file from ${url} : ${responseText.substr(0, 500)}`);
 	}
 	await writeFile(outputPath, await response.buffer());
 }
@@ -42,8 +42,8 @@ async function downloadFile(url: string, outputPath: string) {
 export async function extractPlugins(currentDir: string, defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName): Promise<void> {
 	for (const pluginId of Object.keys(downloadedPluginsNames)) {
 		await execCommand2(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`, { quiet: true });
-		await move(`package/publish/${pluginId}.jpl`,`${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
-		await move(`package/publish/${pluginId}.json`,`${defaultPluginDir}/${pluginId}/manifest.json`, { overwrite: true });
+		await move(`package/publish/${pluginId}.jpl`, `${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
+		await move(`package/publish/${pluginId}.json`, `${defaultPluginDir}/${pluginId}/manifest.json`, { overwrite: true });
 		await remove(`${downloadedPluginsNames[pluginId]}`);
 		await remove('package');
 	}
@@ -58,7 +58,7 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 
 		if (!response.ok) {
 			const responseText = await response.text();
-			throw new Error(`Cannot fetch ${manifests[pluginId]._npm_package_name} release info from NPM : ${responseText.substr(0,500)}`);
+			throw new Error(`Cannot fetch ${manifests[pluginId]._npm_package_name} release info from NPM : ${responseText.substr(0, 500)}`);
 		}
 		const releaseText = await response.text();
 		const release = JSON.parse(releaseText);
@@ -74,7 +74,7 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 };
 
 async function start(): Promise<void> {
-	const defaultPluginDir = join(__dirname, '..', '..', 'packages', 'app-desktop', 'build','defaultPlugins');
+	const defaultPluginDir = join(__dirname, '..', '..', 'packages', 'app-desktop', 'build', 'defaultPlugins');
 	const defaultPluginsInfo = getDefaultPluginsInfo();
 
 	const manifestData = await fetch('https://raw.githubusercontent.com/joplin/plugins/master/manifests.json');

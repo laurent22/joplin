@@ -20,7 +20,7 @@ const useVisibleOnSelect = ({ container, wrapperRef, isVisible, isSelected }: Vi
 
 	useEffect(() => {
 		isVisibleRef.current = isVisible;
-	} , [isVisible]);
+	}, [isVisible]);
 
 };
 

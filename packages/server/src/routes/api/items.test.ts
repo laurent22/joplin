@@ -172,7 +172,7 @@ describe('api_items', function() {
 	});
 
 	test('should report errors when batch uploading', async function() {
-		const { user: user1,session: session1 } = await createUserAndSession(1, false);
+		const { user: user1, session: session1 } = await createUserAndSession(1, false);
 
 		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
 		await models().user().save({ id: user1.id, max_item_size: note1.length });

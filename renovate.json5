@@ -3,6 +3,15 @@
 	"extends": [
 		"config:base"
 	],
+	"major": {
+		"stabilityDays": 30,
+	},
+	"minor": {
+		"stabilityDays": 20,
+	},
+	"patch": {
+		"stabilityDays": 10,
+	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
 	"ignorePaths": [
@@ -103,6 +112,7 @@
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"labels": ["automerge"],
+			"extends": ["schedule:monthly"],
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
@@ -114,6 +124,7 @@
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
 				"eslint",
+				"eslint-config-prettier",
 				"eslint-interactive",
 				"@typescript-eslint/eslint-plugin",
 				"@typescript-eslint/parser",

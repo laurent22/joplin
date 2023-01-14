@@ -1,3 +1,4 @@
+import { ModelType } from '../../../BaseModel';
 import { Path } from './types';
 /**
  * This module provides access to the Joplin data API: https://joplinapp.org/api/references/rest_api/
@@ -44,4 +45,6 @@ export default class JoplinData {
     post(path: Path, query?: any, body?: any, files?: any[]): Promise<any>;
     put(path: Path, query?: any, body?: any, files?: any[]): Promise<any>;
     delete(path: Path, query?: any): Promise<any>;
+    itemType(itemId: string): Promise<ModelType>;
+    resourcePath(resourceId: string): Promise<string>;
 }
