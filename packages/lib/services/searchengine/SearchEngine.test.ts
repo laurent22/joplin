@@ -6,7 +6,7 @@ import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 
-let engine = null;
+let engine: any = null;
 
 
 // const IDF = (N, n) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
