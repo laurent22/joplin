@@ -68,7 +68,7 @@ describe('services_SearchEngine', function() {
 	});
 
 	it('should keep the content and FTS table in sync', (async () => {
-		let rows, n1, n2, n3;
+		let rows, n1, n2;
 
 		n1 = await Note.save({ title: 'a' });
 		n2 = await Note.save({ title: 'b' });
@@ -103,8 +103,8 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should, after initial indexing, save the last change ID', (async () => {
-		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
-		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
+		await Note.save({ title: 'abcd efgh' }); // 3
+		await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
 
 		expect(Setting.value('searchEngine.initialIndexingDone')).toBe(false);
 
@@ -130,11 +130,11 @@ describe('services_SearchEngine', function() {
 		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
 		const n2 = await Note.save({ title: 'abcd efgh abcd abcd' }); // 1
 		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' }); // 2
-		const n4 = await Note.save({ title: 'xyz xyz' });
-		const n5 = await Note.save({ title: 'xyz xyz xyz xyz' });
-		const n6 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
-		const n7 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
-		const n8 = await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
+		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
 
 		await engine.syncTables();
 		let rows = await engine.search('abcd');
@@ -312,11 +312,11 @@ describe('services_SearchEngine', function() {
 	it('should supports various query types', (async () => {
 		let rows;
 
-		const n1 = await Note.save({ title: 'abcd efgh ijkl', body: 'aaaa bbbb' });
-		const n2 = await Note.save({ title: 'iiii efgh bbbb', body: 'aaaa bbbb' });
-		const n3 = await Note.save({ title: 'Агентство Рейтер' });
-		const n4 = await Note.save({ title: 'Dog' });
-		const n5 = await Note.save({ title: 'СООБЩИЛО' });
+		await Note.save({ title: 'abcd efgh ijkl', body: 'aaaa bbbb' });
+		await Note.save({ title: 'iiii efgh bbbb', body: 'aaaa bbbb' });
+		await Note.save({ title: 'Агентство Рейтер' });
+		await Note.save({ title: 'Dog' });
+		await Note.save({ title: 'СООБЩИЛО' });
 
 		await engine.syncTables();
 
@@ -361,8 +361,7 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should support queries with or without accents', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: 'père noël' });
+		await Note.save({ title: 'père noël' });
 
 		await engine.syncTables();
 
@@ -373,8 +372,7 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should support queries with Chinese characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '我是法国人', body: '中文测试' });
+		await Note.save({ title: '我是法国人', body: '中文测试' });
 
 		await engine.syncTables();
 
@@ -388,8 +386,7 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should support queries with Japanese characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
+		await Note.save({ title: '私は日本語を話すことができません', body: 'テスト' });
 
 		await engine.syncTables();
 
@@ -401,8 +398,7 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should support queries with Korean characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: '이것은 한국말이다' });
+		await Note.save({ title: '이것은 한국말이다' });
 
 		await engine.syncTables();
 
@@ -412,8 +408,7 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should support queries with Thai characters', (async () => {
-		let rows;
-		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
+		await Note.save({ title: 'นี่คือคนไทย' });
 
 		await engine.syncTables();
 
@@ -423,8 +418,6 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should parse normal query strings', (async () => {
-		let rows;
-
 		const testCases = [
 			['abcd efgh', { _: ['abcd', 'efgh'] }],
 			['abcd   efgh', { _: ['abcd', 'efgh'] }],
@@ -478,8 +471,8 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should allow using basic search', (async () => {
-		const n1 = await Note.save({ title: '- [ ] abcd' });
-		const n2 = await Note.save({ title: '[ ] abcd' });
+		await Note.save({ title: '- [ ] abcd' });
+		await Note.save({ title: '[ ] abcd' });
 
 		await engine.syncTables();
 
