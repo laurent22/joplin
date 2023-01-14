@@ -243,17 +243,19 @@ describe('services_SearchEngine', function() {
 		await engine.syncTables();
 
 		const testCases = [
-			['abcd', ['title', 'body'], ['title'], ['body']],
-			['efgh', ['title'], [], ['title']],
+			{ search: 'abcd', matchingPos: [['title', 'body'], ['title'], ['body']] },
+			{ search: 'efgh', matchingPos: [['title'], [], ['title']] },
 		];
 
+		Setting.setValue('search.sortOrder.field', 'bmp25');
+		Setting.setValue('search.sortOrder.reverse', false);
 		for (const testCase of testCases) {
-			const rows = await engine.search(testCase[0]);
+			const rows: any[] = await engine.search(testCase.search);
 
 			for (let i = 0; i < notes.length; i++) {
 				const row = rows.find(row => row.id === notes[i].id);
 				const actual = row ? row.fields.sort().join(',') : '';
-				const expected = testCase[i + 1].sort().join(',');
+				const expected = testCase.matchingPos[i].sort().join(',');
 				expect(expected).toBe(actual);
 			}
 		}
