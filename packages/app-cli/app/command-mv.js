@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 
 		const destinationDuplicates = await Folder.search({ titlePattern: destination, limit: 2 });
 		if (destinationDuplicates.length > 1) {
-			throw new Error(_('Ambiguous notebook "%s". Please use short notebook id instead - press "ti" to see the short notebook id' , destination));
+			throw new Error(_('Ambiguous notebook "%s". Please use short notebook id instead - press "ti" to see the short notebook id', destination));
 		}
 
 		const itemFolder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);

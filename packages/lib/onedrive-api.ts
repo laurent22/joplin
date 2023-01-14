@@ -158,7 +158,7 @@ export default class OneDriveApi {
 		delete options.contentLength;
 		delete options.startByte;
 
-		const response = await shim.fetch(url,options);
+		const response = await shim.fetch(url, options);
 		return response;
 	}
 
@@ -374,7 +374,7 @@ export default class OneDriveApi {
 	async execAccountPropertiesRequest() {
 
 		try {
-			const response = await this.exec('GET','https://graph.microsoft.com/v1.0/me/drive');
+			const response = await this.exec('GET', 'https://graph.microsoft.com/v1.0/me/drive');
 			const data = await response.json();
 			const accountProperties = { accountType: data.driveType, driveId: data.id };
 			return accountProperties;

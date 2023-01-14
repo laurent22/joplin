@@ -187,7 +187,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editorRef.current.getContent(), props.contentOriginalCss);
 			},
 			resetScroll: () => {
-				if (editor) editor.getWin().scrollTo(0,0);
+				if (editor) editor.getWin().scrollTo(0, 0);
 			},
 			scrollTo: (options: ScrollOptions) => {
 				if (!editor) return;

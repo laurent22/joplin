@@ -124,7 +124,7 @@ const NoteListComponent = (props: Props) => {
 		});
 
 		menu.popup(bridge().window());
-	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles,props.plugins, props.selectedFolderId, props.customCss]);
+	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles, props.plugins, props.selectedFolderId, props.customCss]);
 
 	const onGlobalDrop_ = () => {
 		unregisterGlobalDragEndEvent_();
@@ -307,7 +307,7 @@ const NoteListComponent = (props: Props) => {
 			updateSizeState();
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [previousSelectedNoteIds,previousNotes, previousVisible, props.selectedNoteIds, props.notes]);
+	}, [previousSelectedNoteIds, previousNotes, previousVisible, props.selectedNoteIds, props.notes]);
 
 	const scrollNoteIndex_ = (keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) => {
 
