@@ -427,27 +427,26 @@ describe('services_SearchEngine', function() {
 
 	it('should parse normal query strings', (async () => {
 		const testCases = [
-			['abcd efgh', { _: ['abcd', 'efgh'] }],
-			['abcd   efgh', { _: ['abcd', 'efgh'] }],
-			['title:abcd efgh', { _: ['efgh'], title: ['abcd'] }],
-			['title:abcd', { title: ['abcd'] }],
-			['"abcd efgh"', { _: ['abcd efgh'] }],
-			['title:abcd title:efgh', { title: ['abcd', 'efgh'] }],
+			{ input: 'abcd efgh', expected: { value: ['abcd', 'efgh'] } },
+			{ input: 'abcd   efgh', expected: { value: ['abcd', 'efgh'] } },
+			{ input: 'title:abcd efgh', expected: { value: ['efgh'], title: ['abcd'] } },
+			{ input: 'title:abcd', expected: { title: ['abcd'] } },
+			{ input: '"abcd efgh"', expected: { value: ['abcd efgh'] } },
+			{ input: 'title:abcd title:efgh', expected: { title: ['abcd', 'efgh'] } },
+			{ input: 'abcd body:efgh', expected: { value: ['abcd'], body: ['efgh'] } },
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
-			const t = testCases[i];
-			const input = t[0];
-			const expected = t[1];
+			const testCase = testCases[i];
+			const input = testCase.input;
+			const expected = testCase.expected;
 			const actual = await engine.parseQuery(input);
-
-			const _Values = actual.terms._ ? actual.terms._.map(v => v.value) : undefined;
-			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;
-			const bodyValues = actual.terms.body ? actual.terms.body.map(v => v.value) : undefined;
-
-			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), `Test case (_) ${i}`);
-			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), `Test case (title) ${i}`);
-			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), `Test case (body) ${i}`);
+			const _Values = actual.terms._ ? actual.terms._.map((v: any) => v.value) : undefined;
+			const titleValues = actual.terms.title ? actual.terms.title.map((v: any) => v.value) : undefined;
+			const bodyValues = actual.terms.body ? actual.terms.body.map((v: any) => v.value) : undefined;
+			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected.value));
+			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title));
+			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body));
 		}
 	}));
 
