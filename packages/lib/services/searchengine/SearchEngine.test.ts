@@ -500,4 +500,38 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('л')).length).toBe(1);
 		expect((await engine.search('л'))[0].id).toBe(n2.id);
 	}));
+
+	it('Order search results', (async () => {
+		const note1 = await Note.save({ title: 'Testnote 2', body: 'body1', created_time: Date.parse('2021-04-01'), updated_time: Date.parse('2021-04-02') });
+		const note2 = await Note.save({ title: 'testnote 11', body: 'body2', created_time: Date.parse('2021-04-03'), updated_time: Date.parse('2021-04-03') });
+		const note3 = await Note.save({ title: 'Testnote 8', body: 'body3', created_time: Date.parse('2021-04-02'), updated_time: Date.parse('2021-04-05') });
+		const note4 = await Note.save({ title: 'Some Testnote', body: 'body4', created_time: Date.parse('2021-04-05'), updated_time: Date.parse('2021-04-08') });
+		const note5 = await Note.save({ title: '10 Testnote 5', body: 'body5', created_time: Date.parse('2021-04-10'), updated_time: Date.parse('2021-04-22') });
+		const note6 = await Note.save({ title: '8 Testnote 6', body: 'body6', created_time: Date.parse('2021-04-17'), updated_time: Date.parse('2021-04-26') });
+		const todo1 = await Note.save({ title: 'Testnote as todo1', body: 'todobody 1', is_todo: 1, created_time: Date.parse('2021-04-09'), updated_time: Date.parse('2021-04-24') });
+		const todo2 = await Note.save({ title: '80 Testnote as todo2', body: 'todobody 2', is_todo: 1, todo_completed: Date.parse('2021-04-11'), todo_due: Date.parse('2021-04-27'), created_time: Date.parse('2021-04-14'), updated_time: Date.parse('2021-04-11') });
+		const body1 = await Note.save({ title: '77 Only in body', body: 'Testnote in body', created_time: Date.parse('2021-04-28'), updated_time: Date.parse('2021-04-30') });
+		await Note.save({ title: 'No match', body: 'No match', created_time: Date.parse('2021-04-28'), updated_time: Date.parse('2021-04-30') });
+		await engine.syncTables();
+
+		const testCases = [
+			{ searchQuery: 'Testnote', sortOrder: { field: 'bmp25', reverse: false }, expectedOrder: [todo1, note6, note5, note4, note3, note2, note1, todo2, body1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'bmp25', reverse: true }, expectedOrder: [body1, todo2, note1, note2, note3, note4, note5, note6, todo1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'title', reverse: false }, expectedOrder: [note6, note5, body1, todo2, note4, note1, note3, note2, todo1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'title', reverse: true }, expectedOrder: [todo1, note2, note3, note1, note4, todo2, body1, note5, note6] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'user_created_time', reverse: false }, expectedOrder: [body1, note6, todo2, note5, todo1, note4, note2, note3, note1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'user_created_time', reverse: true }, expectedOrder: [note1, note3, note2, note4, todo1, note5, todo2, note6, body1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'user_updated_time', reverse: false }, expectedOrder: [body1, todo2, todo1, note6, note5, note4, note3, note2, note1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'user_updated_time', reverse: true }, expectedOrder: [note1, note2, note3, note4, note5, note6, todo1, todo2, body1] },
+		];
+
+		for (const testCase of testCases) {
+			Setting.setValue('search.sortOrder.field', testCase.sortOrder.field);
+			Setting.setValue('search.sortOrder.reverse', testCase.sortOrder.reverse);
+			const searchResult = await engine.search(testCase.searchQuery);
+			const noteOrder = searchResult.map((v: any) => v.id);
+			const expected = testCase.expectedOrder.map((v: any) => v.id);
+			expect(noteOrder).toEqual(expected);
+		}
+	}));
 });
