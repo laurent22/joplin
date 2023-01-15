@@ -136,7 +136,7 @@ describe('services_SearchEngine', function() {
 		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz' });
 		await Note.save({ title: 'xyz xyz xyz xyz xyz xyz xyz xyz' });
 
-		Setting.setValue('search.sortOrder.field', 'bmp25');
+		Setting.setValue('search.sortOrder.field', 'bm25');
 		Setting.setValue('search.sortOrder.reverse', false);
 		await engine.syncTables();
 		let rows = await engine.search('abcd');
@@ -247,7 +247,7 @@ describe('services_SearchEngine', function() {
 			{ search: 'efgh', matchingPos: [['title'], [], ['title']] },
 		];
 
-		Setting.setValue('search.sortOrder.field', 'bmp25');
+		Setting.setValue('search.sortOrder.field', 'bm25');
 		Setting.setValue('search.sortOrder.reverse', false);
 		for (const testCase of testCases) {
 			const rows: any[] = await engine.search(testCase.search);
@@ -271,7 +271,7 @@ describe('services_SearchEngine', function() {
 		const n3 = await Note.save({ title: 'abcd' });
 		await sleep(0.1);
 
-		Setting.setValue('search.sortOrder.field', 'bmp25');
+		Setting.setValue('search.sortOrder.field', 'bm25');
 		Setting.setValue('search.sortOrder.reverse', false);
 		await engine.syncTables();
 		rows = await engine.search('abcd');
@@ -299,7 +299,7 @@ describe('services_SearchEngine', function() {
 		const n3 = await Note.save({ title: 'abcd', is_todo: 1 });
 		await sleep(0.1);
 
-		Setting.setValue('search.sortOrder.field', 'bmp25');
+		Setting.setValue('search.sortOrder.field', 'bm25');
 		Setting.setValue('search.sortOrder.reverse', false);
 		await engine.syncTables();
 		rows = await engine.search('abcd');
