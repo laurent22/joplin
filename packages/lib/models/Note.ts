@@ -32,7 +32,7 @@ export default class Note extends BaseItem {
 
 	static fieldToLabel(field: string) {
 		const fieldsToLabels: Record<string, string> = {
-			bm25: _('relevance (bm 25)'),
+			bm25: _('relevance'),
 			title: _('title'),
 			user_updated_time: _('updated date'),
 			user_created_time: _('created date'),
