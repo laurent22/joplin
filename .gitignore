@@ -671,6 +671,7 @@ packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js
 packages/lib/services/rest/utils/requestPaginationOptions.js
 packages/lib/services/searchengine/SearchEngine.js
+packages/lib/services/searchengine/SearchEngine.test.js
 packages/lib/services/searchengine/SearchEngineUtils.js
 packages/lib/services/searchengine/SearchEngineUtils.test.js
 packages/lib/services/searchengine/SearchFilter.test.js
