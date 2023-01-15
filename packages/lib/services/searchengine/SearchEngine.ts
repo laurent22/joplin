@@ -398,8 +398,8 @@ export default class SearchEngine {
 				return 0;
 			});
 		} else {
+			const field = Setting.value('search.sortOrder.field');
 			rows.sort((a, b) => {
-				const field = Setting.value('search.sortOrder.field');
 				if (Setting.value('search.sortOrder.field') === 'title') {
 					if (a[field] > b[field]) return +1;
 					if (a[field] < b[field]) return -1;
