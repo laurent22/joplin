@@ -401,9 +401,7 @@ export default class SearchEngine {
 			const field = Setting.value('search.sortOrder.field');
 			rows.sort((a, b) => {
 				if (Setting.value('search.sortOrder.field') === 'title') {
-					if (a[field] > b[field]) return +1;
-					if (a[field] < b[field]) return -1;
-					return 0;
+					return a[field].localeCompare(b[field], undefined, { numeric: true, sensitivity: 'base' });
 				} else {
 					if (a[field] > b[field]) return -1;
 					if (a[field] < b[field]) return +1;
