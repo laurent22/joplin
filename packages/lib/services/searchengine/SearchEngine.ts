@@ -385,7 +385,7 @@ export default class SearchEngine {
 			}
 		}
 
-		if (Setting.value('search.sortOrder.field') === 'bmp25') {
+		if (Setting.value('search.sortOrder.field') === 'bm25') {
 			rows.sort((a, b) => {
 				if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 				if (!a.fields.includes('title') && b.fields.includes('title')) return +1;

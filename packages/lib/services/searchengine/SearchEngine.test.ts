@@ -515,8 +515,8 @@ describe('services_SearchEngine', function() {
 		await engine.syncTables();
 
 		const testCases = [
-			{ searchQuery: 'Testnote', sortOrder: { field: 'bmp25', reverse: false }, expectedOrder: [todo1, note6, note5, note4, note3, note2, note1, todo2, body1] },
-			{ searchQuery: 'Testnote', sortOrder: { field: 'bmp25', reverse: true }, expectedOrder: [body1, todo2, note1, note2, note3, note4, note5, note6, todo1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'bm25', reverse: false }, expectedOrder: [todo1, note6, note5, note4, note3, note2, note1, todo2, body1] },
+			{ searchQuery: 'Testnote', sortOrder: { field: 'bm25', reverse: true }, expectedOrder: [body1, todo2, note1, note2, note3, note4, note5, note6, todo1] },
 			{ searchQuery: 'Testnote', sortOrder: { field: 'title', reverse: false }, expectedOrder: [note6, note5, body1, todo2, note4, note1, note3, note2, todo1] },
 			{ searchQuery: 'Testnote', sortOrder: { field: 'title', reverse: true }, expectedOrder: [todo1, note2, note3, note1, note4, todo2, body1, note5, note6] },
 			{ searchQuery: 'Testnote', sortOrder: { field: 'user_created_time', reverse: false }, expectedOrder: [body1, note6, todo2, note5, todo1, note4, note2, note3, note1] },

@@ -920,7 +920,7 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 			'search.sortOrder.field': {
-				value: 'bmp25',
+				value: 'bm25',
 				type: SettingItemType.String,
 				section: 'note',
 				isEnum: true,
@@ -929,7 +929,7 @@ class Setting extends BaseModel {
 				label: () => _('Sort search by'),
 				options: () => {
 					const Note = require('./Note').default;
-					const noteSortFields = ['bmp25', 'user_updated_time', 'user_created_time', 'title'];
+					const noteSortFields = ['bm25', 'user_updated_time', 'user_created_time', 'title'];
 					const options: any = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
 						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
