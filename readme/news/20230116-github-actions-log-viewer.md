@@ -1,5 +1,6 @@
 ---
 tweet: Introducing the "GitHub Action Raw Log Viewer" extension for Chrome
+forum_url: https://discourse.joplinapp.org/t/29139
 ---
 
 # Introducing the "GitHub Actions Raw Log Viewer" extension for Chrome
