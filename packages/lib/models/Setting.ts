@@ -1382,6 +1382,18 @@ class Setting extends BaseModel {
 				};
 			} },
 
+			useCustomPdfViewer: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				advanced: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Use custom PDF viewer (Beta)',
+				description: () => 'The custom PDF viewer remembers the last page that was viewed, however it has some technical issues.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'editor.keyboardMode': {
 				value: '',
 				type: SettingItemType.String,

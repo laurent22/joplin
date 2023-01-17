@@ -424,6 +424,7 @@ function NoteEditor(props: NoteEditorProps) {
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
 		isSafeMode: props.isSafeMode,
+		useCustomPdfViewer: props.useCustomPdfViewer,
 		// We need it to identify the context for which media is rendered.
 		// It is currently used to remember pdf scroll position for each attacments of each note uniquely.
 		noteId: props.noteId,
@@ -630,6 +631,7 @@ const mapStateToProps = (state: AppState) => {
 		], whenClauseContext)[0],
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		isSafeMode: state.settings.isSafeMode,
+		useCustomPdfViewer: state.settings.useCustomPdfViewer,
 	};
 };
 
