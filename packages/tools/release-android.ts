@@ -145,11 +145,9 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 async function main() {
 	const argv = require('yargs').argv;
 
-	if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
-
 	await gitPullTry(false);
 
-	const isPreRelease = argv.type === 'prerelease';
+	const isPreRelease = !('type' in argv) || argv.type === 'prerelease';
 
 	process.chdir(rnDir);
 	await execCommand2('yarn run build', { showStdout: false });

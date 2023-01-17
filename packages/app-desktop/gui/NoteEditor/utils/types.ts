@@ -43,6 +43,7 @@ export interface NoteEditorProps {
 	richTextBannerDismissed: boolean;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
+	useCustomPdfViewer: boolean;
 }
 
 export interface NoteBodyEditorProps {
@@ -76,6 +77,7 @@ export interface NoteBodyEditorProps {
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	noteId: string;
+	useCustomPdfViewer: boolean;
 }
 
 export interface FormNote {
