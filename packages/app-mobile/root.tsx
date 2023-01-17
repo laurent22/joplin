@@ -217,6 +217,7 @@ const appDefaultState: AppState = Object.assign({}, defaultState, {
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
 	isOnMobileData: false,
+	disableSideMenuGestures: false,
 });
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -380,6 +381,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = Object.assign({}, state);
 			newState.noteSideMenuOptions = action.options;
+			break;
+
+		case 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED':
+			newState = Object.assign({}, state);
+			newState.disableSideMenuGestures = action.disableSideMenuGestures;
 			break;
 
 		case 'MOBILE_DATA_WARNING_UPDATE':
@@ -946,6 +952,7 @@ class AppComponent extends React.Component {
 					edgeHitWidth={5}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
+					disableGestures={this.state.disableSideMenuGestures}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					onSliding={(percent: number) => {
 						this.props.dispatch({
@@ -1007,6 +1014,7 @@ const mapStateToProps = (state: any) => {
 		routeName: state.route.routeName,
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
+		disableSideMenuGestures: state.disableSideMenuGestures,
 	};
 };
 

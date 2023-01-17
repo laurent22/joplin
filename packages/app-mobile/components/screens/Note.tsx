@@ -466,6 +466,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 				void this.onSaveDrawing(drawingData);
 			});
 		}
+
+		// Disable opening/closing the side menu with touch gestures
+		// when the image editor is open.
+		if (prevState.showImageEditor !== this.state.showImageEditor) {
+			this.props.dispatch({
+				type: 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED',
+				disableSideMenuGestures: this.state.showImageEditor,
+			});
+		}
 	}
 
 	componentWillUnmount() {
