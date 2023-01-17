@@ -379,4 +379,19 @@ describe('models/Setting', function() {
 		}
 	});
 
+	test('values should not be undefined when they are set', async () => {
+		Setting.setValue('locale', undefined);
+		expect(Setting.value('locale')).toBe('');
+	});
+
+	test('values should not be undefined when registering a setting', async () => {
+		await Setting.registerSetting('myCustom', {
+			public: true,
+			value: undefined,
+			type: Setting.TYPE_STRING,
+		});
+
+		expect(Setting.value('myCustom')).toBe('');
+	});
+
 });
