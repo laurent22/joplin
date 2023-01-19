@@ -15,8 +15,8 @@ describe('command-mkbook', function() {
 
 	it('should create a subfolder in first folder', async () => {
 		const command = setupCommandForTesting(Command);
-		await command.action({ 'new-notebook': 'folder1' });
-		await command.action({ 'new-notebook': 'folder1_1' , options: { sub: true } });
+		await command.action({ 'new-notebook': 'folder1', options: {} });
+		await command.action({ 'new-notebook': 'folder1_1', options: { parent: 'folder1' } });
 
 		const folder1 = await Folder.loadByTitle('folder1');
 		const folder1_1 = await Folder.loadByTitle('folder1_1');
@@ -25,23 +25,17 @@ describe('command-mkbook', function() {
 		expect(folder1_1.parent_id).toBe(folder1.id);
 	});
 
-	it('should create a subfolder in the second destination folder', async () => {
+	it('should not be possible to create a subfolder without an argument.', async () => {
 		const command = setupCommandForTesting(Command);
-		await command.action({ 'new-notebook': 'folder2' });
-		await command.action({ 'new-notebook': 'folder2_1', 'notebook': 'folder2' });
-
-		const folder2 = await Folder.loadByTitle('folder2');
-		const folder2_1 = await Folder.loadByTitle('folder2_1');
-
-		expect(folder2.title).toBe('folder2');
-		expect(folder2_1.parent_id).toBe(folder2.id);
+		await command.action({ 'new-notebook': 'folder2', options: {} });
+		await expect(command.action({ 'new-notebook': 'folder2_1', options: { parent: true } })).rejects.toThrowError();
 	});
 
 	it('should not be possible to create subfolder in ambiguous destination folder', async () => {
 		const command = setupCommandForTesting(Command);
-		await command.action({ 'new-notebook': 'folder3' });
-		await command.action({ 'new-notebook': 'folder3' });	// ambiguous folder
-		await expect(command.action({ 'new-notebook': 'folder3_1', 'notebook': 'folder3' })).rejects.toThrowError();
+		await command.action({ 'new-notebook': 'folder3', options: {} });
+		await command.action({ 'new-notebook': 'folder3', options: {} });	// ambiguous folder
+		await expect(command.action({ 'new-notebook': 'folder3_1', options: { parent: 'folder3' } })).rejects.toThrowError();
 
 		// check if duplicate entries have been created.
 		const folderAll = await Folder.all();

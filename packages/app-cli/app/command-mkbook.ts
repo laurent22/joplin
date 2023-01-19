@@ -7,7 +7,7 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
 	usage() {
-		return 'mkbook <new-notebook> [notebook]';
+		return 'mkbook <new-notebook>';
 	}
 
 	description() {
@@ -16,12 +16,12 @@ class Command extends BaseCommand {
 
 	options() {
 		return [
-			['-s, --sub', _('Creates the new notebook as a sub-notebook')],
+			['-p, --parent <parent-notebook>', _('Create a new notebook under a parent notebook.')],
 		];
 	}
 
-	// validDestinationSubFolder check for presents and ambiguous folders
-	async validDestinationSubFolder(targetFolder: string) {
+	// validDestinationFolder check for presents and ambiguous folders
+	async validDestinationFolder(targetFolder: string) {
 
 		const destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetFolder);
 		if (!destinationFolder) {
@@ -44,20 +44,18 @@ class Command extends BaseCommand {
 	}
 
 	async action(args: any) {
-		const createSubFolder = args.options && args.options.sub === true;
-		const targetFolder = args['notebook'];
+		const targetFolder = args.options.parent;
+
 		const newFolder: FolderEntity = {
 			title: args['new-notebook'],
 		};
-		// this.logger().debug('mkbook-command-args: ', args);
 
-		if (createSubFolder) {
-			newFolder.parent_id = app().currentFolder().id;
-			await this.saveAndSwitchFolder(newFolder);
+		if (targetFolder) {
+			if (typeof targetFolder === 'boolean') {
+				throw new Error(_('Missing required argument: parent-notebook'));
+			}
 
-		} else if (targetFolder) {
-			const destinationFolder = await this.validDestinationSubFolder(targetFolder);
-
+			const destinationFolder = await this.validDestinationFolder(targetFolder);
 			newFolder.parent_id = destinationFolder.id;
 			await this.saveAndSwitchFolder(newFolder);
 
