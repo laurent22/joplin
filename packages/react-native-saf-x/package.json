@@ -5,7 +5,6 @@
   "main": "src/index",
   "react-native": "src/index",
   "source": "src/index",
-  "private": true,
   "files": [
     "src",
     "lib",
@@ -15,7 +14,10 @@
     "react-native-saf-x.podspec",
     "!lib/typescript/example",
     "!android/build",
-    "!ios/build"
+    "!ios/build",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
@@ -30,8 +32,10 @@
     "scoped",
     "storage",
     "SAF",
-    "storage-access-framework"
+    "storage-access-framework",
+    "fs"
   ],
+  "repository": "https://github.com/jd1378/react-native-saf-x",
   "author": "Javad Mnjd (https://github.com/jd1378)",
   "license": "AGPL-3.0-or-later",
   "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/react-native-saf-x",
@@ -39,12 +43,12 @@
     "access": "public"
   },
   "devDependencies": {
-    "@babel/core": "7.16.0",
-    "@types/react": "16.14.21",
-    "@types/react-native": "0.64.19",
-    "react": "18.2.0",
-    "react-native": "0.66.1",
-    "typescript": "4.9.4"
+    "@babel/core": "^7.17.9",
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.70.6",
+    "react": "18.1.0",
+    "react-native": "0.70.6",
+    "typescript": "^4.9.4"
   },
   "peerDependencies": {
     "react": "*",
