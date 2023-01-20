@@ -21,7 +21,11 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableArray;
+import com.reactnativesafx.utils.exceptions.ExceptionFast;
+import com.reactnativesafx.utils.exceptions.FileNotFoundExceptionFast;
+import com.reactnativesafx.utils.exceptions.IOExceptionFast;
 import com.reactnativesafx.utils.exceptions.RenameFailedException;
+import com.reactnativesafx.utils.exceptions.SecurityExceptionFast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,13 +84,13 @@ public class EfficientDocumentHelper {
         if (!targetFile.exists()) {
           boolean madeFolder = targetFile.mkdirs();
           if (!madeFolder) {
-            throw new IOException("mkdir failed for Uri with `file` scheme");
+            throw new IOExceptionFast("mkdir failed for Uri with `file` scheme");
           }
         }
       }
 
       if (!targetFile.exists()) {
-        throw new FileNotFoundException("file does not exist at: " + unknownUriStr);
+        throw new FileNotFoundExceptionFast("file does not exist at: " + unknownUriStr);
       }
 
       uri = Uri.fromFile(targetFile);
@@ -97,10 +101,11 @@ public class EfficientDocumentHelper {
 
       try {
         stat = getStat(uri);
-      } catch (Exception ignored) {}
+      } catch (Exception ignored) {
+      }
 
       if (stat == null) {
-        throw new FileNotFoundException("file does not exist at: " + unknownUriStr);
+        throw new FileNotFoundExceptionFast("file does not exist at: " + unknownUriStr);
       }
 
       return uri;
@@ -135,7 +140,7 @@ public class EfficientDocumentHelper {
       int pathSegmentsToTraverseLength = includeLastSegment ? strings.length : strings.length - 1;
       if (pathSegmentsToTraverseLength == 0) {
         if (getStat(uri) == null) {
-          throw new FileNotFoundException("file does not exist at: " + unknownUriStr);
+          throw new FileNotFoundExceptionFast("file does not exist at: " + unknownUriStr);
         }
       }
       for (int i = 0; i < pathSegmentsToTraverseLength; i++) {
@@ -150,7 +155,7 @@ public class EfficientDocumentHelper {
               uri = childStat.getInternalUri();
             } else {
               // child doc is a file
-              throw new IOException(
+              throw new IOExceptionFast(
                 "There's a document with the same name as the one we are trying to traverse at: '"
                   + childStat.getUri()
                   + "'");
@@ -159,7 +164,7 @@ public class EfficientDocumentHelper {
             if (createIfDirectoryNotExist) {
               uri = createDirectory(uri, strings[i]);
             } else {
-              throw new FileNotFoundException(
+              throw new FileNotFoundExceptionFast(
                 "Cannot traverse to the pointed document. Document '"
                   + strings[i]
                   + "'"
@@ -241,7 +246,7 @@ public class EfficientDocumentHelper {
       context.getContentResolver(), buildDocumentUriUsingTree(parentTreeUri), DocumentsContract.Document.MIME_TYPE_DIR,
       name);
     if (createdDir == null) {
-      throw new IOException("Could not create directory in " + parentTreeUri + " with name " + name);
+      throw new IOExceptionFast("Could not create directory in " + parentTreeUri + " with name " + name);
     }
 
     return createdDir;
@@ -271,7 +276,7 @@ public class EfficientDocumentHelper {
     if (uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
       File parentFile = new File(uri.getPath()).getParentFile();
       if (!parentFile.canRead()) {
-        throw new SecurityException("Permission Denial: Cannot read directory at " + uri.getPath());
+        throw new SecurityExceptionFast("Permission Denial: Cannot read directory at " + uri.getPath());
       }
       WritableArray stats = Arguments.createArray();
       for (File file : parentFile.listFiles()) {
@@ -312,7 +317,7 @@ public class EfficientDocumentHelper {
     if (fileOrDirectory.exists()) {
       final boolean result = fileOrDirectory.delete();
       if (!result) {
-        throw new IOException("Cannot delete file at: " + fileOrDirectory.getAbsolutePath());
+        throw new IOExceptionFast("Cannot delete file at: " + fileOrDirectory.getAbsolutePath());
       }
     }
   }
@@ -320,14 +325,14 @@ public class EfficientDocumentHelper {
   private void unlink(final Uri uri) throws IOException {
     final boolean result = DocumentsContract.deleteDocument(context.getContentResolver(), uri);
     if (!result) {
-      throw new IOException("Cannot delete file at: " + uri);
+      throw new IOExceptionFast("Cannot delete file at: " + uri);
     }
   }
 
   private Uri renameTo(final Uri uri, final String newName) throws IOException {
     final Uri newUri = DocumentsContract.renameDocument(context.getContentResolver(), uri, newName);
     if (newUri == null) {
-      throw new IOException("Failed to rename file at: " + uri + " to " + newName);
+      throw new IOExceptionFast("Failed to rename file at: " + uri + " to " + newName);
     }
     final String renameResult = UriHelper.getFileName(newUri.toString());
     if (!renameResult.equals(newName)) {
@@ -345,7 +350,7 @@ public class EfficientDocumentHelper {
     }
 
     if (uri != null) {
-      throw new IOException("a file or directory already exist at: " + uri);
+      throw new IOExceptionFast("a file or directory already exist at: " + uri);
     }
 
     uri = UriHelper.getUnifiedUri(unknownStr);
@@ -355,7 +360,7 @@ public class EfficientDocumentHelper {
       file.getParentFile().mkdirs();
       boolean created = file.createNewFile();
       if (!created) {
-        throw new IOException("could not create file at: " + unknownStr);
+        throw new IOExceptionFast("could not create file at: " + unknownStr);
       }
       return uri;
     }
@@ -366,7 +371,7 @@ public class EfficientDocumentHelper {
     // and any other path would have at least one '/' to provide a file name in a folder
     String fileName = UriHelper.getFileName(unknownStr);
     if (fileName.indexOf(':') != -1) {
-      throw new IOException(
+      throw new IOExceptionFast(
         "Invalid file name: Could not extract filename from uri string provided");
     }
 
@@ -390,7 +395,7 @@ public class EfficientDocumentHelper {
     );
 
     if (createdFile == null) {
-      throw new IOException(
+      throw new IOExceptionFast(
         "File creation failed without any specific error for '" + fileName + "'");
     }
 
@@ -402,7 +407,7 @@ public class EfficientDocumentHelper {
         createdFile = renameTo(createdFile, fileName);
       } catch (RenameFailedException e) {
         unlink(e.getResultUri());
-        throw new IOException(
+        throw new IOExceptionFast(
           "The created file name was not as expected: input name was '"
             + e.getInputName()
             + "' "
@@ -625,7 +630,7 @@ public class EfficientDocumentHelper {
           Uri uri = getDocumentUri(unknownStr, false, true);
           DocumentStat stats = getStat(uri);
           if (stats == null) {
-            throw new FileNotFoundException("'" + unknownStr + "' does not exist");
+            throw new FileNotFoundExceptionFast("'" + unknownStr + "' does not exist");
           }
 
           byte[] bytes;
@@ -689,7 +694,7 @@ public class EfficientDocumentHelper {
           try {
             uri = getDocumentUri(unknownStr, false, true);
             if (uri == null) {
-              throw new FileNotFoundException();
+              throw new FileNotFoundExceptionFast();
             }
           } catch (FileNotFoundException e) {
             uri = createFile(unknownStr, mimeType);
@@ -732,7 +737,7 @@ public class EfficientDocumentHelper {
           DocumentStat srcStats = getStat(srcUri);
 
           if (srcStats == null) {
-            throw new FileNotFoundException("Document at given Uri does not exist: " + unknownDestUri);
+            throw new FileNotFoundExceptionFast("Document at given Uri does not exist: " + unknownDestUri);
           }
 
           Uri destUri;
@@ -741,9 +746,9 @@ public class EfficientDocumentHelper {
             if (!replaceIfDestExists) {
               DocumentStat destStat = getStat(destUri);
               if (destStat != null) {
-                throw new IOException("a document with the same name already exists in destination");
+                throw new IOExceptionFast("a document with the same name already exists in destination");
               } else {
-                throw new FileNotFoundException();
+                throw new FileNotFoundExceptionFast();
               }
             }
           } catch (FileNotFoundException e) {
@@ -767,7 +772,7 @@ public class EfficientDocumentHelper {
 
           DocumentStat destStat = getStat(destUri);
           if (destStat == null) {
-            throw new IOException("Unexpected error, destination file does not exist after write was completed, file: " + destUri);
+            throw new IOExceptionFast("Unexpected error, destination file does not exist after write was completed, file: " + destUri);
           }
           return destStat.getWritableMap();
         } catch (Exception e) {
@@ -838,7 +843,7 @@ public class EfficientDocumentHelper {
         activity.startActivityForResult(intent, DOCUMENT_TREE_REQUEST_CODE);
       } else {
         context.removeActivityEventListener(activityEventListener);
-        throw new Exception("Cannot get current activity, so cannot launch document picker");
+        throw new ExceptionFast("Cannot get current activity, so cannot launch document picker");
       }
 
     } catch (Exception e) {
@@ -875,7 +880,7 @@ public class EfficientDocumentHelper {
                 final Uri uri = intent.getData();
                 final ClipData clipData = intent.getClipData();
                 if (uri == null && clipData == null) {
-                  throw new Exception(
+                  throw new ExceptionFast(
                     "Unexpected Error: Could not retrieve information about selected documents");
                 }
 
@@ -948,7 +953,7 @@ public class EfficientDocumentHelper {
         activity.startActivityForResult(intent, DOCUMENT_REQUEST_CODE);
       } else {
         context.removeActivityEventListener(activityEventListener);
-        throw new Exception("Cannot get current activity, so cannot launch document picker");
+        throw new ExceptionFast("Cannot get current activity, so cannot launch document picker");
       }
 
     } catch (Exception e) {
@@ -1001,7 +1006,7 @@ public class EfficientDocumentHelper {
 
                       DocumentStat stat = getStat(uri);
                       if (stat == null) {
-                        throw new IOException("Could not get stats for the saved file");
+                        throw new IOExceptionFast("Could not get stats for the saved file");
                       }
                       return stat.getWritableMap();
                     } catch (Exception e) {
@@ -1041,7 +1046,7 @@ public class EfficientDocumentHelper {
         activity.startActivityForResult(intent, DOCUMENT_CREATE_CODE);
       } else {
         context.removeActivityEventListener(activityEventListener);
-        throw new Exception("Cannot get current activity, so cannot launch document picker");
+        throw new ExceptionFast("Cannot get current activity, so cannot launch document picker");
       }
     } catch (Exception e) {
       rejectWithException(e, promise);

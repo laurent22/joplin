@@ -32,17 +32,16 @@ public class DocumentStat {
    * 2 - DocumentsContract.Document.COLUMN_MIME_TYPE
    * 3 - DocumentsContract.Document.COLUMN_SIZE
    * 4 - DocumentsContract.Document.COLUMN_LAST_MODIFIED
-   *  @param uri if this is a tree uri, it must be in it's simplified form
+   *
+   * @param uri if this is a tree uri, it must be in it's simplified form
    *            (before being processed for the library)
-   *
-   *
    */
   public DocumentStat(Cursor c, final Uri uri) {
     if (DocumentsContract.isTreeUri(uri)) {
       // this is to make sure urls that are going out of this library are always simple to use
       // so tree Uris passed in must always be
       this.uri = DocumentsContract.buildTreeDocumentUri(uri.getAuthority(), c.getString(0));
-      this.internalUri = DocumentsContract.buildDocumentUriUsingTree(uri,  c.getString(0));
+      this.internalUri = DocumentsContract.buildDocumentUriUsingTree(uri, c.getString(0));
     } else {
       this.uri = DocumentsContract.buildDocumentUri(uri.getAuthority(), c.getString(0));
       this.internalUri = this.uri;
@@ -63,7 +62,7 @@ public class DocumentStat {
     this.lastModified = file.lastModified();
     this.size = file.length();
     this.isDirectory = file.isDirectory();
-    if(this.isDirectory) {
+    if (this.isDirectory) {
       this.mimeType = DocumentsContract.Document.MIME_TYPE_DIR;
     } else {
       this.mimeType = getTypeForName(file.getName());
@@ -73,11 +72,11 @@ public class DocumentStat {
   public WritableMap getWritableMap() {
     WritableMap fileMap = Arguments.createMap();
     fileMap.putString("uri", UriHelper.denormalize(uri));
-    fileMap.putString("name",  displayName);
+    fileMap.putString("name", displayName);
     if (isDirectory) {
-      fileMap.putString("type",  "directory");
+      fileMap.putString("type", "directory");
     } else {
-      fileMap.putString("type",  "file");
+      fileMap.putString("type", "file");
     }
     fileMap.putString("mime", mimeType);
     fileMap.putDouble("size", size);
@@ -88,18 +87,23 @@ public class DocumentStat {
   public String getUri() {
     return UriHelper.denormalize(uri);
   }
+
   public String getDisplayName() {
     return displayName;
   }
+
   public String getMimeType() {
     return mimeType;
   }
+
   public Boolean isDirectory() {
     return this.isDirectory;
   }
+
   public long getSize() {
     return size;
   }
+
   public long getLastModified() {
     return lastModified;
   }

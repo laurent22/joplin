@@ -5,6 +5,12 @@ import android.net.Uri;
 import java.io.IOException;
 
 public class RenameFailedException extends IOException {
+
+  @Override
+  public synchronized Throwable fillInStackTrace() {
+    return this;
+  }
+
   private final Uri inputUri;
   private final String inputName;
 

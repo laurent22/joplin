@@ -7,6 +7,8 @@ import android.provider.DocumentsContract;
 
 import androidx.annotation.RequiresApi;
 
+import com.reactnativesafx.utils.exceptions.IllegalArgumentExceptionFast;
+
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class UriHelper {
 
@@ -54,14 +56,14 @@ public class UriHelper {
 
   public static Uri getUnifiedUri(String unknownUriStr) {
     if (unknownUriStr == null || unknownUriStr.equals("")) {
-      throw new IllegalArgumentException("Invalid Uri: No input was given");
+      throw new IllegalArgumentExceptionFast("Invalid Uri: No input was given");
     }
     Uri uri = Uri.parse(unknownUriStr);
     if (uri.getScheme() == null) {
       uri = Uri.parse(ContentResolver.SCHEME_FILE + "://" + unknownUriStr);
     } else if (!(uri.getScheme().equals(ContentResolver.SCHEME_FILE)
       || uri.getScheme().equals(ContentResolver.SCHEME_CONTENT))) {
-      throw new IllegalArgumentException("Invalid Uri: Scheme not supported");
+      throw new IllegalArgumentExceptionFast("Invalid Uri: Scheme not supported");
     }
     return uri;
   }
