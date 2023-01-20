@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@joplin/lib": "~2.10",
+    "@joplin/react-native-alarm-notification": "~2.10",
     "@joplin/react-native-saf-x": "~2.10",
     "@joplin/renderer": "~2.10",
     "@react-native-community/clipboard": "1.5.1",
@@ -32,7 +33,6 @@
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.0",
     "events": "3.3.0",
-    "joplin-rn-alarm-notification": "1.0.7",
     "jsc-android": "241213.1.0",
     "lodash": "4.17.21",
     "md5": "2.3.0",

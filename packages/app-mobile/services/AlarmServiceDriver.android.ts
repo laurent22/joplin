@@ -1,13 +1,13 @@
 import Logger from '@joplin/lib/Logger';
 import { Notification } from '@joplin/lib/models/Alarm';
 
-const ReactNativeAN = require('joplin-rn-alarm-notification').default;
+const ReactNativeAN = require('@joplin/react-native-alarm-notification').default;
 
 export default class AlarmServiceDriver {
 
 	private logger_: Logger;
 
-	constructor(logger: Logger) {
+	public constructor(logger: Logger) {
 		this.logger_ = logger;
 	}
 
