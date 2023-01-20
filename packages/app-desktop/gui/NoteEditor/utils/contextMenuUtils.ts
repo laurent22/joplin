@@ -79,8 +79,18 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 			try {
 				canvas = document.createElement('canvas');
 				if (!canvas) throw new Error('Failed to create canvas element');
-				canvas.width = width || img.width;
-				canvas.height = height || img.height;
+				if (!width || !height) {
+					const maxDimension = 1024;
+					if (img.width > img.height) {
+						width = maxDimension;
+						height = width * (img.height / img.width);
+					} else {
+						height = maxDimension;
+						width = height * (img.width / img.height);
+					}
+				}
+				canvas.width = width;
+				canvas.height = height;
 				const ctx = canvas.getContext('2d');
 				if (!ctx) throw new Error('Failed to get context');
 				ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
