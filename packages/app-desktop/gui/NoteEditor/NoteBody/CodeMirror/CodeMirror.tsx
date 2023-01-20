@@ -287,8 +287,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorCopyText = useCallback(() => {
 		if (editorRef.current) {
 			const selections = editorRef.current.getSelections();
-			if (selections.length > 0) {
+			if (selections.length > 0 && selections[0]) {
 				clipboard.writeText(selections[0]);
+			} else {
+				const cursor = editorRef.current.getCursor();
+				const line = editorRef.current.getLine(cursor.line);
+				clipboard.writeText(line);
 			}
 		}
 	}, []);
