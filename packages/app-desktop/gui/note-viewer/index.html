@@ -145,7 +145,6 @@
 			ignoreNextScrollEvent();
 			
 			if (Math.floor(contentElement.scrollTop) !== Math.floor(newScrollTop)) {
-				ignoreNextScrollEvent();
 				percentScroll_ = percent;
 				contentElement.scrollTop = newScrollTop;
 			}
