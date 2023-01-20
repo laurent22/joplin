@@ -79,7 +79,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.6'
+    testImplementation 'org.robolectric:robolectric:4.9.2'
 }
 
 def configureReactNativePom(def pom) {
