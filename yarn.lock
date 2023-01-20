@@ -4775,7 +4775,7 @@ __metadata:
     react-native-image-picker: 4.10.3
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
-    react-native-paper: 5.1.2
+    react-native-paper: 5.1.3
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -4832,7 +4832,7 @@ __metadata:
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
     standard: 17.0.0
-    tap: 16.3.2
+    tap: 16.3.3
   languageName: unknown
   linkType: soft
 
@@ -26954,9 +26954,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.1.2":
-  version: 5.1.2
-  resolution: "react-native-paper@npm:5.1.2"
+"react-native-paper@npm:5.1.3":
+  version: 5.1.3
+  resolution: "react-native-paper@npm:5.1.3"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.8
     color: ^3.1.2
@@ -26966,7 +26966,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 3e3c542db6ced94bb4dc63912a657d3223a965bd8e2465462dd17047d9ec3fd1591204407a37c4c38b61e5174955b1dc44be8021701c9fcd9ba603b5534f2b86
+  checksum: 76a7993981ae75266e8f86a3d439f426505307b8058db367c573a07e5bdb263c68148b6c9a6438966744da5caae730c0fcf813a7b262e6deb7a79f8952d8692e
   languageName: node
   linkType: hard
 
@@ -30611,9 +30611,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tap@npm:16.3.2":
-  version: 16.3.2
-  resolution: "tap@npm:16.3.2"
+"tap@npm:16.3.3":
+  version: 16.3.3
+  resolution: "tap@npm:16.3.3"
   dependencies:
     "@isaacs/import-jsx": ^4.0.1
     "@types/react": ^17.0.52
@@ -30657,7 +30657,7 @@ __metadata:
       optional: true
   bin:
     tap: bin/run.js
-  checksum: d2c02ba8b101e57f53ea83eb358ff70b1b83087338cf41568f85844b0d1dbaec5a7fbc3e6a6bc9727ed0af88e5d9cd3dd9ffb54b8e7892f8eafaf2be90794821
+  checksum: faf8eb9cb0ee777430c2850b5fc56bc18a81a3c7e39604725d2c96e82b7182ae923c726ae5ee15cb39940f9737882f1dfddfa424e0ba5e963b831083a98d76f4
   languageName: node
   linkType: hard
 
