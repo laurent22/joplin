@@ -1,9 +1,16 @@
-const React = require('react');
+import * as React from 'react';
+import time from '@joplin/lib/time';
+import { themeStyle } from '@joplin/lib/theme';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import { AppState } from '../app.reducer';
 const { connect } = require('react-redux');
-const time = require('@joplin/lib/time').default;
-const { themeStyle } = require('@joplin/lib/theme');
 
-class NoteStatusBarComponent extends React.Component {
+interface Props {
+	themeId: number;
+	note: NoteEntity;
+}
+
+class NoteStatusBarComponent extends React.Component<Props> {
 	style() {
 		const theme = themeStyle(this.props.themeId);
 
@@ -23,7 +30,7 @@ class NoteStatusBarComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		// notes: state.notes,
 		// folders: state.folders,
@@ -34,4 +41,4 @@ const mapStateToProps = state => {
 
 const NoteStatusBar = connect(mapStateToProps)(NoteStatusBarComponent);
 
-module.exports = { NoteStatusBar };
+export default NoteStatusBar;

@@ -6,7 +6,8 @@ interface Props {
 	onDomReady: Function;
 	onIpcMessage: Function;
 	viewerStyle: any;
-	contentMaxWidth: number;
+	contentMaxWidth?: number;
+	themeId: number;
 }
 
 export default class NoteTextViewerComponent extends React.Component<Props, any> {

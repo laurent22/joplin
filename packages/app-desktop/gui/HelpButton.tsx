@@ -1,10 +1,18 @@
-const React = require('react');
+import * as React from 'react';
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
+import { AppState } from '../app.reducer';
 
-class HelpButtonComponent extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	tip: string;
+	onClick: Function;
+	themeId: number;
+	style: any;
+}
+
+class HelpButtonComponent extends React.Component<Props> {
+	constructor(props: Props) {
+		super(props);
 
 		this.onClick = this.onClick.bind(this);
 	}
@@ -17,7 +25,7 @@ class HelpButtonComponent extends React.Component {
 		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign({}, this.props.style, { color: theme.color, textDecoration: 'none' });
 		const helpIconStyle = { flex: 0, width: 16, height: 16, marginLeft: 10 };
-		const extraProps = {};
+		const extraProps: any = {};
 		if (this.props.tip) extraProps['data-tip'] = this.props.tip;
 		return (
 			<a href="#" style={style} onClick={this.onClick} {...extraProps}>
@@ -27,7 +35,7 @@ class HelpButtonComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
@@ -35,4 +43,4 @@ const mapStateToProps = state => {
 
 const HelpButton = connect(mapStateToProps)(HelpButtonComponent);
 
-module.exports = HelpButton;
+export default HelpButton;

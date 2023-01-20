@@ -1,7 +1,8 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
-const CommandService = require('@joplin/lib/services/CommandService').default;
+import { themeStyle } from '@joplin/lib/theme';
+import CommandService from '@joplin/lib/services/CommandService';
+import { AppState } from '../app.reducer';
 
 class TagItemComponent extends React.Component {
 	render() {
@@ -13,10 +14,8 @@ class TagItemComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
 	return { themeId: state.settings.theme };
 };
 
-const TagItem = connect(mapStateToProps)(TagItemComponent);
-
-module.exports = TagItem;
+export default connect(mapStateToProps)(TagItemComponent);

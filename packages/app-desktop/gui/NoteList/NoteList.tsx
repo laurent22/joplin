@@ -13,7 +13,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
-const { ItemList } = require('../ItemList.min.js');
+import ItemList from '../ItemList';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';

@@ -131,13 +131,14 @@ async function main() {
 	await updatePackageVersion(`${rootDir}/packages/app-mobile/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/generator-joplin/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/htmlpack/package.json`, majorMinorVersion, options);
-	await updatePackageVersion(`${rootDir}/packages/react-native-saf-x/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/lib/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/pdf-viewer/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/plugin-repo-cli/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/react-native-alarm-notification/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/react-native-saf-x/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/renderer/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
-	await updatePackageVersion(`${rootDir}/packages/pdf-viewer/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {
 		await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);

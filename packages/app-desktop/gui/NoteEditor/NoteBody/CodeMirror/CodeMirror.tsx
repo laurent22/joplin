@@ -882,6 +882,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			<div style={cellViewerStyle}>
 				<NoteTextViewer
 					ref={webviewRef}
+					themeId={props.themeId}
 					viewerStyle={styles.viewer}
 					onIpcMessage={webview_ipcMessage}
 					onDomReady={webview_domReady}

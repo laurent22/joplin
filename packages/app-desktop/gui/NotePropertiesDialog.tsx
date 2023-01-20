@@ -1,18 +1,38 @@
-const React = require('react');
-const { _ } = require('@joplin/lib/locale');
-const { themeStyle } = require('@joplin/lib/theme');
-const time = require('@joplin/lib/time').default;
-const DialogButtonRow = require('./DialogButtonRow').default;
+import * as React from 'react';
+import { _ } from '@joplin/lib/locale';
+import { themeStyle } from '@joplin/lib/theme';
+import time from '@joplin/lib/time';
+import DialogButtonRow from './DialogButtonRow';
+import Note from '@joplin/lib/models/Note';
+import bridge from '../services/bridge';
+import shim from '@joplin/lib/shim';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 const Datetime = require('react-datetime').default;
-const Note = require('@joplin/lib/models/Note').default;
-const formatcoords = require('formatcoords');
-const bridge = require('@electron/remote').require('./bridge').default;
-const shim = require('@joplin/lib/shim').default;
 const { clipboard } = require('electron');
+const formatcoords = require('formatcoords');
 
-class NotePropertiesDialog extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	noteId: string;
+	onClose: Function;
+	onRevisionLinkClick: Function;
+	themeId: number;
+}
+
+interface State {
+	editedKey: string;
+	formNote: any;
+	editedValue: any;
+}
+
+class NotePropertiesDialog extends React.Component<Props, State> {
+
+	private okButton: any;
+	private keyToLabel_: Record<string, string>;
+	private styleKey_: number;
+	private styles_: any;
+
+	constructor(props: Props) {
+		super(props);
 
 		this.revisionsLink_click = this.revisionsLink_click.bind(this);
 		this.buttonRow_click = this.buttonRow_click.bind(this);
@@ -37,7 +57,7 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadNote(this.props.noteId);
+		void this.loadNote(this.props.noteId);
 	}
 
 	componentDidUpdate() {
@@ -46,7 +66,7 @@ class NotePropertiesDialog extends React.Component {
 		}
 	}
 
-	async loadNote(noteId) {
+	async loadNote(noteId: string) {
 		if (!noteId) {
 			this.setState({ formNote: null });
 		} else {
@@ -56,8 +76,8 @@ class NotePropertiesDialog extends React.Component {
 		}
 	}
 
-	latLongFromLocation(location) {
-		const o = {};
+	latLongFromLocation(location: string) {
+		const o: any = {};
 		const l = location.split(',');
 		if (l.length === 2) {
 			o.latitude = l[0].trim();
@@ -69,8 +89,8 @@ class NotePropertiesDialog extends React.Component {
 		return o;
 	}
 
-	noteToFormNote(note) {
-		const formNote = {};
+	noteToFormNote(note: NoteEntity) {
+		const formNote: any = {};
 
 		formNote.user_updated_time = time.formatMsToLocal(note.user_updated_time);
 		formNote.user_created_time = time.formatMsToLocal(note.user_created_time);
@@ -93,7 +113,7 @@ class NotePropertiesDialog extends React.Component {
 		return formNote;
 	}
 
-	formNoteToNote(formNote) {
+	formNoteToNote(formNote: any) {
 		const note = Object.assign({ id: formNote.id }, this.latLongFromLocation(formNote.location));
 		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
 		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
@@ -107,7 +127,7 @@ class NotePropertiesDialog extends React.Component {
 		return note;
 	}
 
-	styles(themeId) {
+	styles(themeId: number) {
 		const styleKey = themeId;
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -148,7 +168,7 @@ class NotePropertiesDialog extends React.Component {
 		return this.styles_;
 	}
 
-	async closeDialog(applyChanges) {
+	async closeDialog(applyChanges: boolean) {
 		if (applyChanges) {
 			await this.saveProperty();
 			const note = this.formNoteToNote(this.state.formNote);
@@ -163,26 +183,26 @@ class NotePropertiesDialog extends React.Component {
 		}
 	}
 
-	buttonRow_click(event) {
-		this.closeDialog(event.buttonName === 'ok');
+	buttonRow_click(event: any) {
+		void this.closeDialog(event.buttonName === 'ok');
 	}
 
 	revisionsLink_click() {
-		this.closeDialog(false);
+		void this.closeDialog(false);
 		if (this.props.onRevisionLinkClick) this.props.onRevisionLinkClick();
 	}
 
-	editPropertyButtonClick(key, initialValue) {
+	editPropertyButtonClick(key: string, initialValue: any) {
 		this.setState({
 			editedKey: key,
 			editedValue: initialValue,
 		});
 
 		shim.setTimeout(() => {
-			if (this.refs.editField.openCalendar) {
-				this.refs.editField.openCalendar();
+			if ((this.refs.editField as any).openCalendar) {
+				(this.refs.editField as any).openCalendar();
 			} else {
-				this.refs.editField.focus();
+				(this.refs.editField as any).focus();
 			}
 		}, 100);
 	}
@@ -190,7 +210,7 @@ class NotePropertiesDialog extends React.Component {
 	async saveProperty() {
 		if (!this.state.editedKey) return;
 
-		return new Promise((resolve) => {
+		return new Promise((resolve: Function) => {
 			const newFormNote = Object.assign({}, this.state.formNote);
 
 			if (this.state.editedKey.indexOf('_time') >= 0) {
@@ -214,7 +234,7 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	async cancelProperty() {
-		return new Promise((resolve) => {
+		return new Promise((resolve: Function) => {
 			this.okButton.current.focus();
 			this.setState({
 				editedKey: null,
@@ -225,7 +245,7 @@ class NotePropertiesDialog extends React.Component {
 		});
 	}
 
-	createNoteField(key, value) {
+	createNoteField(key: string, value: any) {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
 		const labelComp = <label style={Object.assign({}, theme.textStyle, theme.controlBoxLabel)}>{this.formatLabel(key)}</label>;
@@ -234,11 +254,11 @@ class NotePropertiesDialog extends React.Component {
 		let editCompHandler = null;
 		let editCompIcon = null;
 
-		const onKeyDown = event => {
+		const onKeyDown = (event: any) => {
 			if (event.keyCode === 13) {
-				this.saveProperty();
+				void this.saveProperty();
 			} else if (event.keyCode === 27) {
-				this.cancelProperty();
+				void this.cancelProperty();
 			}
 		};
 
@@ -251,17 +271,17 @@ class NotePropertiesDialog extends React.Component {
 						dateFormat={time.dateFormat()}
 						timeFormat={time.timeFormat()}
 						inputProps={{
-							onKeyDown: event => onKeyDown(event, key),
+							onKeyDown: (event: any) => onKeyDown(event),
 							style: styles.input,
 						}}
-						onChange={momentObject => {
+						onChange={(momentObject: any) => {
 							this.setState({ editedValue: momentObject });
 						}}
 					/>
 				);
 
 				editCompHandler = () => {
-					this.saveProperty();
+					void this.saveProperty();
 				};
 				editCompIcon = 'fa-save';
 			} else {
@@ -344,12 +364,12 @@ class NotePropertiesDialog extends React.Component {
 		);
 	}
 
-	formatLabel(key) {
+	formatLabel(key: string) {
 		if (this.keyToLabel_[key]) return this.keyToLabel_[key];
 		return key;
 	}
 
-	formatValue(key, note) {
+	formatValue(key: string, note: NoteEntity) {
 		if (key === 'location') {
 			if (!Number(note.latitude) && !Number(note.longitude)) return null;
 			const dms = formatcoords(Number(note.latitude), Number(note.longitude));
@@ -357,10 +377,10 @@ class NotePropertiesDialog extends React.Component {
 		}
 
 		if (['user_updated_time', 'user_created_time', 'todo_completed'].indexOf(key) >= 0) {
-			return time.formatMsToLocal(note[key]);
+			return time.formatMsToLocal((note as any)[key]);
 		}
 
-		return note[key];
+		return (note as any)[key];
 	}
 
 	render() {
@@ -389,4 +409,4 @@ class NotePropertiesDialog extends React.Component {
 	}
 }
 
-module.exports = NotePropertiesDialog;
+export default NotePropertiesDialog;

@@ -1,7 +1,14 @@
-const React = require('react');
-const { themeStyle } = require('@joplin/lib/theme');
+import * as React from 'react';
+import { themeStyle } from '@joplin/lib/theme';
 
-class IconButton extends React.Component {
+interface Props {
+	themeId: number;
+	style: any;
+	iconName: string;
+	onClick: Function;
+}
+
+class IconButton extends React.Component<Props> {
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
@@ -42,4 +49,4 @@ class IconButton extends React.Component {
 	}
 }
 
-module.exports = { IconButton };
+export default IconButton;
