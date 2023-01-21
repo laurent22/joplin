@@ -3,11 +3,12 @@ buildscript {
     repositories {
       google()
       mavenCentral()
-      jcenter()
     }
 
     dependencies {
-      classpath 'com.android.tools.build:gradle:4.2.2'
+      classpath("com.android.tools.build:gradle:7.2.1")
+      classpath("com.facebook.react:react-native-gradle-plugin")
+      classpath("de.undercouch:gradle-download-task:5.0.1")
     }
   }
 }
@@ -50,7 +51,6 @@ repositories {
   }
   google()
   mavenCentral()
-  jcenter()
 }
 
 dependencies {
