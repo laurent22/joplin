@@ -6,14 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: KaneGreen <737445366KG@Gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: wh201906 <wh201906@yandex.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:657
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -308,7 +310,7 @@ msgstr "高级工具"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
-msgstr ""
+msgstr "包含笔记，笔记本和标签在内的所有数据将会被永久删除。"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
 #: packages/app-mobile/components/screens/notes.js:204
@@ -342,8 +344,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr "不明确的笔记本“%s”。请改用短笔记本id - 按\"ti\"查看短笔记本id"
 
 #: packages/app-desktop/checkForUpdates.ts:197
@@ -825,7 +827,7 @@ msgstr "内容由 %s 提供"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to note"
@@ -927,9 +929,8 @@ msgstr ""
 "错误是：“%s”"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "无法安装插件：%s"
+msgstr "无法切换到配置文件：%s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:220
 msgid "Could not upgrade master key: %s"
@@ -943,7 +944,7 @@ msgstr "无法验证此笔记的分享状态 — 正在终止。请在连接到�
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:28
 msgid "Could not verify your identify"
-msgstr ""
+msgstr "无法验证您的身份"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
@@ -1167,14 +1168,12 @@ msgid "Delete plugin \"%s\"?"
 msgstr "是否删除插件 “%s”？"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "是否删除笔记 “%s”？"
+msgstr "删除配置文件 “%s”"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:419
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "是否删除这 %d 条笔记？"
+msgstr "删除选中的笔记"
 
 #: packages/lib/models/Note.ts:771
 msgid "Delete these %d notes?"
@@ -1187,9 +1186,8 @@ msgid ""
 msgstr "是否删除该邀请？收件人将无法再次访问此共享笔记本。"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "是否删除这 %d 条笔记？"
+msgstr "是否删除此配置文件？"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1392,9 +1390,8 @@ msgid "Duplicate line"
 msgstr "复制行"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:437
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "复制行"
+msgstr "复制选中的笔记"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -1416,9 +1413,8 @@ msgid "Edit in external editor"
 msgstr "在外部编辑器中编辑"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
-#, fuzzy
 msgid "Edit link"
-msgstr "编辑笔记本"
+msgstr "编辑链接"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -1430,9 +1426,8 @@ msgid "Edit notebook"
 msgstr "编辑笔记本"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "导出配置文件"
+msgstr "编辑配置文件"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1796,9 +1791,8 @@ msgid "Find and replace"
 msgstr "查找和替换"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "已找到："
+msgstr "查找："
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1861,9 +1855,8 @@ msgid "Force path style"
 msgstr "强制路径风格"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:276
-#, fuzzy
 msgid "Formatting"
-msgstr "说明"
+msgstr "格式"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -2153,7 +2146,6 @@ msgstr "插入超链接"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:625
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
-#, fuzzy
 msgid "Insert time"
 msgstr "插入时间"
 
@@ -2367,14 +2359,12 @@ msgid "Lines"
 msgstr "行"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:174
-#, fuzzy
 msgid "Link"
-msgstr "加粗文本"
+msgstr "链接"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "加密"
+msgstr "链接描述"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:185
 msgid "Link has been copied to clipboard!"
@@ -2382,9 +2372,8 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "链接已复制到剪贴板！"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "加粗文本"
+msgstr "链接文本"
 
 #: packages/app-mobile/components/screens/Note.tsx:196
 msgid "Links with protocol \"%s\" are not supported"
@@ -2465,9 +2454,8 @@ msgid "Manage multiple users"
 msgstr "管理多个用户"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
-#, fuzzy
 msgid "Manage profiles"
-msgstr "更新配置文件"
+msgstr "管理配置文件"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2908,7 +2896,6 @@ msgid "Open %s"
 msgstr "打开 %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
 msgstr "打开 PDF 查看器"
 
@@ -2941,9 +2928,8 @@ msgid "Or create an account."
 msgstr "创建帐号。"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
-#, fuzzy
 msgid "Ordered list"
-msgstr "创建用户"
+msgstr "有序列表"
 
 #: packages/app-desktop/gui/MenuBar.tsx:407
 msgid "Other applications..."
@@ -3176,9 +3162,8 @@ msgid "Profile"
 msgstr "配置文件"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
-#, fuzzy
 msgid "Profile name"
-msgstr "配置文件："
+msgstr "配置文件名称"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3189,7 +3174,6 @@ msgid "Profile Version: %s"
 msgstr "配置文件版本：%s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
-#, fuzzy
 msgid "Profiles"
 msgstr "配置文件"
 
@@ -3198,9 +3182,8 @@ msgid "Properties"
 msgstr "笔记属性"
 
 #: packages/lib/models/Setting.ts:1462
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "已启用"
+msgstr "使用代理"
 
 #: packages/lib/models/Setting.ts:1484
 msgid "Proxy timeout (seconds)"
@@ -3282,9 +3265,8 @@ msgid "Refresh"
 msgstr "刷新"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
-#, fuzzy
 msgid "Regular expression"
-msgstr "启用数学表达式"
+msgstr "正则表达式"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
 #: packages/app-desktop/gui/Root.tsx:179
@@ -3330,9 +3312,8 @@ msgid "Replace"
 msgstr "替换"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
-#, fuzzy
 msgid "Replace all"
-msgstr "全选"
+msgstr "全部替换"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
@@ -3474,7 +3455,6 @@ msgid "Search for plugins..."
 msgstr "搜索插件..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
-#, fuzzy
 msgid "Search for..."
 msgstr "搜索..."
 
@@ -3622,9 +3602,8 @@ msgid "Show disabled keys"
 msgstr "显示禁用的密钥"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Show more actions"
-msgstr "显示笔记数"
+msgstr "显示更多操作"
 
 #: packages/lib/models/Setting.ts:883
 msgid "Show note counts"
@@ -3997,7 +3976,7 @@ msgstr "感谢！您的 Joplin Cloud 帐号已经设置完毕。"
 msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
-msgstr ""
+msgstr "无法删除正在使用的配置文件。请切换到另一配置文件后再次尝试。"
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4007,7 +3986,7 @@ msgstr "应用将要关闭。请重新启动它以完成此过程。"
 #: packages/app-desktop/app.ts:340
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr "该程序没有正确关闭。你想在安全模式下启动吗？"
+msgstr "该程序没有正确关闭。您想在安全模式下启动吗？"
 
 #: packages/lib/onedrive-api-node-utils.js:87
 msgid ""
@@ -4056,7 +4035,7 @@ msgstr "默认的加密方式已变更，您应当重新加密数据。"
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "无法删除默认配置文件"
 
 #: packages/lib/models/Setting.ts:1367
 msgid ""
@@ -4196,7 +4175,7 @@ msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:341
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "一些修改尚未保存。"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:487
 msgid ""
@@ -4395,7 +4374,7 @@ msgstr "运行 `e2ee decrypt —retry-failed-items` 来尝试再次解密这些�
 msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
-msgstr ""
+msgstr "切换配置文件后，应用程序将会自动关闭，您需要重新启动它。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
@@ -4410,9 +4389,8 @@ msgid "to-do"
 msgstr "待办事项"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "待办事项"
+msgstr "待办事项：%s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
 msgid "Toggle comment"
@@ -4530,9 +4508,8 @@ msgid ""
 msgstr "已下载项目为未知类型，请将 Joplin 升级至最新版本"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
-#, fuzzy
 msgid "Unordered list"
-msgstr "创建用户"
+msgstr "无序列表"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:164
 msgid "Unpublish note"
@@ -4701,7 +4678,7 @@ msgstr "有效"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:24
 msgid "Verify your identity"
-msgstr ""
+msgstr "验证您的身份"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
