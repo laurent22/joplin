@@ -9,8 +9,12 @@ import androidx.annotation.RequiresApi;
 
 import com.reactnativesafx.utils.exceptions.IllegalArgumentExceptionFast;
 
+import java.util.List;
+
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class UriHelper {
+  private static final String PATH_TREE = "tree";
+  private static final String PATH_DOCUMENT = "document";
 
   public static String getFileName(String uriStr) {
     // it should be safe because user cannot select sd root or primary root
@@ -35,9 +39,11 @@ public class UriHelper {
       // normalized:
       // content://com.android.externalstorage.documents/tree/1707-3F0B%3Ajoplin%2Flocks%2F2_2_fa4f9801e9a545a58f1a6c5d3a7cfded.json
 
-      // uri parts:
-      String[] parts = Uri.decode(uri.toString()).split(":");
-      return parts[0] + ":" + parts[1] + Uri.encode(":" + parts[2]);
+      if (uri.getPath().indexOf(":") != -1) {
+        // uri parts:
+        String[] parts = Uri.decode(uri.toString()).split(":");
+        return parts[0] + ":" + parts[1] + Uri.encode(":" + parts[2]);
+      }
     }
     return uri.toString();
   }
@@ -67,4 +73,21 @@ public class UriHelper {
     }
     return uri;
   }
+
+  public static boolean isContentUri(Uri uri) {
+    return uri != null && ContentResolver.SCHEME_CONTENT.equals(uri.getScheme());
+  }
+
+  public static boolean isDocumentUri(Uri uri) {
+    if (isContentUri(uri)) {
+      final List<String> paths = uri.getPathSegments();
+      if (paths.size() >= 4) {
+        return PATH_TREE.equals(paths.get(0)) && PATH_DOCUMENT.equals(paths.get(2));
+      } else if (paths.size() >= 2) {
+        return PATH_DOCUMENT.equals(paths.get(0));
+      }
+    }
+    return false;
+  }
+
 }

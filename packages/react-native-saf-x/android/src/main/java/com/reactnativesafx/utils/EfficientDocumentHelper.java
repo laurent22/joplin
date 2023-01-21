@@ -95,13 +95,16 @@ public class EfficientDocumentHelper {
 
       uri = Uri.fromFile(targetFile);
       return uri;
-    } else if (!DocumentsContract.isTreeUri(uri)) {
+    } else if (UriHelper.isDocumentUri(uri)) {
       // It's a document picked by user, nothing much we can do. operations limited.
       DocumentStat stat = null;
 
       try {
         stat = getStat(uri);
       } catch (Exception ignored) {
+        if (createIfDirectoryNotExist) {
+          throw new IOExceptionFast("Unsupported uri: " + unknownUriStr);
+        }
       }
 
       if (stat == null) {
@@ -121,9 +124,13 @@ public class EfficientDocumentHelper {
         List<UriPermission> uriList = context.getContentResolver().getPersistedUriPermissions();
         for (UriPermission uriPermission : uriList) {
           String uriPath = uriPermission.getUri().toString();
-          if (permissionMatchesAndHasAccess(uriPermission, uriString)) {
+            if (permissionMatchesAndHasAccess(uriPermission, uriString)) {
             baseUri = uriPermission.getUri();
             appendUri = Uri.decode(uriString.substring(uriPath.length()));
+            // sometimes appendUri can be empty string
+            // which then causes strings to be [""]
+            // this is perfectly fine, which means we don't check baseUri's existence
+            // as it can be troublesome
             strings = appendUri.split("/");
             break;
           }

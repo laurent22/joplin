@@ -38,12 +38,16 @@ public class DocumentStat {
    */
   public DocumentStat(Cursor c, final Uri uri) {
     if (DocumentsContract.isTreeUri(uri)) {
-      // this is to make sure urls that are going out of this library are always simple to use
-      // so tree Uris passed in must always be
-      this.uri = DocumentsContract.buildTreeDocumentUri(uri.getAuthority(), c.getString(0));
-      this.internalUri = DocumentsContract.buildDocumentUriUsingTree(uri, c.getString(0));
+      final Uri tree = DocumentsContract.buildTreeDocumentUri(uri.getAuthority(), DocumentsContract.getTreeDocumentId(uri));
+      this.internalUri = DocumentsContract.buildDocumentUriUsingTree(tree, c.getString(0));
+
+      if (uri.toString().contains("document/raw") || !c.getString(0).contains(DocumentsContract.getTreeDocumentId(uri))) {
+        this.uri = this.internalUri;
+      } else {
+        this.uri = DocumentsContract.buildTreeDocumentUri(uri.getAuthority(), c.getString(0));
+      }
     } else {
-      this.uri = DocumentsContract.buildDocumentUri(uri.getAuthority(), c.getString(0));
+      this.uri = uri;
       this.internalUri = this.uri;
     }
 
