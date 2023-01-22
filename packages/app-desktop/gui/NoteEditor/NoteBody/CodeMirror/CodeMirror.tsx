@@ -288,10 +288,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		if (editorRef.current) {
 			const selections = editorRef.current.getSelections();
 
-			/**
-       * Handle the case when there is a selection - copy the selection to the clipboard
-	   * When there is no selection, the selection array contains an empty string.
-       */
+
+			// Handle the case when there is a selection - copy the selection to the clipboard
+			// When there is no selection, the selection array contains an empty string.
 			if (selections.length > 0 && selections[0]) {
 				clipboard.writeText(selections[0]);
 			} else {
