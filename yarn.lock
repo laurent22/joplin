@@ -4770,7 +4770,7 @@ __metadata:
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
     timers: 0.1.1
-    ts-jest: 29.0.4
+    ts-jest: 29.0.5
     ts-loader: 9.4.2
     ts-node: 10.9.1
     typescript: 4.9.4
@@ -4797,7 +4797,7 @@ __metadata:
     eslint-config-prettier: 8.6.0
     jest: 29.3.1
     prettier: 2.8.1
-    ts-jest: 29.0.4
+    ts-jest: 29.0.5
     typescript: 4.9.4
   languageName: unknown
   linkType: soft
@@ -4938,7 +4938,7 @@ __metadata:
     react-dom: 18.2.0
     style-loader: 3.3.1
     styled-components: 5.3.5
-    ts-jest: 29.0.4
+    ts-jest: 29.0.5
     ts-loader: 9.4.2
     typescript: 4.9.4
     webpack: 5.74.0
@@ -30676,9 +30676,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:29.0.4":
-  version: 29.0.4
-  resolution: "ts-jest@npm:29.0.4"
+"ts-jest@npm:29.0.5":
+  version: 29.0.5
+  resolution: "ts-jest@npm:29.0.5"
   dependencies:
     bs-logger: 0.x
     fast-json-stable-stringify: 2.x
@@ -30705,7 +30705,7 @@ __metadata:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: c3daa71835fabd0c98eefc8611edc083cd2c78cbe9a02c1edea707a907afffafc1e61051f4746c0634904d4c68cd70736d0875ae644f55c6ed8beb950bf78689
+  checksum: f60f129c2287f4c963d9ee2677132496c5c5a5d39c27ad234199a1140c26318a7d5bda34890ab0e30636ec42a8de28f84487c09e9dcec639c9c67812b3a38373
   languageName: node
   linkType: hard
 
