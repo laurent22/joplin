@@ -247,9 +247,19 @@ export default class MdToHtml {
 		if (name === 'link_close') name = 'mediaPlayers';
 
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
-		o = Object.assign({
-			enabled: true,
-		}, o);
+
+		// explicitly set the typographer markdown option to false
+		// this fixes issue https://github.com/laurent22/joplin/issues/7587
+		// where (r) and (c) get rendered as ® and © when a note is published and viewed in the browser
+		if (name === 'typographer') {
+			o = Object.assign({
+				enabled: false,
+			}, o);
+		} else {
+			o = Object.assign({
+				enabled: true,
+			}, o);
+		}
 
 		return o;
 	}
