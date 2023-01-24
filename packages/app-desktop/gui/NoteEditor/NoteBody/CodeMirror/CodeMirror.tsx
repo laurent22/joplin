@@ -31,6 +31,7 @@ import dialogs from '../../../dialogs';
 import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
+const debounce = require('debounce');
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -682,7 +683,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (!props.searchMarkers) return;
+		if (!props.searchMarkers) return () => {};
 
 		// If there is a currently active search, it's important to re-search the text as the user
 		// types. However this is slow for performance so we ONLY want it to happen when there is
@@ -697,11 +698,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			webviewRef.current.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
-				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
+				// Fixes https://github.com/laurent22/joplin/issues/7565
+				const debouncedMarkers = debounce(() => {
+					const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
 
-				props.setLocalSearchResultCount(matches);
+					props.setLocalSearchResultCount(matches);
+				}, 50);
+				debouncedMarkers();
+				return () => {
+					debouncedMarkers.clear();
+				};
 			}
 		}
+		return () => {};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
 
