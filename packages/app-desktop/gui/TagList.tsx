@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { AppState } from '../app.reducer';
+import TagItem from './TagItem';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const TagItem = require('./TagItem.min.js');
 
 interface Props {
 	themeId: number;

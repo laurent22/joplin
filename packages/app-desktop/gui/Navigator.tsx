@@ -1,11 +1,15 @@
 const React = require('react');
-const Component = React.Component;
-const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
+import Setting from '@joplin/lib/models/Setting';
+import { AppState } from '../app.reducer';
 const bridge = require('@electron/remote').require('./bridge').default;
 
-class NavigatorComponent extends Component {
-	UNSAFE_componentWillReceiveProps(newProps) {
+interface Props {
+	route: any;
+}
+
+class NavigatorComponent extends React.Component<Props> {
+	UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if (newProps.route) {
 			const screenInfo = this.props.screens[newProps.route.routeName];
 			const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
@@ -17,7 +21,7 @@ class NavigatorComponent extends Component {
 		}
 	}
 
-	updateWindowTitle(title) {
+	updateWindowTitle(title: string) {
 		try {
 			if (bridge().window()) bridge().window().setTitle(title);
 		} catch (error) {
@@ -46,10 +50,10 @@ class NavigatorComponent extends Component {
 	}
 }
 
-const Navigator = connect(state => {
+const Navigator = connect((state: AppState) => {
 	return {
 		route: state.route,
 	};
 })(NavigatorComponent);
 
-module.exports = { Navigator };
+export default Navigator;

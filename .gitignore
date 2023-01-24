@@ -130,7 +130,12 @@ packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EmojiBox.js
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
 packages/app-desktop/gui/ErrorBoundary.js
+packages/app-desktop/gui/ExtensionBadge.js
 packages/app-desktop/gui/FolderIconBox.js
+packages/app-desktop/gui/HelpButton.js
+packages/app-desktop/gui/IconButton.js
+packages/app-desktop/gui/ImportScreen.js
+packages/app-desktop/gui/ItemList.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js
@@ -181,6 +186,7 @@ packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
 packages/app-desktop/gui/MultiNoteActions.js
+packages/app-desktop/gui/Navigator.js
 packages/app-desktop/gui/NoteContentPropertiesDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Editor.js
@@ -240,6 +246,10 @@ packages/app-desktop/gui/NoteListControls/commands/focusSearch.js
 packages/app-desktop/gui/NoteListControls/commands/index.js
 packages/app-desktop/gui/NoteListItem.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
+packages/app-desktop/gui/NotePropertiesDialog.js
+packages/app-desktop/gui/NoteRevisionViewer.js
+packages/app-desktop/gui/NoteSearchBar.js
+packages/app-desktop/gui/NoteStatusBar.js
 packages/app-desktop/gui/NoteTextViewer.js
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.js
 packages/app-desktop/gui/OneDriveLoginScreen.js
@@ -278,12 +288,14 @@ packages/app-desktop/gui/Sidebar/styles/index.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js
 packages/app-desktop/gui/SyncWizard/Dialog.js
+packages/app-desktop/gui/TagItem.js
 packages/app-desktop/gui/TagList.js
 packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.js
 packages/app-desktop/gui/ToggleEditorsButton/styles/index.js
 packages/app-desktop/gui/ToolbarBase.js
 packages/app-desktop/gui/ToolbarButton/ToolbarButton.js
 packages/app-desktop/gui/ToolbarButton/styles/index.js
+packages/app-desktop/gui/ToolbarSpace.js
 packages/app-desktop/gui/dialogs.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useImperativeHandlerDebugger.js

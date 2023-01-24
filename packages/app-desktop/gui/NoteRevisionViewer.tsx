@@ -1,25 +1,45 @@
-const React = require('react');
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
-const { _ } = require('@joplin/lib/locale');
-const NoteTextViewer = require('./NoteTextViewer').default;
-const HelpButton = require('./HelpButton.min');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Revision = require('@joplin/lib/models/Revision').default;
+import * as React from 'react';
+import { themeStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
+import NoteTextViewer from './NoteTextViewer';
+import HelpButton from './HelpButton';
+import BaseModel from '@joplin/lib/BaseModel';
+import Revision from '@joplin/lib/models/Revision';
+import Setting from '@joplin/lib/models/Setting';
+import RevisionService from '@joplin/lib/services/RevisionService';
+import { MarkupToHtml } from '@joplin/renderer';
+import time from '@joplin/lib/time';
+import bridge from '../services/bridge';
+import markupLanguageUtils from '../utils/markupLanguageUtils';
+import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
+import { AppState } from '../app.reducer';
 const urlUtils = require('@joplin/lib/urlUtils');
-const Setting = require('@joplin/lib/models/Setting').default;
-const RevisionService = require('@joplin/lib/services/RevisionService').default;
-const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
-const { MarkupToHtml } = require('@joplin/renderer');
-const time = require('@joplin/lib/time').default;
 const ReactTooltip = require('react-tooltip');
 const { urlDecode } = require('@joplin/lib/string-utils');
-const bridge = require('@electron/remote').require('./bridge').default;
-const markupLanguageUtils = require('../utils/markupLanguageUtils').default;
+const { connect } = require('react-redux');
+const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 
-class NoteRevisionViewerComponent extends React.PureComponent {
-	constructor() {
-		super();
+interface Props {
+	themeId: number;
+	noteId: string;
+	onBack: Function;
+	customCss: string;
+}
+
+interface State {
+	note: NoteEntity;
+	revisions: RevisionEntity[];
+	currentRevId: string;
+	restoring: boolean;
+}
+
+class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
+
+	private viewerRef_: any;
+	private helpButton_onClick: Function;
+
+	constructor(props: Props) {
+		super(props);
 
 		this.state = {
 			revisions: [],
@@ -65,7 +85,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 				currentRevId: revisions.length ? revisions[revisions.length - 1].id : '',
 			},
 			() => {
-				this.reloadNote();
+				void this.reloadNote();
 			}
 		);
 	}
@@ -82,7 +102,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		if (this.props.onBack) this.props.onBack();
 	}
 
-	revisionList_onChange(event) {
+	revisionList_onChange(event: any) {
 		const value = event.target.value;
 
 		if (!value) {
@@ -93,7 +113,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 					currentRevId: value,
 				},
 				() => {
-					this.reloadNote();
+					void this.reloadNote();
 				}
 			);
 		}
@@ -128,12 +148,12 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		});
 
 		this.viewerRef_.current.send('setHtml', result.html, {
-			cssFiles: result.cssFiles,
+			// cssFiles: result.cssFiles,
 			pluginAssets: result.pluginAssets,
 		});
 	}
 
-	async webview_ipcMessage(event) {
+	async webview_ipcMessage(event: any) {
 		// For the revision view, we only suppport a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
@@ -148,9 +168,9 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 				throw new Error(_('Unsupported link or message: %s', msg));
 			} else if (urlUtils.urlProtocol(msg)) {
 				if (msg.indexOf('file://') === 0) {
-					require('electron').shell.openExternal(urlDecode(msg));
+					void require('electron').shell.openExternal(urlDecode(msg));
 				} else {
-					require('electron').shell.openExternal(msg);
+					void require('electron').shell.openExternal(msg);
 				}
 			} else if (msg.indexOf('#') === 0) {
 				// This is an internal anchor, which is handled by the WebView so skip this case
@@ -202,7 +222,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		const viewer = <NoteTextViewer themeId={this.props.themeId} viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
 
 		return (
-			<div style={style.root}>
+			<div style={style.root as any}>
 				{titleInput}
 				{viewer}
 				<ReactTooltip place="bottom" delayShow={300} className="help-tooltip" />
@@ -211,7 +231,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
@@ -219,4 +239,4 @@ const mapStateToProps = state => {
 
 const NoteRevisionViewer = connect(mapStateToProps)(NoteRevisionViewerComponent);
 
-module.exports = NoteRevisionViewer;
+export default NoteRevisionViewer;

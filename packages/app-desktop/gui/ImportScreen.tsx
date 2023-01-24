@@ -1,12 +1,29 @@
-const React = require('react');
+import * as React from 'react';
+import Folder from '@joplin/lib/models/Folder';
+import { themeStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
+import { filename, basename } from '@joplin/lib/path-utils';
+import importEnex from '@joplin/lib/import-enex';
+import { AppState } from '../app.reducer';
 const { connect } = require('react-redux');
-const Folder = require('@joplin/lib/models/Folder').default;
-const { themeStyle } = require('@joplin/lib/theme');
-const { _ } = require('@joplin/lib/locale');
-const { filename, basename } = require('@joplin/lib/path-utils');
-const importEnex = require('@joplin/lib/import-enex').default;
 
-class ImportScreenComponent extends React.Component {
+interface Props {
+	filePath: string;
+	themeId: number;
+}
+
+interface Message {
+	key: string;
+	text: string;
+}
+
+interface State {
+	filePath: string;
+	doImport: boolean;
+	messages: Message[];
+}
+
+class ImportScreenComponent extends React.Component<Props, State> {
 	UNSAFE_componentWillMount() {
 		this.setState({
 			doImport: true,
@@ -15,7 +32,7 @@ class ImportScreenComponent extends React.Component {
 		});
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if (newProps.filePath) {
 			this.setState(
 				{
@@ -24,7 +41,7 @@ class ImportScreenComponent extends React.Component {
 					messages: [],
 				},
 				() => {
-					this.doImport();
+					void this.doImport();
 				}
 			);
 		}
@@ -32,11 +49,11 @@ class ImportScreenComponent extends React.Component {
 
 	componentDidMount() {
 		if (this.state.filePath && this.state.doImport) {
-			this.doImport();
+			void this.doImport();
 		}
 	}
 
-	addMessage(key, text) {
+	addMessage(key: string, text: string) {
 		const messages = this.state.messages.slice();
 
 		messages.push({ key: key, text: text });
@@ -66,7 +83,7 @@ class ImportScreenComponent extends React.Component {
 		let lastProgress = '';
 
 		const options = {
-			onProgress: progressState => {
+			onProgress: (progressState: any) => {
 				const line = [];
 				line.push(_('Found: %d.', progressState.loaded));
 				line.push(_('Created: %d.', progressState.created));
@@ -77,7 +94,7 @@ class ImportScreenComponent extends React.Component {
 				lastProgress = line.join(' ');
 				this.addMessage('progress', lastProgress);
 			},
-			onError: error => {
+			onError: (error: any) => {
 				// Don't display the error directly because most of the time it doesn't matter
 				// (eg. for weird broken HTML, but the note is still imported)
 				console.warn('When importing ENEX file', error);
@@ -116,7 +133,7 @@ class ImportScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
@@ -124,4 +141,5 @@ const mapStateToProps = state => {
 
 const ImportScreen = connect(mapStateToProps)(ImportScreenComponent);
 
-module.exports = { ImportScreen };
+export default ImportScreen;
+

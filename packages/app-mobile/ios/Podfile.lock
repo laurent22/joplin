@@ -306,7 +306,7 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
-  - react-native-alarm-notification (1.0.7):
+  - react-native-alarm-notification (2.10.0):
     - React
   - react-native-camera (4.2.1):
     - React-Core
@@ -490,7 +490,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-alarm-notification (from `../node_modules/joplin-rn-alarm-notification`)
+  - "react-native-alarm-notification (from `../node_modules/@joplin/react-native-alarm-notification`)"
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
@@ -597,7 +597,7 @@ EXTERNAL SOURCES:
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-alarm-notification:
-    :path: "../node_modules/joplin-rn-alarm-notification"
+    :path: "../node_modules/@joplin/react-native-alarm-notification"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
   react-native-document-picker:
@@ -714,7 +714,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
-  react-native-alarm-notification: 4e150e89c1707e057bc5e8c87ab005f1ea4b8d52
+  react-native-alarm-notification: 0f58eaa37a4188480536fd7ab62db9b1dfba392f
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 958e2bc82e128be69055be261aeac8d872c8d34c
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe

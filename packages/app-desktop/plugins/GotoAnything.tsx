@@ -14,7 +14,7 @@ import Tag from '@joplin/lib/models/Tag';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 const { ItemList } = require('../gui/ItemList.min');
-const HelpButton = require('../gui/HelpButton.min');
+import HelpButton from '../gui/HelpButton';
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
 import markupLanguageUtils from '../utils/markupLanguageUtils';

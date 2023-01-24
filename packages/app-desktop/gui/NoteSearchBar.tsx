@@ -1,10 +1,27 @@
-const React = require('react');
-const { themeStyle } = require('@joplin/lib/theme');
-const { _ } = require('@joplin/lib/locale');
+import * as React from 'react';
+import { themeStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
 
-class NoteSearchBar extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	themeId: number;
+	onNext: Function;
+	onPrevious: Function;
+	onClose: Function;
+	onChange: Function;
+	query: string;
+	searching: boolean;
+	resultCount: number;
+	selectedIndex: number;
+	visiblePanes: string[];
+	style: any;
+}
+
+class NoteSearchBar extends React.Component<Props> {
+
+	private backgroundColor: any;
+
+	constructor(props: Props) {
+		super(props);
 
 		this.searchInput_change = this.searchInput_change.bind(this);
 		this.searchInput_keyDown = this.searchInput_keyDown.bind(this);
@@ -29,7 +46,7 @@ class NoteSearchBar extends React.Component {
 		return style;
 	}
 
-	buttonIconComponent(iconName, clickHandler, isEnabled) {
+	buttonIconComponent(iconName: string, clickHandler: any, isEnabled: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const searchButton = {
@@ -57,12 +74,12 @@ class NoteSearchBar extends React.Component {
 		);
 	}
 
-	searchInput_change(event) {
+	searchInput_change(event: any) {
 		const query = event.currentTarget.value;
 		this.triggerOnChange(query);
 	}
 
-	searchInput_keyDown(event) {
+	searchInput_keyDown(event: any) {
 		if (event.keyCode === 13) {
 			// ENTER
 			event.preventDefault();
@@ -101,13 +118,13 @@ class NoteSearchBar extends React.Component {
 		if (this.props.onClose) this.props.onClose();
 	}
 
-	triggerOnChange(query) {
+	triggerOnChange(query: string) {
 		if (this.props.onChange) this.props.onChange(query);
 	}
 
 	focus() {
-		this.refs.searchInput.focus();
-		this.refs.searchInput.select();
+		(this.refs.searchInput as any).focus();
+		(this.refs.searchInput as any).select();
 	}
 
 	render() {
@@ -177,4 +194,4 @@ class NoteSearchBar extends React.Component {
 	}
 }
 
-module.exports = NoteSearchBar;
+export default NoteSearchBar;

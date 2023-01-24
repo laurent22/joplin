@@ -1,8 +1,27 @@
-const React = require('react');
+import * as React from 'react';
 
-class ItemList extends React.Component {
-	constructor() {
-		super();
+interface Props {
+	style: any;
+	itemHeight: number;
+	items: any[];
+	disabled: boolean;
+	onKeyDown: Function;
+	itemRenderer: Function;
+	className: string;
+}
+
+interface State {
+	topItemIndex: number;
+	bottomItemIndex: number;
+}
+
+class ItemList extends React.Component<Props, State> {
+
+	private scrollTop_: number;
+	private listRef: any;
+
+	constructor(props: Props) {
+		super(props);
 
 		this.scrollTop_ = 0;
 
@@ -12,12 +31,12 @@ class ItemList extends React.Component {
 		this.onKeyDown = this.onKeyDown.bind(this);
 	}
 
-	visibleItemCount(props) {
+	visibleItemCount(props: Props = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 		return Math.ceil(props.style.height / props.itemHeight);
 	}
 
-	updateStateItemIndexes(props) {
+	updateStateItemIndexes(props: Props = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 
 		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
@@ -44,20 +63,20 @@ class ItemList extends React.Component {
 		this.updateStateItemIndexes();
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps: Props) {
 		this.updateStateItemIndexes(newProps);
 	}
 
-	onScroll(event) {
+	onScroll(event: any) {
 		this.scrollTop_ = event.target.scrollTop;
 		this.updateStateItemIndexes();
 	}
 
-	onKeyDown(event) {
+	onKeyDown(event: any) {
 		if (this.props.onKeyDown) this.props.onKeyDown(event);
 	}
 
-	makeItemIndexVisible(itemIndex) {
+	makeItemIndexVisible(itemIndex: number) {
 		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex);
 		const bottom = Math.max(0, this.state.bottomItemIndex);
 
@@ -105,7 +124,7 @@ class ItemList extends React.Component {
 
 		if (!this.props.itemHeight) throw new Error('itemHeight is required');
 
-		const blankItem = function(key, height) {
+		const blankItem = function(key: string, height: number) {
 			return <div key={key} style={{ height: height }}></div>;
 		};
 
@@ -129,4 +148,4 @@ class ItemList extends React.Component {
 	}
 }
 
-module.exports = { ItemList };
+export default ItemList;
