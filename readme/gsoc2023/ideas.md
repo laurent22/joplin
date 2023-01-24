@@ -137,6 +137,22 @@ Skills Required: JavaScript, Electron
 
 Potential Mentor(s): 
 
+## 9. Template insertion tool
+
+Joplinc can store general templates as notes that can be used in various context. For example, it could have email templates that could be inserted into a Thunderbird email. Or code snippets that could be inserted into a text editor. The workflow will be as follow
+
+- User presses a global shortcut, for example Ctrl+Alt+T, from any text editor (email client, code editor, etc.)
+- A floating window is opened, from which the user can pick a note
+- Once a note is selected, its content is inserted into the text editor
+
+Expected Outcome: This can developed as an external application or possibly as part of the core application, but some changes will have to be made to allow this. It needs to work at least on Windows and macOS.
+
+Difficulty Level: High
+
+Skills Required: JavaScript, Windows/macOS programming
+
+Potential Mentor(s): 
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2023/)
