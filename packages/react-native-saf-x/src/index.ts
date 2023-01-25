@@ -50,11 +50,11 @@ interface SafxInterface {
     encoding?: Encoding,
     mimeType?: string,
     append?: boolean,
-  ): Promise<string>;
+  ): Promise<void>;
   createFile(uriString: string, mimeType?: String): Promise<DocumentFileDetail>;
   unlink(uriString: string): Promise<boolean>;
   mkdir(uriString: string): Promise<DocumentFileDetail>;
-  rename(uriString: string, newName: string): Promise<boolean>;
+  rename(uriString: string, newName: string): Promise<DocumentFileDetail>;
   getPersistedUriPermissions(): Promise<Array<string>>;
   releasePersistableUriPermission(uriString: string): Promise<void>;
   listFiles(uriString: string): Promise<DocumentFileDetail[]>;
@@ -72,8 +72,8 @@ export type DocumentFileDetail = {
   name: string;
   type: 'directory' | 'file';
   lastModified: number;
-  mime?: string;
-  size?: number;
+  mime: string;
+  size: number;
 };
 
 export type FileOperationOptions = {

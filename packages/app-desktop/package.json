@@ -113,8 +113,6 @@
     "@types/react": "16.14.34",
     "@types/react-redux": "7.1.25",
     "@types/styled-components": "5.1.26",
-    "babel-cli": "6.26.0",
-    "babel-preset-react": "6.24.1",
     "electron": "19.1.4",
     "electron-builder": "23.6.0",
     "electron-notarize": "1.2.2",
