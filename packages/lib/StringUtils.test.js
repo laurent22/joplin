@@ -20,6 +20,7 @@ describe('StringUtils', function() {
 			[['test'], 'test test Test', 'a', 'b', { escapeHtml: true }, 'atestb atestb aTestb'],
 			[['d'], 'dfasdf', '[', ']', { escapeHtml: true }, '[d]fas[d]f'],
 			[[{ scriptType: 'en', type: 'regex', value: 'd*', valueRegex: 'd[^ \t\n\r,\\.,\\+\\-\\*\\?\\!\\=\\{\\}\\<\\>\\|\\:"\'\\(\\)\\[\\]]*?' }], 'dfasdf', '[', ']', { escapeHtml: true }, '[d]fas[d]f'],
+			[['zzz'], 'zzz<img src=q onerror=eval("require(\'child_process\').exec(\'mate-calc\');");>', 'a', 'b', { escapeHtml: true }, 'azzzb&lt;img src=q onerror=eval(&quot;require(&apos;child_process&apos;).exec(&apos;mate-calc&apos;);&quot;);&gt;'],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
