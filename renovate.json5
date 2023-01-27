@@ -92,6 +92,7 @@
 		"com.facebook.flipper:flipper-fresco-plugin",
 		"com.facebook.flipper:flipper-network-plugin",
 		"com.facebook.flipper:flipper",
+		"com.google.code.gson:*",
 		"com.google.code.gson",
 		"de.undercouch:gradle-download-task",
 		"jsc-android",
