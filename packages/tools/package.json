@@ -45,7 +45,7 @@
     "@joplin/fork-htmlparser2": "^4.1.41",
     "@rmp135/sql-ts": "1.15.1",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.2.5",
+    "@types/jest": "29.2.6",
     "@types/mustache": "4.2.2",
     "@types/node": "18.11.18",
     "gettext-extractor": "3.6.1",
