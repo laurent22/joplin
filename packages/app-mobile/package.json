@@ -94,7 +94,7 @@
     "@joplin/tools": "~2.10",
     "@lezer/highlight": "1.1.3",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.2.5",
+    "@types/jest": "29.2.6",
     "@types/react-native": "0.64.19",
     "@types/react-redux": "7.1.25",
     "babel-plugin-module-resolver": "4.1.0",
