@@ -118,6 +118,13 @@ async function main() {
 		corsAllowedDomains.push('http://localhost:8077');
 	}
 
+	try {
+		const baseAppOrigin = (new URL(envVariables.APP_BASE_URL)).origin;
+		corsAllowedDomains.push(baseAppOrigin);
+	} catch (e: any) {
+		appLogger().warn(`APP_BASE_URL environment variable: ${envVariables.APP_BASE_URL} is not a valid URL.`);
+	}
+
 	function acceptOrigin(origin: string): boolean {
 		const hostname = (new URL(origin)).hostname;
 		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
