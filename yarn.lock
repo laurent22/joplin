@@ -4853,7 +4853,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.11.18
     "@types/node-rsa": 1.1.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     "@types/uuid": ^9.0.0
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -7765,7 +7765,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.52, @types/react@npm:^17.0.52":
+"@types/react@npm:17.0.53":
+  version: 17.0.53
+  resolution: "@types/react@npm:17.0.53"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: dacfde02c260fd98bed2eb775ed0c7ce1397be4c0844f907a50763b081a4008f81f57071889a16eb1350ddcf0927f3cf1a6541702c8ad03de3c70383ef931e3f
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17.0.52":
   version: 17.0.52
   resolution: "@types/react@npm:17.0.52"
   dependencies:
