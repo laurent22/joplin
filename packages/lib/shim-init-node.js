@@ -637,7 +637,11 @@ function shimInit(options = null) {
 		}
 
 		// Open the file
-		return shim.openUrl(`file://${filepath}`);
+		// Don't use openUrl() there.
+		// The underneath require('electron').shell.openExternal() has a bug
+		// https://github.com/electron/electron/issues/31347
+
+		return shim.electronBridge().openItem(filepath);
 	};
 
 	shim.waitForFrame = () => {};

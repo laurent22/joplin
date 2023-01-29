@@ -82,6 +82,7 @@ const pluginAssets = function() {
 				.fountain .dialogue {
 					margin-left: 3em;
 					margin-right: 3em;
+					margin-bottom: 1em;
 				}
 
 				.fountain .dialogue p,

@@ -108,6 +108,8 @@ async function requestNoteToNote(requestNote: any) {
 	if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
 	if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
 	if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
+	if ('todo_due' in requestNote) output.todo_due = Database.formatValue(Database.TYPE_INT, requestNote.todo_due);
+	if ('todo_completed' in requestNote) output.todo_completed = Database.formatValue(Database.TYPE_INT, requestNote.todo_completed);
 	if ('markup_language' in requestNote) output.markup_language = Database.formatValue(Database.TYPE_INT, requestNote.markup_language);
 	if ('longitude' in requestNote) output.longitude = requestNote.longitude;
 	if ('latitude' in requestNote) output.latitude = requestNote.latitude;

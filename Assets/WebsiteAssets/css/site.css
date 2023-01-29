@@ -729,6 +729,16 @@ footer .bottom-links-row p {
 }
 
 /*****************************************************************
+ LARGE VIEW
+*****************************************************************/
+
+@media (max-width: 1200px) {
+	#nav-section a {
+		margin-left: 10px;
+	}
+}
+
+/*****************************************************************
  MEDIUM VIEW
  - Make menu bar elements smaller and closer to each others
    so that everything fit.

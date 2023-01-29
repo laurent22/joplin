@@ -13,7 +13,7 @@ class UndoQueue {
 	push(e: any) {
 		this.inner_.push(e);
 		while (this.length > this.size_) {
-			this.inner_.splice(0,1);
+			this.inner_.splice(0, 1);
 		}
 	}
 

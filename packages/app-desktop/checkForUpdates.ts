@@ -40,7 +40,7 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 
 	if (!response.ok) {
 		const responseText = await response.text();
-		throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
+		throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
 	}
 
 	const releases = await response.json();

@@ -16,6 +16,7 @@ import NoteTextViewer from '../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
 import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../services/bridge';
 import markdownUtils from '@joplin/lib/markdownUtils';
@@ -30,6 +31,7 @@ import dialogs from '../../../dialogs';
 import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
+const debounce = require('debounce');
 const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -286,15 +288,25 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorCopyText = useCallback(() => {
 		if (editorRef.current) {
 			const selections = editorRef.current.getSelections();
-			if (selections.length > 0) {
+
+
+			// Handle the case when there is a selection - copy the selection to the clipboard
+			// When there is no selection, the selection array contains an empty string.
+			if (selections.length > 0 && selections[0]) {
 				clipboard.writeText(selections[0]);
+			} else {
+				// This is the case when there is no selection - copy the current line to the clipboard
+				const cursor = editorRef.current.getCursor();
+				const line = editorRef.current.getLine(cursor.line);
+				clipboard.writeText(line);
 			}
 		}
 	}, []);
 
-	const editorPasteText = useCallback(() => {
+	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
-			editorRef.current.replaceSelection(clipboard.readText());
+			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
+			editorRef.current.replaceSelection(modifiedMd);
 		}
 	}, []);
 
@@ -302,7 +314,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const clipboardText = clipboard.readText();
 
 		if (clipboardText) {
-			editorPasteText();
+			void editorPasteText();
 		} else {
 			// To handle pasting images
 			void onEditorPaste();
@@ -619,7 +631,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				contentMaxWidth: props.contentMaxWidth,
 				mapsToLine: true,
 				// Always using useCustomPdfViewer for now, we can add a new setting for it in future if we need to.
-				useCustomPdfViewer: true,
+				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
 			}));
@@ -671,7 +683,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (!props.searchMarkers) return;
+		if (!props.searchMarkers) return () => {};
 
 		// If there is a currently active search, it's important to re-search the text as the user
 		// types. However this is slow for performance so we ONLY want it to happen when there is
@@ -686,11 +698,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			webviewRef.current.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
-				const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
+				// Fixes https://github.com/laurent22/joplin/issues/7565
+				const debouncedMarkers = debounce(() => {
+					const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
 
-				props.setLocalSearchResultCount(matches);
+					props.setLocalSearchResultCount(matches);
+				}, 50);
+				debouncedMarkers();
+				return () => {
+					debouncedMarkers.clear();
+				};
 			}
 		}
+		return () => {};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
 
@@ -849,7 +869,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	function renderEditor() {
 
-		const matchBracesOptions = Setting.value('editor.autoMatchingBraces') ? { override: true, pairs: '<>()[]{}\'\'""‘’“”（）《》「」『』【】〔〕〖〗〘〙〚〛' } : false;
+		const matchBracesOptions = Setting.value('editor.autoMatchingBraces') ? { override: true, pairs: '()[]{}\'\'""‘’“”（）《》「」『』【】〔〕〖〗〘〙〚〛' } : false;
 
 		return (
 			<div style={cellEditorStyle}>
@@ -880,6 +900,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			<div style={cellViewerStyle}>
 				<NoteTextViewer
 					ref={webviewRef}
+					themeId={props.themeId}
 					viewerStyle={styles.viewer}
 					onIpcMessage={webview_ipcMessage}
 					onDomReady={webview_domReady}

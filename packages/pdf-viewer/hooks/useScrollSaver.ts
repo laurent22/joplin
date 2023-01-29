@@ -60,7 +60,7 @@ const useScrollSaver = ({ container, scaledSize, pdfId, rememberScroll, onActive
 
 	useEffect(() => {
 		currentScaleSize.current = scaledSize;
-	} , [scaledSize]);
+	}, [scaledSize]);
 };
 
 export default useScrollSaver;

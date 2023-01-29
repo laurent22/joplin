@@ -51,19 +51,20 @@ module.exports = {
 			return `${s.join('.')}.js`;
 		});
 
-		const ignoredMapFiles = tsFiles.map(f => {
-			const s = f.split('.');
-			s.pop();
-			return `${s.join('.')}.js.map`;
-		});
+		// const ignoredMapFiles = tsFiles.map(f => {
+		// 	const s = f.split('.');
+		// 	s.pop();
+		// 	return `${s.join('.')}.js.map`;
+		// });
 
-		const ignoredDefFiles = tsFiles.map(f => {
-			const s = f.split('.');
-			s.pop();
-			return `${s.join('.')}.d.ts`;
-		});
+		// const ignoredDefFiles = tsFiles.map(f => {
+		// 	const s = f.split('.');
+		// 	s.pop();
+		// 	return `${s.join('.')}.d.ts`;
+		// });
 
-		const ignoredFiles = ignoredJsFiles.concat(ignoredMapFiles).concat(ignoredDefFiles);
+		// const ignoredFiles = ignoredJsFiles.concat(ignoredMapFiles).concat(ignoredDefFiles);
+		const ignoredFiles = ignoredJsFiles;
 		ignoredFiles.sort();
 
 		const regex = /(# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD)[\s\S]*(# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD)/;

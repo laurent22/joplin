@@ -353,7 +353,7 @@ class FileApiDriverAmazonS3 {
 				Bucket: this.s3_bucket_,
 				CopySource: this.makePath_(oldPath),
 				Key: newPath,
-			}),(err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});

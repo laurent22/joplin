@@ -3,11 +3,12 @@ buildscript {
     repositories {
       google()
       mavenCentral()
-      jcenter()
     }
 
     dependencies {
-      classpath 'com.android.tools.build:gradle:4.2.2'
+      classpath("com.android.tools.build:gradle:7.2.1")
+      classpath("com.facebook.react:react-native-gradle-plugin")
+      classpath("de.undercouch:gradle-download-task:5.0.1")
     }
   }
 }
@@ -19,10 +20,10 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-  compileSdkVersion safeExtGet('SafX_compileSdkVersion', 30)
+  compileSdkVersion safeExtGet('SafX_compileSdkVersion', 31)
   defaultConfig {
     minSdkVersion safeExtGet('SafX_minSdkVersion', 21)
-    targetSdkVersion safeExtGet('SafX_targetSdkVersion', 30)
+    targetSdkVersion safeExtGet('SafX_targetSdkVersion', 31)
     versionCode 1
     versionName "1.0"
 
@@ -50,7 +51,6 @@ repositories {
   }
   google()
   mavenCentral()
-  jcenter()
 }
 
 dependencies {

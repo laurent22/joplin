@@ -85,15 +85,19 @@
 
 		// React Native stuff should be updated only when
 		// upgrading React Native.
+		"@babel/runtime",
 		"@types/react-native",
+		"androidx.appcompat:appcompat",
 		"com.android.tools.build:gradle",
 		"com.facebook.flipper:flipper-fresco-plugin",
 		"com.facebook.flipper:flipper-network-plugin",
 		"com.facebook.flipper:flipper",
-		"jsc-android",
-		"react-native",
-		"@babel/runtime",
+		"com.google.code.gson:*",
+		"com.google.code.gson",
 		"de.undercouch:gradle-download-task",
+		"jsc-android",
+		"org.robolectric:robolectric",
+		"react-native",
 
 		// Need special processing when upgrading
 		"katex",
@@ -112,7 +116,7 @@
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"labels": ["automerge"],
-			"schedule": "on the first day of the week",
+			"extends": ["schedule:monthly"],
 			"matchPackageNames": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.

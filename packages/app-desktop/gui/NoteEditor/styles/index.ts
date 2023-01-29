@@ -7,7 +7,7 @@ export default function styles(props: NoteEditorProps) {
 		return {
 			root: {
 				boxSizing: 'border-box',
-				paddingLeft: 0,// theme.mainPadding,
+				paddingLeft: 0, // theme.mainPadding,
 				paddingTop: 0,
 				width: '100%',
 				height: '100%',

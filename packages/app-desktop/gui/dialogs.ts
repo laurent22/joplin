@@ -1,4 +1,10 @@
-const smalltalk = require('smalltalk/bundle');
+import Logger from '@joplin/lib/Logger';
+
+// Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
+// upgrade again, check that adding a link from the CodeMirror editor works/
+const smalltalk = require('smalltalk');
+
+const logger = Logger.create('dialogs');
 
 class Dialogs {
 	async alert(message: string, title = '') {
@@ -10,6 +16,7 @@ class Dialogs {
 			await smalltalk.confirm(title, message, options);
 			return true;
 		} catch (error) {
+			logger.error(error);
 			return false;
 		}
 	}
@@ -21,6 +28,7 @@ class Dialogs {
 			const answer = await smalltalk.prompt(title, message, defaultValue, options);
 			return answer;
 		} catch (error) {
+			logger.error(error);
 			return null;
 		}
 	}
