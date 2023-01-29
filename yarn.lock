@@ -4618,7 +4618,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.2.6
     "@types/node": 18.11.18
-    "@types/react": 16.14.34
+    "@types/react": 16.14.35
     "@types/react-redux": 7.1.25
     "@types/styled-components": 5.1.26
     async-mutex: 0.4.0
@@ -4925,7 +4925,7 @@ __metadata:
     "@joplin/lib": ~2.10
     "@types/jest": 29.2.6
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 16.14.34
+    "@types/react": 16.14.35
     "@types/react-dom": 18.0.10
     "@types/styled-components": 5.1.25
     async-mutex: 0.4.0
@@ -7754,14 +7754,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:16.14.34":
-  version: 16.14.34
-  resolution: "@types/react@npm:16.14.34"
+"@types/react@npm:16.14.35":
+  version: 16.14.35
+  resolution: "@types/react@npm:16.14.35"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: a1a105c131bd7fd5cae693c641b3a05eb03c079875fe8e780e616afc54d86e3fa1e8c6433e7a30d2a7f8a1a7681cf1a4f652e9eb48b6abe1f80f7cafe858ebf2
+  checksum: ed9c551a7d50d073a5fb0295c1d939536c66c3286d42b6c94c20749464492ed95a408e6d3694bf49df0012da69e22202065c8c2fac0406356972a7fcb4960dd3
   languageName: node
   linkType: hard
 
