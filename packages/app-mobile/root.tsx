@@ -825,12 +825,12 @@ class AppComponent extends React.Component {
 	public componentWillUnmount() {
 		if (this.appStateChangeListener_) {
 			this.appStateChangeListener_.remove();
-			this.urlOpenListener = null;
+			this.appStateChangeListener_ = null;
 		}
 
 		if (this.urlOpenListener_) {
 			this.urlOpenListener_.remove();
-			this.urlOpenListener = null;
+			this.urlOpenListener_ = null;
 		}
 
 		if (this.unsubscribeScreenWidthChangeHandler_) {
