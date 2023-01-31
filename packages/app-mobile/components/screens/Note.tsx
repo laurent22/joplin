@@ -41,7 +41,6 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
-import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
@@ -1050,10 +1049,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const theme = themeStyle(this.props.themeId);
 		const note: NoteEntity = this.state.note;
 		const isTodo = !!Number(note.is_todo);
-
-		if (this.state.showCamera) {
-			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
-		}
 
 		// Currently keyword highlighting is supported only when FTS is available.
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
