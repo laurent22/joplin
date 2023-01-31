@@ -136,6 +136,9 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			js.push('}');
 			js.push('true;');
 
+
+			const iOSNotePaddingBottom = '100px';
+
 			// iOS doesn't automatically adjust the WebView's font size to match users'
 			// accessibility settings. To do this, we need to tell it to match the system font.
 			// See https://github.com/ionic-team/capacitor/issues/2748#issuecomment-612923135
@@ -152,8 +155,13 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				*/
 				body > #rendered-md {
 					width: 100vw;
-					height: 100vh;
 					overflow: auto;
+					height: calc(100vh - ${iOSNotePaddingBottom});
+					padding-bottom: ${iOSNotePaddingBottom};
+				}
+
+				:root > body {
+					padding: 0;
 				}
 			`;
 
