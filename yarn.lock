@@ -4738,7 +4738,6 @@ __metadata:
     react: 18.2.0
     react-native: 0.70.6
     react-native-action-button: 2.8.5
-    react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.1.3
     react-native-dropdownalert: 4.5.1
@@ -26168,15 +26167,6 @@ __metadata:
   peerDependencies:
     react-native: ">=0.11"
   checksum: e5f8236c9980e491daff3707648ab3a0f4c79c3c4c102ec340d376e204a740b87486f8d4b5e2336e2ab29e5dcd4990693778513cb76e7cc5ddd00ac1c2166977
-  languageName: node
-  linkType: hard
-
-"react-native-camera@npm:4.2.1":
-  version: 4.2.1
-  resolution: "react-native-camera@npm:4.2.1"
-  dependencies:
-    prop-types: ^15.6.2
-  checksum: 0e84ce657774694d1cc49395c43a8f2caabc03df36aa77aacfb5c797ad8cfe0368f4807deccc54e82ff2b193e8c2d1ce7ad504eedf7a9fc4719b38e39958a804
   languageName: node
   linkType: hard
 
