@@ -378,12 +378,13 @@ export default class MdToHtml {
 	}
 
 	private async outputAssetsToExternalAssets_(output: any) {
-		for (const cssString of output.cssStrings) {
+		const newOutput = { ...output, pluginAssets: output.pluginAssets.slice() };
+		for (const cssString of newOutput.cssStrings) {
 			const filePath = await this.fsDriver().cacheCssToFile(cssString);
-			output.pluginAssets.push(filePath);
+			newOutput.pluginAssets.push(filePath);
 		}
-		delete output.cssStrings;
-		return output;
+		delete newOutput.cssStrings;
+		return newOutput;
 	}
 
 	// The string we are looking for is: <p></p>\n
@@ -582,7 +583,6 @@ export default class MdToHtml {
 		let cssStrings = noteStyle(options.theme, {
 			contentMaxWidth: options.contentMaxWidth,
 		});
-
 		let output = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 

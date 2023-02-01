@@ -671,6 +671,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		if (!webviewReady) return;
 
 		const options: any = {
+			noteId: props.noteId,
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 			markupLineCount: editorRef.current?.lineCount() || 0,

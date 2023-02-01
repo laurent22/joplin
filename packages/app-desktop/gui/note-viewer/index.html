@@ -78,6 +78,7 @@
 	}
 
 	let pluginAssetsAdded_ = {};
+	let currentNoteId = ''
 
 	try {
 		const contentElement = document.getElementById('joplin-container-content');
@@ -154,15 +155,25 @@
 			setPercentScroll(percentScroll_);
 		}
 
-		// Note that this function keeps track of what's been added so as not to
-		// add the same CSS files multiple times.
-		function addPluginAssets(assets) {
+		// This function now keeps a track of the css or javascript files loaded as well switching of notes. 
+		// Recreating of div#joplin-container-pluginAssetsContainer on loading a new note ensures that plugin
+		// assets belonging to current note are only loaded into view to avoid css styling conflict issue.
+		function addPluginAssets(noteId, assets) {
 			if (!assets) return;
 
-			const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
-
-			const processedAssetIds = [];
-
+			let pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
+			
+			if (currentNoteId !== noteId) {
+				pluginAssetsContainer.remove();
+				currentNoteId = noteId;
+				pluginAssetsAdded_ = {};
+				const joplinContainerBody = document.getElementById('joplin-container-body');
+				const newPluginAssetsContainer = document.createElement('div');
+				newPluginAssetsContainer.id = 'joplin-container-pluginAssetsContainer';
+				joplinContainerBody.insertBefore(newPluginAssetsContainer, joplinContainerBody.firstChild);
+				pluginAssetsContainer = newPluginAssetsContainer;
+			}
+			
 			for (let i = 0; i < assets.length; i++) {
 				const asset = assets[i];
 				
@@ -385,7 +396,9 @@
 				setPercentScroll(event.options.percent);
 			}
 
-			addPluginAssets(event.options.pluginAssets);
+			if (currentNoteId === '') currentNoteId = event.options.noteId
+
+			addPluginAssets(event.options.noteId, event.options.pluginAssets);
 
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
