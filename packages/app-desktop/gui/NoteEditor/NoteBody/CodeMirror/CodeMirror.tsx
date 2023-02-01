@@ -276,11 +276,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorCutText = useCallback(() => {
 		if (editorRef.current) {
 			const selections = editorRef.current.getSelections();
-			if (selections.length > 0) {
+			if (selections.length > 0 && selections[0]) {
 				clipboard.writeText(selections[0]);
 				// Easy way to wipe out just the first selection
 				selections[0] = '';
 				editorRef.current.replaceSelections(selections);
+			} else {
+				//no selection - copy the current line content to the clipboard
+				//and replacing it with an empty line
+				const cursor = editorRef.current.getCursor();
+				const line = editorRef.current.getLine(cursor.line);
+				clipboard.writeText(line);
+				editorRef.current.replaceRange('', { line : cursor.line, ch: 0 }, { line : cursor.line });
 			}
 		}
 	}, []);
