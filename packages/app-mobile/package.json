@@ -23,7 +23,7 @@
     "@joplin/react-native-saf-x": "~2.10",
     "@joplin/renderer": "~2.10",
     "@react-native-community/clipboard": "1.5.1",
-    "@react-native-community/datetimepicker": "6.7.2",
+    "@react-native-community/datetimepicker": "6.7.3",
     "@react-native-community/geolocation": "2.1.0",
     "@react-native-community/netinfo": "9.3.7",
     "@react-native-community/push-notification-ios": "1.10.1",
