@@ -1,6 +1,43 @@
 import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
+import PluginService, { Plugins } from './services/plugins/PluginService';
+
+interface PluginList {
+  completeList: string;
+  summary: string;
+}
+
+function getPluginLists(): PluginList {
+	const plugins: Plugins = PluginService.instance().plugins;
+	const pluginList = [];
+	if (Object.keys(plugins).length > 0) {
+		for (const pluginId in plugins) {
+			pluginList.push(`${plugins[pluginId].manifest.name}: ${plugins[pluginId].manifest.version}`);
+		}
+	}
+
+	let completeList = '';
+	let summary = '';
+	if (pluginList.length > 0) {
+		completeList = ['\n', ...pluginList].join('\n');
+
+		if (pluginList.length > 20) {
+			summary = [
+				'\n',
+				...[...pluginList].filter((_, index) => index < 20),
+				'...',
+			].join('\n');
+		} else {
+			summary = completeList;
+		}
+	}
+
+	return {
+		completeList,
+		summary,
+	};
+}
 
 export default function versionInfo(packageInfo: any) {
 	const p = packageInfo;
@@ -32,9 +69,11 @@ export default function versionInfo(packageInfo: any) {
 		console.info(gitInfo);
 	}
 
+	const pluginList: PluginList = getPluginLists();
+
 	return {
 		header: header.join('\n'),
-		body: body.join('\n'),
-		message: header.concat(body).join('\n'),
+		body: body.join('\n').concat(pluginList.completeList),
+		message: header.concat(body).join('\n').concat(pluginList.summary),
 	};
 }
