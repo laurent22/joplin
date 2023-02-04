@@ -63,6 +63,10 @@ class FolderScreenComponent extends BaseScreenComponent {
 	async saveFolderButton_press() {
 		let folder = Object.assign({}, this.state.folder);
 
+		if (this.props.navigation.state.parentFolderId) {
+			folder.parent_id = this.props.navigation.state.parentFolderId;
+		}
+
 		try {
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {

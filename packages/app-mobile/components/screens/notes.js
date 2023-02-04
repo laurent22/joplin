@@ -179,6 +179,15 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	newSubNotebook(folderId) {
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Folder',
+			folderId: null,
+			parentFolderId: folderId,
+		});
+	}
+
 	newNoteNavigate = async (folderId, isTodo) => {
 		const newNote = await Note.save({
 			parent_id: folderId,
@@ -255,6 +264,15 @@ class NotesScreenComponent extends BaseScreenComponent {
 		const makeActionButtonComp = () => {
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
 				const buttons = [];
+				buttons.push({
+					label: _('New sub-notebook'),
+					onPress: () => {
+						this.newSubNotebook(buttonFolderId);
+					},
+					color: '#9b59b6',
+					icon: 'md-folder',
+				});
+
 				buttons.push({
 					label: _('New to-do'),
 					onPress: () => {
