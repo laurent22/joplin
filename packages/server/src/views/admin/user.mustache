@@ -30,22 +30,23 @@
 						{{/accountTypes}}
 					</select>
 				</div>
-				<p class="help">If the below properties are left to their default (empty) values, the account-specific properties will apply.</p>
 			</div>
 		{{/showAccountTypes}}
 
 		<div class="field">
-			<label class="label">Max item size</label>
+			<label class="label">Max item size (in bytes)</label>
 			<div class="control">
 				<input class="input" type="number" placeholder="Default" name="max_item_size" value="{{user.max_item_size}}"/>
 			</div>
+            <p class="help">Leave empty to use the default system limit ({{accountTypeDefaultMaxItemSize}}).</p>
 		</div>
 
 		<div class="field">
-			<label class="label">Max total size</label>
+			<label class="label">Max total size (in bytes)</label>
 			<div class="control">
 				<input class="input" type="number" placeholder="Default" name="max_total_item_size" value="{{user.max_total_item_size}}"/>
 			</div>
+            <p class="help">Leave empty to use the default system limit ({{accountTypeDefaultMaxTotalSize}}).</p>
 		</div>
 
 		<div class="field">

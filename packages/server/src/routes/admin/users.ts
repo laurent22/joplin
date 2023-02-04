@@ -10,7 +10,7 @@ import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
-import { AccountType, accountTypeOptions, accountTypeToString } from '../../models/UserModel';
+import { accountByType, AccountType, accountTypeOptions, accountTypeToString } from '../../models/UserModel';
 import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
@@ -24,6 +24,7 @@ import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
+import { formatBytes } from '../../utils/bytes';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -274,6 +275,10 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 	view.content.userFlagViews = userFlagViews;
 	view.content.stripePortalUrl = stripePortalUrl();
 	view.content.pageTitle = view.content.buttonTitle;
+
+	const { max_item_size, max_total_item_size } = accountByType(user.account_type ?? AccountType.Default);
+	view.content.accountTypeDefaultMaxItemSize = formatBytes(max_item_size);
+	view.content.accountTypeDefaultMaxTotalSize = formatBytes(max_total_item_size);
 
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');
