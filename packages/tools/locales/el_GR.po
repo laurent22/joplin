@@ -16,19 +16,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:609
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:657
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Φωτογραφική μηχανή: για να μπορείτε να τραβήξετε μια φωτογραφία και να την "
 "προσαρτήσετε σε μια σημείωση."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:612
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:660
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Τοποθεσία: να επιτρέπεται η επισύναψη πληροφοριών γεωγραφικής θέσης σε μια "
 "σημείωση."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:606
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:654
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -88,7 +88,7 @@ msgstr "&Εργαλεία"
 msgid "&View"
 msgstr "&Εμφάνιση"
 
-#: packages/lib/models/Setting.ts:1492
+#: packages/lib/models/Setting.ts:1517
 msgid "%d days"
 msgstr "%d ημέρες"
 
@@ -102,11 +102,11 @@ msgstr ""
 msgid "%d GB storage space"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1346
 msgid "%d hour"
 msgstr "%d ώρα"
 
-#: packages/lib/models/Setting.ts:1323 packages/lib/models/Setting.ts:1324
+#: packages/lib/models/Setting.ts:1347 packages/lib/models/Setting.ts:1348
 msgid "%d hours"
 msgstr "%d ώρες"
 
@@ -121,8 +121,8 @@ msgstr ""
 msgid "%d MB per note or attachment"
 msgstr "Επισυναπτόμενα σημειώσεων"
 
-#: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
-#: packages/lib/models/Setting.ts:1321
+#: packages/lib/models/Setting.ts:1343 packages/lib/models/Setting.ts:1344
+#: packages/lib/models/Setting.ts:1345
 msgid "%d minutes"
 msgstr "%d΄λεπτά"
 
@@ -217,15 +217,15 @@ msgstr ""
 "σημείωση, θα μετατραπεί σε to-do). Χρησιμοποιήστε το \"clear\" για να "
 "μετατρέψετε το to-do σε κανονική σημείωση."
 
-#: packages/lib/models/Setting.ts:1348
+#: packages/lib/models/Setting.ts:1372
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1370
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1349
+#: packages/lib/models/Setting.ts:1373
 msgid "A5"
 msgstr "A5"
 
@@ -277,11 +277,11 @@ msgstr "Ενεργό"
 msgid "Actual Size"
 msgstr "Πραγματικό μέγεθος"
 
-#: packages/app-mobile/components/screens/Note.tsx:1123
+#: packages/app-mobile/components/screens/Note.tsx:1114
 msgid "Add body"
 msgstr "Προσθήκη σώματος κειμένου"
 
-#: packages/app-mobile/components/action-button.js:76
+#: packages/app-mobile/components/ActionButton.tsx:59
 #, fuzzy
 msgid "Add new"
 msgstr "Προσθήκη τίτλου"
@@ -294,7 +294,7 @@ msgstr "Προσθήκη ή διαγραφή ετικετών:"
 msgid "Add recipient:"
 msgstr "Προσθήκη παραλήπτη:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1198
+#: packages/app-mobile/components/screens/Note.tsx:1187
 msgid "Add title"
 msgstr "Προσθήκη τίτλου"
 
@@ -319,9 +319,14 @@ msgstr "Επιλογές για προχωρημένους"
 msgid "Advanced tools"
 msgstr "Προηγμένα εργαλεία"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:485
-#: packages/app-mobile/components/screens/notes.js:191
-#: packages/app-mobile/components/side-menu-content.tsx:455
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
+msgid ""
+"All data, including notes, notebooks and tags will be permanently deleted."
+msgstr ""
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
+#: packages/app-mobile/components/screens/notes.js:204
+#: packages/app-mobile/components/side-menu-content.tsx:472
 msgid "All notes"
 msgstr "Όλες οι σημειώσεις"
 
@@ -358,11 +363,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
 
-#: packages/lib/models/Setting.ts:2400
+#: packages/lib/models/Setting.ts:2447
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
-#: packages/lib/models/Setting.ts:2405
+#: packages/lib/models/Setting.ts:2452
 msgid "Application"
 msgstr "Εφαρμογή"
 
@@ -374,7 +379,7 @@ msgstr "Εφαρμογή"
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Είστε βέβαιοι ότι θέλετε να ανανεώσετε το διακριτικό εξουσιοδότησης;"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:507
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:511
 msgid "Arguments:"
 msgstr "Παράμετροι:"
 
@@ -389,15 +394,15 @@ msgstr "Επισύναψη..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
-#: packages/app-mobile/components/screens/Note.tsx:874
+#: packages/app-mobile/components/screens/Note.tsx:865
 msgid "Attach file"
 msgstr "Επισύναψη αρχείου"
 
-#: packages/app-mobile/components/screens/Note.tsx:878
+#: packages/app-mobile/components/screens/Note.tsx:869
 msgid "Attach photo"
 msgstr "Επισυνάψτε μία φωτογραφία"
 
-#: packages/app-mobile/components/screens/Note.tsx:911
+#: packages/app-mobile/components/screens/Note.tsx:902
 msgid "Attach..."
 msgstr "Επισύναψη..."
 
@@ -461,7 +466,7 @@ msgstr "Αυτόματη προσθήκη απενεργοποιημένων λ�
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1330
 msgid "Automatically check for updates"
 msgstr "Αυτόματος έλεγχος για ενημερώσεις"
 
@@ -470,9 +475,9 @@ msgid "Automatically switch theme to match system theme"
 msgstr "Αυτόματη εναλλαγή θέματος ώστε να ταιριάζει με το θέμα συστήματος"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:728
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:732
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-mobile/components/ScreenHeader.tsx:302
+#: packages/app-mobile/components/ScreenHeader.tsx:304
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
 msgstr "Πίσω"
@@ -491,7 +496,7 @@ msgstr "Έντονη γραφή"
 msgid "Browse all plugins"
 msgstr "Αναζήτηση όλων των plugin"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:544
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:548
 msgid "Browse..."
 msgstr "Αναζήτηση..."
 
@@ -506,25 +511,28 @@ msgstr "Κοινοποίηση"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:728
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:732
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.tsx:270
+#: packages/app-desktop/gui/PromptDialog.min.js:249
+#: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:318
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:665
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
-#: packages/app-mobile/components/CameraView.tsx:191
+#: packages/app-mobile/components/CameraView.tsx:193
 #: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:104
-#: packages/app-mobile/components/screens/Note.tsx:586
+#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/Note.tsx:577
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
-#: packages/app-mobile/components/side-menu-content.tsx:165
-#: packages/app-mobile/components/side-menu-content.tsx:174
-#: packages/app-mobile/components/side-menu-content.tsx:426
+#: packages/app-mobile/components/side-menu-content.tsx:169
+#: packages/app-mobile/components/side-menu-content.tsx:178
+#: packages/app-mobile/components/side-menu-content.tsx:443
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "Άκυρο"
@@ -662,7 +670,7 @@ msgid "Check for updates..."
 msgstr "Ελεγχος για ενημερώσεις..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:391
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:435
 msgid "Check synchronisation configuration"
 msgstr "Ελέγχος ρυθμίσεων συγχρονισμού"
 
@@ -678,7 +686,7 @@ msgstr "Λίστα πλαισίων ελέγχου"
 msgid "Checking... Please wait."
 msgstr "Έλεγχος... Παρακαλώ περιμένετε."
 
-#: packages/app-mobile/components/screens/Note.tsx:881
+#: packages/app-mobile/components/screens/Note.tsx:872
 msgid "Choose an option"
 msgstr "Διαλέξτε μία επιλογή"
 
@@ -687,7 +695,8 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.tsx:277
+#: packages/app-desktop/gui/PromptDialog.min.js:256
+#: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Καθαρισμός"
 
@@ -720,8 +729,14 @@ msgstr "Αναγνωριστικό προγράμματος-πελάτη: %s"
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.tsx:91
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:198
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:142
 msgid "Close"
 msgstr "Κλείσιμο"
+
+#: packages/app-mobile/components/Dropdown.tsx:166
+#, fuzzy
+msgid "Close dropdown"
+msgstr "Κλείσιμο παραθύρου"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:593
@@ -745,7 +760,7 @@ msgstr "Προβολή κώδικα"
 msgid "Collaborate on notebooks with others"
 msgstr "Συνεργασία σε σημειωματάρια με άλλους"
 
-#: packages/app-mobile/components/side-menu-content.tsx:333
+#: packages/app-mobile/components/side-menu-content.tsx:346
 msgid "Collapse"
 msgstr ""
 
@@ -753,7 +768,7 @@ msgstr ""
 msgid "Coming alarms"
 msgstr "Προσεχείς ειδοποιήσεις"
 
-#: packages/lib/models/Setting.ts:1406
+#: packages/lib/models/Setting.ts:1430
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -774,7 +789,7 @@ msgstr "εντολή"
 msgid "Command"
 msgstr "Εντολή"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:637
+#: packages/app-desktop/plugins/GotoAnything.tsx:625
 msgid "Command palette"
 msgstr "Παλέτα εντολών"
 
@@ -798,8 +813,9 @@ msgstr "Ολοκληρώθηκε: %s (%s)"
 msgid "Compress old changes"
 msgstr "Συμπίεση παλαιών αλλαγών"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
-#: packages/app-mobile/components/side-menu-content.tsx:404
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:729
+#: packages/app-mobile/components/side-menu-content.tsx:421
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
 
@@ -813,6 +829,7 @@ msgid "Confirm password:"
 msgstr "Επιβεβαίωση κωδικού πρόσβασης:"
 
 #: packages/app-desktop/gui/Root.tsx:153
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:60
 msgid "Confirmation"
 msgstr "Επιβεβαίωση"
 
@@ -836,17 +853,21 @@ msgstr ""
 msgid "Content provided by %s"
 msgstr "Περιεχόμενο που παρέχεται από %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
+msgid "Continue"
+msgstr ""
+
+#: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to note"
 msgstr "Μετατροπή σε σημείωση"
 
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to todo"
 msgstr "Μετατροπή σε to-do"
 
 #: packages/app-desktop/gui/MenuBar.tsx:492
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:783
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:785
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:157
 msgid "Copy"
 msgstr "Αντιγραφή"
@@ -855,8 +876,8 @@ msgstr "Αντιγραφή"
 msgid "Copy dev mode command to clipboard"
 msgstr "Αντιγραφή dev mode εντολής στο πρόχειρο"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:391
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:405
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:390
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:404
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 msgid "Copy external link"
 msgstr "Αντιγραφή εξωτερικού συνδέσμου"
@@ -870,7 +891,7 @@ msgid "Copy Link Address"
 msgstr "Αντιγραφή διεύθυνσης σύνδεσης"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:947
+#: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Copy Markdown link"
 msgstr "Αντιγραφή συνδέσμου Markdown"
 
@@ -918,7 +939,7 @@ msgstr ""
 msgid "Could not connect to plugin repository."
 msgstr "Δεν ήταν δυνατή η σύνδεση στο plugin repository."
 
-#: packages/app-desktop/InteropServiceHelper.ts:190
+#: packages/app-desktop/InteropServiceHelper.ts:196
 msgid "Could not export notes: %s"
 msgstr "Δεν ήταν δυνατή η εξαγωγή σημειώσεων: %s"
 
@@ -938,6 +959,11 @@ msgstr ""
 "\n"
 "Το σφάλμα ήταν: \"%s\""
 
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
+#, fuzzy
+msgid "Could not switch profile: %s"
+msgstr "Δεν ήταν δυνατή η εγκατάσταση του plugin: %s"
+
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:220
 msgid "Could not upgrade master key: %s"
 msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
@@ -950,7 +976,12 @@ msgstr ""
 "Δεν ήταν δυνατή η επαλήθευση της κατάστασης κοινής χρήσης αυτού του φορητού "
 "υπολογιστή - διακοπή. Προσπαθήστε ξανά όταν συνδεθείτε στο διαδίκτυο."
 
-#: packages/app-desktop/gui/PromptDialog.tsx:256
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:28
+msgid "Could not verify your identify"
+msgstr ""
+
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/PromptDialog.tsx:260
 #, fuzzy
 msgid "Create"
 msgstr "Δημιουργήθηκε"
@@ -960,6 +991,7 @@ msgid "Create a notebook"
 msgstr "Δημιουργία σημειωματάριου"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
+#: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
 #, fuzzy
 msgid "Create new profile..."
 msgstr "Δημιουργεί μία νέα σημείωση."
@@ -1002,7 +1034,7 @@ msgid "Created: %d."
 msgstr "Δημιουργήθηκε: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:836
 msgid "Created: %s"
 msgstr "Δημιουργήθηκε: %s"
 
@@ -1022,7 +1054,7 @@ msgstr "Δημιουργεί ένα νέο to-do."
 msgid "Creating new %s..."
 msgstr "Δημιουργία νεου %s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:567
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
 msgid "Creating report..."
 msgstr "Δημιουργία αναφοράς..."
 
@@ -1038,20 +1070,20 @@ msgstr "προσαρμοσμένη σειρά"
 msgid "Custom order"
 msgstr "Προσαρμοσμένη σειρά"
 
-#: packages/lib/models/Setting.ts:1275
+#: packages/lib/models/Setting.ts:1299
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Προσαρμοσμένο stylesheet για όλες τις εφαρμογές Joplin"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1282
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Προσαρμοσμένο stylesheet για rendered Markdown"
 
-#: packages/lib/models/Setting.ts:1405
+#: packages/lib/models/Setting.ts:1429
 msgid "Custom TLS certificates"
 msgstr "Custom πιστοποιητικά TLS"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:773
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:775
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:149
 msgid "Cut"
 msgstr "Αποκοπή"
@@ -1064,7 +1096,7 @@ msgstr "Dark"
 msgid "Dashboard"
 msgstr "Οθόνη Διαχείρισης"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:669
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:717
 msgid "Database v%s"
 msgstr "Βάση Δεδομένων v%s"
 
@@ -1076,7 +1108,7 @@ msgstr "Ημερομηνία"
 msgid "Date format"
 msgstr "Μορφή ημερομηνίας"
 
-#: packages/lib/models/Setting.ts:1492
+#: packages/lib/models/Setting.ts:1517
 msgid "days"
 msgstr "ημέρες"
 
@@ -1092,13 +1124,13 @@ msgstr "Αποκρυπτογραφημένα στοιχεία: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "Αποκρυπτογραφημένα στοιχεία: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:734
-#: packages/app-mobile/components/side-menu-content.tsx:413
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:738
+#: packages/app-mobile/components/side-menu-content.tsx:430
 msgid "Decrypting items: %d/%d"
 msgstr "Αποκρυπτογράφηση αντικειμένων: %d/%d"
 
-#: packages/lib/models/Setting.ts:1200 packages/lib/models/Setting.ts:1207
-#: packages/lib/models/Setting.ts:1371
+#: packages/lib/models/Setting.ts:1224 packages/lib/models/Setting.ts:1231
+#: packages/lib/models/Setting.ts:1395
 msgid "Default"
 msgstr "Προεπιλογή"
 
@@ -1109,13 +1141,14 @@ msgstr "Προεπιλογή: %s"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:292
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
-#: packages/app-mobile/components/ScreenHeader.tsx:415
-#: packages/app-mobile/components/ScreenHeader.tsx:482
-#: packages/app-mobile/components/screens/Note.tsx:960
-#: packages/app-mobile/components/side-menu-content.tsx:155
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
+#: packages/app-mobile/components/ScreenHeader.tsx:417
+#: packages/app-mobile/components/ScreenHeader.tsx:484
+#: packages/app-mobile/components/screens/Note.tsx:951
+#: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -1135,7 +1168,7 @@ msgstr "Διαγραφή των ληγμένων token"
 msgid "Delete line"
 msgstr "Διαγραφή γραμμής"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1323
 msgid "Delete local data and re-download from sync target"
 msgstr "Διαγραφή τοπικών δεδομένων και εκ νέου λήψη από τον προορισμό"
 
@@ -1144,12 +1177,12 @@ msgid "Delete note \"%s\"?"
 msgstr "Διαγραφή σημείωσης \"%s\";"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:529
+#: packages/app-mobile/components/screens/Note.tsx:528
 msgid "Delete note?"
 msgstr "Να διαγραφεί η σημείωση;"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
-#: packages/app-mobile/components/side-menu-content.tsx:157
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:290
+#: packages/app-mobile/components/side-menu-content.tsx:161
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
@@ -1173,7 +1206,12 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Διαγραφή plugin \"%s\";"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:417
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
+#, fuzzy
+msgid "Delete profile \"%s\""
+msgstr "Διαγραφή σημείωσης \"%s\";"
+
+#: packages/app-mobile/components/ScreenHeader.tsx:419
 #, fuzzy
 msgid "Delete selected notes"
 msgstr "Να διαγραφούν αυτές οι σημειώσεις;"
@@ -1189,6 +1227,11 @@ msgid ""
 msgstr ""
 "Να διαγραφεί αυτή την πρόσκληση; Ο παραλήπτης δεν θα έχει πλέον πρόσβαση σε "
 "αυτό το κοινόχρηστο σημειωματάριο."
+
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
+#, fuzzy
+msgid "Delete this profile?"
+msgstr "Διαγραφή των σημειώσεων %d;"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1247,7 +1290,7 @@ msgstr "Απενεργοποίηση υπηρεσίας Web Clipper"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1318
+#: packages/lib/models/Setting.ts:1342
 msgid "Disabled"
 msgstr "Απενεργοποιημένη"
 
@@ -1262,7 +1305,8 @@ msgstr ""
 "σας πρόκειται να επανασυγχρονιστούν και να σταλούν χωρίς κρυπτογράφηση στον "
 "προορισμό συγχρονισμού. Θέλετε να συνεχίσετε;"
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:350
+#: packages/app-mobile/components/screens/Note.tsx:103
 msgid "Discard changes"
 msgstr "Απόρριψη αλλαγών"
 
@@ -1316,7 +1360,7 @@ msgstr "Εμφανίζει πληροφορίες χρήσης."
 msgid "Displays version information"
 msgstr "Εμφανίζει πληροφορίες έκδοσης"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:643
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:647
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 msgid "Do it now"
 msgstr "Κάνε το τώρα"
@@ -1386,8 +1430,8 @@ msgid "Dropbox Login"
 msgstr "Σύνδεση Dropbox"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/ScreenHeader.tsx:433
-#: packages/app-mobile/components/ScreenHeader.tsx:488
+#: packages/app-mobile/components/ScreenHeader.tsx:435
+#: packages/app-mobile/components/ScreenHeader.tsx:490
 msgid "Duplicate"
 msgstr "Δημιουργία αντιγράφου"
 
@@ -1395,7 +1439,7 @@ msgstr "Δημιουργία αντιγράφου"
 msgid "Duplicate line"
 msgstr "Διπλασιασμός γραμμής"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:435
+#: packages/app-mobile/components/ScreenHeader.tsx:437
 #, fuzzy
 msgid "Duplicate selected notes"
 msgstr "Διπλασιασμός γραμμής"
@@ -1411,7 +1455,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1160
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
+#: packages/app-mobile/components/screens/Note.tsx:1149
 msgid "Edit"
 msgstr "Επεξεργασία"
 
@@ -1429,9 +1474,14 @@ msgid "Edit note."
 msgstr "Eπεξεργασία σημείωσης."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:162
-#: packages/app-mobile/components/screens/folder.js:110
+#: packages/app-mobile/components/screens/folder.js:90
 msgid "Edit notebook"
 msgstr "Επεξεργασία σημειωματάριου"
+
+#: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
+#, fuzzy
+msgid "Edit profile"
+msgstr "Εξαγωγή προφίλ"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1443,23 +1493,23 @@ msgstr ""
 msgid "Editor"
 msgstr "Επεξεργασία"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1217
 msgid "Editor font"
 msgstr "Γραμματοσειρά editor"
 
-#: packages/lib/models/Setting.ts:1219
+#: packages/lib/models/Setting.ts:1243
 msgid "Editor font family"
 msgstr "Οικογένεια γραμματοσειράς editor"
 
-#: packages/lib/models/Setting.ts:1185
+#: packages/lib/models/Setting.ts:1205
 msgid "Editor font size"
 msgstr "Μέγεθος γραμματοσειράς editor"
 
-#: packages/lib/models/Setting.ts:1238
+#: packages/lib/models/Setting.ts:1262
 msgid "Editor maximum width"
 msgstr "Μέγιστο πλάτος editor"
 
-#: packages/lib/models/Setting.ts:1231
+#: packages/lib/models/Setting.ts:1255
 msgid "Editor monospace font family"
 msgstr "Οικογένεια μονοδιαστημικών γραμματοσειρών επεξεργαστή"
 
@@ -1473,7 +1523,7 @@ msgstr "Επεξεργασία"
 msgid "Either \"text\" or \"json\""
 msgstr "Είτε \"text\" ή \"json\""
 
-#: packages/lib/models/Setting.ts:1372
+#: packages/lib/models/Setting.ts:1396
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1488,40 +1538,45 @@ msgstr "Email"
 msgid "Emails"
 msgstr "Emails"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:195
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "emphasised text"
 msgstr "κείμενο με έμφαση"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:59
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "Ενεργό"
 
-#: packages/lib/models/Setting.ts:1134
+#: packages/lib/models/Setting.ts:1146
 msgid "Enable ^sup^ syntax"
 msgstr "Ενεργοποίηση ^sup^ syntax"
 
-#: packages/lib/models/Setting.ts:1138
+#: packages/lib/models/Setting.ts:1150
 msgid "Enable ++insert++ syntax"
 msgstr "Ενεργοποίηση ++insert++ syntax"
 
-#: packages/lib/models/Setting.ts:1130
+#: packages/lib/models/Setting.ts:1142
 msgid "Enable ==mark== syntax"
 msgstr "Ενεργοποίηση ==mark== syntax"
 
-#: packages/lib/models/Setting.ts:1133
+#: packages/lib/models/Setting.ts:1145
 msgid "Enable ~sub~ syntax"
 msgstr "Ενεργοποίηση ~sub~ syntax"
 
-#: packages/lib/models/Setting.ts:1136
+#: packages/lib/models/Setting.ts:1148
 msgid "Enable abbreviation syntax"
 msgstr "Ενεργοποίηση abbreviation syntax"
 
-#: packages/lib/models/Setting.ts:1127
+#: packages/lib/models/Setting.ts:1139
 msgid "Enable audio player"
 msgstr "Ενεργοποίηση προγράμματος αναπαραγωγής ήχου"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:55
+msgid "Enable biometrics authentication?"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:1147
 msgid "Enable deflist syntax"
 msgstr "Ενεργοποίηση deflist syntax"
 
@@ -1530,55 +1585,55 @@ msgstr "Ενεργοποίηση deflist syntax"
 msgid "Enable encryption"
 msgstr "Ενεργοποίηση κρυπτογράφησης"
 
-#: packages/lib/models/Setting.ts:1131
+#: packages/lib/models/Setting.ts:1143
 msgid "Enable footnotes"
 msgstr "Ενεργοποίηση footnotes"
 
-#: packages/lib/models/Setting.ts:1124
+#: packages/lib/models/Setting.ts:1136
 msgid "Enable Fountain syntax support"
 msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
 
-#: packages/lib/models/Setting.ts:1121
+#: packages/lib/models/Setting.ts:1133
 msgid "Enable Linkify"
 msgstr "Ενεργοποίηση Linkify"
 
-#: packages/lib/models/Setting.ts:1137
+#: packages/lib/models/Setting.ts:1149
 msgid "Enable markdown emoji"
 msgstr "Ενεργοποίηση markdown emoji"
 
-#: packages/lib/models/Setting.ts:1123
+#: packages/lib/models/Setting.ts:1135
 msgid "Enable math expressions"
 msgstr "Ενεργοποίηση math expressions"
 
-#: packages/lib/models/Setting.ts:1125
+#: packages/lib/models/Setting.ts:1137
 msgid "Enable Mermaid diagrams support"
 msgstr "Ενεργοποίηση υποστήριξης διαγραμμάτων Mermaid"
 
-#: packages/lib/models/Setting.ts:1139
+#: packages/lib/models/Setting.ts:1151
 msgid "Enable multimarkdown table extension"
 msgstr "Ενεργοποίηση επέκτασης multimarkdown table"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1507
 msgid "Enable note history"
 msgstr "Ενεργοποίηση ιστορικού σημειώσεων"
 
-#: packages/lib/models/Setting.ts:1129
+#: packages/lib/models/Setting.ts:1141
 msgid "Enable PDF viewer"
 msgstr "Ενεργοποίηση προβολής PDF"
 
-#: packages/lib/models/Setting.ts:1119
+#: packages/lib/models/Setting.ts:1131
 msgid "Enable soft breaks"
 msgstr "Ενεργοποίηση soft breaks"
 
-#: packages/lib/models/Setting.ts:1132
+#: packages/lib/models/Setting.ts:1144
 msgid "Enable table of contents extension"
 msgstr "Ενεργοποίηση επέκτασης table of contents"
 
-#: packages/lib/models/Setting.ts:1120
+#: packages/lib/models/Setting.ts:1132
 msgid "Enable typographer support"
 msgstr "Ενεργοποίηση υποστήριξης typographer"
 
-#: packages/lib/models/Setting.ts:1128
+#: packages/lib/models/Setting.ts:1140
 msgid "Enable video player"
 msgstr "Ενεργοποίηση προγράμματος αναπαραγωγής βίντεο"
 
@@ -1609,15 +1664,15 @@ msgstr "Κρυπτογραφημένο"
 msgid "Encrypted items cannot be modified"
 msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
 
-#: packages/app-mobile/components/side-menu-content.tsx:141
+#: packages/app-mobile/components/side-menu-content.tsx:145
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Τα κρυπτογραφημένα σημειωματάρια δεν μπορούν να μετονομαστούν"
 
-#: packages/lib/models/Setting.ts:2407
+#: packages/lib/models/Setting.ts:2454
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:400
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:444
 #: packages/app-mobile/components/screens/encryption-config.tsx:287
 msgid "Encryption Config"
 msgstr "Ρυθμίσεις κρυπτογράφησης"
@@ -1649,7 +1704,7 @@ msgstr "Βάλτε τον κωδικό εδώ"
 msgid "Enter master password:"
 msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
 
-#: packages/app-mobile/components/screens/folder.js:111
+#: packages/app-mobile/components/screens/folder.js:93
 msgid "Enter notebook title"
 msgstr "Δώστε τον τίτλο του σημειωματάριου"
 
@@ -1696,12 +1751,12 @@ msgstr "Αρχείο εξαγωγής Evernote (σαν Markdown)"
 msgid "Exits the application."
 msgstr "Βγαίνει από την εφαρμογή."
 
-#: packages/app-mobile/components/side-menu-content.tsx:333
+#: packages/app-mobile/components/side-menu-content.tsx:346
 msgid "Expand"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:375
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:374
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "Εξαγωγή"
@@ -1715,19 +1770,19 @@ msgstr "Εξαγωγή όλων"
 msgid "Export debug report"
 msgstr "Εξαγωγή Debug report"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:567
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
 msgid "Export Debug Report"
 msgstr "Εξαγωγή Aναφοράς Debug"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:572
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Export profile"
 msgstr "Εξαγωγή προφίλ"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:572
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Exporting profile..."
 msgstr "Γίνεται εξαγωγή προφίλ..."
 
-#: packages/app-desktop/InteropServiceHelper.ts:170
+#: packages/app-desktop/InteropServiceHelper.ts:176
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Γίνεται εξαγωγή στο \"%s\" με μορφή \"%s\". Παρακαλώ περιμένετε..."
 
@@ -1748,11 +1803,11 @@ msgstr "Εξάγει μόνο την καθορισμένη σημείωση."
 msgid "Exports only the given notebook."
 msgstr "Εξάγει μόνο το καθορισμένο σημειωματάριο."
 
-#: packages/lib/models/Setting.ts:1468
+#: packages/lib/models/Setting.ts:1493
 msgid "Fail-safe"
 msgstr "Ασφαλής"
 
-#: packages/lib/models/Setting.ts:1469
+#: packages/lib/models/Setting.ts:1494
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1765,7 +1820,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Ανεπανόρθωτο σφάλμα:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:589
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 msgid "Feature flags"
 msgstr "Feature flags"
 
@@ -1773,8 +1828,8 @@ msgstr "Feature flags"
 msgid "Fetched items: %d/%d."
 msgstr "Ληφθέντα στοιχεία: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
-#: packages/app-mobile/components/side-menu-content.tsx:418
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:743
+#: packages/app-mobile/components/side-menu-content.tsx:435
 msgid "Fetching resources: %d/%d"
 msgstr "Λήψη πόρων: %d/%d"
 
@@ -1786,7 +1841,7 @@ msgstr "Αρχείο"
 msgid "File system"
 msgstr "Σύστημα Αρχείων"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:190
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:192
 #, fuzzy
 msgid "Filter tags"
 msgstr "Νέες ετικέτες:"
@@ -1804,11 +1859,11 @@ msgstr "Βρέθηκε: %d."
 msgid "Firefox Extension"
 msgstr "Επέκταση Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
 msgid "Fix search index"
 msgstr "Διόρθωση ευρετηρίων αναζήτησης"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
 msgid "Fixing search index..."
 msgstr "Διόρθωση ευρετηρίων αναζήτησης..."
 
@@ -1820,11 +1875,11 @@ msgstr "Διόρθωση ευρετηρίων αναζήτησης..."
 msgid "Focus"
 msgstr "Εστίαση σε"
 
-#: packages/lib/models/Setting.ts:1068 packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1080 packages/lib/models/Setting.ts:1097
 msgid "Focus body"
 msgstr "Eστίαση στο σώμα"
 
-#: packages/lib/models/Setting.ts:1067 packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1079 packages/lib/models/Setting.ts:1096
 msgid "Focus title"
 msgstr "Eστίαση στον τίτλο"
 
@@ -1832,13 +1887,13 @@ msgstr "Eστίαση στον τίτλο"
 msgid "Folders"
 msgstr "Φάκελοι"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:572
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 "Για τον εντοπισμό σφαλμάτων και μόνο: εξαγάγετε το προφίλ σας σε μια "
 "εξωτερική κάρτα SD."
 
-#: packages/lib/models/Setting.ts:1449
+#: packages/lib/models/Setting.ts:1473
 msgid "For example \"%s\""
 msgstr ""
 
@@ -1881,7 +1936,7 @@ msgstr "Μπροστά"
 msgid "Found: %d."
 msgstr "Βρέθηκε: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:675
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:723
 msgid "FTS enabled: %d"
 msgstr "FTS ενεργοποιημένο: %d"
 
@@ -1894,7 +1949,7 @@ msgstr "Πλήρες αρχείο αλλαγών"
 msgid "Full name"
 msgstr "Πλήρες αρχείο αλλαγών"
 
-#: packages/lib/models/Setting.ts:2398
+#: packages/lib/models/Setting.ts:2445
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Γενικά"
@@ -1913,7 +1968,7 @@ msgstr[1] "Δημιουργία νεου %s..."
 msgid "Get it now:"
 msgstr "Λήψη τώρα:"
 
-#: packages/lib/models/Setting.ts:1307
+#: packages/lib/models/Setting.ts:1331
 msgid "Get pre-releases when checking for updates"
 msgstr "Λήψη προεκδόσεων κατά τον έλεγχο για ενημερώσεις"
 
@@ -1927,12 +1982,12 @@ msgstr ""
 "εμφανιστεί  το [όνομα]. Εάν δεν υπάρχει ούτε [όνομα] ούτε [τιμή], θα "
 "εμφανιστεί η τρέχουσα παράμετρος."
 
-#: packages/app-mobile/components/screens/Note.tsx:857
+#: packages/app-mobile/components/screens/Note.tsx:848
 msgid "Go to source URL"
 msgstr "Μεταβείτε στη διεύθυνση URL προέλευσης"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:629
+#: packages/app-desktop/plugins/GotoAnything.tsx:617
 msgid "Goto Anything..."
 msgstr "Γρήγορη Μετακίνηση..."
 
@@ -2030,7 +2085,7 @@ msgstr "Αδρανής"
 msgid "Ignore"
 msgstr "Παράβλεψη"
 
-#: packages/lib/models/Setting.ts:1428
+#: packages/lib/models/Setting.ts:1452
 msgid "Ignore TLS certificate errors"
 msgstr "Παράβλεψη σφαλμάτων πιστοποιητικού TLS"
 
@@ -2079,7 +2134,7 @@ msgstr ""
 "συντομεύσεις `$n` ή `$b` αντίστοιχα. Η `$c` μπορεί να χρησιμοποιηθεί για να "
 "το τρέχον επιλεγμένο στοιχείο."
 
-#: packages/app-mobile/components/screens/Note.tsx:402
+#: packages/app-mobile/components/screens/Note.tsx:401
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2124,8 +2179,8 @@ msgstr ""
 "\n"
 "Σημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:202
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:81
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -2157,7 +2212,7 @@ msgstr "Μείωση εσοχής"
 msgid "Indent more"
 msgstr "Αύξηση εσοχής"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:201
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:209
 msgid "Information"
 msgstr "Πληροφορίες"
 
@@ -2169,7 +2224,7 @@ msgstr "Ενσωματωμένος κώδικας"
 msgid "Insert"
 msgstr "Εισαγωγή"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:197
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:198
 msgid "Insert Hyperlink"
 msgstr "Εισαγωγή υπερσύνδεσης"
 
@@ -2212,7 +2267,7 @@ msgstr "Μη έγκυρη απάντηση: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ακυρη εντολή: \"%s\""
 
-#: packages/lib/models/Setting.ts:1926
+#: packages/lib/models/Setting.ts:1973
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Άκυρη τιμή: \" %s\". Οι πιθανές τιμές είναι: %s."
 
@@ -2311,7 +2366,7 @@ msgstr ""
 "Το Joplin Web Clipper επιτρέπει την αποθήκευση ιστοσελίδων και screenshots "
 "από το πρόγραμμα περιήγησης στο Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:689
 msgid "Joplin website"
 msgstr "Joplin website"
 
@@ -2328,11 +2383,11 @@ msgstr ""
 msgid "KaTeX"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1494
+#: packages/lib/models/Setting.ts:1519
 msgid "Keep note history for"
 msgstr "Διατήρηση ιστορικού σημειώσεων για"
 
-#: packages/lib/models/Setting.ts:1368
+#: packages/lib/models/Setting.ts:1392
 msgid "Keyboard Mode"
 msgstr "Λειτουργία πληκτρολογίου"
 
@@ -2340,7 +2395,7 @@ msgstr "Λειτουργία πληκτρολογίου"
 msgid "Keyboard Shortcut"
 msgstr "Συντόμευση πληκτρολογίου"
 
-#: packages/lib/models/Setting.ts:2409
+#: packages/lib/models/Setting.ts:2456
 msgid "Keyboard Shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
@@ -2352,7 +2407,7 @@ msgstr "Υποστηριζόμενη κλειδοθήκη: %s"
 msgid "Keys that need upgrading"
 msgstr "Κλειδιά που χρειάζονται αναβάθμιση"
 
-#: packages/lib/models/Setting.ts:1357
+#: packages/lib/models/Setting.ts:1381
 msgid "Landscape"
 msgstr "Οριζόντια"
 
@@ -2364,11 +2419,11 @@ msgstr "Γλώσσα"
 msgid "Last error: %s"
 msgstr "Τελευταίο σφάλμα: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:643
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:647
 msgid "Later"
 msgstr "Αργότερα"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:614
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:616
 msgid "Layout"
 msgstr "Διάταξη"
 
@@ -2380,11 +2435,11 @@ msgstr "Ακολουθία κουμπιών διάταξης"
 msgid "Leave notebook..."
 msgstr "Αφήστε το σημειωματάριο..."
 
-#: packages/lib/models/Setting.ts:1351
+#: packages/lib/models/Setting.ts:1375
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1347
+#: packages/lib/models/Setting.ts:1371
 msgid "Letter"
 msgstr "Letter"
 
@@ -2417,13 +2472,13 @@ msgstr[1] "Ο σύνδεσμοι έχει αντιγραφεί στο πρόχε
 msgid "Link text"
 msgstr "Σύνδεσμος"
 
-#: packages/app-mobile/components/screens/Note.tsx:197
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Σύνδεσμοι με πρωτόκολλο \"%s\" δεν υποστηρίζονται"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:233
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:234
 msgid "List item"
 msgstr "Στοιχείο λίστας"
 
@@ -2449,7 +2504,7 @@ msgstr ""
 "πραγματοποιείται συγχρονισμός, μπορείτε να διαγράψετε το αρχείο κλειδώματος "
 "στο \"%s\" και να συνεχίσετε τη λειτουργία."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:565
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:613
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
@@ -2480,7 +2535,7 @@ msgid "Logs"
 msgstr "Αρχεία Καταγραφής"
 
 #: packages/app-desktop/gui/MenuBar.tsx:787
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:627
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:675
 msgid "Make a donation"
 msgstr "Κάντε μια δωρεά"
 
@@ -2496,6 +2551,11 @@ msgstr "Διαχείριση κύριου κωδικού πρόσβασης..."
 #, fuzzy
 msgid "Manage multiple users"
 msgstr "Διαχείριση κύριου κωδικού πρόσβασης"
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+#, fuzzy
+msgid "Manage profiles"
+msgstr "Ενημέρωση προφίλ"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2514,7 +2574,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Χειροκίνητα"
 
-#: packages/lib/models/Setting.ts:2403
+#: packages/lib/models/Setting.ts:2450
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2582,7 +2642,7 @@ msgstr "Απουσία κυρίως κλειδιών"
 msgid "Missing required argument: %s"
 msgstr "Λείπει το απαιτούμενο όρισμα: %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:439
+#: packages/app-mobile/components/side-menu-content.tsx:456
 msgid "Mobile data - auto-sync disabled"
 msgstr ""
 "Δεδομένα κινητής τηλεφωνίας - ο αυτόματος συγχρονισμός απενεργοποιήθηκε"
@@ -2591,7 +2651,7 @@ msgstr ""
 msgid "More info"
 msgstr "Περισσότερες πληροφορίες"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:593
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
 msgid "More information"
 msgstr "Περισσότερες πληροφορίες"
 
@@ -2601,7 +2661,7 @@ msgstr ""
 "Περισσότερα από ένα στοιχεία ταιριάζουν με το \"%s\". Παρακαλώ περιορίστε το "
 "ερώτημά σας."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:562
+#: packages/app-mobile/components/ScreenHeader.tsx:564
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Μετακίνηση %d σημειώσεων στο σημειωματάριο \"%s\";"
 
@@ -2613,7 +2673,7 @@ msgstr "Μετακίνηση στο σημειωματάριο"
 msgid "Move to notebook:"
 msgstr "Μετακίνηση στο σημειωματάριο:"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:522
+#: packages/app-mobile/components/ScreenHeader.tsx:524
 msgid "Move to notebook..."
 msgstr "Μετακίνηση στο σημειωματάριο..."
 
@@ -2632,7 +2692,7 @@ msgid "N"
 msgstr "Ο"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
-#: packages/app-mobile/components/action-button.js:105
+#: packages/app-mobile/components/screens/notes.js:269
 #: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Νέα σημείωση"
@@ -2641,7 +2701,7 @@ msgstr "Νέα σημείωση"
 msgid "New notebook"
 msgstr "Νέο σημειωματάριο"
 
-#: packages/app-mobile/components/side-menu-content.tsx:400
+#: packages/app-mobile/components/side-menu-content.tsx:413
 msgid "New Notebook"
 msgstr "Νέο σημειωματάριο"
 
@@ -2655,12 +2715,12 @@ msgstr ""
 msgid "New sub-notebook"
 msgstr "Νέο υπο-σημειωματάριο"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:170
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:172
 msgid "New tags:"
 msgstr "Νέες ετικέτες:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:6
-#: packages/app-mobile/components/action-button.js:96
+#: packages/app-mobile/components/screens/notes.js:259
 #: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Νέο to-do"
@@ -2694,7 +2754,7 @@ msgid "no"
 msgstr "όχι"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:576
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Όχι"
@@ -2703,7 +2763,7 @@ msgstr "Όχι"
 msgid "No active notebook."
 msgstr "Δεν υπάρχει ενεργό σημειωματάριο."
 
-#: packages/app-mobile/components/screens/Note.tsx:168
+#: packages/app-mobile/components/screens/Note.tsx:167
 msgid "No item with ID %s"
 msgstr "Δεν υπάρχει στοιχείο με αναγνωριστικό %s"
 
@@ -2762,17 +2822,22 @@ msgstr "Δεν έγινε λήψη"
 msgid "Not generated"
 msgstr "Δεν δημιουργήθηκαν"
 
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:64
+#, fuzzy
+msgid "Not now"
+msgstr "Κάνε το τώρα"
+
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
 msgid "note"
 msgstr "σημείωση"
 
-#: packages/lib/models/Setting.ts:2401
+#: packages/lib/models/Setting.ts:2448
 msgid "Note"
 msgstr "Σημείωση"
 
-#: packages/lib/models/Setting.ts:1558
+#: packages/lib/models/Setting.ts:1583
 msgid "Note area growth factor"
 msgstr "Συντελεστής ανάπτυξης περιοχής σημειώσεων"
 
@@ -2802,7 +2867,7 @@ msgid "Note has been saved."
 msgstr "Η σημείωση έχει αποθηκευτεί."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2406
+#: packages/lib/models/Setting.ts:2453
 msgid "Note History"
 msgstr "Ιστορικό Σημειώσεων"
 
@@ -2814,7 +2879,7 @@ msgstr "Η σημείωση δεν είναι  to-do: \"%s\""
 msgid "Note list"
 msgstr "Λίστα σημειώσεων"
 
-#: packages/lib/models/Setting.ts:1543
+#: packages/lib/models/Setting.ts:1568
 msgid "Note list growth factor"
 msgstr "Συντελεστής ανάπτυξης λίστας σημειώσεων"
 
@@ -2827,7 +2892,7 @@ msgstr "Ιδιότητες σημείωσης"
 msgid "Note title"
 msgstr "Τίτλος σημειωματάριου"
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1165
 msgid "Note: Does not work in all desktop environments."
 msgstr "Σημείωση: Δεν λειτουργεί σε όλα τα γραφικά περιβάλλοντα."
 
@@ -2842,20 +2907,20 @@ msgstr ""
 msgid "Note&book"
 msgstr "Note&book"
 
-#: packages/lib/models/Setting.ts:2402
+#: packages/lib/models/Setting.ts:2449
 msgid "Notebook"
 msgstr "Σημειωματάριo"
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1553
 msgid "Notebook list growth factor"
 msgstr "Συντελεστής ανάπτυξης λίστας σημειωματάριων"
 
-#: packages/app-mobile/components/side-menu-content.tsx:135
+#: packages/app-mobile/components/side-menu-content.tsx:139
 msgid "Notebook: %s"
 msgstr "Σημειωματάριο: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:691
-#: packages/app-mobile/components/side-menu-content.tsx:459
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:690
+#: packages/app-mobile/components/side-menu-content.tsx:476
 msgid "Notebooks"
 msgstr "Σημειωματάρια"
 
@@ -2870,7 +2935,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Σημειώσεις"
 
-#: packages/lib/models/Setting.ts:2418
+#: packages/lib/models/Setting.ts:2465
 msgid "Notes and settings are stored in: %s"
 msgstr "Οι σημειώσεις και οι ρυθμίσεις αποθηκεύονται στο: %s"
 
@@ -2888,12 +2953,13 @@ msgstr "Αριθμημένη λίστα"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:492
-#: packages/app-desktop/gui/PromptDialog.tsx:263
+#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
-#: packages/app-mobile/components/CameraView.tsx:190
+#: packages/app-mobile/components/CameraView.tsx:192
 #: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:203
-#: packages/app-mobile/components/side-menu-content.tsx:159
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/side-menu-content.tsx:163
 msgid "OK"
 msgstr "Εντάξει"
 
@@ -2992,11 +3058,11 @@ msgstr "Άλλες εφαρμογές..."
 msgid "Output format: %s"
 msgstr "Μορφή εξόδου: %s"
 
-#: packages/lib/models/Setting.ts:1354
+#: packages/lib/models/Setting.ts:1378
 msgid "Page orientation for PDF export"
 msgstr "Προσανατολισμός σελίδας για εξαγωγή PDF"
 
-#: packages/lib/models/Setting.ts:1344
+#: packages/lib/models/Setting.ts:1368
 msgid "Page size for PDF export"
 msgstr "Μέγεθος σελίδας για εξαγωγή PDF"
 
@@ -3020,12 +3086,12 @@ msgid "Passwords do not match!"
 msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:793
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:795
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Paste"
 msgstr "Επικόλληση"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:535
 msgid "Path:"
 msgstr "Διαδρομή:"
 
@@ -3038,11 +3104,11 @@ msgstr "Αρχείο PDF"
 msgid "Per user. Minimum of %d users."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:403
+#: packages/app-mobile/components/screens/Note.tsx:402
 msgid "Permission needed"
 msgstr "Απαιτείται άδεια"
 
-#: packages/app-mobile/components/CameraView.tsx:188
+#: packages/app-mobile/components/CameraView.tsx:190
 msgid "Permission to use camera"
 msgstr "Άδεια χρήσης κάμερας"
 
@@ -3135,11 +3201,11 @@ msgid "Plugin tools"
 msgstr "Πρόσθετα εργαλεία"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2404
+#: packages/lib/models/Setting.ts:2451
 msgid "Plugins"
 msgstr "Πρόσθετα"
 
-#: packages/lib/models/Setting.ts:1356
+#: packages/lib/models/Setting.ts:1380
 msgid "Portrait"
 msgstr "Κάθετη"
 
@@ -3184,7 +3250,7 @@ msgstr ""
 "Πατήστε τη συντόμευση και, στη συνέχεια, πατήστε το πλήκτρο ENTER. "
 "Εναλλακτικά, πατήστε το πλήκτρο BACKSPACE για να καταργήσετε τη συντόμευση."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:580
+#: packages/app-mobile/components/ScreenHeader.tsx:582
 msgid "Press to set the decryption password."
 msgstr "Πατήστε για να ορίσετε τον κωδικό αποκρυπτογράφησης."
 
@@ -3204,7 +3270,7 @@ msgstr "Εκτύπωση"
 msgid "Priority support"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:655
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:703
 msgid "Privacy Policy"
 msgstr "Πολιτική Προστασίας Προσωπικών Δεδομένων"
 
@@ -3229,6 +3295,11 @@ msgstr "Επεξεργασία διαγραφών χρηστών"
 msgid "Profile"
 msgstr "Προφιλ"
 
+#: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
+#, fuzzy
+msgid "Profile name"
+msgstr "Προφιλ"
+
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 #, fuzzy
 msgid "Profile name:"
@@ -3238,20 +3309,25 @@ msgstr "Προφιλ"
 msgid "Profile Version: %s"
 msgstr "Έκδοση προφίλ: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:954
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
+#, fuzzy
+msgid "Profiles"
+msgstr "Προφιλ"
+
+#: packages/app-mobile/components/screens/Note.tsx:945
 msgid "Properties"
 msgstr "Ιδιότητες"
 
-#: packages/lib/models/Setting.ts:1438
+#: packages/lib/models/Setting.ts:1462
 #, fuzzy
 msgid "Proxy enabled"
 msgstr "Ενεργοποιημένη"
 
-#: packages/lib/models/Setting.ts:1459
+#: packages/lib/models/Setting.ts:1484
 msgid "Proxy timeout (seconds)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1448
+#: packages/lib/models/Setting.ts:1472
 msgid "Proxy URL"
 msgstr ""
 
@@ -3286,7 +3362,7 @@ msgstr "Επανακρυπτογράφηση δεδομένων"
 msgid "Re-encryption"
 msgstr "Επανα-κρυπτογράφηση"
 
-#: packages/lib/models/Setting.ts:1288
+#: packages/lib/models/Setting.ts:1312
 msgid "Re-upload local data to sync target"
 msgstr "Εκ νέου αποστολή τοπικών δεδομένων στον προορισμό για συγχρονισμό"
 
@@ -3316,7 +3392,7 @@ msgstr "Αποδέκτες:"
 
 #: packages/app-desktop/gui/MenuBar.tsx:646
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
-#: packages/app-mobile/components/ScreenHeader.tsx:374
+#: packages/app-mobile/components/ScreenHeader.tsx:376
 msgid "Redo"
 msgstr "Επανάληψη"
 
@@ -3336,21 +3412,21 @@ msgstr "Ενεργοποίηση math expressions"
 msgid "Reject"
 msgstr "Απόρριψη"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:288
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:287
 msgid "Remove"
 msgstr "Κατάργηση"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:295
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:294
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:297
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:296
 msgid "Remove this search from the sidebar?"
 msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.ts:8
-#: packages/app-mobile/components/side-menu-content.tsx:138
+#: packages/app-mobile/components/side-menu-content.tsx:142
 msgid "Rename"
 msgstr "Μετονομασία"
 
@@ -3402,7 +3478,7 @@ msgstr "Πόροι: %d."
 msgid "Restart and upgrade"
 msgstr "Επανεκκίνηση και αναβάθμιση"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:708
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:712
 msgid "Restart now"
 msgstr "Επανεκίνηση τώρα"
 
@@ -3505,8 +3581,9 @@ msgstr "Αποθήκευση ως..."
 msgid "Save as..."
 msgstr "Αποθήκευση ως..."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:327
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/ScreenHeader.tsx:329
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:343
+#: packages/app-mobile/components/screens/Note.tsx:103
 msgid "Save changes"
 msgstr "Αποθήκευση αλλαγών"
 
@@ -3514,8 +3591,8 @@ msgstr "Αποθήκευση αλλαγών"
 msgid "Save geo-location with notes"
 msgstr "Αποθήκευση της γεωγραφικής τοποθεσίας μαζί με της σημειώσεις"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:399
-#: packages/app-mobile/components/screens/search.js:160
+#: packages/app-mobile/components/ScreenHeader.tsx:401
+#: packages/app-mobile/components/screens/search.tsx:171
 msgid "Search"
 msgstr "Εύρεση"
 
@@ -3542,7 +3619,7 @@ msgstr "Εύρεση:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:164
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 msgid "Search..."
 msgstr "Αναζήτηση..."
 
@@ -3550,7 +3627,7 @@ msgstr "Αναζήτηση..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Αναζητά το καθορισμένο <pattern> σε όλες τις σημειώσεις."
 
-#: packages/lib/models/Setting.ts:1307
+#: packages/lib/models/Setting.ts:1331
 msgid "See the pre-release page for more details: %s"
 msgstr "Δείτε τη σελίδα προέκδοσης για περισσότερες λεπτομέρειες: %s"
 
@@ -3559,7 +3636,7 @@ msgid "Select"
 msgstr "Επιλογή"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
-#: packages/app-mobile/components/ScreenHeader.tsx:386
+#: packages/app-mobile/components/ScreenHeader.tsx:388
 msgid "Select all"
 msgstr "Επιλογή όλων"
 
@@ -3585,7 +3662,7 @@ msgid "Server is running on port %d"
 msgstr "Ο διακομιστής εκτελείται στη θύρα %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:918
+#: packages/app-mobile/components/screens/Note.tsx:909
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Ορισμός υπενθύμισης"
@@ -3594,7 +3671,7 @@ msgstr "Ορισμός υπενθύμισης"
 msgid "Set alarm:"
 msgstr "Ορισμός ειδοποίησης:"
 
-#: packages/lib/models/Setting.ts:1238
+#: packages/lib/models/Setting.ts:1262
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3620,7 +3697,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:926
+#: packages/app-mobile/components/screens/Note.tsx:917
 msgid "Share"
 msgstr "Κοινοποίηση"
 
@@ -3688,16 +3765,16 @@ msgstr "Εμφάνιση πλήθους σημειώσεων"
 msgid "Show sort order buttons"
 msgstr "Εμφάνιση κουμπιών σειράς ταξινόμησης"
 
-#: packages/lib/models/Setting.ts:1151
+#: packages/lib/models/Setting.ts:1163
 msgid "Show tray icon"
 msgstr "Εμφάνιση εικονιδίου στη γραμμή εργασιών"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:287
+#: packages/app-mobile/components/ScreenHeader.tsx:289
 msgid "Show/hide the sidebar"
 msgstr ""
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
-#: packages/app-mobile/components/ScreenHeader.tsx:286
+#: packages/app-mobile/components/ScreenHeader.tsx:288
 msgid "Sidebar"
 msgstr "Πλευρική μπάρα"
 
@@ -3736,7 +3813,7 @@ msgstr "Δεν είναι δυνατή η αποκρυπτογράφηση ορ�
 msgid "Some items cannot be synchronised."
 msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:581
+#: packages/app-mobile/components/ScreenHeader.tsx:583
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Ορισμένα στοιχεία δεν είναι δυνατό να συγχρονιστούν. Πατήστε για "
@@ -3747,7 +3824,7 @@ msgid "Sort notebooks by"
 msgstr "Ταξινόμηση σημειωματάριων κατά"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/app-mobile/components/ScreenHeader.tsx:449
+#: packages/app-mobile/components/ScreenHeader.tsx:451
 #: packages/lib/models/Setting.ts:909
 msgid "Sort notes by"
 msgstr "Ταξινόμηση σημειώσεων κατά"
@@ -3770,7 +3847,7 @@ msgstr "Μορφή προέλευσης: %s"
 msgid "Source: "
 msgstr "Πηγή: "
 
-#: packages/lib/models/Setting.ts:1474
+#: packages/lib/models/Setting.ts:1499
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3788,7 +3865,7 @@ msgstr "Ορθογράφος"
 msgid "Split View"
 msgstr "Διαίρεση προβολής"
 
-#: packages/lib/models/Setting.ts:1159
+#: packages/lib/models/Setting.ts:1171
 msgid "Start application minimised in the tray icon"
 msgstr "Έναρξη εφαρμογής ελαχιστοποιημένη στη γραμμή εργασιών"
 
@@ -3878,7 +3955,7 @@ msgstr ""
 msgid "Strikethrough"
 msgstr "Διακριτή διαγραφή"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:195
 msgid "strong text"
 msgstr "έντονη γραφή"
 
@@ -3912,6 +3989,7 @@ msgid "Switch between note and to-do type"
 msgstr "Εναλλαγή μεταξύ σημείωσης και to-do"
 
 #: packages/app-desktop/gui/MenuBar.tsx:444
+#: packages/app-mobile/components/side-menu-content.tsx:418
 #, fuzzy
 msgid "Switch profile"
 msgstr "Εξαγωγή προφίλ"
@@ -3943,7 +4021,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:564
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:612
 msgid "Sync Status"
 msgstr "Κατάσταση Συγχρονισμού"
 
@@ -3975,11 +4053,11 @@ msgstr "Έκδοση συγχρονισμού: %s"
 msgid "Sync your notes"
 msgstr "Συγχρονισμός των σημειώσεών σας"
 
-#: packages/lib/models/Setting.ts:2399
+#: packages/lib/models/Setting.ts:2446
 msgid "Synchronisation"
 msgstr "Συγχρονισμός"
 
-#: packages/lib/models/Setting.ts:1315
+#: packages/lib/models/Setting.ts:1339
 msgid "Synchronisation interval"
 msgstr "Διάστημα συγχρονισμού"
 
@@ -4000,13 +4078,13 @@ msgstr "Στόχος συγχρονισμού"
 msgid "Synchronisation target: %s (%s)"
 msgstr "Στόχος συγχρονισμού: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:665
-#: packages/app-mobile/components/side-menu-content.tsx:426
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
+#: packages/app-mobile/components/side-menu-content.tsx:443
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Συγχρονισμός"
 
-#: packages/lib/models/Setting.ts:1335
+#: packages/lib/models/Setting.ts:1359
 msgid "Synchronise only over WiFi connection"
 msgstr "Συγχρονισμός μόνο μέσω σύνδεσης WiFi"
 
@@ -4022,11 +4100,11 @@ msgstr "Συγχρονισμός..."
 msgid "Synchronizing..."
 msgstr "Συγχρονισμός..."
 
-#: packages/lib/models/Setting.ts:1350
+#: packages/lib/models/Setting.ts:1374
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:179
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:181
 msgid "tag1, tag2, ..."
 msgstr ""
 
@@ -4036,14 +4114,14 @@ msgid "Tagged: %d."
 msgstr "Με ετικέτα: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:715
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:719
+#: packages/app-mobile/components/screens/Note.tsx:924
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.tsx:402
+#: packages/app-mobile/components/side-menu-content.tsx:415
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: packages/app-mobile/components/screens/Note.tsx:879
+#: packages/app-mobile/components/screens/Note.tsx:870
 msgid "Take photo"
 msgstr "Βγάλτε μια φωτογραφία"
 
@@ -4061,7 +4139,7 @@ msgstr "Εργασίες"
 msgid "Teams"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1343
+#: packages/lib/models/Setting.ts:1367
 msgid "Text editor command"
 msgstr "Εντολή \"Επεξεργαστή κειμένου\""
 
@@ -4070,6 +4148,12 @@ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
 "Ευχαριστώ! Ο λογαριασμός σας στο Joplin Cloud είναι τώρα ρυθμισμένος και "
 "έτοιμος για χρήση."
+
+#: packages/lib/services/profileConfig/index.ts:105
+msgid ""
+"The active profile cannot be deleted. Switch to a different profile and try "
+"again."
+msgstr ""
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4098,7 +4182,7 @@ msgstr "Η εφαρμογή έχει εγκριθεί!"
 msgid "The application has been successfully authorised."
 msgstr "Η εφαρμογή έχει εξουσιοδοτηθεί με επιτυχία."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:632
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:636
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 "Η εφαρμογή πρέπει να επανεκκινηθεί για να τεθούν σε ισχύ αυτές οι αλλαγές."
@@ -4141,7 +4225,11 @@ msgstr ""
 "Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να "
 "κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
 
-#: packages/lib/models/Setting.ts:1343
+#: packages/lib/services/profileConfig/index.ts:104
+msgid "The default profile cannot be deleted"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:1367
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -4150,8 +4238,8 @@ msgstr ""
 "για το άνοιγμα μιας σημείωσης. Εάν δεν δωθεί καμία, θα προσπαθήσει να "
 "ανιχνεύσει αυτόματα το προεπιλεγμένο πρόγραμμα επεξεργασίας."
 
-#: packages/lib/models/Setting.ts:1530 packages/lib/models/Setting.ts:1545
-#: packages/lib/models/Setting.ts:1560
+#: packages/lib/models/Setting.ts:1555 packages/lib/models/Setting.ts:1570
+#: packages/lib/models/Setting.ts:1585
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4179,7 +4267,7 @@ msgstr ""
 "εξακολουθεί να είναι σε θέση να αποκρυπτογραφήσει και να κρυπτογραφήσει τα "
 "δεδομένα σας ως συνήθως."
 
-#: packages/app-mobile/components/screens/Note.tsx:193
+#: packages/app-mobile/components/screens/Note.tsx:192
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Η εφαρμογή Joplin για κινητά δεν υποστηρίζει αυτήν τη στιγμή αυτόν τον τύπο "
@@ -4222,7 +4310,7 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
 "Η σημείωση \"%s\" έχει επαναφερθεί με επιτυχία στο σημειωματάριο \"%s\"."
 
-#: packages/app-mobile/components/screens/folder.js:88
+#: packages/app-mobile/components/screens/folder.js:69
 msgid "The notebook could not be saved: %s"
 msgstr "Αυτό το σημειωματάριο δεν μπορεί να σωθεί: %s"
 
@@ -4255,7 +4343,7 @@ msgstr ""
 "Joplin. Η λειτουργία μπορεί να διαρκέσει λίγα λεπτά για να ολοκληρωθεί και η "
 "εφαρμογή πρέπει να επανεκκινηθεί. Για να προχωρήσετε κάντε κλικ στο σύνδεσμο."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:582
+#: packages/app-mobile/components/ScreenHeader.tsx:584
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Ο προορισμός συγχρονισμού πρέπει να αναβαθμιστεί. Πατήστε αυτό το banner για "
@@ -4299,6 +4387,10 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Δεν υπάρχουν προς το παρόν σημειώσεις. Δημιουργήστε μία κάνοντας κλικ στο "
 "κουμπί (+)."
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:341
+msgid "There are unsaved changes."
+msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:487
 msgid ""
@@ -4348,7 +4440,7 @@ msgstr ""
 "στόχο συγχρονισμού. Για να βρείτε αυτά τα στοιχεία, αναζητήστε είτε τον "
 "τίτλο είτε το αναγνωριστικό (το οποίο εμφανίζεται στις παραπάνω παρενθέσεις)."
 
-#: packages/lib/models/Setting.ts:2417
+#: packages/lib/models/Setting.ts:2464
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4372,7 +4464,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί"
 
-#: packages/app-mobile/components/screens/Note.tsx:187
+#: packages/app-mobile/components/screens/Note.tsx:186
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί."
 
@@ -4398,11 +4490,11 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Αυτή η σημείωση δεν διαθέτει πληροφορίες γεωγραφικής θέσης."
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:103
 msgid "This note has been modified:"
 msgstr "Αυτή η σημείωση έχει τροποποιηθεί:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:614
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:616
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4433,7 +4525,7 @@ msgstr ""
 "μπορεί να σας ζητήσει να δώσετε άδεια στο Joplin να επικοινωνεί μέσω της "
 "συγκεκριμένης πόρτας."
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1165
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4525,7 +4617,13 @@ msgstr ""
 "Για να επαναλάβετε την αποκρυπτογράφηση αυτών των στοιχείων. Τρέξτε `e2ee "
 "decrypt --retry-failed-items`"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:603
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:61
+msgid ""
+"To switch the profile, the app is going to close and you will need to "
+"restart it."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4587,7 +4685,7 @@ msgstr "Εναλλαγή του πεδίου ταξινόμησης"
 msgid "Token has been copied to the clipboard!"
 msgstr "Το Token έχει αντιγραφεί στο πρόχειρο!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:562
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "Tools"
 msgstr "Εργαλεία"
 
@@ -4601,6 +4699,7 @@ msgid "Total: %d/%d"
 msgstr "Σύνολο: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
@@ -4622,7 +4721,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Πληκτρολογήστε `joplin help` για πληροφορίες χρήσης."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:592
+#: packages/app-desktop/plugins/GotoAnything.tsx:580
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4633,7 +4732,7 @@ msgstr ""
 "ή @ ακολουθούμενο από ένα σημειωματάριο. Ή πληκτρολογίστε : για να ψάξετε "
 "για εντολές."
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:198
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:200
 msgid "Type new tags or select from list"
 msgstr "Πληκτρολογήστε καινούρια ετικέτα ή επιλέξτε από την λίστα"
 
@@ -4647,7 +4746,7 @@ msgstr "Μη ολοκληρωμένα to-dos στην κορυφή"
 
 #: packages/app-desktop/gui/MenuBar.tsx:642
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#: packages/app-mobile/components/ScreenHeader.tsx:364
+#: packages/app-mobile/components/ScreenHeader.tsx:366
 msgid "Undo"
 msgstr "Αναίρεση"
 
@@ -4683,7 +4782,7 @@ msgstr ""
 "Διακόψτε την κοινή χρήση σε αυτό το σημειωματάριο; Οι παραλήπτες δεν θα "
 "έχουν πλέον πρόσβαση στο περιεχόμενό του."
 
-#: packages/app-mobile/components/screens/Note.tsx:668
+#: packages/app-mobile/components/screens/Note.tsx:659
 msgid "Unsupported image type: %s"
 msgstr "Μη υποστηριζόμενος τύπος εικόνας: %s"
 
@@ -4738,7 +4837,7 @@ msgstr "Ενημερώθηκε: "
 msgid "Updated: %d."
 msgstr "Ενημερώθηκε: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:846
+#: packages/app-mobile/components/screens/Note.tsx:837
 msgid "Updated: %s"
 msgstr "Ενημερώθηκε: %s"
 
@@ -4764,6 +4863,10 @@ msgstr "URL"
 #: packages/lib/BaseApplication.ts:220
 msgid "Usage: %s"
 msgstr "Χρήση: %s"
+
+#: packages/lib/models/Setting.ts:1629
+msgid "Use biometrics to secure access to the app"
+msgstr ""
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4791,7 +4894,7 @@ msgstr ""
 "Χρησιμοποιήστε τα βέλη για να μετακινήσετε τα στοιχεία διάταξης. Πατήστε "
 "\"Escape\" για έξοδο."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4800,7 +4903,13 @@ msgstr ""
 "πρόβλημα με την αναζήτηση. Μπορεί να χρειαστεί πολύς χρόνος ανάλογα με τον "
 "αριθμό των σημειώσεων."
 
-#: packages/lib/models/Setting.ts:1221
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:56
+msgid ""
+"Use your biometrics to secure access to your application. You can always set "
+"it up later in Settings."
+msgstr ""
+
+#: packages/lib/models/Setting.ts:1245
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4809,7 +4918,7 @@ msgstr ""
 "επεξεργασίας σημειώσεων. Εάν δεν βρεθεί, χρησιμοποιείται μια γενική "
 "αναλογική γραμματοσειρά (μεταβλητού πλάτους)."
 
-#: packages/lib/models/Setting.ts:1233
+#: packages/lib/models/Setting.ts:1257
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4833,11 +4942,15 @@ msgstr "Χρήστες"
 msgid "Valid"
 msgstr "Έγκυρo"
 
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:24
+msgid "Verify your identity"
+msgstr ""
+
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
 msgstr "Προβολή"
 
-#: packages/app-mobile/components/screens/Note.tsx:850
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "View on map"
 msgstr "Προβολή στο χάρτη"
 
@@ -4853,11 +4966,11 @@ msgstr "Προβολή τώρα"
 msgid "Viewer"
 msgstr "Εμφάνιση"
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1397
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:81
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
 msgid "Warning"
 msgstr "Προειδοποίηση"
 
@@ -4866,7 +4979,7 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Προειδοποίηση: δεν εμφανίζονται όλοι οι πόροι για λόγους απόδοσης (όριο:% s)."
 
-#: packages/lib/models/Setting.ts:2408 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2455 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4908,11 +5021,11 @@ msgstr ""
 "Για παράδειγμα, για να δημιουργήσετε ένα σημειωματάριο πατήστε `mb` ενώ για "
 "να δημιουργήσετε μια σημείωση πατήστε `mn`."
 
-#: packages/lib/models/Setting.ts:1081
+#: packages/lib/models/Setting.ts:1093
 msgid "When creating a new note:"
 msgstr "Κατά τη δημιουργία μιας νέας σημείωσης:"
 
-#: packages/lib/models/Setting.ts:1064
+#: packages/lib/models/Setting.ts:1076
 msgid "When creating a new to-do:"
 msgstr "Κατά τη δημιουργία ενός νέου to-do:"
 
@@ -4934,12 +5047,12 @@ msgid "yes"
 msgstr "ναι"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/app-mobile/components/screens/Note.tsx:575
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Ναι"
 
-#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/app-mobile/components/screens/Note.tsx:574
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -4995,7 +5108,7 @@ msgstr ""
 "Ο κωδικός πρόσβασής σας είναι απαραίτητος για την αποκρυπτογράφηση ορισμένων "
 "δεδομένων σας. Πληκτρολογήστε `:e2ee decrypt` για να τον ορίσετε."
 
-#: packages/app-mobile/components/CameraView.tsx:189
+#: packages/app-mobile/components/CameraView.tsx:191
 msgid "Your permission to use your camera is required."
 msgstr "Απαιτείται η άδειά σας για τη χρήση της φωτογραφικής σας μηχανής."
 

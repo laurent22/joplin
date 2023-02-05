@@ -1382,6 +1382,18 @@ class Setting extends BaseModel {
 				};
 			} },
 
+			useCustomPdfViewer: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				advanced: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Use custom PDF viewer (Beta)',
+				description: () => 'The custom PDF viewer remembers the last page that was viewed, however it has some technical issues.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'editor.keyboardMode': {
 				value: '',
 				type: SettingItemType.String,
@@ -1728,31 +1740,45 @@ class Setting extends BaseModel {
 		if (!key.match(/^[a-zA-Z0-9_\-.]+$/)) throw new Error(`Key must only contain characters /a-zA-Z0-9_-./ : ${key}`);
 	}
 
+	private static validateType(type: SettingItemType) {
+		if (!Number.isInteger(type)) throw new Error(`Setting type is not an integer: ${type}`);
+		if (type < 0) throw new Error(`Invalid setting type: ${type}`);
+	}
+
 	static async registerSetting(key: string, metadataItem: SettingItem) {
-		if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
+		try {
+			if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
 
-		this.validateKey(key);
+			this.validateKey(key);
+			this.validateType(metadataItem.type);
 
-		this.customMetadata_[key] = metadataItem;
+			this.customMetadata_[key] = {
+				...metadataItem,
+				value: this.formatValue(metadataItem.type, metadataItem.value),
+			};
 
-		// Clear cache
-		this.metadata_ = null;
-		this.keys_ = null;
+			// Clear cache
+			this.metadata_ = null;
+			this.keys_ = null;
 
-		// Reload the value from the database, if it was already present
-		const valueRow = await this.loadOne(key);
-		if (valueRow) {
-			this.cache_.push({
+			// Reload the value from the database, if it was already present
+			const valueRow = await this.loadOne(key);
+			if (valueRow) {
+				this.cache_.push({
+					key: key,
+					value: this.formatValue(key, valueRow.value),
+				});
+			}
+
+			this.dispatch({
+				type: 'SETTING_UPDATE_ONE',
 				key: key,
-				value: this.formatValue(key, valueRow.value),
+				value: this.value(key),
 			});
+		} catch (error) {
+			error.message = `Could not register setting "${key}": ${error.message}`;
+			throw error;
 		}
-
-		this.dispatch({
-			type: 'SETTING_UPDATE_ONE',
-			key: key,
-			value: this.value(key),
-		});
 	}
 
 	static async registerSection(name: string, source: SettingSectionSource, section: SettingSection) {
@@ -2107,12 +2133,12 @@ class Setting extends BaseModel {
 		return md.filter ? md.filter(value) : value;
 	}
 
-	static formatValue(key: string, value: any) {
-		const md = this.settingMetadata(key);
+	static formatValue(key: string | SettingItemType, value: any) {
+		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
-		if (md.type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
+		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
 
-		if (md.type === SettingItemType.Bool) {
+		if (type === SettingItemType.Bool) {
 			if (typeof value === 'string') {
 				value = value.toLowerCase();
 				if (value === 'true') return true;
@@ -2122,26 +2148,26 @@ class Setting extends BaseModel {
 			return !!value;
 		}
 
-		if (md.type === SettingItemType.Array) {
+		if (type === SettingItemType.Array) {
 			if (!value) return [];
 			if (Array.isArray(value)) return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return [];
 		}
 
-		if (md.type === SettingItemType.Object) {
+		if (type === SettingItemType.Object) {
 			if (!value) return {};
 			if (typeof value === 'object') return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return {};
 		}
 
-		if (md.type === SettingItemType.String) {
+		if (type === SettingItemType.String) {
 			if (!value) return '';
 			return `${value}`;
 		}
 
-		throw new Error(`Unhandled value type: ${md.type}`);
+		throw new Error(`Unhandled value type: ${type}`);
 	}
 
 	static value(key: string) {

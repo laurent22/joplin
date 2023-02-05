@@ -1,13 +1,14 @@
 package com.reactnativesafx.utils;
 
 import android.util.Base64;
+
 import java.nio.charset.StandardCharsets;
 
 public class GeneralHelper {
   /**
    * String to byte converter method
    *
-   * @param data Raw data in string format
+   * @param data     Raw data in string format
    * @param encoding Decoder name
    * @return Converted data byte array
    */

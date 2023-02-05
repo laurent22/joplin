@@ -1,9 +1,9 @@
+import * as React from 'react';
 import ToolbarButton from './ToolbarButton/ToolbarButton';
 import ToggleEditorsButton, { Value } from './ToggleEditorsButton/ToggleEditorsButton';
-const React = require('react');
+import ToolbarSpace from './ToolbarSpace';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const ToolbarSpace = require('./ToolbarSpace.min.js');
 
 interface Props {
 	themeId: number;
