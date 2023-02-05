@@ -72,7 +72,7 @@
     "eslint-interactive": "10.3.0",
     "eslint-plugin-import": "2.27.4",
     "eslint-plugin-promise": "6.1.1",
-    "eslint-plugin-react": "7.32.0",
+    "eslint-plugin-react": "7.32.1",
     "fs-extra": "11.1.0",
     "glob": "8.1.0",
     "gulp": "4.0.2",
