@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -318,6 +320,8 @@ msgstr "Erweiterte Optionen"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Alle Daten, inklusive Notizen, Notizbücher und Schlagwörter werden permanent "
+"gelöscht."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
 #: packages/app-mobile/components/screens/notes.js:204
@@ -744,9 +748,8 @@ msgid "Close"
 msgstr "Schließen"
 
 #: packages/app-mobile/components/Dropdown.tsx:166
-#, fuzzy
 msgid "Close dropdown"
-msgstr "Fenster schließen"
+msgstr "Auswahlliste schließen"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:593
@@ -865,7 +868,7 @@ msgstr "Von %s bereitgestellte Inhalte"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "Fortfahren"
 
 #: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to note"
@@ -971,9 +974,8 @@ msgstr ""
 "Der Fehler war: „%s“"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "Erweiterung konnte nicht installiert werden: %s"
+msgstr "Konnte das Profil nicht wechseln: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:220
 msgid "Could not upgrade master key: %s"
@@ -990,7 +992,7 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:28
 msgid "Could not verify your identify"
-msgstr ""
+msgstr "Konnte deine Identität nicht verifizieren."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
@@ -1218,9 +1220,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Erweiterung „%s“ löschen?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Notiz „%s“ löschen?"
+msgstr "Lösche Profil \"%s\""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:419
 msgid "Delete selected notes"
@@ -1239,9 +1240,8 @@ msgstr ""
 "freigegebene Notizbuch."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "Sollen diese %d Notizen gelöscht werden?"
+msgstr "Dieses Profil löschen?"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1489,9 +1489,8 @@ msgid "Edit notebook"
 msgstr "Notizbuch bearbeiten"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "Profil exportieren"
+msgstr "Profil bearbeiten"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1584,7 +1583,7 @@ msgstr "Audiospieler aktivieren"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:55
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Biometrische Authentifizierung aktivieren?"
 
 #: packages/lib/models/Setting.ts:1147
 msgid "Enable deflist syntax"
@@ -2548,9 +2547,8 @@ msgid "Manage multiple users"
 msgstr "Verwalte mehrere Nutzer"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
-#, fuzzy
 msgid "Manage profiles"
-msgstr "Profil aktualisieren"
+msgstr "Profile verwalten"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2814,9 +2812,8 @@ msgid "Not generated"
 msgstr "Nicht erzeugt"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:64
-#, fuzzy
 msgid "Not now"
-msgstr "Mach es jetzt"
+msgstr "Nicht jetzt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
@@ -3290,9 +3287,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
-#, fuzzy
 msgid "Profile name"
-msgstr "Profilname:"
+msgstr "Profilname"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3303,9 +3299,8 @@ msgid "Profile Version: %s"
 msgstr "Profil-Version: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profile"
 
 #: packages/app-mobile/components/screens/Note.tsx:945
 msgid "Properties"
@@ -4136,6 +4131,8 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"Das aktive Profil kann nicht gelöscht werden. Bitte wechsle in ein anderes "
+"Profil und versuche es erneut."
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4209,7 +4206,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "Das Standardprofil kann nicht gelöscht werden."
 
 #: packages/lib/models/Setting.ts:1367
 msgid ""
@@ -4371,7 +4368,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:341
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "Es gibt ungespeicherte Änderungen."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:487
 msgid ""
@@ -4602,6 +4599,8 @@ msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
+"Um das Profil zu wechseln, wird die App beendet und muss von dir neu "
+"gestartet werden."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
@@ -4840,7 +4839,7 @@ msgstr "Nutzung: %s"
 
 #: packages/lib/models/Setting.ts:1629
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Verwende Biometrie, um den Zugriff zu der App abzusichern."
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4881,6 +4880,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"Verwende Biometrie, um den Zugriff zu deiner Anwendung abzusichern. Du "
+"kannst sie jederzeit in den Einstellungen einrichten."
 
 #: packages/lib/models/Setting.ts:1245
 msgid ""
@@ -4917,7 +4918,7 @@ msgstr "Gültig"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:24
 msgid "Verify your identity"
-msgstr ""
+msgstr "Verifiziere deine Identität"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
