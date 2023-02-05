@@ -2,7 +2,7 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
-import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng } from './contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions } from './contextMenuUtils';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
@@ -106,8 +106,10 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (!options.filename) {
 					throw new Error('Filename is needed to save as png');
 				}
+				// double dimensions to make sure it's always big enough even on hdpi screens
+				const [width, height] = svgDimensions(document, options.textToCopy).map((x: number) => x * 2 || undefined);
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
-				const png = await svgUriToPng(document, dataUri);
+				const png = await svgUriToPng(document, dataUri, width, height);
 				const filename = options.filename.replace('.svg', '.png');
 				await saveFileData(png, filename);
 			},
