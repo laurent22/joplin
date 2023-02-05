@@ -5,7 +5,7 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "yarn run electronRebuild && yarn run electronBuilder",
+    "dist": "yarn run electronRebuild && npx electron-builder",
     "build": "gulp build",
     "postinstall": "yarn run build",
     "electronBuilder": "gulp electronBuilder",

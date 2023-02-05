@@ -1,3 +1,7 @@
+// Note: this is not working because electron-builder needs access to env
+// variables which are not defined in this context. To make it work, we'll need
+// to somehow pass this to the execCommand call.
+
 const execCommand = require('./execCommand');
 
 async function main() {
