@@ -4734,7 +4734,7 @@ __metadata:
     metro-react-native-babel-preset: 0.72.3
     nodemon: 2.0.20
     prop-types: 15.8.1
-    punycode: 2.2.0
+    punycode: 2.2.2
     react: 18.2.0
     react-native: 0.70.6
     react-native-action-button: 2.8.5
@@ -25903,10 +25903,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:2.2.0":
-  version: 2.2.0
-  resolution: "punycode@npm:2.2.0"
-  checksum: 32f291c1b1e8bef8a7d351a369579565bc17530ee5224d2f2b5c37b2647aa0ec7f1972294e2de1b632812f90c8080a7c0c5645c14758aadc0f27b35dd4906d89
+"punycode@npm:2.2.2":
+  version: 2.2.2
+  resolution: "punycode@npm:2.2.2"
+  checksum: 282ce6abf320731f6ff59b0d2151479dfcf059b9b2f78b45cd4eb4efa73f24375b9a9b0416056b7e9ae572bb251cb77ed8ca4f316a18236e52575cc0173767c6
   languageName: node
   linkType: hard
 
