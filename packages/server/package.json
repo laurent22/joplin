@@ -43,7 +43,7 @@
     "nanoid": "2.1.11",
     "node-cron": "3.0.2",
     "node-env-file": "0.1.8",
-    "nodemailer": "6.9.0",
+    "nodemailer": "6.9.1",
     "nodemon": "2.0.20",
     "pg": "8.8.0",
     "pretty-bytes": "5.6.0",
