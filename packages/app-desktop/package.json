@@ -5,9 +5,10 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "yarn run electronRebuild && npx electron-builder",
+    "dist": "yarn run electronRebuild && yarn run electronBuilder",
     "build": "gulp build",
     "postinstall": "yarn run build",
+    "electronBuilder": "gulp electronBuilder",
     "electronRebuild": "gulp electronRebuild",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
