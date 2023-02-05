@@ -4,10 +4,10 @@ interface Props {
 	style: any;
 	itemHeight: number;
 	items: any[];
-	disabled: boolean;
-	onKeyDown: Function;
+	disabled?: boolean;
+	onKeyDown?: Function;
 	itemRenderer: Function;
-	className: string;
+	className?: string;
 }
 
 interface State {

@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: X3NO <X3NO@disroot.org>\n"
 "Language-Team: \n"
 "Language: pl_PL\n"
@@ -15,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:657
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -95,7 +97,7 @@ msgstr "%d dni"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
@@ -113,13 +115,12 @@ msgstr "%d godzin"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Załączniki notatki"
+msgstr "%d MB na notatkę lub załącznik"
 
 #: packages/lib/models/Setting.ts:1343 packages/lib/models/Setting.ts:1344
 #: packages/lib/models/Setting.ts:1345
@@ -257,7 +258,7 @@ msgstr "Akceptuj"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -282,9 +283,8 @@ msgid "Add body"
 msgstr "Dodaj tekst"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
-#, fuzzy
 msgid "Add new"
-msgstr "Dodaj tytuł"
+msgstr "Dodaj nowy"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -323,6 +323,7 @@ msgstr "Narzędzia zaawansowane"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Wszystkie dane, włączając notatki, notatniki i tagi zostaną trwale usunięte."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
 #: packages/app-mobile/components/screens/notes.js:204
@@ -387,9 +388,8 @@ msgid "Aritim Dark"
 msgstr "Aritim ciemny"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
-#, fuzzy
 msgid "Attach"
-msgstr "Załącz..."
+msgstr "Załącz"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
@@ -484,7 +484,7 @@ msgstr "Cofnij"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Podstawowy"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -852,7 +852,7 @@ msgstr "Treść dostarczona przez %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "Kontynuuj"
 
 #: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to note"
@@ -976,7 +976,7 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:28
 msgid "Could not verify your identify"
-msgstr ""
+msgstr "Nie można zweryfikować tożsamości"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
@@ -1473,9 +1473,8 @@ msgid "Edit notebook"
 msgstr "Edytuj notatnik"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "Eksportuj profil"
+msgstr "Edytuj profil"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1567,7 +1566,7 @@ msgstr "Aktywuj odtwarzacz muzyki"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:55
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Włączyć uwierzytelnianie biometryczne?"
 
 #: packages/lib/models/Setting.ts:1147
 msgid "Enable deflist syntax"
@@ -1838,7 +1837,7 @@ msgstr "Filtrowanie znaczników"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
-msgstr ""
+msgstr "Znajdź i zamień"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 #, fuzzy
@@ -4575,9 +4574,8 @@ msgid "to-do"
 msgstr "zadanie"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "zadanie"
+msgstr "zadanie: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
 msgid "Toggle comment"
