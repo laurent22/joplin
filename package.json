@@ -70,7 +70,7 @@
     "cspell": "5.21.2",
     "eslint": "8.31.0",
     "eslint-interactive": "10.3.0",
-    "eslint-plugin-import": "2.27.4",
+    "eslint-plugin-import": "2.27.5",
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.0",
     "fs-extra": "11.1.0",
