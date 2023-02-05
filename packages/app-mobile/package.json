@@ -37,7 +37,7 @@
     "lodash": "4.17.21",
     "md5": "2.3.0",
     "prop-types": "15.8.1",
-    "punycode": "2.1.1",
+    "punycode": "2.2.0",
     "react": "18.2.0",
     "react-native": "0.70.6",
     "react-native-action-button": "2.8.5",
