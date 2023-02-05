@@ -5078,7 +5078,7 @@ __metadata:
     node-cron: 3.0.2
     node-env-file: 0.1.8
     node-mocks-http: 1.12.1
-    nodemailer: 6.8.0
+    nodemailer: 6.9.0
     nodemon: 2.0.20
     pg: 8.8.0
     pretty-bytes: 5.6.0
@@ -23519,10 +23519,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.8.0":
-  version: 6.8.0
-  resolution: "nodemailer@npm:6.8.0"
-  checksum: e1827df714d207a00f1bf8012e767826862467b72440fc9c37cf238a14d01a4c591b7657f4d1805bfb2764883c07aa9f2e31ee96a5fec51ccf1e6ad6dd01bd1d
+"nodemailer@npm:6.9.0":
+  version: 6.9.0
+  resolution: "nodemailer@npm:6.9.0"
+  checksum: 152d38de71582436d8c6067dfa6a3ddae738437b6f9be9211bd22cf92b2f92786dbef4a4d2ca0282e76b18f0274a7fb6ec5a7acc22f57bdd05559a6ec379dd5c
   languageName: node
   linkType: hard
 
