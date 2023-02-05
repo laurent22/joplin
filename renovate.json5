@@ -92,7 +92,7 @@
 		"com.facebook.flipper:flipper-fresco-plugin",
 		"com.facebook.flipper:flipper-network-plugin",
 		"com.facebook.flipper:flipper",
-		"com.google.code.gson:*",
+		"com.google.code.gson:gson",
 		"com.google.code.gson",
 		"de.undercouch:gradle-download-task",
 		"jsc-android",
@@ -118,7 +118,7 @@
 			"groupName": "buildTools",
 			"labels": ["automerge"],
 			"extends": ["schedule:monthly"],
-			"matchPackageNames": [
+			"matchPackagePatterns": [
 				// If the apps build and all tests pass, we can assume that Yarn
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
@@ -139,11 +139,10 @@
 			"groupName": "aws",
 			"labels": ["automerge"],
 			"extends": ["schedule:monthly"],
-			"matchPackageNames": [
+			"matchPackagePatterns": [
 				// AWS packages are updated too frequently and we can assume minor
 				// updates are stable.
-				"@aws-sdk/client-s3",
-				"@aws-sdk/s3-request-presigner",
+				"@aws-sdk/*",
 				"aws-sdk",
 			],
 		},
