@@ -178,7 +178,7 @@ export default class ReportService {
 
 			for (let i = 0; i < disabledItems.length; i++) {
 				const row = disabledItems[i];
-				let msg: string = '';
+				let msg = '';
 				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
 					msg = _('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason);
 				} else {

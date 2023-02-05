@@ -24,7 +24,7 @@ interface ResetPasswordFields {
 
 const subRoutes: Record<string, RouteHandler> = {
 	forgot: async (_path: SubPath, ctx: AppContext) => {
-		let confirmationMessage: string = '';
+		let confirmationMessage = '';
 
 		if (ctx.method === 'POST') {
 			const fields = await bodyFields<ForgotPasswordFields>(ctx.req);
@@ -46,7 +46,7 @@ const subRoutes: Record<string, RouteHandler> = {
 	},
 
 	reset: async (_path: SubPath, ctx: AppContext) => {
-		let successMessage: string = '';
+		let successMessage = '';
 		let error: Error = null;
 		const token = ctx.query.token as string;
 

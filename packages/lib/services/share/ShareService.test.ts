@@ -188,7 +188,7 @@ describe('ShareService', function() {
 		const recipientPpk = await generateKeyPair(encryptionService(), '222222');
 		expect(ppk.id).not.toBe(recipientPpk.id);
 
-		let uploadedEmail: string = '';
+		let uploadedEmail = '';
 		let uploadedMasterKey: MasterKeyEntity = null;
 
 		const service = testShareFolderService({

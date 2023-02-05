@@ -61,7 +61,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	const createdTagIds: string[] = [];
 	const createdFolderDepths: Record<string, number> = {};
 	const folderDepthToId: Record<number, string[]> = {};
-	let rootFolderCount: number = 0;
+	let rootFolderCount = 0;
 
 	for (let i = 0; i < options.folderCount; i++) {
 		const folder: any = {
@@ -72,7 +72,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 
 		if (options.rootFolderCount && rootFolderCount >= options.rootFolderCount) isRoot = false;
 
-		let depth: number = 0;
+		let depth = 0;
 
 		if (!isRoot) {
 			let possibleFolderIds: string[] = [];

@@ -100,7 +100,7 @@ export default class MenuUtils {
 	}
 
 	public commandsToMenuItems(commandNames: string[], onClick: Function, locale: string): MenuItems {
-		const key: string = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}_${locale}`;
+		const key = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}_${locale}`;
 		if (this.menuItemCache_[key]) return this.menuItemCache_[key];
 
 		const output: MenuItems = {};
