@@ -155,7 +155,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				body > #rendered-md {
 					width: 100vw;
 					overflow: auto;
-					height: calc(100vh - ${paddingBottom}px);
+					height: calc(100vh - ${paddingBottom}px - ${paddingTop});
 					padding-bottom: ${paddingBottom}px;
 					padding-top: ${paddingTop};
 				}
