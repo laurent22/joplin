@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@joplin/tools": "~2.10",
-    "@rmp135/sql-ts": "1.15.1",
+    "@rmp135/sql-ts": "1.16.0",
     "@types/formidable": "2.0.5",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.6",

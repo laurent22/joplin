@@ -5044,7 +5044,7 @@ __metadata:
     "@joplin/renderer": ~2.10
     "@joplin/tools": ~2.10
     "@koa/cors": 3.1.0
-    "@rmp135/sql-ts": 1.15.1
+    "@rmp135/sql-ts": 1.16.0
     "@types/formidable": 2.0.5
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
@@ -5103,7 +5103,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/lib": ~2.10
     "@joplin/renderer": ~2.10
-    "@rmp135/sql-ts": 1.15.1
+    "@rmp135/sql-ts": 1.16.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/mustache": 4.2.2
@@ -6792,20 +6792,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rmp135/sql-ts@npm:1.15.1":
-  version: 1.15.1
-  resolution: "@rmp135/sql-ts@npm:1.15.1"
+"@rmp135/sql-ts@npm:1.16.0":
+  version: 1.16.0
+  resolution: "@rmp135/sql-ts@npm:1.16.0"
   dependencies:
     change-case: ^4.1.2
     handlebars: ^4.7.7
-    knex: ^1.0.3
-    yargs: ^17.3.1
+    knex: ^2.4.0
+    yargs: ^17.6.2
   peerDependencies:
     better-sqlite3: ^7.5.0
     mssql: ^8.0.2
     mysql: ^2.18.1
     mysql2: ^2.3.3
-    pg: ^8.7.3
+    pg: ^8.8.0
     sqlite3: ^5.0.2
   peerDependenciesMeta:
     better-sqlite3:
@@ -6822,7 +6822,7 @@ __metadata:
       optional: true
   bin:
     sql-ts: bin/sql-ts
-  checksum: 074831229a0d1611991e3af2c2eda0e8b6e5cccfbe81231d32084ccec037dc989fe4f6ca919eba4d600d78a62d6f5ea0953cfc501706f93a71d6b9a33cc98770
+  checksum: 5151e2b864c894d27dc61cc20dc08788f63067c551f3e2f607f5f16741eb24feff98ed09d60dbdffc28630524ec2a5884d3f6951f70c606f256361b5fbea1297
   languageName: node
   linkType: hard
 
@@ -11444,13 +11444,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:2.0.16, colorette@npm:^2.0.14":
-  version: 2.0.16
-  resolution: "colorette@npm:2.0.16"
-  checksum: cd55596a3a2d1071c1a28eee7fd8a5387593ff1bd10a3e8d0a6221499311fe34a9f2b9272d77c391e0e003dcdc8934fb2f8d106e7ef1f7516f8060c901d41a27
-  languageName: node
-  linkType: hard
-
 "colorette@npm:2.0.19, colorette@npm:^2.0.19":
   version: 2.0.19
   resolution: "colorette@npm:2.0.19"
@@ -11462,6 +11455,13 @@ __metadata:
   version: 1.4.0
   resolution: "colorette@npm:1.4.0"
   checksum: 01c3c16058b182a4ab4c126a65a75faa4d38a20fa7c845090b25453acec6c371bb2c5dceb0a2338511f17902b9d1a9af0cadd8509c9403894b79311032c256c3
+  languageName: node
+  linkType: hard
+
+"colorette@npm:^2.0.14":
+  version: 2.0.16
+  resolution: "colorette@npm:2.0.16"
+  checksum: cd55596a3a2d1071c1a28eee7fd8a5387593ff1bd10a3e8d0a6221499311fe34a9f2b9272d77c391e0e003dcdc8934fb2f8d106e7ef1f7516f8060c901d41a27
   languageName: node
   linkType: hard
 
@@ -20676,7 +20676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:2.4.2":
+"knex@npm:2.4.2, knex@npm:^2.4.0":
   version: 2.4.2
   resolution: "knex@npm:2.4.2"
   dependencies:
@@ -20712,45 +20712,6 @@ __metadata:
   bin:
     knex: bin/cli.js
   checksum: cfb6436c0e3df3cd1f55d3637e4f222d1acbc7b6ec3757e52c92cbf0a7da4055d40156d707ffede57dc155af75d7f5739a49d1b31d8755bc77bc0e4e2a570748
-  languageName: node
-  linkType: hard
-
-"knex@npm:^1.0.3":
-  version: 1.0.7
-  resolution: "knex@npm:1.0.7"
-  dependencies:
-    colorette: 2.0.16
-    commander: ^9.1.0
-    debug: 4.3.4
-    escalade: ^3.1.1
-    esm: ^3.2.25
-    get-package-type: ^0.1.0
-    getopts: 2.3.0
-    interpret: ^2.2.0
-    lodash: ^4.17.21
-    pg-connection-string: 2.5.0
-    rechoir: ^0.8.0
-    resolve-from: ^5.0.0
-    tarn: ^3.0.2
-    tildify: 2.0.0
-  peerDependenciesMeta:
-    "@vscode/sqlite3":
-      optional: true
-    better-sqlite3:
-      optional: true
-    mysql:
-      optional: true
-    mysql2:
-      optional: true
-    pg:
-      optional: true
-    pg-native:
-      optional: true
-    tedious:
-      optional: true
-  bin:
-    knex: bin/cli.js
-  checksum: 57608a3a6813cb66da6f5a078016338166c53ab2cbaab66e81492352023db88fc158e4ad6bbd2156cd9d7c9cac14a4b1e581dd8232b4f9bab2285ea6f1efc5cf
   languageName: node
   linkType: hard
 
@@ -32801,7 +32762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.6.2, yargs@npm:^17.5.1":
+"yargs@npm:17.6.2, yargs@npm:^17.5.1, yargs@npm:^17.6.2":
   version: 17.6.2
   resolution: "yargs@npm:17.6.2"
   dependencies:
