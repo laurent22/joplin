@@ -69,7 +69,7 @@ export default function versionInfo(packageInfo: any) {
 		console.info(gitInfo);
 	}
 
-	const pluginList: PluginList = getPluginLists();
+	const pluginList = getPluginLists();
 
 	return {
 		header: header.join('\n'),
