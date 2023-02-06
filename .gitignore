@@ -346,6 +346,7 @@ packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.test.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
