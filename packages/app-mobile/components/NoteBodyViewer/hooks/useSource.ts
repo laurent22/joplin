@@ -25,9 +25,11 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
 	const [isFirstRender, setIsFirstRender] = useState(true);
 
+	const paddingTop = '.8em';
+
 	const rendererTheme = useMemo(() => {
 		return {
-			bodyPaddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+			bodyPaddingTop: paddingTop, // Extra top padding on the rendered MD so it doesn't touch the border
 			bodyPaddingBottom: paddingBottom, // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			...themeStyle(themeId),
 		};
@@ -136,9 +138,6 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 			js.push('}');
 			js.push('true;');
 
-
-			const iOSNotePaddingBottom = '100px';
-
 			// iOS doesn't automatically adjust the WebView's font size to match users'
 			// accessibility settings. To do this, we need to tell it to match the system font.
 			// See https://github.com/ionic-team/capacitor/issues/2748#issuecomment-612923135
@@ -156,8 +155,9 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				body > #rendered-md {
 					width: 100vw;
 					overflow: auto;
-					height: calc(100vh - ${iOSNotePaddingBottom});
-					padding-bottom: ${iOSNotePaddingBottom};
+					height: calc(100vh - ${paddingBottom}px);
+					padding-bottom: ${paddingBottom}px;
+					padding-top: ${paddingTop};
 				}
 
 				:root > body {
