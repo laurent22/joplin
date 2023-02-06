@@ -102,7 +102,7 @@ interface LastOnChangeEventInfo {
 let loadedCssFiles_: string[] = [];
 let loadedJsFiles_: string[] = [];
 let dispatchDidUpdateIID_: any = null;
-let changeId_: number = 1;
+let changeId_ = 1;
 
 const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [editor, setEditor] = useState(null);

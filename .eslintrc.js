@@ -159,6 +159,7 @@ module.exports = {
 				// make everything public which is not great. New code however should specify member accessibility.
 				'@typescript-eslint/explicit-member-accessibility': ['warn'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
+				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
 				'@typescript-eslint/comma-dangle': ['error', {
 					'arrays': 'always-multiline',
 					'objects': 'always-multiline',

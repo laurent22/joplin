@@ -15,7 +15,7 @@ interface AdvancedExpression {
 
 function parseAdvancedExpression(advancedExpression: string): AdvancedExpression {
 	let subExpressionIndex = -1;
-	let subExpressions: string = '';
+	let subExpressions = '';
 	let currentSubExpressionKey = '';
 	const subContext: any = {};
 
