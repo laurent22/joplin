@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import useEditPopup from './useEditPopup';
 const { assetsToHeaders } = require('@joplin/renderer');
 
 interface UseSourceResult {
@@ -61,6 +62,8 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	}, {});
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
 
+	const { createEditPopupSyntax, destroyEditPopupSyntax, editPopupCss } = useEditPopup();
+
 	useEffect(() => {
 		if (onlyNoteBodyHasChanged) return () => {};
 
@@ -80,6 +83,11 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				codeTheme: theme.codeThemeCss,
 				postMessageSyntax: 'window.joplinPostMessage_',
 				enableLongPress: true,
+
+				// Show an 'edit' popup over SVG images
+				editPopupFiletypes: ['image/svg+xml'],
+				createEditPopupSyntax,
+				destroyEditPopupSyntax,
 			};
 
 			// Whenever a resource state changes, for example when it goes from "not downloaded" to "downloaded", the "noteResources"
@@ -166,6 +174,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<meta name="viewport" content="width=device-width, initial-scale=1">
 						<style>
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+							${editPopupCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 					</head>

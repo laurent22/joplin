@@ -823,6 +823,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	private onEditResource = (message: string) => {
+		const messageData = /^edit:(.*)$/.exec(message);
+		if (!messageData) {
+			throw new Error('onEditResource: Error: Invalid message');
+		}
+
+		const resourceId = messageData[1];
+		this.onJoplinLinkClick_(`joplin://${resourceId}`);
+	};
+
 	private async attachFile_onPress() {
 		const response = await this.pickDocuments();
 		for (const asset of response) {
@@ -1162,6 +1172,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						noteHash={this.props.noteHash}
 						onCheckboxChange={this.onBodyViewerCheckboxChange}
 						onMarkForDownload={this.onMarkForDownload}
+						onRequestEditResource={this.onEditResource}
 						onLoadEnd={this.onBodyViewerLoadEnd}
 					/>
 				);

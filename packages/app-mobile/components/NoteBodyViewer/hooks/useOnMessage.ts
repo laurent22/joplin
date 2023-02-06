@@ -1,7 +1,25 @@
 import { useCallback } from 'react';
 const shared = require('@joplin/lib/components/shared/note-screen-shared');
 
-export default function useOnMessage(onCheckboxChange: Function, noteBody: string, onMarkForDownload: Function, onJoplinLinkClick: Function, onResourceLongPress: Function) {
+export type HandleMessageCallback = (message: string)=> void;
+export type OnMarkForDownloadCallback = (resource: { resourceId: string })=> void;
+
+interface MessageCallbacks {
+	onMarkForDownload?: OnMarkForDownloadCallback;
+	onJoplinLinkClick: HandleMessageCallback;
+	onResourceLongPress: HandleMessageCallback;
+	onRequestEditResource?: HandleMessageCallback;
+	onCheckboxChange: HandleMessageCallback;
+}
+
+export default function useOnMessage(
+	noteBody: string,
+	callbacks: MessageCallbacks
+) {
+	const {
+		onMarkForDownload, onResourceLongPress, onCheckboxChange, onRequestEditResource, onJoplinLinkClick,
+	} = callbacks;
+
 	return useCallback((event: any) => {
 		// 2021-05-19: Historically this was unescaped twice as it was
 		// apparently needed after an upgrade to RN 58 (or 59). However this is
@@ -15,13 +33,15 @@ export default function useOnMessage(onCheckboxChange: Function, noteBody: strin
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			const newBody = shared.toggleCheckbox(msg, noteBody);
-			if (onCheckboxChange) onCheckboxChange(newBody);
+			onCheckboxChange?.(newBody);
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const splittedMsg = msg.split(':');
 			const resourceId = splittedMsg[1];
-			if (onMarkForDownload) onMarkForDownload({ resourceId: resourceId });
+			onMarkForDownload?.({ resourceId: resourceId });
 		} else if (msg.startsWith('longclick:')) {
 			onResourceLongPress(msg);
+		} else if (msg.startsWith('edit:')) {
+			onRequestEditResource?.(msg);
 		} else if (msg.startsWith('joplin:')) {
 			onJoplinLinkClick(msg);
 		} else if (msg.startsWith('error:')) {
@@ -29,5 +49,12 @@ export default function useOnMessage(onCheckboxChange: Function, noteBody: strin
 		} else {
 			onJoplinLinkClick(msg);
 		}
-	}, [onCheckboxChange, noteBody, onMarkForDownload, onJoplinLinkClick, onResourceLongPress]);
+	}, [
+		noteBody,
+		onCheckboxChange,
+		onMarkForDownload,
+		onJoplinLinkClick,
+		onResourceLongPress,
+		onRequestEditResource,
+	]);
 }

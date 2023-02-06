@@ -65,11 +65,12 @@ const createEventHandlingAttrs = (resourceId: string, options: Options, onClickA
 	}
 
 	if (options.enableEditPopup) {
-		const createEditPopup = ` (${options.createEditPopupSyntax})(this, '${resourceId}'); `;
+		const editPopupClick = `(() => ${options.postMessageSyntax}('edit:${resourceId}'))`;
+		const createEditPopup = ` (${options.createEditPopupSyntax})(this, ${JSON.stringify(resourceId)}, ${editPopupClick}); `;
 		eventHandlers.ontouchstart += createEditPopup;
 
 		eventHandlers.onmouseenter += createEditPopup;
-		eventHandlers.onmouseleave += ` (${options.destroyEditPopupSyntax})(this, '${resourceId}'); `;
+		eventHandlers.onmouseleave += ` (${options.destroyEditPopupSyntax})(this, ${JSON.stringify(resourceId)}); `;
 	}
 
 	if (onClickAction !== null) {

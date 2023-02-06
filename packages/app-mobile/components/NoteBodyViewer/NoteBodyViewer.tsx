@@ -1,7 +1,7 @@
 import { useRef, useCallback } from 'react';
 
 import useSource from './hooks/useSource';
-import useOnMessage from './hooks/useOnMessage';
+import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 
 const React = require('react');
@@ -19,9 +19,10 @@ interface Props {
 	noteResources: any;
 	paddingBottom: number;
 	noteHash: string;
-	onJoplinLinkClick: Function;
-	onCheckboxChange?: Function;
-	onMarkForDownload?: Function;
+	onJoplinLinkClick: HandleMessageCallback;
+	onCheckboxChange?: HandleMessageCallback;
+	onRequestEditResource?: HandleMessageCallback;
+	onMarkForDownload?: OnMarkForDownloadCallback;
 	onLoadEnd?: Function;
 }
 
@@ -48,11 +49,14 @@ export default function NoteBodyViewer(props: Props) {
 	);
 
 	const onMessage = useOnMessage(
-		props.onCheckboxChange,
 		props.noteBody,
-		props.onMarkForDownload,
-		props.onJoplinLinkClick,
-		onResourceLongPress
+		{
+			onCheckboxChange: props.onCheckboxChange,
+			onMarkForDownload: props.onMarkForDownload,
+			onJoplinLinkClick: props.onJoplinLinkClick,
+			onRequestEditResource: props.onRequestEditResource,
+			onResourceLongPress,
+		}
 	);
 
 	const onLoadEnd = useCallback(() => {
