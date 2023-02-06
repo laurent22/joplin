@@ -172,6 +172,15 @@ export interface RuleOptions {
 	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
 	linkRenderingType?: number;
 
+	// A list of MIME types for which an edit button appears on tap/hover.
+	// Used by the image editor in the mobile app.
+	editPopupFiletypes?: string[];
+
+	// Shoould be the string representation a function that accepts two arguments:
+	// the target element to have the popup shown for and the id of the resource to edit.
+	createEditPopupSyntax?: string;
+	destroyEditPopupSyntax?: string;
+
 	audioPlayerEnabled: boolean;
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;

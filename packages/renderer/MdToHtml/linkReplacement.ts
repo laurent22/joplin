@@ -1,4 +1,5 @@
 import utils, { ItemIdToUrlHandler } from '../utils';
+import createEventHandlingAttrs from './createEventHandlingAttrs';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
@@ -93,13 +94,11 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	let js = `${options.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
 	if (options.enableLongPress && !!resourceId) {
 		const onClick = `${options.postMessageSyntax}(${JSON.stringify(href)})`;
-		const onLongClick = `${options.postMessageSyntax}("longclick:${resourceId}")`;
-		// if t is set when ontouchstart is called it means the user has already touched the screen once and this is the 2nd touch
-		// in this case we assume the user is trying to zoom and we don't want to show the menu
-		const touchStart = `if (typeof(t) !== "undefined" && !!t) { clearTimeout(t); t = null; } else { t = setTimeout(() => { t = null; ${onLongClick}; }, ${utils.longPressDelay}); }`;
-		const cancel = 'if (!!t) {clearTimeout(t); t=null;';
-		const touchEnd = `${cancel} ${onClick};}`;
-		js = `ontouchstart='${touchStart}' ontouchend='${touchEnd}' ontouchcancel='${cancel} ontouchmove="${cancel}'`;
+		js = createEventHandlingAttrs(resourceId, {
+			enableLongPress: options.enableLongPress ?? false,
+			postMessageSyntax: options.postMessageSyntax ?? 'void',
+			enableEditPopup: false,
+		}, onClick);
 	} else {
 		js = `onclick='${js}'`;
 	}
