@@ -1,4 +1,3 @@
-import { ModelType } from '@joplin/lib/BaseModel';
 import { resourceBlobPath } from '../utils/joplinUtils';
 import { Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
@@ -198,20 +197,12 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleCreated = async (change: Change, item: Item, share: Share) => {
-			// console.info('CREATE ITEM', item);
-			// console.info('CHANGE', change);
-
-			// if (![ModelType.Note, ModelType.Folder, ModelType.Resource].includes(item.jop_type)) return;
 			if (!item.jop_share_id) return;
 
 			const shareUserIds = await this.allShareUserIds(share);
 			for (const shareUserId of shareUserIds) {
 				if (shareUserId === change.user_id) continue;
 				await addUserItem(shareUserId, item.id);
-
-				if (item.jop_type === ModelType.Resource) {
-					// const resourceItem = await this.models().item().loadByName(change.user_id, resourceBlobPath(
-				}
 			}
 		};
 
