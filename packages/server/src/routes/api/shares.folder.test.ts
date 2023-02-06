@@ -1,5 +1,5 @@
 import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource, expectNotThrow } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
@@ -365,6 +365,24 @@ describe('shares.folder', function() {
 		const newChildren = await models().item().children(user2.id);
 		expect(newChildren.items.length).toBe(1);
 		expect(newChildren.items[0].id).toBe(folderItem1.id);
+	});
+
+	test('should not throw an error if an item is associated with a share that no longer exists', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {},
+		});
+
+		await createNote(session1.id, {
+			id: '00000000000000000000000000000007',
+			share_id: share.id,
+		});
+
+		await models().share().delete(share.id);
+
+		await expectNotThrow(async () => await models().share().updateSharedItems3());
 	});
 
 	test('should unshare a deleted item', async function() {

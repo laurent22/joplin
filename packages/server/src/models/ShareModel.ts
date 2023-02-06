@@ -299,12 +299,29 @@ export default class ShareModel extends BaseModel<Share> {
 					for (const change of changes) {
 						const item = items.find(i => i.id === change.item_id);
 
+						// When a folder is unshared, the share object is
+						// deleted, then all items that were shared get their
+						// 'share_id' property set to an empty string. This is
+						// all done client side.
+						//
+						// However it means that if a share object is deleted
+						// but the items are not synced, we'll find items that
+						// are associated with a share that no longer exists.
+						// This is fine, but we need to handle it properly
+						// below, otherwise the share update process will fail.
+
+						const itemShare = shares.find(s => s.id === item.jop_share_id);
+
 						if (change.type === ChangeType.Create) {
-							await handleCreated(change, item, shares.find(s => s.id === item.jop_share_id));
+							if (!itemShare) {
+								logger.warn(`Found an item (${item.id}) associated with a share that no longer exists (${item.jop_share_id}) - skipping it`);
+							} else {
+								await handleCreated(change, item, itemShare);
+							}
 						}
 
 						if (change.type === ChangeType.Update) {
-							await handleUpdated(change, item, shares.find(s => s.id === item.jop_share_id));
+							await handleUpdated(change, item, itemShare);
 						}
 
 						// We don't need to handle ChangeType.Delete because when an
