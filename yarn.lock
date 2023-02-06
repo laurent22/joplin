@@ -4727,7 +4727,7 @@ __metadata:
     jest-environment-jsdom: 29.3.1
     jetifier: 2.0.0
     jsc-android: 241213.1.0
-    jsdom: 21.0.0
+    jsdom: 21.1.0
     lodash: 4.17.21
     md5: 2.3.0
     md5-file: 5.0.0
@@ -5069,7 +5069,7 @@ __metadata:
     jest: 29.3.1
     jest-expect-message: 1.1.3
     jquery: 3.6.3
-    jsdom: 21.0.0
+    jsdom: 21.1.0
     knex: 2.4.2
     koa: 2.14.1
     markdown-it: 13.0.1
@@ -5156,7 +5156,7 @@ __metadata:
     browserify: 14.5.0
     css: 3.0.0
     html-entities: 1.4.0
-    jsdom: 21.0.0
+    jsdom: 21.1.0
     rollup: 0.50.1
     rollup-plugin-commonjs: 8.4.1
     rollup-plugin-node-resolve: 3.4.0
@@ -20212,9 +20212,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:21.0.0":
-  version: 21.0.0
-  resolution: "jsdom@npm:21.0.0"
+"jsdom@npm:21.1.0":
+  version: 21.1.0
+  resolution: "jsdom@npm:21.1.0"
   dependencies:
     abab: ^2.0.6
     acorn: ^8.8.1
@@ -20247,7 +20247,7 @@ __metadata:
   peerDependenciesMeta:
     canvas:
       optional: true
-  checksum: 5e553f8a106716a7fc8084350418c69bbbe9121e792760a9b153d5eb184464497c660f2dadcc425f3a17fdde31a3ed4c8bc7b9e9515832f4bbc9d877041bce3a
+  checksum: 2c89c72a6f399184ffc8de30bbdd86283086dbd72bb3a40667102d3f12af141c7517ffb78150a3bb6883a654e8c7d0266c3328d1c387a2b9a1fd0729dc537954
   languageName: node
   linkType: hard
 
