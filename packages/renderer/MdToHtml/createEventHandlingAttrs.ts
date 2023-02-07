@@ -18,30 +18,29 @@ const longPressTouchStartFnString = `(onLongPress, longPressDelay) => {
 	// if touchTimeout is set when ontouchstart is called it means the user has already touched
 	// the screen once and this is the 2nd touch in this case we assume the user is trying
 	// to zoom and we don't want to show the menu
-	if (typeof(touchTimeout) !== 'undefined' && !!touchTimeout) {
-		clearTimeout(touchTimeout);
-		touchTimeout = null;
+	if (!!window.touchTimeout) {
+		clearTimeout(window.touchTimeout);
+		window.touchTimeout = null;
 	} else {
-		touchTimeout = setTimeout(() => {
-			touchTimeout = null;
+		window.touchTimeout = setTimeout(() => {
+			window.touchTimeout = null;
 			onLongPress();
 		}, longPressDelay);
 	}
 }`;
 
 const clearLongPressTimeoutFnString = `() => {
-	if (typeof(touchTimeout) !== 'undefined' && touchTimeout) {
-		clearTimeout(touchTimeout);
-		touchTimeout = null;
+	if (window.touchTimeout) {
+		clearTimeout(window.touchTimeout);
+		window.touchTimeout = null;
 	}
 }`;
 
-
-// Adds event-handling (e.g. long press) code to images and links.
-// resourceId is the ID of the image resource or link.
-const createEventHandlingAttrs = (resourceId: string, options: Options, onClickAction: string|null) => {
+// Helper for createEventHandlingAttrs. Exported to facilitate testing.
+export const createEventHandlingListeners = (resourceId: string, options: Options, onClickAction: string|null) => {
 	const eventHandlers = {
 		ontouchstart: '',
+		ontouchmove: '',
 		ontouchend: '',
 		ontouchcancel: '',
 		onmouseenter: '',
@@ -59,6 +58,7 @@ const createEventHandlingAttrs = (resourceId: string, options: Options, onClickA
 
 		eventHandlers.ontouchstart += touchStart;
 		eventHandlers.ontouchcancel += touchCancel;
+		eventHandlers.ontouchmove += touchCancel;
 		eventHandlers.ontouchend += touchEnd;
 	}
 
@@ -71,9 +71,17 @@ const createEventHandlingAttrs = (resourceId: string, options: Options, onClickA
 		eventHandlers.onmouseleave += ` (${options.destroyEditPopupSyntax})(this, ${JSON.stringify(resourceId)}); `;
 	}
 
-	if (onClickAction !== null) {
+	if (onClickAction) {
 		eventHandlers.onclick += onClickAction;
 	}
+
+	return eventHandlers;
+};
+
+// Adds event-handling (e.g. long press) code to images and links.
+// resourceId is the ID of the image resource or link.
+const createEventHandlingAttrs = (resourceId: string, options: Options, onClickAction: string|null) => {
+	const eventHandlers = createEventHandlingListeners(resourceId, options, onClickAction);
 
 	// Build onfoo="listener" strings and add them to the result.
 	let result = '';
