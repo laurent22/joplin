@@ -59,10 +59,7 @@ const createEventHandlingAttrs = (resourceId: string, options: Options, onClickA
 
 		const callClearLongPressTimeout = `(${clearLongPressTimeoutFnString})(); `;
 		const touchCancel = callClearLongPressTimeout;
-		const touchEnd = `if (typeof(touchTimeout) !== 'undefined' && touchTimeout) {
-			${callClearLongPressTimeout}
-			${onClickAction ?? ''}
-		}`;
+		const touchEnd = callClearLongPressTimeout;
 
 		eventHandlers.ontouchstart += touchStart;
 		eventHandlers.ontouchcancel += touchCancel;
