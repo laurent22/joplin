@@ -13,6 +13,13 @@ export default function useOnResourceLongPress(onJoplinLinkClick: Function, dial
 		try {
 			const resourceId = msg.split(':')[1];
 			const resource = await Resource.load(resourceId);
+
+			// Handle the case where it's a long press on a link with no resource
+			if (!resource) {
+				reg.logger().warn(`Long-press: Resource with ID ${resourceId} does not exist (may be a note).`);
+				return;
+			}
+
 			const name = resource.title ? resource.title : resource.file_name;
 
 			const action = await dialogs.pop({ dialogbox: dialogBoxRef.current }, name, [
