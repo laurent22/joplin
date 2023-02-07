@@ -33,8 +33,10 @@ const longPressTouchStart = (onLongPress: ()=> void, longPressDelay: number) => 
 const longPressTouchStartFnString = longPressTouchStart.toString();
 
 const clearLongPressTimeout = () => {
-	clearTimeout(touchTimeout);
-	touchTimeout = null;
+	if (typeof(touchTimeout) !== 'undefined' && touchTimeout) {
+		clearTimeout(touchTimeout);
+		touchTimeout = null;
+	}
 };
 const clearLongPressTimeoutFnString = clearLongPressTimeout.toString();
 
@@ -57,7 +59,10 @@ const createEventHandlingAttrs = (resourceId: string, options: Options, onClickA
 
 		const callClearLongPressTimeout = `(${clearLongPressTimeoutFnString})(); `;
 		const touchCancel = callClearLongPressTimeout;
-		const touchEnd = `${callClearLongPressTimeout} ${onClickAction ?? ''}`;
+		const touchEnd = `if (typeof(touchTimeout) !== 'undefined' && touchTimeout) {
+			${callClearLongPressTimeout}
+			${onClickAction ?? ''}
+		}`;
 
 		eventHandlers.ontouchstart += touchStart;
 		eventHandlers.ontouchcancel += touchCancel;

@@ -71,7 +71,7 @@ export const getEditPopupSource = () => {
 		editPopup.classList.add(${JSON.stringify(editPopupClass)});
 		editPopup.onclick = onclick;
 
-		parent.insertAdjacentElement('afterend', editPopup);
+		parent.insertAdjacentElement('beforeBegin', editPopup);
 		window.lastEditPopupTarget = parent;
 	}`;
 
