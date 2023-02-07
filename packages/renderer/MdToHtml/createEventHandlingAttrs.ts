@@ -12,13 +12,11 @@ export interface Options {
 	destroyEditPopupSyntax?: string;
 }
 
-declare let touchTimeout: any|undefined;
-
 // longPressTouchStart and clearLongPressTimeout are turned into strings before being called.
 // Thus, they should not reference any other non-builtin functions.
-const longPressTouchStart = (onLongPress: ()=> void, longPressDelay: number) => {
+const longPressTouchStartFnString = `(onLongPress, longPressDelay) => {
 	// if touchTimeout is set when ontouchstart is called it means the user has already touched
-	// the screen once and this is the 2nd touch  in this case we assume the user is trying
+	// the screen once and this is the 2nd touch in this case we assume the user is trying
 	// to zoom and we don't want to show the menu
 	if (typeof(touchTimeout) !== 'undefined' && !!touchTimeout) {
 		clearTimeout(touchTimeout);
@@ -29,16 +27,14 @@ const longPressTouchStart = (onLongPress: ()=> void, longPressDelay: number) => 
 			onLongPress();
 		}, longPressDelay);
 	}
-};
-const longPressTouchStartFnString = longPressTouchStart.toString();
+}`;
 
-const clearLongPressTimeout = () => {
+const clearLongPressTimeoutFnString = `() => {
 	if (typeof(touchTimeout) !== 'undefined' && touchTimeout) {
 		clearTimeout(touchTimeout);
 		touchTimeout = null;
 	}
-};
-const clearLongPressTimeoutFnString = clearLongPressTimeout.toString();
+}`;
 
 
 // Adds event-handling (e.g. long press) code to images and links.
