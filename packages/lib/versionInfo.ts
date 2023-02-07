@@ -68,7 +68,7 @@ export default function versionInfo(packageInfo: any, plugins: Plugins) {
 		console.info(gitInfo);
 	}
 
-	const pluginList = Object.keys(plugins) ? getPluginLists(plugins) : { completeList: '', summary: '' };
+	const pluginList = getPluginLists(plugins);
 
 	return {
 		header: header.join('\n'),
