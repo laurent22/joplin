@@ -20,7 +20,7 @@ const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
 
-const maxWidth: number = 320;
+const maxWidth = 320;
 
 const Root = styled.div`
 	display: flex;

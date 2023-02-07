@@ -271,7 +271,7 @@ async function commandVersion() {
 }
 
 async function main() {
-	const scriptName: string = 'plugin-repo-cli';
+	const scriptName = 'plugin-repo-cli';
 
 	const commands: Record<string, Function> = {
 		build: commandBuild,
@@ -279,8 +279,8 @@ async function main() {
 		updateRelease: commandUpdateRelease,
 	};
 
-	let selectedCommand: string = '';
-	let selectedCommandArgs: string = '';
+	let selectedCommand = '';
+	let selectedCommandArgs = '';
 
 	function setSelectedCommand(name: string, args: any) {
 		selectedCommand = name;

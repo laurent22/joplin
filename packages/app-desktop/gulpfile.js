@@ -21,6 +21,9 @@ const tasks = {
 	electronRebuild: {
 		fn: require('./tools/electronRebuild.js'),
 	},
+	electronBuilder: {
+		fn: require('./tools/electronBuilder.js'),
+	},
 	tsc: require('@joplin/tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('@joplin/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
 	buildCommandIndex: require('@joplin/tools/gulp/tasks/buildCommandIndex'),

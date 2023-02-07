@@ -110,7 +110,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			if (stat && !isDir) {
 				const supportedFileExtension = this.metadata().fileExtensions;
 				const resolvedPath = shim.fsDriver().resolve(pathWithExtension);
-				let id: string = '';
+				let id = '';
 				// If the link looks like a note, then import it
 				if (supportedFileExtension.indexOf(fileExtension(trimmedLink).toLowerCase()) >= 0) {
 					// If the note hasn't been imported yet, do so now

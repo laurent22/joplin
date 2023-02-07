@@ -54,11 +54,12 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 		await dropTables(db);
 		await migrateLatest(db);
 
-		for (let userNum = 1; userNum <= 2; userNum++) {
+		for (let userNum = 1; userNum <= 3; userNum++) {
 			await models.user().save({
 				email: `user${userNum}@example.com`,
 				password,
 				full_name: `User ${userNum}`,
+				account_type: AccountType.Pro,
 			});
 		}
 
