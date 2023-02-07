@@ -1,15 +1,14 @@
 import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
-import PluginService, { Plugins } from './services/plugins/PluginService';
+import { Plugins } from './services/plugins/PluginService';
 
 interface PluginList {
   completeList: string;
   summary: string;
 }
 
-function getPluginLists(): PluginList {
-	const plugins: Plugins = PluginService.instance().plugins;
+function getPluginLists(plugins: Plugins): PluginList {
 	const pluginList = [];
 	if (Object.keys(plugins).length > 0) {
 		for (const pluginId in plugins) {
@@ -39,7 +38,7 @@ function getPluginLists(): PluginList {
 	};
 }
 
-export default function versionInfo(packageInfo: any) {
+export default function versionInfo(packageInfo: any, plugins: Plugins) {
 	const p = packageInfo;
 	let gitInfo = '';
 	if ('git' in p) {
@@ -69,7 +68,7 @@ export default function versionInfo(packageInfo: any) {
 		console.info(gitInfo);
 	}
 
-	const pluginList = getPluginLists();
+	const pluginList = Object.keys(plugins) ? getPluginLists(plugins) : { completeList: '', summary: '' };
 
 	return {
 		header: header.join('\n'),
