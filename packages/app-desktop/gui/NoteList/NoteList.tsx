@@ -182,7 +182,7 @@ const NoteListComponent = (props: Props) => {
 		const targetNoteIndex = dragTargetNoteIndex_(event);
 		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
-		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
 	};
 
 
@@ -528,6 +528,8 @@ const mapStateToProps = (state: AppState) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
+		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
+		showCompletedTodos: state.settings.showCompletedTodos,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
