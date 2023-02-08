@@ -4712,7 +4712,7 @@ __metadata:
     "@react-native-community/slider": 4.4.1
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
-    "@types/react-native": 0.64.19
+    "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.25
     assert-browserify: 2.0.0
     babel-plugin-module-resolver: 4.1.0
@@ -7707,6 +7707,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: e6d4608d64387d4b261412d7deb242942ba37313e5284743869d9dd29c2c0d1d3f5c5b1066f736967d6e0970f9c163d5447b7c1e9f356935d5aa66487a43e961
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:0.70.6":
+  version: 0.70.6
+  resolution: "@types/react-native@npm:0.70.6"
+  dependencies:
+    "@types/react": "*"
+  checksum: 1b620095ddf2fe85157df9d57435edc619587eacb1a4fadd91c977c200cef8008e7fec4d8c5429ce373e1a2158199f1162f9c84e8e5a7d0b71a2224f31b64dfd
   languageName: node
   linkType: hard
 
