@@ -756,6 +756,7 @@ packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/uuid.js
 packages/lib/versionInfo.js
+packages/lib/versionInfo.test.js
 packages/pdf-viewer/FullViewer.js
 packages/pdf-viewer/Page.js
 packages/pdf-viewer/PdfDocument.js
