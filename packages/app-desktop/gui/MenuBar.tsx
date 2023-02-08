@@ -634,6 +634,7 @@ function useMenu(props: Props) {
 						menuItemDic.textCopy,
 						menuItemDic.textCut,
 						menuItemDic.textPaste,
+						menuItemDic.textPasteAsText,
 						menuItemDic.textSelectAll,
 						separator(),
 						// Using the generic "undo"/"redo" roles mean the menu
