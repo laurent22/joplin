@@ -9,7 +9,7 @@ body {
 	width: 400px;
 	
 	overflow-x: hidden;
-	overflow-y: hidden;
+	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
 	background-color: #162b3d;
