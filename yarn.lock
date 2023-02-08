@@ -4659,7 +4659,7 @@ __metadata:
     react-test-renderer: 18.2.0
     react-toggle-button: 2.2.0
     react-tooltip: 4.5.1
-    redux: 4.2.0
+    redux: 4.2.1
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
@@ -4764,7 +4764,7 @@ __metadata:
     react-native-version-info: 1.1.1
     react-native-webview: 11.26.1
     react-redux: 7.2.9
-    redux: 4.2.0
+    redux: 4.2.1
     rn-fetch-blob: 0.12.0
     stream: 0.0.2
     stream-browserify: 3.0.0
@@ -4895,7 +4895,7 @@ __metadata:
     query-string: 7.1.3
     re-reselect: 4.0.1
     read-chunk: 2.1.0
-    redux: 4.2.0
+    redux: 4.2.1
     relative: 3.0.2
     reselect: 4.1.7
     server-destroy: 1.0.1
@@ -26895,12 +26895,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:4.2.0":
-  version: 4.2.0
-  resolution: "redux@npm:4.2.0"
+"redux@npm:4.2.1":
+  version: 4.2.1
+  resolution: "redux@npm:4.2.1"
   dependencies:
     "@babel/runtime": ^7.9.2
-  checksum: 75f3955c89b3f18edf5411e5fb482aa2e4f41a416183e8802a6bf6472c4fc3d47675b8b321d147f8af8e0f616436ac507bf5a25f1c4d6180e797b549c7db2c1d
+  checksum: f63b9060c3a1d930ae775252bb6e579b42415aee7a23c4114e21a0b4ba7ec12f0ec76936c00f546893f06e139819f0e2855e0d55ebfce34ca9c026241a6950dd
   languageName: node
   linkType: hard
 
