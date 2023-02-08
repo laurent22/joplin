@@ -50,7 +50,7 @@
     "react-native-fingerprint-scanner": "6.0.0",
     "react-native-fs": "2.20.0",
     "react-native-get-random-values": "1.8.0",
-    "react-native-image-picker": "4.10.3",
+    "react-native-image-picker": "5.0.0",
     "react-native-image-resizer": "1.4.5",
     "react-native-modal-datetime-picker": "14.0.1",
     "react-native-paper": "5.1.4",
