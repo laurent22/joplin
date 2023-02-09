@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.10.7](https://github.com/laurent22/joplin/releases/tag/server-v2.10.7) - 2023-02-09T15:57:31Z
+
+- Fixed: Fixed sharing issue for changes that are associated with deleted items (05c17fb)
+
 ## [server-v2.10.6](https://github.com/laurent22/joplin/releases/tag/server-v2.10.6) - 2023-02-06T19:01:36Z
 
 - New: Add in ability to use Postgres connection string in configuration (#6836 by [@halkeye](https://github.com/halkeye))
