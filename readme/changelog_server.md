@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.10.9](https://github.com/laurent22/joplin/releases/tag/server-v2.10.9) - 2023-02-09T19:43:03Z
+
+- Improved: Clean up share logic (107f2e1)
+
 ## [server-v2.10.8](https://github.com/laurent22/joplin/releases/tag/server-v2.10.8) - 2023-02-09T18:24:27Z
 
 - Fixed: Fixed sharing issue when a user no longer has a user item associated with their account (293f621)
