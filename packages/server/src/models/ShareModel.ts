@@ -199,6 +199,20 @@ export default class ShareModel extends BaseModel<Share> {
 		const handleCreated = async (change: Change, item: Item, share: Share) => {
 			if (!item.jop_share_id) return;
 
+			// When a folder is unshared, the share object is deleted, then all
+			// items that were shared get their 'share_id' property set to an
+			// empty string. This is all done client side.
+			//
+			// However it means that if a share object is deleted but the items
+			// are not synced, we'll find items that are associated with a share
+			// that no longer exists. This is fine, but we need to handle it
+			// properly below, otherwise the share update process will fail.
+
+			if (!share) {
+				logger.warn(`Found an item (${item.id}) associated with a share that no longer exists (${item.jop_share_id}) - skipping it`);
+				return;
+			}
+
 			const shareUserIds = await this.allShareUserIds(share);
 			for (const shareUserId of shareUserIds) {
 				if (shareUserId === change.user_id) continue;
@@ -301,25 +315,10 @@ export default class ShareModel extends BaseModel<Share> {
 						// Item associated with the change may have been
 						// deleted, so take this into account.
 						if (item) {
-							// When a folder is unshared, the share object is
-							// deleted, then all items that were shared get their
-							// 'share_id' property set to an empty string. This is
-							// all done client side.
-							//
-							// However it means that if a share object is deleted
-							// but the items are not synced, we'll find items that
-							// are associated with a share that no longer exists.
-							// This is fine, but we need to handle it properly
-							// below, otherwise the share update process will fail.
-
 							const itemShare = shares.find(s => s.id === item.jop_share_id);
 
 							if (change.type === ChangeType.Create) {
-								if (!itemShare) {
-									logger.warn(`Found an item (${item.id}) associated with a share that no longer exists (${item.jop_share_id}) - skipping it`);
-								} else {
-									await handleCreated(change, item, itemShare);
-								}
+								await handleCreated(change, item, itemShare);
 							}
 
 							if (change.type === ChangeType.Update) {
