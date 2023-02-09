@@ -24,10 +24,6 @@ const declarations: CommandDeclaration[] = [
 		role: 'paste',
 	},
 	{
-		name: 'textPasteAsText',
-		label: () => _('Paste as text'),
-	},
-	{
 		name: 'textSelectAll',
 		label: () => _('Select all'),
 		role: 'selectAll',

@@ -65,6 +65,6 @@ export default function() {
 		'switchProfile1',
 		'switchProfile2',
 		'switchProfile3',
-		'textPasteAsText',
+		'pasteAsText',
 	];
 }
