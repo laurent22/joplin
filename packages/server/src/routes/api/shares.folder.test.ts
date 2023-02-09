@@ -414,6 +414,43 @@ describe('shares.folder', function() {
 		await expectNotThrow(async () => await models().share().updateSharedItems3());
 	});
 
+	test('should not throw an error if a user no longer has a user item, and the target share changes', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		const { share: share2 } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F5', [
+			{
+				id: '000000000000000000000000000000F5',
+				children: [],
+			},
+		]);
+
+		const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+
+		// Note is moved from a shared folder to a different shared folder
+
+		await models().item().saveForUser(user1.id, {
+			id: noteItem.id,
+			jop_parent_id: '000000000000000000000000000000F5',
+			jop_share_id: share2.id,
+		});
+
+		await models().userItem().deleteByUserItem(user2.id, noteItem.id, { recordChanges: false });
+
+		await expectNotThrow(async () => await models().share().updateSharedItems3());
+	});
+
 	test('should unshare a deleted item', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);

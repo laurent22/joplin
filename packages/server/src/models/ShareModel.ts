@@ -219,7 +219,15 @@ export default class ShareModel extends BaseModel<Share> {
 				const shareUserIds = await this.allShareUserIds(previousShare);
 				for (const shareUserId of shareUserIds) {
 					if (shareUserId === change.user_id) continue;
-					await removeUserItem(shareUserId, item.id);
+					try {
+						await removeUserItem(shareUserId, item.id);
+					} catch (error) {
+						if (error.httpCode === ErrorNotFound.httpCode) {
+							logger.warn('Could not remove a user item because it has already been removed:', error);
+						} else {
+							throw error;
+						}
+					}
 				}
 			}
 
