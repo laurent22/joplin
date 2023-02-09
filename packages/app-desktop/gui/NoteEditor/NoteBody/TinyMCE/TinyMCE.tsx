@@ -260,6 +260,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// https://github.com/tinymce/tinymce/issues/3745
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
+					pasteAsText: () => {
+						const text = clipboard.readText();
+						editor.insertContent(text);
+					},
 				};
 
 				if (additionalCommands[cmd.name]) {
