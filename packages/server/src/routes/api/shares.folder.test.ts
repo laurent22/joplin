@@ -385,6 +385,35 @@ describe('shares.folder', function() {
 		await expectNotThrow(async () => await models().share().updateSharedItems3());
 	});
 
+	test('should not throw an error if a change is associated with an item that no longer exists', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share: share1 } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {},
+		});
+
+		const { share: share2 } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', {
+			'000000000000000000000000000000F2': {},
+		});
+
+		const item1 = await createNote(session1.id, {
+			id: '00000000000000000000000000000007',
+			share_id: share1.id,
+		});
+
+		await createNote(session1.id, {
+			id: '00000000000000000000000000000008',
+			share_id: share2.id,
+		});
+
+		await models().item().delete(item1.id);
+
+		await models().share().updateSharedItems3();
+
+		await expectNotThrow(async () => await models().share().updateSharedItems3());
+	});
+
 	test('should unshare a deleted item', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
