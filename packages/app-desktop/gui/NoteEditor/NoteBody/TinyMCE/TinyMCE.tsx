@@ -262,7 +262,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					},
 					pasteAsText: () => {
 						const text = clipboard.readText();
-						editor.insertContent(text);
+						editor.insertContent(plainTextToHtml(text));
 					},
 				};
 
