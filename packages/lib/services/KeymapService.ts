@@ -66,7 +66,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Q', command: 'quit' },
 		{ accelerator: 'Ctrl+C', command: 'textCopy' },
 		{ accelerator: 'Ctrl+X', command: 'textCut' },
-		{ accelerator: 'Ctrl+Shift+V', command: 'textPasteAsText' },
+		{ accelerator: 'Ctrl+V', command: 'textPaste' },
 		{ accelerator: 'Ctrl+A', command: 'textSelectAll' },
 		{ accelerator: 'Ctrl+B', command: 'textBold' },
 		{ accelerator: 'Ctrl+I', command: 'textItalic' },
