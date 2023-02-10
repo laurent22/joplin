@@ -180,6 +180,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 	}, [editor, props.onMessage]);
 
+	const pasteAsPlainText = useCallback((text: string = null) => {
+		const pastedText = text === null ? clipboard.readText() : text;
+		if (pastedText) {
+			editor.insertContent(plainTextToHtml(pastedText));
+		}
+	}, [editor]);
+
 	useImperativeHandle(ref, () => {
 		return {
 			content: async () => {
@@ -260,10 +267,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// https://github.com/tinymce/tinymce/issues/3745
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
-					pasteAsText: () => {
-						const text = clipboard.readText();
-						editor.insertContent(plainTextToHtml(text));
-					},
+					pasteAsText: pasteAsPlainText,
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -285,7 +289,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			},
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss]);
+	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss, pasteAsPlainText]);
 
 	// -----------------------------------------------------------------------------------------
 	// Load the TinyMCE library. The lib loads additional JS and CSS files on startup
@@ -1049,13 +1053,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			editor.insertContent('');
 			event.preventDefault();
 			onChangeHandler();
-		}
-
-		function pasteAsPlainText(text: string = null) {
-			const pastedText = text === null ? clipboard.readText() : text;
-			if (pastedText) {
-				editor.insertContent(plainTextToHtml(pastedText));
-			}
 		}
 
 		function onKeyDown(event: any) {
