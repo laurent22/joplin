@@ -727,7 +727,10 @@ class AppComponent extends React.Component {
 		};
 
 		this.handleOpenURL_ = (event: any) => {
-			if (event.url === ShareExtension.shareURL) {
+			// If this is called while biometrics haven't been done yet, we can
+			// ignore the call, because handleShareData() will be called once
+			// biometricsDone is `true`.
+			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
 				void this.handleShareData();
 			}
 		};
@@ -812,8 +815,6 @@ class AppComponent extends React.Component {
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
-		await this.handleShareData();
-
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
@@ -847,6 +848,10 @@ class AppComponent extends React.Component {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
 				duration: 600,
 			}).start();
+		}
+
+		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
+			void this.handleShareData();
 		}
 	}
 
@@ -973,10 +978,11 @@ class AppComponent extends React.Component {
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-							<BiometricPopup
+							{ this.state.sensorInfo && <BiometricPopup
+								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
-							/>
+							/> }
 						</SafeAreaView>
 					</MenuContext>
 				</SideMenu>
@@ -1017,6 +1023,7 @@ const mapStateToProps = (state: any) => {
 		routeName: state.route.routeName,
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
+		biometricsDone: state.biometricsDone,
 	};
 };
 
