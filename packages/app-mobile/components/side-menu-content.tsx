@@ -139,19 +139,6 @@ const SideMenuContentComponent = (props: Props) => {
 			_('Notebook: %s', folder.title),
 			[
 				{
-					text: _('New sub-notebook'),
-					onPress: () => {
-						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Folder',
-							folderId: null,
-							parentFolderId: folder.id,
-						});
-					},
-				},
-				{
 					text: _('Rename'),
 					onPress: () => {
 						if (folder.encryption_applied) {
