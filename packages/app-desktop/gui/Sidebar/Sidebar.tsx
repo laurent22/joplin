@@ -211,32 +211,43 @@ const SidebarComponent = (props: Props) => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		const dt = event.dataTransfer;
 		if (!dt) return;
-
-		// folderId can be NULL when dropping on the sidebar Notebook header. In that case, it's used
-		// to put the dropped folder at the root. But for notes, folderId needs to always be defined
-		// since there's no such thing as a root note.
-
-		try {
-			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
-				event.preventDefault();
-
-				if (!folderId) return;
-
-				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-				for (let i = 0; i < noteIds.length; i++) {
-					await Note.moveToFolder(noteIds[i], folderId);
+	
+		const dragThreshold = 50;
+		let dragPosition = 0;
+		
+		// Track the drag position
+		document.addEventListener("drag", (event: any) => {
+			dragPosition += event.movementY;
+		});
+	
+		// Check if the drag threshold has been crossed
+		if (Math.abs(dragPosition) >= dragThreshold) {
+			// folderId can be NULL when dropping on the sidebar Notebook header. In that case, it's used
+			// to put the dropped folder at the root. But for notes, folderId needs to always be defined
+			// since there's no such thing as a root note.
+	
+			try {
+				if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+					event.preventDefault();
+	
+					if (!folderId) return;
+	
+					const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+					for (let i = 0; i < noteIds.length; i++) {
+						await Note.moveToFolder(noteIds[i], folderId);
+					}
+				} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
+					event.preventDefault();
+	
+					const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
+					for (let i = 0; i < folderIds.length; i++) {
+						await Folder.moveToFolder(folderIds[i], folderId);
+					}
 				}
-			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
-				event.preventDefault();
-
-				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-				for (let i = 0; i < folderIds.length; i++) {
-					await Folder.moveToFolder(folderIds[i], folderId);
-				}
+			} catch (error) {
+				logger.error(error);
+				alert(error.message);
 			}
-		} catch (error) {
-			logger.error(error);
-			alert(error.message);
 		}
 	}, []);
 
