@@ -804,7 +804,9 @@ packages/renderer/InMemoryCache.js
 packages/renderer/MarkupToHtml.js
 packages/renderer/MdToHtml.js
 packages/renderer/MdToHtml/createEventHandlingAttrs.js
+packages/renderer/MdToHtml/createEventHandlingAttrs.test.js
 packages/renderer/MdToHtml/linkReplacement.js
+packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/renderMedia.js
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/code_inline.js
@@ -824,6 +826,7 @@ packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/headerAnchor.js
 packages/renderer/highlight.js
 packages/renderer/htmlUtils.js
+packages/renderer/htmlUtils.test.js
 packages/renderer/index.js
 packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
