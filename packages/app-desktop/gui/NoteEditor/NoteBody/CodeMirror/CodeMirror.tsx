@@ -414,7 +414,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const maxWidthCss = props.contentMaxWidth ? `
 			margin-right: auto !important;
 			margin-left: auto !important;
-			max-width: ${props.contentMaxWidth}px !important;	
+			max-width: ${props.contentMaxWidth}px !important;
 		` : '';
 
 		const element = document.createElement('style');
@@ -869,7 +869,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	function renderEditor() {
 
-		const matchBracesOptions = Setting.value('editor.autoMatchingBraces') ? { override: true, pairs: '()[]{}\'\'""‘’“”（）《》「」『』【】〔〕〖〗〘〙〚〛' } : false;
+		const matchBracesOptions = Setting.value('editor.autoMatchingBraces') ? { override: true, pairs: '``()[]{}\'\'""‘’“”（）《》「」『』【】〔〕〖〗〘〙〚〛' } : false;
 
 		return (
 			<div style={cellEditorStyle}>
@@ -927,4 +927,3 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 }
 
 export default forwardRef(CodeMirror);
-

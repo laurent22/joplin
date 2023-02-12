@@ -4659,7 +4659,7 @@ __metadata:
     react-test-renderer: 18.2.0
     react-toggle-button: 2.2.0
     react-tooltip: 4.5.1
-    redux: 4.2.0
+    redux: 4.2.1
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
@@ -4709,10 +4709,10 @@ __metadata:
     "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.7
     "@react-native-community/push-notification-ios": 1.10.1
-    "@react-native-community/slider": 4.4.1
+    "@react-native-community/slider": 4.4.2
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
-    "@types/react-native": 0.64.19
+    "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.25
     assert-browserify: 2.0.0
     babel-plugin-module-resolver: 4.1.0
@@ -4735,7 +4735,7 @@ __metadata:
     metro-react-native-babel-preset: 0.72.3
     nodemon: 2.0.20
     prop-types: 15.8.1
-    punycode: 2.2.2
+    punycode: 2.3.0
     react: 18.2.0
     react-native: 0.70.6
     react-native-action-button: 2.8.5
@@ -4748,14 +4748,14 @@ __metadata:
     react-native-fingerprint-scanner: 6.0.0
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.8.0
-    react-native-image-picker: 4.10.3
+    react-native-image-picker: 5.0.1
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
     react-native-paper: 5.1.4
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
-    react-native-safe-area-context: 4.4.1
+    react-native-safe-area-context: 4.5.0
     react-native-securerandom: 1.0.1
     react-native-share: 8.1.0
     react-native-side-menu-updated: 1.3.2
@@ -4763,9 +4763,9 @@ __metadata:
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
-    react-native-webview: 11.26.0
+    react-native-webview: 11.26.1
     react-redux: 7.2.9
-    redux: 4.2.0
+    redux: 4.2.1
     rn-fetch-blob: 0.12.0
     stream: 0.0.2
     stream-browserify: 3.0.0
@@ -4896,7 +4896,7 @@ __metadata:
     query-string: 7.1.3
     re-reselect: 4.0.1
     read-chunk: 2.1.0
-    redux: 4.2.0
+    redux: 4.2.1
     relative: 3.0.2
     reselect: 4.1.7
     server-destroy: 1.0.1
@@ -5047,7 +5047,7 @@ __metadata:
     "@joplin/renderer": ~2.10
     "@joplin/tools": ~2.10
     "@koa/cors": 3.1.0
-    "@rmp135/sql-ts": 1.15.1
+    "@rmp135/sql-ts": 1.16.0
     "@types/formidable": 2.0.5
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
@@ -5106,7 +5106,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.41
     "@joplin/lib": ~2.10
     "@joplin/renderer": ~2.10
-    "@rmp135/sql-ts": 1.15.1
+    "@rmp135/sql-ts": 1.16.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/mustache": 4.2.2
@@ -6774,10 +6774,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/slider@npm:4.4.1":
-  version: 4.4.1
-  resolution: "@react-native-community/slider@npm:4.4.1"
-  checksum: 2bfaf3099fae17c3e3247568840b47384ec19a5a34d5f5238f5bc2b0107bc7501cf8d339f60388ded9411fe9ab1c24c7eed3a2edc58ae5fa1dfe0e49eec7c9db
+"@react-native-community/slider@npm:4.4.2":
+  version: 4.4.2
+  resolution: "@react-native-community/slider@npm:4.4.2"
+  checksum: 1ae613f594a8ea9d7243b3125d26b36aab4e4c2dd9eba1bf66c4f31878e74fae055cd35a1babc46b262240885bb61fa321610417bb2a6d9f77a330136ff33293
   languageName: node
   linkType: hard
 
@@ -6802,20 +6802,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rmp135/sql-ts@npm:1.15.1":
-  version: 1.15.1
-  resolution: "@rmp135/sql-ts@npm:1.15.1"
+"@rmp135/sql-ts@npm:1.16.0":
+  version: 1.16.0
+  resolution: "@rmp135/sql-ts@npm:1.16.0"
   dependencies:
     change-case: ^4.1.2
     handlebars: ^4.7.7
-    knex: ^1.0.3
-    yargs: ^17.3.1
+    knex: ^2.4.0
+    yargs: ^17.6.2
   peerDependencies:
     better-sqlite3: ^7.5.0
     mssql: ^8.0.2
     mysql: ^2.18.1
     mysql2: ^2.3.3
-    pg: ^8.7.3
+    pg: ^8.8.0
     sqlite3: ^5.0.2
   peerDependenciesMeta:
     better-sqlite3:
@@ -6832,7 +6832,7 @@ __metadata:
       optional: true
   bin:
     sql-ts: bin/sql-ts
-  checksum: 074831229a0d1611991e3af2c2eda0e8b6e5cccfbe81231d32084ccec037dc989fe4f6ca919eba4d600d78a62d6f5ea0953cfc501706f93a71d6b9a33cc98770
+  checksum: 5151e2b864c894d27dc61cc20dc08788f63067c551f3e2f607f5f16741eb24feff98ed09d60dbdffc28630524ec2a5884d3f6951f70c606f256361b5fbea1297
   languageName: node
   linkType: hard
 
@@ -7717,6 +7717,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: e6d4608d64387d4b261412d7deb242942ba37313e5284743869d9dd29c2c0d1d3f5c5b1066f736967d6e0970f9c163d5447b7c1e9f356935d5aa66487a43e961
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:0.70.6":
+  version: 0.70.6
+  resolution: "@types/react-native@npm:0.70.6"
+  dependencies:
+    "@types/react": "*"
+  checksum: 1b620095ddf2fe85157df9d57435edc619587eacb1a4fadd91c977c200cef8008e7fec4d8c5429ce373e1a2158199f1162f9c84e8e5a7d0b71a2224f31b64dfd
   languageName: node
   linkType: hard
 
@@ -11461,13 +11470,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:2.0.16, colorette@npm:^2.0.14":
-  version: 2.0.16
-  resolution: "colorette@npm:2.0.16"
-  checksum: cd55596a3a2d1071c1a28eee7fd8a5387593ff1bd10a3e8d0a6221499311fe34a9f2b9272d77c391e0e003dcdc8934fb2f8d106e7ef1f7516f8060c901d41a27
-  languageName: node
-  linkType: hard
-
 "colorette@npm:2.0.19, colorette@npm:^2.0.19":
   version: 2.0.19
   resolution: "colorette@npm:2.0.19"
@@ -11479,6 +11481,13 @@ __metadata:
   version: 1.4.0
   resolution: "colorette@npm:1.4.0"
   checksum: 01c3c16058b182a4ab4c126a65a75faa4d38a20fa7c845090b25453acec6c371bb2c5dceb0a2338511f17902b9d1a9af0cadd8509c9403894b79311032c256c3
+  languageName: node
+  linkType: hard
+
+"colorette@npm:^2.0.14":
+  version: 2.0.16
+  resolution: "colorette@npm:2.0.16"
+  checksum: cd55596a3a2d1071c1a28eee7fd8a5387593ff1bd10a3e8d0a6221499311fe34a9f2b9272d77c391e0e003dcdc8934fb2f8d106e7ef1f7516f8060c901d41a27
   languageName: node
   linkType: hard
 
@@ -20703,7 +20712,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:2.4.2":
+"knex@npm:2.4.2, knex@npm:^2.4.0":
   version: 2.4.2
   resolution: "knex@npm:2.4.2"
   dependencies:
@@ -20739,45 +20748,6 @@ __metadata:
   bin:
     knex: bin/cli.js
   checksum: cfb6436c0e3df3cd1f55d3637e4f222d1acbc7b6ec3757e52c92cbf0a7da4055d40156d707ffede57dc155af75d7f5739a49d1b31d8755bc77bc0e4e2a570748
-  languageName: node
-  linkType: hard
-
-"knex@npm:^1.0.3":
-  version: 1.0.7
-  resolution: "knex@npm:1.0.7"
-  dependencies:
-    colorette: 2.0.16
-    commander: ^9.1.0
-    debug: 4.3.4
-    escalade: ^3.1.1
-    esm: ^3.2.25
-    get-package-type: ^0.1.0
-    getopts: 2.3.0
-    interpret: ^2.2.0
-    lodash: ^4.17.21
-    pg-connection-string: 2.5.0
-    rechoir: ^0.8.0
-    resolve-from: ^5.0.0
-    tarn: ^3.0.2
-    tildify: 2.0.0
-  peerDependenciesMeta:
-    "@vscode/sqlite3":
-      optional: true
-    better-sqlite3:
-      optional: true
-    mysql:
-      optional: true
-    mysql2:
-      optional: true
-    pg:
-      optional: true
-    pg-native:
-      optional: true
-    tedious:
-      optional: true
-  bin:
-    knex: bin/cli.js
-  checksum: 57608a3a6813cb66da6f5a078016338166c53ab2cbaab66e81492352023db88fc158e4ad6bbd2156cd9d7c9cac14a4b1e581dd8232b4f9bab2285ea6f1efc5cf
   languageName: node
   linkType: hard
 
@@ -21459,9 +21429,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"madge@npm:5.0.1":
-  version: 5.0.1
-  resolution: "madge@npm:5.0.1"
+"madge@npm:5.0.2":
+  version: 5.0.2
+  resolution: "madge@npm:5.0.2"
   dependencies:
     chalk: ^4.1.1
     commander: ^7.2.0
@@ -21487,7 +21457,7 @@ __metadata:
     walkdir: ^0.4.1
   bin:
     madge: bin/cli.js
-  checksum: 821db88fdcb6259cf4bf1665abb976dd859fb7157a712886468d4172ab6d758f3446212fcd3fa92be21e9e2b408854f96e9495b7119d7387e6fe5690bd9786c4
+  checksum: 734e62da993c65995cbfe9aff6f93a2040f3d042a8be95d78c7a1fa84b894d22bf8091e9fe0fd01462e7bfefe61c8f9b645fece625194323f70fb1d3a2f22a4d
   languageName: node
   linkType: hard
 
@@ -25804,10 +25774,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:2.2.2":
-  version: 2.2.2
-  resolution: "punycode@npm:2.2.2"
-  checksum: 282ce6abf320731f6ff59b0d2151479dfcf059b9b2f78b45cd4eb4efa73f24375b9a9b0416056b7e9ae572bb251cb77ed8ca4f316a18236e52575cc0173767c6
+"punycode@npm:2.3.0":
+  version: 2.3.0
+  resolution: "punycode@npm:2.3.0"
+  checksum: 39f760e09a2a3bbfe8f5287cf733ecdad69d6af2fe6f97ca95f24b8921858b91e9ea3c9eeec6e08cede96181b3bb33f95c6ffd8c77e63986508aa2e8159fa200
   languageName: node
   linkType: hard
 
@@ -26257,13 +26227,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:4.10.3":
-  version: 4.10.3
-  resolution: "react-native-image-picker@npm:4.10.3"
+"react-native-image-picker@npm:5.0.1":
+  version: 5.0.1
+  resolution: "react-native-image-picker@npm:5.0.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 1f1c5cae5950790cfbdab2e1f547cfe065de9949c7cf0102dec512f43889f586eed1c265e1ecbc88df106696650b3dc5bf936b862078906787aca7e9ca2f145c
+  checksum: c14eb042ed55a6edbe6d0d5b09627e6191ca730451c4086b0ea218c6cfd10645372f7eabb77141ea8f63e35bb4b8c7ed0e4e100b3cd6bba5e51c4b38581505b0
   languageName: node
   linkType: hard
 
@@ -26325,13 +26295,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:4.4.1":
-  version: 4.4.1
-  resolution: "react-native-safe-area-context@npm:4.4.1"
+"react-native-safe-area-context@npm:4.5.0":
+  version: 4.5.0
+  resolution: "react-native-safe-area-context@npm:4.5.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: ef7c41ea59a34b114c6481fb130e66ef85e8d5b88acb46279131367761ca9fbf22cd310fe613f49b6c9b56dbd83e044be640f0532eda1d3856bf708e96335a35
+  checksum: 958df1d20492aa89c23d746f88409a3a3bd1b0d397c80310a4b0bbec9888cbbeb7579c9c92dad46841e2e6536491806206228ba009b7c8af970670aef8273a30
   languageName: node
   linkType: hard
 
@@ -26404,16 +26374,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:11.26.0":
-  version: 11.26.0
-  resolution: "react-native-webview@npm:11.26.0"
+"react-native-webview@npm:11.26.1":
+  version: 11.26.1
+  resolution: "react-native-webview@npm:11.26.1"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 9335fd21cdb9a883e241650cf66421a72d0456c905d8da2948bdc168124b8eec944c86e5f1730d4985fb4b3fe8554363c08765f0c5e6c0014035620cb7450378
+  checksum: d2f95a89e944a2f1e8cf402e4e274f3568edae42e7ef190915e9fba8004a01d699c962459bdc9688c159060538e90aea3017cab24e6f4112021cbbc10ef57104
   languageName: node
   linkType: hard
 
@@ -26952,12 +26922,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:4.2.0":
-  version: 4.2.0
-  resolution: "redux@npm:4.2.0"
+"redux@npm:4.2.1":
+  version: 4.2.1
+  resolution: "redux@npm:4.2.1"
   dependencies:
     "@babel/runtime": ^7.9.2
-  checksum: 75f3955c89b3f18edf5411e5fb482aa2e4f41a416183e8802a6bf6472c4fc3d47675b8b321d147f8af8e0f616436ac507bf5a25f1c4d6180e797b549c7db2c1d
+  checksum: f63b9060c3a1d930ae775252bb6e579b42415aee7a23c4114e21a0b4ba7ec12f0ec76936c00f546893f06e139819f0e2855e0d55ebfce34ca9c026241a6950dd
   languageName: node
   linkType: hard
 
@@ -27738,7 +27708,7 @@ __metadata:
     husky: 3.1.0
     lerna: 3.22.1
     lint-staged: 13.1.0
-    madge: 5.0.1
+    madge: 5.0.2
     node-gyp: 9.3.1
     nodemon: 2.0.20
     npm-package-json-lint: 6.4.0
@@ -32828,7 +32798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.6.2, yargs@npm:^17.5.1":
+"yargs@npm:17.6.2, yargs@npm:^17.5.1, yargs@npm:^17.6.2":
   version: 17.6.2
   resolution: "yargs@npm:17.6.2"
   dependencies:

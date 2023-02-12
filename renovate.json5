@@ -88,6 +88,7 @@
 		"@babel/runtime",
 		"@types/react-native",
 		"androidx.appcompat:appcompat",
+		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
 		"com.facebook.flipper:flipper-fresco-plugin",
 		"com.facebook.flipper:flipper-network-plugin",

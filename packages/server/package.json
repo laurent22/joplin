@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.10.6",
+  "version": "2.10.9",
   "private": true,
   "scripts": {
     "start-dev": "yarn run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@joplin/tools": "~2.10",
-    "@rmp135/sql-ts": "1.15.1",
+    "@rmp135/sql-ts": "1.16.0",
     "@types/formidable": "2.0.5",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.6",

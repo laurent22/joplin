@@ -26,9 +26,11 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	const [resourceLoadedTime, setResourceLoadedTime] = useState(0);
 	const [isFirstRender, setIsFirstRender] = useState(true);
 
+	const paddingTop = '.8em';
+
 	const rendererTheme = useMemo(() => {
 		return {
-			bodyPaddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+			bodyPaddingTop: paddingTop, // Extra top padding on the rendered MD so it doesn't touch the border
 			bodyPaddingBottom: paddingBottom, // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			...themeStyle(themeId),
 		};
@@ -160,8 +162,14 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				*/
 				body > #rendered-md {
 					width: 100vw;
-					height: 100vh;
 					overflow: auto;
+					height: calc(100vh - ${paddingBottom}px - ${paddingTop});
+					padding-bottom: ${paddingBottom}px;
+					padding-top: ${paddingTop};
+				}
+
+				:root > body {
+					padding: 0;
 				}
 			`;
 

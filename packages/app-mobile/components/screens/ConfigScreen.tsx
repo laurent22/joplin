@@ -577,7 +577,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().settingText}>
 						{md.label()}
 					</Text>
-					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {

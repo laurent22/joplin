@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.10.6](https://github.com/laurent22/joplin/releases/tag/android-v2.10.6) (Pre-release) - 2023-02-10T16:22:28Z
+
+- Improved: Add create sub-notebook feature (#7728) (#1044 by [@carlosngo](https://github.com/carlosngo))
+- Fixed: Fix double-scroll issue in long notes (#7701) (#7700 by Henry Heino)
+- Fixed: Fix startup error (#7688) (#7687 by Henry Heino)
+- Fixed: Sharing file to Joplin does not work (#7691)
+
 ## [android-v2.10.5](https://github.com/laurent22/joplin/releases/tag/android-v2.10.5) (Pre-release) - 2023-01-21T14:21:23Z
 
 - Improved: Improve dialogue spacing in Fountain renderer (#7628) (#7627 by [@Elleo](https://github.com/Elleo))

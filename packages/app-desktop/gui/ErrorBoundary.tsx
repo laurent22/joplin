@@ -1,6 +1,6 @@
 import * as React from 'react';
 import versionInfo from '@joplin/lib/versionInfo';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 const packageInfo = require('../packageInfo.js');
@@ -21,6 +21,7 @@ interface State {
 	error: Error;
 	errorInfo: ErrorInfo;
 	pluginInfos: PluginInfo[];
+	plugins: Plugins;
 }
 
 interface Props {
@@ -29,14 +30,16 @@ interface Props {
 
 export default class ErrorBoundary extends React.Component<Props, State> {
 
-	public state: State = { error: null, errorInfo: null, pluginInfos: [] };
+	public state: State = { error: null, errorInfo: null, pluginInfos: [], plugins: {} };
 
 	componentDidCatch(error: any, errorInfo: ErrorInfo) {
 		if (typeof error === 'string') error = { message: error };
 
 		const pluginInfos: PluginInfo[] = [];
+		let plugins: Plugins = {};
 		try {
 			const service = PluginService.instance();
+			plugins = service.plugins;
 			const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 			for (const pluginId in pluginSettings) {
 				const plugin = PluginService.instance().pluginById(pluginId);
@@ -52,7 +55,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 			console.error('Could not get plugin info:', error);
 		}
 
-		this.setState({ error, errorInfo, pluginInfos });
+		this.setState({ error, errorInfo, pluginInfos, plugins });
 	}
 
 	componentDidMount() {
@@ -91,7 +94,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 				output.push(
 					<section key="versionInfo">
 						<h2>Version info</h2>
-						<pre>{versionInfo(packageInfo).message}</pre>
+						<pre>{versionInfo(packageInfo, this.state.plugins).message}</pre>
 					</section>
 				);
 
