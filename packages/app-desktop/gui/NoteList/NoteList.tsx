@@ -340,11 +340,39 @@ const NoteListComponent = (props: Props) => {
 		return noteIndex;
 	};
 
+	const noteItem_noteMove = async (keyCode: any) => {
+		if (props.notesParentType !== 'Folder') return;
+		if (props.noteSortOrder !== 'order') {
+			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
+				buttons: [_('Do it now'), _('Cancel')],
+			});
+			if (!doIt) return;
+
+			Setting.setValue('notes.sortOrder.field', 'order');
+			return;
+		}
+		const noteIds = props.selectedNoteIds;
+		if ((keyCode === 40)) {
+			const noteId = noteIds[0];
+			const targetNoteIndex = BaseModel.modelIndexById(props.notes, noteId) + 2;
+			void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+		}
+
+		if ((keyCode === 38)) {
+			const noteId = noteIds[0];
+			const targetNoteIndex = BaseModel.modelIndexById(props.notes, noteId) - 1;
+			void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+		}
+	};
+
 	const onKeyDown = async (event: any) => {
 		const keyCode = event.keyCode;
 		const noteIds = props.selectedNoteIds;
 
-		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
+		if ((keyCode === 40 || keyCode === 38) && event.altKey) {
+			await noteItem_noteMove(keyCode);
+			event.preventDefault();
+		} else if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(props.notes, noteId);
