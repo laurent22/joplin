@@ -76,6 +76,16 @@ function stripMarkup(markupLanguage: number, markup: string, options: any = null
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
 
+function createSyntheticClipboardEventWithoutHTML(): ClipboardEvent {
+	const clipboardData = new DataTransfer();
+	for (const format of clipboard.availableFormats()) {
+		if (format !== 'text/html') {
+			clipboardData.setData(format, clipboard.read(format));
+		}
+	}
+	return new ClipboardEvent('paste', { clipboardData });
+}
+
 interface TinyMceCommand {
 	name: string;
 	value?: any;
@@ -260,6 +270,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// https://github.com/tinymce/tinymce/issues/3745
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
+					pasteAsText: () => editor.fire('pasteAsText'),
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -992,7 +1003,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		async function onPaste(event: any) {
+		async function onPaste(event: ClipboardEvent) {
 			// We do not use the default pasting behaviour because the input has
 			// to be processed in various ways.
 			event.preventDefault();
@@ -1070,10 +1081,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		async function onPasteAsText() {
+			await onPaste(createSyntheticClipboardEventWithoutHTML());
+		}
+
 		editor.on('keyup', onKeyUp);
 		editor.on('keydown', onKeyDown);
 		editor.on('keypress', onKeypress);
 		editor.on('paste', onPaste);
+		editor.on('pasteAsText', onPasteAsText);
 		editor.on('copy', onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
@@ -1090,6 +1106,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
 				editor.off('paste', onPaste);
+				editor.off('pasteAsText', onPasteAsText);
 				editor.off('copy', onCopy);
 				editor.off('compositionend', onChangeHandler);
 				editor.off('cut', onCut);

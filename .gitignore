@@ -216,6 +216,7 @@ packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
+packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
 packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js
