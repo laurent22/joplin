@@ -668,26 +668,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						}
 					});
 
-					// Listen to a click on the button 'Save' of the Link plugin's dialog box
-					editor.on('OpenWindow', function() {
-						const dialogs = document.getElementsByClassName('tox-dialog');
-						if (dialogs.length > 0) {
-							const insertLinkDialog = Array.from(dialogs).find((e) => {
-								return e instanceof HTMLElement ? e.innerText === 'Insert/Edit Link\nURL\nText to display\nTitle\nCancel\nSave' : false;
-							});
-
-							if (insertLinkDialog) {
-								const saveButton = Array.from(insertLinkDialog.querySelectorAll('button')).find(e => e.title === 'Save');
-								if (saveButton) {
-									saveButton.addEventListener('click', () => {
-										editor.fire('linkPluginSave');
-										dispatchDidUpdate(editor);
-									});
-								}
-							}
-						}
-					});
-
 					editor.on('init', () => {
 						setEditorReady(true);
 					});
@@ -1103,7 +1083,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on('Undo', onChangeHandler);
 		editor.on('Redo', onChangeHandler);
 		editor.on('ExecCommand', onExecCommand);
-		editor.on('linkPluginSave', onChangeHandler);
+		editor.on('SetAttrib', onChangeHandler);
 
 		return () => {
 			try {
@@ -1118,7 +1098,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('Undo', onChangeHandler);
 				editor.off('Redo', onChangeHandler);
 				editor.off('ExecCommand', onExecCommand);
-				editor.off('linkPluginSave', onChangeHandler);
+				editor.off('SetAttrib', onChangeHandler);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
