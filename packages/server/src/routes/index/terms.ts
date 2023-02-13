@@ -15,7 +15,8 @@ router.get('terms', async (_path: SubPath, _ctx: AppContext) => {
 
 Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern JOPLIN’s relationship with you in relation to this website. JOPLIN is the owner of this website, Joplin Cloud. If you disagree with any part of these terms and conditions, please do not use our website.
 
-The term ‘Joplin Cloud’ or ‘us’ or ‘we’ refers to the owner of the website whose registered office is 32 Greenfield Gardens, London, NW2 1HX. Our company registration number is 06547799. The term ‘you’ refers to the user or viewer of our website.
+The term ‘Joplin Cloud’ or ‘us’ or ‘we’ refers to the owner of the website whose registered office is 3 Place Simone Veil, CS 20739
+54064 Nancy. SIREN: RCS Nancy 919 395 087. The term ‘you’ refers to the user or viewer of our website.
 
 The use of this website is subject to the following terms of use:
 
@@ -35,7 +36,7 @@ The use of this website is subject to the following terms of use:
 
 - From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).
 
-- Your use of this website and any dispute arising out of such use of the website is subject to the laws of England, Northern Ireland, Scotland and Wales.
+- Your use of this website and any dispute arising out of such use of the website is subject to the laws of France.
 
 - Please contact us at [${markdownUtils.escapeTitleText(config().supportEmail)}](mailto:${markdownUtils.escapeLinkUrl(config().supportEmail)}) for any question.`);
 });
