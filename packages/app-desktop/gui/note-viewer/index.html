@@ -423,13 +423,21 @@
 
 			if ('separateWordSearch' in options) markKeywordOptions.separateWordSearch = options.separateWordSearch;
 
-			for (let i = 0; i < keywords.length; i++) {
-				let keyword = keywords[i];
-
-				markJsUtils.markKeyword(mark_, keyword, {
-					pregQuote: pregQuote,
-					replaceRegexDiacritics: replaceRegexDiacritics,
-				}, markKeywordOptions);
+			try {
+				for (const keyword of keywords) {
+					markJsUtils.markKeyword(mark_, keyword, {
+						pregQuote: pregQuote,
+						replaceRegexDiacritics: replaceRegexDiacritics,
+					}, markKeywordOptions);
+				}
+			} catch (error) {
+				if (error.name !== 'SyntaxError') {
+					throw error;
+				}
+				// An error of 'Regular expression too large' might occour in the markJs library
+				// when the input is really big, this catch is here to avoid the application crashing
+				// https://github.com/laurent22/joplin/issues/7634
+				console.error('Error while trying to highlight words from search: ', error);
 			}
 		}
 
