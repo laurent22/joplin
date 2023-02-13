@@ -190,54 +190,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 	}, [editor, props.onMessage]);
 
-	const pasteAsPlainText = useCallback((text: string = null) => {
-		const pastedText = text === null ? clipboard.readText() : text;
-		if (pastedText) {
-			editor.insertContent(plainTextToHtml(pastedText));
-		}
-	}, [editor]);
-
-	const onPaste = useCallback(async (event: ClipboardEvent) => {
-		// We do not use the default pasting behaviour because the input has
-		// to be processed in various ways.
-		event.preventDefault();
-
-		const resourceMds = await handlePasteEvent(event);
-		if (resourceMds.length) {
-			const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
-			editor.insertContent(result.html);
-		} else {
-			const pastedText = event.clipboardData.getData('text/plain');
-
-			if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
-				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
-				editor.insertContent(result.html);
-			} else { // Paste regular text
-				// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>,
-				// which seems to be not supported in editor.insertContent().
-				//
-				// when pasting text with Ctrl+Shift+V, the format should be ignored.
-				// In this case, event.clopboardData.getData('text/html') returns an empty string, but the clipboard.readHTML() still returns the formatted text.
-				const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
-				if (pastedHtml) { // Handles HTML
-					const modifiedHtml = await processPastedHtml(pastedHtml);
-					editor.insertContent(modifiedHtml);
-				} else { // Handles plain text
-					pasteAsPlainText(pastedText);
-				}
-
-				// This code before was necessary to get undo working after
-				// pasting but it seems it's no longer necessary, so
-				// removing it for now. We also couldn't do it immediately
-				// it seems, or else nothing is added to the stack, so do it
-				// on the next frame.
-				//
-				// window.requestAnimationFrame(() =>
-				// editor.undoManager.add()); onChangeHandler();
-			}
-		}
-	}, [editor, pasteAsPlainText]);
-
 	useImperativeHandle(ref, () => {
 		return {
 			content: async () => {
@@ -318,9 +270,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// https://github.com/tinymce/tinymce/issues/3745
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
-					pasteAsText: async () => {
-						await onPaste(createSyntheticClipboardEventWithoutHTML());
-					},
+					pasteAsText: () => editor.fire('pasteAsText'),
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -342,7 +292,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			},
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss, onPaste]);
+	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss]);
 
 	// -----------------------------------------------------------------------------------------
 	// Load the TinyMCE library. The lib loads additional JS and CSS files on startup
@@ -1053,6 +1003,47 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		async function onPaste(event: ClipboardEvent) {
+			// We do not use the default pasting behaviour because the input has
+			// to be processed in various ways.
+			event.preventDefault();
+
+			const resourceMds = await handlePasteEvent(event);
+			if (resourceMds.length) {
+				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
+				editor.insertContent(result.html);
+			} else {
+				const pastedText = event.clipboardData.getData('text/plain');
+
+				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
+					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+					editor.insertContent(result.html);
+				} else { // Paste regular text
+					// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>,
+					// which seems to be not supported in editor.insertContent().
+					//
+					// when pasting text with Ctrl+Shift+V, the format should be ignored.
+					// In this case, event.clopboardData.getData('text/html') returns an empty string, but the clipboard.readHTML() still returns the formatted text.
+					const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
+					if (pastedHtml) { // Handles HTML
+						const modifiedHtml = await processPastedHtml(pastedHtml);
+						editor.insertContent(modifiedHtml);
+					} else { // Handles plain text
+						pasteAsPlainText(pastedText);
+					}
+
+					// This code before was necessary to get undo working after
+					// pasting but it seems it's no longer necessary, so
+					// removing it for now. We also couldn't do it immediately
+					// it seems, or else nothing is added to the stack, so do it
+					// on the next frame.
+					//
+					// window.requestAnimationFrame(() =>
+					// editor.undoManager.add()); onChangeHandler();
+				}
+			}
+		}
+
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
 			copyHtmlToClipboard(copiedContent);
@@ -1065,6 +1056,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			editor.insertContent('');
 			event.preventDefault();
 			onChangeHandler();
+		}
+
+		function pasteAsPlainText(text: string = null) {
+			const pastedText = text === null ? clipboard.readText() : text;
+			if (pastedText) {
+				editor.insertContent(plainTextToHtml(pastedText));
+			}
 		}
 
 		function onKeyDown(event: any) {
@@ -1083,10 +1081,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		async function onPasteAsText() {
+			await onPaste(createSyntheticClipboardEventWithoutHTML());
+		}
+
 		editor.on('keyup', onKeyUp);
 		editor.on('keydown', onKeyDown);
 		editor.on('keypress', onKeypress);
 		editor.on('paste', onPaste);
+		editor.on('pasteAsText', onPasteAsText);
 		editor.on('copy', onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
@@ -1103,6 +1106,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
 				editor.off('paste', onPaste);
+				editor.off('pasteAsText', onPasteAsText);
 				editor.off('copy', onCopy);
 				editor.off('compositionend', onChangeHandler);
 				editor.off('cut', onCut);
@@ -1115,7 +1119,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor, onPaste]);
+	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor]);
 
 	// -----------------------------------------------------------------------------------------
 	// Destroy the editor when unmounting
