@@ -92,7 +92,6 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 				template.push({
 					label: item.label,
 					click: () => {
-						console.log('aaaaaaaaaaaaaa');
 						item.onAction(contextMenuActionOptions.current);
 					},
 				});
