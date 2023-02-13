@@ -23,7 +23,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+C', command: 'textCopy' },
 		{ accelerator: 'Cmd+X', command: 'textCut' },
 		{ accelerator: 'Cmd+V', command: 'textPaste' },
-		{ accelerator: 'Option+Shift+Cmd+V', command: 'pasteAsText' },
+		{ accelerator: 'Cmd+Shift+V', command: 'pasteAsText' },
 		{ accelerator: 'Cmd+A', command: 'textSelectAll' },
 		{ accelerator: 'Cmd+B', command: 'textBold' },
 		{ accelerator: 'Cmd+I', command: 'textItalic' },
