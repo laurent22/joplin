@@ -77,9 +77,6 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 					editor.insertContent(content);
 				},
 				isReadOnly: false,
-				fireEditorEvent: (event: string) => {
-					editor.fire(event);
-				},
 			};
 
 			let template = [];

@@ -176,11 +176,6 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			},
 			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
 		},
-		pasteAsText: {
-			label: _('Paste as text'),
-			onAction: async (options: ContextMenuOptions) => options.fireEditorEvent('pasteAsText'),
-			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
-		},
 		copyLinkUrl: {
 			label: _('Copy Link Address'),
 			onAction: async (options: ContextMenuOptions) => {
