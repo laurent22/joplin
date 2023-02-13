@@ -1083,10 +1083,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		async function pasteAsText() {
+			await onPaste(createSyntheticClipboardEventWithoutHTML());
+			onChangeHandler();
+		}
+
 		editor.on('keyup', onKeyUp);
 		editor.on('keydown', onKeyDown);
 		editor.on('keypress', onKeypress);
 		editor.on('paste', onPaste);
+		editor.on('pasteAsText', pasteAsText);
 		editor.on('copy', onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
@@ -1103,6 +1109,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
 				editor.off('paste', onPaste);
+				editor.off('pasteAsText', pasteAsText);
 				editor.off('copy', onCopy);
 				editor.off('compositionend', onChangeHandler);
 				editor.off('cut', onCut);

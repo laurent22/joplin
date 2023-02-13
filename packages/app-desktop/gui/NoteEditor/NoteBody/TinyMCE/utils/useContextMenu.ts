@@ -77,6 +77,9 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 					editor.insertContent(content);
 				},
 				isReadOnly: false,
+				fireEditorEvent: (event: string) => {
+					editor.fire(event);
+				},
 			};
 
 			let template = [];
@@ -89,6 +92,7 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 				template.push({
 					label: item.label,
 					click: () => {
+						console.log('aaaaaaaaaaaaaa');
 						item.onAction(contextMenuActionOptions.current);
 					},
 				});
