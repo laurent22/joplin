@@ -72,6 +72,44 @@ describe('models/Note_CustomSortOrder', function() {
 		expect(sortedNotes[4].id).toBe(notes1[0].id);
 	}));
 
+	it('should bump system but not user updated time when changing sort value', (async () => {
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const note0 = await Note.save({ title: 'A3', parent_id: folder1.id, is_todo: 0, order: 3 });
+		const note1 = await Note.save({ title: 'A20', parent_id: folder1.id, is_todo: 0, order: 2 });
+		const note2 = await Note.save({ title: 'A100', parent_id: folder1.id, is_todo: 0, order: 1 });
+
+		const sortedNotes1 = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: Note.customOrderByColumns(),
+		});
+		expect(sortedNotes1.length).toBe(3);
+		expect(sortedNotes1[0].id).toBe(note0.id);
+		expect(sortedNotes1[1].id).toBe(note1.id);
+		expect(sortedNotes1[2].id).toBe(note2.id);
+
+		const timeBefore = time.unixMs();
+
+		await Note.insertNotesAt(folder1.id, [note2.id], 0);
+		await Note.insertNotesAt(folder1.id, [note1.id], 1);
+
+		const sortedNotes2 = await Note.previews(folder1.id, {
+			fields: ['id', 'title', 'updated_time', 'user_updated_time'],
+			order: Note.customOrderByColumns(),
+		});
+		expect(sortedNotes2.length).toBe(3);
+		expect(sortedNotes2[0].id).toBe(note2.id);
+		expect(sortedNotes2[1].id).toBe(note1.id);
+		expect(sortedNotes2[2].id).toBe(note0.id);
+
+		expect(sortedNotes2[0].updated_time).toBeGreaterThan(timeBefore);
+		expect(sortedNotes2[1].updated_time).toBeGreaterThan(timeBefore);
+		expect(sortedNotes2[2].updated_time).toBeLessThan(timeBefore);
+
+		expect(sortedNotes2[0].user_updated_time).toBeLessThan(timeBefore);
+		expect(sortedNotes2[1].user_updated_time).toBeLessThan(timeBefore);
+		expect(sortedNotes2[2].user_updated_time).toBeLessThan(timeBefore);
+	}));
+
 	it('should insert notes at the specified position (targets with same orders)', (async () => {
 		// If the target notes all have the same order, inserting a note should work
 		// anyway, because the order of the other notes will be updated as needed.
