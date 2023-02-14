@@ -10,6 +10,7 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/TinyMCE';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -173,6 +174,13 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 
 				options.insertContent(content);
+			},
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
+		},
+		pasteAsText: {
+			label: _('Paste as text'),
+			onAction: async (options: ContextMenuOptions) => {
+				options.fireEditorEvent(TinyMceEditorEvents.PasteAsText);
 			},
 			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
 		},
