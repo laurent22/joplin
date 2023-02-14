@@ -1,5 +1,6 @@
 import { _ } from '@joplin/lib/locale';
 import { MarkupToHtml } from '@joplin/renderer';
+import { TinyMceEditorEvents } from '../TinyMCE';
 const taboverride = require('taboverride');
 
 interface SourceInfo {
@@ -102,7 +103,7 @@ export default function openEditDialog(editor: any, markupToHtml: any, dispatchD
 			}
 
 			dialogApi.close();
-			editor.fire('joplinChange');
+			editor.fire(TinyMceEditorEvents.JoplinChange);
 			dispatchDidUpdate(editor);
 		},
 		onClose: () => {
