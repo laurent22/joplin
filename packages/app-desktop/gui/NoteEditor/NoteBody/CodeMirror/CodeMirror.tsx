@@ -276,11 +276,22 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorCutText = useCallback(() => {
 		if (editorRef.current) {
 			const selections = editorRef.current.getSelections();
-			if (selections.length > 0) {
+			if (selections.length > 0 && selections[0]) {
 				clipboard.writeText(selections[0]);
 				// Easy way to wipe out just the first selection
 				selections[0] = '';
 				editorRef.current.replaceSelections(selections);
+			} else {
+				const cursor = editorRef.current.getCursor();
+				const line = editorRef.current.getLine(cursor.line);
+				clipboard.writeText(`${line}\n`);
+				const startLine = editorRef.current.getCursor('head');
+				startLine.ch = 0;
+				const endLine = {
+					line: startLine.line + 1,
+					ch: 0,
+				};
+				editorRef.current.replaceRange('', startLine, endLine);
 			}
 		}
 	}, []);
@@ -352,7 +363,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		let cancelled = false;
 
 		async function loadScripts() {
-			const scriptsToLoad: {src: string; id: string; loaded: boolean}[] = [
+			const scriptsToLoad: { src: string; id: string; loaded: boolean }[] = [
 				{
 					src: `${bridge().vendorDir()}/lib/codemirror/addon/dialog/dialog.css`,
 					id: 'codemirrorDialogStyle',
@@ -683,7 +694,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (!props.searchMarkers) return () => {};
+		if (!props.searchMarkers) return () => { };
 
 		// If there is a currently active search, it's important to re-search the text as the user
 		// types. However this is slow for performance so we ONLY want it to happen when there is
@@ -710,7 +721,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				};
 			}
 		}
-		return () => {};
+		return () => { };
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
 
@@ -786,7 +797,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			const menu = new Menu();
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection();
 
 			menu.append(
 				new MenuItem({
