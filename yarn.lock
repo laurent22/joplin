@@ -4751,6 +4751,7 @@ __metadata:
     buffer: 6.0.3
     constants-browserify: 1.0.0
     crypto-browserify: 3.12.0
+    deprecated-react-native-prop-types: ^4.0.0
     events: 3.3.0
     execa: 4.1.0
     fs-extra: 11.1.0
@@ -4765,6 +4766,8 @@ __metadata:
     md5-file: 5.0.0
     metro-react-native-babel-preset: 0.72.3
     nodemon: 2.0.20
+    patch-package: ^6.5.1
+    postinstall-postinstall: ^2.1.0
     prop-types: 15.8.1
     punycode: 2.3.0
     react: 18.2.0
@@ -6817,6 +6820,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/normalize-colors@npm:*":
+  version: 0.72.0
+  resolution: "@react-native/normalize-colors@npm:0.72.0"
+  checksum: c8ec577663394a3390eb34c3cd531350521172bcfad7de309ab111e5f9e3d27c966d4a4387f00972302107be3d8cad584c5794ccfa30939aecc56162e4ddbe25
+  languageName: node
+  linkType: hard
+
 "@react-native/polyfills@npm:2.0.0":
   version: 2.0.0
   resolution: "@react-native/polyfills@npm:2.0.0"
@@ -8341,6 +8351,13 @@ __metadata:
   version: 4.2.2
   resolution: "@xtuc/long@npm:4.2.2"
   checksum: 8ed0d477ce3bc9c6fe2bf6a6a2cc316bb9c4127c5a7827bae947fa8ec34c7092395c5a283cc300c05b5fa01cbbfa1f938f410a7bf75db7c7846fea41949989ec
+  languageName: node
+  linkType: hard
+
+"@yarnpkg/lockfile@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@yarnpkg/lockfile@npm:1.1.0"
+  checksum: 05b881b4866a3546861fee756e6d3812776ea47fa6eb7098f983d6d0eefa02e12b66c3fff931574120f196286a7ad4879ce02743c8bb2be36c6a576c7852083a
   languageName: node
   linkType: hard
 
@@ -12215,7 +12232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^6.0.0":
+"cross-spawn@npm:^6.0.0, cross-spawn@npm:^6.0.5":
   version: 6.0.5
   resolution: "cross-spawn@npm:6.0.5"
   dependencies:
@@ -13636,6 +13653,17 @@ __metadata:
   bin:
     dependency-tree: bin/cli.js
   checksum: e26dffd0332b80ac6303fa4073dcd8f3df05c1584e26fe8fd15f59572f0427e8618757e9797d8963578648f80eb9d4f4496f25bbbb5984329b4c55e49e51d7be
+  languageName: node
+  linkType: hard
+
+"deprecated-react-native-prop-types@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "deprecated-react-native-prop-types@npm:4.0.0"
+  dependencies:
+    "@react-native/normalize-colors": "*"
+    invariant: "*"
+    prop-types: "*"
+  checksum: 3542c70d0379153c946bc2e23202405df4337be3dc2a96601b6696247097e13405091efa7640841f8c920d3239145d8c024e13758c65a884a207b88ec2c826aa
   languageName: node
   linkType: hard
 
@@ -16040,6 +16068,15 @@ __metadata:
     locate-path: ^6.0.0
     path-exists: ^4.0.0
   checksum: 07955e357348f34660bde7920783204ff5a26ac2cafcaa28bace494027158a97b9f56faaf2d89a6106211a8174db650dd9f503f9c0d526b1202d5554a00b9095
+  languageName: node
+  linkType: hard
+
+"find-yarn-workspace-root@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "find-yarn-workspace-root@npm:2.0.0"
+  dependencies:
+    micromatch: ^4.0.2
+  checksum: fa5ca8f9d08fe7a54ce7c0a5931ff9b7e36f9ee7b9475fb13752bcea80ec6b5f180fa5102d60b376d5526ce924ea3fc6b19301262efa0a5d248dd710f3644242
   languageName: node
   linkType: hard
 
@@ -18583,7 +18620,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:2.2.4, invariant@npm:^2.2.4":
+"invariant@npm:*, invariant@npm:2.2.4, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -19327,7 +19364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-wsl@npm:^2.2.0":
+"is-wsl@npm:^2.1.1, is-wsl@npm:^2.2.0":
   version: 2.2.0
   resolution: "is-wsl@npm:2.2.0"
   dependencies:
@@ -20802,6 +20839,15 @@ __metadata:
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
   checksum: 3ab01e7b1d440b22fe4c31f23d8d38b4d9b91d9f291df683476576493d5dfd2e03848a8b05813dd0c3f0e835bc63f433007ddeceb71f05cb25c45ae1b19c6d3b
+  languageName: node
+  linkType: hard
+
+"klaw-sync@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "klaw-sync@npm:6.0.0"
+  dependencies:
+    graceful-fs: ^4.1.11
+  checksum: 0da397f8961313c3ef8f79fb63af9002cde5a8fb2aeb1a37351feff0dd6006129c790400c3f5c3b4e757bedcabb13d21ec0a5eaef5a593d59515d4f2c291e475
   languageName: node
   linkType: hard
 
@@ -22433,7 +22479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.0, micromatch@npm:^4.0.5":
+"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2, micromatch@npm:^4.0.5":
   version: 4.0.5
   resolution: "micromatch@npm:4.0.5"
   dependencies:
@@ -24279,6 +24325,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"open@npm:^7.4.2":
+  version: 7.4.2
+  resolution: "open@npm:7.4.2"
+  dependencies:
+    is-docker: ^2.0.0
+    is-wsl: ^2.1.1
+  checksum: 3333900ec0e420d64c23b831bc3467e57031461d843c801f569b2204a1acc3cd7b3ec3c7897afc9dde86491dfa289708eb92bba164093d8bd88fb2c231843c91
+  languageName: node
+  linkType: hard
+
 "opencollective-postinstall@npm:^2.0.2":
   version: 2.0.3
   resolution: "opencollective-postinstall@npm:2.0.3"
@@ -24848,6 +24904,30 @@ __metadata:
   version: 1.0.0
   resolution: "patch-console@npm:1.0.0"
   checksum: 8cd738aa470f2e9463fca35da6a19403384ac555004f698ddd3dfdb69135ab60fe9bd2edd1dbdd8c09d92c0a2190fd0f7337fe48123013baf8ffec8532885a3a
+  languageName: node
+  linkType: hard
+
+"patch-package@npm:^6.5.1":
+  version: 6.5.1
+  resolution: "patch-package@npm:6.5.1"
+  dependencies:
+    "@yarnpkg/lockfile": ^1.1.0
+    chalk: ^4.1.2
+    cross-spawn: ^6.0.5
+    find-yarn-workspace-root: ^2.0.0
+    fs-extra: ^9.0.0
+    is-ci: ^2.0.0
+    klaw-sync: ^6.0.0
+    minimist: ^1.2.6
+    open: ^7.4.2
+    rimraf: ^2.6.3
+    semver: ^5.6.0
+    slash: ^2.0.0
+    tmp: ^0.0.33
+    yaml: ^1.10.2
+  bin:
+    patch-package: index.js
+  checksum: 8530ffa30f11136b527c6eddf6da48fa12856ee510a47edb1f9cdf8a025636adb82968f5fae778b5e04ce8c87915ebdf5911422b54add59a5a42e372a8f30eb2
   languageName: node
   linkType: hard
 
@@ -25466,6 +25546,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postinstall-postinstall@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "postinstall-postinstall@npm:2.1.0"
+  checksum: e1d34252cf8d2c5641c7d2db7426ec96e3d7a975f01c174c68f09ef5b8327bc8d5a9aa2001a45e693db2cdbf69577094d3fe6597b564ad2d2202b65fba76134b
+  languageName: node
+  linkType: hard
+
 "prebuild-install@npm:^7.0.1, prebuild-install@npm:^7.1.1":
   version: 7.1.1
   resolution: "prebuild-install@npm:7.1.1"
@@ -25754,17 +25841,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.5.10":
-  version: 15.5.10
-  resolution: "prop-types@npm:15.5.10"
-  dependencies:
-    fbjs: ^0.8.9
-    loose-envify: ^1.3.1
-  checksum: 3e928ad5afa5124d52a341a706170628e7b0caa9340515782be6a767261e6eb0e473116188bb8efbe9d9b62cb3c9501c71bf4ab7d34f2507294ee34c90de6964
-  languageName: node
-  linkType: hard
-
-"prop-types@npm:15.8.1, prop-types@npm:^15.8.1":
+"prop-types@npm:*, prop-types@npm:15.8.1, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -25772,6 +25849,16 @@ __metadata:
     object-assign: ^4.1.1
     react-is: ^16.13.1
   checksum: c056d3f1c057cb7ff8344c645450e14f088a915d078dcda795041765047fa080d38e5d626560ccaac94a4e16e3aa15f3557c1a9a8d1174530955e992c675e459
+  languageName: node
+  linkType: hard
+
+"prop-types@npm:15.5.10":
+  version: 15.5.10
+  resolution: "prop-types@npm:15.5.10"
+  dependencies:
+    fbjs: ^0.8.9
+    loose-envify: ^1.3.1
+  checksum: 3e928ad5afa5124d52a341a706170628e7b0caa9340515782be6a767261e6eb0e473116188bb8efbe9d9b62cb3c9501c71bf4ab7d34f2507294ee34c90de6964
   languageName: node
   linkType: hard
 

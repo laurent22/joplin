@@ -15,7 +15,7 @@
     "test": "jest",
     "test-ci": "yarn test",
     "watchInjectedJs": "gulp watchInjectedJs",
-    "postinstall": "jetify && yarn run build"
+    "postinstall": "patch-package && jetify && yarn run build"
   },
   "dependencies": {
     "@joplin/lib": "~2.10",
@@ -32,6 +32,7 @@
     "buffer": "6.0.3",
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.0",
+    "deprecated-react-native-prop-types": "4.0.0",
     "events": "3.3.0",
     "jsc-android": "241213.1.0",
     "lodash": "4.17.21",
@@ -108,6 +109,8 @@
     "md5-file": "5.0.0",
     "metro-react-native-babel-preset": "0.72.3",
     "nodemon": "2.0.20",
+    "patch-package": "^6.5.1",
+    "postinstall-postinstall": "^2.1.0",
     "ts-jest": "29.0.5",
     "ts-loader": "9.4.2",
     "ts-node": "10.9.1",
