@@ -7,6 +7,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
 import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
+import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
@@ -30,6 +31,7 @@ const StyledRoot = styled.div`
 `;
 
 const StyleNewTodoButton = styled(Button)`
+	margin-left: 8px;
 	width: fit-content;
 	height: 26px;
 	min-width: 68px;
@@ -38,7 +40,6 @@ const StyleNewTodoButton = styled(Button)`
 `;
 
 const StyledNewNoteButton = styled(Button)`
-	margin-left: 8px;
 	width: fit-content;
 	height: 26px;
 	min-width: 68px;
@@ -64,6 +65,7 @@ const StyledPairButtonR = styled(Button)`
 const RowContainer = styled.div`
 	display: flex;
 	flex-direction: row;
+	flex: 1 1 auto
 `;
 
 function NoteListControls(props: Props) {
@@ -127,21 +129,21 @@ function NoteListControls(props: Props) {
 
 		return (
 			<RowContainer>
-				<StyleNewTodoButton
-					className="new-todo-button"
-					tooltip={CommandService.instance().label('newTodo')}
-					title="+ New to do"
-					level={ButtonLevel.Secondary}
-					size={ButtonSize.Small}
-					onClick={onNewTodoButtonClick}
-				/>
 				<StyledNewNoteButton
 					className="new-note-button"
 					tooltip={CommandService.instance().label('newNote')}
-					title="+ New note"
+					title={_('+ %s', 'New note')}
 					level={ButtonLevel.Primary}
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
+				/>
+				<StyleNewTodoButton
+					className="new-todo-button"
+					tooltip={CommandService.instance().label('newTodo')}
+					title={_('+ %s', 'New to-do')}
+					level={ButtonLevel.Secondary}
+					size={ButtonSize.Small}
+					onClick={onNewTodoButtonClick}
 				/>
 			</RowContainer>
 		);
