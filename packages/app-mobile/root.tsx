@@ -954,6 +954,9 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
+		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
+		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
+
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
@@ -974,7 +977,7 @@ class AppComponent extends React.Component {
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								<AppNav screens={appNavInit} dispatch={this.props.dispatch} />
+								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
