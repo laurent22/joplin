@@ -269,7 +269,6 @@ const NoteListComponent = (props: Props) => {
 			onCheckboxClick={noteItem_checkboxClick}
 			onDragStart={noteItem_dragStart}
 			onNoteDragOver={noteItem_noteDragOver}
-			onNoteDrop={noteItem_noteDrop}
 			onTitleClick={noteItem_titleClick}
 			onContextMenu={itemContextMenu}
 		/>;
@@ -500,6 +499,7 @@ const NoteListComponent = (props: Props) => {
 				style={props.size}
 				itemRenderer={renderItem}
 				onKeyDown={onKeyDown}
+				onNoteDrop={noteItem_noteDrop}
 			/>
 		);
 	};

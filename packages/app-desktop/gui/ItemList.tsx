@@ -8,6 +8,7 @@ interface Props {
 	onKeyDown?: Function;
 	itemRenderer: Function;
 	className?: string;
+	onNoteDrop?: Function;
 }
 
 interface State {
@@ -29,6 +30,7 @@ class ItemList extends React.Component<Props, State> {
 
 		this.onScroll = this.onScroll.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
+		this.onDrop = this.onDrop.bind(this);
 	}
 
 	visibleItemCount(props: Props = undefined) {
@@ -74,6 +76,10 @@ class ItemList extends React.Component<Props, State> {
 
 	onKeyDown(event: any) {
 		if (this.props.onKeyDown) this.props.onKeyDown(event);
+	}
+
+	onDrop(event: any) {
+		if (this.props.onNoteDrop) this.props.onNoteDrop(event);
 	}
 
 	makeItemIndexVisible(itemIndex: number) {
@@ -141,7 +147,7 @@ class ItemList extends React.Component<Props, State> {
 		if (this.props.className) classes.push(this.props.className);
 
 		return (
-			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown}>
+			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown} onDrop={this.onDrop}>
 				{itemComps}
 			</div>
 		);
