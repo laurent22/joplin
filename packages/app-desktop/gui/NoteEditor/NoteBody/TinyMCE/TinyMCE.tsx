@@ -24,6 +24,7 @@ import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
+import { TinyMceEditorEvents } from './utils/types';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -169,7 +170,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const nodeName = event.target ? event.target.nodeName : '';
 
 		if (nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
-			editor.fire('joplinChange');
+			editor.fire(TinyMceEditorEvents.JoplinChange);
 			dispatchDidUpdate(editor);
 		}
 
@@ -261,7 +262,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					},
 					replaceSelection: (value: any) => {
 						editor.selection.setContent(value);
-						editor.fire('joplinChange');
+						editor.fire(TinyMceEditorEvents.JoplinChange);
 						dispatchDidUpdate(editor);
 
 						// It doesn't make sense but it seems calling setContent
@@ -270,7 +271,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// https://github.com/tinymce/tinymce/issues/3745
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
-					pasteAsText: () => editor.fire('pasteAsText'),
+					pasteAsText: () => editor.fire(TinyMceEditorEvents.PasteAsText),
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -674,7 +675,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 					editor.on('ObjectResized', function(event: any) {
 						if (event.target.nodeName === 'IMG') {
-							editor.fire('joplinChange');
+							editor.fire(TinyMceEditorEvents.JoplinChange);
 							dispatchDidUpdate(editor);
 						}
 					});
@@ -1085,35 +1086,35 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			await onPaste(createSyntheticClipboardEventWithoutHTML());
 		}
 
-		editor.on('keyup', onKeyUp);
-		editor.on('keydown', onKeyDown);
-		editor.on('keypress', onKeypress);
-		editor.on('paste', onPaste);
-		editor.on('pasteAsText', onPasteAsText);
-		editor.on('copy', onCopy);
+		editor.on(TinyMceEditorEvents.KeyUp, onKeyUp);
+		editor.on(TinyMceEditorEvents.KeyDown, onKeyDown);
+		editor.on(TinyMceEditorEvents.KeyPress, onKeypress);
+		editor.on(TinyMceEditorEvents.Paste, onPaste);
+		editor.on(TinyMceEditorEvents.PasteAsText, onPasteAsText);
+		editor.on(TinyMceEditorEvents.Copy, onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
-		editor.on('compositionend', onChangeHandler);
-		editor.on('cut', onCut);
-		editor.on('joplinChange', onChangeHandler);
-		editor.on('Undo', onChangeHandler);
-		editor.on('Redo', onChangeHandler);
-		editor.on('ExecCommand', onExecCommand);
+		editor.on(TinyMceEditorEvents.CompositionEnd, onChangeHandler);
+		editor.on(TinyMceEditorEvents.Cut, onCut);
+		editor.on(TinyMceEditorEvents.JoplinChange, onChangeHandler);
+		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
+		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
+		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
 
 		return () => {
 			try {
-				editor.off('keyup', onKeyUp);
-				editor.off('keydown', onKeyDown);
-				editor.off('keypress', onKeypress);
-				editor.off('paste', onPaste);
-				editor.off('pasteAsText', onPasteAsText);
-				editor.off('copy', onCopy);
-				editor.off('compositionend', onChangeHandler);
-				editor.off('cut', onCut);
-				editor.off('joplinChange', onChangeHandler);
-				editor.off('Undo', onChangeHandler);
-				editor.off('Redo', onChangeHandler);
-				editor.off('ExecCommand', onExecCommand);
+				editor.off(TinyMceEditorEvents.KeyUp, onKeyUp);
+				editor.off(TinyMceEditorEvents.KeyDown, onKeyDown);
+				editor.off(TinyMceEditorEvents.KeyPress, onKeypress);
+				editor.off(TinyMceEditorEvents.Paste, onPaste);
+				editor.off(TinyMceEditorEvents.PasteAsText, onPasteAsText);
+				editor.off(TinyMceEditorEvents.Copy, onCopy);
+				editor.off(TinyMceEditorEvents.CompositionEnd, onChangeHandler);
+				editor.off(TinyMceEditorEvents.Cut, onCut);
+				editor.off(TinyMceEditorEvents.JoplinChange, onChangeHandler);
+				editor.off(TinyMceEditorEvents.Undo, onChangeHandler);
+				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
+				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}

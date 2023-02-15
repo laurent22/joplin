@@ -19,6 +19,7 @@ export interface ContextMenuOptions {
 	htmlToCopy: string;
 	insertContent: Function;
 	isReadOnly?: boolean;
+	fireEditorEvent: Function;
 }
 
 export interface ContextMenuItem {
