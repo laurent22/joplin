@@ -23,17 +23,27 @@ const StyledRoot = styled.div`
 	box-sizing: border-box;
 	height: ${(props: any) => props.height}px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	padding: ${(props: any) => props.theme.mainPadding}px;
 	background-color: ${(props: any) => props.theme.backgroundColor3};
+	gap: 5px;
 `;
 
-const StyledButton = styled(Button)`
-	margin-left: 8px;
-	width: 26px;
+const StyleNewTodoButton = styled(Button)`
+	width: fit-content;
 	height: 26px;
-	min-width: 26px;
+	min-width: 68px;
 	min-height: 26px;
+	flex: 1 1 auto
+`;
+
+const StyledNewNoteButton = styled(Button)`
+	margin-left: 8px;
+	width: fit-content;
+	height: 26px;
+	min-width: 68px;
+	min-height: 26px;
+	flex: 1 1 auto
 `;
 
 const StyledPairButtonL = styled(Button)`
@@ -51,7 +61,7 @@ const StyledPairButtonR = styled(Button)`
 	width: auto;
 `;
 
-const ButtonContainer = styled.div`
+const RowContainer = styled.div`
 	display: flex;
 	flex-direction: row;
 `;
@@ -116,7 +126,32 @@ function NoteListControls(props: Props) {
 		if (!props.showNewNoteButtons) return null;
 
 		return (
-			<ButtonContainer>
+			<RowContainer>
+				<StyleNewTodoButton
+					className="new-todo-button"
+					tooltip={CommandService.instance().label('newTodo')}
+					title="+ New to do"
+					level={ButtonLevel.Secondary}
+					size={ButtonSize.Small}
+					onClick={onNewTodoButtonClick}
+				/>
+				<StyledNewNoteButton
+					className="new-note-button"
+					tooltip={CommandService.instance().label('newNote')}
+					title="+ New note"
+					level={ButtonLevel.Primary}
+					size={ButtonSize.Small}
+					onClick={onNewNoteButtonClick}
+				/>
+			</RowContainer>
+		);
+	}
+
+	return (
+		<StyledRoot height={props.height}>
+			{renderNewNoteButtons()}
+			<RowContainer>
+				<SearchBar inputRef={searchBarRef}/>
 				{showsSortOrderButtons() &&
 					<StyledPairButtonL
 						className="sort-order-field-button"
@@ -137,30 +172,7 @@ function NoteListControls(props: Props) {
 						onClick={onSortOrderReverseButtonClick}
 					/>
 				}
-				<StyledButton
-					className="new-todo-button"
-					tooltip={CommandService.instance().label('newTodo')}
-					iconName="far fa-check-square"
-					level={ButtonLevel.Primary}
-					size={ButtonSize.Small}
-					onClick={onNewTodoButtonClick}
-				/>
-				<StyledButton
-					className="new-note-button"
-					tooltip={CommandService.instance().label('newNote')}
-					iconName="icon-note"
-					level={ButtonLevel.Primary}
-					size={ButtonSize.Small}
-					onClick={onNewNoteButtonClick}
-				/>
-			</ButtonContainer>
-		);
-	}
-
-	return (
-		<StyledRoot height={props.height}>
-			<SearchBar inputRef={searchBarRef}/>
-			{renderNewNoteButtons()}
+			</RowContainer>
 		</StyledRoot>
 	);
 }
