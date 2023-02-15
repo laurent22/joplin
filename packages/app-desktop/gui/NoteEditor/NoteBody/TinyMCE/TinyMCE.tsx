@@ -972,14 +972,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		function onSetAttrib(event: any) {
+		const onSetAttrib = (event: any) => {
 			// Dispatch onChange when a link is edited
 			if (event.attrElm[0].nodeName === 'A') {
 				if (event.attrName === 'title' || event.attrName === 'href' || event.attrName === 'rel') {
 					onChangeHandler();
 				}
 			}
-		}
+		};
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
 		// pressed so we want to always trigger onChange in this case
