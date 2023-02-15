@@ -41,6 +41,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 				linkToCopy: arg0.linkToCopy || null,
 				htmlToCopy: '',
 				insertContent: () => { console.warn('insertContent() not implemented'); },
+				fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },
 			}, dispatch);
 
 			menu.popup(bridge().window());
