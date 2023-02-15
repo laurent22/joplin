@@ -674,6 +674,7 @@ function useMenu(props: Props) {
 					label: _('&View'),
 					submenu: [
 						menuItemDic.toggleLayoutMoveMode,
+						menuItemDic.restoreDefaultLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
 						menuItemDic.toggleNoteList,
