@@ -24,6 +24,7 @@ import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
+import { TinyMceEditorEvents } from './utils/types';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -84,21 +85,6 @@ function createSyntheticClipboardEventWithoutHTML(): ClipboardEvent {
 		}
 	}
 	return new ClipboardEvent('paste', { clipboardData });
-}
-
-export enum TinyMceEditorEvents {
-	KeyUp = 'keyup',
-	KeyDown = 'keydown',
-	KeyPress = 'keypress',
-	Paste = 'paste',
-	PasteAsText = 'pasteAsText',
-	Copy = 'copy',
-	CompositionEnd = 'compositionend',
-	Cut = 'cut',
-	JoplinChange = 'joplinChange',
-	Undo = 'Undo',
-	Redo = 'Redo',
-	ExecCommand = 'ExecCommand',
 }
 
 interface TinyMceCommand {

@@ -11,7 +11,7 @@ import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordin
 import Setting from '@joplin/lib/models/Setting';
 
 import Resource from '@joplin/lib/models/Resource';
-import { TinyMceEditorEvents } from '../TinyMCE';
+import { TinyMceEditorEvents } from './types';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 

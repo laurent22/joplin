@@ -1,6 +1,6 @@
 import { _ } from '@joplin/lib/locale';
 import { MarkupToHtml } from '@joplin/renderer';
-import { TinyMceEditorEvents } from '../TinyMCE';
+import { TinyMceEditorEvents } from './types';
 const taboverride = require('taboverride');
 
 interface SourceInfo {

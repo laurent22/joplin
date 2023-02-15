@@ -10,7 +10,7 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
-import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/TinyMCE';
+import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
