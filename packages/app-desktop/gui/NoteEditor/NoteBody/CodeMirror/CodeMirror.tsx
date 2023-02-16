@@ -363,7 +363,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		let cancelled = false;
 
 		async function loadScripts() {
-			const scriptsToLoad: { src: string; id: string; loaded: boolean }[] = [
+			const scriptsToLoad: {src: string; id: string; loaded: boolean}[] = [
 				{
 					src: `${bridge().vendorDir()}/lib/codemirror/addon/dialog/dialog.css`,
 					id: 'codemirrorDialogStyle',
@@ -694,7 +694,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
-		if (!props.searchMarkers) return () => { };
+		if (!props.searchMarkers) return () => {};
 
 		// If there is a currently active search, it's important to re-search the text as the user
 		// types. However this is slow for performance so we ONLY want it to happen when there is
@@ -721,7 +721,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				};
 			}
 		}
-		return () => { };
+		return () => {};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
 
@@ -797,7 +797,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			const menu = new Menu();
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection();
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
 
 			menu.append(
 				new MenuItem({
