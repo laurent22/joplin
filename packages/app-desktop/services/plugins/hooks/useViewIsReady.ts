@@ -9,9 +9,11 @@ export default function useViewIsReady(viewRef: any) {
 	const [iframeContentReady, setIFrameContentReady] = useState(false);
 
 	useEffect(() => {
+		// eslint-disable-next-line no-console
 		console.debug('useViewIsReady ============== Setup Listeners');
 
 		function onIFrameReady() {
+			// eslint-disable-next-line no-console
 			console.debug('useViewIsReady: onIFrameReady');
 			setIFrameReady(true);
 		}
@@ -21,6 +23,7 @@ export default function useViewIsReady(viewRef: any) {
 
 			if (!data || data.target !== 'UserWebview') return;
 
+			// eslint-disable-next-line no-console
 			console.debug('useViewIsReady: message', data);
 
 			if (data.message === 'ready') {
@@ -30,6 +33,7 @@ export default function useViewIsReady(viewRef: any) {
 
 		const iframeDocument = viewRef.current.contentWindow.document;
 
+		// eslint-disable-next-line no-console
 		console.debug('useViewIsReady readyState', iframeDocument.readyState);
 
 		if (iframeDocument.readyState === 'complete') {

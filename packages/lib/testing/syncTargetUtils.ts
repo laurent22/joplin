@@ -134,5 +134,6 @@ export async function main(syncTargetType: string) {
 	await fs.mkdirp(destDir);
 	await fs.copy(syncDir, destDir);
 
+	// eslint-disable-next-line no-console
 	console.info(`Sync target snapshot created in: ${destDir}`);
 }

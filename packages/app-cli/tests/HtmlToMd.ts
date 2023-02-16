@@ -57,6 +57,7 @@ describe('HtmlToMd', function() {
 				result.push('--------------------------------------------');
 				result.push('');
 
+				// eslint-disable-next-line no-console
 				console.info(result.join('\n'));
 
 				// console.info('');
