@@ -5,7 +5,7 @@ class Cache {
 			const storage = await Cache.storage();
 			output = await storage.getItem(name);
 		} catch (error) {
-			console.info(error);
+			// console.info(error);
 			// Defaults to returning null
 		}
 		return output;

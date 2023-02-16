@@ -62,11 +62,11 @@ const useKeymap = (): [
 			// Then, update the state with the data from KeymapService
 			// Side-effect: Changes will also be saved to the disk
 			setKeymapItems(keymapService.getKeymapItems());
-		} catch (err) {
+		} catch (error) {
 			// oldKeymapItems includes even the unchanged keymap items
 			// However, it is not an issue because the logic accounts for such scenarios
 			keymapService.overrideKeymap(oldKeymapItems);
-			throw err;
+			throw error;
 		}
 	};
 
@@ -80,8 +80,8 @@ const useKeymap = (): [
 				keymapService.overrideKeymap(keymapItems);
 				await keymapService.saveCustomKeymap();
 				setKeymapError(null);
-			} catch (err) {
-				const error = new Error(`Could not save file: ${err.message}`);
+			} catch (error) {
+				error.message = `Could not save file: ${error.message}`;
 				setKeymapError(error);
 			}
 		}

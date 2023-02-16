@@ -72,6 +72,7 @@ describe('MdToHtml', function() {
 					'',
 				];
 
+				// eslint-disable-next-line no-console
 				console.info(msg.join('\n'));
 
 				expect(false).toBe(true);

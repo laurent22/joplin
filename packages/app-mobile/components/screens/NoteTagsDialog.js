@@ -11,6 +11,7 @@ const naturalCompare = require('string-natural-compare');
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
 Icon.loadFont().catch((error) => { console.info(error); });
 
 class NoteTagsDialogComponent extends React.Component {

@@ -118,6 +118,7 @@ class Command extends BaseCommand {
 			}
 			await Promise.all(promises);
 
+			// eslint-disable-next-line no-console
 			console.info(await api.exec('GET', 'api/items/root:/testing:'));
 		}
 

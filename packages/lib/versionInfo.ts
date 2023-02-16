@@ -65,7 +65,6 @@ export default function versionInfo(packageInfo: any, plugins: Plugins) {
 
 	if (gitInfo) {
 		body.push(`\n${gitInfo}`);
-		console.info(gitInfo);
 	}
 
 	const pluginList = getPluginLists(plugins);

@@ -14,7 +14,6 @@ export const runtime = (): CommandRuntime => {
 			const resource = await Resource.load(resourceId);
 			if (!resource) throw new Error(`No such resource: ${resourceId}`);
 			if (resource.mime !== 'application/pdf') throw new Error(`Not a PDF: ${resource.mime}`);
-			console.log('Opening PDF', resource);
 			context.dispatch({
 				type: 'DIALOG_OPEN',
 				name: 'pdfViewer',

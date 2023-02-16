@@ -19,6 +19,7 @@ export interface ContextMenuOptions {
 	htmlToCopy: string;
 	insertContent: Function;
 	isReadOnly?: boolean;
+	fireEditorEvent: Function;
 }
 
 export interface ContextMenuItem {
@@ -106,8 +107,8 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 				canvas.remove();
 				img.remove();
 				resolve(buff);
-			} catch (err) {
-				cleanUpAndReject(err);
+			} catch (error) {
+				cleanUpAndReject(error);
 			}
 		};
 		img.onerror = function(e) {

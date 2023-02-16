@@ -220,6 +220,7 @@ export default abstract class BaseModel<T> {
 
 		txIndex = await this.transactionHandler_.start(name);
 
+		// eslint-disable-next-line no-console
 		if (debugSteps) console.info('START', name, txIndex);
 
 		let output: T = null;
@@ -227,6 +228,7 @@ export default abstract class BaseModel<T> {
 		try {
 			output = await fn();
 		} catch (error) {
+			// eslint-disable-next-line no-console
 			if (debugSteps) console.info('ROLLBACK', name, txIndex);
 
 			await this.transactionHandler_.rollback(txIndex);
@@ -236,6 +238,7 @@ export default abstract class BaseModel<T> {
 			if (debugTimerId) clearTimeout(debugTimerId);
 		}
 
+		// eslint-disable-next-line no-console
 		if (debugSteps) console.info('COMMIT', name, txIndex);
 
 		await this.transactionHandler_.commit(txIndex);

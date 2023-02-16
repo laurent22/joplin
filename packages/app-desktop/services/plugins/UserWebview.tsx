@@ -28,7 +28,7 @@ export interface Props {
 	onReady?: Function;
 }
 
-const StyledFrame = styled.iframe<{fitToContent: boolean; borderBottom: boolean}>`
+const StyledFrame = styled.iframe<{ fitToContent: boolean; borderBottom: boolean }>`
 	padding: 0;
 	margin: 0;
 	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '100%'};
