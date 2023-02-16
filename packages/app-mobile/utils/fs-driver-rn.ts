@@ -296,6 +296,7 @@ export default class FsDriverRN extends FsDriverBase {
 			}
 		} catch (error) {
 			if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
+				// eslint-disable-next-line no-console
 				console.info('pickDocuments: user has cancelled');
 				return null;
 			} else {

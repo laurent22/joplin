@@ -351,6 +351,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					continue;
 				}
 
+				// eslint-disable-next-line no-console
 				console.info('Loading script', s.src);
 
 				await loadScript(s);

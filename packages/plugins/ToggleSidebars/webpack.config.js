@@ -6,6 +6,8 @@
 // update, you can easily restore the functionality you've added.
 // -----------------------------------------------------------------------------
 
+/* eslint-disable no-console */
+
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs-extra');

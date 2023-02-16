@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import * as fs from 'fs-extra';
 
 require('source-map-support').install();

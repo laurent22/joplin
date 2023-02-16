@@ -172,7 +172,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private openCallbackUrl(url: string) {
-		console.log(`openUrl ${url}`);
 		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command.toString(), params.id);
 	}
@@ -393,6 +392,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	async waitForNoteToSaved(noteId: string) {
 		while (noteId && this.props.editorNoteStatuses[noteId] === 'saving') {
+			// eslint-disable-next-line no-console
 			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
 			await time.msleep(100);
 		}
@@ -401,6 +401,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	async printTo_(target: string, options: any) {
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (this.isPrinting_) {
+			// eslint-disable-next-line no-console
 			console.info(`Printing ${options.path} to ${target} disallowed, already printing.`);
 			return;
 		}

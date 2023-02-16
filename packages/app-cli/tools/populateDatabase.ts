@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 // This script can be used to simulate a running production environment, by
 // having multiple users in parallel changing notes and synchronising.
 //

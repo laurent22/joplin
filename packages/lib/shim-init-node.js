@@ -24,7 +24,7 @@ const proxySettings = {};
 function fileExists(filePath) {
 	try {
 		return fs.statSync(filePath).isFile();
-	} catch (err) {
+	} catch (error) {
 		return false;
 	}
 }
@@ -232,9 +232,9 @@ function shimInit(options = null) {
 						fit: 'inside',
 						withoutEnlargement: true,
 					})
-					.toFile(targetPath, (err, info) => {
-						if (err) {
-							reject(err);
+					.toFile(targetPath, (error, info) => {
+						if (error) {
+							reject(error);
 						} else {
 							resolve(info);
 						}

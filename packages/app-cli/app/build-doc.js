@@ -131,6 +131,7 @@ async function main() {
 	const commandsText = commandBlocks.join('\n\n');
 	const footerText = getFooter();
 
+	// eslint-disable-next-line no-console
 	console.info(`${headerText}\n\n` + 'USAGE' + `\n\n${commandsText}\n\n${footerText}`);
 }
 

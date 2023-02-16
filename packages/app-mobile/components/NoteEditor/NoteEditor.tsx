@@ -315,6 +315,7 @@ function NoteEditor(props: Props, ref: any) {
 
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
+				// eslint-disable-next-line no-console
 				console.info('CodeMirror:', ...event.value);
 			},
 
@@ -323,7 +324,6 @@ function NoteEditor(props: Props, ref: any) {
 			},
 
 			onUndoRedoDepthChange: (event: UndoRedoDepthChangeEvent) => {
-				console.info('onUndoRedoDepthChange', event);
 				props.onUndoRedoDepthChange(event);
 			},
 
@@ -355,6 +355,7 @@ function NoteEditor(props: Props, ref: any) {
 		if (handlers[msg.name]) {
 			handlers[msg.name](msg.data);
 		} else {
+			// eslint-disable-next-line no-console
 			console.info('Unsupported CodeMirror message:', msg);
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);

@@ -20,6 +20,7 @@ export default function useEffectDebugger(effectHook: any, dependencies: any, de
 	}, {});
 
 	if (Object.keys(changedDeps).length) {
+		// eslint-disable-next-line no-console
 		console.log('[use-effet-debugger] ', changedDeps);
 	}
 

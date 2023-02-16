@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { githubOauthToken } from '@joplin/tools/tool-utils';
 import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
 
