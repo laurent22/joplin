@@ -165,7 +165,7 @@ packages/app-desktop/gui/MainScreen/commands/openTag.js
 packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/renameFolder.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
-packages/app-desktop/gui/MainScreen/commands/restoreDefaultLayout.js
+packages/app-desktop/gui/MainScreen/commands/resetLayout.js
 packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/setTags.js

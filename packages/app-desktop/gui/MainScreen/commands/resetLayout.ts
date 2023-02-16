@@ -3,8 +3,8 @@ import { _ } from '@joplin/lib/locale';
 import dialogs from '../../dialogs';
 
 export const declaration: CommandDeclaration = {
-	name: 'restoreDefaultLayout',
-	label: () => _('Restore the default layout'),
+	name: 'resetLayout',
+	label: () => _('Reset application layout'),
 };
 
 export const runtime = (): CommandRuntime => {
@@ -17,7 +17,7 @@ export const runtime = (): CommandRuntime => {
 			if (!isConfirmed) return;
 
 			context.dispatch({
-				type: 'RESTORE_DEFAULT_LAYOUT',
+				type: 'RESET_LAYOUT',
 				value: true,
 			});
 		},
