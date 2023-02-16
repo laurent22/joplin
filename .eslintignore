@@ -221,6 +221,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
@@ -228,6 +229,7 @@ packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
+packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
 packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js
@@ -756,6 +758,7 @@ packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
 packages/lib/uuid.js
 packages/lib/versionInfo.js
+packages/lib/versionInfo.test.js
 packages/pdf-viewer/FullViewer.js
 packages/pdf-viewer/Page.js
 packages/pdf-viewer/PdfDocument.js

@@ -9,6 +9,7 @@ import { _ } from '@joplin/lib/locale';
 interface Props {
 	themeId: number;
 	sensorInfo: SensorInfo;
+	dispatch: Function;
 }
 
 export default (props: Props) => {
@@ -49,6 +50,11 @@ export default (props: Props) => {
 			} else {
 				setTryBiometricsCheck(true);
 			}
+
+			props.dispatch({
+				type: 'BIOMETRICS_DONE_SET',
+				value: true,
+			});
 		};
 
 		Alert.alert(
@@ -67,7 +73,7 @@ export default (props: Props) => {
 				},
 			]
 		);
-	}, [initialPromptDone, props.sensorInfo.supportedSensors, display]);
+	}, [initialPromptDone, props.sensorInfo.supportedSensors, display, props.dispatch]);
 
 	const windowSize = useMemo(() => {
 		return {
@@ -75,6 +81,15 @@ export default (props: Props) => {
 			height: Dimensions.get('window').height,
 		};
 	}, []);
+
+	useEffect(() => {
+		if (!display) {
+			props.dispatch({
+				type: 'BIOMETRICS_DONE_SET',
+				value: true,
+			});
+		}
+	}, [display, props.dispatch]);
 
 	const renderTryAgainButton = () => {
 		if (!display || tryBiometricsCheck || !initialPromptDone) return null;

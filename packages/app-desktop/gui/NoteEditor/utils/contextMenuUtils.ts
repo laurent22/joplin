@@ -1,5 +1,6 @@
 import Resource from '@joplin/lib/models/Resource';
-
+import Logger from '@joplin/lib/Logger';
+const logger = Logger.create('contextMenuUtils');
 export enum ContextMenuItemType {
 	None = '',
 	Image = 'image',
@@ -18,6 +19,7 @@ export interface ContextMenuOptions {
 	htmlToCopy: string;
 	insertContent: Function;
 	isReadOnly?: boolean;
+	fireEditorEvent: Function;
 }
 
 export interface ContextMenuItem {
@@ -40,8 +42,23 @@ export async function resourceInfo(options: ContextMenuOptions) {
 export function textToDataUri(text: string, mime: string): string {
 	return `data:${mime};base64,${Buffer.from(text).toString('base64')}`;
 }
-
-export const svgUriToPng = (document: Document, svg: string) => {
+export const svgDimensions = (document: Document, svg: string) => {
+	let width: number;
+	let height: number;
+	try {
+		const parser = new DOMParser();
+		const id = parser.parseFromString(svg, 'text/html').querySelector('svg').id;
+		({ width, height } = document.querySelector<HTMLIFrameElement>('.noteTextViewer').contentWindow.document.querySelector(`#${id}`).getBoundingClientRect());
+	} catch (error) {
+		logger.warn('Could not get SVG dimensions.');
+		logger.warn('Error was: ', error);
+	}
+	if (!width || !height) {
+		return [undefined, undefined];
+	}
+	return [width, height];
+};
+export const svgUriToPng = (document: Document, svg: string, width: number, height: number) => {
 	return new Promise<Uint8Array>((resolve, reject) => {
 		let canvas: HTMLCanvasElement;
 		let img: HTMLImageElement;
@@ -63,11 +80,21 @@ export const svgUriToPng = (document: Document, svg: string) => {
 			try {
 				canvas = document.createElement('canvas');
 				if (!canvas) throw new Error('Failed to create canvas element');
-				canvas.width = img.width;
-				canvas.height = img.height;
+				if (!width || !height) {
+					const maxDimension = 1024;
+					if (img.width > img.height) {
+						width = maxDimension;
+						height = width * (img.height / img.width);
+					} else {
+						height = maxDimension;
+						width = height * (img.width / img.height);
+					}
+				}
+				canvas.width = width;
+				canvas.height = height;
 				const ctx = canvas.getContext('2d');
 				if (!ctx) throw new Error('Failed to get context');
-				ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+				ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
 				const pngUri = canvas.toDataURL('image/png');
 				if (!pngUri) throw new Error('Failed to generate png uri');
 				const pngBase64 = pngUri.split(',')[1];

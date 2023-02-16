@@ -88,11 +88,12 @@
 		"@babel/runtime",
 		"@types/react-native",
 		"androidx.appcompat:appcompat",
+		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
 		"com.facebook.flipper:flipper-fresco-plugin",
 		"com.facebook.flipper:flipper-network-plugin",
 		"com.facebook.flipper:flipper",
-		"com.google.code.gson:*",
+		"com.google.code.gson:gson",
 		"com.google.code.gson",
 		"de.undercouch:gradle-download-task",
 		"jsc-android",
@@ -113,25 +114,18 @@
 			"labels": ["automerge"],
 		},
 		{
-			"matchUpdateTypes": ["minor", "patch"],
+			"matchUpdateTypes": ["major", "minor", "patch"],
 			"automerge": true,
+			"groupName": "buildTools",
 			"labels": ["automerge"],
 			"extends": ["schedule:monthly"],
-			"matchPackageNames": [
-				// AWS packages are updated too frequently and we can assume minor
-				// updates are stable.
-				"@aws-sdk/client-s3",
-				"@aws-sdk/s3-request-presigner",
-				"aws-sdk",
-
+			"matchPackagePatterns": [
 				// If the apps build and all tests pass, we can assume that Yarn
 				// and TypeScript are safe to upgrade. They are frequently
 				// updated so having them here reduces noise.
 				"eslint",
-				"eslint-config-prettier",
-				"eslint-interactive",
-				"@typescript-eslint/eslint-plugin",
-				"@typescript-eslint/parser",
+				"eslint-*",
+				"@typescript-eslint/*",
 				"yarn",
 				"typescript",
 				"prettier",
@@ -139,6 +133,19 @@
 				// If it builds, it should be safe to merge @types/* packages
 				"@types/*",
 			],
-		}
+		},
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
+			"groupName": "aws",
+			"labels": ["automerge"],
+			"extends": ["schedule:monthly"],
+			"matchPackagePatterns": [
+				// AWS packages are updated too frequently and we can assume minor
+				// updates are stable.
+				"@aws-sdk/*",
+				"aws-sdk",
+			],
+		},
 	]
 }

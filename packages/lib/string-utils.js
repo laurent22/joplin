@@ -301,20 +301,17 @@ function surroundKeywords(keywords, text, prefix, suffix, options = null) {
 		escapeHtml: false,
 	}, options);
 
-	if (!keywords.length) return text;
+	text = options.escapeHtml ? htmlentities(text) : text;
 
-	function escapeHtml(s) {
-		if (!options.escapeHtml) return s;
-		return htmlentities(s);
-	}
+	if (!keywords.length) return text;
 
 	let regexString = keywords
 		.map(k => {
 			if (k.type === 'regex') {
-				return escapeHtml(stringUtilsCommon.replaceRegexDiacritics(k.valueRegex));
+				return stringUtilsCommon.replaceRegexDiacritics(k.valueRegex);
 			} else {
 				const value = typeof k === 'string' ? k : k.value;
-				return escapeHtml(stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(value)));
+				return stringUtilsCommon.replaceRegexDiacritics(stringUtilsCommon.pregQuote(value));
 			}
 		})
 		.join('|');

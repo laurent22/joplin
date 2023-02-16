@@ -1,22 +1,4 @@
-const execCommand = function(command) {
-	const exec = require('child_process').exec;
-
-	console.info(`Running: ${command}`);
-
-	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout) => {
-			if (error) {
-				if (error.signal === 'SIGTERM') {
-					resolve('Process was killed');
-				} else {
-					reject(error);
-				}
-			} else {
-				resolve(stdout.trim());
-			}
-		});
-	});
-};
+const execCommand = require('./execCommand');
 
 const isWindows = () => {
 	return process && process.platform === 'win32';

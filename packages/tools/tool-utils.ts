@@ -82,12 +82,11 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 
 export function releaseFinalGitCommands(appName: string, newVersion: string, newTag: string): string {
 	const finalCmds = [
-		'git pull',
 		'git add -A',
 		`git commit -m "${appName} ${newVersion}"`,
 		`git tag "${newTag}"`,
 		'git push',
-		'git push --tags',
+		`git push origin refs/tags/${newTag}`,
 	];
 
 	return finalCmds.join(' && ');

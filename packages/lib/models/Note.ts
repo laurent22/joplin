@@ -828,6 +828,7 @@ export default class Note extends BaseItem {
 		return Note.save(Object.assign({}, note, {
 			order: order,
 			user_updated_time: note.user_updated_time,
+			updated_time: time.unixMs(),
 		}), { autoTimestamp: false, dispatchUpdateAction: false });
 	}
 
