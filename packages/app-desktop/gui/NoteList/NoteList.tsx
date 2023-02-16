@@ -160,21 +160,27 @@ const NoteListComponent = (props: Props) => {
 		}
 	};
 
-	const noteItem_noteDrop = async (event: any) => {
-		if (props.notesParentType !== 'Folder') return;
+	const checkCustomOrder_ = async () => {
+		if (props.notesParentType !== 'Folder') return 0;
 
 		if (props.noteSortOrder !== 'order') {
 			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
 				buttons: [_('Do it now'), _('Cancel')],
 			});
-			if (!doIt) return;
+			if (!doIt) return 0;
 
 			Setting.setValue('notes.sortOrder.field', 'order');
-			return;
+			return 0;
 		}
+		return 1;
+	};
+
+	const noteItem_noteDrop = async (event: any) => {
 
 		// TODO: check that parent type is folder
-
+		if (!checkCustomOrder_()) {
+			return;
+		}
 		const dt = event.dataTransfer;
 		unregisterGlobalDragEndEvent_();
 		setDragOverTargetNoteIndex(null);
@@ -341,14 +347,7 @@ const NoteListComponent = (props: Props) => {
 	};
 
 	const noteItem_noteMove = async (direction: any) => {
-		if (props.notesParentType !== 'Folder') return;
-		if (props.noteSortOrder !== 'order') {
-			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
-				buttons: [_('Do it now'), _('Cancel')],
-			});
-			if (!doIt) return;
-
-			Setting.setValue('notes.sortOrder.field', 'order');
+		if (!checkCustomOrder_()) {
 			return;
 		}
 		const noteIds = props.selectedNoteIds;
