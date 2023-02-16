@@ -60,7 +60,7 @@ const globalStyle: any = {
 	toolbarPadding: 6,
 	appearance: 'light',
 	mainPadding: 12,
-	topRowHeight: 100,
+	topRowHeight: 50,
 	editorPaddingLeft: 8,
 };
 
