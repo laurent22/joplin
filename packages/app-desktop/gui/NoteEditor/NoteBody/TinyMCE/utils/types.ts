@@ -12,4 +12,5 @@ export enum TinyMceEditorEvents {
 	Undo = 'Undo',
 	Redo = 'Redo',
 	ExecCommand = 'ExecCommand',
+	SetAttrib = 'SetAttrib',
 }

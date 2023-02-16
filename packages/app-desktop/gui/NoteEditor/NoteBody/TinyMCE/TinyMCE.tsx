@@ -984,6 +984,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		const onSetAttrib = (event: any) => {
+			// Dispatch onChange when a link is edited
+			if (event.attrElm[0].nodeName === 'A') {
+				if (event.attrName === 'title' || event.attrName === 'href' || event.attrName === 'rel') {
+					onChangeHandler();
+				}
+			}
+		};
+
 		// Keypress means that a printable key (letter, digit, etc.) has been
 		// pressed so we want to always trigger onChange in this case
 		function onKeypress() {
@@ -1100,6 +1109,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
+		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 
 		return () => {
 			try {
@@ -1115,6 +1125,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off(TinyMceEditorEvents.Undo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
+				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
