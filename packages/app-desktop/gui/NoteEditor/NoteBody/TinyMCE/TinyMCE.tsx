@@ -1109,7 +1109,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
-		editor.on('SetAttrib', onSetAttrib);
+		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 
 		return () => {
 			try {
@@ -1125,7 +1125,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off(TinyMceEditorEvents.Undo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
-				editor.off('SetAttrib', onSetAttrib);
+				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
