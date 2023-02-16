@@ -170,6 +170,7 @@ module.exports = {
 					'tuples': 'always-multiline',
 					'functions': 'never',
 				}],
+				'@typescript-eslint/object-curly-spacing': ['error', 'always'],
 				'@typescript-eslint/semi': ['error', 'always'],
 				'@typescript-eslint/member-delimiter-style': ['error', {
 					'multiline': {

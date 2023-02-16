@@ -271,7 +271,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	/** always returns an array */
-	public async pickDocument(options: {multiple: false}) {
+	public async pickDocument(options: { multiple: false }) {
 		const { multiple = false } = options || {};
 		let result;
 		try {
