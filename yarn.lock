@@ -15078,6 +15078,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-prefer-arrow-functions@npm:^3.1.4":
+  version: 3.1.4
+  resolution: "eslint-plugin-prefer-arrow-functions@npm:3.1.4"
+  peerDependencies:
+    eslint: ">=5.0.0"
+  checksum: 581f1be4ea056d70aad1866ee16a0def7ecece050e03ff3bc2a6695b8bdca3751d6360fcd0e4efccd0068a0e0557b7ab36586a301afa38957acc8c58d293560c
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-promise@npm:6.1.1, eslint-plugin-promise@npm:^6.0.0":
   version: 6.1.1
   resolution: "eslint-plugin-promise@npm:6.1.1"
@@ -27824,6 +27833,7 @@ __metadata:
     eslint: 8.31.0
     eslint-interactive: 10.3.0
     eslint-plugin-import: 2.27.4
+    eslint-plugin-prefer-arrow-functions: ^3.1.4
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.32.0
     fs-extra: 11.1.0
