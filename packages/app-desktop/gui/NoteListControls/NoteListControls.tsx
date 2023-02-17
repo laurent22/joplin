@@ -29,20 +29,7 @@ const StyledRoot = styled.div`
 	gap: 5px;
 `;
 
-const StyleNewTodoButton = styled(Button)`
-	margin-left: 8px;
-	width: fit-content;
-	height: 26px;
-	min-width: 68px;
-	min-height: 26px;
-	flex: 1 1 auto;
-
-  .fa, .fas {
-    font-size: 11px;
-  }
-`;
-
-const StyledNewNoteButton = styled(Button)`
+const StyledButton = styled(Button)`
 	width: fit-content;
 	height: 26px;
 	min-width: 68px;
@@ -55,7 +42,6 @@ const StyledNewNoteButton = styled(Button)`
 `;
 
 const StyledPairButtonL = styled(Button)`
-	margin-left: 8px;
 	border-radius: 3px 0 0 3px;
 	min-width: ${(props: any) => buttonSizePx(props)}px;
 	max-width: ${(props: any) => buttonSizePx(props)}px;
@@ -63,7 +49,6 @@ const StyledPairButtonL = styled(Button)`
 
 const StyledPairButtonR = styled(Button)`
 	min-width: 8px;
-	margin-left: 0px;
 	border-radius: 0 3px 3px 0;
 	border-width: 1px 1px 1px 0;
 	width: auto;
@@ -72,7 +57,14 @@ const StyledPairButtonR = styled(Button)`
 const RowContainer = styled.div`
 	display: flex;
 	flex-direction: row;
-	flex: 1 1 auto
+	flex: 1 1 auto;
+	gap: 8px;
+`;
+
+const SortOrderButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
 `;
 
 function NoteListControls(props: Props) {
@@ -136,7 +128,7 @@ function NoteListControls(props: Props) {
 
 		return (
 			<RowContainer>
-				<StyledNewNoteButton
+				<StyledButton
 					className="new-note-button"
 					tooltip={CommandService.instance().label('newNote')}
 					iconName="fas fa-plus"
@@ -145,7 +137,7 @@ function NoteListControls(props: Props) {
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
 				/>
-				<StyleNewTodoButton
+				<StyledButton
 					className="new-todo-button"
 					tooltip={CommandService.instance().label('newTodo')}
 					iconName="fas fa-plus"
@@ -163,7 +155,8 @@ function NoteListControls(props: Props) {
 			{renderNewNoteButtons()}
 			<RowContainer>
 				<SearchBar inputRef={searchBarRef}/>
-				{showsSortOrderButtons() &&
+				<SortOrderButtonsContainer>
+					{showsSortOrderButtons() &&
 					<StyledPairButtonL
 						className="sort-order-field-button"
 						tooltip={sortOrderFieldTooltip()}
@@ -172,8 +165,8 @@ function NoteListControls(props: Props) {
 						size={ButtonSize.Small}
 						onClick={onSortOrderFieldButtonClick}
 					/>
-				}
-				{showsSortOrderButtons() &&
+					}
+					{showsSortOrderButtons() &&
 					<StyledPairButtonR
 						className="sort-order-reverse-button"
 						tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
@@ -182,7 +175,8 @@ function NoteListControls(props: Props) {
 						size={ButtonSize.Small}
 						onClick={onSortOrderReverseButtonClick}
 					/>
-				}
+					}
+				</SortOrderButtonsContainer>
 			</RowContainer>
 		</StyledRoot>
 	);
