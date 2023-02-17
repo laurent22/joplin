@@ -50,6 +50,17 @@ module.exports = {
 		},
 		'sourceType': 'module',
 	},
+	'plugins': [
+		'react',
+		'@typescript-eslint',
+		// Need to use a fork of the official rules of hooks because of this bug:
+		// https://github.com/facebook/react/issues/16265
+		'@seiyab/eslint-plugin-react-hooks',
+		// 'react-hooks',
+		'import',
+		'promise',
+		'prefer-arrow-functions',
+	],
 	'rules': {
 		// -------------------------------
 		// Code correctness
@@ -143,17 +154,16 @@ module.exports = {
 		// - notebook: In code, it should always be "folder" (not "notebook").
 		//   In user-facing text, it should be "notebook".
 		'id-denylist': ['error', 'err', 'notebook', 'notebooks'],
+		'prefer-arrow-functions/prefer-arrow-functions': [
+			'warn',
+			{
+				'classPropertiesAllowed': true,
+				'disallowPrototype': true,
+				'returnStyle': 'unchanged',
+				'singleReturnOnly': false,
+			},
+		],
 	},
-	'plugins': [
-		'react',
-		'@typescript-eslint',
-		// Need to use a fork of the official rules of hooks because of this bug:
-		// https://github.com/facebook/react/issues/16265
-		'@seiyab/eslint-plugin-react-hooks',
-		// 'react-hooks',
-		'import',
-		'promise',
-	],
 	'overrides': [
 		{
 			'files': [
