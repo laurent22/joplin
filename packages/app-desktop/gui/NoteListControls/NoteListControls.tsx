@@ -30,11 +30,10 @@ const StyledRoot = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-	width: fit-content;
+	width: auto;
 	height: 26px;
-	min-width: 68px;
 	min-height: 26px;
-	flex: 1 1 auto;
+	flex: 1 0 auto;
 
   .fa, .fas {
     font-size: 11px;
