@@ -5,10 +5,10 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
-import ExtendedWebView from '../../ExtendedWebView';
+import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
 
 const logger = Logger.create('ImageEditor');
@@ -49,7 +49,7 @@ const useCss = (editorTheme: Theme) => {
 
 const ImageEditor = (props: Props) => {
 	const editorTheme: Theme = themeStyle(props.themeId);
-	const webviewRef = useRef(null);
+	const webviewRef: MutableRefObject<WebViewControl>|null = useRef(null);
 	const [imageChanged, setImageChanged] = useState(false);
 
 	const onRequestCloseEditor = useCallback(() => {
@@ -156,10 +156,7 @@ const ImageEditor = (props: Props) => {
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 				);
 
-				window.initialSVGData = ${JSON.stringify(props.initialSVGData)};
-				if (initialSVGData && initialSVGData.length > 0) {
-					editor.loadFromSVG(initialSVGData);
-				}
+				editor.showLoadingWarning(0);
 			}
 		} catch(e) {
 			window.ReactNativeWebView.postMessage(
@@ -167,7 +164,24 @@ const ImageEditor = (props: Props) => {
 			);
 		}
 		true;
-	`, [props.initialSVGData]);
+	`, []);
+
+	const onLoadEnd = useCallback(() => {
+		// It can take some time for props.initialSVGData to be transferred to the WebView.
+		// Thus, do so after the main content has been loaded.
+		webviewRef.current.injectJS(`
+			if (window.editor && !window.initialSVGData) {
+				// loadFromSVG shows its own loading message. Hide the original.
+				editor.hideLoadingWarning();
+
+				window.initialSVGData = ${JSON.stringify(props.initialSVGData)};
+
+				if (initialSVGData && initialSVGData.length > 0) {
+					editor.loadFromSVG(initialSVGData);
+				}
+			}
+		`);
+	}, [webviewRef, props.initialSVGData]);
 
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
@@ -204,6 +218,7 @@ const ImageEditor = (props: Props) => {
 			injectedJavaScript={injectedJavaScript}
 			onMessage={onMessage}
 			onError={onError}
+			onLoadEnd={onLoadEnd}
 			ref={webviewRef}
 			webviewInstanceId={'image-editor-js-draw'}
 		/>
