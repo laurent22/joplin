@@ -156,21 +156,6 @@ const ImageEditor = (props: Props) => {
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 				);
 
-				editor.showLoadingWarning(0);
-			}
-		} catch(e) {
-			window.ReactNativeWebView.postMessage(
-				'error: ' + e.message + ': ' + JSON.stringify(e)
-			);
-		}
-		true;
-	`, []);
-
-	const onLoadEnd = useCallback(() => {
-		// It can take some time for props.initialSVGData to be transferred to the WebView.
-		// Thus, do so after the main content has been loaded.
-		webviewRef.current.injectJS(`
-			if (window.editor && !window.initialSVGData) {
 				// loadFromSVG shows its own loading message. Hide the original.
 				editor.hideLoadingWarning();
 
@@ -180,8 +165,13 @@ const ImageEditor = (props: Props) => {
 					editor.loadFromSVG(initialSVGData);
 				}
 			}
-		`);
-	}, [webviewRef, props.initialSVGData]);
+		} catch(e) {
+			window.ReactNativeWebView.postMessage(
+				'error: ' + e.message + ': ' + JSON.stringify(e)
+			);
+		}
+		true;
+	`, [props.initialSVGData]);
 
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
@@ -218,7 +208,6 @@ const ImageEditor = (props: Props) => {
 			injectedJavaScript={injectedJavaScript}
 			onMessage={onMessage}
 			onError={onError}
-			onLoadEnd={onLoadEnd}
 			ref={webviewRef}
 			webviewInstanceId={'image-editor-js-draw'}
 		/>
