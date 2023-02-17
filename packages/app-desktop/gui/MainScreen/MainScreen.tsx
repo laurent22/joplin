@@ -78,6 +78,7 @@ interface Props {
 	isSafeMode: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
+	isResettingLayout: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -369,6 +370,15 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.props.dispatch({
 				type: !prevState.promptOptions ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
 				name: 'promptDialog',
+			});
+		}
+
+		if (this.props.isResettingLayout) {
+			Setting.setValue('ui.layout', null);
+			this.updateMainLayout(this.buildLayout(this.props.plugins));
+			this.props.dispatch({
+				type: 'RESET_LAYOUT',
+				value: false,
 			});
 		}
 	}
@@ -880,6 +890,7 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
+		isResettingLayout: state.isResettingLayout,
 	};
 };
 
