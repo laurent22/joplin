@@ -24,7 +24,7 @@ rules.tableRow = {
       for (var i = 0; i < colCount; i++) {
         const childNode = colCount >= node.childNodes.length ? null : node.childNodes[i];
         var border = '---'
-        var align = childNode ? (childNode.getAttribute('align') || '').toLowerCase() : '';
+        var align = childNode ? (childNode.getAttribute('align') || node.childNodes[i].style.textAlign || '').toLowerCase() : '';
 
         if (align) border = alignMap[align] || border
 
