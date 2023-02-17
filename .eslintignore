@@ -800,6 +800,8 @@ packages/renderer/HtmlToHtml.js
 packages/renderer/InMemoryCache.js
 packages/renderer/MarkupToHtml.js
 packages/renderer/MdToHtml.js
+packages/renderer/MdToHtml/createEventHandlingAttrs.js
+packages/renderer/MdToHtml/createEventHandlingAttrs.test.js
 packages/renderer/MdToHtml/linkReplacement.js
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/renderMedia.js
