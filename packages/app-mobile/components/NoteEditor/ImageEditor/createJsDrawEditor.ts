@@ -6,7 +6,69 @@ declare namespace ReactNativeWebView {
 	const postMessage: (data: any)=> void;
 }
 
-export const makeCloseIcon = () => {
+interface ImageEditorStrings {
+	close: string;
+	save: string;
+}
+
+interface ImageEditorCallbacks {
+	saveDrawing: ()=> void;
+	autosaveDrawing: ()=> void;
+	closeEditor: ()=> void;
+
+	setImageHasChanges: (hasChanges: boolean)=> void;
+}
+
+export const createJsDrawEditor = (
+	strings: ImageEditorStrings,
+	callbacks: ImageEditorCallbacks,
+	initialToolbarState: string
+): Editor => {
+	const parentElement = document.body;
+	const editor = new Editor(parentElement);
+
+	const toolbar = editor.addToolbar();
+
+	const maxSpacerSize = '20px';
+	toolbar.addSpacer({
+		grow: 1,
+		maxSize: maxSpacerSize,
+	});
+
+	toolbar.addActionButton({
+		label: strings.close,
+		icon: makeCloseIcon(),
+	}, () => callbacks.closeEditor());
+
+	toolbar.addSpacer({
+		grow: 1,
+		maxSize: maxSpacerSize,
+	});
+
+	toolbar.addActionButton({
+		label: strings.save,
+		icon: editor.icons.makeSaveIcon(),
+	}, () => callbacks.saveDrawing());
+
+	restoreToolbarState(toolbar, initialToolbarState);
+	listenToolbarState(editor, toolbar);
+	void startAutosaveLoop(() => callbacks.autosaveDrawing());
+
+	const imageChangeListener = editor.notifier.on(EditorEventType.UndoRedoStackUpdated, () => {
+		if (editor.history.undoStackSize > 0) {
+			callbacks.setImageHasChanges(true);
+
+			// Don't listen for the undoStackSize to go back to zero -- the editor
+			// has a maximum undo stack size, so it's possible, after pressing 'undo' many times,
+			// to have an undo stack size of zero and changes to the document.
+			imageChangeListener.remove();
+		}
+	});
+
+	return editor;
+};
+
+const makeCloseIcon = () => {
 	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	svg.innerHTML = `
 		<style>
@@ -30,14 +92,7 @@ export const makeCloseIcon = () => {
 	return svg;
 };
 
-export const createJsDrawEditor = (): Editor => {
-	const parentElement = document.body;
-	const editor = new Editor(parentElement);
-
-	return editor;
-};
-
-export const restoreToolbarState = (toolbar: HTMLToolbar, state: string) => {
+const restoreToolbarState = (toolbar: HTMLToolbar, state: string) => {
 	if (state) {
 		// deserializeState throws on invalid argument.
 		try {
@@ -48,7 +103,7 @@ export const restoreToolbarState = (toolbar: HTMLToolbar, state: string) => {
 	}
 };
 
-export const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
+const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
 	editor.notifier.on(EditorEventType.ToolUpdated, () => {
 		const state = toolbar.serializeState();
 		ReactNativeWebView.postMessage(
@@ -61,7 +116,7 @@ export const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
 };
 
 type AutosaveCallback = ()=> Promise<void>|void;
-export const startAutosaveLoop = async (autosave: AutosaveCallback) => {
+const startAutosaveLoop = async (autosave: AutosaveCallback) => {
 	// Autosave every two minutes.
 	const delayTime = 1000 * 60 * 2; // ms
 

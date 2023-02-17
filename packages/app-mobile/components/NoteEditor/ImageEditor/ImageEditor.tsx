@@ -5,7 +5,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView from '../../ExtendedWebView';
@@ -50,16 +50,24 @@ const useCss = (editorTheme: Theme) => {
 const ImageEditor = (props: Props) => {
 	const editorTheme: Theme = themeStyle(props.themeId);
 	const webviewRef = useRef(null);
+	const [imageChanged, setImageChanged] = useState(false);
 
 	const onRequestCloseEditor = useCallback(() => {
+		const discardChangesAndClose = async () => {
+			await clearAutosave();
+			props.onCancel();
+		};
+
+		if (!imageChanged) {
+			void discardChangesAndClose();
+			return true;
+		}
+
 		Alert.alert(
 			_('Save changes?'), _('This drawing may have unsaved changes.'), [
 				{
 					text: _('Discard changes'),
-					onPress: async () => {
-						await clearAutosave();
-						props.onCancel();
-					},
+					onPress: discardChangesAndClose,
 					style: 'destructive',
 				},
 				{
@@ -73,7 +81,7 @@ const ImageEditor = (props: Props) => {
 			]
 		);
 		return true;
-	}, [webviewRef, props.onCancel]);
+	}, [webviewRef, props.onCancel, imageChanged]);
 
 	useEffect(() => {
 		BackHandler.addEventListener('hardwareBackPress', onRequestCloseEditor);
@@ -106,6 +114,15 @@ const ImageEditor = (props: Props) => {
 			);
 		};
 
+		const setImageHasChanges = (hasChanges) => {
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					action: 'setImageHasChanges',
+					data: hasChanges,
+				}),
+			);
+		};
+
 		const saveDrawing = (isAutosave) => {
 			const img = window.editor.toSVG();
 			window.ReactNativeWebView.postMessage(
@@ -117,7 +134,7 @@ const ImageEditor = (props: Props) => {
 		};
 		window.saveDrawing = saveDrawing;
 
-		const closeDrawing = () => {
+		const closeEditor = () => {
 			window.ReactNativeWebView.postMessage('{ "action": "close" }');
 		};
 
@@ -125,45 +142,24 @@ const ImageEditor = (props: Props) => {
 			if (window.editor === undefined) {
 				${shim.injectedJs('svgEditorBundle')}
 
-				window.editor = svgEditorBundle.createJsDrawEditor();
+				window.editor = svgEditorBundle.createJsDrawEditor(
+					{
+						close: ${JSON.stringify(_('Close'))},
+						save: ${JSON.stringify(_('Done'))},
+					},
+					{
+						saveDrawing: () => saveDrawing(false),
+						autosaveDrawing: () => saveDrawing(true),
+						closeEditor,
+						setImageHasChanges,
+					},
+					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
+				);
 
 				window.initialSVGData = ${JSON.stringify(props.initialSVGData)};
 				if (initialSVGData && initialSVGData.length > 0) {
 					editor.loadFromSVG(initialSVGData);
 				}
-
-				const toolbar = editor.addToolbar();
-
-				const maxSpacerSize = '20px';
-				toolbar.addSpacer({
-					grow: 1,
-					maxSize: maxSpacerSize,
-				});
-
-				toolbar.addActionButton({
-					label: ${JSON.stringify(_('Close'))}, 
-					icon: svgEditorBundle.makeCloseIcon(),
-				}, () => closeDrawing());
-
-				toolbar.addSpacer({
-					grow: 1,
-					maxSize: maxSpacerSize,
-				});
-
-				toolbar.addActionButton({
-					label: ${JSON.stringify(_('Done'))},
-					icon: editor.icons.makeSaveIcon(),
-				}, () => {
-					saveDrawing(false);
-				});
-
-				svgEditorBundle.restoreToolbarState(
-					toolbar,
-					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))}
-				);
-				svgEditorBundle.listenToolbarState(editor, toolbar);
-
-				svgEditorBundle.startAutosaveLoop(() => saveDrawing(true));
 			}
 		} catch(e) {
 			window.ReactNativeWebView.postMessage(
@@ -190,6 +186,8 @@ const ImageEditor = (props: Props) => {
 			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
 		} else if (json.action === 'close') {
 			onRequestCloseEditor();
+		} else if (json.action === 'setImageHasChanges') {
+			setImageChanged(json.data);
 		} else {
 			logger.error('Unknown action,', json.action);
 		}
