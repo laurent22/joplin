@@ -116,7 +116,13 @@ async function main() {
 
 	console.info('Popup: Creating React app...');
 
-	ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+	ReactDOM.render(
+		<div style = {{ maxHeight: screen.height * 0.65, overflowY: 'scroll' }}>
+			<Provider store={store}>
+				<App />
+			</Provider>
+		</div>,
+		document.getElementById('root'));
 }
 
 main().catch((error) => {
