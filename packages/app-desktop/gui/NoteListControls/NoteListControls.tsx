@@ -35,7 +35,11 @@ const StyleNewTodoButton = styled(Button)`
 	height: 26px;
 	min-width: 68px;
 	min-height: 26px;
-	flex: 1 1 auto
+	flex: 1 1 auto;
+
+  .fa, .fas {
+    font-size: 11px;
+  }
 `;
 
 const StyledNewNoteButton = styled(Button)`
@@ -43,7 +47,11 @@ const StyledNewNoteButton = styled(Button)`
 	height: 26px;
 	min-width: 68px;
 	min-height: 26px;
-	flex: 1 1 auto
+	flex: 1 1 auto;
+
+  .fa, .fas {
+    font-size: 11px;
+  }
 `;
 
 const StyledPairButtonL = styled(Button)`
@@ -131,7 +139,8 @@ function NoteListControls(props: Props) {
 				<StyledNewNoteButton
 					className="new-note-button"
 					tooltip={CommandService.instance().label('newNote')}
-					title={_('+ %s', 'New note')}
+					iconName="fas fa-plus"
+					title={_('%s', 'New note')}
 					level={ButtonLevel.Primary}
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
@@ -139,7 +148,8 @@ function NoteListControls(props: Props) {
 				<StyleNewTodoButton
 					className="new-todo-button"
 					tooltip={CommandService.instance().label('newTodo')}
-					title={_('+ %s', 'New to-do')}
+					iconName="fas fa-plus"
+					title={_('%s', 'New to-do')}
 					level={ButtonLevel.Secondary}
 					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
