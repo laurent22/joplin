@@ -789,6 +789,9 @@ function useMenu(props: Props) {
 						label: _('Joplin Forum'),
 						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
+						label: _('Join us on Twitter'),
+						click() { void bridge().openExternal('https://twitter.com/joplinapp'); },
+					}, {
 						label: _('Make a donation'),
 						click() { void bridge().openExternal('https://joplinapp.org/donate/'); },
 					}, {
