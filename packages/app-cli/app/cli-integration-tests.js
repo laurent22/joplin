@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-disable no-console */
+
 const fs = require('fs-extra');
 const Logger = require('@joplin/lib/Logger').default;
 const { dirname } = require('@joplin/lib/path-utils');

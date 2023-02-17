@@ -66,6 +66,7 @@ export default async function setupCommands(): Promise<Commands> {
 
 	if (cmdName && !selectedCommand) {
 		yargs.showHelp();
+		// eslint-disable-next-line no-console
 		console.info('');
 		throw new Error(`Invalid command: ${cmdName}`);
 	}

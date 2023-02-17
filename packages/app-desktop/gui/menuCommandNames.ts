@@ -32,6 +32,7 @@ export default function() {
 		'textBulletedList',
 		'toggleExternalEditing',
 		'toggleLayoutMoveMode',
+		'resetLayout',
 		'toggleNoteList',
 		'toggleNotesSortOrderField',
 		'toggleNotesSortOrderReverse',

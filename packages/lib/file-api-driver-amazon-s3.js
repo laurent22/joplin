@@ -65,8 +65,8 @@ class FileApiDriverAmazonS3 {
 				Prefix: key,
 				Delimiter: '/',
 				ContinuationToken: cursor,
-			}), (err, response) => {
-				if (err) reject(err);
+			}), (error, response) => {
+				if (error) reject(error);
 				else resolve(response);
 			});
 		});
@@ -78,8 +78,8 @@ class FileApiDriverAmazonS3 {
 			this.api().send(new HeadObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
-			}), (err, response) => {
-				if (err) reject(err);
+			}), (error, response) => {
+				if (error) reject(error);
 				else resolve(response);
 			});
 		});
@@ -91,8 +91,8 @@ class FileApiDriverAmazonS3 {
 				Bucket: this.s3_bucket_,
 				Key: key,
 				Body: body,
-			}), (err, response) => {
-				if (err) reject(err);
+			}), (error, response) => {
+				if (error) reject(error);
 				else resolve(response);
 			});
 		});
@@ -108,8 +108,8 @@ class FileApiDriverAmazonS3 {
 				Key: key,
 				Body: Buffer.from(body, 'base64'),
 				ContentLength: `${fileStat.size}`,
-			}), (err, response) => {
-				if (err) reject(err);
+			}), (error, response) => {
+				if (error) reject(error);
 				else resolve(response);
 			});
 		});
@@ -121,11 +121,10 @@ class FileApiDriverAmazonS3 {
 				Bucket: this.s3_bucket_,
 				Key: key,
 			}),
-			(err, response) => {
-				if (err) {
-					console.log(err.code);
-					console.log(err.message);
-					reject(err);
+			(error, response) => {
+				if (error) {
+					console.error(error);
+					reject(error);
 				} else { resolve(response); }
 			});
 		});
@@ -138,11 +137,10 @@ class FileApiDriverAmazonS3 {
 				Bucket: this.s3_bucket_,
 				Delete: { Objects: keys },
 			}),
-			(err, response) => {
-				if (err) {
-					console.log(err.code);
-					console.log(err.message);
-					reject(err);
+			(error, response) => {
+				if (error) {
+					console.error(error);
+					reject(error);
 				} else { resolve(response); }
 			});
 		});
@@ -353,8 +351,8 @@ class FileApiDriverAmazonS3 {
 				Bucket: this.s3_bucket_,
 				CopySource: this.makePath_(oldPath),
 				Key: newPath,
-			}), (err, response) => {
-				if (err) reject(err);
+			}), (error, response) => {
+				if (error) reject(error);
 				else resolve(response);
 			});
 		});
@@ -383,8 +381,8 @@ class FileApiDriverAmazonS3 {
 				return this.api().send(new ListObjectsV2Command({
 					Bucket: this.s3_bucket_,
 					ContinuationToken: cursor,
-				}), (err, response) => {
-					if (err) reject(err);
+				}), (error, response) => {
+					if (error) reject(error);
 					else resolve(response);
 				});
 			});

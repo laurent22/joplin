@@ -299,13 +299,13 @@ export function fileExists(filePath: string) {
 	const fs = require('fs-extra');
 
 	return new Promise((resolve, reject) => {
-		fs.stat(filePath, function(err: any) {
-			if (!err) {
+		fs.stat(filePath, function(error: any) {
+			if (!error) {
 				resolve(true);
-			} else if (err.code === 'ENOENT') {
+			} else if (error.code === 'ENOENT') {
 				resolve(false);
 			} else {
-				reject(err);
+				reject(error);
 			}
 		});
 	});

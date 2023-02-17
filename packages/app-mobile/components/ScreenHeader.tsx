@@ -23,6 +23,7 @@ import CustomButton from './CustomButton';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 // Rather than applying a padding to the whole bar, it is applied to each

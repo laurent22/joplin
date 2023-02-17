@@ -108,11 +108,11 @@ class BundledFile {
 		await writeFile(md5Path, newMd5, 'utf8');
 	}
 
-	private handleErrors(err: Error | undefined | null, stats: webpack.Stats | undefined): boolean {
+	private handleErrors(error: Error | undefined | null, stats: webpack.Stats | undefined): boolean {
 		let failed = false;
 
-		if (err) {
-			console.error(`Error: ${err.name}`, err.message, err.stack);
+		if (error) {
+			console.error(`Error: ${error.name}`, error.message, error.stack);
 			failed = true;
 		} else if (stats?.hasErrors() || stats?.hasWarnings()) {
 			const data = stats.toJson();
@@ -153,8 +153,8 @@ class BundledFile {
 		return new Promise<void>((resolve, reject) => {
 			console.info(`Building bundle: ${this.bundleName}...`);
 
-			compiler.run((err, stats) => {
-				let failed = this.handleErrors(err, stats);
+			compiler.run((error, stats) => {
+				let failed = this.handleErrors(error, stats);
 
 				// Clean up.
 				compiler.close(async (error) => {
@@ -180,8 +180,8 @@ class BundledFile {
 		};
 
 		console.info('Watching bundle: ', this.bundleName);
-		compiler.watch(watchOptions, async (err, stats) => {
-			const failed = this.handleErrors(err, stats);
+		compiler.watch(watchOptions, async (error, stats) => {
+			const failed = this.handleErrors(error, stats);
 			if (!failed) {
 				await this.uglify();
 				await this.copyToImportableFile();

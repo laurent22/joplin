@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 require('source-map-support').install();
 
 import * as fs from 'fs-extra';

@@ -119,6 +119,7 @@ export default class Database {
 
 				const queryId = this.queryId_++;
 				if (this.profilingEnabled_) {
+					// eslint-disable-next-line no-console
 					console.info(`SQL START ${queryId}`, sql, params);
 
 					profilingTimeoutId = shim.setInterval(() => {
@@ -132,6 +133,7 @@ export default class Database {
 					shim.clearInterval(profilingTimeoutId);
 					profilingTimeoutId = null;
 					const elapsed = Date.now() - callStartTime;
+					// eslint-disable-next-line no-console
 					if (elapsed > 10) console.info(`SQL END ${queryId}`, elapsed, sql, params);
 				}
 
