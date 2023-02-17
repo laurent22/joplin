@@ -17,12 +17,12 @@ rules.tableRow = {
     if (tableShouldBeSkipped(parentTable)) return content;
 
     var borderCells = ''
-    var alignMap = { left: ':--', right: '--:', center: ':-:' }
+    var alignMap = { left: ':---', right: '---:', center: ':---:' }
 
     if (isHeadingRow(node)) {
       const colCount = tableColCount(parentTable);
       for (var i = 0; i < colCount; i++) {
-        const childNode = colCount >= node.childNodes.length ? null : node.childNodes[i];
+        const childNode = i < node.childNodes.length ? node.childNodes[i] : null;
         var border = '---'
         var align = childNode ? (childNode.getAttribute('align') || node.childNodes[i].style.textAlign || '').toLowerCase() : '';
 
@@ -55,7 +55,7 @@ rules.table = {
     // If table has no heading, add an empty one so as to get a valid Markdown table
     var secondLine = content.trim().split('\n');
     if (secondLine.length >= 2) secondLine = secondLine[1]
-    var secondLineIsDivider = secondLine.indexOf('| ---') === 0
+    var secondLineIsDivider = /\| :?---/.test(secondLine)
     
     var columnCount = tableColCount(node);
     var emptyHeader = ''
