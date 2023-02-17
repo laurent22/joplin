@@ -42,6 +42,8 @@ function shimInit() {
 	// uses the native XMLHttpRequest which is more likely to get the proper
 	// response and error message.
 
+	/* eslint-disable no-console */
+
 	shim.debugFetch = async (url, options = null) => {
 		options = {
 			method: 'GET',
@@ -81,6 +83,8 @@ function shimInit() {
 			xhr.send();
 		});
 	};
+
+	/* eslint-enable */
 
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatchable error that crashes the

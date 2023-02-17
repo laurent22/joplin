@@ -54,6 +54,7 @@ describe('import-enex-md-gen', function() {
 				result.push('--------------------------------------------');
 				result.push('');
 
+				// eslint-disable-next-line no-console
 				console.info(result.join('\n'));
 
 				expect(false).toBe(true);

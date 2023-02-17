@@ -23,6 +23,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+C', command: 'textCopy' },
 		{ accelerator: 'Cmd+X', command: 'textCut' },
 		{ accelerator: 'Cmd+V', command: 'textPaste' },
+		{ accelerator: 'Cmd+Shift+V', command: 'pasteAsText' },
 		{ accelerator: 'Cmd+A', command: 'textSelectAll' },
 		{ accelerator: 'Cmd+B', command: 'textBold' },
 		{ accelerator: 'Cmd+I', command: 'textItalic' },
@@ -67,6 +68,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+C', command: 'textCopy' },
 		{ accelerator: 'Ctrl+X', command: 'textCut' },
 		{ accelerator: 'Ctrl+V', command: 'textPaste' },
+		{ accelerator: 'Ctrl+Shift+V', command: 'pasteAsText' },
 		{ accelerator: 'Ctrl+A', command: 'textSelectAll' },
 		{ accelerator: 'Ctrl+B', command: 'textBold' },
 		{ accelerator: 'Ctrl+I', command: 'textItalic' },
@@ -198,8 +200,8 @@ export default class KeymapService extends BaseService {
 
 			// Refresh the menu items so that the changes are reflected
 			eventManager.emit('keymapChange');
-		} catch (err) {
-			const message = err.message || '';
+		} catch (error) {
+			const message = error.message || '';
 			throw new Error(_('Error: %s', message));
 		}
 	}
@@ -303,9 +305,9 @@ export default class KeymapService extends BaseService {
 			// Validate the entire keymap for duplicates
 			// Throws whenever there are duplicate Accelerators used in the keymap
 			this.validateKeymap();
-		} catch (err) {
+		} catch (error) {
 			this.resetKeymap(); // Discard all the changes if there are any issues
-			throw err;
+			throw error;
 		}
 	}
 

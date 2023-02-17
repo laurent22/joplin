@@ -24,7 +24,7 @@ const StyledRoot = styled.div`
 	max-width: 1200px;
 `;
 
-const SyncTargetDescription = styled.div<{height: number}>`
+const SyncTargetDescription = styled.div<{ height: number }>`
 	${props => props.height ? `height: ${props.height}px` : ''};
 	margin-bottom: 1.3em;
 	line-height: ${props => props.theme.lineHeight};
@@ -69,7 +69,7 @@ const SyncTargetLogo = styled.img`
 	margin-right: 0.4em;
 `;
 
-const SyncTargetBox = styled.div<{faded: boolean}>`
+const SyncTargetBox = styled.div<{ faded: boolean }>`
 	display: flex;
 	flex: 1;
 	flex-direction: column;
@@ -96,7 +96,7 @@ const FeatureIcon = styled.i`
 	position: absolute;
 `;
 
-const FeatureLine = styled.div<{enabled: boolean}>`
+const FeatureLine = styled.div<{ enabled: boolean }>`
 	margin-bottom: .5em;
 	opacity: ${props => props.enabled ? 1 : 0.5};
 	position: relative;

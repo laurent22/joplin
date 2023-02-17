@@ -10,9 +10,9 @@ const pdfFilePath1 = resolve('config/welcome.pdf');
 
 function loadFile(filePath: string) {
 	return new Promise<Uint8Array>((resolve, reject) => {
-		readFile(filePath, (err, data) => {
-			if (err) {
-				reject(err);
+		readFile(filePath, (error, data) => {
+			if (error) {
+				reject(error);
 			} else {
 				resolve(new Uint8Array((data)));
 			}

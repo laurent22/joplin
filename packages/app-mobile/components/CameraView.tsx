@@ -10,6 +10,7 @@ import Setting from '@joplin/lib/models/Setting';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 class CameraView extends Component {

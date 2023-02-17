@@ -59,6 +59,7 @@ export default function PdfViewer(props: Props) {
 			linkToCopy: null,
 			htmlToCopy: '',
 			insertContent: () => { console.warn('insertContent() not implemented'); },
+			fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },
 		} as ContextMenuOptions, props.dispatch);
 
 		menu.popup(bridge().window());

@@ -271,6 +271,7 @@ function useMenu(props: Props) {
 		const service = InteropService.instance();
 		try {
 			const result = await service.import(importOptions);
+			// eslint-disable-next-line no-console
 			console.info('Import result: ', result);
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
@@ -634,6 +635,7 @@ function useMenu(props: Props) {
 						menuItemDic.textCopy,
 						menuItemDic.textCut,
 						menuItemDic.textPaste,
+						menuItemDic.pasteAsText,
 						menuItemDic.textSelectAll,
 						separator(),
 						// Using the generic "undo"/"redo" roles mean the menu
@@ -673,6 +675,7 @@ function useMenu(props: Props) {
 					label: _('&View'),
 					submenu: [
 						menuItemDic.toggleLayoutMoveMode,
+						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
 						menuItemDic.toggleNoteList,
