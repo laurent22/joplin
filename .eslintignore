@@ -387,6 +387,7 @@ packages/app-mobile/components/NoteEditor/EditLinkDialog.js
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js
 packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/isEditableResource.js
 packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.js

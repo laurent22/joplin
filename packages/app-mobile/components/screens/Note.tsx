@@ -46,6 +46,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
 import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
+import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -191,12 +192,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 
 						const resourcePath = Resource.fullPath(item);
-						if (item.mime === 'image/svg+xml') {
-							void this.editDrawing(resourcePath, item);
-						} else {
-							logger.info(`Opening resource: ${resourcePath}`);
-							await FileViewer.open(resourcePath);
-						}
+						logger.info(`Opening resource: ${resourcePath}`);
+						await FileViewer.open(resourcePath);
 					} else {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
@@ -802,7 +799,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Otherwise, we're creating a new file
 			await this.attachFile({
 				uri: filePath,
-				name: _('Joplin Drawing'),
+				name: _('Drawing'),
 			}, 'image');
 		}
 	}
@@ -815,7 +812,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showImageEditor: false });
 	};
 
-	private async editDrawing(filePath: string, item: BaseItem) {
+	private async editDrawing(item: BaseItem) {
+		const filePath = Resource.fullPath(item);
 		const svgData = await shim.fsDriver().readFile(filePath);
 		this.setState({
 			showImageEditor: true,
@@ -824,14 +822,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	private onEditResource = (message: string) => {
+	private onEditResource = async (message: string) => {
 		const messageData = /^edit:(.*)$/.exec(message);
 		if (!messageData) {
 			throw new Error('onEditResource: Error: Invalid message');
 		}
 
 		const resourceId = messageData[1];
-		this.onJoplinLinkClick_(`joplin://${resourceId}`);
+
+		const resource = await BaseItem.loadItemById(resourceId);
+		await Resource.requireIsReady(resource);
+
+		if (isEditableResource(resource.mime)) {
+			await this.editDrawing(resource);
+		} else {
+			throw new Error(_('Unable to edit resource of type %s', resource.mime));
+		}
 	};
 
 	private async attachFile_onPress() {

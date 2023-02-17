@@ -44,7 +44,10 @@ export default function NoteBodyViewer(props: Props) {
 	);
 
 	const onResourceLongPress = useOnResourceLongPress(
-		props.onJoplinLinkClick,
+		{
+			onJoplinLinkClick: props.onJoplinLinkClick,
+			onRequestEditResource: props.onRequestEditResource,
+		},
 		dialogBoxRef
 	);
 
