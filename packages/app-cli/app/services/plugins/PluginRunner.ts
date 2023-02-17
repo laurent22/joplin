@@ -11,6 +11,7 @@ function createConsoleWrapper(pluginId: string) {
 	const wrapper: any = {};
 
 	for (const n in console) {
+		// eslint-disable-next-line no-console
 		if (!console.hasOwnProperty(n)) continue;
 		wrapper[n] = (...args: any[]) => {
 			const newArgs = args.slice();

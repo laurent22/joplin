@@ -340,7 +340,7 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.4.1):
+  - react-native-slider (4.4.2):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
@@ -726,7 +726,7 @@ SPEC CHECKSUMS:
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: 22bcd49188a04d6d6df254ca33085f26e28879c9
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
-  react-native-slider: a0d45ce5ea1be39f149954cae4367afff44d5a32
+  react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
   react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1

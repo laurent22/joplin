@@ -11,6 +11,7 @@ export default function useOnMessage(onCheckboxChange: Function, noteBody: strin
 		// https://github.com/laurent22/joplin/issues/4494
 		const msg = event.nativeEvent.data;
 
+		// eslint-disable-next-line no-console
 		console.info('Got IPC message: ', msg);
 
 		if (msg.indexOf('checkboxclick:') === 0) {

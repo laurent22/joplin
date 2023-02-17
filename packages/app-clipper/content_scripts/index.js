@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 (function() {
 
 	if (window.jopext_hasRun) return;

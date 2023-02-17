@@ -177,6 +177,7 @@ packages/app-desktop/gui/MainScreen/commands/openTag.js
 packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/renameFolder.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
+packages/app-desktop/gui/MainScreen/commands/resetLayout.js
 packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/setTags.js
@@ -221,6 +222,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js

@@ -246,6 +246,7 @@ class Application extends BaseApplication {
 			showConsole: () => {},
 			maximizeConsole: () => {},
 			stdout: text => {
+				// eslint-disable-next-line no-console
 				console.info(text);
 			},
 			fullScreen: () => {},
@@ -407,6 +408,7 @@ class Application extends BaseApplication {
 				if (this.showStackTraces_) {
 					console.error(error);
 				} else {
+					// eslint-disable-next-line no-console
 					console.info(error.message);
 				}
 				process.exit(1);

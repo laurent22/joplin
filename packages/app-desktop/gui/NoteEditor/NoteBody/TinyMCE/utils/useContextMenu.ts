@@ -11,6 +11,7 @@ import convertToScreenCoordinates from '../../../../utils/convertToScreenCoordin
 import Setting from '@joplin/lib/models/Setting';
 
 import Resource from '@joplin/lib/models/Resource';
+import { TinyMceEditorEvents } from './types';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -77,6 +78,9 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 					editor.insertContent(content);
 				},
 				isReadOnly: false,
+				fireEditorEvent: (event: TinyMceEditorEvents) => {
+					editor.fire(event);
+				},
 			};
 
 			let template = [];
