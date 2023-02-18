@@ -1,4 +1,4 @@
-package net.cozic.joplin.share;
+package net.cozic.joplin;
 
 import com.facebook.react.ReactActivity;
 

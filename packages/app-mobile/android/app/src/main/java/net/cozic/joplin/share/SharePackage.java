@@ -91,6 +91,10 @@ public class SharePackage implements ReactPackage {
                 return null;
             }
 
+            if (intent.getBooleanExtra("is_processed", false)) {
+                return null;
+            }
+
             String type = intent.getType() == null ? "" : intent.getType();
             map.putString("type", type);
             map.putString("title", getTitle(intent));
@@ -112,6 +116,7 @@ public class SharePackage implements ReactPackage {
             }
 
             map.putArray("resources", resources);
+            intent.putExtra("is_processed", true);
             return map;
         }
 
