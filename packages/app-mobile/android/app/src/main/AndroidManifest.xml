@@ -84,6 +84,7 @@
 			android:noHistory="true"
 			android:name=".ShareActivity"
 			android:configChanges="orientation"
+			android:launchMode="singleTask"
 			android:label="@string/app_name"
 			android:excludeFromRecents="true"
 			android:theme="@style/AppTheme"
