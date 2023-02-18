@@ -1,26 +1,25 @@
 const React = require('react');
-
-const { AppState, View, StyleSheet } = require('react-native');
-const { stateUtils } = require('@joplin/lib/reducer');
-const { connect } = require('react-redux');
+import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } from 'react-native';
+import { stateUtils } from '@joplin/lib/reducer';
+import { connect } from 'react-redux';
 const { NoteList } = require('../note-list.js');
-const Folder = require('@joplin/lib/models/Folder').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Setting = require('@joplin/lib/models/Setting').default;
+import Folder from '@joplin/lib/models/Folder';
+import Tag from '@joplin/lib/models/Tag';
+import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../global-style.js');
-const { ScreenHeader } = require('../ScreenHeader');
-const { _ } = require('@joplin/lib/locale');
-const ActionButton = require('../ActionButton').default;
+import { ScreenHeader } from '../ScreenHeader';
+import { _ } from '@joplin/lib/locale';
+import ActionButton from '../ActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('../base-screen.js');
 const { BackButtonService } = require('../../services/back-button.js');
+import { AppState } from '../../utils/types';
 
-class NotesScreenComponent extends BaseScreenComponent {
-	static navigationOptions() {
-		return { header: null };
-	}
+class NotesScreenComponent extends BaseScreenComponent<any> {
+
+	private onAppStateChangeSub_: NativeEventSubscription = null;
 
 	constructor() {
 		super();
@@ -36,7 +35,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			const buttons = [];
 			const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
 
-			const makeCheckboxText = function(selected, sign, label) {
+			const makeCheckboxText = function(selected: boolean, sign: string, label: string) {
 				const s = sign === 'tick' ? '✓' : '⬤';
 				return (selected ? `${s} ` : '') + label;
 			};
@@ -100,21 +99,21 @@ class NotesScreenComponent extends BaseScreenComponent {
 	async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		await this.refreshNotes();
-		AppState.addEventListener('change', this.onAppStateChange_);
+		this.onAppStateChangeSub_ = RNAppState.addEventListener('change', this.onAppStateChange_);
 	}
 
 	async componentWillUnmount() {
-		AppState.removeEventListener('change', this.onAppStateChange_);
+		if (this.onAppStateChangeSub_) this.onAppStateChangeSub_.remove();
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
-	async componentDidUpdate(prevProps) {
+	async componentDidUpdate(prevProps: any) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
 			await this.refreshNotes(this.props);
 		}
 	}
 
-	async refreshNotes(props = null) {
+	async refreshNotes(props: any = null) {
 		if (props === null) props = this.props;
 
 		const options = {
@@ -150,9 +149,9 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	deleteFolder_onPress(folderId) {
+	deleteFolder_onPress(folderId: string) {
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then(ok => {
+		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then((ok: boolean) => {
 			if (!ok) return;
 
 			Folder.delete(folderId)
@@ -171,7 +170,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	editFolder_onPress(folderId) {
+	editFolder_onPress(folderId: string) {
 		this.props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Folder',
@@ -179,7 +178,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	newNoteNavigate = async (folderId, isTodo) => {
+	newNoteNavigate = async (folderId: string, isTodo: boolean) => {
 		const newNote = await Note.save({
 			parent_id: folderId,
 			is_todo: isTodo ? 1 : 0,
@@ -192,7 +191,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		});
 	};
 
-	parentItem(props = null) {
+	parentItem(props: any = null) {
 		if (!props) props = this.props;
 
 		let output = null;
@@ -259,7 +258,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 					label: _('New to-do'),
 					onPress: () => {
 						const isTodo = true;
-						this.newNoteNavigate(buttonFolderId, isTodo);
+						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
 					icon: 'md-checkbox-outline',
@@ -269,7 +268,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 					label: _('New note'),
 					onPress: () => {
 						const isTodo = false;
-						this.newNoteNavigate(buttonFolderId, isTodo);
+						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
 					icon: 'md-document',
@@ -287,7 +286,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
 				<DialogBox
-					ref={dialogbox => {
+					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
 				/>
@@ -296,7 +295,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const NotesScreen = connect(state => {
+const NotesScreen = connect((state: AppState) => {
 	return {
 		folders: state.folders,
 		tags: state.tags,
@@ -314,6 +313,6 @@ const NotesScreen = connect(state => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
 	};
-})(NotesScreenComponent);
+})(NotesScreenComponent as any);
 
-module.exports = { NotesScreen };
+export default NotesScreen as any;
