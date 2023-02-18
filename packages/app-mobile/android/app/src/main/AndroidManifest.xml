@@ -82,11 +82,10 @@
 		<!-- SHARE EXTENSION -->
 		<activity
 			android:noHistory="true"
-			android:name=".share.ShareActivity"
+			android:name=".ShareActivity"
 			android:configChanges="orientation"
 			android:label="@string/app_name"
 			android:excludeFromRecents="true"
-			android:launchMode="singleTask"
 			android:theme="@style/AppTheme"
 			android:exported="true">
 			<intent-filter>
