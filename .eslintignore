@@ -483,6 +483,7 @@ packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
+packages/lib/components/shared/note-screen-shared.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
