@@ -20881,7 +20881,7 @@ __metadata:
     keytar: 7.9.0
     md5: 2.3.0
     node-rsa: 1.1.1
-    open: 8.4.0
+    open: 8.4.1
     proper-lockfile: 4.1.2
     read-chunk: 2.1.0
     server-destroy: 1.0.1
@@ -24919,14 +24919,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"open@npm:8.4.0":
-  version: 8.4.0
-  resolution: "open@npm:8.4.0"
+"open@npm:8.4.1":
+  version: 8.4.1
+  resolution: "open@npm:8.4.1"
   dependencies:
     define-lazy-prop: ^2.0.0
     is-docker: ^2.1.1
     is-wsl: ^2.2.0
-  checksum: e9545bec64cdbf30a0c35c1bdc310344adf8428a117f7d8df3c0af0a0a24c513b304916a6d9b11db0190ff7225c2d578885080b761ed46a3d5f6f1eebb98b63c
+  checksum: dbe8e1d98889df60b5179eab8b94b9591744d1f0033bce1a9a10738ba140bd9d625d6bcde7ff9f043e379aafb918975c2daa03b87cef13eb046ac18ed807f06d
   languageName: node
   linkType: hard
 
