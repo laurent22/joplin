@@ -26261,6 +26261,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-camera@patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch::locator=root%40workspace%3A.":
+  version: 4.2.1
+  resolution: "react-native-camera@patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch::version=4.2.1&hash=e9c70e&locator=root%40workspace%3A."
+  dependencies:
+    prop-types: ^15.6.2
+  checksum: 09a95a91cf3669c86083980f9dc1b4270d1d7f53d29ae3f3f69a44c99abf5380d5bcc816006826a888bef8b17cce1d75aff09779c288bcabe22671ab8dae5f37
+  languageName: node
+  linkType: hard
+
 "react-native-codegen@npm:^0.70.6":
   version: 0.70.6
   resolution: "react-native-codegen@npm:0.70.6"
