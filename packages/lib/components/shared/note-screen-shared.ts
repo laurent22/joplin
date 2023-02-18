@@ -20,7 +20,7 @@ interface Shared {
 	isModified?: (comp: any)=> boolean;
 	initState?: (comp: any)=> void;
 	toggleIsTodo_onPress?: (comp: any)=> void;
-	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> void;
+	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
 	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> void;
 	installResourceHandling?: (refreshResourceHandler: any)=> void;
 	uninstallResourceHandling?: (refreshResourceHandler: any)=> void;
@@ -329,4 +329,4 @@ shared.uninstallResourceHandling = function(refreshResourceHandler: any) {
 	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
 };
 
-module.exports = shared;
+export default shared;
