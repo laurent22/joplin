@@ -154,7 +154,7 @@ class AlarmUtil {
         if (scheduleType.equals("once")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            } else if (alarmManager.canScheduleExactAlarms()) {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             } else {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
@@ -176,7 +176,7 @@ class AlarmUtil {
                 duration = value;
                 break;
             case "hourly":
-                duration = 60 * value;
+                duration = 60L * value;
                 break;
             case "daily":
                 duration = 60 * 24;
@@ -317,9 +317,9 @@ class AlarmUtil {
             int smallIconResId;
             String smallIcon = alarm.getSmallIcon();
             if (smallIcon != null && !smallIcon.equals("")) {
-                smallIconResId = res.getIdentifier(smallIcon, "mipmap", packageName);
+                smallIconResId = res.getIdentifier(smallIcon, "drawable", packageName);
             } else {
-                smallIconResId = res.getIdentifier("ic_launcher", "mipmap", packageName);
+                smallIconResId = res.getIdentifier("ic_notification", "drawable", packageName);
             }
 
             Intent intent = new Intent(context, intentClass);
@@ -329,7 +329,7 @@ class AlarmUtil {
             intent.putExtra(Constants.NOTIFICATION_ID, alarm.getId());
             intent.putExtra("data", alarm.getData());
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelID)
                     .setSmallIcon(smallIconResId)
@@ -378,11 +378,9 @@ class AlarmUtil {
             }
 
             //color
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String color = alarm.getColor();
-                if (color != null && !color.equals("")) {
-                    mBuilder.setColor(Color.parseColor(color));
-                }
+            String color = alarm.getColor();
+            if (color != null && !color.equals("")) {
+                mBuilder.setColor(Color.parseColor(color));
             }
 
             mBuilder.setContentIntent(pendingIntent);
