@@ -117,6 +117,8 @@ import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 
+const logger = Logger.create('root');
+
 let storeDispatch = function(_action: any) {};
 
 const logReducerAction = function(action: any) {
@@ -727,17 +729,23 @@ class AppComponent extends React.Component {
 		};
 
 		this.handleOpenURL_ = (event: any) => {
+			logger.info('Sharing: handleOpenURL_: start');
+
 			// If this is called while biometrics haven't been done yet, we can
 			// ignore the call, because handleShareData() will be called once
 			// biometricsDone is `true`.
 			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
+				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
 			}
 		};
 
 		this.handleNewShare_ = () => {
+			logger.info('Sharing: handleNewShare_: start');
+
 			// look at this.handleOpenURL_ comment
 			if (this.props.biometricsDone) {
+				logger.info('Sharing: handleNewShare_: Processing share data');
 				void this.handleShareData();
 			}
 		};
@@ -865,6 +873,7 @@ class AppComponent extends React.Component {
 		}
 
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
+			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
 		}
 	}
@@ -892,9 +901,13 @@ class AppComponent extends React.Component {
 
 	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
+
+		logger.info('Sharing: handleShareData:', sharedData);
+
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
+				logger.info('Sharing: handleShareData: Processing...');
 				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
