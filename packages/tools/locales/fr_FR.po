@@ -4588,7 +4588,7 @@ msgstr "Basculer liste de notes"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
 msgid "Toggle own sort order"
-msgstr "Utiliser le tri personaliser"
+msgstr "Utiliser le tri personnalisé"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
