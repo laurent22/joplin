@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -21,6 +22,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.ViewManager;
 
 import java.io.File;
@@ -42,11 +44,14 @@ public class SharePackage implements ReactPackage {
         return Collections.emptyList();
     }
 
-    public static class ShareModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+    public static class ShareModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
+        private boolean handledStartIntent = false;
+        private Intent receivedShareIntent = null;
 
         ShareModule(@NonNull ReactApplicationContext reactContext) {
             super(reactContext);
             reactContext.addActivityEventListener(this);
+            reactContext.addLifecycleEventListener(this);
         }
 
         @Override
@@ -55,6 +60,14 @@ public class SharePackage implements ReactPackage {
 
         @Override
         public void onNewIntent(Intent intent) {
+            if (intent == null || !(Intent.ACTION_SEND.equals(intent.getAction())
+                    || Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction()))) {
+                return;
+            }
+            receivedShareIntent = intent;
+            this.getReactApplicationContext()
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("new_share_intent", null);
         }
 
         @NonNull
@@ -77,37 +90,29 @@ public class SharePackage implements ReactPackage {
         }
 
         private WritableMap processIntent() {
-            Activity currentActivity = getCurrentActivity();
             WritableMap map = Arguments.createMap();
 
-            if (currentActivity == null) {
+            if (receivedShareIntent == null) {
                 return null;
             }
 
-            Intent intent = currentActivity.getIntent();
-
-            if (intent == null || !(Intent.ACTION_SEND.equals(intent.getAction())
-                || Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction()))) {
+            if (receivedShareIntent.getBooleanExtra("is_processed", false)) {
                 return null;
             }
 
-            if (intent.getBooleanExtra("is_processed", false)) {
-                return null;
-            }
-
-            String type = intent.getType() == null ? "" : intent.getType();
+            String type = receivedShareIntent.getType() == null ? "" : receivedShareIntent.getType();
             map.putString("type", type);
-            map.putString("title", getTitle(intent));
-            map.putString("text", intent.getStringExtra(Intent.EXTRA_TEXT));
+            map.putString("title", getTitle(receivedShareIntent));
+            map.putString("text", receivedShareIntent.getStringExtra(Intent.EXTRA_TEXT));
 
             WritableArray resources = Arguments.createArray();
 
-            if (Intent.ACTION_SEND.equals(intent.getAction())) {
-                if (intent.hasExtra(Intent.EXTRA_STREAM)) {
-                    resources.pushMap(getFileData(intent.getParcelableExtra(Intent.EXTRA_STREAM)));
+            if (Intent.ACTION_SEND.equals(receivedShareIntent.getAction())) {
+                if (receivedShareIntent.hasExtra(Intent.EXTRA_STREAM)) {
+                    resources.pushMap(getFileData(receivedShareIntent.getParcelableExtra(Intent.EXTRA_STREAM)));
                 }
-            } else if (Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
-                ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            } else if (Intent.ACTION_SEND_MULTIPLE.equals(receivedShareIntent.getAction())) {
+                ArrayList<Uri> imageUris = receivedShareIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
                 if (imageUris != null) {
                     for (Uri uri : imageUris) {
                         resources.pushMap(getFileData(uri));
@@ -116,7 +121,7 @@ public class SharePackage implements ReactPackage {
             }
 
             map.putArray("resources", resources);
-            intent.putExtra("is_processed", true);
+            receivedShareIntent.putExtra("is_processed", true);
             return map;
         }
 
@@ -184,6 +189,37 @@ public class SharePackage implements ReactPackage {
                 ext = file.substring(i + 1);
             }
             return ext;
+        }
+
+        @ReactMethod
+        public void addListener(String eventName) {
+            // Set up any upstream listeners or background tasks as necessary
+        }
+
+        @ReactMethod
+        public void removeListeners(Integer count) {
+            // Remove upstream listeners, stop unnecessary background tasks
+        }
+
+        @Override
+        public void onHostResume() {
+            if (this.getCurrentActivity() != null) {
+                Intent intent = this.getCurrentActivity().getIntent();
+                if (this.handledStartIntent) {
+                    // sometimes onHostResume is fired after onNewIntent
+                    // and we only care about the activity intent when the first time app opens
+                    return;
+                }
+                this.handledStartIntent = true;
+                this.onNewIntent(intent);
+            }
+        }
+
+        @Override
+        public void onHostPause() {}
+
+        @Override
+        public void onHostDestroy() {
         }
     }
 }

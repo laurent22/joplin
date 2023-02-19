@@ -735,6 +735,15 @@ class AppComponent extends React.Component {
 			}
 		};
 
+		this.handleNewShare_ = () => {
+			// look at this.handleOpenURL_ comment
+			if (this.props.biometricsDone) {
+				void this.handleShareData();
+			}
+		};
+
+		this.unsubscribeNewShareListener_ = ShareExtension.addShareListener(this.handleNewShare_);
+
 		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
@@ -840,6 +849,11 @@ class AppComponent extends React.Component {
 		}
 
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
+
+		if (this.unsubscribeNewShareListener_) {
+			this.unsubscribeNewShareListener_();
+			this.unsubscribeNewShareListener_ = undefined;
+		}
 	}
 
 	public componentDidUpdate(prevProps: any) {

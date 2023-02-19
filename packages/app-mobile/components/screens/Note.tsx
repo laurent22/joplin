@@ -139,15 +139,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 
 			if (this.state.fromShare) {
-				// effectively the same as NAV_BACK but NAV_BACK causes undesired behaviour in this case:
-				// - share to Joplin from some other app
-				// - open Joplin and open any note
-				// - go back -- with NAV_BACK this causes the app to exit rather than just showing notes
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Notes',
-					folderId: this.state.note.parent_id,
-				});
+				ShareExtension.close();
 				return true;
 			}
 
@@ -457,10 +449,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		NavService.removeHandler(this.navHandler);
 
 		shared.uninstallResourceHandling(this.refreshResource);
-
-		if (this.state.fromShare) {
-			ShareExtension.close();
-		}
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
 
