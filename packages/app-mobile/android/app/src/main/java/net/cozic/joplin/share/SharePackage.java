@@ -78,10 +78,13 @@ public class SharePackage implements ReactPackage {
 
         @ReactMethod
         public void close() {
-            Activity currentActivity = getCurrentActivity();
-            if (currentActivity != null) {
-                currentActivity.finish();
-            }
+            // We disable this, because otherwise it would close the whole application
+            // https://github.com/laurent22/joplin/issues/7791#issuecomment-1436078948
+
+            // Activity currentActivity = getCurrentActivity();
+            // if (currentActivity != null) {
+            //     currentActivity.finish();
+            // }
         }
 
         @ReactMethod

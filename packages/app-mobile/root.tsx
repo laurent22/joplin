@@ -729,7 +729,7 @@ class AppComponent extends React.Component {
 		};
 
 		this.handleOpenURL_ = (event: any) => {
-			logger.info('Sharing: handleOpenURL_: start');
+			// logger.info('Sharing: handleOpenURL_: start');
 
 			// If this is called while biometrics haven't been done yet, we can
 			// ignore the call, because handleShareData() will be called once
@@ -741,7 +741,7 @@ class AppComponent extends React.Component {
 		};
 
 		this.handleNewShare_ = () => {
-			logger.info('Sharing: handleNewShare_: start');
+			// logger.info('Sharing: handleNewShare_: start');
 
 			// look at this.handleOpenURL_ comment
 			if (this.props.biometricsDone) {

@@ -120,27 +120,29 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 	comp.setState(newState);
 
 	if (isProvisionalNote) {
-		const geoNote: any = await Note.updateGeolocation(note.id);
+		const updateGeoloc = async () => {
+			const geoNote: NoteEntity = await Note.updateGeolocation(note.id);
 
-		// TODO: CHECK - this code has never worked??
+			const stateNote = comp.state.note;
+			if (!stateNote || !geoNote) return;
+			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
 
-		const stateNote = comp.state.note;
-		if (!stateNote || !geoNote) return;
-		if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
+			// Geo-location for this note has been saved to the database however the properties
+			// are is not in the state so set them now.
 
-		// Geo-location for this note has been saved to the database however the properties
-		// are is not in the state so set them now.
+			const geoInfo = {
+				longitude: geoNote.longitude,
+				latitude: geoNote.latitude,
+				altitude: geoNote.altitude,
+			};
 
-		const geoInfo = {
-			longitude: geoNote.longitude,
-			latitude: geoNote.latitude,
-			altitude: geoNote.altitude,
+			const modNote = Object.assign({}, stateNote, geoInfo);
+			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
+
+			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
 		};
 
-		const modNote = Object.assign({}, stateNote, geoInfo);
-		const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
-
-		comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
+		await updateGeoloc();
 	}
 
 	releaseMutex();
