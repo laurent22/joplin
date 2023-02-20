@@ -68,14 +68,14 @@ export default class Database {
 		this.logger().info('Database was open successfully');
 	}
 
-	escapeField = (field: string) => {
+	public escapeField(field: string) {
 		if (field === '*') return '*';
 		const p = field.split('.');
 		if (p.length === 1) return `\`${field}\``;
 		if (p.length === 2) return `${p[0]}.\`${p[1]}\``;
 
 		throw new Error(`Invalid field format: ${field}`);
-	};
+	}
 
 	public escapeFields(fields: string[] | string): string[] | string {
 		if (fields === '*') return '*';
@@ -161,7 +161,17 @@ export default class Database {
 		return this.tryCall('selectOne', sql, params);
 	}
 
-	loadExtension = async () => undefined;
+	async loadExtension(/* path */) {
+		return; // Disabled for now as fuzzy search extension is not in use
+
+		// let result =  null;
+		// try {
+		// 	result = await this.driver().loadExtension(path);
+		// 	return result;
+		// } catch (e) {
+		// 	throw new Error(`Could not load extension ${path}`);
+		// }
+	}
 
 	async selectAll(sql: string, params: SqlParams = null): Promise<Row[]> {
 		return this.tryCall('selectAll', sql, params);
@@ -230,7 +240,7 @@ export default class Database {
 		throw new Error(`Unknown enum type or value: ${type}, ${s}`);
 	}
 
-	enumName = (type: string, id: number) => {
+	static enumName(type: string, id: number) {
 		if (type === 'fieldType') {
 			if (id === Database.TYPE_UNKNOWN) return 'unknown';
 			if (id === Database.TYPE_INT) return 'int';
@@ -241,7 +251,7 @@ export default class Database {
 
 		// Or maybe an error should be thrown
 		return undefined;
-	};
+	}
 
 	static formatValue(type: number, value: any) {
 		if (value === null || value === undefined) return null;
@@ -251,7 +261,7 @@ export default class Database {
 		throw new Error(`Unknown type: ${type}`);
 	}
 
-	sqlStringToLines = (sql: string) => {
+	sqlStringToLines(sql: string) {
 		const output = [];
 		const lines = sql.split('\n');
 		let statement = '';
@@ -267,7 +277,7 @@ export default class Database {
 			}
 		}
 		return output;
-	};
+	}
 
 	logQuery(sql: string, params: SqlParams = null) {
 		if (!this.sqlQueryLogEnabled_) return;
@@ -283,7 +293,7 @@ export default class Database {
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}
 
-	insertQuery = (tableName: string, data: Record<string, any>) => {
+	static insertQuery(tableName: string, data: Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
 		let keySql = '';
@@ -302,9 +312,9 @@ export default class Database {
 			sql: `INSERT INTO \`${tableName}\` (${keySql}) VALUES (${valueSql})`,
 			params: params,
 		};
-	};
+	}
 
-	updateQuery = (tableName: string, data: Record<string, any>, where: string | Record<string, any>) => {
+	static updateQuery(tableName: string, data: Record<string, any>, where: string | Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
 		let sql = '';
@@ -331,7 +341,7 @@ export default class Database {
 			sql: `UPDATE \`${tableName}\` SET ${sql} WHERE ${where}`,
 			params: params,
 		};
-	};
+	}
 
 	alterColumnQueries(tableName: string, fields: Record<string, string>) {
 		const fieldsNoType = [];
@@ -371,7 +381,7 @@ export default class Database {
 		return output;
 	}
 
-	wrapQuery = (sql: any, params: SqlParams = null): SqlQuery => {
+	wrapQuery(sql: any, params: SqlParams = null): SqlQuery {
 		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 
 		if (Array.isArray(sql)) {
@@ -384,5 +394,5 @@ export default class Database {
 		} else {
 			return sql; // Already wrapped
 		}
-	};
+	}
 }
