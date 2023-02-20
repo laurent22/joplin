@@ -251,7 +251,7 @@ export default class Note extends BaseItem {
 		return output;
 	}
 
-	// Note: sort logic must be duplicated in previews();
+	// Note: sort logic must be duplicated in previews().
 	static sortNotes(notes: NoteEntity[], orders: any[], uncompletedTodosOnTop: boolean) {
 		const noteOnTop = (note: NoteEntity) => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
@@ -815,11 +815,9 @@ export default class Note extends BaseItem {
 
 	// When notes are sorted in "custom order", they are sorted by the "order" field first and,
 	// in those cases, where the order field is the same for some notes, by created time.
-	static customOrderByColumns(type: string = null) {
-		if (!type) type = 'object';
-		if (type === 'object') return [{ by: 'order', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }];
-		if (type === 'string') return 'ORDER BY `order` DESC, user_created_time DESC';
-		throw new Error(`Invalid type: ${type}`);
+	// Further sorting by todo completion status, if enabled, is handled separately.
+	static customOrderByColumns() {
+		return [{ by: 'order', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }];
 	}
 
 	// Update the note "order" field without changing the user timestamps,
@@ -836,7 +834,7 @@ export default class Note extends BaseItem {
 	// of unecessary updates, so it's the caller's responsability to update
 	// the UI once the call is finished. This is done by listening to the
 	// NOTE_IS_INSERTING_NOTES action in the application middleware.
-	static async insertNotesAt(folderId: string, noteIds: string[], index: number) {
+	static async insertNotesAt(folderId: string, noteIds: string[], index: number, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean) {
 		if (!noteIds.length) return;
 
 		const defer = () => {
@@ -852,13 +850,21 @@ export default class Note extends BaseItem {
 		});
 
 		try {
-			const noteSql = `
-				SELECT id, \`order\`, user_created_time, user_updated_time
-				FROM notes
-				WHERE is_conflict = 0 AND parent_id = ?
-			${this.customOrderByColumns('string')}`;
+			const getSortedNotes = async (folderId: string) => {
+				const noteSql = `
+					SELECT id, \`order\`, user_created_time, user_updated_time,
+						is_todo, todo_completed, title
+					FROM notes
+					WHERE
+						is_conflict = 0
+						${showCompletedTodos ? '' : 'AND todo_completed = 0'}
+					AND parent_id = ?
+				`;
+				const notes_raw: NoteEntity[] = await this.modelSelectAll(noteSql, [folderId]);
+				return await this.sortNotes(notes_raw, this.customOrderByColumns(), uncompletedTodosOnTop);
+			};
 
-			let notes = await this.modelSelectAll(noteSql, [folderId]);
+			let notes = await getSortedNotes(folderId);
 
 			// If the target index is the same as the source note index, exit now
 			for (let i = 0; i < notes.length; i++) {
@@ -878,7 +884,39 @@ export default class Note extends BaseItem {
 				}
 			}
 
-			if (hasSetOrder) notes = await this.modelSelectAll(noteSql, [folderId]);
+			if (hasSetOrder) notes = await getSortedNotes(folderId);
+
+			// If uncompletedTodosOnTop, then we should only consider the existing
+			// order of same-completion-window notes. A completed todo or non-todo
+			// dragged into the uncompleted list should end up at the start of the
+			// completed/non-todo list, and an uncompleted todo dragged into the
+			// completed/non-todo list should end up at the end of the uncompleted
+			// list.
+			// To make this determination we need to know the completion status of the
+			// item we are dropping. We apply several simplifications:
+			//  - We only care about completion status if uncompletedTodosOnTop
+			//  - We only care about completion status / position if the item being
+			//     moved is already in the current list; not if it is dropped from
+			//     another notebook.
+			//  - We only care about the completion status of the first item being
+			//     moved. If a moving selection includes both uncompleted and
+			//     completed/non-todo items, then the completed/non-todo items will
+			//     not get "correct" position (although even defining a "more correct"
+			//     outcome in such a case might be challenging).
+			let relevantExistingNoteCount = notes.length;
+			let firstRelevantNoteIndex = 0;
+			let lastRelevantNoteIndex = notes.length - 1;
+			if (uncompletedTodosOnTop) {
+				const uncompletedTest = (n: NoteEntity) => !(n.todo_completed || !n.is_todo);
+				const targetNoteInNotebook = notes.find(n => n.id === noteIds[0]);
+				if (targetNoteInNotebook) {
+					const targetUncompleted = uncompletedTest(targetNoteInNotebook);
+					const noteFilterCondition = targetUncompleted ? (n: NoteEntity) => uncompletedTest(n) : (n: NoteEntity) => !uncompletedTest(n);
+					relevantExistingNoteCount = notes.filter(noteFilterCondition).length;
+					firstRelevantNoteIndex = notes.findIndex(noteFilterCondition);
+					lastRelevantNoteIndex = notes.map(noteFilterCondition).lastIndexOf(true);
+				}
+			}
 
 			// Find the order value for the first note to be inserted,
 			// and the increment between the order values of each inserted notes.
@@ -886,14 +924,14 @@ export default class Note extends BaseItem {
 			let intervalBetweenNotes = 0;
 			const defaultIntevalBetweeNotes = 60 * 60 * 1000;
 
-			if (!notes.length) { // If there's no notes in the target notebook
+			if (!relevantExistingNoteCount) { // If there's no (relevant) notes in the target notebook
 				newOrder = Date.now();
 				intervalBetweenNotes = defaultIntevalBetweeNotes;
-			} else if (index >= notes.length) { // Insert at the end
-				intervalBetweenNotes = notes[notes.length - 1].order / (noteIds.length + 1);
-				newOrder = notes[notes.length - 1].order - intervalBetweenNotes;
-			} else if (index === 0) { // Insert at the beginning
-				const firstNoteOrder = notes[0].order;
+			} else if (index > lastRelevantNoteIndex) { // Insert at the end (of relevant group)
+				intervalBetweenNotes = notes[lastRelevantNoteIndex].order / (noteIds.length + 1);
+				newOrder = notes[lastRelevantNoteIndex].order - intervalBetweenNotes;
+			} else if (index <= firstRelevantNoteIndex) { // Insert at the beginning (of relevant group)
+				const firstNoteOrder = notes[firstRelevantNoteIndex].order;
 				if (firstNoteOrder >= Date.now()) {
 					intervalBetweenNotes = defaultIntevalBetweeNotes;
 					newOrder = firstNoteOrder + defaultIntevalBetweeNotes;

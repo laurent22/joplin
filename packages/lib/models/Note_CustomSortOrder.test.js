@@ -204,4 +204,76 @@ describe('models/Note_CustomSortOrder', function() {
 		expect(sortedNotes[3].id).toBe(notes[0].id);
 	}));
 
+	it('should account for completion-hidden and uncompleted-on-top todos', (async () => {
+		const folder1 = await Folder.save({});
+
+		const notes = [];
+		notes.push(await Note.save({ order: 1006, parent_id: folder1.id, is_todo: true, todo_completed: time.unixMs() })); await time.msleep(2);
+		notes.push(await Note.save({ order: 1005, parent_id: folder1.id, is_todo: true })); await time.msleep(2);
+		notes.push(await Note.save({ order: 1004, parent_id: folder1.id })); await time.msleep(2);
+		notes.push(await Note.save({ order: 1003, parent_id: folder1.id })); await time.msleep(2);
+		notes.push(await Note.save({ order: 1002, parent_id: folder1.id })); await time.msleep(2);
+		notes.push(await Note.save({ order: 1001, parent_id: folder1.id, is_todo: true })); await time.msleep(2);
+		notes.push(await Note.save({ order: 1000, parent_id: folder1.id, is_todo: true })); await time.msleep(2);
+
+		const sortNotes = async () => await Note.previews(folder1.id, {
+			fields: ['id', 'order', 'user_created_time', 'is_todo', 'todo_completed'],
+			order: Note.customOrderByColumns(),
+			uncompletedTodosOnTop: true,
+			showCompletedTodos: false,
+		});
+
+		// Initial sort is as expected in UI, with completed item missing, and uncompleted
+		// todos at top.
+		const initialSortedNotes = await sortNotes();
+		expect(initialSortedNotes.length).toBe(6);
+		expect(initialSortedNotes[0].id).toBe(notes[1].id);
+		expect(initialSortedNotes[1].id).toBe(notes[5].id);
+		expect(initialSortedNotes[2].id).toBe(notes[6].id);
+		expect(initialSortedNotes[3].id).toBe(notes[2].id);
+		expect(initialSortedNotes[4].id).toBe(notes[3].id);
+		expect(initialSortedNotes[5].id).toBe(notes[4].id);
+
+		// Regular reorder - place a note within its window
+		await Note.insertNotesAt(folder1.id, [initialSortedNotes[5].id], 4, true, false);
+
+		// Post-reorder, the updated note is at the index requested
+		const resortedNotes1 = await sortNotes();
+		expect(resortedNotes1.length).toBe(6);
+		expect(resortedNotes1[0].id).toBe(initialSortedNotes[0].id);
+		expect(resortedNotes1[1].id).toBe(initialSortedNotes[1].id);
+		expect(resortedNotes1[2].id).toBe(initialSortedNotes[2].id);
+		expect(resortedNotes1[3].id).toBe(initialSortedNotes[3].id);
+		expect(resortedNotes1[4].id).toBe(initialSortedNotes[5].id);
+		expect(resortedNotes1[5].id).toBe(initialSortedNotes[4].id);
+
+		// Limit reorder - place the note into another window
+		await Note.insertNotesAt(folder1.id, [resortedNotes1[4].id], 2, true, false);
+
+		// Post-reorder, the updated note is not at the index requested, but
+		// as close as possible: at the top edge of its window.
+		const resortedNotes2 = await sortNotes();
+		expect(resortedNotes2.length).toBe(6);
+		expect(resortedNotes2[0].id).toBe(resortedNotes1[0].id);
+		expect(resortedNotes2[1].id).toBe(resortedNotes1[1].id);
+		expect(resortedNotes2[2].id).toBe(resortedNotes1[2].id);
+		expect(resortedNotes2[3].id).toBe(resortedNotes1[4].id);
+		expect(resortedNotes2[4].id).toBe(resortedNotes1[3].id);
+		expect(resortedNotes2[5].id).toBe(resortedNotes1[5].id);
+
+		// Limit reorder - place an uncompleted todo into another window
+		await Note.insertNotesAt(folder1.id, [resortedNotes2[0].id], 4, true, false);
+
+		// Post-reorder, the updated todo is not at the index requested, but
+		// as close as possible: at the lower edge of its window.
+		const resortedNotes3 = await sortNotes();
+		expect(resortedNotes3.length).toBe(6);
+		expect(resortedNotes3[0].id).toBe(resortedNotes2[1].id);
+		expect(resortedNotes3[1].id).toBe(resortedNotes2[2].id);
+		expect(resortedNotes3[2].id).toBe(resortedNotes2[0].id);
+		expect(resortedNotes3[3].id).toBe(resortedNotes2[3].id);
+		expect(resortedNotes3[4].id).toBe(resortedNotes2[4].id);
+		expect(resortedNotes3[5].id).toBe(resortedNotes2[5].id);
+	}));
+
 });
