@@ -53,7 +53,7 @@ export default class AlarmServiceDriver {
 			title: notification.title,
 			message: notification.body ? notification.body : '-', // Required
 			channel: 'net.cozic.joplin.notification',
-			icon: 'ic_notification', // Android requires the icon to be transparent
+			small_icon: 'ic_notification', // Android requires the icon to be transparent
 			color: '#FF1377DA',
 			data: {
 				joplinNotificationId: notification.id,
