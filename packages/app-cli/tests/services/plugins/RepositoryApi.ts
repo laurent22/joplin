@@ -8,7 +8,7 @@ async function newRepoApi(): Promise<RepositoryApi> {
 	return repo;
 }
 
-describe('services_plugins_RepositoryApi', function() {
+describe('services_plugins_RepositoryApi', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

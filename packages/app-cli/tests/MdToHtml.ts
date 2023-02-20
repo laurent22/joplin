@@ -16,7 +16,7 @@ function newTestMdToHtml(options: any = null) {
 	return new MdToHtml(options);
 }
 
-describe('MdToHtml', function() {
+describe('MdToHtml', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

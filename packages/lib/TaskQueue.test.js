@@ -1,7 +1,7 @@
 const { setupDatabaseAndSynchronizer, sleep, switchClient } = require('./testing/test-utils.js');
 const TaskQueue = require('./TaskQueue').default;
 
-describe('TaskQueue', function() {
+describe('TaskQueue', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

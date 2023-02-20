@@ -6,7 +6,7 @@ import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 const WelcomeUtils = require('../../WelcomeUtils');
 
-describe('Synchronizer.basics', function() {
+describe('Synchronizer.basics', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

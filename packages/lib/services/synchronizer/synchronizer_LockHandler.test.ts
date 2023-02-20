@@ -20,7 +20,7 @@ function lockHandler(): LockHandler {
 	return lockHandler_;
 }
 
-describe('synchronizer_LockHandler', function() {
+describe('synchronizer_LockHandler', () => {
 
 	beforeEach(async () => {
 		// logger.setLevel(Logger.LEVEL_WARN);

@@ -35,7 +35,7 @@ const createNoteForPagination = async (numOrTitle: number | string, time: number
 
 let api: Api = null;
 
-describe('services_rest_Api', function() {
+describe('services_rest_Api', () => {
 
 	beforeEach(async () => {
 		api = new Api();

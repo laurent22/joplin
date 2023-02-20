@@ -674,7 +674,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						props_onDrop.current(event);
 					});
 
-					editor.on('ObjectResized', function(event: any) {
+					editor.on('ObjectResized', (event: any) => {
 						if (event.target.nodeName === 'IMG') {
 							editor.fire(TinyMceEditorEvents.JoplinChange);
 							dispatchDidUpdate(editor);

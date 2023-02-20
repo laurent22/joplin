@@ -15,7 +15,7 @@ import { loadMasterKeysFromSettings } from '../e2ee/utils';
 
 let insideBeforeEach = false;
 
-describe('Synchronizer.resources', function() {
+describe('Synchronizer.resources', () => {
 
 	beforeEach(async () => {
 		insideBeforeEach = true;

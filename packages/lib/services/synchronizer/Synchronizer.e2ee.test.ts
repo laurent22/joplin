@@ -18,7 +18,7 @@ function newResourceFetcher(synchronizer: Synchronizer) {
 	return new ResourceFetcher(() => { return synchronizer.api(); });
 }
 
-describe('Synchronizer.e2ee', function() {
+describe('Synchronizer.e2ee', () => {
 
 	beforeEach(async () => {
 		insideBeforeEach = true;

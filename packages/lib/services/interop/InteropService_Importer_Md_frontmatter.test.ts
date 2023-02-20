@@ -5,7 +5,7 @@ import time from '../../time';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 
 
-describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
+describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 	async function importNote(path: string) {
 		const importer = new InteropService_Importer_Md_frontmatter();
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
@@ -16,7 +16,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
-	it('should import file and set all metadata correctly', async function() {
+	it('should import file and set all metadata correctly', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/full.md`);
 		const format = 'DD/MM/YYYY HH:mm';
 
@@ -41,14 +41,14 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		expect(tagTitles).toContain('note');
 		expect(tagTitles).toContain('pencil');
 	});
-	it('should only import data from the first yaml block', async function() {
+	it('should only import data from the first yaml block', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/split.md`);
 
 		expect(note.title).toBe('xxx');
 		expect(note.author).not.toBe('xxx');
 		expect(note.body).toBe('---\nauthor: xxx\n---\n\nnote body\n');
 	});
-	it('should only import, duplicate notes and tags are not created', async function() {
+	it('should only import, duplicate notes and tags are not created', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/duplicates.md`);
 
 		expect(note.title).toBe('ddd');
@@ -58,13 +58,13 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(1);
 	});
-	it('should not import items as numbers', async function() {
+	it('should not import items as numbers', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/numbers.md`);
 
 		expect(note.title).toBe('001');
 		expect(note.body).toBe('note body\n');
 	});
-	it('should normalize whitespace and load correctly', async function() {
+	it('should normalize whitespace and load correctly', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/normalize.md`);
 
 		expect(note.title).toBe('norm');
@@ -73,7 +73,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(3);
 	});
-	it('should load unquoted special forms correctly', async function() {
+	it('should load unquoted special forms correctly', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/unquoted.md`);
 
 		expect(note.title).toBe('Unquoted');
@@ -83,19 +83,19 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		expect(note.is_todo).toBe(1);
 		expect(note.todo_completed).toBeUndefined();
 	});
-	it('should load notes with newline in the title', async function() {
+	it('should load notes with newline in the title', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/title_newline.md`);
 
 		expect(note.title).toBe('First\nSecond');
 	});
-	it('should import dates (without time) correctly', async function() {
+	it('should import dates (without time) correctly', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/short_date.md`);
 		const format = 'YYYY-MM-DD HH:mm';
 
 		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('2021-01-01 00:00');
 		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('2017-01-01 00:00');
 	});
-	it('should load tags even with the inline syntax', async function() {
+	it('should load tags even with the inline syntax', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/inline_tags.md`);
 
 		expect(note.title).toBe('Inline Tags');
@@ -103,7 +103,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(2);
 	});
-	it('should import r-markdown files correctly and set what metadata it can', async function() {
+	it('should import r-markdown files correctly and set what metadata it can', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/r-markdown.md`);
 		const format = 'YYYY-MM-DD HH:mm';
 
@@ -119,13 +119,13 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		expect(tagTitles).toContain('yaml');
 		expect(tagTitles).toContain('rmd');
 	});
-	it('should import r-markdown files with alternative author syntax', async function() {
+	it('should import r-markdown files with alternative author syntax', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/r-markdown_author.md`);
 
 		expect(note.title).toBe('Distill for R Markdown');
 		expect(note.author).toBe('JJ Allaire');
 	});
-	it('should handle date formats with timezone information', async function() {
+	it('should handle date formats with timezone information', async () => {
 		const note = await importNote(`${supportDir}/test_notes/yaml/utc.md`);
 
 		expect(note.user_updated_time).toBe(1556729640000);

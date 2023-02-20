@@ -58,7 +58,7 @@ const compareOutputToExpected = (options) => {
 	}));
 };
 
-describe('EnexToHtml', function() {
+describe('EnexToHtml', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

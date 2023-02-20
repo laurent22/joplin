@@ -53,7 +53,7 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 	// would be ignored. I don't think it's happening anymore, but something to keep in mind
 	// anyway.
 
-	return new Promise(function(resolve, reject) {
+	return new Promise((resolve, reject) => {
 		// Note: we manually handle closing the file so that we can
 		// force flusing it before close. This is needed because
 		// "end" might be called before the file has been flushed
@@ -528,7 +528,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			}
 		}));
 
-		saxStream.on('opentag', handleSaxStreamEvent(function(node: Node) {
+		saxStream.on('opentag', handleSaxStreamEvent((node: Node) => {
 			const n = node.name.toLowerCase();
 			nodes.push(node);
 
@@ -551,7 +551,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			}
 		}));
 
-		saxStream.on('cdata', handleSaxStreamEvent(function(data: any) {
+		saxStream.on('cdata', handleSaxStreamEvent((data: any) => {
 			const n = currentNodeName();
 
 			if (noteResourceRecognition) {
@@ -633,7 +633,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			}
 		}));
 
-		saxStream.on('end', handleSaxStreamEvent(function() {
+		saxStream.on('end', handleSaxStreamEvent(() => {
 			// Wait till there is no more notes to process.
 			const iid = shim.setInterval(() => {
 				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied

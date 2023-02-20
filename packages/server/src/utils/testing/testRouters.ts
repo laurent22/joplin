@@ -132,7 +132,7 @@ async function main() {
 		serverProcess.kill();
 	};
 
-	process.on('SIGINT', function() {
+	process.on('SIGINT', () => {
 		console.info('Received SIGINT signal - killing server');
 		cleanUp();
 		process.exit();

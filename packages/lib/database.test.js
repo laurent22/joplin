@@ -1,7 +1,7 @@
 const { setupDatabaseAndSynchronizer, switchClient } = require('./testing/test-utils.js');
 const BaseModel = require('./BaseModel').default;
 
-describe('database', function() {
+describe('database', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

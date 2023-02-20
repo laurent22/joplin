@@ -31,7 +31,7 @@ const packageInfo = {
 	},
 };
 
-describe('getPluginLists', function() {
+describe('getPluginLists', () => {
 
 	beforeAll(() => {
 		(reg.db as jest.Mock).mockReturnValue(mockedDb);

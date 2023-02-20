@@ -14,7 +14,7 @@ function parseUri(str) {
 	while (i--) uri[o.key[i]] = m[i] || '';
 
 	uri[o.q.name] = {};
-	uri[o.key[12]].replace(o.q.parser, function($0, $1, $2) {
+	uri[o.key[12]].replace(o.q.parser, ($0, $1, $2) => {
 		if ($1) uri[o.q.name][$1] = $2;
 	});
 

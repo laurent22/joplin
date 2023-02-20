@@ -143,6 +143,7 @@ module.exports = {
 		// - notebook: In code, it should always be "folder" (not "notebook").
 		//   In user-facing text, it should be "notebook".
 		'id-denylist': ['error', 'err', 'notebook', 'notebooks'],
+		'prefer-arrow-callback': ['error'],
 	},
 	'plugins': [
 		'react',

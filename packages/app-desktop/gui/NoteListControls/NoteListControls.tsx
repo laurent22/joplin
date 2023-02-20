@@ -69,7 +69,7 @@ const SortOrderButtonsContainer = styled.div`
 function NoteListControls(props: Props) {
 	const searchBarRef = useRef(null);
 
-	useEffect(function() {
+	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
 
 		return function() {

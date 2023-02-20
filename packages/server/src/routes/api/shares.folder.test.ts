@@ -9,7 +9,7 @@ import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '..
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
-describe('shares.folder', function() {
+describe('shares.folder', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('shares.folder');
@@ -23,7 +23,7 @@ describe('shares.folder', function() {
 		await beforeEachDb();
 	});
 
-	test('should share a folder with another user', async function() {
+	test('should share a folder with another user', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const folderItem = await createFolder(session1.id, { title: 'created by sharer' });
@@ -97,7 +97,7 @@ describe('shares.folder', function() {
 		}
 	});
 
-	test('should share a folder and all its children', async function() {
+	test('should share a folder and all its children', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -152,7 +152,7 @@ describe('shares.folder', function() {
 		expect(children2.items.map(i => i.name).sort().join(',')).toBe(expectedNames.sort().join(','));
 	});
 
-	test('should received shared items only once invitation accepted', async function() {
+	test('should received shared items only once invitation accepted', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -185,7 +185,7 @@ describe('shares.folder', function() {
 		}
 	});
 
-	test('should share when a note is added to a shared folder', async function() {
+	test('should share when a note is added to a shared folder', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -213,7 +213,7 @@ describe('shares.folder', function() {
 		expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
 	});
 
-	test('should update share status when note parent changes', async function() {
+	test('should update share status when note parent changes', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -329,7 +329,7 @@ describe('shares.folder', function() {
 		}
 	});
 
-	test('should update share status when note parent changes more than once between updates', async function() {
+	test('should update share status when note parent changes more than once between updates', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -367,7 +367,7 @@ describe('shares.folder', function() {
 		expect(newChildren.items[0].id).toBe(folderItem1.id);
 	});
 
-	test('should not throw an error if an item is associated with a share that no longer exists', async function() {
+	test('should not throw an error if an item is associated with a share that no longer exists', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -385,7 +385,7 @@ describe('shares.folder', function() {
 		await expectNotThrow(async () => await models().share().updateSharedItems3());
 	});
 
-	test('should not throw an error if a change is associated with an item that no longer exists', async function() {
+	test('should not throw an error if a change is associated with an item that no longer exists', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -414,7 +414,7 @@ describe('shares.folder', function() {
 		await expectNotThrow(async () => await models().share().updateSharedItems3());
 	});
 
-	test('should not throw an error if a user no longer has a user item, and the target share changes', async function() {
+	test('should not throw an error if a user no longer has a user item, and the target share changes', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -451,7 +451,7 @@ describe('shares.folder', function() {
 		await expectNotThrow(async () => await models().share().updateSharedItems3());
 	});
 
-	test('should unshare a deleted item', async function() {
+	test('should unshare a deleted item', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -470,7 +470,7 @@ describe('shares.folder', function() {
 		expect((await models().item().children(user2.id)).items.length).toBe(1);
 	});
 
-	test('should unshare a deleted shared root folder', async function() {
+	test('should unshare a deleted shared root folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -502,7 +502,7 @@ describe('shares.folder', function() {
 		// Test deleting the share, but not the root folder
 	});
 
-	test('should unshare when the share object is deleted', async function() {
+	test('should unshare when the share object is deleted', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -545,7 +545,7 @@ describe('shares.folder', function() {
 	// 	expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
 	// });
 
-	test('should see delta changes for linked items', async function() {
+	test('should see delta changes for linked items', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -622,7 +622,7 @@ describe('shares.folder', function() {
 		}
 	});
 
-	test('should get delta changes - user 2 sync, user 1 share and sync, user 2 sync', async function() {
+	test('should get delta changes - user 2 sync, user 1 share and sync, user 2 sync', async () => {
 		// - User 1 sync
 		// - User 2 sync - and keep delta2
 		// - User 1 share a folder with user 2
@@ -653,7 +653,7 @@ describe('shares.folder', function() {
 		expect(latestChanges2.items.length).toBe(2);
 	});
 
-	test('should get delta changes - user 1 and 2 are in sync, user 2 adds a note to shared folder', async function() {
+	test('should get delta changes - user 1 and 2 are in sync, user 2 adds a note to shared folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -682,7 +682,7 @@ describe('shares.folder', function() {
 		expect(latestChanges1.items[0].item_name).toBe('00000000000000000000000000000002.md');
 	});
 
-	test('should get delta changes - user 1 and 2 are in sync, user 2 moves a note out of shared folder', async function() {
+	test('should get delta changes - user 1 and 2 are in sync, user 2 moves a note out of shared folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -708,7 +708,7 @@ describe('shares.folder', function() {
 		expect(latestChanges1.items[0].item_id).toBe(noteItem.id);
 	});
 
-	test('should get delta changes - user 1 and 2 are in sync, user 1 deletes invitation', async function() {
+	test('should get delta changes - user 1 and 2 are in sync, user 1 deletes invitation', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -748,7 +748,7 @@ describe('shares.folder', function() {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
 
-	test('should share an empty folder', async function() {
+	test('should share an empty folder', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -760,7 +760,7 @@ describe('shares.folder', function() {
 		]);
 	});
 
-	test('should unshare from a non-owner user who has deleted the root folder', async function() {
+	test('should unshare from a non-owner user who has deleted the root folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -785,7 +785,7 @@ describe('shares.folder', function() {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
 
-	test('should unshare a folder', async function() {
+	test('should unshare a folder', async () => {
 		// The process to unshare a folder is as follow:
 		//
 		// - Client call DELETE /api/share/:id
@@ -847,7 +847,7 @@ describe('shares.folder', function() {
 	// 	expect(children.items.find(c => c.id === noteItem1.id)).toBeTruthy();
 	// });
 
-	test('should check permissions - cannot share a folder with yourself', async function() {
+	test('should check permissions - cannot share a folder with yourself', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		await createItemTree(user1.id, '', { '000000000000000000000000000000F1': {} });
@@ -855,7 +855,7 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user1.email }), ErrorForbidden.httpCode);
 	});
 
-	test('should check permissions - cannot share a folder twice with a user', async function() {
+	test('should check permissions - cannot share a folder twice with a user', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
@@ -865,7 +865,7 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi(session1.id, `shares/${share.id}/users`, { email: user2.email }), ErrorForbidden.httpCode);
 	});
 
-	test('should check permissions - cannot share a non-root folder', async function() {
+	test('should check permissions - cannot share a non-root folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		await createItemTree(user1.id, '', {
@@ -877,7 +877,7 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F2' }), ErrorForbidden.httpCode);
 	});
 
-	test('should check permissions - cannot share if share feature not enabled', async function() {
+	test('should check permissions - cannot share if share feature not enabled', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 		await models().user().save({ id: user1.id, can_share_folder: 0 });
@@ -893,7 +893,7 @@ describe('shares.folder', function() {
 		);
 	});
 
-	test('should check permissions - cannot share if share feature not enabled for recipient', async function() {
+	test('should check permissions - cannot share if share feature not enabled for recipient', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		await models().user().save({ id: user2.id, can_share_folder: 0 });
@@ -909,7 +909,7 @@ describe('shares.folder', function() {
 		);
 	});
 
-	test('should check permissions - by default sharing by note is always possible', async function() {
+	test('should check permissions - by default sharing by note is always possible', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 
 		const noteItem = await createNote(session1.id, {
@@ -925,7 +925,7 @@ describe('shares.folder', function() {
 		expect(share).toBeTruthy();
 	});
 
-	test('should check permissions - cannot share with a disabled account', async function() {
+	test('should check permissions - cannot share with a disabled account', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		await models().user().save({
@@ -944,7 +944,7 @@ describe('shares.folder', function() {
 		);
 	});
 
-	test('should allow sharing, unsharing and sharing again', async function() {
+	test('should allow sharing, unsharing and sharing again', async () => {
 		// - U1 share a folder that contains a note
 		// - U2 accept
 		// - U2 syncs

@@ -3,7 +3,7 @@ import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
 	try {
-		await db.schema.alterTable('emails', function(table: Knex.CreateTableBuilder) {
+		await db.schema.alterTable('emails', (table: Knex.CreateTableBuilder) => {
 			table.text('key', 'mediumtext').defaultTo('').notNullable();
 		});
 	} catch (error) {

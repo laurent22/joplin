@@ -33,7 +33,7 @@ function mockService(api: any) {
 	return service;
 }
 
-describe('ShareService', function() {
+describe('ShareService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

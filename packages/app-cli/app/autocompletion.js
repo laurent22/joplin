@@ -125,14 +125,14 @@ async function handleAutocompletionPromise(line) {
 }
 function handleAutocompletion(str, callback) {
 // eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	handleAutocompletionPromise(str).then(function(res) {
+	handleAutocompletionPromise(str).then((res) => {
 		callback(undefined, res);
 	});
 }
 function toCommandLine(args) {
 	if (Array.isArray(args)) {
 		return args
-			.map(function(a) {
+			.map((a) => {
 				if (a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
 					return `'${a}'`;
 				} else if (a.indexOf('\'') !== -1) {

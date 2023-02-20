@@ -108,7 +108,7 @@ async function mockPluginData() {
 	return tgzData;
 }
 
-describe('bundleDefaultPlugins', function() {
+describe('bundleDefaultPlugins', () => {
 
 	const testDefaultPluginsInfo = {
 		'plugin.calebjohn.rich-markdown': {

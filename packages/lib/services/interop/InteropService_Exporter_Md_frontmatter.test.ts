@@ -13,7 +13,7 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
-describe('interop/InteropService_Exporter_Md_frontmatter', function() {
+describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 	async function exportAndLoad(path: string): Promise<string> {
 		const service = InteropService.instance();
 

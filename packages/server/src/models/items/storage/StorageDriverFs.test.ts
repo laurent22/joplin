@@ -17,7 +17,7 @@ const newConfig = (path: string = null): StorageDriverConfig => {
 	};
 };
 
-describe('StorageDriverFs', function() {
+describe('StorageDriverFs', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('StorageDriverFs');
@@ -45,14 +45,14 @@ describe('StorageDriverFs', function() {
 	shouldUpdateContentStorageIdAfterSwitchingDriver(newConfig(), { type: StorageDriverType.Memory });
 	shouldThrowNotFoundIfNotExist(newConfig());
 
-	test('should write to a file and read it back', async function() {
+	test('should write to a file and read it back', async () => {
 		const driver = newDriver();
 		await driver.write('testing', Buffer.from('testing'));
 		const content = await driver.read('testing');
 		expect(content.toString()).toBe('testing');
 	});
 
-	test('should automatically create the base path', async function() {
+	test('should automatically create the base path', async () => {
 		const tmp = `${tempDirPath()}/testcreate`;
 		expect(await pathExists(tmp)).toBe(false);
 		const driver = newDriver(tmp);
@@ -60,7 +60,7 @@ describe('StorageDriverFs', function() {
 		expect(await pathExists(tmp)).toBe(true);
 	});
 
-	test('should not throw if deleting a file that does not exist', async function() {
+	test('should not throw if deleting a file that does not exist', async () => {
 		const driver = newDriver();
 		await expectNotThrow(async () => driver.delete('notthere'));
 	});

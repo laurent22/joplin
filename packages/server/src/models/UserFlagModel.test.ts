@@ -1,7 +1,7 @@
 import { UserFlagType } from '../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession } from '../utils/testing/testUtils';
 
-describe('UserFlagModel', function() {
+describe('UserFlagModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('UserFlagModel');
@@ -15,7 +15,7 @@ describe('UserFlagModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should create no more than one flag per type', async function() {
+	test('should create no more than one flag per type', async () => {
 		const { user } = await createUserAndSession(1);
 
 		const beforeTime = Date.now();
@@ -39,7 +39,7 @@ describe('UserFlagModel', function() {
 		expect(flag.id).not.toBe(differentFlag.id);
 	});
 
-	test('should set the timestamp when disabling an account', async function() {
+	test('should set the timestamp when disabling an account', async () => {
 		const { user } = await createUserAndSession(1);
 
 		const beforeTime = Date.now();
