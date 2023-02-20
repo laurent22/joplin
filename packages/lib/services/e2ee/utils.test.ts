@@ -5,7 +5,7 @@ import { localSyncInfo, masterKeyById, masterKeyEnabled, setActiveMasterKeyId, s
 import Setting from '../../models/Setting';
 import { generateKeyPair, ppkPasswordIsValid } from './ppk';
 
-describe('e2ee/utils', function() {
+describe('e2ee/utils', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

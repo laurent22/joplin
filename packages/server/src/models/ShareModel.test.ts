@@ -3,7 +3,7 @@ import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { ShareType } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
 
-describe('ShareModel', function() {
+describe('ShareModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ShareModel');
@@ -17,7 +17,7 @@ describe('ShareModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should validate share objects', async function() {
+	test('should validate share objects', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const item = await createItem(session.id, 'root:/test.txt:', 'testing');
@@ -31,7 +31,7 @@ describe('ShareModel', function() {
 		expect(error instanceof ErrorNotFound).toBe(true);
 	});
 
-	test('should get all shares of a user', async function() {
+	test('should get all shares of a user', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3, session: session3 } = await createUserAndSession(3);
@@ -83,7 +83,7 @@ describe('ShareModel', function() {
 		expect(participatedShares3[0].folder_id).toBe('000000000000000000000000000000F1');
 	});
 
-	test('should generate only one link per shared note', async function() {
+	test('should generate only one link per shared note', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		await createItemTree(user1.id, '', {
@@ -98,7 +98,7 @@ describe('ShareModel', function() {
 		expect(share1.id).toBe(share2.id);
 	});
 
-	test('should delete a note that has been shared', async function() {
+	test('should delete a note that has been shared', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		await createItemTree(user1.id, '', {
@@ -113,7 +113,7 @@ describe('ShareModel', function() {
 		expect(await models().item().load(noteItem.id)).toBeFalsy();
 	});
 
-	test('should count number of items in share', async function() {
+	test('should count number of items in share', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -131,7 +131,7 @@ describe('ShareModel', function() {
 		expect(await models().share().itemCountByShareId(share.id)).toBe(0);
 	});
 
-	test('should count number of items in share per recipient', async function() {
+	test('should count number of items in share per recipient', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
@@ -153,7 +153,7 @@ describe('ShareModel', function() {
 		expect(rows.find(r => r.user_id === user3.id).item_count).toBe(2);
 	});
 
-	test('should create user items for shared folder', async function() {
+	test('should create user items for shared folder', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);

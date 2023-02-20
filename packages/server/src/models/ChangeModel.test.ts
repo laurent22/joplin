@@ -4,7 +4,7 @@ import { Day, msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
 import { SqliteMaxVariableNum } from '../db';
 
-describe('ChangeModel', function() {
+describe('ChangeModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ChangeModel');
@@ -18,7 +18,7 @@ describe('ChangeModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should track changes - create only', async function() {
+	test('should track changes - create only', async () => {
 		const { session, user } = await createUserAndSession(1, true);
 		const changeModel = models().change();
 
@@ -32,7 +32,7 @@ describe('ChangeModel', function() {
 		}
 	});
 
-	test('should track changes - create, then update', async function() {
+	test('should track changes - create, then update', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const itemModel = models().item();
 		const changeModel = models().change();
@@ -113,7 +113,7 @@ describe('ChangeModel', function() {
 		}
 	});
 
-	test('should throw an error if cursor is invalid', async function() {
+	test('should throw an error if cursor is invalid', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const itemModel = models().item();
 		const changeModel = models().change();
@@ -125,7 +125,7 @@ describe('ChangeModel', function() {
 		await expectThrow(async () => changeModel.delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});
 
-	test('should tell that there are more changes even when current page is empty', async function() {
+	test('should tell that there are more changes even when current page is empty', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		const changeCount = 10;
@@ -159,7 +159,7 @@ describe('ChangeModel', function() {
 		expect(allFromIds3.has_more).toBe(false);
 	});
 
-	test('should not fail when retrieving many changes', async function() {
+	test('should not fail when retrieving many changes', async () => {
 		// Create many changes and verify that, by default, the SQL query that
 		// returns change doesn't fail. Before the max number of items was set
 		// to 1000 and it would fail with "SQLITE_ERROR: too many SQL variables"
@@ -178,7 +178,7 @@ describe('ChangeModel', function() {
 		expect(changeCount).toBe(SqliteMaxVariableNum);
 	});
 
-	test('should delete old changes', async function() {
+	test('should delete old changes', async () => {
 		// Create the following events:
 		//
 		// T1   2020-01-01    U1 Create

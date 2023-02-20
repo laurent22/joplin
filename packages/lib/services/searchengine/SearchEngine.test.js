@@ -57,7 +57,7 @@ const calculateScore = (searchString, notes) => {
 	return scores;
 };
 
-describe('services_SearchEngine', function() {
+describe('services_SearchEngine', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

@@ -3,7 +3,7 @@ const { setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-
 const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 
-describe('models/Note_CustomSortOrder', function() {
+describe('models/Note_CustomSortOrder', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

@@ -15,7 +15,7 @@ async function updateCodeProjVersions(filePath: string) {
 	let newVersionId = 0;
 
 	// MARKETING_VERSION = 10.1.0;
-	newContent = newContent.replace(/(MARKETING_VERSION = )(\d+\.\d+)\.(\d+)(.*)/g, function(_match, prefix, majorMinorVersion, buildNum, suffix) {
+	newContent = newContent.replace(/(MARKETING_VERSION = )(\d+\.\d+)\.(\d+)(.*)/g, (_match, prefix, majorMinorVersion, buildNum, suffix) => {
 		const n = Number(buildNum);
 		if (isNaN(n)) throw new Error(`Invalid version code: ${buildNum}`);
 		newVersion = `${majorMinorVersion}.${n + 1}`;
@@ -23,7 +23,7 @@ async function updateCodeProjVersions(filePath: string) {
 	});
 
 	// CURRENT_PROJECT_VERSION = 58;
-	newContent = newContent.replace(/(CURRENT_PROJECT_VERSION = )(\d+)(.*)/g, function(_match, prefix, projectVersion, suffix) {
+	newContent = newContent.replace(/(CURRENT_PROJECT_VERSION = )(\d+)(.*)/g, (_match, prefix, projectVersion, suffix) => {
 		const n = Number(projectVersion);
 		if (isNaN(n)) throw new Error(`Invalid version code: ${projectVersion}`);
 		newVersionId = n + 1;

@@ -4,7 +4,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { clearLocalDataForRedownload, clearLocalSyncStateForReupload } from '../../services/synchronizer/tools';
 
-describe('Synchronizer.tools', function() {
+describe('Synchronizer.tools', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

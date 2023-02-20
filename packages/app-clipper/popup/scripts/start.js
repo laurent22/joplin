@@ -130,8 +130,8 @@ checkBrowsers(paths.appPath, isInteractive)
 			openBrowser(urls.localUrlForBrowser);
 		});
 
-		['SIGINT', 'SIGTERM'].forEach(function(sig) {
-			process.on(sig, function() {
+		['SIGINT', 'SIGTERM'].forEach((sig) => {
+			process.on(sig, () => {
 				devServer.close();
 				process.exit();
 			});

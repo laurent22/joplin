@@ -1,7 +1,7 @@
 import Setting from '../models/Setting';
 import time from '../time';
 
-describe('dateFormats', function() {
+describe('dateFormats', () => {
 
 
 

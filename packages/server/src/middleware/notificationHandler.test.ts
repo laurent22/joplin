@@ -10,7 +10,7 @@ const runNotificationHandler = async (sessionId: string): Promise<AppContext> =>
 	return context;
 };
 
-describe('notificationHandler', function() {
+describe('notificationHandler', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('notificationHandler');
@@ -24,7 +24,7 @@ describe('notificationHandler', function() {
 		await beforeEachDb();
 	});
 
-	test('should check admin password', async function() {
+	test('should check admin password', async () => {
 		const r = await createUserAndSession(1, true);
 		const session = r.session;
 		let admin = r.user;
@@ -70,7 +70,7 @@ describe('notificationHandler', function() {
 		}
 	});
 
-	test('should not check admin password for non-admin', async function() {
+	test('should not check admin password for non-admin', async () => {
 		const { session } = await createUserAndSession(1, false);
 
 		await createUserAndSession(2, true, {
@@ -84,7 +84,7 @@ describe('notificationHandler', function() {
 		expect(notifications.length).toBe(0);
 	});
 
-	test('should display a banner if the account is disabled', async function() {
+	test('should display a banner if the account is disabled', async () => {
 		const { session, user } = await createUserAndSession(1);
 
 		await models().userFlag().add(user.id, UserFlagType.FailedPaymentFinal);
@@ -94,7 +94,7 @@ describe('notificationHandler', function() {
 		expect(ctx.joplin.notifications.find(v => v.id === 'accountDisabled')).toBeTruthy();
 	});
 
-	test('should display a banner if the email is not confirmed', async function() {
+	test('should display a banner if the email is not confirmed', async () => {
 		const { session, user } = await createUserAndSession(1);
 
 		{

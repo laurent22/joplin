@@ -422,7 +422,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: any) {
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
 		newContext.statsCache = await getDirStatFn(path);
-		newContext.statsCache.sort(function(a: any, b: any) {
+		newContext.statsCache.sort((a: any, b: any) => {
 			return a.updated_time - b.updated_time;
 		});
 		newContext.statIdsCache = newContext.statsCache.filter((item: any) => BaseItem.isSystemPath(item.path)).map((item: any) => BaseItem.pathToId(item.path));

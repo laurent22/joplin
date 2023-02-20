@@ -2,7 +2,7 @@ import { EventType } from '../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 import { msleep } from '../utils/time';
 
-describe('EventModel', function() {
+describe('EventModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('EventModel');
@@ -16,7 +16,7 @@ describe('EventModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should create an event', async function() {
+	test('should create an event', async () => {
 		await models().event().create(EventType.TaskStarted, 'deleteExpiredTokens');
 
 		const events = await models().event().all();
@@ -25,7 +25,7 @@ describe('EventModel', function() {
 		expect(events[0].name).toBe('deleteExpiredTokens');
 	});
 
-	test('should get the latest event', async function() {
+	test('should get the latest event', async () => {
 		await models().event().create(EventType.TaskStarted, 'deleteExpiredTokens');
 		await msleep(1);
 		await models().event().create(EventType.TaskStarted, 'deleteExpiredTokens');

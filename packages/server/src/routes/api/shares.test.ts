@@ -4,7 +4,7 @@ import { postApi, getApi } from '../../utils/testing/apiUtils';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { PaginatedResults } from '../../models/utils/pagination';
 
-describe('shares', function() {
+describe('shares', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('shares');
@@ -18,7 +18,7 @@ describe('shares', function() {
 		await beforeEachDb();
 	});
 
-	test('should retrieve share info', async function() {
+	test('should retrieve share info', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);

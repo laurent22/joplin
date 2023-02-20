@@ -9,7 +9,7 @@ import Resource from '../models/Resource';
 import SearchEngine from '../services/searchengine/SearchEngine';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/utils';
 
-describe('services/ResourceService', function() {
+describe('services/ResourceService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

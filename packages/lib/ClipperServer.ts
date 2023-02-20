@@ -198,7 +198,7 @@ export default class ClipperServer {
 				if (contentType.indexOf('multipart/form-data') === 0) {
 					const form = new multiparty.Form();
 
-					form.parse(request, function(error: any, fields: any, files: any) {
+					form.parse(request, (error: any, fields: any, files: any) => {
 						if (error) {
 							writeResponse(error.httpCode ? error.httpCode : 500, error.message);
 							return;

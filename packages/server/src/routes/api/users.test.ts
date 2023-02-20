@@ -2,7 +2,7 @@ import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models } from '../../utils/testing/testUtils';
 
-describe('api_users', function() {
+describe('api_users', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('api_users');
@@ -16,7 +16,7 @@ describe('api_users', function() {
 		await beforeEachDb();
 	});
 
-	test('should create a user', async function() {
+	test('should create a user', async () => {
 		const { session: adminSession } = await createUserAndSession(1, true);
 
 		const userToSave: User = {
@@ -37,7 +37,7 @@ describe('api_users', function() {
 		expect(savedUser.must_set_password).toBe(1);
 	});
 
-	test('should patch a user', async function() {
+	test('should patch a user', async () => {
 		const { session: adminSession } = await createUserAndSession(1, true);
 		const { user } = await createUserAndSession(2);
 
@@ -49,7 +49,7 @@ describe('api_users', function() {
 		expect(savedUser.max_item_size).toBe(1000);
 	});
 
-	test('should get a user', async function() {
+	test('should get a user', async () => {
 		const { session: adminSession } = await createUserAndSession(1, true);
 		const { user } = await createUserAndSession(2);
 
@@ -59,7 +59,7 @@ describe('api_users', function() {
 		expect(fetchedUser.email).toBe(user.email);
 	});
 
-	test('should delete a user', async function() {
+	test('should delete a user', async () => {
 		const { session: adminSession } = await createUserAndSession(1, true);
 		const { user } = await createUserAndSession(2);
 
@@ -69,7 +69,7 @@ describe('api_users', function() {
 		expect(loadedUser).toBeFalsy();
 	});
 
-	test('should list users', async function() {
+	test('should list users', async () => {
 		const { session: adminSession } = await createUserAndSession(1, true);
 		await createUserAndSession(2);
 		await createUserAndSession(3);

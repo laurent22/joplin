@@ -6,7 +6,7 @@ import { ErrorConflict, ErrorUnprocessableEntity } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession, expectHttpError } from '../utils/testing/testUtils';
 import { LockType, LockClientType, defaultLockTtl } from '@joplin/lib/services/synchronizer/LockHandler';
 
-describe('LockModel', function() {
+describe('LockModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('LockModel');
@@ -20,7 +20,7 @@ describe('LockModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should allow exclusive lock if the sync locks have expired', async function() {
+	test('should allow exclusive lock if the sync locks have expired', async () => {
 		jest.useFakeTimers();
 
 		const { user } = await createUserAndSession(1);
@@ -45,7 +45,7 @@ describe('LockModel', function() {
 		jest.useRealTimers();
 	});
 
-	test('should keep user locks separated', async function() {
+	test('should keep user locks separated', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
@@ -59,7 +59,7 @@ describe('LockModel', function() {
 		expect(exclusiveLock).toBeTruthy();
 	});
 
-	test('should validate locks', async function() {
+	test('should validate locks', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		await expectHttpError(async () => models().lock().acquireLock(user1.id, 'wrongtype' as any, LockClientType.Desktop, '1111'), ErrorUnprocessableEntity.httpCode);
@@ -67,7 +67,7 @@ describe('LockModel', function() {
 		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, LockClientType.Desktop, 'veryverylongclientidveryverylongclientidveryverylongclientidveryverylongclientid'), ErrorUnprocessableEntity.httpCode);
 	});
 
-	test('should expire locks', async function() {
+	test('should expire locks', async () => {
 		const { user } = await createUserAndSession(1);
 
 		jest.useFakeTimers();

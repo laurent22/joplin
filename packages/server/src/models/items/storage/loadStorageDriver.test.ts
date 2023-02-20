@@ -2,7 +2,7 @@ import { afterAllTests, beforeAllDb, beforeEachDb, db, expectThrow, models } fro
 import { StorageDriverType } from '../../../utils/types';
 import loadStorageDriver from './loadStorageDriver';
 
-describe('loadStorageDriver', function() {
+describe('loadStorageDriver', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('loadStorageDriver');
@@ -16,7 +16,7 @@ describe('loadStorageDriver', function() {
 		await beforeEachDb();
 	});
 
-	test('should load a driver and assign an ID to it', async function() {
+	test('should load a driver and assign an ID to it', async () => {
 		{
 			const newDriver = await loadStorageDriver({ type: StorageDriverType.Memory }, db());
 			expect(newDriver.storageId).toBe(1);
@@ -30,7 +30,7 @@ describe('loadStorageDriver', function() {
 		}
 	});
 
-	test('should not record the same storage connection twice', async function() {
+	test('should not record the same storage connection twice', async () => {
 		await db()('storages').insert({
 			connection_string: 'Type=Database',
 			updated_time: Date.now(),

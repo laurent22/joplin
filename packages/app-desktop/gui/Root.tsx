@@ -98,7 +98,7 @@ const GlobalStyle = createGlobalStyle`
 let wcsTimeoutId_: any = null;
 
 async function initialize() {
-	bridge().window().on('resize', function() {
+	bridge().window().on('resize', () => {
 		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
 
 		wcsTimeoutId_ = shim.setTimeout(() => {

@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
-	await db.schema.createTable('notifications', function(table: Knex.CreateTableBuilder) {
+	await db.schema.createTable('notifications', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('owner_id', 32).notNullable();
 		table.integer('level').notNullable();
@@ -14,7 +14,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await db.schema.alterTable('notifications', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('notifications', (table: Knex.CreateTableBuilder) => {
 		table.unique(['owner_id', 'key']);
 	});
 }

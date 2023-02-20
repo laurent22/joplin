@@ -2,12 +2,12 @@ import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
-	await db.schema.alterTable('users', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.integer('email_confirmed').defaultTo(0).notNullable();
 		table.integer('must_set_password').defaultTo(0).notNullable();
 	});
 
-	await db.schema.createTable('emails', function(table: Knex.CreateTableBuilder) {
+	await db.schema.createTable('emails', (table: Knex.CreateTableBuilder) => {
 		table.increments('id').unique().primary().notNullable();
 		table.text('recipient_name', 'mediumtext').defaultTo('').notNullable();
 		table.text('recipient_email', 'mediumtext').defaultTo('').notNullable();
@@ -22,7 +22,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await db.schema.createTable('tokens', function(table: Knex.CreateTableBuilder) {
+	await db.schema.createTable('tokens', (table: Knex.CreateTableBuilder) => {
 		table.increments('id').unique().primary().notNullable();
 		table.string('value', 32).notNullable();
 		table.string('user_id', 32).defaultTo('').notNullable();
@@ -30,14 +30,14 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
-	await db.schema.alterTable('emails', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('emails', (table: Knex.CreateTableBuilder) => {
 		table.index(['sent_time']);
 		table.index(['sent_success']);
 	});
 
 	await db('users').update({ email_confirmed: 1 });
 
-	await db.schema.alterTable('tokens', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('tokens', (table: Knex.CreateTableBuilder) => {
 		table.index(['value', 'user_id']);
 	});
 }

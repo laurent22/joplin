@@ -13,7 +13,7 @@ import Resource from './models/Resource';
 
 const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
-describe('import-enex-md-gen', function() {
+describe('import-enex-md-gen', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
