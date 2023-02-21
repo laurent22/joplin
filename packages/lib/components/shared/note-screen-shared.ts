@@ -21,7 +21,7 @@ interface Shared {
 	initState?: (comp: any)=> void;
 	toggleIsTodo_onPress?: (comp: any)=> void;
 	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
-	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> void;
+	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> string;
 	installResourceHandling?: (refreshResourceHandler: any)=> void;
 	uninstallResourceHandling?: (refreshResourceHandler: any)=> void;
 }
