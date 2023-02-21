@@ -359,7 +359,7 @@ const NoteListComponent = (props: Props) => {
 		if ((direction === -1)) {
 			targetNoteIndex -= 1;
 		}
-		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
 	};
 
 	const onKeyDown = async (event: any) => {
@@ -368,7 +368,7 @@ const NoteListComponent = (props: Props) => {
 
 		if ((keyCode === 40 || keyCode === 38) && event.altKey) {
 			// (DOWN / UP) & ALT
-			await noteItem_noteMove(keyCode == 40 ? 1 : -1);
+			await noteItem_noteMove(keyCode === 40 ? 1 : -1);
 			event.preventDefault();
 		} else if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
