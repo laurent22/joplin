@@ -5,6 +5,7 @@ const migrationScripts: Record<number, any> = {
 	27: require('../migrations/27.js'),
 	33: require('../migrations/33.js'),
 	35: require('../migrations/35.js'),
+	42: require('../migrations/42.js'),
 };
 
 export default class Migration extends BaseModel {
