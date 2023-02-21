@@ -73,7 +73,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			showImageEditor: false,
-			imageEditorData: '',
+			loadImageEditorData: null,
 			imageEditorResource: null,
 			noteResources: {},
 
@@ -774,7 +774,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private drawPicture_onPress = () => {
 		this.setState({
 			showImageEditor: true,
-			imageEditorData: '',
+			loadImageEditorData: null,
 			imageEditorResource: null,
 		});
 	};
@@ -814,10 +814,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private async editDrawing(item: BaseItem) {
 		const filePath = Resource.fullPath(item);
-		const svgData = await shim.fsDriver().readFile(filePath);
 		this.setState({
 			showImageEditor: true,
-			imageEditorData: svgData,
+			loadImageEditorData: async () => {
+				return await shim.fsDriver().readFile(filePath);
+			},
 			imageEditorResource: item,
 		});
 	}
@@ -1149,7 +1150,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
 		} else if (this.state.showImageEditor) {
 			return <ImageEditor
-				initialSVGData={this.state.imageEditorData}
+				loadInitialSVGData={this.state.loadImageEditorData}
 				themeId={this.props.themeId}
 				onSave={this.onSaveDrawing}
 				onCancel={this.onCancelDrawing}

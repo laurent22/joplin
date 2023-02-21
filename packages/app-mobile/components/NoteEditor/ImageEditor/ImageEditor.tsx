@@ -15,10 +15,11 @@ const logger = Logger.create('ImageEditor');
 
 type OnSaveCallback = (svgData: string)=> void;
 type OnCancelCallback = ()=> void;
+type LoadInitialSVGCallback = ()=> Promise<string>;
 
 interface Props {
 	themeId: number;
-	initialSVGData: string;
+	loadInitialSVGData: LoadInitialSVGCallback|null;
 	onSave: OnSaveCallback;
 	onCancel: OnCancelCallback;
 }
@@ -177,22 +178,24 @@ const ImageEditor = (props: Props) => {
 		true;
 	`, []);
 
-	const onReadyToLoadData = useCallback(() => {
-		// It can take some time for props.initialSVGData to be transferred to the WebView.
+	const onReadyToLoadData = useCallback(async () => {
+		const initialSVGData = await props.loadInitialSVGData?.() ?? '';
+
+		// It can take some time for initialSVGData to be transferred to the WebView.
 		// Thus, do so after the main content has been loaded.
 		webviewRef.current.injectJS(`
 			if (window.editor && !window.initialSVGData) {
 				// loadFromSVG shows its own loading message. Hide the original.
 				editor.hideLoadingWarning();
 
-				window.initialSVGData = ${JSON.stringify(props.initialSVGData)};
+				window.initialSVGData = ${JSON.stringify(initialSVGData)};
 
 				if (initialSVGData && initialSVGData.length > 0) {
 					editor.loadFromSVG(initialSVGData);
 				}
 			}
 		`);
-	}, [webviewRef, props.initialSVGData]);
+	}, [webviewRef, props.loadInitialSVGData]);
 
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
@@ -212,7 +215,7 @@ const ImageEditor = (props: Props) => {
 		} else if (json.action === 'close') {
 			onRequestCloseEditor();
 		} else if (json.action === 'ready-to-load-data') {
-			onReadyToLoadData();
+			void onReadyToLoadData();
 		} else if (json.action === 'set-image-has-changes') {
 			setImageChanged(json.data);
 		} else {
