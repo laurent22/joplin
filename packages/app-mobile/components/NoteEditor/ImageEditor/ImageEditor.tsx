@@ -117,9 +117,17 @@ const ImageEditor = (props: Props) => {
 		const setImageHasChanges = (hasChanges) => {
 			window.ReactNativeWebView.postMessage(
 				JSON.stringify({
-					action: 'setImageHasChanges',
+					action: 'set-image-has-changes',
 					data: hasChanges,
 				}),
+			);
+		};
+
+		const notifyReadyToLoadSVG = () => {
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					action: 'ready-to-load-data',
+				})
 			);
 		};
 
@@ -156,6 +164,24 @@ const ImageEditor = (props: Props) => {
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 				);
 
+				editor.showLoadingWarning(0);
+
+				const loadStartDelay = 10;
+				setTimeout(() => notifyReadyToLoadSVG(), loadStartDelay);
+			}
+		} catch(e) {
+			window.ReactNativeWebView.postMessage(
+				'error: ' + e.message + ': ' + JSON.stringify(e)
+			);
+		}
+		true;
+	`, []);
+
+	const onReadyToLoadData = useCallback(() => {
+		// It can take some time for props.initialSVGData to be transferred to the WebView.
+		// Thus, do so after the main content has been loaded.
+		webviewRef.current.injectJS(`
+			if (window.editor && !window.initialSVGData) {
 				// loadFromSVG shows its own loading message. Hide the original.
 				editor.hideLoadingWarning();
 
@@ -165,13 +191,8 @@ const ImageEditor = (props: Props) => {
 					editor.loadFromSVG(initialSVGData);
 				}
 			}
-		} catch(e) {
-			window.ReactNativeWebView.postMessage(
-				'error: ' + e.message + ': ' + JSON.stringify(e)
-			);
-		}
-		true;
-	`, [props.initialSVGData]);
+		`);
+	}, [webviewRef, props.initialSVGData]);
 
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
@@ -190,12 +211,14 @@ const ImageEditor = (props: Props) => {
 			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
 		} else if (json.action === 'close') {
 			onRequestCloseEditor();
-		} else if (json.action === 'setImageHasChanges') {
+		} else if (json.action === 'ready-to-load-data') {
+			onReadyToLoadData();
+		} else if (json.action === 'set-image-has-changes') {
 			setImageChanged(json.data);
 		} else {
 			logger.error('Unknown action,', json.action);
 		}
-	}, [props.onSave, onRequestCloseEditor]);
+	}, [props.onSave, onRequestCloseEditor, onReadyToLoadData]);
 
 	const onError = useCallback((event: any) => {
 		logger.error('ImageEditor: WebView error: ', event);

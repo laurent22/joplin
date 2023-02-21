@@ -4758,7 +4758,7 @@ __metadata:
     jest: 29.4.1
     jest-environment-jsdom: 29.4.1
     jetifier: 2.0.0
-    js-draw: 0.17.1
+    js-draw: 0.17.2
     jsc-android: 241213.1.0
     jsdom: 21.0.0
     lodash: 4.17.21
@@ -6240,10 +6240,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@melloware/coloris@npm:^0.16.1":
-  version: 0.16.1
-  resolution: "@melloware/coloris@npm:0.16.1"
-  checksum: 32b468ae92bba2b470896a3c3d8db71106e555f81e996dcb54a3d55557c95b1788c0f58d4cfd963b0ead8af85469459f3fcc6d3bb104dd689bdf5203715fd06d
+"@melloware/coloris@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "@melloware/coloris@npm:0.18.0"
+  checksum: dc29675acc177e880c57a9a5c4f034d50f0ec44184b2c92e51f168b69111a96a08715e81b4aba6f6e014a24506c7cb44e4a5fad6856e2cea413b786ec4a43b27
   languageName: node
   linkType: hard
 
@@ -9885,10 +9885,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bezier-js@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "bezier-js@npm:6.1.0"
-  checksum: 46b4133c821df152cf12f392313a94cd4a1a4649277367990970a2aefb8275999a594d35cff3bada92947f5e6fee423a54ba89857a3954fdcd8f04f0d475e488
+"bezier-js@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "bezier-js@npm:6.1.3"
+  checksum: 5ca3317b00c844c15b4b179f1b54638bc943d393d17dd1551777c7178017663f3d61e469e56c2c2cc5b28459380706ccc12e46d80677b9375970ca55f48b5338
   languageName: node
   linkType: hard
 
@@ -20281,13 +20281,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:0.17.1":
-  version: 0.17.1
-  resolution: "js-draw@npm:0.17.1"
+"js-draw@npm:0.17.2":
+  version: 0.17.2
+  resolution: "js-draw@npm:0.17.2"
   dependencies:
-    "@melloware/coloris": ^0.16.1
-    bezier-js: ^6.1.0
-  checksum: 04d4bb13b9793c00f86fe4ffc813538dd915e6c3b843ebd54b7da68c340fc09a0dcff0e91db000e156f0acd08b96d3cb18b56da093d83fe715477f72cd53d30b
+    "@melloware/coloris": ^0.18.0
+    bezier-js: ^6.1.3
+  checksum: 3623b0515ca520109736c5540124d0181366d74e05d9abd3b4bf57f6f1968f07848364748482a903528094e040f779a85d942f48b600a6b739d9897b02274eab
   languageName: node
   linkType: hard
 
