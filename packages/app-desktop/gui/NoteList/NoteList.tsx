@@ -346,7 +346,7 @@ const NoteListComponent = (props: Props) => {
 		return noteIndex;
 	};
 
-	const noteItem_noteMove = async (direction: any) => {
+	const noteItem_noteMove = async (direction: number) => {
 		if (!canManuallySortNotes()) {
 			return;
 		}
@@ -368,7 +368,7 @@ const NoteListComponent = (props: Props) => {
 
 		if ((keyCode === 40 || keyCode === 38) && event.altKey) {
 			// (DOWN / UP) & ALT
-			await noteItem_noteMove(keyCode - 39);
+			await noteItem_noteMove(keyCode == 40 ? 1 : -1);
 			event.preventDefault();
 		} else if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
