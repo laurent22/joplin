@@ -9,7 +9,7 @@ export default function(dependencies: HookDependencies) {
 	const { folderId } = dependencies;
 	const [folder, setFolder] = useState(null);
 
-	useEffect(function() {
+	useEffect(() => {
 		let cancelled = false;
 
 		async function loadFolder() {

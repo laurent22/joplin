@@ -43,5 +43,7 @@ export default async (sharedData: SharedData, folderId: string, dispatch: Functi
 			noteId: newNote.id,
 			sharedData: sharedData,
 		});
+
+		ShareExtension.close();
 	}, 5);
 };

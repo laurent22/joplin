@@ -15,7 +15,7 @@ let engine: any = null;
 
 const ids = (array: NoteEntity[]) => array.map(a => a.id);
 
-describe('services_SearchFilter', function() {
+describe('services_SearchFilter', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -604,7 +604,7 @@ describe('services_SearchFilter', function() {
 				const n11 = await Note.save({ title: 'I also made this', body: 'today', updated_time: today, user_updated_time: today }, { autoTimestamp: false });
 
 				const n2 = await Note.save({ title: 'I made this', body: 'yesterday', updated_time: yesterday, user_updated_time: yesterday }, { autoTimestamp: false });
-				const n3 = await Note.save({ title: 'I made this', body: 'day before yesterday', updated_time: dayBeforeYesterday ,user_updated_time: dayBeforeYesterday }, { autoTimestamp: false });
+				const n3 = await Note.save({ title: 'I made this', body: 'day before yesterday', updated_time: dayBeforeYesterday, user_updated_time: dayBeforeYesterday }, { autoTimestamp: false });
 
 				await engine.syncTables();
 

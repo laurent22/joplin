@@ -1,6 +1,6 @@
 import cssToTheme from './cssToTheme';
 
-describe('cssToTheme', function() {
+describe('cssToTheme', () => {
 
 	it('should convert a CSS string to a theme', async () => {
 		const input = `

@@ -3,17 +3,17 @@ import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
-
 const { connect } = require('react-redux');
-const { _ } = require('@joplin/lib/locale');
-const { themeStyle } = require('@joplin/lib/theme');
+import { _ } from '@joplin/lib/locale';
+import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
 import BaseModel from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
-const { ItemList } = require('../gui/ItemList.min');
-const HelpButton = require('../gui/HelpButton.min');
+import ItemList from '../gui/ItemList';
+import HelpButton from '../gui/HelpButton';
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
 import markupLanguageUtils from '../utils/markupLanguageUtils';
@@ -242,19 +242,6 @@ class Dialog extends React.PureComponent<Props, State> {
 		}, 100);
 	}
 
-	makeSearchQuery(query: string) {
-		const output = [];
-		const splitted = query.split(' ');
-
-		for (let i = 0; i < splitted.length; i++) {
-			const s = splitted[i].trim();
-			if (!s) continue;
-			output.push(`${s}*`);
-		}
-
-		return output.join(' ');
-	}
-
 	async keywords(searchQuery: string) {
 		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
@@ -321,7 +308,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				}
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
-				searchQuery = this.makeSearchQuery(this.state.query);
+				searchQuery = gotoAnythingStyleQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery);
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));

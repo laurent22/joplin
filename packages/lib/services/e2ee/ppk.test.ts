@@ -2,7 +2,7 @@ import { afterAllCleanUp, encryptionService, expectNotThrow, expectThrow, setupD
 import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from './ppk';
 import { runIntegrationTests } from './ppkTestUtils';
 
-describe('e2ee/ppk', function() {
+describe('e2ee/ppk', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

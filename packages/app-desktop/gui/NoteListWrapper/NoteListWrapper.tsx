@@ -1,4 +1,3 @@
-import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { useMemo } from 'react';
 import NoteList from '../NoteList/NoteList';
@@ -21,19 +20,16 @@ const StyledRoot = styled.div`
 `;
 
 export default function NoteListWrapper(props: Props) {
-	const theme = themeStyle(props.themeId);
-	const controlHeight = theme.topRowHeight;
-
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - controlHeight,
+			height: props.size.height,
 		};
-	}, [props.size, controlHeight]);
+	}, [props.size]);
 
 	return (
 		<StyledRoot>
-			<NoteListControls height={controlHeight} />
+			<NoteListControls />
 			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>
 	);

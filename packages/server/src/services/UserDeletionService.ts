@@ -105,7 +105,7 @@ export default class UserDeletionService extends BaseService {
 		}
 
 		let error: any = null;
-		let success: boolean = true;
+		let success = true;
 
 		try {
 			await this.models.userDeletion().start(deletion.id);

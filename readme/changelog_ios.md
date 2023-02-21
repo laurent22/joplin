@@ -1,5 +1,38 @@
 # Joplin iOS app changelog
 
+## [ios-v12.10.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.2) - 2023-01-20T17:41:13Z
+
+- New: Add support for locking the app using biometrics (f10d9f7)
+- New: Add support for multiple profiles (6bb52d5)
+- New: Add support for realtime search (767213c)
+- Improved: Configurable editor font size (#7596 by Henry Heino)
+- Improved: Confirm closing settings with unsaved changes (#7566 by Henry Heino)
+- Improved: Improve dialogue spacing in Fountain renderer (#7628) (#7627 by [@Elleo](https://github.com/Elleo))
+- Improved: Make the new text editor the default one (f5ef318)
+- Improved: Upgrade to React Native 0.70 (4bdb3d0)
+- Fixed: Enable autocorrect with spellcheck (#7532) (#6175 by Henry Heino)
+- Fixed: Fix Dropdown accessibility (#7564) (#7553 by Henry Heino)
+- Fixed: Fixed issue when floating keyboard is visible (#7593) (#6682 by Henry Heino)
+- Fixed: Fixed proxy timeout setting UI (275c80a)
+- Fixed: Remove gray line around text editor (#7595) (#7594 by Henry Heino)
+- Fixed: Settings save button visible even when no settings have been changed (#7503)
+
+## [ios-v12.10.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.1) - 2022-12-28T15:08:39Z
+
+- Improved: Switch license to AGPL-3.0 (faf0a4e)
+- Improved: Tag search case insensitive (#7368 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Update Mermaid: 9.1.7 to 9.2.2 (#7330 by Helmut K. C. Tessarek)
+- Improved: Upgrade to react-native 0.68.5 (e2d59ee)
+- Fixed: Fix CodeMirror syntax highlighting (#7386 by Henry Heino)
+- Fixed: Fix attaching multiple files (#7196) (#7195 by Self Not Found)
+- Fixed: Note viewer inertial scroll is slower than native inertial scrolling (#7470) (#7469 by Henry Heino)
+- Fixed: Update CodeMirror (#7262) (#7253 by Henry Heino)
+- Security: Fix XSS when a specially crafted string is passed to the renderer (a2de167)
+
+## [ios-v12.9.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.9.2) - 2022-12-22T12:42:26Z
+
+- Fixed: Could not attach images to notes anymore (#7471)
+
 ## [ios-v12.9.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.9.1) - 2022-12-04T18:03:02Z
 
 - New: Add Markdown toolbar (#6753 by Henry Heino)

@@ -24,9 +24,9 @@ import MasterPasswordDialog from './MasterPasswordDialog/Dialog';
 import EditFolderDialog from './EditFolderDialog/Dialog';
 import PdfViewer from './PdfViewer';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
-const { ImportScreen } = require('./ImportScreen.min.js');
+import ImportScreen from './ImportScreen';
 const { ResourceScreen } = require('./ResourceScreen.js');
-const { Navigator } = require('./Navigator.min.js');
+import Navigator from './Navigator';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
@@ -98,7 +98,7 @@ const GlobalStyle = createGlobalStyle`
 let wcsTimeoutId_: any = null;
 
 async function initialize() {
-	bridge().window().on('resize', function() {
+	bridge().window().on('resize', () => {
 		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
 
 		wcsTimeoutId_ = shim.setTimeout(() => {

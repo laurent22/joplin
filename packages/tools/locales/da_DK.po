@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -16,17 +18,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:609
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:657
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Kamera: Tilladelse til fotografering og vedhæftning af et billede til en "
 "note."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:612
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:660
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- Placering: Bruges til at vedhæfte GPS-informationer til en note."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:606
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:654
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -86,7 +88,7 @@ msgstr "&Værktøjer"
 msgid "&View"
 msgstr "&Vis"
 
-#: packages/lib/models/Setting.ts:1492
+#: packages/lib/models/Setting.ts:1517
 msgid "%d days"
 msgstr "%d dage"
 
@@ -100,11 +102,11 @@ msgstr "%d GB"
 msgid "%d GB storage space"
 msgstr "%d GB lagerplads"
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1346
 msgid "%d hour"
 msgstr "%d time"
 
-#: packages/lib/models/Setting.ts:1323 packages/lib/models/Setting.ts:1324
+#: packages/lib/models/Setting.ts:1347 packages/lib/models/Setting.ts:1348
 msgid "%d hours"
 msgstr "%d timer"
 
@@ -118,8 +120,8 @@ msgstr "%d MB"
 msgid "%d MB per note or attachment"
 msgstr "%d MB pr. note eller vedhæftning"
 
-#: packages/lib/models/Setting.ts:1319 packages/lib/models/Setting.ts:1320
-#: packages/lib/models/Setting.ts:1321
+#: packages/lib/models/Setting.ts:1343 packages/lib/models/Setting.ts:1344
+#: packages/lib/models/Setting.ts:1345
 msgid "%d minutes"
 msgstr "%d minutter"
 
@@ -195,11 +197,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), "
-"\"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] "
-"fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-"
-"list` kan bruges til at vise alle etiketter (brug -l for at vise den lange "
-"udgave)."
+"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove"
+"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra "
+"[note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` "
+"kan bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -213,15 +214,15 @@ msgstr ""
 "(Hvis resultatet er en almindelig note, bliver den konverteret til en "
 "opgave). Brug \"clear\" til at konvertere en opgave til en alm. note."
 
-#: packages/lib/models/Setting.ts:1348
+#: packages/lib/models/Setting.ts:1372
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1370
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1349
+#: packages/lib/models/Setting.ts:1373
 msgid "A5"
 msgstr "A5"
 
@@ -273,11 +274,11 @@ msgstr "Aktiv"
 msgid "Actual Size"
 msgstr "Faktisk størrelse"
 
-#: packages/app-mobile/components/screens/Note.tsx:1123
+#: packages/app-mobile/components/screens/Note.tsx:1114
 msgid "Add body"
 msgstr "Tilføj brødtekst"
 
-#: packages/app-mobile/components/action-button.js:76
+#: packages/app-mobile/components/ActionButton.tsx:59
 msgid "Add new"
 msgstr "Tilføj ny"
 
@@ -289,7 +290,7 @@ msgstr "Tilføj eller fjern etiketter:"
 msgid "Add recipient:"
 msgstr "Tilføj modtager:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1198
+#: packages/app-mobile/components/screens/Note.tsx:1187
 msgid "Add title"
 msgstr "Tilføj titel"
 
@@ -314,9 +315,15 @@ msgstr "Avancerede indstillinger"
 msgid "Advanced tools"
 msgstr "Avancerede værktøjer"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:485
-#: packages/app-mobile/components/screens/notes.js:191
-#: packages/app-mobile/components/side-menu-content.tsx:455
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
+msgid ""
+"All data, including notes, notebooks and tags will be permanently deleted."
+msgstr ""
+"Alle data, herunder noter, notesbøger og etiketter, bliver slettet permanent."
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
+#: packages/app-mobile/components/screens/notes.js:204
+#: packages/app-mobile/components/side-menu-content.tsx:472
 msgid "All notes"
 msgstr "Alle noter"
 
@@ -341,14 +348,14 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på "
-"\"ti\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
+"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på \"ti"
+"\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
 "notesbog"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Tvetydig notesbog \"%s\". Brug venligst kort notesbog-id i stedet - tryk på "
 "\"ti\" for at se det korte notebogs-id"
@@ -357,11 +364,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Opdatering er tilgængelig, vil du hente den nu?"
 
-#: packages/lib/models/Setting.ts:2400
+#: packages/lib/models/Setting.ts:2447
 msgid "Appearance"
 msgstr "Udseende"
 
-#: packages/lib/models/Setting.ts:2405
+#: packages/lib/models/Setting.ts:2452
 msgid "Application"
 msgstr "Program"
 
@@ -373,7 +380,7 @@ msgstr "Anvend"
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Er du sikker på, at du vil forny autorisationstoken?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:507
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:511
 msgid "Arguments:"
 msgstr "Argumenter:"
 
@@ -387,15 +394,15 @@ msgstr "Vedhæft"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
-#: packages/app-mobile/components/screens/Note.tsx:874
+#: packages/app-mobile/components/screens/Note.tsx:865
 msgid "Attach file"
 msgstr "Vedhæft fil"
 
-#: packages/app-mobile/components/screens/Note.tsx:878
+#: packages/app-mobile/components/screens/Note.tsx:869
 msgid "Attach photo"
 msgstr "Vedhæft foto"
 
-#: packages/app-mobile/components/screens/Note.tsx:911
+#: packages/app-mobile/components/screens/Note.tsx:902
 msgid "Attach..."
 msgstr "Vedhæft..."
 
@@ -457,7 +464,7 @@ msgstr "Føj automatisk deaktiverede konti til sletning"
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-par klammer, parenteser, citater, etc."
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1330
 msgid "Automatically check for updates"
 msgstr "Tjek automatisk efter opdateringer"
 
@@ -466,9 +473,9 @@ msgid "Automatically switch theme to match system theme"
 msgstr "Skifter automatisk tema så det matcher systemets tema"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:728
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:732
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-mobile/components/ScreenHeader.tsx:302
+#: packages/app-mobile/components/ScreenHeader.tsx:304
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
 msgstr "Tilbage"
@@ -487,7 +494,7 @@ msgstr "Fed"
 msgid "Browse all plugins"
 msgstr "Gennemse alle udvidelser"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:544
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:548
 msgid "Browse..."
 msgstr "Gennemse..."
 
@@ -501,25 +508,28 @@ msgstr "Kan dele"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:728
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:732
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.tsx:270
+#: packages/app-desktop/gui/PromptDialog.min.js:249
+#: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:318
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:665
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
-#: packages/app-mobile/components/CameraView.tsx:191
+#: packages/app-mobile/components/CameraView.tsx:193
 #: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:104
-#: packages/app-mobile/components/screens/Note.tsx:586
+#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/Note.tsx:577
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
-#: packages/app-mobile/components/side-menu-content.tsx:165
-#: packages/app-mobile/components/side-menu-content.tsx:174
-#: packages/app-mobile/components/side-menu-content.tsx:426
+#: packages/app-mobile/components/side-menu-content.tsx:169
+#: packages/app-mobile/components/side-menu-content.tsx:178
+#: packages/app-mobile/components/side-menu-content.tsx:443
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "Annullér"
@@ -652,7 +662,7 @@ msgid "Check for updates..."
 msgstr "Tjek om der er opdateringer.."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:391
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:435
 msgid "Check synchronisation configuration"
 msgstr "Tjek synkroniseringskonfiguration"
 
@@ -669,7 +679,7 @@ msgstr "Afkrydsningsliste"
 msgid "Checking... Please wait."
 msgstr "Tjekker...  Vent venligst."
 
-#: packages/app-mobile/components/screens/Note.tsx:881
+#: packages/app-mobile/components/screens/Note.tsx:872
 msgid "Choose an option"
 msgstr "Vælg en mulighed"
 
@@ -678,7 +688,8 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.tsx:277
+#: packages/app-desktop/gui/PromptDialog.min.js:256
+#: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Ryd"
 
@@ -710,8 +721,13 @@ msgstr "Klient-ID: %s"
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.tsx:91
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:198
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:142
 msgid "Close"
 msgstr "Luk"
+
+#: packages/app-mobile/components/Dropdown.tsx:166
+msgid "Close dropdown"
+msgstr "Luk rullelisten"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:593
@@ -735,7 +751,7 @@ msgstr "Kodevisning"
 msgid "Collaborate on notebooks with others"
 msgstr "Samarbejd med andre om notesbøger"
 
-#: packages/app-mobile/components/side-menu-content.tsx:333
+#: packages/app-mobile/components/side-menu-content.tsx:346
 msgid "Collapse"
 msgstr "Fold sammen"
 
@@ -743,7 +759,7 @@ msgstr "Fold sammen"
 msgid "Coming alarms"
 msgstr "Kommende alarmer"
 
-#: packages/lib/models/Setting.ts:1406
+#: packages/lib/models/Setting.ts:1430
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -764,7 +780,7 @@ msgstr "kommando"
 msgid "Command"
 msgstr "Kommando"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:637
+#: packages/app-desktop/plugins/GotoAnything.tsx:625
 msgid "Command palette"
 msgstr "Kommando-udvalg"
 
@@ -788,8 +804,9 @@ msgstr "Fuldført: %s (%s)"
 msgid "Compress old changes"
 msgstr "Komprimér gamle ændringer"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
-#: packages/app-mobile/components/side-menu-content.tsx:404
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:729
+#: packages/app-mobile/components/side-menu-content.tsx:421
 msgid "Configuration"
 msgstr "Indstillinger"
 
@@ -803,6 +820,7 @@ msgid "Confirm password:"
 msgstr "Bekræft adgangskode:"
 
 #: packages/app-desktop/gui/Root.tsx:153
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:60
 msgid "Confirmation"
 msgstr "Bekræftelse"
 
@@ -826,17 +844,21 @@ msgstr "Konsolideret fakturering"
 msgid "Content provided by %s"
 msgstr "Indhold leveret af %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
+msgid "Continue"
+msgstr "Fortsæt"
+
+#: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to note"
 msgstr "Konverter til note"
 
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/screens/Note.tsx:931
 msgid "Convert to todo"
 msgstr "Konverter til opgave"
 
 #: packages/app-desktop/gui/MenuBar.tsx:492
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:783
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:785
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:157
 msgid "Copy"
 msgstr "Kopier"
@@ -845,8 +867,8 @@ msgstr "Kopier"
 msgid "Copy dev mode command to clipboard"
 msgstr "Kopier udviklertilstand-kommando til udklipsholderen"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:391
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:405
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:390
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:404
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 msgid "Copy external link"
 msgstr "Kopiér eksternt link"
@@ -860,7 +882,7 @@ msgid "Copy Link Address"
 msgstr "Kopier linkadresse"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:947
+#: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Copy Markdown link"
 msgstr "Kopier markdown link"
 
@@ -909,7 +931,7 @@ msgstr ""
 msgid "Could not connect to plugin repository."
 msgstr "Kunne ikke forbinde til plugin-lager."
 
-#: packages/app-desktop/InteropServiceHelper.ts:190
+#: packages/app-desktop/InteropServiceHelper.ts:196
 msgid "Could not export notes: %s"
 msgstr "Kunne ikke eksportere noterne: %s"
 
@@ -929,6 +951,10 @@ msgstr ""
 "\n"
 "Fejlen var: \"%s\""
 
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
+msgid "Could not switch profile: %s"
+msgstr "Kunne ikke skifte profil: %s"
+
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:220
 msgid "Could not upgrade master key: %s"
 msgstr "Kunne ikke opgradere hovednøgle: %s"
@@ -941,7 +967,12 @@ msgstr ""
 "Kunne ikke verificere denne notesbogs status for deling - afbryder. Prøv "
 "venligst igen, når du har forbindelse til internettet."
 
-#: packages/app-desktop/gui/PromptDialog.tsx:256
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:28
+msgid "Could not verify your identify"
+msgstr "Kunne ikke bekræfte din identitet"
+
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Opret"
 
@@ -950,6 +981,7 @@ msgid "Create a notebook"
 msgstr "Opret en notesbog"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
+#: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
 msgid "Create new profile..."
 msgstr "Opret ny note..."
 
@@ -991,7 +1023,7 @@ msgid "Created: %d."
 msgstr "Oprettet: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:836
 msgid "Created: %s"
 msgstr "Oprettet: %s"
 
@@ -1011,7 +1043,7 @@ msgstr "Opretter en ny opgave."
 msgid "Creating new %s..."
 msgstr "Opretter ny %s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:567
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
 msgid "Creating report..."
 msgstr "Opretter rapport..."
 
@@ -1027,20 +1059,20 @@ msgstr "brugerdefineret rækkefølge"
 msgid "Custom order"
 msgstr "Brugerdefineret rækkefølge"
 
-#: packages/lib/models/Setting.ts:1275
+#: packages/lib/models/Setting.ts:1299
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Brugerdefineret stylesheet til Joplin app-stilarter"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1282
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Brugerdefineret stylesheet til fortolket Markdown"
 
-#: packages/lib/models/Setting.ts:1405
+#: packages/lib/models/Setting.ts:1429
 msgid "Custom TLS certificates"
 msgstr "Brugerdefinerede TLS certifikater"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:773
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:775
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:149
 msgid "Cut"
 msgstr "Klip"
@@ -1053,7 +1085,7 @@ msgstr "Mørkt"
 msgid "Dashboard"
 msgstr "Kontrolpanel"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:669
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:717
 msgid "Database v%s"
 msgstr "Database v%s"
 
@@ -1065,7 +1097,7 @@ msgstr "Dato"
 msgid "Date format"
 msgstr "Datoformat"
 
-#: packages/lib/models/Setting.ts:1492
+#: packages/lib/models/Setting.ts:1517
 msgid "days"
 msgstr "dage"
 
@@ -1081,13 +1113,13 @@ msgstr "Dekrypterede emner: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "Dekrypterede emner: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:734
-#: packages/app-mobile/components/side-menu-content.tsx:413
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:738
+#: packages/app-mobile/components/side-menu-content.tsx:430
 msgid "Decrypting items: %d/%d"
 msgstr "Dekrypterede emner: %d/%d"
 
-#: packages/lib/models/Setting.ts:1200 packages/lib/models/Setting.ts:1207
-#: packages/lib/models/Setting.ts:1371
+#: packages/lib/models/Setting.ts:1224 packages/lib/models/Setting.ts:1231
+#: packages/lib/models/Setting.ts:1395
 msgid "Default"
 msgstr "Standard"
 
@@ -1098,13 +1130,14 @@ msgstr "Standard: %s"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:292
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
-#: packages/app-mobile/components/ScreenHeader.tsx:415
-#: packages/app-mobile/components/ScreenHeader.tsx:482
-#: packages/app-mobile/components/screens/Note.tsx:960
-#: packages/app-mobile/components/side-menu-content.tsx:155
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
+#: packages/app-mobile/components/ScreenHeader.tsx:417
+#: packages/app-mobile/components/ScreenHeader.tsx:484
+#: packages/app-mobile/components/screens/Note.tsx:951
+#: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "Delete"
 msgstr "Slet"
 
@@ -1124,7 +1157,7 @@ msgstr "Slet udløbne tokens"
 msgid "Delete line"
 msgstr "Slet linje"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1323
 msgid "Delete local data and re-download from sync target"
 msgstr "Slet lokal data og download igen fra synkroniseringsmål"
 
@@ -1133,12 +1166,12 @@ msgid "Delete note \"%s\"?"
 msgstr "Slet noten \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:529
+#: packages/app-mobile/components/screens/Note.tsx:528
 msgid "Delete note?"
 msgstr "Slet note?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
-#: packages/app-mobile/components/side-menu-content.tsx:157
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:290
+#: packages/app-mobile/components/side-menu-content.tsx:161
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
@@ -1161,7 +1194,11 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Slet udvidelse \"%s\"?"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:417
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
+msgid "Delete profile \"%s\""
+msgstr "Slet profilen \"%s\""
+
+#: packages/app-mobile/components/ScreenHeader.tsx:419
 msgid "Delete selected notes"
 msgstr "Slet valgte noter"
 
@@ -1176,6 +1213,10 @@ msgid ""
 msgstr ""
 "Vil du slette denne invitation? Modtageren vil ikke længere have adgang til "
 "denne delte notesbog."
+
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
+msgid "Delete this profile?"
+msgstr "Slet denne profil?"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1234,7 +1275,7 @@ msgstr "Deaktiver Web-Clipper tjeneste"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1318
+#: packages/lib/models/Setting.ts:1342
 msgid "Disabled"
 msgstr "Deaktiveret"
 
@@ -1248,7 +1289,8 @@ msgstr ""
 "Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-"
 "synkroniseret og sendt ukrypteret til synk-modtageren. Vil du fortsætte?"
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:350
+#: packages/app-mobile/components/screens/Note.tsx:103
 msgid "Discard changes"
 msgstr "Kassér ændringer"
 
@@ -1302,7 +1344,7 @@ msgstr "Viser brugsinformation."
 msgid "Displays version information"
 msgstr "Viser versionsinfo"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:643
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:647
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 msgid "Do it now"
 msgstr "Gør det nu"
@@ -1370,8 +1412,8 @@ msgid "Dropbox Login"
 msgstr "Dropbox login"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/ScreenHeader.tsx:433
-#: packages/app-mobile/components/ScreenHeader.tsx:488
+#: packages/app-mobile/components/ScreenHeader.tsx:435
+#: packages/app-mobile/components/ScreenHeader.tsx:490
 msgid "Duplicate"
 msgstr "Dupliker"
 
@@ -1379,7 +1421,7 @@ msgstr "Dupliker"
 msgid "Duplicate line"
 msgstr "Dupliker linje"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:435
+#: packages/app-mobile/components/ScreenHeader.tsx:437
 msgid "Duplicate selected notes"
 msgstr "Dupliker valgte noter"
 
@@ -1393,7 +1435,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1160
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
+#: packages/app-mobile/components/screens/Note.tsx:1149
 msgid "Edit"
 msgstr "Redigér"
 
@@ -1410,9 +1453,13 @@ msgid "Edit note."
 msgstr "Rediger note."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:162
-#: packages/app-mobile/components/screens/folder.js:110
+#: packages/app-mobile/components/screens/folder.js:90
 msgid "Edit notebook"
 msgstr "Rediger notesbog"
+
+#: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
+msgid "Edit profile"
+msgstr "Rediger profil"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1424,23 +1471,23 @@ msgstr "Rediger profilkonfiguration..."
 msgid "Editor"
 msgstr "Editor"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1217
 msgid "Editor font"
 msgstr "Tekstredigeringsskrifttype"
 
-#: packages/lib/models/Setting.ts:1219
+#: packages/lib/models/Setting.ts:1243
 msgid "Editor font family"
 msgstr "Rediger skrifttypefamilie"
 
-#: packages/lib/models/Setting.ts:1185
+#: packages/lib/models/Setting.ts:1205
 msgid "Editor font size"
 msgstr "Tekstredigeringsskriftstørrelse"
 
-#: packages/lib/models/Setting.ts:1238
+#: packages/lib/models/Setting.ts:1262
 msgid "Editor maximum width"
 msgstr "Maksimal bredde på editor"
 
-#: packages/lib/models/Setting.ts:1231
+#: packages/lib/models/Setting.ts:1255
 msgid "Editor monospace font family"
 msgstr "Editor monospace skrifttypefamilie"
 
@@ -1453,7 +1500,7 @@ msgstr "Editor: %s"
 msgid "Either \"text\" or \"json\""
 msgstr "Enten \"text\" eller \"json\""
 
-#: packages/lib/models/Setting.ts:1372
+#: packages/lib/models/Setting.ts:1396
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1468,40 +1515,45 @@ msgstr "E-mail"
 msgid "Emails"
 msgstr "E-mails"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:195
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "emphasised text"
 msgstr "fremhævet tekst"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:59
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "Aktivér"
 
-#: packages/lib/models/Setting.ts:1134
+#: packages/lib/models/Setting.ts:1146
 msgid "Enable ^sup^ syntax"
 msgstr "Aktivér ^sup^ syntaks"
 
-#: packages/lib/models/Setting.ts:1138
+#: packages/lib/models/Setting.ts:1150
 msgid "Enable ++insert++ syntax"
 msgstr "Aktivér ++insert++ syntaks"
 
-#: packages/lib/models/Setting.ts:1130
+#: packages/lib/models/Setting.ts:1142
 msgid "Enable ==mark== syntax"
 msgstr "Aktivér ==mark== syntaks"
 
-#: packages/lib/models/Setting.ts:1133
+#: packages/lib/models/Setting.ts:1145
 msgid "Enable ~sub~ syntax"
 msgstr "Aktivér ~sub~ syntaks"
 
-#: packages/lib/models/Setting.ts:1136
+#: packages/lib/models/Setting.ts:1148
 msgid "Enable abbreviation syntax"
 msgstr "Aktivér forkortelsessyntaks"
 
-#: packages/lib/models/Setting.ts:1127
+#: packages/lib/models/Setting.ts:1139
 msgid "Enable audio player"
 msgstr "Aktivér lydafspiller"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:55
+msgid "Enable biometrics authentication?"
+msgstr "Aktivér biometrisk autentificering?"
+
+#: packages/lib/models/Setting.ts:1147
 msgid "Enable deflist syntax"
 msgstr "Aktivér deflist syntaks"
 
@@ -1510,55 +1562,55 @@ msgstr "Aktivér deflist syntaks"
 msgid "Enable encryption"
 msgstr "Aktivér kryptering"
 
-#: packages/lib/models/Setting.ts:1131
+#: packages/lib/models/Setting.ts:1143
 msgid "Enable footnotes"
 msgstr "Aktivér fodnoter"
 
-#: packages/lib/models/Setting.ts:1124
+#: packages/lib/models/Setting.ts:1136
 msgid "Enable Fountain syntax support"
 msgstr "Slå understøttelse af Fountain syntaks til"
 
-#: packages/lib/models/Setting.ts:1121
+#: packages/lib/models/Setting.ts:1133
 msgid "Enable Linkify"
 msgstr "Aktivér Linkify"
 
-#: packages/lib/models/Setting.ts:1137
+#: packages/lib/models/Setting.ts:1149
 msgid "Enable markdown emoji"
 msgstr "Aktivér markdown emojies"
 
-#: packages/lib/models/Setting.ts:1123
+#: packages/lib/models/Setting.ts:1135
 msgid "Enable math expressions"
 msgstr "Slå matematiske udtryk til"
 
-#: packages/lib/models/Setting.ts:1125
+#: packages/lib/models/Setting.ts:1137
 msgid "Enable Mermaid diagrams support"
 msgstr "Slå understøttelse af Mermaid diagrammer til"
 
-#: packages/lib/models/Setting.ts:1139
+#: packages/lib/models/Setting.ts:1151
 msgid "Enable multimarkdown table extension"
 msgstr "Aktivér multimarkdown-tabeludvidelsen"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1507
 msgid "Enable note history"
 msgstr "Slå note-historie til"
 
-#: packages/lib/models/Setting.ts:1129
+#: packages/lib/models/Setting.ts:1141
 msgid "Enable PDF viewer"
 msgstr "Aktivér PDF-viser"
 
-#: packages/lib/models/Setting.ts:1119
+#: packages/lib/models/Setting.ts:1131
 msgid "Enable soft breaks"
 msgstr "Slå bløde ombrydninger til"
 
-#: packages/lib/models/Setting.ts:1132
+#: packages/lib/models/Setting.ts:1144
 msgid "Enable table of contents extension"
 msgstr "Aktivér indholdsfortegnelsesudvidelsen"
 
-#: packages/lib/models/Setting.ts:1120
+#: packages/lib/models/Setting.ts:1132
 msgid "Enable typographer support"
 msgstr "Slå typografunderstøttelse til"
 
-#: packages/lib/models/Setting.ts:1128
+#: packages/lib/models/Setting.ts:1140
 msgid "Enable video player"
 msgstr "Aktivér videoafspiller"
 
@@ -1588,15 +1640,15 @@ msgstr "Krypteret"
 msgid "Encrypted items cannot be modified"
 msgstr "Krypteret emner kan ikke rettes"
 
-#: packages/app-mobile/components/side-menu-content.tsx:141
+#: packages/app-mobile/components/side-menu-content.tsx:145
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Krypterede notesbøger kan ikke omdøbes"
 
-#: packages/lib/models/Setting.ts:2407
+#: packages/lib/models/Setting.ts:2454
 msgid "Encryption"
 msgstr "Kryptering"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:400
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:444
 #: packages/app-mobile/components/screens/encryption-config.tsx:287
 msgid "Encryption Config"
 msgstr "Krypteringsindstillinger"
@@ -1628,7 +1680,7 @@ msgstr "Skriv kode her"
 msgid "Enter master password:"
 msgstr "Indtast hovedadgangskode:"
 
-#: packages/app-mobile/components/screens/folder.js:111
+#: packages/app-mobile/components/screens/folder.js:93
 msgid "Enter notebook title"
 msgstr "Indtast notesbogstitel"
 
@@ -1675,12 +1727,12 @@ msgstr "Evernote eksport fil (i Markdown)"
 msgid "Exits the application."
 msgstr "Lukker programmet."
 
-#: packages/app-mobile/components/side-menu-content.tsx:333
+#: packages/app-mobile/components/side-menu-content.tsx:346
 msgid "Expand"
 msgstr "Udvid"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:375
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:374
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "Eksportér"
@@ -1694,19 +1746,19 @@ msgstr "Eksporter alle"
 msgid "Export debug report"
 msgstr "Eksporter fejlrapport"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:567
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
 msgid "Export Debug Report"
 msgstr "Eksporter fejlrapport"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:572
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Export profile"
 msgstr "Eksporter profil"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:572
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Exporting profile..."
 msgstr "Eksporterer profil..."
 
-#: packages/app-desktop/InteropServiceHelper.ts:170
+#: packages/app-desktop/InteropServiceHelper.ts:176
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
 
@@ -1726,11 +1778,11 @@ msgstr "Eksporterer kun valgt note."
 msgid "Exports only the given notebook."
 msgstr "Eksporterer kun valgt notesbog."
 
-#: packages/lib/models/Setting.ts:1468
+#: packages/lib/models/Setting.ts:1493
 msgid "Fail-safe"
 msgstr "Fejlsikring"
 
-#: packages/lib/models/Setting.ts:1469
+#: packages/lib/models/Setting.ts:1494
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1742,7 +1794,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Kritisk fejl:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:589
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 msgid "Feature flags"
 msgstr "Feature-markeringer"
 
@@ -1750,8 +1802,8 @@ msgstr "Feature-markeringer"
 msgid "Fetched items: %d/%d."
 msgstr "Hentede emner: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
-#: packages/app-mobile/components/side-menu-content.tsx:418
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:743
+#: packages/app-mobile/components/side-menu-content.tsx:435
 msgid "Fetching resources: %d/%d"
 msgstr "Henter ressourcer: %d/%d"
 
@@ -1763,7 +1815,7 @@ msgstr "Fil"
 msgid "File system"
 msgstr "Filsystem"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:190
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:192
 msgid "Filter tags"
 msgstr "Filtrer etiketter"
 
@@ -1779,11 +1831,11 @@ msgstr "Find: "
 msgid "Firefox Extension"
 msgstr "Firefox udvidelse"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
 msgid "Fix search index"
 msgstr "Fiks søgeindeks"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
 msgid "Fixing search index..."
 msgstr "Fikser søgeindeks..."
 
@@ -1795,11 +1847,11 @@ msgstr "Fikser søgeindeks..."
 msgid "Focus"
 msgstr "Fokuser"
 
-#: packages/lib/models/Setting.ts:1068 packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1080 packages/lib/models/Setting.ts:1097
 msgid "Focus body"
 msgstr "Fokuser på brødtekst"
 
-#: packages/lib/models/Setting.ts:1067 packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1079 packages/lib/models/Setting.ts:1096
 msgid "Focus title"
 msgstr "Fokuser på titel"
 
@@ -1807,11 +1859,11 @@ msgstr "Fokuser på titel"
 msgid "Folders"
 msgstr "Mapper"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:572
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Kun til fejlsøgning: Eksporter din profil til et eksternt SD-kort."
 
-#: packages/lib/models/Setting.ts:1449
+#: packages/lib/models/Setting.ts:1473
 msgid "For example \"%s\""
 msgstr "For eksempel \"%s\""
 
@@ -1851,7 +1903,7 @@ msgstr "Videresend"
 msgid "Found: %d."
 msgstr "Fundet: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:675
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:723
 msgid "FTS enabled: %d"
 msgstr "Fuld-tekst søgning slået til: %d"
 
@@ -1863,7 +1915,7 @@ msgstr "Komplet ændringslog"
 msgid "Full name"
 msgstr "Fuldt navn"
 
-#: packages/lib/models/Setting.ts:2398
+#: packages/lib/models/Setting.ts:2445
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Generelt"
@@ -1882,7 +1934,7 @@ msgstr[1] "Opretter links..."
 msgid "Get it now:"
 msgstr "Få den nu:"
 
-#: packages/lib/models/Setting.ts:1307
+#: packages/lib/models/Setting.ts:1331
 msgid "Get pre-releases when checking for updates"
 msgstr "Hent for-udgivelser når der tjekkes efter opdateringer"
 
@@ -1897,12 +1949,12 @@ msgstr ""
 "aktuel konfiguration."
 
 # Kilde-URL er en dårlig oversættelse
-#: packages/app-mobile/components/screens/Note.tsx:857
+#: packages/app-mobile/components/screens/Note.tsx:848
 msgid "Go to source URL"
 msgstr "Gå til kilde-URL"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:629
+#: packages/app-desktop/plugins/GotoAnything.tsx:617
 msgid "Goto Anything..."
 msgstr "Gå til tilfældig..."
 
@@ -1999,7 +2051,7 @@ msgstr "Ledig"
 msgid "Ignore"
 msgstr "Ignorér"
 
-#: packages/lib/models/Setting.ts:1428
+#: packages/lib/models/Setting.ts:1452
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer TLS certifikat-fejl"
 
@@ -2043,10 +2095,10 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. "
-"`$c` kan bruges som reference til aktuel/valgt emne."
+"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
+"$c` kan bruges som reference til aktuel/valgt emne."
 
-#: packages/app-mobile/components/screens/Note.tsx:402
+#: packages/app-mobile/components/screens/Note.tsx:401
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2088,8 +2140,8 @@ msgstr ""
 "\n"
 "Vigtigt: Du behøver kun at gøre dette EN gang på en enhed."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:202
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:81
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -2121,7 +2173,7 @@ msgstr "Indryk mindre"
 msgid "Indent more"
 msgstr "Indryk mere"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:201
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:209
 msgid "Information"
 msgstr "Information"
 
@@ -2133,7 +2185,7 @@ msgstr "Inline-kode"
 msgid "Insert"
 msgstr "Indsæt"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:197
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:198
 msgid "Insert Hyperlink"
 msgstr "Indsæt hyperlink"
 
@@ -2175,7 +2227,7 @@ msgstr "Forkert svar: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ulovlig kommando: \"%s\""
 
-#: packages/lib/models/Setting.ts:1926
+#: packages/lib/models/Setting.ts:1973
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ulovlig indstillingsværdi: \"%s\".  Mulige valg er: %s."
 
@@ -2273,7 +2325,7 @@ msgstr ""
 "Joplin Web-Clipper gør at du kan gemme hjemmesider og screenshots fra din "
 "browser i Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:689
 msgid "Joplin website"
 msgstr "Joplin hjemmeside"
 
@@ -2289,11 +2341,11 @@ msgstr ""
 msgid "KaTeX"
 msgstr "KaTeX"
 
-#: packages/lib/models/Setting.ts:1494
+#: packages/lib/models/Setting.ts:1519
 msgid "Keep note history for"
 msgstr "Behold note-historie i"
 
-#: packages/lib/models/Setting.ts:1368
+#: packages/lib/models/Setting.ts:1392
 msgid "Keyboard Mode"
 msgstr "Tastaturtilstand"
 
@@ -2301,7 +2353,7 @@ msgstr "Tastaturtilstand"
 msgid "Keyboard Shortcut"
 msgstr "Tastaturgenvej"
 
-#: packages/lib/models/Setting.ts:2409
+#: packages/lib/models/Setting.ts:2456
 msgid "Keyboard Shortcuts"
 msgstr "Tastaturgenveje"
 
@@ -2313,7 +2365,7 @@ msgstr "Keychain-understøttet: %s"
 msgid "Keys that need upgrading"
 msgstr "Nøgler der har brug for opgradering"
 
-#: packages/lib/models/Setting.ts:1357
+#: packages/lib/models/Setting.ts:1381
 msgid "Landscape"
 msgstr "Landskab"
 
@@ -2325,11 +2377,11 @@ msgstr "Sprog"
 msgid "Last error: %s"
 msgstr "Sidste fejl: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:643
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:647
 msgid "Later"
 msgstr "Senere"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:614
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:616
 msgid "Layout"
 msgstr "Layout"
 
@@ -2341,11 +2393,11 @@ msgstr "Indstil knap-rækkefølge"
 msgid "Leave notebook..."
 msgstr "Forlad notesbog..."
 
-#: packages/lib/models/Setting.ts:1351
+#: packages/lib/models/Setting.ts:1375
 msgid "Legal"
 msgstr "US Legal"
 
-#: packages/lib/models/Setting.ts:1347
+#: packages/lib/models/Setting.ts:1371
 msgid "Letter"
 msgstr "US Letter"
 
@@ -2375,13 +2427,13 @@ msgstr[1] "Links er kopieret til udklipsholder!"
 msgid "Link text"
 msgstr "Link-tekst"
 
-#: packages/app-mobile/components/screens/Note.tsx:197
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Links med \"%s\" protokollen er ikke understøttede"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:233
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:234
 msgid "List item"
 msgstr "Listepunkt"
 
@@ -2406,7 +2458,7 @@ msgstr ""
 "Låsefil er allerede i brug. Hvis du ved at ingen synkronisering er i gang "
 "kan du slette låsefilen \"%s\" og genoptage synkroniseringen."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:565
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:613
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
@@ -2437,7 +2489,7 @@ msgid "Logs"
 msgstr "Logfiler"
 
 #: packages/app-desktop/gui/MenuBar.tsx:787
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:627
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:675
 msgid "Make a donation"
 msgstr "Giv en donation"
 
@@ -2452,6 +2504,10 @@ msgstr "Administrer hovedadgangskode..."
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Manage multiple users"
 msgstr "Administrer flere brugere"
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+msgid "Manage profiles"
+msgstr "Administrer profiler"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2471,7 +2527,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Manuel"
 
-#: packages/lib/models/Setting.ts:2403
+#: packages/lib/models/Setting.ts:2450
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2537,7 +2593,7 @@ msgstr "Manglende hovednøgler"
 msgid "Missing required argument: %s"
 msgstr "Mangler krævet argument: %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:439
+#: packages/app-mobile/components/side-menu-content.tsx:456
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobildata - auto-synk deaktiveret"
 
@@ -2545,7 +2601,7 @@ msgstr "Mobildata - auto-synk deaktiveret"
 msgid "More info"
 msgstr "Mere information"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:593
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
 msgid "More information"
 msgstr "Mere information"
 
@@ -2553,7 +2609,7 @@ msgstr "Mere information"
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Mere end et emne matcher \"%s\".  Præciser din søgning."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:562
+#: packages/app-mobile/components/ScreenHeader.tsx:564
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Flyt %d noter til notesbogen \"%s\"?"
 
@@ -2565,7 +2621,7 @@ msgstr "Flyt til notesbog"
 msgid "Move to notebook:"
 msgstr "Flyt til notesbog:"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:522
+#: packages/app-mobile/components/ScreenHeader.tsx:524
 msgid "Move to notebook..."
 msgstr "Flyt til notesbog..."
 
@@ -2583,7 +2639,7 @@ msgid "N"
 msgstr "N"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
-#: packages/app-mobile/components/action-button.js:105
+#: packages/app-mobile/components/screens/notes.js:269
 #: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Ny note"
@@ -2592,7 +2648,7 @@ msgstr "Ny note"
 msgid "New notebook"
 msgstr "Ny notesbog"
 
-#: packages/app-mobile/components/side-menu-content.tsx:400
+#: packages/app-mobile/components/side-menu-content.tsx:413
 msgid "New Notebook"
 msgstr "Ny notesbog"
 
@@ -2605,12 +2661,12 @@ msgstr "Ny notesbog \"%s\" bliver oprettet og filen \"%s\" importeres til den"
 msgid "New sub-notebook"
 msgstr "Ny under-notesbog"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:170
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:172
 msgid "New tags:"
 msgstr "Nye etiketter:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:6
-#: packages/app-mobile/components/action-button.js:96
+#: packages/app-mobile/components/screens/notes.js:259
 #: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Ny opgave"
@@ -2644,7 +2700,7 @@ msgid "no"
 msgstr "nej"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:576
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Nej"
@@ -2653,7 +2709,7 @@ msgstr "Nej"
 msgid "No active notebook."
 msgstr "Ingen aktiv notesbog."
 
-#: packages/app-mobile/components/screens/Note.tsx:168
+#: packages/app-mobile/components/screens/Note.tsx:167
 msgid "No item with ID %s"
 msgstr "Intet emne med ID'en %s"
 
@@ -2710,17 +2766,21 @@ msgstr "Ikke downloadet"
 msgid "Not generated"
 msgstr "Ikke oprettet"
 
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:64
+msgid "Not now"
+msgstr "Ikke nu"
+
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
 msgid "note"
 msgstr "note"
 
-#: packages/lib/models/Setting.ts:2401
+#: packages/lib/models/Setting.ts:2448
 msgid "Note"
 msgstr "Note"
 
-#: packages/lib/models/Setting.ts:1558
+#: packages/lib/models/Setting.ts:1583
 msgid "Note area growth factor"
 msgstr "Noteområde-vækstfaktor"
 
@@ -2749,7 +2809,7 @@ msgid "Note has been saved."
 msgstr "Note gemt."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2406
+#: packages/lib/models/Setting.ts:2453
 msgid "Note History"
 msgstr "Notehistore"
 
@@ -2761,7 +2821,7 @@ msgstr "Noten er ikke en opgave: \"%s\""
 msgid "Note list"
 msgstr "Noteliste"
 
-#: packages/lib/models/Setting.ts:1543
+#: packages/lib/models/Setting.ts:1568
 msgid "Note list growth factor"
 msgstr "Noteliste-vækstfaktor"
 
@@ -2774,7 +2834,7 @@ msgstr "Noteegenskaber"
 msgid "Note title"
 msgstr "Notes titel"
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1165
 msgid "Note: Does not work in all desktop environments."
 msgstr "OBS: Virker ikke i alle skrivebordsmiljøer."
 
@@ -2789,20 +2849,20 @@ msgstr ""
 msgid "Note&book"
 msgstr "Note&bog"
 
-#: packages/lib/models/Setting.ts:2402
+#: packages/lib/models/Setting.ts:2449
 msgid "Notebook"
 msgstr "Notesbog"
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1553
 msgid "Notebook list growth factor"
 msgstr "Notesbogsliste-vækstfaktor"
 
-#: packages/app-mobile/components/side-menu-content.tsx:135
+#: packages/app-mobile/components/side-menu-content.tsx:139
 msgid "Notebook: %s"
 msgstr "Notesbog: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:691
-#: packages/app-mobile/components/side-menu-content.tsx:459
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:690
+#: packages/app-mobile/components/side-menu-content.tsx:476
 msgid "Notebooks"
 msgstr "Notesbøger"
 
@@ -2815,7 +2875,7 @@ msgstr "Notesbøger kan ikke navngives \"%s\", da det er en reserveret titel."
 msgid "Notes"
 msgstr "Noter"
 
-#: packages/lib/models/Setting.ts:2418
+#: packages/lib/models/Setting.ts:2465
 msgid "Notes and settings are stored in: %s"
 msgstr "Noter og indstillinger er gemt i: %s"
 
@@ -2833,12 +2893,13 @@ msgstr "Nummeret liste"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:492
-#: packages/app-desktop/gui/PromptDialog.tsx:263
+#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
-#: packages/app-mobile/components/CameraView.tsx:190
+#: packages/app-mobile/components/CameraView.tsx:192
 #: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:203
-#: packages/app-mobile/components/side-menu-content.tsx:159
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/side-menu-content.tsx:163
 msgid "OK"
 msgstr "OK"
 
@@ -2934,11 +2995,11 @@ msgstr "Andre applikationer..."
 msgid "Output format: %s"
 msgstr "Output-format: %s"
 
-#: packages/lib/models/Setting.ts:1354
+#: packages/lib/models/Setting.ts:1378
 msgid "Page orientation for PDF export"
 msgstr "Sideretning for PDF eksport"
 
-#: packages/lib/models/Setting.ts:1344
+#: packages/lib/models/Setting.ts:1368
 msgid "Page size for PDF export"
 msgstr "Sidestørrelse for PDF eksport"
 
@@ -2962,12 +3023,12 @@ msgid "Passwords do not match!"
 msgstr "Adgangskoder stemmer ikke overens!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:793
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:795
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Paste"
 msgstr "Indsæt"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:535
 msgid "Path:"
 msgstr "Sti:"
 
@@ -2980,11 +3041,11 @@ msgstr "PDF-fil"
 msgid "Per user. Minimum of %d users."
 msgstr "Pr. bruger. Minimum %d brugere."
 
-#: packages/app-mobile/components/screens/Note.tsx:403
+#: packages/app-mobile/components/screens/Note.tsx:402
 msgid "Permission needed"
 msgstr "Tilladelse nødvendig"
 
-#: packages/app-mobile/components/CameraView.tsx:188
+#: packages/app-mobile/components/CameraView.tsx:190
 msgid "Permission to use camera"
 msgstr "Tilladelse til at bruge kameraet"
 
@@ -3072,11 +3133,11 @@ msgid "Plugin tools"
 msgstr "Udvidelsesværtøjer"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2404
+#: packages/lib/models/Setting.ts:2451
 msgid "Plugins"
 msgstr "Udvidelser"
 
-#: packages/lib/models/Setting.ts:1356
+#: packages/lib/models/Setting.ts:1380
 msgid "Portrait"
 msgstr "Portræt"
 
@@ -3120,7 +3181,7 @@ msgstr ""
 "Tryk på genvejen og tryk så på ENTER. Eller, tryk MELLEMRUMSTASTEN for at "
 "rydde genvejen."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:580
+#: packages/app-mobile/components/ScreenHeader.tsx:582
 msgid "Press to set the decryption password."
 msgstr "Klik for at gemme dekrypterings-adgangskodeord."
 
@@ -3140,7 +3201,7 @@ msgstr "Udskriv"
 msgid "Priority support"
 msgstr "Prioriteret support"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:655
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:703
 msgid "Privacy Policy"
 msgstr "Privatlivspolitik"
 
@@ -3164,6 +3225,10 @@ msgstr "Behandl brugersletninger"
 msgid "Profile"
 msgstr "Profil"
 
+#: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
+msgid "Profile name"
+msgstr "Profilnavn"
+
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
 msgstr "Profilnavn:"
@@ -3172,19 +3237,23 @@ msgstr "Profilnavn:"
 msgid "Profile Version: %s"
 msgstr "Profil-version: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:954
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
+msgid "Profiles"
+msgstr "Profiler"
+
+#: packages/app-mobile/components/screens/Note.tsx:945
 msgid "Properties"
 msgstr "Egenskaber"
 
-#: packages/lib/models/Setting.ts:1438
+#: packages/lib/models/Setting.ts:1462
 msgid "Proxy enabled"
 msgstr "Proxy aktiveret"
 
-#: packages/lib/models/Setting.ts:1459
+#: packages/lib/models/Setting.ts:1484
 msgid "Proxy timeout (seconds)"
 msgstr "Proxy timeout (sekunder)"
 
-#: packages/lib/models/Setting.ts:1448
+#: packages/lib/models/Setting.ts:1472
 msgid "Proxy URL"
 msgstr "Proxy-URL"
 
@@ -3219,7 +3288,7 @@ msgstr "Genkryptér data"
 msgid "Re-encryption"
 msgstr "Genkryptering"
 
-#: packages/lib/models/Setting.ts:1288
+#: packages/lib/models/Setting.ts:1312
 msgid "Re-upload local data to sync target"
 msgstr "Upload lokal data igen til synkroniseringsmål"
 
@@ -3249,7 +3318,7 @@ msgstr "Modtagere:"
 
 #: packages/app-desktop/gui/MenuBar.tsx:646
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
-#: packages/app-mobile/components/ScreenHeader.tsx:374
+#: packages/app-mobile/components/ScreenHeader.tsx:376
 msgid "Redo"
 msgstr "Gentag"
 
@@ -3268,21 +3337,21 @@ msgstr "Almindeligt udtryk"
 msgid "Reject"
 msgstr "Afvis"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:288
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:287
 msgid "Remove"
 msgstr "Fjern"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:295
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:294
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Slet etikette \"%s\" fra alle noter?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:297
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:296
 msgid "Remove this search from the sidebar?"
 msgstr "Slet denne søgning fra sidebjælken?"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.ts:8
-#: packages/app-mobile/components/side-menu-content.tsx:138
+#: packages/app-mobile/components/side-menu-content.tsx:142
 msgid "Rename"
 msgstr "Omdøb"
 
@@ -3332,7 +3401,7 @@ msgstr "Ressourcer: %d."
 msgid "Restart and upgrade"
 msgstr "Genstart og upgradér"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:708
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:712
 msgid "Restart now"
 msgstr "Genstart nu"
 
@@ -3433,8 +3502,9 @@ msgstr "Gem som %s"
 msgid "Save as..."
 msgstr "Gem som..."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:327
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/ScreenHeader.tsx:329
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:343
+#: packages/app-mobile/components/screens/Note.tsx:103
 msgid "Save changes"
 msgstr "Gem ændringer"
 
@@ -3442,8 +3512,8 @@ msgstr "Gem ændringer"
 msgid "Save geo-location with notes"
 msgstr "Gem geo-lokation i noter"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:399
-#: packages/app-mobile/components/screens/search.js:160
+#: packages/app-mobile/components/ScreenHeader.tsx:401
+#: packages/app-mobile/components/screens/search.tsx:171
 msgid "Search"
 msgstr "Søg"
 
@@ -3469,7 +3539,7 @@ msgstr "Søg:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:164
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 msgid "Search..."
 msgstr "Søg..."
 
@@ -3477,7 +3547,7 @@ msgstr "Søg..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Søger efter <pattern> mønster i alle noter."
 
-#: packages/lib/models/Setting.ts:1307
+#: packages/lib/models/Setting.ts:1331
 msgid "See the pre-release page for more details: %s"
 msgstr "Se for-udgivelsessiden for yderligere information: %s"
 
@@ -3486,7 +3556,7 @@ msgid "Select"
 msgstr "Vælg"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
-#: packages/app-mobile/components/ScreenHeader.tsx:386
+#: packages/app-mobile/components/ScreenHeader.tsx:388
 msgid "Select all"
 msgstr "Vælg alt"
 
@@ -3512,7 +3582,7 @@ msgid "Server is running on port %d"
 msgstr "Serveren kører på port %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:918
+#: packages/app-mobile/components/screens/Note.tsx:909
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Indstil alarm"
@@ -3521,7 +3591,7 @@ msgstr "Indstil alarm"
 msgid "Set alarm:"
 msgstr "Indstil alarm:"
 
-#: packages/lib/models/Setting.ts:1238
+#: packages/lib/models/Setting.ts:1262
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3547,7 +3617,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:926
+#: packages/app-mobile/components/screens/Note.tsx:917
 msgid "Share"
 msgstr "Del"
 
@@ -3611,16 +3681,16 @@ msgstr "Vis noteantal"
 msgid "Show sort order buttons"
 msgstr "Vis knapper til sorteringsrækkefølge"
 
-#: packages/lib/models/Setting.ts:1151
+#: packages/lib/models/Setting.ts:1163
 msgid "Show tray icon"
 msgstr "Vis ikon på bundbjælke"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:287
+#: packages/app-mobile/components/ScreenHeader.tsx:289
 msgid "Show/hide the sidebar"
 msgstr "Vis/skjul sidebjælken"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
-#: packages/app-mobile/components/ScreenHeader.tsx:286
+#: packages/app-mobile/components/ScreenHeader.tsx:288
 msgid "Sidebar"
 msgstr "Sidebjælke"
 
@@ -3659,7 +3729,7 @@ msgstr "Nogle emner kan ikke dekrypteres."
 msgid "Some items cannot be synchronised."
 msgstr "Nogle emner kan ikke synkroniseres."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:581
+#: packages/app-mobile/components/ScreenHeader.tsx:583
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Nogle emner kan ikke synkroniseres. Tryk for mere info."
 
@@ -3668,7 +3738,7 @@ msgid "Sort notebooks by"
 msgstr "Sorter notesbøger efter"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/app-mobile/components/ScreenHeader.tsx:449
+#: packages/app-mobile/components/ScreenHeader.tsx:451
 #: packages/lib/models/Setting.ts:909
 msgid "Sort notes by"
 msgstr "Sorter noter efter"
@@ -3690,7 +3760,7 @@ msgstr "Kildeformat: %s"
 msgid "Source: "
 msgstr "Kilde: "
 
-#: packages/lib/models/Setting.ts:1474
+#: packages/lib/models/Setting.ts:1499
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3707,7 +3777,7 @@ msgstr "Stavekontrol"
 msgid "Split View"
 msgstr "Opdelt visning"
 
-#: packages/lib/models/Setting.ts:1159
+#: packages/lib/models/Setting.ts:1171
 msgid "Start application minimised in the tray icon"
 msgstr "Start programmet minimeret i systembakkeikonet"
 
@@ -3787,15 +3857,14 @@ msgid "Stop external editing"
 msgstr "Stop ekstern redigering"
 
 #: packages/lib/utils/joplinCloud.ts:129
-#, fuzzy
 msgid "Storage space"
-msgstr "%d GB lagerplads"
+msgstr "Lagerplads"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
 msgstr "Gennemstregning"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:195
 msgid "strong text"
 msgstr "fed (strong) tekst"
 
@@ -3829,6 +3898,7 @@ msgid "Switch between note and to-do type"
 msgstr "Skift mellem note- og opgave type"
 
 #: packages/app-desktop/gui/MenuBar.tsx:444
+#: packages/app-mobile/components/side-menu-content.tsx:418
 msgid "Switch profile"
 msgstr "Skift profil"
 
@@ -3857,7 +3927,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr "Synkroniser så mange enheder, du vil"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:564
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:612
 msgid "Sync Status"
 msgstr "Synkroniseringsstatus"
 
@@ -3885,11 +3955,11 @@ msgstr "Synk-version: %s"
 msgid "Sync your notes"
 msgstr "Synk dine noter"
 
-#: packages/lib/models/Setting.ts:2399
+#: packages/lib/models/Setting.ts:2446
 msgid "Synchronisation"
 msgstr "Synkronisering"
 
-#: packages/lib/models/Setting.ts:1315
+#: packages/lib/models/Setting.ts:1339
 msgid "Synchronisation interval"
 msgstr "Synkroniseringsinterval"
 
@@ -3910,13 +3980,13 @@ msgstr "Synkroniseringsmål"
 msgid "Synchronisation target: %s (%s)"
 msgstr "Synkroniseringsmål: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:665
-#: packages/app-mobile/components/side-menu-content.tsx:426
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
+#: packages/app-mobile/components/side-menu-content.tsx:443
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Synkroniser"
 
-#: packages/lib/models/Setting.ts:1335
+#: packages/lib/models/Setting.ts:1359
 msgid "Synchronise only over WiFi connection"
 msgstr "Synkroniser kun over WiFi-forbindelse"
 
@@ -3932,11 +4002,11 @@ msgstr "Synkroniserer..."
 msgid "Synchronizing..."
 msgstr "Synkroniserer..."
 
-#: packages/lib/models/Setting.ts:1350
+#: packages/lib/models/Setting.ts:1374
 msgid "Tabloid"
 msgstr "US Tabloid"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:179
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:181
 msgid "tag1, tag2, ..."
 msgstr "etiket1, etiket2, ..."
 
@@ -3946,14 +4016,14 @@ msgid "Tagged: %d."
 msgstr "Etiketterede: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:715
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:719
+#: packages/app-mobile/components/screens/Note.tsx:924
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.tsx:402
+#: packages/app-mobile/components/side-menu-content.tsx:415
 msgid "Tags"
 msgstr "Etiketter"
 
-#: packages/app-mobile/components/screens/Note.tsx:879
+#: packages/app-mobile/components/screens/Note.tsx:870
 msgid "Take photo"
 msgstr "Tag et foto"
 
@@ -3970,13 +4040,20 @@ msgstr "Opgaver"
 msgid "Teams"
 msgstr "Teams"
 
-#: packages/lib/models/Setting.ts:1343
+#: packages/lib/models/Setting.ts:1367
 msgid "Text editor command"
 msgstr "Tekstredigeringskomando"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:215
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "Mange tak! Din Joplin Cloud-konto er nu indstillet og klar til brug."
+
+#: packages/lib/services/profileConfig/index.ts:105
+msgid ""
+"The active profile cannot be deleted. Switch to a different profile and try "
+"again."
+msgstr ""
+"Den aktive profil kan ikke slettes. Skift til en anden profil, og prøv igen."
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4003,7 +4080,7 @@ msgstr "App'en er succesfuldt godkendt!"
 msgid "The application has been successfully authorised."
 msgstr "Denne app er succesfuldt godkendt."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:632
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:636
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Applikationen skal genstartes før disse ændringer kan træde i kraft."
 
@@ -4042,7 +4119,11 @@ msgid ""
 msgstr ""
 "Standard-krypteringsmetoden er blevet ændret, du bør genkryptere dine data."
 
-#: packages/lib/models/Setting.ts:1343
+#: packages/lib/services/profileConfig/index.ts:104
+msgid "The default profile cannot be deleted"
+msgstr "Standardprofilen kan ikke slettes"
+
+#: packages/lib/models/Setting.ts:1367
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -4051,8 +4132,8 @@ msgstr ""
 "Hvis der ikke er angivet nogen, vil den prøve at autodetektere "
 "standardeditoren."
 
-#: packages/lib/models/Setting.ts:1530 packages/lib/models/Setting.ts:1545
-#: packages/lib/models/Setting.ts:1560
+#: packages/lib/models/Setting.ts:1555 packages/lib/models/Setting.ts:1570
+#: packages/lib/models/Setting.ts:1585
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4078,7 +4159,7 @@ msgstr ""
 "opgradere dem. Den opgraderet nøgler vil stadig kunne dekryptere og kryptere "
 "dine data som normalt."
 
-#: packages/app-mobile/components/screens/Note.tsx:193
+#: packages/app-mobile/components/screens/Note.tsx:192
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Joplin mobil-app'en understøtter på nuværende tidspunkt ikke denne type "
@@ -4120,7 +4201,7 @@ msgstr ""
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Noten \"%s\" er blevet gendannet til notesbogen \"%s\"."
 
-#: packages/app-mobile/components/screens/folder.js:88
+#: packages/app-mobile/components/screens/folder.js:69
 msgid "The notebook could not be saved: %s"
 msgstr "Notesbogen kan ikke gemmes: %s"
 
@@ -4153,7 +4234,7 @@ msgstr ""
 "operation kan tage nogle minutter at udføre, og appen skal genstartes. Klik "
 "på linket for at fortsætte."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:582
+#: packages/app-mobile/components/ScreenHeader.tsx:584
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "Synk-mål skal opgraderes! Tryk på denne banner for at fortsætte."
 
@@ -4189,6 +4270,10 @@ msgstr "Tema"
 #: packages/app-mobile/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Der er ingen noter. Opret note ved at klikke på (+) knappen."
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:341
+msgid "There are unsaved changes."
+msgstr "Der er ikke-gemte ændringer."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:487
 msgid ""
@@ -4235,7 +4320,7 @@ msgstr ""
 "For at finde disse emner; enten søg efter titel eller ID (som er vist i "
 "klammer herover)"
 
-#: packages/lib/models/Setting.ts:2417
+#: packages/lib/models/Setting.ts:2464
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4258,7 +4343,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Denne vedhæftning er ikke downloadet eller ikke dekrypteret endnu"
 
-#: packages/app-mobile/components/screens/Note.tsx:187
+#: packages/app-mobile/components/screens/Note.tsx:186
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 "Denne vedhæftning er ikke downloadet eller er ikke blevet dekrypteret endnu."
@@ -4285,11 +4370,11 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Denne note har ingen geolokationsoplysninger."
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:103
 msgid "This note has been modified:"
 msgstr "Denne note er blevet ændret:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:614
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:616
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4319,7 +4404,7 @@ msgstr ""
 "slår den til kan det være, at din firewall beder om tilladelse til at lytte "
 "på en bestemt port."
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1165
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4404,8 +4489,14 @@ msgid ""
 msgstr ""
 "For at prøve at dekryptere dem igen. Kør `e2ee decrypt --retry-failed-items`"
 
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:61
+msgid ""
+"To switch the profile, the app is going to close and you will need to "
+"restart it."
+msgstr "Hvis du vil skifte profil, lukkes appen, og du skal genstarte den."
+
 # Hvad kaldes "Apps" indstillingskategorien på dansk?
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:603
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4465,7 +4556,7 @@ msgstr "Slå felt for sorteringsrækkefølge til eller fra"
 msgid "Token has been copied to the clipboard!"
 msgstr "Din token er blevet kopieret til udklipsholderen!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:562
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:609
 msgid "Tools"
 msgstr "Værktøjer"
 
@@ -4478,6 +4569,7 @@ msgid "Total: %d/%d"
 msgstr "I alt: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Try again"
 msgstr "Prøv igen"
 
@@ -4498,7 +4590,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Tast `Joplin help` for alm. info."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:592
+#: packages/app-desktop/plugins/GotoAnything.tsx:580
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4508,7 +4600,7 @@ msgstr ""
 "Eller skriv # efterfulgt af et etikettenavn, eller @ efterfulgt af en "
 "notesbogs navn. Eller skriv: for at søge efter kommandoer."
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:198
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:200
 msgid "Type new tags or select from list"
 msgstr "Indtast nye etiketter eller vælg fra listen"
 
@@ -4522,7 +4614,7 @@ msgstr "Ufærdige opgaver øverst"
 
 #: packages/app-desktop/gui/MenuBar.tsx:642
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#: packages/app-mobile/components/ScreenHeader.tsx:364
+#: packages/app-mobile/components/ScreenHeader.tsx:366
 msgid "Undo"
 msgstr "Fortryd"
 
@@ -4557,7 +4649,7 @@ msgstr ""
 "Del ikke længere denne notesbog? Modtagerne vil ikke længere have adgang til "
 "dens indhold."
 
-#: packages/app-mobile/components/screens/Note.tsx:668
+#: packages/app-mobile/components/screens/Note.tsx:659
 msgid "Unsupported image type: %s"
 msgstr "Ikke-understøttet billedtype: %s"
 
@@ -4612,7 +4704,7 @@ msgstr "Opdateret: "
 msgid "Updated: %d."
 msgstr "Opdateret %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:846
+#: packages/app-mobile/components/screens/Note.tsx:837
 msgid "Updated: %s"
 msgstr "Opdateret: %s"
 
@@ -4638,6 +4730,10 @@ msgstr "URL"
 #: packages/lib/BaseApplication.ts:220
 msgid "Usage: %s"
 msgstr "Forbrug: %s"
+
+#: packages/lib/models/Setting.ts:1629
+msgid "Use biometrics to secure access to the app"
+msgstr "Brug biometri til at sikre adgangen til appen"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4665,7 +4761,7 @@ msgstr ""
 "Brug pilene for at flytte layout-elementerne. Tryk på \"Escape\" for at "
 "afslutte."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4673,7 +4769,15 @@ msgstr ""
 "Brug denne funktion til at genopbygge søgeindekset, hvis der er problemer "
 "med søgning. Det kan tage lang tid afhængig af antallet af noter."
 
-#: packages/lib/models/Setting.ts:1221
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:56
+msgid ""
+"Use your biometrics to secure access to your application. You can always set "
+"it up later in Settings."
+msgstr ""
+"Brug dine biometriske data til at sikre adgangen til din applikation. Du kan "
+"altid konfigurere det senere i Indstillinger."
+
+#: packages/lib/models/Setting.ts:1245
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4681,7 +4785,7 @@ msgstr ""
 "Bruges til det meste tekst i markdown-editoren. Hvis ikke fundet, bruges en "
 "proportional (variabel bredde) font."
 
-#: packages/lib/models/Setting.ts:1233
+#: packages/lib/models/Setting.ts:1257
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4705,11 +4809,15 @@ msgstr "Brugere"
 msgid "Valid"
 msgstr "Gyldig"
 
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:24
+msgid "Verify your identity"
+msgstr "Bekræft din identitet"
+
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
 msgstr "Vis"
 
-#: packages/app-mobile/components/screens/Note.tsx:850
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "View on map"
 msgstr "Vis på kort"
 
@@ -4725,11 +4833,11 @@ msgstr "Se dem nu"
 msgid "Viewer"
 msgstr "Fremviser"
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1397
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:81
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
 msgid "Warning"
 msgstr "Advarsel"
 
@@ -4739,7 +4847,7 @@ msgstr ""
 "Advarsel: Ikke alle ressourcer kan vises af ydelsesmæssige årsager "
 "(Begrænsning: %s)."
 
-#: packages/lib/models/Setting.ts:2408 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2455 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Web-clipper"
 
@@ -4781,11 +4889,11 @@ msgstr ""
 "For eksempel, for at oprette en notesbog; tryk `mb` eller tryk `mn` for at "
 "oprette en note."
 
-#: packages/lib/models/Setting.ts:1081
+#: packages/lib/models/Setting.ts:1093
 msgid "When creating a new note:"
 msgstr "Ved oprettelse af ny note:"
 
-#: packages/lib/models/Setting.ts:1064
+#: packages/lib/models/Setting.ts:1076
 msgid "When creating a new to-do:"
 msgstr "Ved oprettelse af ny opgave:"
 
@@ -4808,12 +4916,12 @@ msgid "yes"
 msgstr "ja"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/app-mobile/components/screens/Note.tsx:575
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Ja"
 
-#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/app-mobile/components/screens/Note.tsx:574
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -4863,7 +4971,7 @@ msgstr ""
 "Din adgangskode er nødvendig for at dekryptere nogle af dine data. Tast `:"
 "e2ee decrypt` for at indstille den."
 
-#: packages/app-mobile/components/CameraView.tsx:189
+#: packages/app-mobile/components/CameraView.tsx:191
 msgid "Your permission to use your camera is required."
 msgstr "Din tilladelse til at bruge kameraet er påkrævet."
 

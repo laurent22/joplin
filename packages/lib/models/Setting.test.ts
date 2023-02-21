@@ -24,7 +24,7 @@ const switchToSubProfileSettings = async () => {
 	await Setting.load();
 };
 
-describe('models/Setting', function() {
+describe('models/Setting', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -377,6 +377,21 @@ describe('models/Setting', function() {
 		for (const [k, v] of Object.entries(Setting.metadata())) {
 			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
 		}
+	});
+
+	test('values should not be undefined when they are set', async () => {
+		Setting.setValue('locale', undefined);
+		expect(Setting.value('locale')).toBe('');
+	});
+
+	test('values should not be undefined when registering a setting', async () => {
+		await Setting.registerSetting('myCustom', {
+			public: true,
+			value: undefined,
+			type: Setting.TYPE_STRING,
+		});
+
+		expect(Setting.value('myCustom')).toBe('');
 	});
 
 });

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Slider from '@react-native-community/slider';
 const React = require('react');
-const { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } = require('react-native');
+import { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import ReportService from '@joplin/lib/services/ReportService';
@@ -12,6 +12,7 @@ import shim from '@joplin/lib/shim';
 import setIgnoreTlsErrors from '../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
+const { BackButtonService } = require('../../services/back-button.js');
 const VersionInfo = require('react-native-version-info').default;
 const { connect } = require('react-redux');
 import ScreenHeader from '../ScreenHeader';
@@ -98,6 +99,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.syncStatusButtonPress_ = () => {
 			void NavService.go('Status');
+		};
+
+		this.manageProfilesButtonPress_ = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'ProfileSwitcher',
+			});
 		};
 
 		this.exportDebugButtonPress_ = async () => {
@@ -320,6 +328,36 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return 0;
 	}
 
+	private handleBackButtonPress = (): boolean => {
+		const goBack = async () => {
+			BackButtonService.removeHandler(this.handleBackButtonPress);
+			await BackButtonService.back();
+		};
+
+		if (this.state.changedSettingKeys.length > 0) {
+			const dialogTitle: string|null = null;
+			Alert.alert(
+				dialogTitle,
+				_('There are unsaved changes.'),
+				[{
+					text: _('Save changes'),
+					onPress: async () => {
+						await this.saveButton_press();
+						await goBack();
+					},
+				},
+				{
+					text: _('Discard changes'),
+					onPress: goBack,
+				}]
+			);
+
+			return true;
+		}
+
+		return false;
+	};
+
 	public componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
 			setTimeout(() => {
@@ -330,6 +368,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				});
 			}, 200);
 		}
+
+		BackButtonService.addHandler(this.handleBackButtonPress);
+	}
+
+	public componentWillUnmount() {
+		BackButtonService.removeHandler(this.handleBackButtonPress);
 	}
 
 	renderHeader(key: string, title: string) {
@@ -341,7 +385,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	renderButton(key: string, title: string, clickHandler: Function, options: any = null) {
+	renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		if (!options) options = {};
 
 		let descriptionComp = null;
@@ -495,6 +539,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			// );
 		} else if (md.type === Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
+			const minimum = 'minimum' in md ? md.minimum : 0;
+			const maximum = 'maximum' in md ? md.maximum : 10;
+
 			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
 			// on the Slider as they are buggy and can crash the app on certain devices.
 			// https://github.com/laurent22/joplin/issues/2733
@@ -506,7 +553,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={minimum} maximumValue={maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
@@ -530,7 +577,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().settingText}>
 						{md.label()}
 					</Text>
-					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
@@ -561,6 +608,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(this.renderHeader('tools', _('Tools')));
 
+		settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
 		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
 		if (Platform.OS === 'android') {
@@ -620,7 +668,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			<View key="donate_link" style={this.styles().settingContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						Linking.openURL('https://joplinapp.org/donate/');
+						void Linking.openURL('https://joplinapp.org/donate/');
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>
@@ -634,7 +682,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			<View key="website_link" style={this.styles().settingContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						Linking.openURL('https://joplinapp.org/');
+						void Linking.openURL('https://joplinapp.org/');
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>
@@ -648,7 +696,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			<View key="privacy_link" style={this.styles().settingContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						Linking.openURL('https://joplinapp.org/privacy/');
+						void Linking.openURL('https://joplinapp.org/privacy/');
 					}}
 				>
 					<Text key="label" style={this.styles().linkText}>

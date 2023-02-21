@@ -2,7 +2,7 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
-import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng } from './contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions } from './contextMenuUtils';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
@@ -10,6 +10,7 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -106,8 +107,10 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (!options.filename) {
 					throw new Error('Filename is needed to save as png');
 				}
+				// double dimensions to make sure it's always big enough even on hdpi screens
+				const [width, height] = svgDimensions(document, options.textToCopy).map((x: number) => x * 2 || undefined);
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
-				const png = await svgUriToPng(document, dataUri);
+				const png = await svgUriToPng(document, dataUri, width, height);
 				const filename = options.filename.replace('.svg', '.png');
 				await saveFileData(png, filename);
 			},
@@ -171,6 +174,13 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 
 				options.insertContent(content);
+			},
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
+		},
+		pasteAsText: {
+			label: _('Paste as text'),
+			onAction: async (options: ContextMenuOptions) => {
+				options.fireEditorEvent(TinyMceEditorEvents.PasteAsText);
 			},
 			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
 		},

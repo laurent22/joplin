@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const { randomClipperPort } = require('./randomClipperPort');
 
 function msleep(ms) {

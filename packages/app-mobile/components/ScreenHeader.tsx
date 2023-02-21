@@ -1,7 +1,7 @@
 const React = require('react');
 
 import { connect } from 'react-redux';
-import { PureComponent, Component } from 'react';
+import { PureComponent } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
@@ -21,7 +21,10 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import CustomButton from './CustomButton';
 
-Icon.loadFont();
+// We need this to suppress the useless warning
+// https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
+Icon.loadFont().catch((error: any) => { console.info(error); });
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -46,7 +49,7 @@ type DispatchCommandType=(event: { type: string })=> void;
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	noteSelectionEnabled: boolean;
-	parentComponent: Component;
+	parentComponent: any;
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
@@ -55,8 +58,8 @@ interface ScreenHeaderProps {
 	folders: FolderEntity[];
 	folderPickerOptions?: {
 		enabled: boolean;
-		selectedFolderId: string;
-		onValueChange: OnValueChangedListener;
+		selectedFolderId?: string;
+		onValueChange?: OnValueChangedListener;
 		mustSelect?: boolean;
 	};
 

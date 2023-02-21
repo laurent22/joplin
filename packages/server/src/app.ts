@@ -70,7 +70,7 @@ function markPasswords(o: Record<string, any>): Record<string, any> {
 	const output: Record<string, any> = {};
 
 	for (const k of Object.keys(o)) {
-		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret')) {
+		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret') || k.toLowerCase().includes('connectionstring')) {
 			output[k] = '********';
 		} else {
 			output[k] = o[k];
@@ -184,7 +184,7 @@ async function main() {
 	app.use(cors({
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
-			const origin = ctx.request.origin;
+			const origin = ctx.request.header.origin;
 
 			if (acceptOrigin(origin)) {
 				return origin;

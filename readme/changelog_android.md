@@ -1,5 +1,53 @@
 # Joplin Android app changelog
 
+## [android-v2.10.6](https://github.com/laurent22/joplin/releases/tag/android-v2.10.6) (Pre-release) - 2023-02-10T16:22:28Z
+
+- Improved: Add create sub-notebook feature (#7728) (#1044 by [@carlosngo](https://github.com/carlosngo))
+- Fixed: Fix double-scroll issue in long notes (#7701) (#7700 by Henry Heino)
+- Fixed: Fix startup error (#7688) (#7687 by Henry Heino)
+- Fixed: Sharing file to Joplin does not work (#7691)
+
+## [android-v2.10.5](https://github.com/laurent22/joplin/releases/tag/android-v2.10.5) (Pre-release) - 2023-01-21T14:21:23Z
+
+- Improved: Improve dialogue spacing in Fountain renderer (#7628) (#7627 by [@Elleo](https://github.com/Elleo))
+- Improved: Improve filesystem sync performance (#7637) (#6942 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixes non-working alarms (138bc81)
+
+## [android-v2.10.4](https://github.com/laurent22/joplin/releases/tag/android-v2.10.4) (Pre-release) - 2023-01-14T17:30:34Z
+
+- New: Add support for multiple profiles (6bb52d5)
+- Improved: Configurable editor font size (#7596 by Henry Heino)
+- Improved: Confirm closing settings with unsaved changes (#7566 by Henry Heino)
+- Improved: Upgrade to React Native 0.69 (7e29804)
+- Improved: Upgrade to React Native 0.70 (4bdb3d0)
+- Fixed: Fixed biometics prompt on new devices (9eff7e6)
+- Fixed: Fixed issue when floating keyboard is visible (#7593) (#6682 by Henry Heino)
+- Fixed: Remove gray line around text editor (#7595) (#7594 by Henry Heino)
+
+## [android-v2.10.3](https://github.com/laurent22/joplin/releases/tag/android-v2.10.3) (Pre-release) - 2023-01-05T11:29:06Z
+
+- New: Add support for locking the app using biometrics (f10d9f7)
+- Improved: Make the new text editor the default one (f5ef318)
+- Fixed: Fixed proxy timeout setting UI (275c80a)
+- Fixed: Settings save button visible even when no settings have been changed (#7503)
+
+## [android-v2.10.2](https://github.com/laurent22/joplin/releases/tag/android-v2.10.2) (Pre-release) - 2023-01-02T17:44:15Z
+
+- New: Add support for realtime search (767213c)
+- Fixed: Enable autocorrect with spellcheck (#7532) (#6175 by Henry Heino)
+
+## [android-v2.10.1](https://github.com/laurent22/joplin/releases/tag/android-v2.10.1) (Pre-release) - 2022-12-29T13:55:48Z
+
+- Improved: Switch license to AGPL-3.0 (faf0a4e)
+- Improved: Tag search case insensitive (#7368 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Update Mermaid: 9.1.7 to 9.2.2 (#7330 by Helmut K. C. Tessarek)
+- Improved: Upgrade to react-native 0.68.5 (e2d59ee)
+- Fixed: Could not attach images to notes anymore (#7471)
+- Fixed: Fix CodeMirror syntax highlighting (#7386 by Henry Heino)
+- Fixed: Fix attaching multiple files (#7196) (#7195 by Self Not Found)
+- Fixed: Update CodeMirror (#7262) (#7253 by Henry Heino)
+- Security: Fix XSS when a specially crafted string is passed to the renderer (762b4e8)
+
 ## [android-v2.9.8](https://github.com/laurent22/joplin/releases/tag/android-v2.9.8) (Pre-release) - 2022-11-01T15:45:36Z
 
 - Updated translations

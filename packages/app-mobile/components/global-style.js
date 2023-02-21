@@ -69,6 +69,9 @@ function addExtraStyles(style) {
 
 	style.keyboardAppearance = style.appearance;
 
+	style.color5 = style.backgroundColor4;
+	style.backgroundColor5 = style.color4;
+
 	return style;
 }
 

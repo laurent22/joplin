@@ -11,7 +11,7 @@ interface PackageJson {
 
 const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
 
-let runningInDocker_: boolean = false;
+let runningInDocker_ = false;
 
 export function runningInDocker(): boolean {
 	return runningInDocker_;
@@ -42,15 +42,25 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	};
 
 	if (env.DB_CLIENT === 'pg') {
-		return {
+		const databaseConfig: DatabaseConfig = {
 			...baseConfig,
 			client: DatabaseConfigClient.PostgreSQL,
-			name: env.POSTGRES_DATABASE,
-			user: env.POSTGRES_USER,
-			password: env.POSTGRES_PASSWORD,
-			port: env.POSTGRES_PORT,
-			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
 		};
+		if (env.POSTGRES_CONNECTION_STRING) {
+			return {
+				...databaseConfig,
+				connectionString: env.POSTGRES_CONNECTION_STRING,
+			};
+		} else {
+			return {
+				...databaseConfig,
+				name: env.POSTGRES_DATABASE,
+				user: env.POSTGRES_USER,
+				password: env.POSTGRES_PASSWORD,
+				port: env.POSTGRES_PORT,
+				host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
+			};
+		}
 	}
 
 	return {

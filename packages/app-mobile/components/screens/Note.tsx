@@ -22,7 +22,7 @@ const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import BaseModel from '@joplin/lib/BaseModel';
-const { ActionButton } = require('../action-button.js');
+import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 import ScreenHeader from '../ScreenHeader';
@@ -37,9 +37,8 @@ const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const ImageResizer = require('react-native-image-resizer').default;
-const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
-const ImagePicker = require('react-native-image-picker').default;
-import { ImagePickerResponse } from 'react-native-image-picker';
+import shared from '@joplin/lib/components/shared/note-screen-shared';
+import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
@@ -149,6 +148,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					routeName: 'Notes',
 					folderId: this.state.note.parent_id,
 				});
+
+				ShareExtension.close();
 				return true;
 			}
 
@@ -332,7 +333,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
-				fontSize: theme.fontSize,
+				fontSize: this.props.editorFontSize,
 				fontFamily: editorFont(this.props.editorFont),
 			},
 			noteBodyViewer: {
@@ -459,10 +460,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		if (this.state.fromShare) {
-			ShareExtension.close();
-		}
-
 		this.saveActionQueue(this.state.note.id).processAllNow();
 
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
@@ -497,7 +494,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	makeSaveAction() {
 		return async () => {
-			return shared.saveNoteButton_press(this);
+			return shared.saveNoteButton_press(this, null, null);
 		};
 	}
 
@@ -513,7 +510,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async saveNoteButton_press(folderId: string = null) {
-		await shared.saveNoteButton_press(this, folderId);
+		await shared.saveNoteButton_press(this, folderId, null);
 
 		Keyboard.dismiss();
 	}
@@ -543,6 +540,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private async pickDocuments() {
 		const result = await shim.fsDriver().pickDocument({ multiple: true });
 		if (!result) {
+			// eslint-disable-next-line no-console
 			console.info('pickDocuments: user has cancelled');
 		}
 		return result;
@@ -559,14 +557,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					reject(error);
 				}
 			);
-		});
-	}
-
-	showImagePicker(options: any) {
-		return new Promise((resolve) => {
-			ImagePicker.launchImageLibrary(options, (response: any) => {
-				resolve(response);
-			});
 		});
 	}
 
@@ -720,7 +710,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	private async attachPhoto_onPress() {
 		// the selection Limit should be specfied. I think 200 is enough?
-		const response: ImagePickerResponse = await this.showImagePicker({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+		const response: ImagePickerResponse = await launchImageLibrary({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
 
 		if (response.errorCode) {
 			reg.logger().warn('Got error from picker', response.errorCode);
@@ -1154,21 +1144,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
-			const buttons = [];
-
-			buttons.push({
-				title: _('Edit'),
+			const editButton = {
+				label: _('Edit'),
 				icon: 'md-create',
 				onPress: () => {
 					this.setState({ mode: 'edit' });
 
 					this.doFocusUpdate_ = true;
 				},
-			});
+			};
 
 			if (this.state.mode === 'edit') return null;
 
-			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;
+			return <ActionButton mainButton={editButton} />;
 		};
 
 		const actionButtonComp = renderActionButton();
@@ -1246,12 +1234,13 @@ const NoteScreen = connect((state: any) => {
 		searchQuery: state.searchQuery,
 		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
+		editorFontSize: state.settings['style.editor.fontSize'],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
-		useEditorBeta: state.settings['editor.beta'],
+		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);
 

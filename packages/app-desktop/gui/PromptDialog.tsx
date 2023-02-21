@@ -224,12 +224,16 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		const onKeyDown = (event: any) => {
 			if (event.key === 'Enter') {
-				if (this.props.inputType !== 'tags' && this.props.inputType !== 'dropdown') {
-					onClose(true);
-				} else if (this.answerInput_.current && !this.answerInput_.current.state.menuIsOpen) {
-					// The menu will be open if the user is selecting a new item
+				if (this.props.inputType === 'tags' || this.props.inputType === 'dropdown') {
+					// Do nothing
+				} else {
 					onClose(true);
 				}
+
+				// } else if (this.answerInput_.current && !this.answerInput_.current.state.menuIsOpen) {
+				// 	// The menu will be open if the user is selecting a new item
+				// 	onClose(true);
+				// }
 			} else if (event.key === 'Escape') {
 				onClose(false);
 			}

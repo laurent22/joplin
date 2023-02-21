@@ -3,9 +3,9 @@ import { ItemAddressingType } from '../services/database/types';
 import { RouteType } from './types';
 import { expectThrow } from './testing/testUtils';
 
-describe('routeUtils', function() {
+describe('routeUtils', () => {
 
-	it('should parse a route path', async function() {
+	it('should parse a route path', async () => {
 		const testCases: any[] = [
 			['123456/content', '123456', 'content', ItemAddressingType.Id],
 			['123456', '123456', '', ItemAddressingType.Id],
@@ -27,7 +27,7 @@ describe('routeUtils', function() {
 		}
 	});
 
-	it('should find a matching route', async function() {
+	it('should find a matching route', async () => {
 		const testCases: any[] = [
 			['/admin/organizations', {
 				route: 1,
@@ -82,7 +82,7 @@ describe('routeUtils', function() {
 		await expectThrow(async () => findMatchingRoute('api/users/123', routes));
 	});
 
-	it('should split an item path', async function() {
+	it('should split an item path', async () => {
 		const testCases: any[] = [
 			['root:/Documents/MyFile.md:', ['root', 'Documents', 'MyFile.md']],
 			['documents:/CV.doc:', ['documents', 'CV.doc']],
@@ -98,7 +98,7 @@ describe('routeUtils', function() {
 		}
 	});
 
-	it('should check the request origin for API URLs', async function() {
+	it('should check the request origin for API URLs', async () => {
 		const testCases: [string, string, boolean][] = [
 			[
 				'https://example.com', // Request origin
@@ -140,7 +140,7 @@ describe('routeUtils', function() {
 		}
 	});
 
-	it('should check the request origin for User Content URLs', async function() {
+	it('should check the request origin for User Content URLs', async () => {
 		const testCases: [string, string, boolean][] = [
 			[
 				'https://usercontent.local', // Request origin
@@ -170,7 +170,7 @@ describe('routeUtils', function() {
 		}
 	});
 
-	it('should check if a URL matches a schema', async function() {
+	it('should check if a URL matches a schema', async () => {
 		const testCases: [string, string, boolean][] = [
 			[
 				'https://test.com/items/123/children',

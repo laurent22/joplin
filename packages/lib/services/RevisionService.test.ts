@@ -8,7 +8,7 @@ import BaseModel, { ModelType } from '../BaseModel';
 import RevisionService from '../services/RevisionService';
 import { MarkupLanguage } from '../../renderer';
 
-describe('services/RevisionService', function() {
+describe('services/RevisionService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

@@ -46,7 +46,7 @@ async function patchUser(sessionId: string, user: any, url: string = ''): Promis
 	return context.response.body;
 }
 
-describe('admin/users', function() {
+describe('admin/users', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('admin/users');
@@ -60,7 +60,7 @@ describe('admin/users', function() {
 		await beforeEachDb();
 	});
 
-	test('should create a new user', async function() {
+	test('should create a new user', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const password = uuidgen();
@@ -83,7 +83,7 @@ describe('admin/users', function() {
 		expect(userFromModel.password === password).toBe(false); // Password has been hashed
 	});
 
-	test('should create a user with null properties if they are not explicitly set', async function() {
+	test('should create a user with null properties if they are not explicitly set', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		await postUser(session.id, 'test@example.com');
@@ -95,7 +95,7 @@ describe('admin/users', function() {
 		expect(newUser.max_total_item_size).toBe(null);
 	});
 
-	test('should ask user to set password if not set on creation', async function() {
+	test('should ask user to set password if not set on creation', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		await postUser(session.id, 'test@example.com', '', {
@@ -107,7 +107,7 @@ describe('admin/users', function() {
 		expect(!!newUser.password).toBe(true);
 	});
 
-	test('should format the email when saving it', async function() {
+	test('should format the email when saving it', async () => {
 		const email = 'ILikeUppercaseAndSpaces@Example.COM   ';
 
 		const { session } = await createUserAndSession(1, true);
@@ -119,7 +119,7 @@ describe('admin/users', function() {
 		expect(loggedInUser.email).toBe('ilikeuppercaseandspaces@example.com');
 	});
 
-	test('should not create anything if user creation fail', async function() {
+	test('should not create anything if user creation fail', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const userModel = models().user();
@@ -140,7 +140,7 @@ describe('admin/users', function() {
 		expect(beforeUserCount).toBe(afterUserCount);
 	});
 
-	test('should list users', async function() {
+	test('should list users', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, true);
 		const { user: user2 } = await createUserAndSession(2, false);
 
@@ -149,7 +149,7 @@ describe('admin/users', function() {
 		expect(result).toContain(user2.email);
 	});
 
-	test('should delete sessions when changing password', async function() {
+	test('should delete sessions when changing password', async () => {
 		const { user, session, password } = await createUserAndSession(1);
 
 		await models().session().authenticate(user.email, password);
@@ -170,7 +170,7 @@ describe('admin/users', function() {
 		expect(sessions[0].id).toBe(session.id);
 	});
 
-	test('should apply ACL', async function() {
+	test('should apply ACL', async () => {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
 
 		// admin user cannot make themselves a non-admin

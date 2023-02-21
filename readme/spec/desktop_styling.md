@@ -20,7 +20,7 @@ Whenever the app is built, this root style.scss file is compiled and a style.css
 
 ## CSS class framework
 
-We use [rscss](https://rscss.io/index.html) to structure the components and classes. The main things to remember are:
+We use [rscss](https://ricostacruz.com/rscss/index.html) to structure the components and classes. The main things to remember are:
 
 - Components should be named with **at least two words**. eg `.search-form`
 
@@ -75,4 +75,4 @@ Do **NOT** do this:
 
 The goal of this approach is to specifically target the elements that you need and nothing else. Over the long term is makes managing the CSS easier.
 
-For more details, see the [RSCSS documentation](https://rscss.io/index.html).
+For more details, see the [RSCSS documentation](https://ricostacruz.com/rscss/index.html).

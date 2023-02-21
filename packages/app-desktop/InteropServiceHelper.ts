@@ -40,6 +40,7 @@ export default class InteropServiceHelper {
 		const service = InteropService.instance();
 
 		const result = await service.export(fullExportOptions);
+		// eslint-disable-next-line no-console
 		console.info('Export HTML result: ', result);
 		return tempFile;
 	}
@@ -78,6 +79,12 @@ export default class InteropServiceHelper {
 					shim.setTimeout(async () => {
 						if (target === 'pdf') {
 							try {
+								// The below line "opens" all <details> tags
+								// before printing. This assures that the
+								// contents of the tag are visible in printed
+								// pdfs.
+								// https://github.com/laurent22/joplin/issues/6254.
+								win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
 								const data = await win.webContents.printToPDF(options);
 								resolve(data);
 							} catch (error) {
@@ -184,6 +191,7 @@ export default class InteropServiceHelper {
 
 		try {
 			const result = await service.export(exportOptions);
+			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
 		} catch (error) {
 			console.error(error);

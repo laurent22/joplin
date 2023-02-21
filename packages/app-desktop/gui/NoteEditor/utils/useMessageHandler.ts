@@ -13,6 +13,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
+		// eslint-disable-next-line no-console
 		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
@@ -41,6 +42,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 				linkToCopy: arg0.linkToCopy || null,
 				htmlToCopy: '',
 				insertContent: () => { console.warn('insertContent() not implemented'); },
+				fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },
 			}, dispatch);
 
 			menu.popup(bridge().window());

@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
+
 import sqlts from '@rmp135/sql-ts';
 
 require('source-map-support').install();
 
-const dbFilePath: string = `${__dirname}/../../src/services/database/types.ts`;
+const dbFilePath = `${__dirname}/../../src/services/database/types.ts`;
 
 const fileReplaceWithinMarker = '// AUTO-GENERATED-TYPES';
 
@@ -74,7 +76,7 @@ function insertContentIntoFile(filePath: string, markerOpen: string, markerClose
 	if (!fs.existsSync(filePath)) throw new Error(`File not found: ${filePath}`);
 	let content: string = fs.readFileSync(filePath, 'utf-8');
 	// [^]* matches any character including new lines
-	const regex: RegExp = new RegExp(`${markerOpen}[^]*?${markerClose}`);
+	const regex = new RegExp(`${markerOpen}[^]*?${markerClose}`);
 	if (!content.match(regex)) throw new Error(`Could not find markers: ${markerOpen}`);
 	content = content.replace(regex, `${markerOpen}\n${contentToInsert}\n${markerClose}`);
 	fs.writeFileSync(filePath, content);

@@ -1,24 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const electron_notarize = require('electron-notarize');
-
-function execCommand(command) {
-	const exec = require('child_process').exec;
-
-	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout, stderr) => {
-			if (error) {
-				if (error.signal === 'SIGTERM') {
-					resolve('Process was killed');
-				} else {
-					reject(new Error([stdout.trim(), stderr.trim()].join('\n')));
-				}
-			} else {
-				resolve([stdout.trim(), stderr.trim()].join('\n'));
-			}
-		});
-	});
-}
+const execCommand = require('./execCommand');
 
 function isDesktopAppTag(tagName) {
 	if (!tagName) return false;

@@ -135,8 +135,7 @@ const SidebarComponent = (props: Props) => {
 	tagItemsOrder_.current = [];
 
 	const rootRef = useRef(null);
-	const anchorItemRefs = useRef<Record<string, any>>(null);
-	anchorItemRefs.current = {};
+	const anchorItemRefs = useRef<Record<string, any>>({});
 
 	// This whole component is a bit of a mess and rather than passing
 	// a plugins prop around, not knowing how it's going to affect
@@ -695,6 +694,11 @@ const SidebarComponent = (props: Props) => {
 		})
 	);
 
+	const foldersStyle = useMemo(() => {
+		return { display: props.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 };
+	}, [props.folderHeaderIsExpanded]);
+
+
 	if (props.folders.length) {
 		const allNotesSelected = props.notesParentType === 'SmartFilter' && props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 		const result = shared.renderFolders(props, renderFolderItem);
@@ -704,7 +708,7 @@ const SidebarComponent = (props: Props) => {
 			<div
 				className={`folders ${props.folderHeaderIsExpanded ? 'expanded' : ''}`}
 				key="folder_items"
-				style={{ display: props.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}
+				style={foldersStyle}
 			>
 				{folderItems}
 			</div>

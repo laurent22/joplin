@@ -121,11 +121,28 @@ async function main() {
 
 	const baseUrl = 'https://api.github.com/repos/laurent22/joplin/releases?page=';
 
+	// GitHub release API has been broken for a few years now - a fetch for a
+	// particular page may or may not return the page. So here we fetch the page
+	// multiple times until we get it. If we don't get it after that, we can
+	// assume there's really no page there. Without this hack, we get stuff like
+	// this, where the changelog is partly cleared, then restored on next
+	// update:
+	//
+	// - https://github.com/laurent22/joplin/commit/907422cefaeff52fe909278e40145812cc0d1303
+	// - https://github.com/laurent22/joplin/commit/07535a494e5c700adce89835d1fb3dc077600240
+	const multiFetch = async (url) => {
+		for (let i = 0; i < 3; i++) {
+			const response = await fetch(url);
+			const output = await response.json();
+			if (output && output.length) return output;
+		}
+		return null;
+	};
+
 	let pageNum = 1;
 	while (true) {
 		console.info(`Build stats: Page ${pageNum}`);
-		const response = await fetch(`${baseUrl}${pageNum}`);
-		const releases = await response.json();
+		const releases = await multiFetch(`${baseUrl}${pageNum}`);
 		if (!releases || !releases.length) break;
 		processReleases(releases);
 		pageNum++;

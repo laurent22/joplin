@@ -22,7 +22,7 @@ const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 let testApp = null;
 
-describe('integration_ShowAllNotes', function() {
+describe('integration_ShowAllNotes', () => {
 
 	beforeEach(async () => {
 		testApp = new TestApp();

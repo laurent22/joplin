@@ -5,7 +5,10 @@ const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { themeStyle } = require('./global-style.js');
 
-Icon.loadFont();
+// We need this to suppress the useless warning
+// https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
+Icon.loadFont().catch((error) => { console.info(error); });
 
 class SideMenuContentNoteComponent extends Component {
 	constructor() {

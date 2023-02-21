@@ -99,9 +99,16 @@ function useHtml(css: string): string {
 }
 
 function editorTheme(themeId: number) {
+	const fontSizeInPx = Setting.value('style.editor.fontSize');
+
+	// Convert from `px` to `em`. To support font size scaling based on
+	// system accessibility settings, we need to provide font sizes in `em`.
+	// 16px is about 1em with the default root font size.
+	const estimatedFontSizeInEm = fontSizeInPx / 16;
+
 	return {
 		...themeStyle(themeId),
-		fontSize: 0.85, // em
+		fontSize: estimatedFontSizeInEm,
 		fontFamily: fontFamilyFromSettings(),
 	};
 }
@@ -308,6 +315,7 @@ function NoteEditor(props: Props, ref: any) {
 
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
+				// eslint-disable-next-line no-console
 				console.info('CodeMirror:', ...event.value);
 			},
 
@@ -316,7 +324,6 @@ function NoteEditor(props: Props, ref: any) {
 			},
 
 			onUndoRedoDepthChange: (event: UndoRedoDepthChangeEvent) => {
-				console.info('onUndoRedoDepthChange', event);
 				props.onUndoRedoDepthChange(event);
 			},
 
@@ -348,6 +355,7 @@ function NoteEditor(props: Props, ref: any) {
 		if (handlers[msg.name]) {
 			handlers[msg.name](msg.data);
 		} else {
+			// eslint-disable-next-line no-console
 			console.info('Unsupported CodeMirror message:', msg);
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);

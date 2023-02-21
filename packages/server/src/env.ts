@@ -55,6 +55,7 @@ const defaultEnvValues: EnvVariables = {
 	POSTGRES_USER: 'joplin',
 	POSTGRES_HOST: '',
 	POSTGRES_PORT: 5432,
+	POSTGRES_CONNECTION_STRING: '',
 
 	// This must be the full path to the database file
 	SQLITE_DATABASE: '',
@@ -124,6 +125,7 @@ export interface EnvVariables {
 	POSTGRES_USER: string;
 	POSTGRES_HOST: string;
 	POSTGRES_PORT: number;
+	POSTGRES_CONNECTION_STRING: string;
 
 	SQLITE_DATABASE: string;
 

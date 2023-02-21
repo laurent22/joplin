@@ -90,7 +90,7 @@ const later = require('later');
 		if (numbers.length === 2) return expectedStep;
 
 		// Check that every number is the previous number + the first number
-		return numbers.slice(1).every(function(n,i,a) {
+		return numbers.slice(1).every((n, i, a) => {
 			return (i === 0 ? n : n - a[i - 1]) === expectedStep;
 		}) ? expectedStep : 0;
 	};
@@ -330,7 +330,7 @@ const later = require('later');
 			}
 		}
 
-		return textParts.filter(function(p) { return p; }).join(' ');
+		return textParts.filter((p) => { return p; }).join(' ');
 	};
 
 	// ----------------

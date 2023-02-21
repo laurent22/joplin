@@ -45,7 +45,7 @@ export function themeById(themeId: string) {
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
 const globalStyle: any = {
-	fontFamily: 'Roboto',// 'sans-serif',
+	fontFamily: 'Roboto', // 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,

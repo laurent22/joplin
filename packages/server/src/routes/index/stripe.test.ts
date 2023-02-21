@@ -81,7 +81,7 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 	}, options);
 }
 
-describe('index/stripe', function() {
+describe('index/stripe', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index/stripe');
@@ -96,7 +96,7 @@ describe('index/stripe', function() {
 		await beforeEachDb();
 	});
 
-	test('should handle the checkout.session.completed event', async function() {
+	test('should handle the checkout.session.completed event', async () => {
 		const startTime = Date.now();
 
 		const ctx = await koaAppContext();
@@ -113,7 +113,7 @@ describe('index/stripe', function() {
 		expect(sub.last_payment_failed_time).toBe(0);
 	});
 
-	test('should not process the same event twice', async function() {
+	test('should not process the same event twice', async () => {
 		const ctx = await koaAppContext();
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' });
 		const v = await models().keyValue().value('stripeEventDone::evt_1');
@@ -122,7 +122,7 @@ describe('index/stripe', function() {
 		await expectNotThrow(async () => createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' }));
 	});
 
-	test('should check if it is a beta user', async function() {
+	test('should check if it is a beta user', async () => {
 		const user1 = await models().user().save({ email: 'toto@example.com', password: uuidgen() });
 		const user2 = await models().user().save({ email: 'tutu@example.com', password: uuidgen() });
 		await models().user().save({ id: user2.id, created_time: 1624441295775 });
@@ -140,13 +140,13 @@ describe('index/stripe', function() {
 		expect(await isBetaUser(models(), user2.id)).toBe(false);
 	});
 
-	test('should find out beta user trial end date', async function() {
+	test('should find out beta user trial end date', async () => {
 		const fromDateTime = 1627901594842; // Mon Aug 02 2021 10:53:14 GMT+0000
 		expect(betaUserTrialPeriodDays(1624441295775, fromDateTime)).toBe(50); // Wed Jun 23 2021 09:41:35 GMT+0000
 		expect(betaUserTrialPeriodDays(1614682158000, fromDateTime)).toBe(7); // Tue Mar 02 2021 10:49:18 GMT+0000
 	});
 
-	test('should setup subscription for an existing user', async function() {
+	test('should setup subscription for an existing user', async () => {
 		// This is for example if a user has been manually added to the system,
 		// and then later they setup their subscription. Applies to beta users
 		// for instance.
@@ -160,7 +160,7 @@ describe('index/stripe', function() {
 		expect(sub.stripe_subscription_id).toBe('sub_123');
 	});
 
-	test('should cancel duplicate subscriptions', async function() {
+	test('should cancel duplicate subscriptions', async () => {
 		const stripe = mockStripe();
 		const ctx = await koaAppContext();
 
@@ -178,7 +178,7 @@ describe('index/stripe', function() {
 		expect(subBefore.stripe_subscription_id).toBe(subAfter.stripe_subscription_id);
 	});
 
-	test('should disable an account if the sub is cancelled', async function() {
+	test('should disable an account if the sub is cancelled', async () => {
 		const stripe = mockStripe();
 		const ctx = await koaAppContext();
 
@@ -191,7 +191,7 @@ describe('index/stripe', function() {
 		expect(sub.is_deleted).toBe(1);
 	});
 
-	test('should re-enable account if sub was cancelled and new sub created', async function() {
+	test('should re-enable account if sub was cancelled and new sub created', async () => {
 		const stripe = mockStripe();
 		const ctx = await koaAppContext();
 
@@ -213,7 +213,7 @@ describe('index/stripe', function() {
 		}
 	});
 
-	test('should re-enable account if successful payment is made', async function() {
+	test('should re-enable account if successful payment is made', async () => {
 		const stripe = mockStripe();
 		const ctx = await koaAppContext();
 
@@ -235,7 +235,7 @@ describe('index/stripe', function() {
 		expect(user.can_upload).toBe(1);
 	});
 
-	test('should attach new sub to existing user', async function() {
+	test('should attach new sub to existing user', async () => {
 		// Simulates:
 		// - User subscribes
 		// - Later the subscription is cancelled, either automatically by Stripe or manually
@@ -269,7 +269,7 @@ describe('index/stripe', function() {
 		expect(sub.stripe_subscription_id).toBe('sub_new');
 	});
 
-	test('should not cancel a subscription as duplicate if it is already associated with a user', async function() {
+	test('should not cancel a subscription as duplicate if it is already associated with a user', async () => {
 		// When user goes through a Stripe checkout, we get the following
 		// events:
 		//

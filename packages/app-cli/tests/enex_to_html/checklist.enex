@@ -1,0 +1,11 @@
+<en-note>
+  <div>
+    <p>In Evernote a checklist is not the same as a list with checkboxes.</p>
+
+    <ul style="--en-todo:true;">
+        <li style="--en-checked:false;"><div>One</div></li>
+        <li style="--en-checked:true;"><div>Two</div>
+        </li><li style="--en-checked:false;"><div>Three</div></li>
+    </ul>
+  </div>
+</en-note>

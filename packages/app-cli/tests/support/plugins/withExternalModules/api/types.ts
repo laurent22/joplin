@@ -202,6 +202,25 @@ export interface Disposable {
 	// dispose():void;
 }
 
+export enum ModelType {
+	Note = 1,
+	Folder = 2,
+	Setting = 3,
+	Resource = 4,
+	Tag = 5,
+	NoteTag = 6,
+	Search = 7,
+	Alarm = 8,
+	MasterKey = 9,
+	ItemChange = 10,
+	NoteResource = 11,
+	ResourceLocalState = 12,
+	Revision = 13,
+	Migration = 14,
+	SmartFilter = 15,
+	Command = 16,
+}
+
 // =================================================================
 // Menu types
 // =================================================================
@@ -270,6 +289,17 @@ export interface MenuItem {
 	commandName?: string;
 
 	/**
+	 * Arguments that should be passed to the command. They will be as rest
+	 * parameters.
+	 */
+	commandArgs?: any[];
+
+	/**
+	 * Set to "separator" to create a divider line
+	 */
+	type?: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio');
+
+	/**
 	 * Accelerator associated with the menu item
 	 */
 	accelerator?: string;
@@ -334,6 +364,12 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum SettingItemSubType {
+	FilePathAndArgs = 'file_path_and_args',
+	FilePath = 'file_path', // Not supported on mobile!
+	DirectoryPath = 'directory_path', // Not supported on mobile!
+}
+
 export enum AppType {
 	Desktop = 'desktop',
 	Mobile = 'mobile',
@@ -350,6 +386,12 @@ export enum SettingStorage {
 export interface SettingItem {
 	value: any;
 	type: SettingItemType;
+
+	/**
+	 * Currently only used to display a file or directory selector. Always set
+	 * `type` to `SettingItemType.String` when using this property.
+	 */
+	subType?: SettingItemSubType;
 
 	label: string;
 	description?: string;

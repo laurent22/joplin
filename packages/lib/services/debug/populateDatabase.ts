@@ -9,6 +9,8 @@ export interface Options {
 	tagsPerNote?: number;
 	silent?: number;
 	clearDatabase?: boolean;
+	rootFolderCount?: number;
+	subFolderDepth?: number;
 }
 
 function randomIndex(array: any[]): number {
@@ -47,6 +49,8 @@ export default async function populateDatabase(db: any, options: Options = null)
 		tagCount: 0,
 		tagsPerNote: 0,
 		clearDatabase: false,
+		rootFolderCount: 0,
+		subFolderDepth: 0,
 		...options,
 	};
 
@@ -55,22 +59,47 @@ export default async function populateDatabase(db: any, options: Options = null)
 	const createdFolderIds: string[] = [];
 	const createdNoteIds: string[] = [];
 	const createdTagIds: string[] = [];
+	const createdFolderDepths: Record<string, number> = {};
+	const folderDepthToId: Record<number, string[]> = {};
+	let rootFolderCount = 0;
 
 	for (let i = 0; i < options.folderCount; i++) {
 		const folder: any = {
 			title: `folder${i}`,
 		};
 
-		const isRoot = Math.random() <= 0.1 || i === 0;
+		let isRoot = Math.random() <= 0.1 || i === 0;
+
+		if (options.rootFolderCount && rootFolderCount >= options.rootFolderCount) isRoot = false;
+
+		let depth = 0;
 
 		if (!isRoot) {
-			const parentIndex = randomIndex(createdFolderIds);
-			folder.parent_id = createdFolderIds[parentIndex];
+			let possibleFolderIds: string[] = [];
+			if (options.subFolderDepth) {
+				for (let i = 0; i < options.subFolderDepth; i++) {
+					if (folderDepthToId[i]) possibleFolderIds = possibleFolderIds.concat(folderDepthToId[i]);
+				}
+			} else {
+				possibleFolderIds = createdFolderIds;
+			}
+
+			const parentIndex = randomIndex(possibleFolderIds);
+			const parentId = possibleFolderIds[parentIndex];
+			folder.parent_id = parentId;
+			depth = createdFolderDepths[parentId] + 1;
+		} else {
+			rootFolderCount++;
 		}
 
 		const savedFolder = await Folder.save(folder);
 		createdFolderIds.push(savedFolder.id);
+		createdFolderDepths[savedFolder.id] = depth;
 
+		if (!folderDepthToId[depth]) folderDepthToId[depth] = [];
+		folderDepthToId[depth].push(savedFolder.id);
+
+		// eslint-disable-next-line no-console
 		if (!options.silent) console.info(`Folders: ${i} / ${options.folderCount}`);
 	}
 
@@ -80,6 +109,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		tagBatch.push(Tag.save({ title: tagTitle }, { dispatchUpdateAction: false }).then((savedTag: any) => {
 			createdTagIds.push(savedTag.id);
+			// eslint-disable-next-line no-console
 			if (!options.silent) console.info(`Tags: ${i} / ${options.tagCount}`);
 		}));
 
@@ -103,6 +133,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		noteBatch.push(Note.save(note, { dispatchUpdateAction: false }).then((savedNote: any) => {
 			createdNoteIds.push(savedNote.id);
+			// eslint-disable-next-line no-console
 			console.info(`Notes: ${i} / ${options.noteCount}`);
 		}));
 

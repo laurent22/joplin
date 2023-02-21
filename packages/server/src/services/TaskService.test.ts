@@ -14,7 +14,7 @@ const newService = () => {
 	});
 };
 
-describe('TaskService', function() {
+describe('TaskService', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('TaskService');
@@ -28,7 +28,7 @@ describe('TaskService', function() {
 		await beforeEachDb();
 	});
 
-	test('should register a task', async function() {
+	test('should register a task', async () => {
 		const service = newService();
 
 		const task: Task = {
@@ -98,7 +98,7 @@ describe('TaskService', function() {
 	// 	expect(events.taskCompleted.created_time).toBeGreaterThan(startTime.getTime());
 	// });
 
-	test('should not run if task is disabled', async function() {
+	test('should not run if task is disabled', async () => {
 		const service = newService();
 
 		let taskHasRan = false;

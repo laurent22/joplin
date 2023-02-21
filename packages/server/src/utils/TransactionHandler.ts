@@ -35,6 +35,7 @@ export default class TransactionHandler {
 
 	private log(s: string): void {
 		if (!this.logEnabled_) return;
+		// eslint-disable-next-line no-console
 		console.info(`TransactionHandler: ${s}`);
 	}
 

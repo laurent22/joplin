@@ -6,7 +6,7 @@ import { DbConnection } from '../db';
 // https://github.com/knex/knex/issues/2581
 
 export async function up(db: DbConnection): Promise<any> {
-	await db.schema.alterTable('users', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.dropColumn('max_item_size');
 		table.dropColumn('can_share_folder');
 		table.dropColumn('can_share_note');

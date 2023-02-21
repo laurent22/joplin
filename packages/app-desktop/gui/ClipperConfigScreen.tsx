@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { clipboard } = require('electron');
-const ExtensionBadge = require('./ExtensionBadge.min');
+import ExtensionBadge from './ExtensionBadge';
 import bridge from '../services/bridge';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';

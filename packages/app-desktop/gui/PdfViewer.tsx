@@ -59,33 +59,37 @@ export default function PdfViewer(props: Props) {
 			linkToCopy: null,
 			htmlToCopy: '',
 			insertContent: () => { console.warn('insertContent() not implemented'); },
+			fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },
 		} as ContextMenuOptions, props.dispatch);
 
 		menu.popup(bridge().window());
 	}, [props.dispatch]);
 
-	useEffect(() => {
-		const onMessage_ = async (event: any) =>{
-			if (!event.data || !event.data.name) {
-				return;
-			}
+	const onMessage_ = useCallback(async (event: any) => {
+		if (!event.data || !event.data.name) {
+			return;
+		}
 
-			if (event.data.name === 'close') {
-				onClose();
-			} else if (event.data.name === 'externalViewer') {
-				await openExternalViewer();
-			} else if (event.data.name === 'textSelected') {
-				await textSelected(event.data.text);
-			} else {
-				console.error('Unknown event received', event.data.name);
-			}
-		};
+		if (event.data.name === 'close') {
+			onClose();
+		} else if (event.data.name === 'externalViewer') {
+			await openExternalViewer();
+		} else if (event.data.name === 'textSelected') {
+			await textSelected(event.data.text);
+		} else {
+			console.error('Unknown event received', event.data.name);
+		}
+	}, [openExternalViewer, textSelected, onClose]);
+
+	useEffect(() => {
 		const iframe = iframeRef.current;
 		iframe.contentWindow.addEventListener('message', onMessage_);
 		return () => {
-			iframe.contentWindow.removeEventListener('message', onMessage_);
+			// iframe.contentWindow is not always defined
+			// https://github.com/laurent22/joplin/issues/7528
+			if (iframe.contentWindow) iframe.contentWindow.removeEventListener('message', onMessage_);
 		};
-	}, [onClose, openExternalViewer, textSelected]);
+	}, [onMessage_]);
 
 	const theme = themeStyle(props.themeId);
 

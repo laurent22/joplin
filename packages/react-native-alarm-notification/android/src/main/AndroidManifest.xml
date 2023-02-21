@@ -1,0 +1,38 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.emekalites.react.alarm.notification">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application>
+        <receiver
+            android:name="com.emekalites.react.alarm.notification.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ACTION_DISMISS" />
+                <action android:name="ACTION_SNOOZE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.emekalites.react.alarm.notification.AlarmDismissReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name="com.emekalites.react.alarm.notification.AlarmBootReceiver"
+            android:directBootAware="true"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>

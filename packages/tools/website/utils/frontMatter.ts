@@ -18,7 +18,7 @@ const readProp = (line: string): string[] => {
 export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 	if (md.indexOf('---') !== 0) return { doc: md };
 
-	let state: string = 'start';
+	let state = 'start';
 	const lines = md.split('\n');
 	const docLines: string[] = [];
 

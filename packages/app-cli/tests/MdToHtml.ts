@@ -16,7 +16,7 @@ function newTestMdToHtml(options: any = null) {
 	return new MdToHtml(options);
 }
 
-describe('MdToHtml', function() {
+describe('MdToHtml', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -72,6 +72,7 @@ describe('MdToHtml', function() {
 					'',
 				];
 
+				// eslint-disable-next-line no-console
 				console.info(msg.join('\n'));
 
 				expect(false).toBe(true);

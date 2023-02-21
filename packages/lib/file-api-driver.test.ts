@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } from './testing/test-utils';
 
-describe('file-api-driver', function() {
+describe('file-api-driver', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

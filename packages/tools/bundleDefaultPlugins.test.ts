@@ -108,7 +108,7 @@ async function mockPluginData() {
 	return tgzData;
 }
 
-describe('bundleDefaultPlugins', function() {
+describe('bundleDefaultPlugins', () => {
 
 	const testDefaultPluginsInfo = {
 		'plugin.calebjohn.rich-markdown': {
@@ -123,7 +123,7 @@ describe('bundleDefaultPlugins', function() {
 	};
 
 	it('should get local plugin versions', async () => {
-		const manifestsPath = join(supportDir, 'pluginRepo','plugins');
+		const manifestsPath = join(supportDir, 'pluginRepo', 'plugins');
 		const testDefaultPluginsInfo = {
 			'joplin.plugin.ambrt.backlinksToNote': { version: '1.0.4' },
 			'org.joplinapp.plugins.ToggleSidebars': { version: '1.0.2' },
@@ -142,14 +142,14 @@ describe('bundleDefaultPlugins', function() {
 				downloadedPlugin1: 'joplin-plugin-rich-markdown-0.9.0.tgz',
 				downloadedPlugin2: 'joplin-plugin-backup-1.1.0.tgz',
 				numberOfCalls: 4,
-				calledWith: ['https://registry.npmjs.org/joplin-plugin-rich-markdown','response-1-link','https://registry.npmjs.org/joplin-plugin-backup','response-2-link'],
+				calledWith: ['https://registry.npmjs.org/joplin-plugin-rich-markdown', 'response-1-link', 'https://registry.npmjs.org/joplin-plugin-backup', 'response-2-link'],
 			},
 			{
 				localVersions: { 'io.github.jackgruber.backup': '1.1.0', 'plugin.calebjohn.rich-markdown': '0.0.0' },
 				downloadedPlugin1: 'joplin-plugin-rich-markdown-0.9.0.tgz',
 				downloadedPlugin2: undefined,
 				numberOfCalls: 2,
-				calledWith: ['https://registry.npmjs.org/joplin-plugin-rich-markdown','response-1-link'],
+				calledWith: ['https://registry.npmjs.org/joplin-plugin-rich-markdown', 'response-1-link'],
 			},
 			{
 				localVersions: { 'io.github.jackgruber.backup': '1.1.0', 'plugin.calebjohn.rich-markdown': '0.9.0' },

@@ -7,6 +7,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
 import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
+import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
@@ -16,28 +17,30 @@ interface Props {
 	sortOrderField: string;
 	sortOrderReverse: boolean;
 	notesParentType: string;
-	height: number;
 }
 
 const StyledRoot = styled.div`
 	box-sizing: border-box;
-	height: ${(props: any) => props.height}px;
 	display: flex;
-	flex-direction: row;
+	height: auto;
+	flex-direction: column;
 	padding: ${(props: any) => props.theme.mainPadding}px;
 	background-color: ${(props: any) => props.theme.backgroundColor3};
+	gap: 5px;
 `;
 
 const StyledButton = styled(Button)`
-	margin-left: 8px;
-	width: 26px;
+	width: auto;
 	height: 26px;
-	min-width: 26px;
 	min-height: 26px;
+	flex: 1 0 auto;
+
+  .fa, .fas {
+    font-size: 11px;
+  }
 `;
 
 const StyledPairButtonL = styled(Button)`
-	margin-left: 8px;
 	border-radius: 3px 0 0 3px;
 	min-width: ${(props: any) => buttonSizePx(props)}px;
 	max-width: ${(props: any) => buttonSizePx(props)}px;
@@ -45,21 +48,28 @@ const StyledPairButtonL = styled(Button)`
 
 const StyledPairButtonR = styled(Button)`
 	min-width: 8px;
-	margin-left: 0px;
 	border-radius: 0 3px 3px 0;
 	border-width: 1px 1px 1px 0;
 	width: auto;
 `;
 
-const ButtonContainer = styled.div`
+const RowContainer = styled.div`
 	display: flex;
 	flex-direction: row;
+	flex: 1 1 auto;
+	gap: 8px;
+`;
+
+const SortOrderButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
 `;
 
 function NoteListControls(props: Props) {
 	const searchBarRef = useRef(null);
 
-	useEffect(function() {
+	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
 
 		return function() {
@@ -116,8 +126,36 @@ function NoteListControls(props: Props) {
 		if (!props.showNewNoteButtons) return null;
 
 		return (
-			<ButtonContainer>
-				{showsSortOrderButtons() &&
+			<RowContainer>
+				<StyledButton
+					className="new-note-button"
+					tooltip={CommandService.instance().label('newNote')}
+					iconName="fas fa-plus"
+					title={_('%s', 'New note')}
+					level={ButtonLevel.Primary}
+					size={ButtonSize.Small}
+					onClick={onNewNoteButtonClick}
+				/>
+				<StyledButton
+					className="new-todo-button"
+					tooltip={CommandService.instance().label('newTodo')}
+					iconName="fas fa-plus"
+					title={_('%s', 'New to-do')}
+					level={ButtonLevel.Secondary}
+					size={ButtonSize.Small}
+					onClick={onNewTodoButtonClick}
+				/>
+			</RowContainer>
+		);
+	}
+
+	return (
+		<StyledRoot>
+			{renderNewNoteButtons()}
+			<RowContainer>
+				<SearchBar inputRef={searchBarRef}/>
+				<SortOrderButtonsContainer>
+					{showsSortOrderButtons() &&
 					<StyledPairButtonL
 						className="sort-order-field-button"
 						tooltip={sortOrderFieldTooltip()}
@@ -126,8 +164,8 @@ function NoteListControls(props: Props) {
 						size={ButtonSize.Small}
 						onClick={onSortOrderFieldButtonClick}
 					/>
-				}
-				{showsSortOrderButtons() &&
+					}
+					{showsSortOrderButtons() &&
 					<StyledPairButtonR
 						className="sort-order-reverse-button"
 						tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
@@ -136,31 +174,9 @@ function NoteListControls(props: Props) {
 						size={ButtonSize.Small}
 						onClick={onSortOrderReverseButtonClick}
 					/>
-				}
-				<StyledButton
-					className="new-todo-button"
-					tooltip={CommandService.instance().label('newTodo')}
-					iconName="far fa-check-square"
-					level={ButtonLevel.Primary}
-					size={ButtonSize.Small}
-					onClick={onNewTodoButtonClick}
-				/>
-				<StyledButton
-					className="new-note-button"
-					tooltip={CommandService.instance().label('newNote')}
-					iconName="icon-note"
-					level={ButtonLevel.Primary}
-					size={ButtonSize.Small}
-					onClick={onNewNoteButtonClick}
-				/>
-			</ButtonContainer>
-		);
-	}
-
-	return (
-		<StyledRoot height={props.height}>
-			<SearchBar inputRef={searchBarRef}/>
-			{renderNewNoteButtons()}
+					}
+				</SortOrderButtonsContainer>
+			</RowContainer>
 		</StyledRoot>
 	);
 }

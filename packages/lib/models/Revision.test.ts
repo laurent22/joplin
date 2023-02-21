@@ -2,7 +2,7 @@ import { expectNotThrow, naughtyStrings, setupDatabaseAndSynchronizer, switchCli
 import Note from '../models/Note';
 import Revision, { ObjectPatch } from '../models/Revision';
 
-describe('models/Revision', function() {
+describe('models/Revision', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

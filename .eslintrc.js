@@ -77,6 +77,7 @@ module.exports = {
 		'no-array-constructor': ['error'],
 		'radix': ['error'],
 		'eqeqeq': ['error', 'always'],
+		'no-console': ['error', { 'allow': ['warn', 'error'] }],
 
 		// Warn only for now because fixing everything would take too much
 		// refactoring, but new code should try to stick to it.
@@ -91,6 +92,7 @@ module.exports = {
 		// "react-hooks/exhaustive-deps": "warn",
 
 		'promise/prefer-await-to-then': 'error',
+		'no-unneeded-ternary': 'error',
 
 		// -------------------------------
 		// Formatting
@@ -109,6 +111,7 @@ module.exports = {
 			'exports': 'always-multiline',
 			'functions': 'never',
 		}],
+		'comma-spacing': ['error', { 'before': false, 'after': true }],
 		'no-trailing-spaces': 'error',
 		'linebreak-style': ['error', 'unix'],
 		'prefer-template': ['error'],
@@ -134,6 +137,14 @@ module.exports = {
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
 		'no-multi-spaces': ['error'],
+
+		// Regarding the keyword blacklist:
+		// - err: We generally avoid using too many abbreviations, so it should
+		//   be "error", not "err"
+		// - notebook: In code, it should always be "folder" (not "notebook").
+		//   In user-facing text, it should be "notebook".
+		'id-denylist': ['error', 'err', 'notebook', 'notebooks'],
+		'prefer-arrow-callback': ['error'],
 	},
 	'plugins': [
 		'react',
@@ -147,6 +158,16 @@ module.exports = {
 	],
 	'overrides': [
 		{
+			'files': [
+				'packages/tools/**',
+				'packages/app-mobile/tools/**',
+				'packages/app-desktop/tools/**',
+			],
+			'rules': {
+				'no-console': 'off',
+			},
+		},
+		{
 			// enable the rule specifically for TypeScript files
 			'files': ['*.ts', '*.tsx'],
 			'parserOptions': {
@@ -158,6 +179,7 @@ module.exports = {
 				// make everything public which is not great. New code however should specify member accessibility.
 				'@typescript-eslint/explicit-member-accessibility': ['warn'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
+				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
 				'@typescript-eslint/comma-dangle': ['error', {
 					'arrays': 'always-multiline',
 					'objects': 'always-multiline',
@@ -168,6 +190,7 @@ module.exports = {
 					'tuples': 'always-multiline',
 					'functions': 'never',
 				}],
+				'@typescript-eslint/object-curly-spacing': ['error', 'always'],
 				'@typescript-eslint/semi': ['error', 'always'],
 				'@typescript-eslint/member-delimiter-style': ['error', {
 					'multiline': {

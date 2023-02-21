@@ -880,7 +880,7 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
-			showNoteCounts: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false, advanced: true, appTypes: [AppType.Desktop,AppType.Cli], label: () => _('Show note counts') },
+			showNoteCounts: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false, advanced: true, appTypes: [AppType.Desktop, AppType.Cli], label: () => _('Show note counts') },
 
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
@@ -1018,10 +1018,22 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'note',
-				public: true,
+				public: false,
 				appTypes: [AppType.Mobile],
 				label: () => 'Opt-in to the editor beta',
 				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
+			'editor.usePlainText': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				label: () => 'Use the plain text editor',
+				description: () => 'The plain text editor has various issues and is no longer supported. If you are having issues with the new editor however you can revert to the old one using this setting.',
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -1182,7 +1194,19 @@ class Setting extends BaseModel {
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
 
-			'style.editor.fontSize': { value: 15, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
+			'style.editor.fontSize': {
+				value: 15,
+				type: SettingItemType.Int,
+				public: true,
+				storage: SettingStorage.File,
+				isGlobal: true,
+				appTypes: [AppType.Desktop, AppType.Mobile],
+				section: 'appearance',
+				label: () => _('Editor font size'),
+				minimum: 4,
+				maximum: 50,
+				step: 1,
+			},
 			'style.editor.fontFamily':
 				(mobilePlatform) ?
 					({
@@ -1235,7 +1259,7 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
-			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true,appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
+			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 
@@ -1358,6 +1382,18 @@ class Setting extends BaseModel {
 				};
 			} },
 
+			useCustomPdfViewer: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				advanced: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Use custom PDF viewer (Beta)',
+				description: () => 'The custom PDF viewer remembers the last page that was viewed, however it has some technical issues.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'editor.keyboardMode': {
 				value: '',
 				type: SettingItemType.String,
@@ -1452,6 +1488,7 @@ class Setting extends BaseModel {
 			'net.proxyTimeout': {
 				value: 1,
 				type: SettingItemType.Int,
+				maximum: 60,
 				advanced: true,
 				section: 'sync',
 				isGlobal: true,
@@ -1598,6 +1635,28 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
+			'security.biometricsEnabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				label: () => _('Use biometrics to secure access to the app'),
+				public: true,
+				appTypes: [AppType.Mobile],
+			},
+
+			'security.biometricsSupportedSensors': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+			},
+
+			'security.biometricsInitialPromptDone': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Mobile],
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,
@@ -1681,31 +1740,45 @@ class Setting extends BaseModel {
 		if (!key.match(/^[a-zA-Z0-9_\-.]+$/)) throw new Error(`Key must only contain characters /a-zA-Z0-9_-./ : ${key}`);
 	}
 
+	private static validateType(type: SettingItemType) {
+		if (!Number.isInteger(type)) throw new Error(`Setting type is not an integer: ${type}`);
+		if (type < 0) throw new Error(`Invalid setting type: ${type}`);
+	}
+
 	static async registerSetting(key: string, metadataItem: SettingItem) {
-		if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
+		try {
+			if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
 
-		this.validateKey(key);
+			this.validateKey(key);
+			this.validateType(metadataItem.type);
 
-		this.customMetadata_[key] = metadataItem;
+			this.customMetadata_[key] = {
+				...metadataItem,
+				value: this.formatValue(metadataItem.type, metadataItem.value),
+			};
 
-		// Clear cache
-		this.metadata_ = null;
-		this.keys_ = null;
+			// Clear cache
+			this.metadata_ = null;
+			this.keys_ = null;
 
-		// Reload the value from the database, if it was already present
-		const valueRow = await this.loadOne(key);
-		if (valueRow) {
-			this.cache_.push({
+			// Reload the value from the database, if it was already present
+			const valueRow = await this.loadOne(key);
+			if (valueRow) {
+				this.cache_.push({
+					key: key,
+					value: this.formatValue(key, valueRow.value),
+				});
+			}
+
+			this.dispatch({
+				type: 'SETTING_UPDATE_ONE',
 				key: key,
-				value: this.formatValue(key, valueRow.value),
+				value: this.value(key),
 			});
+		} catch (error) {
+			error.message = `Could not register setting "${key}": ${error.message}`;
+			throw error;
 		}
-
-		this.dispatch({
-			type: 'SETTING_UPDATE_ONE',
-			key: key,
-			value: this.value(key),
-		});
 	}
 
 	static async registerSection(name: string, source: SettingSectionSource, section: SettingSection) {
@@ -2060,12 +2133,12 @@ class Setting extends BaseModel {
 		return md.filter ? md.filter(value) : value;
 	}
 
-	static formatValue(key: string, value: any) {
-		const md = this.settingMetadata(key);
+	static formatValue(key: string | SettingItemType, value: any) {
+		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
-		if (md.type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
+		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
 
-		if (md.type === SettingItemType.Bool) {
+		if (type === SettingItemType.Bool) {
 			if (typeof value === 'string') {
 				value = value.toLowerCase();
 				if (value === 'true') return true;
@@ -2075,26 +2148,26 @@ class Setting extends BaseModel {
 			return !!value;
 		}
 
-		if (md.type === SettingItemType.Array) {
+		if (type === SettingItemType.Array) {
 			if (!value) return [];
 			if (Array.isArray(value)) return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return [];
 		}
 
-		if (md.type === SettingItemType.Object) {
+		if (type === SettingItemType.Object) {
 			if (!value) return {};
 			if (typeof value === 'object') return value;
 			if (typeof value === 'string') return JSON.parse(value);
 			return {};
 		}
 
-		if (md.type === SettingItemType.String) {
+		if (type === SettingItemType.String) {
 			if (!value) return '';
 			return `${value}`;
 		}
 
-		throw new Error(`Unhandled value type: ${md.type}`);
+		throw new Error(`Unhandled value type: ${type}`);
 	}
 
 	static value(key: string) {

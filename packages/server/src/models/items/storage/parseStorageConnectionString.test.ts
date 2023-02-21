@@ -1,9 +1,9 @@
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import parseStorageConnectionString from './parseStorageConnectionString';
 
-describe('parseStorageConnectionString', function() {
+describe('parseStorageConnectionString', () => {
 
-	test('should parse a connection string', async function() {
+	test('should parse a connection string', async () => {
 		const testCases: Record<string, StorageDriverConfig> = {
 			'Type=Database': {
 				type: StorageDriverType.Database,
@@ -31,7 +31,7 @@ describe('parseStorageConnectionString', function() {
 		}
 	});
 
-	test('should detect errors', async function() {
+	test('should detect errors', async () => {
 		expect(() => parseStorageConnectionString('Path=/path/to/dir')).toThrow(); // Type is missing
 		expect(() => parseStorageConnectionString('Type=')).toThrow();
 		expect(() => parseStorageConnectionString('Type;')).toThrow();

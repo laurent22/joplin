@@ -51,7 +51,7 @@ export default function(editor: any) {
 				editor.execCommand('mceToggleFormat', false, def.name);
 			},
 			onSetup: function(api: any) {
-				editor.formatter.formatChanged(def.name, function(state: boolean) {
+				editor.formatter.formatChanged(def.name, (state: boolean) => {
 					api.setActive(state);
 				});
 			},

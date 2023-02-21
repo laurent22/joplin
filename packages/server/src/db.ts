@@ -11,7 +11,7 @@ import { databaseSchema } from './services/database/types';
 //
 // In our case, all bigInteger are timestamps, which JavaScript can handle
 // fine as numbers.
-require('pg').types.setTypeParser(20, function(val: any) {
+require('pg').types.setTypeParser(20, (val: any) => {
 	return parseInt(val, 10);
 });
 
@@ -45,6 +45,7 @@ export interface DbConfigConnection {
 	database?: string;
 	filename?: string;
 	password?: string;
+	connectionString?: string;
 }
 
 export interface QueryContext {
@@ -77,11 +78,15 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	if (dbConfig.client === 'sqlite3') {
 		connection.filename = dbConfig.name;
 	} else {
-		connection.database = dbConfig.name;
-		connection.host = dbConfig.host;
-		connection.port = dbConfig.port;
-		connection.user = dbConfig.user;
-		connection.password = dbConfig.password;
+		if (dbConfig.connectionString) {
+			connection.connectionString = dbConfig.connectionString;
+		} else {
+			connection.database = dbConfig.name;
+			connection.host = dbConfig.host;
+			connection.port = dbConfig.port;
+			connection.user = dbConfig.user;
+			connection.password = dbConfig.password;
+		}
 	}
 
 	return {

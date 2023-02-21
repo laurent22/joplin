@@ -66,7 +66,7 @@ export interface PluginSettings {
 
 function makePluginId(source: string): string {
 	// https://www.npmjs.com/package/slug#options
-	return uslug(source).substr(0,32);
+	return uslug(source).substr(0, 32);
 }
 
 export default class PluginService extends BaseService {

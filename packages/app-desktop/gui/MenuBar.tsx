@@ -21,6 +21,7 @@ import checkForUpdates from '../checkForUpdates';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -270,6 +271,7 @@ function useMenu(props: Props) {
 		const service = InteropService.instance();
 		try {
 			const result = await service.import(importOptions);
+			// eslint-disable-next-line no-console
 			console.info('Import result: ', result);
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
@@ -485,7 +487,8 @@ function useMenu(props: Props) {
 			}
 
 			function _showAbout() {
-				const v = versionInfo(packageInfo);
+				const v = versionInfo(packageInfo, PluginService.instance().plugins);
+
 
 				const copyToClipboard = bridge().showMessageBox(v.message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
@@ -509,14 +512,14 @@ function useMenu(props: Props) {
 				// Issue: https://github.com/laurent22/joplin/issues/934
 				submenu: [{
 					label: _('About Joplin'),
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 					click: () => _showAbout(),
 				}, {
 					type: 'separator',
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 				}, {
 					label: _('Preferences...'),
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 					accelerator: shim.isMac() && keymapService.getAccelerator('config'),
 					click: () => {
 						props.dispatch({
@@ -526,11 +529,11 @@ function useMenu(props: Props) {
 					},
 				}, {
 					label: _('Check for updates...'),
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 					click: () => _checkForUpdates(),
 				}, {
 					type: 'separator',
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 				},
 				shim.isMac() ? noItem : newNoteItem,
 				shim.isMac() ? noItem : newTodoItem,
@@ -538,14 +541,14 @@ function useMenu(props: Props) {
 				shim.isMac() ? noItem : newSubFolderItem,
 				{
 					type: 'separator',
-					visible: shim.isMac() ? false : true,
+					visible: !shim.isMac(),
 				}, {
 					label: _('Import'),
-					visible: shim.isMac() ? false : true,
+					visible: !shim.isMac(),
 					submenu: importItems,
 				}, {
 					label: _('Export all'),
-					visible: shim.isMac() ? false : true,
+					visible: !shim.isMac(),
 					submenu: exportItems,
 				}, {
 					type: 'separator',
@@ -583,7 +586,7 @@ function useMenu(props: Props) {
 
 			const rootMenuFileMacOs = {
 				label: _('&File'),
-				visible: shim.isMac() ? true : false,
+				visible: !!shim.isMac(),
 				submenu: [
 					newNoteItem,
 					newTodoItem,
@@ -632,6 +635,7 @@ function useMenu(props: Props) {
 						menuItemDic.textCopy,
 						menuItemDic.textCut,
 						menuItemDic.textPaste,
+						menuItemDic.pasteAsText,
 						menuItemDic.textSelectAll,
 						separator(),
 						// Using the generic "undo"/"redo" roles mean the menu
@@ -671,6 +675,7 @@ function useMenu(props: Props) {
 					label: _('&View'),
 					submenu: [
 						menuItemDic.toggleLayoutMoveMode,
+						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
 						menuItemDic.toggleNoteList,
@@ -784,11 +789,14 @@ function useMenu(props: Props) {
 						label: _('Joplin Forum'),
 						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
+						label: _('Join us on Twitter'),
+						click() { void bridge().openExternal('https://twitter.com/joplinapp'); },
+					}, {
 						label: _('Make a donation'),
 						click() { void bridge().openExternal('https://joplinapp.org/donate/'); },
 					}, {
 						label: _('Check for updates...'),
-						visible: shim.isMac() ? false : true,
+						visible: !shim.isMac(),
 						click: () => _checkForUpdates(),
 					},
 					separator(),
@@ -810,10 +818,10 @@ function useMenu(props: Props) {
 
 					{
 						type: 'separator',
-						visible: shim.isMac() ? false : true,
+						visible: !shim.isMac(),
 					}, {
 						label: _('About Joplin'),
-						visible: shim.isMac() ? false : true,
+						visible: !shim.isMac(),
 						click: () => _showAbout(),
 					}],
 				},

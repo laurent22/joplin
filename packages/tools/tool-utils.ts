@@ -82,12 +82,11 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 
 export function releaseFinalGitCommands(appName: string, newVersion: string, newTag: string): string {
 	const finalCmds = [
-		'git pull',
 		'git add -A',
 		`git commit -m "${appName} ${newVersion}"`,
 		`git tag "${newTag}"`,
 		'git push',
-		'git push --tags',
+		`git push origin refs/tags/${newTag}`,
 	];
 
 	return finalCmds.join(' && ');
@@ -253,10 +252,10 @@ export async function downloadFile(url: string, targetPath: string) {
 
 	return new Promise((resolve, reject) => {
 		const file = fs.createWriteStream(targetPath);
-		https.get(url, function(response: any) {
+		https.get(url, (response: any) => {
 			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
 			response.pipe(file);
-			file.on('finish', function() {
+			file.on('finish', () => {
 				// file.close();
 				resolve(null);
 			});
@@ -274,12 +273,12 @@ export function fileSha256(filePath: string) {
 		const shasum = crypto.createHash(algo);
 
 		const s = fs.ReadStream(filePath);
-		s.on('data', function(d: any) { shasum.update(d); });
-		s.on('end', function() {
+		s.on('data', (d: any) => { shasum.update(d); });
+		s.on('end', () => {
 			const d = shasum.digest('hex');
 			resolve(d);
 		});
-		s.on('error', function(error: any) {
+		s.on('error', (error: any) => {
 			reject(error);
 		});
 	});
@@ -300,13 +299,13 @@ export function fileExists(filePath: string) {
 	const fs = require('fs-extra');
 
 	return new Promise((resolve, reject) => {
-		fs.stat(filePath, function(err: any) {
-			if (!err) {
+		fs.stat(filePath, (error: any) => {
+			if (!error) {
 				resolve(true);
-			} else if (err.code === 'ENOENT') {
+			} else if (error.code === 'ENOENT') {
 				resolve(false);
 			} else {
-				reject(err);
+				reject(error);
 			}
 		});
 	});

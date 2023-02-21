@@ -3,7 +3,7 @@ import { execRequest } from '../../utils/testing/apiUtils';
 import uuidgen from '../../utils/uuidgen';
 import { ErrorNotFound } from '../../utils/errors';
 
-describe('index/password', function() {
+describe('index/password', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index/password');
@@ -17,7 +17,7 @@ describe('index/password', function() {
 		await beforeEachDb();
 	});
 
-	test('should queue an email to reset password', async function() {
+	test('should queue an email to reset password', async () => {
 		const { user, password } = await createUserAndSession(1);
 
 		// Create a few sessions, to verify that they are all deleted when the
@@ -47,14 +47,14 @@ describe('index/password', function() {
 		expect(await models().session().count()).toBe(0);
 	});
 
-	test('should not queue an email for non-existing emails', async function() {
+	test('should not queue an email for non-existing emails', async () => {
 		await createUserAndSession(1);
 		await models().email().deleteAll();
 		await execRequest('', 'POST', 'password/forgot', { email: 'justtryingtohackdontmindme@example.com' });
 		expect((await models().email().all()).length).toBe(0);
 	});
 
-	test('should not reset the password if the token is invalid', async function() {
+	test('should not reset the password if the token is invalid', async () => {
 		const { user } = await createUserAndSession(1);
 		await models().email().deleteAll();
 

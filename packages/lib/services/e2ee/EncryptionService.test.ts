@@ -9,7 +9,7 @@ import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
 
-describe('services_EncryptionService', function() {
+describe('services_EncryptionService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -267,14 +267,14 @@ describe('services_EncryptionService', function() {
 
 		// First check that we can replicate the error with the old encryption method
 		service.defaultEncryptionMethod_ = EncryptionMethod.SJCL;
-		const hasThrown = await checkThrowAsync(async () => await service.encryptString('🐶🐶🐶'.substr(0,5)));
+		const hasThrown = await checkThrowAsync(async () => await service.encryptString('🐶🐶🐶'.substr(0, 5)));
 		expect(hasThrown).toBe(true);
 
 		// Now check that the new one fixes the problem
 		service.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
-		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0,5));
+		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0, 5));
 		const plainText = await service.decryptString(cipherText);
-		expect(plainText).toBe('🐶🐶🐶'.substr(0,5));
+		expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
 	}));
 
 	it('should check if a master key is loaded', (async () => {

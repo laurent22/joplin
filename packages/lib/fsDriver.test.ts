@@ -12,7 +12,7 @@ function platformPath(path: string) {
 	}
 }
 
-describe('fsDriver', function() {
+describe('fsDriver', () => {
 
 	it('should resolveRelativePathWithinDir', async () => {
 		const fsDriver = new FsDriverNode();
