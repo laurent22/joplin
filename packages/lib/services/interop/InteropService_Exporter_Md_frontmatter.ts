@@ -127,8 +127,12 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		const context: FrontMatterContext = this.context();
 		if (context.noteTags[note.id]) {
 			const tagIds = context.noteTags[note.id];
-			const tags = tagIds.map((id: string) => context.tagTitles[id]).sort();
-			md['tags'] = tags;
+			// In some cases a NoteTag can still exist, while the Tag does not. In this case, tagTitles
+			// for that tagId will return undefined, which can't be handled by the yaml library (issue #7782)
+			const tags = tagIds.map((id: string) => context.tagTitles[id]).filter(e => !!e).sort();
+			if (tags.length > 0) {
+				md['tags'] = tags;
+			}
 		}
 
 		// This guarentees that fields will always be ordered the same way
