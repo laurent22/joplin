@@ -1,8 +1,8 @@
 import checkProviderIsUnsupported from './webDAVUtils';
 import Setting from '../models/Setting';
 
-describe('checkProviderIsUnsupported', function() {
-	describe('when no blocked provider is already configured', function() {
+describe('checkProviderIsUnsupported', () => {
+	describe('when no blocked provider is already configured', () => {
 		beforeAll(() => {
 			Setting.setValue('sync.allowUnsupportedProviders', 0);
 		});
@@ -26,12 +26,12 @@ describe('checkProviderIsUnsupported', function() {
 		});
 	});
 
-	describe('when a blocked provider is already configured', function() {
+	describe('when a blocked provider is already configured', () => {
 		beforeAll(() => {
 			Setting.setValue('sync.allowUnsupportedProviders', 1);
 		});
 
-		it('should return true when a blocked provider is already configured', () => {
+		it('should return false when a blocked provider is already configured', () => {
 			const result = checkProviderIsUnsupported('pcloud');
 			expect(result.isUnsupported).toBe(false);
 			expect(result.unsupportedProvider).toBe('');
