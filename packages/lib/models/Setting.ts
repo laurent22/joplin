@@ -1675,7 +1675,6 @@ class Setting extends BaseModel {
 				value: -1,
 				type: SettingItemType.Int,
 				public: false,
-				// TODO: julien - add storage?
 			},
 
 		};
