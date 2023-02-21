@@ -15,7 +15,7 @@ let engine: any = null;
 
 const ids = (array: NoteEntity[]) => array.map(a => a.id);
 
-describe('services_SearchFilter', function() {
+describe('services_SearchFilter', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

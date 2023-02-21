@@ -14,7 +14,7 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
-describe('interop/InteropService_Exporter_Html', function() {
+describe('interop/InteropService_Exporter_Html', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

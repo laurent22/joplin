@@ -143,7 +143,7 @@ async function testMigrationE2EE(migrationVersion: number, maxSyncVersion: numbe
 
 let previousSyncTargetName = '';
 
-describe('MigrationHandler', function() {
+describe('MigrationHandler', () => {
 
 	beforeEach(async () => {
 		// Note that, for undocumented reasons, the timeout argument passed

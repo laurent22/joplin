@@ -97,7 +97,7 @@ const expected = `
 	--joplin-code-theme-css: atom-one-light.css;
 }`;
 
-describe('themeToCss', function() {
+describe('themeToCss', () => {
 
 	it('should a theme to a CSS string', async () => {
 		const actual = themeToCss(input);

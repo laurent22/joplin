@@ -216,8 +216,8 @@ function shimInit() {
 	};
 
 	shim.waitForFrame = () => {
-		return new Promise(function(resolve) {
-			requestAnimationFrame(function() {
+		return new Promise((resolve) => {
+			requestAnimationFrame(() => {
 				resolve();
 			});
 		});

@@ -512,14 +512,14 @@ function useMenu(props: Props) {
 				// Issue: https://github.com/laurent22/joplin/issues/934
 				submenu: [{
 					label: _('About Joplin'),
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 					click: () => _showAbout(),
 				}, {
 					type: 'separator',
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 				}, {
 					label: _('Preferences...'),
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 					accelerator: shim.isMac() && keymapService.getAccelerator('config'),
 					click: () => {
 						props.dispatch({
@@ -529,11 +529,11 @@ function useMenu(props: Props) {
 					},
 				}, {
 					label: _('Check for updates...'),
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 					click: () => _checkForUpdates(),
 				}, {
 					type: 'separator',
-					visible: shim.isMac() ? true : false,
+					visible: !!shim.isMac(),
 				},
 				shim.isMac() ? noItem : newNoteItem,
 				shim.isMac() ? noItem : newTodoItem,
@@ -541,14 +541,14 @@ function useMenu(props: Props) {
 				shim.isMac() ? noItem : newSubFolderItem,
 				{
 					type: 'separator',
-					visible: shim.isMac() ? false : true,
+					visible: !shim.isMac(),
 				}, {
 					label: _('Import'),
-					visible: shim.isMac() ? false : true,
+					visible: !shim.isMac(),
 					submenu: importItems,
 				}, {
 					label: _('Export all'),
-					visible: shim.isMac() ? false : true,
+					visible: !shim.isMac(),
 					submenu: exportItems,
 				}, {
 					type: 'separator',
@@ -586,7 +586,7 @@ function useMenu(props: Props) {
 
 			const rootMenuFileMacOs = {
 				label: _('&File'),
-				visible: shim.isMac() ? true : false,
+				visible: !!shim.isMac(),
 				submenu: [
 					newNoteItem,
 					newTodoItem,
@@ -789,11 +789,14 @@ function useMenu(props: Props) {
 						label: _('Joplin Forum'),
 						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
+						label: _('Join us on Twitter'),
+						click() { void bridge().openExternal('https://twitter.com/joplinapp'); },
+					}, {
 						label: _('Make a donation'),
 						click() { void bridge().openExternal('https://joplinapp.org/donate/'); },
 					}, {
 						label: _('Check for updates...'),
-						visible: shim.isMac() ? false : true,
+						visible: !shim.isMac(),
 						click: () => _checkForUpdates(),
 					},
 					separator(),
@@ -815,10 +818,10 @@ function useMenu(props: Props) {
 
 					{
 						type: 'separator',
-						visible: shim.isMac() ? false : true,
+						visible: !shim.isMac(),
 					}, {
 						label: _('About Joplin'),
-						visible: shim.isMac() ? false : true,
+						visible: !shim.isMac(),
 						click: () => _showAbout(),
 					}],
 				},

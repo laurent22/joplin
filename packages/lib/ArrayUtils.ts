@@ -1,5 +1,5 @@
 export const unique = function(array: any[]) {
-	return array.filter(function(elem, index, self) {
+	return array.filter((elem, index, self) => {
 		return index === self.indexOf(elem);
 	});
 };

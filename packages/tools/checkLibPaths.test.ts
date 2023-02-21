@@ -1,6 +1,6 @@
 import { findInvalidImportPaths } from './checkLibPaths';
 
-describe('checkLibPaths', function() {
+describe('checkLibPaths', () => {
 
 	test('should detect invalid lib paths', async () => {
 		const testCases: [number, string][] = [

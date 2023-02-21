@@ -24,7 +24,7 @@ function newPluginService(appVersion: string = '1.4') {
 	return service;
 }
 
-describe('defaultPluginsUtils', function() {
+describe('defaultPluginsUtils', () => {
 
 	const pluginsId = ['joplin.plugin.ambrt.backlinksToNote', 'org.joplinapp.plugins.ToggleSidebars'];
 

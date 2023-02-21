@@ -2,7 +2,7 @@ import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models,
 import { Notification, NotificationLevel } from '../services/database/types';
 import { NotificationKey } from './NotificationModel';
 
-describe('NotificationModel', function() {
+describe('NotificationModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('NotificationModel');
@@ -16,11 +16,11 @@ describe('NotificationModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should require a user to create the notification', async function() {
+	test('should require a user to create the notification', async () => {
 		await expectThrow(async () => models().notification().add('', NotificationKey.EmailConfirmed, NotificationLevel.Normal, NotificationKey.EmailConfirmed));
 	});
 
-	test('should create a notification', async function() {
+	test('should create a notification', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const model = models().notification();
 		await model.add(user.id, NotificationKey.EmailConfirmed, NotificationLevel.Important, 'testing');
@@ -30,7 +30,7 @@ describe('NotificationModel', function() {
 		expect(n.level).toBe(NotificationLevel.Important);
 	});
 
-	test('should create only one notification per key', async function() {
+	test('should create only one notification per key', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const model = models().notification();
 		await model.add(user.id, NotificationKey.EmailConfirmed, NotificationLevel.Important, 'testing');
@@ -38,7 +38,7 @@ describe('NotificationModel', function() {
 		expect((await model.all()).length).toBe(1);
 	});
 
-	test('should mark a notification as read', async function() {
+	test('should mark a notification as read', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const model = models().notification();
 		await model.add(user.id, NotificationKey.EmailConfirmed, NotificationLevel.Important, 'testing');

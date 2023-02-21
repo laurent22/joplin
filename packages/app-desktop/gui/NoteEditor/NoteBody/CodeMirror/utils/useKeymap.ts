@@ -93,7 +93,7 @@ export default function useKeymap(CodeMirror: any) {
 	}
 
 
-	CodeMirror.defineExtension('supportsCommand', function(cmd: EditorCommand) {
+	CodeMirror.defineExtension('supportsCommand', (cmd: EditorCommand) => {
 		return isEditorCommand(cmd.name) && editorCommandToCodeMirror(cmd.name) in CodeMirror.commands;
 	});
 

@@ -56,7 +56,7 @@ async function updatePackageVersion(packageFilePath: string, majorMinorVersion: 
 async function updateGradleVersion(filePath: string, majorMinorVersion: string) {
 	const contentText = await fs.readFile(filePath, 'utf8');
 
-	const newContent = contentText.replace(/(versionName\s+")(\d+?\.\d+?)(\.\d+")/, function(_match, prefix, version, suffix) {
+	const newContent = contentText.replace(/(versionName\s+")(\d+?\.\d+?)(\.\d+")/, (_match, prefix, version, suffix) => {
 		if (version === majorMinorVersion) return prefix + version + suffix;
 		return `${prefix + majorMinorVersion}.0"`;
 	});
@@ -70,7 +70,7 @@ async function updateCodeProjVersion(filePath: string, majorMinorVersion: string
 	const contentText = await fs.readFile(filePath, 'utf8');
 
 	// MARKETING_VERSION = 10.1.0;
-	const newContent = contentText.replace(/(MARKETING_VERSION = )(\d+\.\d+)(\.\d+;)/g, function(_match, prefix, version, suffix) {
+	const newContent = contentText.replace(/(MARKETING_VERSION = )(\d+\.\d+)(\.\d+;)/g, (_match, prefix, version, suffix) => {
 		if (version === majorMinorVersion) return prefix + version + suffix;
 		return `${prefix + majorMinorVersion}.0;`;
 	});

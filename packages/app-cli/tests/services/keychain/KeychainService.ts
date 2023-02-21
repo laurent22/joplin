@@ -11,7 +11,7 @@ function describeIfCompatible(name: string, fn: any, elseFn: any) {
 	}
 }
 
-describeIfCompatible('services_KeychainService', function() {
+describeIfCompatible('services_KeychainService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1, { keychainEnabled: true });

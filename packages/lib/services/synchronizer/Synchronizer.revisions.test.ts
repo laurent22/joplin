@@ -5,7 +5,7 @@ import Note from '../../models/Note';
 import Revision from '../../models/Revision';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
 
-describe('Synchronizer.revisions', function() {
+describe('Synchronizer.revisions', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

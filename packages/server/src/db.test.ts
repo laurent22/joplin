@@ -6,7 +6,7 @@ async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
 	return sqlts.toTypeScript({}, db as any);
 }
 
-describe('db', function() {
+describe('db', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('db', { autoMigrate: false });
@@ -20,7 +20,7 @@ describe('db', function() {
 		await beforeEachDb();
 	});
 
-	it('should allow upgrading and downgrading schema', async function() {
+	it('should allow upgrading and downgrading schema', async () => {
 		// Migrations before that didn't have a down() step.
 		const ignoreAllBefore = '20210819165350_user_flags';
 

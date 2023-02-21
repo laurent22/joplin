@@ -7,7 +7,7 @@ import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './Subsc
 import { stripePortalUrl } from '../utils/urlUtils';
 import { Day } from '../utils/time';
 
-describe('UserModel', function() {
+describe('UserModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('UserModel');
@@ -331,7 +331,7 @@ describe('UserModel', function() {
 		}
 	});
 
-	test('should get the user public key', async function() {
+	test('should get the user public key', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);

@@ -420,7 +420,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.10.1):
     - React-Core
-  - RNDateTimePicker (6.7.3):
+  - RNDateTimePicker (6.7.4):
     - React-Core
   - RNExitApp (1.1.0):
     - React
@@ -745,7 +745,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
-  RNDateTimePicker: 00247f26c34683c80be94207f488f6f13448586e
+  RNDateTimePicker: 2cc0a68b714aba89b4bc017796cd8c8825e0c3a7
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688

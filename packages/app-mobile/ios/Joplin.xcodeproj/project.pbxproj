@@ -614,6 +614,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
@@ -669,6 +672,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (

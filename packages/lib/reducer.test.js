@@ -81,7 +81,7 @@ function getIds(items, indexes = null) {
 	return ids;
 }
 
-describe('reducer', function() {
+describe('reducer', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

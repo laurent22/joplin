@@ -1,7 +1,7 @@
 import InMemoryCache from './InMemoryCache';
 import time from './time';
 
-describe('InMemoryCache', function() {
+describe('InMemoryCache', () => {
 
 	it('should get and set values', () => {
 		const cache = new InMemoryCache();

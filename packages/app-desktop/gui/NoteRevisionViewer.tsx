@@ -17,7 +17,7 @@ const urlUtils = require('@joplin/lib/urlUtils');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode } = require('@joplin/lib/string-utils');
 const { connect } = require('react-redux');
-const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 
 interface Props {
 	themeId: number;

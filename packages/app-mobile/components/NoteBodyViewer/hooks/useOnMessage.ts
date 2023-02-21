@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-const shared = require('@joplin/lib/components/shared/note-screen-shared');
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 
 export type HandleMessageCallback = (message: string)=> void;
 export type OnMarkForDownloadCallback = (resource: { resourceId: string })=> void;

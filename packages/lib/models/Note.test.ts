@@ -18,7 +18,7 @@ async function allItems() {
 	return folders.concat(notes);
 }
 
-describe('models/Note', function() {
+describe('models/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -411,7 +411,7 @@ describe('models/Note', function() {
 
 });
 
-describe('models/Note_replacePaths', function() {
+describe('models/Note_replacePaths', () => {
 
 	function testResourceReplacment(body: string, pathsToTry: string[], expected: string) {
 		expect(Note['replaceResourceExternalToInternalLinks_'](pathsToTry, body)).toBe(expected);

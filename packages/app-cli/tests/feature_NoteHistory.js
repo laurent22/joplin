@@ -22,7 +22,7 @@ const goToNote = (testApp, note) => {
 	testApp.dispatch({ type: 'NOTE_SELECT', id: note.id });
 };
 
-describe('feature_NoteHistory', function() {
+describe('feature_NoteHistory', () => {
 	beforeEach(async () => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);

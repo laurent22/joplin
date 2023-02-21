@@ -62,7 +62,7 @@ async function getUserHtml(sessionId: string, userId: string): Promise<string> {
 	return context.response.body as string;
 }
 
-describe('index/users', function() {
+describe('index/users', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_users');
@@ -76,7 +76,7 @@ describe('index/users', function() {
 		await beforeEachDb();
 	});
 
-	test('new user should be able to login', async function() {
+	test('new user should be able to login', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const password = uuidgen();
@@ -86,7 +86,7 @@ describe('index/users', function() {
 		expect(loggedInUser.email).toBe('test@example.com');
 	});
 
-	test('should change user properties', async function() {
+	test('should change user properties', async () => {
 		const { user, session } = await createUserAndSession(1, false);
 
 		const userModel = models().user();
@@ -96,7 +96,7 @@ describe('index/users', function() {
 		expect(modUser.full_name).toBe('new name');
 	});
 
-	test('should change the password', async function() {
+	test('should change the password', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const userModel = models().user();
@@ -108,7 +108,7 @@ describe('index/users', function() {
 		expect(modUser.id).toBe(user.id);
 	});
 
-	test('should get a user', async function() {
+	test('should get a user', async () => {
 		const { user, session } = await createUserAndSession();
 
 		const userHtml = await getUserHtml(session.id, user.id);
@@ -118,7 +118,7 @@ describe('index/users', function() {
 		expect((doc.querySelector('input[name=email]') as any).value).toBe('user1@localhost');
 	});
 
-	test('should allow user to set a password for new accounts', async function() {
+	test('should allow user to set a password for new accounts', async () => {
 		let user1 = await models().user().save({
 			email: 'user1@localhost',
 			must_set_password: 1,
@@ -197,7 +197,7 @@ describe('index/users', function() {
 		expect(notification.key).toBe('passwordSet');
 	});
 
-	test('should not confirm email if not requested', async function() {
+	test('should not confirm email if not requested', async () => {
 		let user1 = await models().user().save({
 			email: 'user1@localhost',
 			must_set_password: 1,
@@ -218,7 +218,7 @@ describe('index/users', function() {
 		expect(user1.email_confirmed).toBe(0);
 	});
 
-	test('should allow user to verify their email', async function() {
+	test('should allow user to verify their email', async () => {
 		let user1 = await models().user().save({
 			email: 'user1@localhost',
 			must_set_password: 0,
@@ -250,7 +250,7 @@ describe('index/users', function() {
 		expect(notification.key).toBe(NotificationKey.EmailConfirmed);
 	});
 
-	test('should allow changing an email', async function() {
+	test('should allow changing an email', async () => {
 		const { user, session } = await createUserAndSession();
 
 		await patchUser(session.id, {
@@ -296,7 +296,7 @@ describe('index/users', function() {
 		expect(reloadedUser1.can_upload).toBe(1);
 	});
 
-	test('should apply ACL', async function() {
+	test('should apply ACL', async () => {
 		const { user: admin } = await createUserAndSession(1, true);
 		const { session: session1 } = await createUserAndSession(2, false);
 

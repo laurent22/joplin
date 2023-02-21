@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-const { NotesScreen } = require('./screens/notes.js');
+import NotesScreen from './screens/Notes';
 const { SearchScreen } = require('./screens/search.js');
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';

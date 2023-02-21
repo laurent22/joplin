@@ -7,7 +7,7 @@ function setupStore() {
 	return store;
 }
 
-describe('services_KvStore', function() {
+describe('services_KvStore', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

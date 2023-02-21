@@ -37,7 +37,7 @@ const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const ImageResizer = require('react-native-image-resizer').default;
-const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
@@ -154,6 +154,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					routeName: 'Notes',
 					folderId: this.state.note.parent_id,
 				});
+
+				ShareExtension.close();
 				return true;
 			}
 
@@ -480,10 +482,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		if (this.state.fromShare) {
-			ShareExtension.close();
-		}
-
 		this.saveActionQueue(this.state.note.id).processAllNow();
 
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
@@ -518,7 +516,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	makeSaveAction() {
 		return async () => {
-			return shared.saveNoteButton_press(this);
+			return shared.saveNoteButton_press(this, null, null);
 		};
 	}
 
@@ -534,7 +532,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async saveNoteButton_press(folderId: string = null) {
-		await shared.saveNoteButton_press(this, folderId);
+		await shared.saveNoteButton_press(this, folderId, null);
 
 		Keyboard.dismiss();
 	}

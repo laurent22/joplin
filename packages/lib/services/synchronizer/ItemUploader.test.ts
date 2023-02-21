@@ -41,7 +41,7 @@ function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = nu
 	return apiCall;
 }
 
-describe('synchronizer/ItemUploader', function() {
+describe('synchronizer/ItemUploader', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

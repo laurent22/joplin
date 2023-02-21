@@ -11,7 +11,7 @@ const newConfig = (): StorageDriverConfig => {
 	};
 };
 
-describe('StorageDriverMemory', function() {
+describe('StorageDriverMemory', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('StorageDriverMemory');

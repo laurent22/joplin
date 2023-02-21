@@ -81,7 +81,25 @@ class Logger {
 	}
 
 	public static get globalLogger(): Logger {
-		if (!this.globalLogger_) throw new Error('Global logger has not been initialized!!');
+		if (!this.globalLogger_) {
+			// The global logger normally is initialized early, so we shouldn't
+			// end up here. However due to early event handlers, it might happen
+			// and in this case we want to know about it. So we print this
+			// warning, and also flag the log statements using `[UNINITIALIZED
+			// GLOBAL LOGGER]` so that we know from where the incorrect log
+			// statement comes from.
+
+			console.warn('Logger: Trying to access globalLogger, but it has not been initialized. Make sure that initializeGlobalLogger() has been called before logging. Will use the console as fallback.');
+			const output: any = {
+				log: (level: LogLevel, prefix: string, ...object: any[]) => {
+					// eslint-disable-next-line no-console
+					console.info(`[UNINITIALIZED GLOBAL LOGGER] ${this.levelIdToString(level)}: ${prefix}:`, object);
+				},
+			};
+			return output;
+
+			// throw new Error('Global logger has not been initialized!!');
+		}
 		return this.globalLogger_;
 	}
 

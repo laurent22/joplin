@@ -414,6 +414,7 @@ packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/Note.js
+packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
@@ -489,6 +490,7 @@ packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
+packages/lib/components/shared/note-screen-shared.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js

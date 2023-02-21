@@ -6,7 +6,7 @@ import shim from '../shim';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
-describe('models/Resource', function() {
+describe('models/Resource', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

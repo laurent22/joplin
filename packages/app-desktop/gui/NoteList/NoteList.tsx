@@ -160,21 +160,27 @@ const NoteListComponent = (props: Props) => {
 		}
 	};
 
-	const noteItem_noteDrop = async (event: any) => {
-		if (props.notesParentType !== 'Folder') return;
+	const canManuallySortNotes = async () => {
+		if (props.notesParentType !== 'Folder') return false;
 
 		if (props.noteSortOrder !== 'order') {
 			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
 				buttons: [_('Do it now'), _('Cancel')],
 			});
-			if (!doIt) return;
+			if (!doIt) return false;
 
 			Setting.setValue('notes.sortOrder.field', 'order');
-			return;
+			return false;
 		}
+		return true;
+	};
+
+	const noteItem_noteDrop = async (event: any) => {
 
 		// TODO: check that parent type is folder
-
+		if (!canManuallySortNotes()) {
+			return;
+		}
 		const dt = event.dataTransfer;
 		unregisterGlobalDragEndEvent_();
 		setDragOverTargetNoteIndex(null);
@@ -182,7 +188,7 @@ const NoteListComponent = (props: Props) => {
 		const targetNoteIndex = dragTargetNoteIndex_(event);
 		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
-		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
 	};
 
 
@@ -340,11 +346,31 @@ const NoteListComponent = (props: Props) => {
 		return noteIndex;
 	};
 
+	const noteItem_noteMove = async (direction: number) => {
+		if (!canManuallySortNotes()) {
+			return;
+		}
+		const noteIds = props.selectedNoteIds;
+		const noteId = noteIds[0];
+		let targetNoteIndex = BaseModel.modelIndexById(props.notes, noteId);
+		if ((direction === 1)) {
+			targetNoteIndex += 2;
+		}
+		if ((direction === -1)) {
+			targetNoteIndex -= 1;
+		}
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
+	};
+
 	const onKeyDown = async (event: any) => {
 		const keyCode = event.keyCode;
 		const noteIds = props.selectedNoteIds;
 
-		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
+		if ((keyCode === 40 || keyCode === 38) && event.altKey) {
+			// (DOWN / UP) & ALT
+			await noteItem_noteMove(keyCode === 40 ? 1 : -1);
+			event.preventDefault();
+		} else if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(props.notes, noteId);
@@ -528,6 +554,8 @@ const mapStateToProps = (state: AppState) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
+		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
+		showCompletedTodos: state.settings.showCompletedTodos,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,

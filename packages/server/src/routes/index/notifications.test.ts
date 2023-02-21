@@ -3,7 +3,7 @@ import routeHandler from '../../middleware/routeHandler';
 import { NotificationKey } from '../../models/NotificationModel';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, createUserAndSession } from '../../utils/testing/testUtils';
 
-describe('index_notification', function() {
+describe('index_notification', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_notification');
@@ -17,7 +17,7 @@ describe('index_notification', function() {
 		await beforeEachDb();
 	});
 
-	test('should update notification', async function() {
+	test('should update notification', async () => {
 		const { user, session } = await createUserAndSession();
 
 		const model = models().notification();

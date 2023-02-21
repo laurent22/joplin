@@ -1,6 +1,6 @@
 const ArrayUtils = require('./ArrayUtils');
 
-describe('ArrayUtils', function() {
+describe('ArrayUtils', () => {
 
 
 
