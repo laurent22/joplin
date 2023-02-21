@@ -142,7 +142,8 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
 		};
 
-		await updateGeoloc();
+		// We don't wait because it can be done in the background
+		void updateGeoloc();
 	}
 
 	releaseMutex();
