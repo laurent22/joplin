@@ -17,6 +17,7 @@ This is a quick summary of the Markdown syntax.
 | **Heading 3** | <pre>### Heading 3</pre> | <h3>Heading 3</h3>
 | **Bold** | <pre>This is some `**bold text**`</pre> | This is some <strong>bold text</strong>
 | **Italic** | <pre>This is some `*italic text*`</pre> | This is some <i>italic text</i>
+| **Strikethrough** | <pre>This is some `~~strikethrough text~~`</pre> | This is some <s>strikethrough text</s>
 | **Blockquotes** | <pre>> Kent.<br/>> Where's the king?<br/><br/>> Gent.<br/>> Contending with the<br/>> fretful elements</pre> | <blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with<br/>the fretful elements</blockquote>
 | **List** | <pre>* Milk<br/>* Eggs<br/>* Beers<br/>    * Desperados<br/>    * Heineken<br/>* Ham</pre> | <ul><li>Milk</li><li>Eggs</li><li>Beers<ul><li>Desperados</li><li>Heineken</li></ul></li><li>Ham</li></ul>
 | **Ordered list** | <pre>1. Introduction<br/>2. Main topic<br/>    1. First sub-topic<br/>    2. Second sub-topic<br/>3. Conclusion</pre> | <ol><li>Introduction</li><li>Main topic<ol><li>First sub-topic</li><li>Second sub-topic</li></ol></li><li>Conclusion</li></ol>
@@ -132,9 +133,9 @@ The checkboxes can then be ticked in the mobile and desktop applications.
 
 ### HTML support
 
-It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:
+It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as to highlight text), you can also use HTML code directly. For example this would be a valid note:
 
-	This is <s>strikethrough text</s> mixed with regular **Markdown**.
+	This is <span style="color: red">colored text</span> mixed with regular **Markdown**.
 
 ### Markdown Plugins
 
