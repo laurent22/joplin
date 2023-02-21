@@ -92,6 +92,7 @@ module.exports = {
 		// "react-hooks/exhaustive-deps": "warn",
 
 		'promise/prefer-await-to-then': 'error',
+		'no-unneeded-ternary': 'error',
 
 		// -------------------------------
 		// Formatting

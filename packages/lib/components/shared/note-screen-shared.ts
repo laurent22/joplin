@@ -236,7 +236,7 @@ shared.initState = async function(comp: any) {
 		mode: mode,
 		folder: folder,
 		isLoading: false,
-		fromShare: comp.props.sharedData ? true : false,
+		fromShare: !!comp.props.sharedData,
 		noteResources: await shared.attachedResources(note ? note.body : ''),
 	});
 
