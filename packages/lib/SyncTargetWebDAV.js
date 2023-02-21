@@ -5,6 +5,7 @@ const { FileApi } = require('./file-api.js');
 const Synchronizer = require('./Synchronizer').default;
 const WebDavApi = require('./WebDavApi');
 const { FileApiDriverWebDav } = require('./file-api-driver-webdav');
+const checkProviderIsUnsupported = require('./utils/webDAVUtils').default;
 
 class SyncTargetWebDAV extends BaseSyncTarget {
 	static id() {
@@ -54,6 +55,12 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 			ok: false,
 			errorMessage: '',
 		};
+
+		const providerCheck = checkProviderIsUnsupported(options.path());
+		if (providerCheck.isUnsupported === true) {
+			output.errorMessage = `The WebDAV implementation of ${providerCheck.unsupportedProvider} is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.`;
+			return output;
+		}
 
 		try {
 			const result = await fileApi.stat('');

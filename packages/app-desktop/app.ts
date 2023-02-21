@@ -46,6 +46,7 @@ import { homedir } from 'os';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
+import checkProviderIsUnsupported from '@joplin/lib/utils/webDAVUtils';
 
 const commands = mainScreenCommands
 	.concat(noteEditorCommands)
@@ -510,6 +511,13 @@ class Application extends BaseApplication {
 
 				void DecryptionWorker.instance().scheduleStart();
 			});
+		}
+
+		const providerCheck = checkProviderIsUnsupported(Setting.value('sync.6.path'));
+		if (providerCheck.unsupportedProvider) {
+			Setting.setValue('sync.allowUnsupportedProviders', 1);
+		} else {
+			Setting.setValue('sync.allowUnsupportedProviders', 0);
 		}
 
 		const clipperLogger = new Logger();

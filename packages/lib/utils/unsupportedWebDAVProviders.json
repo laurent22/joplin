@@ -1,0 +1,6 @@
+{
+  "providers": [
+    "pcloud", 
+    "jianguoyun"
+  ]
+}
