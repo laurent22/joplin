@@ -79,14 +79,8 @@ packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/base-command.js
 packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-e2ee.js
-packages/app-cli/app/command-e2ee.js.map
-packages/app-cli/app/command-mkbook.d.ts
 packages/app-cli/app/command-mkbook.js
-packages/app-cli/app/command-mkbook.js.map
-packages/app-cli/app/command-mkbook.test.d.ts
 packages/app-cli/app/command-mkbook.test.js
-packages/app-cli/app/command-mkbook.test.js.map
-packages/app-cli/app/command-settingschema.d.ts
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-testing.js

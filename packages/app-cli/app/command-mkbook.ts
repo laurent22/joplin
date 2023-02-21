@@ -51,9 +51,6 @@ class Command extends BaseCommand {
 		};
 
 		if (targetFolder) {
-			if (typeof targetFolder === 'boolean') {
-				throw new Error(_('Missing required argument: parent-notebook'));
-			}
 
 			const destinationFolder = await this.validDestinationFolder(targetFolder);
 			newFolder.parent_id = destinationFolder.id;
