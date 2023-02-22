@@ -123,7 +123,7 @@ const NoteListComponent = (props: Props) => {
 			customCss: props.customCss,
 		});
 
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles, props.plugins, props.selectedFolderId, props.customCss]);
 
 	const onGlobalDrop_ = () => {
