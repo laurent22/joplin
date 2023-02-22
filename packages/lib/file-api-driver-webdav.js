@@ -2,7 +2,7 @@ const { basicDelta } = require('./file-api');
 const { rtrimSlashes, ltrimSlashes } = require('./path-utils');
 const JoplinError = require('./JoplinError').default;
 const Setting = require('./models/Setting').default;
-const checkProviderIsUnsupported = require('./utils/webDAVUtils').default;
+const checkProviderIsSupported = require('./utils/webDAVUtils').default;
 
 class FileApiDriverWebDav {
 	constructor(api) {
@@ -228,10 +228,7 @@ class FileApiDriverWebDav {
 	}
 
 	initialize() {
-		const providerCheck = checkProviderIsUnsupported(Setting.value('sync.6.path'));
-		if (providerCheck.isUnsupported === true) {
-			throw new Error(`The WebDAV implementation of ${providerCheck.unsupportedProvider} is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.`);
-		}
+		checkProviderIsSupported(Setting.value('sync.6.path'));
 	}
 }
 

@@ -1,15 +1,10 @@
 import Setting from '../models/Setting';
 
-interface CheckResult {
-	isUnsupported: boolean;
-	unsupportedProvider: string;
-}
+export const checkProviderIsSupported = (path: string): void => {
+	if (Setting.value('sync.allowUnsupportedProviders') === 1) return;
 
-export const checkProviderIsUnsupported = (path: string): CheckResult => {
-	if (Setting.value('sync.allowUnsupportedProviders') === 1) return { isUnsupported: false, unsupportedProvider: '' };
-
-	const unsupportedProviders = require('./unsupportedWebDAVProviders.json');
-	for (const p of unsupportedProviders.providers) {
+	const unsupportedProviders = ['pcloud', 'jianguoyun'];
+	for (const p of unsupportedProviders) {
 		// For a provider named abc, this regex will match the provider's name if enclosed by either '/', '.' or '-'.
 		// E.g: https://abc.com, https://api.abc.com, https://api-abc-test.com
 		//
@@ -17,17 +12,9 @@ export const checkProviderIsUnsupported = (path: string): CheckResult => {
 		// E.g: https://fooabc.com
 		const pattern = `(?<=[/.-])${p}(?=[/.-])`;
 		if (path.search(new RegExp(pattern)) !== -1) {
-			return {
-				isUnsupported: true,
-				unsupportedProvider: p,
-			};
+			throw new Error(`The WebDAV implementation of ${p} is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.`);
 		}
 	}
-
-	return {
-		isUnsupported: false,
-		unsupportedProvider: '',
-	};
 };
 
-export default checkProviderIsUnsupported;
+export default checkProviderIsSupported;
