@@ -149,6 +149,7 @@ export interface RuleOptions {
 	postMessageSyntax: string;
 	ResourceModel: any;
 	resourceBaseUrl: string;
+	linkedNotes: string[];
 	resources: any; // resourceId: Resource
 
 	// Used by checkboxes to specify how it should be rendered
@@ -460,9 +461,13 @@ export default class MdToHtml {
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
+		const linkedNotes = await require('../lib/models/Note').default.linkedNoteIds(body);
+
+
 		const ruleOptions = Object.assign({}, options, {
 			resourceBaseUrl: this.resourceBaseUrl_,
 			ResourceModel: this.ResourceModel_,
+			linkedNotes: linkedNotes,
 		});
 
 		const context: PluginContext = {

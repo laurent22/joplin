@@ -167,6 +167,17 @@ export default function(theme: any, options: Options = null) {
 			margin-right: 0.4em;
 			background-color:  ${theme.urlColor};
 		}
+
+		.resource-icon-error {
+			display: inline-block;
+			position: relative;
+			top: 0.3em;
+			text-decoration: none;
+			width: 1.2em;
+			height: 1.4em;
+			margin-right: 0.4em;
+			background-color: red;
+		}
     /* These icons are obtained from the wonderful ForkAwesome project by copying the src svgs 
      * into the css classes below.
      * svgs are obtained from https://github.com/ForkAwesome/Fork-Awesome/tree/master/src/icons/svg
@@ -223,6 +234,10 @@ export default function(theme: any, options: Options = null) {
 		}
 		.fa-file {
 			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-exclamation-circle {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M768 128c424 0 768 344 768 768s-344 768-768 768S0 1320 0 896s344-768 768-768zm128 1247v-190c0-18-14-33-31-33H673c-18 0-33 15-33 33v190c0 18 15 33 33 33h192c17 0 31-15 31-33zm-2-344l18-621c0-7-3-14-10-18-6-5-15-8-24-8H658c-9 0-18 3-24 8-7 4-10 11-10 18l17 621c0 14 15 25 34 25h185c18 0 33-11 34-25z'/></svg>");
       -webkit-mask-repeat: no-repeat;
 		}
 		blockquote {

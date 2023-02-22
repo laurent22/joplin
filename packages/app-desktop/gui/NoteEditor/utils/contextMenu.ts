@@ -34,7 +34,10 @@ export async function openItemById(itemId: string, dispatch: Function, hash: str
 
 	const item = await BaseItem.loadItemById(itemId);
 
-	if (!item) throw new Error(`No item with ID ${itemId}`);
+	if (!item) {
+		bridge().showErrorMessageBox(`No item found with ID ${itemId}`);
+		throw new Error(`No item with ID ${itemId}`);
+	}
 
 	if (item.type_ === BaseModel.TYPE_RESOURCE) {
 		const resource = item as ResourceEntity;

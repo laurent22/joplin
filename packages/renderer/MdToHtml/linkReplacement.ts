@@ -3,7 +3,8 @@ import createEventHandlingAttrs from './createEventHandlingAttrs';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
-const { getClassNameForMimeType } = require('font-awesome-filetypes');
+const { getClassNameForMimeType, getClassNameForExtension } = require('font-awesome-filetypes');
+
 
 export interface Options {
 	title?: string;
@@ -13,6 +14,7 @@ export interface Options {
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;
 	enableLongPress?: boolean;
+	linkedNotes?: string[];
 	itemIdToUrl?: ItemIdToUrlHandler;
 }
 
@@ -36,7 +38,6 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	};
 
 	const resourceHrefInfo = urlUtils.parseResourceUrl(href);
-	const isResourceUrl = options.resources && !!resourceHrefInfo;
 	let title = options.title;
 
 	let resourceIdAttr = '';
@@ -45,45 +46,61 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	let mime = '';
 	let resourceId = '';
 	let resource = null;
-	if (isResourceUrl) {
+
+	if (resourceHrefInfo !== null) {
 		resourceId = resourceHrefInfo.itemId;
 
-		const result = options.resources[resourceId];
-		const resourceStatus = utils.resourceStatus(options.ResourceModel, result);
+		href = `joplin://${resourceId}`;
+		if (resourceHrefInfo.hash) href += `#${resourceHrefInfo.hash}`;
+		resourceIdAttr = `data-resource-id='${resourceId}'`;
 
-		if (result && result.item) {
-			if (!title) title = result.item.title;
-			mime = result.item.mime;
-			resource = result.item;
-		}
+		if (options.resources[resourceId]) {
+			const result = options.resources[resourceId];
+			const resourceStatus = utils.resourceStatus(options.ResourceModel, result);
 
-		if (result && resourceStatus !== 'ready' && !options.plainResourceRendering) {
-			const icon = utils.resourceStatusFile(resourceStatus);
 
-			return {
-				resourceReady: false,
-				html: `<a class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`,
-				resource,
-				resourceFullPath: null,
-			};
+			if (result && result.item) {
+				if (!title) title = result.item.title;
+				mime = result.item.mime;
+				resource = result.item;
+			}
+
+			if (result && resourceStatus !== 'ready' && !options.plainResourceRendering) {
+				const icon = utils.resourceStatusFile(resourceStatus);
+
+				return {
+					resourceReady: false,
+					html: `<a class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`,
+					resource,
+					resourceFullPath: null,
+				};
+			} else {
+				const iconType = mime ? getClassNameForMimeType(mime) : '';
+				icon = `<span class="resource-icon ${iconType}"></span>`;
+			}
 		} else {
-			// If we are rendering a note link, we'll get here too, so in that
-			// case "resourceId" would actually be the note ID.
-			href = `joplin://${resourceId}`;
-			if (resourceHrefInfo.hash) href += `#${resourceHrefInfo.hash}`;
-			resourceIdAttr = `data-resource-id='${resourceId}'`;
-
-			const iconType = mime ? getClassNameForMimeType(mime) : 'fa-joplin';
-
-			// Icons are defined in lib/renderers/noteStyle using inline svg
-			// The icons are taken from fork-awesome but use the font-awesome naming scheme in order
-			// to be more compatible with the getClass library
-			icon = `<span class="resource-icon ${iconType}"></span>`;
+			// If options.resources[resourceID] is undefined then there are 2 possibilities.
+			// First, it may be be a joplin linked note.
+			// Second, there's no resource with the given resourceId.
+			if (options.linkedNotes.indexOf(resourceId) > -1) {
+				const iconType = 'fa-joplin';
+				icon = `<span title="${title}" class="resource-icon ${iconType}"></span>`;
+			} else {
+				const iconType = 'fa-exclamation-circle';
+				icon = `<span title="File not found" class="resource-icon-error ${iconType}"></span>`;
+			}
 		}
-	} else {
+	} else if (href.startsWith('https://') || href.startsWith('http://')) {
 		// If the link is a plain URL (as opposed to a resource link), set the href to the actual
 		// link. This allows the link to be exported too when exporting to PDF.
 		hrefAttr = href;
+	} else if (href.startsWith('file://')) {
+		const ext = href.split('.').pop();
+		const iconType = ext ? getClassNameForExtension(ext) : '';
+		icon = `<span class="resource-icon ${iconType}"></span>`;
+	} else {
+		const iconType = 'fa-exclamation-circle';
+		icon = `<span title="Invlaid resource id" class="resource-icon-error ${iconType}"></span>`;
 	}
 
 	// A single quote is valid in a URL but we don't want any because the
