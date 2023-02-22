@@ -252,4 +252,41 @@ describe('MdToHtml', () => {
 			);
 		}
 	}));
+
+	test('should not make cache inconsistent', (async () => {
+
+		const codeTheme = 'atom-one-light.css';
+
+		const mdToHtml = newTestMdToHtml({
+			codeTheme: codeTheme,
+			theme: themeStyle(1),
+			externalAssetsOnly: false,
+		});
+
+		async function renderCall(inputText: string) {
+			const result = await mdToHtml.render(inputText, themeStyle(1), {
+				bodyOnly: false,
+				plainResourceRendering: true,
+				splitted: true,
+				externalAssetsOnly: true,
+				contentMaxWidth: 0,
+			});
+			return { ...result, pluginAssets: result.pluginAssets.slice() };
+		}
+
+		const cacheKey = themeStyle(1).cacheKey + codeTheme;
+
+		const firstRender = await renderCall('# First render call');
+		const firstCacheRetrieval = { ...mdToHtml['allProcessedAssets_'][cacheKey], pluginAssets: mdToHtml['allProcessedAssets_'][cacheKey].pluginAssets.slice() };
+
+		const secondRender = await renderCall('# Second render call');
+		const secondCacheRetrieval = { ...mdToHtml['allProcessedAssets_'][cacheKey], pluginAssets: mdToHtml['allProcessedAssets_'][cacheKey].pluginAssets.slice() };
+
+		expect(firstCacheRetrieval).toStrictEqual(secondCacheRetrieval);
+		expect(firstRender.cssStrings).toBeUndefined();
+		expect(secondRender.cssStrings).toBeUndefined();
+		expect(firstRender.pluginAssets).toStrictEqual(secondRender.pluginAssets);
+		expect(firstRender.pluginAssets).not.toEqual(firstCacheRetrieval.pluginAssets);
+		expect(secondRender.pluginAssets).not.toEqual(secondCacheRetrieval.pluginAssets);
+	}));
 });
