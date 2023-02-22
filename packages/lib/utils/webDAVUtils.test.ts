@@ -26,6 +26,7 @@ describe('checkProviderIsSupported', () => {
 
 			expect(() => checkProviderIsSupported('https://api-pcloud-test.com')).toThrowError('The WebDAV implementation of pcloud is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.');
 		});
+		expect(() => checkProviderIsSupported('?param=pcloud')).toThrowError('The WebDAV implementation of pcloud is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.');
 	});
 
 	describe('when an unsupported provider is already configured', () => {
