@@ -1671,6 +1671,12 @@ class Setting extends BaseModel {
 			// 	storage: SettingStorage.File,
 			// },
 
+			'sync.allowUnsupportedProviders': {
+				value: -1,
+				type: SettingItemType.Int,
+				public: false,
+			},
+
 		};
 
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
