@@ -26,11 +26,18 @@ interface Props {
 
 const useCss = (editorTheme: Theme) => {
 	return useMemo(() => {
+		// Ensure we have contrast between the background and selection. Some themes
+		// have the same backgroundColor and selectionColor2. (E.g. Aritim Dark)
+		let selectionBackgroundColor = editorTheme.selectedColor2;
+		if (selectionBackgroundColor === editorTheme.backgroundColor) {
+			selectionBackgroundColor = editorTheme.selectedColor;
+		}
+
 		return `
 			:root .imageEditorContainer {
 				--primary-background-color: ${editorTheme.backgroundColor};
 				--primary-background-color-transparent: ${editorTheme.backgroundColorTransparent};
-				--secondary-background-color: ${editorTheme.selectedColor2};
+				--secondary-background-color: ${selectionBackgroundColor};
 				--primary-foreground-color: ${editorTheme.color};
 				--secondary-foreground-color: ${editorTheme.color2};
 				--primary-shadow-color: ${editorTheme.colorFaded};
