@@ -124,6 +124,15 @@ const ImageEditor = (props: Props) => {
 			);
 		};
 
+		window.updateEditorTemplate = (templateData) => {
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					action: 'set-image-template-data',
+					data: templateData,
+				}),
+			);
+		};
+
 		const notifyReadyToLoadSVG = () => {
 			window.ReactNativeWebView.postMessage(
 				JSON.stringify({
@@ -160,6 +169,7 @@ const ImageEditor = (props: Props) => {
 						saveDrawing: () => saveDrawing(false),
 						autosaveDrawing: () => saveDrawing(true),
 						closeEditor,
+						updateEditorTemplate,
 						setImageHasChanges,
 					},
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
@@ -183,18 +193,24 @@ const ImageEditor = (props: Props) => {
 
 		// It can take some time for initialSVGData to be transferred to the WebView.
 		// Thus, do so after the main content has been loaded.
-		webviewRef.current.injectJS(`
-			if (window.editor && !window.initialSVGData) {
+		webviewRef.current.injectJS(`(async () => {
+			if (window.editor) {
 				// loadFromSVG shows its own loading message. Hide the original.
 				editor.hideLoadingWarning();
 
-				window.initialSVGData = ${JSON.stringify(initialSVGData)};
+				const initialSVGData = ${JSON.stringify(initialSVGData)};
+				const initialTemplateData = ${JSON.stringify(Setting.value('imageeditor.imageTemplate'))};
 
 				if (initialSVGData && initialSVGData.length > 0) {
-					editor.loadFromSVG(initialSVGData);
+					await editor.loadFromSVG(initialSVGData);
+				} else {
+					svgEditorBundle.applyTemplateToEditor(editor, initialTemplateData);
 				}
+
+				// Only watch for changes to the image size, etc after we've loaded an image.
+				svgEditorBundle.watchTemplateChanges(editor, initialTemplateData, window.updateEditorTemplate);
 			}
-		`);
+		})();`);
 	}, [webviewRef, props.loadInitialSVGData]);
 
 	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
@@ -218,6 +234,8 @@ const ImageEditor = (props: Props) => {
 			void onReadyToLoadData();
 		} else if (json.action === 'set-image-has-changes') {
 			setImageChanged(json.data);
+		} else if (json.action === 'set-image-template-data') {
+			Setting.setValue('imageeditor.imageTemplate', json.data);
 		} else {
 			logger.error('Unknown action,', json.action);
 		}

@@ -1,5 +1,5 @@
 
-import Editor, { EditorEventType, HTMLToolbar } from 'js-draw';
+import Editor, { Color4, EditorEventType, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
 import 'js-draw/bundle';
 
 declare namespace ReactNativeWebView {
@@ -112,6 +112,73 @@ const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
 				data: state,
 			})
 		);
+	});
+};
+
+export const applyTemplateToEditor = (editor: Editor, templateData: string) => {
+	let backgroundColor = Color4.transparent;
+	let imageSize = editor.getImportExportRect().size;
+
+	try {
+		const templateJSON = JSON.parse(templateData);
+
+		if ('backgroundColor' in templateJSON) {
+			backgroundColor = Color4.fromString(templateJSON.backgroundColor);
+		}
+
+		if ('imageSize' in templateJSON) {
+			imageSize = Vec2.ofXY(templateJSON.imageSize);
+		}
+	} catch (e) {
+		console.error('Warning: Invalid image template data: ', e);
+	}
+
+	const backgroundColorCommand = editor.setBackgroundColor(backgroundColor);
+	const imageSizeCommand = editor.setImportExportRect(new Rect2(0, 0, imageSize.x, imageSize.y));
+
+	void editor.dispatchNoAnnounce(backgroundColorCommand, false);
+	void editor.dispatchNoAnnounce(imageSizeCommand, false);
+};
+
+export const watchTemplateChanges = (
+	editor: Editor, initialTemplate: string, updateTemplate: (templateData: string)=> void
+) => {
+	const computeTemplate = (): string => {
+		let imageSize = editor.getImportExportRect().size;
+
+		// Constrain the size: Don't allow an extremely small or extremely large tempalte.
+		// Map components to constrained components.
+		imageSize = imageSize.map(component => {
+			const minDimen = 45;
+			const maxDimen = 5000;
+
+			return Math.max(Math.min(component, maxDimen), minDimen);
+		});
+
+		const templateData = {
+			imageSize: imageSize.xy,
+			backgroundColor: editor.estimateBackgroundColor().toHexString(),
+		};
+		return JSON.stringify(templateData);
+	};
+
+	let lastTemplate = initialTemplate;
+	const updateTemplateIfNecessary = () => {
+		const newTemplate = computeTemplate();
+
+		if (newTemplate !== lastTemplate) {
+			updateTemplate(newTemplate);
+			lastTemplate = newTemplate;
+		}
+	};
+
+	// Whenever a command is done/undone, re-calculate the template & save.
+	editor.notifier.on(EditorEventType.CommandDone, () => {
+		updateTemplateIfNecessary();
+	});
+
+	editor.notifier.on(EditorEventType.CommandUndone, () => {
+		updateTemplateIfNecessary();
 	});
 };
 

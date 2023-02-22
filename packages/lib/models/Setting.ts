@@ -1433,6 +1433,15 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'imageeditor.imageTemplate': {
+				value: '{ "backgroundColor": "rgba(150, 150, 150, 0.1)" }',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => 'Template for the image editor',
+				storage: SettingStorage.File,
+			},
+
 			'net.customCertificates': {
 				value: '',
 				type: SettingItemType.String,
