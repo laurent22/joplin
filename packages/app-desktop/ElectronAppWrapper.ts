@@ -32,6 +32,7 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
+	private splash_: any = null;
 
 	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
@@ -63,6 +64,9 @@ export default class ElectronAppWrapper {
 
 	initialCallbackUrl() {
 		return this.initialCallbackUrl_;
+	}
+	splash() {
+		return this.splash_;
 	}
 
 	createWindow() {
@@ -240,6 +244,41 @@ export default class ElectronAppWrapper {
 		this.pluginWindows_[pluginId] = window;
 	}
 
+	// Dedicated function to implement splash screen
+	splashScreen() {
+
+		const splashOptions = {
+			width: 640,
+			height: 480,
+			minHeight: 480,
+			minWidth: 640,
+			transparent: true,
+			frame: false,
+			alwaysOnTop: true,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+			},
+		};
+		this.splash_ = new BrowserWindow(splashOptions);
+
+		// The splash screen is loaded in file 'splash.html'
+		// which uses a SVG file to render the splash screem
+		this.splash_.loadURL(url.format({
+			pathname: path.join(__dirname, 'splash.html'),
+			protocol: 'file:',
+			slashes: true,
+		}));
+
+		// The main window creation is called here and once it is ready to show,
+		// the splash screen is discarded and main window is displayed
+		this.createWindow();
+		this.win_.on('ready-to-show', () => {
+			this.splash_.destroy();
+			this.win_.show();
+		});
+	}
+
 	async waitForElectronAppReady() {
 		if (this.electronApp().isReady()) return Promise.resolve();
 
@@ -355,7 +394,8 @@ export default class ElectronAppWrapper {
 		const alreadyRunning = this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
-		this.createWindow();
+		// Loads the Splash Screen and createWindow is called from the below function
+		this.splashScreen();
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
