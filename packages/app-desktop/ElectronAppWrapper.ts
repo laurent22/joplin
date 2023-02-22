@@ -65,9 +65,6 @@ export default class ElectronAppWrapper {
 	initialCallbackUrl() {
 		return this.initialCallbackUrl_;
 	}
-	splash() {
-		return this.splash_;
-	}
 
 	createWindow() {
 		// Set to true to view errors if the application does not start
@@ -252,11 +249,12 @@ export default class ElectronAppWrapper {
 			height: 480,
 			minHeight: 480,
 			minWidth: 640,
+			resizable:false,
+			movable:false,
 			transparent: true,
 			frame: false,
 			alwaysOnTop: true,
 			webPreferences: {
-				nodeIntegration: true,
 				contextIsolation: false,
 			},
 		};
@@ -264,19 +262,11 @@ export default class ElectronAppWrapper {
 
 		// The splash screen is loaded in file 'splash.html'
 		// which uses a SVG file to render the splash screem
-		this.splash_.loadURL(url.format({
-			pathname: path.join(__dirname, 'splash.html'),
-			protocol: 'file:',
-			slashes: true,
-		}));
+		this.splash_.loadURL(`${this.buildDir()}/../splash.html`);
 
-		// The main window creation is called here and once it is ready to show,
-		// the splash screen is discarded and main window is displayed
-		this.createWindow();
-		this.win_.on('ready-to-show', () => {
-			this.splash_.destroy();
-			this.win_.show();
-		});
+		// The main window creation is returned here
+		return this.createWindow();
+		// Control goes back to start() function
 	}
 
 	async waitForElectronAppReady() {
@@ -394,8 +384,14 @@ export default class ElectronAppWrapper {
 		const alreadyRunning = this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
-		// Loads the Splash Screen and createWindow is called from the below function
+		// Loads the Splash Screen and createWindow is returned from the below function
 		this.splashScreen();
+		
+		// this.win_ is used rather than this.electronApp_ for the splash screen to work
+		this.win_.on('ready-to-show', () => {
+			this.splash_.destroy();
+			this.win_.show();
+		});
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
