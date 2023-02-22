@@ -1,3 +1,4 @@
+import { _ } from '../locale';
 import Setting from '../models/Setting';
 
 export const checkProviderIsSupported = (path: string): void => {
@@ -12,7 +13,7 @@ export const checkProviderIsSupported = (path: string): void => {
 		// E.g: https://fooabc.com
 		const pattern = `(?<=[/.-])${p}(?=[/.-])`;
 		if (path.search(new RegExp(pattern)) !== -1) {
-			throw new Error(`The WebDAV implementation of ${p} is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.`);
+			throw new Error(_('The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.', p));
 		}
 	}
 };

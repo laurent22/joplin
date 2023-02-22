@@ -501,6 +501,7 @@ packages/lib/markdownUtils.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils2.test.js
 packages/lib/markupLanguageUtils.js
+packages/lib/migrations/42.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.js
 packages/lib/models/Folder.js
