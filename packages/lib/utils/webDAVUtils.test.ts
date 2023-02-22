@@ -19,10 +19,25 @@ describe('checkProviderIsUnsupported', () => {
 			expect(result.unsupportedProvider).toBe('');
 		});
 
+		it('should return false when a valid provider path with a similar name is provided', () => {
+			const result = checkProviderIsUnsupported('https://hopcloudabc.com');
+			expect(result.isUnsupported).toBe(false);
+			expect(result.unsupportedProvider).toBe('');
+		});
+
 		it('should return true and the name of the provider when an unsupported provider path is provided', () => {
-			const result = checkProviderIsUnsupported('https://pcloud.com');
-			expect(result.isUnsupported).toBe(true);
-			expect(result.unsupportedProvider).toBe('pcloud');
+			const first = checkProviderIsUnsupported('https://pcloud.com');
+			const second = checkProviderIsUnsupported('https://api.pcloud.com');
+			const third = checkProviderIsUnsupported('https://api-pcloud-test.com');
+
+			expect(first.isUnsupported).toBe(true);
+			expect(first.unsupportedProvider).toBe('pcloud');
+
+			expect(second.isUnsupported).toBe(true);
+			expect(second.unsupportedProvider).toBe('pcloud');
+
+			expect(third.isUnsupported).toBe(true);
+			expect(third.unsupportedProvider).toBe('pcloud');
 		});
 	});
 
