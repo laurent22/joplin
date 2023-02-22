@@ -1,6 +1,8 @@
 const { basicDelta } = require('./file-api');
 const { rtrimSlashes, ltrimSlashes } = require('./path-utils');
 const JoplinError = require('./JoplinError').default;
+const Setting = require('./models/Setting').default;
+const checkProviderIsSupported = require('./utils/webDAVUtils').default;
 
 class FileApiDriverWebDav {
 	constructor(api) {
@@ -223,6 +225,10 @@ class FileApiDriverWebDav {
 	async clearRoot() {
 		await this.delete('');
 		await this.mkdir('');
+	}
+
+	initialize() {
+		checkProviderIsSupported(Setting.value('sync.6.path'));
 	}
 }
 

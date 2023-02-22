@@ -225,7 +225,7 @@ export default function(props: Props) {
 		];
 
 		const menu = bridge().Menu.buildFromTemplate(template);
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, [onInstall, onBrowsePlugins]);
 
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {

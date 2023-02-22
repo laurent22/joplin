@@ -3,7 +3,7 @@ import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
-const { BrowserWindow, Tray, screen } = require('electron');
+import { BrowserWindow, Tray, screen } from 'electron';
 const url = require('url');
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
@@ -25,7 +25,7 @@ export default class ElectronAppWrapper {
 	private env_: string;
 	private isDebugMode_: boolean;
 	private profilePath_: string;
-	private win_: any = null;
+	private win_: BrowserWindow = null;
 	private willQuitApp_: boolean = false;
 	private tray_: any = null;
 	private buildDir_: string = null;
@@ -118,7 +118,7 @@ export default class ElectronAppWrapper {
 			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
-		this.win_.loadURL(url.format({
+		void this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
 			protocol: 'file:',
 			slashes: true,
