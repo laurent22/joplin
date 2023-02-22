@@ -32,7 +32,7 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
-	private splash_: any = null;
+	private splash_: BrowserWindow = null;
 
 	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
@@ -258,7 +258,7 @@ export default class ElectronAppWrapper {
 				contextIsolation: false,
 			},
 		};
-		this.splash_ = new BrowserWindow(splashOptions);
+		void this.splash_ = new BrowserWindow(splashOptions);
 
 		// The splash screen is loaded in file 'splash.html'
 		// which uses a SVG file to render the splash screem
