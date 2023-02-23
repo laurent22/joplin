@@ -1045,7 +1045,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				appTypes: [AppType.Mobile],
-				label: () => 'Enable spellcheck',
+				label: () => _('Enable spellcheck in the text editor'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
