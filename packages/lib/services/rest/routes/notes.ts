@@ -265,12 +265,22 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 			return Resource.internalUrl(urlInfo.resource);
 		});
 	} else {
+		// Proper Regex:
+		//
+		//     /(!\[.*?\]\()([^\s\)]+)(.*?\))/g
+		//
+		// Broken regex when [embedded_pdf] support was added, and fixed with
+		// `before.startsWith('[![')` hack. But ideally that function should be
+		// unit tested to prevent it from being broken again.
+		//
+		//     /(!?\[.*?\]\()([^\s\)]+)(.*?\))/g
+		//
 		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			let type = 'link';
 			if (before.startsWith('[embedded_pdf]')) {
 				type = 'pdf';
-			} else if (before.startsWith('![')) {
+			} else if (before.startsWith('![') || before.startsWith('[![')) {
 				type = 'image';
 			}
 
