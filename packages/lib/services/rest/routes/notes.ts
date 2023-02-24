@@ -9,8 +9,6 @@ import defaultLoadOptions from '../utils/defaultLoadOptions';
 import { RequestMethod, Request } from '../Api';
 import markdownUtils from '../../../markdownUtils';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
-
-import { reg } from '../../../registry';
 import Database from '../../../database';
 import Folder from '../../../models/Folder';
 import Note from '../../../models/Note';
@@ -23,11 +21,14 @@ const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
 import * as ArrayUtils from '../../../ArrayUtils';
+import Logger from '../../../Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
 const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
+
+const logger = Logger.create('routes/notes');
 
 let htmlToMdParser_: any = null;
 
@@ -136,7 +137,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 				output.push(text);
 				await shim.fsDriver().remove(tempPath);
 			} catch (error) {
-				reg.logger().warn(`Cannot download stylesheet at ${stylesheet.value}`, error);
+				logger.warn(`Cannot download stylesheet at ${stylesheet.value}`, error);
 			}
 		} else {
 			throw new Error(`Invalid stylesheet type: ${stylesheet.type}`);
@@ -159,6 +160,7 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 }
 
 async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
+	logger.info('Downloading media file', url);
 
 	const tempDir = Setting.value('tempDir');
 
@@ -169,7 +171,7 @@ async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
 
 	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
 	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
-		reg.logger().warn(`Resources in data URL format is only supported for images ${url}`);
+		logger.warn(`Resources in data URL format is only supported for images ${url}`);
 		return '';
 	}
 
@@ -199,7 +201,7 @@ async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
 		}
 		return mediaPath;
 	} catch (error) {
-		reg.logger().warn(`Cannot download image at ${url}`, error);
+		logger.warn(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
@@ -237,7 +239,7 @@ async function createResourcesFromPaths(urls: string[]) {
 			const resource = await shim.createResourceFromPath(urlInfo.path);
 			urlInfo.resource = resource;
 		} catch (error) {
-			reg.logger().warn(`Cannot create resource for ${url}`, error);
+			logger.warn(`Cannot create resource for ${url}`, error);
 		}
 	}
 	return urls;
@@ -250,7 +252,7 @@ async function removeTempFiles(urls: string[]) {
 		try {
 			await shim.fsDriver().remove(urlInfo.path);
 		} catch (error) {
-			reg.logger().warn(`Cannot remove ${urlInfo.path}`, error);
+			logger.warn(`Cannot remove ${urlInfo.path}`, error);
 		}
 	}
 }
@@ -364,21 +366,23 @@ export default async function(request: Request, id: string = null, link: string 
 
 		const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
 
+		logger.info('Images:', imageSizes);
+
 		let note: any = await requestNoteToNote(requestNote);
 
 		const mediaUrls = extractMediaUrls(note.markup_language, note.body);
 
-		reg.logger().info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
+		logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
 
 		let result = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
 
-		reg.logger().info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
+		logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
 
 		result = await createResourcesFromPaths(result);
 		await removeTempFiles(result);
 		note.body = replaceUrlsByResources(note.markup_language, note.body, result, imageSizes);
 
-		reg.logger().info(`Request (${requestId}): Saving note...`);
+		logger.info(`Request (${requestId}): Saving note...`);
 
 		const saveOptions = defaultSaveOptions('POST', note.id);
 		saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
@@ -399,7 +403,7 @@ export default async function(request: Request, id: string = null, link: string 
 			note = await attachImageFromDataUrl(note, requestNote.image_data_url, requestNote.crop_rect);
 		}
 
-		reg.logger().info(`Request (${requestId}): Created note ${note.id}`);
+		logger.info(`Request (${requestId}): Created note ${note.id}`);
 
 		return note;
 	}
