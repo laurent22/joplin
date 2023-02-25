@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -129,9 +131,8 @@ msgstr "%d noter der matcher dette mønster. Slet dem?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -201,11 +202,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), "
-"\"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] "
-"fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-"
-"list` kan bruges til at vise alle etiketter (brug -l for at vise den lange "
-"udgave)."
+"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove"
+"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra "
+"[note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` "
+"kan bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -353,14 +353,14 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på "
-"\"ti\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
+"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på \"ti"
+"\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
 "notesbog"
 
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Tvetydig notesbog \"%s\". Brug venligst kort notesbog-id i stedet - tryk på "
 "\"ti\" for at se det korte notebogs-id"
@@ -390,6 +390,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Er du sikker på, at du vil vende tilbage til standardlayoutet? Den aktuelle "
+"layoutkonfiguration vil gå tabt."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -1621,7 +1623,7 @@ msgstr "Slå bløde ombrydninger til"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Aktiver stavekontrol i teksteditoren"
 
 #: packages/lib/models/Setting.ts:1143
 msgid "Enable table of contents extension"
@@ -2120,8 +2122,8 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. "
-"`$c` kan bruges som reference til aktuel/valgt emne."
+"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
+"$c` kan bruges som reference til aktuel/valgt emne."
 
 #: packages/app-mobile/components/screens/Note.tsx:403
 msgid ""
@@ -2284,7 +2286,7 @@ msgstr "Emner kan ikke synkroniseres"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Følg os på Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2625,9 +2627,8 @@ msgid "Missing required argument: %s"
 msgstr "Mangler krævet argument: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "Mangler krævet argument: %s"
+msgstr "Mangler krævet flag-værdi: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
@@ -3070,7 +3071,7 @@ msgstr "Indsæt"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "Indsæt som tekst"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3433,9 +3434,8 @@ msgid "Replace: "
 msgstr "Erstat: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "Skift applikationslayout"
+msgstr "Nulstil applikationslayout"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -4324,6 +4324,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"WebDAV-implementeringen af %s er ikke kompatibel med Joplin og understøttes "
+"derfor ikke længere. Brug venligst en anden synkroniseringsmetode."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
