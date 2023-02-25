@@ -1,5 +1,14 @@
 # Joplin terminal app changelog
 
+## [cli-v2.10.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.10.1) - 2023-02-25T16:49:17Z
+
+- Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
+- Improved: Switch license to AGPL-3.0 (faf0a4e)
+- Improved: Validate required flags (42cef1e)
+- Fixed: Custom sort order not synchronized (#7729) (#6956 by Tao Klerks)
+- Fixed: Support non-ASCII characters in OneDrive (#6916) (#6838 by Self Not Found)
+- Security: Fix XSS when a specially crafted string is passed to the renderer (762b4e8)
+
 ## [cli-v2.9.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.9.1) - 2022-10-12T14:49:48Z
 
 - Improved: Added note count indicator per notebook (#6526) (#6478 by Eduardo Esparza)

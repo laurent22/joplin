@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "",
   "main": "index.js",
   "bin": "./dist/index.js",
@@ -18,8 +18,8 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/lib": "~2.10",
-    "@joplin/tools": "~2.10",
+    "@joplin/lib": "^2.10.1",
+    "@joplin/tools": "^2.10.1",
     "fs-extra": "11.1.0",
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",
