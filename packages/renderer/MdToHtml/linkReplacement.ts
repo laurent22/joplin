@@ -90,7 +90,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 				icon = `<span title="File not found" class="resource-icon-error ${iconType}"></span>`;
 			}
 		}
-	} else if (href.startsWith('https://') || href.startsWith('http://')) {
+	} else if (href.startsWith('https://') || href.startsWith('http://') || href.indexOf('#') === 0) {
 		// If the link is a plain URL (as opposed to a resource link), set the href to the actual
 		// link. This allows the link to be exported too when exporting to PDF.
 		hrefAttr = href;
