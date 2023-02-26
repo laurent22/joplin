@@ -9,11 +9,11 @@ import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler
 const BaseCommand = require('./base-command').default;
 const { app } = require('./app.js');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
-const locker = require('proper-lockfile');
-const fs = require('fs-extra');
+import * as locker from 'proper-lockfile';
+import { pathExists, writeFile } from 'fs-extra';
 
 class Command extends BaseCommand {
 
@@ -37,21 +37,12 @@ class Command extends BaseCommand {
 		];
 	}
 
-	static async lockFile(filePath: string): Promise<Function> {
+	private static async lockFile(filePath: string) {
 		return locker.lock(filePath, { stale: 1000 * 60 * 5 });
 	}
 
-	static isLocked(filePath: string) {
-		return new Promise((resolve, reject) => {
-			locker.check(filePath, (error: any, isLocked: boolean) => {
-				if (error) {
-					reject(error);
-					return;
-				}
-
-				resolve(isLocked);
-			});
-		});
+	private static async isLocked(filePath: string) {
+		return locker.check(filePath);
 	}
 
 	async doAuth() {
@@ -114,7 +105,7 @@ class Command extends BaseCommand {
 
 		// Lock is unique per profile/database
 		const lockFilePath = `${require('os').tmpdir()}/synclock_${md5(escape(Setting.value('profileDir')))}`; // https://github.com/pvorb/node-md5/issues/41
-		if (!(await fs.pathExists(lockFilePath))) await fs.writeFile(lockFilePath, 'synclock');
+		if (!(await pathExists(lockFilePath))) await writeFile(lockFilePath, 'synclock');
 
 		const useLock = args.options.useLock !== 0;
 

@@ -7727,6 +7727,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/proper-lockfile@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "@types/proper-lockfile@npm:4.1.2"
+  dependencies:
+    "@types/retry": "*"
+  checksum: 9d8a100f96e6df3ce1213eea2696b86de4b75dce3ab5bbc1767226732976bf38d2d2ce1060d6942e76561e8617576547e83bb172e95375192a0b8df1fbca2331
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*":
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
@@ -7851,6 +7860,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: e99fc7cc6265407987b30deda54c1c24bb1478803faf6037557a774b2f034c5b097ffd65847daa87e82a61a250d919f35c3588654b0fdaa816906650f596d1b0
+  languageName: node
+  linkType: hard
+
+"@types/retry@npm:*":
+  version: 0.12.2
+  resolution: "@types/retry@npm:0.12.2"
+  checksum: e5675035717b39ce4f42f339657cae9637cf0c0051cf54314a6a2c44d38d91f6544be9ddc0280587789b6afd056be5d99dbe3e9f4df68c286c36321579b1bf4a
   languageName: node
   linkType: hard
 
@@ -20213,6 +20229,7 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/node": 18.11.18
+    "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1290.0
     chalk: 4.1.2
     compare-version: 0.1.2
