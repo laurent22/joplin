@@ -74,6 +74,10 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 
 		for (let i = 0; i < linkedResourceIds.length; i++) {
 			const id = linkedResourceIds[i];
+			// Skip the resources which haven't been downloaded yet
+			if (!resourcePaths.hasOwnProperty(id)) {
+				continue;
+			}
 			const resourceContent = `${relativePath ? `${relativePath}/` : ''}_resources/${basename(resourcePaths[id])}`;
 			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), resourceContent);
 		}
