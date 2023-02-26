@@ -4,7 +4,7 @@ import Folder from '@joplin/lib/models/Folder';
 const Command = require('./command-mkbook');
 
 
-describe('command-mkbook', function() {
+describe('command-mkbook', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
