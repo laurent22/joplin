@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v2.10.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.10.2) - 2023-02-26T12:41:23Z
+
+- Improved: Create subnotebooks (#6722) (#1728 by Andrej Lifinzew)
+
 ## [cli-v2.10.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.10.1) - 2023-02-25T16:49:17Z
 
 - Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
