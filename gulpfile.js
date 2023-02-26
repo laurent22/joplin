@@ -6,6 +6,9 @@ const tasks = {
 	buildCommandIndex: require('./packages/tools/gulp/tasks/buildCommandIndex'),
 	completePublishAll: {
 		fn: async () => {
+			await utils.execCommandVerbose('git', ['add', '-A']);
+			await utils.execCommandVerbose('git', ['commit', '-m', 'Releasing sub-packages']);
+
 			// Lerna does some unnecessary auth check that doesn't work with
 			// automation tokens, thus the --no-verify-access. Automation token
 			// is still used for access when publishing even with this flag
@@ -15,7 +18,8 @@ const tasks = {
 
 			await utils.execCommandVerbose('yarn', ['install']);
 			await utils.execCommandVerbose('git', ['add', '-A']);
-			await utils.execCommandVerbose('git', ['commit', '-m', 'Releasing sub-packages']);
+			await utils.execCommandVerbose('git', ['commit', '-m', 'Lock file']);
+
 			await utils.execCommandVerbose('git', ['push']);
 		},
 	},
