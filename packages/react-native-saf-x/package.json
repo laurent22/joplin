@@ -1,6 +1,6 @@
 {
   "name": "@joplin/react-native-saf-x",
-  "version": "2.10.1",
+  "version": "2.10.2",
   "description": "a module to help work with scoped storages on android easily",
   "main": "src/index",
   "react-native": "src/index",

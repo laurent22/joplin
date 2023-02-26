@@ -332,7 +332,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.10.0):
+  - react-native-saf-x (2.10.1):
     - React-Core
   - react-native-safe-area-context (4.5.0):
     - RCT-Folly
@@ -724,7 +724,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: 22bcd49188a04d6d6df254ca33085f26e28879c9
+  react-native-saf-x: 3a127b6b7c3c40ab39d4717850d5c7824e8226d6
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
