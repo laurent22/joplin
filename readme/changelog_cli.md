@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v2.10.3](https://github.com/laurent22/joplin/releases/tag/cli-v2.10.3) - 2023-02-26T13:03:59Z
+
+- Fixed: Fixed "sync" command when calling it in non-interactive mode (d157b9c)
+
 ## [cli-v2.10.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.10.2) - 2023-02-26T12:41:23Z
 
 - Improved: Create subnotebooks (#6722) (#1728 by Andrej Lifinzew)
