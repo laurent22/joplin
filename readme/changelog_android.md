@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.10.7](https://github.com/laurent22/joplin/releases/tag/android-v2.10.7) (Pre-release) - 2023-02-23T13:44:34Z
+## [android-v2.10.8](https://github.com/laurent22/joplin/releases/tag/android-v2.10.8) (Pre-release) - 2023-02-28T18:09:21Z
 
 - Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
 - Fixed: Custom sort order not synchronized (#7729) (#6956 by Tao Klerks)
