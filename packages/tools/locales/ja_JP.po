@@ -352,6 +352,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -446,8 +447,8 @@ msgstr ""
 "ておきましょう。そうしないとすべてのファイルが削除されてしまいます！ 詳しくは"
 "次のFAQをご覧ください: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -519,7 +520,6 @@ msgstr "共有"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -549,7 +549,7 @@ msgstr "バックグラウンド同期を中止中… しばらくお待ちく�
 msgid "Cancelling..."
 msgstr "中止中..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "中止中...お待ちください。"
 
@@ -593,7 +593,12 @@ msgstr "ノートをノートブック \"%s\" にコピーできません"
 msgid "Cannot find \"%s\"."
 msgstr "\"%s\" は見つかりませんでした。"
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "\"%s\" は見つかりませんでした。"
+
+#: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
 msgstr "同期プロセスを初期化できませんでした。"
 
@@ -696,7 +701,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome ウェブストア"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "クリア"
@@ -980,10 +984,14 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "作成"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "あたらしいノートブックを作成します。"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1042,7 +1050,7 @@ msgstr "作成しました：%s"
 msgid "Creates a new note."
 msgstr "あたらしいノートを作成します。"
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "あたらしいノートブックを作成します。"
 
@@ -1405,7 +1413,7 @@ msgstr "ダウンロード済み（未復号）"
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "リソースをダウンロード中..."
 
@@ -2485,7 +2493,7 @@ msgstr "読み込み済み"
 msgid "Location"
 msgstr "場所"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2771,7 +2779,7 @@ msgstr "ノートブックが選択されていません。"
 msgid "No notebook selected."
 msgstr "ノートブックが選択されていません。"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "ノートがありません。新しいノートを作成して下さい。"
 
@@ -2802,7 +2810,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "%s では認証できません。他の資格証明書を使用してください。"
 
@@ -2946,7 +2954,6 @@ msgstr "番号つきリスト"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3878,7 +3885,7 @@ msgstr ""
 "復号を開始しました... どのぐらいの数を復号するかによりますが、数分かかります"
 "のでお待ちください。"
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "同期を開始中..."
 
@@ -3912,13 +3919,13 @@ msgstr "状態: ポート %d で起動中"
 msgid "Step 1: Enable the clipper service"
 msgstr "ステップ1: クリッパーサービスを有効にする"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "ステップ1: アプリケーションを認証するためにこのURLをブラウザーで開く:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -4017,7 +4024,7 @@ msgstr "同期の状態"
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 "同期先のアップグレードが必要です。続行するには `%s` を実行してください。"
@@ -4046,7 +4053,7 @@ msgstr "同期"
 msgid "Synchronisation interval"
 msgstr "同期間隔"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
 
@@ -4059,7 +4066,7 @@ msgstr "同期状況"
 msgid "Synchronisation target"
 msgstr "同期先"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "同期先: %s (%s)"
 
@@ -4365,7 +4372,7 @@ msgstr "ノートがありません。(+)ボタンを押して新しいノート
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
@@ -4526,7 +4533,7 @@ msgstr "題名"
 msgid "Title"
 msgstr "題名"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5047,7 +5054,7 @@ msgstr "既存データを暗号化しなおし、再同期します。"
 msgid "Your password is needed to decrypt some of your data."
 msgstr "一部のデータを復号化するためにあなたのパスワードが必要です。"
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

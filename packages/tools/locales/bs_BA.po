@@ -363,6 +363,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -461,8 +462,8 @@ msgstr ""
 "sinhronizacije kopirate sav sadržaj jer će, u protivnom, sve datoteke biti "
 "uklonjene! Za više detalja vidjeti često postavljana pitanja (FAQ): %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -535,7 +536,6 @@ msgstr "Podijeli"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -565,7 +565,7 @@ msgstr "Prekidam sinhronizaciju... Pričekajte."
 msgid "Cancelling..."
 msgstr "Prekidam..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "Prekidam... Pričekajte."
 
@@ -609,7 +609,12 @@ msgstr "Bilješka se ne može kopirati u bilježnicu \"%s\""
 msgid "Cannot find \"%s\"."
 msgstr "Ne mogu pronaći \"%s\"."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "Ne mogu pronaći \"%s\"."
+
+#: packages/app-cli/app/command-sync.ts:164
 #, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Sinhronizovanje se ne može započeti."
@@ -711,7 +716,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Počisti"
@@ -1012,11 +1016,15 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 #, fuzzy
 msgid "Create"
 msgstr "Kreirano"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Kreira novu bilježnicu."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1080,7 +1088,7 @@ msgstr "Kreirano: %s"
 msgid "Creates a new note."
 msgstr "Kreira novu bilješku."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Kreira novu bilježnicu."
 
@@ -1456,7 +1464,7 @@ msgstr "Preuzeto i šifrirano"
 msgid "Downloading"
 msgstr "Preuzimam resurse..."
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Preuzimam resurse..."
 
@@ -2580,7 +2588,7 @@ msgstr "Preuzeto"
 msgid "Location"
 msgstr "Lokacija"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2878,7 +2886,7 @@ msgstr "Nije precizirana bilježnica."
 msgid "No notebook selected."
 msgstr "Nije odabrana bilježnica."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Nema bilješki. Kreirajte bilješku pritisnuvši na \"Nova bilješka\"."
 
@@ -2910,7 +2918,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Nije ovjereno sa %s. Molimo unesite podatke koji nedostaju."
 
@@ -3062,7 +3070,6 @@ msgstr "Numerisano nabrajanje"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -4026,7 +4033,7 @@ msgstr ""
 "Počinjem sa dešifrovanjem... Molim Vas da pričekate, jer proces može trajati "
 "nekoliko minuta, zavisno od količine podataka koje treba dešifrovati."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Započinjem sinhronizovanje..."
 
@@ -4060,7 +4067,7 @@ msgstr "Status: pokrenut preko porta %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "Korak 1: aktivirajte clipper servis"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
@@ -4068,7 +4075,7 @@ msgstr ""
 "Korak 1: otvorite ovu adresu u Vašem internet pregledniku i ovjerite "
 "aplikaciju:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -4167,7 +4174,7 @@ msgstr "Status sinhronizacije"
 msgid "Sync status (synced items / total items)"
 msgstr "Status sinhronizacije (sinhronizovano / ukupno)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 
@@ -4198,7 +4205,7 @@ msgstr "Sinhronizacija"
 msgid "Synchronisation interval"
 msgstr "Interval za sinhronizaciju"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Sinhronizovanje je u toku."
 
@@ -4211,7 +4218,7 @@ msgstr "Status sinhronizacije"
 msgid "Synchronisation target"
 msgstr "Odredište za sinhronizaciju"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "Odredište sinhronizacije: %s (%s)"
 
@@ -4512,7 +4519,7 @@ msgstr "Trenutno nema bilješki. Kreirajte ih pritiskom na (+) dugme."
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -4672,7 +4679,7 @@ msgstr "naziv"
 msgid "Title"
 msgstr "Naziv"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5209,7 +5216,7 @@ msgstr "Vaši podaci iznova će se šifrirati i sinhronizovati."
 msgid "Your password is needed to decrypt some of your data."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

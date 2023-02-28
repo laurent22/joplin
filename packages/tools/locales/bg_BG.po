@@ -362,6 +362,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -461,8 +462,8 @@ msgstr ""
 "съдържание там преди да синхронизирате, иначе всички файлове ще бъдат "
 "премахнати! Вижчте ЧЗВ за повече подробности: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -535,7 +536,6 @@ msgstr "Сподели"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -565,7 +565,7 @@ msgstr "Отменя се синхронизацията течаща на за�
 msgid "Cancelling..."
 msgstr "Отменям..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "Отменям... Моля изчакайте."
 
@@ -609,7 +609,12 @@ msgstr "Не можах да копира бележката в тетрадка
 msgid "Cannot find \"%s\"."
 msgstr "Не успях да намеря \"%s\"."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "Не успях да намеря \"%s\"."
+
+#: packages/app-cli/app/command-sync.ts:164
 #, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Не успях да инициализирам синхронизатора."
@@ -712,7 +717,6 @@ msgid "Chrome Web Store"
 msgstr ""
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Изчисти"
@@ -1004,11 +1008,15 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 #, fuzzy
 msgid "Create"
 msgstr "Създаден"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Създава нова тетрадка."
 
 #: packages/app-mobile/components/note-list.js:101
 #, fuzzy
@@ -1073,7 +1081,7 @@ msgstr "Създаден: %s"
 msgid "Creates a new note."
 msgstr "Създава нова бележка."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Създава нова тетрадка."
 
@@ -1449,7 +1457,7 @@ msgstr ""
 msgid "Downloading"
 msgstr "Свалям ресурси..."
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Свалям ресурси..."
 
@@ -2559,7 +2567,7 @@ msgstr ""
 msgid "Location"
 msgstr "Местоположение"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2857,7 +2865,7 @@ msgstr "Няма зададени тетрадки."
 msgid "No notebook selected."
 msgstr "Няма избрани тетрадки."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Тук няма бележки. Може да натиснете \"Нова бележка\" за да създадете първата."
@@ -2889,7 +2897,7 @@ msgstr ""
 msgid "Nord"
 msgstr ""
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
 "Не сме оторизирани за %s. Моля въведете липсващите оторизационни данни."
@@ -3037,7 +3045,6 @@ msgstr "Номериран списък"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3989,7 +3996,7 @@ msgstr ""
 "Започвам да декриптирам... Моля изчакайте, защото това може да отнеме "
 "няколко минути, в зависимост от колко има за декриптиране."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Започвам синхронизация..."
 
@@ -4025,13 +4032,13 @@ msgstr "Статус: Стартирано на порт %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "1ва стъпка: Пуснете услугата на клипера"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1ва стъпка: Отворете този адрес в браузър и оторизирайте приложението:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -4133,7 +4140,7 @@ msgstr "Статус"
 msgid "Sync status (synced items / total items)"
 msgstr "Статус на синхронизацията (синхронизирани / всички)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 
@@ -4165,7 +4172,7 @@ msgstr "Синхронизация"
 msgid "Synchronisation interval"
 msgstr "Интервал на синхронизация"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Вече се извършва синхронизация."
 
@@ -4178,7 +4185,7 @@ msgstr "Статус на синхронизацията"
 msgid "Synchronisation target"
 msgstr "Цел за синхронизация"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "Цел за синхронизация: %s (%s)"
 
@@ -4465,7 +4472,7 @@ msgstr "В момента няма бележки. Натиснете бутон
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -4612,7 +4619,7 @@ msgstr "заглавие"
 msgid "Title"
 msgstr "заглавие"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5142,7 +5149,7 @@ msgstr ""
 msgid "Your password is needed to decrypt some of your data."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

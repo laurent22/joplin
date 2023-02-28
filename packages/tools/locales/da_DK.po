@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -202,10 +200,11 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), \"remove"
-"\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] fra "
-"[note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-list` "
-"kan bruges til at vise alle etiketter (brug -l for at vise den lange udgave)."
+"<tag-command> (etiket-kommando) kan enten være \"add\" (tilføj), "
+"\"remove\" (slet) eller \"list\" (liste) for at tilføje eller fjerne [tag] "
+"fra [note], eller for at liste de noter der bruger [tag]. Kommandoen `tag-"
+"list` kan bruges til at vise alle etiketter (brug -l for at vise den lange "
+"udgave)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -353,14 +352,15 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på \"ti"
-"\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
+"Tvetydig notesbog \"%s\". Brug venligst notesbog-id i stedet - tryk på "
+"\"ti\" for at se det korte notebogs-id eller brug $b for den aktuelle valgte "
 "notesbog"
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
 "Tvetydig notesbog \"%s\". Brug venligst kort notesbog-id i stedet - tryk på "
 "\"ti\" for at se det korte notebogs-id"
@@ -454,8 +454,8 @@ msgstr ""
 "dit indhold til den før du synkroniserer, ellers vil alle filer blive "
 "slettet! Læs FAQ'en for flere detaljer: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -526,7 +526,6 @@ msgstr "Kan dele"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -556,7 +555,7 @@ msgstr "Annullerer baggrunds synkronisering... Vent venligst."
 msgid "Cancelling..."
 msgstr "Annullerer..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "Annullerer... Vent venligst."
 
@@ -600,7 +599,12 @@ msgstr "Kan ikke kopiere note til \"%s\" notesbog"
 msgid "Cannot find \"%s\"."
 msgstr "Kan ikke finde \"%s\"."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "Kan ikke finde \"%s\"."
+
+#: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
 msgstr "Kan ikke starte synkroniseringen."
 
@@ -703,7 +707,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Ryd"
@@ -988,10 +991,14 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr "Kunne ikke bekræfte din identitet"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Opret"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Opretter en ny notesbog."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1050,7 +1057,7 @@ msgstr "Oprettet: %s"
 msgid "Creates a new note."
 msgstr "Opretter en ny note."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Opretter en ny notesbog."
 
@@ -1410,7 +1417,7 @@ msgstr "Downloadet og krypteret"
 msgid "Downloading"
 msgstr "Downloader"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Downloader ressource..."
 
@@ -2122,8 +2129,8 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "I enhver kommando kan en note eller notesbog refereres med titel eller ID, "
-"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `"
-"$c` kan bruges som reference til aktuel/valgt emne."
+"eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. "
+"`$c` kan bruges som reference til aktuel/valgt emne."
 
 #: packages/app-mobile/components/screens/Note.tsx:403
 msgid ""
@@ -2481,7 +2488,7 @@ msgstr "Indlæst"
 msgid "Location"
 msgstr "Placering"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2759,7 +2766,7 @@ msgstr "Ingen notesbog er specificeret."
 msgid "No notebook selected."
 msgstr "Ingen notesbog er valgt."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Der er ingen noter her. Opret en ved at klikke på \"Ny note\"."
 
@@ -2790,7 +2797,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
 "Ikke godkendt med %s. Angiv venligst eventuelle manglende "
@@ -2933,7 +2940,6 @@ msgstr "Nummeret liste"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3851,7 +3857,7 @@ msgstr ""
 "Dekryptering startet... Vent venligst da kan tage adskillige minutter "
 "afhængig af mængden der skal dekrypteres."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Starter synkronisering..."
 
@@ -3886,13 +3892,13 @@ msgstr "Status: Startet på port %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "Trin 1: Aktiver Web-Clipper tjenesten"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "Trin 1: Åben denne URL i din browser for at autorisere applikationen:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -3989,7 +3995,7 @@ msgstr "Synkroniseringsstatus"
 msgid "Sync status (synced items / total items)"
 msgstr "Synk status (synk'ede emner / emner i alt)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr "Synk-mål skal opgraderes! Kør `%s` for at fortsætte."
 
@@ -4017,7 +4023,7 @@ msgstr "Synkronisering"
 msgid "Synchronisation interval"
 msgstr "Synkroniseringsinterval"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Synkronisering er allerede i gang."
 
@@ -4030,7 +4036,7 @@ msgstr "Synkroniseringsstatus"
 msgid "Synchronisation target"
 msgstr "Synkroniseringsmål"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "Synkroniseringsmål: %s (%s)"
 
@@ -4339,7 +4345,7 @@ msgstr "Der er ingen noter. Opret note ved at klikke på (+) knappen."
 msgid "There are unsaved changes."
 msgstr "Der er ikke-gemte ændringer."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
@@ -4503,7 +4509,7 @@ msgstr "titel"
 msgid "Title"
 msgstr "Titel"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5032,7 +5038,7 @@ msgstr "Dine data bliver genkrypteret og synkroniseret igen."
 msgid "Your password is needed to decrypt some of your data."
 msgstr "Din adgangskode er nødvendig for at dekryptere nogle af dine data."
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

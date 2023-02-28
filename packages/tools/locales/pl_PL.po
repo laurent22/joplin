@@ -357,6 +357,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -451,8 +452,8 @@ msgstr ""
 "innym wypadku wszystkie pliki będą usunięte! Sprawdź FAQ w celu uzyskania "
 "informacji: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -526,7 +527,6 @@ msgstr "Udostępnij"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -556,7 +556,7 @@ msgstr "Anulowanie synchronizacji w tle... Proszę czekać."
 msgid "Cancelling..."
 msgstr "Anulowanie..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "Anulowanie... Proszę czekać."
 
@@ -600,7 +600,12 @@ msgstr "Nie można skopiować notatki do notatnika \"%s\""
 msgid "Cannot find \"%s\"."
 msgstr "Nie można znaleźć \"%s\"."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "Nie można znaleźć \"%s\"."
+
+#: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
 msgstr "Nie można zainicjalizować synchronizatora."
 
@@ -703,7 +708,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Wyczyść"
@@ -992,10 +996,14 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr "Nie można zweryfikować tożsamości"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Utwórz"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Tworzy nowy notatnik."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1054,7 +1062,7 @@ msgstr "Utworzono: %s"
 msgid "Creates a new note."
 msgstr "Tworzy nową notatkę."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Tworzy nowy notatnik."
 
@@ -1420,7 +1428,7 @@ msgstr "Pobrane i zaszyfrowane"
 msgid "Downloading"
 msgstr "Pobieranie"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Pobieranie zasobów..."
 
@@ -2512,7 +2520,7 @@ msgstr "Załadowano"
 msgid "Location"
 msgstr "Lokacja"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2800,7 +2808,7 @@ msgstr "Notatnik nie został określony."
 msgid "No notebook selected."
 msgstr "Nie wybrano notatnika."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Brak notatek. Utwórz nową, naciskając na \"Nowa notatka\"."
 
@@ -2831,7 +2839,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Nie uwierzytelniono z %s. Proszę uzupełnij brakujące dane."
 
@@ -2973,7 +2981,6 @@ msgstr "Lista numerowana"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3911,7 +3918,7 @@ msgstr ""
 "Rozpoczynanie deszyfrowania...Proszę czekać, może to zająć kilkanaście minut "
 "w zależności od ilości danych."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Rozpoczynanie synchronizacji..."
 
@@ -3946,14 +3953,14 @@ msgstr "Status: Uruchomiono w porcie %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "Krok 1: Aktywuj usługę Clipper"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Krok 1: Otwórz odnośnik w swojej przeglądarce aby autoryzować aplikację:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -4051,7 +4058,7 @@ msgstr "Status synchronizacji"
 msgid "Sync status (synced items / total items)"
 msgstr "Status synchronizacji (obiekty zsynchronizowane / obiekty ogółem)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr "Cel synchronizacji wymaga aktualizacji. Uruchom '%s' aby kontynuować."
 
@@ -4081,7 +4088,7 @@ msgstr "Synchronizacja"
 msgid "Synchronisation interval"
 msgstr "Interwał synchronizacji"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Synchronizacja w toku."
 
@@ -4094,7 +4101,7 @@ msgstr "Status synchronizacji"
 msgid "Synchronisation target"
 msgstr "Serwis synchronizacji"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "Serwis synchronizacji: %s (%s)"
 
@@ -4400,7 +4407,7 @@ msgstr "Brak notatek. Aby utworzyć, naciśnij przycisk (+)."
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Brak notatników. Utwórz nowy, naciskając na \"Nowy notatnik\"."
@@ -4564,7 +4571,7 @@ msgstr "tytuł"
 msgid "Title"
 msgstr "Tytuł"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5092,7 +5099,7 @@ msgstr "Twoje dane zostaną ponownie zaszyfrowane i zsynchronizowane."
 msgid "Your password is needed to decrypt some of your data."
 msgstr "Twoje hasło jest potrzebne do odszyfrowania części twoich danych."
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

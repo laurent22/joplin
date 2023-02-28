@@ -356,6 +356,7 @@ msgstr ""
 "\"ti\" nähdäksesi lyhyen muistikirjan tunnuksen tai käytä $b nykyiselle "
 "valitulle muistikirjalle"
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -451,8 +452,8 @@ msgstr ""
 "siihen ennen synkronointia, muuten kaikki tiedostot poistetaan! Lisätietoja "
 "on usein kysytyissä kysymyksissä: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -523,7 +524,6 @@ msgstr "Voit jakaa"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -553,7 +553,7 @@ msgstr "Peruutetaan taustasynkronointi... Odota."
 msgid "Cancelling..."
 msgstr "Peruutetaan..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "Peruutetaan ... Odota hetki."
 
@@ -597,7 +597,12 @@ msgstr "Muistiinpanoa ei voi kopioida \"%s\" muistikirjaan"
 msgid "Cannot find \"%s\"."
 msgstr "Ei löydy \"%s\"."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "Ei löydy \"%s\"."
+
+#: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
 msgstr "Synkronoinnin alustaminen ei onnistu."
 
@@ -700,7 +705,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Tyhjennä"
@@ -986,10 +990,14 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Luo"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Luo uuden muistikirjan."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1048,7 +1056,7 @@ msgstr "Luotu: %s"
 msgid "Creates a new note."
 msgstr "Luo uuden muistiinpanon."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Luo uuden muistikirjan."
 
@@ -1412,7 +1420,7 @@ msgstr "Ladattu ja salattu"
 msgid "Downloading"
 msgstr "Ladataan"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Ladataan resursseja..."
 
@@ -2486,7 +2494,7 @@ msgstr "Ladattu"
 msgid "Location"
 msgstr "Sijainti"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2767,7 +2775,7 @@ msgstr "Muistikirjaa ei ole luokiteltu."
 msgid "No notebook selected."
 msgstr "Muistikirjaa ei ole valittu."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Ei muistiinpanoja. Luo uusi napsauttamalla \"Uusi muistiinpano\"."
 
@@ -2798,7 +2806,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Ei todennettu %s. Anna puuttuvat tunnistetiedot."
 
@@ -2939,7 +2947,6 @@ msgstr "Numeroitu luettelo"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3865,7 +3872,7 @@ msgstr ""
 "Aloitetaan salauksen purkua... Odota, koska se voi kestää useita minuutteja "
 "riippuen siitä, kuinka paljon on purettavaa."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Aloitetaan synkronointi..."
 
@@ -3899,13 +3906,13 @@ msgstr "Tila: Aloitettu portissa %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "Vaihe 1: Ota Web Clipper työkalu käyttöön"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "Vaihe 1: Avaa tämä URL osoite selaimessa valtuuttaaksesi sovelluksen:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -4003,7 +4010,7 @@ msgstr "Synkronoinnin tila"
 msgid "Sync status (synced items / total items)"
 msgstr "Synkronoinnin tila (synkronoidut kohteet / kohteet yhteensä)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr "Synkronointikohde on päivitettävä! Suorita `%s` jatkaaksesi."
 
@@ -4032,7 +4039,7 @@ msgstr "Synkronointi"
 msgid "Synchronisation interval"
 msgstr "Synkronoinnin aikaväli"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Synkronointi on jo käynnissä."
 
@@ -4045,7 +4052,7 @@ msgstr "Synkronoinnin tila"
 msgid "Synchronisation target"
 msgstr "Synkronointikohde"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "Synkronoinnin kohde: %s (%s)"
 
@@ -4351,7 +4358,7 @@ msgstr ""
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -4517,7 +4524,7 @@ msgstr "otsikko"
 msgid "Title"
 msgstr "Otsikko"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5036,7 +5043,7 @@ msgstr "Tietosi salataan ja synkronoidaan uudelleen."
 msgid "Your password is needed to decrypt some of your data."
 msgstr "Salasanaasi tarvitaan joidenkin tietojen salauksen purkamiseen."
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

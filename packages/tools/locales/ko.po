@@ -354,6 +354,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -447,8 +448,8 @@ msgstr ""
 "주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
 "세요. 변경 중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -520,7 +521,6 @@ msgstr "공유"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -550,7 +550,7 @@ msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기�
 msgid "Cancelling..."
 msgstr "취소하는 중..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
@@ -594,7 +594,12 @@ msgstr "노트를 \"%s\" 노트북으로 복사할 수 없습니다"
 msgid "Cannot find \"%s\"."
 msgstr "\"%s\"를 찾을 수 없습니다."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "\"%s\"를 찾을 수 없습니다."
+
+#: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
 msgstr "동기화를 시작할 수 없습니다."
 
@@ -696,7 +701,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome 웹 스토어"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "지우기"
@@ -980,10 +984,14 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "생성됨"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "새 노트북을 만듭니다."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1042,7 +1050,7 @@ msgstr "생성됨: %s"
 msgid "Creates a new note."
 msgstr "새 노트를 만듭니다."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "새 노트북을 만듭니다."
 
@@ -1403,7 +1411,7 @@ msgstr "내려받기 및 암호화됨"
 msgid "Downloading"
 msgstr "내려받는 중"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "리소스 내려받는 중..."
 
@@ -2479,7 +2487,7 @@ msgstr "로딩됨"
 msgid "Location"
 msgstr "위치"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2763,7 +2771,7 @@ msgstr "특정된 노트북이 없습니다."
 msgid "No notebook selected."
 msgstr "선택된 노트북이 없습니다."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "노트가 없습니다. \"새 노트\"를 선택해서 노트를 새로 만드세요."
 
@@ -2794,7 +2802,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "%s과 인증되지 않았습니다. 증명서를 제공해주세요."
 
@@ -2935,7 +2943,6 @@ msgstr "번호 매기기 목록"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3860,7 +3867,7 @@ msgstr ""
 "복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다"
 "러주세요."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "동기화를 시작합니다..."
 
@@ -3893,13 +3900,13 @@ msgstr "상태: %d 포트 열림"
 msgid "Step 1: Enable the clipper service"
 msgstr "1단계: 웹 수집기 서비스 활성화"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1단계: 브라우저에서 이 URL에 접근하여 애플리케이션을 허가합니다:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -3996,7 +4003,7 @@ msgstr "동기화 상태"
 msgid "Sync status (synced items / total items)"
 msgstr "동기화 상태 (동기화 완료 항목 / 전체 항목)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해 `%s` 누르세요."
 
@@ -4024,7 +4031,7 @@ msgstr "동기화"
 msgid "Synchronisation interval"
 msgstr "동기화 간격"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "이미 동기화가 진행중입니다."
 
@@ -4037,7 +4044,7 @@ msgstr "동기화 상태"
 msgid "Synchronisation target"
 msgstr "동기화 대상"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "동기화 대상: %s (%s)"
 
@@ -4332,7 +4339,7 @@ msgstr "노트가 없습니다. (+) 버튼을 클릭하여 새로 만드세요."
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "노트북이 없습니다. \"새 노트북\"을 선택해서 노트북을 새로 만드세요."
@@ -4491,7 +4498,7 @@ msgstr "제목"
 msgid "Title"
 msgstr "제목"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5013,7 +5020,7 @@ msgstr "데이터가 재 암호화 되고, 다시 동기화 될 것입니다."
 msgid "Your password is needed to decrypt some of your data."
 msgstr "일부 데이터를 복호화하라면 암호가 필요합니다."
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."

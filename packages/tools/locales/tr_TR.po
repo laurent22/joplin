@@ -356,6 +356,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -450,8 +451,8 @@ msgstr ""
 "kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha "
 "fazla bilgi için SSS bölümüne bakın: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -523,7 +524,6 @@ msgstr "Paylaş"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
@@ -553,7 +553,7 @@ msgstr "Arka plan senkronizasyonu iptal ediliyor... Lütfen bekleyin."
 msgid "Cancelling..."
 msgstr "İptal ediliyor..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "İptal ediliyor... Lütfen bekleyin."
 
@@ -597,7 +597,12 @@ msgstr "Not, \"%s\" not defterine kopyalanamadı"
 msgid "Cannot find \"%s\"."
 msgstr "\"%s\" bulunamıyor."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "\"%s\" bulunamıyor."
+
+#: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
 msgstr "Senkronizasyon başlatılamadı."
 
@@ -698,7 +703,6 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Mağazası"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Temizle"
@@ -985,10 +989,14 @@ msgstr ""
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Oluştur"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Yeni bir not defteri oluşturur."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1047,7 +1055,7 @@ msgstr "Oluşturulma: %s"
 msgid "Creates a new note."
 msgstr "Yeni bir not oluşturur."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Yeni bir not defteri oluşturur."
 
@@ -1410,7 +1418,7 @@ msgstr "İndirildi ve şifrelendi"
 msgid "Downloading"
 msgstr "İndiriliyor"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Kaynaklar indiriliyor..."
 
@@ -2502,7 +2510,7 @@ msgstr "Yüklenme"
 msgid "Location"
 msgstr "Konum"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2787,7 +2795,7 @@ msgstr "Hiçbir not defteri belirtilmedi."
 msgid "No notebook selected."
 msgstr "Seçili defter yok."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Burada not yok. \"Yeni not\" üzerine tıklayarak bir tane oluşturun."
 
@@ -2818,7 +2826,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "%s ile doğrulama sağlanamadı. Lütfen eksik olan tüm bilgileri girin."
 
@@ -2959,7 +2967,6 @@ msgstr "Numaralı liste"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3895,7 +3902,7 @@ msgstr ""
 "Şifre çözme başlatılıyor... Çözülecek dosya sayısına bağlı olarak biraz "
 "zaman alabilir, lütfen bekleyiniz."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Senkronizasyon başlatılıyor..."
 
@@ -3930,13 +3937,13 @@ msgstr "Durum: %d portunda başlatıldı"
 msgid "Step 1: Enable the clipper service"
 msgstr "Adım 1: Alıntılama servisini aktif et"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1. Adım: Uygulamayı yetkilendirmek için bu URL'i tarayıcınızda açın:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -4034,7 +4041,7 @@ msgstr "Senkronizasyon Durumu"
 msgid "Sync status (synced items / total items)"
 msgstr "Senkronizasyon durumu (senkronize öğeler / toplam öğeler)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 "Senkronizasyon hedefinin güncellenmesi gerekmekte. Devam etmek için `%s` "
@@ -4066,7 +4073,7 @@ msgstr "Senkronizasyon"
 msgid "Synchronisation interval"
 msgstr "Senkronizasyon aralığı"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Senkronizasyon zaten devam ediyor."
 
@@ -4079,7 +4086,7 @@ msgstr "Senkronizasyon Durumu"
 msgid "Synchronisation target"
 msgstr "Senkronizasyon hedefi"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 msgid "Synchronisation target: %s (%s)"
 msgstr "Senkronizasyon hedefi: %s (%s)"
 
@@ -4390,7 +4397,7 @@ msgstr "Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:513
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -4556,7 +4563,7 @@ msgstr "başlık"
 msgid "Title"
 msgstr "Başlık"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -5086,7 +5093,7 @@ msgstr ""
 "Verilerinizin bir kısmının şifrelemesinin çözülmesi için parolanız "
 "gerekmektedir."
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
