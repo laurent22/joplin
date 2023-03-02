@@ -56,7 +56,6 @@ interface NoteListItemProps {
 	onCheckboxClick: any;
 	onDragStart: any;
 	onNoteDragOver: any;
-	onNoteDrop: any;
 	onTitleClick: any;
 	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void;
 }
@@ -175,7 +174,6 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		<StyledRoot
 			className={classNames}
 			onDragOver={props.onNoteDragOver}
-			onDrop={props.onNoteDrop}
 			width={props.width}
 			height={props.height}
 			isProvisional={props.isProvisional}

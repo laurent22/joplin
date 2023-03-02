@@ -6,7 +6,6 @@ const tasks = {
 	buildCommandIndex: require('./packages/tools/gulp/tasks/buildCommandIndex'),
 	completePublishAll: {
 		fn: async () => {
-
 			await utils.execCommandVerbose('git', ['add', '-A']);
 			await utils.execCommandVerbose('git', ['commit', '-m', 'Releasing sub-packages']);
 
@@ -16,6 +15,10 @@ const tasks = {
 			// (publishing would fail otherwise).
 			// https://github.com/lerna/lerna/issues/2788
 			await utils.execCommandVerbose('lerna', ['publish', 'from-package', '-y', '--no-verify-access']);
+
+			await utils.execCommandVerbose('yarn', ['install']);
+			await utils.execCommandVerbose('git', ['add', '-A']);
+			await utils.execCommandVerbose('git', ['commit', '-m', 'Lock file']);
 
 			await utils.execCommandVerbose('git', ['push']);
 		},

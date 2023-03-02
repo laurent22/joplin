@@ -123,7 +123,7 @@ const NoteListComponent = (props: Props) => {
 			customCss: props.customCss,
 		});
 
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles, props.plugins, props.selectedFolderId, props.customCss]);
 
 	const onGlobalDrop_ = () => {
@@ -275,7 +275,6 @@ const NoteListComponent = (props: Props) => {
 			onCheckboxClick={noteItem_checkboxClick}
 			onDragStart={noteItem_dragStart}
 			onNoteDragOver={noteItem_noteDragOver}
-			onNoteDrop={noteItem_noteDrop}
 			onTitleClick={noteItem_titleClick}
 			onContextMenu={itemContextMenu}
 		/>;
@@ -526,6 +525,7 @@ const NoteListComponent = (props: Props) => {
 				style={props.size}
 				itemRenderer={renderItem}
 				onKeyDown={onKeyDown}
+				onNoteDrop={noteItem_noteDrop}
 			/>
 		);
 	};

@@ -17,12 +17,13 @@ interface Props {
 	sortOrderField: string;
 	sortOrderReverse: boolean;
 	notesParentType: string;
+	height: number;
 }
 
 const StyledRoot = styled.div`
 	box-sizing: border-box;
+	height: ${(props: any) => props.height}px;
 	display: flex;
-	height: auto;
 	flex-direction: column;
 	padding: ${(props: any) => props.theme.mainPadding}px;
 	background-color: ${(props: any) => props.theme.backgroundColor3};

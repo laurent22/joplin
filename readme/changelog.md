@@ -1,5 +1,18 @@
 # Joplin changelog
 
+## [v2.10.8](https://github.com/laurent22/joplin/releases/tag/v2.10.8) (Pre-release) - 2023-02-26T12:53:55Z
+
+- Improved: Note background does not change when theme automatically updated via system ([d1e545a](https://github.com/laurent22/joplin/commit/d1e545a))
+- Fixed: Fixed clipping certain pages that contain images within links ([92cf5ab](https://github.com/laurent22/joplin/commit/92cf5ab))
+
+## [v2.10.7](https://github.com/laurent22/joplin/releases/tag/v2.10.7) (Pre-release) - 2023-02-24T10:56:20Z
+
+- New: Add a link to twitter inside the help menu ([#7796](https://github.com/laurent22/joplin/issues/7796) by [@pedr](https://github.com/pedr))
+- Improved: Added "Move Line Up" and "Move Line Down" shortcuts ([#7755](https://github.com/laurent22/joplin/issues/7755)) ([#7692](https://github.com/laurent22/joplin/issues/7692) by [@Polaris66](https://github.com/Polaris66))
+- Improved: Stop synchronization with unsupported WebDAV providers ([#7819](https://github.com/laurent22/joplin/issues/7819)) ([#7661](https://github.com/laurent22/joplin/issues/7661) by [@julien](https://github.com/julien))
+- Fixed: Make note sort update logic use correct prior sort and drop-grouping ([#7737](https://github.com/laurent22/joplin/issues/7737)) ([#7731](https://github.com/laurent22/joplin/issues/7731) by Tao Klerks)
+- Fixed: Markdown + Front Matter export fails when tag(s) lost ([#7820](https://github.com/laurent22/joplin/issues/7820)) ([#7782](https://github.com/laurent22/joplin/issues/7782) by [@pedr](https://github.com/pedr))
+
 ## [v2.10.6](https://github.com/laurent22/joplin/releases/tag/v2.10.6) (Pre-release) - 2023-02-20T14:00:05Z
 
 - New: Add 'Paste as text' to the Context menu of the Rich Text Editor ([#7769](https://github.com/laurent22/joplin/issues/7769) by [@pedr](https://github.com/pedr))

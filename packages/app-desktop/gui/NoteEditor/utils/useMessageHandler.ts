@@ -45,7 +45,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 				fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },
 			}, dispatch);
 
-			menu.popup(bridge().window());
+			menu.popup({ window: bridge().window() });
 		} else if (msg.indexOf('#') === 0) {
 			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else if (msg === 'contentScriptExecuteCommand') {

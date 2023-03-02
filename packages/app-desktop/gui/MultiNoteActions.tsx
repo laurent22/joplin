@@ -42,7 +42,7 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 
 	const multiNotesButton_click = (item: any) => {
 		if (item.submenu) {
-			item.submenu.popup(bridge().window());
+			item.submenu.popup({ window: bridge().window() });
 		} else {
 			item.click();
 		}
