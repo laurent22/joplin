@@ -180,6 +180,7 @@ const ImageEditor = (props: Props) => {
 						setImageHasChanges,
 					},
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
+					${JSON.stringify(Setting.value('locale'))},
 				);
 
 				editor.showLoadingWarning(0);
