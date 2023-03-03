@@ -104,8 +104,10 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		this.api_.setAccountProperties(accountProperties);
 		const appDir = await this.api().appDirectory();
 		// the appDir might contain non-ASCII characters
-		// baseDir = encodeURI(appDir)
-		const fileApi = new FileApi(encodeURI(appDir), new FileApiDriverOneDrive(this.api()));
+		// /[^\u0021-\u00ff]/ is used in Node.js to detect the unescaped characters.
+		// See https://github.com/nodejs/node/blob/bbbf97b6dae63697371082475dc8651a6a220336/lib/_http_client.js#L176
+		const baseDir = RegExp(/[^\u0021-\u00ff]/).exec() !== null ? encodeURI(appDir) : appDir
+		const fileApi = new FileApi(baseDir, new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.syncTargetId());
 		fileApi.setLogger(this.logger());
 		return fileApi;
