@@ -28,6 +28,10 @@ Even if you are **modifying** a file that was originally in JavaScript you shoul
 
 If this is a large file however please ask first if it needs to be converted. Some very old and large JS files are tricky to convert properly due to poorly defined types, so in some cases it's better to leave that for another day (or another PR).
 
+### Prefer `import` to `require`
+
+In TypeScript files prefer `import` to `require` so that we can benefit from type-checking. If it does not work, you may have to add the type using `yarn add @types/NAME_OF_PACKAGE`. If you are trying to import an old package, it may not have TypeScript types and in this case using `require()` is acceptable.
+
 ## Filenames
 
  * `camelCase.ts`: Files that export multiple things.
@@ -69,6 +73,24 @@ processData();
 ...
 ```
 
+## Only import what you need
+
+Only import what you need so that we can potentially benefit from [tree shaking](https://webpack.js.org/guides/tree-shaking/) if we ever implement it.
+
+**BAD:**
+```ts
+import * as fs from 'fs-extra';
+// ...
+fs.writeFile('example.md', 'example');
+```
+
+**Good:**
+```ts
+import { writeFile } from 'fs-extra';
+// ...
+writeFile('example.md', 'example');
+```
+
 ## Use `camelCase` for `const`ants in new code
 
 **BAD:**
@@ -81,24 +103,6 @@ const GRAVITY_ACCEL = 9.8;
 ```ts
 const gravityAccel = 9.8;
 ```
-
-
-## Indent using `tab`s
-
-**VSCode**: In `vscode`, be sure to check whether new files are created with `tab` or `space` indentation! [Spaces can be converted to tabs using the command palette.](https://code.visualstudio.com/docs/editor/codebasics#_autodetection)
-
-
-## Use strict equality
-
-Use `===` instead of `==`.
-
-Although the TypeScript compiler _will_ give error messages if two different types are compared with `==` (e.g. `number == boolean`), its compiler error [messages in this case can be misleading](https://github.com/microsoft/TypeScript/issues/26592).
-
-
-### See also
- * [Unofficial TypeScript style guide, `==` vs `===`](https://basarat.gitbook.io/typescript/styleguide#or)
- * [More about `==` vs `===` in TypeScript.](https://stackoverflow.com/a/60669874)
-
 
 ## Declare variables just before their usage
 
@@ -167,6 +171,7 @@ const foo = () => {
 As much as possible, avoid default parameters in **function definitions** and optional fields in **interface definitions**. When all parameters are required, it is much easier to refactor the code because the compiler will automatically catch any missing parameters.
 
 # React
+
 ## Use function components for new code
 
 New code should use [React Hooks](https://reactjs.org/docs/hooks-intro.html) and `function` components, rather than objects that extend `Component`.
