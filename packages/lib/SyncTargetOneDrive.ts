@@ -103,7 +103,9 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		}
 		this.api_.setAccountProperties(accountProperties);
 		const appDir = await this.api().appDirectory();
-		const fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
+		// the appDir might contain non-ASCII characters
+		// baseDir = encodeURI(appDir)
+		const fileApi = new FileApi(encodeURI(appDir), new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.syncTargetId());
 		fileApi.setLogger(this.logger());
 		return fileApi;
