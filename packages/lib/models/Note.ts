@@ -874,16 +874,21 @@ export default class Note extends BaseItem {
 				if (note.id === noteIds[0] && index === i) return defer();
 			}
 
-			// If some of the target notes have order = 0, set the order field to user_created_time
-			// (historically, all notes had the order field set to 0)
+			// If some of the target notes have order = 0, set the order field to a reasonable
+			// value to avoid moving the note. Using "smallest value / 2" (vs, for example,
+			// subtracting a constant) ensures items remain in their current position at the
+			// end, without ever reaching 0.
 			let hasSetOrder = false;
+			let previousOrder = 0;
 			for (let i = 0; i < notes.length; i++) {
 				const note = notes[i];
 				if (!note.order) {
-					const updatedNote = await this.updateNoteOrder_(note, note.user_created_time);
+					const newOrder = previousOrder ? previousOrder / 2 : note.user_created_time;
+					const updatedNote = await this.updateNoteOrder_(note, newOrder);
 					notes[i] = updatedNote;
 					hasSetOrder = true;
 				}
+				previousOrder = notes[i].order;
 			}
 
 			if (hasSetOrder) notes = await getSortedNotes(folderId);
