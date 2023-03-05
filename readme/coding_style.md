@@ -32,7 +32,7 @@ If this is a large file however please ask first if it needs to be converted. So
 
 In TypeScript files prefer `import` to `require` so that we can benefit from type-checking. If it does not work, you may have to add the type using `yarn add @types/NAME_OF_PACKAGE`. If you are trying to import an old package, it may not have TypeScript types and in this case using `require()` is acceptable.
 
-### Avoid inline styles
+### Avoid inline types
 
 In general please define types separately as it improves readability and it means the type can be re-used.
 
