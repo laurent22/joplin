@@ -185,8 +185,10 @@ const ImageEditor = (props: Props) => {
 
 				editor.showLoadingWarning(0);
 
-				const loadStartDelay = 10;
-				setTimeout(() => notifyReadyToLoadSVG(), loadStartDelay);
+				// Start loading the SVG file (if present) after loading the editor.
+				// This shows the user that progress is being made (loading large SVGs
+				// from disk into memory can take several seconds).
+				notifyReadyToLoadSVG();
 			}
 		} catch(e) {
 			window.ReactNativeWebView.postMessage(
