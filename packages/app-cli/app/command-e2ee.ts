@@ -12,15 +12,15 @@ const imageType = require('image-type');
 const readChunk = require('read-chunk');
 
 class Command extends BaseCommand {
-	usage() {
+	public usage() {
 		return 'e2ee <command> [path]';
 	}
 
-	description() {
+	public description() {
 		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.'); // `generate-ppk`
 	}
 
-	options() {
+	public options() {
 		return [
 			// This is here mostly for testing - shouldn't be used
 			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
@@ -30,7 +30,7 @@ class Command extends BaseCommand {
 		];
 	}
 
-	async action(args: any) {
+	public async action(args: any) {
 		const options = args.options;
 
 		const askForMasterKey = async (error: any) => {

@@ -27,29 +27,29 @@ export default class SearchEngine {
 	private syncCalls_: any[] = [];
 	private scheduleSyncTablesIID_: any;
 
-	static instance() {
+	public static instance() {
 		if (SearchEngine.instance_) return SearchEngine.instance_;
 		SearchEngine.instance_ = new SearchEngine();
 		return SearchEngine.instance_;
 	}
 
-	setLogger(logger: Logger) {
+	public setLogger(logger: Logger) {
 		this.logger_ = logger;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	setDb(db: any) {
+	public setDb(db: any) {
 		this.db_ = db;
 	}
 
-	db() {
+	public db() {
 		return this.db_;
 	}
 
-	noteById_(notes: NoteEntity[], noteId: string) {
+	private noteById_(notes: NoteEntity[], noteId: string) {
 		for (let i = 0; i < notes.length; i++) {
 			if (notes[i].id === noteId) return notes[i];
 		}
@@ -61,7 +61,7 @@ export default class SearchEngine {
 		return null;
 	}
 
-	async rebuildIndex_() {
+	private async rebuildIndex_() {
 		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		noteIds = noteIds.map((n: any) => n.id);
 
@@ -94,7 +94,7 @@ export default class SearchEngine {
 		Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
 	}
 
-	scheduleSyncTables() {
+	public scheduleSyncTables() {
 		if (this.scheduleSyncTablesIID_) return;
 
 		this.scheduleSyncTablesIID_ = shim.setTimeout(async () => {
@@ -107,13 +107,13 @@ export default class SearchEngine {
 		}, 10000);
 	}
 
-	async rebuildIndex() {
+	public async rebuildIndex() {
 		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
 		Setting.setValue('searchEngine.initialIndexingDone', false);
 		return this.syncTables();
 	}
 
-	async syncTables_() {
+	private async syncTables_() {
 		if (this.isIndexing_) return;
 
 		this.isIndexing_ = true;
@@ -201,7 +201,7 @@ export default class SearchEngine {
 		this.isIndexing_ = false;
 	}
 
-	async syncTables() {
+	public async syncTables() {
 		this.syncCalls_.push(true);
 		try {
 			await this.syncTables_();
@@ -210,13 +210,13 @@ export default class SearchEngine {
 		}
 	}
 
-	async countRows() {
+	public async countRows() {
 		const sql = 'SELECT count(*) as total FROM notes_fts';
 		const row = await this.db().selectOne(sql);
 		return row && row['total'] ? row['total'] : 0;
 	}
 
-	fieldNamesFromOffsets_(offsets: any[]) {
+	private fieldNamesFromOffsets_(offsets: any[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurenceCount = Math.floor(offsets.length / 4);
 		const output: string[] = [];
@@ -229,39 +229,39 @@ export default class SearchEngine {
 		return output;
 	}
 
-	calculateWeight_(offsets: any[], termCount: number) {
-		// Offset doc: https://www.sqlite.org/fts3.html#offsets
+	// protected calculateWeight_(offsets: any[], termCount: number) {
+	// 	// Offset doc: https://www.sqlite.org/fts3.html#offsets
 
-		// - If there's only one term in the query string, the content with the most matches goes on top
-		// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
-		//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
+	// 	// - If there's only one term in the query string, the content with the most matches goes on top
+	// 	// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
+	// 	//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
 
-		const occurenceCount = Math.floor(offsets.length / 4);
+	// 	const occurenceCount = Math.floor(offsets.length / 4);
 
-		if (termCount === 1) return occurenceCount;
+	// 	if (termCount === 1) return occurenceCount;
 
-		let spread = 0;
-		let previousDist = null;
-		for (let i = 0; i < occurenceCount; i++) {
-			const dist = offsets[i * 4 + 2];
+	// 	let spread = 0;
+	// 	let previousDist = null;
+	// 	for (let i = 0; i < occurenceCount; i++) {
+	// 		const dist = offsets[i * 4 + 2];
 
-			if (previousDist !== null) {
-				const delta = dist - previousDist;
-				spread += delta;
-			}
+	// 		if (previousDist !== null) {
+	// 			const delta = dist - previousDist;
+	// 			spread += delta;
+	// 		}
 
-			previousDist = dist;
-		}
+	// 		previousDist = dist;
+	// 	}
 
-		// Divide the number of occurences by the spread so even if a note has many times the searched terms
-		// but these terms are very spread appart, they'll be given a lower weight than a note that has the
-		// terms once or twice but just next to each others.
-		return occurenceCount / spread;
-	}
+	// 	// Divide the number of occurences by the spread so even if a note has many times the searched terms
+	// 	// but these terms are very spread appart, they'll be given a lower weight than a note that has the
+	// 	// terms once or twice but just next to each others.
+	// 	return occurenceCount / spread;
+	// }
 
 
 
-	calculateWeightBM25_(rows: any[]) {
+	private calculateWeightBM25_(rows: any[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -354,7 +354,7 @@ export default class SearchEngine {
 		}
 	}
 
-	processBasicSearchResults_(rows: any[], parsedQuery: any) {
+	private processBasicSearchResults_(rows: any[], parsedQuery: any) {
 		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map((term: any) => term.valueRegex || term.value) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
@@ -373,7 +373,7 @@ export default class SearchEngine {
 		}
 	}
 
-	processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -399,7 +399,7 @@ export default class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
-	queryTermToRegex(term: any) {
+	public queryTermToRegex(term: any) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
 		}
@@ -413,7 +413,7 @@ export default class SearchEngine {
 		return regexString;
 	}
 
-	async parseQuery(query: string) {
+	public async parseQuery(query: string) {
 
 		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
@@ -492,7 +492,7 @@ export default class SearchEngine {
 		};
 	}
 
-	allParsedQueryTerms(parsedQuery: any) {
+	public allParsedQueryTerms(parsedQuery: any) {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
 		let output: any[] = [];
@@ -503,19 +503,19 @@ export default class SearchEngine {
 		return output;
 	}
 
-	normalizeText_(text: string) {
+	private normalizeText_(text: string) {
 		const normalizedText = text.normalize ? text.normalize() : text;
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
-	normalizeNote_(note: NoteEntity) {
+	private normalizeNote_(note: NoteEntity) {
 		const n = Object.assign({}, note);
 		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;
 	}
 
-	async basicSearch(query: string) {
+	public async basicSearch(query: string) {
 		query = query.replace(/\*/, '');
 		const parsedQuery = await this.parseQuery(query);
 		const searchOptions: any = {};
@@ -532,7 +532,7 @@ export default class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	determineSearchType_(query: string, preferredSearchType: any) {
+	private determineSearchType_(query: string, preferredSearchType: any) {
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 
@@ -561,7 +561,7 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	async search(searchString: string, options: any = null) {
+	public async search(searchString: string, options: any = null) {
 		if (!searchString) return [];
 
 		options = Object.assign({}, {
@@ -598,7 +598,7 @@ export default class SearchEngine {
 		}
 	}
 
-	async destroy() {
+	public async destroy() {
 		if (this.scheduleSyncTablesIID_) {
 			shim.clearTimeout(this.scheduleSyncTablesIID_);
 			this.scheduleSyncTablesIID_ = null;

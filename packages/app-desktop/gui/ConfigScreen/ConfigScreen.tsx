@@ -26,9 +26,9 @@ const settingKeyToControl: any = {
 
 class ConfigScreenComponent extends React.Component<any, any> {
 
-	rowStyle_: any = null;
+	private rowStyle_: any = null;
 
-	constructor(props: any) {
+	public constructor(props: any) {
 		super(props);
 
 		shared.init(this, reg);
@@ -55,15 +55,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.handleSettingButton = this.handleSettingButton.bind(this);
 	}
 
-	async checkSyncConfig_() {
+	private async checkSyncConfig_() {
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		if (this.props.defaultSection) {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
 				this.switchSection(this.props.defaultSection);
@@ -93,7 +93,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 	}
 
-	sectionByName(name: string) {
+	public sectionByName(name: string) {
 		const sections = shared.settingsSections({ device: 'desktop', settings: this.state.settings });
 		for (const section of sections) {
 			if (section.name === name) return section;
@@ -102,7 +102,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		throw new Error(`Invalid section name: ${name}`);
 	}
 
-	screenFromName(screenName: string) {
+	public screenFromName(screenName: string) {
 		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
@@ -110,7 +110,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
 
-	switchSection(name: string) {
+	public switchSection(name: string) {
 		const section = this.sectionByName(name);
 		let screenName = '';
 		if (section.isScreen) {
@@ -125,11 +125,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
-	sidebar_selectionChange(event: any) {
+	private sidebar_selectionChange(event: any) {
 		this.switchSection(event.section.name);
 	}
 
-	renderSectionDescription(section: any) {
+	public renderSectionDescription(section: any) {
 		const description = Setting.sectionDescription(section.name);
 		if (!description) return null;
 
@@ -141,7 +141,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
-	sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
+	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const createSettingComponents = (advanced: boolean) => {
@@ -284,7 +284,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return description ? <div style={this.descriptionStyle(themeId)}>{description}</div> : null;
 	}
 
-	settingToComponent(key: string, value: any) {
+	public settingToComponent(key: string, value: any) {
 		const theme = themeStyle(this.props.themeId);
 
 		const output: any = null;
@@ -657,26 +657,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 	}
 
-	async onApplyClick() {
+	public async onApplyClick() {
 		shared.saveSettings(this);
 		await this.checkNeedRestart();
 	}
 
-	async onSaveClick() {
+	public async onSaveClick() {
 		shared.saveSettings(this);
 		await this.checkNeedRestart();
 		this.props.dispatch({ type: 'NAV_BACK' });
 	}
 
-	onCancelClick() {
+	public onCancelClick() {
 		this.props.dispatch({ type: 'NAV_BACK' });
 	}
 
-	hasChanges() {
+	public hasChanges() {
 		return !!this.state.changedSettingKeys.length;
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = Object.assign({},

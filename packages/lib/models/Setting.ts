@@ -313,11 +313,11 @@ class Setting extends BaseModel {
 	private static rootFileHandler_: FileHandler = null;
 	private static settingFilename_: string = 'settings.json';
 
-	static tableName() {
+	public static tableName() {
 		return 'settings';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_SETTING;
 	}
 
@@ -365,16 +365,16 @@ class Setting extends BaseModel {
 		return this.rootFileHandler_;
 	}
 
-	static keychainService() {
+	public static keychainService() {
 		if (!this.keychainService_) throw new Error('keychainService has not been set!!');
 		return this.keychainService_;
 	}
 
-	static setKeychainService(s: any) {
+	public static setKeychainService(s: any) {
 		this.keychainService_ = s;
 	}
 
-	static metadata(): SettingItems {
+	public static metadata(): SettingItems {
 		if (this.metadata_) return this.metadata_;
 
 		const platform = shim.platformName();
@@ -1768,7 +1768,7 @@ class Setting extends BaseModel {
 		if (type < 0) throw new Error(`Invalid setting type: ${type}`);
 	}
 
-	static async registerSetting(key: string, metadataItem: SettingItem) {
+	public static async registerSetting(key: string, metadataItem: SettingItem) {
 		try {
 			if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
 
@@ -1804,11 +1804,11 @@ class Setting extends BaseModel {
 		}
 	}
 
-	static async registerSection(name: string, source: SettingSectionSource, section: SettingSection) {
+	public static async registerSection(name: string, source: SettingSectionSource, section: SettingSection) {
 		this.customSections_[name] = { ...section, name: name, source: source };
 	}
 
-	static settingMetadata(key: string): SettingItem {
+	public static settingMetadata(key: string): SettingItem {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
 		const output = Object.assign({}, metadata[key]);
@@ -1830,17 +1830,17 @@ class Setting extends BaseModel {
 		return !!this.cache_.find(d => d.key === key);
 	}
 
-	static keyDescription(key: string, appType: AppType = null) {
+	public static keyDescription(key: string, appType: AppType = null) {
 		const md = this.settingMetadata(key);
 		if (!md.description) return null;
 		return md.description(appType);
 	}
 
-	static isSecureKey(key: string) {
+	public static isSecureKey(key: string) {
 		return this.metadata()[key] && this.metadata()[key].secure === true;
 	}
 
-	static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
+	public static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
 		options = Object.assign({}, {
 			secureOnly: false,
 		}, options);
@@ -1869,7 +1869,7 @@ class Setting extends BaseModel {
 		}
 	}
 
-	static isPublic(key: string) {
+	public static isPublic(key: string) {
 		return this.keys(true).indexOf(key) >= 0;
 	}
 
@@ -1985,7 +1985,7 @@ class Setting extends BaseModel {
 		return md.storage || SettingStorage.Database;
 	}
 
-	static toPlainObject() {
+	public static toPlainObject() {
 		const keys = this.keys();
 		const keyToValues: any = {};
 		for (let i = 0; i < keys.length; i++) {
@@ -1994,14 +1994,14 @@ class Setting extends BaseModel {
 		return keyToValues;
 	}
 
-	static dispatchUpdateAll() {
+	public static dispatchUpdateAll() {
 		this.dispatch({
 			type: 'SETTING_UPDATE_ALL',
 			settings: this.toPlainObject(),
 		});
 	}
 
-	static setConstant(key: string, value: any) {
+	public static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
 		(this.constants_ as any)[key] = value;
 	}
@@ -2064,11 +2064,11 @@ class Setting extends BaseModel {
 		this.scheduleChangeEvent();
 	}
 
-	static incValue(key: string, inc: any) {
+	public static incValue(key: string, inc: any) {
 		return this.setValue(key, this.value(key) + inc);
 	}
 
-	static toggle(key: string) {
+	public static toggle(key: string) {
 		return this.setValue(key, !this.value(key));
 	}
 
@@ -2083,27 +2083,27 @@ class Setting extends BaseModel {
 		return false;
 	}
 
-	static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
+	public static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
 		const o = this.value(settingKey);
 		if (!o || !(objectKey in o)) return defaultValue;
 		return o[objectKey];
 	}
 
-	static setObjectValue(settingKey: string, objectKey: string, value: any) {
+	public static setObjectValue(settingKey: string, objectKey: string, value: any) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
 		o[objectKey] = value;
 		this.setValue(settingKey, o);
 	}
 
-	static deleteObjectValue(settingKey: string, objectKey: string) {
+	public static deleteObjectValue(settingKey: string, objectKey: string) {
 		const o = this.value(settingKey);
 		if (typeof o !== 'object') return;
 		delete o[objectKey];
 		this.setValue(settingKey, o);
 	}
 
-	static async deleteKeychainPasswords() {
+	public static async deleteKeychainPasswords() {
 		const secureKeys = this.keys(false, null, { secureOnly: true });
 		for (const key of secureKeys) {
 			await this.keychainService().deletePassword(`setting.${key}`);
@@ -2139,7 +2139,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static valueToString(key: string, value: any) {
+	public static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
 		if (md.type === SettingItemType.Int) return value.toFixed(0);
@@ -2151,12 +2151,12 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
-	static filterValue(key: string, value: any) {
+	public static filterValue(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		return md.filter ? md.filter(value) : value;
 	}
 
-	static formatValue(key: string | SettingItemType, value: any) {
+	public static formatValue(key: string | SettingItemType, value: any) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
 		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
@@ -2193,7 +2193,7 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${type}`);
 	}
 
-	static value(key: string) {
+	public static value(key: string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
 		// and object and change a key, the objects will be detected as equal. By returning a copy
@@ -2230,12 +2230,12 @@ class Setting extends BaseModel {
 		return this.value(key);
 	}
 
-	static isEnum(key: string) {
+	public static isEnum(key: string) {
 		const md = this.settingMetadata(key);
 		return md.isEnum === true;
 	}
 
-	static enumOptionValues(key: string) {
+	public static enumOptionValues(key: string) {
 		const options = this.enumOptions(key);
 		const output = [];
 		for (const n in options) {
@@ -2245,7 +2245,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static enumOptionLabel(key: string, value: any) {
+	public static enumOptionLabel(key: string, value: any) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
 			if (n === value) return options[n];
@@ -2253,14 +2253,14 @@ class Setting extends BaseModel {
 		return '';
 	}
 
-	static enumOptions(key: string) {
+	public static enumOptions(key: string) {
 		const metadata = this.metadata();
 		if (!metadata[key]) throw new Error(`Unknown key: ${key}`);
 		if (!metadata[key].options) throw new Error(`No options for: ${key}`);
 		return metadata[key].options();
 	}
 
-	static enumOptionsDoc(key: string, templateString: string = null) {
+	public static enumOptionsDoc(key: string, templateString: string = null) {
 		if (templateString === null) templateString = '%s: %s';
 		const options = this.enumOptions(key);
 		const output = [];
@@ -2271,7 +2271,7 @@ class Setting extends BaseModel {
 		return output.join(', ');
 	}
 
-	static isAllowedEnumOption(key: string, value: any) {
+	public static isAllowedEnumOption(key: string, value: any) {
 		const options = this.enumOptions(key);
 		return !!options[value];
 	}
@@ -2280,7 +2280,7 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
-	static subValues(baseKey: string, settings: any, options: any = null) {
+	public static subValues(baseKey: string, settings: any, options: any = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
 		const output: any = {};
@@ -2376,7 +2376,7 @@ class Setting extends BaseModel {
 		logger.debug('Settings have been saved.');
 	}
 
-	static scheduleChangeEvent() {
+	public static scheduleChangeEvent() {
 		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
 
 		this.changeEventTimeoutId_ = shim.setTimeout(() => {
@@ -2384,7 +2384,7 @@ class Setting extends BaseModel {
 		}, 1000);
 	}
 
-	static cancelScheduleChangeEvent() {
+	public static cancelScheduleChangeEvent() {
 		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
 		this.changeEventTimeoutId_ = null;
 	}
@@ -2406,7 +2406,7 @@ class Setting extends BaseModel {
 		eventManager.emit('settingsChange', { keys });
 	}
 
-	static scheduleSave() {
+	public static scheduleSave() {
 		if (!Setting.autoSaveEnabled) return;
 
 		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
@@ -2420,12 +2420,12 @@ class Setting extends BaseModel {
 		}, 500);
 	}
 
-	static cancelScheduleSave() {
+	public static cancelScheduleSave() {
 		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 	}
 
-	static publicSettings(appType: AppType) {
+	public static publicSettings(appType: AppType) {
 		if (!appType) throw new Error('appType is required');
 
 		const metadata = this.metadata();
@@ -2442,7 +2442,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static typeToString(typeId: number) {
+	public static typeToString(typeId: number) {
 		if (typeId === SettingItemType.Int) return 'int';
 		if (typeId === SettingItemType.String) return 'string';
 		if (typeId === SettingItemType.Bool) return 'bool';
@@ -2456,7 +2456,7 @@ class Setting extends BaseModel {
 		return SettingSectionSource.Default;
 	}
 
-	static groupMetadatasBySections(metadatas: SettingItem[]) {
+	public static groupMetadatasBySections(metadatas: SettingItem[]) {
 		const sections = [];
 		const generalSection: any = { name: 'general', metadatas: [] };
 		const nameToSections: any = {};
@@ -2490,7 +2490,7 @@ class Setting extends BaseModel {
 		return sections;
 	}
 
-	static sectionNameToLabel(name: string) {
+	public static sectionNameToLabel(name: string) {
 		if (name === 'general') return _('General');
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
@@ -2509,7 +2509,7 @@ class Setting extends BaseModel {
 		return name;
 	}
 
-	static sectionDescription(name: string) {
+	public static sectionDescription(name: string) {
 		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
 		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 
@@ -2518,7 +2518,7 @@ class Setting extends BaseModel {
 		return '';
 	}
 
-	static sectionNameToIcon(name: string) {
+	public static sectionNameToIcon(name: string) {
 		if (name === 'general') return 'icon-general';
 		if (name === 'sync') return 'icon-sync';
 		if (name === 'appearance') return 'icon-appearance';
@@ -2537,7 +2537,7 @@ class Setting extends BaseModel {
 		return 'fas fa-cog';
 	}
 
-	static appTypeToLabel(name: string) {
+	public static appTypeToLabel(name: string) {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();

@@ -26,11 +26,11 @@ export default class Note extends BaseItem {
 	private static geolocationCache_: any;
 	private static dueDateObjects_: any;
 
-	static tableName() {
+	public static tableName() {
 		return 'notes';
 	}
 
-	static fieldToLabel(field: string) {
+	public static fieldToLabel(field: string) {
 		const fieldsToLabels: Record<string, string> = {
 			title: _('title'),
 			user_updated_time: _('updated date'),
@@ -41,11 +41,11 @@ export default class Note extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static async serializeForEdit(note: NoteEntity) {
+	public static async serializeForEdit(note: NoteEntity) {
 		return this.replaceResourceInternalToExternalLinks(await super.serialize(note, ['title', 'body']));
 	}
 
-	static async unserializeForEdit(content: string) {
+	public static async unserializeForEdit(content: string) {
 		content += `\n\ntype_: ${BaseModel.TYPE_NOTE}`;
 		const output = await super.unserialize(content);
 		if (!output.title) output.title = '';
@@ -54,14 +54,14 @@ export default class Note extends BaseItem {
 		return output;
 	}
 
-	static async serializeAllProps(note: NoteEntity) {
+	public static async serializeAllProps(note: NoteEntity) {
 		const fieldNames = this.fieldNames();
 		fieldNames.push('type_');
 		pull(fieldNames, 'title', 'body');
 		return super.serialize(note, fieldNames);
 	}
 
-	static minimalSerializeForDisplay(note: NoteEntity) {
+	public static minimalSerializeForDisplay(note: NoteEntity) {
 		const n = Object.assign({}, note);
 
 		const fieldNames = this.fieldNames();
@@ -89,25 +89,25 @@ export default class Note extends BaseItem {
 		return super.serialize(n, fieldNames);
 	}
 
-	static defaultTitle(noteBody: string) {
+	public static defaultTitle(noteBody: string) {
 		return this.defaultTitleFromBody(noteBody);
 	}
 
-	static defaultTitleFromBody(body: string) {
+	public static defaultTitleFromBody(body: string) {
 		return markdownUtils.titleFromBody(body);
 	}
 
-	static geolocationUrl(note: NoteEntity) {
+	public static geolocationUrl(note: NoteEntity) {
 		if (!('latitude' in note) || !('longitude' in note)) throw new Error('Latitude or longitude is missing');
 		if (!Number(note.latitude) && !Number(note.longitude)) throw new Error(_('This note does not have geolocation information.'));
 		return this.geoLocationUrlFromLatLong(note.latitude, note.longitude);
 	}
 
-	static geoLocationUrlFromLatLong(lat: number, long: number) {
+	public static geoLocationUrlFromLatLong(lat: number, long: number) {
 		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long);
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_NOTE;
 	}
 
@@ -119,13 +119,13 @@ export default class Note extends BaseItem {
 		return unique(itemIds);
 	}
 
-	static async linkedItems(body: string) {
+	public static async linkedItems(body: string) {
 		const itemIds = this.linkedItemIds(body);
 		const r = await BaseItem.loadItemsByIds(itemIds);
 		return r;
 	}
 
-	static async linkedItemIdsByType(type: ModelType, body: string) {
+	public static async linkedItemIdsByType(type: ModelType, body: string) {
 		const items = await this.linkedItems(body);
 		const output: string[] = [];
 
@@ -137,15 +137,15 @@ export default class Note extends BaseItem {
 		return output;
 	}
 
-	static async linkedResourceIds(body: string) {
+	public static async linkedResourceIds(body: string) {
 		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
-	static async linkedNoteIds(body: string) {
+	public static async linkedNoteIds(body: string) {
 		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
 	}
 
-	static async replaceResourceInternalToExternalLinks(body: string, options: any = null) {
+	public static async replaceResourceInternalToExternalLinks(body: string, options: any = null) {
 		options = Object.assign({}, {
 			useAbsolutePaths: false,
 		}, options);
@@ -175,7 +175,7 @@ export default class Note extends BaseItem {
 		return body;
 	}
 
-	static async replaceResourceExternalToInternalLinks(body: string, options: any = null) {
+	public static async replaceResourceExternalToInternalLinks(body: string, options: any = null) {
 		options = Object.assign({}, {
 			useAbsolutePaths: false,
 		}, options);
@@ -239,20 +239,20 @@ export default class Note extends BaseItem {
 		return body;
 	}
 
-	static new(parentId = '') {
+	public static new(parentId = '') {
 		const output = super.new();
 		output.parent_id = parentId;
 		return output;
 	}
 
-	static newTodo(parentId = '') {
+	public static newTodo(parentId = '') {
 		const output = this.new(parentId);
 		output.is_todo = true;
 		return output;
 	}
 
 	// Note: sort logic must be duplicated in previews().
-	static sortNotes(notes: NoteEntity[], orders: any[], uncompletedTodosOnTop: boolean) {
+	public static sortNotes(notes: NoteEntity[], orders: any[], uncompletedTodosOnTop: boolean) {
 		const noteOnTop = (note: NoteEntity) => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
 		};
@@ -308,11 +308,11 @@ export default class Note extends BaseItem {
 		});
 	}
 
-	static previewFieldsWithDefaultValues(options: any = null) {
+	public static previewFieldsWithDefaultValues(options: any = null) {
 		return Note.defaultValues(this.previewFields(options));
 	}
 
-	static previewFields(options: any = null) {
+	public static previewFields(options: any = null) {
 		options = Object.assign({
 			includeTimestamps: true,
 		}, options);
@@ -328,13 +328,13 @@ export default class Note extends BaseItem {
 		return output;
 	}
 
-	static previewFieldsSql(fields: string[] = null) {
+	public static previewFieldsSql(fields: string[] = null) {
 		if (fields === null) fields = this.previewFields();
 		const escaped = this.db().escapeFields(fields);
 		return Array.isArray(escaped) ? escaped.join(',') : escaped;
 	}
 
-	static async loadFolderNoteByField(folderId: string, field: string, value: any) {
+	public static async loadFolderNoteByField(folderId: string, field: string, value: any) {
 		if (!folderId) throw new Error('folderId is undefined');
 
 		const options = {
@@ -347,7 +347,7 @@ export default class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
-	static async previews(parentId: string, options: any = null) {
+	public static async previews(parentId: string, options: any = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which is used
 		// to sort already loaded notes.
 
@@ -436,12 +436,12 @@ export default class Note extends BaseItem {
 		return results;
 	}
 
-	static preview(noteId: string, options: any = null) {
+	public static preview(noteId: string, options: any = null) {
 		if (!options) options = { fields: null };
 		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
-	static async search(options: any = null) {
+	public static async search(options: any = null) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
@@ -455,16 +455,16 @@ export default class Note extends BaseItem {
 		return super.search(options);
 	}
 
-	static conflictedNotes() {
+	public static conflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
 	}
 
-	static async conflictedCount() {
+	public static async conflictedCount() {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
 		return r && r.total ? r.total : 0;
 	}
 
-	static unconflictedNotes() {
+	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
@@ -518,7 +518,7 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	static filter(note: NoteEntity) {
+	public static filter(note: NoteEntity) {
 		if (!note) return note;
 
 		const output = super.filter(note);
@@ -528,7 +528,7 @@ export default class Note extends BaseItem {
 		return output;
 	}
 
-	static async copyToFolder(noteId: string, folderId: string) {
+	public static async copyToFolder(noteId: string, folderId: string) {
 		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
@@ -540,7 +540,7 @@ export default class Note extends BaseItem {
 		});
 	}
 
-	static async moveToFolder(noteId: string, folderId: string) {
+	public static async moveToFolder(noteId: string, folderId: string) {
 		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
@@ -557,7 +557,7 @@ export default class Note extends BaseItem {
 		return Note.save(modifiedNote, { autoTimestamp: false });
 	}
 
-	static changeNoteType(note: NoteEntity, type: string) {
+	public static changeNoteType(note: NoteEntity, type: string) {
 		if (!('is_todo' in note)) throw new Error('Missing "is_todo" property');
 
 		const newIsTodo = type === 'todo' ? 1 : 0;
@@ -572,11 +572,11 @@ export default class Note extends BaseItem {
 		return output;
 	}
 
-	static toggleIsTodo(note: NoteEntity) {
+	public static toggleIsTodo(note: NoteEntity) {
 		return this.changeNoteType(note, note.is_todo ? 'note' : 'todo');
 	}
 
-	static toggleTodoCompleted(note: NoteEntity) {
+	public static toggleTodoCompleted(note: NoteEntity) {
 		if (!('todo_completed' in note)) throw new Error('Missing "todo_completed" property');
 
 		note = Object.assign({}, note);
@@ -589,7 +589,7 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	static async duplicateMultipleNotes(noteIds: string[], options: any = null) {
+	public static async duplicateMultipleNotes(noteIds: string[], options: any = null) {
 		// if options.uniqueTitle is true, a unique title for the duplicated file will be assigned.
 		const ensureUniqueTitle = options && options.ensureUniqueTitle;
 
@@ -655,7 +655,7 @@ export default class Note extends BaseItem {
 		return this.save(newNoteSaved);
 	}
 
-	static async noteIsOlderThan(noteId: string, date: number) {
+	public static async noteIsOlderThan(noteId: string, date: number) {
 		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
 		if (!n) throw new Error(`No such note: ${noteId}`);
 		return n.updated_time < date;
@@ -737,7 +737,7 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: any = null) {
 		ids = ids.slice();
 
 		while (ids.length) {
@@ -763,7 +763,7 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	static async deleteMessage(noteIds: string[]): Promise<string|null> {
+	public static async deleteMessage(noteIds: string[]): Promise<string|null> {
 		let msg = '';
 		if (noteIds.length === 1) {
 			const note = await Note.load(noteIds[0]);
@@ -775,15 +775,15 @@ export default class Note extends BaseItem {
 		return msg;
 	}
 
-	static dueNotes() {
+	public static dueNotes() {
 		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
 	}
 
-	static needAlarm(note: NoteEntity) {
+	public static needAlarm(note: NoteEntity) {
 		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
 	}
 
-	static dueDateObject(note: NoteEntity) {
+	public static dueDateObject(note: NoteEntity) {
 		if (!!note.is_todo && note.todo_due) {
 			if (!this.dueDateObjects_) this.dueDateObjects_ = {};
 			if (this.dueDateObjects_[note.todo_due]) return this.dueDateObjects_[note.todo_due];
@@ -795,7 +795,7 @@ export default class Note extends BaseItem {
 	}
 
 	// Tells whether the conflict between the local and remote note can be ignored.
-	static mustHandleConflict(localNote: NoteEntity, remoteNote: NoteEntity) {
+	public static mustHandleConflict(localNote: NoteEntity, remoteNote: NoteEntity) {
 		// That shouldn't happen so throw an exception
 		if (localNote.id !== remoteNote.id) throw new Error('Cannot handle conflict for two different notes');
 
@@ -809,7 +809,7 @@ export default class Note extends BaseItem {
 		return false;
 	}
 
-	static markupLanguageToLabel(markupLanguageId: number) {
+	public static markupLanguageToLabel(markupLanguageId: number) {
 		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
 		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_HTML) return 'HTML';
 		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
@@ -818,13 +818,13 @@ export default class Note extends BaseItem {
 	// When notes are sorted in "custom order", they are sorted by the "order" field first and,
 	// in those cases, where the order field is the same for some notes, by created time.
 	// Further sorting by todo completion status, if enabled, is handled separately.
-	static customOrderByColumns() {
+	public static customOrderByColumns() {
 		return [{ by: 'order', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }];
 	}
 
 	// Update the note "order" field without changing the user timestamps,
 	// which is generally what we want.
-	static async updateNoteOrder_(note: NoteEntity, order: any) {
+	private static async updateNoteOrder_(note: NoteEntity, order: any) {
 		return Note.save(Object.assign({}, note, {
 			order: order,
 			user_updated_time: note.user_updated_time,
@@ -836,7 +836,7 @@ export default class Note extends BaseItem {
 	// of unecessary updates, so it's the caller's responsability to update
 	// the UI once the call is finished. This is done by listening to the
 	// NOTE_IS_INSERTING_NOTES action in the application middleware.
-	static async insertNotesAt(folderId: string, noteIds: string[], index: number, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean) {
+	public static async insertNotesAt(folderId: string, noteIds: string[], index: number, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean) {
 		if (!noteIds.length) return;
 
 		const defer = () => {
@@ -985,19 +985,19 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	static handleTitleNaturalSorting(items: NoteEntity[], options: any) {
+	public static handleTitleNaturalSorting(items: NoteEntity[], options: any) {
 		if (options.order.length > 0 && options.order[0].by === 'title') {
 			const collator = this.getNaturalSortingCollator();
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
 		}
 	}
 
-	static getNaturalSortingCollator() {
+	public static getNaturalSortingCollator() {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
 
-	static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
 		const conflictNote = Object.assign({}, sourceNote);
 		delete conflictNote.id;
 		conflictNote.is_conflict = 1;

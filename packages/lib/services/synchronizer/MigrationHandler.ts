@@ -80,7 +80,7 @@ export default class MigrationHandler extends BaseService {
 		}
 	}
 
-	async upgrade(targetVersion: number = 0) {
+	public async upgrade(targetVersion: number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
 		const syncTargetInfo = await this.fetchSyncTargetInfo();
 

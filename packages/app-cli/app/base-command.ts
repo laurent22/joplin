@@ -7,80 +7,80 @@ export default class BaseCommand {
 	protected prompt_: any = null;
 	protected dispatcher_: any;
 
-	usage(): string {
+	public usage(): string {
 		throw new Error('Usage not defined');
 	}
 
-	encryptionCheck(item: any) {
+	public encryptionCheck(item: any) {
 		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
 	}
 
-	description() {
+	public description() {
 		throw new Error('Description not defined');
 	}
 
-	async action(_args: any) {
+	public async action(_args: any) {
 		throw new Error('Action not defined');
 	}
 
-	compatibleUis() {
+	public compatibleUis() {
 		return ['cli', 'gui'];
 	}
 
-	supportsUi(ui: string) {
+	public supportsUi(ui: string) {
 		return this.compatibleUis().indexOf(ui) >= 0;
 	}
 
-	options(): any[] {
+	public options(): any[] {
 		return [];
 	}
 
-	hidden() {
+	public hidden() {
 		return false;
 	}
 
-	enabled() {
+	public enabled() {
 		return true;
 	}
 
-	cancellable() {
+	public cancellable() {
 		return false;
 	}
 
-	async cancel() {}
+	public async cancel() {}
 
-	name() {
+	public name() {
 		const r = this.usage().split(' ');
 		return r[0];
 	}
 
-	setDispatcher(fn: Function) {
+	public setDispatcher(fn: Function) {
 		this.dispatcher_ = fn;
 	}
 
-	dispatch(action: any) {
+	public dispatch(action: any) {
 		if (!this.dispatcher_) throw new Error('Dispatcher not defined');
 		return this.dispatcher_(action);
 	}
 
-	setStdout(fn: Function) {
+	public setStdout(fn: Function) {
 		this.stdout_ = fn;
 	}
 
-	stdout(text: string) {
+	public stdout(text: string) {
 		if (this.stdout_) this.stdout_(text);
 	}
 
-	setPrompt(fn: Function) {
+	public setPrompt(fn: Function) {
 		this.prompt_ = fn;
 	}
 
-	async prompt(message: string, options: any = null) {
+	public async prompt(message: string, options: any = null) {
 		if (!this.prompt_) throw new Error('Prompt is undefined');
 		return await this.prompt_(message, options);
 	}
 
-	metadata() {
+	public metadata() {
 		return {
 			name: this.name(),
 			usage: this.usage(),
@@ -89,7 +89,7 @@ export default class BaseCommand {
 		};
 	}
 
-	logger() {
+	public logger() {
 		return reg.logger();
 	}
 }

@@ -418,7 +418,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
-	reducerActionToString(action: any) {
+	public reducerActionToString(action: any) {
 		const o = [action.type];
 		if ('id' in action) o.push(action.id);
 		if ('noteId' in action) o.push(action.noteId);

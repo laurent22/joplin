@@ -13,19 +13,19 @@ interface Props {
 
 class DropboxLoginScreenComponent extends React.Component<any, any> {
 
-	shared_: any;
+	private shared_: any;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.shared_ = new Shared(this, (msg: string) => bridge().showInfoMessageBox(msg), (msg: string) => bridge().showErrorMessageBox(msg));
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.shared_.refreshUrl();
 	}
 
-	render() {
+	public render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 

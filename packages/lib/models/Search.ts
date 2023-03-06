@@ -3,15 +3,15 @@
 import BaseModel from '../BaseModel';
 
 export default class Search extends BaseModel {
-	static tableName(): string {
+	public static tableName(): string {
 		throw new Error('Not using database');
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_SEARCH;
 	}
 
-	static keywords(query: string) {
+	public static keywords(query: string) {
 		let output: any = query.trim();
 		output = output.split(/[\s\t\n]+/);
 		output = output.filter((o: any) => !!o);

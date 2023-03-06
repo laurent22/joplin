@@ -62,7 +62,7 @@ export default class MenuUtils {
 	private menuItemCache_: MenuItemCache = {};
 	private menuItemPropsCache_: MenuItemPropsCache = {};
 
-	constructor(service: CommandService) {
+	public constructor(service: CommandService) {
 		this.service_ = service;
 	}
 

@@ -7,12 +7,12 @@ export default class InteropService_Exporter_Custom extends InteropService_Expor
 	private customContext_: ExportContext;
 	private module_: Module = null;
 
-	constructor(module: Module) {
+	public constructor(module: Module) {
 		super();
 		this.module_ = module;
 	}
 
-	async init(destPath: string, options: ExportOptions) {
+	public async init(destPath: string, options: ExportOptions) {
 		this.customContext_ = {
 			destPath: destPath,
 			options: options,
@@ -21,15 +21,15 @@ export default class InteropService_Exporter_Custom extends InteropService_Expor
 		return this.module_.onInit(this.customContext_);
 	}
 
-	async processItem(itemType: number, item: any) {
+	public async processItem(itemType: number, item: any) {
 		return this.module_.onProcessItem(this.customContext_, itemType, item);
 	}
 
-	async processResource(resource: any, filePath: string) {
+	public async processResource(resource: any, filePath: string) {
 		return this.module_.onProcessResource(this.customContext_, resource, filePath);
 	}
 
-	async close() {
+	public async close() {
 		return this.module_.onClose(this.customContext_);
 	}
 }

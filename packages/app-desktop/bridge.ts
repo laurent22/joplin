@@ -21,7 +21,7 @@ export class Bridge {
 	private electronWrapper_: ElectronAppWrapper;
 	private lastSelectedPaths_: LastSelectedPath;
 
-	constructor(electronWrapper: ElectronAppWrapper) {
+	public constructor(electronWrapper: ElectronAppWrapper) {
 		this.electronWrapper_ = electronWrapper;
 		this.lastSelectedPaths_ = {
 			file: null,
@@ -29,11 +29,11 @@ export class Bridge {
 		};
 	}
 
-	electronApp() {
+	public electronApp() {
 		return this.electronWrapper_;
 	}
 
-	electronIsDev() {
+	public electronIsDev() {
 		return !this.electronApp().electronApp().isPackaged;
 	}
 
@@ -60,11 +60,11 @@ export class Bridge {
 		return `${__dirname}/vendor`;
 	}
 
-	env() {
+	public env() {
 		return this.electronWrapper_.env();
 	}
 
-	processArgv() {
+	public processArgv() {
 		return process.argv;
 	}
 
@@ -114,44 +114,44 @@ export class Bridge {
 		});
 	}
 
-	window() {
+	public window() {
 		return this.electronWrapper_.window();
 	}
 
-	showItemInFolder(fullPath: string) {
+	public showItemInFolder(fullPath: string) {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
-	newBrowserWindow(options: any) {
+	public newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
 	}
 
-	windowContentSize() {
+	public windowContentSize() {
 		if (!this.window()) return { width: 0, height: 0 };
 		const s = this.window().getContentSize();
 		return { width: s[0], height: s[1] };
 	}
 
-	windowSize() {
+	public windowSize() {
 		if (!this.window()) return { width: 0, height: 0 };
 		const s = this.window().getSize();
 		return { width: s[0], height: s[1] };
 	}
 
-	windowSetSize(width: number, height: number) {
+	public windowSetSize(width: number, height: number) {
 		if (!this.window()) return;
 		return this.window().setSize(width, height);
 	}
 
-	openDevTools() {
+	public openDevTools() {
 		return this.window().webContents.openDevTools();
 	}
 
-	closeDevTools() {
+	public closeDevTools() {
 		return this.window().webContents.closeDevTools();
 	}
 
-	async showSaveDialog(options: any) {
+	public async showSaveDialog(options: any) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
@@ -162,7 +162,7 @@ export class Bridge {
 		return filePath;
 	}
 
-	async showOpenDialog(options: OpenDialogOptions = null) {
+	public async showOpenDialog(options: OpenDialogOptions = null) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
@@ -177,13 +177,13 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	showMessageBox_(window: any, options: any): number {
+	private showMessageBox_(window: any, options: any): number {
 		const { dialog } = require('electron');
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, options);
 	}
 
-	showErrorMessageBox(message: string) {
+	public showErrorMessageBox(message: string) {
 		return this.showMessageBox_(this.window(), {
 			type: 'error',
 			message: message,
@@ -191,7 +191,7 @@ export class Bridge {
 		});
 	}
 
-	showConfirmMessageBox(message: string, options: any = null) {
+	public showConfirmMessageBox(message: string, options: any = null) {
 		options = {
 			buttons: [_('OK'), _('Cancel')],
 			...options,
@@ -208,7 +208,7 @@ export class Bridge {
 	}
 
 	/* returns the index of the clicked button */
-	showMessageBox(message: string, options: any = null) {
+	public showMessageBox(message: string, options: any = null) {
 		if (options === null) options = {};
 
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
@@ -220,7 +220,7 @@ export class Bridge {
 		return result;
 	}
 
-	showInfoMessageBox(message: string, options: any = {}) {
+	public showInfoMessageBox(message: string, options: any = {}) {
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
 			type: 'info',
 			message: message,
@@ -229,35 +229,35 @@ export class Bridge {
 		return result === 0;
 	}
 
-	setLocale(locale: string) {
+	public setLocale(locale: string) {
 		setLocale(locale);
 	}
 
-	get Menu() {
+	public get Menu() {
 		return require('electron').Menu;
 	}
 
-	get MenuItem() {
+	public get MenuItem() {
 		return require('electron').MenuItem;
 	}
 
-	openExternal(url: string) {
+	public openExternal(url: string) {
 		return require('electron').shell.openExternal(url);
 	}
 
-	async openItem(fullPath: string) {
+	public async openItem(fullPath: string) {
 		return require('electron').shell.openPath(toSystemSlashes(fullPath));
 	}
 
-	screen() {
+	public screen() {
 		return require('electron').screen;
 	}
 
-	shouldUseDarkColors() {
+	public shouldUseDarkColors() {
 		return nativeTheme.shouldUseDarkColors;
 	}
 
-	addEventListener(name: string, fn: Function) {
+	public addEventListener(name: string, fn: Function) {
 		if (name === 'nativeThemeUpdated') {
 			nativeTheme.on('updated', fn);
 		} else {
@@ -265,7 +265,7 @@ export class Bridge {
 		}
 	}
 
-	restart(linuxSafeRestart = true) {
+	public restart(linuxSafeRestart = true) {
 		// Note that in this case we are not sending the "appClose" event
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.

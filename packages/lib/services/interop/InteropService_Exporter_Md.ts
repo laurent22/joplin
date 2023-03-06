@@ -14,7 +14,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 	private resourceDir_: string;
 	private createdDirs_: string[];
 
-	async init(destDir: string) {
+	public async init(destDir: string) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? `${destDir}/_resources` : null;
 		this.createdDirs_ = [];
@@ -23,7 +23,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename: boolean = true) {
+	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename: boolean = true) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -39,14 +39,14 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	async relaceLinkedItemIdsByRelativePaths_(item: any) {
+	private async relaceLinkedItemIdsByRelativePaths_(item: any) {
 		const relativePathToRoot = await this.makeDirPath_(item, '..');
 
 		const newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
 		return await this.replaceNoteIdsByRelativePaths_(newBody, relativePathToRoot);
 	}
 
-	async replaceResourceIdsByRelativePaths_(noteBody: string, relativePathToRoot: string) {
+	private async replaceResourceIdsByRelativePaths_(noteBody: string, relativePathToRoot: string) {
 		const linkedResourceIds = await Note.linkedResourceIds(noteBody);
 		const resourcePaths = this.context() && this.context().destResourcePaths ? this.context().destResourcePaths : {};
 
@@ -56,7 +56,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedResourceIds, resourcePaths, createRelativePath);
 	}
 
-	async replaceNoteIdsByRelativePaths_(noteBody: string, relativePathToRoot: string) {
+	private async replaceNoteIdsByRelativePaths_(noteBody: string, relativePathToRoot: string) {
 		const linkedNoteIds = await Note.linkedNoteIds(noteBody);
 		const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
 
@@ -66,7 +66,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
 	}
 
-	async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: any, fn_createRelativePath: Function) {
+	private async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: any, fn_createRelativePath: Function) {
 		let newBody = noteBody;
 
 		for (let i = 0; i < linkedItemIds.length; i++) {
@@ -78,7 +78,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return newBody;
 	}
 
-	async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
+	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		if (itemType === BaseModel.TYPE_NOTE) {
 			// Create unique file path for the note
 			const context: any = {
@@ -114,7 +114,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	}
 
-	async processItem(_itemType: number, item: any) {
+	public async processItem(_itemType: number, item: any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -150,7 +150,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return fileName;
 	}
 
-	async processResource(resource: ResourceEntity, filePath: string) {
+	public async processResource(resource: ResourceEntity, filePath: string) {
 		const context = this.context();
 		if (!context.destResourcePaths) context.destResourcePaths = {};
 
@@ -163,5 +163,5 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		this.updateContext(context);
 	}
 
-	async close() {}
+	public async close() {}
 }

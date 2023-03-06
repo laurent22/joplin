@@ -22,7 +22,7 @@ export default class OneDriveApi {
 	// apps are considered "public"), in which case the secret should not be sent to the API.
 	// In practice the React Native app is public, and the Node one is not because we
 	// use a local server for the OAuth dance.
-	constructor(clientId: string, clientSecret: string, isPublic: boolean) {
+	public constructor(clientId: string, clientSecret: string, isPublic: boolean) {
 		this.clientId_ = clientId;
 		this.clientSecret_ = clientSecret;
 		this.auth_ = null;
@@ -33,57 +33,57 @@ export default class OneDriveApi {
 		};
 	}
 
-	isPublic() {
+	public isPublic() {
 		return this.isPublic_;
 	}
 
-	dispatch(eventName: string, param: any) {
+	public dispatch(eventName: string, param: any) {
 		const ls = this.listeners_[eventName];
 		for (let i = 0; i < ls.length; i++) {
 			ls[i](param);
 		}
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		this.listeners_[eventName].push(callback);
 	}
 
-	tokenBaseUrl() {
+	public tokenBaseUrl() {
 		return 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 	}
 
-	nativeClientRedirectUrl() {
+	public nativeClientRedirectUrl() {
 		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
 	}
 
-	auth(): any {
+	public auth(): any {
 		return this.auth_;
 	}
 
-	setAuth(auth: any) {
+	public setAuth(auth: any) {
 		this.auth_ = auth;
 		this.dispatch('authRefreshed', this.auth());
 	}
 
-	token() {
+	public token() {
 		return this.auth_ ? this.auth_.access_token : null;
 	}
 
-	clientId() {
+	public clientId() {
 		return this.clientId_;
 	}
 
-	clientSecret() {
+	public clientSecret() {
 		return this.clientSecret_;
 	}
 
-	async appDirectory() {
+	public async appDirectory() {
 		const driveId = this.accountProperties_.driveId;
 		const r = await this.execJson('GET', `/me/drives/${driveId}/special/approot`);
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
-	authCodeUrl(redirectUri: string) {
+	public authCodeUrl(redirectUri: string) {
 		const query = {
 			client_id: this.clientId_,
 			scope: 'files.readwrite offline_access sites.readwrite.all',
@@ -94,7 +94,7 @@ export default class OneDriveApi {
 		return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${stringify(query)}`;
 	}
 
-	async execTokenRequest(code: string, redirectUri: string) {
+	public async execTokenRequest(code: string, redirectUri: string) {
 		const body: any = {};
 		body['client_id'] = this.clientId();
 		if (!this.isPublic()) body['client_secret'] = this.clientSecret();
@@ -126,7 +126,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	oneDriveErrorResponseToError(errorResponse: any) {
+	public oneDriveErrorResponseToError(errorResponse: any) {
 		if (!errorResponse) return new Error('Undefined error');
 
 		if (errorResponse.error) {
@@ -140,7 +140,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	async uploadChunk(url: string, handle: any, buffer: any, options: any) {
+	public async uploadChunk(url: string, handle: any, buffer: any, options: any) {
 		options = Object.assign({}, options);
 		if (!options.method) { options.method = 'POST'; }
 
@@ -162,7 +162,7 @@ export default class OneDriveApi {
 		return response;
 	}
 
-	async uploadBigFile(url: string, options: any) {
+	public async uploadBigFile(url: string, options: any) {
 		const response = await shim.fetch(url, {
 			method: 'POST',
 			headers: {
@@ -227,7 +227,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	async exec(method: string, path: string, query: any = null, data: any = null, options: any = null) {
+	public async exec(method: string, path: string, query: any = null, data: any = null, options: any = null) {
 		if (!path) throw new Error('Path is required');
 
 		method = method.toUpperCase();
@@ -367,11 +367,11 @@ export default class OneDriveApi {
 		throw new Error(`Could not execute request after multiple attempts: ${method} ${url}`);
 	}
 
-	setAccountProperties(accountProperties: any) {
+	public setAccountProperties(accountProperties: any) {
 		this.accountProperties_ = accountProperties;
 	}
 
-	async execAccountPropertiesRequest() {
+	public async execAccountPropertiesRequest() {
 
 		try {
 			const response = await this.exec('GET', 'https://graph.microsoft.com/v1.0/me/drive');
@@ -383,7 +383,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	async execJson(method: string, path: string, query: any = null, data: any = null) {
+	public async execJson(method: string, path: string, query: any = null, data: any = null) {
 		const response = await this.exec(method, path, query, data);
 		const errorResponseText = await response.text();
 		try {
@@ -396,13 +396,13 @@ export default class OneDriveApi {
 		}
 	}
 
-	async execText(method: string, path: string, query: any = null, data: any = null) {
+	public async execText(method: string, path: string, query: any = null, data: any = null) {
 		const response = await this.exec(method, path, query, data);
 		const output = await response.text();
 		return output;
 	}
 
-	async refreshAccessToken() {
+	public async refreshAccessToken() {
 		if (!this.auth_ || !this.auth_.refresh_token) {
 			this.setAuth(null);
 			throw new Error(_('Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'));

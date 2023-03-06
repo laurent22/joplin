@@ -175,9 +175,7 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
-				// Warn only because it would make it difficult to convert JS classes to TypeScript, unless we
-				// make everything public which is not great. New code however should specify member accessibility.
-				'@typescript-eslint/explicit-member-accessibility': ['warn'],
+				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
 				'@typescript-eslint/comma-dangle': ['error', {

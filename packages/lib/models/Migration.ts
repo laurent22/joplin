@@ -10,19 +10,19 @@ const migrationScripts: Record<number, any> = {
 };
 
 export default class Migration extends BaseModel {
-	static tableName() {
+	public static tableName() {
 		return 'migrations';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_MIGRATION;
 	}
 
-	static migrationsToDo() {
+	public static migrationsToDo() {
 		return this.modelSelectAll('SELECT * FROM migrations ORDER BY number ASC');
 	}
 
-	static script(number: number) {
+	public static script(number: number) {
 		if (!migrationScripts[number]) throw new Error('Migration script has not been added to "migrationScripts" array');
 		return migrationScripts[number];
 	}

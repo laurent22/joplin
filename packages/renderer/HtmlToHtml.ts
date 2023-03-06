@@ -50,7 +50,7 @@ export default class HtmlToHtml {
 	private cache_;
 	private fsDriver_: any;
 
-	constructor(options: Options = null) {
+	public constructor(options: Options = null) {
 		options = {
 			ResourceModel: null,
 			...options,
@@ -72,11 +72,11 @@ export default class HtmlToHtml {
 		}
 	}
 
-	fsDriver() {
+	public fsDriver() {
 		return this.fsDriver_;
 	}
 
-	splitHtml(html: string) {
+	public splitHtml(html: string) {
 		const trimmedHtml = trimStart(html);
 		if (trimmedHtml.indexOf('<style>') !== 0) return { html: html, css: '' };
 
@@ -89,14 +89,14 @@ export default class HtmlToHtml {
 		};
 	}
 
-	async allAssets(/* theme*/): Promise<any[]> {
+	public async allAssets(/* theme*/): Promise<any[]> {
 		return []; // TODO
 	}
 
 	// Note: the "theme" variable is ignored and instead the light theme is
 	// always used for HTML notes.
 	// See: https://github.com/laurent22/joplin/issues/3698
-	async render(markup: string, _theme: any, options: RenderOptions): Promise<RenderResult> {
+	public async render(markup: string, _theme: any, options: RenderOptions): Promise<RenderResult> {
 		options = {
 			splitted: false,
 			postMessageSyntax: 'postMessage',

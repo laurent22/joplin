@@ -155,28 +155,26 @@ function NoteListControls(props: Props) {
 			{renderNewNoteButtons()}
 			<RowContainer>
 				<SearchBar inputRef={searchBarRef}/>
-				<SortOrderButtonsContainer>
-					{showsSortOrderButtons() &&
-					<StyledPairButtonL
-						className="sort-order-field-button"
-						tooltip={sortOrderFieldTooltip()}
-						iconName={sortOrderFieldIcon()}
-						level={ButtonLevel.Secondary}
-						size={ButtonSize.Small}
-						onClick={onSortOrderFieldButtonClick}
-					/>
-					}
-					{showsSortOrderButtons() &&
-					<StyledPairButtonR
-						className="sort-order-reverse-button"
-						tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
-						iconName={sortOrderReverseIcon()}
-						level={ButtonLevel.Secondary}
-						size={ButtonSize.Small}
-						onClick={onSortOrderReverseButtonClick}
-					/>
-					}
-				</SortOrderButtonsContainer>
+				{showsSortOrderButtons() &&
+					<SortOrderButtonsContainer>
+						<StyledPairButtonL
+							className="sort-order-field-button"
+							tooltip={sortOrderFieldTooltip()}
+							iconName={sortOrderFieldIcon()}
+							level={ButtonLevel.Secondary}
+							size={ButtonSize.Small}
+							onClick={onSortOrderFieldButtonClick}
+						/>
+						<StyledPairButtonR
+							className="sort-order-reverse-button"
+							tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
+							iconName={sortOrderReverseIcon()}
+							level={ButtonLevel.Secondary}
+							size={ButtonSize.Small}
+							onClick={onSortOrderReverseButtonClick}
+						/>
+					</SortOrderButtonsContainer>
+				}
 			</RowContainer>
 		</StyledRoot>
 	);
@@ -184,7 +182,8 @@ function NoteListControls(props: Props) {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		showNewNoteButtons: state.focusedField !== 'globalSearch',
+		// TODO: showNewNoteButtons and the logic associated is not needed anymore.
+		showNewNoteButtons: true,
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
 		sortOrderField: state.settings['notes.sortOrder.field'],
 		sortOrderReverse: state.settings['notes.sortOrder.reverse'],

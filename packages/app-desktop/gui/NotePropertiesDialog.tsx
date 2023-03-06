@@ -31,7 +31,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	private styleKey_: number;
 	private styles_: any;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.revisionsLink_click = this.revisionsLink_click.bind(this);
@@ -56,17 +56,17 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		void this.loadNote(this.props.noteId);
 	}
 
-	componentDidUpdate() {
+	public componentDidUpdate() {
 		if (this.state.editedKey === null) {
 			this.okButton.current.focus();
 		}
 	}
 
-	async loadNote(noteId: string) {
+	public async loadNote(noteId: string) {
 		if (!noteId) {
 			this.setState({ formNote: null });
 		} else {
@@ -76,7 +76,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 	}
 
-	latLongFromLocation(location: string) {
+	public latLongFromLocation(location: string) {
 		const o: any = {};
 		const l = location.split(',');
 		if (l.length === 2) {
@@ -89,7 +89,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		return o;
 	}
 
-	noteToFormNote(note: NoteEntity) {
+	public noteToFormNote(note: NoteEntity) {
 		const formNote: any = {};
 
 		formNote.user_updated_time = time.formatMsToLocal(note.user_updated_time);
@@ -113,7 +113,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		return formNote;
 	}
 
-	formNoteToNote(formNote: any) {
+	public formNoteToNote(formNote: any) {
 		const note = Object.assign({ id: formNote.id }, this.latLongFromLocation(formNote.location));
 		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
 		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
@@ -127,7 +127,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		return note;
 	}
 
-	styles(themeId: number) {
+	public styles(themeId: number) {
 		const styleKey = themeId;
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -168,7 +168,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		return this.styles_;
 	}
 
-	async closeDialog(applyChanges: boolean) {
+	public async closeDialog(applyChanges: boolean) {
 		if (applyChanges) {
 			await this.saveProperty();
 			const note = this.formNoteToNote(this.state.formNote);
@@ -183,16 +183,16 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 	}
 
-	buttonRow_click(event: any) {
+	private buttonRow_click(event: any) {
 		void this.closeDialog(event.buttonName === 'ok');
 	}
 
-	revisionsLink_click() {
+	private revisionsLink_click() {
 		void this.closeDialog(false);
 		if (this.props.onRevisionLinkClick) this.props.onRevisionLinkClick();
 	}
 
-	editPropertyButtonClick(key: string, initialValue: any) {
+	public editPropertyButtonClick(key: string, initialValue: any) {
 		this.setState({
 			editedKey: key,
 			editedValue: initialValue,
@@ -207,7 +207,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}, 100);
 	}
 
-	async saveProperty() {
+	public async saveProperty() {
 		if (!this.state.editedKey) return;
 
 		return new Promise((resolve: Function) => {
@@ -233,7 +233,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		});
 	}
 
-	async cancelProperty() {
+	public async cancelProperty() {
 		return new Promise((resolve: Function) => {
 			this.okButton.current.focus();
 			this.setState({
@@ -245,7 +245,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		});
 	}
 
-	createNoteField(key: string, value: any) {
+	public createNoteField(key: string, value: any) {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
 		const labelComp = <label style={Object.assign({}, theme.textStyle, theme.controlBoxLabel)}>{this.formatLabel(key)}</label>;
@@ -364,12 +364,12 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		);
 	}
 
-	formatLabel(key: string) {
+	public formatLabel(key: string) {
 		if (this.keyToLabel_[key]) return this.keyToLabel_[key];
 		return key;
 	}
 
-	formatValue(key: string, note: NoteEntity) {
+	public formatValue(key: string, note: NoteEntity) {
 		if (key === 'location') {
 			if (!Number(note.latitude) && !Number(note.longitude)) return null;
 			const dms = formatcoords(Number(note.latitude), Number(note.longitude));
@@ -383,7 +383,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		return (note as any)[key];
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const formNote = this.state.formNote;
 

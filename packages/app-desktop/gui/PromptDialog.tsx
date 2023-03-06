@@ -27,13 +27,13 @@ export default class PromptDialog extends React.Component<Props, any> {
 	private styles_: any;
 	private styleKey_: string;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.answerInput_ = React.createRef();
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({
 			visible: false,
 			answer: this.props.defaultValue ? this.props.defaultValue : '',
@@ -41,7 +41,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		this.focusInput_ = true;
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: Props) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if ('visible' in newProps && newProps.visible !== this.props.visible) {
 			this.setState({ visible: newProps.visible });
 			if (newProps.visible) this.focusInput_ = true;
@@ -52,12 +52,12 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 	}
 
-	componentDidUpdate() {
+	public componentDidUpdate() {
 		if (this.focusInput_ && this.answerInput_.current) this.answerInput_.current.focus();
 		this.focusInput_ = false;
 	}
 
-	styles(themeId: number, width: number, height: number, visible: boolean) {
+	public styles(themeId: number, width: number, height: number, visible: boolean) {
 		const styleKey = `${themeId}_${width}_${height}_${visible}`;
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -181,7 +181,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		return this.styles_;
 	}
 
-	render() {
+	public render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 		const buttonTypes = this.props.buttons ? this.props.buttons : ['ok', 'cancel'];

@@ -2,7 +2,6 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { clipboard } = require('electron');
 import ExtensionBadge from './ExtensionBadge';
-import bridge from '../services/bridge';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import ClipperServer from '@joplin/lib/ClipperServer';
@@ -11,37 +10,29 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { AppState } from '../app.reducer';
 
 class ClipperConfigScreenComponent extends React.Component {
-	constructor() {
+	public constructor() {
 		super();
 
 		this.copyToken_click = this.copyToken_click.bind(this);
 	}
 
-	disableClipperServer_click() {
+	private disableClipperServer_click() {
 		Setting.setValue('clipperServer.autoStart', false);
 		void ClipperServer.instance().stop();
 	}
 
-	enableClipperServer_click() {
+	private enableClipperServer_click() {
 		Setting.setValue('clipperServer.autoStart', true);
 		void ClipperServer.instance().start();
 	}
 
-	chromeButton_click() {
-		void bridge().openExternal('https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek');
-	}
-
-	firefoxButton_click() {
-		void bridge().openExternal('https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/');
-	}
-
-	copyToken_click() {
+	private copyToken_click() {
 		clipboard.writeText(this.props.apiToken);
 
 		alert(_('Token has been copied to the clipboard!'));
 	}
 
-	renewToken_click() {
+	private renewToken_click() {
 		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
 				.generateApiToken()
@@ -52,7 +43,7 @@ class ClipperConfigScreenComponent extends React.Component {
 		}
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {

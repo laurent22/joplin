@@ -21,7 +21,7 @@ class ItemList extends React.Component<Props, State> {
 	private scrollTop_: number;
 	private listRef: any;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.scrollTop_ = 0;
@@ -33,12 +33,12 @@ class ItemList extends React.Component<Props, State> {
 		this.onDrop = this.onDrop.bind(this);
 	}
 
-	visibleItemCount(props: Props = undefined) {
+	public visibleItemCount(props: Props = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 		return Math.ceil(props.style.height / props.itemHeight);
 	}
 
-	updateStateItemIndexes(props: Props = undefined) {
+	public updateStateItemIndexes(props: Props = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 
 		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
@@ -53,36 +53,36 @@ class ItemList extends React.Component<Props, State> {
 		});
 	}
 
-	offsetTop() {
+	public offsetTop() {
 		return this.listRef.current ? this.listRef.current.offsetTop : 0;
 	}
 
-	offsetScroll() {
+	public offsetScroll() {
 		return this.scrollTop_;
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.updateStateItemIndexes();
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: Props) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		this.updateStateItemIndexes(newProps);
 	}
 
-	onScroll(event: any) {
+	public onScroll(event: any) {
 		this.scrollTop_ = event.target.scrollTop;
 		this.updateStateItemIndexes();
 	}
 
-	onKeyDown(event: any) {
+	public onKeyDown(event: any) {
 		if (this.props.onKeyDown) this.props.onKeyDown(event);
 	}
 
-	onDrop(event: any) {
+	public onDrop(event: any) {
 		if (this.props.onNoteDrop) this.props.onNoteDrop(event);
 	}
 
-	makeItemIndexVisible(itemIndex: number) {
+	public makeItemIndexVisible(itemIndex: number) {
 		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex);
 		const bottom = Math.max(0, this.state.bottomItemIndex);
 
@@ -119,7 +119,7 @@ class ItemList extends React.Component<Props, State> {
 	// 	return true;
 	// }
 
-	render() {
+	public render() {
 		const items = this.props.items;
 		const style = Object.assign({}, this.props.style, {
 			overflowX: 'hidden',

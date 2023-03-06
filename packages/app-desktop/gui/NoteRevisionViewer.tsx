@@ -38,7 +38,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 	private viewerRef_: any;
 	private helpButton_onClick: Function;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -57,7 +57,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 	}
 
-	style() {
+	public style() {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = {
@@ -74,7 +74,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		return style;
 	}
 
-	async viewer_domReady() {
+	private async viewer_domReady() {
 		// this.viewerRef_.current.openDevTools();
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, this.props.noteId);
@@ -90,7 +90,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		);
 	}
 
-	async importButton_onClick() {
+	private async importButton_onClick() {
 		if (!this.state.note) return;
 		this.setState({ restoring: true });
 		await RevisionService.instance().importRevisionNote(this.state.note);
@@ -98,11 +98,11 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		alert(RevisionService.instance().restoreSuccessMessage(this.state.note));
 	}
 
-	backButton_click() {
+	private backButton_click() {
 		if (this.props.onBack) this.props.onBack();
 	}
 
-	revisionList_onChange(event: any) {
+	private revisionList_onChange(event: any) {
 		const value = event.target.value;
 
 		if (!value) {
@@ -119,7 +119,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		}
 	}
 
-	async reloadNote() {
+	public async reloadNote() {
 		let noteBody = '';
 		let markupLanguage = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		if (!this.state.revisions.length || !this.state.currentRevId) {
@@ -153,7 +153,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		});
 	}
 
-	async webview_ipcMessage(event: any) {
+	private async webview_ipcMessage(event: any) {
 		// For the revision view, we only suppport a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
@@ -183,7 +183,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 		}
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 
