@@ -25,7 +25,7 @@ import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	static navigationOptions(): any {
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
@@ -200,7 +200,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	async checkFilesystemPermission() {
+	public async checkFilesystemPermission() {
 		if (Platform.OS !== 'android') {
 			// Not implemented yet
 			return true;
@@ -212,11 +212,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
 
-	styles() {
+	public styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -376,7 +376,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
 	}
 
-	renderHeader(key: string, title: string) {
+	public renderHeader(key: string, title: string) {
 		const theme = themeStyle(this.props.themeId);
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle} onLayout={(event: any) => this.onHeaderLayout(key, event)}>
@@ -410,7 +410,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	sectionToComponent(key: string, section: any, settings: any) {
+	public sectionToComponent(key: string, section: any, settings: any) {
 		const settingComps = [];
 
 		for (let i = 0; i < section.metadatas.length; i++) {
@@ -474,7 +474,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return !hasDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
 	}
 
-	settingToComponent(key: string, value: any) {
+	public settingToComponent(key: string, value: any) {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 		const output: any = null;
@@ -599,7 +599,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	render() {
+	public render() {
 		const settings = this.state.settings;
 
 		const theme = themeStyle(this.props.themeId);

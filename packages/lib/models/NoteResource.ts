@@ -8,11 +8,11 @@ import BaseItem from './BaseItem';
 // - If last_seen_time is 0, it means the resource has never been associated with any note.
 
 export default class NoteResource extends BaseModel {
-	static tableName() {
+	public static tableName() {
 		return 'note_resources';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_NOTE_RESOURCE;
 	}
 
@@ -71,12 +71,12 @@ export default class NoteResource extends BaseModel {
 	// 	await this.db().transactionExecBatch(queries);
 	// }
 
-	static async associatedNoteIds(resourceId: string): Promise<string[]> {
+	public static async associatedNoteIds(resourceId: string): Promise<string[]> {
 		const rows = await this.modelSelectAll('SELECT note_id FROM note_resources WHERE resource_id = ? AND is_associated = 1', [resourceId]);
 		return rows.map((r: any) => r.note_id);
 	}
 
-	static async setAssociatedResources(noteId: string, resourceIds: string[]) {
+	public static async setAssociatedResources(noteId: string, resourceIds: string[]) {
 		const existingRows = await this.modelSelectAll('SELECT * FROM note_resources WHERE note_id = ?', [noteId]);
 
 		const notProcessedResourceIds = resourceIds.slice();
@@ -100,7 +100,7 @@ export default class NoteResource extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
-	static async addOrphanedResources() {
+	public static async addOrphanedResources() {
 		const missingResources = await this.db().selectAll('SELECT id FROM resources WHERE id NOT IN (SELECT DISTINCT resource_id FROM note_resources)');
 		const queries = [];
 		for (let i = 0; i < missingResources.length; i++) {
@@ -125,11 +125,11 @@ export default class NoteResource extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
-	static async remove(noteId: string) {
+	public static async remove(noteId: string) {
 		await this.db().exec({ sql: 'UPDATE note_resources SET is_associated = 0 WHERE note_id = ?', params: [noteId] });
 	}
 
-	static async orphanResources(expiryDelay: number = null) {
+	public static async orphanResources(expiryDelay: number = null) {
 		if (expiryDelay === null) expiryDelay = 1000 * 60 * 60 * 24 * 10;
 		const cutOffTime = Date.now() - expiryDelay;
 		const output = await this.modelSelectAll(
@@ -146,7 +146,7 @@ export default class NoteResource extends BaseModel {
 		return output.map((r: any) => r.resource_id);
 	}
 
-	static async deleteByResource(resourceId: string) {
+	public static async deleteByResource(resourceId: string) {
 		await this.db().exec('DELETE FROM note_resources WHERE resource_id = ?', [resourceId]);
 	}
 }

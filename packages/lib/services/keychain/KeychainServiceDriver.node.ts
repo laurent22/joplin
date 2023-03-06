@@ -3,18 +3,18 @@ import shim from '../../shim';
 
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 
-	async setPassword(name: string, password: string): Promise<boolean> {
+	public async setPassword(name: string, password: string): Promise<boolean> {
 		if (!shim.keytar()) return false;
 		await shim.keytar().setPassword(`${this.appId}.${name}`, `${this.clientId}@joplin`, password);
 		return true;
 	}
 
-	async password(name: string): Promise<string> {
+	public async password(name: string): Promise<string> {
 		if (!shim.keytar()) return null;
 		return shim.keytar().getPassword(`${this.appId}.${name}`, `${this.clientId}@joplin`);
 	}
 
-	async deletePassword(name: string): Promise<void> {
+	public async deletePassword(name: string): Promise<void> {
 		if (!shim.keytar()) return;
 		await shim.keytar().deletePassword(`${this.appId}.${name}`, `${this.clientId}@joplin`);
 	}

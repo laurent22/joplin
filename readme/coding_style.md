@@ -200,11 +200,11 @@ New code should use [React Hooks](https://reactjs.org/docs/hooks-intro.html) and
 ```tsx
 // Don't do this in new code!
 class Example extends React.Component {
-	constructor(props: { text: string }) {
+	public constructor(props: { text: string }) {
 		super(props);
 	}
 
-	render() {
+	public render() {
 		return (
 			<div>${text}</div>
 		);

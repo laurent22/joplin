@@ -182,7 +182,7 @@ export default class LockHandler {
 		return lockNameToObject(filename(file.path), file.updated_time);
 	}
 
-	async locks(lockType: LockType = null): Promise<Lock[]> {
+	public async locks(lockType: LockType = null): Promise<Lock[]> {
 		if (this.useBuiltInLocks) {
 			const locks = (await this.api_.listLocks()).items;
 			return locks;
@@ -405,7 +405,7 @@ export default class LockHandler {
 		return handle;
 	}
 
-	stopAutoLockRefresh(lock: Lock) {
+	public stopAutoLockRefresh(lock: Lock) {
 		const handle = this.autoLockRefreshHandle(lock);
 		if (!this.refreshTimers_[handle]) {
 			// Should not throw an error because lock may have been cleared in startAutoLockRefresh

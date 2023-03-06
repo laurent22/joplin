@@ -26,7 +26,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private style_: any;
 	private packIntoSingleFile_: boolean = false;
 
-	async init(path: string, options: any = {}) {
+	public async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
 
 		if (this.metadata().target === 'file') {
@@ -48,7 +48,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 
-	async makeDirPath_(item: any, pathPart: string = null) {
+	private async makeDirPath_(item: any, pathPart: string = null) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -64,7 +64,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
-	async processNoteResources_(item: any) {
+	private async processNoteResources_(item: any) {
 		const target = this.metadata().target;
 		const linkedResourceIds = await Note.linkedResourceIds(item.body);
 		const relativePath = target === 'directory' ? rtrimSlashes(await this.makeDirPath_(item, '..')) : '';
@@ -85,7 +85,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		return newBody;
 	}
 
-	async processItem(_itemType: number, item: any) {
+	public async processItem(_itemType: number, item: any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		let dirPath = '';
@@ -150,7 +150,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
-	async processResource(resource: any, filePath: string) {
+	public async processResource(resource: any, filePath: string) {
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);
 		this.resources_.push(resource);

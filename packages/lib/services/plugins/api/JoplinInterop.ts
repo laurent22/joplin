@@ -16,7 +16,7 @@ import { ExportModule, ImportModule } from './types';
  */
 export default class JoplinInterop {
 
-	async registerExportModule(module: ExportModule) {
+	public async registerExportModule(module: ExportModule) {
 		const internalModule: Module = {
 			...module,
 			type: ModuleType.Exporter,
@@ -27,7 +27,7 @@ export default class JoplinInterop {
 		return InteropService.instance().registerModule(internalModule);
 	}
 
-	async registerImportModule(module: ImportModule) {
+	public async registerImportModule(module: ImportModule) {
 		const internalModule: Module = {
 			...module,
 			type: ModuleType.Importer,

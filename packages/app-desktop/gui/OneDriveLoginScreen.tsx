@@ -14,7 +14,7 @@ interface Props {
 }
 
 class OneDriveLoginScreenComponent extends React.Component<any, any> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -22,7 +22,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 		};
 	}
 
-	async componentDidMount() {
+	public async componentDidMount() {
 		const log = (s: any) => {
 			this.setState((state: any) => {
 				const authLog = state.authLog.slice();
@@ -48,15 +48,15 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 		}
 	}
 
-	startUrl() {
+	public startUrl() {
 		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
 	}
 
-	redirectUrl() {
+	public redirectUrl() {
 		return reg.syncTarget().api().nativeClientRedirectUrl();
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 
 		const logComps = [];

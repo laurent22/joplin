@@ -22,11 +22,11 @@ export default class ItemChange extends BaseModel {
 	public static SOURCE_SYNC = 2;
 	public static SOURCE_DECRYPTION = 2; // CAREFUL - SAME ID AS SOURCE_SYNC!
 
-	static tableName() {
+	public static tableName() {
 		return 'item_changes';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_ITEM_CHANGE;
 	}
 

@@ -21,7 +21,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.onAppStateChange_ = async () => {
@@ -78,7 +78,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		};
 	}
 
-	styles() {
+	public styles() {
 		if (!this.styles_) this.styles_ = {};
 		const themeId = this.props.themeId;
 		const cacheKey = themeId;
@@ -96,24 +96,24 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return this.styles_[cacheKey];
 	}
 
-	async componentDidMount() {
+	public async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		await this.refreshNotes();
 		this.onAppStateChangeSub_ = RNAppState.addEventListener('change', this.onAppStateChange_);
 	}
 
-	async componentWillUnmount() {
+	public async componentWillUnmount() {
 		if (this.onAppStateChangeSub_) this.onAppStateChangeSub_.remove();
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
-	async componentDidUpdate(prevProps: any) {
+	public async componentDidUpdate(prevProps: any) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
 			await this.refreshNotes(this.props);
 		}
 	}
 
-	async refreshNotes(props: any = null) {
+	public async refreshNotes(props: any = null) {
 		if (props === null) props = this.props;
 
 		const options = {
@@ -149,36 +149,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		});
 	}
 
-	deleteFolder_onPress(folderId: string) {
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		dialogs.confirm(this, _('Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.')).then((ok: boolean) => {
-			if (!ok) return;
-
-			Folder.delete(folderId)
-			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-				.then(() => {
-					this.props.dispatch({
-						type: 'NAV_GO',
-						routeName: 'Notes',
-						smartFilterId: 'c3176726992c11e9ac940492261af972',
-					});
-				})
-			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-				.catch(error => {
-					alert(error.message);
-				});
-		});
-	}
-
-	editFolder_onPress(folderId: string) {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Folder',
-			folderId: folderId,
-		});
-	}
-
-	newNoteNavigate = async (folderId: string, isTodo: boolean) => {
+	public newNoteNavigate = async (folderId: string, isTodo: boolean) => {
 		const newNote = await Note.save({
 			parent_id: folderId,
 			is_todo: isTodo ? 1 : 0,
@@ -191,7 +162,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		});
 	};
 
-	parentItem(props: any = null) {
+	public parentItem(props: any = null) {
 		if (!props) props = this.props;
 
 		let output = null;
@@ -208,7 +179,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return output;
 	}
 
-	folderPickerOptions() {
+	public folderPickerOptions() {
 		const options = {
 			enabled: this.props.noteSelectionEnabled,
 			mustSelect: true,
@@ -220,7 +191,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return this.folderPickerOptions_;
 	}
 
-	render() {
+	public render() {
 		const parent = this.parentItem();
 		const theme = themeStyle(this.props.themeId);
 

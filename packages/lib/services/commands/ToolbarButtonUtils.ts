@@ -26,7 +26,7 @@ export default class ToolbarButtonUtils {
 	private service_: CommandService;
 	private toolbarButtonCache_: ToolbarButtonCache = {};
 
-	constructor(service: CommandService) {
+	public constructor(service: CommandService) {
 		this.service_ = service;
 	}
 

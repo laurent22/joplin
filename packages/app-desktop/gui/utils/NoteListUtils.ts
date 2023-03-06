@@ -26,7 +26,7 @@ interface ContextMenuProps {
 }
 
 export default class NoteListUtils {
-	static makeContextMenu(noteIds: string[], props: ContextMenuProps) {
+	public static makeContextMenu(noteIds: string[], props: ContextMenuProps) {
 		const cmdService = CommandService.instance();
 
 		const menuUtils = new MenuUtils(cmdService);
@@ -212,7 +212,7 @@ export default class NoteListUtils {
 		return menu;
 	}
 
-	static async confirmDeleteNotes(noteIds: string[]) {
+	public static async confirmDeleteNotes(noteIds: string[]) {
 		if (!noteIds.length) return;
 
 		const msg = await Note.deleteMessage(noteIds);

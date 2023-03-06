@@ -3,15 +3,15 @@ import { ResourceLocalStateEntity } from '../services/database/types';
 import Database from '../database';
 
 export default class ResourceLocalState extends BaseModel {
-	static tableName() {
+	public static tableName() {
 		return 'resource_local_states';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_RESOURCE_LOCAL_STATE;
 	}
 
-	static async byResourceId(resourceId: string) {
+	public static async byResourceId(resourceId: string) {
 		if (!resourceId) throw new Error('Resource ID not provided'); // Sanity check
 
 		const result = await this.modelSelectOne('SELECT * FROM resource_local_states WHERE resource_id = ?', [resourceId]);
@@ -26,13 +26,13 @@ export default class ResourceLocalState extends BaseModel {
 		return result;
 	}
 
-	static async save(o: ResourceLocalStateEntity) {
+	public static async save(o: ResourceLocalStateEntity) {
 		const queries = [{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] }, Database.insertQuery(this.tableName(), o)];
 
 		return this.db().transactionExecBatch(queries);
 	}
 
-	static batchDelete(ids: string[], options: any = null) {
+	public static batchDelete(ids: string[], options: any = null) {
 		options = options ? Object.assign({}, options) : {};
 		options.idFieldName = 'resource_id';
 		return super.batchDelete(ids, options);

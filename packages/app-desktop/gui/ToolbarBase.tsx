@@ -13,7 +13,7 @@ interface Props {
 
 class ToolbarBaseComponent extends React.Component<Props, any> {
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 
 		const style: any = Object.assign({

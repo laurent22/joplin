@@ -23,7 +23,7 @@ export default class JoplinViews {
 	private toolbarButtons_: JoplinViewsToolbarButtons = null;
 	private implementation_: any = null;
 
-	constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: any, plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
 		this.implementation_ = implementation;
