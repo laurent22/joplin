@@ -79,11 +79,7 @@ function stripMarkup(markupLanguage: number, markup: string, options: any = null
 
 function createSyntheticClipboardEventWithoutHTML(): ClipboardEvent {
 	const clipboardData = new DataTransfer();
-	for (const format of clipboard.availableFormats()) {
-		if (format !== 'text/html') {
-			clipboardData.setData(format, clipboard.read(format));
-		}
-	}
+	clipboardData.setData('text/plain', clipboard.readText());
 	return new ClipboardEvent('paste', { clipboardData });
 }
 
