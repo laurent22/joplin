@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -129,9 +131,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -363,8 +364,8 @@ msgstr ""
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Zweideutiges Notizbuch „%s“. Bitte verwende stattdessen die kurze Notizbuch-"
 "ID - drücke „ti“, um die kurze Notizbuch-ID zu sehen"
@@ -397,6 +398,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Sicher, dass du zum Standardlayout zurückkehren möchtest? Das aktuelle "
+"Layout geht dabei verloren"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -615,7 +618,6 @@ msgid "Cannot find \"%s\"."
 msgstr "Kann „%s“ nicht finden."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
 msgstr "Kann „%s“ nicht finden."
 
@@ -1010,16 +1012,15 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
 msgid "Could not verify your identify"
-msgstr "Konnte deine Identität nicht verifizieren."
+msgstr "Konnte deine Identität nicht verifizieren"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Erstellen"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Erstellt ein neues Notizbuch."
+msgstr "Erstelle ein neues Notizbuch unter einem übergeordneten Notizbuch."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1660,7 +1661,7 @@ msgstr "Weiche Zeilenumbrüche aktivieren"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Aktiviere die Rechtschreibprüfung im Text-Editor"
 
 #: packages/lib/models/Setting.ts:1143
 msgid "Enable table of contents extension"
@@ -2328,7 +2329,7 @@ msgstr "Elemente, die nicht synchronisiert werden können"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Folge uns auf Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2672,7 +2673,6 @@ msgid "Missing required argument: %s"
 msgstr "Fehlendes erforderliches Argument: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
 msgstr "Fehlendes erforderliches Argument: %s"
 
@@ -3124,7 +3124,7 @@ msgstr "Einfügen"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "Einfügen als Text"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3501,9 +3501,8 @@ msgid "Replace: "
 msgstr "Ersetze: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "Anwendungs-Layout ändern"
+msgstr "Anwendungslayout zurücksetzen"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -4267,7 +4266,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr "Das Standardprofil kann nicht gelöscht werden."
+msgstr "Das Standardprofil kann nicht gelöscht werden"
 
 #: packages/lib/models/Setting.ts:1366
 msgid ""
@@ -4423,6 +4422,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"Die WebDAV Implementation von %s ist nicht kompatibel mit Joplin und deshalb "
+"nicht länger unterstützt. Bitte verwende eine andere Sync-Methode."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4653,8 +4654,8 @@ msgstr "Um die Konsole zu maximieren/minimieren, drücke „tc“."
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
-"Um von einem Bereich zu einem anderen zu wechseln, drücke Tab oder "
-"Umschalt+Tab."
+"Um von einem Bereich zu einem anderen zu wechseln, drücke Tab oder Umschalt"
+"+Tab."
 
 #: packages/app-cli/app/command-status.js:44
 msgid ""
@@ -4912,7 +4913,7 @@ msgstr "Nutzung: %s"
 
 #: packages/lib/models/Setting.ts:1640
 msgid "Use biometrics to secure access to the app"
-msgstr "Verwende Biometrie, um den Zugriff zu der App abzusichern."
+msgstr "Verwende Biometrie, um den Zugriff auf die App abzusichern"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
