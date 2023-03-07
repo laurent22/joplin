@@ -1,6 +1,6 @@
 import { AppState } from '../../app.reducer';
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -18,6 +18,7 @@ interface Props {
 	sortOrderReverse: boolean;
 	notesParentType: string;
 	height: number;
+	width: number;
 }
 
 const StyledRoot = styled.div`
@@ -35,6 +36,7 @@ const StyledButton = styled(Button)`
 	height: 26px;
 	min-height: 26px;
 	flex: 1 0 auto;
+	min-width: 0;
 
   .fa, .fas {
     font-size: 11px;
@@ -69,6 +71,73 @@ const SortOrderButtonsContainer = styled.div`
 
 function NoteListControls(props: Props) {
 	const searchBarRef = useRef(null);
+	const newNoteRef = useRef(null);
+	const newTodoRef = useRef(null);
+	const noteControlsRef = useRef(null);
+	const searchAndSortRef = useRef(null);
+
+	const [noteBtnText, setNoteBtnText] = useState('New note');
+	const [todoBtnText, setTodoBtnText] = useState('New to-do');
+	const [breakpoint, setBreakpoint] = useState('l');
+	const [iconNote, setIconNote] = useState('fas fa-plus');
+	const [iconTodo, setIconTodo] = useState('fas fa-plus');
+
+	useEffect(() => {
+		const breakpoints = [{ s: 135 }, { md: 189 }, { l: 470 }, { xl: 500 }];
+		// Find largest breakpoint that width is less than
+		const index = breakpoints.map(x => Object.values(x)[0])
+			.findIndex(x => props.width < x);
+
+		const bp = index === -1 ? Object.keys(breakpoints[breakpoints.length - 1])[0] : Object.keys(breakpoints[index])[0];
+
+		setBreakpoint(bp);
+	}, [props.width]);
+
+	useEffect(() => {
+		if (breakpoint === 's') {
+			setNoteBtnText('');
+			setTodoBtnText('');
+		} else if (breakpoint === 'md') {
+			setNoteBtnText('note');
+			setTodoBtnText('to-do');
+		} else {
+			setNoteBtnText('New note');
+			setTodoBtnText('New to-do');
+		}
+	}, [breakpoint]);
+
+	useEffect(() => {
+		if (breakpoint === 's') {
+			newNoteRef.current.style.padding = '0px 18px 0px 18px';
+			newTodoRef.current.style.padding = '0px 18px 0px 18px';
+		} else {
+			newNoteRef.current.style.padding = '0px 4px 0px 4px';
+			newTodoRef.current.style.padding = '0px 4px 0px 4px';
+		}
+
+		if (breakpoint === 'xl') {
+			noteControlsRef.current.style.flexDirection = 'row';
+			searchAndSortRef.current.style.flex = '2 1 auto';
+		} else {
+			noteControlsRef.current.style.flexDirection = 'column';
+		}
+	}, [breakpoint]);
+
+	useEffect(() => {
+		if (breakpoint === 's') {
+			setIconNote('icon-note');
+			setIconTodo('far fa-check-square');
+		} else if (breakpoint === 'md') {
+			setIconNote('fas fa-plus');
+			setIconTodo('fas fa-plus');
+		} else if (breakpoint === 'l') {
+			setIconNote('fas fa-plus');
+			setIconTodo('fas fa-plus');
+		} else {
+			setIconNote('fas fa-plus');
+			setIconTodo('fas fa-plus');
+		}
+	}, [breakpoint]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
@@ -128,20 +197,20 @@ function NoteListControls(props: Props) {
 
 		return (
 			<RowContainer>
-				<StyledButton
+				<StyledButton ref={newNoteRef}
 					className="new-note-button"
 					tooltip={CommandService.instance().label('newNote')}
-					iconName="fas fa-plus"
-					title={_('%s', 'New note')}
+					iconName={iconNote}
+					title={_('%s', noteBtnText)}
 					level={ButtonLevel.Primary}
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
 				/>
-				<StyledButton
+				<StyledButton ref={newTodoRef}
 					className="new-todo-button"
 					tooltip={CommandService.instance().label('newTodo')}
-					iconName="fas fa-plus"
-					title={_('%s', 'New to-do')}
+					iconName={iconTodo}
+					title={_('%s', todoBtnText)}
 					level={ButtonLevel.Secondary}
 					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
@@ -151,9 +220,9 @@ function NoteListControls(props: Props) {
 	}
 
 	return (
-		<StyledRoot>
+		<StyledRoot ref={noteControlsRef}>
 			{renderNewNoteButtons()}
-			<RowContainer>
+			<RowContainer ref={searchAndSortRef}>
 				<SearchBar inputRef={searchBarRef}/>
 				<SortOrderButtonsContainer>
 					{showsSortOrderButtons() &&

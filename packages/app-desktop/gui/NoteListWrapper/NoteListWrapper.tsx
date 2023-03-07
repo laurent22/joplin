@@ -33,7 +33,7 @@ export default function NoteListWrapper(props: Props) {
 
 	return (
 		<StyledRoot>
-			<NoteListControls height={controlHeight}/>
+			<NoteListControls height={controlHeight} width={noteListSize.width}/>
 			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>
 	);
