@@ -4997,7 +4997,7 @@ __metadata:
     typescript: 4.9.4
     webpack: 5.65.0
     webpack-cli: 4.10.0
-    yargs: 17.7.0
+    yargs: 17.7.1
   bin:
     plugin-repo-cli: ./dist/index.js
   languageName: unknown
@@ -5126,7 +5126,7 @@ __metadata:
     stripe: 8.222.0
     typescript: 4.9.4
     uuid: 9.0.0
-    yargs: 17.7.0
+    yargs: 17.7.1
     zxcvbn: 4.4.2
   languageName: unknown
   linkType: soft
@@ -5168,7 +5168,7 @@ __metadata:
     sqlite3: 5.1.4
     typescript: 4.9.4
     uri-template: 2.0.0
-    yargs: 17.7.0
+    yargs: 17.7.1
   languageName: unknown
   linkType: soft
 
@@ -33176,9 +33176,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.7.0":
-  version: 17.7.0
-  resolution: "yargs@npm:17.7.0"
+"yargs@npm:17.7.1":
+  version: 17.7.1
+  resolution: "yargs@npm:17.7.1"
   dependencies:
     cliui: ^8.0.1
     escalade: ^3.1.1
@@ -33187,7 +33187,7 @@ __metadata:
     string-width: ^4.2.3
     y18n: ^5.0.5
     yargs-parser: ^21.1.1
-  checksum: e7d5f5b60e63b04ded7c27c3d4b194565565cac3ea19fffcdbb183bed973a83106822a04dda28ebba4811ce92949a9d9858d3935186ff8f343548bf98aab2120
+  checksum: 3d8a43c336a4942bc68080768664aca85c7bd406f018bad362fd255c41c8f4e650277f42fd65d543fce99e084124ddafee7bbfc1a5c6a8fda4cec78609dcf8d4
   languageName: node
   linkType: hard
 
