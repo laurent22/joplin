@@ -1,6 +1,6 @@
 import { AppState } from '../../app.reducer';
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -76,33 +76,48 @@ function NoteListControls(props: Props) {
 	const noteControlsRef = useRef(null);
 	const searchAndSortRef = useRef(null);
 
-	const [noteBtnText, setNoteBtnText] = useState('New note');
-	const [todoBtnText, setTodoBtnText] = useState('New to-do');
-	const [breakpoint, setBreakpoint] = useState('l');
-	const [iconNote, setIconNote] = useState('fas fa-plus');
-	const [iconTodo, setIconTodo] = useState('fas fa-plus');
-
-	useEffect(() => {
+	const breakpoint = useMemo(() => {
 		const breakpoints = [{ s: 135 }, { md: 189 }, { l: 470 }, { xl: 500 }];
 		// Find largest breakpoint that width is less than
 		const index = breakpoints.map(x => Object.values(x)[0])
 			.findIndex(x => props.width < x);
 
-		const bp = index === -1 ? Object.keys(breakpoints[breakpoints.length - 1])[0] : Object.keys(breakpoints[index])[0];
-
-		setBreakpoint(bp);
+		return index === -1 ? Object.keys(breakpoints[breakpoints.length - 1])[0] : Object.keys(breakpoints[index])[0];
 	}, [props.width]);
 
-	useEffect(() => {
+	const noteButtonText = useMemo(() => {
 		if (breakpoint === 's') {
-			setNoteBtnText('');
-			setTodoBtnText('');
+			return '';
 		} else if (breakpoint === 'md') {
-			setNoteBtnText('note');
-			setTodoBtnText('to-do');
+			return _('note');
 		} else {
-			setNoteBtnText('New note');
-			setTodoBtnText('New to-do');
+			return _('New note');
+		}
+	}, [breakpoint]);
+
+	const todoButtonText = useMemo(() => {
+		if (breakpoint === 's') {
+			return '';
+		} else if (breakpoint === 'md') {
+			return _('to-do');
+		} else {
+			return _('New to-do');
+		}
+	}, [breakpoint]);
+
+	const noteIcon = useMemo(() => {
+		if (breakpoint === 's') {
+			return 'icon-note';
+		} else {
+			return 'fas fa-plus';
+		}
+	}, [breakpoint]);
+
+	const todoIcon = useMemo(() => {
+		if (breakpoint === 's') {
+			return 'far fa-check-square';
+		} else {
+			return 'fas fa-plus';
 		}
 	}, [breakpoint]);
 
@@ -120,22 +135,6 @@ function NoteListControls(props: Props) {
 			searchAndSortRef.current.style.flex = '2 1 auto';
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
-		}
-	}, [breakpoint]);
-
-	useEffect(() => {
-		if (breakpoint === 's') {
-			setIconNote('icon-note');
-			setIconTodo('far fa-check-square');
-		} else if (breakpoint === 'md') {
-			setIconNote('fas fa-plus');
-			setIconTodo('fas fa-plus');
-		} else if (breakpoint === 'l') {
-			setIconNote('fas fa-plus');
-			setIconTodo('fas fa-plus');
-		} else {
-			setIconNote('fas fa-plus');
-			setIconTodo('fas fa-plus');
 		}
 	}, [breakpoint]);
 
@@ -200,8 +199,8 @@ function NoteListControls(props: Props) {
 				<StyledButton ref={newNoteRef}
 					className="new-note-button"
 					tooltip={CommandService.instance().label('newNote')}
-					iconName={iconNote}
-					title={_('%s', noteBtnText)}
+					iconName={noteIcon}
+					title={_('%s', noteButtonText)}
 					level={ButtonLevel.Primary}
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
@@ -209,8 +208,8 @@ function NoteListControls(props: Props) {
 				<StyledButton ref={newTodoRef}
 					className="new-todo-button"
 					tooltip={CommandService.instance().label('newTodo')}
-					iconName={iconTodo}
-					title={_('%s', todoBtnText)}
+					iconName={todoIcon}
+					title={_('%s', todoButtonText)}
 					level={ButtonLevel.Secondary}
 					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
