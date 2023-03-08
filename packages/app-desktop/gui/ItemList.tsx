@@ -80,8 +80,7 @@ class ItemList extends React.Component<Props, State> {
 	public componentDidUpdate(): void {
 		// EDGE CASE
 		// scroll top is not updated when note list visibility is toggled
-		// as a result, blank spaces are added at the bottom of the note list
-		// if the user was at the bottom of the note list before hiding
+		// if the user was at the bottom of the note list before hiding, blank spaces are added at the bottom of the note list
 		if (this.offsetScroll() !== this.listRef.current?.scrollTop) {
 			// update scroll postion once if there is a mismatch in scroll position after showing note list
 			this.onScroll({
