@@ -21,6 +21,13 @@ interface Props {
 	width: number;
 }
 
+enum Breakpoint {
+	Sm = 222,
+	Md = 316,
+	Lg = 470,
+	Xl = 500,
+}
+
 const StyledRoot = styled.div`
 	box-sizing: border-box;
 	height: ${(props: any) => props.height}px;
@@ -77,7 +84,7 @@ function NoteListControls(props: Props) {
 	const searchAndSortRef = useRef(null);
 
 	const breakpoint = useMemo(() => {
-		const breakpoints = [{ s: 135 }, { md: 189 }, { l: 470 }, { xl: 500 }];
+		const breakpoints = [{ sm: Breakpoint.Sm }, { md: Breakpoint.Md }, { l: Breakpoint.Lg }, { xl: Breakpoint.Xl }];
 		// Find largest breakpoint that width is less than
 		const index = breakpoints.map(x => Object.values(x)[0])
 			.findIndex(x => props.width < x);
@@ -86,7 +93,7 @@ function NoteListControls(props: Props) {
 	}, [props.width]);
 
 	const noteButtonText = useMemo(() => {
-		if (breakpoint === 's') {
+		if (breakpoint === 'sm') {
 			return '';
 		} else if (breakpoint === 'md') {
 			return _('note');
@@ -96,7 +103,7 @@ function NoteListControls(props: Props) {
 	}, [breakpoint]);
 
 	const todoButtonText = useMemo(() => {
-		if (breakpoint === 's') {
+		if (breakpoint === 'sm') {
 			return '';
 		} else if (breakpoint === 'md') {
 			return _('to-do');
@@ -106,7 +113,7 @@ function NoteListControls(props: Props) {
 	}, [breakpoint]);
 
 	const noteIcon = useMemo(() => {
-		if (breakpoint === 's') {
+		if (breakpoint === 'sm') {
 			return 'icon-note';
 		} else {
 			return 'fas fa-plus';
@@ -114,7 +121,7 @@ function NoteListControls(props: Props) {
 	}, [breakpoint]);
 
 	const todoIcon = useMemo(() => {
-		if (breakpoint === 's') {
+		if (breakpoint === 'sm') {
 			return 'far fa-check-square';
 		} else {
 			return 'fas fa-plus';
@@ -122,7 +129,7 @@ function NoteListControls(props: Props) {
 	}, [breakpoint]);
 
 	useEffect(() => {
-		if (breakpoint === 's') {
+		if (breakpoint === 'sm') {
 			newNoteRef.current.style.padding = '0px 18px 0px 18px';
 			newTodoRef.current.style.padding = '0px 18px 0px 18px';
 		} else {
