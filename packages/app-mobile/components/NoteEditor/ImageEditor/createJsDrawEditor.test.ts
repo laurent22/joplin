@@ -6,7 +6,7 @@ HTMLCanvasElement.prototype.getContext = () => null;
 window.ResizeObserver = class { public observe() { } } as any;
 
 import { describe, it, expect, jest } from '@jest/globals';
-import { Color4, EditorImage, Path, StrokeComponent } from 'js-draw';
+import { Color4, EditorImage, EditorSettings, Path, StrokeComponent } from 'js-draw';
 import { RenderingMode } from 'js-draw';
 import createJsDrawEditor, { ImageEditorCallbacks } from './createJsDrawEditor';
 
@@ -15,23 +15,24 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 	const toolbarState = '';
 	const locale = 'en';
 
-	return createJsDrawEditor({
-		close: 'Close',
-		save: 'Save',
-	}, {
+	const allCallbacks = {
 		saveDrawing: () => {},
 		autosaveDrawing: ()=> {},
 		closeEditor: ()=> {},
 		setImageHasChanges: ()=> {},
 
 		...callbacks,
-	},
-	toolbarState,
-	locale,
-	{
+	};
+
+	const editorOptions: Partial<EditorSettings> = {
+		// Don't use a CanvasRenderer: jsdom doesn't support DrawingContext2D
 		renderingMode: RenderingMode.DummyRenderer,
-	}
-	);
+	};
+
+	return createJsDrawEditor({
+		close: 'Close',
+		save: 'Save',
+	}, allCallbacks, toolbarState, locale, editorOptions);
 };
 
 describe('createJsDrawEditor', () => {
