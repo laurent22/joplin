@@ -70,5 +70,6 @@ dist/
 components/NoteEditor/**/*.bundle.js
 components/NoteEditor/**/*.bundle.js.md5
 components/NoteEditor/**/*.bundle.min.js
+components/NoteEditor/**/*.bundle.js.LICENSE.txt
 
 utils/fs-driver-android.js
