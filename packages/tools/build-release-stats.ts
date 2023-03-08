@@ -1,26 +1,47 @@
-/* eslint-disable require-atomic-updates */
-
-const fetch = require('node-fetch');
-const { writeFile, readFile, pathExists } = require('fs-extra');
-const { dirname } = require('@joplin/lib/path-utils');
-const markdownUtils = require('@joplin/lib/markdownUtils').default;
+import fetch from 'node-fetch';
+import { writeFile, readFile, pathExists } from 'fs-extra';
+import { dirname } from '@joplin/lib/path-utils';
+import markdownUtils from '@joplin/lib/markdownUtils';
 const yargParser = require('yargs-parser');
-const { stripOffFrontMatter } = require('./website/utils/frontMatter');
-const dayjs = require('dayjs');
-dayjs.extend(require('dayjs/plugin/utc'));
+import { stripOffFrontMatter } from './website/utils/frontMatter';
+import dayjs = require('dayjs');
+import utc = require('dayjs/plugin/utc');
+dayjs.extend(utc);
+
+interface GitHubReleaseAsset {
+	name: string;
+	download_count: number;
+}
+
+interface GitHubRelease {
+	assets: GitHubReleaseAsset[];
+	prerelease: boolean;
+	tag_name: string;
+	published_at: string;
+	body: string;
+	draft: boolean;
+}
+
+interface Release extends GitHubRelease {
+	windows_count: number | string;
+	mac_count: number | string;
+	linux_count: number | string;
+	total_count: number | string;
+}
 
 const rootDir = dirname(dirname(__dirname));
 const statsFilePath = `${rootDir}/readme/stats.md`;
 
-function endsWith(str, suffix) {
+function endsWith(str: string, suffix: string) {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-function downloadCounts(release) {
+function downloadCounts(release: GitHubRelease) {
 	const output = {
 		mac_count: 0,
 		windows_count: 0,
 		linux_count: 0,
+		total_count: 0,
 	};
 
 	for (let i = 0; i < release.assets.length; i++) {
@@ -40,7 +61,7 @@ function downloadCounts(release) {
 	return output;
 }
 
-function createChangeLog(releases) {
+function createChangeLog(releases: Release[]) {
 	const output = [];
 
 	output.push('# Joplin changelog');
@@ -63,8 +84,8 @@ function createChangeLog(releases) {
 async function main() {
 	const argv = yargParser(process.argv);
 	const types = argv.types ? argv.types.split(',') : ['stats', 'changelog'];
-	const updateIntervalDays = argv.updateInterval ? argv.updateInterval : 0; // in days
-	const updateInterval = updateIntervalDays * 86400000; // in days
+	// const updateIntervalDays = argv.updateInterval ? argv.updateInterval : 0; // in days
+	// const updateInterval = updateIntervalDays * 86400000; // in days
 
 	let updateStats = types.includes('stats');
 	const updateChangelog = types.includes('changelog');
@@ -74,11 +95,13 @@ async function main() {
 		const info = stripOffFrontMatter(md);
 		if (!info.updated) throw new Error('Missing front matter property: updated');
 
-		if (info.updated.getTime() + updateInterval > Date.now()) {
-			console.info(`Skipping stat update because the file (from ${info.updated.toString()}) is not older than ${updateIntervalDays} days`);
-			updateStats = false;
+		const now = new Date();
+
+		if (info.updated.getMonth() !== now.getMonth()) {
+			console.info(`Proceeding with stat update because the file has not been updated this month (file date was ${info.updated.toString()})`);
 		} else {
-			console.info(`Proceeding with stat update because the file (from ${info.updated.toString()}) is older than ${updateIntervalDays} days`);
+			console.info(`Skipping stat update because the file (from ${info.updated.toString()}) has already been updated this month`);
+			updateStats = false;
 		}
 	}
 
@@ -88,30 +111,35 @@ async function main() {
 		return;
 	}
 
-	const rows = [];
+	const rows: Release[] = [];
 
 	const totals = {
 		windows_count: 0,
 		mac_count: 0,
 		linux_count: 0,
+		windows_percent: 0,
+		mac_percent: 0,
+		linux_percent: 0,
 	};
 
-	const processReleases = (releases) => {
+	const processReleases = (releases: GitHubRelease[]) => {
 		for (let i = 0; i < releases.length; i++) {
 			const release = releases[i];
 			if (!release.tag_name.match(/^v\d+\.\d+\.\d+$/)) continue;
 			if (release.draft) continue;
 
-			let row = {};
-			row = Object.assign(row, downloadCounts(release));
-			row.tag_name = `[${release.tag_name}](https://github.com/laurent22/joplin/releases/tag/${release.tag_name})`;
-			row.published_at = release.published_at;
-			row.body = release.body;
-			row.prerelease = release.prerelease;
+			const row: Release = {
+				...release,
+				...downloadCounts(release),
+				tag_name: `[${release.tag_name}](https://github.com/laurent22/joplin/releases/tag/${release.tag_name})`,
+				published_at: release.published_at,
+				body: release.body,
+				prerelease: release.prerelease,
+			};
 
-			totals.windows_count += row.windows_count;
-			totals.mac_count += row.mac_count;
-			totals.linux_count += row.linux_count;
+			totals.windows_count += row.windows_count as number;
+			totals.mac_count += row.mac_count as number;
+			totals.linux_count += row.linux_count as number;
 
 			rows.push(row);
 		}
@@ -130,7 +158,7 @@ async function main() {
 	//
 	// - https://github.com/laurent22/joplin/commit/907422cefaeff52fe909278e40145812cc0d1303
 	// - https://github.com/laurent22/joplin/commit/07535a494e5c700adce89835d1fb3dc077600240
-	const multiFetch = async (url) => {
+	const multiFetch = async (url: string) => {
 		for (let i = 0; i < 3; i++) {
 			const response = await fetch(url);
 			const output = await response.json();
@@ -176,10 +204,10 @@ async function main() {
 
 	for (let i = 0; i < rows.length; i++) {
 		rows[i].tag_name = rows[i].prerelease ? `${rows[i].tag_name} (p)` : rows[i].tag_name;
-		rows[i].mac_count = formatter.format(rows[i].mac_count);
-		rows[i].windows_count = formatter.format(rows[i].windows_count);
-		rows[i].linux_count = formatter.format(rows[i].linux_count);
-		rows[i].total_count = formatter.format(rows[i].total_count);
+		rows[i].mac_count = formatter.format(rows[i].mac_count as number);
+		rows[i].windows_count = formatter.format(rows[i].windows_count as number);
+		rows[i].linux_count = formatter.format(rows[i].linux_count as number);
+		rows[i].total_count = formatter.format(rows[i].total_count as number);
 	}
 
 	const statsMd = [
@@ -203,7 +231,7 @@ async function main() {
 			{ name: 'mac_count', label: 'macOS' },
 			{ name: 'linux_count', label: 'Linux' },
 			{ name: 'total_count', label: 'Total' },
-		], rows),
+		], rows as any[]),
 	];
 
 	const statsText = statsMd.join('\n');
