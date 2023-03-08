@@ -47,6 +47,14 @@ class ItemList extends React.Component<Props, State> {
 		let bottomItemIndex = topItemIndex + (visibleItemCount - 1);
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
 
+		// EDGE CASE:
+		// ref: https://github.com/laurent22/joplin/issues/4124
+		// when the note list is hidden, visibleItemCount is negative, and scroll top is positive when a note is selected
+		if (visibleItemCount < 0 && this.scrollTop_ > 0) {
+			// we will reset the scroll top so that there is no blank space at the top of note list
+			this.scrollTop_ = 0;
+		}
+
 		this.setState({
 			topItemIndex: topItemIndex,
 			bottomItemIndex: bottomItemIndex,
