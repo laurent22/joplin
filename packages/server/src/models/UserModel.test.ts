@@ -237,35 +237,6 @@ describe('UserModel', () => {
 		stripeConfig().enabled = false;
 	});
 
-	test('should disable disable the account and send an email if payment failed for good', async () => {
-		stripeConfig().enabled = true;
-
-		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
-
-		const sub = await models().subscription().byUserId(user1.id);
-
-		const now = Date.now();
-		const paymentFailedTime = now - failedPaymentFinalAccount - 10;
-		await models().subscription().save({
-			id: sub.id,
-			last_payment_time: now - failedPaymentFinalAccount * 2,
-			last_payment_failed_time: paymentFailedTime,
-		});
-
-		await models().user().handleFailedPaymentSubscriptions();
-
-		{
-			const user1 = await models().user().loadByEmail('toto@example.com');
-			expect(user1.enabled).toBe(0);
-
-			const email = (await models().email().all()).pop();
-			expect(email.key).toBe(`payment_failed_account_disabled_${paymentFailedTime}`);
-			expect(email.body).toContain(stripePortalUrl());
-		}
-
-		stripeConfig().enabled = false;
-	});
-
 	test('should send emails and flag accounts when it is over the size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);

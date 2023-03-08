@@ -92,6 +92,8 @@ module.exports = {
 		// "react-hooks/exhaustive-deps": "warn",
 
 		'jest/require-top-level-describe': ['error', { 'maxNumberOfTopLevelDescribes': 1 }],
+		'jest/no-identical-title': ['error'],
+		'jest/prefer-lowercase-title': ['error', { 'ignoreTopLevelDescribe': true }],
 
 		'promise/prefer-await-to-then': 'error',
 		'no-unneeded-ternary': 'error',
