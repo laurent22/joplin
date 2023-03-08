@@ -1,5 +1,5 @@
 
-import Editor, { Color4, EditorEventType, getLocalizationTable, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
+import Editor, { Color4, EditorEventType, EditorSettings, getLocalizationTable, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
 import 'js-draw/bundle';
 
 declare namespace ReactNativeWebView {
@@ -11,7 +11,7 @@ interface ImageEditorStrings {
 	save: string;
 }
 
-interface ImageEditorCallbacks {
+export interface ImageEditorCallbacks {
 	saveDrawing: ()=> void;
 	autosaveDrawing: ()=> void;
 	closeEditor: ()=> void;
@@ -23,13 +23,17 @@ export const createJsDrawEditor = (
 	strings: ImageEditorStrings,
 	callbacks: ImageEditorCallbacks,
 	initialToolbarState: string,
-	locale: string
+	locale: string,
+
+	// Intended for automated tests.
+	editorSettings: Partial<EditorSettings> = {}
 ): Editor => {
 	const parentElement = document.body;
 	const editor = new Editor(parentElement, {
 		// Try to use the Joplin locale, but fall back to the system locale if
 		// js-draw doesn't support it.
 		localization: getLocalizationTable([locale, ...navigator.languages]),
+		...editorSettings,
 	});
 
 	const toolbar = editor.addToolbar();

@@ -2979,6 +2979,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.21.0":
+  version: 7.21.0
+  resolution: "@babel/runtime@npm:7.21.0"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 7b33e25bfa9e0e1b9e8828bb61b2d32bdd46b41b07ba7cb43319ad08efc6fda8eb89445193e67d6541814627df0ca59122c0ea795e412b99c5183a0540d338ab
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.0.0, @babel/template@npm:^7.16.0, @babel/template@npm:^7.3.3":
   version: 7.16.0
   resolution: "@babel/template@npm:7.16.0"
@@ -4759,7 +4768,7 @@ __metadata:
     jest: 29.4.3
     jest-environment-jsdom: 29.4.3
     jetifier: 2.0.0
-    js-draw: 0.17.4
+    js-draw: 0.18.2
     jsc-android: 241213.1.0
     jsdom: 21.0.0
     lodash: 4.17.21
@@ -20423,13 +20432,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:0.17.4":
-  version: 0.17.4
-  resolution: "js-draw@npm:0.17.4"
+"js-draw@npm:0.18.2":
+  version: 0.18.2
+  resolution: "js-draw@npm:0.18.2"
   dependencies:
+    "@babel/runtime": ^7.21.0
     "@melloware/coloris": ^0.18.0
     bezier-js: ^6.1.3
-  checksum: ca78bff50f8342c07f6a31251dd718e5d5f2f155eccfeeea096e36f1397681452882a077341323d43d9ec4674a19d542d735f3e37d9d30e1e4084e6779ba7c46
+  checksum: 349e0655389e3aab61b3bd75e2516ac044393382438aa08badde2073d6d46fc7cfa644c4395a72bce314cd814cae4ed0de3e683aa12d2d953925b07f8543d4d8
   languageName: node
   linkType: hard
 
