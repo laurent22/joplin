@@ -1,4 +1,7 @@
 import * as React from 'react';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('ItemList');
 
 interface Props {
 	style: any;
@@ -51,6 +54,7 @@ class ItemList extends React.Component<Props, State> {
 		// ref: https://github.com/laurent22/joplin/issues/4124
 		// when the note list is hidden, visibleItemCount is negative, and scroll top is positive when a note is selected
 		if (visibleItemCount < 0 && this.scrollTop_ > 0) {
+			logger.warn('Resetting scrollTop to 0. visibleItemCount is negative, scrollTop is positive.');
 			// we will reset the scroll top so that there is no blank space at the top of note list
 			this.scrollTop_ = 0;
 		}
@@ -82,6 +86,7 @@ class ItemList extends React.Component<Props, State> {
 		// scroll top is not updated when item list visibility is toggled
 		// if the user was at the bottom of the item list before hiding, blank spaces are added at the bottom of the item list
 		if (this.offsetScroll() !== this.listRef.current?.scrollTop) {
+			logger.warn(`scrollTop mismatch. Updating scrollTop with current listRef scrollTop(${this.listRef.current.scrollTop})`);
 			// update scroll postion once if there is a mismatch in scroll position after showing item list
 			this.onScroll({
 				target: {
