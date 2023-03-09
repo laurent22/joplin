@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.10.9](https://github.com/laurent22/joplin/releases/tag/server-v2.10.9) - 2023-02-09T19:43:03Z
+## [server-v2.10.10](https://github.com/laurent22/joplin/releases/tag/server-v2.10.10) - 2023-03-09T14:37:07Z
 
 - Improved: Clean up share logic (107f2e1)
 
