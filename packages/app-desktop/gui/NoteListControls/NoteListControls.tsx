@@ -12,9 +12,9 @@ const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
 enum BaseBreakpoint {
-	Sm = 125,
-	Md = 179,
-	Lg = 30,
+	Sm = 160,
+	Md = 190,
+	Lg = 40,
 	Xl = 474,
 }
 
@@ -174,7 +174,7 @@ function NoteListControls(props: Props) {
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
 		}
-	}, [breakpoint, dynamicBreakpoints, props.width]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
