@@ -112,7 +112,7 @@ function NoteListControls(props: Props) {
 
 	// Initialize language-specific breakpoints
 	useEffect(() => {
-		// Calculate the amount of extra width needed based on the longest string
+		// Use the longest string to Calculate the amount of extra width needed
 		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
 		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
 
