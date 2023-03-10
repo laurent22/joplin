@@ -167,6 +167,14 @@ function NoteListControls(props: Props) {
 		}
 	}, [breakpoint, dynamicBreakpoints]);
 
+	const showTooltip = useMemo(() => {
+		if (breakpoint === dynamicBreakpoints.Sm) {
+			return true;
+		} else {
+			return false;
+		}
+	}, [breakpoint, dynamicBreakpoints.Sm]);
+
 	useEffect(() => {
 		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
@@ -236,7 +244,7 @@ function NoteListControls(props: Props) {
 			<TopRow>
 				<StyledButton ref={newNoteRef}
 					className="new-note-button"
-					tooltip={CommandService.instance().label('newNote')}
+					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
 					iconName={noteIcon}
 					title={_('%s', noteButtonText)}
 					level={ButtonLevel.Primary}
@@ -245,7 +253,7 @@ function NoteListControls(props: Props) {
 				/>
 				<StyledButton ref={newTodoRef}
 					className="new-todo-button"
-					tooltip={CommandService.instance().label('newTodo')}
+					tooltip={ showTooltip ? CommandService.instance().label('newTodo') : '' }
 					iconName={todoIcon}
 					title={_('%s', todoButtonText)}
 					level={ButtonLevel.Secondary}
