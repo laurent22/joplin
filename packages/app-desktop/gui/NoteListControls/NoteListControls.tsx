@@ -12,8 +12,8 @@ const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
 enum BaseBreakpoint {
-	Sm = 120,
-	Md = 174,
+	Sm = 125,
+	Md = 179,
 	Lg = 30,
 	Xl = 474,
 }
@@ -49,7 +49,7 @@ const StyledButton = styled(Button)`
 	width: auto;
 	height: 26px;
 	min-height: 26px;
-	min-width: 0;
+	max-width: none;
 
   .fa, .fas {
     font-size: 11px;
@@ -133,7 +133,7 @@ function NoteListControls(props: Props) {
 
 	const noteButtonText = useMemo(() => {
 		if (breakpoint === dynamicBreakpoints.Sm) {
-			return ' ';
+			return '';
 		} else if (breakpoint === dynamicBreakpoints.Md) {
 			return _('note');
 		} else {
@@ -143,7 +143,7 @@ function NoteListControls(props: Props) {
 
 	const todoButtonText = useMemo(() => {
 		if (breakpoint === dynamicBreakpoints.Sm) {
-			return ' ';
+			return '';
 		} else if (breakpoint === dynamicBreakpoints.Md) {
 			return _('to-do');
 		} else {
@@ -168,22 +168,13 @@ function NoteListControls(props: Props) {
 	}, [breakpoint, dynamicBreakpoints]);
 
 	useEffect(() => {
-		if (breakpoint === dynamicBreakpoints.Sm) {
-			const paddingLeft = getTextWidth(' ');
-			newNoteRef.current.style.padding = `0px 0px 0px ${paddingLeft}px`;
-			newTodoRef.current.style.padding = `0px 0px 0px ${paddingLeft}px`;
-		} else {
-			newNoteRef.current.style.padding = '0px 4px 0px 4px';
-			newTodoRef.current.style.padding = '0px 4px 0px 4px';
-		}
-
 		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
 			searchAndSortRef.current.style.flex = '2 1 auto';
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
 		}
-	}, [breakpoint, dynamicBreakpoints]);
+	}, [breakpoint, dynamicBreakpoints, props.width]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
