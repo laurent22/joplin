@@ -1,6 +1,6 @@
 import { AppState } from '../../app.reducer';
 import * as React from 'react';
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -10,6 +10,13 @@ import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrder
 import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 const styled = require('styled-components').default;
+
+enum BaseBreakpoint {
+	Sm = 120,
+	Md = 174,
+	Lg = 30,
+	Xl = 474,
+}
 
 interface Props {
 	showNewNoteButtons: boolean;
@@ -21,11 +28,11 @@ interface Props {
 	width: number;
 }
 
-enum Breakpoint {
-	Sm = 222,
-	Md = 316,
-	Lg = 470,
-	Xl = 500,
+interface Breakpoints {
+	Sm: number;
+	Md: number;
+	Lg: number;
+	Xl: number;
 }
 
 const StyledRoot = styled.div`
@@ -42,7 +49,6 @@ const StyledButton = styled(Button)`
 	width: auto;
 	height: 26px;
 	min-height: 26px;
-	flex: 1 0 auto;
 	min-width: 0;
 
   .fa, .fas {
@@ -63,7 +69,13 @@ const StyledPairButtonR = styled(Button)`
 	width: auto;
 `;
 
-const RowContainer = styled.div`
+const TopRow = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+`;
+
+const BottomRow = styled.div`
 	display: flex;
 	flex-direction: row;
 	flex: 1 1 auto;
@@ -77,73 +89,101 @@ const SortOrderButtonsContainer = styled.div`
 `;
 
 function NoteListControls(props: Props) {
+	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
+
 	const searchBarRef = useRef(null);
 	const newNoteRef = useRef(null);
 	const newTodoRef = useRef(null);
 	const noteControlsRef = useRef(null);
 	const searchAndSortRef = useRef(null);
 
-	const breakpoint = useMemo(() => {
-		const breakpoints = [{ sm: Breakpoint.Sm }, { md: Breakpoint.Md }, { l: Breakpoint.Lg }, { xl: Breakpoint.Xl }];
-		// Find largest breakpoint that width is less than
-		const index = breakpoints.map(x => Object.values(x)[0])
-			.findIndex(x => props.width < x);
+	const getTextWidth = (text: string): number => {
+		const canvas = document.createElement('canvas');
+		if (!canvas) throw new Error('Failed to create canvas element');
+		const ctx = canvas.getContext('2d');
+		if (!ctx) throw new Error('Failed to get context');
+		const fontWeight = getComputedStyle(newNoteRef.current).getPropertyValue('font-weight');
+		const fontSize = getComputedStyle(newNoteRef.current).getPropertyValue('font-size');
+		const fontFamily = getComputedStyle(newNoteRef.current).getPropertyValue('font-family');
+		ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
 
-		return index === -1 ? Object.keys(breakpoints[breakpoints.length - 1])[0] : Object.keys(breakpoints[index])[0];
-	}, [props.width]);
+		return ctx.measureText(text).width;
+	};
+
+	// Initialize language-specific breakpoints
+	useEffect(() => {
+		// Calculate the amount of extra width needed based on the longest string
+		const smAdditional = getTextWidth(_('note')) > getTextWidth(_('to-do')) ? getTextWidth(_('note')) : getTextWidth(_('to-do'));
+		const mdAdditional = getTextWidth(_('New note')) > getTextWidth(_('New to-do')) ? getTextWidth(_('New note')) : getTextWidth(_('New to-do'));
+
+		const Sm = BaseBreakpoint.Sm + smAdditional * 2;
+		const Md = BaseBreakpoint.Md + mdAdditional * 2;
+		const Lg = BaseBreakpoint.Lg + Md;
+		const Xl = BaseBreakpoint.Xl;
+
+		setDynamicBreakpoints({ Sm, Md, Lg, Xl });
+	}, []);
+
+	const breakpoint = useMemo(() => {
+		// Find largest breakpoint that width is less than
+		const index = Object.values(dynamicBreakpoints).findIndex(x => props.width < x);
+
+		return index === -1 ? dynamicBreakpoints.Xl : Object.values(dynamicBreakpoints)[index];
+	}, [props.width, dynamicBreakpoints]);
 
 	const noteButtonText = useMemo(() => {
-		if (breakpoint === 'sm') {
-			return '';
-		} else if (breakpoint === 'md') {
+		if (breakpoint === dynamicBreakpoints.Sm) {
+			return ' ';
+		} else if (breakpoint === dynamicBreakpoints.Md) {
 			return _('note');
 		} else {
 			return _('New note');
 		}
-	}, [breakpoint]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	const todoButtonText = useMemo(() => {
-		if (breakpoint === 'sm') {
-			return '';
-		} else if (breakpoint === 'md') {
+		if (breakpoint === dynamicBreakpoints.Sm) {
+			return ' ';
+		} else if (breakpoint === dynamicBreakpoints.Md) {
 			return _('to-do');
 		} else {
 			return _('New to-do');
 		}
-	}, [breakpoint]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	const noteIcon = useMemo(() => {
-		if (breakpoint === 'sm') {
+		if (breakpoint === dynamicBreakpoints.Sm) {
 			return 'icon-note';
 		} else {
 			return 'fas fa-plus';
 		}
-	}, [breakpoint]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	const todoIcon = useMemo(() => {
-		if (breakpoint === 'sm') {
+		if (breakpoint === dynamicBreakpoints.Sm) {
 			return 'far fa-check-square';
 		} else {
 			return 'fas fa-plus';
 		}
-	}, [breakpoint]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	useEffect(() => {
-		if (breakpoint === 'sm') {
-			newNoteRef.current.style.padding = '0px 18px 0px 18px';
-			newTodoRef.current.style.padding = '0px 18px 0px 18px';
+		if (breakpoint === dynamicBreakpoints.Sm) {
+			const paddingLeft = getTextWidth(' ');
+			newNoteRef.current.style.padding = `0px 0px 0px ${paddingLeft}px`;
+			newTodoRef.current.style.padding = `0px 0px 0px ${paddingLeft}px`;
 		} else {
 			newNoteRef.current.style.padding = '0px 4px 0px 4px';
 			newTodoRef.current.style.padding = '0px 4px 0px 4px';
 		}
 
-		if (breakpoint === 'xl') {
+		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
 			searchAndSortRef.current.style.flex = '2 1 auto';
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
 		}
-	}, [breakpoint]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
@@ -202,7 +242,7 @@ function NoteListControls(props: Props) {
 		if (!props.showNewNoteButtons) return null;
 
 		return (
-			<RowContainer>
+			<TopRow>
 				<StyledButton ref={newNoteRef}
 					className="new-note-button"
 					tooltip={CommandService.instance().label('newNote')}
@@ -221,38 +261,36 @@ function NoteListControls(props: Props) {
 					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
 				/>
-			</RowContainer>
+			</TopRow>
 		);
 	}
 
 	return (
 		<StyledRoot ref={noteControlsRef}>
 			{renderNewNoteButtons()}
-			<RowContainer ref={searchAndSortRef}>
+			<BottomRow ref={searchAndSortRef}>
 				<SearchBar inputRef={searchBarRef}/>
-				<SortOrderButtonsContainer>
-					{showsSortOrderButtons() &&
-					<StyledPairButtonL
-						className="sort-order-field-button"
-						tooltip={sortOrderFieldTooltip()}
-						iconName={sortOrderFieldIcon()}
-						level={ButtonLevel.Secondary}
-						size={ButtonSize.Small}
-						onClick={onSortOrderFieldButtonClick}
-					/>
-					}
-					{showsSortOrderButtons() &&
-					<StyledPairButtonR
-						className="sort-order-reverse-button"
-						tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
-						iconName={sortOrderReverseIcon()}
-						level={ButtonLevel.Secondary}
-						size={ButtonSize.Small}
-						onClick={onSortOrderReverseButtonClick}
-					/>
-					}
-				</SortOrderButtonsContainer>
-			</RowContainer>
+				{showsSortOrderButtons() &&
+					<SortOrderButtonsContainer>
+						<StyledPairButtonL
+							className="sort-order-field-button"
+							tooltip={sortOrderFieldTooltip()}
+							iconName={sortOrderFieldIcon()}
+							level={ButtonLevel.Secondary}
+							size={ButtonSize.Small}
+							onClick={onSortOrderFieldButtonClick}
+						/>
+						<StyledPairButtonR
+							className="sort-order-reverse-button"
+							tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
+							iconName={sortOrderReverseIcon()}
+							level={ButtonLevel.Secondary}
+							size={ButtonSize.Small}
+							onClick={onSortOrderReverseButtonClick}
+						/>
+					</SortOrderButtonsContainer>
+				}
+			</BottomRow>
 		</StyledRoot>
 	);
 }
