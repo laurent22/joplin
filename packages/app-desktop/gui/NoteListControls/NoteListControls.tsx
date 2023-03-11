@@ -241,7 +241,7 @@ function NoteListControls(props: Props) {
 		if (!props.showNewNoteButtons) return null;
 
 		return (
-			<TopRow>
+			<TopRow className="new-note-todo-buttons">
 				<StyledButton ref={newNoteRef}
 					className="new-note-button"
 					tooltip={ showTooltip ? CommandService.instance().label('newNote') : '' }
@@ -267,7 +267,7 @@ function NoteListControls(props: Props) {
 	return (
 		<StyledRoot ref={noteControlsRef}>
 			{renderNewNoteButtons()}
-			<BottomRow ref={searchAndSortRef}>
+			<BottomRow ref={searchAndSortRef} className="search-and-sort">
 				<SearchBar inputRef={searchBarRef}/>
 				{showsSortOrderButtons() &&
 					<SortOrderButtonsContainer>
