@@ -60,6 +60,14 @@ const sources: Source[] = [
 		id: 9,
 		name: 'WebsiteTopImageCn.png',
 	},
+	{
+		id: 10,
+		name: 'JoplinLetter.svg',
+	},
+	{
+		id: 11,
+		name: 'JoplinIconBlack.svg',
+	},
 ];
 
 function sourceById(id: number) {
@@ -70,6 +78,47 @@ function sourceById(id: number) {
 }
 
 const operations: Operation[] = [
+
+	// ============================================================================
+	// Android icons
+	// ============================================================================
+
+	{
+		source: 10,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable/ic_launcher_foreground.xml',
+		width: 108,
+		height: 108,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-anydpi-v24/ic_notification.xml',
+		width: 24,
+		height: 24,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-mdpi/ic_notification.png',
+		width: 24,
+		height: 24,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-hdpi/ic_notification.png',
+		width: 36,
+		height: 36,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-xhdpi/ic_notification.png',
+		width: 48,
+		height: 48,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-xxhdpi/ic_notification.png',
+		width: 72,
+		height: 72,
+	},
 
 	// ============================================================================
 	// iOS icons
