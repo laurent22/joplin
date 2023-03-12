@@ -505,6 +505,7 @@ Name | Description
 [Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
 [Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
 [Discord server](https://discord.gg/VSj7AFHvpq) | Our chat server
+[LinkedIn](https://www.linkedin.com/company/joplin) | Our LinkedIn page
 [Sub-reddit](https://www.reddit.com/r/joplinapp/) | Also a good place to get help
 
 # Contributing
