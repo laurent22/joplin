@@ -108,7 +108,7 @@
     "jsdom": "21.0.0",
     "md5-file": "5.0.0",
     "metro-react-native-babel-preset": "0.72.3",
-    "nodemon": "2.0.20",
+    "nodemon": "2.0.21",
     "ts-jest": "29.0.5",
     "ts-loader": "9.4.2",
     "ts-node": "10.9.1",

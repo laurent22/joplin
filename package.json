@@ -89,7 +89,7 @@
     "@types/fs-extra": "9.0.13",
     "http-server": "14.1.1",
     "node-gyp": "9.3.1",
-    "nodemon": "2.0.20"
+    "nodemon": "2.0.21"
   },
   "packageManager": "yarn@3.3.1",
   "resolutions": {
