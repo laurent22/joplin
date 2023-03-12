@@ -8,6 +8,9 @@ export enum Env {
 
 export interface GithubSponsor {
 	name: string;
+}
+
+export interface GithubUser {
 	id: string;
 }
 
