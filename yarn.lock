@@ -4765,7 +4765,7 @@ __metadata:
     md5: 2.3.0
     md5-file: 5.0.0
     metro-react-native-babel-preset: 0.72.3
-    nodemon: 2.0.20
+    nodemon: 2.0.21
     prop-types: 15.8.1
     punycode: 2.3.0
     react: 18.2.0
@@ -5114,7 +5114,7 @@ __metadata:
     node-env-file: 0.1.8
     node-mocks-http: 1.12.1
     nodemailer: 6.9.1
-    nodemon: 2.0.20
+    nodemon: 2.0.21
     pg: 8.9.0
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
@@ -23862,9 +23862,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:2.0.20":
-  version: 2.0.20
-  resolution: "nodemon@npm:2.0.20"
+"nodemon@npm:2.0.21":
+  version: 2.0.21
+  resolution: "nodemon@npm:2.0.21"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
@@ -23878,7 +23878,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 9fe858682414fe703179f4fe36c86e71f40d2693b5345c09803d7b191816a6589c5df8f1f9873bffee92893880183b95a031c86340e46b364ef1b0b7f619edbf
+  checksum: 0b9fe2d11fd95c51b66d61bd1ee85cddf579c9e674c9429752a74f445f1b98576235ae860858783728baa3666c87e4ef938ab67167cc34fe4bb8fcec74d6885b
   languageName: node
   linkType: hard
 
@@ -28133,7 +28133,7 @@ __metadata:
     lint-staged: 13.1.2
     madge: 6.0.0
     node-gyp: 9.3.1
-    nodemon: 2.0.20
+    nodemon: 2.0.21
     npm-package-json-lint: 6.4.0
     typedoc: 0.17.8
     typescript: 4.9.4
