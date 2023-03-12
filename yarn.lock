@@ -4696,7 +4696,7 @@ __metadata:
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
     sqlite3: 5.1.4
-    styled-components: 5.3.6
+    styled-components: 5.3.8
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
@@ -4970,7 +4970,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     style-loader: 3.3.1
-    styled-components: 5.3.5
+    styled-components: 5.3.8
     ts-jest: 29.0.5
     ts-loader: 9.4.2
     typescript: 4.9.4
@@ -30009,9 +30009,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.5":
-  version: 5.3.5
-  resolution: "styled-components@npm:5.3.5"
+"styled-components@npm:5.3.8":
+  version: 5.3.8
+  resolution: "styled-components@npm:5.3.8"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
@@ -30027,29 +30027,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 05a664dfe423c2906959a0f3f47f9b1ad630e493eb2e06deea0dc0906af33ba5ca17277b98948a6c9642e73894d6533391aebf45576489f5afe920c974e9f8eb
-  languageName: node
-  linkType: hard
-
-"styled-components@npm:5.3.6":
-  version: 5.3.6
-  resolution: "styled-components@npm:5.3.6"
-  dependencies:
-    "@babel/helper-module-imports": ^7.0.0
-    "@babel/traverse": ^7.4.5
-    "@emotion/is-prop-valid": ^1.1.0
-    "@emotion/stylis": ^0.8.4
-    "@emotion/unitless": ^0.7.4
-    babel-plugin-styled-components: ">= 1.12.0"
-    css-to-react-native: ^3.0.0
-    hoist-non-react-statics: ^3.0.0
-    shallowequal: ^1.1.0
-    supports-color: ^5.5.0
-  peerDependencies:
-    react: ">= 16.8.0"
-    react-dom: ">= 16.8.0"
-    react-is: ">= 16.8.0"
-  checksum: 68eac1e451be81d66739cf86de8ec9e72f46e7584aa359271761a2437468210bd7cf0a864281fc97dab08c32b35e6bf7513dc8b4104ed6b196cf8d65674dd289
+  checksum: 60148083f4057cd0dd4ad555e82800ec4ec4b8822fd81645f084e9beebf91420f4c9c75875b44933755d32ec97c46be6b79ca0c23578e5a731e3399e6ea0d901
   languageName: node
   linkType: hard
 
