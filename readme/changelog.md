@@ -1,5 +1,13 @@
 # Joplin changelog
 
+## [v2.10.9](https://github.com/laurent22/joplin/releases/tag/v2.10.9) (Pre-release) - 2023-03-12T16:16:45Z
+
+- Improved: Always show new note buttons (Regression) ([#7850](https://github.com/laurent22/joplin/issues/7850) by [@julien](https://github.com/julien))
+- Improved: Made note list controls responsive ([#7884](https://github.com/laurent22/joplin/issues/7884)) ([#7848](https://github.com/laurent22/joplin/issues/7848) by [@julien](https://github.com/julien))
+- Improved: Paste as Text only working on hotkeys on Windows ([#7886](https://github.com/laurent22/joplin/issues/7886)) ([#7880](https://github.com/laurent22/joplin/issues/7880) by [@pedr](https://github.com/pedr))
+- Fixed: Drag-dropping notes to top or bottom, in custom sort, is finicky ([#7777](https://github.com/laurent22/joplin/issues/7777)) ([#7776](https://github.com/laurent22/joplin/issues/7776) by Tao Klerks)
+- Fixed: Linux notebook display bug ([#7897](https://github.com/laurent22/joplin/issues/7897)) ([#7506](https://github.com/laurent22/joplin/issues/7506) by Arun Kumar)
+
 ## [v2.10.8](https://github.com/laurent22/joplin/releases/tag/v2.10.8) (Pre-release) - 2023-02-26T12:53:55Z
 
 - Improved: Note background does not change when theme automatically updated via system ([d1e545a](https://github.com/laurent22/joplin/commit/d1e545a))
