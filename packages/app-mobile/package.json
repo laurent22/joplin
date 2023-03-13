@@ -99,7 +99,7 @@
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.25",
     "babel-plugin-module-resolver": "4.1.0",
-    "execa": "4.1.0",
+    "execa": "7.0.0",
     "fs-extra": "11.1.0",
     "gulp": "4.0.2",
     "jest": "29.4.3",

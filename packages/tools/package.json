@@ -25,7 +25,7 @@
     "@types/node-fetch": "2.6.2",
     "@types/yargs": "17.0.20",
     "dayjs": "1.11.7",
-    "execa": "4.1.0",
+    "execa": "7.0.0",
     "fs-extra": "11.1.0",
     "gettext-parser": "6.0.0",
     "glob": "8.1.0",
