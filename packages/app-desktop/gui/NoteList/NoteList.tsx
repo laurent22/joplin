@@ -294,7 +294,7 @@ const NoteListComponent = (props: Props) => {
 	useEffect(() => {
 		if (previousSelectedNoteIds !== props.selectedNoteIds && props.selectedNoteIds.length === 1) {
 			const id = props.selectedNoteIds[0];
-			const doRefocus = props.notes.length < previousNotes.length;
+			const doRefocus = props.notes.length < previousNotes.length && !props.focusedField;
 
 			for (let i = 0; i < props.notes.length; i++) {
 				if (props.notes[i].id === id) {
@@ -311,8 +311,7 @@ const NoteListComponent = (props: Props) => {
 		if (previousVisible !== props.visible) {
 			updateSizeState();
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [previousSelectedNoteIds, previousNotes, previousVisible, props.selectedNoteIds, props.notes]);
+	}, [previousSelectedNoteIds, previousNotes, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
 	const scrollNoteIndex_ = (keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) => {
 
@@ -559,6 +558,7 @@ const mapStateToProps = (state: AppState) => {
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
+		focusedField: state.focusedField,
 	};
 };
 
