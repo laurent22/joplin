@@ -24,7 +24,7 @@ export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
 	const [controlHeight, setControlHeight] = useState(theme.topRowHeight);
 
-	const handleControlHeight = (sameRow: boolean) => {
+	const onContentHeightChange = (sameRow: boolean) => {
 		if (sameRow) {
 			setControlHeight(theme.topRowHeight);
 		} else {
@@ -41,7 +41,7 @@ export default function NoteListWrapper(props: Props) {
 
 	return (
 		<StyledRoot>
-			<NoteListControls height={controlHeight} width={noteListSize.width} handleControlHeight={handleControlHeight}/>
+			<NoteListControls height={controlHeight} width={noteListSize.width} onContentHeightChange={onContentHeightChange}/>
 			<NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>
 	);
