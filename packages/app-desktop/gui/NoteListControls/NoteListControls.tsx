@@ -26,6 +26,7 @@ interface Props {
 	notesParentType: string;
 	height: number;
 	width: number;
+	handleControlHeight: (sameRow: boolean)=> void;
 }
 
 interface Breakpoints {
@@ -179,10 +180,12 @@ function NoteListControls(props: Props) {
 		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
 			searchAndSortRef.current.style.flex = '2 1 auto';
+			props.handleControlHeight(true);
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
+			props.handleControlHeight(false);
 		}
-	}, [breakpoint, dynamicBreakpoints]);
+	}, [breakpoint, dynamicBreakpoints, props.handleControlHeight]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
