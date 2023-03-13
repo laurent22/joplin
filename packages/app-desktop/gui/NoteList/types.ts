@@ -23,4 +23,5 @@ export interface Props {
 	highlightedWords: string[];
 	provisionalNoteIds: string[];
 	visible: boolean;
+	focusedField: string;
 }
