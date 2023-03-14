@@ -835,7 +835,6 @@ export default class BaseApplication {
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
-		// App will be started in 'SAFE MODE ' if --safe-mode flag is set from command line or from flags.txt
 		if (initArgs?.isSafeMode) {
 			Setting.setValue('isSafeMode', true);
 		}
