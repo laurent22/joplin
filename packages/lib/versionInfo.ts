@@ -10,11 +10,14 @@ interface PluginList {
 
 function getPluginLists(plugins: Plugins): PluginList {
 	const pluginList = [];
+
 	if (Object.keys(plugins).length > 0) {
 		for (const pluginId in plugins) {
 			pluginList.push(`${plugins[pluginId].manifest.name}: ${plugins[pluginId].manifest.version}`);
 		}
 	}
+
+	pluginList.sort();
 
 	let completeList = '';
 	let summary = '';
