@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.10.10](https://github.com/laurent22/joplin/releases/tag/v2.10.10) (Pre-release) - 2023-03-13T23:16:37Z
+
+- Fixed: Fix issue where search bar can randomly lose focus while searching ([bd42914](https://github.com/laurent22/joplin/commit/bd42914))
+- Fixed: Fixed height when controls are on a single row ([#7912](https://github.com/laurent22/joplin/issues/7912)) ([#7907](https://github.com/laurent22/joplin/issues/7907) by [@julien](https://github.com/julien))
+
 ## [v2.10.9](https://github.com/laurent22/joplin/releases/tag/v2.10.9) (Pre-release) - 2023-03-12T16:16:45Z
 
 - Improved: Always show new note buttons (Regression) ([#7850](https://github.com/laurent22/joplin/issues/7850) by [@julien](https://github.com/julien))
