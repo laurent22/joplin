@@ -39,6 +39,7 @@ interface CreateCheckoutSessionFields {
 	coupon: string;
 	promotionCode: string;
 	email: string;
+  source: string;
 }
 
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
@@ -141,6 +142,7 @@ export const postHandlers: PostHandlers = {
 	createCheckoutSession: async (stripe: Stripe, __path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
 		const priceId = fields.priceId;
+		const source = fields.source;
 
 		const checkoutSession: Stripe.Checkout.SessionCreateParams = {
 			mode: 'subscription',
@@ -156,6 +158,9 @@ export const postHandlers: PostHandlers = {
 			],
 			subscription_data: {
 				trial_period_days: 14,
+			},
+			metadata: {
+				source,
 			},
 			allow_promotion_codes: true,
 			// {CHECKOUT_SESSION_ID} is a string literal; do not change it!
@@ -250,6 +255,8 @@ export const postHandlers: PostHandlers = {
 			'checkout.session.completed': async () => {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
+				const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
+				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata.source } });
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
 			},
@@ -466,6 +473,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 				<script>
 					var stripe = Stripe(${JSON.stringify(stripeConfig().publishableKey)});
 
+					var source = localStorage.getItem('source');
+
 					var createCheckoutSession = function(priceId, promotionCode) {
 						return fetch("/stripe/createCheckoutSession", {
 							method: "POST",
@@ -475,6 +484,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 							body: JSON.stringify({
 								priceId,
 								promotionCode,
+								source,
 							})
 						}).then(function(result) {
 							return result.json();

@@ -96,6 +96,8 @@
 
 			console.info('Creating Stripe session for price:', priceId, 'Promotion code:', promotionCode);
 
+			const source = localStorage.getItem('source');
+
 			return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
 				method: "POST",
 				headers: {
@@ -105,6 +107,7 @@
 					priceId,
 					promotionCode,
 					email: checkoutSessionUser ? checkoutSessionUser.email : '',
+					source,
 				})
 			}).then(async function(result) {
 				if (!result.ok) {
