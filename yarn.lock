@@ -4696,7 +4696,7 @@ __metadata:
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
     sqlite3: 5.1.4
-    styled-components: 5.3.6
+    styled-components: 5.3.8
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
@@ -4765,7 +4765,7 @@ __metadata:
     md5: 2.3.0
     md5-file: 5.0.0
     metro-react-native-babel-preset: 0.72.3
-    nodemon: 2.0.20
+    nodemon: 2.0.21
     prop-types: 15.8.1
     punycode: 2.3.0
     react: 18.2.0
@@ -4780,7 +4780,7 @@ __metadata:
     react-native-fingerprint-scanner: 6.0.0
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.8.0
-    react-native-image-picker: 5.0.2
+    react-native-image-picker: 5.1.0
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
     react-native-paper: 5.2.0
@@ -4789,7 +4789,7 @@ __metadata:
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.5.0
     react-native-securerandom: 1.0.1
-    react-native-share: 8.2.0
+    react-native-share: 8.2.1
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 1.3.0
@@ -4970,7 +4970,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     style-loader: 3.3.1
-    styled-components: 5.3.5
+    styled-components: 5.3.8
     ts-jest: 29.0.5
     ts-loader: 9.4.2
     typescript: 4.9.4
@@ -5114,7 +5114,7 @@ __metadata:
     node-env-file: 0.1.8
     node-mocks-http: 1.12.1
     nodemailer: 6.9.1
-    nodemon: 2.0.20
+    nodemon: 2.0.21
     pg: 8.9.0
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
@@ -23862,9 +23862,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:2.0.20":
-  version: 2.0.20
-  resolution: "nodemon@npm:2.0.20"
+"nodemon@npm:2.0.21":
+  version: 2.0.21
+  resolution: "nodemon@npm:2.0.21"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
@@ -23878,7 +23878,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 9fe858682414fe703179f4fe36c86e71f40d2693b5345c09803d7b191816a6589c5df8f1f9873bffee92893880183b95a031c86340e46b364ef1b0b7f619edbf
+  checksum: 0b9fe2d11fd95c51b66d61bd1ee85cddf579c9e674c9429752a74f445f1b98576235ae860858783728baa3666c87e4ef938ab67167cc34fe4bb8fcec74d6885b
   languageName: node
   linkType: hard
 
@@ -26649,13 +26649,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:5.0.2":
-  version: 5.0.2
-  resolution: "react-native-image-picker@npm:5.0.2"
+"react-native-image-picker@npm:5.1.0":
+  version: 5.1.0
+  resolution: "react-native-image-picker@npm:5.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: aaa07658299c8efb1aececf80c9f0f4d664e5b6e71d6eb2a75451ec4e8b8a4cf4c673ae074c1026fc2c04c8e5e042eb80fa5193b957822da71403b8a0df78bb5
+  checksum: 4ebf51c5bbc07e4631bda8d9a4cebc64758003ba689ff8cc3a75c4a177c499c6acc59bd9993ae43c9d636894ef945b7593ac5eff1aaf5cbb2f6441dab9b11640
   languageName: node
   linkType: hard
 
@@ -26738,10 +26738,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:8.2.0":
-  version: 8.2.0
-  resolution: "react-native-share@npm:8.2.0"
-  checksum: fb01390644c489071c16501df54582e0139645dcde131184d7956591c42351b76e909cfcf57d6c8b25e38e9b14e6d4f8126f3d3b330f93f664a194ad94f5b5db
+"react-native-share@npm:8.2.1":
+  version: 8.2.1
+  resolution: "react-native-share@npm:8.2.1"
+  checksum: 5158518eec9582aa738f61c3e424c1791cb58df8943475812cd3343b36988fadf0609847bdc5d384b6e100d979c6e56003eab3c3934a673be55dff7ae4deb50e
   languageName: node
   linkType: hard
 
@@ -28133,7 +28133,7 @@ __metadata:
     lint-staged: 13.1.2
     madge: 6.0.0
     node-gyp: 9.3.1
-    nodemon: 2.0.20
+    nodemon: 2.0.21
     npm-package-json-lint: 6.4.0
     typedoc: 0.17.8
     typescript: 4.9.4
@@ -30009,9 +30009,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.5":
-  version: 5.3.5
-  resolution: "styled-components@npm:5.3.5"
+"styled-components@npm:5.3.8":
+  version: 5.3.8
+  resolution: "styled-components@npm:5.3.8"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
@@ -30027,29 +30027,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 05a664dfe423c2906959a0f3f47f9b1ad630e493eb2e06deea0dc0906af33ba5ca17277b98948a6c9642e73894d6533391aebf45576489f5afe920c974e9f8eb
-  languageName: node
-  linkType: hard
-
-"styled-components@npm:5.3.6":
-  version: 5.3.6
-  resolution: "styled-components@npm:5.3.6"
-  dependencies:
-    "@babel/helper-module-imports": ^7.0.0
-    "@babel/traverse": ^7.4.5
-    "@emotion/is-prop-valid": ^1.1.0
-    "@emotion/stylis": ^0.8.4
-    "@emotion/unitless": ^0.7.4
-    babel-plugin-styled-components: ">= 1.12.0"
-    css-to-react-native: ^3.0.0
-    hoist-non-react-statics: ^3.0.0
-    shallowequal: ^1.1.0
-    supports-color: ^5.5.0
-  peerDependencies:
-    react: ">= 16.8.0"
-    react-dom: ">= 16.8.0"
-    react-is: ">= 16.8.0"
-  checksum: 68eac1e451be81d66739cf86de8ec9e72f46e7584aa359271761a2437468210bd7cf0a864281fc97dab08c32b35e6bf7513dc8b4104ed6b196cf8d65674dd289
+  checksum: 60148083f4057cd0dd4ad555e82800ec4ec4b8822fd81645f084e9beebf91420f4c9c75875b44933755d32ec97c46be6b79ca0c23578e5a731e3399e6ea0d901
   languageName: node
   linkType: hard
 

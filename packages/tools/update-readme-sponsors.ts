@@ -1,11 +1,43 @@
 import { readFile } from 'fs-extra';
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableJustify, MarkdownTableRow } from '@joplin/lib/markdownUtils';
-import { GithubSponsor, OrgSponsor, Sponsors } from './website/utils/types';
+import { GithubSponsor, GithubUser, OrgSponsor, Sponsors } from './website/utils/types';
+import fetch from 'node-fetch';
 const { escapeHtml } = require('@joplin/lib/string-utils');
 
 const readmePath = `${rootDir}/README.md`;
 const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
+
+const sleep = (ms: number) => {
+	return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+const fetchWithRetry = async (url: string, opts: any = null) => {
+	if (!opts) opts = {};
+	let retry = opts && opts.retry || 3;
+
+	while (retry > 0) {
+		try {
+			return fetch(url, opts);
+		} catch (e) {
+			if (opts && opts.callback) {
+				opts.callback(retry);
+			}
+			retry = retry - 1;
+			if (retry === 0) {
+				throw e;
+			}
+
+			if (opts && opts.pause) {
+				if (opts && !opts.silent) console.log('pausing..');
+				await sleep(opts.pause);
+				if (opts && !opts.silent) console.log('done pausing...');
+			}
+		}
+	}
+
+	return null;
+};
 
 async function createGitHubSponsorTable(sponsors: GithubSponsor[]): Promise<string> {
 	sponsors = sponsors.slice();
@@ -31,14 +63,16 @@ async function createGitHubSponsorTable(sponsors: GithubSponsor[]): Promise<stri
 
 	let sponsorIndex = 0;
 	for (let rowIndex = 0; rowIndex < 9999; rowIndex++) {
-		let sponsor = null;
+		let sponsor: GithubSponsor = null;
 		const row: MarkdownTableRow = {};
 		for (let colIndex = 0; colIndex < sponsorsPerRow; colIndex++) {
 			sponsor = sponsors[sponsorIndex];
 			sponsorIndex++;
 			if (!sponsor) break;
 
-			row[`col${colIndex}`] = `<img width="50" src="https://avatars2.githubusercontent.com/u/${sponsor.id}?s=96&v=4"/></br>[${sponsor.name}](https://github.com/${sponsor.name})`;
+			const userResponse = await fetchWithRetry(`https://api.github.com/users/${sponsor.name}`);
+			const user = await userResponse.json() as GithubUser;
+			row[`col${colIndex}`] = `<img width="50" src="https://avatars2.githubusercontent.com/u/${user.id}?s=96&v=4"/></br>[${sponsor.name}](https://github.com/${sponsor.name})`;
 		}
 
 		if (Object.keys(row)) rows.push(row);
@@ -50,8 +84,6 @@ async function createGitHubSponsorTable(sponsors: GithubSponsor[]): Promise<stri
 }
 
 async function createOrgSponsorTable(sponsors: OrgSponsor[]): Promise<string> {
-	// sponsors = ArrayUtils.shuffle(sponsors);
-
 	const output: string[] = [];
 
 	for (const sponsor of sponsors) {

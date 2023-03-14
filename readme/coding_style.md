@@ -220,13 +220,46 @@ const Example = (props: { text: string }) => {
 	);
 };
 ```
-
-
 ## Use react [custom hooks](https://reactjs.org/docs/hooks-custom.html) to simplify long code
 
 If `eslint` gives an error about `useFoo` being called outside of a component, be sure [the custom hook is titled appropriately](https://stackoverflow.com/a/55862839).
 
+# Database
 
+## Use snake_case
+
+We use `snake_case` for table names and column names.
+
+## Everything is NOT NULL
+
+All columns should be defined as `NOT NULL`, possibly with a default value (but see below). This helps keeping queries more simple as we don't have to do check for both `NULL` and `0` or empty string.
+
+## Use defaults sparingly
+
+Don't automatically give a default valuet to a column - in many cases it's better to require the user to explicitly set the value, otherwise it will be set to a default they might not know about or want. Exceptions can be less important columns, things like timestamp, or columns that are going to be set by the system.
+
+## Use an integer for enum-like values
+
+If a column can be set to a fixed number of values, please set the type to integer. In code, you would then have a TypeScript enum that defines what each values is for. For example:
+
+```typescript
+export enum Action {
+	Create = 1,
+	Update = 2,
+	Delete = 3,
+}
+```
+
+We don't use built-in database enums because they make migrations difficult. They provide added readability when accessing the database directly, but it is not worth the extra trouble.
+
+## Prefer using `tinyint(1)` to `bool`
+Booleans are not a distinct types in many common DBMS, including SQLite (which we use) and MySQL, so prefer using a `tinyint(1)` instead.
+
+# Web requests and API
+
+## Use `snake_case`
+
+We use `snake_case` for end points and query parameters.
 
 # See also
 ## **Other** projects' style guides

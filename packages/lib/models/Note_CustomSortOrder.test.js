@@ -24,6 +24,9 @@ describe('models/Note_CustomSortOrder', () => {
 		// (which normally is the creation timestamp). So if the user tries to move notes
 		// in the middle of other notes with order = 0, the order of all these notes is
 		// initialised at this point.
+		// Also check that the order-0 notes stay in their previous position when their
+		// order values are initialized. There was at one point a bug where they popped to
+		// the top.
 
 		const folder1 = await Folder.save({});
 		const folder2 = await Folder.save({});
@@ -32,6 +35,7 @@ describe('models/Note_CustomSortOrder', () => {
 		notes1.push(await Note.save({ order: 0, parent_id: folder1.id })); await time.msleep(2);
 		notes1.push(await Note.save({ order: 0, parent_id: folder1.id })); await time.msleep(2);
 		notes1.push(await Note.save({ order: 0, parent_id: folder1.id })); await time.msleep(2);
+		notes1.push(await Note.save({ order: 1000, parent_id: folder1.id })); await time.msleep(2);
 
 		const notes2 = [];
 		notes2.push(await Note.save({ parent_id: folder2.id })); await time.msleep(2);
@@ -45,12 +49,13 @@ describe('models/Note_CustomSortOrder', () => {
 			};
 		}
 
-		await Note.insertNotesAt(folder1.id, notes2.map(n => n.id), 1);
+		await Note.insertNotesAt(folder1.id, notes2.map(n => n.id), 2);
 
 		const newNotes1 = [
 			await Note.load(notes1[0].id),
 			await Note.load(notes1[1].id),
 			await Note.load(notes1[2].id),
+			await Note.load(notes1[3].id),
 		];
 
 		// Check that timestamps haven't changed - moving a note should not change the user timestamps
@@ -64,12 +69,13 @@ describe('models/Note_CustomSortOrder', () => {
 			order: Note.customOrderByColumns(),
 		});
 
-		expect(sortedNotes.length).toBe(5);
-		expect(sortedNotes[0].id).toBe(notes1[2].id);
-		expect(sortedNotes[1].id).toBe(notes2[0].id);
-		expect(sortedNotes[2].id).toBe(notes2[1].id);
-		expect(sortedNotes[3].id).toBe(notes1[1].id);
-		expect(sortedNotes[4].id).toBe(notes1[0].id);
+		expect(sortedNotes.length).toBe(6);
+		expect(sortedNotes[0].id).toBe(notes1[3].id);
+		expect(sortedNotes[1].id).toBe(notes1[2].id);
+		expect(sortedNotes[2].id).toBe(notes2[0].id);
+		expect(sortedNotes[3].id).toBe(notes2[1].id);
+		expect(sortedNotes[4].id).toBe(notes1[1].id);
+		expect(sortedNotes[5].id).toBe(notes1[0].id);
 	}));
 
 	it('should bump system but not user updated time when changing sort value', (async () => {
