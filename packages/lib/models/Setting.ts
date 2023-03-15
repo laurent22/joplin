@@ -1056,7 +1056,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				appTypes: [AppType.Mobile],
-				label: () => _('Enable the markdown toolbar'),
+				label: () => _('Enable the Markdown toolbar'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
