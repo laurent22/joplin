@@ -30,6 +30,7 @@ interface Props {
 	initialSelection?: Selection;
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
+	toolbarEnabled: boolean;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -364,10 +365,6 @@ function NoteEditor(props: Props, ref: any) {
 		console.error('NoteEditor: webview error');
 	}, []);
 
-	const useMarkdownToolbar: boolean = useMemo(() => {
-		return Setting.value('editor.mobile.toolbarEnabled');
-	}, []);
-
 	const toolbar = <MarkdownToolbar
 		style={{
 			// Don't show the markdown toolbar if there isn't enough space
@@ -418,7 +415,7 @@ function NoteEditor(props: Props, ref: any) {
 				searchState={searchState}
 			/>
 
-			{useMarkdownToolbar ? toolbar : null}
+			{props.toolbarEnabled ? toolbar : null}
 		</View>
 	);
 }
