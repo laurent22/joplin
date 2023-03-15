@@ -2,6 +2,8 @@ import versionInfo from './versionInfo';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
 import Plugin from './services/plugins/Plugin';
+import Setting from './models/Setting';
+import { PluginSettings } from './services/plugins/PluginService';
 
 jest.mock('./registry');
 
@@ -64,6 +66,10 @@ describe('getPluginLists', () => {
 		const plugins: Plugins = {};
 		plugins[plugin.manifest.id] = plugin;
 
+		const pluginSettings: PluginSettings = {};
+		pluginSettings[plugin.id] = { enabled: true, deleted: false, hasBeenUpdated: false };
+		Setting.setValue('plugins.states', pluginSettings);
+
 		const v = versionInfo(packageInfo, plugins);
 		expect(v.body).toMatch(/\n\nPlugin1: 1/);
 		expect(v.message).toMatch(/\n\nPlugin1: 1/);
@@ -86,6 +92,13 @@ describe('getPluginLists', () => {
 			);
 			plugins[plugin.manifest.id] = plugin;
 		}
+
+		const pluginSettings: PluginSettings = {};
+		for (const key of Object.keys(plugins)) {
+			pluginSettings[key] = { enabled: true, deleted: false, hasBeenUpdated: false };
+		}
+		Setting.setValue('plugins.states', pluginSettings);
+
 		const v = versionInfo(packageInfo, plugins);
 
 		expect(v.body).toMatch(/\n\nPlugin1: 1\nPlugin2: 1\nPlugin3: 1/);
@@ -110,6 +123,13 @@ describe('getPluginLists', () => {
 
 			plugins[plugin.manifest.id] = plugin;
 		}
+
+		const pluginSettings: PluginSettings = {};
+		for (const key of Object.keys(plugins)) {
+			pluginSettings[key] = { enabled: true, deleted: false, hasBeenUpdated: false };
+		}
+		Setting.setValue('plugins.states', pluginSettings);
+
 		const v = versionInfo(packageInfo, plugins);
 
 		const body = '\n';
