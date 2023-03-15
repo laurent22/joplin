@@ -241,7 +241,6 @@ const NoteListComponent = (props: Props) => {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
-		// ref: https://github.com/laurent22/joplin/issues/7881
 		event.dataTransfer.effectAllowed = 'move';
 	};
 
