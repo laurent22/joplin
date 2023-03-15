@@ -241,6 +241,7 @@ const NoteListComponent = (props: Props) => {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
+		event.dataTransfer.effectAllowed = 'move';
 	};
 
 	const renderItem = useCallback((item: any, index: number) => {
