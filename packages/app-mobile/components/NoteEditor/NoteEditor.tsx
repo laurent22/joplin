@@ -1,4 +1,3 @@
-import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import EditLinkDialog from './EditLinkDialog';
@@ -9,6 +8,7 @@ const React = require('react');
 import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { View, ViewStyle } from 'react-native';
+import { connect } from 'react-redux';
 const { editorFont } = require('../global-style');
 
 import SelectionFormatting from './SelectionFormatting';
@@ -18,6 +18,7 @@ import {
 } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
+import { AppState } from '../../utils/types';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -25,21 +26,22 @@ type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
 type OnAttachCallback = ()=> void;
 
 interface Props {
-	themeId: number;
 	initialText: string;
 	initialSelection?: Selection;
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
 
+	fontFamily: number;
+	katexEnabled: boolean;
+	themeId: number;
+	spellcheckEnabled: boolean;
+	fontSize: number;
+	markdownToolbarEnabled: boolean;
+
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
 	onAttach: OnAttachCallback;
-}
-
-function fontFamilyFromSettings() {
-	const font = editorFont(Setting.value('style.editor.fontFamily'));
-	return font ? `${font}, sans-serif` : 'sans-serif';
 }
 
 function useCss(themeId: number): string {
@@ -98,18 +100,23 @@ function useHtml(css: string): string {
 	return html;
 }
 
-function editorTheme(themeId: number) {
-	const fontSizeInPx = Setting.value('style.editor.fontSize');
+function editorTheme(fontSize: number, fontFamilyId: number, themeId: number) {
+	const fontSizeInPx = fontSize;
 
 	// Convert from `px` to `em`. To support font size scaling based on
 	// system accessibility settings, we need to provide font sizes in `em`.
 	// 16px is about 1em with the default root font size.
 	const estimatedFontSizeInEm = fontSizeInPx / 16;
 
+	let fontFamily = editorFont(fontFamilyId);
+
+	// Add fallback fonts.
+	fontFamily = fontFamily ? `${fontFamily}, sans-serif` : 'sans-serif';
+
 	return {
 		...themeStyle(themeId),
 		fontSize: estimatedFontSizeInEm,
-		fontFamily: fontFamilyFromSettings(),
+		fontFamily,
 	};
 }
 
@@ -213,7 +220,7 @@ const useEditorControl = (
 	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
 };
 
-function NoteEditor(props: Props, ref: any) {
+const NoteEditorComponent = (props: Props, ref: any) => {
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
@@ -222,9 +229,9 @@ function NoteEditor(props: Props, ref: any) {
 
 	const editorSettings: EditorSettings = {
 		themeId: props.themeId,
-		themeData: editorTheme(props.themeId),
-		katexEnabled: Setting.value('markdown.plugin.katex'),
-		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
+		themeData: editorTheme(props.fontSize, props.fontFamily, props.themeId),
+		katexEnabled: props.katexEnabled,
+		spellcheckEnabled: props.spellcheckEnabled,
 	};
 
 	const injectedJavaScript = `
@@ -415,6 +422,17 @@ function NoteEditor(props: Props, ref: any) {
 			/>
 		</View>
 	);
-}
+};
 
-export default forwardRef(NoteEditor);
+const NoteEditor = connect((state: AppState) => {
+	return {
+		katexEnabled: state.settings['markdown.plugin.katex'],
+		spellcheckEnabled: state.settings['editor.mobile.spellcheckEnabled'],
+		fontSize: state.settings['style.editor.fontSize'],
+		fontFamily: state.settings['style.editor.fontFamily'],
+		markdownToolbarEnabled: state.settings['editor.mobile.toolbarEnabled'],
+		themeId: state.settings.theme,
+	};
+}, null, null, { forwardRef: true })(forwardRef(NoteEditorComponent));
+
+export default NoteEditor;

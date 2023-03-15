@@ -1118,7 +1118,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
-					themeId={this.props.themeId}
 					initialText={note.body}
 					initialSelection={this.selection}
 					onChange={this.onBodyChange}
