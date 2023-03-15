@@ -1118,7 +1118,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
-					toolbarEnabled={this.props.markdownToolbarEnabled}
+					toolbarEnabled={this.props.toolbarEnabled}
 					themeId={this.props.themeId}
 					initialText={note.body}
 					initialSelection={this.selection}
@@ -1232,7 +1232,7 @@ const NoteScreen = connect((state: any) => {
 		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
 		editorFontSize: state.settings['style.editor.fontSize'],
-		markdownToolbarEnabled: state.settings['editor.mobile.toolbarEnabled'],
+		toolbarEnabled: state.settings['editor.mobile.toolbarEnabled'],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
