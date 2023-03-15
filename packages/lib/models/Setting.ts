@@ -1050,6 +1050,17 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'editor.mobile.toolbarEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				label: () => _('Enable the markdown toolbar'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			// Works around a bug in which additional space is visible beneath the toolbar on some devices.
 			// See https://github.com/laurent22/joplin/pull/6823
 			'editor.mobile.removeSpaceBelowToolbar': {

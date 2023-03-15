@@ -364,6 +364,23 @@ function NoteEditor(props: Props, ref: any) {
 		console.error('NoteEditor: webview error');
 	}, []);
 
+	const useMarkdownToolbar: boolean = useMemo(() => {
+		return Setting.value('editor.mobile.toolbarEnabled');
+	}, []);
+
+	const toolbar = <MarkdownToolbar
+		style={{
+			// Don't show the markdown toolbar if there isn't enough space
+			// for it:
+			flexShrink: 1,
+		}}
+		editorSettings={editorSettings}
+		editorControl={editorControl}
+		selectionState={selectionState}
+		searchState={searchState}
+		onAttach={props.onAttach}
+	/>;
+
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
 	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
@@ -401,18 +418,7 @@ function NoteEditor(props: Props, ref: any) {
 				searchState={searchState}
 			/>
 
-			<MarkdownToolbar
-				style={{
-					// Don't show the markdown toolbar if there isn't enough space
-					// for it:
-					flexShrink: 1,
-				}}
-				editorSettings={editorSettings}
-				editorControl={editorControl}
-				selectionState={selectionState}
-				searchState={searchState}
-				onAttach={props.onAttach}
-			/>
+			{useMarkdownToolbar ? toolbar : null}
 		</View>
 	);
 }
