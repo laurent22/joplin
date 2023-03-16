@@ -11022,6 +11022,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:5.2.0":
+  version: 5.2.0
+  resolution: "chalk@npm:5.2.0"
+  checksum: 03d8060277de6cf2fd567dc25fcf770593eb5bb85f460ce443e49255a30ff1242edd0c90a06a03803b0466ff0687a939b41db1757bec987113e83de89a003caa
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^1.0.0, chalk@npm:^1.1.3":
   version: 1.1.3
   resolution: "chalk@npm:1.1.3"
@@ -21341,12 +21348,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:13.1.3":
-  version: 13.1.3
-  resolution: "lint-staged@npm:13.1.3"
+"lint-staged@npm:13.1.4":
+  version: 13.1.4
+  resolution: "lint-staged@npm:13.1.4"
   dependencies:
+    chalk: 5.2.0
     cli-truncate: ^3.1.0
-    colorette: ^2.0.19
     commander: ^10.0.0
     debug: ^4.3.4
     execa: ^7.0.0
@@ -21361,7 +21368,7 @@ __metadata:
     yaml: ^2.2.1
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 98a0410b98e8941059b477b38812d3c5ce8b93f3d8f65cfa4836f4b9ca861e7c935491a420b2f48d95acd8fd712dab10d95fffdd7868b072615d3d0fdec11e3c
+  checksum: 75729290bd78c026351b1fd39f9bcbee3744f93e6d66a0125119c59de108205872b6fb7732437dc3bd363716bf7c3585e0c1f93a3419eae87aaa2878de0225e3
   languageName: node
   linkType: hard
 
@@ -28145,7 +28152,7 @@ __metadata:
     http-server: 14.1.1
     husky: 3.1.0
     lerna: 3.22.1
-    lint-staged: 13.1.3
+    lint-staged: 13.1.4
     madge: 6.0.0
     node-gyp: 9.3.1
     nodemon: 2.0.21
