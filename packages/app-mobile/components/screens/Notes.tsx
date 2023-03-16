@@ -3,6 +3,7 @@ import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } fro
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import NoteList from '../NoteList';
+const { EditableNoteItem } = require('../editable-note-item.js');
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
@@ -75,6 +76,10 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				return true;
 			}
 			return false;
+		};
+
+		this.state = {
+			showQuickNote: false,
 		};
 	}
 
@@ -225,6 +230,17 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const makeActionButtonComp = () => {
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
 				const buttons = [];
+
+				buttons.push({
+					label: _('Quick to-dos'),
+					onPress: () => this.setState({
+						...this.state,
+						showQuickNote: true,
+					}),
+					color: '#9b59b6',
+					icon: 'md-checkbox-outline',
+				});
+
 				buttons.push({
 					label: _('New to-do'),
 					onPress: () => {
@@ -254,6 +270,22 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				{this.state.showQuickNote &&
+				<EditableNoteItem
+					note={{}}
+					isTodo={false}
+					onHide={() =>
+						this.setState({ ...this.state, showQuickNote: false })
+					}
+					onSubmit={async (text: string) => {
+						await Note.save({
+							parent_id: buttonFolderId,
+							is_todo: 1,
+							title: text,
+						}, { provisional: false });
+					}}
+				/>
+				}
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
