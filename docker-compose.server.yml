@@ -30,7 +30,7 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_DB=${POSTGRES_DATABASE}
     app:
-        image: joplin/server:latest
+        image: laurent22/joplin-server:latest
         depends_on:
             - db
         ports:

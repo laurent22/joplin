@@ -12,7 +12,7 @@
 3. Run the following command to test starting the server using the default configuration:
 
 ```shell
-docker run --env-file .env -p 22300:22300 joplin/server:latest
+docker run --env-file .env -p 22300:22300 laurent22/joplin-server:latest
 ```
 
 The server will listen on port **22300** on **localhost**. By default, the server will use SQLite, which allows you to test the app without setting up a database. When running the server for production use, you should connect the container to a database, as described below.

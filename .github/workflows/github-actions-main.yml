@@ -97,7 +97,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
-          SERVER_REPOSITORY: joplin/server
+          SERVER_REPOSITORY: laurent22/joplin-server
           SERVER_TAG_PREFIX: server
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
@@ -122,7 +122,7 @@ jobs:
         env:
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
-          SERVER_REPOSITORY: joplin/server
+          SERVER_REPOSITORY: laurent22/joplin-server
           SERVER_TAG_PREFIX: server
         run: |
           yarn install && cd packages/app-desktop && yarn run dist --publish=never
@@ -166,8 +166,8 @@ jobs:
           BUILD_SEQUENCIAL: 1
         run: |
           yarn install
-          yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+          yarn run buildServerDocker --tag-name server-v0.0.0 --repository laurent22/joplin-server
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
-          docker run joplin/server:0.0.0-beta node dist/app.js migrate list
+          docker run laurent22/joplin-server:0.0.0-beta node dist/app.js migrate list

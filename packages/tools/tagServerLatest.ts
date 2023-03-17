@@ -6,9 +6,9 @@ async function main() {
 
 	const version = argv._[0];
 
-	await execCommand2(`docker pull "joplin/server:${version}"`);
-	await execCommand2(`docker tag "joplin/server:${version}" "joplin/server:latest"`);
-	await execCommand2('docker push joplin/server:latest');
+	await execCommand2(`docker pull "laurent22/joplin-server:${version}"`);
+	await execCommand2(`docker tag "laurent22/joplin-server:${version}" "laurent22/joplin-server:latest"`);
+	await execCommand2('docker push laurent22/joplin-server:latest');
 }
 
 if (require.main === module) {
