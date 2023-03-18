@@ -82,7 +82,6 @@
     "madge": "5.0.2",
     "npm-package-json-lint": "6.4.0",
     "svg2vectordrawable": "^2.9.1",
-    "svgo": "^3.0.2",
     "typedoc": "0.17.8",
     "typescript": "4.9.4"
   },
