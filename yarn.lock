@@ -5103,7 +5103,7 @@ __metadata:
     html-entities: 1.4.0
     jest: 29.4.3
     jest-expect-message: 1.1.3
-    jquery: 3.6.3
+    jquery: 3.6.4
     jsdom: 21.0.0
     knex: 2.4.2
     koa: 2.14.1
@@ -20495,10 +20495,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery@npm:3.6.3":
-  version: 3.6.3
-  resolution: "jquery@npm:3.6.3"
-  checksum: 0fd366bdcaa0c84a7a8751ce20f8192290141913978b5059574426d9b01f4365daa675f95aab3eec94fd794d27b08d32078a2236bef404b8ba78073009988ce6
+"jquery@npm:3.6.4":
+  version: 3.6.4
+  resolution: "jquery@npm:3.6.4"
+  checksum: 8354f7bd0a0424aa714ee1b6b1ef74b410f834eb5c8501682289b358bc151f11677f11188b544f3bb49309d6ec4d15d1a5de175661250c206b06185a252f706f
   languageName: node
   linkType: hard
 
