@@ -4,6 +4,7 @@ import { execCommand } from './tool-utils';
 import { fileExtension } from '@joplin/lib/path-utils';
 const md5File = require('md5-file');
 const sharp = require('sharp');
+const svg2vectordrawable = require('svg2vectordrawable/src/svg-file-to-vectordrawable-file');
 
 interface Source {
 	id: number;
@@ -583,6 +584,14 @@ async function main() {
 				s.webp({
 					// quality: 90,
 				});
+			} else if (destExt === 'xml') {
+				const options = {
+					floatPrecision: 2,
+					fillBlack: false,
+					xmlTag: true,
+					tint: '#FFFFFFFF',
+				};
+				svg2vectordrawable.convertFile(sourcePath, destPath, options);
 			} else {
 				throw new Error(`Unsupported extension: ${destExt}`);
 			}
