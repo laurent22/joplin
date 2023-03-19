@@ -20,7 +20,7 @@ import Folder from './models/Folder';
 import BaseItem from './models/BaseItem';
 import Note from './models/Note';
 import Tag from './models/Tag';
-const { splitCommandString } = require('./string-utils.js');
+import { splitCommandString } from '@joplin/utils';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
@@ -706,7 +706,7 @@ export default class BaseApplication {
 
 		flagContent = flagContent.trim();
 
-		let flags = splitCommandString(flagContent);
+		let flags: any = splitCommandString(flagContent);
 		flags.splice(0, 0, 'cmd');
 		flags.splice(0, 0, 'node');
 

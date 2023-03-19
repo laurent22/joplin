@@ -4880,6 +4880,7 @@ __metadata:
     "@joplin/renderer": ^2.10.2
     "@joplin/turndown": ^4.0.65
     "@joplin/turndown-plugin-gfm": ^1.0.47
+    "@joplin/utils": ~2.10
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/js-yaml": 4.0.5
@@ -4985,6 +4986,7 @@ __metadata:
   dependencies:
     "@joplin/lib": ^2.10.2
     "@joplin/tools": ^2.10.2
+    "@joplin/utils": ~2.10
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/node": 18.11.18
@@ -5138,6 +5140,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.43
     "@joplin/lib": ^2.10.2
     "@joplin/renderer": ^2.10.2
+    "@joplin/utils": ~2.10
     "@rmp135/sql-ts": 1.16.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
@@ -5198,6 +5201,14 @@ __metadata:
     rollup-plugin-replace: 2.2.0
     standard: 17.0.0
     turndown-attendant: 0.0.3
+  languageName: unknown
+  linkType: soft
+
+"@joplin/utils@workspace:packages/utils, @joplin/utils@~2.10":
+  version: 0.0.0-use.local
+  resolution: "@joplin/utils@workspace:packages/utils"
+  dependencies:
+    execa: 5.1.1
   languageName: unknown
   linkType: soft
 
@@ -15681,22 +15692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "execa@npm:1.0.0"
-  dependencies:
-    cross-spawn: ^6.0.0
-    get-stream: ^4.0.0
-    is-stream: ^1.1.0
-    npm-run-path: ^2.0.0
-    p-finally: ^1.0.0
-    signal-exit: ^3.0.0
-    strip-eof: ^1.0.0
-  checksum: ddf1342c1c7d02dd93b41364cd847640f6163350d9439071abf70bf4ceb1b9b2b2e37f54babb1d8dc1df8e0d8def32d0e81e74a2e62c3e1d70c303eb4c306bc4
-  languageName: node
-  linkType: hard
-
-"execa@npm:^5.0.0, execa@npm:^5.1.1":
+"execa@npm:5.1.1, execa@npm:^5.0.0, execa@npm:^5.1.1":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
   dependencies:
@@ -15710,6 +15706,21 @@ __metadata:
     signal-exit: ^3.0.3
     strip-final-newline: ^2.0.0
   checksum: fba9022c8c8c15ed862847e94c252b3d946036d7547af310e344a527e59021fd8b6bb0723883ea87044dc4f0201f949046993124a42ccb0855cae5bf8c786343
+  languageName: node
+  linkType: hard
+
+"execa@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "execa@npm:1.0.0"
+  dependencies:
+    cross-spawn: ^6.0.0
+    get-stream: ^4.0.0
+    is-stream: ^1.1.0
+    npm-run-path: ^2.0.0
+    p-finally: ^1.0.0
+    signal-exit: ^3.0.0
+    strip-eof: ^1.0.0
+  checksum: ddf1342c1c7d02dd93b41364cd847640f6163350d9439071abf70bf4ceb1b9b2b2e37f54babb1d8dc1df8e0d8def32d0e81e74a2e62c3e1d70c303eb4c306bc4
   languageName: node
   linkType: hard
 
@@ -20444,6 +20455,7 @@ __metadata:
     "@joplin/lib": ~2.10
     "@joplin/renderer": ~2.10
     "@joplin/tools": ~2.10
+    "@joplin/utils": ~2.10
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/node": 18.11.18

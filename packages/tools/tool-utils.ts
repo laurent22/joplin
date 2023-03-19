@@ -1,9 +1,9 @@
 import * as fs from 'fs-extra';
 import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
+import { execCommand as execCommand2, commandToString } from '@joplin/utils';
 
 const fetch = require('node-fetch');
 const execa = require('execa');
-const { splitCommandString } = require('@joplin/lib/string-utils');
 const moment = require('moment');
 
 export interface GitHubReleaseAsset {
@@ -18,23 +18,6 @@ export interface GitHubRelease {
 	html_url: string;
 	prerelease: boolean;
 	draft: boolean;
-}
-
-function quotePath(path: string) {
-	if (!path) return '';
-	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
-	path = path.replace(/"/, '\\"');
-	return `"${path}"`;
-}
-
-function commandToString(commandName: string, args: string[] = []) {
-	const output = [quotePath(commandName)];
-
-	for (const arg of args) {
-		output.push(quotePath(arg));
-	}
-
-	return output.join(' ');
 }
 
 async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl: string = '') {
@@ -161,52 +144,6 @@ export function execCommandVerbose(commandName: string, args: string[] = []) {
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
 	return promise;
-}
-
-interface ExecCommandOptions {
-	showInput?: boolean;
-	showStdout?: boolean;
-	showStderr?: boolean;
-	quiet?: boolean;
-}
-
-// There's lot of execCommandXXX functions, but eventually all scripts should
-// use the one below, which supports:
-//
-// - Printing the command being executed
-// - Printing the output in real time (piping to stdout)
-// - Returning the command result as string
-export async function execCommand2(command: string | string[], options: ExecCommandOptions = null): Promise<string> {
-	options = {
-		showInput: true,
-		showStdout: true,
-		showStderr: true,
-		quiet: false,
-		...options,
-	};
-
-	if (options.quiet) {
-		options.showInput = false;
-		options.showStdout = false;
-		options.showStderr = false;
-	}
-
-	if (options.showInput) {
-		if (typeof command === 'string') {
-			console.info(`> ${command}`);
-		} else {
-			console.info(`> ${commandToString(command[0], command.slice(1))}`);
-		}
-	}
-
-	const args: string[] = typeof command === 'string' ? splitCommandString(command) : command as string[];
-	const executableName = args[0];
-	args.splice(0, 1);
-	const promise = execa(executableName, args);
-	if (options.showStdout) promise.stdout.pipe(process.stdout);
-	if (options.showStderr) promise.stdout.pipe(process.stderr);
-	const result = await promise;
-	return result.stdout.trim();
 }
 
 export function execCommandWithPipes(executable: string, args: string[]) {
