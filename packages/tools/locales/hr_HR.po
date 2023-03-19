@@ -657,7 +657,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr "Razlikovanje velikih/malih slova"
+msgstr "Razlikuje velika i mala slova"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -1073,7 +1073,7 @@ msgstr "Stvaranje izvještaja …"
 
 #: packages/app-desktop/checkForUpdates.ts:180
 msgid "Current version is up-to-date."
-msgstr "Trenutačna verzija je najnovija verzija."
+msgstr "Trenutačna verzija je aktualna."
 
 #: packages/lib/models/Note.ts:38
 msgid "custom order"
@@ -1175,7 +1175,7 @@ msgstr "Izbriši istekle sesije"
 
 #: packages/server/src/services/TaskService.ts:20
 msgid "Delete expired tokens"
-msgstr "Izbriši istekle tokene"
+msgstr "Izbriši istekle ključeve"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1390,7 +1390,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 msgid "Done"
-msgstr "Završeno"
+msgstr "Gotovo"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1577,7 +1577,7 @@ msgstr "Aktiviraj audio-player"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
 msgid "Enable biometrics authentication?"
-msgstr "Aktiviraj autentifikaciju biometrijom?"
+msgstr "Aktivirati biometrijsku autentifikaciju?"
 
 #: packages/lib/models/Setting.ts:1146
 msgid "Enable deflist syntax"
@@ -2044,7 +2044,7 @@ msgstr "Istaknuto"
 #: packages/server/src/services/MustacheService.ts:140
 #: packages/server/src/services/MustacheService.ts:271
 msgid "Home"
-msgstr "Početna"
+msgstr "Početak"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -2216,7 +2216,7 @@ msgstr "Umetnuti kȏd"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
-msgstr "Umetnuto"
+msgstr "Umetni"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:199
 msgid "Insert Hyperlink"
@@ -2381,7 +2381,7 @@ msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1530
 msgid "Keep note history for"
-msgstr "Čuvaj povijest bilješke"
+msgstr "Čuvaj povijest bilježaka"
 
 #: packages/lib/models/Setting.ts:1403
 msgid "Keyboard Mode"
@@ -2847,7 +2847,7 @@ msgstr "Bilješka ne postoji: „%s”. Želiš li je stvoriti?"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
 msgid "Note editor"
-msgstr "Uređivač bilješki"
+msgstr "Uređivač za bilješke"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3030,7 +3030,7 @@ msgstr "Ili stvori novi račun."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
 msgid "Ordered list"
-msgstr "Poredan popis"
+msgstr "Razvrstan popis"
 
 #: packages/app-desktop/gui/MenuBar.tsx:409
 msgid "Other applications..."
@@ -3122,8 +3122,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
-"Imaj na umu, da ako je velika bilježnica, može potrajati nekoliko minuta dok "
-"se sve bilješke pojave na uređaju primatelja."
+"Imaj na umu, da ako je bilježnica velika, pojavljivanje svih bilježaka na "
+"uređaju primatelja može potrajati nekoliko minuta."
 
 #: packages/lib/onedrive-api-node-utils.js:118
 msgid ""
@@ -3134,9 +3134,9 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 "Otvori sljedeći URL u pregledniku za autentificiranje programa. Program će "
-"stvoriti mapu u „Aplikacije/Joplin” i koristit će je samo za čitanje i "
-"pisanje. Program neće moći pristupiti datotekama izvan ove mape niti bilo "
-"kojim drugim osobnim podacima. Nikoji podaci se neće dijeliti s drugima."
+"stvoriti mapu u „Aplikacije/Joplin” dozvolama za čitanje i pisanje. Program "
+"neće moći pristupiti datotekama izvan ove mape niti bilo kojim drugim "
+"osobnim podacima. Nikoji podaci se neće dijeliti s drugima."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3234,7 +3234,7 @@ msgstr "Pritisni za postavljanje lozinke za dešifriranje."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr "Prethodno podudaranje"
+msgstr "Prethodno poklapanje"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
@@ -3430,7 +3430,7 @@ msgstr "Zamijeni sve"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr "Zamijeni s …"
+msgstr "Zamijeni sa …"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
@@ -3438,7 +3438,7 @@ msgstr "Zamijeni: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
-msgstr "Resetiraj raspored programa"
+msgstr "Obnovi raspored programa"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3692,7 +3692,7 @@ msgstr "Dijeli bilježnicu …"
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr "Dijeli kontrolu pristupa"
+msgstr "Dijeljenje kontrole pristupa"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3700,7 +3700,7 @@ msgstr "Dijeljenje bilježnice …"
 
 #: packages/app-cli/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Prečaci nisu podržani u naredbenom retku."
+msgstr "Prečaci nisu dostupni u naredbenom retku."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
 msgid "Show advanced"
@@ -3736,7 +3736,7 @@ msgstr "Prikaži broj bilježaka"
 
 #: packages/lib/models/Setting.ts:942
 msgid "Show sort order buttons"
-msgstr "Prikaži gumbe redoslijeda"
+msgstr "Prikaži gumbe za određivanje redoslijeda"
 
 #: packages/lib/models/Setting.ts:1162
 msgid "Show tray icon"
@@ -3981,12 +3981,12 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Mijenja se u bilježnicu [notebook] – sve daljnje operacije izvode se u toj "
-"bilježnici."
+"Prebacuje na bilježnicu [notebook] – sve daljnje operacije će se izvoditi u "
+"ovoj bilježnici."
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr "Sinkroniziraj kolikogod uređaja želiš"
+msgstr "Sinkroniziraj koliko god uređaja želiš"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:612
 msgid "Sync Status"
@@ -4173,7 +4173,7 @@ msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
-"Standardna metoda šifriranja promijenjena je u sigurniju metodu. "
+"Standardna metoda šifriranja je promijenjena sa sigurnijom metodom. "
 "Preporučujemo da je primijeniš na tvoje podatke."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
@@ -4367,7 +4367,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Došlo je do [konflikta](%s) s dolje navedenim privitkom.\n"
+"Došlo je do konflikta [conflict](%s) s dolje navedenim privitkom.\n"
 "\n"
 "%s"
 
@@ -4430,7 +4430,7 @@ msgid ""
 "access Joplin."
 msgstr ""
 "Ovaj ključ za autorizaciju potreban je samo za dozvoljavanje drugim "
-"programima pristupiti Joplinu."
+"programima da pristupe Joplinu."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
 msgid ""
@@ -4708,7 +4708,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
 msgid "Unordered list"
-msgstr "Neporedan popis"
+msgstr "Nerazvstan popis"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:162
 msgid "Unpublish note"
@@ -4814,7 +4814,7 @@ msgstr "Korištenje: %s"
 
 #: packages/lib/models/Setting.ts:1640
 msgid "Use biometrics to secure access to the app"
-msgstr "Koristi biometrijske podatke za siguran pristup aplikaciji"
+msgstr "Koristi biometrijske podatke za osiguravanje pristupa programu"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -5064,3 +5064,344 @@ msgstr "Uvećaj prikaz"
 #: packages/app-desktop/gui/MenuBar.tsx:742
 msgid "Zoom Out"
 msgstr "Umanji prikaz"
+
+#, fuzzy
+#~ msgid "Save as SVG"
+#~ msgstr "Spremi kao …"
+
+#~ msgid "Please click on \"%s\" to proceed"
+#~ msgstr "Za nastavljanje pritisni „%s”"
+
+#~ msgid "Automatically update the application"
+#~ msgstr "Automatski aktualiziraj program"
+
+#~ msgid "Notebook title:"
+#~ msgstr "Naslov bilježnice:"
+
+#~ msgid "AWS S3"
+#~ msgstr "AWS S3"
+
+#~ msgid "Master keys that need upgrading"
+#~ msgstr "Glavni ključevi koji se moraju nadograditi"
+
+#~ msgid ""
+#~ "The following master keys use an out-dated encryption algorithm and it is "
+#~ "recommended to upgrade them. The upgraded master key will still be able "
+#~ "to decrypt and encrypt your data as usual."
+#~ msgstr ""
+#~ "Sljedeći glavni ključevi koriste zastarjeli algoritam šifriranja i "
+#~ "preporučujemo da ih nadogradiš. Nadograđen glavni ključ i dalje će moći "
+#~ "dešifrirati i šifrirati tvoje podatke."
+
+#~ msgid ""
+#~ "Enabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent encrypted to the sync target. Do not lose the "
+#~ "password as, for security purposes, this will be the *only* way to "
+#~ "decrypt the data! To enable encryption, please enter your password below."
+#~ msgstr ""
+#~ "Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici "
+#~ "ponovo sinkronizirati i poslati šifrirano u cilj sinkronizacije. Nemoj "
+#~ "izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za "
+#~ "dešifriranje podataka! Za aktiviranje šifriranja dolje upiši lozinku."
+
+#~ msgid "Master Keys"
+#~ msgstr "Glavni ključevi"
+
+#~ msgid "Source"
+#~ msgstr "Izvor"
+
+#~ msgid "Password OK"
+#~ msgstr "Lozinka je u redu"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Napomena: Za šifriranje će se koristiti samo jedan glavni ključ (onaj "
+#~ "koji je označen kao „aktivan”). Za dešifriranje se može koristiti bilo "
+#~ "koji ključ, ovisno o izvornom načinu šifriranja bilježaka ili bilježnica."
+
+#~ msgid "Encryption is:"
+#~ msgstr "Šifriranje je:"
+
+#, javascript-format
+#~ msgid "Encryption will be enabled using the master key created on %s"
+#~ msgstr "Šifriranje će se aktivirati pomoću glavnog ključa stvorenog %s"
+
+#, javascript-format
+#~ msgid "%s %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "Insert template"
+#~ msgstr "Umetni predložak"
+
+#~ msgid "Template file:"
+#~ msgstr "Datoteka predloška:"
+
+#~ msgid "Create note from template"
+#~ msgstr "Stvori bilješku iz predloška"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "Stvori zadatak iz predloška"
+
+#~ msgid "Open template directory"
+#~ msgstr "Otvori mapu predložaka"
+
+#~ msgid "Refresh templates"
+#~ msgstr "Aktualiziraj predloške"
+
+#~ msgid "Templates"
+#~ msgstr "Predlošci"
+
+#~ msgid "Share Notes"
+#~ msgstr "Dijeli bilješke"
+
+#~ msgid "Joplin Server Directory"
+#~ msgstr "Joplin poslužitelj mapa"
+
+#~ msgid "Joplin Server username"
+#~ msgstr "Joplin poslužitelj korisničko ime"
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "istaknuti tekst"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Označavanje"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Napomene uz izdanje"
+
+#~ msgid ""
+#~ "If the font is incorrect or empty, it will default to a generic monospace "
+#~ "font."
+#~ msgstr ""
+#~ "Ako je polje fonta netočno ili prazno, postavit će se opći font fiksne "
+#~ "širine."
+
+#~ msgid ""
+#~ "This should be a *monospace* font or some elements will render "
+#~ "incorrectly. If the font is incorrect or empty, it will default to a "
+#~ "generic monospace font."
+#~ msgstr ""
+#~ "Ovo bi trebao biti font *fiksne širine*, jer će se inače neki elementi "
+#~ "prikazati pogrešno. Ako je polje fonta netočno ili prazno, postavit će se "
+#~ "opći font fiksne širine."
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Nepoznata zastavica: %s"
+
+#, fuzzy
+#~ msgid "Checking..."
+#~ msgstr "Prekidam..."
+
+#, fuzzy
+#~ msgid "Check Status"
+#~ msgstr "Status"
+
+#~ msgid "OneDrive Dev (For testing only)"
+#~ msgstr "OneDrive Dev (Samo za testiranje)"
+
+#, fuzzy
+#~ msgid "Notebook properties"
+#~ msgstr "Naslov bilježnice:"
+
+#, fuzzy, javascript-format
+#~ msgid "This file could not be opened: %s"
+#~ msgstr "Bilježnicu nije moguće snimiti: %s"
+
+#, fuzzy
+#~ msgid "Click to stop external editing"
+#~ msgstr "Bilješka je promijenjena:"
+
+#, fuzzy
+#~ msgid "Content Properties"
+#~ msgstr "Naslov bilježnice:"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "Prvo stvori bilježnicu."
+
+#, fuzzy
+#~ msgid "Usage"
+#~ msgstr "Korištenje: %s"
+
+#~ msgid "Confirm"
+#~ msgstr "Potvrdi"
+
+#~ msgid "Attach any file"
+#~ msgstr "Priloži datoteku"
+
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Nepoznata razina logiranja: %s"
+
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Nepoznat ID razine: %s"
+
+#, fuzzy
+#~ msgid "Synchronize"
+#~ msgstr "Sinkroniziraj"
+
+#, fuzzy
+#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+#~ msgstr "Makni ovu oznaku iz svih bilješki?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not synchronise with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Ne mogu sinkronizirati OneDrive.\n"
+#~ "\n"
+#~ "Ova greška se često javlja pri korištenju usluge OneDrive for Business "
+#~ "koja nije podržana.\n"
+#~ "\n"
+#~ "Molimo da koristite obični OneDrive korisnički račun."
+
+#, fuzzy
+#~ msgid "Cannot move tag to this location."
+#~ msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Dodaj ili makni oznake"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "Resursi: %d."
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sinkronizacija je već u toku. Stanje: %s"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Nedostaje obavezni argument: %s"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Status sinkronizacije"
+
+#, fuzzy
+#~ msgid "General Options"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~ msgid "Clipper Options"
+#~ msgstr "Opcije"
+
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Prekini sinkronizaciju"
+
+#~ msgid "Show metadata"
+#~ msgstr "Prikaži metapodatke"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Obriši bilježnicu"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Klikni (+) gumb za dodavanje nove bilješke ili bilježnice ili odaberi "
+#~ "postojeću bilježnicu iz izbornika."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
+
+#~ msgid "Welcome"
+#~ msgstr "Dobro došli"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Odvoji oznake zarezom."
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija "
+#~ "sa datotečnim sustavom omogućena. Vidi `sync.target`."
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Stanje: \"%s\"."
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Bilježnica s ovim naslovom već postoji: \"%s\""
+
+#~ msgid "Searches"
+#~ msgstr "Pretraživanja"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena "
+#~ "u nju. Nastavi?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Uvezi Evernote bilješke"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Fokusiraj sljedeće okno"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Fokusiraj prethodno okno"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Napusti naredbeni redak"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Prekini trenutnu naredbu."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Postavi zadatak kao završen/nezavršen"
+
+#, fuzzy
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+
+#, fuzzy
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[t]oggle note [m]etadata."
+
+#, fuzzy
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[M]ake a new [n]ote"
+
+#, fuzzy
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[M]ake a new [t]odo"
+
+#, fuzzy
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[M]ake a new note[b]ook"
+
+#, fuzzy
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copy ([Y]ank) the [n]ote to a notebook."
+
+#~ msgid ""
+#~ "The target to synchronise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
+#~ "sustavom, postavi `sync.2.path` na ciljani direktorij."
+
+#~ msgid "To-do title:"
+#~ msgstr "Naslov zadatka:"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
