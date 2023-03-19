@@ -12,5 +12,5 @@ export default (commandName: string, args: string[] = []) => {
 		output.push(quotePath(arg));
 	}
 
-	return output.join(' ');
+	return output.join(' ').trim();
 };
