@@ -1,4 +1,5 @@
-import { execCommand2, gitCurrentBranch, githubRelease, gitPullTry, rootDir } from './tool-utils';
+import { execCommand } from '@joplin/utils';
+import { gitCurrentBranch, githubRelease, gitPullTry, rootDir } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-desktop`;
 
@@ -11,16 +12,16 @@ async function main() {
 
 	console.info(`Running from: ${process.cwd()}`);
 
-	const version = (await execCommand2('npm version patch')).trim();
+	const version = (await execCommand('npm version patch')).trim();
 	const tagName = version;
 
 	console.info(`New version number: ${version}`);
 
-	await execCommand2('git add -A');
-	await execCommand2(`git commit -m "Desktop release ${version}"`);
-	await execCommand2(`git tag ${tagName}`);
-	await execCommand2('git push');
-	await execCommand2('git push --tags');
+	await execCommand('git add -A');
+	await execCommand(`git commit -m "Desktop release ${version}"`);
+	await execCommand(`git tag ${tagName}`);
+	await execCommand('git push');
+	await execCommand('git push --tags');
 
 	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
 

@@ -19,7 +19,7 @@
 
 import * as fs from 'fs-extra';
 import { homedir } from 'os';
-import { execCommand2 } from '@joplin/tools/tool-utils';
+import { execCommand } from '@joplin/utils';
 import { chdir } from 'process';
 
 const minUserNum = 1;
@@ -66,7 +66,7 @@ const processUser = async (userNum: number) => {
 
 		await chdir(cliDir);
 
-		await execCommand2(['yarn', 'run', 'start-no-build', '--', '--profile', profileDir, 'batch', commandFile]);
+		await execCommand(['yarn', 'run', 'start-no-build', '--', '--profile', profileDir, 'batch', commandFile]);
 	} catch (error) {
 		console.error(`Could not process user ${userNum}:`, error);
 	} finally {
@@ -90,7 +90,7 @@ const main = async () => {
 
 	// Build the app once before starting, because we'll use start-no-build to
 	// run the scripts (faster)
-	await execCommand2(['yarn', 'run', 'build']);
+	await execCommand(['yarn', 'run', 'build']);
 
 	const focusUserNum = 0;
 

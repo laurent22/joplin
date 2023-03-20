@@ -91,12 +91,12 @@ msgstr "%d päivää"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d Gt"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d Gt tallennustila"
 
 #: packages/lib/models/Setting.ts:1345
 msgid "%d hour"
@@ -109,13 +109,12 @@ msgstr "%d tuntia"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d Mt"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Muistiinpanon liitteet"
+msgstr "%d Mt muistiinpanoa tai liitettä kohti"
 
 #: packages/lib/models/Setting.ts:1342 packages/lib/models/Setting.ts:1343
 #: packages/lib/models/Setting.ts:1344
@@ -128,9 +127,8 @@ msgstr "%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -323,6 +321,8 @@ msgstr "Lisätyökalut"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Kaikki tiedot, mukaan lukien muistiinpanot, muistikirjat ja tunnisteet, "
+"poistetaan pysyvästi."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
 #: packages/app-mobile/components/screens/Notes.tsx:203
@@ -359,8 +359,8 @@ msgstr ""
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Epäselvä muistikirja \"%s\". Käytä sen sijaan lyhyttä muistikirjan tunnusta "
 "- paina \"ti\" nähdäksesi lyhyen muistikirjan tunnuksen"
@@ -390,6 +390,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Haluatko varmasti palata oletus ulkoasuun? Nykyinen ulkoasun määritys "
+"menetetään."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -494,7 +496,7 @@ msgstr "Takaisin"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Perus"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -598,9 +600,8 @@ msgid "Cannot find \"%s\"."
 msgstr "Ei löydy \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "Ei löydy \"%s\"."
+msgstr "Ei löydy: \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
@@ -743,9 +744,8 @@ msgid "Close"
 msgstr "Sulkea"
 
 #: packages/app-mobile/components/Dropdown.tsx:166
-#, fuzzy
 msgid "Close dropdown"
-msgstr "Sulje ikkuna"
+msgstr "Sulje pudotusvalikko"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:596
@@ -857,7 +857,7 @@ msgstr "Ristiriidat (liitteet)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Yhdistetty laskutus"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 msgid "Content provided by %s"
@@ -865,7 +865,7 @@ msgstr "Sisällön toimittaa %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "Jatkaa"
 
 #: packages/app-mobile/components/screens/Note.tsx:930
 msgid "Convert to note"
@@ -970,9 +970,8 @@ msgstr ""
 "Virhe oli: \"%s\""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "Laajennuksen asentaminen epäonnistui: %s"
+msgstr "Profiilia ei voitu vaihtaa: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -988,16 +987,15 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
 msgid "Could not verify your identify"
-msgstr ""
+msgstr "Henkilöllisyyttäsi ei voitu vahvistaa"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Luo"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Luo uuden muistikirjan."
+msgstr "Luo uusi muistikirja päämuistikirjan alle."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1220,9 +1218,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Poista laajennus \"%s\"?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Poista muistiinpano \"%s\"?"
+msgstr "Poista profiili \"%s\""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:420
 msgid "Delete selected notes"
@@ -1241,9 +1238,8 @@ msgstr ""
 "muistikirjaa."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "Poistetaanko nämä %d muistiinpanot?"
+msgstr "Poistetaanko tämä profiili?"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1488,9 +1484,8 @@ msgid "Edit notebook"
 msgstr "Muokkaa muistikirjaa"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "Vie profiili"
+msgstr "Muokkaa profiilia"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1582,7 +1577,7 @@ msgstr "Ota käyttöön audiosoitin"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Otetaanko biometrinen todennus käyttöön?"
 
 #: packages/lib/models/Setting.ts:1146
 msgid "Enable deflist syntax"
@@ -1635,7 +1630,7 @@ msgstr "Ota pehmeät tauot käyttöön"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Ota oikeinkirjoituksen tarkistus käyttöön tekstieditorissa"
 
 #: packages/lib/models/Setting.ts:1143
 msgid "Enable table of contents extension"
@@ -2298,7 +2293,7 @@ msgstr "Kohteet, joita ei voi synkronoida"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Liity meihin Twitterissä"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2547,14 +2542,12 @@ msgid "Manage master password..."
 msgstr "Pääsalasanan hallinta..."
 
 #: packages/lib/utils/joplinCloud.ts:165
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "Pääsalasanan hallinta"
+msgstr "Hallitse useita käyttäjiä"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
-#, fuzzy
 msgid "Manage profiles"
-msgstr "Päivitä profiili"
+msgstr "Hallitse profiileja"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2621,9 +2614,8 @@ msgid "Max Item Size"
 msgstr "Kohteen enimmäiskoko"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Muistiinpanon liitteet"
+msgstr "Muistiinpanon tai liitteen enimmäiskoko"
 
 #: packages/server/src/routes/admin/users.ts:150
 msgid "Max Total Size"
@@ -2642,9 +2634,8 @@ msgid "Missing required argument: %s"
 msgstr "Vaadittu argumentti puuttuu: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "Vaadittu argumentti puuttuu: %s"
+msgstr "Pakollinen lipun arvo puuttuu: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
@@ -2819,9 +2810,8 @@ msgid "Not generated"
 msgstr "Ei luotu"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:70
-#, fuzzy
 msgid "Not now"
-msgstr "Hae se nyt"
+msgstr "Ei nyt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
@@ -3084,7 +3074,7 @@ msgstr "Liitä"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "Liitä tekstinä"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3097,7 +3087,7 @@ msgstr "PDF tiedosto"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Käyttäjää kohti. Vähintään %d käyttäjää."
 
 #: packages/app-mobile/components/screens/Note.tsx:404
 msgid "Permission needed"
@@ -3258,16 +3248,15 @@ msgstr "Tulosta"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr ""
+msgstr "Ensisijainen tuki"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:703
 msgid "Privacy Policy"
 msgstr "Tietosuojakäytäntö"
 
 #: packages/lib/utils/joplinCloud.ts:316
-#, fuzzy
 msgid "Pro"
-msgstr "Profiili"
+msgstr "Ammattilainen"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3286,9 +3275,8 @@ msgid "Profile"
 msgstr "Profiili"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
-#, fuzzy
 msgid "Profile name"
-msgstr "Profiilin nimi:"
+msgstr "Profiilin nimi"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3299,9 +3287,8 @@ msgid "Profile Version: %s"
 msgstr "Profiilin versio: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
-#, fuzzy
 msgid "Profiles"
-msgstr "Profiili"
+msgstr "Profiilit"
 
 #: packages/app-mobile/components/screens/Note.tsx:944
 msgid "Properties"
@@ -3450,9 +3437,8 @@ msgid "Replace: "
 msgstr "Vaihda: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "Sovelluksen asettelun muuttaminen"
+msgstr "Palauta sovelluksen asettelu"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3692,9 +3678,8 @@ msgid "Share"
 msgstr "Jaa"
 
 #: packages/lib/utils/joplinCloud.ts:159
-#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "Muistiinpanoja voi luoda vain muistikirjaan."
+msgstr "Muistikirjan jakaminen ja yhteiskäyttö"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
@@ -3706,7 +3691,7 @@ msgstr "Muistikirjan jakaminen..."
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr ""
+msgstr "Käyttöoikeuksien hallinnan jakaminen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3932,7 +3917,7 @@ msgstr "Lopeta ulkoisen tekstieditorin muokkaus"
 
 #: packages/lib/utils/joplinCloud.ts:129
 msgid "Storage space"
-msgstr ""
+msgstr "Tallennustila"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4000,7 +3985,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "Synkronoi niin monta laitetta kuin haluat"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:612
 msgid "Sync Status"
@@ -4115,7 +4100,7 @@ msgstr "Tehtävät"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "Tiimit"
 
 #: packages/lib/models/Setting.ts:1366
 msgid "Text editor command"
@@ -4130,6 +4115,8 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"Aktiivista profiilia ei voi poistaa. Vaihda toiseen profiiliin ja yritä "
+"uudelleen."
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4195,7 +4182,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "Oletusprofiilia ei voi poistaa"
 
 #: packages/lib/models/Setting.ts:1366
 msgid ""
@@ -4343,6 +4330,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"%s WebDAV toteutus ei ole yhteensopiva Joplinin kanssa, joten sitä ei enää "
+"tueta. Käytä toista synkronointitapaa."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4356,7 +4345,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:341
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "On tallentamattomia muutoksia."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
@@ -4580,6 +4569,8 @@ msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
+"Jos haluat vaihtaa profiilia, sovellus suljetaan ja sinun on käynnistettävä "
+"se uudelleen."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
@@ -4661,9 +4652,8 @@ msgstr "Yritä uudestaan"
 
 #: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
 #: packages/lib/utils/joplinCloud.ts:353
-#, fuzzy
 msgid "Try it now"
-msgstr "Hae se nyt"
+msgstr "Kokeile nyt"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4822,7 +4812,7 @@ msgstr "Käyttö: %s"
 
 #: packages/lib/models/Setting.ts:1640
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Käytä biometrisiä tunnisteita suojataksesi pääsyn sovellukseen"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4861,6 +4851,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"Käytä biometrisiä tunnisteita suojataksesi pääsyn sovellukseen. Voit "
+"määrittää sen myöhemmin asetuksissa."
 
 #: packages/lib/models/Setting.ts:1244
 msgid ""
@@ -4896,7 +4888,7 @@ msgstr "Kelvollinen"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:25
 msgid "Verify your identity"
-msgstr ""
+msgstr "Vahvista henkilöllisyytesi"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"

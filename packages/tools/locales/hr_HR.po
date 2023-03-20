@@ -2,14 +2,12 @@
 # Copyright (C) 2001 Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # Hrvoje Mandić <trbuhom@net.hr>
-# Milo Ivir <mail@milotype.de>, 2021., 2022., 2023.
+# Milo Ivir <mail@milotype.de>, 2021., 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -17,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:657
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -47,7 +45,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:71
 msgid "(In plugin: %s)"
-msgstr "(U dodatku: %s)"
+msgstr ""
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -95,12 +93,12 @@ msgstr "%d dana"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr "%d GB"
+msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr "%d GB memorije"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:1345
 msgid "%d hour"
@@ -113,12 +111,13 @@ msgstr "%d h"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr "%d MB"
+msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
+#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "%d MB za bilješku ili privitak"
+msgstr "Privici bilješke"
 
 #: packages/lib/models/Setting.ts:1342 packages/lib/models/Setting.ts:1343
 #: packages/lib/models/Setting.ts:1344
@@ -131,8 +130,9 @@ msgstr "%d bilješke se poklapaju s ovim uzorkom. Želiš li ih izbrisati?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
+#, fuzzy
 msgid "%s"
-msgstr "%s"
+msgstr "(%s)"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -260,7 +260,7 @@ msgstr "Prihvati"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr "Račun"
+msgstr ""
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -285,8 +285,9 @@ msgid "Add body"
 msgstr "Dodaj sadržaj"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
+#, fuzzy
 msgid "Add new"
-msgstr "Dodaj novu"
+msgstr "Dodaj naslov"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -325,7 +326,6 @@ msgstr "Napredni alati"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
-"Svi podaci, uključujući bilješke, bilježnice i oznake će se trajno izbrisati."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
 #: packages/app-mobile/components/screens/Notes.tsx:203
@@ -354,18 +354,13 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Nejednoznačna bilježnica „%s”. Umjesto toga koristi ID bilježnice – pritisni "
-"„ti” za prikaz kratkog ID-a bilježnice ili koristi $b za aktualno odabranu "
-"bilježnicu"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
-"Nejednoznačna bilježnica „%s”. Umjesto toga koristi kratki ID bilježnice – "
-"pritisni „ti” za prikaz kratkog ID-a bilježnice"
 
 #: packages/app-desktop/checkForUpdates.ts:197
 msgid "An update is available, do you want to download it now?"
@@ -392,8 +387,6 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
-"Stvarno želiš vratiti standardni raspored? Trenutačna konfiguracija "
-"rasporeda će se izgubiti."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -404,8 +397,9 @@ msgid "Aritim Dark"
 msgstr "Aritim tamna"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
+#, fuzzy
 msgid "Attach"
-msgstr "Priloži"
+msgstr "Priloži …"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:604
@@ -498,7 +492,7 @@ msgstr "Natrag"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr "Osnovno"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -519,8 +513,9 @@ msgid "Bulleted List"
 msgstr "Popis s predznakom"
 
 #: packages/server/src/routes/admin/users.ts:154
+#, fuzzy
 msgid "Can Share"
-msgstr "Može dijeliti"
+msgstr "Dijeli"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
@@ -602,8 +597,9 @@ msgid "Cannot find \"%s\"."
 msgstr "Nije moguće pronaći „%s”."
 
 #: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "Nije moguće pronaći: „%s”."
+msgstr "Nije moguće pronaći „%s”."
 
 #: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
@@ -745,8 +741,9 @@ msgid "Close"
 msgstr "Zatvori"
 
 #: packages/app-mobile/components/Dropdown.tsx:166
+#, fuzzy
 msgid "Close dropdown"
-msgstr "Zatvori padajući izbornik"
+msgstr "Zatvori prozor"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:596
@@ -772,7 +769,7 @@ msgstr "Surađuj s drugima na bilježnicama"
 
 #: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Collapse"
-msgstr "Sklopi"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:305
 msgid "Coming alarms"
@@ -857,7 +854,7 @@ msgstr "Konflikti (privici)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr "Konsolidirana naplata"
+msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 msgid "Content provided by %s"
@@ -865,7 +862,7 @@ msgstr "Sadržaj pruža %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr "Nastavi"
+msgstr ""
 
 #: packages/app-mobile/components/screens/Note.tsx:930
 msgid "Convert to note"
@@ -971,8 +968,9 @@ msgstr ""
 "Greška je bila: „% s”"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
+#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "Neuspjelo mijenjanje profila: %s"
+msgstr "Neuspjelo instaliranje dodatka: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -988,15 +986,16 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
 msgid "Could not verify your identify"
-msgstr "Neuspjela provjera tvoje identifikacije"
+msgstr ""
 
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Stvori"
 
 #: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Stvori novu bilježnicu u nadređenoj bilježnici."
+msgstr "Stvara novu bilježnicu."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1127,7 +1126,7 @@ msgstr "dani"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:109
 msgid "Decrease indent level"
-msgstr "Smanji razinu uvlake"
+msgstr ""
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1219,12 +1218,14 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Izbrisati dodatak „%s”?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
+#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Izbriši profil „%s”"
+msgstr "Izbrisati bilješku „%s”?"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:420
+#, fuzzy
 msgid "Delete selected notes"
-msgstr "Izbriši odabrane bilješke"
+msgstr "Izbrisati ove bilješke?"
 
 #: packages/lib/models/Note.ts:773
 msgid "Delete these %d notes?"
@@ -1239,8 +1240,9 @@ msgstr ""
 "bilježnici."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
+#, fuzzy
 msgid "Delete this profile?"
-msgstr "Izbrisati ovaj profil?"
+msgstr "Izbrisati ove %d bilješke?"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1447,8 +1449,9 @@ msgid "Duplicate line"
 msgstr "Dupliciraj redak"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
+#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "Dupliciraj odabrane bilješke"
+msgstr "Dupliciraj redak"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -1471,8 +1474,9 @@ msgid "Edit in external editor"
 msgstr "Uredi u vanjskom uređivaču"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
+#, fuzzy
 msgid "Edit link"
-msgstr "Uredi poveznicu"
+msgstr "Uredi bilježnicu"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -1484,8 +1488,9 @@ msgid "Edit notebook"
 msgstr "Uredi bilježnicu"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
+#, fuzzy
 msgid "Edit profile"
-msgstr "Uredi profil"
+msgstr "Izvezi profil"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1630,7 +1635,7 @@ msgstr "Aktiviraj prijelom redaka"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr "Aktiviraj provjeru pravopisa u uređivaču teksta"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:1143
 msgid "Enable table of contents extension"
@@ -1759,7 +1764,7 @@ msgstr "Zatvara program."
 
 #: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Expand"
-msgstr "Rasklopi"
+msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:374
@@ -1851,11 +1856,12 @@ msgstr "Filtriraj oznake"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
-msgstr "Pronađi i zamijeni"
+msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
+#, fuzzy
 msgid "Find: "
-msgstr "Pronađi: "
+msgstr "Pronađeno: %d."
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
@@ -1896,7 +1902,7 @@ msgstr "Samo za otklanjanje grešaka: izvezi tvoj profil na vanjsku SD karticu."
 
 #: packages/lib/models/Setting.ts:1484
 msgid "For example \"%s\""
-msgstr "Na primjer „%s”"
+msgstr ""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -1920,8 +1926,9 @@ msgid "Force path style"
 msgstr "Prisili stil putanje"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:276
+#, fuzzy
 msgid "Formatting"
-msgstr "Formatiranje"
+msgstr "Informacije"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1942,8 +1949,9 @@ msgid "Full changelog"
 msgstr "Potpuni dnevnik promjena"
 
 #: packages/server/src/routes/admin/users.ts:130
+#, fuzzy
 msgid "Full name"
-msgstr "Ime i prezime"
+msgstr "Potpuni dnevnik promjena"
 
 #: packages/lib/models/Setting.ts:2476
 #: packages/server/src/services/MustacheService.ts:108
@@ -1995,11 +2003,11 @@ msgstr "Odobri autorizaciju"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Header %d"
-msgstr "Zaglavlje %d"
+msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
-msgstr "Zaglavlja"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -2014,12 +2022,14 @@ msgid "Hide %s"
 msgstr "Sakrij %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
+#, fuzzy
 msgid "Hide advanced"
-msgstr "Sakrij napredne"
+msgstr "Sakrij metapodatke"
 
 #: packages/server/src/routes/admin/users.ts:200
+#, fuzzy
 msgid "Hide disabled"
-msgstr "Sakrij deaktivirane"
+msgstr "Sakrij deaktivirane ključeve"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
@@ -2030,12 +2040,14 @@ msgid "Hide Joplin"
 msgstr "Sakrij Joplin"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:253
+#, fuzzy
 msgid "Hide keyboard"
-msgstr "Sakrij tipkovnicu"
+msgstr "Sakrij metapodatke"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
+#, fuzzy
 msgid "Hide more actions"
-msgstr "Sakrij daljnje radnje"
+msgstr "Sakrij metapodatke"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2196,7 +2208,7 @@ msgstr "U: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:119
 msgid "Increase indent level"
-msgstr "Povećaj razinu uvlake"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 msgid "Indent less"
@@ -2225,8 +2237,9 @@ msgstr "Umetni poveznicu"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:638
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
+#, fuzzy
 msgid "Insert time"
-msgstr "Umetni vrijeme"
+msgstr "Umetni datum/vrijeme"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 msgid "Install"
@@ -2292,7 +2305,7 @@ msgstr "Elementi koje se ne mogu sinkronizirati"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr "Prati nas na Twitteru"
+msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2377,7 +2390,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
 msgid "KaTeX"
-msgstr "KaTeX"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:1530
 msgid "Keep note history for"
@@ -2448,12 +2461,14 @@ msgid "Lines"
 msgstr "Broj redaka"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:174
+#, fuzzy
 msgid "Link"
-msgstr "Poveznica"
+msgstr "podebljani tekst"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
+#, fuzzy
 msgid "Link description"
-msgstr "Opis poveznice"
+msgstr "Šifriranje"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Link has been copied to clipboard!"
@@ -2463,8 +2478,9 @@ msgstr[1] "Poveznice su kopirane u međuspremnik!"
 msgstr[2] "Poveznice su kopirane u međuspremnik!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
+#, fuzzy
 msgid "Link text"
-msgstr "Tekst poveznice"
+msgstr "podebljani tekst"
 
 #: packages/app-mobile/components/screens/Note.tsx:198
 msgid "Links with protocol \"%s\" are not supported"
@@ -2478,7 +2494,7 @@ msgstr "Element popisa"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
-msgstr "Popisi"
+msgstr ""
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
@@ -2543,12 +2559,14 @@ msgid "Manage master password..."
 msgstr "Upravjaj glavnom lozinkom …"
 
 #: packages/lib/utils/joplinCloud.ts:165
+#, fuzzy
 msgid "Manage multiple users"
-msgstr "Upravljaj korisnicima"
+msgstr "Upravjaj glavnom lozinkom"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+#, fuzzy
 msgid "Manage profiles"
-msgstr "Upravljaj profilima"
+msgstr "Aktualiziraj profil"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2613,15 +2631,17 @@ msgstr "Najviše istovremenih veza"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr "Maksimalna veličina elementa"
+msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:117
+#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Maksimalna veličina bilješke ili privitka"
+msgstr "Privici bilješke"
 
 #: packages/server/src/routes/admin/users.ts:150
+#, fuzzy
 msgid "Max Total Size"
-msgstr "Maksimalna ukupna veličina"
+msgstr "Stvarna veličina"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 msgid "Missing keys"
@@ -2636,8 +2656,9 @@ msgid "Missing required argument: %s"
 msgstr "Nedostaje obavezni argument: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
+#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "Nedostaje obavezna vrijednost oznake: %s"
+msgstr "Nedostaje obavezni argument: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
@@ -2672,8 +2693,11 @@ msgid "Move to notebook..."
 msgstr "Premjesti u bilježnicu..."
 
 #: packages/app-cli/app/command-mv.js:14
+#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr "Premješta zadani element <item> u bilježnicu [notebook]"
+msgstr ""
+"Premješta bilješke koje se poklapaju s bilješkom <note> u bilježnicu "
+"[notebook]."
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:20
@@ -2724,7 +2748,7 @@ msgstr "Nova verzija: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr "Sljedeće poklapanje"
+msgstr ""
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -2812,8 +2836,9 @@ msgid "Not generated"
 msgstr "Nije izrađeno"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:70
+#, fuzzy
 msgid "Not now"
-msgstr "Ne sada"
+msgstr "Učini to sada"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
@@ -2846,6 +2871,7 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Bilješka ne postoji: „%s”. Želiš li je stvoriti?"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
+#, fuzzy
 msgid "Note editor"
 msgstr "Uređivač za bilješke"
 
@@ -2997,8 +3023,9 @@ msgid "Open %s"
 msgstr "Otvori %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
+#, fuzzy
 msgid "Open PDF viewer"
-msgstr "Otvori PDF preglednik"
+msgstr "Aktiviraj PDF-preglednik"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3029,6 +3056,7 @@ msgid "Or create an account."
 msgstr "Ili stvori novi račun."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
+#, fuzzy
 msgid "Ordered list"
 msgstr "Razvrstan popis"
 
@@ -3076,7 +3104,7 @@ msgstr "Umetni"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr "Umetni kao tekst"
+msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3089,7 +3117,7 @@ msgstr "PDF datoteka"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr "Po korisniku. Najmanje %d korisnika."
+msgstr ""
 
 #: packages/app-mobile/components/screens/Note.tsx:404
 msgid "Permission needed"
@@ -3247,15 +3275,16 @@ msgstr "Ispiši"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr "Prioritetna podrška"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:703
 msgid "Privacy Policy"
 msgstr "Politika privatnosti"
 
 #: packages/lib/utils/joplinCloud.ts:316
+#, fuzzy
 msgid "Pro"
-msgstr "Pro"
+msgstr "Profil"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3274,8 +3303,9 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
+#, fuzzy
 msgid "Profile name"
-msgstr "Ime profila"
+msgstr "Ime profila:"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3286,28 +3316,30 @@ msgid "Profile Version: %s"
 msgstr "Verzija profila: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
+#, fuzzy
 msgid "Profiles"
-msgstr "Profili"
+msgstr "Profil"
 
 #: packages/app-mobile/components/screens/Note.tsx:944
 msgid "Properties"
 msgstr "Svojstva"
 
 #: packages/lib/models/Setting.ts:1473
+#, fuzzy
 msgid "Proxy enabled"
-msgstr "Proxy aktiviran"
+msgstr "Aktivirano"
 
 #: packages/lib/models/Setting.ts:1495
 msgid "Proxy timeout (seconds)"
-msgstr "Istek vremena proxija (u sekundama)"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:1483
 msgid "Proxy URL"
-msgstr "URL proxija"
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr "Javno-privatni par ključeva:"
+msgstr "Javno-privatan par ključa:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -3377,8 +3409,9 @@ msgid "Refresh"
 msgstr "Osvježi"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
+#, fuzzy
 msgid "Regular expression"
-msgstr "Regularni izraz"
+msgstr "Aktiviraj matematičke izraze"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 #: packages/app-desktop/gui/Root.tsx:179
@@ -3422,11 +3455,12 @@ msgstr "Obnovi ključ"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr "Zamijeni"
+msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
+#, fuzzy
 msgid "Replace all"
-msgstr "Zamijeni sve"
+msgstr "Označi sve"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
@@ -3434,9 +3468,10 @@ msgstr "Zamijeni sa …"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr "Zamijeni: "
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
+#, fuzzy
 msgid "Reset application layout"
 msgstr "Obnovi raspored programa"
 
@@ -3578,6 +3613,7 @@ msgid "Search for plugins..."
 msgstr "Traži dodatke …"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
+#, fuzzy
 msgid "Search for..."
 msgstr "Traži …"
 
@@ -3679,8 +3715,9 @@ msgid "Share"
 msgstr "Dijeli"
 
 #: packages/lib/utils/joplinCloud.ts:159
+#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "Dijeli bilježnicu i surađuj u bilježnici"
+msgstr "Premjesti bilješku u bilježnicu."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
@@ -3703,8 +3740,9 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "Prečaci nisu dostupni u naredbenom retku."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
+#, fuzzy
 msgid "Show advanced"
-msgstr "Prikaži napredne"
+msgstr "Prikaži napredne postavke"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:217
 msgid "Show Advanced Settings"
@@ -3719,16 +3757,18 @@ msgid "Show completed to-dos"
 msgstr "Prikaži završene zadatke"
 
 #: packages/server/src/routes/admin/users.ts:200
+#, fuzzy
 msgid "Show disabled"
-msgstr "Prikaži deaktivirane"
+msgstr "Prikaži deaktivirane ključeve"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Show disabled keys"
 msgstr "Prikaži deaktivirane ključeve"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
+#, fuzzy
 msgid "Show more actions"
-msgstr "Prikaži više radnji"
+msgstr "Prikaži broj bilježaka"
 
 #: packages/lib/models/Setting.ts:883
 msgid "Show note counts"
@@ -3744,7 +3784,7 @@ msgstr "Prikaži ikonu u programskoj traci"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:290
 msgid "Show/hide the sidebar"
-msgstr "Prikaži/Sakrij bočnu traku"
+msgstr ""
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:289
@@ -3918,7 +3958,7 @@ msgstr "Prekini vanjsko uređivanje"
 
 #: packages/lib/utils/joplinCloud.ts:129
 msgid "Storage space"
-msgstr "Memorija"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4092,8 +4132,9 @@ msgid "Take photo"
 msgstr "Snimi sliku"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:95
+#, fuzzy
 msgid "Task list"
-msgstr "Popis zadataka"
+msgstr "Zadaci"
 
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
@@ -4102,7 +4143,7 @@ msgstr "Zadaci"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr "Timovi"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:1366
 msgid "Text editor command"
@@ -4118,8 +4159,6 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
-"Aktivni profil se ne može izbrisati. Prebaci se na jedan drugi profil i "
-"pokušaj ponovo."
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4186,7 +4225,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr "Standardni profil se ne može izbrisati"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:1366
 msgid ""
@@ -4336,8 +4375,6 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
-"WebDAV implementacija za %s nije kompatibilna s Joplinom i više se ne "
-"podržava. Koristi jednu drugu metodu sinkronizacije."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4349,7 +4386,7 @@ msgstr "Trenutačno nema bilježaka. Stvori bilješku pritiskom na gumb (+)."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:341
 msgid "There are unsaved changes."
-msgstr "Postoje nespremljene promjene."
+msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
@@ -4571,8 +4608,6 @@ msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
-"Za mijenjanje profila, program će se zatvoriti i morat ćeš ga ponovo "
-"pokrenuti."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
@@ -4587,8 +4622,9 @@ msgid "to-do"
 msgstr "zadatak"
 
 #: packages/app-mobile/components/note-item.js:143
+#, fuzzy
 msgid "to-do: %s"
-msgstr "zadatak: %s"
+msgstr "zadatak"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
 msgid "Toggle comment"
@@ -4639,8 +4675,9 @@ msgid "Tools"
 msgstr "Alati"
 
 #: packages/server/src/routes/admin/users.ts:146
+#, fuzzy
 msgid "Total Size"
-msgstr "Ukupna veličina"
+msgstr "Stvarna veličina"
 
 #: packages/lib/services/ReportService.ts:282
 msgid "Total: %d/%d"
@@ -4653,8 +4690,9 @@ msgstr "Pokušaj ponovo"
 
 #: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
 #: packages/lib/utils/joplinCloud.ts:353
+#, fuzzy
 msgid "Try it now"
-msgstr "Isprobaj"
+msgstr "Učini to sada"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4707,6 +4745,7 @@ msgstr ""
 "Preuzeta je nepoznata vrsta elementa – nadogradi Joplin na najnoviju verziju"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
+#, fuzzy
 msgid "Unordered list"
 msgstr "Nerazvstan popis"
 
@@ -4854,8 +4893,6 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
-"Koristi svoje biometrijske podatke za osiguravanje pristupa tvom programu. "
-"To možeš postaviti i kasnije u postavkama."
 
 #: packages/lib/models/Setting.ts:1244
 msgid ""
@@ -4890,7 +4927,7 @@ msgstr "Ispravno"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:25
 msgid "Verify your identity"
-msgstr "Potvrdi svoj identitet"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
@@ -5064,6 +5101,49 @@ msgstr "Uvećaj prikaz"
 #: packages/app-desktop/gui/MenuBar.tsx:742
 msgid "Zoom Out"
 msgstr "Umanji prikaz"
+
+#, fuzzy
+#~ msgid "Changes have been saved"
+#~ msgstr "Bilješka je spremljena."
+
+#, fuzzy
+#~ msgid "Create KaTeX region"
+#~ msgstr "Stvori korisnika"
+
+#, fuzzy
+#~ msgid "Create link"
+#~ msgstr "Stvori"
+
+#, fuzzy
+#~ msgid "Create task list"
+#~ msgstr "Stvori bilježnicu"
+
+#, fuzzy
+#~ msgid "Navigate to the previous view"
+#~ msgstr "Fokusiraj prethodno okno"
+
+#, fuzzy
+#~ msgid "Remove KaTeX region"
+#~ msgstr "Stvori korisnika"
+
+#, fuzzy
+#~ msgid "Unitalic"
+#~ msgstr "Kurziv"
+
+#, fuzzy
+#~ msgid "Bold text"
+#~ msgstr "Podebljano"
+
+#, fuzzy
+#~ msgid "Edit Link"
+#~ msgstr "Uredi bilježnicu"
+
+#~ msgid "Insert Date Time"
+#~ msgstr "Umetni datum/vrijeme"
+
+#, fuzzy
+#~ msgid "Italicize"
+#~ msgstr "Kurziv"
 
 #, fuzzy
 #~ msgid "Save as SVG"
