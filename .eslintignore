@@ -66,6 +66,7 @@ packages/lib/welcomeAssets.js
 packages/plugins/**/api
 packages/plugins/**/dist
 packages/server/dist/
+packages/utils/dist/
 packages/tools/node_modules
 packages/tools/PortableAppsLauncher
 packages/turndown-plugin-gfm/
