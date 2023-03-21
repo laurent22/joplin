@@ -49,8 +49,8 @@ const SideMenuComponent = ({
 				renderNavigationView={() => props.menu}
 				drawerPosition={props.menuPosition}
 				drawerWidth={props.openMenuOffset}
-				onDrawerOpen={() => props.onChange && props.onChange(true)}
-				onDrawerClose={() => props.onChange && props.onChange(false)}
+				onDrawerOpen={() => (props.onDrawerStateChange && props.onDrawerStateChange(true))}
+				onDrawerClose={() => (props.onDrawerStateChange && props.onDrawerStateChange(false))}
 				{...props}
 			>
 				{children}
@@ -60,7 +60,7 @@ const SideMenuComponent = ({
 
 	return (
 		// @ts-ignore
-		<SideMenuFallback {...props}>
+		<SideMenuFallback {...props} onChange={props.onDrawerStateChange}>
 			{children}
 		</SideMenuFallback>
 	);

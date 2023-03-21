@@ -992,7 +992,7 @@ class AppComponent extends React.Component {
 					edgeHitWidth={5}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
-					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
+					onDrawerStateChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					onSliding={(percent: number) => {
 						this.props.dispatch({
 							type: 'SIDE_MENU_OPEN_PERCENT',
