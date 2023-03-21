@@ -865,7 +865,8 @@ class AppComponent extends React.Component {
 	}
 
 	public componentDidUpdate(prevProps: any) {
-		if (this.props.showSideMenu !== prevProps.showSideMenu) {
+		// Don't do this for android, DrawerLayoutAndroid will do its own dimming.
+		if (this.props.showSideMenu !== prevProps.showSideMenu && Platform.OS !== 'android') {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
 				duration: 600,
