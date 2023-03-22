@@ -3,7 +3,7 @@ const { connect } = require('react-redux');
 const SideMenu_ = require('react-native-side-menu-updated').default;
 import { Dimensions, DrawerLayoutAndroid, Platform } from 'react-native';
 import { State } from '@joplin/lib/reducer';
-import { useEffect, useRef } from 'react';
+import { FunctionComponent, useEffect, useRef } from 'react';
 
 class SideMenuFallback extends SideMenu_ {
 	public onLayoutChange(e: any) {
@@ -15,8 +15,7 @@ class SideMenuFallback extends SideMenu_ {
 	}
 }
 
-const SideMenuComponent = ({
-	// @ts-ignore
+const SideMenuComponent: FunctionComponent<any> = ({
 	children,
 	...props
 }) => {
@@ -34,7 +33,6 @@ const SideMenuComponent = ({
 
 	if (Platform.OS === 'android') {
 		return (
-			// @ts-ignore
 			<DrawerLayoutAndroid
 				// Need to do this if the drawer position switches from left to right
 				// Otherwise, there's a bug
