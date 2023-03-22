@@ -3,7 +3,10 @@
 	"version": "2.10.0",
 	"description": "Utilities for Joplin",
 	"repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
-	"main": "dist/index.js",
+	"exports": {
+		".": "./dist/index.js",
+		"./net": "./dist/net.js"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
