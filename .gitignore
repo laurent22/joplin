@@ -178,6 +178,7 @@ packages/app-desktop/gui/MainScreen/commands/showPrompt.js
 packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js
 packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js
 packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js
+packages/app-desktop/gui/MainScreen/commands/toggleEditorFullScreen.js
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.js
 packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js
