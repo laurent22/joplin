@@ -8,9 +8,9 @@ const { connect } = require('react-redux');
 const { buildStyle } = require('@joplin/lib/theme');
 
 interface NoteToolbarProps {
-	themeId: number;
-	style: any;
-	toolbarButtonInfos: ToolbarButtonInfo[];
+  themeId: number;
+  style: any;
+  toolbarButtonInfos: ToolbarButtonInfo[];
 }
 
 function styles_(props: NoteToolbarProps) {
@@ -37,6 +37,7 @@ const mapStateToProps = (state: any) => {
 
 	return {
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
+			'toggleEditorFullScreen',
 			'showSpellCheckerMenu',
 			'editAlarm',
 			'toggleVisiblePanes',
