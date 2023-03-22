@@ -2,6 +2,7 @@ import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
+import PluginService from './services/plugins/PluginService';
 
 interface PluginList {
   completeList: string;
@@ -10,11 +11,16 @@ interface PluginList {
 
 function getPluginLists(plugins: Plugins): PluginList {
 	const pluginList = [];
-	if (Object.keys(plugins).length > 0) {
-		for (const pluginId in plugins) {
-			pluginList.push(`${plugins[pluginId].manifest.name}: ${plugins[pluginId].manifest.version}`);
+	const pluginSettings = PluginService.instance().unserializePluginSettings(Setting.value('plugins.states'));
+	const enabledPlugins = Object.fromEntries(Object.entries(plugins).filter((p) => pluginSettings[p[0]] && pluginSettings[p[0]].enabled === true));
+
+	if (Object.keys(enabledPlugins).length > 0) {
+		for (const pluginId in enabledPlugins) {
+			pluginList.push(`${enabledPlugins[pluginId].manifest.name}: ${enabledPlugins[pluginId].manifest.version}`);
 		}
 	}
+
+	pluginList.sort();
 
 	let completeList = '';
 	let summary = '';

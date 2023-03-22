@@ -1,4 +1,5 @@
-import { execCommand2, rootDir } from './tool-utils';
+import { execCommand } from '@joplin/utils';
+import { rootDir } from './tool-utils';
 
 const sqlts = require('@rmp135/sql-ts').default;
 const fs = require('fs-extra');
@@ -6,7 +7,7 @@ const fs = require('fs-extra');
 async function main() {
 	// Run the CLI app once so as to generate the database file
 	process.chdir(`${rootDir}/packages/app-cli`);
-	await execCommand2('yarn start version');
+	await execCommand('yarn start version');
 
 	const sqlTsConfig = {
 		'client': 'sqlite3',

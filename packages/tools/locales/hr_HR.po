@@ -653,7 +653,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Razlikuje velika i mala slova"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -1072,7 +1072,7 @@ msgstr "Stvaranje izvještaja …"
 
 #: packages/app-desktop/checkForUpdates.ts:180
 msgid "Current version is up-to-date."
-msgstr "Trenutačna verzija je najnovija verzija."
+msgstr "Trenutačna verzija je aktualna."
 
 #: packages/lib/models/Note.ts:38
 msgid "custom order"
@@ -1174,7 +1174,7 @@ msgstr "Izbriši istekle sesije"
 
 #: packages/server/src/services/TaskService.ts:20
 msgid "Delete expired tokens"
-msgstr "Izbriši istekle tokene"
+msgstr "Izbriši istekle ključeve"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1392,7 +1392,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 msgid "Done"
-msgstr ""
+msgstr "Gotovo"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1582,7 +1582,7 @@ msgstr "Aktiviraj audio-player"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Aktivirati biometrijsku autentifikaciju?"
 
 #: packages/lib/models/Setting.ts:1146
 msgid "Enable deflist syntax"
@@ -2228,7 +2228,7 @@ msgstr "Umetnuti kȏd"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
-msgstr "Umetnuto"
+msgstr "Umetni"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:199
 msgid "Insert Hyperlink"
@@ -2394,7 +2394,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1530
 msgid "Keep note history for"
-msgstr "Čuvaj povijest bilješke"
+msgstr "Čuvaj povijest bilježaka"
 
 #: packages/lib/models/Setting.ts:1403
 msgid "Keyboard Mode"
@@ -2873,7 +2873,7 @@ msgstr "Bilješka ne postoji: „%s”. Želiš li je stvoriti?"
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
 #, fuzzy
 msgid "Note editor"
-msgstr "Povijest bilježaka"
+msgstr "Uređivač za bilješke"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3058,7 +3058,7 @@ msgstr "Ili stvori novi račun."
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
 #, fuzzy
 msgid "Ordered list"
-msgstr "Stvori korisnika"
+msgstr "Razvrstan popis"
 
 #: packages/app-desktop/gui/MenuBar.tsx:409
 msgid "Other applications..."
@@ -3150,8 +3150,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
-"Imaj na umu, da ako je velika bilježnica, može potrajati nekoliko minuta dok "
-"se sve bilješke pojave na uređaju primatelja."
+"Imaj na umu, da ako je bilježnica velika, pojavljivanje svih bilježaka na "
+"uređaju primatelja može potrajati nekoliko minuta."
 
 #: packages/lib/onedrive-api-node-utils.js:118
 msgid ""
@@ -3162,9 +3162,9 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 "Otvori sljedeći URL u pregledniku za autentificiranje programa. Program će "
-"stvoriti mapu u „Aplikacije/Joplin” i koristit će je samo za čitanje i "
-"pisanje. Program neće moći pristupiti datotekama izvan ove mape niti bilo "
-"kojim drugim osobnim podacima. Nikoji podaci se neće dijeliti s drugima."
+"stvoriti mapu u „Aplikacije/Joplin” dozvolama za čitanje i pisanje. Program "
+"neće moći pristupiti datotekama izvan ove mape niti bilo kojim drugim "
+"osobnim podacima. Nikoji podaci se neće dijeliti s drugima."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3262,7 +3262,7 @@ msgstr "Pritisni za postavljanje lozinke za dešifriranje."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "Prethodno poklapanje"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
@@ -3464,7 +3464,7 @@ msgstr "Označi sve"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "Zamijeni sa …"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
@@ -3473,7 +3473,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 #, fuzzy
 msgid "Reset application layout"
-msgstr "Promijeni raspored programa"
+msgstr "Obnovi raspored programa"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3729,7 +3729,7 @@ msgstr "Dijeli bilježnicu …"
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr ""
+msgstr "Dijeljenje kontrole pristupa"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3737,7 +3737,7 @@ msgstr "Dijeljenje bilježnice …"
 
 #: packages/app-cli/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Prečaci nisu podržani u naredbenom retku."
+msgstr "Prečaci nisu dostupni u naredbenom retku."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
 #, fuzzy
@@ -3776,7 +3776,7 @@ msgstr "Prikaži broj bilježaka"
 
 #: packages/lib/models/Setting.ts:942
 msgid "Show sort order buttons"
-msgstr "Prikaži gumbe redoslijeda"
+msgstr "Prikaži gumbe za određivanje redoslijeda"
 
 #: packages/lib/models/Setting.ts:1162
 msgid "Show tray icon"
@@ -4021,12 +4021,12 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Mijenja se u bilježnicu [notebook] – sve daljnje operacije izvode se u toj "
-"bilježnici."
+"Prebacuje na bilježnicu [notebook] – sve daljnje operacije će se izvoditi u "
+"ovoj bilježnici."
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "Sinkroniziraj koliko god uređaja želiš"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:612
 msgid "Sync Status"
@@ -4212,7 +4212,7 @@ msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
-"Standardna metoda šifriranja promijenjena je u sigurniju metodu. "
+"Standardna metoda šifriranja je promijenjena sa sigurnijom metodom. "
 "Preporučujemo da je primijeniš na tvoje podatke."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
@@ -4404,7 +4404,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Došlo je do [konflikta](%s) s dolje navedenim privitkom.\n"
+"Došlo je do konflikta [conflict](%s) s dolje navedenim privitkom.\n"
 "\n"
 "%s"
 
@@ -4467,7 +4467,7 @@ msgid ""
 "access Joplin."
 msgstr ""
 "Ovaj ključ za autorizaciju potreban je samo za dozvoljavanje drugim "
-"programima pristupiti Joplinu."
+"programima da pristupe Joplinu."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
 msgid ""
@@ -4747,7 +4747,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
 #, fuzzy
 msgid "Unordered list"
-msgstr "Stvori korisnika"
+msgstr "Nerazvstan popis"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:162
 msgid "Unpublish note"
@@ -4853,7 +4853,7 @@ msgstr "Korištenje: %s"
 
 #: packages/lib/models/Setting.ts:1640
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Koristi biometrijske podatke za osiguravanje pristupa programu"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -5436,6 +5436,9 @@ msgstr "Umanji prikaz"
 
 #~ msgid "Give focus to next pane"
 #~ msgstr "Fokusiraj sljedeće okno"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Fokusiraj prethodno okno"
 
 #~ msgid "Exit command line mode"
 #~ msgstr "Napusti naredbeni redak"

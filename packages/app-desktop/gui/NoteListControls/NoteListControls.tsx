@@ -51,6 +51,7 @@ const StyledButton = styled(Button)`
 	height: 26px;
 	min-height: 26px;
 	max-width: none;
+	white-space: nowrap;
 
   .fa, .fas {
     font-size: 11px;

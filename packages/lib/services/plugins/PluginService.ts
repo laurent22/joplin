@@ -108,6 +108,10 @@ export default class PluginService extends BaseService {
 		return this.isSafeMode_;
 	}
 
+	public get appVersion(): string {
+		return this.appVersion_;
+	}
+
 	public set isSafeMode(v: boolean) {
 		this.isSafeMode_ = v;
 	}

@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.10.11](https://github.com/laurent22/joplin/releases/tag/v2.10.11) (Pre-release) - 2023-03-17T10:54:02Z
+
+- Fixed: Fixes text wrap on new buttons ([#7938](https://github.com/laurent22/joplin/issues/7938) by [@julien](https://github.com/julien))
+- Fixed: List enabled plugins only in About Joplin and in alphabetical order ([#7923](https://github.com/laurent22/joplin/issues/7923)) ([#7920](https://github.com/laurent22/joplin/issues/7920) by [@julien](https://github.com/julien))
+
 ## [v2.10.10](https://github.com/laurent22/joplin/releases/tag/v2.10.10) (Pre-release) - 2023-03-13T23:16:37Z
 
 - Fixed: Fix issue where search bar can randomly lose focus while searching ([bd42914](https://github.com/laurent22/joplin/commit/bd42914))

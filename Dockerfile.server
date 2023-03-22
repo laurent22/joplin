@@ -30,6 +30,7 @@ COPY packages/fork-uslug ./packages/fork-uslug
 COPY packages/htmlpack ./packages/htmlpack
 COPY packages/renderer ./packages/renderer
 COPY packages/tools ./packages/tools
+COPY packages/utils ./packages/utils
 COPY packages/lib ./packages/lib
 COPY packages/server ./packages/server
 

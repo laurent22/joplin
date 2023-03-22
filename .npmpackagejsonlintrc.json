@@ -14,7 +14,8 @@
 					"@joplin/turndown-plugin-gfm",
 					"@joplin/tools",
 					"@joplin/react-native-saf-x",
-					"@joplin/react-native-alarm-notification"
+					"@joplin/react-native-alarm-notification",
+					"@joplin/utils"
 				]
 		  	}
 		]

@@ -1,4 +1,4 @@
-import { execCommand2 } from './tool-utils';
+import { execCommand } from '@joplin/utils';
 
 async function main() {
 	const argv = require('yargs').argv;
@@ -6,9 +6,9 @@ async function main() {
 
 	const version = argv._[0];
 
-	await execCommand2(`docker pull "joplin/server:${version}"`);
-	await execCommand2(`docker tag "joplin/server:${version}" "joplin/server:latest"`);
-	await execCommand2('docker push joplin/server:latest');
+	await execCommand(`docker pull "joplin/server:${version}"`);
+	await execCommand(`docker tag "joplin/server:${version}" "joplin/server:latest"`);
+	await execCommand('docker push joplin/server:latest');
 }
 
 if (require.main === module) {
