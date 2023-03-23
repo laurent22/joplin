@@ -24,9 +24,10 @@ export const getResourceDir = (profile: Profile, isSubProfile: boolean) => {
 	return `${getProfilesRootDir()}/resources-${profile.id}`;
 };
 
-export const getDatabaseName = (profile: Profile, isSubProfile: boolean) => {
-	if (!isSubProfile) return 'joplin.sqlite';
-	return `joplin-${profile.id}.sqlite`;
+// The suffix is for debugging only
+export const getDatabaseName = (profile: Profile, isSubProfile: boolean, suffix: string = '') => {
+	if (!isSubProfile) return `joplin${suffix}.sqlite`;
+	return `joplin-${profile.id}${suffix}.sqlite`;
 };
 
 export const loadProfileConfig = async () => {
