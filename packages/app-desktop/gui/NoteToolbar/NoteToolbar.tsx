@@ -37,6 +37,7 @@ const mapStateToProps = (state: any) => {
 
 	return {
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
+			'toggleEditorFullScreen',
 			'showSpellCheckerMenu',
 			'editAlarm',
 			'toggleVisiblePanes',
