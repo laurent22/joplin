@@ -13,7 +13,11 @@ interface Props {
 }
 
 export default (props: Props) => {
-	const [initialPromptDone, setInitialPromptDone] = useState(Setting.value('security.biometricsInitialPromptDone'));
+	// The initial prompt is there so that the user can choose to opt-in to
+	// biometrics auth the first time the app is launched. However since it
+	// doesn't work properly, we disable it. We only want the user to enable the
+	// feature after they've read the description in the config screen.
+	const [initialPromptDone, setInitialPromptDone] = useState(true); // useState(Setting.value('security.biometricsInitialPromptDone'));
 	const [display, setDisplay] = useState(!!props.sensorInfo.supportedSensors && (props.sensorInfo.enabled || !initialPromptDone));
 	const [tryBiometricsCheck, setTryBiometricsCheck] = useState(initialPromptDone);
 

@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.10.9](https://github.com/laurent22/joplin/releases/tag/android-v2.10.9) (Pre-release) - 2023-03-22T18:40:57Z
+
+- Improved: Mark biometrics feature as beta and ensure no call is made if it is not enabled (e44a934)
+
 ## [android-v2.10.8](https://github.com/laurent22/joplin/releases/tag/android-v2.10.8) (Pre-release) - 2023-02-28T18:09:21Z
 
 - Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
