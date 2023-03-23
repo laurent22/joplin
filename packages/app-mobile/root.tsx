@@ -501,7 +501,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-1') });
 
 			// await db.clearForTesting();
 		}
