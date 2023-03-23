@@ -5,6 +5,17 @@ import { Dimensions, DrawerLayoutAndroid, Platform } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { FunctionComponent, useEffect, useRef } from 'react';
 
+type DrawerStateChangeCallback = (isOpen: boolean)=> void;
+
+interface Props {
+	menu: JSX.Element;
+	edgeHitWidth: number;
+	menuPosition: 'left' | 'right';
+	isOpen?: boolean;
+	openMenuOffset?: number;
+	onDrawerStateChange?: DrawerStateChangeCallback;
+}
+
 class SideMenuFallback extends SideMenu_ {
 	public onLayoutChange(e: any) {
 		const { width, height } = e.nativeEvent.layout;
@@ -15,7 +26,7 @@ class SideMenuFallback extends SideMenu_ {
 	}
 }
 
-const SideMenuComponent: FunctionComponent<any> = ({
+const SideMenuComponent: FunctionComponent<Props> = ({
 	children,
 	...props
 }) => {
