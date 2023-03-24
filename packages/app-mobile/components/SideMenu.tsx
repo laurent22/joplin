@@ -68,6 +68,7 @@ const SideMenuComponent: FunctionComponent<Props> = ({
 	}
 
 	return (
+		// Need @ts-ignore here because the old react-native-side-menu-updated won't work with TypeScript
 		// @ts-ignore
 		<SideMenuFallback {...props} onChange={props.onDrawerStateChange}>
 			{children}
