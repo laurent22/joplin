@@ -1,4 +1,4 @@
-import {
+import CommandService, {
 	CommandContext,
 	CommandDeclaration,
 	CommandRuntime,
@@ -8,9 +8,15 @@ import setLayoutItemProps from '../../ResizableLayout/utils/setLayoutItemProps';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
 
+// Record the current state of the sidebar and note list
+const lastUserLayoutStatus = {
+	isNoteListVisible: true,
+	isSidebarVisible: true,
+};
+
 export const declaration: CommandDeclaration = {
 	name: 'toggleEditorFullScreen',
-	label: () => _('toggle full screen'),
+	label: () => _('Toggle fullscreen'),
 	iconName: 'fas fa-expand',
 };
 
@@ -19,32 +25,25 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: CommandContext) => {
 			const layout = (context.state as AppState).mainLayout;
 
+			const isNoteListVisible = layoutItemProp(layout, 'noteList', 'visible');
+			const isSidebarVisible = layoutItemProp(layout, 'sideBar', 'visible');
 			let isEditorFullScreen = layoutItemProp(layout, 'editor', 'isFullScreen');
 
 			if (isEditorFullScreen === undefined) {
-				const isNoteListVisible = layoutItemProp(layout, 'noteList', 'visible');
-				const isSidebarVisible = layoutItemProp(layout, 'sideBar', 'visible');
-
 				isEditorFullScreen = !isNoteListVisible && !isSidebarVisible;
 			}
 
 			let newLayout = layout;
 
 			if (isEditorFullScreen) {
-				newLayout = setLayoutItemProps(newLayout, 'sideBar', {
-					visible: true,
-				});
-
-				newLayout = setLayoutItemProps(newLayout, 'noteList', {
-					visible: true,
-				});
+				newLayout = await CommandService.instance().execute('toggleSideBar', lastUserLayoutStatus.isSidebarVisible);
+				newLayout = await CommandService.instance().execute('toggleNoteList', lastUserLayoutStatus.isNoteListVisible);
 			} else {
-				newLayout = setLayoutItemProps(newLayout, 'sideBar', {
-					visible: false,
-				});
-				newLayout = setLayoutItemProps(newLayout, 'noteList', {
-					visible: false,
-				});
+				lastUserLayoutStatus.isSidebarVisible = isSidebarVisible;
+				lastUserLayoutStatus.isNoteListVisible = isNoteListVisible;
+
+				newLayout = await CommandService.instance().execute('toggleSideBar', false);
+				newLayout = await CommandService.instance().execute('toggleNoteList', false);
 			}
 
 			newLayout = setLayoutItemProps(newLayout, 'editor', {

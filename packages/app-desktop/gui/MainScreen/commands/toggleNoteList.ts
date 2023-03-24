@@ -12,11 +12,11 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext) => {
+		execute: async (context: CommandContext, isVisible: boolean) => {
 			const layout = (context.state as AppState).mainLayout;
 
 			const newLayout = setLayoutItemProps(layout, 'noteList', {
-				visible: !layoutItemProp(layout, 'noteList', 'visible'),
+				visible: isVisible === undefined ? !layoutItemProp(layout, 'noteList', 'visible') : isVisible,
 			});
 
 			// Toggling the sidebar will affect the size of most other on-screen components.
@@ -28,6 +28,8 @@ export const runtime = (): CommandRuntime => {
 				type: 'MAIN_LAYOUT_SET',
 				value: newLayout,
 			});
+
+			return newLayout;
 		},
 	};
 };
