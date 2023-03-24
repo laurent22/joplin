@@ -4905,7 +4905,7 @@ __metadata:
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     styled-components: 5.3.8
     styled-system: 5.1.5
     taboverride: 4.0.3
@@ -5145,7 +5145,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.3
     sprintf-js: 1.1.2
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     string-padding: 1.0.2
     string-to-stream: 3.0.1
     tar: 6.1.13
@@ -5334,7 +5334,7 @@ __metadata:
     rate-limiter-flexible: 2.4.1
     raw-body: 2.5.2
     source-map-support: 0.5.21
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     stripe: 8.222.0
     typescript: 4.9.4
     uuid: 9.0.0
@@ -5378,7 +5378,7 @@ __metadata:
     sass: 1.58.3
     sharp: 0.31.3
     source-map-support: 0.5.21
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     typescript: 4.9.4
     uri-template: 2.0.0
     yargs: 17.7.1
@@ -21161,7 +21161,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.3
     sprintf-js: 1.1.2
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     string-padding: 1.0.2
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
@@ -30047,9 +30047,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.4":
-  version: 5.1.4
-  resolution: "sqlite3@npm:5.1.4"
+"sqlite3@npm:5.1.5":
+  version: 5.1.5
+  resolution: "sqlite3@npm:5.1.5"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.0
     node-addon-api: ^4.2.0
@@ -30063,7 +30063,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: a265220515b0168cb166ece9b7fd3b230fe93fe9dabea8f426b0bfbb833bf39be1177fba4e161a7796e471caace6ca2c312fb3fc44c1f053a3b5617b250a5575
+  checksum: b7df68c8d4a16cd1d8d42e34035973c2e4cff33e0b917ff8830fa21c84e3bc0d16beaf51589a4a45df9c52e30bf0224122e6c67d0f17ff1d776be738d8706b02
   languageName: node
   linkType: hard
 
