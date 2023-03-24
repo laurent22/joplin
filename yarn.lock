@@ -4905,7 +4905,7 @@ __metadata:
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     styled-components: 5.3.8
     styled-system: 5.1.5
     taboverride: 4.0.3
@@ -5145,7 +5145,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.3
     sprintf-js: 1.1.2
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     string-padding: 1.0.2
     string-to-stream: 3.0.1
     tar: 6.1.13
@@ -5270,7 +5270,7 @@ __metadata:
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
-    markdown-it-multimd-table: 4.2.0
+    markdown-it-multimd-table: 4.2.1
     markdown-it-sub: 1.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
@@ -5324,7 +5324,7 @@ __metadata:
     nanoid: 2.1.11
     node-cron: 3.0.2
     node-env-file: 0.1.8
-    node-mocks-http: 1.12.1
+    node-mocks-http: 1.12.2
     nodemailer: 6.9.1
     nodemon: 2.0.21
     pg: 8.9.0
@@ -5334,7 +5334,7 @@ __metadata:
     rate-limiter-flexible: 2.4.1
     raw-body: 2.5.2
     source-map-support: 0.5.21
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     stripe: 8.222.0
     typescript: 4.9.4
     uuid: 9.0.0
@@ -5378,7 +5378,7 @@ __metadata:
     sass: 1.58.3
     sharp: 0.31.3
     source-map-support: 0.5.21
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     typescript: 4.9.4
     uri-template: 2.0.0
     yargs: 17.7.1
@@ -21161,7 +21161,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.3
     sprintf-js: 1.1.2
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     string-padding: 1.0.2
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
@@ -22775,10 +22775,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:4.2.0":
-  version: 4.2.0
-  resolution: "markdown-it-multimd-table@npm:4.2.0"
-  checksum: 07bdbdbf6d15dfd14d98e5daad79fe98fd30f8afe14cc8e87bec275c052dad5500320786949d588d9aa7970b9c84033e798ea3b131fbe182e5c60c72b0bcb87f
+"markdown-it-multimd-table@npm:4.2.1":
+  version: 4.2.1
+  resolution: "markdown-it-multimd-table@npm:4.2.1"
+  checksum: a494d9485fe4b69c37bdf363be1d4243113c2f73b1c5cbb533764c9ffae5b7f3b8f43c9a6c4a147c87368388bbce04dc63fac00bd36cb1000200643ae48eaa43
   languageName: node
   linkType: hard
 
@@ -24461,9 +24461,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:1.12.1":
-  version: 1.12.1
-  resolution: "node-mocks-http@npm:1.12.1"
+"node-mocks-http@npm:1.12.2":
+  version: 1.12.2
+  resolution: "node-mocks-http@npm:1.12.2"
   dependencies:
     accepts: ^1.3.7
     content-disposition: ^0.5.3
@@ -24475,7 +24475,7 @@ __metadata:
     parseurl: ^1.3.3
     range-parser: ^1.2.0
     type-is: ^1.6.18
-  checksum: 80b2ef4967d95e5804f4be5edd13bab06e6cad7c00813e32fd1958189ee8c4c68b833aabcbb2b39194b412b14504a7724e628d74ca5956a83221e0fa838aaf92
+  checksum: 39e50b7146bd37fd56a0588ee3df46fd310f76395d52e9b8889545910aca6cc8e8a41de3cdd3e103903d4bbfc556e67624fcbe934c0bd3b0cca6ee1358a0f440
   languageName: node
   linkType: hard
 
@@ -30047,9 +30047,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.4":
-  version: 5.1.4
-  resolution: "sqlite3@npm:5.1.4"
+"sqlite3@npm:5.1.5":
+  version: 5.1.5
+  resolution: "sqlite3@npm:5.1.5"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.0
     node-addon-api: ^4.2.0
@@ -30063,7 +30063,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: a265220515b0168cb166ece9b7fd3b230fe93fe9dabea8f426b0bfbb833bf39be1177fba4e161a7796e471caace6ca2c312fb3fc44c1f053a3b5617b250a5575
+  checksum: b7df68c8d4a16cd1d8d42e34035973c2e4cff33e0b917ff8830fa21c84e3bc0d16beaf51589a4a45df9c52e30bf0224122e6c67d0f17ff1d776be738d8706b02
   languageName: node
   linkType: hard
 
