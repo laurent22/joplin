@@ -140,13 +140,8 @@ const SideMenuContentComponent = (props: Props) => {
 			_('Notebook: %s', folder.title),
 			[
 				{
-					text: _('Rename'),
+					text: _('Edit'),
 					onPress: () => {
-						if (folder.encryption_applied) {
-							alert(_('Encrypted notebooks cannot be renamed'));
-							return;
-						}
-
 						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 						props.dispatch({
