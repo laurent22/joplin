@@ -8,6 +8,18 @@ export interface SensorInfo {
 }
 
 export default async (): Promise<SensorInfo> => {
+	// Early exit if the feature is disabled, so that we don't make any
+	// FingerprintScanner scanner calls, since it seems they can fail and freeze
+	// the app.
+
+	if (!Setting.value('security.biometricsEnabled')) {
+		return {
+			enabled: false,
+			sensorsHaveChanged: false,
+			supportedSensors: '',
+		};
+	}
+
 	let hasChanged = false;
 	let supportedSensors = '';
 
