@@ -982,6 +982,10 @@ class AppComponent extends React.Component {
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<Drawer
+					// Need to reset the key here based on menu position, otherwise
+					// the drawer will flash open on screen and close every time the
+					// drawer position switches (i.e. when opening or closing a note)
+					key={`main-drawer-${menuPosition}`}
 					open={this.props.showSideMenu}
 					onOpen={() => this.sideMenu_change(true)}
 					onClose={() => this.sideMenu_change(false)}
