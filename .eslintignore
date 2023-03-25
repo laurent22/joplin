@@ -396,6 +396,7 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js
 packages/app-mobile/components/NoteEditor/types.js
+packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
