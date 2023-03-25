@@ -67,7 +67,7 @@ const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js'
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
-import SideMenu from './components/SideMenu';
+import { Drawer } from 'react-native-drawer-layout';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
@@ -116,6 +116,9 @@ import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import { ReactNode } from 'react';
+
+type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
@@ -951,8 +954,8 @@ class AppComponent extends React.Component {
 		if (this.props.appState !== 'ready') return null;
 		const theme: Theme = themeStyle(this.props.themeId);
 
-		let sideMenuContent = null;
-		let menuPosition = 'left';
+		let sideMenuContent: ReactNode = null;
+		let menuPosition: SideMenuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
@@ -987,18 +990,16 @@ class AppComponent extends React.Component {
 
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={5}
-					openMenuOffset={this.state.sideMenuWidth}
-					menuPosition={menuPosition}
-					onDrawerStateChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
-					onSliding={(percent: number) => {
-						this.props.dispatch({
-							type: 'SIDE_MENU_OPEN_PERCENT',
-							value: percent,
-						});
+				<Drawer
+					open={this.props.showSideMenu}
+					onOpen={() => this.sideMenu_change(true)}
+					onClose={() => this.sideMenu_change(false)}
+					drawerPosition={menuPosition}
+					swipeEdgeWidth={5}
+					drawerStyle={{
+						width: this.state.sideMenuWidth,
 					}}
+					renderDrawerContent={() => sideMenuContent}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuContext style={{ flex: 1 }}>
@@ -1016,7 +1017,7 @@ class AppComponent extends React.Component {
 							/> }
 						</SafeAreaView>
 					</MenuContext>
-				</SideMenu>
+				</Drawer>
 			</View>
 		);
 
