@@ -28,7 +28,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
+const { Keyboard, NativeModules, BackHandler, View, StatusBar, Platform, Dimensions } = require('react-native');
 import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -716,7 +716,6 @@ class AppComponent extends React.Component {
 		super();
 
 		this.state = {
-			sideMenuContentOpacity: new Animated.Value(0),
 			sideMenuWidth: this.getSideMenuWidth(),
 			sensorInfo: null,
 		};
@@ -868,14 +867,6 @@ class AppComponent extends React.Component {
 	}
 
 	public componentDidUpdate(prevProps: any) {
-		// Don't do this for android, DrawerLayoutAndroid will do its own dimming.
-		if (this.props.showSideMenu !== prevProps.showSideMenu && Platform.OS !== 'android') {
-			Animated.timing(this.state.sideMenuContentOpacity, {
-				toValue: this.props.showSideMenu ? 0.5 : 0,
-				duration: 600,
-			}).start();
-		}
-
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -1009,7 +1000,6 @@ class AppComponent extends React.Component {
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 							{ this.state.sensorInfo && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
