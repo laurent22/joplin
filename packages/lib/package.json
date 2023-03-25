@@ -83,7 +83,7 @@
     "reselect": "4.1.7",
     "server-destroy": "1.0.1",
     "sprintf-js": "1.1.2",
-    "sqlite3": "5.1.5",
+    "sqlite3": "5.1.6",
     "string-padding": "1.0.2",
     "string-to-stream": "3.0.1",
     "tar": "6.1.13",
