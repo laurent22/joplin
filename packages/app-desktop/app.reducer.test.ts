@@ -3,7 +3,7 @@ import appReducer, { createAppDefaultState } from './app.reducer';
 
 describe('app.reducer', () => {
 
-	it('DIALOG_OPEN', async () => {
+	it('should handle DIALOG_OPEN', async () => {
 		const state: AppState = createAppDefaultState({}, {});
 
 		let newState = appReducer(state, {

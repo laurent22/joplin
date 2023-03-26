@@ -62,6 +62,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,
 			externalAssetsOnly: true,
+			codeHighlightCacheKey: 'useMarkupToHtml',
 		}, options));
 
 		return result;

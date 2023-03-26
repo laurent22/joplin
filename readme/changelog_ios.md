@@ -1,6 +1,6 @@
 # Joplin iOS app changelog
 
-## [ios-v12.10.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.4) - 2023-02-24T11:21:21Z
+## [ios-v12.10.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.5) - 2023-03-06T14:43:37Z
 
 - Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
 - Fixed: Custom sort order not synchronized (#7729) (#6956 by Tao Klerks)

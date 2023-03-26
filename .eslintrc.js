@@ -91,6 +91,10 @@ module.exports = {
 		// Disable because of this: https://github.com/facebook/react/issues/16265
 		// "react-hooks/exhaustive-deps": "warn",
 
+		'jest/require-top-level-describe': ['error', { 'maxNumberOfTopLevelDescribes': 1 }],
+		'jest/no-identical-title': ['error'],
+		'jest/prefer-lowercase-title': ['error', { 'ignoreTopLevelDescribe': true }],
+
 		'promise/prefer-await-to-then': 'error',
 		'no-unneeded-ternary': 'error',
 
@@ -155,6 +159,7 @@ module.exports = {
 		// 'react-hooks',
 		'import',
 		'promise',
+		'jest',
 	],
 	'overrides': [
 		{

@@ -1,6 +1,7 @@
 import { readdir, stat, writeFile } from 'fs-extra';
 import { chdir, cwd } from 'process';
-import { execCommand2, rootDir } from './tool-utils';
+import { rootDir } from './tool-utils';
+import { execCommand } from '@joplin/utils';
 import yargs = require('yargs');
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 
@@ -13,7 +14,7 @@ interface LicenseInfo {
 const getLicenses = async (directory: string): Promise<Record<string, LicenseInfo>> => {
 	const previousDir = cwd();
 	await chdir(directory);
-	const result = await execCommand2(['license-checker-rseidelsohn', '--production', '--json'], { quiet: true });
+	const result = await execCommand(['license-checker-rseidelsohn', '--production', '--json'], { quiet: true });
 	const info: Record<string, LicenseInfo> = JSON.parse(result);
 	if (!info) throw new Error(`Could not parse JSON: ${directory}`);
 	await chdir(previousDir);

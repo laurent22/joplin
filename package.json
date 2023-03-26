@@ -71,6 +71,7 @@
     "eslint": "8.31.0",
     "eslint-interactive": "10.3.0",
     "eslint-plugin-import": "2.27.4",
+    "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.0",
     "fs-extra": "11.1.0",
@@ -78,7 +79,7 @@
     "gulp": "4.0.2",
     "husky": "3.1.0",
     "lerna": "3.22.1",
-    "lint-staged": "13.1.2",
+    "lint-staged": "13.1.4",
     "madge": "6.0.0",
     "npm-package-json-lint": "6.4.0",
     "typedoc": "0.17.8",
@@ -88,7 +89,7 @@
     "@types/fs-extra": "9.0.13",
     "http-server": "14.1.1",
     "node-gyp": "9.3.1",
-    "nodemon": "2.0.20"
+    "nodemon": "2.0.21"
   },
   "packageManager": "yarn@3.3.1",
   "resolutions": {

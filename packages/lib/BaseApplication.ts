@@ -20,7 +20,7 @@ import Folder from './models/Folder';
 import BaseItem from './models/BaseItem';
 import Note from './models/Note';
 import Tag from './models/Tag';
-const { splitCommandString } = require('./string-utils.js');
+import { splitCommandString } from '@joplin/utils';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
@@ -188,6 +188,12 @@ export default class BaseApplication {
 
 			if (arg === '--is-demo') {
 				Setting.setConstant('isDemo', true);
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg === '--safe-mode') {
+				matched.isSafeMode = true;
 				argv.splice(0, 1);
 				continue;
 			}
@@ -700,7 +706,7 @@ export default class BaseApplication {
 
 		flagContent = flagContent.trim();
 
-		let flags = splitCommandString(flagContent);
+		let flags: any = splitCommandString(flagContent);
 		flags.splice(0, 0, 'cmd');
 		flags.splice(0, 0, 'node');
 
@@ -828,6 +834,10 @@ export default class BaseApplication {
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
+
+		if (initArgs?.isSafeMode) {
+			Setting.setValue('isSafeMode', true);
+		}
 
 		if (Setting.value('firstStart')) {
 			// If it's a sub-profile, the locale must come from the root

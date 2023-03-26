@@ -1,4 +1,3 @@
-
 const { setupDatabaseAndSynchronizer, switchClient, supportDir } = require('./testing/test-utils.js');
 const shim = require('./shim').default;
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
@@ -50,6 +49,7 @@ const compareOutputToExpected = (options) => {
 	const outputFile = fileWithPath(`${options.testName}.html`);
 	const testTitle = `should convert from Enex to Html: ${options.testName}`;
 
+	// eslint-disable-next-line jest/require-top-level-describe
 	it(testTitle, (async () => {
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const expectedOutput = await shim.fsDriver().readFile(outputFile);

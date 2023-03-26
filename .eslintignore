@@ -66,6 +66,7 @@ packages/lib/welcomeAssets.js
 packages/plugins/**/api
 packages/plugins/**/dist
 packages/server/dist/
+packages/utils/dist/
 packages/tools/node_modules
 packages/tools/PortableAppsLauncher
 packages/turndown-plugin-gfm/
@@ -843,6 +844,7 @@ packages/renderer/index.js
 packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
+packages/tools/build-release-stats.js
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
@@ -853,6 +855,7 @@ packages/tools/convertThemesToCss.js
 packages/tools/generate-database-types.js
 packages/tools/generate-images.js
 packages/tools/git-changelog.js
+packages/tools/git-changelog.test.js
 packages/tools/licenseChecker.js
 packages/tools/release-android.js
 packages/tools/release-cli.js
@@ -868,6 +871,7 @@ packages/tools/update-readme-download.js
 packages/tools/update-readme-sponsors.js
 packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.js
+packages/tools/utils/loadSponsors.js
 packages/tools/utils/translation.js
 packages/tools/website/build.js
 packages/tools/website/buildTranslations.js

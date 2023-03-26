@@ -1,3 +1,5 @@
+/* eslint-disable jest/require-top-level-describe */
+
 import config from '../../../config';
 import { Item } from '../../../services/database/types';
 import { ErrorCode } from '../../../utils/errors';

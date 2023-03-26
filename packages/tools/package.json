@@ -22,6 +22,7 @@
   "dependencies": {
     "@joplin/lib": "^2.10.2",
     "@joplin/renderer": "^2.10.2",
+    "@joplin/utils": "~2.10",
     "@types/node-fetch": "2.6.2",
     "@types/yargs": "17.0.20",
     "dayjs": "1.11.7",
@@ -39,7 +40,7 @@
     "sharp": "0.31.3",
     "source-map-support": "0.5.21",
     "uri-template": "2.0.0",
-    "yargs": "17.6.2"
+    "yargs": "17.7.1"
   },
   "devDependencies": {
     "@joplin/fork-htmlparser2": "^4.1.43",
@@ -54,7 +55,7 @@
     "jest": "29.4.3",
     "rss": "1.2.2",
     "sass": "1.58.3",
-    "sqlite3": "5.1.4",
+    "sqlite3": "5.1.6",
     "typescript": "4.9.4"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"

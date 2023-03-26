@@ -106,6 +106,7 @@
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
+		"execa"
 	],
 	"packageRules": [
 		{
