@@ -10,6 +10,9 @@
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 
+// Set up required for react-native-gesture-handler (see: https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
+import 'react-native-gesture-handler';
+
 import { LogBox, AppRegistry } from 'react-native';
 const Root = require('./root').default;
 
