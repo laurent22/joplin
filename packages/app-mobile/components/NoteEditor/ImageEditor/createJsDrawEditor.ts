@@ -1,6 +1,6 @@
 
 import Editor, { Color4, EditorEventType, EditorSettings, getLocalizationTable, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
-import 'js-draw/bundle';
+import 'js-draw/bundledStyles';
 
 declare namespace ReactNativeWebView {
 	const postMessage: (data: any)=> void;
