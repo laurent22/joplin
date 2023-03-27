@@ -16,7 +16,7 @@ function getPluginLists(plugins: Plugins): PluginList {
 		}
 	}
 
-	pluginList.sort();
+	pluginList.sort(Intl.Collator().compare);
 
 	let completeList = '';
 	let summary = '';
