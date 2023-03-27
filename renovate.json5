@@ -126,6 +126,8 @@
 				// updated so having them here reduces noise.
 				"eslint",
 				"eslint-*",
+				"jest",
+				"jest-*",
 				"@typescript-eslint/*",
 				"yarn",
 				"typescript",
