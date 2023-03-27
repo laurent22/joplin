@@ -990,7 +990,7 @@ class AppComponent extends React.Component {
 					onOpen={() => this.sideMenu_change(true)}
 					onClose={() => this.sideMenu_change(false)}
 					drawerPosition={menuPosition}
-					swipeEdgeWidth={5}
+					swipeEdgeWidth={15}
 					drawerStyle={{
 						width: this.state.sideMenuWidth,
 					}}
