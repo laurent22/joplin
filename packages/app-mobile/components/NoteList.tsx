@@ -216,6 +216,7 @@ class NoteListComponent extends Component<NoteListProps> {
 							});
 						}
 					}}
+					scrollEnabled
 				/>
 			);
 		} else {
