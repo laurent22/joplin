@@ -100,11 +100,6 @@ class NoteItemComponent extends Component {
 
 		if (this.props.onLongPress) {
 			this.props.onLongPress();
-		} else {
-			this.props.dispatch({
-				type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
-				id: this.props.note.id,
-			});
 		}
 	}
 
