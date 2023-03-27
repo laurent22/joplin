@@ -487,7 +487,7 @@ function useMenu(props: Props) {
 			}
 
 			function _showAbout() {
-				const v = versionInfo(packageInfo, PluginService.instance().plugins);
+				const v = versionInfo(packageInfo, PluginService.instance().pluginsEnabled);
 
 				const copyToClipboard = bridge().showMessageBox(v.message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
