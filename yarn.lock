@@ -4905,8 +4905,8 @@ __metadata:
     reselect: 4.1.7
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
-    sqlite3: 5.1.5
-    styled-components: 5.3.8
+    sqlite3: 5.1.6
+    styled-components: 5.3.9
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
@@ -4983,7 +4983,7 @@ __metadata:
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 8.1.3
+    react-native-document-picker: 8.1.4
     react-native-dropdownalert: 4.5.1
     react-native-exit-app: 1.1.0
     react-native-file-viewer: 2.1.5
@@ -5145,7 +5145,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.3
     sprintf-js: 1.1.2
-    sqlite3: 5.1.5
+    sqlite3: 5.1.6
     string-padding: 1.0.2
     string-to-stream: 3.0.1
     tar: 6.1.13
@@ -5180,8 +5180,8 @@ __metadata:
     pdfjs-dist: 2.16.105
     react: 18.2.0
     react-dom: 18.2.0
-    style-loader: 3.3.1
-    styled-components: 5.3.8
+    style-loader: 3.3.2
+    styled-components: 5.3.9
     ts-jest: 29.0.5
     ts-loader: 9.4.2
     typescript: 4.9.4
@@ -5334,7 +5334,7 @@ __metadata:
     rate-limiter-flexible: 2.4.1
     raw-body: 2.5.2
     source-map-support: 0.5.21
-    sqlite3: 5.1.5
+    sqlite3: 5.1.6
     stripe: 8.222.0
     typescript: 4.9.4
     uuid: 9.0.0
@@ -5378,7 +5378,7 @@ __metadata:
     sass: 1.58.3
     sharp: 0.31.3
     source-map-support: 0.5.21
-    sqlite3: 5.1.5
+    sqlite3: 5.1.6
     typescript: 4.9.4
     uri-template: 2.0.0
     yargs: 17.7.1
@@ -21161,7 +21161,7 @@ __metadata:
     server-destroy: 1.0.1
     sharp: 0.31.3
     sprintf-js: 1.1.2
-    sqlite3: 5.1.5
+    sqlite3: 5.1.6
     string-padding: 1.0.2
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
@@ -27301,9 +27301,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:8.1.3":
-  version: 8.1.3
-  resolution: "react-native-document-picker@npm:8.1.3"
+"react-native-document-picker@npm:8.1.4":
+  version: 8.1.4
+  resolution: "react-native-document-picker@npm:8.1.4"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -27313,7 +27313,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: fe2523dd1e6fa54a374240c03b27332cc37532811fd664ee98296564fd863cc559046e6c175275e1061df71e053f04562acd144bb6043f9d63fb0df8f2615029
+  checksum: 898dc2bfdc1771b1a16bd45f7afbe04de044c60381c73e57207a084cc7f8292dab7822ae730ac368693e93fe6cbfbfa2953da5778474432bc7041f54d42eb518
   languageName: node
   linkType: hard
 
@@ -30047,9 +30047,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.5":
-  version: 5.1.5
-  resolution: "sqlite3@npm:5.1.5"
+"sqlite3@npm:5.1.6":
+  version: 5.1.6
+  resolution: "sqlite3@npm:5.1.6"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.0
     node-addon-api: ^4.2.0
@@ -30063,7 +30063,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: b7df68c8d4a16cd1d8d42e34035973c2e4cff33e0b917ff8830fa21c84e3bc0d16beaf51589a4a45df9c52e30bf0224122e6c67d0f17ff1d776be738d8706b02
+  checksum: ea640628843e37a63dfb4bd2c8429dbd7aab845c1a8204574dca3aac61486ab65bc0abfd99b48f1cead1f783171c6111c0cc4115335d5b95bb0b4eb44db162d5
   languageName: node
   linkType: hard
 
@@ -30729,12 +30729,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-loader@npm:3.3.1":
-  version: 3.3.1
-  resolution: "style-loader@npm:3.3.1"
+"style-loader@npm:3.3.2":
+  version: 3.3.2
+  resolution: "style-loader@npm:3.3.2"
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 470feef680f59e2fce4d6601b5c55b88c01ad8d1dd693c528ffd591ff5fd7c01a4eff3bdbe62f26f847d6bd2430c9ab594be23307cfe7a3446ab236683f0d066
+  checksum: 5ee5ce2dc885369eccb55d429376e83d02570d473ac5edeb69fd65ee894847f1e51429cf078351f617bd04516ece8a1dd967f9f40464bd8fa76d903c6b2a6f08
   languageName: node
   linkType: hard
 
@@ -30745,9 +30745,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.8":
-  version: 5.3.8
-  resolution: "styled-components@npm:5.3.8"
+"styled-components@npm:5.3.9":
+  version: 5.3.9
+  resolution: "styled-components@npm:5.3.9"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
@@ -30763,7 +30763,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 60148083f4057cd0dd4ad555e82800ec4ec4b8822fd81645f084e9beebf91420f4c9c75875b44933755d32ec97c46be6b79ca0c23578e5a731e3399e6ea0d901
+  checksum: 404311cc7028259218674d3f9f39bdda2342fc02f2ebbba8f057ef560b2ad205c5bd63b82deed4d0bf217ac7eb960d0e1127510b0b606e32cbd5a48c10373ce8
   languageName: node
   linkType: hard
 
