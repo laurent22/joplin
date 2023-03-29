@@ -80,6 +80,7 @@
       "target": "dmg",
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
+      "entitlementsInherit": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
         "CFBundleURLTypes": [
           {
