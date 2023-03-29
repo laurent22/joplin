@@ -79,6 +79,7 @@
       "icon": "../../Assets/macOs.icns",
       "target": "dmg",
       "hardenedRuntime": true,
+      "gatekeeperAssess": false,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "entitlementsInherit": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
