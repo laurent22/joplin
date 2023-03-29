@@ -192,32 +192,33 @@ class NoteListComponent extends Component<NoteListProps> {
 
 		if (this.props.items.length) {
 			return (
-				<DraggableFlatList
-					ref={(ref: any) => (this.rootRef_ = ref)}
-					data={this.state.items}
-					renderItem={({ item, drag, isActive }) => (<ScaleDecorator>
-						{this.renderNoteItem(item, { drag, isActive })}
-					</ScaleDecorator>)}
-					keyExtractor={item => item.id}
-					onDragEnd={async ({ data, to }) => {
-						if (this.props.selectedFolderId) {
-							this.setState({ items: data });
-							await Note.insertNotesAt(
-								this.props.selectedFolderId,
-								[data[to].id],
-								to,
-								Setting.value('uncompletedTodosOnTop'),
-								Setting.value('showCompletedTodos')
-							);
-							this.props.dispatch({
-								type: 'NOTE_UPDATE_ALL',
-								notes: data,
-								notesSource: this.props.notesSource,
-							});
-						}
-					}}
-					scrollEnabled
-				/>
+				<View style={{ flex: 1 }}>
+					<DraggableFlatList
+						ref={(ref: any) => (this.rootRef_ = ref)}
+						data={this.state.items}
+						renderItem={({ item, drag, isActive }) => (<ScaleDecorator>
+							{this.renderNoteItem(item, { drag, isActive })}
+						</ScaleDecorator>)}
+						keyExtractor={item => item.id}
+						onDragEnd={async ({ data, to }) => {
+							if (this.props.selectedFolderId) {
+								this.setState({ items: data });
+								await Note.insertNotesAt(
+									this.props.selectedFolderId,
+									[data[to].id],
+									to,
+									Setting.value('uncompletedTodosOnTop'),
+									Setting.value('showCompletedTodos')
+								);
+								this.props.dispatch({
+									type: 'NOTE_UPDATE_ALL',
+									notes: data,
+									notesSource: this.props.notesSource,
+								});
+							}
+						}}
+					/>
+				</View>
 			);
 		} else {
 			if (!this.props.folders.length) {
