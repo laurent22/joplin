@@ -30,7 +30,8 @@
       2019,
       2020,
       2021,
-      2022
+      2022,
+      2023
     ],
     "owner": "Laurent Cozic"
   },
@@ -42,6 +43,7 @@
   "dependencies": {
     "@joplin/lib": "~2.10",
     "@joplin/renderer": "~2.10",
+    "@joplin/utils": "~2.10",
     "aws-sdk": "2.1290.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
@@ -57,7 +59,7 @@
     "server-destroy": "1.0.1",
     "sharp": "0.31.3",
     "sprintf-js": "1.1.2",
-    "sqlite3": "5.1.4",
+    "sqlite3": "5.1.6",
     "string-padding": "1.0.2",
     "strip-ansi": "6.0.1",
     "tcp-port-used": "1.0.2",

@@ -12,9 +12,9 @@ const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
 enum BaseBreakpoint {
-	Sm = 160,
-	Md = 190,
-	Lg = 40,
+	Sm = 75,
+	Md = 80,
+	Lg = 120,
 	Xl = 474,
 }
 
@@ -50,7 +50,9 @@ const StyledButton = styled(Button)`
 	width: auto;
 	height: 26px;
 	min-height: 26px;
+	min-width: 37px;
 	max-width: none;
+	white-space: nowrap;
 
   .fa, .fas {
     font-size: 11px;

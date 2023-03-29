@@ -329,6 +329,7 @@
 			"packages/renderer/MdToHtml/rules/sanitize_html.js": true,
 			"packages/server/db-*.sqlite": true,
 			"packages/server/dist/": true,
+			"packages/utils/dist/": true,
 			"packages/server/temp": true,
 			"packages/server/test.pid": true,
 			"phpunit.xml": true,

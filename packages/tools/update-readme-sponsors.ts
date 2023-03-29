@@ -1,43 +1,9 @@
-import { readFile } from 'fs-extra';
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableJustify, MarkdownTableRow } from '@joplin/lib/markdownUtils';
-import { GithubSponsor, GithubUser, OrgSponsor, Sponsors } from './website/utils/types';
-import fetch from 'node-fetch';
+import { GithubSponsor, loadSponsors, OrgSponsor } from './utils/loadSponsors';
 const { escapeHtml } = require('@joplin/lib/string-utils');
 
 const readmePath = `${rootDir}/README.md`;
-const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
-
-const sleep = (ms: number) => {
-	return new Promise(resolve => setTimeout(resolve, ms));
-};
-
-const fetchWithRetry = async (url: string, opts: any = null) => {
-	if (!opts) opts = {};
-	let retry = opts && opts.retry || 3;
-
-	while (retry > 0) {
-		try {
-			return fetch(url, opts);
-		} catch (e) {
-			if (opts && opts.callback) {
-				opts.callback(retry);
-			}
-			retry = retry - 1;
-			if (retry === 0) {
-				throw e;
-			}
-
-			if (opts && opts.pause) {
-				if (opts && !opts.silent) console.log('pausing..');
-				await sleep(opts.pause);
-				if (opts && !opts.silent) console.log('done pausing...');
-			}
-		}
-	}
-
-	return null;
-};
 
 async function createGitHubSponsorTable(sponsors: GithubSponsor[]): Promise<string> {
 	sponsors = sponsors.slice();
@@ -70,9 +36,7 @@ async function createGitHubSponsorTable(sponsors: GithubSponsor[]): Promise<stri
 			sponsorIndex++;
 			if (!sponsor) break;
 
-			const userResponse = await fetchWithRetry(`https://api.github.com/users/${sponsor.name}`);
-			const user = await userResponse.json() as GithubUser;
-			row[`col${colIndex}`] = `<img width="50" src="https://avatars2.githubusercontent.com/u/${user.id}?s=96&v=4"/></br>[${sponsor.name}](https://github.com/${sponsor.name})`;
+			row[`col${colIndex}`] = `<img width="50" src="https://avatars2.githubusercontent.com/u/${sponsor.id}?s=96&v=4"/></br>[${sponsor.name}](https://github.com/${sponsor.name})`;
 		}
 
 		if (Object.keys(row)) rows.push(row);
@@ -94,7 +58,7 @@ async function createOrgSponsorTable(sponsors: OrgSponsor[]): Promise<string> {
 }
 
 async function main() {
-	const sponsors: Sponsors = JSON.parse(await readFile(sponsorsPath, 'utf8'));
+	const sponsors = await loadSponsors();
 
 	await insertContentIntoFile(
 		readmePath,

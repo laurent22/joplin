@@ -1050,6 +1050,17 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'editor.mobile.toolbarEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				section: 'note',
+				public: true,
+				appTypes: [AppType.Mobile],
+				label: () => _('Enable the Markdown toolbar'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			// Works around a bug in which additional space is visible beneath the toolbar on some devices.
 			// See https://github.com/laurent22/joplin/pull/6823
 			'editor.mobile.removeSpaceBelowToolbar': {
@@ -1634,10 +1645,17 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
+			// The biometrics feature is disabled by default and marked as beta
+			// because it seems to cause a freeze or slow down startup on
+			// certain devices. May be the reason for:
+			//
+			// - https://discourse.joplinapp.org/t/on-android-when-joplin-gets-started-offline/29951/1
+			// - https://github.com/laurent22/joplin/issues/7956
 			'security.biometricsEnabled': {
 				value: false,
 				type: SettingItemType.Bool,
-				label: () => _('Use biometrics to secure access to the app'),
+				label: () => `${_('Use biometrics to secure access to the app')} (Beta)`,
+				description: () => 'Important: This is a beta feature and it is not compatible with certain devices. If the app no longer starts after enabling this or is very slow to start, please uninstall and reinstall the app.',
 				public: true,
 				appTypes: [AppType.Mobile],
 			},
