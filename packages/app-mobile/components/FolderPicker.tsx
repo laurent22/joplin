@@ -9,13 +9,14 @@ import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 
 interface FolderPickerProps {
-  disabled?: boolean;
-  selectedFolderId?: string;
-  onValueChange?: OnValueChangedListener;
-  mustSelect?: boolean;
+	disabled?: boolean;
+	selectedFolderId?: string;
+	onValueChange?: OnValueChangedListener;
+	mustSelect?: boolean;
 	folders: FolderEntity[];
-  placeholder?: string;
-  dark?: boolean;
+	placeholder?: string;
+	darkText?: boolean;
+	themeId?: string;
 }
 
 
@@ -26,9 +27,9 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	mustSelect,
 	folders,
 	placeholder,
-	dark,
+	darkText,
+	themeId = Setting.value('theme'),
 }) => {
-	const themeId = Setting.value('theme');
 	const theme = themeStyle(themeId);
 
 	const addFolderChildren = (
@@ -70,7 +71,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 				backgroundColor: theme.backgroundColor,
 			}}
 			headerStyle={{
-				color: dark ? theme.colorFaded : theme.colorBright2,
+				color: darkText ? theme.colorFaded : theme.colorBright2,
 				fontSize: theme.fontSize,
 				opacity: disabled ? theme.disabledOpacity : 1,
 			}}

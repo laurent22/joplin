@@ -500,6 +500,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			if (folderPickerOptions && folderPickerOptions.enabled) {
 				return (
 					<FolderPicker
+						themeId={themeId}
 						disabled={disabled}
 						selectedFolderId={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
 						onValueChange={async (folderId) => {

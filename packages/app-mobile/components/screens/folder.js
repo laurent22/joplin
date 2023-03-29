@@ -104,12 +104,13 @@ class FolderScreenComponent extends BaseScreenComponent {
 				/>
 				<View style={styles.folderPickerContainer}>
 					<FolderPicker
+						themeId={this.props.themeId}
 						placeholder={_('Select parent notebook')}
 						folders={this.props.folders}
 						selectedFolderId={this.state.folder.parent_id}
 						onValueChange={newValue => this.parent_changeValue(newValue)}
 						mustSelect
-						dark
+						darkText
 					/>
 				</View>
 				<View style={{ flex: 1 }} />
