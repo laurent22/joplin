@@ -33,7 +33,7 @@
     "compare-versions": "3.6.0",
     "dayjs": "1.11.7",
     "formidable": "2.1.1",
-    "fs-extra": "11.1.0",
+    "fs-extra": "11.1.1",
     "html-entities": "1.4.0",
     "jquery": "3.6.4",
     "knex": "2.4.2",

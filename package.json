@@ -74,7 +74,7 @@
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.0",
-    "fs-extra": "11.1.0",
+    "fs-extra": "11.1.1",
     "glob": "8.1.0",
     "gulp": "4.0.2",
     "husky": "3.1.0",
