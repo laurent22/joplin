@@ -118,7 +118,7 @@
     "electron-builder": "23.6.0",
     "electron-notarize": "1.2.2",
     "electron-rebuild": "3.2.9",
-    "glob": "8.1.0",
+    "glob": "9.0.1",
     "gulp": "4.0.2",
     "jest": "29.4.3",
     "jest-environment-jsdom": "29.4.3",

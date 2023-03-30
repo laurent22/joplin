@@ -4876,7 +4876,7 @@ __metadata:
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
     fs-extra: 11.1.0
-    glob: 8.1.0
+    glob: 9.0.1
     gulp: 4.0.2
     highlight.js: 11.7.0
     immer: 7.0.15
@@ -5363,7 +5363,7 @@ __metadata:
     fs-extra: 11.1.0
     gettext-extractor: 3.6.2
     gettext-parser: 6.0.0
-    glob: 8.1.0
+    glob: 9.0.1
     gulp: 4.0.2
     html-entities: 1.4.0
     jest: 29.4.3
@@ -17584,16 +17584,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:8.1.0":
-  version: 8.1.0
-  resolution: "glob@npm:8.1.0"
+"glob@npm:9.0.1":
+  version: 9.0.1
+  resolution: "glob@npm:9.0.1"
   dependencies:
     fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^5.0.1
-    once: ^1.3.0
-  checksum: 92fbea3221a7d12075f26f0227abac435de868dd0736a17170663783296d0dd8d3d532a5672b4488a439bf5d7fb85cdd07c11185d6cd39184f0385cbdfb86a47
+    minimatch: ^7.3.0
+    minipass: ^4.2.4
+    path-scurry: ^1.5.0
+  checksum: 898b93b1310186abcf9a7b785aecf7db4abbda5a096cde19fa6bad928993fde4d1f3face98815040b5f0acc8d62bd5ff923ff24d574deec45d798bc3f7566d7b
   languageName: node
   linkType: hard
 
@@ -22441,6 +22440,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^7.14.1":
+  version: 7.18.3
+  resolution: "lru-cache@npm:7.18.3"
+  checksum: e550d772384709deea3f141af34b6d4fa392e2e418c1498c078de0ee63670f1f46f5eee746e8ef7e69e1c895af0d4224e62ee33e66a543a14763b0f2e74c1356
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^7.7.1":
   version: 7.14.1
   resolution: "lru-cache@npm:7.14.1"
@@ -23584,6 +23590,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minimatch@npm:^7.3.0":
+  version: 7.4.3
+  resolution: "minimatch@npm:7.4.3"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: daa954231b6859e3ba0e5fbd2486986d3cae283bb69acb7ed3833c84a293f8d7edb8514360ea62c01426ba791446b2a1e1cc0d718bed15c0212cef35c59a6b95
+  languageName: node
+  linkType: hard
+
 "minimist-options@npm:4.1.0":
   version: 4.1.0
   resolution: "minimist-options@npm:4.1.0"
@@ -23719,6 +23734,13 @@ __metadata:
   dependencies:
     yallist: ^4.0.0
   checksum: 7a609afbf394abfcf9c48e6c90226f471676c8f2a67f07f6838871afb03215ede431d1433feffe1b855455bcb13ef0eb89162841b9796109d6fed8d89790f381
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^4.0.2, minipass@npm:^4.2.4":
+  version: 4.2.5
+  resolution: "minipass@npm:4.2.5"
+  checksum: 4f9c19af23a5d4a9e7156feefc9110634b178a8cff8f8271af16ec5ebf7e221725a97429952c856f5b17b30c2065ebd24c81722d90c93d2122611d75b952b48f
   languageName: node
   linkType: hard
 
@@ -25962,6 +25984,16 @@ __metadata:
   dependencies:
     path-root-regex: ^0.1.0
   checksum: ff88aebfc1c59ace510cc06703d67692a11530989920427625e52b66a303ca9b3d4059b0b7d0b2a73248d1ad29bcb342b8b786ec00592f3101d38a45fd3b2e08
+  languageName: node
+  linkType: hard
+
+"path-scurry@npm:^1.5.0":
+  version: 1.6.3
+  resolution: "path-scurry@npm:1.6.3"
+  dependencies:
+    lru-cache: ^7.14.1
+    minipass: ^4.0.2
+  checksum: 814ebd7f8df717e2381dc707ba3a3ddf84d0a4f9d653036c7554cb1fea632d4d78eb17dd5f4c85111b78ba8b8c0a5b59c756645c9d343bdacacda4ba8d1626c2
   languageName: node
   linkType: hard
 
@@ -28861,7 +28893,7 @@ __metadata:
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.32.0
     fs-extra: 11.1.0
-    glob: 8.1.0
+    glob: 9.0.1
     gulp: 4.0.2
     http-server: 14.1.1
     husky: 3.1.0
