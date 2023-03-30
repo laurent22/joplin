@@ -96,12 +96,14 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		let context = Setting.value(`sync.${this.syncTargetId()}.context`);
 		context = context === '' ? null : JSON.parse(context);
 		let accountProperties = context ? context.accountProperties : null;
+		const api = this.api();
+
 		if (!accountProperties) {
-			accountProperties = await this.api_.execAccountPropertiesRequest();
+			accountProperties = await api.execAccountPropertiesRequest();
 			context ? context.accountProperties = accountProperties : context = { accountProperties: accountProperties };
 			Setting.setValue(`sync.${this.syncTargetId()}.context`, JSON.stringify(context));
 		}
-		this.api_.setAccountProperties(accountProperties);
+		api.setAccountProperties(accountProperties);
 		const appDir = await this.api().appDirectory();
 		// the appDir might contain non-ASCII characters
 		// /[^\u0021-\u00ff]/ is used in Node.js to detect the unescaped characters.
