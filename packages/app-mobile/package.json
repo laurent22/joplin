@@ -2,7 +2,7 @@
   "name": "@joplin/app-mobile",
   "description": "Joplin for Mobile",
   "license": "AGPL-3.0-or-later",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "private": true,
   "scripts": {
     "start": "react-native start --reset-cache",
@@ -18,10 +18,10 @@
     "postinstall": "jetify && yarn run build"
   },
   "dependencies": {
-    "@joplin/lib": "~2.10",
-    "@joplin/react-native-alarm-notification": "~2.10",
-    "@joplin/react-native-saf-x": "~2.10",
-    "@joplin/renderer": "~2.10",
+    "@joplin/lib": "~2.11",
+    "@joplin/react-native-alarm-notification": "~2.11",
+    "@joplin/react-native-saf-x": "~2.11",
+    "@joplin/renderer": "~2.11",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/datetimepicker": "6.7.5",
     "@react-native-community/geolocation": "2.1.0",
@@ -92,7 +92,7 @@
     "@codemirror/search": "6.2.3",
     "@codemirror/state": "6.1.4",
     "@codemirror/view": "6.7.1",
-    "@joplin/tools": "~2.10",
+    "@joplin/tools": "~2.11",
     "@lezer/highlight": "1.1.3",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.6",
