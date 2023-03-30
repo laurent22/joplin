@@ -87,7 +87,7 @@ Tags are useful for marking notes across folder and subfolder structures. Multip
 # Searching:
 https://discourse.joplinapp.org/t/search-syntax-documentation/9110
 Some helpful search syntax:
-type:todo iscompleted:0 
+`type:todo iscompleted:0` 
 all uncompleted tasks (this is the same as clicking on the “+” sign at the top of the folder list under “All Notebooks.” (unfinished ToDo’s are listed first).
 
 `created:202001 -created:202003` will return notes created on or after January and before March 2020.
