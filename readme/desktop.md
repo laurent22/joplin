@@ -90,13 +90,13 @@ Some helpful search syntax:
 type:todo iscompleted:0 
 all uncompleted tasks (this is the same as clicking on the “+” sign at the top of the folder list under “All Notebooks.” (unfinished ToDo’s are listed first).
 
-created:202001 -created:202003 will return notes created on or after January and before March 2020.
+`created:202001 -created:202003` will return notes created on or after January and before March 2020.
 
-updated:1997 -updated:2020 will return all notes updated between the years 1997 and 2019.
+`updated:1997 -updated:2020` will return all notes updated between the years 1997 and 2019.
 
-created:day-2 searches for all notes created in the past two days.
+`created:day-2` searches for all notes created in the past two days.
 
-updated:year-0 searches all notes updated in the current year.
+`updated:year-0` searches all notes updated in the current year.
 
 # End (so far):
 It is hoped that this gives the Windows user a quick overview of Joplin functions and features.  This document is open source please propose edits and additions.
