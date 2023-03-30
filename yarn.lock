@@ -5327,7 +5327,7 @@ __metadata:
     node-mocks-http: 1.12.2
     nodemailer: 6.9.1
     nodemon: 2.0.21
-    pg: 8.9.0
+    pg: 8.10.0
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
     query-string: 7.1.3
@@ -26077,12 +26077,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.5.2":
-  version: 3.5.2
-  resolution: "pg-pool@npm:3.5.2"
+"pg-pool@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "pg-pool@npm:3.6.0"
   peerDependencies:
     pg: ">=8.0"
-  checksum: a5d029200257671f0c17ca54b9ab6213e2060e64e5cc792b78edd50ab471a26cd364890d05d546d9296949e079e943821cf2ceb4d488f4e6a6789fb781a628bf
+  checksum: f3fe050fbfe27406369340c4c26efcbe21a388ace085a876453de0ea496a315c38b2dc739ac97d4767a359e911da2ec4810467f72601eeec8ad540e58b27987c
   languageName: node
   linkType: hard
 
@@ -26106,14 +26106,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.9.0":
-  version: 8.9.0
-  resolution: "pg@npm:8.9.0"
+"pg@npm:8.10.0":
+  version: 8.10.0
+  resolution: "pg@npm:8.10.0"
   dependencies:
     buffer-writer: 2.0.0
     packet-reader: 1.0.0
     pg-connection-string: ^2.5.0
-    pg-pool: ^3.5.2
+    pg-pool: ^3.6.0
     pg-protocol: ^1.6.0
     pg-types: ^2.1.0
     pgpass: 1.x
@@ -26122,7 +26122,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: dfd158955318f9ffb9428eaada29f3ee98b9eb07e87ed4b56589a19984d109f23bb8f88db78b7d7f870553e5b75ca0d58d0ed55755a8c6aed5df44e038c1d529
+  checksum: c6be78f2e823f2ae3c618c8e54a6622592dd71b556fb665d7eaedcbcc2fa5d210a8bcf519401e72526a65b9d797f19b772f48f29b9d9f31e98dd526fd27d61e0
   languageName: node
   linkType: hard
 
