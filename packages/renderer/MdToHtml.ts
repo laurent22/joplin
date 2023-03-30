@@ -179,6 +179,8 @@ export interface RuleOptions {
 	noteId?: string;
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
+
+	platformName?: string;
 }
 
 export default class MdToHtml {
