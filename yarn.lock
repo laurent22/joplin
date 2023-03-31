@@ -4993,7 +4993,7 @@ __metadata:
     react-native-image-picker: 5.1.0
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
-    react-native-paper: 5.4.0
+    react-native-paper: 5.4.1
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -27415,19 +27415,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.4.0":
-  version: 5.4.0
-  resolution: "react-native-paper@npm:5.4.0"
+"react-native-paper@npm:5.4.1":
+  version: 5.4.1
+  resolution: "react-native-paper@npm:5.4.1"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.8
     color: ^3.1.2
-    use-event-callback: ^0.1.0
+    use-latest-callback: ^0.1.5
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 3b0f013881e89f757941c105eda8dc4cc9bf8327df708a9587ba08734fe747639078ff3f621aee76688aaf5fd57331a609b747981e5da5a4dbdbdeffae4ce611
+  checksum: b6bca70b935ca3b69ba4d2bc16717b938b4219d0a1fc17b1e0c7b87df753ba3cd8f52e8f17cf09ca862c7e6be243fb52092054fc176a4b284fa3143cf32d0672
   languageName: node
   linkType: hard
 
@@ -32724,15 +32724,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-event-callback@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "use-event-callback@npm:0.1.0"
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 1e15fb21306c74f877e9d57686546c363165429412dcb9260254d2dd8f56692cb01ba2162f9169e6fc15b01cf3921b9cd8a9c60cf777d0143afcee92c1a7976a
-  languageName: node
-  linkType: hard
-
 "use-isomorphic-layout-effect@npm:^1.1.2":
   version: 1.1.2
   resolution: "use-isomorphic-layout-effect@npm:1.1.2"
@@ -32742,6 +32733,13 @@ __metadata:
     "@types/react":
       optional: true
   checksum: a6532f7fc9ae222c3725ff0308aaf1f1ddbd3c00d685ef9eee6714fd0684de5cb9741b432fbf51e61a784e2955424864f7ea9f99734a02f237b17ad3e18ea5cb
+  languageName: node
+  linkType: hard
+
+"use-latest-callback@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "use-latest-callback@npm:0.1.5"
+  checksum: a7af3275985b7918c3e0e7a57bb5fc8ad678b21673fc618fe778d111992bdabb4f9592cd3e0286e032a7c956ee3c9d1aba39801c13f32d68bc4c4a008e38783b
   languageName: node
   linkType: hard
 
