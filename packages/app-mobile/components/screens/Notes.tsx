@@ -1,5 +1,5 @@
 const React = require('react');
-import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } from 'react-native';
+import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription, Dimensions, Platform, PixelRatio } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 const { NoteList } = require('../note-list.js');
@@ -86,9 +86,33 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
-		const styles = {
+		const screen = {
+			pixel: 1 / PixelRatio.get(),
+			...Dimensions.get('window'),
+			isIOS: Platform.OS === 'ios',
+		};
+
+		const theme = themeStyle(themeId);
+
+		const styles: any = {
 			noteList: {
 				flex: 1,
+			},
+			tipBoxView: {
+				backgroundColor: theme.backgroundColor,
+				justifyContent: 'center',
+				alignItems: 'center',
+				width: screen.width - 50,
+				borderRadius: 12,
+				overflow: 'hidden',
+			},
+			tipContent: {
+				fontSize: 16,
+				margin: 5,
+				marginTop: screen.isIOS ? 3 : 5,
+				marginBottom: screen.isIOS ? 7 : 5,
+				textAlign: 'center',
+				color: theme.color,
 			},
 		};
 
@@ -259,6 +283,10 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				<DialogBox
 					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
+					}}
+					style={{
+						tipBoxView: this.styles().tipBoxView,
+						tipContent: this.styles().tipContent,
 					}}
 				/>
 			</View>
