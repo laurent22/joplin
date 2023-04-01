@@ -13,7 +13,7 @@
   "dependencies": {
     "css": "3.0.0",
     "html-entities": "1.4.0",
-    "jsdom": "21.0.0"
+    "jsdom": "21.1.1"
   },
   "devDependencies": {
     "browserify": "14.5.0",
