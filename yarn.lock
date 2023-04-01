@@ -5392,7 +5392,7 @@ __metadata:
     browserify: 14.5.0
     rollup: 0.50.1
     standard: 17.0.0
-    turndown: 7.1.1
+    turndown: 7.1.2
     turndown-attendant: 0.0.3
   languageName: unknown
   linkType: soft
@@ -31975,12 +31975,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turndown@npm:7.1.1":
-  version: 7.1.1
-  resolution: "turndown@npm:7.1.1"
+"turndown@npm:7.1.2":
+  version: 7.1.2
+  resolution: "turndown@npm:7.1.2"
   dependencies:
     domino: ^2.1.6
-  checksum: f2d77632bd69bc93298b619f051dc0c050fabee15188afe874eab713f8ffdcaea89106a536c19db0962a677b5f7177f5aa84b45ef38e06d6e489a49f11abd80d
+  checksum: 4779580c3439d0385e7dd71144bf0f72884cf7fb492bd2f5600ff256fa7c9ae9663ef284507021de90d54d62885fc027d740d578a3e11a1ae83e84a107eedd38
   languageName: node
   linkType: hard
 
