@@ -21,7 +21,7 @@ import checkForUpdates from '../checkForUpdates';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -128,6 +128,7 @@ interface Props {
 	customCss: string;
 	locale: string;
 	profileConfig: ProfileConfig;
+	pluginSettings: PluginSettings;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -487,7 +488,7 @@ function useMenu(props: Props) {
 			}
 
 			function _showAbout() {
-				const v = versionInfo(packageInfo, PluginService.instance().pluginsEnabled);
+				const v = versionInfo(packageInfo, PluginService.instance().enabledPlugins(props.pluginSettings));
 
 				const copyToClipboard = bridge().showMessageBox(v.message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
@@ -930,6 +931,7 @@ function useMenu(props: Props) {
 		props['spellChecker.languages'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['spellChecker.enabled'],
+		props.pluginSettings,
 		props.customCss,
 		props.locale,
 		props.profileConfig,
@@ -985,6 +987,7 @@ const mapStateToProps = (state: AppState) => {
 		['folders.sortOrder.field']: state.settings['folders.sortOrder.field'],
 		['notes.sortOrder.reverse']: state.settings['notes.sortOrder.reverse'],
 		['folders.sortOrder.reverse']: state.settings['folders.sortOrder.reverse'],
+		pluginSettings: state.settings['plugins.states'],
 		showNoteCounts: state.settings.showNoteCounts,
 		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
 		showCompletedTodos: state.settings.showCompletedTodos,

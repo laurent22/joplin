@@ -100,8 +100,7 @@ export default class PluginService extends BaseService {
 		return this.plugins_;
 	}
 
-	public get pluginsEnabled(): Plugins {
-		const pluginSettings = this.unserializePluginSettings(Setting.value('plugins.states'));
+	public enabledPlugins(pluginSettings: PluginSettings): Plugins {
 		const enabledPlugins = Object.fromEntries(Object.entries(this.plugins_).filter((p) => this.pluginEnabled(pluginSettings, p[0])));
 		return enabledPlugins;
 	}
