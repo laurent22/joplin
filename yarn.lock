@@ -5361,7 +5361,7 @@ __metadata:
     dayjs: 1.11.7
     execa: 4.1.0
     fs-extra: 11.1.1
-    gettext-extractor: 3.6.2
+    gettext-extractor: 3.7.0
     gettext-parser: 6.0.0
     glob: 8.1.0
     gulp: 4.0.2
@@ -17379,9 +17379,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-extractor@npm:3.6.2":
-  version: 3.6.2
-  resolution: "gettext-extractor@npm:3.6.2"
+"gettext-extractor@npm:3.7.0":
+  version: 3.7.0
+  resolution: "gettext-extractor@npm:3.7.0"
   dependencies:
     "@types/glob": 5 - 7
     "@types/parse5": ^5
@@ -17390,7 +17390,7 @@ __metadata:
     parse5: 5 - 6
     pofile: 1.0.x
     typescript: 2 - 4
-  checksum: 14a144ecdd31b4576b3b8ec47767463cb3374d68d8bec86248406e84a9ec4e9e1366669280f9e14d9cfb48334138f6f3f21b48d6648bdfa94d137307743e9420
+  checksum: 5a471e06619944f10d224ef2c718cdc6748824142241141bfd2177f5ddf57e5d138b1066509d75f2123018428494e93db60e1b659bef15c301799139403efd74
   languageName: node
   linkType: hard
 
