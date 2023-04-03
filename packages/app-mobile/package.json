@@ -93,7 +93,7 @@
     "@codemirror/state": "6.1.4",
     "@codemirror/view": "6.7.1",
     "@joplin/tools": "~2.11",
-    "@lezer/highlight": "1.1.3",
+    "@lezer/highlight": "1.1.4",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.6",
     "@types/react-native": "0.70.6",
