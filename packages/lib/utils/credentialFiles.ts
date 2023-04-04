@@ -22,7 +22,7 @@ export function credentialDir() {
 }
 
 export const hasCredentialFile = (filename: string) => {
-	return pathExistsSync(filename);
+	return pathExistsSync(`${credentialDir()}/${filename}`);
 };
 
 export function credentialFile(filename: string) {
