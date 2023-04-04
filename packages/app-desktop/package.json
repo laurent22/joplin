@@ -90,7 +90,11 @@
             "CFBundleURLName": "org.joplinapp.x-callback-url"
           }
         ]
-      }
+      },
+      "binaries": [
+        "build/defaultPlugins/io.github.jackgruber.backup/plugin.jpl/7zip-bin/mac/x64/7za",
+        "build/defaultPlugins/io.github.jackgruber.backup/plugin.jpl/7zip-bin/mac/arm64/7za"
+      ]
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
