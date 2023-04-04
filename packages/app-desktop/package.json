@@ -107,7 +107,8 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@electron/rebuild": "^3.2.10",
+    "@electron/notarize": "1.2.3",
+    "@electron/rebuild": "3.2.10",
     "@joplin/tools": "~2.11",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.2.6",
@@ -117,7 +118,6 @@
     "@types/styled-components": "5.1.26",
     "electron": "19.1.4",
     "electron-builder": "23.6.0",
-    "electron-notarize": "1.2.2",
     "glob": "8.1.0",
     "gulp": "4.0.2",
     "jest": "29.4.3",
