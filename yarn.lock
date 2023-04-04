@@ -5419,8 +5419,10 @@ __metadata:
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
     "@types/jest": 29.5.0
+    "@types/node-fetch": 2.6.2
     execa: 5.1.1
     jest: 29.5.0
+    node-fetch: 2.6.7
     ts-jest: 29.0.5
   languageName: unknown
   linkType: soft
