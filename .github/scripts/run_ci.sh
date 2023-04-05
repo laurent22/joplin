@@ -192,6 +192,7 @@ else
 	echo "Step: Bundling default plugins for CI check"
 	cd "$ROOT_DIR/packages/tools"
 	node bundleDefaultPlugins.js
+	cd "$ROOT_DIR/packages/app-desktop"
 	echo "Step: Building but *not* publishing desktop application..."
 	USE_HARD_LINKS=false yarn run dist --publish=never
 fi
