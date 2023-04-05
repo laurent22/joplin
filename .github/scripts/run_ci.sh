@@ -189,6 +189,9 @@ elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	cd "$ROOT_DIR"
 	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
+	echo "Step: Building default plugins for CI check"
+	cd "$ROOT_DIR/packages/tools"
+	node bundleDefaultPlugins.js
 	echo "Step: Building but *not* publishing desktop application..."
 	USE_HARD_LINKS=false yarn run dist --publish=never
 fi
