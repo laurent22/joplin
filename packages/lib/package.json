@@ -38,7 +38,7 @@
     "@joplin/renderer": "~2.11",
     "@joplin/turndown": "^4.0.65",
     "@joplin/turndown-plugin-gfm": "^1.0.47",
-    "@joplin/utils": "~2.11",
+    "@joplin/utils": "../utils",
     "@types/nanoid": "3.0.0",
     "async-mutex": "0.4.0",
     "base-64": "1.0.0",

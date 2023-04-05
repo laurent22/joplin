@@ -20,7 +20,7 @@
   "dependencies": {
     "@joplin/lib": "~2.11",
     "@joplin/tools": "~2.11",
-    "@joplin/utils": "~2.11",
+    "@joplin/utils": "../utils",
     "fs-extra": "11.1.1",
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",

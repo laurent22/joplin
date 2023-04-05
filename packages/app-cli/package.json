@@ -43,7 +43,7 @@
   "dependencies": {
     "@joplin/lib": "~2.11",
     "@joplin/renderer": "~2.11",
-    "@joplin/utils": "~2.11",
+    "@joplin/utils": "../utils",
     "aws-sdk": "2.1290.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
