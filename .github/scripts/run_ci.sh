@@ -4,7 +4,7 @@
 # Setup environment variables
 # =============================================================================
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIR="$SCRIPT_DIR/../.."
 
 IS_PULL_REQUEST=0
@@ -47,9 +47,9 @@ echo "IS_DEV_BRANCH=$IS_DEV_BRANCH"
 echo "IS_LINUX=$IS_LINUX"
 echo "IS_MACOS=$IS_MACOS"
 
-echo "Node $(node -v)"
-echo "Npm $(npm -v)"
-echo "Yarn $(yarn -v)"
+echo "Node $( node -v )"
+echo "Npm $( npm -v )"
+echo "Yarn $( yarn -v )"
 
 # =============================================================================
 # Install packages
@@ -189,7 +189,7 @@ elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	cd "$ROOT_DIR"
 	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
-	echo "Step: Bundling default plugins for CI check"
+	echo "Step: Building default plugins for CI check"
 	cd "$ROOT_DIR/packages/tools"
 	node bundleDefaultPlugins.js
 	echo "Step: Building but *not* publishing desktop application..."
