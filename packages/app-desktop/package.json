@@ -92,7 +92,7 @@
         ]
       },
       "binaries": [
-        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/"
+        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/plugin.jpl"
       ]
     },
     "linux": {
