@@ -64,6 +64,7 @@
     }
   },
   "devDependencies": {
+    "@joplin/utils": "~2.11",
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
     "@typescript-eslint/eslint-plugin": "5.48.2",
     "@typescript-eslint/parser": "5.48.2",
