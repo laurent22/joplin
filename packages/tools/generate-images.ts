@@ -588,11 +588,11 @@ async function main() {
 				const options = {
 					floatPrecision: 2,
 					fillBlack: false,
-					xmlTag: true,
+					xmlTag: false,
 					tint: '#FFFFFFFF',
 				};
 				svg2vectordrawable.convertFile(sourcePath, destPath, options);
-				break;
+				continue;
 			} else {
 				throw new Error(`Unsupported extension: ${destExt}`);
 			}
