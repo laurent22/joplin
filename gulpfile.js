@@ -2,8 +2,6 @@ const gulp = require('gulp');
 const { execCommand } = require('@joplin/utils');
 
 const tasks = {
-	updateIgnoredTypeScriptBuild: require('./packages/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
-	buildCommandIndex: require('./packages/tools/gulp/tasks/buildCommandIndex'),
 	completePublishAll: {
 		fn: async () => {
 			await execCommand(['git', 'add', '-A']);

@@ -15,7 +15,7 @@
     "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn run tsc",
     "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
-    "buildCommandIndex": "gulp buildCommandIndex",
+    "buildCommandIndex": "node packages/tools/gulp/tasks/buildCommandIndexRun.js",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out ../joplin-website/docs/api/references/plugin_api packages/lib/services/plugins/api/",
     "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "updateNews": "node ./packages/tools/website/updateNews",
@@ -53,7 +53,7 @@
     "test-ci": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 2 run test-ci",
     "test": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 2 run test",
     "tsc": "yarn workspaces foreach --parallel --verbose --interlaced run tsc",
-    "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
+    "updateIgnored": "node packages/tools/gulp/tasks/updateIgnoredTypeScriptBuildRun.js",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
     "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
