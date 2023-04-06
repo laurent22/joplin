@@ -22,7 +22,7 @@
   "dependencies": {
     "@joplin/lib": "~2.11",
     "@joplin/renderer": "~2.11",
-    "@joplin/utils": "~2.11",
+    "@joplin/utils": "file:../utils",
     "dayjs": "1.11.7",
     "execa": "4.1.0",
     "fs-extra": "11.1.1",
