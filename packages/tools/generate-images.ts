@@ -592,6 +592,7 @@ async function main() {
 					tint: '#FFFFFFFF',
 				};
 				svg2vectordrawable.convertFile(sourcePath, destPath, options);
+				break;
 			} else {
 				throw new Error(`Unsupported extension: ${destExt}`);
 			}
