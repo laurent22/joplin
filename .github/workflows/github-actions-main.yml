@@ -93,6 +93,7 @@ jobs:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
