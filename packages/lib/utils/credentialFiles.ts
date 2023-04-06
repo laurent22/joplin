@@ -21,6 +21,17 @@ export function credentialDir() {
 	throw new Error(`Could not find credential directory in any of these paths: ${JSON.stringify(toTry)}`);
 }
 
+export const hasCredentialFile = (filename: string) => {
+	let d = '';
+	try {
+		d = credentialDir();
+	} catch (error) {
+		return false;
+	}
+
+	return pathExistsSync(`${d}/${filename}`);
+};
+
 export function credentialFile(filename: string) {
 	const rootDir = credentialDir();
 	const output = `${rootDir}/${filename}`;
