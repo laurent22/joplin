@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { ResourceInfos } from './types';
 import markupLanguageUtils from '../../../utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
 
 const { themeStyle } = require('@joplin/lib/theme');
 import Note from '@joplin/lib/models/Note';
@@ -23,6 +24,7 @@ export interface MarkupToHtmlOptions {
 	useCustomPdfViewer?: boolean;
 	noteId?: string;
 	vendorDir?: string;
+	platformName?: string;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
@@ -40,6 +42,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 		options = {
 			replaceResourceInternalToExternalLinks: false,
 			resourceInfos: {},
+			platformName: shim.platformName(),
 			...options,
 		};
 
