@@ -4982,7 +4982,7 @@ __metadata:
     react-native: 0.70.6
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
-    react-native-device-info: ^10.6.0
+    react-native-device-info: 10.6.0
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.1.4
     react-native-dropdownalert: 4.5.1
@@ -27339,7 +27339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-device-info@npm:^10.6.0":
+"react-native-device-info@npm:10.6.0":
   version: 10.6.0
   resolution: "react-native-device-info@npm:10.6.0"
   peerDependencies:
