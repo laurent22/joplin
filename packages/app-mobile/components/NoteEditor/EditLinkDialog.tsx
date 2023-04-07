@@ -1,9 +1,10 @@
 // Dialog allowing the user to update/create links
 
-import * as React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Modal, StyleSheet, Text, TextInput, View } from 'react-native';
-import { hasNotch } from 'react-native-device-info';
+const React = require('react');
+const { useState, useEffect, useMemo, useRef } = require('react');
+const { StyleSheet } = require('react-native');
+const { View, Modal, Text, TextInput, Button } = require('react-native');
+const { hasNotch } = require('react-native-device-info');
 
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
