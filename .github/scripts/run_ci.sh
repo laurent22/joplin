@@ -180,19 +180,12 @@ cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
-	cd "$ROOT_DIR/packages/tools"
-	node bundleDefaultPlugins.js
-	cd "$ROOT_DIR/packages/app-desktop"
 	USE_HARD_LINKS=false yarn run dist
 elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
 	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
-	echo "Step: Bundling default plugins for CI check"
-	cd "$ROOT_DIR/packages/tools"
-	node bundleDefaultPlugins.js
-	cd "$ROOT_DIR/packages/app-desktop"
 	echo "Step: Building but *not* publishing desktop application..."
 	USE_HARD_LINKS=false yarn run dist --publish=never
 fi
