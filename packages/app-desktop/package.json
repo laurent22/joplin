@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dist": "yarn run bundleDefaultPlugins && yarn run electronRebuild && npx electron-builder",
-    "bundleDefaultPlugins": "cd ../tools && node bundleDefaultPlugins.js",
+    "bundleDefaultPlugins": "cd ../tools && node bundleDefaultPlugins.js && cd ../app-desktop",
     "build": "gulp build",
     "postinstall": "yarn run build",
     "electronBuilder": "gulp electronBuilder",
