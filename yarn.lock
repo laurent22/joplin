@@ -5090,7 +5090,7 @@ __metadata:
     "@joplin/renderer": ~2.11
     "@joplin/turndown": ^4.0.65
     "@joplin/turndown-plugin-gfm": ^1.0.47
-    "@joplin/utils": "file:../utils"
+    "@joplin/utils": ~2.11
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/js-yaml": 4.0.5
@@ -5196,7 +5196,7 @@ __metadata:
   dependencies:
     "@joplin/lib": ~2.11
     "@joplin/tools": ~2.11
-    "@joplin/utils": "file:../utils"
+    "@joplin/utils": ~2.11
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/node": 18.11.18
@@ -5350,7 +5350,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.43
     "@joplin/lib": ~2.11
     "@joplin/renderer": ~2.11
-    "@joplin/utils": "file:../utils"
+    "@joplin/utils": ~2.11
     "@rmp135/sql-ts": 1.16.0
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
@@ -5414,51 +5414,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/utils@file:../utils::locator=%40joplin%2Flib%40workspace%3Apackages%2Flib":
-  version: 2.11.0
-  resolution: "@joplin/utils@file:../utils#../utils::hash=259fa9&locator=%40joplin%2Flib%40workspace%3Apackages%2Flib"
-  dependencies:
-    execa: 5.1.1
-    fs-extra: 11.1.1
-    node-fetch: 2.6.7
-  checksum: ca7728eac50663c3b7160b06f8d887f0f0b4902fdb03ee809616419c947b32f2935a0ddeddbf31fd54b4b9a6d4542e5d52c51f7732a116e8e3c97242782151eb
-  languageName: node
-  linkType: hard
-
-"@joplin/utils@file:../utils::locator=%40joplin%2Fplugin-repo-cli%40workspace%3Apackages%2Fplugin-repo-cli":
-  version: 2.11.0
-  resolution: "@joplin/utils@file:../utils#../utils::hash=259fa9&locator=%40joplin%2Fplugin-repo-cli%40workspace%3Apackages%2Fplugin-repo-cli"
-  dependencies:
-    execa: 5.1.1
-    fs-extra: 11.1.1
-    node-fetch: 2.6.7
-  checksum: ca7728eac50663c3b7160b06f8d887f0f0b4902fdb03ee809616419c947b32f2935a0ddeddbf31fd54b4b9a6d4542e5d52c51f7732a116e8e3c97242782151eb
-  languageName: node
-  linkType: hard
-
-"@joplin/utils@file:../utils::locator=%40joplin%2Ftools%40workspace%3Apackages%2Ftools":
-  version: 2.11.0
-  resolution: "@joplin/utils@file:../utils#../utils::hash=259fa9&locator=%40joplin%2Ftools%40workspace%3Apackages%2Ftools"
-  dependencies:
-    execa: 5.1.1
-    fs-extra: 11.1.1
-    node-fetch: 2.6.7
-  checksum: ca7728eac50663c3b7160b06f8d887f0f0b4902fdb03ee809616419c947b32f2935a0ddeddbf31fd54b4b9a6d4542e5d52c51f7732a116e8e3c97242782151eb
-  languageName: node
-  linkType: hard
-
-"@joplin/utils@file:../utils::locator=joplin%40workspace%3Apackages%2Fapp-cli":
-  version: 2.11.0
-  resolution: "@joplin/utils@file:../utils#../utils::hash=259fa9&locator=joplin%40workspace%3Apackages%2Fapp-cli"
-  dependencies:
-    execa: 5.1.1
-    fs-extra: 11.1.1
-    node-fetch: 2.6.7
-  checksum: ca7728eac50663c3b7160b06f8d887f0f0b4902fdb03ee809616419c947b32f2935a0ddeddbf31fd54b4b9a6d4542e5d52c51f7732a116e8e3c97242782151eb
-  languageName: node
-  linkType: hard
-
-"@joplin/utils@workspace:packages/utils":
+"@joplin/utils@workspace:packages/utils, @joplin/utils@~2.11":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
@@ -21215,7 +21171,7 @@ __metadata:
     "@joplin/lib": ~2.11
     "@joplin/renderer": ~2.11
     "@joplin/tools": ~2.11
-    "@joplin/utils": "file:../utils"
+    "@joplin/utils": ~2.11
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
     "@types/node": 18.11.18
@@ -28942,6 +28898,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@joplin/utils": ~2.11
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 9.0.13
     "@typescript-eslint/eslint-plugin": 5.48.2
@@ -28953,6 +28910,7 @@ __metadata:
     eslint-plugin-jest: 27.2.1
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.32.0
+    execa: 5.1.1
     fs-extra: 11.1.1
     glob: 8.1.0
     gulp: 4.0.2
