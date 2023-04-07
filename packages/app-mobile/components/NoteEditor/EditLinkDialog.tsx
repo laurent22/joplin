@@ -4,6 +4,7 @@ const React = require('react');
 const { useState, useEffect, useMemo, useRef } = require('react');
 const { StyleSheet } = require('react-native');
 const { View, Modal, Text, TextInput, Button } = require('react-native');
+import { hasNotch } from 'react-native-device-info';
 
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
@@ -43,7 +44,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				margin: 15,
 				padding: 30,
 				backgroundColor: theme.backgroundColor,
-
+				marginTop: hasNotch() ? 65 : 15,
 				elevation: 5,
 				shadowOffset: {
 					width: 1,
