@@ -984,6 +984,10 @@ class AppComponent extends React.Component {
 		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
 		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
 
+		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
+		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
+		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
+
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu

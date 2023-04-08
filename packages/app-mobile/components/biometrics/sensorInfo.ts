@@ -1,5 +1,7 @@
+import Logger from '@joplin/lib/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import FingerprintScanner from 'react-native-fingerprint-scanner';
+const logger = Logger.create('sensorInfo');
 
 export interface SensorInfo {
 	enabled: boolean;
@@ -11,6 +13,9 @@ export default async (): Promise<SensorInfo> => {
 	// Early exit if the feature is disabled, so that we don't make any
 	// FingerprintScanner scanner calls, since it seems they can fail and freeze
 	// the app.
+
+	logger.info('Start');
+	logger.info('security.biometricsEnabled', Setting.value('security.biometricsEnabled'));
 
 	if (!Setting.value('security.biometricsEnabled')) {
 		return {
@@ -24,7 +29,9 @@ export default async (): Promise<SensorInfo> => {
 	let supportedSensors = '';
 
 	try {
+		logger.info('Getting isSensorAvailable...');
 		const result = await FingerprintScanner.isSensorAvailable();
+		logger.info('isSensorAvailable result', result);
 		supportedSensors = result;
 
 		if (result) {
@@ -34,7 +41,7 @@ export default async (): Promise<SensorInfo> => {
 			}
 		}
 	} catch (error) {
-		console.warn('Could not check for biometrics sensor:', error);
+		logger.warn('Could not check for biometrics sensor:', error);
 		Setting.setValue('security.biometricsSupportedSensors', '');
 	}
 

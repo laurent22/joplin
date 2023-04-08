@@ -5,6 +5,9 @@ import { View, Dimensions, Alert, Button } from 'react-native';
 import FingerprintScanner from 'react-native-fingerprint-scanner';
 import { SensorInfo } from './sensorInfo';
 import { _ } from '@joplin/lib/locale';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('BiometricPopup');
 
 interface Props {
 	themeId: number;
@@ -21,12 +24,22 @@ export default (props: Props) => {
 	const [display, setDisplay] = useState(!!props.sensorInfo.supportedSensors && (props.sensorInfo.enabled || !initialPromptDone));
 	const [tryBiometricsCheck, setTryBiometricsCheck] = useState(initialPromptDone);
 
+	logger.info('Render start');
+	logger.info('initialPromptDone', initialPromptDone);
+	logger.info('display', display);
+	logger.info('tryBiometricsCheck', tryBiometricsCheck);
+	logger.info('props.sensorInfo', props.sensorInfo);
+
 	useEffect(() => {
 		if (!display || !tryBiometricsCheck) return;
 
 		const biometricsCheck = async () => {
+			logger.info('biometricsCheck: start');
+
 			try {
+				logger.info('biometricsCheck: authenticate...');
 				await FingerprintScanner.authenticate({ description: _('Verify your identity') });
+				logger.info('biometricsCheck: authenticate done');
 				setTryBiometricsCheck(false);
 				setDisplay(false);
 			} catch (error) {
@@ -35,6 +48,8 @@ export default (props: Props) => {
 			} finally {
 				FingerprintScanner.release();
 			}
+
+			logger.info('biometricsCheck: end');
 		};
 
 		void biometricsCheck();
@@ -45,6 +60,9 @@ export default (props: Props) => {
 		if (!display) return;
 
 		const complete = (enableBiometrics: boolean) => {
+			logger.info('complete: start');
+			logger.info('complete: enableBiometrics:', enableBiometrics);
+
 			setInitialPromptDone(true);
 			Setting.setValue('security.biometricsInitialPromptDone', true);
 			Setting.setValue('security.biometricsEnabled', enableBiometrics);
@@ -59,6 +77,8 @@ export default (props: Props) => {
 				type: 'BIOMETRICS_DONE_SET',
 				value: true,
 			});
+
+			logger.info('complete: end');
 		};
 
 		Alert.alert(
@@ -87,12 +107,18 @@ export default (props: Props) => {
 	}, []);
 
 	useEffect(() => {
+		logger.info('effect 1: start');
+
 		if (!display) {
+			logger.info('effect 1: display', display);
+
 			props.dispatch({
 				type: 'BIOMETRICS_DONE_SET',
 				value: true,
 			});
 		}
+
+		logger.info('effect 1: end');
 	}, [display, props.dispatch]);
 
 	const renderTryAgainButton = () => {
