@@ -1,5 +1,13 @@
 # Joplin Android app changelog
 
+## [android-v2.11.1](https://github.com/laurent22/joplin/releases/tag/android-v2.11.1) (Pre-release) - 2023-04-08T08:49:19Z
+
+- New: Add log info for biometrics feature (efdbaeb)
+- New: Add setting to enable/disable the markdown toolbar (#7929 by Henry Heino)
+- Fixed: Encode the non-ASCII characters in OneDrive URI (#7868) (#7851 by Self Not Found)
+- Fixed: Fix OneDrive sync attempting to call method on `null` variable (#7987) (#7986 by Henry Heino)
+- Updated packages @lezer/highlight (v1.1.4), fs-extra (v11.1.1), jsdom (v21.1.1), markdown-it-multimd-table (v4.2.1), nanoid (v3.3.6), node-persist (v3.1.3), nodemon (v2.0.22), react-native-document-picker (v8.1.4), react-native-image-picker (v5.3.1), react-native-paper (v5.4.1), react-native-share (v8.2.1), sass (v1.59.3), sqlite3 (v5.1.6), turndown (v7.1.2), yargs (v17.7.1)
+
 ## [android-v2.10.9](https://github.com/laurent22/joplin/releases/tag/android-v2.10.9) (Pre-release) - 2023-03-22T18:40:57Z
 
 - Improved: Mark biometrics feature as beta and ensure no call is made if it is not enabled (e44a934)
