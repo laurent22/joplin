@@ -63,11 +63,11 @@ const sources: Source[] = [
 	},
 	{
 		id: 10,
-		name: 'JoplinLetter.svg',
+		name: 'JoplinIconForeground.svg',
 	},
 	{
 		id: 11,
-		name: 'JoplinIconBlack.svg',
+		name: 'JoplinNotificationIcon.svg',
 	},
 ];
 
