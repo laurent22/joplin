@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) (Pre-release) - 2023-04-09T12:04:06Z
+
+- Improved: Resolve #8022: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)
+- Improved: Updated packages @react-native-community/netinfo (v9.3.8)
+- Fixed: Removed `MasterKey` from Sync Status report (#8026) (#7940 by Arun Kumar)
+- Security: Prevent bypassing fingerprint lock on certain devices (6b72f86)
+
 ## [android-v2.11.1](https://github.com/laurent22/joplin/releases/tag/android-v2.11.1) (Pre-release) - 2023-04-08T08:49:19Z
 
 - New: Add log info for biometrics feature (efdbaeb)
