@@ -30,6 +30,18 @@ export default async (): Promise<SensorInfo> => {
 
 	try {
 		logger.info('Getting isSensorAvailable...');
+
+		// Note: If `isSensorAvailable()` doesn't return anything, it seems we
+		// could assume that biometrics are not setup on the device, and thus we
+		// can unlock the app. However that's not always correct - on some
+		// devices (eg Galaxy S22), `isSensorAvailable()` will return nothing if
+		// the device is on lockout - i.e. if the user gave the wrong
+		// fingerprint multiple times.
+		//
+		// So we definitely can't unlock the app in that case, and it means
+		// `isSensorAvailable()` is pretty much useless. Instead we ask for
+		// fingerprint when the user turns on the feature and at that point we
+		// know if the device supports biometrics or not.
 		const result = await FingerprintScanner.isSensorAvailable();
 		logger.info('isSensorAvailable result', result);
 		supportedSensors = result;

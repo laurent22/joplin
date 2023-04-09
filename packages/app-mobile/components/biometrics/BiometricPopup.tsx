@@ -2,10 +2,10 @@ const React = require('react');
 import Setting from '@joplin/lib/models/Setting';
 import { useEffect, useMemo, useState } from 'react';
 import { View, Dimensions, Alert, Button } from 'react-native';
-import FingerprintScanner from 'react-native-fingerprint-scanner';
 import { SensorInfo } from './sensorInfo';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
+import biometricAuthenticate from './biometricAuthenticate';
 
 const logger = Logger.create('BiometricPopup');
 
@@ -21,7 +21,7 @@ export default (props: Props) => {
 	// doesn't work properly, we disable it. We only want the user to enable the
 	// feature after they've read the description in the config screen.
 	const [initialPromptDone, setInitialPromptDone] = useState(true); // useState(Setting.value('security.biometricsInitialPromptDone'));
-	const [display, setDisplay] = useState(!!props.sensorInfo.supportedSensors && (props.sensorInfo.enabled || !initialPromptDone));
+	const [display, setDisplay] = useState(props.sensorInfo.enabled || !initialPromptDone);
 	const [tryBiometricsCheck, setTryBiometricsCheck] = useState(initialPromptDone);
 
 	logger.info('Render start');
@@ -37,17 +37,13 @@ export default (props: Props) => {
 			logger.info('biometricsCheck: start');
 
 			try {
-				logger.info('biometricsCheck: authenticate...');
-				await FingerprintScanner.authenticate({ description: _('Verify your identity') });
-				logger.info('biometricsCheck: authenticate done');
-				setTryBiometricsCheck(false);
+				await biometricAuthenticate();
 				setDisplay(false);
 			} catch (error) {
-				Alert.alert(_('Could not verify your identify'), error.message);
-				setTryBiometricsCheck(false);
-			} finally {
-				FingerprintScanner.release();
+				Alert.alert(error.message);
 			}
+
+			setTryBiometricsCheck(false);
 
 			logger.info('biometricsCheck: end');
 		};
@@ -97,7 +93,7 @@ export default (props: Props) => {
 				},
 			]
 		);
-	}, [initialPromptDone, props.sensorInfo.supportedSensors, display, props.dispatch]);
+	}, [initialPromptDone, display, props.dispatch]);
 
 	const windowSize = useMemo(() => {
 		return {
