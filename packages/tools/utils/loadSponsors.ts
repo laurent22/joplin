@@ -1,8 +1,7 @@
 import { readFile } from 'fs-extra';
-import { rootDir } from '@joplin/utils';
+import { getRootDir } from '@joplin/utils';
 import { fetchWithRetry } from '@joplin/utils/net';
-
-const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
+import { githubOauthToken } from '../tool-utils';
 
 export interface GithubSponsor {
 	name: string;
@@ -22,6 +21,7 @@ export interface OrgSponsor {
 }
 
 export const loadSponsors = async (): Promise<Sponsors> => {
+	const sponsorsPath = `${await getRootDir()}/packages/tools/sponsors.json`;
 	const output: Sponsors = JSON.parse(await readFile(sponsorsPath, 'utf8'));
 
 	output.orgs = output.orgs.map(o => {
@@ -29,8 +29,17 @@ export const loadSponsors = async (): Promise<Sponsors> => {
 		return o;
 	});
 
+	const oauthToken = await githubOauthToken();
+
 	for (const ghSponsor of output.github) {
-		const userResponse = await fetchWithRetry(`https://api.github.com/users/${ghSponsor.name}`);
+		const userResponse = await fetchWithRetry(`https://api.github.com/users/${ghSponsor.name}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `token ${oauthToken}`,
+			},
+		});
+
+		if (!userResponse.ok) throw new Error(await userResponse.text());
 		const user = await userResponse.json();
 		ghSponsor.id = user.id;
 	}

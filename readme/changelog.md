@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v2.10.13](https://github.com/laurent22/joplin/releases/tag/v2.10.13) (Pre-release) - 2023-04-03T16:53:46Z
+
+- Fixed: Encode the non-ASCII characters in OneDrive URI ([#7868](https://github.com/laurent22/joplin/issues/7868)) ([#7851](https://github.com/laurent22/joplin/issues/7851) by Self Not Found)
+- Fixed: Fix OneDrive sync attempting to call method on `null` variable ([#7987](https://github.com/laurent22/joplin/issues/7987)) ([#7986](https://github.com/laurent22/joplin/issues/7986) by Henry Heino)
+- Fixed: Fixed display of installed plugins in About box ([376e4eb](https://github.com/laurent22/joplin/commit/376e4eb))
+
+## [v2.10.12](https://github.com/laurent22/joplin/releases/tag/v2.10.12) (Pre-release) - 2023-03-23T12:17:13Z
+
+- Improved: Adjusted New Note and New to-do buttons' breakpoints to happen earlier ([#7961](https://github.com/laurent22/joplin/issues/7961) by [@julien](https://github.com/julien))
+
 ## [v2.10.11](https://github.com/laurent22/joplin/releases/tag/v2.10.11) (Pre-release) - 2023-03-17T10:54:02Z
 
 - Fixed: Fixes text wrap on new buttons ([#7938](https://github.com/laurent22/joplin/issues/7938) by [@julien](https://github.com/julien))

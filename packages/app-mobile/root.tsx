@@ -504,7 +504,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-1') });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-3') });
 
 			// await db.clearForTesting();
 		}
@@ -978,6 +978,10 @@ class AppComponent extends React.Component {
 
 		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
 		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
+
+		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
+		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
+		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>

@@ -2,12 +2,15 @@
  * @jest-environment jsdom
  */
 
+
 import { EditorSettings } from '../types';
 import { initCodeMirror } from './CodeMirror';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
 import loadLangauges from './testUtil/loadLanguages';
+
+import { expect, describe, it } from '@jest/globals';
 
 
 const createEditorSettings = (themeId: number) => {
@@ -23,6 +26,14 @@ const createEditorSettings = (themeId: number) => {
 };
 
 describe('CodeMirror', () => {
+	// This checks for a regression -- occasionally, when updating packages,
+	// syntax highlighting in the CodeMirror editor stops working. This is usually
+	// fixed by
+	// 1. removing all `@codemirror/` and `@lezer/` dependencies from yarn.lock,
+	// 2. upgrading all CodeMirror packages to the latest versions in package.json, and
+	// 3. re-running `yarn install`.
+	//
+	// See https://github.com/laurent22/joplin/issues/7253
 	it('should give headings a different style', async () => {
 		const headerLineText = '# Testing...';
 		const initialText = `${headerLineText}\nThis is a test.`;
