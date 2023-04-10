@@ -1,9 +1,9 @@
-import * as fs from 'fs-extra';
-import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
+import { pathExists, readFile, writeFile, unlink, stat, createWriteStream } from 'fs-extra';
+import { hasCredentialFile, readCredentialFile } from '@joplin/lib/utils/credentialFiles';
+import { execCommand as execCommand2, commandToString } from '@joplin/utils';
 
 const fetch = require('node-fetch');
 const execa = require('execa');
-const { splitCommandString } = require('@joplin/lib/string-utils');
 const moment = require('moment');
 
 export interface GitHubReleaseAsset {
@@ -20,27 +20,10 @@ export interface GitHubRelease {
 	draft: boolean;
 }
 
-function quotePath(path: string) {
-	if (!path) return '';
-	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
-	path = path.replace(/"/, '\\"');
-	return `"${path}"`;
-}
-
-function commandToString(commandName: string, args: string[] = []) {
-	const output = [quotePath(commandName)];
-
-	for (const arg of args) {
-		output.push(quotePath(arg));
-	}
-
-	return output.join(' ');
-}
-
 async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl: string = '') {
 	repoTagUrl = repoTagUrl || 'https://github.com/laurent22/joplin/releases/tag';
 
-	const currentText = await fs.readFile(changelogPath, 'UTF-8');
+	const currentText = await readFile(changelogPath, 'UTF-8');
 	const lines = currentText.split('\n');
 
 	const beforeLines = [];
@@ -97,7 +80,7 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 
 	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease, repoTagUrl);
 
-	await fs.writeFile(changelogPath, newChangelog);
+	await writeFile(changelogPath, newChangelog);
 
 	console.info('');
 	console.info('Verify that the changelog is correct:');
@@ -112,8 +95,8 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 async function loadGitHubUsernameCache() {
 	const path = `${__dirname}/github_username_cache.json`;
 
-	if (await fs.pathExists(path)) {
-		const jsonString = await fs.readFile(path, 'utf8');
+	if (await pathExists(path)) {
+		const jsonString = await readFile(path, 'utf8');
 		return JSON.parse(jsonString);
 	}
 
@@ -122,7 +105,7 @@ async function loadGitHubUsernameCache() {
 
 async function saveGitHubUsernameCache(cache: any) {
 	const path = `${__dirname}/github_username_cache.json`;
-	await fs.writeFile(path, JSON.stringify(cache));
+	await writeFile(path, JSON.stringify(cache));
 }
 
 // Returns the project root dir
@@ -163,52 +146,6 @@ export function execCommandVerbose(commandName: string, args: string[] = []) {
 	return promise;
 }
 
-interface ExecCommandOptions {
-	showInput?: boolean;
-	showStdout?: boolean;
-	showStderr?: boolean;
-	quiet?: boolean;
-}
-
-// There's lot of execCommandXXX functions, but eventually all scripts should
-// use the one below, which supports:
-//
-// - Printing the command being executed
-// - Printing the output in real time (piping to stdout)
-// - Returning the command result as string
-export async function execCommand2(command: string | string[], options: ExecCommandOptions = null): Promise<string> {
-	options = {
-		showInput: true,
-		showStdout: true,
-		showStderr: true,
-		quiet: false,
-		...options,
-	};
-
-	if (options.quiet) {
-		options.showInput = false;
-		options.showStdout = false;
-		options.showStderr = false;
-	}
-
-	if (options.showInput) {
-		if (typeof command === 'string') {
-			console.info(`> ${command}`);
-		} else {
-			console.info(`> ${commandToString(command[0], command.slice(1))}`);
-		}
-	}
-
-	const args: string[] = typeof command === 'string' ? splitCommandString(command) : command as string[];
-	const executableName = args[0];
-	args.splice(0, 1);
-	const promise = execa(executableName, args);
-	if (options.showStdout) promise.stdout.pipe(process.stdout);
-	if (options.showStderr) promise.stdout.pipe(process.stderr);
-	const result = await promise;
-	return result.stdout.trim();
-}
-
 export function execCommandWithPipes(executable: string, args: string[]) {
 	const spawn = require('child_process').spawn;
 
@@ -236,26 +173,25 @@ export function toSystemSlashes(path: string) {
 }
 
 export async function setPackagePrivateField(filePath: string, value: any) {
-	const text = await fs.readFile(filePath, 'utf8');
+	const text = await readFile(filePath, 'utf8');
 	const obj = JSON.parse(text);
 	if (!value) {
 		delete obj.private;
 	} else {
 		obj.private = true;
 	}
-	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
+	await writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
 }
 
 export async function downloadFile(url: string, targetPath: string) {
 	const https = require('https');
-	const fs = require('fs');
 
 	return new Promise((resolve, reject) => {
-		const file = fs.createWriteStream(targetPath);
-		https.get(url, function(response: any) {
+		const file = createWriteStream(targetPath);
+		https.get(url, (response: any) => {
 			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
 			response.pipe(file);
-			file.on('finish', function() {
+			file.on('finish', () => {
 				// file.close();
 				resolve(null);
 			});
@@ -273,22 +209,20 @@ export function fileSha256(filePath: string) {
 		const shasum = crypto.createHash(algo);
 
 		const s = fs.ReadStream(filePath);
-		s.on('data', function(d: any) { shasum.update(d); });
-		s.on('end', function() {
+		s.on('data', (d: any) => { shasum.update(d); });
+		s.on('end', () => {
 			const d = shasum.digest('hex');
 			resolve(d);
 		});
-		s.on('error', function(error: any) {
+		s.on('error', (error: any) => {
 			reject(error);
 		});
 	});
 }
 
 export async function unlinkForce(filePath: string) {
-	const fs = require('fs-extra');
-
 	try {
-		await fs.unlink(filePath);
+		await unlink(filePath);
 	} catch (error) {
 		if (error.code === 'ENOENT') return;
 		throw error;
@@ -296,16 +230,14 @@ export async function unlinkForce(filePath: string) {
 }
 
 export function fileExists(filePath: string) {
-	const fs = require('fs-extra');
-
 	return new Promise((resolve, reject) => {
-		fs.stat(filePath, function(err: any) {
-			if (!err) {
+		stat(filePath, (error: any) => {
+			if (!error) {
 				resolve(true);
-			} else if (err.code === 'ENOENT') {
+			} else if (error.code === 'ENOENT') {
 				resolve(false);
 			} else {
-				reject(err);
+				reject(error);
 			}
 		});
 	});
@@ -389,7 +321,10 @@ export function patreonOauthToken() {
 }
 
 export function githubOauthToken() {
-	return readCredentialFile('github_oauth_token.txt');
+	const filename = 'github_oauth_token.txt';
+	if (hasCredentialFile(filename)) return readCredentialFile(filename);
+	if (process.env.JOPLIN_GITHUB_OAUTH_TOKEN) return process.env.JOPLIN_GITHUB_OAUTH_TOKEN;
+	throw new Error(`Cannot get Oauth token. Neither ${filename} nor the env variable JOPLIN_GITHUB_OAUTH_TOKEN are present`);
 }
 
 // Note that the GitHub API releases/latest is broken on the joplin-android repo
@@ -485,12 +420,11 @@ export function isMac() {
 }
 
 export async function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string) {
-	const fs = require('fs-extra');
-	let content = await fs.readFile(filePath, 'utf-8');
+	let content = await readFile(filePath, 'utf-8');
 	// [^]* matches any character including new lines
 	const regex = new RegExp(`${markerOpen}[^]*?${markerClose}`);
 	content = content.replace(regex, markerOpen + contentToInsert + markerClose);
-	await fs.writeFile(filePath, content);
+	await writeFile(filePath, content);
 }
 
 export function dirname(path: string) {

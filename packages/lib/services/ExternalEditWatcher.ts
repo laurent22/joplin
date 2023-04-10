@@ -55,27 +55,27 @@ export default class ExternalEditWatcher {
 		};
 	}
 
-	tempDir() {
+	public tempDir() {
 		return Setting.value('profileDir');
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	setLogger(l: Logger) {
+	public setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	watch(fileToWatch: string) {
+	public watch(fileToWatch: string) {
 		if (!this.chokidar_) return;
 
 		if (!this.watcher_) {
@@ -164,11 +164,11 @@ export default class ExternalEditWatcher {
 		return this.watcher_;
 	}
 
-	noteIdToFilePath_(noteId: string) {
+	private noteIdToFilePath_(noteId: string) {
 		return `${this.tempDir()}/edit-${noteId}.md`;
 	}
 
-	noteFilePathToId_(path: string) {
+	private noteFilePathToId_(path: string) {
 		let id: any = toSystemSlashes(path, 'linux').split('/');
 		if (!id.length) throw new Error(`Invalid path: ${path}`);
 		id = id[id.length - 1];
@@ -178,7 +178,7 @@ export default class ExternalEditWatcher {
 		return id[1];
 	}
 
-	watchedFiles() {
+	public watchedFiles() {
 		if (!this.watcher_) return [];
 
 		const output = [];
@@ -196,7 +196,7 @@ export default class ExternalEditWatcher {
 		return output;
 	}
 
-	noteIsWatched(note: NoteEntity) {
+	public noteIsWatched(note: NoteEntity) {
 		if (!this.watcher_) return false;
 
 		const noteFilename = basename(this.noteIdToFilePath_(note.id));
@@ -215,7 +215,7 @@ export default class ExternalEditWatcher {
 		return false;
 	}
 
-	async openAndWatch(note: NoteEntity) {
+	public async openAndWatch(note: NoteEntity) {
 		if (!note || !note.id) {
 			this.logger().warn('ExternalEditWatcher: Cannot open note: ', note);
 			return;
@@ -235,7 +235,7 @@ export default class ExternalEditWatcher {
 		this.logger().info(`ExternalEditWatcher: Started watching ${filePath}`);
 	}
 
-	async stopWatching(noteId: string) {
+	public async stopWatching(noteId: string) {
 		if (!noteId) return;
 
 		const filePath = this.noteIdToFilePath_(noteId);
@@ -248,7 +248,7 @@ export default class ExternalEditWatcher {
 		this.logger().info(`ExternalEditWatcher: Stopped watching ${filePath}`);
 	}
 
-	async stopWatchingAll() {
+	public async stopWatchingAll() {
 		const filePaths = this.watchedFiles();
 		for (let i = 0; i < filePaths.length; i++) {
 			await shim.fsDriver().remove(filePaths[i]);
@@ -262,7 +262,7 @@ export default class ExternalEditWatcher {
 		});
 	}
 
-	async updateNoteFile(note: NoteEntity) {
+	public async updateNoteFile(note: NoteEntity) {
 		if (!this.noteIsWatched(note)) return;
 
 		if (!note || !note.id) {
@@ -279,7 +279,7 @@ export default class ExternalEditWatcher {
 		await this.writeNoteToFile_(note);
 	}
 
-	async writeNoteToFile_(note: NoteEntity) {
+	private async writeNoteToFile_(note: NoteEntity) {
 		if (!note || !note.id) {
 			this.logger().warn('ExternalEditWatcher: Cannot update note file: ', note);
 			return null;

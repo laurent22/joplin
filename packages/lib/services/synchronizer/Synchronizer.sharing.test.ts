@@ -1,4 +1,4 @@
-describe('Synchronizer.sharing', function() {
+describe('Synchronizer.sharing', () => {
 
 	it('should skip', (async () => {
 		expect(true).toBe(true);

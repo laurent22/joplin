@@ -24,7 +24,7 @@ const proxySettings = {};
 function fileExists(filePath) {
 	try {
 		return fs.statSync(filePath).isFile();
-	} catch (err) {
+	} catch (error) {
 		return false;
 	}
 }
@@ -66,7 +66,7 @@ const gunzipFile = function(source, destination) {
 		src.pipe(zlib.createGunzip()).pipe(dest);
 
 		// callback on extract completion
-		dest.on('close', function() {
+		dest.on('close', () => {
 			resolve();
 		});
 
@@ -232,9 +232,9 @@ function shimInit(options = null) {
 						fit: 'inside',
 						withoutEnlargement: true,
 					})
-					.toFile(targetPath, (err, info) => {
-						if (err) {
-							reject(err);
+					.toFile(targetPath, (error, info) => {
+						if (error) {
+							reject(error);
 						} else {
 							resolve(info);
 						}
@@ -523,16 +523,16 @@ function shimInit(options = null) {
 					// Note: relative paths aren't supported
 					file = fs.createWriteStream(filePath);
 
-					file.on('error', function(error) {
+					file.on('error', (error) => {
 						cleanUpOnError(error);
 					});
 
-					const request = http.request(requestOptions, function(response) {
+					const request = http.request(requestOptions, (response) => {
 						response.pipe(file);
 
 						const isGzipped = response.headers['content-encoding'] === 'gzip';
 
-						file.on('finish', function() {
+						file.on('finish', () => {
 							file.close(async () => {
 								if (isGzipped) {
 									const gzipFilePath = `${filePath}.gzip`;
@@ -553,7 +553,7 @@ function shimInit(options = null) {
 						});
 					});
 
-					request.on('error', function(error) {
+					request.on('error', (error) => {
 						cleanUpOnError(error);
 					});
 

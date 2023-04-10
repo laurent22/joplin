@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-const { splitCommandString } = require('../../string-utils');
+import { splitCommandString } from '@joplin/utils';
 import { spawn } from 'child_process';
 import Logger from '../../Logger';
 import Setting from '../../models/Setting';

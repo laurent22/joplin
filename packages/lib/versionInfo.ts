@@ -16,6 +16,8 @@ function getPluginLists(plugins: Plugins): PluginList {
 		}
 	}
 
+	pluginList.sort(Intl.Collator().compare);
+
 	let completeList = '';
 	let summary = '';
 	if (pluginList.length > 0) {
@@ -65,7 +67,6 @@ export default function versionInfo(packageInfo: any, plugins: Plugins) {
 
 	if (gitInfo) {
 		body.push(`\n${gitInfo}`);
-		console.info(gitInfo);
 	}
 
 	const pluginList = getPluginLists(plugins);

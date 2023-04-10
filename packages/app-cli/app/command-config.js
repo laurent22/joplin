@@ -39,9 +39,9 @@ class Command extends BaseCommand {
 				let settingsObj;
 				try {
 					settingsObj = JSON.parse(json);
-				} catch (err) {
+				} catch (error) {
 					isSettled = true;
-					return reject(new Error(`Invalid JSON passed to config --import: \n${err.message}.`));
+					return reject(new Error(`Invalid JSON passed to config --import: \n${error.message}.`));
 				}
 				if (settingsObj) {
 					Object.entries(settingsObj)

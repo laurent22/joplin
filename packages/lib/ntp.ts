@@ -13,8 +13,8 @@ function ntpClient() {
 }
 
 export async function getNetworkTime(): Promise<Date> {
-	return new Promise(function(resolve: Function, reject: Function) {
-		ntpClient().getNetworkTime(server.domain, server.port, function(error: any, date: Date) {
+	return new Promise((resolve: Function, reject: Function) => {
+		ntpClient().getNetworkTime(server.domain, server.port, (error: any, date: Date) => {
 			if (error) {
 				reject(error);
 				return;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-const { NotesScreen } = require('./screens/notes.js');
+import NotesScreen from './screens/Notes';
 const { SearchScreen } = require('./screens/search.js');
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
@@ -25,7 +25,7 @@ class AppNavComponent extends Component<Props, State> {
 	private keyboardDidHideListener: EmitterSubscription|null = null;
 	private keyboardWillChangeFrameListener: EmitterSubscription|null = null;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.previousRouteName_ = null;
@@ -35,7 +35,7 @@ class AppNavComponent extends Component<Props, State> {
 		};
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		if (Platform.OS === 'ios') {
 			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow.bind(this));
 			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide.bind(this));
@@ -43,7 +43,7 @@ class AppNavComponent extends Component<Props, State> {
 		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		this.keyboardDidShowListener?.remove();
 		this.keyboardDidHideListener?.remove();
 		this.keyboardWillChangeFrameListener?.remove();
@@ -53,15 +53,15 @@ class AppNavComponent extends Component<Props, State> {
 		this.keyboardWillChangeFrameListener = null;
 	}
 
-	keyboardDidShow() {
+	public keyboardDidShow() {
 		this.setState({ autoCompletionBarExtraHeight: 30 });
 	}
 
-	keyboardDidHide() {
+	public keyboardDidHide() {
 		this.setState({ autoCompletionBarExtraHeight: 0 });
 	}
 
-	keyboardWillChangeFrame = (evt: KeyboardEvent) => {
+	private keyboardWillChangeFrame = (evt: KeyboardEvent) => {
 		const windowWidth = Dimensions.get('window').width;
 
 		// If the keyboard isn't as wide as the window, the floating keyboard is diabled.
@@ -71,7 +71,7 @@ class AppNavComponent extends Component<Props, State> {
 		});
 	};
 
-	render() {
+	public render() {
 		if (!this.props.route) throw new Error('Route must not be null');
 
 		// Note: certain screens are kept into memory, in particular Notes and Search

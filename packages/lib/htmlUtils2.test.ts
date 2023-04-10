@@ -1,6 +1,6 @@
 import htmlUtils from './htmlUtils';
 
-describe('htmlUtils', function() {
+describe('htmlUtils', () => {
 
 
 

@@ -9,7 +9,8 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
-const { splitCommandString, splitCommandBatch } = require('@joplin/lib/string-utils');
+const { splitCommandString } = require('@joplin/utils');
+const { splitCommandBatch } = require('@joplin/lib/string-utils');
 const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
@@ -246,6 +247,7 @@ class Application extends BaseApplication {
 			showConsole: () => {},
 			maximizeConsole: () => {},
 			stdout: text => {
+				// eslint-disable-next-line no-console
 				console.info(text);
 			},
 			fullScreen: () => {},
@@ -407,6 +409,7 @@ class Application extends BaseApplication {
 				if (this.showStackTraces_) {
 					console.error(error);
 				} else {
+					// eslint-disable-next-line no-console
 					console.info(error.message);
 				}
 				process.exit(1);

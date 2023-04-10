@@ -8,7 +8,7 @@ import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/te
 import uuidgen from '../../utils/uuidgen';
 import { FormUser } from './signup';
 
-describe('index_signup', function() {
+describe('index_signup', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_signup');
@@ -22,7 +22,7 @@ describe('index_signup', function() {
 		await beforeEachDb();
 	});
 
-	test('should create a new account', async function() {
+	test('should create a new account', async () => {
 		const password = uuidgen();
 		const formUser: FormUser = {
 			full_name: 'Toto',

@@ -11,7 +11,7 @@ import { databaseSchema } from './services/database/types';
 //
 // In our case, all bigInteger are timestamps, which JavaScript can handle
 // fine as numbers.
-require('pg').types.setTypeParser(20, function(val: any) {
+require('pg').types.setTypeParser(20, (val: any) => {
 	return parseInt(val, 10);
 });
 

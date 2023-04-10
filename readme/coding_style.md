@@ -28,6 +28,30 @@ Even if you are **modifying** a file that was originally in JavaScript you shoul
 
 If this is a large file however please ask first if it needs to be converted. Some very old and large JS files are tricky to convert properly due to poorly defined types, so in some cases it's better to leave that for another day (or another PR).
 
+### Prefer `import` to `require`
+
+In TypeScript files prefer `import` to `require` so that we can benefit from type-checking. If it does not work, you may have to add the type using `yarn add @types/NAME_OF_PACKAGE`. If you are trying to import an old package, it may not have TypeScript types and in this case using `require()` is acceptable.
+
+### Avoid inline types
+
+In general please define types separately as it improves readability and it means the type can be re-used.
+
+**BAD:**
+```ts
+const config: { [key: string]: Knex.Config } = {
+	// ...
+}	
+```
+
+**Good:**
+```ts
+type Config = Record<string, Knex.Config>;
+
+const config: Config = {
+	// ...
+}	
+```
+
 ## Filenames
 
  * `camelCase.ts`: Files that export multiple things.
@@ -69,6 +93,24 @@ processData();
 ...
 ```
 
+## Only import what you need
+
+Only import what you need so that we can potentially benefit from [tree shaking](https://webpack.js.org/guides/tree-shaking/) if we ever implement it.
+
+**BAD:**
+```ts
+import * as fs from 'fs-extra';
+// ...
+fs.writeFile('example.md', 'example');
+```
+
+**Good:**
+```ts
+import { writeFile } from 'fs-extra';
+// ...
+writeFile('example.md', 'example');
+```
+
 ## Use `camelCase` for `const`ants in new code
 
 **BAD:**
@@ -81,24 +123,6 @@ const GRAVITY_ACCEL = 9.8;
 ```ts
 const gravityAccel = 9.8;
 ```
-
-
-## Indent using `tab`s
-
-**VSCode**: In `vscode`, be sure to check whether new files are created with `tab` or `space` indentation! [Spaces can be converted to tabs using the command palette.](https://code.visualstudio.com/docs/editor/codebasics#_autodetection)
-
-
-## Use strict equality
-
-Use `===` instead of `==`.
-
-Although the TypeScript compiler _will_ give error messages if two different types are compared with `==` (e.g. `number == boolean`), its compiler error [messages in this case can be misleading](https://github.com/microsoft/TypeScript/issues/26592).
-
-
-### See also
- * [Unofficial TypeScript style guide, `==` vs `===`](https://basarat.gitbook.io/typescript/styleguide#or)
- * [More about `==` vs `===` in TypeScript.](https://stackoverflow.com/a/60669874)
-
 
 ## Declare variables just before their usage
 
@@ -166,7 +190,125 @@ const foo = () => {
 
 As much as possible, avoid default parameters in **function definitions** and optional fields in **interface definitions**. When all parameters are required, it is much easier to refactor the code because the compiler will automatically catch any missing parameters.
 
+## Escape variables
+
+[XSS](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) is one of the most common vulnerabilities in today's code. These vulnerabilities are often difficult to spot because they are not errors, they often won't fail any test units and the program will work just fine with 99% of input. Yet that remaining 1% can be exploited and used to steal user information, crash the app, etc.
+
+If you search for ["XSS" in the Joplin git log](https://github.com/laurent22/joplin/search?q=xss&type=commits) you'll find several security vulnerabilities that have been fixed over the year, and that happened in various places that are hard to predict. So we need to be careful with this and make sure we correctly escape user content.
+
+How you escape the data depends on where you are going to insert it so there's no single function that's going to cover all cases.
+
+### To insert into a JS script
+
+Use `JSON.stringify()`. For example:
+
+```ts
+const jsCode = `const data = ${JSON.stringify(dynamicallyGeneratedData)};`
+```
+
+### To insert into an HTML string
+
+You need to convert special characters to HTML entities, which we usually do using the `html-entities` package. For example:
+
+```ts
+// We generally use this rather verbose pattern, but there
+// are also helper functions that you may be able to use
+// depending on the package.
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = new Entities().encode;
+const html = `<a href="${htmlentities(attributes)}">${htmlentities(content)}</a>`;
+```
+
+### To insert into a URL
+
+It depends on what you're trying to do. To insert a query parameter, use `encodeURIComponent`
+
+```ts
+const url = `https://example.com/?page=${encodeURIComponent(page)}`;
+```
+
+If you want to encode a full URL, use `encodeURI`:
+
+```ts
+encodeURI('https://domain.com/path to a document.pdf');
+// 'https://domain.com/path%20to%20a%20document.pdf'
+```
+
+### Escape as late as possible
+
+Ideally the application should only deal with raw, unencoded data, so it means data should be decoded and encoded at the application boundaries. Doing so means we avoid accidentally double-escaping data, or having to encode/decode within the app, which is error prone.
+
+In practice it means as soon as we get user input, we should decode it to the application-specific format (for example by calling `JSON.parse` on the input). And likewise we should only escape the data when it needs to be printed or exported.
+
+**BAD**
+
+```ts
+let parameters = `id=${encodeURIComponent(id)}&time=${encodeURIComponent(Date.now())}`;
+
+// Clumsy string concatenation because we're dealing with already escaped data.
+// and we have to remember to encode every time:
+parameters += `&other=${encodeURIComponent(otherParam)}`; 
+
+const url = `https://example.com?${parameters}`
+```
+
+**GOOD**
+
+```ts
+// Keep the data as an object
+const parameters = {
+	id: id,
+	timestamp: Date.now(),
+};
+
+// Then we can easily add to it without string concatenation:
+parameters.other = otherParam;
+
+// We escape only when it is needed:
+const url = `https://example.com?${new URLSearchParams(parameters).toString()}`
+```
+
+### Make wrong code look wrong
+
+To name variables that are already escaped we used the technique described in "[Make wrong code look wrong](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/)". We add a suffix to indicate the content of the variable and to make it clear it has already been escaped. It means that the code will look wrong if a variable is inserted in a string and it does not have a suffix. For example:
+
+**BAD:**
+
+```ts
+const userContent = queryParameters.page;
+
+// ...
+// later:
+// ...
+
+const html = `<div>${userContent}</div>`
+
+// The above code looks wrong because it appears we're
+// inserting user input as is in the document, and
+// indeed we are. Wrong code looks wrong.
+```
+
+**GOOD:**
+
+```ts
+// Here we escape the data immediately - and we add an
+// "html" prefix to specify that we have escaped the data
+// and that the variable content is actual HTML.
+const userContentHtml = htmlentities(queryParameters.page);
+
+// ...
+// later:
+// ...
+
+const html = `<div>${userContentHtml}</div>`
+
+// This is correct and because we've added the "html" suffix
+// we know that this variable can be safely added to an HTML
+// string.
+```
+
 # React
+
 ## Use function components for new code
 
 New code should use [React Hooks](https://reactjs.org/docs/hooks-intro.html) and `function` components, rather than objects that extend `Component`.
@@ -175,11 +317,11 @@ New code should use [React Hooks](https://reactjs.org/docs/hooks-intro.html) and
 ```tsx
 // Don't do this in new code!
 class Example extends React.Component {
-	constructor(props: { text: string }) {
+	public constructor(props: { text: string }) {
 		super(props);
 	}
 
-	render() {
+	public render() {
 		return (
 			<div>${text}</div>
 		);
@@ -195,13 +337,46 @@ const Example = (props: { text: string }) => {
 	);
 };
 ```
-
-
 ## Use react [custom hooks](https://reactjs.org/docs/hooks-custom.html) to simplify long code
 
 If `eslint` gives an error about `useFoo` being called outside of a component, be sure [the custom hook is titled appropriately](https://stackoverflow.com/a/55862839).
 
+# Database
 
+## Use snake_case
+
+We use `snake_case` for table names and column names.
+
+## Everything is NOT NULL
+
+All columns should be defined as `NOT NULL`, possibly with a default value (but see below). This helps keeping queries more simple as we don't have to do check for both `NULL` and `0` or empty string.
+
+## Use defaults sparingly
+
+Don't automatically give a default valuet to a column - in many cases it's better to require the user to explicitly set the value, otherwise it will be set to a default they might not know about or want. Exceptions can be less important columns, things like timestamp, or columns that are going to be set by the system.
+
+## Use an integer for enum-like values
+
+If a column can be set to a fixed number of values, please set the type to integer. In code, you would then have a TypeScript enum that defines what each values is for. For example:
+
+```typescript
+export enum Action {
+	Create = 1,
+	Update = 2,
+	Delete = 3,
+}
+```
+
+We don't use built-in database enums because they make migrations difficult. They provide added readability when accessing the database directly, but it is not worth the extra trouble.
+
+## Prefer using `tinyint(1)` to `bool`
+Booleans are not a distinct types in many common DBMS, including SQLite (which we use) and MySQL, so prefer using a `tinyint(1)` instead.
+
+# Web requests and API
+
+## Use `snake_case`
+
+We use `snake_case` for end points and query parameters.
 
 # See also
 ## **Other** projects' style guides

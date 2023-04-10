@@ -1,6 +1,6 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession, createNote, createResource } from '../utils/testing/testUtils';
 
-describe('ItemResourceModel', function() {
+describe('ItemResourceModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ItemResourceModel');

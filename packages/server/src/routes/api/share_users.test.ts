@@ -5,7 +5,7 @@ import { shareFolderWithUser, shareWithUserAndAccept } from '../../utils/testing
 import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
 
-describe('share_users', function() {
+describe('share_users', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('share_users');
@@ -19,7 +19,7 @@ describe('share_users', function() {
 		await beforeEachDb();
 	});
 
-	test('should list user invitations', async function() {
+	test('should list user invitations', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -38,7 +38,7 @@ describe('share_users', function() {
 		expect(shareUsers.items.find(su => su.share.id === share2.id)).toBeTruthy();
 	});
 
-	test('should not change someone else shareUser object', async function() {
+	test('should not change someone else shareUser object', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -53,7 +53,7 @@ describe('share_users', function() {
 		await expectHttpError(async () => patchApi(session1.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted }), ErrorForbidden.httpCode);
 	});
 
-	test('should not allow accepting a share twice or more', async function() {
+	test('should not allow accepting a share twice or more', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 

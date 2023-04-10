@@ -58,7 +58,7 @@ const geoipServices: Record<string, GeoipService> = {
 };
 
 export default class {
-	static async currentPosition(options: CurrentPositionOptions = null) {
+	public static async currentPosition(options: CurrentPositionOptions = null) {
 		if (!options) options = {};
 
 		for (const [serviceName, handler] of Object.entries(geoipServices)) {

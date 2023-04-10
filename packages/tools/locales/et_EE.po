@@ -33,8 +33,8 @@ msgstr ""
 "-Storage: lubada lisades faile märkmeid ja lubada failisüsteemi "
 "sünkroniseerimine."
 
-#: packages/lib/services/KeymapService.ts:314
-#: packages/lib/services/KeymapService.ts:320
+#: packages/lib/services/KeymapService.ts:316
+#: packages/lib/services/KeymapService.ts:322
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr ""
 
@@ -54,39 +54,39 @@ msgstr ""
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:630
-#: packages/app-desktop/gui/MenuBar.tsx:895
+#: packages/app-desktop/gui/MenuBar.tsx:633
+#: packages/app-desktop/gui/MenuBar.tsx:903
 msgid "&Edit"
 msgstr "&Redigeeri"
 
-#: packages/app-desktop/gui/MenuBar.tsx:505
-#: packages/app-desktop/gui/MenuBar.tsx:585
-#: packages/app-desktop/gui/MenuBar.tsx:891
+#: packages/app-desktop/gui/MenuBar.tsx:508
+#: packages/app-desktop/gui/MenuBar.tsx:588
+#: packages/app-desktop/gui/MenuBar.tsx:899
 msgid "&File"
 msgstr "&Fail"
 
-#: packages/app-desktop/gui/MenuBar.tsx:745
+#: packages/app-desktop/gui/MenuBar.tsx:750
 msgid "&Go"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:777
+#: packages/app-desktop/gui/MenuBar.tsx:782
 msgid "&Help"
 msgstr "&Spikker"
 
-#: packages/app-desktop/gui/MenuBar.tsx:763
+#: packages/app-desktop/gui/MenuBar.tsx:768
 #, fuzzy
 msgid "&Note"
 msgstr "Märge"
 
-#: packages/app-desktop/gui/MenuBar.tsx:773
+#: packages/app-desktop/gui/MenuBar.tsx:778
 msgid "&Tools"
 msgstr "&Tööriistad"
 
-#: packages/app-desktop/gui/MenuBar.tsx:671
+#: packages/app-desktop/gui/MenuBar.tsx:675
 msgid "&View"
 msgstr "&Vaade"
 
-#: packages/lib/models/Setting.ts:1517
+#: packages/lib/models/Setting.ts:1528
 msgid "%d days"
 msgstr "%d päeva"
 
@@ -100,11 +100,11 @@ msgstr ""
 msgid "%d GB storage space"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1345
 msgid "%d hour"
 msgstr "%d tund"
 
-#: packages/lib/models/Setting.ts:1347 packages/lib/models/Setting.ts:1348
+#: packages/lib/models/Setting.ts:1346 packages/lib/models/Setting.ts:1347
 msgid "%d hours"
 msgstr "%d tundi"
 
@@ -119,14 +119,19 @@ msgstr ""
 msgid "%d MB per note or attachment"
 msgstr "Manused"
 
-#: packages/lib/models/Setting.ts:1343 packages/lib/models/Setting.ts:1344
-#: packages/lib/models/Setting.ts:1345
+#: packages/lib/models/Setting.ts:1342 packages/lib/models/Setting.ts:1343
+#: packages/lib/models/Setting.ts:1344
 msgid "%d minutes"
 msgstr "%d minutit"
 
 #: packages/app-cli/app/command-rmnote.js:27
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
+
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
+msgid "%s"
+msgstr ""
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -137,7 +142,7 @@ msgstr "%s - Kopeeri"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) ei saanud üles laadida: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:617
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
 msgid "%s (%s) would like to share a notebook with you."
 msgstr ""
 
@@ -158,7 +163,7 @@ msgstr "%s / %s"
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/versionInfo.ts:22
+#: packages/lib/versionInfo.ts:58
 #, fuzzy
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s)"
@@ -186,7 +191,7 @@ msgstr "%s: %d märkused"
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/app-cli/app/cli-utils.js:140
+#: packages/app-cli/app/cli-utils.js:156
 #: packages/lib/services/ReportService.ts:217
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -217,39 +222,39 @@ msgstr ""
 "sihtmärk on regulaarne märge, teisendatakse see tellimuseks). Kasutage "
 "\"clear\" teisendada to-do tagasi tavalise Märkus."
 
-#: packages/lib/models/Setting.ts:1372
+#: packages/lib/models/Setting.ts:1371
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1370
+#: packages/lib/models/Setting.ts:1369
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1372
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:511
-#: packages/app-desktop/gui/MenuBar.tsx:815
+#: packages/app-desktop/gui/MenuBar.tsx:514
+#: packages/app-desktop/gui/MenuBar.tsx:823
 msgid "About Joplin"
 msgstr "Teave kasutaja Joplin kohta"
 
-#: packages/lib/services/KeymapService.ts:320
-#: packages/lib/services/KeymapService.ts:325
+#: packages/lib/services/KeymapService.ts:322
+#: packages/lib/services/KeymapService.ts:327
 msgid "accelerator"
 msgstr ""
 
-#: packages/lib/services/KeymapService.ts:377
+#: packages/lib/services/KeymapService.ts:379
 msgid "Accelerator \"%s\" is not valid."
 msgstr ""
 
-#: packages/lib/services/KeymapService.ts:346
+#: packages/lib/services/KeymapService.ts:348
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
 msgid "Accept"
 msgstr ""
 
@@ -273,11 +278,11 @@ msgid "Active"
 msgstr "Aktiivne"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:713
+#: packages/app-desktop/gui/MenuBar.tsx:718
 msgid "Actual Size"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1114
+#: packages/app-mobile/components/screens/Note.tsx:1113
 msgid "Add body"
 msgstr "Lisa keha"
 
@@ -294,7 +299,7 @@ msgstr "Siltide lisamine või eemaldamine:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note.tsx:1186
 msgid "Add title"
 msgstr "Pealkirja lisamine"
 
@@ -326,8 +331,8 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
-#: packages/app-mobile/components/screens/notes.js:204
-#: packages/app-mobile/components/side-menu-content.tsx:472
+#: packages/app-mobile/components/screens/Notes.tsx:203
+#: packages/app-mobile/components/side-menu-content.tsx:473
 msgid "All notes"
 msgstr "Kõik märkmed"
 
@@ -339,7 +344,7 @@ msgstr ""
 msgid "Also displays unset and hidden config variables."
 msgstr "Kuvab ka seatud ja peidetud konfiguratsioonimuutujad."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:203
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:201
 #, fuzzy
 msgid "Also publish linked notes"
 msgstr "Jaga"
@@ -354,6 +359,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 
+#: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
@@ -364,11 +370,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Saadaval on värskendus, kas soovite selle kohe alla laadida?"
 
-#: packages/lib/models/Setting.ts:2447
+#: packages/lib/models/Setting.ts:2478
 msgid "Appearance"
 msgstr "Välimus"
 
-#: packages/lib/models/Setting.ts:2452
+#: packages/lib/models/Setting.ts:2483
 msgid "Application"
 msgstr "Rakendus"
 
@@ -380,7 +386,13 @@ msgstr "Rakenda"
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:511
+#: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:14
+msgid ""
+"Are you sure you want to return to the default layout? The current layout "
+"configuration will be lost."
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
 msgstr ""
 
@@ -394,16 +406,16 @@ msgid "Attach"
 msgstr "Lisada..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:591
-#: packages/app-mobile/components/screens/Note.tsx:865
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:604
+#: packages/app-mobile/components/screens/Note.tsx:864
 msgid "Attach file"
 msgstr "Manusta fail"
 
-#: packages/app-mobile/components/screens/Note.tsx:869
+#: packages/app-mobile/components/screens/Note.tsx:868
 msgid "Attach photo"
 msgstr "Manusta foto"
 
-#: packages/app-mobile/components/screens/Note.tsx:902
+#: packages/app-mobile/components/screens/Note.tsx:901
 msgid "Attach..."
 msgstr "Lisada..."
 
@@ -445,8 +457,8 @@ msgstr ""
 "sünkroonimist kõik oma sisu, vastasel juhul eemaldatakse kõik failid! "
 "Lisateavet leiate KKK-st: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:64
+#: packages/app-cli/app/command-sync.ts:78
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 #, fuzzy
 msgid ""
@@ -469,7 +481,7 @@ msgstr ""
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Automaatne sidumine traksid, sulg, noteeringud jne."
 
-#: packages/lib/models/Setting.ts:1330
+#: packages/lib/models/Setting.ts:1329
 #, fuzzy
 msgid "Automatically check for updates"
 msgstr "Otsi värskendusi..."
@@ -479,9 +491,10 @@ msgid "Automatically switch theme to match system theme"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:732
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:738
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-mobile/components/ScreenHeader.tsx:304
+#: packages/app-desktop/gui/NoteRevisionViewer.tsx:209
+#: packages/app-mobile/components/ScreenHeader.tsx:305
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
 msgstr "Tagasi"
@@ -500,7 +513,7 @@ msgstr "Paks"
 msgid "Browse all plugins"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:548
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:554
 msgid "Browse..."
 msgstr "Sirvi..."
 
@@ -515,28 +528,27 @@ msgstr "Jaga"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:732
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:738
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
-#: packages/app-mobile/components/CameraView.tsx:193
+#: packages/app-mobile/components/CameraView.tsx:194
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
 #: packages/app-mobile/components/screens/Note.tsx:103
-#: packages/app-mobile/components/screens/Note.tsx:577
+#: packages/app-mobile/components/screens/Note.tsx:576
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
-#: packages/app-mobile/components/side-menu-content.tsx:169
-#: packages/app-mobile/components/side-menu-content.tsx:178
-#: packages/app-mobile/components/side-menu-content.tsx:443
+#: packages/app-mobile/components/side-menu-content.tsx:170
+#: packages/app-mobile/components/side-menu-content.tsx:179
+#: packages/app-mobile/components/side-menu-content.tsx:444
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "Tühista"
@@ -549,7 +561,7 @@ msgstr "Tausta sünkroniseerimise tühistamine... Oota."
 msgid "Cancelling..."
 msgstr "Tühistamine..."
 
-#: packages/app-cli/app/command-sync.ts:260
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Cancelling... Please wait."
 msgstr "Tühistamine... Oota."
 
@@ -562,7 +574,7 @@ msgstr "%s ei pääse juurde"
 msgid "Cannot change encrypted item"
 msgstr "Krüpteeritud üksust ei saa muuta"
 
-#: packages/lib/models/Note.ts:530
+#: packages/lib/models/Note.ts:532
 #, fuzzy
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
@@ -595,7 +607,12 @@ msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
 msgid "Cannot find \"%s\"."
 msgstr "Ei leia \" %s\"."
 
-#: packages/app-cli/app/command-sync.ts:173
+#: packages/app-cli/app/command-mkbook.ts:28
+#, fuzzy
+msgid "Cannot find: \"%s\""
+msgstr "Ei leia \" %s\"."
+
+#: packages/app-cli/app/command-sync.ts:164
 #, fuzzy
 msgid "Cannot initialise synchroniser."
 msgstr "Sünkroonijat ei saa lähtestada."
@@ -610,7 +627,7 @@ msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
 
-#: packages/lib/models/Note.ts:542
+#: packages/lib/models/Note.ts:544
 #, fuzzy
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Märget \"%s\" märkmikku ei saa teisaldada"
@@ -666,8 +683,8 @@ msgstr ""
 msgid "Characters excluding spaces"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:528
-#: packages/app-desktop/gui/MenuBar.tsx:790
+#: packages/app-desktop/gui/MenuBar.tsx:531
+#: packages/app-desktop/gui/MenuBar.tsx:798
 msgid "Check for updates..."
 msgstr "Otsi värskendusi..."
 
@@ -689,16 +706,16 @@ msgstr "Märkekast"
 msgid "Checking... Please wait."
 msgstr "Kontroll... Oota."
 
-#: packages/app-mobile/components/screens/Note.tsx:872
+#: packages/app-mobile/components/screens/Note.tsx:871
 msgid "Choose an option"
 msgstr "Valida suvand"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:17
+#: packages/app-desktop/gui/ExtensionBadge.tsx:70
 msgid "Chrome Web Store"
 msgstr "Chrome ' i veebipood"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "Tühjenda"
@@ -708,6 +725,7 @@ msgid "Clear alarm"
 msgstr "Tühjenda alarm"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
+#: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 #, fuzzy
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -721,14 +739,14 @@ msgstr ""
 msgid "Click to add tags..."
 msgstr "Otsi värskendusi..."
 
-#: packages/lib/versionInfo.ts:24
+#: packages/lib/versionInfo.ts:60
 #, fuzzy
 msgid "Client ID: %s"
 msgstr "Lõpule viidud: %s"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:171
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:350
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:221
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:219
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:336
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
@@ -744,7 +762,7 @@ msgid "Close dropdown"
 msgstr "Sule aken"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:593
+#: packages/app-desktop/gui/MenuBar.tsx:596
 msgid "Close Window"
 msgstr "Sule aken"
 
@@ -753,11 +771,11 @@ msgstr "Sule aken"
 msgid "Code"
 msgstr "Kood"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:601
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:614
 msgid "Code Block"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
 #, fuzzy
 msgid "Code View"
 msgstr "Kood"
@@ -767,7 +785,7 @@ msgstr "Kood"
 msgid "Collaborate on notebooks with others"
 msgstr "Palun looge esmalt märkmik"
 
-#: packages/app-mobile/components/side-menu-content.tsx:346
+#: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Collapse"
 msgstr ""
 
@@ -776,7 +794,7 @@ msgstr ""
 msgid "Coming alarms"
 msgstr "Tulehäired"
 
-#: packages/lib/models/Setting.ts:1430
+#: packages/lib/models/Setting.ts:1441
 #, fuzzy
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -789,7 +807,7 @@ msgstr ""
 "sätteid, peate enne nupu \"Check synchronisation configuration\" klõpsamist "
 "oma muudatused salvestama."
 
-#: packages/lib/services/KeymapService.ts:314
+#: packages/lib/services/KeymapService.ts:316
 msgid "command"
 msgstr ""
 
@@ -797,7 +815,7 @@ msgstr ""
 msgid "Command"
 msgstr ""
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:625
+#: packages/app-desktop/plugins/GotoAnything.tsx:624
 msgid "Command palette"
 msgstr ""
 
@@ -806,6 +824,7 @@ msgid "Command palette..."
 msgstr ""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Completed"
 msgstr "Lõpetatud"
 
@@ -824,7 +843,7 @@ msgstr ""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:729
-#: packages/app-mobile/components/side-menu-content.tsx:421
+#: packages/app-mobile/components/side-menu-content.tsx:422
 msgid "Configuration"
 msgstr "Seadistamine"
 
@@ -869,19 +888,19 @@ msgstr "Märkme atribuudid"
 msgid "Continue"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:931
+#: packages/app-mobile/components/screens/Note.tsx:930
 msgid "Convert to note"
 msgstr "Teisenda märkeks"
 
-#: packages/app-mobile/components/screens/Note.tsx:931
+#: packages/app-mobile/components/screens/Note.tsx:930
 #, fuzzy
 msgid "Convert to todo"
 msgstr "Teisenda Todo"
 
-#: packages/app-desktop/gui/MenuBar.tsx:492
+#: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:785
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:157
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:814
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:160
 msgid "Copy"
 msgstr "Kopeeri"
 
@@ -897,25 +916,25 @@ msgstr "Kopeeri tee lõikelauale"
 msgid "Copy external link"
 msgstr "Peata väline redigeerimine"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 #, fuzzy
 msgid "Copy image"
 msgstr "Kopeeri token"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:188
 msgid "Copy Link Address"
 msgstr "Kopeeri lingi aadress"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:937
 msgid "Copy Markdown link"
 msgstr "Kopeeri Markdown link"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:125
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:128
 msgid "Copy path to clipboard"
 msgstr "Kopeeri tee lõikelauale"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:214
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:212
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Kopeeri jagatav link"
@@ -956,7 +975,7 @@ msgstr ""
 msgid "Could not connect to plugin repository."
 msgstr ""
 
-#: packages/app-desktop/InteropServiceHelper.ts:196
+#: packages/app-desktop/InteropServiceHelper.ts:198
 msgid "Could not export notes: %s"
 msgstr ""
 
@@ -977,7 +996,7 @@ msgstr ""
 msgid "Could not switch profile: %s"
 msgstr "Märkme tüübi aktiveerimine"
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:220
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
 msgstr ""
 
@@ -987,15 +1006,19 @@ msgid ""
 "again when you are connected to the internet."
 msgstr ""
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:28
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
 msgid "Could not verify your identify"
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 #, fuzzy
 msgid "Create"
 msgstr "Loodud"
+
+#: packages/app-cli/app/command-mkbook.ts:19
+#, fuzzy
+msgid "Create a new notebook under a parent notebook."
+msgstr "Loob uue märkmiku."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1018,6 +1041,7 @@ msgid "Create user"
 msgstr "Loodud: %s"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:49
 msgid "Created"
 msgstr "Loodud"
 
@@ -1045,11 +1069,12 @@ msgstr "Loodud: %s"
 
 #: packages/app-cli/app/command-import.js:48
 #: packages/app-desktop/gui/ImportScreen.min.js:69
+#: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Created: %d."
 msgstr "Loodud: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:835
 msgid "Created: %s"
 msgstr "Loodud: %s"
 
@@ -1057,7 +1082,7 @@ msgstr "Loodud: %s"
 msgid "Creates a new note."
 msgstr "Loob uue märkme."
 
-#: packages/app-cli/app/command-mkbook.js:12
+#: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
 msgstr "Loob uue märkmiku."
 
@@ -1085,23 +1110,23 @@ msgstr ""
 msgid "Custom order"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1298
 #, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Kohandatud Stylesheet Joplin Wide app stiilid"
 
-#: packages/lib/models/Setting.ts:1282
+#: packages/lib/models/Setting.ts:1281
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Kohandatud Stylesheet Joplin Wide app stiilid"
 
-#: packages/lib/models/Setting.ts:1429
+#: packages/lib/models/Setting.ts:1440
 msgid "Custom TLS certificates"
 msgstr "Kohandatud TLS-i serdid"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:775
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:149
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:804
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:152
 msgid "Cut"
 msgstr "Lõika"
 
@@ -1125,7 +1150,7 @@ msgstr ""
 msgid "Date format"
 msgstr "Kuupäeva formaat"
 
-#: packages/lib/models/Setting.ts:1517
+#: packages/lib/models/Setting.ts:1528
 msgid "days"
 msgstr "päeva"
 
@@ -1138,17 +1163,17 @@ msgstr ""
 msgid "Decrypted items: %d"
 msgstr "Dekrüpteeritud üksused: %s / %s"
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:46
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:45
 msgid "Decrypted items: %s / %s"
 msgstr "Dekrüpteeritud üksused: %s / %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:738
-#: packages/app-mobile/components/side-menu-content.tsx:430
+#: packages/app-mobile/components/side-menu-content.tsx:431
 msgid "Decrypting items: %d/%d"
 msgstr "Üksuste dekrüpteerimine: %d/%d"
 
-#: packages/lib/models/Setting.ts:1224 packages/lib/models/Setting.ts:1231
-#: packages/lib/models/Setting.ts:1395
+#: packages/lib/models/Setting.ts:1223 packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1406
 msgid "Default"
 msgstr "Vaikimisi"
 
@@ -1163,10 +1188,10 @@ msgstr "Default: %s"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
-#: packages/app-mobile/components/ScreenHeader.tsx:417
-#: packages/app-mobile/components/ScreenHeader.tsx:484
-#: packages/app-mobile/components/screens/Note.tsx:951
-#: packages/app-mobile/components/side-menu-content.tsx:159
+#: packages/app-mobile/components/ScreenHeader.tsx:418
+#: packages/app-mobile/components/ScreenHeader.tsx:485
+#: packages/app-mobile/components/screens/Note.tsx:950
+#: packages/app-mobile/components/side-menu-content.tsx:160
 msgid "Delete"
 msgstr "Kustuta"
 
@@ -1190,21 +1215,21 @@ msgstr "Kas kustutada %d märkmed?"
 msgid "Delete line"
 msgstr "Kas soovite märkme kustutada?"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1322
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
-#: packages/lib/models/Note.ts:769
+#: packages/lib/models/Note.ts:771
 msgid "Delete note \"%s\"?"
 msgstr "Kas kustutada märge \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:528
+#: packages/app-mobile/components/screens/Note.tsx:526
 msgid "Delete note?"
 msgstr "Kas soovite märkme kustutada?"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:290
-#: packages/app-mobile/components/side-menu-content.tsx:161
+#: packages/app-mobile/components/side-menu-content.tsx:162
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
@@ -1215,7 +1240,7 @@ msgstr ""
 "Kustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
 
 #: packages/app-cli/app/command-rmbook.js:26
-#: packages/app-mobile/components/screens/notes.js:155
+#: packages/app-mobile/components/screens/Notes.tsx:154
 #, fuzzy
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
@@ -1234,12 +1259,12 @@ msgstr "Kas kustutada märge \"%s\"?"
 msgid "Delete profile \"%s\""
 msgstr "Kas kustutada märge \"%s\"?"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:419
+#: packages/app-mobile/components/ScreenHeader.tsx:420
 #, fuzzy
 msgid "Delete selected notes"
 msgstr "Kas soovite need märkmed kustutada?"
 
-#: packages/lib/models/Note.ts:771
+#: packages/lib/models/Note.ts:773
 msgid "Delete these %d notes?"
 msgstr "Kas kustutada %d märkmed?"
 
@@ -1302,7 +1327,7 @@ msgstr "Keelatud"
 msgid "Disable encryption"
 msgstr "Keela krüptimine"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:596
 msgid "Disable safe mode and restart"
 msgstr ""
 
@@ -1314,7 +1339,7 @@ msgstr "Keela Web Clipper Service"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1342
+#: packages/lib/models/Setting.ts:1341
 msgid "Disabled"
 msgstr "Keelatud"
 
@@ -1335,7 +1360,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Hülga muutused"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:454
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:455
 msgid "Dismiss"
 msgstr ""
 
@@ -1386,7 +1411,7 @@ msgstr "Kuvab kasutusteabe."
 msgid "Displays version information"
 msgstr "Kuvab versiooniteabe"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:647
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:653
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 #, fuzzy
 msgid "Do it now"
@@ -1396,7 +1421,7 @@ msgstr "Võta nüüd:"
 msgid "Do not ask for confirmation."
 msgstr "Ära küsi kinnitust."
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:56
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 #, fuzzy
 msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* "
@@ -1437,7 +1462,7 @@ msgstr "Alla laaditud ja krüpteeritud"
 msgid "Downloading"
 msgstr "Allalaadimine"
 
-#: packages/app-cli/app/command-sync.ts:227
+#: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
 msgstr "Ressursside allalaadimine..."
 
@@ -1445,7 +1470,7 @@ msgstr "Ressursside allalaadimine..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
 msgid "Drop notes or files here"
 msgstr ""
 
@@ -1458,8 +1483,8 @@ msgid "Dropbox Login"
 msgstr "Dropbox-i sisselogimine"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/ScreenHeader.tsx:435
-#: packages/app-mobile/components/ScreenHeader.tsx:490
+#: packages/app-mobile/components/ScreenHeader.tsx:436
+#: packages/app-mobile/components/ScreenHeader.tsx:491
 msgid "Duplicate"
 msgstr "Paljunda"
 
@@ -1468,7 +1493,7 @@ msgstr "Paljunda"
 msgid "Duplicate line"
 msgstr "Paljunda"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:437
+#: packages/app-mobile/components/ScreenHeader.tsx:438
 #, fuzzy
 msgid "Duplicate selected notes"
 msgstr "Paljunda"
@@ -1482,9 +1507,9 @@ msgstr ""
 "märkmikku pole täpsustatud, dubleeritakse see praeguses märkmikus."
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
-#: packages/app-mobile/components/screens/Note.tsx:1149
+#: packages/app-mobile/components/screens/Note.tsx:1148
 msgid "Edit"
 msgstr "Muuda"
 
@@ -1521,23 +1546,23 @@ msgstr ""
 msgid "Editor"
 msgstr "Redigeerija"
 
-#: packages/lib/models/Setting.ts:1217
+#: packages/lib/models/Setting.ts:1216
 msgid "Editor font"
 msgstr "Redaktori font"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1242
 msgid "Editor font family"
 msgstr "Redaktori font pere"
 
-#: packages/lib/models/Setting.ts:1205
+#: packages/lib/models/Setting.ts:1204
 msgid "Editor font size"
 msgstr "Redaktori fondi suurus"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1261
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1255
+#: packages/lib/models/Setting.ts:1254
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "Redaktori font pere"
@@ -1552,7 +1577,7 @@ msgstr "Redigeerija"
 msgid "Either \"text\" or \"json\""
 msgstr "Kas \"tekst\" või \"JSON\""
 
-#: packages/lib/models/Setting.ts:1396
+#: packages/lib/models/Setting.ts:1407
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1567,52 +1592,52 @@ msgstr ""
 msgid "Emails"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:197
 #, fuzzy
 msgid "emphasised text"
 msgstr "toonitud tekst"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:59
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:65
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "Luba"
 
-#: packages/lib/models/Setting.ts:1146
+#: packages/lib/models/Setting.ts:1145
 #, fuzzy
 msgid "Enable ^sup^ syntax"
 msgstr "Luba ^ SUP ^ Süntaks"
 
-#: packages/lib/models/Setting.ts:1150
+#: packages/lib/models/Setting.ts:1149
 #, fuzzy
 msgid "Enable ++insert++ syntax"
 msgstr "Luba + + lisa + + süntaks"
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1141
 #, fuzzy
 msgid "Enable ==mark== syntax"
 msgstr "Luba = = Mark = = süntaks"
 
-#: packages/lib/models/Setting.ts:1145
+#: packages/lib/models/Setting.ts:1144
 #, fuzzy
 msgid "Enable ~sub~ syntax"
 msgstr "Luba ~ sub ~ süntaks"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1147
 #, fuzzy
 msgid "Enable abbreviation syntax"
 msgstr "Luba lühendi süntaks"
 
-#: packages/lib/models/Setting.ts:1139
+#: packages/lib/models/Setting.ts:1138
 #, fuzzy
 msgid "Enable audio player"
 msgstr "Luba allahindlusest emotikonide"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:55
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
 msgid "Enable biometrics authentication?"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1147
+#: packages/lib/models/Setting.ts:1146
 #, fuzzy
 msgid "Enable deflist syntax"
 msgstr "Luba deflailosüntaks"
@@ -1622,66 +1647,70 @@ msgstr "Luba deflailosüntaks"
 msgid "Enable encryption"
 msgstr "Luba krüptimine"
 
-#: packages/lib/models/Setting.ts:1143
+#: packages/lib/models/Setting.ts:1142
 #, fuzzy
 msgid "Enable footnotes"
 msgstr "Luba allmärkused"
 
-#: packages/lib/models/Setting.ts:1136
+#: packages/lib/models/Setting.ts:1135
 #, fuzzy
 msgid "Enable Fountain syntax support"
 msgstr "Luba purskkaevu süntaks toetust"
 
-#: packages/lib/models/Setting.ts:1133
+#: packages/lib/models/Setting.ts:1132
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "Luba märkmete ajalugu"
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1148
 #, fuzzy
 msgid "Enable markdown emoji"
 msgstr "Luba allahindlusest emotikonide"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/lib/models/Setting.ts:1134
 #, fuzzy
 msgid "Enable math expressions"
 msgstr "Luba matemaatika avaldised"
 
-#: packages/lib/models/Setting.ts:1137
+#: packages/lib/models/Setting.ts:1136
 #, fuzzy
 msgid "Enable Mermaid diagrams support"
 msgstr "Luba typographer tugi"
 
-#: packages/lib/models/Setting.ts:1151
+#: packages/lib/models/Setting.ts:1150
 #, fuzzy
 msgid "Enable multimarkdown table extension"
 msgstr "Luba mitmemarkdown tabeli laiend"
 
-#: packages/lib/models/Setting.ts:1507
+#: packages/lib/models/Setting.ts:1518
 #, fuzzy
 msgid "Enable note history"
 msgstr "Luba märkmete ajalugu"
 
-#: packages/lib/models/Setting.ts:1141
+#: packages/lib/models/Setting.ts:1140
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1131
+#: packages/lib/models/Setting.ts:1130
 #, fuzzy
 msgid "Enable soft breaks"
 msgstr "Luba pehmed katkestused"
 
-#: packages/lib/models/Setting.ts:1144
+#: packages/lib/models/Setting.ts:1048
+msgid "Enable spellcheck in the text editor"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:1143
 #, fuzzy
 msgid "Enable table of contents extension"
 msgstr "Luba sisukorra laiend"
 
-#: packages/lib/models/Setting.ts:1132
+#: packages/lib/models/Setting.ts:1131
 #, fuzzy
 msgid "Enable typographer support"
 msgstr "Luba typographer tugi"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1139
 msgid "Enable video player"
 msgstr ""
 
@@ -1695,7 +1724,7 @@ msgstr "Luba Web Clipper Service"
 msgid "Enabled"
 msgstr "Lubatud"
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:51
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 #, fuzzy
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -1713,11 +1742,11 @@ msgstr "Krüpteeritud"
 msgid "Encrypted items cannot be modified"
 msgstr "Krüpteeritud üksusi ei saa muuta"
 
-#: packages/app-mobile/components/side-menu-content.tsx:145
+#: packages/app-mobile/components/side-menu-content.tsx:146
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Krüptitud märkmikke ei saa ümber nimetada"
 
-#: packages/lib/models/Setting.ts:2454
+#: packages/lib/models/Setting.ts:2485
 msgid "Encryption"
 msgstr "Krüpteerimine"
 
@@ -1776,7 +1805,7 @@ msgstr "Tõrge märkme avamisel redaktoris: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
-#: packages/lib/services/KeymapService.ts:203
+#: packages/lib/services/KeymapService.ts:205
 #, fuzzy
 msgid "Error: %s"
 msgstr "Viga"
@@ -1808,7 +1837,7 @@ msgstr "Evernote Export faili (nagu Markdown)"
 msgid "Exits the application."
 msgstr "Väljub rakendusest."
 
-#: packages/app-mobile/components/side-menu-content.tsx:346
+#: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Expand"
 msgstr ""
 
@@ -1818,8 +1847,8 @@ msgstr ""
 msgid "Export"
 msgstr "Eksport"
 
-#: packages/app-desktop/gui/MenuBar.tsx:547
-#: packages/app-desktop/gui/MenuBar.tsx:603
+#: packages/app-desktop/gui/MenuBar.tsx:550
+#: packages/app-desktop/gui/MenuBar.tsx:606
 #, fuzzy
 msgid "Export all"
 msgstr "Eksport"
@@ -1844,7 +1873,7 @@ msgstr "Ekspordi profiil"
 msgid "Exporting profile..."
 msgstr "Profiili eksportimine..."
 
-#: packages/app-desktop/InteropServiceHelper.ts:176
+#: packages/app-desktop/InteropServiceHelper.ts:177
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
@@ -1864,11 +1893,11 @@ msgstr "Ekspordib ainult antud märkuse."
 msgid "Exports only the given notebook."
 msgstr "Ekspordib ainult antud märkmiku."
 
-#: packages/lib/models/Setting.ts:1493
+#: packages/lib/models/Setting.ts:1504
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1494
+#: packages/lib/models/Setting.ts:1505
 #, fuzzy
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
@@ -1890,7 +1919,7 @@ msgid "Fetched items: %d/%d."
 msgstr "Tõmmatud üksused: %d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:743
-#: packages/app-mobile/components/side-menu-content.tsx:435
+#: packages/app-mobile/components/side-menu-content.tsx:436
 msgid "Fetching resources: %d/%d"
 msgstr "Ressursside toomine: %d/%d"
 
@@ -1902,7 +1931,7 @@ msgstr "Fail"
 msgid "File system"
 msgstr "Failisüsteem"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:192
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:193
 #, fuzzy
 msgid "Filter tags"
 msgstr "Uued sildid:"
@@ -1917,6 +1946,7 @@ msgid "Find: "
 msgstr "Leitud: %d."
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
+#: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
 msgstr "Firefoxi laiendus"
 
@@ -1928,7 +1958,7 @@ msgstr "Paranda otsinguindeks"
 msgid "Fixing search index..."
 msgstr "Otsinguindeksi parandamine..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:751
+#: packages/app-desktop/gui/MenuBar.tsx:756
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
@@ -1936,12 +1966,12 @@ msgstr "Otsinguindeksi parandamine..."
 msgid "Focus"
 msgstr "Fookus"
 
-#: packages/lib/models/Setting.ts:1080 packages/lib/models/Setting.ts:1097
+#: packages/lib/models/Setting.ts:1079 packages/lib/models/Setting.ts:1096
 #, fuzzy
 msgid "Focus body"
 msgstr "Fookuse keha"
 
-#: packages/lib/models/Setting.ts:1079 packages/lib/models/Setting.ts:1096
+#: packages/lib/models/Setting.ts:1078 packages/lib/models/Setting.ts:1095
 #, fuzzy
 msgid "Focus title"
 msgstr "Fookuse tiitel"
@@ -1955,7 +1985,7 @@ msgstr "Kaustad"
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Ainult silumiseks eesmärk: eksportida oma profiili välise SD kaardi."
 
-#: packages/lib/models/Setting.ts:1473
+#: packages/lib/models/Setting.ts:1484
 msgid "For example \"%s\""
 msgstr ""
 
@@ -1995,6 +2025,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-import.js:47
 #: packages/app-desktop/gui/ImportScreen.min.js:68
+#: packages/app-desktop/gui/ImportScreen.tsx:88
 msgid "Found: %d."
 msgstr "Leitud: %d."
 
@@ -2010,7 +2041,7 @@ msgstr ""
 msgid "Full name"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2445
+#: packages/lib/models/Setting.ts:2476
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Üldine"
@@ -2020,17 +2051,18 @@ msgstr "Üldine"
 msgid "Generated"
 msgstr "Üldine"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:184
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:182
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Lingi loomine..."
 msgstr[1] "Linkide loomine..."
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
+#: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
 msgstr "Võta nüüd:"
 
-#: packages/lib/models/Setting.ts:1331
+#: packages/lib/models/Setting.ts:1330
 #, fuzzy
 msgid "Get pre-releases when checking for updates"
 msgstr "Hankige eelväljaanded värskenduste kontrollimisel"
@@ -2045,12 +2077,12 @@ msgstr ""
 "näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], "
 "loetatakse praegune konfiguratsioon."
 
-#: packages/app-mobile/components/screens/Note.tsx:848
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Go to source URL"
 msgstr "Mine Allika URL-ile"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:617
+#: packages/app-desktop/plugins/GotoAnything.tsx:616
 #, fuzzy
 msgid "Goto Anything..."
 msgstr "Ükskõik mida..."
@@ -2076,7 +2108,7 @@ msgstr "Pealkiri"
 msgid "Help"
 msgstr "Abi"
 
-#: packages/app-desktop/gui/MenuBar.tsx:564
+#: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
 msgstr "Peida %s"
 
@@ -2140,6 +2172,7 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:76
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:48
 #: packages/app-desktop/gui/ResourceScreen.tsx:94
 msgid "ID"
 msgstr "ID"
@@ -2152,7 +2185,7 @@ msgstr "Jõude"
 msgid "Ignore"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1463
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoreeri TLS-i serdi tõrked"
 
@@ -2161,13 +2194,13 @@ msgid "Images"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:543
-#: packages/app-desktop/gui/MenuBar.tsx:600
+#: packages/app-desktop/gui/MenuBar.tsx:546
+#: packages/app-desktop/gui/MenuBar.tsx:603
 #: packages/app-desktop/gui/Root.tsx:225
 msgid "Import"
 msgstr "Impordi"
 
-#: packages/app-desktop/gui/MenuBar.tsx:246
+#: packages/app-desktop/gui/MenuBar.tsx:247
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
@@ -2200,7 +2233,7 @@ msgstr ""
 "kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või "
 "märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
 
-#: packages/app-mobile/components/screens/Note.tsx:401
+#: packages/app-mobile/components/screens/Note.tsx:403
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2242,7 +2275,7 @@ msgstr "Selleks, et kasutada Web Clipper, peate tegema järgmist:"
 msgid "In progress"
 msgstr "Töötlemisel"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:539
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:540
 msgid "In: %s"
 msgstr "Asukoht: %s"
 
@@ -2262,7 +2295,7 @@ msgstr ""
 msgid "Information"
 msgstr "Informatsioon"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
 msgid "Inline Code"
 msgstr ""
 
@@ -2270,12 +2303,12 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:198
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:199
 msgid "Insert Hyperlink"
 msgstr "Lisa hüperlink"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:625
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:638
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
 #, fuzzy
 msgid "Insert time"
@@ -2303,12 +2336,12 @@ msgstr "Tühistamine..."
 msgid "Invalid"
 msgstr "Sobimatu vastus: %s"
 
-#: packages/lib/services/KeymapService.ts:325
+#: packages/lib/services/KeymapService.ts:327
 #, fuzzy
 msgid "Invalid %s: %s."
 msgstr "Sobimatu vastus: %s"
 
-#: packages/app-cli/app/cli-utils.js:151
+#: packages/app-cli/app/cli-utils.js:167
 msgid "Invalid answer: %s"
 msgstr "Sobimatu vastus: %s"
 
@@ -2316,7 +2349,7 @@ msgstr "Sobimatu vastus: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Sobimatu käsk: %s"
 
-#: packages/lib/models/Setting.ts:1973
+#: packages/lib/models/Setting.ts:2004
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
 
@@ -2346,6 +2379,10 @@ msgstr "Üksused, mida ei saa dekrüptida"
 #: packages/lib/services/ReportService.ts:173
 msgid "Items that cannot be synchronised"
 msgstr "Üksused, mida ei saa sünkrooniseerida"
+
+#: packages/app-desktop/gui/MenuBar.tsx:792
+msgid "Join us on Twitter"
+msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2391,7 +2428,7 @@ msgstr ""
 "rikutud või liiga suured. Need üksused jäävad seadmesse, kuid Joplin ei püüa "
 "enam neid dekrüptida."
 
-#: packages/app-desktop/gui/MenuBar.tsx:784
+#: packages/app-desktop/gui/MenuBar.tsx:789
 msgid "Joplin Forum"
 msgstr "Joplini Foorum"
 
@@ -2436,11 +2473,11 @@ msgstr ""
 msgid "KaTeX"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1519
+#: packages/lib/models/Setting.ts:1530
 msgid "Keep note history for"
 msgstr "Säilita märkmete ajalugu"
 
-#: packages/lib/models/Setting.ts:1392
+#: packages/lib/models/Setting.ts:1403
 msgid "Keyboard Mode"
 msgstr "Klaviatuuri režiim"
 
@@ -2449,12 +2486,12 @@ msgstr "Klaviatuuri režiim"
 msgid "Keyboard Shortcut"
 msgstr "Klaviatuuri režiim"
 
-#: packages/lib/models/Setting.ts:2456
+#: packages/lib/models/Setting.ts:2487
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatuuri režiim"
 
-#: packages/lib/versionInfo.ts:27
+#: packages/lib/versionInfo.ts:63
 msgid "Keychain Supported: %s"
 msgstr ""
 
@@ -2462,7 +2499,7 @@ msgstr ""
 msgid "Keys that need upgrading"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1381
+#: packages/lib/models/Setting.ts:1380
 msgid "Landscape"
 msgstr "Maastik"
 
@@ -2474,15 +2511,15 @@ msgstr "Keel"
 msgid "Last error: %s"
 msgstr "Viimane tõrge: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:647
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:653
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:616
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:637
 msgid "Layout"
 msgstr "Paigutus"
 
-#: packages/app-desktop/gui/MenuBar.tsx:679
+#: packages/app-desktop/gui/MenuBar.tsx:684
 #, fuzzy
 msgid "Layout button sequence"
 msgstr "Paigutuse nupujada"
@@ -2492,11 +2529,11 @@ msgstr "Paigutuse nupujada"
 msgid "Leave notebook..."
 msgstr "Jaga märkust..."
 
-#: packages/lib/models/Setting.ts:1375
+#: packages/lib/models/Setting.ts:1374
 msgid "Legal"
 msgstr "Õiguslik"
 
-#: packages/lib/models/Setting.ts:1371
+#: packages/lib/models/Setting.ts:1370
 msgid "Letter"
 msgstr "Kaaskiri"
 
@@ -2518,7 +2555,7 @@ msgstr "Link"
 msgid "Link description"
 msgstr "Krüpteerimine"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:185
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Link on kopeeritud lõikelauale!"
@@ -2529,13 +2566,13 @@ msgstr[1] "Lingid on kopeeritud lõikelauale!"
 msgid "Link text"
 msgstr "Link"
 
-#: packages/app-mobile/components/screens/Note.tsx:196
+#: packages/app-mobile/components/screens/Note.tsx:198
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Linke protokolliga \"%s\" ei toetata"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:233
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:234
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:235
 #, fuzzy
 msgid "List item"
 msgstr "Loendiüksus"
@@ -2550,10 +2587,11 @@ msgid "Loaded"
 msgstr "Allalaetud"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Location"
 msgstr "Asukoht"
 
-#: packages/app-cli/app/command-sync.ts:128
+#: packages/app-cli/app/command-sync.ts:119
 #, fuzzy
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
@@ -2593,7 +2631,7 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:787
+#: packages/app-desktop/gui/MenuBar.tsx:795
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:675
 msgid "Make a donation"
 msgstr "Annetuse tegemine"
@@ -2636,7 +2674,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Manuaal"
 
-#: packages/lib/models/Setting.ts:2450
+#: packages/lib/models/Setting.ts:2481
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2657,6 +2695,7 @@ msgid "Marks a to-do as non-completed."
 msgstr "Märgib, et see ei ole lõpetatud."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:55
 #, fuzzy
 msgid "Markup"
 msgstr "Märgistus"
@@ -2705,15 +2744,20 @@ msgstr "Puuduvad juhtklahvid"
 msgid "Missing Master Keys"
 msgstr "Puuduvad juhtklahvid"
 
-#: packages/app-cli/app/cli-utils.js:109
+#: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
 msgstr "Puuduv nõutav argument: %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:456
+#: packages/app-cli/app/cli-utils.js:135
+#, fuzzy
+msgid "Missing required flag value: %s"
+msgstr "Puuduv nõutav argument: %s"
+
+#: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:609
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
 #, fuzzy
 msgid "More info"
 msgstr "Lisainformatsioon"
@@ -2727,7 +2771,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:564
+#: packages/app-mobile/components/ScreenHeader.tsx:565
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Kas teisaldada %d märkmed märkmikku \"%s\"?"
 
@@ -2741,7 +2785,7 @@ msgstr "Teisalda märkmikku..."
 msgid "Move to notebook:"
 msgstr "Teisalda märkmikku..."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:524
+#: packages/app-mobile/components/ScreenHeader.tsx:525
 msgid "Move to notebook..."
 msgstr "Teisalda märkmikku..."
 
@@ -2750,7 +2794,7 @@ msgstr "Teisalda märkmikku..."
 msgid "Moves the given <item> to [notebook]"
 msgstr "Teisaldab märkmete vastendamise <note> [notebook]."
 
-#: packages/app-cli/app/cli-utils.js:161
+#: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:20
 msgid "n"
 msgstr "n"
@@ -2760,7 +2804,7 @@ msgid "N"
 msgstr "N"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
-#: packages/app-mobile/components/screens/notes.js:269
+#: packages/app-mobile/components/screens/Notes.tsx:268
 #: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Uus Märkus"
@@ -2769,11 +2813,12 @@ msgstr "Uus Märkus"
 msgid "New notebook"
 msgstr "Uus märkmik"
 
-#: packages/app-mobile/components/side-menu-content.tsx:413
+#: packages/app-mobile/components/side-menu-content.tsx:414
 msgid "New Notebook"
 msgstr "Uus märkmik"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:61
+#: packages/app-desktop/gui/ImportScreen.tsx:81
 #, fuzzy
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -2783,12 +2828,12 @@ msgstr "Luuakse uus märkmik \"%s\" ja fail \"%s\" imporditakse sellesse"
 msgid "New sub-notebook"
 msgstr "Uus alammärkmik"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:172
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:173
 msgid "New tags:"
 msgstr "Uued sildid:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:6
-#: packages/app-mobile/components/screens/notes.js:259
+#: packages/app-mobile/components/screens/Notes.tsx:258
 #: packages/app-mobile/setupQuickActions.ts:18
 #, fuzzy
 msgid "New to-do"
@@ -2824,8 +2869,8 @@ msgid "no"
 msgstr "n"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:576
-#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:575
+#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:63
 msgid "No"
 msgstr "Ei"
 
@@ -2833,7 +2878,7 @@ msgstr "Ei"
 msgid "No active notebook."
 msgstr "Aktiivset märkmikku pole."
 
-#: packages/app-mobile/components/screens/Note.tsx:167
+#: packages/app-mobile/components/screens/Note.tsx:169
 msgid "No item with ID %s"
 msgstr "Üksust ID-ga %s ei ole"
 
@@ -2845,7 +2890,7 @@ msgstr "Ühtegi märkmikku pole määratud."
 msgid "No notebook selected."
 msgstr "Ühtegi märkmikku pole valitud."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:487
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
 
@@ -2876,7 +2921,7 @@ msgstr ""
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.ts:97
+#: packages/app-cli/app/command-sync.ts:88
 #, fuzzy
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Pole %s-ga seostatud. Palun esitage puuduv mandaat."
@@ -2889,7 +2934,7 @@ msgstr "Ei laaditud alla"
 msgid "Not generated"
 msgstr ""
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:64
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:70
 #, fuzzy
 msgid "Not now"
 msgstr "Võta nüüd:"
@@ -2900,11 +2945,11 @@ msgstr "Võta nüüd:"
 msgid "note"
 msgstr "paberraha"
 
-#: packages/lib/models/Setting.ts:2448
+#: packages/lib/models/Setting.ts:2479
 msgid "Note"
 msgstr "Märge"
 
-#: packages/lib/models/Setting.ts:1583
+#: packages/lib/models/Setting.ts:1594
 msgid "Note area growth factor"
 msgstr ""
 
@@ -2913,7 +2958,7 @@ msgstr ""
 msgid "Note attachments"
 msgstr "Manused"
 
-#: packages/app-desktop/gui/MenuBar.tsx:467
+#: packages/app-desktop/gui/MenuBar.tsx:469
 #, fuzzy
 msgid "Note attachments..."
 msgstr "Manused"
@@ -2938,7 +2983,8 @@ msgid "Note has been saved."
 msgstr "Ühtegi märkmikku pole määratud."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2453
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
+#: packages/lib/models/Setting.ts:2484
 msgid "Note History"
 msgstr "Märkmete ajalugu"
 
@@ -2951,12 +2997,13 @@ msgstr "Märkus ei ole ülesannete loetelu: %s"
 msgid "Note list"
 msgstr "Märkmete ajalugu"
 
-#: packages/lib/models/Setting.ts:1568
+#: packages/lib/models/Setting.ts:1579
 msgid "Note list growth factor"
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:403
 msgid "Note properties"
 msgstr "Märkme atribuudid"
 
@@ -2965,37 +3012,37 @@ msgstr "Märkme atribuudid"
 msgid "Note title"
 msgstr "Märkmiku tiitel:"
 
-#: packages/lib/models/Setting.ts:1165
+#: packages/lib/models/Setting.ts:1164
 msgid "Note: Does not work in all desktop environments."
 msgstr "Märkus: ei tööta kõigil töölaua keskkondades."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:191
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:189
 #, fuzzy
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "Märkused: kui Märkus on ühiskasutuses, ei ole see enam serveris krüptitud."
 
-#: packages/app-desktop/gui/MenuBar.tsx:757
+#: packages/app-desktop/gui/MenuBar.tsx:762
 #, fuzzy
 msgid "Note&book"
 msgstr "Sülearvutid"
 
-#: packages/lib/models/Setting.ts:2449
+#: packages/lib/models/Setting.ts:2480
 #, fuzzy
 msgid "Notebook"
 msgstr "Sülearvutid"
 
-#: packages/lib/models/Setting.ts:1553
+#: packages/lib/models/Setting.ts:1564
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: packages/app-mobile/components/side-menu-content.tsx:139
+#: packages/app-mobile/components/side-menu-content.tsx:140
 msgid "Notebook: %s"
 msgstr "Märkmik: %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:690
-#: packages/app-mobile/components/side-menu-content.tsx:476
+#: packages/app-mobile/components/side-menu-content.tsx:477
 msgid "Notebooks"
 msgstr "Sülearvutid"
 
@@ -3009,7 +3056,7 @@ msgstr "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
 msgid "Notes"
 msgstr "Märge"
 
-#: packages/lib/models/Setting.ts:2465
+#: packages/lib/models/Setting.ts:2496
 msgid "Notes and settings are stored in: %s"
 msgstr "Märkmed ja sätted talletatakse: %s"
 
@@ -3026,14 +3073,13 @@ msgstr "Nummerdatud loend"
 #: packages/app-desktop/bridge.ts:217 packages/app-desktop/bridge.ts:227
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
-#: packages/app-desktop/gui/MenuBar.tsx:492
-#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
-#: packages/app-mobile/components/CameraView.tsx:192
+#: packages/app-mobile/components/CameraView.tsx:193
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:211
-#: packages/app-mobile/components/side-menu-content.tsx:163
+#: packages/app-mobile/components/side-menu-content.tsx:164
 msgid "OK"
 msgstr "OK"
 
@@ -3046,7 +3092,7 @@ msgstr "Tume"
 msgid "On %s: %s"
 msgstr "%s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:602
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:613
 #, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Üks või mitu Põhivõtit vajavad parooli."
@@ -3063,7 +3109,7 @@ msgstr ""
 "Põhiparooli. Selleks sisestage \"e2ee Decrypt\". Kui olete juba parooli "
 "sisestanud, krüptitakse krüptitud üksused taustal ja need on peagi saadaval."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 msgid "One or more master keys need a password."
 msgstr "Üks või mitu Põhivõtit vajavad parooli."
 
@@ -3101,7 +3147,7 @@ msgstr "Joplin Export kataloog"
 msgid "Open Sync Wizard..."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:73
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:74
 msgid "Open..."
 msgstr "Avatud..."
 
@@ -3112,7 +3158,7 @@ msgid "Operation cancelled"
 msgstr "Toiming tühistati"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:453
+#: packages/app-desktop/gui/MenuBar.tsx:455
 #: packages/app-desktop/gui/Root.tsx:226
 msgid "Options"
 msgstr "Valikud"
@@ -3127,7 +3173,7 @@ msgstr "Loob uue märkme."
 msgid "Ordered list"
 msgstr "Loodud: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:407
+#: packages/app-desktop/gui/MenuBar.tsx:409
 #, fuzzy
 msgid "Other applications..."
 msgstr "Väljub rakendusest."
@@ -3137,11 +3183,11 @@ msgstr "Väljub rakendusest."
 msgid "Output format: %s"
 msgstr "Allika Formaat: %s"
 
-#: packages/lib/models/Setting.ts:1378
+#: packages/lib/models/Setting.ts:1377
 msgid "Page orientation for PDF export"
 msgstr "Lehekülje suund PDF-i eksportimiseks"
 
-#: packages/lib/models/Setting.ts:1368
+#: packages/lib/models/Setting.ts:1367
 #, fuzzy
 msgid "Page size for PDF export"
 msgstr "Lehekülje suurus PDF-i eksportimiseks"
@@ -3166,12 +3212,17 @@ msgid "Passwords do not match!"
 msgstr "Paroolid ei kattu!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:795
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:824
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:167
 msgid "Paste"
 msgstr "Kleebi"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:535
+#: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
+msgid "Paste as text"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
 msgstr ""
 
@@ -3184,12 +3235,12 @@ msgstr "PDF-fail"
 msgid "Per user. Minimum of %d users."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:402
+#: packages/app-mobile/components/screens/Note.tsx:404
 #, fuzzy
 msgid "Permission needed"
 msgstr "Kaamera kasutamise õigus"
 
-#: packages/app-mobile/components/CameraView.tsx:190
+#: packages/app-mobile/components/CameraView.tsx:191
 msgid "Permission to use camera"
 msgstr "Kaamera kasutamise õigus"
 
@@ -3199,12 +3250,12 @@ msgid ""
 "below."
 msgstr ""
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:65
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:209
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:208
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
@@ -3256,7 +3307,7 @@ msgstr "Palun täpsustage märkmik, kuhu märkmed tuleks importida."
 msgid "Please upgrade Joplin to use this plugin"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1175
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -3274,11 +3325,11 @@ msgid "Plugin tools"
 msgstr "Pluginad"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2451
+#: packages/lib/models/Setting.ts:2482
 msgid "Plugins"
 msgstr "Pluginad"
 
-#: packages/lib/models/Setting.ts:1380
+#: packages/lib/models/Setting.ts:1379
 msgid "Portrait"
 msgstr "Portree"
 
@@ -3295,7 +3346,7 @@ msgstr "Võimalikud väärtused: %s."
 msgid "Preferences"
 msgstr "Eelistused..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:518
+#: packages/app-desktop/gui/MenuBar.tsx:521
 msgid "Preferences..."
 msgstr "Eelistused..."
 
@@ -3321,7 +3372,7 @@ msgid ""
 "shortcut."
 msgstr ""
 
-#: packages/app-mobile/components/ScreenHeader.tsx:582
+#: packages/app-mobile/components/ScreenHeader.tsx:583
 msgid "Press to set the decryption password."
 msgstr "Vajutage, et määrata dekrüptimisparool."
 
@@ -3330,6 +3381,7 @@ msgid "Previous match"
 msgstr ""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
 msgid "Previous versions of this note"
 msgstr "Selle märkme eelmised versioonid"
 
@@ -3375,7 +3427,7 @@ msgstr "Uus versioon: %s"
 msgid "Profile name:"
 msgstr "Uus versioon: %s"
 
-#: packages/lib/versionInfo.ts:26
+#: packages/lib/versionInfo.ts:62
 #, fuzzy
 msgid "Profile Version: %s"
 msgstr "Uus versioon: %s"
@@ -3385,20 +3437,20 @@ msgstr "Uus versioon: %s"
 msgid "Profiles"
 msgstr "Uus versioon: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:945
+#: packages/app-mobile/components/screens/Note.tsx:944
 msgid "Properties"
 msgstr "Objektid"
 
-#: packages/lib/models/Setting.ts:1462
+#: packages/lib/models/Setting.ts:1473
 #, fuzzy
 msgid "Proxy enabled"
 msgstr "Lubatud"
 
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1495
 msgid "Proxy timeout (seconds)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1472
+#: packages/lib/models/Setting.ts:1483
 msgid "Proxy URL"
 msgstr ""
 
@@ -3411,7 +3463,7 @@ msgstr ""
 msgid "Publish note..."
 msgstr "Jaga märkust..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:211
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:209
 msgid "Publish Notes"
 msgstr ""
 
@@ -3422,7 +3474,7 @@ msgstr ""
 
 #: packages/app-desktop/app.ts:180
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:315
+#: packages/app-desktop/gui/MenuBar.tsx:317
 msgid "Quit"
 msgstr "Lõpeta"
 
@@ -3436,11 +3488,11 @@ msgstr "Vali kuupäev"
 msgid "Re-encryption"
 msgstr "Krüpteerimine"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1311
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:453
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:454
 msgid "Read more about it"
 msgstr ""
 
@@ -3464,9 +3516,9 @@ msgstr ""
 msgid "Recipients:"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:646
+#: packages/app-desktop/gui/MenuBar.tsx:650
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
-#: packages/app-mobile/components/ScreenHeader.tsx:376
+#: packages/app-mobile/components/ScreenHeader.tsx:377
 msgid "Redo"
 msgstr ""
 
@@ -3481,7 +3533,7 @@ msgstr "Värskenda"
 msgid "Regular expression"
 msgstr "Luba matemaatika avaldised"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 #: packages/app-desktop/gui/Root.tsx:179
 msgid "Reject"
 msgstr ""
@@ -3500,7 +3552,7 @@ msgstr "Kas soovite selle otsingu külgribalt eemaldada?"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.ts:8
-#: packages/app-mobile/components/side-menu-content.tsx:142
+#: packages/app-mobile/components/side-menu-content.tsx:143
 msgid "Rename"
 msgstr "Nimeta ümber"
 
@@ -3537,6 +3589,11 @@ msgstr ""
 msgid "Replace: "
 msgstr ""
 
+#: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
+#, fuzzy
+msgid "Reset application layout"
+msgstr "Väljub rakendusest."
+
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
 #, fuzzy
@@ -3545,20 +3602,22 @@ msgstr "Sisestage põhiparool:"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
+#: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Resources: %d."
 msgstr "Ressursid: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:602
 msgid "Restart and upgrade"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:712
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
 #, fuzzy
 msgid "Restart now"
 msgstr "Võta nüüd:"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:79
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
+#: packages/app-desktop/gui/NoteRevisionViewer.tsx:203
 msgid "Restore"
 msgstr "Taasta"
 
@@ -3578,7 +3637,7 @@ msgid "Retry All"
 msgstr "Uuesti"
 
 #: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:117
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:120
 msgid "Reveal file in folder"
 msgstr ""
 
@@ -3591,7 +3650,7 @@ msgstr "Pööra sortimisjärjestus ümber"
 msgid "Reverses the sorting order."
 msgstr "Pöörab sorteerimis järjestuse ümber."
 
-#: packages/lib/versionInfo.ts:9
+#: packages/lib/versionInfo.ts:45
 #, fuzzy
 msgid "Revision: %s (%s)"
 msgstr "%s %s (%s)"
@@ -3626,7 +3685,7 @@ msgstr ""
 msgid "S3 URL"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:584
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:595
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -3645,17 +3704,17 @@ msgstr "Salvesta"
 msgid "Save alarm"
 msgstr "Häire salvestamine"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:101
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:94
 #, fuzzy
 msgid "Save as %s"
 msgstr "Salvesta kui..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:81
 msgid "Save as..."
 msgstr "Salvesta kui..."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:329
+#: packages/app-mobile/components/ScreenHeader.tsx:330
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:343
 #: packages/app-mobile/components/screens/Note.tsx:103
 msgid "Save changes"
@@ -3665,8 +3724,8 @@ msgstr "Salvesta muudatused"
 msgid "Save geo-location with notes"
 msgstr "Salvesta geograafilise asukoha märkmed"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:401
-#: packages/app-mobile/components/screens/search.tsx:171
+#: packages/app-mobile/components/ScreenHeader.tsx:402
+#: packages/app-mobile/components/screens/search.tsx:172
 msgid "Search"
 msgstr "Otsi"
 
@@ -3695,6 +3754,7 @@ msgstr "Otsi:"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
 #: packages/app-desktop/gui/NoteSearchBar.min.js:165
+#: packages/app-desktop/gui/NoteSearchBar.tsx:179
 msgid "Search..."
 msgstr "Otsi..."
 
@@ -3702,7 +3762,7 @@ msgstr "Otsi..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Otsib <pattern> kõiki märkmeid."
 
-#: packages/lib/models/Setting.ts:1331
+#: packages/lib/models/Setting.ts:1330
 #, fuzzy
 msgid "See the pre-release page for more details: %s"
 msgstr "Lisateavet väljalaske-eelse lehe kohta leiate teemast: %s"
@@ -3713,7 +3773,7 @@ msgid "Select"
 msgstr "Vali kõik"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
-#: packages/app-mobile/components/ScreenHeader.tsx:388
+#: packages/app-mobile/components/ScreenHeader.tsx:389
 msgid "Select all"
 msgstr "Vali kõik"
 
@@ -3741,7 +3801,7 @@ msgid "Server is running on port %d"
 msgstr "Serveris töötab port %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:909
+#: packages/app-mobile/components/screens/Note.tsx:908
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Alarmi seadmine"
@@ -3750,13 +3810,13 @@ msgstr "Alarmi seadmine"
 msgid "Set alarm:"
 msgstr "Alarmi seadmine:"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1261
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:632
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
 msgid "Set the password"
 msgstr "Parooli seadmine"
 
@@ -3775,7 +3835,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:917
+#: packages/app-mobile/components/screens/Note.tsx:916
 msgid "Share"
 msgstr "Jaga"
 
@@ -3848,16 +3908,16 @@ msgstr "Kuva märkmete arv"
 msgid "Show sort order buttons"
 msgstr "Kuva märkmete arv"
 
-#: packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1162
 msgid "Show tray icon"
 msgstr "Kuva salve ikoon"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:289
+#: packages/app-mobile/components/ScreenHeader.tsx:290
 msgid "Show/hide the sidebar"
 msgstr ""
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
-#: packages/app-mobile/components/ScreenHeader.tsx:288
+#: packages/app-mobile/components/ScreenHeader.tsx:289
 msgid "Sidebar"
 msgstr ""
 
@@ -3875,6 +3935,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-import.js:50
 #: packages/app-desktop/gui/ImportScreen.min.js:71
+#: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Skipped: %d."
 msgstr "Vahele jäetud: %d."
 
@@ -3886,16 +3947,16 @@ msgstr "Solarised Dark"
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:596
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:607
 #, fuzzy
 msgid "Some items cannot be decrypted."
 msgstr "Mõnda üksust ei saa sünkroonida."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:625
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid "Some items cannot be synchronised."
 msgstr "Mõnda üksust ei saa sünkroonida."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:583
+#: packages/app-mobile/components/ScreenHeader.tsx:584
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Mõnda üksust ei saa sünkroonida. Lisateabe saamiseks vajutage."
 
@@ -3904,7 +3965,7 @@ msgid "Sort notebooks by"
 msgstr "Sorteeri märkmikud"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/app-mobile/components/ScreenHeader.tsx:451
+#: packages/app-mobile/components/ScreenHeader.tsx:452
 #: packages/lib/models/Setting.ts:909
 msgid "Sort notes by"
 msgstr "Märkmete sortimine"
@@ -3926,7 +3987,7 @@ msgstr "Allika Formaat: %s"
 msgid "Source: "
 msgstr "Allikas"
 
-#: packages/lib/models/Setting.ts:1499
+#: packages/lib/models/Setting.ts:1510
 #, fuzzy
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
@@ -3945,7 +4006,7 @@ msgstr ""
 msgid "Split View"
 msgstr "Tükelda vaade"
 
-#: packages/lib/models/Setting.ts:1171
+#: packages/lib/models/Setting.ts:1170
 #, fuzzy
 msgid "Start application minimised in the tray icon"
 msgstr "Alusta rakenduse minimeerimise salve ikoonil"
@@ -3967,7 +4028,7 @@ msgstr ""
 "Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit "
 "sõltuvalt sellest, kui palju on dekrüpteerida."
 
-#: packages/app-cli/app/command-sync.ts:204
+#: packages/app-cli/app/command-sync.ts:195
 msgid "Starting synchronisation..."
 msgstr "Sünkroonimise käivitamine..."
 
@@ -4001,14 +4062,14 @@ msgstr "Olek: alustatud porti %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "1. samm: Lubage Clipper service"
 
-#: packages/app-cli/app/command-sync.ts:83
+#: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 #, fuzzy
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1. samm : avage see URL brauseris, et lubada rakendust:"
 
-#: packages/app-cli/app/command-sync.ts:85
+#: packages/app-cli/app/command-sync.ts:76
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 #, fuzzy
@@ -4035,7 +4096,7 @@ msgstr ""
 msgid "Strikethrough"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:195
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 #, fuzzy
 msgid "strong text"
 msgstr "tugev tekst"
@@ -4070,8 +4131,8 @@ msgstr ""
 msgid "Switch between note and to-do type"
 msgstr "Märkme ja to-do tüübi vaheldumisi aktiveerimine"
 
-#: packages/app-desktop/gui/MenuBar.tsx:444
-#: packages/app-mobile/components/side-menu-content.tsx:418
+#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-mobile/components/side-menu-content.tsx:419
 #, fuzzy
 msgid "Switch profile"
 msgstr "Ekspordi profiil"
@@ -4112,7 +4173,7 @@ msgstr "Sünkroonimise olek"
 msgid "Sync status (synced items / total items)"
 msgstr "Sünkroonimise olek (sünkroonitud üksused/kokku üksused)"
 
-#: packages/app-cli/app/command-sync.ts:242
+#: packages/app-cli/app/command-sync.ts:233
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 
@@ -4125,7 +4186,7 @@ msgstr ""
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Sync esitatud Target (vaikimisi sünkroonimine. Target config väärtus)"
 
-#: packages/lib/versionInfo.ts:25
+#: packages/lib/versionInfo.ts:61
 #, fuzzy
 msgid "Sync Version: %s"
 msgstr "Uus versioon: %s"
@@ -4135,20 +4196,20 @@ msgstr "Uus versioon: %s"
 msgid "Sync your notes"
 msgstr "Märkmete sortimine"
 
-#: packages/lib/models/Setting.ts:2446
+#: packages/lib/models/Setting.ts:2477
 msgid "Synchronisation"
 msgstr "Sünkroonimine"
 
-#: packages/lib/models/Setting.ts:1339
+#: packages/lib/models/Setting.ts:1338
 #, fuzzy
 msgid "Synchronisation interval"
 msgstr "Sünkroniseerimisintervall"
 
-#: packages/app-cli/app/command-sync.ts:123
+#: packages/app-cli/app/command-sync.ts:114
 msgid "Synchronisation is already in progress."
 msgstr "Sünkroniseerimine on juba teoksil."
 
-#: packages/app-desktop/gui/MenuBar.tsx:423
+#: packages/app-desktop/gui/MenuBar.tsx:425
 #: packages/app-desktop/gui/Root.tsx:228
 msgid "Synchronisation Status"
 msgstr "Sünkroonimise olek"
@@ -4158,18 +4219,18 @@ msgstr "Sünkroonimise olek"
 msgid "Synchronisation target"
 msgstr "Sünkroniseerimine eesmärk"
 
-#: packages/app-cli/app/command-sync.ts:171
+#: packages/app-cli/app/command-sync.ts:162
 #, fuzzy
 msgid "Synchronisation target: %s (%s)"
 msgstr "Sünkroonimise sihtkoht: %s ( %s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
-#: packages/app-mobile/components/side-menu-content.tsx:443
+#: packages/app-mobile/components/side-menu-content.tsx:444
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Sünkroniseeri"
 
-#: packages/lib/models/Setting.ts:1359
+#: packages/lib/models/Setting.ts:1358
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
@@ -4178,7 +4239,7 @@ msgstr ""
 msgid "Synchronises with remote storage."
 msgstr "Sünkrooniseerib kaugsalvestusruumi."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:183
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:181
 msgid "Synchronising..."
 msgstr "Sünkroonimine..."
 
@@ -4187,29 +4248,30 @@ msgstr "Sünkroonimine..."
 msgid "Synchronizing..."
 msgstr "Sünkroonimine..."
 
-#: packages/lib/models/Setting.ts:1374
+#: packages/lib/models/Setting.ts:1373
 #, fuzzy
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:181
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:182
 msgid "tag1, tag2, ..."
 msgstr ""
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
+#: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Tagged: %d."
 msgstr "Sildistatud: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:719
-#: packages/app-mobile/components/screens/Note.tsx:924
+#: packages/app-mobile/components/screens/Note.tsx:923
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.tsx:415
+#: packages/app-mobile/components/side-menu-content.tsx:416
 msgid "Tags"
 msgstr "Sildid"
 
-#: packages/app-mobile/components/screens/Note.tsx:870
+#: packages/app-mobile/components/screens/Note.tsx:869
 msgid "Take photo"
 msgstr "Pildista"
 
@@ -4227,7 +4289,7 @@ msgstr ""
 msgid "Teams"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1367
+#: packages/lib/models/Setting.ts:1366
 #, fuzzy
 msgid "Text editor command"
 msgstr "Tekstiredaktori käsk"
@@ -4267,17 +4329,17 @@ msgstr "Taotlus on heaks kiidetud!"
 msgid "The application has been successfully authorised."
 msgstr "Taotlus on edukalt lubatud."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:636
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:642
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:526
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:527
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
 
-#: packages/app-cli/app/app.js:272
+#: packages/app-cli/app/app.js:273
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Käsk %s on saadaval ainult graafilises kasutajaliideses"
 
@@ -4293,7 +4355,7 @@ msgid ""
 "is recommended that you apply it to your data."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:608
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -4303,7 +4365,7 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1367
+#: packages/lib/models/Setting.ts:1366
 #, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
@@ -4313,8 +4375,8 @@ msgstr ""
 "avamiseks. Kui ühtegi pole ette nähtud, proovib see automaatselt tuvastada "
 "vaikeredaktorit."
 
-#: packages/lib/models/Setting.ts:1555 packages/lib/models/Setting.ts:1570
-#: packages/lib/models/Setting.ts:1585
+#: packages/lib/models/Setting.ts:1566 packages/lib/models/Setting.ts:1581
+#: packages/lib/models/Setting.ts:1596
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4322,7 +4384,7 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:525
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:526
 msgid "The following attachments are being watched for changes:"
 msgstr ""
 
@@ -4333,7 +4395,7 @@ msgid ""
 "and encrypt your data as usual."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:192
+#: packages/app-mobile/components/screens/Note.tsx:194
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s"
 
@@ -4354,7 +4416,7 @@ msgstr ""
 "rakendus ei ole praegu neile juurdepääsemiseks. Tõenäoliselt laaditakse need "
 "lõpuks sünkroniseerimise kaudu alla."
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:218
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
 msgstr ""
 
@@ -4379,6 +4441,7 @@ msgstr "Märkmikku ei saanud salvestada: %s"
 
 #: packages/app-cli/app/command-import.js:70
 #: packages/app-desktop/gui/ImportScreen.min.js:88
+#: packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
 msgstr "Märkmed on imporditud: %s"
 
@@ -4393,14 +4456,14 @@ msgid ""
 "The error was: \"%s\""
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:590
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:601
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
 
-#: packages/app-mobile/components/ScreenHeader.tsx:584
+#: packages/app-mobile/components/ScreenHeader.tsx:585
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 
@@ -4430,6 +4493,12 @@ msgstr "Web Clipper service on lubatud ja seadke automaatselt käivituma."
 msgid "The web clipper service is not enabled."
 msgstr "Web clipper service pole lubatud."
 
+#: packages/lib/utils/webDAVUtils.ts:16
+msgid ""
+"The WebDAV implementation of %s is incompatible with Joplin, and as such is "
+"no longer supported. Please use a different sync method."
+msgstr ""
+
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
 msgstr "Teema"
@@ -4442,7 +4511,7 @@ msgstr "Praegu pole märkmeid. Looge üks, klõpsates nupul (+)."
 msgid "There are unsaved changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:487
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
@@ -4459,7 +4528,7 @@ msgid ""
 "%s"
 msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:43
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:44
 msgid "There was an error downloading this attachment:"
 msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
 
@@ -4482,7 +4551,7 @@ msgstr ""
 "Nende üksuste leidmiseks otsige pealkirja või ID-d (mis kuvatakse ülaltoodud "
 "sulgudes)."
 
-#: packages/lib/models/Setting.ts:2464
+#: packages/lib/models/Setting.ts:2495
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4493,12 +4562,12 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:45
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:46
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Seda manust ei laadita alla või pole veel dekrüpteeritud"
 
-#: packages/app-mobile/components/screens/Note.tsx:186
+#: packages/app-mobile/components/screens/Note.tsx:188
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Seda manust ei ole laetud ega dekrüpteeritud veel."
 
@@ -4526,7 +4595,7 @@ msgstr "Sellel märkil pole geoasukohateavet."
 msgid "This note has been modified:"
 msgstr "Seda märkust on muudetud:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:616
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:637
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4535,10 +4604,11 @@ msgstr ""
 "redigeerimiseks."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
+#: packages/app-desktop/gui/NoteRevisionViewer.tsx:126
 msgid "This note has no history"
 msgstr "Sellel märkel pole ajalugu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:452
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:453
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4553,7 +4623,7 @@ msgstr ""
 "See teenus võimaldab brauseri laiendil suhelda Joplini-ga. Kui lubate selle, "
 "võib tulemüür paluda teil anda luba Joplini kuulata teatud porti."
 
-#: packages/lib/models/Setting.ts:1165
+#: packages/lib/models/Setting.ts:1164
 #, fuzzy
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
@@ -4587,7 +4657,7 @@ msgstr "pealkiri"
 msgid "Title"
 msgstr "pealkiri"
 
-#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:73
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 #, fuzzy
@@ -4595,7 +4665,7 @@ msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "Et lubada Joplin sünkroniseerida Dropbox, järgige alltoodud juhiseid:"
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:54
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 #, fuzzy
 msgid "To continue, please enter your master password below."
 msgstr "Sisestage põhiparool:"
@@ -4664,7 +4734,7 @@ msgstr "ülesande nimekiri"
 msgid "Toggle comment"
 msgstr "Lülita märkuseloend sisse/välja"
 
-#: packages/app-desktop/gui/MenuBar.tsx:799
+#: packages/app-desktop/gui/MenuBar.tsx:807
 msgid "Toggle development tools"
 msgstr "Lülita arendus tööriistad"
 
@@ -4722,7 +4792,7 @@ msgid "Total: %d/%d"
 msgstr "Kokku: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:96
 msgid "Try again"
 msgstr ""
 
@@ -4744,7 +4814,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Sisestage `joplin help` kasutusteabe jaoks ."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:580
+#: packages/app-desktop/plugins/GotoAnything.tsx:579
 #, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
@@ -4754,7 +4824,7 @@ msgstr ""
 "Tippige sellele hüppamiseks märkme tiitel. Või tippige #, millele järgneb "
 "sildi nimi või @, millele järgneb märkmiku nimi."
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:200
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:201
 msgid "Type new tags or select from list"
 msgstr "Tippige uued sildid või valige loendist"
 
@@ -4766,9 +4836,9 @@ msgstr "Tüüp: %s."
 msgid "Uncompleted to-dos on top"
 msgstr "Lõpetamata ülesanded üleval"
 
-#: packages/app-desktop/gui/MenuBar.tsx:642
+#: packages/app-desktop/gui/MenuBar.tsx:646
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#: packages/app-mobile/components/ScreenHeader.tsx:366
+#: packages/app-mobile/components/ScreenHeader.tsx:367
 msgid "Undo"
 msgstr ""
 
@@ -4786,7 +4856,7 @@ msgstr ""
 msgid "Unordered list"
 msgstr "Loodud: %s"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:164
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:162
 #, fuzzy
 msgid "Unpublish note"
 msgstr "Jaga"
@@ -4802,12 +4872,13 @@ msgid ""
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:659
+#: packages/app-mobile/components/screens/Note.tsx:658
 msgid "Unsupported image type: %s"
 msgstr "Toetuseta pilditüüp: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
+#: packages/app-desktop/gui/NoteRevisionViewer.tsx:168
 msgid "Unsupported link or message: %s"
 msgstr "Toetuseta link või sõnum: %s"
 
@@ -4836,6 +4907,7 @@ msgstr "Värskendatud kohalikud üksused: %d."
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:50
 msgid "Updated"
 msgstr "Uuendatud"
 
@@ -4859,10 +4931,11 @@ msgstr "Värskendatud: %s"
 
 #: packages/app-cli/app/command-import.js:49
 #: packages/app-desktop/gui/ImportScreen.min.js:70
+#: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Updated: %d."
 msgstr "Värskendatud: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:837
+#: packages/app-mobile/components/screens/Note.tsx:836
 msgid "Updated: %s"
 msgstr "Värskendatud: %s"
 
@@ -4880,6 +4953,7 @@ msgid "Upgrade the sync target to the latest version."
 msgstr ""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:115
 msgid "URL"
@@ -4890,7 +4964,7 @@ msgstr "URL"
 msgid "Usage: %s"
 msgstr "Kasutus: %s"
 
-#: packages/lib/models/Setting.ts:1629
+#: packages/lib/models/Setting.ts:1640
 msgid "Use biometrics to secure access to the app"
 msgstr ""
 
@@ -4914,7 +4988,7 @@ msgstr ""
 "Loendite ja tekstialade (sh selle konsooli) kerimiseks kasutage nooli ja "
 "lehe üles/alla klahve."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:831
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:842
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 
@@ -4927,19 +5001,19 @@ msgstr ""
 "Kasutage seda Otsinguindeksi taastamiseks, kui otsinguga on probleeme. "
 "Sõltuvalt märkmete arvust võib kuluda palju aega."
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:56
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:62
 msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1245
+#: packages/lib/models/Setting.ts:1244
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1257
+#: packages/lib/models/Setting.ts:1256
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4961,7 +5035,7 @@ msgstr ""
 msgid "Valid"
 msgstr "Sobimatu vastus: %s"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:24
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:25
 msgid "Verify your identity"
 msgstr ""
 
@@ -4970,13 +5044,13 @@ msgstr ""
 msgid "View"
 msgstr "&Vaade"
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "View on map"
 msgstr "Vaata kaardilt"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:597
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:608
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:614
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "View them now"
 msgstr "Vaata neid nüüd"
 
@@ -4987,7 +5061,7 @@ msgstr "Vaata neid nüüd"
 msgid "Viewer"
 msgstr "Viewer"
 
-#: packages/lib/models/Setting.ts:1397
+#: packages/lib/models/Setting.ts:1408
 msgid "Vim"
 msgstr "Vim"
 
@@ -4999,11 +5073,11 @@ msgstr "Hoiatus"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2455 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2486 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: packages/lib/SyncTargetWebDAV.js:23
+#: packages/lib/SyncTargetWebDAV.js:24
 msgid "WebDAV"
 msgstr "WebDAV"
 
@@ -5020,7 +5094,7 @@ msgid "WebDAV username"
 msgstr "WebDAV-i kasutajanimi"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:780
+#: packages/app-desktop/gui/MenuBar.tsx:785
 msgid "Website and documentation"
 msgstr "Veebileht ja dokumentatsioon"
 
@@ -5041,11 +5115,11 @@ msgstr ""
 "\n"
 "Näiteks märkmiku loomiseks vajutage `mb`; , et luua märkme Press `mn`."
 
-#: packages/lib/models/Setting.ts:1093
+#: packages/lib/models/Setting.ts:1092
 msgid "When creating a new note:"
 msgstr "Uue märkme loomisel:"
 
-#: packages/lib/models/Setting.ts:1076
+#: packages/lib/models/Setting.ts:1075
 #, fuzzy
 msgid "When creating a new to-do:"
 msgstr "Uue tee loomisel:"
@@ -5058,7 +5132,7 @@ msgstr ""
 msgid "y"
 msgstr "y"
 
-#: packages/app-cli/app/cli-utils.js:161
+#: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:20
 msgid "Y"
 msgstr "Y"
@@ -5069,12 +5143,12 @@ msgid "yes"
 msgstr "Jah"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:575
-#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:574
+#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:63
 msgid "Yes"
 msgstr "Jah"
 
-#: packages/app-mobile/components/screens/Note.tsx:574
+#: packages/app-mobile/components/screens/Note.tsx:573
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -5100,11 +5174,11 @@ msgid ""
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
 
-#: packages/app-cli/app/cli-utils.js:144
+#: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
 msgstr "Sinu valik: "
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:71
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr ""
 
@@ -5112,13 +5186,13 @@ msgstr ""
 msgid "Your password is needed to decrypt some of your data."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.ts:233
+#: packages/app-cli/app/command-sync.ts:224
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
 
-#: packages/app-mobile/components/CameraView.tsx:191
+#: packages/app-mobile/components/CameraView.tsx:192
 msgid "Your permission to use your camera is required."
 msgstr "Teie luba kaamera kasutamiseks on vajalik."
 
@@ -5126,12 +5200,12 @@ msgstr "Teie luba kaamera kasutamiseks on vajalik."
 msgid "Your version: %s"
 msgstr "Teie versioon: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:724
-#: packages/app-desktop/gui/MenuBar.tsx:730
+#: packages/app-desktop/gui/MenuBar.tsx:729
+#: packages/app-desktop/gui/MenuBar.tsx:735
 msgid "Zoom In"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:737
+#: packages/app-desktop/gui/MenuBar.tsx:742
 msgid "Zoom Out"
 msgstr ""
 

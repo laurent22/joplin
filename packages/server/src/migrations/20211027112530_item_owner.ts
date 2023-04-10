@@ -41,6 +41,7 @@ export async function up(db: DbConnection): Promise<any> {
 
 		if (!items.length) break;
 
+		// eslint-disable-next-line no-console
 		console.info(`Processing items ${itemDone} / ${itemCount}`);
 
 		await db.transaction(async trx => {

@@ -43,8 +43,8 @@ export interface Options {
 
 export default class MarkupToHtml {
 
-	static MARKUP_LANGUAGE_MARKDOWN: number = MarkupLanguage.Markdown;
-	static MARKUP_LANGUAGE_HTML: number = MarkupLanguage.Html;
+	public static MARKUP_LANGUAGE_MARKDOWN: number = MarkupLanguage.Markdown;
+	public static MARKUP_LANGUAGE_HTML: number = MarkupLanguage.Html;
 
 	private renderers_: any = {};
 	private options_: Options;

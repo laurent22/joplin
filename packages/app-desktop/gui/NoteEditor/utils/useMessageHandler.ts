@@ -13,6 +13,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
+		// eslint-disable-next-line no-console
 		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
@@ -41,9 +42,10 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 				linkToCopy: arg0.linkToCopy || null,
 				htmlToCopy: '',
 				insertContent: () => { console.warn('insertContent() not implemented'); },
+				fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },
 			}, dispatch);
 
-			menu.popup(bridge().window());
+			menu.popup({ window: bridge().window() });
 		} else if (msg.indexOf('#') === 0) {
 			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else if (msg === 'contentScriptExecuteCommand') {

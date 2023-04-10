@@ -63,7 +63,7 @@ class Logger {
 	private lastDbCleanup_: number = time.unixMs();
 	private enabled_: boolean = true;
 
-	static fsDriver() {
+	public static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
 		return Logger.fsDriver_;
 	}
@@ -81,11 +81,29 @@ class Logger {
 	}
 
 	public static get globalLogger(): Logger {
-		if (!this.globalLogger_) throw new Error('Global logger has not been initialized!!');
+		if (!this.globalLogger_) {
+			// The global logger normally is initialized early, so we shouldn't
+			// end up here. However due to early event handlers, it might happen
+			// and in this case we want to know about it. So we print this
+			// warning, and also flag the log statements using `[UNINITIALIZED
+			// GLOBAL LOGGER]` so that we know from where the incorrect log
+			// statement comes from.
+
+			console.warn('Logger: Trying to access globalLogger, but it has not been initialized. Make sure that initializeGlobalLogger() has been called before logging. Will use the console as fallback.');
+			const output: any = {
+				log: (level: LogLevel, prefix: string, ...object: any[]) => {
+					// eslint-disable-next-line no-console
+					console.info(`[UNINITIALIZED GLOBAL LOGGER] ${this.levelIdToString(level)}: ${prefix}:`, object);
+				},
+			};
+			return output;
+
+			// throw new Error('Global logger has not been initialized!!');
+		}
 		return this.globalLogger_;
 	}
 
-	static create(prefix: string): LoggerWrapper {
+	public static create(prefix: string): LoggerWrapper {
 		return {
 			debug: (...object: any[]) => this.globalLogger.log(LogLevel.Debug, prefix, ...object),
 			info: (...object: any[]) => this.globalLogger.log(LogLevel.Info, prefix, ...object),
@@ -100,15 +118,15 @@ class Logger {
 		return previous;
 	}
 
-	level() {
+	public level() {
 		return this.level_;
 	}
 
-	targets() {
+	public targets() {
 		return this.targets_;
 	}
 
-	addTarget(type: TargetType, options: TargetOptions = null) {
+	public addTarget(type: TargetType, options: TargetOptions = null) {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
@@ -118,7 +136,7 @@ class Logger {
 		this.targets_.push(target);
 	}
 
-	objectToString(object: any) {
+	public objectToString(object: any) {
 		let output = '';
 
 		if (typeof object === 'object') {
@@ -139,7 +157,7 @@ class Logger {
 		return output;
 	}
 
-	objectsToString(...object: any[]) {
+	public objectsToString(...object: any[]) {
 		const output = [];
 		for (let i = 0; i < object.length; i++) {
 			output.push(`"${this.objectToString(object[i])}"`);
@@ -147,7 +165,7 @@ class Logger {
 		return output.join(', ');
 	}
 
-	static databaseCreateTableSql() {
+	public static databaseCreateTableSql() {
 		const output = `
 		CREATE TABLE IF NOT EXISTS logs (
 			id INTEGER PRIMARY KEY,
@@ -161,7 +179,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	async lastEntries(limit: number = 100, options: any = null) {
+	public async lastEntries(limit: number = 100, options: any = null) {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
@@ -177,7 +195,7 @@ class Logger {
 		return [];
 	}
 
-	targetLevel(target: Target) {
+	public targetLevel(target: Target) {
 		if ('level' in target) return target.level;
 		return this.level();
 	}
@@ -269,20 +287,20 @@ class Logger {
 		}
 	}
 
-	error(...object: any[]) {
+	public error(...object: any[]) {
 		return this.log(LogLevel.Error, null, ...object);
 	}
-	warn(...object: any[]) {
+	public warn(...object: any[]) {
 		return this.log(LogLevel.Warn, null, ...object);
 	}
-	info(...object: any[]) {
+	public info(...object: any[]) {
 		return this.log(LogLevel.Info, null, ...object);
 	}
-	debug(...object: any[]) {
+	public debug(...object: any[]) {
 		return this.log(LogLevel.Debug, null, ...object);
 	}
 
-	static levelStringToId(s: string) {
+	public static levelStringToId(s: string) {
 		if (s === 'none') return LogLevel.None;
 		if (s === 'error') return LogLevel.Error;
 		if (s === 'warn') return LogLevel.Warn;
@@ -291,7 +309,7 @@ class Logger {
 		throw new Error(`Unknown log level: ${s}`);
 	}
 
-	static levelIdToString(id: LogLevel) {
+	public static levelIdToString(id: LogLevel) {
 		if (id === LogLevel.None) return 'none';
 		if (id === LogLevel.Error) return 'error';
 		if (id === LogLevel.Warn) return 'warn';
@@ -300,7 +318,7 @@ class Logger {
 		throw new Error(`Unknown level ID: ${id}`);
 	}
 
-	static levelIds() {
+	public static levelIds() {
 		return [LogLevel.None, LogLevel.Error, LogLevel.Warn, LogLevel.Info, LogLevel.Debug];
 	}
 

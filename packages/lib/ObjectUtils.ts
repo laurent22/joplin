@@ -8,7 +8,7 @@ export function sortByValue(object: any) {
 		});
 	}
 
-	temp.sort(function(a, b) {
+	temp.sort((a, b) => {
 		let v1 = a.value;
 		let v2 = b.value;
 		if (typeof v1 === 'string') v1 = v1.toLowerCase();

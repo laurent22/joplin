@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import sqlts from '@rmp135/sql-ts';
 
 require('source-map-support').install();

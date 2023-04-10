@@ -215,21 +215,21 @@ export default class RepositoryApi {
 		return this.manifests_;
 	}
 
-	public async canBeUpdatedPlugins(installedManifests: PluginManifest[]): Promise<string[]> {
+	public async canBeUpdatedPlugins(installedManifests: PluginManifest[], appVersion: string): Promise<string[]> {
 		const output = [];
 
 		for (const manifest of installedManifests) {
-			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version);
+			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version, appVersion);
 			if (canBe) output.push(manifest.id);
 		}
 
 		return output;
 	}
 
-	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<boolean> {
+	public async pluginCanBeUpdated(pluginId: string, installedVersion: string, appVersion: string): Promise<boolean> {
 		const manifest = (await this.manifests()).find(m => m.id === pluginId);
 		if (!manifest) return false;
-		return compareVersions(installedVersion, manifest.version) < 0;
+		return compareVersions(installedVersion, manifest.version) < 0 && compareVersions(appVersion, manifest.app_min_version) >= 0;
 	}
 
 }

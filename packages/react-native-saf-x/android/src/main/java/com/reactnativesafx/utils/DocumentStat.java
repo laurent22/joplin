@@ -22,8 +22,6 @@ public class DocumentStat {
   private final Boolean isDirectory;
   private final long size;
   private final long lastModified;
-  private static final String encodedSlash = Uri.encode("/");
-  private static final String PATH_DOCUMENT = "document";
 
   /**
    * Cursor columns must be in the following format:
@@ -51,11 +49,30 @@ public class DocumentStat {
       this.internalUri = this.uri;
     }
 
+    final int mimeTypeColIndex = c.getColumnIndex(DocumentsContract.Document.COLUMN_MIME_TYPE);
+    final int sizeColIndex = c.getColumnIndex(DocumentsContract.Document.COLUMN_SIZE);
+    final int lastModifiedColIndex = c.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
 
     this.displayName = c.getString(1);
-    this.mimeType = c.getString(2);
-    this.size = c.getLong(3);
-    this.lastModified = c.getLong(4);
+
+    if (mimeTypeColIndex != -1) {
+      this.mimeType = c.getString(mimeTypeColIndex);
+    } else {
+      this.mimeType = "*/*";
+    }
+
+    if (sizeColIndex != -1) {
+      this.size = c.getLong(sizeColIndex);
+    } else {
+      this.size = -1;
+    }
+
+    if (lastModifiedColIndex != -1) {
+      this.lastModified = c.getLong(lastModifiedColIndex);
+    }else {
+      this.lastModified = System.currentTimeMillis();
+    }
+
     this.isDirectory = DocumentsContract.Document.MIME_TYPE_DIR.equals(this.mimeType);
   }
 

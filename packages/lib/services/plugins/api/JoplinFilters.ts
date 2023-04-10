@@ -7,11 +7,11 @@ import eventManager from '../../../eventManager';
  * so for now disable filters.
  */
 export default class JoplinFilters {
-	async on(name: string, callback: Function) {
+	public async on(name: string, callback: Function) {
 		eventManager.filterOn(name, callback);
 	}
 
-	async off(name: string, callback: Function) {
+	public async off(name: string, callback: Function) {
 		eventManager.filterOff(name, callback);
 	}
 }

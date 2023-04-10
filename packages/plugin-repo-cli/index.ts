@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 require('source-map-support').install();
 
 import * as fs from 'fs-extra';
@@ -7,7 +9,7 @@ import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
 import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
-import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
+import { resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
 import { NpmPackage } from './lib/types';
@@ -15,6 +17,7 @@ import gitCompareUrl from './lib/gitCompareUrl';
 import commandUpdateRelease from './commands/updateRelease';
 import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
 import { applyManifestOverrides, getObsoleteManifests, readManifestOverrides } from './lib/overrideUtils';
+import { execCommand } from '@joplin/utils';
 
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
@@ -47,7 +50,7 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = chdir(workDir);
 
-	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showStderr: false, showStdout: false });
+	await execCommand(`npm install ${packageName} --save --ignore-scripts`, { showStderr: false, showStdout: false });
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
 
@@ -152,7 +155,7 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 
 	await fs.mkdirp(packageTempDir);
 	chdir(packageTempDir);
-	await execCommand2('npm init --yes --loglevel silent', { quiet: true });
+	await execCommand('npm init --yes --loglevel silent', { quiet: true });
 
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
 	let manifests: any = {};
@@ -198,8 +201,8 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 
 	if (!dryRun) {
 		if (!(await gitRepoClean())) {
-			await execCommand2('git add -A', { showStdout: false });
-			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showStdout: false });
+			await execCommand('git add -A', { showStdout: false });
+			await execCommand(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showStdout: false });
 		} else {
 			console.info('Nothing to commit');
 		}
@@ -225,14 +228,14 @@ async function commandBuild(args: CommandBuildArgs) {
 	if (!dryRun) {
 		if (!(await gitRepoClean())) {
 			console.info('Updating README...');
-			await execCommand2('git add -A');
-			await execCommand2('git commit -m "Update README"');
+			await execCommand('git add -A');
+			await execCommand('git commit -m "Update README"');
 		}
 	}
 
 	chdir(previousDir);
 
-	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
+	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
@@ -243,11 +246,11 @@ async function commandBuild(args: CommandBuildArgs) {
 		await commandUpdateRelease(args);
 
 		if (!(await gitRepoClean())) {
-			await execCommand2('git add -A');
-			await execCommand2('git commit -m "Update stats"');
+			await execCommand('git add -A');
+			await execCommand('git commit -m "Update stats"');
 		}
 
-		await execCommand2('git push');
+		await execCommand('git push');
 	}
 }
 

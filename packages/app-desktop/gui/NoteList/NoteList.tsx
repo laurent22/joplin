@@ -123,7 +123,7 @@ const NoteListComponent = (props: Props) => {
 			customCss: props.customCss,
 		});
 
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles, props.plugins, props.selectedFolderId, props.customCss]);
 
 	const onGlobalDrop_ = () => {
@@ -160,21 +160,27 @@ const NoteListComponent = (props: Props) => {
 		}
 	};
 
-	const noteItem_noteDrop = async (event: any) => {
-		if (props.notesParentType !== 'Folder') return;
+	const canManuallySortNotes = async () => {
+		if (props.notesParentType !== 'Folder') return false;
 
 		if (props.noteSortOrder !== 'order') {
 			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
 				buttons: [_('Do it now'), _('Cancel')],
 			});
-			if (!doIt) return;
+			if (!doIt) return false;
 
 			Setting.setValue('notes.sortOrder.field', 'order');
-			return;
+			return false;
 		}
+		return true;
+	};
+
+	const noteItem_noteDrop = async (event: any) => {
 
 		// TODO: check that parent type is folder
-
+		if (!canManuallySortNotes()) {
+			return;
+		}
 		const dt = event.dataTransfer;
 		unregisterGlobalDragEndEvent_();
 		setDragOverTargetNoteIndex(null);
@@ -182,7 +188,7 @@ const NoteListComponent = (props: Props) => {
 		const targetNoteIndex = dragTargetNoteIndex_(event);
 		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
-		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex);
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
 	};
 
 
@@ -235,6 +241,7 @@ const NoteListComponent = (props: Props) => {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
+		event.dataTransfer.effectAllowed = 'move';
 	};
 
 	const renderItem = useCallback((item: any, index: number) => {
@@ -269,7 +276,6 @@ const NoteListComponent = (props: Props) => {
 			onCheckboxClick={noteItem_checkboxClick}
 			onDragStart={noteItem_dragStart}
 			onNoteDragOver={noteItem_noteDragOver}
-			onNoteDrop={noteItem_noteDrop}
 			onTitleClick={noteItem_titleClick}
 			onContextMenu={itemContextMenu}
 		/>;
@@ -289,7 +295,7 @@ const NoteListComponent = (props: Props) => {
 	useEffect(() => {
 		if (previousSelectedNoteIds !== props.selectedNoteIds && props.selectedNoteIds.length === 1) {
 			const id = props.selectedNoteIds[0];
-			const doRefocus = props.notes.length < previousNotes.length;
+			const doRefocus = props.notes.length < previousNotes.length && !props.focusedField;
 
 			for (let i = 0; i < props.notes.length; i++) {
 				if (props.notes[i].id === id) {
@@ -306,8 +312,7 @@ const NoteListComponent = (props: Props) => {
 		if (previousVisible !== props.visible) {
 			updateSizeState();
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [previousSelectedNoteIds, previousNotes, previousVisible, props.selectedNoteIds, props.notes]);
+	}, [previousSelectedNoteIds, previousNotes, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
 	const scrollNoteIndex_ = (keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) => {
 
@@ -340,11 +345,31 @@ const NoteListComponent = (props: Props) => {
 		return noteIndex;
 	};
 
+	const noteItem_noteMove = async (direction: number) => {
+		if (!canManuallySortNotes()) {
+			return;
+		}
+		const noteIds = props.selectedNoteIds;
+		const noteId = noteIds[0];
+		let targetNoteIndex = BaseModel.modelIndexById(props.notes, noteId);
+		if ((direction === 1)) {
+			targetNoteIndex += 2;
+		}
+		if ((direction === -1)) {
+			targetNoteIndex -= 1;
+		}
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
+	};
+
 	const onKeyDown = async (event: any) => {
 		const keyCode = event.keyCode;
 		const noteIds = props.selectedNoteIds;
 
-		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
+		if ((keyCode === 40 || keyCode === 38) && event.altKey) {
+			// (DOWN / UP) & ALT
+			await noteItem_noteMove(keyCode === 40 ? 1 : -1);
+			event.preventDefault();
+		} else if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(props.notes, noteId);
@@ -500,6 +525,7 @@ const NoteListComponent = (props: Props) => {
 				style={props.size}
 				itemRenderer={renderItem}
 				onKeyDown={onKeyDown}
+				onNoteDrop={noteItem_noteDrop}
 			/>
 		);
 	};
@@ -528,9 +554,12 @@ const mapStateToProps = (state: AppState) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],
+		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
+		showCompletedTodos: state.settings.showCompletedTodos,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
+		focusedField: state.focusedField,
 	};
 };
 

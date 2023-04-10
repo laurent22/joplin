@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import * as fs from 'fs-extra';
 
 require('source-map-support').install();
@@ -130,7 +132,7 @@ async function main() {
 		serverProcess.kill();
 	};
 
-	process.on('SIGINT', function() {
+	process.on('SIGINT', () => {
 		console.info('Received SIGINT signal - killing server');
 		cleanUp();
 		process.exit();

@@ -9,7 +9,7 @@ import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
 
-describe('services_EncryptionService', function() {
+describe('services_EncryptionService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

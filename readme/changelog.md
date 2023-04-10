@@ -1,5 +1,69 @@
 # Joplin changelog
 
+## [v2.10.13](https://github.com/laurent22/joplin/releases/tag/v2.10.13) (Pre-release) - 2023-04-03T16:53:46Z
+
+- Fixed: Encode the non-ASCII characters in OneDrive URI ([#7868](https://github.com/laurent22/joplin/issues/7868)) ([#7851](https://github.com/laurent22/joplin/issues/7851) by Self Not Found)
+- Fixed: Fix OneDrive sync attempting to call method on `null` variable ([#7987](https://github.com/laurent22/joplin/issues/7987)) ([#7986](https://github.com/laurent22/joplin/issues/7986) by Henry Heino)
+- Fixed: Fixed display of installed plugins in About box ([376e4eb](https://github.com/laurent22/joplin/commit/376e4eb))
+
+## [v2.10.12](https://github.com/laurent22/joplin/releases/tag/v2.10.12) (Pre-release) - 2023-03-23T12:17:13Z
+
+- Improved: Adjusted New Note and New to-do buttons' breakpoints to happen earlier ([#7961](https://github.com/laurent22/joplin/issues/7961) by [@julien](https://github.com/julien))
+
+## [v2.10.11](https://github.com/laurent22/joplin/releases/tag/v2.10.11) (Pre-release) - 2023-03-17T10:54:02Z
+
+- Fixed: Fixes text wrap on new buttons ([#7938](https://github.com/laurent22/joplin/issues/7938) by [@julien](https://github.com/julien))
+- Fixed: List enabled plugins only in About Joplin and in alphabetical order ([#7923](https://github.com/laurent22/joplin/issues/7923)) ([#7920](https://github.com/laurent22/joplin/issues/7920) by [@julien](https://github.com/julien))
+
+## [v2.10.10](https://github.com/laurent22/joplin/releases/tag/v2.10.10) (Pre-release) - 2023-03-13T23:16:37Z
+
+- Fixed: Fix issue where search bar can randomly lose focus while searching ([bd42914](https://github.com/laurent22/joplin/commit/bd42914))
+- Fixed: Fixed height when controls are on a single row ([#7912](https://github.com/laurent22/joplin/issues/7912)) ([#7907](https://github.com/laurent22/joplin/issues/7907) by [@julien](https://github.com/julien))
+
+## [v2.10.9](https://github.com/laurent22/joplin/releases/tag/v2.10.9) (Pre-release) - 2023-03-12T16:16:45Z
+
+- Improved: Always show new note buttons (Regression) ([#7850](https://github.com/laurent22/joplin/issues/7850) by [@julien](https://github.com/julien))
+- Improved: Made note list controls responsive ([#7884](https://github.com/laurent22/joplin/issues/7884)) ([#7848](https://github.com/laurent22/joplin/issues/7848) by [@julien](https://github.com/julien))
+- Improved: Paste as Text only working on hotkeys on Windows ([#7886](https://github.com/laurent22/joplin/issues/7886)) ([#7880](https://github.com/laurent22/joplin/issues/7880) by [@pedr](https://github.com/pedr))
+- Fixed: Drag-dropping notes to top or bottom, in custom sort, is finicky ([#7777](https://github.com/laurent22/joplin/issues/7777)) ([#7776](https://github.com/laurent22/joplin/issues/7776) by Tao Klerks)
+- Fixed: Linux notebook display bug ([#7897](https://github.com/laurent22/joplin/issues/7897)) ([#7506](https://github.com/laurent22/joplin/issues/7506) by Arun Kumar)
+
+## [v2.10.8](https://github.com/laurent22/joplin/releases/tag/v2.10.8) (Pre-release) - 2023-02-26T12:53:55Z
+
+- Improved: Note background does not change when theme automatically updated via system ([d1e545a](https://github.com/laurent22/joplin/commit/d1e545a))
+- Fixed: Fixed clipping certain pages that contain images within links ([92cf5ab](https://github.com/laurent22/joplin/commit/92cf5ab))
+
+## [v2.10.7](https://github.com/laurent22/joplin/releases/tag/v2.10.7) (Pre-release) - 2023-02-24T10:56:20Z
+
+- New: Add a link to twitter inside the help menu ([#7796](https://github.com/laurent22/joplin/issues/7796) by [@pedr](https://github.com/pedr))
+- Improved: Added "Move Line Up" and "Move Line Down" shortcuts ([#7755](https://github.com/laurent22/joplin/issues/7755)) ([#7692](https://github.com/laurent22/joplin/issues/7692) by [@Polaris66](https://github.com/Polaris66))
+- Improved: Stop synchronization with unsupported WebDAV providers ([#7819](https://github.com/laurent22/joplin/issues/7819)) ([#7661](https://github.com/laurent22/joplin/issues/7661) by [@julien](https://github.com/julien))
+- Fixed: Make note sort update logic use correct prior sort and drop-grouping ([#7737](https://github.com/laurent22/joplin/issues/7737)) ([#7731](https://github.com/laurent22/joplin/issues/7731) by Tao Klerks)
+- Fixed: Markdown + Front Matter export fails when tag(s) lost ([#7820](https://github.com/laurent22/joplin/issues/7820)) ([#7782](https://github.com/laurent22/joplin/issues/7782) by [@pedr](https://github.com/pedr))
+
+## [v2.10.6](https://github.com/laurent22/joplin/releases/tag/v2.10.6) (Pre-release) - 2023-02-20T14:00:05Z
+
+- New: Add 'Paste as text' to the Context menu of the Rich Text Editor ([#7769](https://github.com/laurent22/joplin/issues/7769) by [@pedr](https://github.com/pedr))
+- New: Add a menu option to reset the application layout ([#7786](https://github.com/laurent22/joplin/issues/7786) by [@pedr](https://github.com/pedr))
+- Improved: Allow 'Paste as Text' on the Rich Text Editor ([#7751](https://github.com/laurent22/joplin/issues/7751) by [@pedr](https://github.com/pedr))
+- Improved: Disable custom PDF viewer by default ([#7506](https://github.com/laurent22/joplin/issues/7506))
+- Improved: Fix copy text with no selection ([#7641](https://github.com/laurent22/joplin/issues/7641)) ([#7602](https://github.com/laurent22/joplin/issues/7602) by Betty Alagwu)
+- Improved: Improve dialogue spacing in Fountain renderer ([#7628](https://github.com/laurent22/joplin/issues/7628)) ([#7627](https://github.com/laurent22/joplin/issues/7627) by [@Elleo](https://github.com/Elleo))
+- Improved: New design for "New note" and "New todo" buttons ([#7780](https://github.com/laurent22/joplin/issues/7780) by [@julien](https://github.com/julien))
+- Improved: Remove auto-matching for greater than character ([#7669](https://github.com/laurent22/joplin/issues/7669) by Self Not Found)
+- Improved: Show installed plugins in Help - About Joplin ([#7711](https://github.com/laurent22/joplin/issues/7711)) ([#6143](https://github.com/laurent22/joplin/issues/6143) by [@julien](https://github.com/julien))
+- Fixed: App freezes and displays fatal error when text provided in the search bar is too long ([#7764](https://github.com/laurent22/joplin/issues/7764)) ([#7634](https://github.com/laurent22/joplin/issues/7634) by [@pedr](https://github.com/pedr))
+- Fixed: Certain plugins could create invalid settings, which could result in a crash ([#7621](https://github.com/laurent22/joplin/issues/7621))
+- Fixed: Clicking on Save saves changes when updating a link ([#7753](https://github.com/laurent22/joplin/issues/7753)) ([#7658](https://github.com/laurent22/joplin/issues/7658) by [@julien](https://github.com/julien))
+- Fixed: Ctrl-X behaviour when no text is selected ([#7778](https://github.com/laurent22/joplin/issues/7778)) ([#7662](https://github.com/laurent22/joplin/issues/7662) by [@melsonic](https://github.com/melsonic))
+- Fixed: Custom sort order not synchronized ([#7729](https://github.com/laurent22/joplin/issues/7729)) ([#6956](https://github.com/laurent22/joplin/issues/6956) by Tao Klerks)
+- Fixed: Fix highlighting in GotoAnything dialogue ([#7592](https://github.com/laurent22/joplin/issues/7592) by [@andy1631](https://github.com/andy1631))
+- Fixed: Fix open files with non-ASCII characters in path ([#7679](https://github.com/laurent22/joplin/issues/7679)) ([#7678](https://github.com/laurent22/joplin/issues/7678) by Self Not Found)
+- Fixed: Fix text editor text highlighting when used with special IME methods ([#7630](https://github.com/laurent22/joplin/issues/7630)) ([#7565](https://github.com/laurent22/joplin/issues/7565) by [@light](https://github.com/light))
+- Fixed: Markdown editor not surrounding highlighted text with backticks ([#7697](https://github.com/laurent22/joplin/issues/7697)) ([#7694](https://github.com/laurent22/joplin/issues/7694) by Helmut K. C. Tessarek)
+- Fixed: Mermaid images are incorrectly sized when exported as PNG ([#7546](https://github.com/laurent22/joplin/issues/7546)) ([#7521](https://github.com/laurent22/joplin/issues/7521) by Adarsh Singh)
+- Fixed: Note editor scrolls back to top when editing certain notes ([#7617](https://github.com/laurent22/joplin/issues/7617))
+
 ## [v2.10.4](https://github.com/laurent22/joplin/releases/tag/v2.10.4) (Pre-release) - 2023-01-05T13:09:20Z
 
 - Fixed: Fixed certain plugins that were using the sqlite3 database ([a43ce33](https://github.com/laurent22/joplin/commit/a43ce33))

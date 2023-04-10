@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
-	await db.schema.createTable('joplin_file_contents', function(table: Knex.CreateTableBuilder) {
+	await db.schema.createTable('joplin_file_contents', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();
 		table.string('owner_id', 32).notNullable();
 		table.string('item_id', 32).notNullable();
@@ -14,7 +14,7 @@ export async function up(db: DbConnection): Promise<any> {
 		table.binary('content').defaultTo('').notNullable();
 	});
 
-	await db.schema.alterTable('files', function(table: Knex.CreateTableBuilder) {
+	await db.schema.alterTable('files', (table: Knex.CreateTableBuilder) => {
 		table.integer('content_type', 2).defaultTo(1).notNullable();
 		table.string('content_id', 32).defaultTo('').notNullable();
 	});

@@ -1,5 +1,6 @@
+import { execCommand } from '@joplin/utils';
 import * as fs from 'fs-extra';
-import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog, execCommand2 } from './tool-utils';
+import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -16,7 +17,7 @@ interface Release {
 }
 
 function increaseGradleVersionCode(content: string) {
-	const newContent = content.replace(/versionCode\s+(\d+)/, function(_a, versionCode: string) {
+	const newContent = content.replace(/versionCode\s+(\d+)/, (_a, versionCode: string) => {
 		const n = Number(versionCode);
 		if (isNaN(n) || !n) throw new Error(`Invalid version code: ${versionCode}`);
 		return `versionCode ${n + 1}`;
@@ -28,7 +29,7 @@ function increaseGradleVersionCode(content: string) {
 }
 
 function increaseGradleVersionName(content: string) {
-	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(_match, prefix: string, buildNum: string) {
+	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, (_match, prefix: string, buildNum: string) => {
 		const n = Number(buildNum);
 		if (isNaN(n)) throw new Error(`Invalid version code: ${buildNum}`);
 		return `${prefix + (n + 1)}"`;
@@ -150,7 +151,7 @@ async function main() {
 	const isPreRelease = !('type' in argv) || argv.type === 'prerelease';
 
 	process.chdir(rnDir);
-	await execCommand2('yarn run build', { showStdout: false });
+	await execCommand('yarn run build', { showStdout: false });
 
 	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');

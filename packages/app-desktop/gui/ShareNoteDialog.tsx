@@ -68,8 +68,6 @@ function styles_(props: Props) {
 }
 
 export function ShareNoteDialog(props: Props) {
-	console.info('Render ShareNoteDialog');
-
 	const [notes, setNotes] = useState<NoteEntity[]>([]);
 	const [recursiveShare, setRecursiveShare] = useState<boolean>(false);
 	const [sharesState, setSharesState] = useState<string>('unknown');

@@ -69,12 +69,12 @@ function enexXmlToHtml_(stream, resources) {
 			parent: null,
 		};
 
-		saxStream.on('error', function(e) {
+		saxStream.on('error', (e) => {
 			console.warn(e);
 		});
 
 
-		saxStream.on('text', function(text) {
+		saxStream.on('text', (text) => {
 			section.lines.push(htmlentities(text));
 		});
 
@@ -135,14 +135,14 @@ function enexXmlToHtml_(stream, resources) {
 			}
 		});
 
-		saxStream.on('closetag', function(node) {
+		saxStream.on('closetag', (node) => {
 			const tagName = node ? node.toLowerCase() : node;
 			if (!htmlUtils.isSelfClosingTag(tagName)) section.lines.push(`</${tagName}>`);
 		});
 
-		saxStream.on('attribute', function() {});
+		saxStream.on('attribute', () => {});
 
-		saxStream.on('end', function() {
+		saxStream.on('end', () => {
 			resolve({
 				content: section,
 				resources: remainingResources,

@@ -3,7 +3,7 @@
 const { splitCommandBatch } = require('./string-utils');
 const StringUtils = require('./string-utils');
 
-describe('StringUtils', function() {
+describe('StringUtils', () => {
 
 
 

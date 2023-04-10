@@ -9,31 +9,31 @@ export default class AlarmService {
 	private static logger_: Logger;
 	// private static inAppNotificationHandler_:any;
 
-	static setDriver(v: any) {
+	public static setDriver(v: any) {
 		this.driver_ = v;
 
 		if (this.driver_.setService) this.driver_.setService(this);
 	}
 
-	static driver() {
+	public static driver() {
 		if (!this.driver_) throw new Error('AlarmService driver not set!');
 		return this.driver_;
 	}
 
-	static setLogger(v: Logger) {
+	public static setLogger(v: Logger) {
 		this.logger_ = v;
 	}
 
-	static logger() {
+	public static logger() {
 		return this.logger_;
 	}
 
-	static setInAppNotificationHandler(v: any) {
+	public static setInAppNotificationHandler(v: any) {
 		// this.inAppNotificationHandler_ = v;
 		if (this.driver_.setInAppNotificationHandler) this.driver_.setInAppNotificationHandler(v);
 	}
 
-	static async garbageCollect() {
+	public static async garbageCollect() {
 		this.logger().info('Garbage collecting alarms...');
 
 		// Delete alarms that have already been triggered
@@ -50,7 +50,7 @@ export default class AlarmService {
 
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
-	static async updateNoteNotification(noteOrId: any, isDeleted: boolean = false) {
+	public static async updateNoteNotification(noteOrId: any, isDeleted: boolean = false) {
 		try {
 			let note = null;
 			let noteId = null;
@@ -114,7 +114,7 @@ export default class AlarmService {
 		}
 	}
 
-	static async updateAllNotifications() {
+	public static async updateAllNotifications() {
 		this.logger().info('Updating all notifications...');
 
 		await this.garbageCollect();

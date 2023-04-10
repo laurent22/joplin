@@ -79,7 +79,7 @@ export default class EncryptionService {
 		},
 	};
 
-	constructor() {
+	public constructor() {
 		// Note: 1 MB is very slow with Node and probably even worse on mobile.
 		//
 		// On mobile the time it takes to decrypt increases exponentially for some reason, so it's important
@@ -117,23 +117,23 @@ export default class EncryptionService {
 		return this.defaultMasterKeyEncryptionMethod_;
 	}
 
-	loadedMasterKeysCount() {
+	public loadedMasterKeysCount() {
 		return Object.keys(this.decryptedMasterKeys_).length;
 	}
 
-	chunkSize() {
+	public chunkSize() {
 		return this.chunkSize_;
 	}
 
-	defaultEncryptionMethod() {
+	public defaultEncryptionMethod() {
 		return this.defaultEncryptionMethod_;
 	}
 
-	setActiveMasterKeyId(id: string) {
+	public setActiveMasterKeyId(id: string) {
 		setActiveMasterKeyId(id);
 	}
 
-	activeMasterKeyId() {
+	public activeMasterKeyId() {
 		const id = getActiveMasterKeyId();
 		if (!id) {
 			const error: any = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
@@ -162,11 +162,11 @@ export default class EncryptionService {
 		if (makeActive) this.setActiveMasterKeyId(model.id);
 	}
 
-	unloadMasterKey(model: MasterKeyEntity) {
+	public unloadMasterKey(model: MasterKeyEntity) {
 		delete this.decryptedMasterKeys_[model.id];
 	}
 
-	loadedMasterKey(id: string) {
+	public loadedMasterKey(id: string) {
 		if (!this.decryptedMasterKeys_[id]) {
 			const error: any = new Error(`Master key is not loaded: ${id}`);
 			error.code = 'masterKeyNotLoaded';
@@ -176,22 +176,22 @@ export default class EncryptionService {
 		return this.decryptedMasterKeys_[id];
 	}
 
-	loadedMasterKeyIds() {
+	public loadedMasterKeyIds() {
 		return Object.keys(this.decryptedMasterKeys_);
 	}
 
-	fsDriver() {
+	public fsDriver() {
 		if (!EncryptionService.fsDriver_) throw new Error('EncryptionService.fsDriver_ not set!');
 		return EncryptionService.fsDriver_;
 	}
 
-	sha256(string: string) {
+	public sha256(string: string) {
 		const sjcl = shim.sjclModule;
 		const bitArray = sjcl.hash.sha256.hash(string);
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
 
-	async generateApiToken() {
+	public async generateApiToken() {
 		return await this.randomHexString(64);
 	}
 
@@ -390,7 +390,7 @@ export default class EncryptionService {
 		throw new Error(`Unknown encryption method: ${method}`);
 	}
 
-	async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
+	public async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
 		if (!method) throw new Error('Encryption method is required');
 		if (!key) throw new Error('Encryption key is required');
 
@@ -411,7 +411,7 @@ export default class EncryptionService {
 		}
 	}
 
-	async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
+	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		options = Object.assign({}, {
 			encryptionMethod: this.defaultEncryptionMethod(),
 		}, options);
@@ -447,7 +447,7 @@ export default class EncryptionService {
 		}
 	}
 
-	async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
+	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
 		const header: any = await this.decodeHeaderSource_(source);
@@ -474,7 +474,7 @@ export default class EncryptionService {
 		}
 	}
 
-	stringReader_(string: string, sync = false) {
+	private stringReader_(string: string, sync = false) {
 		const reader = {
 			index: 0,
 			read: function(size: number) {
@@ -487,7 +487,7 @@ export default class EncryptionService {
 		return reader;
 	}
 
-	stringWriter_() {
+	private stringWriter_() {
 		const output: any = {
 			data: [],
 			append: async function(data: any) {
@@ -501,7 +501,7 @@ export default class EncryptionService {
 		return output;
 	}
 
-	async fileReader_(path: string, encoding: any) {
+	private async fileReader_(path: string, encoding: any) {
 		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
 			handle: handle,
@@ -515,7 +515,7 @@ export default class EncryptionService {
 		return reader;
 	}
 
-	async fileWriter_(path: string, encoding: any) {
+	private async fileWriter_(path: string, encoding: any) {
 		return {
 			append: async (data: any) => {
 				return this.fsDriver().appendFile(path, data, encoding);
@@ -538,7 +538,7 @@ export default class EncryptionService {
 		return destination.data.join('');
 	}
 
-	async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
+	public async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
@@ -563,7 +563,7 @@ export default class EncryptionService {
 		await cleanUp();
 	}
 
-	async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
+	public async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		let source = await this.fileReader_(srcPath, 'ascii');
 		let destination = await this.fileWriter_(destPath, 'base64');
 
@@ -588,13 +588,13 @@ export default class EncryptionService {
 		await cleanUp();
 	}
 
-	headerTemplate(version: number) {
+	public headerTemplate(version: number) {
 		const r = (this.headerTemplates_ as any)[version];
 		if (!r) throw new Error(`Unknown header version: ${version}`);
 		return r;
 	}
 
-	encodeHeader_(header: any) {
+	public encodeHeader_(header: any) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
@@ -605,12 +605,12 @@ export default class EncryptionService {
 		return `JED01${encryptionMetadata}`;
 	}
 
-	async decodeHeaderString(cipherText: any) {
+	public async decodeHeaderString(cipherText: any) {
 		const source = this.stringReader_(cipherText);
 		return this.decodeHeaderSource_(source);
 	}
 
-	async decodeHeaderSource_(source: any) {
+	private async decodeHeaderSource_(source: any) {
 		const identifier = await source.read(5);
 		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
@@ -620,7 +620,7 @@ export default class EncryptionService {
 		return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
 	}
 
-	decodeHeaderBytes_(headerHexaBytes: any) {
+	public decodeHeaderBytes_(headerHexaBytes: any) {
 		const reader: any = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
@@ -652,18 +652,18 @@ export default class EncryptionService {
 		return output;
 	}
 
-	isValidEncryptionMethod(method: EncryptionMethod) {
+	public isValidEncryptionMethod(method: EncryptionMethod) {
 		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
-	async itemIsEncrypted(item: any) {
+	public async itemIsEncrypted(item: any) {
 		if (!item) throw new Error('No item');
 		const ItemClass = BaseItem.itemClass(item);
 		if (!ItemClass.encryptionSupported()) return false;
 		return item.encryption_applied && isValidHeaderIdentifier(item.encryption_cipher_text, true);
 	}
 
-	async fileIsEncrypted(path: string) {
+	public async fileIsEncrypted(path: string) {
 		const handle = await this.fsDriver().open(path, 'r');
 		const headerIdentifier = await this.fsDriver().readFileChunk(handle, 5, 'ascii');
 		await this.fsDriver().close(handle);

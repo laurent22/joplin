@@ -8,7 +8,7 @@ import shim from '../../shim';
 const fs = require('fs-extra');
 
 export default class InteropService_Importer_Jex extends InteropService_Importer_Base {
-	async exec(result: ImportExportResult) {
+	public async exec(result: ImportExportResult) {
 		const tempDir = await this.temporaryDirectory_(true);
 
 		try {

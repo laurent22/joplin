@@ -52,7 +52,7 @@ export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
 		});
 	}
 
-	useEffect(function() {
+	useEffect(() => {
 		void upgradeSyncTarget();
 	}, []);
 

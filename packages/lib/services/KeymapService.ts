@@ -200,8 +200,8 @@ export default class KeymapService extends BaseService {
 
 			// Refresh the menu items so that the changes are reflected
 			eventManager.emit('keymapChange');
-		} catch (err) {
-			const message = err.message || '';
+		} catch (error) {
+			const message = error.message || '';
 			throw new Error(_('Error: %s', message));
 		}
 	}
@@ -305,9 +305,9 @@ export default class KeymapService extends BaseService {
 			// Validate the entire keymap for duplicates
 			// Throws whenever there are duplicate Accelerators used in the keymap
 			this.validateKeymap();
-		} catch (err) {
+		} catch (error) {
 			this.resetKeymap(); // Discard all the changes if there are any issues
-			throw err;
+			throw error;
 		}
 	}
 

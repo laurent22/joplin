@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import config from '../../config';
 import { clearDatabase, createTestUsers, CreateTestUsersOptions, createUserDeletions } from '../../tools/debugTools';
 import { bodyFields } from '../../utils/requestUtils';

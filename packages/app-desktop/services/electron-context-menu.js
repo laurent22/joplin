@@ -233,7 +233,7 @@ const create = (win, options) => {
 			// When this is being called from a web view, we can't use `win` as this
 			// would refer to the web view which is not allowed to render a popup menu.
 			//
-			menu.popup(electronRemote ? electronRemote.getCurrentWindow() : win);
+			menu.popup({ window: electronRemote ? electronRemote.getCurrentWindow() : win });
 		}
 	});
 };

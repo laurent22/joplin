@@ -38,6 +38,7 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@lezer/highlight",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
@@ -106,6 +107,7 @@
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
+		"execa"
 	],
 	"packageRules": [
 		{
@@ -125,6 +127,8 @@
 				// updated so having them here reduces noise.
 				"eslint",
 				"eslint-*",
+				"jest",
+				"jest-*",
 				"@typescript-eslint/*",
 				"yarn",
 				"typescript",

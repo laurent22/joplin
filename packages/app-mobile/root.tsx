@@ -56,7 +56,7 @@ import Revision from '@joplin/lib/models/Revision';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
-const { NotesScreen } = require('./components/screens/notes.js');
+import NotesScreen from './components/screens/Notes';
 const { TagsScreen } = require('./components/screens/tags.js');
 import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
@@ -116,6 +116,8 @@ import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+
+const logger = Logger.create('root');
 
 let storeDispatch = function(_action: any) {};
 
@@ -499,7 +501,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-3') });
 
 			// await db.clearForTesting();
 		}
@@ -727,13 +729,28 @@ class AppComponent extends React.Component {
 		};
 
 		this.handleOpenURL_ = (event: any) => {
+			// logger.info('Sharing: handleOpenURL_: start');
+
 			// If this is called while biometrics haven't been done yet, we can
 			// ignore the call, because handleShareData() will be called once
 			// biometricsDone is `true`.
 			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
+				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
 			}
 		};
+
+		this.handleNewShare_ = () => {
+			// logger.info('Sharing: handleNewShare_: start');
+
+			// look at this.handleOpenURL_ comment
+			if (this.props.biometricsDone) {
+				logger.info('Sharing: handleNewShare_: Processing share data');
+				void this.handleShareData();
+			}
+		};
+
+		this.unsubscribeNewShareListener_ = ShareExtension.addShareListener(this.handleNewShare_);
 
 		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
@@ -840,6 +857,11 @@ class AppComponent extends React.Component {
 		}
 
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
+
+		if (this.unsubscribeNewShareListener_) {
+			this.unsubscribeNewShareListener_();
+			this.unsubscribeNewShareListener_ = undefined;
+		}
 	}
 
 	public componentDidUpdate(prevProps: any) {
@@ -851,6 +873,7 @@ class AppComponent extends React.Component {
 		}
 
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
+			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
 		}
 	}
@@ -878,9 +901,13 @@ class AppComponent extends React.Component {
 
 	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
+
+		logger.info('Sharing: handleShareData:', sharedData);
+
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
+				logger.info('Sharing: handleShareData: Processing...');
 				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
@@ -954,6 +981,13 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
+		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
+		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
+
+		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
+		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
+		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
+
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
@@ -974,7 +1008,7 @@ class AppComponent extends React.Component {
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								<AppNav screens={appNavInit} dispatch={this.props.dispatch} />
+								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
 							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>

@@ -260,10 +260,6 @@ describe('useLayoutItemSizes', () => {
 		expect(sizes.col4.width).toBe(50);
 	});
 
-});
-
-describe('calculateMaxSizeAvailableForItem', () => {
-
 	test('should give maximum available space this item can take up during resizing', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',

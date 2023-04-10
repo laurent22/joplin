@@ -18,19 +18,19 @@ function itemCount(args: any) {
 }
 
 class Command extends BaseCommand {
-	usage() {
+	public usage() {
 		return 'testing <command> [arg0]';
 	}
 
-	description() {
+	public description() {
 		return 'testing';
 	}
 
-	enabled() {
+	public enabled() {
 		return false;
 	}
 
-	options(): any[] {
+	public options(): any[] {
 		return [
 			['--folder-count <count>', 'Folders to create'],
 			['--note-count <count>', 'Notes to create'],
@@ -40,7 +40,7 @@ class Command extends BaseCommand {
 		];
 	}
 
-	async action(args: any) {
+	public async action(args: any) {
 		const { command, options } = args;
 
 		if (command === 'populate') {
@@ -118,6 +118,7 @@ class Command extends BaseCommand {
 			}
 			await Promise.all(promises);
 
+			// eslint-disable-next-line no-console
 			console.info(await api.exec('GET', 'api/items/root:/testing:'));
 		}
 

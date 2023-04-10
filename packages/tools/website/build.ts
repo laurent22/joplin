@@ -2,7 +2,7 @@ import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy, pathEx
 import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
-import { AssetUrls, Env, Partials, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
+import { AssetUrls, Env, Partials, PlanPageParams, TemplateParams } from './utils/types';
 import { createFeatureTableMd, getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
@@ -13,6 +13,7 @@ import { getNewsDateString } from './utils/news';
 import { parsePoFile, parseTranslations, Translations } from '../utils/translation';
 import { countryCodeOnly, setLocale } from '@joplin/lib/locale';
 import applyTranslations from './utils/applyTranslations';
+import { loadSponsors } from '../utils/loadSponsors';
 
 interface BuildConfig {
 	env: Env;
@@ -173,16 +174,6 @@ function makeHomePageMd() {
 	md = md.replace(donateLinksRegex_, '');
 
 	return md;
-}
-
-async function loadSponsors(): Promise<Sponsors> {
-	const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
-	const output: Sponsors = JSON.parse(await readFile(sponsorsPath, 'utf8'));
-	output.orgs = output.orgs.map(o => {
-		if (o.urlWebsite) o.url = o.urlWebsite;
-		return o;
-	});
-	return output;
 }
 
 const processNewsMarkdown = (md: string, mdFilePath: string): string => {
