@@ -110,6 +110,8 @@ export default class ReportService {
 		let syncedCount = 0;
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			const d = BaseItem.syncItemDefinitions_[i];
+			// ref: https://github.com/laurent22/joplin/issues/7940#issuecomment-1473709148
+			if (d.className === 'MasterKey') continue;
 			const ItemClass = BaseItem.getClass(d.className);
 			const o = {
 				total: await ItemClass.count(),

@@ -38,6 +38,7 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@lezer/highlight",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
