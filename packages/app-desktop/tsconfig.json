@@ -1,11 +1,17 @@
 {
 	"extends": "../../tsconfig.json",
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
 	],
 	"exclude": [
 		"**/node_modules",
 		"**/dist",
+		"gulpfile.ts",
 	],
+	"compilerOptions": {
+		"types": [
+			"node"
+		]
+	}
 }
