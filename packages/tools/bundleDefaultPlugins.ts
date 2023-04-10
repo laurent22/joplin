@@ -74,6 +74,7 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 };
 
 async function start(): Promise<void> {
+	process.chdir(__dirname);
 	const defaultPluginDir = join(__dirname, '..', '..', 'packages', 'app-desktop', 'build', 'defaultPlugins');
 	const defaultPluginsInfo = getDefaultPluginsInfo();
 
@@ -95,11 +96,6 @@ if (require.main === module) {
 	});
 }
 
-module.exports = async function bundleDefaultPlugins() {
-	try {
-		await start();
-	}	catch (e) {
-		console.error('Error bundling default plugins ', e);
-		process.exit(1);
-	}
+module.exports = async () => {
+	await start();
 };

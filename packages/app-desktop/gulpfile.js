@@ -38,8 +38,6 @@ const tasks = {
 	},
 	bundleDefaultPlugins: {
 		fn: async () => {
-			const toolsDirectory = `${__dirname}/../tools`;
-			process.chdir(toolsDirectory);
 			await bundleDefaultPlugins();
 		},
 	},
