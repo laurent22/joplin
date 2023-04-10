@@ -94,3 +94,12 @@ if (require.main === module) {
 		process.exit(1);
 	});
 }
+
+module.exports = async function bundleDefaultPlugins() {
+	try {
+		await start();
+	}	catch (e) {
+		console.error('Error bundling default plugins ', e);
+		process.exit(1);
+	}
+};

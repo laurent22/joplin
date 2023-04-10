@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const utils = require('@joplin/tools/gulp/utils');
 const compileSass = require('@joplin/tools/compileSass');
 const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
+const bundleDefaultPlugins = require('@joplin/tools/bundleDefaultPlugins');
 
 const tasks = {
 	compileScripts: {
@@ -33,6 +34,13 @@ const tasks = {
 				`${__dirname}/style.scss`,
 				`${__dirname}/style.min.css`
 			);
+		},
+	},
+	bundleDefaultPlugins: {
+		fn: async () => {
+			const toolsDirectory = `${__dirname}/../tools`;
+			process.chdir(toolsDirectory);
+			await bundleDefaultPlugins();
 		},
 	},
 };
