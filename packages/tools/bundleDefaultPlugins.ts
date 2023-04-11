@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join, normalize } from 'path';
 import { pathExists, mkdir, readFile, move, remove, writeFile } from 'fs-extra';
 import { DefaultPluginsInfo } from '@joplin/lib/services/plugins/PluginService';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
@@ -74,8 +74,10 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 };
 
 async function start(): Promise<void> {
-	process.chdir(__dirname);
-	const defaultPluginDir = join(__dirname, '..', '..', 'packages', 'app-desktop', 'build', 'defaultPlugins');
+	// windows CI fix: normalizing __dirname for windows
+	const cwd = normalize(__dirname);
+	process.chdir(cwd);
+	const defaultPluginDir = join(cwd, '..', '..', 'packages', 'app-desktop', 'build', 'defaultPlugins');
 	const defaultPluginsInfo = getDefaultPluginsInfo();
 
 	const manifestData = await fetch('https://raw.githubusercontent.com/joplin/plugins/master/manifests.json');
@@ -84,7 +86,7 @@ async function start(): Promise<void> {
 
 	const localPluginsVersions = await localPluginsVersion(defaultPluginDir, defaultPluginsInfo);
 	const downloadedPluginNames: PluginIdAndName = await downloadPlugins(localPluginsVersions, defaultPluginsInfo, manifests);
-	await extractPlugins(__dirname, defaultPluginDir, downloadedPluginNames);
+	await extractPlugins(cwd, defaultPluginDir, downloadedPluginNames);
 }
 
 if (require.main === module) {
