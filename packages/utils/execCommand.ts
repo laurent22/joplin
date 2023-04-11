@@ -1,6 +1,6 @@
 import * as execa from 'execa';
 import commandToString from './commandToString';
-import splitCommandString from './splitCommandString';
+import splitCommandString, { SplitCommandOptions } from './splitCommandString';
 import { stdout } from 'process';
 
 interface ExecCommandOptions {
@@ -8,6 +8,7 @@ interface ExecCommandOptions {
 	showStdout?: boolean;
 	showStderr?: boolean;
 	quiet?: boolean;
+	splitCommandOptions?: SplitCommandOptions | null;
 }
 
 export default async (command: string | string[], options: ExecCommandOptions | null = null): Promise<string> => {
@@ -33,7 +34,7 @@ export default async (command: string | string[], options: ExecCommandOptions | 
 		}
 	}
 
-	const args: string[] = typeof command === 'string' ? splitCommandString(command) : command as string[];
+	const args: string[] = typeof command === 'string' ? splitCommandString(command, options.splitCommandOptions || null) : command as string[];
 	const executableName = args[0];
 	args.splice(0, 1);
 	const promise = execa(executableName, args);

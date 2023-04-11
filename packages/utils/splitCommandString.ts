@@ -1,3 +1,7 @@
+export interface SplitCommandOptions {
+	handleEscape?: boolean;
+}
+
 export default (command: string, options: any = null) => {
 	options = options || {};
 	if (!('handleEscape' in options)) {
