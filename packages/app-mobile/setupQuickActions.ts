@@ -14,8 +14,8 @@ type TData = {
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
 	const isAndroid = Platform.OS === 'android';
-	const noteIcon = isAndroid ? 'outline_add_black_36' : 'Compose';
-	const todoIcon = isAndroid ? 'outline_edit_black_36' : 'Add';
+	const noteIcon = isAndroid ? 'outline_edit_black_36' : 'Compose';
+	const todoIcon = isAndroid ? 'outline_add_black_36' : 'Add';
 	QuickActions.setShortcutItems([
 		{ type: 'New note', title: _('New note'), icon: noteIcon, userInfo },
 		{ type: 'New to-do', title: _('New to-do'), icon: todoIcon, userInfo },
