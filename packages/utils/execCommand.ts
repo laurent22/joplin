@@ -39,7 +39,7 @@ export default async (command: string | string[], options: ExecCommandOptions | 
 	args.splice(0, 1);
 	const promise = execa(executableName, args);
 	if (options.showStdout && promise.stdout) promise.stdout.pipe(process.stdout);
-	if (options.showStderr && promise.stdout) promise.stdout.pipe(process.stderr);
+	if (options.showStderr && promise.stderr) promise.stderr.pipe(process.stderr);
 	const result = await promise;
 	return result.stdout.trim();
 };

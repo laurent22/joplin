@@ -1,9 +1,7 @@
 import { readFile } from 'fs-extra';
-import { rootDir } from '@joplin/utils';
+import { getRootDir } from '@joplin/utils';
 import { fetchWithRetry } from '@joplin/utils/net';
 import { githubOauthToken } from '../tool-utils';
-
-const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
 
 export interface GithubSponsor {
 	name: string;
@@ -23,6 +21,7 @@ export interface OrgSponsor {
 }
 
 export const loadSponsors = async (): Promise<Sponsors> => {
+	const sponsorsPath = `${await getRootDir()}/packages/tools/sponsors.json`;
 	const output: Sponsors = JSON.parse(await readFile(sponsorsPath, 'utf8'));
 
 	output.orgs = output.orgs.map(o => {
