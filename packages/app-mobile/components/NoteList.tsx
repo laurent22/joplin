@@ -1,15 +1,32 @@
 const React = require('react');
-const Component = React.Component;
-const { connect } = require('react-redux');
-const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
+
+import { Component } from 'react';
+
+import { connect } from 'react-redux';
+import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { AppState } from '../utils/types';
+
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
-const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('./global-style.js');
 
-class NoteListComponent extends Component {
-	constructor() {
-		super();
+interface NoteListProps {
+	themeId: string;
+	dispatch: (action: any)=> void;
+	notesSource: string;
+	items: any[];
+	folders: FolderEntity[];
+	noteSelectionEnabled?: boolean;
+	selectedFolderId?: string;
+}
+
+class NoteListComponent extends Component<NoteListProps> {
+	private rootRef_: FlatList;
+	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
+
+	public constructor(props: NoteListProps) {
+		super(props);
 
 		this.state = {
 			items: [],
@@ -21,7 +38,7 @@ class NoteListComponent extends Component {
 		this.createNotebookButton_click = this.createNotebookButton_click.bind(this);
 	}
 
-	styles() {
+	public styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -47,7 +64,7 @@ class NoteListComponent extends Component {
 		return this.styles_[themeId];
 	}
 
-	createNotebookButton_click() {
+	private createNotebookButton_click() {
 		this.props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Folder',
@@ -55,34 +72,14 @@ class NoteListComponent extends Component {
 		});
 	}
 
-	filterNotes(notes) {
-		const todoFilter = 'all'; // Setting.value('todoFilter');
-		if (todoFilter === 'all') return notes;
-
-		const now = time.unixMs();
-		const maxInterval = 1000 * 60 * 60 * 24;
-		const notRecentTime = now - maxInterval;
-
-		const output = [];
-		for (let i = 0; i < notes.length; i++) {
-			const note = notes[i];
-			if (note.is_todo) {
-				if (todoFilter === 'recent' && note.user_updated_time < notRecentTime && !!note.todo_completed) continue;
-				if (todoFilter === 'nonCompleted' && !!note.todo_completed) continue;
-			}
-			output.push(note);
-		}
-		return output;
-	}
-
-	UNSAFE_componentWillReceiveProps(newProps) {
+	public UNSAFE_componentWillReceiveProps(newProps: NoteListProps) {
 		// Make sure scroll position is reset when switching from one folder to another or to a tag list.
 		if (this.rootRef_ && newProps.notesSource !== this.props.notesSource) {
 			this.rootRef_.scrollToOffset({ offset: 0, animated: false });
 		}
 	}
 
-	render() {
+	public render() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
 		if (this.props.items.length) {
@@ -109,7 +106,7 @@ class NoteListComponent extends Component {
 	}
 }
 
-const NoteList = connect(state => {
+const NoteList = connect((state: AppState) => {
 	return {
 		items: state.notes,
 		folders: state.folders,
@@ -119,4 +116,4 @@ const NoteList = connect(state => {
 	};
 })(NoteListComponent);
 
-module.exports = { NoteList };
+export default NoteList;

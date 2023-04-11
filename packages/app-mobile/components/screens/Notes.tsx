@@ -2,7 +2,7 @@ const React = require('react');
 import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
-const { NoteList } = require('../note-list.js');
+import NoteList from '../NoteList';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
@@ -254,7 +254,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
-				<NoteList style={this.styles().noteList} />
+				<NoteList />
 				{actionButtonComp}
 				<DialogBox
 					ref={(dialogbox: any) => {
