@@ -26,7 +26,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		this.onAppStateChange_ = async () => {
 			// Force an update to the notes list when app state changes
-			const newProps = { ...this.props };
+			const newProps = Object.assign({}, this.props);
 			newProps.notesSource = '';
 			await this.refreshNotes(newProps);
 		};
@@ -68,6 +68,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 			Setting.setValue(r.name, r.value);
 		};
+
+		this.noteList_onSort = this.noteList_onSort.bind(this);
 
 		this.backHandler = () => {
 			if (this.dialogbox && this.dialogbox.state && this.dialogbox.state.isVisible) {
@@ -113,7 +115,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		}
 	}
 
-	public async refreshNotes(props: any = null) {
+	public async refreshNotes(props: any = null, force?: Boolean) {
 		if (props === null) props = this.props;
 
 		const options = {
@@ -131,7 +133,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 			parentId: parent.id,
 		});
 
-		if (source === props.notesSource) return;
+		if (source === props.notesSource && !force) return;
 
 		let notes = [];
 		if (props.notesParentType === 'Folder') {
@@ -147,6 +149,18 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 			notes: notes,
 			notesSource: source,
 		});
+	}
+
+	private async noteList_onSort(sortedId: string, newIndex: number) {
+		await Note.insertNotesAt(
+			this.props.selectedFolderId,
+			[sortedId],
+			newIndex,
+			this.props.uncompletedTodosOnTop,
+			this.props.showCompletedTodos
+		);
+
+		await this.refreshNotes(null, true);
 	}
 
 	public newNoteNavigate = async (folderId: string, isTodo: boolean) => {
@@ -254,7 +268,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
-				<NoteList />
+				<NoteList onSorted={this.noteList_onSort} />
 				{actionButtonComp}
 				<DialogBox
 					ref={(dialogbox: any) => {

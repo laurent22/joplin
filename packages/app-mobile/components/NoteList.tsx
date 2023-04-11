@@ -1,13 +1,13 @@
 const React = require('react');
 
-import { connect } from 'react-redux';
 import { Component } from 'react';
+
+import { connect } from 'react-redux';
+import { FlatList, Text, StyleSheet, Button, View, Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
-import { FlatList, Text, StyleSheet, Button, View, Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import Setting from '@joplin/lib/models/Setting';
-import Note from '@joplin/lib/models/Note';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 
 const { _ } = require('@joplin/lib/locale');
@@ -20,10 +20,11 @@ interface NoteListProps {
 	themeId: string;
 	dispatch: (action: any)=> void;
 	notesSource: string;
-	items: any[];
+	items: NoteEntity[];
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
 	selectedFolderId?: string;
+	onSorted: (sortedId: string, newIndex: number)=> void;
 }
 
 interface AdditionalNoteItemProps {
@@ -32,14 +33,13 @@ interface AdditionalNoteItemProps {
 }
 
 interface NoteListState {
-	items: any[];
+	items: NoteEntity[];
 	selectedItemIds: string[];
 }
 
-class NoteListComponent extends Component<NoteListProps> {
+class NoteListComponent extends Component<NoteListProps, NoteListState> {
 	private rootRef_: FlatList;
 	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
-	public state: NoteListState;
 
 	/** DialogBox isn't a type, so we can't use it here */
 	private dialogbox: any;
@@ -57,7 +57,7 @@ class NoteListComponent extends Component<NoteListProps> {
 		this.createNotebookButton_click = this.createNotebookButton_click.bind(this);
 	}
 
-	public styles() {
+	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -203,18 +203,10 @@ class NoteListComponent extends Component<NoteListProps> {
 						onDragEnd={async ({ data, to }) => {
 							if (this.props.selectedFolderId) {
 								this.setState({ items: data });
-								await Note.insertNotesAt(
-									this.props.selectedFolderId,
-									[data[to].id],
-									to,
-									Setting.value('uncompletedTodosOnTop'),
-									Setting.value('showCompletedTodos')
-								);
-								this.props.dispatch({
-									type: 'NOTE_UPDATE_ALL',
-									notes: data,
-									notesSource: this.props.notesSource,
-								});
+
+								if (this.props.onSorted) {
+									this.props.onSorted(data[to].id, to);
+								}
 							}
 						}}
 					/>
