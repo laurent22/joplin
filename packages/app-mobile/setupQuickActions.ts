@@ -3,7 +3,7 @@
 // class is undocumented.
 import * as QuickActions from 'react-native-quick-actions';
 import { _ } from '@joplin/lib/locale';
-const { DeviceEventEmitter } = require('react-native');
+const { DeviceEventEmitter, Platform } = require('react-native');
 import Note from '@joplin/lib/models/Note';
 import { reg } from '@joplin/lib/registry';
 
@@ -13,9 +13,12 @@ type TData = {
 
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
+	const isAndroid = Platform.OS === 'android';
+	const noteIcon = isAndroid ? 'outline_add_black_36' : 'Compose';
+	const todoIcon = isAndroid ? 'outline_edit_black_36' : 'Add';
 	QuickActions.setShortcutItems([
-		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
-		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
+		{ type: 'New note', title: _('New note'), icon: noteIcon, userInfo },
+		{ type: 'New to-do', title: _('New to-do'), icon: todoIcon, userInfo },
 	]);
 
 	const handleQuickAction = (data: TData) => {
