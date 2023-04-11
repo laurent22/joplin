@@ -11,6 +11,7 @@
 	],
 	"compilerOptions": {
 		"types": [
+			"jest",
 			"node"
 		]
 	}
