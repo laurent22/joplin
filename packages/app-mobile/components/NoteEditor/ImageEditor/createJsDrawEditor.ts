@@ -1,5 +1,5 @@
 
-import Editor, { Color4, EditorEventType, EditorSettings, getLocalizationTable, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
+import Editor, { AbstractComponent, BackgroundComponent, EditorEventType, EditorSettings, Erase, getLocalizationTable, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
 import 'js-draw/bundledStyles';
 
 declare namespace ReactNativeWebView {
@@ -125,14 +125,16 @@ const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
 };
 
 export const applyTemplateToEditor = (editor: Editor, templateData: string) => {
-	let backgroundColor = Color4.transparent;
+	let backgroundComponent: AbstractComponent|null = null;
 	let imageSize = editor.getImportExportRect().size;
 
 	try {
 		const templateJSON = JSON.parse(templateData);
 
-		if ('backgroundColor' in templateJSON) {
-			backgroundColor = Color4.fromString(templateJSON.backgroundColor);
+		if ('backgroundData' in templateJSON) {
+			backgroundComponent = AbstractComponent.deserialize(
+				templateJSON['backgroundData']
+			);
 		}
 
 		if ('imageSize' in templateJSON) {
@@ -142,10 +144,21 @@ export const applyTemplateToEditor = (editor: Editor, templateData: string) => {
 		console.error('Warning: Invalid image template data: ', e);
 	}
 
-	const backgroundColorCommand = editor.setBackgroundColor(backgroundColor);
-	const imageSizeCommand = editor.setImportExportRect(new Rect2(0, 0, imageSize.x, imageSize.y));
+	if (backgroundComponent) {
+		// Remove the old background (if any)
+		const previousBackground = editor.image.getBackgroundComponents();
+		if (previousBackground.length > 0) {
+			const removeBackgroundCommand = new Erase(previousBackground);
+			void editor.dispatchNoAnnounce(removeBackgroundCommand, false);
+		}
 
-	void editor.dispatchNoAnnounce(backgroundColorCommand, false);
+		// Add the new background
+		const addBackgroundCommand = editor.image.addElement(backgroundComponent);
+		void editor.dispatchNoAnnounce(addBackgroundCommand, false);
+	}
+
+	// Set the image size
+	const imageSizeCommand = editor.setImportExportRect(new Rect2(0, 0, imageSize.x, imageSize.y));
 	void editor.dispatchNoAnnounce(imageSizeCommand, false);
 };
 
@@ -164,9 +177,17 @@ export const watchTemplateChanges = (
 			return Math.max(Math.min(component, maxDimen), minDimen);
 		});
 
+		// Find the topmost background component (if any)
+		let backgroundComponent: BackgroundComponent|null = null;
+		for (const component of editor.image.getBackgroundComponents()) {
+			if (component instanceof BackgroundComponent) {
+				backgroundComponent = component;
+			}
+		}
+
 		const templateData = {
 			imageSize: imageSize.xy,
-			backgroundColor: editor.estimateBackgroundColor().toHexString(),
+			backgroundData: backgroundComponent?.serialize(),
 		};
 		return JSON.stringify(templateData);
 	};

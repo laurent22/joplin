@@ -1444,7 +1444,7 @@ class Setting extends BaseModel {
 			},
 
 			'imageeditor.imageTemplate': {
-				value: '{ "backgroundColor": "rgba(150, 150, 150, 0.1)" }',
+				value: '{ }',
 				type: SettingItemType.String,
 				public: false,
 				appTypes: [AppType.Mobile],
