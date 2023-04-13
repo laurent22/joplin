@@ -1,0 +1,15 @@
+#joplin-plugin-content {
+  width: fit-content;
+  background-color: var(--joplin-background-color);
+  color: var(--joplin-color);
+}
+
+#backuperror {
+  width: fit-content;
+  display: block;
+  flex-direction: column;
+  min-width: 300px;
+  overflow-wrap: break-word;
+  font-size: var(--joplin-font-size);
+  font-family: var(--joplin-font-family);
+}

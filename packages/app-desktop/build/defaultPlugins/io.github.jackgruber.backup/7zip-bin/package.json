@@ -1,0 +1,20 @@
+{
+  "name": "7zip-bin",
+  "description": "7-Zip precompiled binaries",
+  "version": "5.1.1",
+  "files": [
+    "*.js",
+    "7x.sh",
+    "index.d.ts",
+    "linux",
+    "mac",
+    "win"
+  ],
+  "license": "MIT",
+  "repository": "develar/7zip-bin",
+  "keywords": [
+    "7zip",
+    "7z",
+    "7za"
+  ]
+}

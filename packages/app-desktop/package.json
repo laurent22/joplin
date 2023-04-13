@@ -5,7 +5,7 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "yarn run bundleDefaultPlugins && yarn run electronRebuild && npx electron-builder",
+    "dist": "yarn run electronRebuild && npx electron-builder",
     "bundleDefaultPlugins": "cd ../tools && node bundleDefaultPlugins.js",
     "build": "gulp build",
     "postinstall": "yarn run build",
@@ -93,7 +93,8 @@
         ]
       },
       "binaries": [
-        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/plugin.jpl"
+        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/7zip-bin/mac/arm64/7za",
+        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/7zip-bin/mac/x64/7za"
       ]
     },
     "linux": {
