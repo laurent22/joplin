@@ -213,8 +213,11 @@ export default class JoplinServerApi {
 			const loadResponseJson = async () => {
 				if (!responseText) return null;
 				if (responseJson_) return responseJson_;
-				responseJson_ = JSON.parse(responseText);
-				if (!responseJson_) throw newError('Cannot parse JSON response', response.status);
+				try {
+					responseJson_ = JSON.parse(responseText);
+				} catch (error) {
+					throw newError(`Cannot parse JSON response: ${error} Response plain text: ${responseText}`, response.status);
+				}
 				return responseJson_;
 			};
 
