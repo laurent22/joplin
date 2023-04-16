@@ -1,7 +1,9 @@
 const React = require('react');
-const { Text, Modal, View, StyleSheet, Button } = require('react-native');
+const { Text, View, StyleSheet, Button } = require('react-native');
 const { themeStyle } = require('./global-style.js');
 const { _ } = require('@joplin/lib/locale');
+
+import Modal from './Modal';
 
 class ModalDialog extends React.Component {
 	constructor() {
@@ -30,6 +32,7 @@ class ModalDialog extends React.Component {
 				margin: 20,
 				padding: 10,
 				borderRadius: 5,
+				elevation: 10,
 			},
 			modalContentWrapper2: {
 				flex: 1,
@@ -58,17 +61,15 @@ class ModalDialog extends React.Component {
 
 		return (
 			<View style={this.styles().modalWrapper}>
-				<Modal transparent={true} visible={true} onRequestClose={() => {}}>
-					<View elevation={10} style={this.styles().modalContentWrapper}>
-						<Text style={this.styles().title}>{this.props.title}</Text>
-						<View style={this.styles().modalContentWrapper2}>{ContentComponent}</View>
-						<View style={this.styles().buttonRow}>
-							<View style={{ flex: 1 }}>
-								<Button disabled={!buttonBarEnabled} title={_('OK')} onPress={this.props.onOkPress}></Button>
-							</View>
-							<View style={{ flex: 1, marginLeft: 5 }}>
-								<Button disabled={!buttonBarEnabled} title={_('Cancel')} onPress={this.props.onCancelPress}></Button>
-							</View>
+				<Modal transparent={true} visible={true} onRequestClose={() => {}} containerStyle={this.styles().modalContentWrapper}>
+					<Text style={this.styles().title}>{this.props.title}</Text>
+					<View style={this.styles().modalContentWrapper2}>{ContentComponent}</View>
+					<View style={this.styles().buttonRow}>
+						<View style={{ flex: 1 }}>
+							<Button disabled={!buttonBarEnabled} title={_('OK')} onPress={this.props.onOkPress}></Button>
+						</View>
+						<View style={{ flex: 1, marginLeft: 5 }}>
+							<Button disabled={!buttonBarEnabled} title={_('Cancel')} onPress={this.props.onCancelPress}></Button>
 						</View>
 					</View>
 				</Modal>
