@@ -4978,7 +4978,7 @@ __metadata:
     react-native-image-picker: 5.3.1
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
-    react-native-paper: 5.5.1
+    react-native-paper: 5.5.2
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -27441,9 +27441,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.5.1":
-  version: 5.5.1
-  resolution: "react-native-paper@npm:5.5.1"
+"react-native-paper@npm:5.5.2":
+  version: 5.5.2
+  resolution: "react-native-paper@npm:5.5.2"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.8
     color: ^3.1.2
@@ -27453,7 +27453,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: d4034074772657dc5be617adca4112402bcf344c3dcddb7763f64209f8a449ab2198484e53ece55136ad226e29360592cfc873172cbf093844788e2fed42521e
+  checksum: fd87b64409e51a2a8c64019710c79c17d6dd016ea3744d869e9aa6a891093418ca6a2326f8ab063ef460d781459b8ed676952a030e64acf8312bc4d05a4c50eb
   languageName: node
   linkType: hard
 
