@@ -1,0 +1,30 @@
+diff --git a/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java b/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
+index a8abd71..ffe9c2c 100644
+--- a/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
++++ b/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
+@@ -591,7 +591,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+ //                    ignored.printStackTrace();
+                 }
+ 
+-                RNFetchBlobFileResp rnFetchBlobFileResp = (RNFetchBlobFileResp) responseBody;
++                RNFetchBlobFileResp rnFetchBlobFileResp = new RNFetchBlobFileResp(responseBody);
+ 
+                 if(rnFetchBlobFileResp != null && !rnFetchBlobFileResp.isDownloadComplete()){
+                     callback.invoke("Download interrupted.", null);
+diff --git a/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/Response/RNFetchBlobFileResp.java b/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/Response/RNFetchBlobFileResp.java
+index 2470eef..965f8be 100644
+--- a/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/Response/RNFetchBlobFileResp.java
++++ b/node_modules/rn-fetch-blob/android/src/main/java/com/RNFetchBlob/Response/RNFetchBlobFileResp.java
+@@ -35,6 +35,12 @@ public class RNFetchBlobFileResp extends ResponseBody {
+     FileOutputStream ofStream;
+     boolean isEndMarkerReceived;
+ 
++    // ref: https://github.com/joltup/rn-fetch-blob/issues/490#issuecomment-990899440
++    public RNFetchBlobFileResp(ResponseBody body) {
++        super();
++        this.originalBody = body;
++    }
++
+     public RNFetchBlobFileResp(ReactApplicationContext ctx, String taskId, ResponseBody body, String path, boolean overwrite) throws IOException {
+         super();
+         this.rctContext = ctx;
