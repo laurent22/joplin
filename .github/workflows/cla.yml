@@ -7,6 +7,7 @@ on:
 
 jobs:
   CLAAssistant:
+    if: github.repository == 'laurent22/joplin'
     runs-on: ubuntu-latest
     steps:
       - name: "CLA Assistant"
