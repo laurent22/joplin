@@ -4,7 +4,7 @@ import { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
-import { FolderEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 
 const { _ } = require('@joplin/lib/locale');
@@ -15,7 +15,7 @@ interface NoteListProps {
 	themeId: string;
 	dispatch: (action: any)=> void;
 	notesSource: string;
-	items: any[];
+	items: NoteEntity[];
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
 	selectedFolderId?: string;
@@ -38,7 +38,7 @@ class NoteListComponent extends Component<NoteListProps> {
 		this.createNotebookButton_click = this.createNotebookButton_click.bind(this);
 	}
 
-	public styles() {
+	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
