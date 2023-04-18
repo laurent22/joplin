@@ -1,10 +1,11 @@
 const React = require('react');
 
-import { connect } from 'react-redux';
 import { Component } from 'react';
+
+import { connect } from 'react-redux';
+import { FlatList, Text, StyleSheet, Button, View, Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
-import { FlatList, Text, StyleSheet, Button, View, Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import Setting from '@joplin/lib/models/Setting';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
@@ -19,7 +20,7 @@ interface NoteListProps {
 	themeId: string;
 	dispatch: (action: any)=> void;
 	notesSource: string;
-	items: any[];
+	items: NoteEntity[];
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
 	selectedFolderId?: string;
@@ -32,7 +33,7 @@ interface AdditionalNoteItemProps {
 }
 
 interface NoteListState {
-	items: any[];
+	items: NoteEntity[];
 	selectedItemIds: string[];
 }
 
@@ -56,7 +57,7 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 		this.createNotebookButton_click = this.createNotebookButton_click.bind(this);
 	}
 
-	public styles() {
+	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
