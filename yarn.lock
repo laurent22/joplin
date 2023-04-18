@@ -4978,7 +4978,7 @@ __metadata:
     react-native-image-picker: 5.3.1
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
-    react-native-paper: 5.5.0
+    react-native-paper: 5.5.2
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -27441,9 +27441,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.5.0":
-  version: 5.5.0
-  resolution: "react-native-paper@npm:5.5.0"
+"react-native-paper@npm:5.5.2":
+  version: 5.5.2
+  resolution: "react-native-paper@npm:5.5.2"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.8
     color: ^3.1.2
@@ -27453,7 +27453,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 1d433e5d48462a8a6477d979f7c9ae44278dfaf713d5f57ff218cfbd8d6f6556d42ace6d01cce410a922157242bd61f92bdf87e0cbd84c6231f1ab369af1777b
+  checksum: fd87b64409e51a2a8c64019710c79c17d6dd016ea3744d869e9aa6a891093418ca6a2326f8ab063ef460d781459b8ed676952a030e64acf8312bc4d05a4c50eb
   languageName: node
   linkType: hard
 
@@ -28787,6 +28787,16 @@ __metadata:
     base-64: 0.1.0
     glob: 7.0.6
   checksum: 56e5832be583e97d58f955c0c4f6dcb0eb62c97dde331182c6effb726253731cb555d4a5f6c81079ed2fcb957f81633cbe95b37d326d063405f912506de20ff4
+  languageName: node
+  linkType: hard
+
+"rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::locator=root%40workspace%3A.":
+  version: 0.12.0
+  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=9431c2&locator=root%40workspace%3A."
+  dependencies:
+    base-64: 0.1.0
+    glob: 7.0.6
+  checksum: 6535ee347b3e76733a10c3873c14622b35613caa86242536b68f130b75a3379d9bb060ad5c8832d78e639c88869e321c288e5c8e89373cdb0c14f23253c31c50
   languageName: node
   linkType: hard
 
