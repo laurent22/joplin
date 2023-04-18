@@ -143,14 +143,14 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 
 		const onOpen = (side: 'left' | 'right') => {
 			if (side === 'left') {
+				if (currentSwipeable) {
+					currentSwipeable.close();
+				}
+
 				this.props.dispatch({
 					type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
 					id: note.id,
 				});
-
-				if (currentSwipeable) {
-					currentSwipeable.close();
-				}
 			}
 		};
 
@@ -175,10 +175,6 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 				/>
 			</View>
 		);
-
-		if (this.props.noteSelectionEnabled) {
-			return noteContent;
-		}
 
 		return (
 			<Swipeable renderLeftActions={renderLeftActions} onSwipeableOpen={onOpen} ref={(swipeable) => currentSwipeable = swipeable}>
