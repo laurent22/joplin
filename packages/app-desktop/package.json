@@ -93,7 +93,8 @@
         ]
       },
       "binaries": [
-        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/plugin.jpl"
+        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/7zip-bin/mac/arm64/7za",
+        "Contents/Resources/build/defaultPlugins/io.github.jackgruber.backup/7zip-bin/mac/x64/7za"
       ]
     },
     "linux": {
