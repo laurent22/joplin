@@ -48,6 +48,15 @@ const StyledFoldersHolder = styled.div`
 	}}
 	}
 `;
+const TagsHolder = styled.div`
+	// linux bug: https://github.com/laurent22/joplin/issues/8000
+	// solution ref: https://github.com/laurent22/joplin/issues/7506#issuecomment-1447101057
+	& a.list-item {
+		${shim.isLinux() && {
+		opacity: 1,
+	}}
+	}
+`;
 
 interface Props {
 	themeId: number;
@@ -738,9 +747,9 @@ const SidebarComponent = (props: Props) => {
 		tagItemsOrder_.current = result.order;
 
 		items.push(
-			<div className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
+			<TagsHolder className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
 				{tagItems}
-			</div>
+			</TagsHolder>
 		);
 	}
 
