@@ -73,6 +73,20 @@ export const downloadPlugins = async (localPluginsVersions: PluginAndVersion, de
 	return downloadedPluginsNames;
 };
 
+// Mac app signing/notarizing fails if the binaries are inside an archive (plugin.jpl)
+// Contents of plugin.jpl are unzipped just for Mac so that binary signing passes through
+// ref: https://github.com/laurent22/joplin/pull/8048, https://github.com/laurent22/joplin/pull/8040
+const extractMacPlugins = async (defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName) => {
+	if (process.platform !== 'darwin') return;
+
+	for (const pluginId in downloadedPluginsNames) {
+		const pluginDirectory = `${defaultPluginDir}/${pluginId}`;
+		const archivePath = `${pluginDirectory}/plugin.jpl`;
+		await execCommand(`tar xzf ${archivePath} --directory ${pluginDirectory}`, { quiet: true, splitCommandOptions: { handleEscape: false } });
+		await remove(archivePath);
+	}
+};
+
 async function start(): Promise<void> {
 	const defaultPluginDir = join(__dirname, '..', '..', 'packages', 'app-desktop', 'build', 'defaultPlugins');
 	const defaultPluginsInfo = getDefaultPluginsInfo();
@@ -85,21 +99,6 @@ async function start(): Promise<void> {
 	const downloadedPluginNames: PluginIdAndName = await downloadPlugins(localPluginsVersions, defaultPluginsInfo, manifests);
 	await extractPlugins(__dirname, defaultPluginDir, downloadedPluginNames);
 	await extractMacPlugins(defaultPluginDir, downloadedPluginNames);
-}
-
-// Mac app signing/notarizing fails if the binaries are inside an archive (plugin.jpl)
-// Contents of plugin.jpl are unzipped just for Mac so that binary signing passes through
-// ref: https://github.com/laurent22/joplin/pull/8048
-// ref: https://github.com/laurent22/joplin/pull/8040
-async function extractMacPlugins(defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName) {
-	if (process.platform !== 'darwin') return;
-
-	for (const pluginId in downloadedPluginsNames) {
-		const pluginDirectory = `${defaultPluginDir}/${pluginId}`;
-		const archivePath = `${pluginDirectory}/plugin.jpl`;
-		await execCommand(`tar xzf ${archivePath} --directory ${pluginDirectory}`, { quiet: true, splitCommandOptions: { handleEscape: false } });
-		await remove(archivePath);
-	}
 }
 
 if (require.main === module) {
