@@ -641,8 +641,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				resourceInfos: props.resourceInfos,
 				contentMaxWidth: props.contentMaxWidth,
 				mapsToLine: true,
-				// Always using useCustomPdfViewer for now, we can add a new setting for it in future if we need to.
-				useCustomPdfViewer: props.useCustomPdfViewer,
+				// turning off custom pdf viewer; ref: https://github.com/laurent22/joplin/issues/8028
+				useCustomPdfViewer: false,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
 			}));

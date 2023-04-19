@@ -7,6 +7,8 @@ import { ContextMenuItemType, ContextMenuOptions } from './NoteEditor/utils/cont
 import CommandService from '@joplin/lib/services/CommandService';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = new Entities().encode;
 
 const Window = styled.div`
 	height: 100%;
@@ -17,12 +19,6 @@ const Window = styled.div`
     z-index: 999;
     background-color: ${(props: any) => props.theme.backgroundColor};
 	color: ${(props: any) => props.theme.color};
-	`;
-
-const IFrame = styled.iframe`
-	height: 100%;
-    width: 100%;
-    border: none;
 	`;
 
 interface Props {
@@ -93,13 +89,12 @@ export default function PdfViewer(props: Props) {
 
 	const theme = themeStyle(props.themeId);
 
+	const escapedResourcePath = htmlentities(Resource.fullPath(props.resource));
+	const escapedMime = htmlentities('application/pdf');
+
 	return (
 		<Window theme={theme}>
-			<IFrame src="./vendor/lib/@joplin/pdf-viewer/index.html" x-url={Resource.fullPath(props.resource)}
-				x-appearance={theme.appearance} ref={iframeRef}
-				x-title={props.resource.title}
-				x-anchorpage={props.pageNo}
-				x-type="full"></IFrame>
+			<object data={escapedResourcePath} className="media-player media-pdf" type={escapedMime}></object>;
 		</Window>
 	);
 }
