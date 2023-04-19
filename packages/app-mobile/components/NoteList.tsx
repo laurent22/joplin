@@ -196,12 +196,18 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 							{this.renderNoteItem(item, { drag, isActive })}
 						</ScaleDecorator>)}
 						keyExtractor={item => item.id}
-						onDragEnd={async ({ data, to }) => {
+						onDragEnd={async ({ data, to, from }) => {
 							if (this.props.selectedFolderId) {
 								this.setState({ items: data });
 
 								if (this.props.onSorted) {
-									this.props.onSorted(data[to].id, to);
+									let newIndex = to;
+
+									if (to > from) {
+										newIndex++;
+									}
+
+									this.props.onSorted(data[to].id, newIndex);
 								}
 							}
 						}}
