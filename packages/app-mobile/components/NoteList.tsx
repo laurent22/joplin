@@ -204,7 +204,7 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 									let newIndex = to;
 
 									if (to > from) {
-										newIndex++;
+										newIndex += 2;
 									}
 
 									this.props.onSorted(data[to].id, newIndex);
