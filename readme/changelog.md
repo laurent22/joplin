@@ -1521,6 +1521,43 @@ IMPORTANT: If you use the Clipper API, please note that there are a few breaking
 - Fixed: Fixed toggleNoteList and toggleSidebar commands
 - Fixed: Fixed Toggle Editor button toolip and icon
 
+## [v1.3.9](https://github.com/laurent22/joplin/releases/tag/v1.3.9) (Pre-release) - 2020-10-23T16:04:26Z
+
+- New: Added `openProfileDirectory` command and menu item
+- Improved: Make “update is available” dialog box easier to use ([#3877](https://github.com/laurent22/joplin/issues/3877) by [@roryokane](https://github.com/roryokane))
+- Improved: Sort tags in a case-insensitive way
+- Fixed: Fix invalid tag state issue when importing notes or syncing
+- Fixed: Fix search filters when language is in Korean or with accents ([#3947](https://github.com/laurent22/joplin/issues/3947) by Naveen M V)
+- Fixed: Fixed Cut menu item
+
+* * *
+
+- New: Add support for application plugins ([#3257](https://github.com/laurent22/joplin/issues/3257))
+- New: Added Thunderbird count for desktop client ([#3880](https://github.com/laurent22/joplin/issues/3880) by [@Technik-J](https://github.com/Technik-J))
+- New: Added support for Menu API for plugins
+- New: Added support for plugins packaged as JS bundles
+- Improved: Display more info while an ENEX file is being imported
+- Improved: Made toolbar buttons bigger and swap order of bullet and number lists
+- Improved: Api: Allow preserving timestamps when updating a note
+- Improved: Added support for a custom S3 URL ([#3921](https://github.com/laurent22/joplin/issues/3921)) ([#3691](https://github.com/laurent22/joplin/issues/3691) by [@aaron](https://github.com/aaron))
+- Improved: Actually enter insert mode after pressing o/O in CodeMirror vim mode ([#3897](https://github.com/laurent22/joplin/issues/3897) by Caleb John)
+- Improved: Simplified and improve command service, and added command palette
+- Improved: Tray: Exit -> Quit ([#3945](https://github.com/laurent22/joplin/issues/3945) by Helmut K. C. Tessarek)
+- Improved: Import `<strike>`, `<s>` tags (strikethrough) from Evernote ([#3936](https://github.com/laurent22/joplin/issues/3936) by Ian Slinger)
+- Improved: Make sidebar item font weight normal (not bold)
+- Improved: Plugin API - added support for settings.globalValue method
+- Improved: Remove Hide Joplin menu item on Linux and Windows
+- Improved: Removed OneDrive Dev sync target which was not really useful
+- Improved: Allow setting note geolocation attributes via API ([#3884](https://github.com/laurent22/joplin/issues/3884))
+- Improved: Disabled emoji highlighting in editor when emoji plugin is disabled ([#3852](https://github.com/laurent22/joplin/issues/3852) by Rahil Sarvaiya)
+- Improved: Sort search results by average of multiple criteria, including 'Sort notes by' field setting ([#3777](https://github.com/laurent22/joplin/issues/3777) by [@shawnaxsom](https://github.com/shawnaxsom))
+- Fixed: Fixed freeze when importing ENEX as HTML, and fixed potential error when importing resources ([#3958](https://github.com/laurent22/joplin/issues/3958))
+- Fixed: Fixed setting issue that would cause a password to be saved in plain text in the database, even when the keychain is working
+- Fixed: Fixed sidebar performance issue when there are many notebooks or tags ([#3893](https://github.com/laurent22/joplin/issues/3893))
+- Fixed: Allows toggling external editing off and on again ([#3886](https://github.com/laurent22/joplin/issues/3886))
+- Fixed: Fixed toggleNoteList and toggleSidebar commands
+- Fixed: Fixed Toggle Editor button toolip and icon
+
 ## [v1.3.8](https://github.com/laurent22/joplin/releases/tag/v1.3.8) (Pre-release) - 2020-10-21T18:46:29Z
 
 - New: Plugins: Added support for content scripts
@@ -2066,13 +2103,6 @@ This release is to remove the hierarchical/nested tags feature for now, as it ha
 - Fixed: Fix getLineSpan logic and list token regex logic ([#3365](https://github.com/laurent22/joplin/issues/3365) by [@CalebJohn](https://github.com/CalebJohn))
 - Fixed: Fixed various bugs related to the import of ENEX files as HTML
 - Fixed: Prevent desktop.ini file from breaking sync lock ([#3381](https://github.com/laurent22/joplin/issues/3381))
-
-## [v1.0.220](https://github.com/laurent22/joplin/releases/tag/v1.0.220) - 2020-06-13T18:26:22Z
-
-- Improved: Improved escaping of Markdown titles in links ([#3333](https://github.com/laurent22/joplin/issues/3333))
-- Improved: Refactored themes to allow using the same ones in both desktop and mobile version
-- Fixed: Fixed issue with setting filename for edited attachments
-- Fixed: Prevent notebook to be the parent of itself ([#3334](https://github.com/laurent22/joplin/issues/3334))
 
 ## [v1.0.220](https://github.com/laurent22/joplin/releases/tag/v1.0.220) - 2020-06-13T18:26:22Z
 
