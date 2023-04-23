@@ -20,7 +20,6 @@ enum SearchType {
 
 interface SearchOptions {
 	searchType: SearchType;
-	fuzzy: boolean;
 }
 
 export default class SearchEngine {
