@@ -698,6 +698,7 @@ packages/lib/services/searchengine/SearchFilter.test.js
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.test.js
 packages/lib/services/searchengine/gotoAnythingStyleQuery.js
+packages/lib/services/searchengine/gotoAnythingStyleQuery.test.js
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/ShareService.test.js
