@@ -392,6 +392,7 @@ packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
+packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js

@@ -1,29 +1,32 @@
 {
-	"name": "@joplin/utils",
-	"version": "2.10.0",
-	"description": "Utilities for Joplin",
-	"repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
-	"exports": {
-		".": "./dist/index.js",
-		"./net": "./dist/net.js"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"scripts": {
-		"tsc": "tsc --project tsconfig.json",
-		"watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-		"test": "jest --verbose=false",
-		"test-ci": "yarn test"
-	},
-	"author": "",
-	"license": "AGPL-3.0-or-later",
-	"dependencies": {
-		"execa": "5.1.1"
-	},
-	"devDependencies": {
-		"@types/jest": "29.5.0",
-		"jest": "29.5.0",
-		"ts-jest": "29.0.5"
-	}
+  "name": "@joplin/utils",
+  "version": "2.11.0",
+  "description": "Utilities for Joplin",
+  "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
+  "exports": {
+    ".": "./dist/index.js",
+    "./net": "./dist/net.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "test": "jest --verbose=false",
+    "test-ci": "yarn test"
+  },
+  "author": "",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "execa": "5.1.1",
+    "fs-extra": "11.1.1",
+    "node-fetch": "2.6.7"
+  },
+  "devDependencies": {
+    "@types/jest": "29.5.0",
+    "@types/node-fetch": "2.6.2",
+    "jest": "29.5.0",
+    "ts-jest": "29.0.5"
+  }
 }
