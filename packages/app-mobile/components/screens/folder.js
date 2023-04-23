@@ -134,7 +134,7 @@ const FolderScreen = connect(state => {
 
 const styles = StyleSheet.create({
 	folderPickerContainer: {
-		height: 42,
+		height: 46,
 		paddingLeft: 14,
 		paddingRight: 14,
 		paddingTop: 12,
