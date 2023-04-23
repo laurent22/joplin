@@ -1,12 +1,9 @@
 const React = require('react');
-
-import { Component } from 'react';
-
+const { Component } = require('react');
 import { connect } from 'react-redux';
-import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
+const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
-
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
 const { themeStyle } = require('./global-style.js');
@@ -22,8 +19,8 @@ interface NoteListProps {
 }
 
 class NoteListComponent extends Component<NoteListProps> {
-	private rootRef_: FlatList;
-	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
+	private rootRef_: any;
+	private styles_: Record<string, any>;
 
 	public constructor(props: NoteListProps) {
 		super(props);
@@ -84,10 +81,10 @@ class NoteListComponent extends Component<NoteListProps> {
 
 		if (this.props.items.length) {
 			return <FlatList
-				ref={ref => (this.rootRef_ = ref)}
+				ref={(ref: any) => (this.rootRef_ = ref)}
 				data={this.props.items}
-				renderItem={({ item }) => <NoteItem note={item} />}
-				keyExtractor={item => item.id}
+				renderItem={(event: any) => <NoteItem note={event.item} />}
+				keyExtractor={(item: any) => item.id}
 			/>;
 		} else {
 			if (!this.props.folders.length) {
@@ -114,6 +111,6 @@ const NoteList = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 	};
-})(NoteListComponent);
+})(NoteListComponent as any);
 
 export default NoteList;
