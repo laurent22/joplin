@@ -384,6 +384,7 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js
 packages/app-mobile/components/NoteEditor/types.js
+packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
@@ -698,6 +699,7 @@ packages/lib/services/searchengine/SearchFilter.test.js
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.test.js
 packages/lib/services/searchengine/gotoAnythingStyleQuery.js
+packages/lib/services/searchengine/gotoAnythingStyleQuery.test.js
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/ShareService.test.js
@@ -859,6 +861,8 @@ packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateNews.js
 packages/tools/website/utils/applyTranslations.js
 packages/tools/website/utils/applyTranslations.test.js
+packages/tools/website/utils/convertLinksToLocale.js
+packages/tools/website/utils/convertLinksToLocale.test.js
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/news.js
 packages/tools/website/utils/openGraph.js
