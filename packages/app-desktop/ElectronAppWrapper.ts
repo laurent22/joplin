@@ -371,12 +371,13 @@ export default class ElectronAppWrapper {
 		if (alreadyRunning) return;
 
 		const splash = await this.createSplashScreen();
-		this.createWindow();
 
 		ipcMain.on('hide-splash', () => {
 			splash.destroy();
 			this.win_.show();
 		});
+
+		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
