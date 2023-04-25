@@ -45,6 +45,7 @@ import libCommands from '@joplin/lib/commands/index';
 import { homedir } from 'os';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const electronContextMenu = require('./services/electron-context-menu');
+const ipcRenderer = require('electron').ipcRenderer;
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = mainScreenCommands
@@ -492,7 +493,9 @@ class Application extends BaseApplication {
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
 			// Keep it hidden
 		} else {
-			bridge().window().show();
+			// bridge().window().show();
+			// splash screen will be hidden and main window will be shown on 'hide-splash' event
+			ipcRenderer.send('hide-splash');
 		}
 
 		void ShareService.instance().maintenance();
