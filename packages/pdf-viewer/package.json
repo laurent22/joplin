@@ -9,12 +9,12 @@
     "access": "restricted"
   },
   "scripts": {
-    "tsc": "tsc --project tsconfig.json",
-    "watch": "webpack --watch --config webpack.config.js --mode=development",
-    "build": "webpack --config webpack.config.js --mode=production",
-    "test": "jest",
-    "test-ci": "yarn test",
-    "postinstall": "yarn build"
+    "tsc_DISABLED": "tsc --project tsconfig.json",
+    "watch_DISABLED": "webpack --watch --config webpack.config.js --mode=development",
+    "build_DISABLED": "webpack --config webpack.config.js --mode=production",
+    "test_DISABLED": "jest",
+    "test-ci_DISABLED": "yarn test",
+    "postinstall_DISABLED": "yarn build"
   },
   "author": "Joplin",
   "license": "AGPL-3.0-or-later",

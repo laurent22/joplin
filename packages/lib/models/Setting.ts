@@ -1384,7 +1384,7 @@ class Setting extends BaseModel {
 			useCustomPdfViewer: {
 				value: false,
 				type: SettingItemType.Bool,
-				public: true,
+				public: false,
 				advanced: true,
 				appTypes: [AppType.Desktop],
 				label: () => 'Use custom PDF viewer (Beta)',

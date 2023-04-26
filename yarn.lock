@@ -4644,7 +4644,6 @@ __metadata:
     "@fortawesome/fontawesome-free": 5.15.4
     "@joeattardi/emoji-button": 4.6.4
     "@joplin/lib": ~2.10
-    "@joplin/pdf-viewer": ~2.10
     "@joplin/renderer": ~2.10
     "@joplin/tools": ~2.10
     "@testing-library/react-hooks": 8.0.1
@@ -4948,7 +4947,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/pdf-viewer@workspace:packages/pdf-viewer, @joplin/pdf-viewer@~2.10":
+"@joplin/pdf-viewer@workspace:packages/pdf-viewer":
   version: 0.0.0-use.local
   resolution: "@joplin/pdf-viewer@workspace:packages/pdf-viewer"
   dependencies:
