@@ -37,5 +37,5 @@ export default function(props: Props): any {
 		};
 	}, [styleSheetContent]);
 
-	return <div style={{ display: 'none' }}></div>;
+	return null; // <div style={{ display: 'none' }}></div>;
 }

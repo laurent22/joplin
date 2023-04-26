@@ -1,5 +1,4 @@
 import shim from '../shim';
-const { useEffect } = shim.react();
 
 export interface AsyncEffectEvent {
 	cancelled: boolean;
@@ -8,6 +7,8 @@ export interface AsyncEffectEvent {
 export type EffectFunction = (event: AsyncEffectEvent)=> Promise<void>;
 
 export default function(effect: EffectFunction, dependencies: any[]) {
+	const { useEffect } = shim.react();
+
 	useEffect(() => {
 		const event: AsyncEffectEvent = { cancelled: false };
 		void effect(event);

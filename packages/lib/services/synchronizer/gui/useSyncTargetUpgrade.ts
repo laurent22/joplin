@@ -3,7 +3,6 @@ import MigrationHandler from '../MigrationHandler';
 import Setting from '../../../models/Setting';
 import { reg } from '../../../registry';
 import { appTypeToLockType } from '../LockHandler';
-const { useEffect, useState } = shim.react();
 
 export interface SyncTargetUpgradeResult {
 	done: boolean;
@@ -11,6 +10,8 @@ export interface SyncTargetUpgradeResult {
 }
 
 export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
+	const { useEffect, useState } = shim.react();
+
 	const [upgradeResult, setUpgradeResult] = useState({
 		done: false,
 		error: null,

@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
-import { itemAnchorRef } from '../NoteList';
+import itemAnchorRef from '../itemAnchorRef';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementNoteList',

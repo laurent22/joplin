@@ -1,5 +1,4 @@
 import shim from '../shim';
-const { useCallback, useEffect, useState } = shim.react();
 import useEventListener from './useEventListener';
 
 interface Size {
@@ -8,6 +7,8 @@ interface Size {
 }
 
 function useElementSize(elementRef: any): Size {
+	const { useCallback, useEffect, useState } = shim.react();
+
 	const [size, setSize] = useState({
 		width: 0,
 		height: 0,

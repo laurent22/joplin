@@ -109,6 +109,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "@joplin/tools": "~2.11",
+    "@rollup/plugin-commonjs": "24.1.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.2.6",
     "@types/node": "18.11.18",
@@ -126,6 +127,7 @@
     "js-sha512": "0.8.0",
     "nan": "2.17.0",
     "react-test-renderer": "18.2.0",
+    "rollup": "3.21.0",
     "typescript": "4.9.4"
   },
   "optionalDependencies": {

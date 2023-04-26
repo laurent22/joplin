@@ -9,11 +9,12 @@ import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchroniz
 import MasterKey from '../../models/MasterKey';
 import { reg } from '../../registry';
 import Setting from '../../models/Setting';
-const { useCallback, useEffect, useState } = shim.react();
 
 type PasswordChecks = Record<string, boolean>;
 
 export const useStats = () => {
+	const { useEffect, useState } = shim.react();
+
 	const [stats, setStats] = useState<EncryptedItemsStats>({ encrypted: null, total: null });
 	const [statsUpdateTime, setStatsUpdateTime] = useState<number>(0);
 
@@ -75,6 +76,7 @@ export const dontReencryptData = () => {
 };
 
 export const useToggleShowDisabledMasterKeys = () => {
+	const { useState } = shim.react();
 	const [showDisabledMasterKeys, setShowDisabledMasterKeys] = useState<boolean>(false);
 
 	const toggleShowDisabledMasterKeys = () => {
@@ -109,6 +111,8 @@ export const onMasterPasswordSave = (masterPasswordInput: string) => {
 };
 
 export const useInputMasterPassword = (masterKeys: MasterKeyEntity[], activeMasterKeyId: string) => {
+	const { useCallback, useState } = shim.react();
+
 	const [inputMasterPassword, setInputMasterPassword] = useState<string>('');
 
 	const onMasterPasswordSave = useCallback(async () => {
@@ -128,6 +132,8 @@ export const useInputMasterPassword = (masterKeys: MasterKeyEntity[], activeMast
 };
 
 export const useInputPasswords = (propsPasswords: Record<string, string>) => {
+	const { useCallback, useEffect, useState } = shim.react();
+
 	const [inputPasswords, setInputPasswords] = useState<Record<string, string>>(propsPasswords);
 
 	useEffect(() => {
@@ -147,6 +153,8 @@ export const useInputPasswords = (propsPasswords: Record<string, string>) => {
 };
 
 export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKeyId: string, masterPassword: string, passwords: Record<string, string>) => {
+	const { useState } = shim.react();
+
 	const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({});
 
 	// "masterPasswordKeys" are the master key that can be decrypted with the

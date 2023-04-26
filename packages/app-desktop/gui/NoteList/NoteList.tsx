@@ -19,6 +19,7 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import { Props } from './types';
 import usePrevious from '../hooks/usePrevious';
+import itemAnchorRef, { itemAnchorRefs_ } from './itemAnchorRef';
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -30,15 +31,6 @@ const StyledRoot = styled.div`
 	background-color: ${(props: any) => props.theme.backgroundColor3};
 	border-right: 1px solid ${(props: any) => props.theme.dividerColor};
 `;
-
-const itemAnchorRefs_: any = {
-	current: {},
-};
-
-export const itemAnchorRef = (itemId: string) => {
-	if (itemAnchorRefs_.current[itemId] && itemAnchorRefs_.current[itemId].current) return itemAnchorRefs_.current[itemId].current;
-	return null;
-};
 
 const NoteListComponent = (props: Props) => {
 	const [dragOverTargetNoteIndex, setDragOverTargetNoteIndex] = useState(null);

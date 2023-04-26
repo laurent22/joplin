@@ -1,11 +1,12 @@
 import shim from '../shim';
-const { useEffect, useRef } = shim.react();
 
 function useEventListener(
 	eventName: any,
 	handler: any,
 	element?: any
 ) {
+	const { useEffect, useRef } = shim.react();
+
 	// Create a ref that stores handler
 	const savedHandler = useRef();
 

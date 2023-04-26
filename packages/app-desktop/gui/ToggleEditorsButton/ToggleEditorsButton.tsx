@@ -1,17 +1,6 @@
 import * as React from 'react';
 import styles_ from './styles';
-import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-
-export enum Value {
-	Markdown = 'markdown',
-	RichText = 'richText',
-}
-
-export interface Props {
-	themeId: number;
-	value: Value;
-	toolbarButtonInfo: ToolbarButtonInfo;
-}
+import { Props } from './types';
 
 export default function ToggleEditorsButton(props: Props) {
 	const style = styles_(props);

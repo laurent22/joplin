@@ -258,6 +258,7 @@ packages/app-desktop/gui/NoteEditor/utils/useWindowCommandHandler.js
 packages/app-desktop/gui/NoteList/NoteList.js
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
+packages/app-desktop/gui/NoteList/itemAnchorRef.js
 packages/app-desktop/gui/NoteList/types.js
 packages/app-desktop/gui/NoteListControls/NoteListControls.js
 packages/app-desktop/gui/NoteListControls/commands/focusSearch.js
@@ -310,6 +311,7 @@ packages/app-desktop/gui/TagItem.js
 packages/app-desktop/gui/TagList.js
 packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.js
 packages/app-desktop/gui/ToggleEditorsButton/styles/index.js
+packages/app-desktop/gui/ToggleEditorsButton/types.js
 packages/app-desktop/gui/ToolbarBase.js
 packages/app-desktop/gui/ToolbarButton/ToolbarButton.js
 packages/app-desktop/gui/ToolbarButton/styles/index.js

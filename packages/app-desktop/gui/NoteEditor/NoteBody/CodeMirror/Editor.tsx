@@ -32,52 +32,84 @@ import Setting from '@joplin/lib/models/Setting';
 
 // import eventManager from '@joplin/lib/eventManager';
 
-import { reg } from '@joplin/lib/registry';
+// import { reg } from '@joplin/lib/registry';
 
-// Based on http://pypl.github.io/PYPL.html
-const topLanguages = [
-	'python',
-	'clike',
-	'javascript',
-	'jsx',
-	'php',
-	'r',
-	'swift',
-	'go',
-	'vb',
-	'vbscript',
-	'ruby',
-	'rust',
-	'dart',
-	'lua',
-	'groovy',
-	'perl',
-	'cobol',
-	'julia',
-	'haskell',
-	'pascal',
-	'css',
+require('codemirror/mode/python/python');
+require('codemirror/mode/clike/clike');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/jsx/jsx');
+require('codemirror/mode/php/php');
+require('codemirror/mode/r/r');
+require('codemirror/mode/swift/swift');
+require('codemirror/mode/go/go');
+require('codemirror/mode/vb/vb');
+require('codemirror/mode/vbscript/vbscript');
+require('codemirror/mode/ruby/ruby');
+require('codemirror/mode/rust/rust');
+require('codemirror/mode/dart/dart');
+require('codemirror/mode/lua/lua');
+require('codemirror/mode/groovy/groovy');
+require('codemirror/mode/perl/perl');
+require('codemirror/mode/cobol/cobol');
+require('codemirror/mode/julia/julia');
+require('codemirror/mode/haskell/haskell');
+require('codemirror/mode/pascal/pascal');
+require('codemirror/mode/css/css');
 
-	// Additional languages, not in the PYPL list
-	'xml', // For HTML too
-	'markdown',
-	'yaml',
-	'shell',
-	'dockerfile',
-	'diff',
-	'erlang',
-	'sql',
-];
-// Load Top Modes
-for (let i = 0; i < topLanguages.length; i++) {
-	const mode = topLanguages[i];
+// Additional languages, not in the PYPL list
+require('codemirror/mode/xml/xml'); // For HTML too
+require('codemirror/mode/markdown/markdown');
+require('codemirror/mode/yaml/yaml');
+require('codemirror/mode/shell/shell');
+require('codemirror/mode/dockerfile/dockerfile');
+require('codemirror/mode/diff/diff');
+require('codemirror/mode/erlang/erlang');
+require('codemirror/mode/sql/sql');
 
-	if (CodeMirror.modeInfo.find((m: any) => m.mode === mode)) {
-		require(`codemirror/mode/${mode}/${mode}`);
-	} else {
-		reg.logger().error('Cannot find CodeMirror mode: ', mode);
-	}
-}
+// // Based on http://pypl.github.io/PYPL.html
+// const topLanguages = [
+// 	'python',
+// 	'clike',
+// 	'javascript',
+// 	'jsx',
+// 	'php',
+// 	'r',
+// 	'swift',
+// 	'go',
+// 	'vb',
+// 	'vbscript',
+// 	'ruby',
+// 	'rust',
+// 	'dart',
+// 	'lua',
+// 	'groovy',
+// 	'perl',
+// 	'cobol',
+// 	'julia',
+// 	'haskell',
+// 	'pascal',
+// 	'css',
+
+// 	// Additional languages, not in the PYPL list
+// 	'xml', // For HTML too
+// 	'markdown',
+// 	'yaml',
+// 	'shell',
+// 	'dockerfile',
+// 	'diff',
+// 	'erlang',
+// 	'sql',
+// ];
+// // Load Top Modes
+// for (let i = 0; i < topLanguages.length; i++) {
+// 	const mode = topLanguages[i];
+
+// 	if (CodeMirror.modeInfo.find((m: any) => m.mode === mode)) {
+// 		require(`codemirror/mode/${mode}/${mode}`);
+// 	} else {
+// 		reg.logger().error('Cannot find CodeMirror mode: ', mode);
+// 	}
+// }
 
 export interface EditorProps {
 	value: string;

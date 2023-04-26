@@ -3,12 +3,15 @@
 // Disable React message in console "Download the React DevTools for a better development experience"
 // https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
 // eslint-disable-next-line no-undef
-__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
-	supportsFiber: true,
-	inject: function() {},
-	onCommitFiberRoot: function() {},
-	onCommitFiberUnmount: function() {},
-};
+if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
+	// eslint-disable-next-line no-undef
+	__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+		supportsFiber: true,
+		inject: function() {},
+		onCommitFiberRoot: function() {},
+		onCommitFiberUnmount: function() {},
+	};
+}
 
 const app = require('./app').default;
 const Folder = require('@joplin/lib/models/Folder').default;

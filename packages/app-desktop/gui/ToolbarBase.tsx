@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ToolbarButton from './ToolbarButton/ToolbarButton';
-import ToggleEditorsButton, { Value } from './ToggleEditorsButton/ToggleEditorsButton';
+import ToggleEditorsButton from './ToggleEditorsButton/ToggleEditorsButton';
+import { Value } from './ToggleEditorsButton/types';
 import ToolbarSpace from './ToolbarSpace';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
