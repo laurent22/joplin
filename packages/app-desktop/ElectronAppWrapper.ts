@@ -374,7 +374,6 @@ export default class ElectronAppWrapper {
 
 		ipcMain.on('hide-splash', () => {
 			splash.destroy();
-			this.win_.show();
 		});
 
 		this.createWindow();

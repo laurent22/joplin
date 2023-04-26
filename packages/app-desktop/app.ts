@@ -490,12 +490,12 @@ class Application extends BaseApplication {
 			void AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
 
+		ipcRenderer.send('hide-splash');
+
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
 			// Keep it hidden
 		} else {
-			// bridge().window().show();
-			// splash screen will be hidden and main window will be shown on 'hide-splash' event
-			ipcRenderer.send('hide-splash');
+			bridge().window().show();
 		}
 
 		void ShareService.instance().maintenance();
