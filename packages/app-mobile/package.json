@@ -25,7 +25,7 @@
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/datetimepicker": "6.7.5",
     "@react-native-community/geolocation": "2.1.0",
-    "@react-native-community/netinfo": "9.3.8",
+    "@react-native-community/netinfo": "9.3.9",
     "@react-native-community/push-notification-ios": "1.10.1",
     "@react-native-community/slider": "4.4.2",
     "assert-browserify": "2.0.0",
