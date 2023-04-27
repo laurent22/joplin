@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.10.15](https://github.com/laurent22/joplin/releases/tag/v2.10.15) (Pre-release) - 2023-04-26T22:02:16Z
+
+- Improved: Remove custom PDF viewer to reduce application size ([#8028](https://github.com/laurent22/joplin/issues/8028))
+- Improved: Compress installer to reduce size ([#8068](https://github.com/laurent22/joplin/issues/8068)) ([#8028](https://github.com/laurent22/joplin/issues/8028))
+
 ## [v2.10.13](https://github.com/laurent22/joplin/releases/tag/v2.10.13) (Pre-release) - 2023-04-03T16:53:46Z
 
 - Fixed: Encode the non-ASCII characters in OneDrive URI ([#7868](https://github.com/laurent22/joplin/issues/7868)) ([#7851](https://github.com/laurent22/joplin/issues/7851) by Self Not Found)
