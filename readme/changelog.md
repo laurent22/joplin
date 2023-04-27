@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v2.10.16](https://github.com/laurent22/joplin/releases/tag/v2.10.16) (Pre-release) - 2023-04-27T09:27:45Z
+
+- Improved: Revert to "normal" package compression ([2e2feab](https://github.com/laurent22/joplin/commit/2e2feab))
+
 ## [v2.10.15](https://github.com/laurent22/joplin/releases/tag/v2.10.15) (Pre-release) - 2023-04-26T22:02:16Z
 
 - Improved: Remove custom PDF viewer to reduce application size ([#8028](https://github.com/laurent22/joplin/issues/8028))
