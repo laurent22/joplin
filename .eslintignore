@@ -410,6 +410,7 @@ packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
+packages/app-mobile/components/screens/VoskScreen.js
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Notes.js

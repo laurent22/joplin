@@ -57,6 +57,7 @@ import RevisionService from '@joplin/lib/services/RevisionService';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 import NotesScreen from './components/screens/Notes';
+import VoskScreen from './components/screens/VoskScreen';
 const { TagsScreen } = require('./components/screens/tags.js');
 import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
@@ -961,6 +962,7 @@ class AppComponent extends React.Component {
 		}
 
 		const appNavInit = {
+			Vosk: { screen: VoskScreen },
 			Notes: { screen: NotesScreen },
 			Note: { screen: NoteScreen },
 			Tags: { screen: TagsScreen },

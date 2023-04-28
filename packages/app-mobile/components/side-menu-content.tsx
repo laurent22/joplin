@@ -237,6 +237,15 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
+	const voskButton_press = () => {
+		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Vosk',
+		});
+	};
+
 	const performSync = useCallback(async () => {
 		const action = props.syncStarted ? 'cancel' : 'start';
 
@@ -412,6 +421,7 @@ const SideMenuContentComponent = (props: Props) => {
 		items.push(makeDivider('divider_1'));
 
 		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'md-folder-open', newFolderButton_press));
+		items.push(renderSidebarButton('vosk_button', 'Vosk', 'md-folder-open', voskButton_press));
 
 		items.push(renderSidebarButton('tag_button', _('Tags'), 'md-pricetag', tagButton_press));
 
