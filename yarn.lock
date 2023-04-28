@@ -4981,7 +4981,7 @@ __metadata:
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
-    react-native-safe-area-context: 4.5.0
+    react-native-safe-area-context: 4.5.1
     react-native-securerandom: 1.0.1
     react-native-share: 8.2.1
     react-native-side-menu-updated: 1.3.2
@@ -27477,13 +27477,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:4.5.0":
-  version: 4.5.0
-  resolution: "react-native-safe-area-context@npm:4.5.0"
+"react-native-safe-area-context@npm:4.5.1":
+  version: 4.5.1
+  resolution: "react-native-safe-area-context@npm:4.5.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 958df1d20492aa89c23d746f88409a3a3bd1b0d397c80310a4b0bbec9888cbbeb7579c9c92dad46841e2e6536491806206228ba009b7c8af970670aef8273a30
+  checksum: 5eb4e8d57f0fd072cbef74c7a31685149590706a3b0a05d7598fdbf6aa69707d09e9fb44494d2aa93c5f4ec9b669da10476b5e858f6b92d1d4290c3f94e43c4b
   languageName: node
   linkType: hard
 
