@@ -2,9 +2,9 @@
 
 Joplin as a project is organised around three main components:
 
-- The user applications (desktop, mobile and CLI)
-- Joplin Server
-- Web Clipper
+- The user applications: For [desktop](https://github.com/laurent22/joplin/blob/dev/readme/desktop.md), [mobile](https://github.com/laurent22/joplin/blob/dev/readme/mobile.md) and [CLI](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md))
+- [Joplin Server](https://github.com/laurent22/joplin/blob/dev/packages/server/README.md)
+- [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md)
 
 ## User applications
 
@@ -16,7 +16,7 @@ The overall architecture for each application is as such:
 
 - Back end: This is shared by all applications. It is made of:
 
-	- Services: Provide high-level functionalities, such as the search engine, plugin system or database driver.
+	- Services: Provide high-level functionalities, such as the [search engine](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/searchengine), [plugin system](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/plugins) or [synchroniser](https://github.com/laurent22/joplin/blob/dev/packages/lib/Synchronizer.ts).
 
 	- Models: The model layer sits between the services and database. They provide a higher level abstraction than SQL and utility functions to easily save data, such as notes, notebooks, etc.
 
