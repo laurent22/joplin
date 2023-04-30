@@ -5345,7 +5345,7 @@ __metadata:
     dayjs: 1.11.7
     execa: 4.1.0
     fs-extra: 11.1.1
-    gettext-extractor: 3.7.0
+    gettext-extractor: 3.7.1
     gettext-parser: 6.0.0
     glob: 8.1.0
     gulp: 4.0.2
@@ -17366,9 +17366,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-extractor@npm:3.7.0":
-  version: 3.7.0
-  resolution: "gettext-extractor@npm:3.7.0"
+"gettext-extractor@npm:3.7.1":
+  version: 3.7.1
+  resolution: "gettext-extractor@npm:3.7.1"
   dependencies:
     "@types/glob": 5 - 7
     "@types/parse5": ^5
@@ -17376,8 +17376,8 @@ __metadata:
     glob: 5 - 7
     parse5: 5 - 6
     pofile: 1.0.x
-    typescript: 2 - 4
-  checksum: 5a471e06619944f10d224ef2c718cdc6748824142241141bfd2177f5ddf57e5d138b1066509d75f2123018428494e93db60e1b659bef15c301799139403efd74
+    typescript: 4 - 5
+  checksum: c78b07ab602c1cc97260f0e8ae4f947e5a06b8151581dd2c50e719f7ba79abc1686eb05cf443392ae7b5ab339083614e1d3476a3744d22d43e87a647e8d0f904
   languageName: node
   linkType: hard
 
@@ -32198,13 +32198,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:2 - 4":
-  version: 4.5.2
-  resolution: "typescript@npm:4.5.2"
+"typescript@npm:4 - 5":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 74f9ce65d532bdf5d0214b3f60cf37992180023388c87a11ee6f838a803067ef0b63c600fa501b0deb07f989257dce1e244c9635ed79feca40bbccf6e0aa1ebc
+  checksum: 82b94da3f4604a8946da585f7d6c3025fff8410779e5bde2855ab130d05e4fd08938b9e593b6ebed165bda6ad9292b230984f10952cf82f0a0ca07bbeaa08172
   languageName: node
   linkType: hard
 
@@ -32238,13 +32238,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@2 - 4#~builtin<compat/typescript>":
-  version: 4.5.2
-  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=bcec9a"
+"typescript@patch:typescript@4 - 5#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=ad5954"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e25e689eba64f7da7cfc43f8ea76cac7176b56caba42655f0a4cb29c0b7c36e67ca54f33df95902859f56108464245d8b45bcdfe21e3d66d9560feb8db780246
+  checksum: 6a1fe9a77bb9c5176ead919cc4a1499ee63e46b4e05bf667079f11bf3a8f7887f135aa72460a4c3b016e6e6bb65a822cb8689a6d86cbfe92d22cc9f501f09213
   languageName: node
   linkType: hard
 
