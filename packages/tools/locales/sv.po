@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:657
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -131,9 +133,8 @@ msgstr "%d anteckningar matchar det här mönstret. Ta bort dem?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -215,11 +216,11 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd "
-"\"toggle\" för att växla mellan givna uppgifter mellan slutförda och inte "
-"slutförda tillstånd (Om målet är en vanlig anteckning kommer den att "
-"konverteras till en att-göra). Använd \"clear\" för att konvertera uppgiften "
-"att-göra tillbaka till en vanlig anteckning."
+"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd \"toggle"
+"\" för att växla mellan givna uppgifter mellan slutförda och inte slutförda "
+"tillstånd (Om målet är en vanlig anteckning kommer den att konverteras till "
+"en att-göra). Använd \"clear\" för att konvertera uppgiften att-göra "
+"tillbaka till en vanlig anteckning."
 
 #: packages/lib/models/Setting.ts:1371
 msgid "A3"
@@ -326,6 +327,8 @@ msgstr "Avancerade verktyg"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"All data, inklusive anteckningar, anteckningsböcker och taggar kommer att "
+"tas bort permanent."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
 #: packages/app-mobile/components/screens/Notes.tsx:203
@@ -361,8 +364,8 @@ msgstr ""
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Tvetydig anteckningsbok \"%s\". Använd kort anteckningsbok-id istället - "
 "tryck på \"ti\" för att se det korta anteckningsbok-id:t"
@@ -392,6 +395,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Är du säker på att du vill återgå till standardlayouten? Den nuvarande "
+"layoutkonfigurationen kommer att gå förlorad."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -600,9 +605,8 @@ msgid "Cannot find \"%s\"."
 msgstr "Det går inte att hitta \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "Det går inte att hitta \"%s\"."
+msgstr "Det går inte att hitta: \"%s\"."
 
 #: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
@@ -750,9 +754,8 @@ msgid "Close"
 msgstr "Stäng"
 
 #: packages/app-mobile/components/Dropdown.tsx:166
-#, fuzzy
 msgid "Close dropdown"
-msgstr "Stäng fönster"
+msgstr "Stäng rullgardinsmenyn"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:596
@@ -864,7 +867,7 @@ msgstr "Konflikter (bilagor)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Konsoliderad fakturering"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 msgid "Content provided by %s"
@@ -872,7 +875,7 @@ msgstr "Innehåll tillhandahålls av %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "Fortsätt"
 
 #: packages/app-mobile/components/screens/Note.tsx:930
 msgid "Convert to note"
@@ -977,9 +980,8 @@ msgstr ""
 "Felet var: \"%s\""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "Det gick inte att installera insticksmodul: %s"
+msgstr "Det gick inte att byta profil: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -995,16 +997,15 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
 msgid "Could not verify your identify"
-msgstr ""
+msgstr "Det gick inte att verifiera din identitet"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "Skapa"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Skapar en ny anteckningsbok."
+msgstr "Skapa en ny anteckningsbok under en överordnad anteckningsbok."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1228,9 +1229,8 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Ta bort insticksmodulen \"%s\"?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "Ta bort anteckningen \"%s\"?"
+msgstr "Ta bort profilen \"%s\""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:420
 msgid "Delete selected notes"
@@ -1249,9 +1249,8 @@ msgstr ""
 "anteckningsboken."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "Ta bort dessa %d anteckningar?"
+msgstr "Ta bort denna profil?"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1496,9 +1495,8 @@ msgid "Edit notebook"
 msgstr "Redigera anteckningsbok"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "Exportera profil"
+msgstr "Redigera profil"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1590,7 +1588,7 @@ msgstr "Aktivera ljudspelare"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Aktivera biometrisk autentisering?"
 
 #: packages/lib/models/Setting.ts:1146
 msgid "Enable deflist syntax"
@@ -1643,7 +1641,7 @@ msgstr "Aktivera mjuk radbrytning"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Aktivera stavningskontroll i textredigeraren"
 
 #: packages/lib/models/Setting.ts:1143
 msgid "Enable table of contents extension"
@@ -2308,7 +2306,7 @@ msgstr "Objekt som inte kan synkroniseras"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Följ oss på Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2561,9 +2559,8 @@ msgid "Manage multiple users"
 msgstr "Hantera flera användare"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
-#, fuzzy
 msgid "Manage profiles"
-msgstr "Uppdatera profil"
+msgstr "Hantera profiler"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2650,9 +2647,8 @@ msgid "Missing required argument: %s"
 msgstr "Saknade obligatoriskt argument: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "Saknade obligatoriskt argument: %s"
+msgstr ""
 
 #: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
@@ -2829,9 +2825,8 @@ msgid "Not generated"
 msgstr "Inte skapad"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:70
-#, fuzzy
 msgid "Not now"
-msgstr "Gör det nu"
+msgstr "Inte nu"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
@@ -3021,7 +3016,7 @@ msgstr "Öppna PDF-visare"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
-msgstr "Öppna profilmappen"
+msgstr "Öppna profilmapp"
 
 #: packages/lib/models/Setting.ts:429
 msgid "Open Sync Wizard..."
@@ -3095,7 +3090,7 @@ msgstr "Klistra in"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "Klistra in som text"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3123,8 +3118,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
-"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan "
-"\"%s\" nedan."
+"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan \"%s"
+"\" nedan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid ""
@@ -3296,9 +3291,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
-#, fuzzy
 msgid "Profile name"
-msgstr "Profilnamn:"
+msgstr "Profilnamn"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3309,9 +3303,8 @@ msgid "Profile Version: %s"
 msgstr "Profilversion: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profiler"
 
 #: packages/app-mobile/components/screens/Note.tsx:944
 msgid "Properties"
@@ -3462,9 +3455,8 @@ msgid "Replace: "
 msgstr "Ersätt: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "Ändra programmets layout"
+msgstr "Återställ applikationslayout"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3942,9 +3934,8 @@ msgid "Stop external editing"
 msgstr "Stoppa extern redigering"
 
 #: packages/lib/utils/joplinCloud.ts:129
-#, fuzzy
 msgid "Storage space"
-msgstr "%d GB lagringsutrymme"
+msgstr "Lagringsutrymme"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4144,6 +4135,8 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"Den aktiva profilen kan inte raderas. Byt till en annan profil och försök "
+"igen."
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4207,7 +4200,7 @@ msgstr "Standardkrypteringsmetoden har ändrats, du bör omkryptera dina data."
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "Standardprofilen kan inte tas bort"
 
 #: packages/lib/models/Setting.ts:1366
 msgid ""
@@ -4357,6 +4350,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"WebDAV-implementeringen av %s är inkompatibel med Joplin och stöds därför "
+"inte längre. Använd en annan synkroniseringsmetod."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4370,7 +4365,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:341
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "Det finns ändringar som inte har sparats."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
@@ -4596,6 +4591,7 @@ msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
+"För att byta profil kommer appen att stängas och du måste starta om den."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:651
 msgid ""
@@ -4836,7 +4832,7 @@ msgstr "Användning: %s"
 
 #: packages/lib/models/Setting.ts:1640
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Använd biometri för att säkra åtkomsten till appen"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4877,6 +4873,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"Använd din biometri för att säkra åtkomsten till din applikation. Du kan "
+"alltid ställa in det senare i Inställningar."
 
 #: packages/lib/models/Setting.ts:1244
 msgid ""
@@ -4912,7 +4910,7 @@ msgstr "Giltig"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:25
 msgid "Verify your identity"
-msgstr ""
+msgstr "Verifiera din identitet"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"

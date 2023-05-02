@@ -138,7 +138,6 @@
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
     "@joplin/lib": "~2.11",
-    "@joplin/pdf-viewer": "~2.11",
     "@joplin/renderer": "~2.11",
     "async-mutex": "0.4.0",
     "codemirror": "5.65.9",
