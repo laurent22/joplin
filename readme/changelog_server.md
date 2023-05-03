@@ -1,5 +1,26 @@
 # Joplin Server Changelog
 
+## [server-v2.10.11](https://github.com/laurent22/joplin/releases/tag/server-v2.10.11) - 2023-03-17T17:50:13Z
+
+- Improved: Updated packages nodemon (v2.0.21)
+
+## [server-v2.10.10](https://github.com/laurent22/joplin/releases/tag/server-v2.10.10) - 2023-03-09T14:37:07Z
+
+- Improved: Clean up share logic (107f2e1)
+
+## [server-v2.10.8](https://github.com/laurent22/joplin/releases/tag/server-v2.10.8) - 2023-02-09T18:24:27Z
+
+- Fixed: Fixed sharing issue when a user no longer has a user item associated with their account (293f621)
+
+## [server-v2.10.7](https://github.com/laurent22/joplin/releases/tag/server-v2.10.7) - 2023-02-09T15:57:31Z
+
+- Fixed: Fixed sharing issue for changes that are associated with deleted items (05c17fb)
+
+## [server-v2.10.6](https://github.com/laurent22/joplin/releases/tag/server-v2.10.6) - 2023-02-06T19:01:36Z
+
+- New: Add in ability to use Postgres connection string in configuration (#6836 by [@halkeye](https://github.com/halkeye))
+- Fixed: Fixed issue when an item is associated with a share that no longer exists (ba5f0bc)
+
 ## [server-v2.10.5](https://github.com/laurent22/joplin/releases/tag/server-v2.10.5) - 2022-12-26T12:09:13Z
 
 - Fixed: Fixed regression that would prevent styles from being loaded in published notes (#7525)

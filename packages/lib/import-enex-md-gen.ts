@@ -587,7 +587,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			parent: null,
 		};
 
-		saxStream.on('error', function(e: any) {
+		saxStream.on('error', (e: any) => {
 			console.warn(e);
 		});
 
@@ -615,7 +615,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			return output;
 		};
 
-		saxStream.on('text', function(text: string) {
+		saxStream.on('text', (text: string) => {
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
 
 			text = !state.inPre ? unwrapInnerText(text) : text;
@@ -923,7 +923,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			}
 		});
 
-		saxStream.on('closetag', function(n: string) {
+		saxStream.on('closetag', (n: string) => {
 			n = n ? n.toLowerCase() : n;
 
 			const poppedTag = state.tags.pop();
@@ -1121,9 +1121,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			}
 		});
 
-		saxStream.on('attribute', function() {});
+		saxStream.on('attribute', () => {});
 
-		saxStream.on('end', function() {
+		saxStream.on('end', () => {
 			resolve({
 				content: section,
 				resources: remainingResources,

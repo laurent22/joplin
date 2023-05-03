@@ -1,27 +1,45 @@
-const { reg } = require('../../registry.js');
-const Folder = require('../../models/Folder').default;
-const BaseModel = require('../../BaseModel').default;
-const Note = require('../../models/Note').default;
-const Resource = require('../../models/Resource').default;
-const ResourceFetcher = require('../../services/ResourceFetcher').default;
-const DecryptionWorker = require('../../services/DecryptionWorker').default;
-const Setting = require('../../models/Setting').default;
-const Mutex = require('async-mutex').Mutex;
+import { NoteEntity } from '../../services/database/types';
+import { reg } from '../../registry';
+import Folder from '../../models/Folder';
+import BaseModel from '../../BaseModel';
+import Note from '../../models/Note';
+import Resource from '../../models/Resource';
+import ResourceFetcher from '../../services/ResourceFetcher';
+import DecryptionWorker from '../../services/DecryptionWorker';
+import Setting from '../../models/Setting';
+import { Mutex } from 'async-mutex';
 
-const shared = {};
+interface Shared {
+	noteExists?: (noteId: string)=> Promise<boolean>;
+	handleNoteDeletedWhileEditing_?: (note: NoteEntity)=> Promise<NoteEntity>;
+	saveNoteButton_press?: (comp: any, folderId: string, options: any)=> Promise<void>;
+	saveOneProperty?: (comp: any, name: string, value: any)=> void;
+	noteComponent_change?: (comp: any, propName: string, propValue: any)=> void;
+	clearResourceCache?: ()=> void;
+	attachedResources?: (noteBody: string)=> Promise<any>;
+	isModified?: (comp: any)=> boolean;
+	initState?: (comp: any)=> void;
+	toggleIsTodo_onPress?: (comp: any)=> void;
+	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
+	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> void;
+	installResourceHandling?: (refreshResourceHandler: any)=> void;
+	uninstallResourceHandling?: (refreshResourceHandler: any)=> void;
+}
+
+const shared: Shared = {};
 
 // If saveNoteButton_press is called multiple times in short intervals, it might result in
 // the same new note being created twice, so we need to a mutex to access this function.
 const saveNoteMutex_ = new Mutex();
 
-shared.noteExists = async function(noteId) {
-	const existingNote = await Note.load(noteId);
+shared.noteExists = async function(noteId: string) {
+	const existingNote = await Note.load(noteId) as NoteEntity;
 	return !!existingNote;
 };
 
 // Note has been deleted while user was modifying it. In that case, we
 // just save a new note so that user can keep editing.
-shared.handleNoteDeletedWhileEditing_ = async (note) => {
+shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 	if (await shared.noteExists(note.id)) return null;
 
 	reg.logger().info('Note has been deleted while it was being edited - recreating it.');
@@ -33,7 +51,7 @@ shared.handleNoteDeletedWhileEditing_ = async (note) => {
 	return Note.load(newNote.id);
 };
 
-shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
+shared.saveNoteButton_press = async function(comp: any, folderId: string = null, options: any = null) {
 	options = Object.assign({}, {
 		autoTitle: true,
 	}, options);
@@ -90,7 +108,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		note.body = stateNote.body;
 	}
 
-	const newState = {
+	const newState: any = {
 		lastSavedNote: Object.assign({}, note),
 		note: note,
 	};
@@ -102,8 +120,9 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	comp.setState(newState);
 
 	if (isProvisionalNote) {
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		Note.updateGeolocation(note.id).then(geoNote => {
+		const updateGeoloc = async () => {
+			const geoNote: NoteEntity = await Note.updateGeolocation(note.id);
+
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
@@ -121,19 +140,22 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
-		});
+		};
+
+		// We don't wait because it can be done in the background
+		void updateGeoloc();
 	}
 
 	releaseMutex();
 };
 
-shared.saveOneProperty = async function(comp, name, value) {
+shared.saveOneProperty = async function(comp: any, name: string, value: any) {
 	let note = Object.assign({}, comp.state.note);
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
 	if (recreatedNote) note = recreatedNote;
 
-	let toSave = { id: note.id };
+	let toSave: any = { id: note.id };
 	toSave[name] = value;
 	toSave = await Note.save(toSave);
 	note[name] = toSave[name];
@@ -144,8 +166,8 @@ shared.saveOneProperty = async function(comp, name, value) {
 	});
 };
 
-shared.noteComponent_change = function(comp, propName, propValue) {
-	const newState = {};
+shared.noteComponent_change = function(comp: any, propName: string, propValue: any) {
+	const newState: any = {};
 
 	const note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
@@ -154,17 +176,17 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 	comp.setState(newState);
 };
 
-let resourceCache_ = {};
+let resourceCache_: any = {};
 
 shared.clearResourceCache = function() {
 	resourceCache_ = {};
 };
 
-shared.attachedResources = async function(noteBody) {
+shared.attachedResources = async function(noteBody: string) {
 	if (!noteBody) return {};
 	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
 
-	const output = {};
+	const output: any = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
 
@@ -188,14 +210,14 @@ shared.attachedResources = async function(noteBody) {
 	return output;
 };
 
-shared.isModified = function(comp) {
+shared.isModified = function(comp: any) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.initState = async function(comp) {
+shared.initState = async function(comp: any) {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
@@ -214,7 +236,7 @@ shared.initState = async function(comp) {
 		mode: mode,
 		folder: folder,
 		isLoading: false,
-		fromShare: comp.props.sharedData ? true : false,
+		fromShare: !!comp.props.sharedData,
 		noteResources: await shared.attachedResources(note ? note.body : ''),
 	});
 
@@ -243,13 +265,13 @@ shared.initState = async function(comp) {
 	comp.lastLoadedNoteId_ = note.id;
 };
 
-shared.toggleIsTodo_onPress = function(comp) {
+shared.toggleIsTodo_onPress = function(comp: any) {
 	const newNote = Note.toggleIsTodo(comp.state.note);
 	const newState = { note: newNote };
 	comp.setState(newState);
 };
 
-function toggleCheckboxLine(ipcMessage, noteBody) {
+function toggleCheckboxLine(ipcMessage: string, noteBody: string) {
 	const newBody = noteBody.split('\n');
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
@@ -285,29 +307,29 @@ function toggleCheckboxLine(ipcMessage, noteBody) {
 	return [newBody, lineIndex, line];
 }
 
-shared.toggleCheckboxRange = function(ipcMessage, noteBody) {
+shared.toggleCheckboxRange = function(ipcMessage: string, noteBody: string) {
 	const [lineIndex, line] = toggleCheckboxLine(ipcMessage, noteBody).slice(1);
 	const from = { line: lineIndex, ch: 0 };
-	const to = { line: lineIndex, ch: line.length };
+	const to = { line: lineIndex, ch: (line as any).length };
 	return { line, from, to };
 };
 
-shared.toggleCheckbox = function(ipcMessage, noteBody) {
+shared.toggleCheckbox = function(ipcMessage: string, noteBody: string) {
 	const [newBody, lineIndex, line] = toggleCheckboxLine(ipcMessage, noteBody);
-	newBody[lineIndex] = line;
-	return newBody.join('\n');
+	(newBody as any)[lineIndex as any] = line;
+	return (newBody as any).join('\n');
 };
 
-shared.installResourceHandling = function(refreshResourceHandler) {
+shared.installResourceHandling = function(refreshResourceHandler: any) {
 	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
 	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
 	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
 };
 
-shared.uninstallResourceHandling = function(refreshResourceHandler) {
+shared.uninstallResourceHandling = function(refreshResourceHandler: any) {
 	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
 	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
 	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
 };
 
-module.exports = shared;
+export default shared;

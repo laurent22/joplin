@@ -22,7 +22,7 @@ export default async function(config: StorageDriverConfig | number, db: DbConnec
 		...options,
 	};
 
-	let storageId: number = 0;
+	let storageId = 0;
 
 	if (typeof config === 'number') {
 		storageId = config;

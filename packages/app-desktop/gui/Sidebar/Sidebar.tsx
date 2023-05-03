@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useEffect, useRef, useCallback, useMemo } from 'react';
+import styled from 'styled-components';
+import shim from '@joplin/lib/shim';
 import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -37,6 +39,24 @@ const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 const { clipboard } = require('electron');
 
 const logger = Logger.create('Sidebar');
+
+const StyledFoldersHolder = styled.div`
+	// linux bug: https://github.com/laurent22/joplin/issues/7506#issuecomment-1447101057
+	& a.list-item {
+		${shim.isLinux() && {
+		opacity: 1,
+	}}
+	}
+`;
+const TagsHolder = styled.div`
+	// linux bug: https://github.com/laurent22/joplin/issues/8000
+	// solution ref: https://github.com/laurent22/joplin/issues/7506#issuecomment-1447101057
+	& a.list-item {
+		${shim.isLinux() && {
+		opacity: 1,
+	}}
+	}
+`;
 
 interface Props {
 	themeId: number;
@@ -271,7 +291,7 @@ const SidebarComponent = (props: Props) => {
 			new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder'))
 		);
 
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, []);
 
 	const itemContextMenu = useCallback(async (event: any) => {
@@ -423,7 +443,7 @@ const SidebarComponent = (props: Props) => {
 			}
 		}
 
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, [props.folders, props.dispatch, pluginsRef]);
 
 	const folderItem_click = useCallback((folderId: string) => {
@@ -705,13 +725,13 @@ const SidebarComponent = (props: Props) => {
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
 		items.push(
-			<div
+			<StyledFoldersHolder
 				className={`folders ${props.folderHeaderIsExpanded ? 'expanded' : ''}`}
 				key="folder_items"
 				style={foldersStyle}
 			>
 				{folderItems}
-			</div>
+			</StyledFoldersHolder>
 		);
 	}
 
@@ -727,9 +747,9 @@ const SidebarComponent = (props: Props) => {
 		tagItemsOrder_.current = result.order;
 
 		items.push(
-			<div className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
+			<TagsHolder className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
 				{tagItems}
-			</div>
+			</TagsHolder>
 		);
 	}
 

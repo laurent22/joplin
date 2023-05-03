@@ -1,5 +1,6 @@
-import { execCommand2, rootDir } from './tool-utils';
+import { rootDir } from './tool-utils';
 import * as moment from 'moment';
+import { execCommand } from '@joplin/utils';
 
 interface Argv {
 	dryRun?: boolean;
@@ -35,7 +36,7 @@ async function main() {
 	const buildDate = moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ssZ');
 	let revision = '';
 	try {
-		revision = await execCommand2('git rev-parse --short HEAD', { showStdout: false });
+		revision = await execCommand('git rev-parse --short HEAD', { showStdout: false });
 	} catch (error) {
 		console.info('Could not get git commit: metadata revision field will be empty');
 	}
@@ -62,16 +63,16 @@ async function main() {
 		return;
 	}
 
-	await execCommand2(dockerCommand);
+	await execCommand(dockerCommand);
 
 	for (const tag of dockerTags) {
-		await execCommand2(`docker tag "${repository}:${imageVersion}" "${repository}:${tag}"`);
-		if (pushImages) await execCommand2(`docker push ${repository}:${tag}`);
+		await execCommand(`docker tag "${repository}:${imageVersion}" "${repository}:${tag}"`);
+		if (pushImages) await execCommand(`docker push ${repository}:${tag}`);
 	}
 }
 
 if (require.main === module) {
-// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+	// eslint-disable-next-line promise/prefer-await-to-then
 	main().catch((error) => {
 		console.error('Fatal error');
 		console.error(error);

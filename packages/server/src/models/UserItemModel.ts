@@ -82,10 +82,10 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.where('user_items.user_id', '=', userId);
 	}
 
-	public async deleteByUserItem(userId: Uuid, itemId: Uuid): Promise<void> {
+	public async deleteByUserItem(userId: Uuid, itemId: Uuid, options: UserItemDeleteOptions = null): Promise<void> {
 		const userItem = await this.byUserAndItemId(userId, itemId);
 		if (!userItem) throw new ErrorNotFound(`No such user_item: ${userId} / ${itemId}`);
-		await this.deleteBy({ byUserItem: userItem });
+		await this.deleteBy({ ...options, byUserItem: userItem });
 	}
 
 	public async deleteByItemIds(itemIds: Uuid[], options: UserItemDeleteOptions = null): Promise<void> {

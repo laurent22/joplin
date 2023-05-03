@@ -40,7 +40,7 @@ function registerCommand(service: CommandService, cmd: TestCommand) {
 	service.registerRuntime(cmd.declaration.name, cmd.runtime);
 }
 
-describe('services_CommandService', function() {
+describe('services_CommandService', () => {
 
 	beforeEach(async () => {
 		KeymapService.destroyInstance();

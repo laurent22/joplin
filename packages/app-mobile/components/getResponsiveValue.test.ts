@@ -25,12 +25,12 @@ const testCases: testCase[] = [
 
 describe('getResponsiveValue', () => {
 
-	test('Should throw exception if value map is an empty object', () => {
+	test('should throw exception if value map is an empty object', () => {
 		const input = {};
 		expect(() => getResponsiveValue(input)).toThrow('valueMap cannot be an empty object!');
 	});
 
-	test('Should return correct values', () => {
+	test('should return correct values', () => {
 		const mockReturnValues = [
 			{ width: 400 },
 			{ width: 480 },

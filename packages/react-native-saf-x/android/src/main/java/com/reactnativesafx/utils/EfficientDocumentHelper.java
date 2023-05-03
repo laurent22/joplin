@@ -95,7 +95,7 @@ public class EfficientDocumentHelper {
 
       uri = Uri.fromFile(targetFile);
       return uri;
-    } else if (UriHelper.isDocumentUri(uri)) {
+    } else if (UriHelper.isDocumentUri(uri) || !DocumentsContract.isTreeUri(uri)) {
       // It's a document picked by user, nothing much we can do. operations limited.
       DocumentStat stat = null;
 

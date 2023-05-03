@@ -1103,7 +1103,7 @@ export class RawContextKey<T> extends ContextKeyDefinedExpr {
 
 	private readonly _defaultValue: T | undefined;
 
-	constructor(key: string, defaultValue: T | undefined) {
+	public constructor(key: string, defaultValue: T | undefined) {
 		super(key);
 		this._defaultValue = defaultValue;
 	}

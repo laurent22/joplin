@@ -8,7 +8,7 @@ import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 
 function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
-	useEffect(function() {
+	useEffect(() => {
 		async function onAppClose() {
 			let canClose = true;
 
@@ -38,7 +38,7 @@ function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 }
 
 function useStyle() {
-	useEffect(function() {
+	useEffect(() => {
 		const element = document.createElement('style');
 		element.appendChild(document.createTextNode(`
 			body {
@@ -62,7 +62,7 @@ function useStyle() {
 }
 
 function useRestartOnDone(upgradeResult: SyncTargetUpgradeResult) {
-	useEffect(function() {
+	useEffect(() => {
 		if (upgradeResult.done && !upgradeResult.error) {
 			void restart();
 		}

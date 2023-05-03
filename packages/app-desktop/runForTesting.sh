@@ -22,6 +22,8 @@
 
 # ./runForTesting.sh 1 createUsers,createData,reset,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 1
 
+# ./runForTesting.sh 1 createUsers,createData,reset,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 3 reset,sync && ./runForTesting.sh 1
+
 # ----------------------------------------------------------------------------------
 # To create two client profiles, in sync, both used by the same user:
 # ----------------------------------------------------------------------------------

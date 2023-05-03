@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledMessage = styled.div<{type: string}>`
+const StyledMessage = styled.div<{ type: string }>`
 	border-radius: 3px;
 	background-color: ${props => props.type === 'error' ? props.theme.warningBackgroundColor : 'transparent'};
 	font-size: ${props => props.theme.fontSize}px;

@@ -179,6 +179,8 @@ export interface RuleOptions {
 	noteId?: string;
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
+
+	platformName?: string;
 }
 
 export default class MdToHtml {
@@ -494,7 +496,7 @@ export default class MdToHtml {
 
 						const cacheKey = md5(`${str}_${lang}`);
 
-						if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
+						if (options.codeHighlightCacheKey && cacheKey in this.cachedHighlightedCode_) {
 							hlCode = this.cachedHighlightedCode_[cacheKey];
 						} else {
 							if (lang && hljs.getLanguage(lang)) {

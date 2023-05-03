@@ -37,7 +37,7 @@ const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const ImageResizer = require('react-native-image-resizer').default;
-const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
@@ -51,11 +51,11 @@ const emptyArray: any[] = [];
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
-	static navigationOptions(): any {
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	constructor() {
+	public constructor() {
 		super();
 		this.state = {
 			note: Note.new(),
@@ -148,6 +148,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					routeName: 'Notes',
 					folderId: this.state.note.parent_id,
 				});
+
+				ShareExtension.close();
 				return true;
 			}
 
@@ -278,7 +280,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	screenHeader_undoButtonPress() {
+	private screenHeader_undoButtonPress() {
 		if (this.useEditorBeta()) {
 			this.editorRef.current.undo();
 		} else {
@@ -286,7 +288,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	screenHeader_redoButtonPress() {
+	private screenHeader_redoButtonPress() {
 		if (this.useEditorBeta()) {
 			this.editorRef.current.redo();
 		} else {
@@ -294,13 +296,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	undoState(noteBody: string = null) {
+	public undoState(noteBody: string = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
 		};
 	}
 
-	styles() {
+	public styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -390,11 +392,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.styles_[cacheKey];
 	}
 
-	isModified() {
+	public isModified() {
 		return shared.isModified(this);
 	}
 
-	async requestGeoLocationPermissions() {
+	public async requestGeoLocationPermissions() {
 		if (!Setting.value('trackLocation')) return;
 
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
@@ -411,7 +413,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async componentDidMount() {
+	public async componentDidMount() {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
@@ -434,11 +436,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void this.requestGeoLocationPermissions();
 	}
 
-	onMarkForDownload(event: any) {
+	public onMarkForDownload(event: any) {
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
@@ -452,15 +454,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
 		shared.uninstallResourceHandling(this.refreshResource);
-
-		if (this.state.fromShare) {
-			ShareExtension.close();
-		}
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
 
@@ -469,13 +467,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
-	title_changeText(text: string) {
+	private title_changeText(text: string) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
 	}
 
-	body_changeText(text: string) {
+	private body_changeText(text: string) {
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -486,7 +484,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	body_selectionChange(event: any) {
+	private body_selectionChange(event: any) {
 		if (this.useEditorBeta()) {
 			this.selection = event.selection;
 		} else {
@@ -494,34 +492,34 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	makeSaveAction() {
+	public makeSaveAction() {
 		return async () => {
-			return shared.saveNoteButton_press(this);
+			return shared.saveNoteButton_press(this, null, null);
 		};
 	}
 
-	saveActionQueue(noteId: string) {
+	public saveActionQueue(noteId: string) {
 		if (!this.saveActionQueues_[noteId]) {
 			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
 		}
 		return this.saveActionQueues_[noteId];
 	}
 
-	scheduleSave() {
+	public scheduleSave() {
 		this.saveActionQueue(this.state.note.id).push(this.makeSaveAction());
 	}
 
-	async saveNoteButton_press(folderId: string = null) {
-		await shared.saveNoteButton_press(this, folderId);
+	private async saveNoteButton_press(folderId: string = null) {
+		await shared.saveNoteButton_press(this, folderId, null);
 
 		Keyboard.dismiss();
 	}
 
-	async saveOneProperty(name: string, value: any) {
+	public async saveOneProperty(name: string, value: any) {
 		await shared.saveOneProperty(this, name, value);
 	}
 
-	async deleteNote_onPress() {
+	private async deleteNote_onPress() {
 		const note = this.state.note;
 		if (!note.id) return;
 
@@ -542,12 +540,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private async pickDocuments() {
 		const result = await shim.fsDriver().pickDocument({ multiple: true });
 		if (!result) {
+			// eslint-disable-next-line no-console
 			console.info('pickDocuments: user has cancelled');
 		}
 		return result;
 	}
 
-	async imageDimensions(uri: string) {
+	public async imageDimensions(uri: string) {
 		return new Promise((resolve, reject) => {
 			Image.getSize(
 				uri,
@@ -561,7 +560,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
+	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
 		const dimensions: any = await this.imageDimensions(localFilePath);
@@ -610,7 +609,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return true;
 	}
 
-	async attachFile(pickerResponse: any, fileType: string) {
+	public async attachFile(pickerResponse: any, fileType: string) {
 		if (!pickerResponse) {
 			// User has cancelled
 			return;
@@ -728,11 +727,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	takePhoto_onPress() {
+	private takePhoto_onPress() {
 		this.setState({ showCamera: true });
 	}
 
-	cameraView_onPhoto(data: any) {
+	private cameraView_onPhoto(data: any) {
 		void this.attachFile(
 			{
 				uri: data.uri,
@@ -744,7 +743,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	cameraView_onCancel() {
+	private cameraView_onCancel() {
 		this.setState({ showCamera: false });
 	}
 
@@ -755,34 +754,30 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	toggleIsTodo_onPress() {
+	private toggleIsTodo_onPress() {
 		shared.toggleIsTodo_onPress(this);
 
 		this.scheduleSave();
 	}
 
-	tags_onPress() {
+	private tags_onPress() {
 		if (!this.state.note || !this.state.note.id) return;
 
 		this.setState({ noteTagDialogShown: true });
 	}
 
-	async share_onPress() {
+	private async share_onPress() {
 		await Share.share({
 			message: `${this.state.note.title}\n\n${this.state.note.body}`,
 			title: this.state.note.title,
 		});
 	}
 
-	properties_onPress() {
+	private properties_onPress() {
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
-	setAlarm_onPress() {
-		this.setState({ alarmDialogShown: true });
-	}
-
-	async onAlarmDialogAccept(date: Date) {
+	public async onAlarmDialogAccept(date: Date) {
 		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
@@ -791,11 +786,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ alarmDialogShown: false });
 	}
 
-	onAlarmDialogReject() {
+	public onAlarmDialogReject() {
 		this.setState({ alarmDialogShown: false });
 	}
 
-	async showOnMap_onPress() {
+	private async showOnMap_onPress() {
 		if (!this.state.note.id) return;
 
 		const note = await Note.load(this.state.note.id);
@@ -808,7 +803,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	async showSource_onPress() {
+	private async showSource_onPress() {
 		if (!this.state.note.id) return;
 
 		const note = await Note.load(this.state.note.id);
@@ -819,12 +814,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
-	copyMarkdownLink_onPress() {
+	private copyMarkdownLink_onPress() {
 		const note = this.state.note;
 		Clipboard.setString(Note.markdownTag(note));
 	}
 
-	sideMenuOptions() {
+	public sideMenuOptions() {
 		const note = this.state.note;
 		if (!note) return [];
 
@@ -855,7 +850,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	async showAttachMenu() {
+	public async showAttachMenu() {
 		const buttons = [];
 
 		// On iOS, it will show "local files", which means certain files saved from the browser
@@ -876,7 +871,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
 	}
 
-	menuOptions() {
+	public menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
@@ -960,11 +955,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	async todoCheckbox_change(checked: boolean) {
+	private async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
-	scheduleFocusUpdate() {
+	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
 		this.focusUpdateIID_ = shim.setTimeout(() => {
@@ -973,7 +968,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 100);
 	}
 
-	focusUpdate() {
+	public focusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 		this.focusUpdateIID_ = null;
 
@@ -991,7 +986,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// }
 	}
 
-	async folderPickerOptions_valueChanged(itemValue: any) {
+	private async folderPickerOptions_valueChanged(itemValue: any) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
@@ -1012,7 +1007,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	folderPickerOptions() {
+	public folderPickerOptions() {
 		const options = {
 			enabled: true,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
@@ -1025,7 +1020,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.folderPickerOptions_;
 	}
 
-	onBodyViewerLoadEnd() {
+	public onBodyViewerLoadEnd() {
 		shim.setTimeout(() => {
 			this.setState({ HACK_webviewLoadingState: 1 });
 			shim.setTimeout(() => {
@@ -1034,11 +1029,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}, 5);
 	}
 
-	onBodyViewerCheckboxChange(newBody: string) {
+	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
 	}
 
-	render() {
+	public render() {
 		if (this.state.isLoading) {
 			return (
 				<View style={this.styles().screen}>
@@ -1123,6 +1118,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
+					toolbarEnabled={this.props.toolbarEnabled}
 					themeId={this.props.themeId}
 					initialText={note.body}
 					initialSelection={this.selection}
@@ -1236,6 +1232,7 @@ const NoteScreen = connect((state: any) => {
 		themeId: state.settings.theme,
 		editorFont: [state.settings['style.editor.fontFamily']],
 		editorFontSize: state.settings['style.editor.fontSize'],
+		toolbarEnabled: state.settings['editor.mobile.toolbarEnabled'],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,

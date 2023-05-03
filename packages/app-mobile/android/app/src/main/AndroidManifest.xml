@@ -77,18 +77,8 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-		</activity>
 
-		<!-- SHARE EXTENSION -->
-		<activity
-			android:noHistory="true"
-			android:name=".share.ShareActivity"
-			android:configChanges="orientation"
-			android:label="@string/app_name"
-			android:excludeFromRecents="true"
-			android:launchMode="singleTask"
-			android:theme="@style/AppTheme"
-			android:exported="true">
+			<!-- SHARE EXTENSION -->
 			<intent-filter>
 				<action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -99,8 +89,8 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:mimeType="*/*" />
 			</intent-filter>
+			<!-- /SHARE EXTENSION -->
 		</activity>
-		<!-- /SHARE EXTENSION -->
 
 	</application>
 

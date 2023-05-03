@@ -14,7 +14,7 @@ export default class JoplinViewsMenus {
 	private store: any;
 	private plugin: Plugin;
 
-	constructor(plugin: Plugin, store: any) {
+	public constructor(plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
 	}

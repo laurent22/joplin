@@ -2,9 +2,9 @@ import { Item } from '../services/database/types';
 import { itemIsEncrypted } from './joplinUtils';
 import { expectThrow } from './testing/testUtils';
 
-describe('joplinUtils', function() {
+describe('joplinUtils', () => {
 
-	it('should check if an item is encrypted', async function() {
+	it('should check if an item is encrypted', async () => {
 		type TestCase = [boolean, Item];
 
 		const testCases: TestCase[] = [

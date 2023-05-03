@@ -9,6 +9,7 @@ const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
 	require('../commands/focusElementNoteTitle'),
 	require('../commands/focusElementNoteBody'),
+	require('../commands/pasteAsText'),
 ];
 
 interface HookDependencies {

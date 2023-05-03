@@ -79,6 +79,7 @@ export interface State {
 	settings: any;
 	sharedData: any;
 	appState: string;
+	biometricsDone: boolean;
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
 	customCss: string;
@@ -134,6 +135,7 @@ export const defaultState: State = {
 	settings: {},
 	sharedData: null,
 	appState: 'starting',
+	biometricsDone: false,
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
 	customCss: '',
@@ -1084,6 +1086,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'APP_STATE_SET':
 			draft.appState = action.state;
+			break;
+
+		case 'BIOMETRICS_DONE_SET':
+			draft.biometricsDone = action.value;
 			break;
 
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':

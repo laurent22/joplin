@@ -4,7 +4,7 @@ v.1: 21 December 2021
 
 This Joplin Server Personal Use License (the "**License**") is a legally binding
 agreement between JOPLIN registered under the laws of France (the
-"**Licensor**"), the owner of the server entitled ‘Joplin Server,’ the related
+"**Licensor**"), the owner of the server entitled "Joplin Server", the related
 software applications, and services  (collectively, the "**Software**") and an
 individual user accessing the Software (the "**Licensee**")  (each individually
 a "**Party**" and collectively, the "**Parties**").
@@ -63,13 +63,13 @@ a "**Party**" and collectively, the "**Parties**").
   Software without prior written authorisation from the Licensor. By way of
   illustration, the Licensee is not allowed to:
 
-    1.  Install the Software on Licensee’s infrastructure and charge others for
+    1.  Install the Software on Licensee's infrastructure and charge others for
         the use of the Software;
 
     2.  Install the Software behind a proxy and charge others for the use of the
         Software;
 
-    3.  Install the Software on a Licensee’s or third party’s server and provide
+    3.  Install the Software on a Licensee's or third party's server and provide
         access to the Software to third parties (a) for a fee or (b) free of
         charge, if the said third parties may use the Software for commercial
         purposes;
@@ -97,16 +97,16 @@ a "**Party**" and collectively, the "**Parties**").
 * **2.7** The Licensee is allowed to make a reasonable number of copies of the
   Software, as and if necessary for the purposes set forth herein, provided that
   only complete copies of the Software are made, including without limitation
-  all ‘read me’ files, copyright notices, and other legal notices and terms
+  all "read me" files, copyright notices, and other legal notices and terms
   included in the Software.
 
 * **2.8**  The Licensee is permitted to load and run the Software on any device,
-  network or cloud virtual machines under Licensee’s control (collectively, the
+  network or cloud virtual machines under Licensee's control (collectively, the
   "**Devices**"), if such Devices are compatible with the Software. The Licensee
   is solely responsible for assessing the compatibility of the Devices to be
   used with the Software.
 
-* **2.9**  It is Licensee’s sole responsibility to verify and assess the
+* **2.9**  It is Licensee's sole responsibility to verify and assess the
   suitability, validity and integrity of the Software prior to using it and to
   decide whether or not the Software fits for the intended use.
 
@@ -115,7 +115,7 @@ a "**Party**" and collectively, the "**Parties**").
 
 * **2.11** The Licensee acknowledges and agrees that any use of the Software
   that is prohibited by this License may be unlawful and may result in
-  Licensee’s criminal liability.
+  Licensee's criminal liability.
 
 # 3. Covered Software and services
 
@@ -160,20 +160,20 @@ a "**Party**" and collectively, the "**Parties**").
   Licensor immediately and in writing if any third party asserts an infringement
   claim against the Licensee in connection with the Software.
 
-* **4.4**  By submitting any content through the Software (the "Licensee’s
+* **4.4**  By submitting any content through the Software (the "Licensee's
   Content"), the Licensee grants  the Licensor unrestricted, sub-licensable,
-  royalty-free, perpetual, and irrevocable rights to process the Licensee’s
+  royalty-free, perpetual, and irrevocable rights to process the Licensee's
   Content for the purposes of providing the Licensee with the Software and
-  carrying out Licensor’s legitimate business interests.
+  carrying out Licensor's legitimate business interests.
 
 * **4.5** The Licensee is not permitted to remove any copyright or other
   proprietary notices and legends.
 
 # 5. PRIVACY AND DATA PROTECTION
 
-* **5.1** The Licensor does not have access in any manner to the Licensee’s
+* **5.1** The Licensor does not have access in any manner to the Licensee's
   Content. Therefore, the Licensee is solely responsible for creating, keeping
-  and maintaining any backup copies of any Licensee’s Content or other
+  and maintaining any backup copies of any Licensee's Content or other
   information submitted to, through, or in relation to the Software.
 
 The Parties agree to individually comply with the applicable data protection
@@ -200,16 +200,16 @@ laws pertaining to the Software.
 * **7.2**  In no event shall the Licensor be liable for any damages whatsoever
   (including, without limitation, damages for loss of business profits, business
   interruption, loss of business information, or any other pecuniary loss)
-  arising out of the Licensee’s Content, the use of or inability to use the
+  arising out of the Licensee's Content, the use of or inability to use the
   Software, even if the Licensor has been advised of the possibility of such
   damages.
 
 * **7.3**  The Licensee is solely responsible for determining the
   appropriateness of the Software and assumes any risks associated with
-  Licensee’s exercise of permissions under the License.
+  Licensee's exercise of permissions under the License.
 
 * **7.4**  Third-party content or services are not covered by this License. The
-  Licensee shall ensure Licensee’s compliance with any terms set forth by the
+  Licensee shall ensure Licensee's compliance with any terms set forth by the
   respective third parties at its own risk, cost and expense.  To the maximum
   extent permitted by law, the Licensor excludes any liability for any loss or
   damage resulting from the acts and omissions of such third-party service
@@ -219,16 +219,15 @@ laws pertaining to the Software.
 
 * 8.1  This License and any disputes arising out of or in connection with the
   License and the Software shall be governed by and construed in accordance with
-  the laws of England and Wales. Unless otherwise provided by the applicable
-  law, all disputes arising out of or in connection with the License shall be
-  submitted to the exclusive jurisdiction of the courts in London, the United
-  Kingdom.
+  the laws of France. Unless otherwise provided by the applicable law, all
+  disputes arising out of or in connection with the License shall be submitted
+  to the exclusive jurisdiction of the courts in London, the United Kingdom.
 
 # 9. FINAL PROVISIONS
 
 * **9.1**  **Indemnification.** The Licensee shall indemnify the Licensor at
-  Licensee’s expense if any claims are asserted by a third party against the
-  Licensor by reason of Licensee’s misconduct or breach of any terms of the
+  Licensee's expense if any claims are asserted by a third party against the
+  Licensor by reason of Licensee's misconduct or breach of any terms of the
   License, including failed adherence by the Licensee with any applicable laws,
   including, whether express or implied.
 
@@ -246,7 +245,7 @@ laws pertaining to the Software.
   breach by such other Party. No waiver shall have any effect unless it is
   specific, irrevocable and in writing.
 
-* **9.4**  **Term and termination.** The License shall commence upon Licensee’s
+* **9.4**  **Term and termination.** The License shall commence upon Licensee's
   access to the Software and continue until terminated by the Licensor. Upon
   termination of the License, the Licensee agrees to (i) stop all access and use
   of the Software and (ii) destroy all copies of the Software and all its
@@ -270,7 +269,7 @@ laws pertaining to the Software.
   Parties relating thereto.
 
 * **9.7**  **Transfer of rights.** The Licensee is not allowed to assign
-  Licensee’s rights under the License. The Licensor is entitled to transfer its
+  Licensee's rights under the License. The Licensor is entitled to transfer its
   rights and obligations under the License entirely or partially to a third
   party by giving a prior notice to the Licensee. If the Licensee does not agree
   to the transfer, the Licensee can terminate this License by ceasing to use the

@@ -50,7 +50,7 @@ async function browserGetZoom(tabId) {
 	});
 }
 
-browser_.runtime.onInstalled.addListener(function() {
+browser_.runtime.onInstalled.addListener(() => {
 	if (window.joplinEnv() === 'dev') {
 		browser_.browserAction.setIcon({
 			path: 'icons/32-dev.png',
@@ -165,7 +165,7 @@ async function sendClipMessage(clipType) {
 	}
 }
 
-browser_.commands.onCommand.addListener(function(command) {
+browser_.commands.onCommand.addListener((command) => {
 	// We could enumerate these twice, but since we're in here first,
 	// why not save ourselves the trouble with this convention
 	if (command.startsWith('clip')) {

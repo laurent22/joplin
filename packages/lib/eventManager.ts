@@ -9,11 +9,11 @@ export class EventManager {
 	private appStateWatchedProps_: string[];
 	private appStateListeners_: any;
 
-	constructor() {
+	public constructor() {
 		this.reset();
 	}
 
-	reset() {
+	public reset() {
 		this.emitter_ = new events.EventEmitter();
 
 		this.appStatePrevious_ = {};
@@ -21,27 +21,27 @@ export class EventManager {
 		this.appStateListeners_ = {};
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.emitter_.on(eventName, callback);
 	}
 
-	emit(eventName: string, object: any = null) {
+	public emit(eventName: string, object: any = null) {
 		return this.emitter_.emit(eventName, object);
 	}
 
-	removeListener(eventName: string, callback: Function) {
+	public removeListener(eventName: string, callback: Function) {
 		return this.emitter_.removeListener(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.removeListener(eventName, callback);
 	}
 
-	filterOn(filterName: string, callback: Function) {
+	public filterOn(filterName: string, callback: Function) {
 		return this.emitter_.on(`filter:${filterName}`, callback);
 	}
 
-	filterOff(filterName: string, callback: Function) {
+	public filterOff(filterName: string, callback: Function) {
 		return this.removeListener(`filter:${filterName}`, callback);
 	}
 
@@ -67,7 +67,7 @@ export class EventManager {
 		return output;
 	}
 
-	appStateOn(propName: string, callback: Function) {
+	public appStateOn(propName: string, callback: Function) {
 		if (!this.appStateListeners_[propName]) {
 			this.appStateListeners_[propName] = [];
 			this.appStateWatchedProps_.push(propName);
@@ -76,7 +76,7 @@ export class EventManager {
 		this.appStateListeners_[propName].push(callback);
 	}
 
-	appStateOff(propName: string, callback: Function) {
+	public appStateOff(propName: string, callback: Function) {
 		if (!this.appStateListeners_[propName]) {
 			throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (1)');
 		}
@@ -87,7 +87,7 @@ export class EventManager {
 		this.appStateListeners_[propName].splice(idx, 1);
 	}
 
-	stateValue_(state: any, propName: string) {
+	private stateValue_(state: any, propName: string) {
 		const parts = propName.split('.');
 		let s = state;
 		for (const p of parts) {
@@ -100,7 +100,7 @@ export class EventManager {
 	// This function works by keeping a copy of the watched props and, whenever this function
 	// is called, comparing the previous and new values and emitting events if they have changed.
 	// The appStateEmit function should be called from a middleware.
-	appStateEmit(state: any) {
+	public appStateEmit(state: any) {
 		if (!this.appStateWatchedProps_.length) return;
 
 		for (const propName of this.appStateWatchedProps_) {

@@ -2,7 +2,7 @@ import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryption
 import MasterKey from '../../models/MasterKey';
 import { masterKeyEnabled, mergeSyncInfos, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
 
-describe('syncInfoUtils', function() {
+describe('syncInfoUtils', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

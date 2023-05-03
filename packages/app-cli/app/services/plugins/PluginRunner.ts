@@ -11,6 +11,7 @@ function createConsoleWrapper(pluginId: string) {
 	const wrapper: any = {};
 
 	for (const n in console) {
+		// eslint-disable-next-line no-console
 		if (!console.hasOwnProperty(n)) continue;
 		wrapper[n] = (...args: any[]) => {
 			const newArgs = args.slice();
@@ -34,7 +35,7 @@ export default class PluginRunner extends BasePluginRunner {
 	private eventHandlers_: EventHandlers = {};
 	private activeSandboxCalls_: any = {};
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.eventHandler = this.eventHandler.bind(this);
@@ -63,7 +64,7 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 	}
 
-	async run(plugin: Plugin, sandbox: Global): Promise<void> {
+	public async run(plugin: Plugin, sandbox: Global): Promise<void> {
 		return new Promise((resolve: Function, reject: Function) => {
 			const onStarted = () => {
 				plugin.off('started', onStarted);

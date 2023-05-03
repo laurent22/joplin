@@ -291,7 +291,7 @@ export default {
 		// set KaTeX as the renderer for markdown-it-simplemath
 		const katexInline = function(latex: string) {
 			katexOptions.displayMode = false;
-			let outputHtml: string = '';
+			let outputHtml = '';
 			try {
 				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
@@ -306,7 +306,7 @@ export default {
 
 		const katexBlock = function(latex: string) {
 			katexOptions.displayMode = true;
-			let outputHtml: string = '';
+			let outputHtml = '';
 			try {
 				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {

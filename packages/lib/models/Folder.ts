@@ -19,22 +19,22 @@ export interface FolderEntityWithChildren extends FolderEntity {
 }
 
 export default class Folder extends BaseItem {
-	static tableName() {
+	public static tableName() {
 		return 'folders';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_FOLDER;
 	}
 
-	static newFolder(): FolderEntity {
+	public static newFolder(): FolderEntity {
 		return {
 			id: null,
 			title: '',
 		};
 	}
 
-	static fieldToLabel(field: string) {
+	public static fieldToLabel(field: string) {
 		const fieldsToLabels: any = {
 			title: _('title'),
 			last_note_user_updated_time: _('updated date'),
@@ -43,7 +43,7 @@ export default class Folder extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static noteIds(parentId: string, options: any = null) {
+	public static noteIds(parentId: string, options: any = null) {
 		options = Object.assign({}, {
 			includeConflicts: false,
 		}, options);
@@ -66,17 +66,17 @@ export default class Folder extends BaseItem {
 			});
 	}
 
-	static async subFolderIds(parentId: string) {
+	public static async subFolderIds(parentId: string) {
 		const rows = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [parentId]);
 		return rows.map((r: FolderEntity) => r.id);
 	}
 
-	static async noteCount(parentId: string) {
+	public static async noteCount(parentId: string) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 		return r ? r.total : 0;
 	}
 
-	static markNotesAsConflict(parentId: string) {
+	public static markNotesAsConflict(parentId: string) {
 		const query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
 		return this.db().exec(query);
 	}
@@ -108,15 +108,15 @@ export default class Folder extends BaseItem {
 		});
 	}
 
-	static conflictFolderTitle() {
+	public static conflictFolderTitle() {
 		return _('Conflicts');
 	}
 
-	static conflictFolderId() {
+	public static conflictFolderId() {
 		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
 	}
 
-	static conflictFolder(): FolderEntity {
+	public static conflictFolder(): FolderEntity {
 		return {
 			type_: this.TYPE_FOLDER,
 			id: this.conflictFolderId(),
@@ -129,7 +129,7 @@ export default class Folder extends BaseItem {
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
-	static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
+	public static async addNoteCounts(folders: any[], includeCompletedTodos = true) {
 		const foldersById: any = {};
 		for (const f of folders) {
 			foldersById[f.id] = f;
@@ -170,7 +170,7 @@ export default class Folder extends BaseItem {
 
 	// Folders that contain notes that have been modified recently go on top.
 	// The remaining folders, that don't contain any notes are sorted by their own user_updated_time
-	static async orderByLastModified(folders: FolderEntity[], dir = 'DESC') {
+	public static async orderByLastModified(folders: FolderEntity[], dir = 'DESC') {
 		dir = dir.toUpperCase();
 		const sql = 'select parent_id, max(user_updated_time) content_updated_time from notes where parent_id != "" group by parent_id';
 		const rows = await this.db().selectAll(sql);
@@ -228,7 +228,7 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	static async all(options: any = null) {
+	public static async all(options: any = null) {
 		const output = await super.all(options);
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
@@ -237,7 +237,7 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	static async childrenIds(folderId: string) {
+	public static async childrenIds(folderId: string) {
 		const folders = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [folderId]);
 
 		let output: string[] = [];
@@ -252,7 +252,7 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	static async expandTree(folders: FolderEntity[], parentId: string) {
+	public static async expandTree(folders: FolderEntity[], parentId: string) {
 		const folderPath = await this.folderPath(folders, parentId);
 		folderPath.pop(); // We don't expand the leaft notebook
 
@@ -542,7 +542,7 @@ export default class Folder extends BaseItem {
 		logger.debug('updateNoLongerSharedItems:', report);
 	}
 
-	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
+	public static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 
 		if (options && options.includeNotes) {
@@ -576,7 +576,7 @@ export default class Folder extends BaseItem {
 		return getNestedChildren(all, '');
 	}
 
-	static folderPath(folders: FolderEntity[], folderId: string) {
+	public static folderPath(folders: FolderEntity[], folderId: string) {
 		const idToFolders: Record<string, FolderEntity> = {};
 		for (let i = 0; i < folders.length; i++) {
 			idToFolders[folders[i].id] = folders[i];
@@ -595,7 +595,7 @@ export default class Folder extends BaseItem {
 		return path;
 	}
 
-	static folderPathString(folders: FolderEntity[], folderId: string, maxTotalLength = 80) {
+	public static folderPathString(folders: FolderEntity[], folderId: string, maxTotalLength = 80) {
 		const path = this.folderPath(folders, folderId);
 
 		let currentTotalLength = 0;
@@ -616,7 +616,7 @@ export default class Folder extends BaseItem {
 		return output.join(' / ');
 	}
 
-	static buildTree(folders: FolderEntity[]): FolderEntityWithChildren[] {
+	public static buildTree(folders: FolderEntity[]): FolderEntityWithChildren[] {
 		const idToFolders: Record<string, any> = {};
 		for (let i = 0; i < folders.length; i++) {
 			idToFolders[folders[i].id] = Object.assign({}, folders[i]);
@@ -644,7 +644,7 @@ export default class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	static async sortFolderTree(folders: FolderEntityWithChildren[] = null) {
+	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null) {
 		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
@@ -672,16 +672,16 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	static load(id: string, _options: any = null): Promise<FolderEntity> {
+	public static load(id: string, _options: any = null): Promise<FolderEntity> {
 		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
 		return super.load(id);
 	}
 
-	static defaultFolder() {
+	public static defaultFolder() {
 		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
 	}
 
-	static async canNestUnder(folderId: string, targetFolderId: string) {
+	public static async canNestUnder(folderId: string, targetFolderId: string) {
 		if (folderId === targetFolderId) return false;
 
 		const folder = await Folder.load(folderId);
@@ -702,7 +702,7 @@ export default class Folder extends BaseItem {
 		return true;
 	}
 
-	static async moveToFolder(folderId: string, targetFolderId: string) {
+	public static async moveToFolder(folderId: string, targetFolderId: string) {
 		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
@@ -721,7 +721,7 @@ export default class Folder extends BaseItem {
 	// manually creating a folder. They shouldn't be done for example when the folders
 	// are being synced to avoid any strange side-effects. Technically it's possible to
 	// have folders and notes with duplicate titles (or no title), or with reserved words.
-	static async save(o: FolderEntity, options: any = null) {
+	public static async save(o: FolderEntity, options: any = null) {
 		if (!options) options = {};
 
 		if (options.userSideValidation === true) {

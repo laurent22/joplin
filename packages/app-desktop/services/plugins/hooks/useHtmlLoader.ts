@@ -16,6 +16,7 @@ export default function(frameWindow: any, isReady: boolean, postMessage: Functio
 
 			if (!data || data.target !== 'UserWebview') return;
 
+			// eslint-disable-next-line no-console
 			console.info('useHtmlLoader: message', data);
 
 			// We only update if the HTML that was loaded is the same as
@@ -35,10 +36,12 @@ export default function(frameWindow: any, isReady: boolean, postMessage: Functio
 	}, [frameWindow, htmlHash]);
 
 	useEffect(() => {
+		// eslint-disable-next-line no-console
 		console.info('useHtmlLoader: isReady', isReady);
 
 		if (!isReady) return;
 
+		// eslint-disable-next-line no-console
 		console.info('useHtmlLoader: setHtml', htmlHash);
 
 		postMessage('setHtml', {

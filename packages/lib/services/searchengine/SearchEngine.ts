@@ -5,20 +5,31 @@ import Note from '../../models/Note';
 import BaseModel from '../../BaseModel';
 import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
-import filterParser from './filterParser';
+import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
+enum SearchType {
+	Auto = 'auto',
+	Basic = 'basic',
+	Nonlatin = 'nonlatin',
+	Fts = 'fts',
+}
+
+interface SearchOptions {
+	searchType: SearchType;
+}
+
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
 	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
-	public static SEARCH_TYPE_AUTO = 'auto';
-	public static SEARCH_TYPE_BASIC = 'basic';
-	public static SEARCH_TYPE_NONLATIN_SCRIPT = 'nonlatin';
-	public static SEARCH_TYPE_FTS = 'fts';
+	public static SEARCH_TYPE_AUTO = SearchType.Auto;
+	public static SEARCH_TYPE_BASIC = SearchType.Basic;
+	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
+	public static SEARCH_TYPE_FTS = SearchType.Fts;
 
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
@@ -27,29 +38,29 @@ export default class SearchEngine {
 	private syncCalls_: any[] = [];
 	private scheduleSyncTablesIID_: any;
 
-	static instance() {
+	public static instance() {
 		if (SearchEngine.instance_) return SearchEngine.instance_;
 		SearchEngine.instance_ = new SearchEngine();
 		return SearchEngine.instance_;
 	}
 
-	setLogger(logger: Logger) {
+	public setLogger(logger: Logger) {
 		this.logger_ = logger;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	setDb(db: any) {
+	public setDb(db: any) {
 		this.db_ = db;
 	}
 
-	db() {
+	public db() {
 		return this.db_;
 	}
 
-	noteById_(notes: NoteEntity[], noteId: string) {
+	private noteById_(notes: NoteEntity[], noteId: string) {
 		for (let i = 0; i < notes.length; i++) {
 			if (notes[i].id === noteId) return notes[i];
 		}
@@ -61,7 +72,7 @@ export default class SearchEngine {
 		return null;
 	}
 
-	async rebuildIndex_() {
+	private async rebuildIndex_() {
 		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		noteIds = noteIds.map((n: any) => n.id);
 
@@ -94,7 +105,7 @@ export default class SearchEngine {
 		Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
 	}
 
-	scheduleSyncTables() {
+	public scheduleSyncTables() {
 		if (this.scheduleSyncTablesIID_) return;
 
 		this.scheduleSyncTablesIID_ = shim.setTimeout(async () => {
@@ -107,13 +118,13 @@ export default class SearchEngine {
 		}, 10000);
 	}
 
-	async rebuildIndex() {
+	public async rebuildIndex() {
 		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
 		Setting.setValue('searchEngine.initialIndexingDone', false);
 		return this.syncTables();
 	}
 
-	async syncTables_() {
+	private async syncTables_() {
 		if (this.isIndexing_) return;
 
 		this.isIndexing_ = true;
@@ -201,7 +212,7 @@ export default class SearchEngine {
 		this.isIndexing_ = false;
 	}
 
-	async syncTables() {
+	public async syncTables() {
 		this.syncCalls_.push(true);
 		try {
 			await this.syncTables_();
@@ -210,13 +221,13 @@ export default class SearchEngine {
 		}
 	}
 
-	async countRows() {
+	public async countRows() {
 		const sql = 'SELECT count(*) as total FROM notes_fts';
 		const row = await this.db().selectOne(sql);
 		return row && row['total'] ? row['total'] : 0;
 	}
 
-	fieldNamesFromOffsets_(offsets: any[]) {
+	private fieldNamesFromOffsets_(offsets: any[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurenceCount = Math.floor(offsets.length / 4);
 		const output: string[] = [];
@@ -229,39 +240,39 @@ export default class SearchEngine {
 		return output;
 	}
 
-	calculateWeight_(offsets: any[], termCount: number) {
-		// Offset doc: https://www.sqlite.org/fts3.html#offsets
+	// protected calculateWeight_(offsets: any[], termCount: number) {
+	// 	// Offset doc: https://www.sqlite.org/fts3.html#offsets
 
-		// - If there's only one term in the query string, the content with the most matches goes on top
-		// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
-		//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
+	// 	// - If there's only one term in the query string, the content with the most matches goes on top
+	// 	// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
+	// 	//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
 
-		const occurenceCount = Math.floor(offsets.length / 4);
+	// 	const occurenceCount = Math.floor(offsets.length / 4);
 
-		if (termCount === 1) return occurenceCount;
+	// 	if (termCount === 1) return occurenceCount;
 
-		let spread = 0;
-		let previousDist = null;
-		for (let i = 0; i < occurenceCount; i++) {
-			const dist = offsets[i * 4 + 2];
+	// 	let spread = 0;
+	// 	let previousDist = null;
+	// 	for (let i = 0; i < occurenceCount; i++) {
+	// 		const dist = offsets[i * 4 + 2];
 
-			if (previousDist !== null) {
-				const delta = dist - previousDist;
-				spread += delta;
-			}
+	// 		if (previousDist !== null) {
+	// 			const delta = dist - previousDist;
+	// 			spread += delta;
+	// 		}
 
-			previousDist = dist;
-		}
+	// 		previousDist = dist;
+	// 	}
 
-		// Divide the number of occurences by the spread so even if a note has many times the searched terms
-		// but these terms are very spread appart, they'll be given a lower weight than a note that has the
-		// terms once or twice but just next to each others.
-		return occurenceCount / spread;
-	}
+	// 	// Divide the number of occurences by the spread so even if a note has many times the searched terms
+	// 	// but these terms are very spread appart, they'll be given a lower weight than a note that has the
+	// 	// terms once or twice but just next to each others.
+	// 	return occurenceCount / spread;
+	// }
 
 
 
-	calculateWeightBM25_(rows: any[]) {
+	private calculateWeightBM25_(rows: any[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -354,7 +365,7 @@ export default class SearchEngine {
 		}
 	}
 
-	processBasicSearchResults_(rows: any[], parsedQuery: any) {
+	private processBasicSearchResults_(rows: any[], parsedQuery: any) {
 		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map((term: any) => term.valueRegex || term.value) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
@@ -373,7 +384,7 @@ export default class SearchEngine {
 		}
 	}
 
-	processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -399,7 +410,7 @@ export default class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
-	queryTermToRegex(term: any) {
+	public queryTermToRegex(term: any) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
 		}
@@ -413,11 +424,11 @@ export default class SearchEngine {
 		return regexString;
 	}
 
-	async parseQuery(query: string) {
+	public async parseQuery(query: string) {
 
 		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
-		let allTerms: any[] = [];
+		let allTerms: Term[] = [];
 
 		try {
 			allTerms = filterParser(query);
@@ -429,7 +440,20 @@ export default class SearchEngine {
 		const titleTerms = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
 		const bodyTerms = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
-		const terms: any = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
+		interface ComplexTerm {
+			type: 'regex' | 'text';
+			value: string;
+			scriptType: any;
+			valueRegex?: RegExp;
+		}
+
+		interface Terms {
+			_: (string | ComplexTerm)[];
+			title: (string | ComplexTerm)[];
+			body: (string | ComplexTerm)[];
+		}
+
+		const terms: Terms = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
 
 		// Filter terms:
 		// - Convert wildcards to regex
@@ -438,7 +462,9 @@ export default class SearchEngine {
 
 		let termCount = 0;
 		const keys = [];
-		for (const col in terms) {
+		for (const col2 in terms) {
+			const col = col2 as '_' | 'title' | 'body';
+
 			if (!terms.hasOwnProperty(col)) continue;
 
 			if (!terms[col].length) {
@@ -447,7 +473,7 @@ export default class SearchEngine {
 			}
 
 			for (let i = terms[col].length - 1; i >= 0; i--) {
-				const term = terms[col][i];
+				const term = terms[col][i] as string;
 
 				// SQlLite FTS doesn't allow "*" queries and neither shall we
 				if (term === '*') {
@@ -468,12 +494,16 @@ export default class SearchEngine {
 		}
 
 		//
-		// The object "allTerms" is used for query construction purposes (this contains all the filter terms)
-		// Since this is used for the FTS match query, we need to normalize text, title and body terms.
-		// Note, we're not normalizing terms like tag because these are matched using SQL LIKE operator and so we must preserve their diacritics.
+		// The object "allTerms" is used for query construction purposes (this
+		// contains all the filter terms) Since this is used for the FTS match
+		// query, we need to normalize text, title and body terms. Note, we're
+		// not normalizing terms like tag because these are matched using SQL
+		// LIKE operator and so we must preserve their diacritics.
 		//
-		// The object "terms" only include text, title, body terms and is used for highlighting.
-		// By not normalizing the text, title, body in "terms", highlighting still works correctly for words with diacritics.
+		// The object "terms" only include text, title, body terms and is used
+		// for highlighting. By not normalizing the text, title, body in
+		// "terms", highlighting still works correctly for words with
+		// diacritics.
 		//
 
 		allTerms = allTerms.map(x => {
@@ -492,7 +522,7 @@ export default class SearchEngine {
 		};
 	}
 
-	allParsedQueryTerms(parsedQuery: any) {
+	public allParsedQueryTerms(parsedQuery: any) {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
 		let output: any[] = [];
@@ -503,27 +533,27 @@ export default class SearchEngine {
 		return output;
 	}
 
-	normalizeText_(text: string) {
+	private normalizeText_(text: string) {
 		const normalizedText = text.normalize ? text.normalize() : text;
 		return removeDiacritics(normalizedText.toLowerCase());
 	}
 
-	normalizeNote_(note: NoteEntity) {
+	private normalizeNote_(note: NoteEntity) {
 		const n = Object.assign({}, note);
 		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;
 	}
 
-	async basicSearch(query: string) {
+	public async basicSearch(query: string) {
 		query = query.replace(/\*/, '');
 		const parsedQuery = await this.parseQuery(query);
 		const searchOptions: any = {};
 
 		for (const key of parsedQuery.keys) {
-			if (parsedQuery.terms[key].length === 0) continue;
+			if ((parsedQuery.terms as any)[key].length === 0) continue;
 
-			const term = parsedQuery.terms[key].map((x: any) => x.value).join(' ');
+			const term = (parsedQuery.terms as any)[key].map((x: Term) => x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
@@ -532,7 +562,7 @@ export default class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	determineSearchType_(query: string, preferredSearchType: any) {
+	private determineSearchType_(query: string, preferredSearchType: any) {
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 
@@ -561,12 +591,13 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	async search(searchString: string, options: any = null) {
+	public async search(searchString: string, options: SearchOptions = null) {
 		if (!searchString) return [];
 
-		options = Object.assign({}, {
+		options = {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
-		}, options);
+			...options,
+		};
 
 		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
@@ -598,7 +629,7 @@ export default class SearchEngine {
 		}
 	}
 
-	async destroy() {
+	public async destroy() {
 		if (this.scheduleSyncTablesIID_) {
 			shim.clearTimeout(this.scheduleSyncTablesIID_);
 			this.scheduleSyncTablesIID_ = null;

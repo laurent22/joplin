@@ -8,7 +8,7 @@ async function newRepoApi(): Promise<RepositoryApi> {
 	return repo;
 }
 
-describe('services_plugins_RepositoryApi', function() {
+describe('services_plugins_RepositoryApi', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -47,9 +47,11 @@ describe('services_plugins_RepositoryApi', function() {
 
 	it('should tell if a plugin can be updated', (async () => {
 		const api = await newRepoApi();
-		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.0')).toBe(true);
-		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.2')).toBe(false);
-		expect(await api.pluginCanBeUpdated('does.not.exist', '1.0.0')).toBe(false);
+
+		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.0', '3.0.0')).toBe(true);
+		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.0', '1.0.0')).toBe(false);
+		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.2', '3.0.0')).toBe(false);
+		expect(await api.pluginCanBeUpdated('does.not.exist', '1.0.0', '3.0.0')).toBe(false);
 	}));
 
 });

@@ -23,19 +23,19 @@ function settingTypeToSchemaType(type: SettingItemType): string {
 }
 
 class Command extends BaseCommand {
-	usage() {
+	public usage() {
 		return 'settingschema <file>';
 	}
 
-	description() {
+	public description() {
 		return 'Build the setting schema file';
 	}
 
-	enabled() {
+	public enabled() {
 		return false;
 	}
 
-	async action(args: any) {
+	public async action(args: any) {
 		const schema: Record<string, any> = {
 			title: 'JSON schema for Joplin setting files',
 			'$id': Setting.schemaUrl,

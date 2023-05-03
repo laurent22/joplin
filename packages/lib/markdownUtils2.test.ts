@@ -2,7 +2,7 @@
 
 import markdownUtils from './markdownUtils';
 
-describe('markdownUtils', function() {
+describe('markdownUtils', () => {
 
 
 

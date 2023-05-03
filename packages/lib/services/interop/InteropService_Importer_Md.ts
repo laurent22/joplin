@@ -16,7 +16,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	private importedNotes: Record<string, NoteEntity> = {};
 
-	async exec(result: ImportExportResult) {
+	public async exec(result: ImportExportResult) {
 		let parentFolderId = null;
 
 		const sourcePath = rtrimSlashes(this.sourcePath_);
@@ -45,7 +45,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		return result;
 	}
 
-	async importDirectory(dirPath: string, parentFolderId: string) {
+	public async importDirectory(dirPath: string, parentFolderId: string) {
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const stats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < stats.length; i++) {
@@ -94,7 +94,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	 * Parse text for links, attempt to find local file, if found create Joplin resource
 	 * and update link accordingly.
 	 */
-	async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
+	public async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
 		const markdownLinks = markdownUtils.extractFileUrls(md);
 		const htmlLinks = htmlUtils.extractFileUrls(md);
@@ -110,7 +110,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			if (stat && !isDir) {
 				const supportedFileExtension = this.metadata().fileExtensions;
 				const resolvedPath = shim.fsDriver().resolve(pathWithExtension);
-				let id: string = '';
+				let id = '';
 				// If the link looks like a note, then import it
 				if (supportedFileExtension.indexOf(fileExtension(trimmedLink).toLowerCase()) >= 0) {
 					// If the note hasn't been imported yet, do so now
@@ -144,7 +144,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		return updated;
 	}
 
-	async importFile(filePath: string, parentFolderId: string) {
+	public async importFile(filePath: string, parentFolderId: string) {
 		const resolvedPath = shim.fsDriver().resolve(filePath);
 		if (this.importedNotes[resolvedPath]) return this.importedNotes[resolvedPath];
 

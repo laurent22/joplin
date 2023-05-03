@@ -1,7 +1,7 @@
 import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow } from './utils/testing/testUtils';
 import { parseEnv } from './env';
 
-describe('env', function() {
+describe('env', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('env');
@@ -15,7 +15,7 @@ describe('env', function() {
 		await beforeEachDb();
 	});
 
-	it('should parse env values', async function() {
+	it('should parse env values', async () => {
 		const result = parseEnv({
 			DB_CLIENT: 'pg',
 			POSTGRES_PORT: '123',
@@ -33,12 +33,12 @@ describe('env', function() {
 		expect(result.ACCOUNT_TYPES_ENABLED).toBe(true);
 	});
 
-	it('should overrides default values', async function() {
+	it('should overrides default values', async () => {
 		expect(parseEnv({}).POSTGRES_USER).toBe('joplin');
 		expect(parseEnv({}, { POSTGRES_USER: 'other' }).POSTGRES_USER).toBe('other');
 	});
 
-	it('should validate values', async function() {
+	it('should validate values', async () => {
 		await expectThrow(async () => parseEnv({ POSTGRES_PORT: 'notanumber' }));
 		await expectThrow(async () => parseEnv({ MAILER_ENABLED: 'TRUE' }));
 	});

@@ -24,6 +24,7 @@ import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
+import { TinyMceEditorEvents } from './utils/types';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -102,7 +103,7 @@ interface LastOnChangeEventInfo {
 let loadedCssFiles_: string[] = [];
 let loadedJsFiles_: string[] = [];
 let dispatchDidUpdateIID_: any = null;
-let changeId_: number = 1;
+let changeId_ = 1;
 
 const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [editor, setEditor] = useState(null);
@@ -159,7 +160,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const nodeName = event.target ? event.target.nodeName : '';
 
 		if (nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
-			editor.fire('joplinChange');
+			editor.fire(TinyMceEditorEvents.JoplinChange);
 			dispatchDidUpdate(editor);
 		}
 
@@ -251,7 +252,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					},
 					replaceSelection: (value: any) => {
 						editor.selection.setContent(value);
-						editor.fire('joplinChange');
+						editor.fire(TinyMceEditorEvents.JoplinChange);
 						dispatchDidUpdate(editor);
 
 						// It doesn't make sense but it seems calling setContent
@@ -260,6 +261,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// https://github.com/tinymce/tinymce/issues/3745
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
+					pasteAsText: () => editor.fire(TinyMceEditorEvents.PasteAsText),
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -339,6 +341,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					continue;
 				}
 
+				// eslint-disable-next-line no-console
 				console.info('Loading script', s.src);
 
 				await loadScript(s);
@@ -661,9 +664,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						props_onDrop.current(event);
 					});
 
-					editor.on('ObjectResized', function(event: any) {
+					editor.on('ObjectResized', (event: any) => {
 						if (event.target.nodeName === 'IMG') {
-							editor.fire('joplinChange');
+							editor.fire(TinyMceEditorEvents.JoplinChange);
 							dispatchDidUpdate(editor);
 						}
 					});
@@ -972,6 +975,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
+		const onSetAttrib = (event: any) => {
+			// Dispatch onChange when a link is edited
+			if (event.attrElm[0].nodeName === 'A') {
+				if (event.attrName === 'title' || event.attrName === 'href' || event.attrName === 'rel') {
+					onChangeHandler();
+				}
+			}
+		};
+
 		// Keypress means that a printable key (letter, digit, etc.) has been
 		// pressed so we want to always trigger onChange in this case
 		function onKeypress() {
@@ -992,7 +1004,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		async function onPaste(event: any) {
+		async function onPaste(event: ClipboardEvent) {
 			// We do not use the default pasting behaviour because the input has
 			// to be processed in various ways.
 			event.preventDefault();
@@ -1054,49 +1066,57 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		}
 
-		function onKeyDown(event: any) {
+		async function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically on Windows and Linux,
 			// so we need to run the below code only on macOS. If we were to run this
 			// on Windows/Linux, we would have this double-paste issue:
 			// https://github.com/laurent22/joplin/issues/4243
 
-			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
-			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
-			// it here and we don't need to do anything special in onPaste
-			if (!shim.isWindows() && !shim.isLinux()) {
-				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
-					pasteAsPlainText();
-				}
+			// While "paste as text" functionality is handled by Windows and Linux, if we
+			// want to allow the user to customize the shortcut we need to prevent when it
+			// has the default value so it doesn't paste the content twice
+			// (one by the system and the other by our code)
+			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
+				event.preventDefault();
+				pasteAsPlainText(null);
 			}
 		}
 
-		editor.on('keyup', onKeyUp);
-		editor.on('keydown', onKeyDown);
-		editor.on('keypress', onKeypress);
-		editor.on('paste', onPaste);
-		editor.on('copy', onCopy);
+		function onPasteAsText() {
+			pasteAsPlainText(null);
+		}
+
+		editor.on(TinyMceEditorEvents.KeyUp, onKeyUp);
+		editor.on(TinyMceEditorEvents.KeyDown, onKeyDown);
+		editor.on(TinyMceEditorEvents.KeyPress, onKeypress);
+		editor.on(TinyMceEditorEvents.Paste, onPaste);
+		editor.on(TinyMceEditorEvents.PasteAsText, onPasteAsText);
+		editor.on(TinyMceEditorEvents.Copy, onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
-		editor.on('compositionend', onChangeHandler);
-		editor.on('cut', onCut);
-		editor.on('joplinChange', onChangeHandler);
-		editor.on('Undo', onChangeHandler);
-		editor.on('Redo', onChangeHandler);
-		editor.on('ExecCommand', onExecCommand);
+		editor.on(TinyMceEditorEvents.CompositionEnd, onChangeHandler);
+		editor.on(TinyMceEditorEvents.Cut, onCut);
+		editor.on(TinyMceEditorEvents.JoplinChange, onChangeHandler);
+		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
+		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
+		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
+		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 
 		return () => {
 			try {
-				editor.off('keyup', onKeyUp);
-				editor.off('keydown', onKeyDown);
-				editor.off('keypress', onKeypress);
-				editor.off('paste', onPaste);
-				editor.off('copy', onCopy);
-				editor.off('compositionend', onChangeHandler);
-				editor.off('cut', onCut);
-				editor.off('joplinChange', onChangeHandler);
-				editor.off('Undo', onChangeHandler);
-				editor.off('Redo', onChangeHandler);
-				editor.off('ExecCommand', onExecCommand);
+				editor.off(TinyMceEditorEvents.KeyUp, onKeyUp);
+				editor.off(TinyMceEditorEvents.KeyDown, onKeyDown);
+				editor.off(TinyMceEditorEvents.KeyPress, onKeypress);
+				editor.off(TinyMceEditorEvents.Paste, onPaste);
+				editor.off(TinyMceEditorEvents.PasteAsText, onPasteAsText);
+				editor.off(TinyMceEditorEvents.Copy, onCopy);
+				editor.off(TinyMceEditorEvents.CompositionEnd, onChangeHandler);
+				editor.off(TinyMceEditorEvents.Cut, onCut);
+				editor.off(TinyMceEditorEvents.JoplinChange, onChangeHandler);
+				editor.off(TinyMceEditorEvents.Undo, onChangeHandler);
+				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
+				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
+				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}

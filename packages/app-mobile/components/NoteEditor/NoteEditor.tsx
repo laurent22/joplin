@@ -30,6 +30,7 @@ interface Props {
 	initialSelection?: Selection;
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
+	toolbarEnabled: boolean;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -315,6 +316,7 @@ function NoteEditor(props: Props, ref: any) {
 
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
+				// eslint-disable-next-line no-console
 				console.info('CodeMirror:', ...event.value);
 			},
 
@@ -323,7 +325,6 @@ function NoteEditor(props: Props, ref: any) {
 			},
 
 			onUndoRedoDepthChange: (event: UndoRedoDepthChangeEvent) => {
-				console.info('onUndoRedoDepthChange', event);
 				props.onUndoRedoDepthChange(event);
 			},
 
@@ -355,6 +356,7 @@ function NoteEditor(props: Props, ref: any) {
 		if (handlers[msg.name]) {
 			handlers[msg.name](msg.data);
 		} else {
+			// eslint-disable-next-line no-console
 			console.info('Unsupported CodeMirror message:', msg);
 		}
 	}, [props.onSelectionChange, props.onUndoRedoDepthChange, props.onChange, editorControl]);
@@ -362,6 +364,19 @@ function NoteEditor(props: Props, ref: any) {
 	const onError = useCallback(() => {
 		console.error('NoteEditor: webview error');
 	}, []);
+
+	const toolbar = <MarkdownToolbar
+		style={{
+			// Don't show the markdown toolbar if there isn't enough space
+			// for it:
+			flexShrink: 1,
+		}}
+		editorSettings={editorSettings}
+		editorControl={editorControl}
+		selectionState={selectionState}
+		searchState={searchState}
+		onAttach={props.onAttach}
+	/>;
 
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
 	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
@@ -400,18 +415,7 @@ function NoteEditor(props: Props, ref: any) {
 				searchState={searchState}
 			/>
 
-			<MarkdownToolbar
-				style={{
-					// Don't show the markdown toolbar if there isn't enough space
-					// for it:
-					flexShrink: 1,
-				}}
-				editorSettings={editorSettings}
-				editorControl={editorControl}
-				selectionState={selectionState}
-				searchState={searchState}
-				onAttach={props.onAttach}
-			/>
+			{props.toolbarEnabled ? toolbar : null}
 		</View>
 	);
 }

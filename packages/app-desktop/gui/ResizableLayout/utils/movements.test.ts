@@ -147,7 +147,7 @@ describe('movements', () => {
 		expect(canMove(MoveDirection.Right, findItemByKey(layout, 'col2'), findItemByKey(layout, 'root'))).toBe(false);
 	});
 
-	test('Container with only one child should take the width of its parent', () => {
+	test('container with only one child should take the width of its parent', () => {
 		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
@@ -170,7 +170,7 @@ describe('movements', () => {
 		expect(layout.children[0].children[0].width).toBe(undefined);
 	});
 
-	test('Temp container should take the width of the child it replaces', () => {
+	test('temp container should take the width of the child it replaces', () => {
 		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,
@@ -198,7 +198,7 @@ describe('movements', () => {
 		expect(layout.children[0].children[1].width).toBe(undefined);
 	});
 
-	test('Last child should have flexible width if all siblings have fixed width', () => {
+	test('last child should have flexible width if all siblings have fixed width', () => {
 		let layout: LayoutItem = validateLayout({
 			key: 'root',
 			width: 100,

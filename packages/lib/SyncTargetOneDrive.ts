@@ -12,20 +12,20 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 
 	private api_: any;
 
-	static id() {
+	public static id() {
 		return 3;
 	}
 
-	constructor(db: any, options: any = null) {
+	public constructor(db: any, options: any = null) {
 		super(db, options);
 		this.api_ = null;
 	}
 
-	static targetName() {
+	public static targetName() {
 		return 'onedrive';
 	}
 
-	static label() {
+	public static label() {
 		return _('OneDrive');
 	}
 
@@ -37,30 +37,30 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		return false;
 	}
 
-	async isAuthenticated() {
+	public async isAuthenticated() {
 		return !!this.api().auth();
 	}
 
-	syncTargetId() {
+	public syncTargetId() {
 		return SyncTargetOneDrive.id();
 	}
 
-	isTesting() {
+	public isTesting() {
 		const p = parameters();
 		return !!p.oneDriveTest;
 	}
 
-	oneDriveParameters() {
+	public oneDriveParameters() {
 		const p = parameters();
 		if (p.oneDriveTest) return p.oneDriveTest;
 		return p.oneDrive;
 	}
 
-	authRouteName() {
+	public authRouteName() {
 		return 'OneDriveLogin';
 	}
 
-	api() {
+	public api() {
 		if (this.isTesting()) {
 			return this.fileApi_.driver().api();
 		}
@@ -92,24 +92,30 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		return this.api_;
 	}
 
-	async initFileApi() {
+	public async initFileApi() {
 		let context = Setting.value(`sync.${this.syncTargetId()}.context`);
 		context = context === '' ? null : JSON.parse(context);
 		let accountProperties = context ? context.accountProperties : null;
+		const api = this.api();
+
 		if (!accountProperties) {
-			accountProperties = await this.api_.execAccountPropertiesRequest();
+			accountProperties = await api.execAccountPropertiesRequest();
 			context ? context.accountProperties = accountProperties : context = { accountProperties: accountProperties };
 			Setting.setValue(`sync.${this.syncTargetId()}.context`, JSON.stringify(context));
 		}
-		this.api_.setAccountProperties(accountProperties);
+		api.setAccountProperties(accountProperties);
 		const appDir = await this.api().appDirectory();
-		const fileApi = new FileApi(appDir, new FileApiDriverOneDrive(this.api()));
+		// the appDir might contain non-ASCII characters
+		// /[^\u0021-\u00ff]/ is used in Node.js to detect the unescaped characters.
+		// See https://github.com/nodejs/node/blob/bbbf97b6dae63697371082475dc8651a6a220336/lib/_http_client.js#L176
+		const baseDir = RegExp(/[^\u0021-\u00ff]/).exec(appDir) !== null ? encodeURI(appDir) : appDir;
+		const fileApi = new FileApi(baseDir, new FileApiDriverOneDrive(this.api()));
 		fileApi.setSyncTargetId(this.syncTargetId());
 		fileApi.setLogger(this.logger());
 		return fileApi;
 	}
 
-	async initSynchronizer() {
+	public async initSynchronizer() {
 		try {
 			if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
 			return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));

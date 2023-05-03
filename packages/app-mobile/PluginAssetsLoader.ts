@@ -6,24 +6,24 @@ import KvStore from '@joplin/lib/services/KvStore';
 
 export default class PluginAssetsLoader {
 
-	static instance_: PluginAssetsLoader = null;
-	logger_: any = null;
+	private static instance_: PluginAssetsLoader = null;
+	private logger_: any = null;
 
-	static instance() {
+	public static instance() {
 		if (PluginAssetsLoader.instance_) return PluginAssetsLoader.instance_;
 		PluginAssetsLoader.instance_ = new PluginAssetsLoader();
 		return PluginAssetsLoader.instance_;
 	}
 
-	setLogger(logger: any) {
+	public setLogger(logger: any) {
 		this.logger_ = logger;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	async importAssets() {
+	public async importAssets() {
 		const destDir = `${Setting.value('resourceDir')}/pluginAssets`;
 		await shim.fsDriver().mkdir(destDir);
 

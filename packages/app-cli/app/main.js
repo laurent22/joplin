@@ -75,14 +75,14 @@ if (process.platform === 'win32') {
 		output: process.stdout,
 	});
 
-	rl.on('SIGINT', function() {
+	rl.on('SIGINT', () => {
 		process.emit('SIGINT');
 	});
 }
 
-process.stdout.on('error', function(err) {
+process.stdout.on('error', (error) => {
 	// https://stackoverflow.com/questions/12329816/error-write-epipe-when-piping-node-output-to-head#15884508
-	if (err.code === 'EPIPE') {
+	if (error.code === 'EPIPE') {
 		process.exit(0);
 	}
 });

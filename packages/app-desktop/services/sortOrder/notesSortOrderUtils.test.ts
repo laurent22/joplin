@@ -2,12 +2,12 @@ import { notesSortOrderFieldArray, notesSortOrderNextField, setNotesSortOrder } 
 import Setting from '@joplin/lib/models/Setting';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 
-beforeAll(() => {
-	shimInit();
-	Setting.autoSaveEnabled = false;
-});
-
 describe('notesSortOrderUtils', () => {
+
+	beforeAll(() => {
+		shimInit();
+		Setting.autoSaveEnabled = false;
+	});
 
 	it('should always provide the same ordered fields', async () => {
 		const expected = ['user_updated_time', 'user_created_time', 'title', 'order'];

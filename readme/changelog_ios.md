@@ -1,5 +1,16 @@
 # Joplin iOS app changelog
 
+## [ios-v12.10.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.5) - 2023-03-06T14:43:37Z
+
+- Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
+- Fixed: Custom sort order not synchronized (#7729) (#6956 by Tao Klerks)
+- Fixed: Fix camera attachment (#7775) (#7675 by [@vikneshwar](https://github.com/vikneshwar))
+- Fixed: Fix double-scroll issue in long notes (#7701) (#7700 by Henry Heino)
+- Fixed: Fix startup error (#7688) (#7687 by Henry Heino)
+- Fixed: Fixed sharing file (ed0edcb)
+- Fixed: Hide main content while biometric is enabled and not authenticated (#7781) (#7762 by [@pedr](https://github.com/pedr))
+- Fixed: Sharing pictures to Joplin creates recurring duplications (#7791)
+
 ## [ios-v12.10.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.2) - 2023-01-20T17:41:13Z
 
 - New: Add support for locking the app using biometrics (f10d9f7)

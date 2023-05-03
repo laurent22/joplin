@@ -15,7 +15,7 @@ let engine: any = null;
 
 const ids = (array: NoteEntity[]) => array.map(a => a.id);
 
-describe('services_SearchFilter', function() {
+describe('services_SearchFilter', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -66,7 +66,7 @@ describe('services_SearchFilter', function() {
 	for (const searchType of [SearchEngine.SEARCH_TYPE_FTS, SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT]) {
 
 		describe(`search type ${searchType}`, () => {
-			it('Check case insensitivity for filter keywords', (async () => {
+			it('check case insensitivity for filter keywords', (async () => {
 				let rows;
 				const notebook1 = await Folder.save({ title: 'folderA' });
 				const notebook2 = await Folder.save({ title: 'folderB' });
@@ -311,7 +311,7 @@ describe('services_SearchFilter', function() {
 			}));
 
 
-			it('should support filtering by tags', (async () => {
+			it('should support filtering by tags (2)', (async () => {
 				let rows;
 				const n1 = await Note.save({ title: 'peace talks', body: 'battle ground' });
 				const n2 = await Note.save({ title: 'mouse', body: 'mister' });

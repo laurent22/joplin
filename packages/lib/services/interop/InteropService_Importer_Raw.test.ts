@@ -119,7 +119,7 @@ const createFiles = async () => {
 	await writeFile(makeFilePath(tempDir, rawNote2), rawNote2);
 };
 
-describe('InteropService_Importer_Raw', function() {
+describe('InteropService_Importer_Raw', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -131,7 +131,7 @@ describe('InteropService_Importer_Raw', function() {
 		await remove(tempDir);
 	});
 
-	it('should import raw files', async function() {
+	it('should import raw files', async () => {
 		await createFiles();
 
 		const importOptions: ImportOptions = {
@@ -163,7 +163,7 @@ describe('InteropService_Importer_Raw', function() {
 		expect(note2.parent_id).toBe(folder2.id);
 	});
 
-	it('should handle duplicate names', async function() {
+	it('should handle duplicate names', async () => {
 		await createFiles();
 
 		const importOptions: ImportOptions = {

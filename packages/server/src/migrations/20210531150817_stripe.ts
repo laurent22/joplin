@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
 export async function up(db: DbConnection): Promise<any> {
-	await db.schema.createTable('subscriptions', function(table: Knex.CreateTableBuilder) {
+	await db.schema.createTable('subscriptions', (table: Knex.CreateTableBuilder) => {
 		table.increments('id').unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
 		table.string('stripe_user_id', 64).notNullable();

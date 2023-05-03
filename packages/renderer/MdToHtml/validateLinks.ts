@@ -11,5 +11,5 @@ export default function(url: string) {
 		return true;
 	}
 
-	return BAD_PROTO_RE.test(str) ? (GOOD_DATA_RE.test(str) ? true : false) : true;
+	return BAD_PROTO_RE.test(str) ? (!!GOOD_DATA_RE.test(str)) : true;
 }

@@ -20,7 +20,7 @@ class NoteSearchBar extends React.Component<Props> {
 
 	private backgroundColor: any;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.searchInput_change = this.searchInput_change.bind(this);
@@ -33,7 +33,7 @@ class NoteSearchBar extends React.Component<Props> {
 		this.backgroundColor = undefined;
 	}
 
-	style() {
+	public style() {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = {
@@ -46,7 +46,7 @@ class NoteSearchBar extends React.Component<Props> {
 		return style;
 	}
 
-	buttonIconComponent(iconName: string, clickHandler: any, isEnabled: boolean) {
+	public buttonIconComponent(iconName: string, clickHandler: any, isEnabled: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const searchButton = {
@@ -74,12 +74,12 @@ class NoteSearchBar extends React.Component<Props> {
 		);
 	}
 
-	searchInput_change(event: any) {
+	private searchInput_change(event: any) {
 		const query = event.currentTarget.value;
 		this.triggerOnChange(query);
 	}
 
-	searchInput_keyDown(event: any) {
+	private searchInput_keyDown(event: any) {
 		if (event.keyCode === 13) {
 			// ENTER
 			event.preventDefault();
@@ -106,28 +106,28 @@ class NoteSearchBar extends React.Component<Props> {
 		}
 	}
 
-	previousButton_click() {
+	private previousButton_click() {
 		if (this.props.onPrevious) this.props.onPrevious();
 	}
 
-	nextButton_click() {
+	private nextButton_click() {
 		if (this.props.onNext) this.props.onNext();
 	}
 
-	closeButton_click() {
+	private closeButton_click() {
 		if (this.props.onClose) this.props.onClose();
 	}
 
-	triggerOnChange(query: string) {
+	public triggerOnChange(query: string) {
 		if (this.props.onChange) this.props.onChange(query);
 	}
 
-	focus() {
+	public focus() {
 		(this.refs.searchInput as any).focus();
 		(this.refs.searchInput as any).select();
 	}
 
-	render() {
+	public render() {
 		const query = this.props.query ? this.props.query : '';
 
 		// backgroundColor needs to cached to a local variable to prevent the

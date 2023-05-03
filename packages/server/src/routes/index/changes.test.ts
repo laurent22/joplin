@@ -1,7 +1,7 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, createItemTree, createUserAndSession, parseHtml } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
 
-describe('index_changes', function() {
+describe('index_changes', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_changes');
@@ -15,7 +15,7 @@ describe('index_changes', function() {
 		await beforeEachDb();
 	});
 
-	test('should list changes', async function() {
+	test('should list changes', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, true);
 
 		const items: any = {};

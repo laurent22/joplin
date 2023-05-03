@@ -85,19 +85,19 @@ class BaseModel {
 
 	private static db_: JoplinDatabase;
 
-	static modelType(): ModelType {
+	public static modelType(): ModelType {
 		throw new Error('Must be overriden');
 	}
 
-	static tableName(): string {
+	public static tableName(): string {
 		throw new Error('Must be overriden');
 	}
 
-	static setDb(db: any) {
+	public static setDb(db: any) {
 		this.db_ = db;
 	}
 
-	static addModelMd(model: any): any {
+	public static addModelMd(model: any): any {
 		if (!model) return model;
 
 		if (Array.isArray(model)) {
@@ -113,22 +113,22 @@ class BaseModel {
 		}
 	}
 
-	static logger() {
+	public static logger() {
 		return this.db().logger();
 	}
 
-	static useUuid() {
+	public static useUuid() {
 		return false;
 	}
 
-	static byId(items: any[], id: string) {
+	public static byId(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id === id) return items[i];
 		}
 		return null;
 	}
 
-	static defaultValues(fieldNames: string[]) {
+	public static defaultValues(fieldNames: string[]) {
 		const output: any = {};
 		for (const n of fieldNames) {
 			output[n] = this.db().fieldDefaultValue(this.tableName(), n);
@@ -136,14 +136,14 @@ class BaseModel {
 		return output;
 	}
 
-	static modelIndexById(items: any[], id: string) {
+	public static modelIndexById(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id === id) return i;
 		}
 		return -1;
 	}
 
-	static modelsByIds(items: any[], ids: string[]) {
+	public static modelsByIds(items: any[], ids: string[]) {
 		const output = [];
 		for (let i = 0; i < items.length; i++) {
 			if (ids.indexOf(items[i].id) >= 0) {
@@ -155,14 +155,14 @@ class BaseModel {
 
 	// Prefer the use of this function to compare IDs as it handles the case where
 	// one ID is null and the other is "", in which case they are actually considered to be the same.
-	static idsEqual(id1: string, id2: string) {
+	public static idsEqual(id1: string, id2: string) {
 		if (!id1 && !id2) return true;
 		if (!id1 && !!id2) return false;
 		if (!!id1 && !id2) return false;
 		return id1 === id2;
 	}
 
-	static modelTypeToName(type: number) {
+	public static modelTypeToName(type: number) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];
 			if (e[1] === type) return e[0].substr(5).toLowerCase();
@@ -170,7 +170,7 @@ class BaseModel {
 		throw new Error(`Unknown model type: ${type}`);
 	}
 
-	static modelNameToType(name: string) {
+	public static modelNameToType(name: string) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];
 			const eName = e[0].substr(5).toLowerCase();
@@ -179,12 +179,12 @@ class BaseModel {
 		throw new Error(`Unknown model name: ${name}`);
 	}
 
-	static hasField(name: string) {
+	public static hasField(name: string) {
 		const fields = this.fieldNames();
 		return fields.indexOf(name) >= 0;
 	}
 
-	static fieldNames(withPrefix: boolean = false) {
+	public static fieldNames(withPrefix: boolean = false) {
 		const output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
 
@@ -197,7 +197,7 @@ class BaseModel {
 		return temp;
 	}
 
-	static fieldType(name: string, defaultValue: any = null) {
+	public static fieldType(name: string, defaultValue: any = null) {
 		const fields = this.fields();
 		for (let i = 0; i < fields.length; i++) {
 			if (fields[i].name === name) return fields[i].type;
@@ -206,11 +206,11 @@ class BaseModel {
 		throw new Error(`Unknown field: ${name}`);
 	}
 
-	static fields(): TableField[] {
+	public static fields(): TableField[] {
 		return this.db().tableFields(this.tableName());
 	}
 
-	static removeUnknownFields(model: any) {
+	public static removeUnknownFields(model: any) {
 		const newModel: any = {};
 		for (const n in model) {
 			if (!model.hasOwnProperty(n)) continue;
@@ -220,7 +220,7 @@ class BaseModel {
 		return newModel;
 	}
 
-	static new() {
+	public static new() {
 		const fields = this.fields();
 		const output: any = {};
 		for (let i = 0; i < fields.length; i++) {
@@ -230,7 +230,7 @@ class BaseModel {
 		return output;
 	}
 
-	static modOptions(options: any) {
+	public static modOptions(options: any) {
 		if (!options) {
 			options = {};
 		} else {
@@ -242,7 +242,7 @@ class BaseModel {
 		return options;
 	}
 
-	static count(options: any = null) {
+	public static count(options: any = null) {
 		if (!options) options = {};
 		let sql = `SELECT count(*) as total FROM \`${this.tableName()}\``;
 		if (options.where) sql += ` WHERE ${options.where}`;
@@ -254,19 +254,19 @@ class BaseModel {
 			});
 	}
 
-	static load(id: string, options: any = null) {
+	public static load(id: string, options: any = null) {
 		return this.loadByField('id', id, options);
 	}
 
-	static shortId(id: string) {
+	public static shortId(id: string) {
 		return id.substr(0, 5);
 	}
 
-	static loadByPartialId(partialId: string) {
+	public static loadByPartialId(partialId: string) {
 		return this.modelSelectAll(`SELECT * FROM \`${this.tableName()}\` WHERE \`id\` LIKE ?`, [`${partialId}%`]);
 	}
 
-	static applySqlOptions(options: any, sql: string, params: any[] = null) {
+	public static applySqlOptions(options: any, sql: string, params: any[] = null) {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
@@ -278,13 +278,13 @@ class BaseModel {
 		return { sql: sql, params: params };
 	}
 
-	static async allIds(options: any = null) {
+	public static async allIds(options: any = null) {
 		const q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
 		const rows = await this.db().selectAll(q.sql, q.params);
 		return rows.map((r: any) => r.id);
 	}
 
-	static async all(options: any = null) {
+	public static async all(options: any = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
@@ -299,7 +299,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
-	static async byIds(ids: string[], options: any = null) {
+	public static async byIds(ids: string[], options: any = null) {
 		if (!ids.length) return [];
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
@@ -310,7 +310,7 @@ class BaseModel {
 		return this.modelSelectAll(q.sql);
 	}
 
-	static async search(options: any = null) {
+	public static async search(options: any = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
@@ -332,7 +332,7 @@ class BaseModel {
 		return this.modelSelectAll(query.sql, query.params);
 	}
 
-	static modelSelectOne(sql: string, params: any[] = null) {
+	public static modelSelectOne(sql: string, params: any[] = null) {
 		if (params === null) params = [];
 		return this.db()
 			.selectOne(sql, params)
@@ -342,7 +342,7 @@ class BaseModel {
 			});
 	}
 
-	static modelSelectAll(sql: string, params: any[] = null) {
+	public static modelSelectAll(sql: string, params: any[] = null) {
 		if (params === null) params = [];
 		return this.db()
 			.selectAll(sql, params)
@@ -352,7 +352,7 @@ class BaseModel {
 			});
 	}
 
-	static loadByField(fieldName: string, fieldValue: any, options: any = null) {
+	public static loadByField(fieldName: string, fieldValue: any, options: any = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -361,7 +361,7 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	static loadByFields(fields: any, options: any = null) {
+	public static loadByFields(fields: any, options: any = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -376,11 +376,11 @@ class BaseModel {
 		return this.modelSelectOne(sql, params);
 	}
 
-	static loadByTitle(fieldValue: any) {
+	public static loadByTitle(fieldValue: any) {
 		return this.modelSelectOne(`SELECT * FROM \`${this.tableName()}\` WHERE \`title\` = ?`, [fieldValue]);
 	}
 
-	static diffObjects(oldModel: any, newModel: any) {
+	public static diffObjects(oldModel: any, newModel: any) {
 		const output: any = {};
 		const fields = this.diffObjectsFields(oldModel, newModel);
 		for (let i = 0; i < fields.length; i++) {
@@ -390,7 +390,7 @@ class BaseModel {
 		return output;
 	}
 
-	static diffObjectsFields(oldModel: any, newModel: any) {
+	public static diffObjectsFields(oldModel: any, newModel: any) {
 		const output = [];
 		for (const n in newModel) {
 			if (!newModel.hasOwnProperty(n)) continue;
@@ -402,13 +402,13 @@ class BaseModel {
 		return output;
 	}
 
-	static modelsAreSame(oldModel: any, newModel: any) {
+	public static modelsAreSame(oldModel: any, newModel: any) {
 		const diff = this.diffObjects(oldModel, newModel);
 		delete diff.type_;
 		return !Object.getOwnPropertyNames(diff).length;
 	}
 
-	static saveMutex(modelOrId: any) {
+	public static saveMutex(modelOrId: any) {
 		const noLockMutex = {
 			acquire: function(): any {
 				return null;
@@ -429,7 +429,7 @@ class BaseModel {
 		return mutex;
 	}
 
-	static releaseSaveMutex(modelOrId: any, release: Function) {
+	public static releaseSaveMutex(modelOrId: any, release: Function) {
 		if (!release) return;
 		if (!modelOrId) return release();
 
@@ -444,7 +444,7 @@ class BaseModel {
 		release();
 	}
 
-	static saveQuery(o: any, options: any) {
+	public static saveQuery(o: any, options: any) {
 		let temp: any = {};
 		const fieldNames = this.fieldNames();
 		for (let i = 0; i < fieldNames.length; i++) {
@@ -521,7 +521,7 @@ class BaseModel {
 		return query;
 	}
 
-	static userSideValidation(o: any) {
+	public static userSideValidation(o: any) {
 		if (o.id && !o.id.match(/^[a-f0-9]{32}$/)) {
 			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
 		}
@@ -532,7 +532,7 @@ class BaseModel {
 		}
 	}
 
-	static async save(o: any, options: any = null) {
+	public static async save(o: any, options: any = null) {
 		// When saving, there's a mutex per model ID. This is because the model returned from this function
 		// is basically its input `o` (instead of being read from the database, for performance reasons).
 		// This works well in general except if that model is saved simultaneously in two places. In that
@@ -602,7 +602,7 @@ class BaseModel {
 		return output;
 	}
 
-	static isNew(object: any, options: any) {
+	public static isNew(object: any, options: any) {
 		if (options && 'isNew' in options) {
 			// options.isNew can be "auto" too
 			if (options.isNew === true) return true;
@@ -612,7 +612,7 @@ class BaseModel {
 		return !object.id;
 	}
 
-	static filterArray(models: any[]) {
+	public static filterArray(models: any[]) {
 		const output = [];
 		for (let i = 0; i < models.length; i++) {
 			output.push(this.filter(models[i]));
@@ -620,7 +620,7 @@ class BaseModel {
 		return output;
 	}
 
-	static filter(model: any) {
+	public static filter(model: any) {
 		if (!model) return model;
 
 		const output = Object.assign({}, model);
@@ -643,12 +643,12 @@ class BaseModel {
 		return output;
 	}
 
-	static delete(id: string) {
+	public static delete(id: string) {
 		if (!id) throw new Error('Cannot delete object without an ID');
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
-	static async batchDelete(ids: string[], options: DeleteOptions = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
@@ -656,7 +656,7 @@ class BaseModel {
 		await this.db().exec(sql);
 	}
 
-	static db() {
+	public static db() {
 		if (!this.db_) throw new Error('Accessing database before it has been initialised');
 		return this.db_;
 	}

@@ -2,9 +2,9 @@ import { extractOpenGraphTags, OpenGraphTags } from './openGraph';
 import { tempFilePath } from '@joplin/lib/testing/test-utils';
 import { writeFile } from 'fs-extra';
 
-describe('openGraph', function() {
+describe('openGraph', () => {
 
-	it('should extract the Open Graph tags', async function() {
+	it('should extract the Open Graph tags', async () => {
 		const tests: [string, OpenGraphTags][] = [
 
 			['# My title\n\nMy note description **with bold text**', {

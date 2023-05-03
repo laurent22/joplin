@@ -1,6 +1,6 @@
 import { getIsPreRelease, getVersionFromTag } from './buildServerDocker';
 
-describe('buildServerDocker', function() {
+describe('buildServerDocker', () => {
 
 	test('should get the tag version', async () => {
 		type TestCase = [string, boolean, string];

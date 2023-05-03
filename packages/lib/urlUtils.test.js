@@ -1,7 +1,7 @@
 
 const urlUtils = require('./urlUtils.js');
 
-describe('urlUtils', function() {
+describe('urlUtils', () => {
 
 	it('should prepend a base URL', (async () => {
 		expect(urlUtils.prependBaseUrl('testing.html', 'http://example.com')).toBe('http://example.com/testing.html');

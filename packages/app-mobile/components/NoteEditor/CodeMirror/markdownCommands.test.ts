@@ -239,17 +239,5 @@ describe('markdownCommands', () => {
 		expect(sel.from).toBe('> Testing...> \n> \n'.length);
 		expect(sel.to).toBe(editor.state.doc.length);
 	});
-
-	it('toggling inline code should both create and navigate out of an inline code region', async () => {
-		const initialDocText = 'Testing...\n\n';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
-
-		toggleCode(editor);
-		editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
-		toggleCode(editor);
-
-		editor.dispatch(editor.state.replaceSelection(' is a function.'));
-		expect(editor.state.doc.toString()).toBe('Testing...\n\n`f(x) = ...` is a function.');
-	});
 });
 
