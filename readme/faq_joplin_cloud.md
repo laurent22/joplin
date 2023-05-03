@@ -20,7 +20,7 @@ We may also offer bulk discounts for companies, associations and nonprofit organ
 
 ## All our services are carbon neutral
 
-<img width="310" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/plans/CarbonNeutral.png" align="right" /> 
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/plans/CarbonNeutral.png" align="right" width="40%" style="max-width: 40%;"/> 
 
 Because the protection of the environment is as important as the protection of your data, we made our services carbon neutral. We believe that technology should not come at the expense of the planet, and we are committed to reducing our carbon footprint. 
 
