@@ -979,12 +979,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 		});
 
-		output.push({
-			title: 'Voice recording (Beta - FR only)',
-			onPress: () => {
-				void this.voiceRecording_onPress();
-			},
-		});
+		if (shim.mobilePlatform() === 'android') {
+			output.push({
+				title: 'Voice recording (Beta - FR only)',
+				onPress: () => {
+					void this.voiceRecording_onPress();
+				},
+			});
+		}
 
 		if (isSaved) {
 			output.push({
