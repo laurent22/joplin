@@ -69,14 +69,11 @@ module.exports = {
 	// ],
 
 	// An array of file extensions your modules use
-	// moduleFileExtensions: [
-	//   "js",
-	//   "json",
-	//   "jsx",
-	//   "ts",
-	//   "tsx",
-	//   "node"
-	// ],
+	moduleFileExtensions: [
+		'ts',
+		'tsx',
+		'js',
+	],
 
 	// A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
 	// moduleNameMapper: {},
@@ -145,13 +142,13 @@ module.exports = {
 
 	// The glob patterns Jest uses to detect test files
 	testMatch: [
-		'**/*.test.js',
+		'**/*.test.ts',
 	],
 
 	// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-	// testPathIgnorePatterns: [
-	//   "/node_modules/"
-	// ],
+	testPathIgnorePatterns: [
+		'<rootDir>/node_modules/',
+	],
 
 	// The regexp pattern or array of patterns that Jest uses to detect test files
 	// testRegex: [],
@@ -169,7 +166,9 @@ module.exports = {
 	// timers: "real",
 
 	// A map from regular expressions to paths to transformers
-	// transform: undefined,
+	transform: {
+		'\\.(ts|tsx)$': 'ts-jest',
+	},
 
 	// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
 	// transformIgnorePatterns: [

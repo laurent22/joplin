@@ -41,7 +41,7 @@ interface ReportItem {
 }
 
 export default class ReportService {
-	csvEscapeCell(cell: string) {
+	public csvEscapeCell(cell: string) {
 		cell = this.csvValueToString(cell);
 		const output = cell.replace(/"/, '""');
 		if (this.csvCellRequiresQuotes(cell, ',')) {
@@ -50,26 +50,26 @@ export default class ReportService {
 		return output;
 	}
 
-	csvCellRequiresQuotes(cell: string, delimiter: string) {
+	public csvCellRequiresQuotes(cell: string, delimiter: string) {
 		if (cell.indexOf('\n') >= 0) return true;
 		if (cell.indexOf('"') >= 0) return true;
 		if (cell.indexOf(delimiter) >= 0) return true;
 		return false;
 	}
 
-	csvValueToString(v: string) {
+	public csvValueToString(v: string) {
 		if (v === undefined || v === null) return '';
 		return v.toString();
 	}
 
-	csvCreateLine(row: string[]) {
+	public csvCreateLine(row: string[]) {
 		for (let i = 0; i < row.length; i++) {
 			row[i] = this.csvEscapeCell(row[i]);
 		}
 		return row.join(',');
 	}
 
-	csvCreate(rows: any[]) {
+	public csvCreate(rows: any[]) {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(this.csvCreateLine(rows[i]));
@@ -77,7 +77,7 @@ export default class ReportService {
 		return output.join('\n');
 	}
 
-	async basicItemList(option: any = null) {
+	public async basicItemList(option: any = null) {
 		if (!option) option = {};
 		if (!option.format) option.format = 'array';
 
@@ -100,7 +100,7 @@ export default class ReportService {
 		return option.format === 'csv' ? this.csvCreate(output) : output;
 	}
 
-	async syncStatus(syncTarget: number) {
+	public async syncStatus(syncTarget: number) {
 		const output: any = {
 			items: {},
 			total: {},
@@ -110,6 +110,8 @@ export default class ReportService {
 		let syncedCount = 0;
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			const d = BaseItem.syncItemDefinitions_[i];
+			// ref: https://github.com/laurent22/joplin/issues/7940#issuecomment-1473709148
+			if (d.className === 'MasterKey') continue;
 			const ItemClass = BaseItem.getClass(d.className);
 			const o = {
 				total: await ItemClass.count(),
@@ -162,7 +164,7 @@ export default class ReportService {
 		return section;
 	}
 
-	async status(syncTarget: number): Promise<ReportSection[]> {
+	public async status(syncTarget: number): Promise<ReportSection[]> {
 		const r = await this.syncStatus(syncTarget);
 		const sections: ReportSection[] = [];
 		let section: ReportSection = null;
@@ -178,7 +180,7 @@ export default class ReportService {
 
 			for (let i = 0; i < disabledItems.length; i++) {
 				const row = disabledItems[i];
-				let msg: string = '';
+				let msg = '';
 				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
 					msg = _('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason);
 				} else {

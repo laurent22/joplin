@@ -10,23 +10,23 @@ export interface Notification {
 }
 
 export default class Alarm extends BaseModel {
-	static tableName() {
+	public static tableName() {
 		return 'alarms';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_ALARM;
 	}
 
-	static byNoteId(noteId: string) {
+	public static byNoteId(noteId: string) {
 		return this.modelSelectOne('SELECT * FROM alarms WHERE note_id = ?', [noteId]);
 	}
 
-	static async deleteExpiredAlarms() {
+	public static async deleteExpiredAlarms() {
 		return this.db().exec('DELETE FROM alarms WHERE trigger_time <= ?', [Date.now()]);
 	}
 
-	static async alarmIdsWithoutNotes() {
+	public static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309
 		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL');
 		return alarms.map((a: any) => {
@@ -34,7 +34,7 @@ export default class Alarm extends BaseModel {
 		});
 	}
 
-	static async makeNotification(alarm: any, note: any = null): Promise<Notification> {
+	public static async makeNotification(alarm: any, note: any = null): Promise<Notification> {
 		if (!note) {
 			note = await Note.load(alarm.note_id);
 		} else if (!note.todo_due) {
@@ -55,7 +55,7 @@ export default class Alarm extends BaseModel {
 		return output;
 	}
 
-	static async allDue() {
+	public static async allDue() {
 		return this.modelSelectAll('SELECT * FROM alarms WHERE trigger_time >= ?', [Date.now()]);
 	}
 }

@@ -12,7 +12,7 @@ const shim = require('@joplin/lib/shim').default;
 const HtmlToHtml = require('@joplin/renderer/HtmlToHtml').default;
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
-describe('HtmlToHtml', function() {
+describe('HtmlToHtml', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -49,6 +49,7 @@ describe('HtmlToHtml', function() {
 			}
 
 			if (actualHtml !== expectedHtml) {
+				/* eslint-disable no-console */
 				console.info('');
 				console.info(`Error converting file: ${htmlSourceFilename}`);
 				console.info('--------------------------------- Got:');
@@ -59,6 +60,7 @@ describe('HtmlToHtml', function() {
 				console.info(expectedHtml.split('\n'));
 				console.info('--------------------------------------------');
 				console.info('');
+				/* eslint-enable */
 
 				expect(false).toBe(true);
 				// return;

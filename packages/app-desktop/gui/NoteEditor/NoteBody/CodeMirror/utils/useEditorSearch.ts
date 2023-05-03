@@ -128,8 +128,18 @@ export default function useEditorSearch(CodeMirror: any) {
 			// We only want to scroll the first keyword into view in the case of a multi keyword search
 			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
 
-			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
-			if (match) marks.push(match);
+			try {
+				const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
+				if (match) marks.push(match);
+			} catch (error) {
+				if (error.name !== 'SyntaxError') {
+					throw error;
+				}
+				// An error of 'Regular expression too large' might occour in the markJs library
+				// when the input is really big, this catch is here to avoid the application crashing
+				// https://github.com/laurent22/joplin/issues/7634
+				console.error('Error while trying to highlight words from search: ', error);
+			}
 		}
 
 		setMarkers(marks);

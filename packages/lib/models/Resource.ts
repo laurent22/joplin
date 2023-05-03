@@ -29,15 +29,15 @@ export default class Resource extends BaseItem {
 
 	public static fsDriver_: any;
 
-	static tableName() {
+	public static tableName() {
 		return 'resources';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_RESOURCE;
 	}
 
-	static encryptionService() {
+	public static encryptionService() {
 		if (!this.encryptionService_) throw new Error('Resource.encryptionService_ is not set!!');
 		return this.encryptionService_;
 	}
@@ -47,12 +47,12 @@ export default class Resource extends BaseItem {
 		return this.shareService_;
 	}
 
-	static isSupportedImageMimeType(type: string) {
+	public static isSupportedImageMimeType(type: string) {
 		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
-	static fetchStatuses(resourceIds: string[]): Promise<any[]> {
+	public static fetchStatuses(resourceIds: string[]): Promise<any[]> {
 		if (!resourceIds.length) return Promise.resolve([]);
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
 	}
@@ -61,7 +61,7 @@ export default class Resource extends BaseItem {
 		return this.db().selectAllFields('SELECT id FROM resources WHERE is_shared = 1', [], 'id');
 	}
 
-	static errorFetchStatuses() {
+	public static errorFetchStatuses() {
 		return this.db().selectAll(`
 			SELECT title AS resource_title, resource_id, fetch_error
 			FROM resource_local_states
@@ -70,7 +70,7 @@ export default class Resource extends BaseItem {
 		`, [Resource.FETCH_STATUS_ERROR]);
 	}
 
-	static needToBeFetched(resourceDownloadMode: string = null, limit: number = null) {
+	public static needToBeFetched(resourceDownloadMode: string = null, limit: number = null) {
 		const sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
@@ -80,21 +80,21 @@ export default class Resource extends BaseItem {
 		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
-	static async resetStartedFetchStatus() {
+	public static async resetStartedFetchStatus() {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
 
-	static resetErrorStatus(resourceId: string) {
+	public static resetErrorStatus(resourceId: string) {
 		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
 	}
 
-	static fsDriver() {
+	public static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
 	}
 
 	// DEPRECATED IN FAVOUR OF friendlySafeFilename()
-	static friendlyFilename(resource: ResourceEntity) {
+	public static friendlyFilename(resource: ResourceEntity) {
 		let output = safeFilename(resource.title); // Make sure not to allow spaces or any special characters as it's not supported in HTTP headers
 		if (!output) output = resource.id;
 		let extension = resource.file_extension;
@@ -103,22 +103,22 @@ export default class Resource extends BaseItem {
 		return output + extension;
 	}
 
-	static baseDirectoryPath() {
+	public static baseDirectoryPath() {
 		return Setting.value('resourceDir');
 	}
 
-	static baseRelativeDirectoryPath() {
+	public static baseRelativeDirectoryPath() {
 		return Setting.value('resourceDirName');
 	}
 
-	static filename(resource: ResourceEntity, encryptedBlob = false) {
+	public static filename(resource: ResourceEntity, encryptedBlob = false) {
 		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		extension = extension ? `.${extension}` : '';
 		return resource.id + extension;
 	}
 
-	static friendlySafeFilename(resource: ResourceEntity) {
+	public static friendlySafeFilename(resource: ResourceEntity) {
 		let ext = resource.file_extension;
 		if (!ext) ext = resource.mime ? mime.toFileExtension(resource.mime) : '';
 		const safeExt = ext ? pathUtils.safeFileExtension(ext).toLowerCase() : '';
@@ -127,20 +127,20 @@ export default class Resource extends BaseItem {
 		return pathUtils.friendlySafeFilename(title) + (safeExt ? `.${safeExt}` : '');
 	}
 
-	static relativePath(resource: ResourceEntity, encryptedBlob = false) {
+	public static relativePath(resource: ResourceEntity, encryptedBlob = false) {
 		return `${Setting.value('resourceDirName')}/${this.filename(resource, encryptedBlob)}`;
 	}
 
-	static fullPath(resource: ResourceEntity, encryptedBlob = false) {
+	public static fullPath(resource: ResourceEntity, encryptedBlob = false) {
 		return `${Setting.value('resourceDir')}/${this.filename(resource, encryptedBlob)}`;
 	}
 
-	static async isReady(resource: ResourceEntity) {
+	public static async isReady(resource: ResourceEntity) {
 		const r = await this.readyStatus(resource);
 		return r === 'ok';
 	}
 
-	static async readyStatus(resource: ResourceEntity) {
+	public static async readyStatus(resource: ResourceEntity) {
 		const ls = await this.localState(resource);
 		if (!resource) return 'notFound';
 		if (ls.fetch_status !== Resource.FETCH_STATUS_DONE) return 'notDownloaded';
@@ -148,13 +148,13 @@ export default class Resource extends BaseItem {
 		return 'ok';
 	}
 
-	static async requireIsReady(resource: ResourceEntity) {
+	public static async requireIsReady(resource: ResourceEntity) {
 		const readyStatus = await Resource.readyStatus(resource);
 		if (readyStatus !== 'ok') throw new Error(`Resource is not ready. Status: ${readyStatus}`);
 	}
 
 	// For resources, we need to decrypt the item (metadata) and the resource binary blob.
-	static async decrypt(item: ResourceEntity) {
+	public static async decrypt(item: ResourceEntity) {
 		// The item might already be decrypted but not the blob (for instance if it crashes while
 		// decrypting the blob or was otherwise interrupted).
 		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : Object.assign({}, item);
@@ -230,7 +230,7 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
-	static markdownTag(resource: any) {
+	public static markdownTag(resource: any) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
@@ -246,48 +246,48 @@ export default class Resource extends BaseItem {
 		return lines.join('');
 	}
 
-	static internalUrl(resource: ResourceEntity) {
+	public static internalUrl(resource: ResourceEntity) {
 		return `:/${resource.id}`;
 	}
 
-	static pathToId(path: string) {
+	public static pathToId(path: string) {
 		return filename(path);
 	}
 
-	static async content(resource: ResourceEntity) {
+	public static async content(resource: ResourceEntity) {
 		return this.fsDriver().readFile(this.fullPath(resource), 'Buffer');
 	}
 
-	static isResourceUrl(url: string) {
+	public static isResourceUrl(url: string) {
 		return url && url.length === 34 && url[0] === ':' && url[1] === '/';
 	}
 
-	static urlToId(url: string) {
+	public static urlToId(url: string) {
 		if (!this.isResourceUrl(url)) throw new Error(`Not a valid resource URL: ${url}`);
 		return url.substr(2);
 	}
 
-	static async localState(resourceOrId: any) {
+	public static async localState(resourceOrId: any) {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
-	static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
+	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
 	}
 
-	static async needFileSizeSet() {
+	public static async needFileSizeSet() {
 		return this.modelSelectAll('SELECT * FROM resources WHERE `size` < 0 AND encryption_blob_encrypted = 0');
 	}
 
 	// Only set the `size` field and nothing else, not even the update_time
 	// This is because it's only necessary to do it once after migration 20
 	// and each client does it so there's no need to sync the resource.
-	static async setFileSizeOnly(resourceId: string, fileSize: number) {
+	public static async setFileSizeOnly(resourceId: string, fileSize: number) {
 		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: any = null) {
 		// For resources, there's not really batch deleting since there's the file data to delete
 		// too, so each is processed one by one with the item being deleted last (since the db
 		// call is the less likely to fail).
@@ -305,13 +305,13 @@ export default class Resource extends BaseItem {
 		await ResourceLocalState.batchDelete(ids);
 	}
 
-	static async markForDownload(resourceId: string) {
+	public static async markForDownload(resourceId: string) {
 		// Insert the row only if it's not already there
 		const t = Date.now();
 		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
 	}
 
-	static async downloadedButEncryptedBlobCount(excludedIds: string[] = null) {
+	public static async downloadedButEncryptedBlobCount(excludedIds: string[] = null) {
 		let excludedSql = '';
 		if (excludedIds && excludedIds.length) {
 			excludedSql = `AND resource_id NOT IN ("${excludedIds.join('","')}")`;
@@ -328,7 +328,7 @@ export default class Resource extends BaseItem {
 		return r ? r.total : 0;
 	}
 
-	static async downloadStatusCounts(status: number) {
+	public static async downloadStatusCounts(status: number) {
 		const r = await this.db().selectOne(`
 			SELECT count(*) as total
 			FROM resource_local_states
@@ -338,7 +338,7 @@ export default class Resource extends BaseItem {
 		return r ? r.total : 0;
 	}
 
-	static async createdLocallyCount() {
+	public static async createdLocallyCount() {
 		const r = await this.db().selectOne(`
 			SELECT count(*) as total
 			FROM resources
@@ -349,7 +349,7 @@ export default class Resource extends BaseItem {
 		return r ? r.total : 0;
 	}
 
-	static fetchStatusToLabel(status: number) {
+	public static fetchStatusToLabel(status: number) {
 		if (status === Resource.FETCH_STATUS_IDLE) return _('Not downloaded');
 		if (status === Resource.FETCH_STATUS_STARTED) return _('Downloading');
 		if (status === Resource.FETCH_STATUS_DONE) return _('Downloaded');
@@ -357,7 +357,7 @@ export default class Resource extends BaseItem {
 		throw new Error(`Invalid status: ${status}`);
 	}
 
-	static async updateResourceBlobContent(resourceId: string, newBlobFilePath: string) {
+	public static async updateResourceBlobContent(resourceId: string, newBlobFilePath: string) {
 		const resource = await Resource.load(resourceId);
 		await this.requireIsReady(resource);
 
@@ -370,7 +370,7 @@ export default class Resource extends BaseItem {
 		});
 	}
 
-	static async resourceBlobContent(resourceId: string, encoding = 'Buffer') {
+	public static async resourceBlobContent(resourceId: string, encoding = 'Buffer') {
 		const resource = await Resource.load(resourceId);
 		await this.requireIsReady(resource);
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);

@@ -4,7 +4,7 @@ import { fetchSyncInfo, localSyncInfo, setEncryptionEnabled } from '../synchroni
 import { EncryptionMethod } from '../e2ee/EncryptionService';
 import { updateMasterPassword } from '../e2ee/utils';
 
-describe('Synchronizer.ppk', function() {
+describe('Synchronizer.ppk', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

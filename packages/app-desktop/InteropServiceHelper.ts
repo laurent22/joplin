@@ -40,6 +40,7 @@ export default class InteropServiceHelper {
 		const service = InteropService.instance();
 
 		const result = await service.export(fullExportOptions);
+		// eslint-disable-next-line no-console
 		console.info('Export HTML result: ', result);
 		return tempFile;
 	}
@@ -190,6 +191,7 @@ export default class InteropServiceHelper {
 
 		try {
 			const result = await service.export(exportOptions);
+			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
 		} catch (error) {
 			console.error(error);

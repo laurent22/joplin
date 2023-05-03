@@ -6,7 +6,7 @@ import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
-describe('Synchronizer.conflicts', function() {
+describe('Synchronizer.conflicts', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

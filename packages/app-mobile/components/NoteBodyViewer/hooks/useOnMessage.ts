@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-const shared = require('@joplin/lib/components/shared/note-screen-shared');
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 
 export default function useOnMessage(onCheckboxChange: Function, noteBody: string, onMarkForDownload: Function, onJoplinLinkClick: Function, onResourceLongPress: Function) {
 	return useCallback((event: any) => {
@@ -11,6 +11,7 @@ export default function useOnMessage(onCheckboxChange: Function, noteBody: strin
 		// https://github.com/laurent22/joplin/issues/4494
 		const msg = event.nativeEvent.data;
 
+		// eslint-disable-next-line no-console
 		console.info('Got IPC message: ', msg);
 
 		if (msg.indexOf('checkboxclick:') === 0) {

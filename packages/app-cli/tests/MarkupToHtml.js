@@ -1,7 +1,7 @@
 
 const MarkupToHtml = require('@joplin/renderer/MarkupToHtml').default;
 
-describe('MarkupToHtml', function() {
+describe('MarkupToHtml', () => {
 
 	it('should strip markup', (async () => {
 		const service = new MarkupToHtml();

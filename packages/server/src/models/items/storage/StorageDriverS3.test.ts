@@ -29,7 +29,7 @@ const configIsSet = () => {
 	return !!s3config_;
 };
 
-describe('StorageDriverS3', function() {
+describe('StorageDriverS3', () => {
 
 	beforeAll(async () => {
 		if (!(configIsSet())) {

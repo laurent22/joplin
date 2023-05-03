@@ -10,10 +10,11 @@ import Setting from '@joplin/lib/models/Setting';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 class CameraView extends Component {
-	constructor() {
+	public constructor() {
 		super();
 
 		const dimensions = Dimensions.get('window');
@@ -33,18 +34,18 @@ class CameraView extends Component {
 		this.onLayout = this.onLayout.bind(this);
 	}
 
-	onLayout(event: any) {
+	public onLayout(event: any) {
 		this.setState({
 			screenWidth: event.nativeEvent.layout.width,
 			screenHeight: event.nativeEvent.layout.height,
 		});
 	}
 
-	back_onPress() {
+	private back_onPress() {
 		if (this.props.onCancel) this.props.onCancel();
 	}
 
-	reverse_onPress() {
+	private reverse_onPress() {
 		if (this.props.cameraType === RNCamera.Constants.Type.back) {
 			Setting.setValue('camera.type', RNCamera.Constants.Type.front);
 		} else {
@@ -52,7 +53,7 @@ class CameraView extends Component {
 		}
 	}
 
-	ratio_onPress() {
+	private ratio_onPress() {
 		if (this.state.ratios.length <= 1) return;
 
 		let index = this.state.ratios.indexOf(this.props.cameraRatio);
@@ -61,7 +62,7 @@ class CameraView extends Component {
 		Setting.setValue('camera.ratio', this.state.ratios[index]);
 	}
 
-	async photo_onPress() {
+	private async photo_onPress() {
 		if (!this.camera || !this.props.onPhoto) return;
 
 		this.setState({ snapping: true });
@@ -78,14 +79,14 @@ class CameraView extends Component {
 
 	}
 
-	async onCameraReady() {
+	public async onCameraReady() {
 		if (this.supportsRatios()) {
 			const ratios = await this.camera.getSupportedRatiosAsync();
 			this.setState({ ratios: ratios });
 		}
 	}
 
-	renderButton(onPress: Function, iconNameOrIcon: any, style: any) {
+	public renderButton(onPress: Function, iconNameOrIcon: any, style: any) {
 		let icon = null;
 
 		if (typeof iconNameOrIcon === 'string') {
@@ -111,7 +112,7 @@ class CameraView extends Component {
 		);
 	}
 
-	fitRectIntoBounds(rect: any, bounds: any) {
+	public fitRectIntoBounds(rect: any, bounds: any) {
 		const rectRatio = rect.width / rect.height;
 		const boundsRatio = bounds.width / bounds.height;
 
@@ -129,7 +130,7 @@ class CameraView extends Component {
 		return newDimensions;
 	}
 
-	cameraRect(ratio: string) {
+	public cameraRect(ratio: string) {
 		// To keep the calculations simpler, it's assumed that the phone is in
 		// portrait orientation. Then at the end we swap the values if needed.
 		const splitted = ratio.split(':');
@@ -151,11 +152,11 @@ class CameraView extends Component {
 		return output;
 	}
 
-	supportsRatios() {
+	public supportsRatios() {
 		return shim.mobilePlatform() === 'android';
 	}
 
-	render() {
+	public render() {
 		const photoIcon = this.state.snapping ? 'md-checkmark' : 'md-camera';
 
 		const displayRatios = this.supportsRatios() && this.state.ratios.length > 1;

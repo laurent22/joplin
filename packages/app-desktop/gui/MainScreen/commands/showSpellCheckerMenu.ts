@@ -20,7 +20,7 @@ export const runtime = (): CommandRuntime => {
 
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker);
 			const menu = Menu.buildFromTemplate(menuItems as any);
-			menu.popup(bridge().window());
+			menu.popup({ window: bridge().window() });
 		},
 
 		mapStateToTitle(state: AppState): string {

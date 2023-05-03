@@ -135,7 +135,7 @@ const getNextSortingOrderType = (s: SortingType): SortingType => {
 const MAX_RESOURCES = 10000;
 
 class ResourceScreenComponent extends React.Component<Props, State> {
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 		this.state = {
 			resources: undefined,
@@ -147,7 +147,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		};
 	}
 
-	async reloadResources(sorting: ActiveSorting) {
+	public async reloadResources(sorting: ActiveSorting) {
 		this.setState({ isLoading: true });
 		const resources = await Resource.all({
 			order: [{
@@ -161,11 +161,11 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		this.setState({ resources, isLoading: false });
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		void this.reloadResources(this.state.sorting);
 	}
 
-	onResourceDelete(resource: InnerResource) {
+	public onResourceDelete(resource: InnerResource) {
 		const ok = bridge().showConfirmMessageBox(_('Delete attachment "%s"?', resource.title), {
 			buttons: [_('Delete'), _('Cancel')],
 			defaultId: 1,
@@ -184,7 +184,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			});
 	}
 
-	openResource(resource: InnerResource) {
+	public openResource(resource: InnerResource) {
 		const resourcePath = Resource.fullPath(resource);
 		const ok = bridge().openExternal(`file://${resourcePath}`);
 		if (!ok) {
@@ -192,7 +192,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
-	onToggleSortOrder(sortOrder: SortingOrder) {
+	public onToggleSortOrder(sortOrder: SortingOrder) {
 		let newSorting = { ...this.state.sorting };
 		if (sortOrder === this.state.sorting.order) {
 			newSorting.type = getNextSortingOrderType(newSorting.type);
@@ -206,7 +206,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		void this.reloadResources(newSorting);
 	}
 
-	render() {
+	public render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 

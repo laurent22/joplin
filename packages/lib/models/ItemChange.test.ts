@@ -7,7 +7,7 @@ import ItemChange from '../models/ItemChange';
 
 let searchEngine: SearchEngine = null;
 
-describe('models/ItemChange', function() {
+describe('models/ItemChange', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

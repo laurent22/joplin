@@ -29,7 +29,7 @@ export default class Cache {
 	private expirableKeys_: ExpirableKeys = {};
 	private recordKeyHistory_: string[] = [];
 
-	constructor(maxRecords: number = 50) {
+	public constructor(maxRecords: number = 50) {
 		this.maxRecords_ = maxRecords;
 	}
 

@@ -17,6 +17,7 @@ import { AppState } from '../../utils/types';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 class SearchScreenComponent extends BaseScreenComponent {
@@ -26,11 +27,11 @@ class SearchScreenComponent extends BaseScreenComponent {
 	private styles_: any = {};
 	private scheduleSearchTimer_: any = null;
 
-	static navigationOptions() {
+	public static navigationOptions() {
 		return { header: null } as any;
 	}
 
-	constructor() {
+	public constructor() {
 		super();
 		this.state = {
 			query: '',
@@ -38,7 +39,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	styles() {
+	public styles() {
 		const theme = themeStyle(this.props.themeId);
 
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
@@ -71,17 +72,17 @@ class SearchScreenComponent extends BaseScreenComponent {
 		return this.styles_[this.props.themeId];
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		this.setState({ query: this.props.query });
 		void this.refreshSearch(this.props.query);
 		this.isMounted_ = true;
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		this.isMounted_ = false;
 	}
 
-	clearButton_press() {
+	private clearButton_press() {
 		this.props.dispatch({
 			type: 'SEARCH_QUERY',
 			query: '',
@@ -91,7 +92,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		void this.refreshSearch('');
 	}
 
-	async refreshSearch(query: string = null) {
+	public async refreshSearch(query: string = null) {
 		if (!this.props.visible) return;
 
 		query = gotoAnythingStyleQuery(query);
@@ -129,7 +130,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		this.setState({ notes: notes });
 	}
 
-	scheduleSearch() {
+	public scheduleSearch() {
 		if (this.scheduleSearchTimer_) clearTimeout(this.scheduleSearchTimer_);
 
 		this.scheduleSearchTimer_ = setTimeout(() => {
@@ -138,7 +139,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		}, 200);
 	}
 
-	searchTextInput_changeText(text: string) {
+	private searchTextInput_changeText(text: string) {
 		this.setState({ query: text });
 
 		this.props.dispatch({
@@ -149,7 +150,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		this.scheduleSearch();
 	}
 
-	render() {
+	public render() {
 		if (!this.isMounted_) return null;
 
 		const theme = themeStyle(this.props.themeId);

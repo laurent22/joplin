@@ -31,53 +31,53 @@ export default class DecryptionWorker {
 	private startCalls_: boolean[] = [];
 	private encryptionService_: EncryptionService = null;
 
-	constructor() {
+	public constructor() {
 		this.state_ = 'idle';
 		this.logger_ = new Logger();
 		this.eventEmitter_ = new EventEmitter();
 	}
 
-	setLogger(l: Logger) {
+	public setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	static instance() {
+	public static instance() {
 		if (DecryptionWorker.instance_) return DecryptionWorker.instance_;
 		DecryptionWorker.instance_ = new DecryptionWorker();
 		return DecryptionWorker.instance_;
 	}
 
-	setEncryptionService(v: any) {
+	public setEncryptionService(v: any) {
 		this.encryptionService_ = v;
 	}
 
-	setKvStore(v: KvStore) {
+	public setKvStore(v: KvStore) {
 		this.kvStore_ = v;
 	}
 
-	encryptionService() {
+	public encryptionService() {
 		if (!this.encryptionService_) throw new Error('DecryptionWorker.encryptionService_ is not set!!');
 		return this.encryptionService_;
 	}
 
-	kvStore() {
+	public kvStore() {
 		if (!this.kvStore_) throw new Error('DecryptionWorker.kvStore_ is not set!!');
 		return this.kvStore_;
 	}
 
-	async scheduleStart() {
+	public async scheduleStart() {
 		if (this.scheduleId_) return;
 
 		this.scheduleId_ = shim.setTimeout(() => {
@@ -88,7 +88,7 @@ export default class DecryptionWorker {
 		}, 1000);
 	}
 
-	async decryptionDisabledItems() {
+	public async decryptionDisabledItems() {
 		let items = await this.kvStore().searchByPrefix('decrypt:');
 		items = items.filter(item => item.value > this.maxDecryptionAttempts_);
 		items = items.map(item => {
@@ -101,15 +101,15 @@ export default class DecryptionWorker {
 		return items;
 	}
 
-	async clearDisabledItem(typeId: string, itemId: string) {
+	public async clearDisabledItem(typeId: string, itemId: string) {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
-	async clearDisabledItems() {
+	public async clearDisabledItems() {
 		await this.kvStore().deleteByPrefix('decrypt:');
 	}
 
-	dispatchReport(report: any) {
+	public dispatchReport(report: any) {
 		const action = Object.assign({}, report);
 		action.type = 'DECRYPTION_WORKER_SET';
 		this.dispatch(action);
@@ -301,7 +301,7 @@ export default class DecryptionWorker {
 		return output;
 	}
 
-	async destroy() {
+	public async destroy() {
 		this.eventEmitter_.removeAllListeners();
 		if (this.scheduleId_) {
 			shim.clearTimeout(this.scheduleId_);

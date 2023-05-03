@@ -17,6 +17,7 @@ import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
+// eslint-disable-next-line no-console
 Icon.loadFont().catch((error: any) => { console.info(error); });
 
 interface Props {

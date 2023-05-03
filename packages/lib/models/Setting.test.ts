@@ -24,7 +24,7 @@ const switchToSubProfileSettings = async () => {
 	await Setting.load();
 };
 
-describe('models/Setting', function() {
+describe('models/Setting', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

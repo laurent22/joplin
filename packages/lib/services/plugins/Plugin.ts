@@ -36,7 +36,7 @@ export default class Plugin {
 	private dataDir_: string;
 	private dataDirCreated_: boolean = false;
 
-	constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
+	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;

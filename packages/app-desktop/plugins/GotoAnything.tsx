@@ -3,17 +3,16 @@ import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
-
 const { connect } = require('react-redux');
-const { _ } = require('@joplin/lib/locale');
-const { themeStyle } = require('@joplin/lib/theme');
+import { _ } from '@joplin/lib/locale';
+import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
 import BaseModel from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
-const { ItemList } = require('../gui/ItemList.min');
+import ItemList from '../gui/ItemList';
 import HelpButton from '../gui/HelpButton';
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
@@ -66,7 +65,7 @@ class GotoAnything {
 	public static Dialog: any;
 	public static manifest: any;
 
-	onTrigger(event: any) {
+	public onTrigger(event: any) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
@@ -86,7 +85,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	private markupToHtml_: MarkupToHtml;
 	private userCallback_: any = null;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
@@ -120,7 +119,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (startString) this.scheduleListUpdate();
 	}
 
-	style() {
+	public style() {
 		const styleKey = [this.props.themeId, this.state.listType, this.state.resultsInBody ? '1' : '0'].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
@@ -185,7 +184,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return this.styles_[styleKey];
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
 
 		this.props.dispatch({
@@ -194,7 +193,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
 
@@ -204,7 +203,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	onKeyDown(event: any) {
+	public onKeyDown(event: any) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -214,7 +213,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	modalLayer_onClick(event: any) {
+	private modalLayer_onClick(event: any) {
 		if (event.currentTarget === event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -224,17 +223,17 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	helpButton_onClick() {
+	private helpButton_onClick() {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	input_onChange(event: any) {
+	private input_onChange(event: any) {
 		this.setState({ query: event.target.value });
 
 		this.scheduleListUpdate();
 	}
 
-	scheduleListUpdate() {
+	public scheduleListUpdate() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 
 		this.listUpdateIID_ = shim.setTimeout(async () => {
@@ -243,12 +242,12 @@ class Dialog extends React.PureComponent<Props, State> {
 		}, 100);
 	}
 
-	async keywords(searchQuery: string) {
+	public async keywords(searchQuery: string) {
 		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
-	markupToHtml() {
+	public markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 		return this.markupToHtml_;
@@ -263,7 +262,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		};
 	}
 
-	async updateList() {
+	public async updateList() {
 		let resultsInBody = false;
 
 		if (!this.state.query) {
@@ -403,7 +402,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.itemListRef.current.makeItemIndexVisible(index);
 	}
 
-	async gotoItem(item: any) {
+	public async gotoItem(item: any) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -466,7 +465,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	listItem_onClick(event: any) {
+	private listItem_onClick(event: any) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
@@ -479,7 +478,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	renderItem(item: SearchResult) {
+	public renderItem(item: SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const isSelected = item.id === this.state.selectedItemId;
@@ -503,7 +502,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		);
 	}
 
-	selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
+	public selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -513,13 +512,13 @@ class Dialog extends React.PureComponent<Props, State> {
 		return -1;
 	}
 
-	selectedItem() {
+	public selectedItem() {
 		const index = this.selectedItemIndex();
 		if (index < 0) return null;
 		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
-	input_onKeyDown(event: any) {
+	private input_onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
@@ -555,7 +554,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return maxItemCount * itemHeight;
 	}
 
-	renderList() {
+	public renderList() {
 		const style = this.style();
 
 		const itemListStyle = {
@@ -574,7 +573,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		);
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const helpComp = !this.state.showHelp ? null : <div className="help-text" style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;

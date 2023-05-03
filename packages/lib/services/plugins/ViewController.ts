@@ -41,11 +41,11 @@ export default class ViewController {
 	}
 
 	public async emitMessage(event: EmitMessageEvent): Promise<any> {
-		console.info('Calling ViewController.emitMessage - but not implemented', event);
+		console.warn('Calling ViewController.emitMessage - but not implemented', event);
 	}
 
 	public postMessage(message: any) {
-		console.info('Calling ViewController.postMessage - but not implemented', message);
+		console.warn('Calling ViewController.postMessage - but not implemented', message);
 	}
 
 }

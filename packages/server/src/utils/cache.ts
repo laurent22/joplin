@@ -9,7 +9,7 @@ interface CacheEntries {
 
 class Cache {
 
-	cache: CacheEntries = {};
+	private cache: CacheEntries = {};
 
 	private async setAny(key: string, o: any): Promise<void> {
 		this.cache[key] = {
@@ -18,7 +18,7 @@ class Cache {
 		};
 	}
 
-	async setObject(key: string, object: Object): Promise<void> {
+	public async setObject(key: string, object: Object): Promise<void> {
 		if (!object) return;
 		return this.setAny(key, object);
 	}
@@ -33,16 +33,16 @@ class Cache {
 		}
 	}
 
-	async object(key: string): Promise<object> {
+	public async object(key: string): Promise<object> {
 		return this.getAny(key) as object;
 	}
 
-	async delete(key: string | string[]): Promise<void> {
+	public async delete(key: string | string[]): Promise<void> {
 		const keys = typeof key === 'string' ? [key] : key;
 		for (const k of keys) delete this.cache[k];
 	}
 
-	async clearAll(): Promise<void> {
+	public async clearAll(): Promise<void> {
 		this.cache = {};
 	}
 

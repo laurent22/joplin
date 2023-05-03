@@ -90,7 +90,7 @@ webviewLib.initialize = function(options) {
 	webviewLib.options_ = options;
 };
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', (event) => {
 	const anchor = webviewLib.getParentAnchorElement(event.target);
 	if (!anchor) return;
 

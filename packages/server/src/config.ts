@@ -11,7 +11,7 @@ interface PackageJson {
 
 const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
 
-let runningInDocker_: boolean = false;
+let runningInDocker_ = false;
 
 export function runningInDocker(): boolean {
 	return runningInDocker_;

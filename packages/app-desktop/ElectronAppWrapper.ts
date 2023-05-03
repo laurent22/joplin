@@ -3,7 +3,7 @@ import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
-const { BrowserWindow, Tray, screen } = require('electron');
+import { BrowserWindow, Tray, screen } from 'electron';
 const url = require('url');
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
@@ -25,7 +25,7 @@ export default class ElectronAppWrapper {
 	private env_: string;
 	private isDebugMode_: boolean;
 	private profilePath_: string;
-	private win_: any = null;
+	private win_: BrowserWindow = null;
 	private willQuitApp_: boolean = false;
 	private tray_: any = null;
 	private buildDir_: string = null;
@@ -33,7 +33,7 @@ export default class ElectronAppWrapper {
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
 
-	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
+	public constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
@@ -41,31 +41,31 @@ export default class ElectronAppWrapper {
 		this.initialCallbackUrl_ = initialCallbackUrl;
 	}
 
-	electronApp() {
+	public electronApp() {
 		return this.electronApp_;
 	}
 
-	setLogger(v: Logger) {
+	public setLogger(v: Logger) {
 		this.logger_ = v;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	window() {
+	public window() {
 		return this.win_;
 	}
 
-	env() {
+	public env() {
 		return this.env_;
 	}
 
-	initialCallbackUrl() {
+	public initialCallbackUrl() {
 		return this.initialCallbackUrl_;
 	}
 
-	createWindow() {
+	public createWindow() {
 		// Set to true to view errors if the application does not start
 		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
 
@@ -117,7 +117,7 @@ export default class ElectronAppWrapper {
 			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
-		this.win_.loadURL(url.format({
+		void this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
 			protocol: 'file:',
 			slashes: true,
@@ -236,11 +236,11 @@ export default class ElectronAppWrapper {
 		}
 	}
 
-	registerPluginWindow(pluginId: string, window: any) {
+	public registerPluginWindow(pluginId: string, window: any) {
 		this.pluginWindows_[pluginId] = window;
 	}
 
-	async waitForElectronAppReady() {
+	public async waitForElectronAppReady() {
 		if (this.electronApp().isReady()) return Promise.resolve();
 
 		return new Promise<void>((resolve) => {
@@ -253,25 +253,25 @@ export default class ElectronAppWrapper {
 		});
 	}
 
-	quit() {
+	public quit() {
 		this.electronApp_.quit();
 	}
 
-	exit(errorCode = 0) {
+	public exit(errorCode = 0) {
 		this.electronApp_.exit(errorCode);
 	}
 
-	trayShown() {
+	public trayShown() {
 		return !!this.tray_;
 	}
 
 	// This method is used in macOS only to hide the whole app (and not just the main window)
 	// including the menu bar. This follows the macOS way of hiding an app.
-	hide() {
+	public hide() {
 		this.electronApp_.hide();
 	}
 
-	buildDir() {
+	public buildDir() {
 		if (this.buildDir_) return this.buildDir_;
 		let dir = `${__dirname}/build`;
 		if (!fs.pathExistsSync(dir)) {
@@ -283,7 +283,7 @@ export default class ElectronAppWrapper {
 		return dir;
 	}
 
-	trayIconFilename_() {
+	private trayIconFilename_() {
 		let output = '';
 
 		if (process.platform === 'darwin') {
@@ -298,7 +298,7 @@ export default class ElectronAppWrapper {
 	}
 
 	// Note: this must be called only after the "ready" event of the app has been dispatched
-	createTray(contextMenu: any) {
+	public createTray(contextMenu: any) {
 		try {
 			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
 			this.tray_.setToolTip(this.electronApp_.name);
@@ -312,13 +312,13 @@ export default class ElectronAppWrapper {
 		}
 	}
 
-	destroyTray() {
+	public destroyTray() {
 		if (!this.tray_) return;
 		this.tray_.destroy();
 		this.tray_ = null;
 	}
 
-	ensureSingleInstance() {
+	public ensureSingleInstance() {
 		if (this.env_ === 'dev') return false;
 
 		const gotTheLock = this.electronApp_.requestSingleInstanceLock();
@@ -347,7 +347,7 @@ export default class ElectronAppWrapper {
 		return false;
 	}
 
-	async start() {
+	public async start() {
 		// Since we are doing other async things before creating the window, we might miss
 		// the "ready" event. So we use the function below to make sure that the app is ready.
 		await this.waitForElectronAppReady();
@@ -375,7 +375,7 @@ export default class ElectronAppWrapper {
 		});
 	}
 
-	async openCallbackUrl(url: string) {
+	public async openCallbackUrl(url: string) {
 		this.win_.webContents.send('asynchronous-message', 'openCallbackUrl', {
 			url: url,
 		});

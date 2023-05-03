@@ -1,8 +1,8 @@
 import WhenClause from './WhenClause';
 
-describe('WhenClause', function() {
+describe('WhenClause', () => {
 
-	test('should work with simple condition', async function() {
+	test('should work with simple condition', async () => {
 		const wc = new WhenClause('test1 && test2');
 
 		expect(wc.evaluate({
@@ -16,7 +16,7 @@ describe('WhenClause', function() {
 		})).toBe(false);
 	});
 
-	test('should work with parenthesis', async function() {
+	test('should work with parenthesis', async () => {
 		const wc = new WhenClause('(test1 && test2) || test3 && (test4 && !test5)');
 
 		expect(wc.evaluate({

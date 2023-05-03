@@ -4,7 +4,7 @@
 const { checkThrow } = require('./testing/test-utils.js');
 const eventManager = require('./eventManager').default;
 
-describe('eventManager', function() {
+describe('eventManager', () => {
 
 	beforeEach(async () => {
 		eventManager.reset();

@@ -1,6 +1,6 @@
 const time = require('./time').default;
 
-describe('timeUtils', function() {
+describe('timeUtils', () => {
 
 
 

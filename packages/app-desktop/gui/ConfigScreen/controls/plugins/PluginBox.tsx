@@ -55,7 +55,7 @@ export interface PluginItem {
 	hasBeenUpdated: boolean;
 }
 
-const CellRoot = styled.div<{isCompatible: boolean}>`
+const CellRoot = styled.div<{ isCompatible: boolean }>`
 	display: flex;
 	box-sizing: border-box;
 	background-color: ${props => props.theme.backgroundColor};
@@ -104,7 +104,7 @@ const DevModeLabel = styled.div`
 	color: ${props => props.theme.color};
 `;
 
-const StyledNameAndVersion = styled.div<{mb: any}>`
+const StyledNameAndVersion = styled.div<{ mb: any }>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;

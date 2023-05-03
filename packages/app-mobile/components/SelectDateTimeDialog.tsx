@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 
 export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
 
-	constructor(props: any) {
+	public constructor(props: any) {
 		super(props);
 
 		this.state = {
@@ -67,37 +67,37 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
 		}
 	}
 
-	onAccept() {
+	public onAccept() {
 		if (this.props.onAccept) this.props.onAccept(this.state.date);
 	}
 
-	onReject() {
+	public onReject() {
 		if (this.props.onReject) this.props.onReject();
 	}
 
-	onClear() {
+	public onClear() {
 		if (this.props.onAccept) this.props.onAccept(null);
 	}
 
-	onPickerConfirm(selectedDate: Date) {
+	public onPickerConfirm(selectedDate: Date) {
 		this.setState({ date: selectedDate, showPicker: false });
 	}
 
-	onPickerCancel() {
+	public onPickerCancel() {
 		this.setState({ showPicker: false });
 	}
 
-	onSetDate() {
+	public onSetDate() {
 		this.setState({ showPicker: true });
 	}
 
-	renderContent() {
+	public renderContent() {
 		const theme = themeStyle(this.props.themeId);
 
 		return (
@@ -118,7 +118,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		);
 	}
 
-	render() {
+	public render() {
 		const modalVisible = this.props.shown;
 
 		if (!modalVisible) return null;

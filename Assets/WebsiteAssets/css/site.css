@@ -657,6 +657,16 @@ footer .bottom-links-row p {
 	font-size: 1.1em;
 }
 
+.language-switcher {
+	display: inline;
+}
+
+.language-switcher > button {
+	border: none;
+	background-color: transparent;
+	color: #0557ba;
+}
+
 /*****************************************************************
  WHAT'S NEW PAGE
 *****************************************************************/
@@ -780,6 +790,7 @@ footer .bottom-links-row p {
 
 	#menu-mobile .social-links .social-link-mastodon,
 	#menu-mobile .social-links .social-link-reddit,
+	#menu-mobile .social-links .social-link-linkedin,
 	#menu-mobile .social-links .social-link-patreon {
 		display: none;
 	}
@@ -948,6 +959,41 @@ footer .bottom-links-row p {
 }
 
 /*****************************************************************
+ MORE NARROW VIEW
+ eg for Galaxy S9
+*****************************************************************/
+
+@media (max-width: 580px) {
+
+	#nav-section .plans-button {
+		display: none;
+	}
+
+}
+
+/*****************************************************************
+ MORE NARROW VIEW
+ eg for Galaxy S9
+*****************************************************************/
+
+@media (max-width: 400px) {
+
+	#nav-section .navbar-mobile-content a.sponsor-button .sponsor-button-label {
+		font-size: 12px;
+	}
+
+	#nav-section .navbar-mobile-content a.sponsor-button {
+		padding: 2px 6px;
+		margin-right: 0.2em;
+	}
+
+	#nav-section a {
+		margin-left: 5px;
+	}
+
+}
+
+/*****************************************************************
  VERY NARROW VIEW
  eg for Galaxy Fold
 *****************************************************************/
@@ -966,6 +1012,15 @@ footer .bottom-links-row p {
 
 	#nav-section a {
 		margin-left: 4px;
+	}
+
+	div.navbar-mobile-content a.sponsor-button {
+		margin-right: 10px;
+	}
+
+	#nav-section .button-link {
+		padding-left: 0;
+		padding-right: 0;
 	}
 
 }

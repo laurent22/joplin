@@ -32,7 +32,7 @@ const selfClosingElements = [
 
 class HtmlUtils {
 
-	attributesHtml(attr: any) {
+	public attributesHtml(attr: any) {
 		const output = [];
 
 		for (const n in attr) {
@@ -48,7 +48,7 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
-	processImageTags(html: string, callback: Function) {
+	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
 		return html.replace(imageRegex, (_v, before, src, after) => {
@@ -73,7 +73,7 @@ class HtmlUtils {
 		});
 	}
 
-	processAnchorTags(html: string, callback: Function) {
+	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 
 		return html.replace(anchorRegex, (_v, before, href, after) => {
@@ -98,7 +98,7 @@ class HtmlUtils {
 		});
 	}
 
-	isSelfClosingTag(tagName: string) {
+	public isSelfClosingTag(tagName: string) {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 

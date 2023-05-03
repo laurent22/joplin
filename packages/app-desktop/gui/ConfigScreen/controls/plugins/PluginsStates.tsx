@@ -20,7 +20,7 @@ const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
 
-const maxWidth: number = 320;
+const maxWidth = 320;
 
 const Root = styled.div`
 	display: flex;
@@ -143,7 +143,7 @@ export default function(props: Props) {
 		let cancelled = false;
 
 		async function fetchPluginIds() {
-			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest));
+			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest), pluginService.appVersion);
 			if (cancelled) return;
 			const conv: Record<string, boolean> = {};
 			pluginIds.forEach(id => conv[id] = true);
@@ -155,7 +155,7 @@ export default function(props: Props) {
 		return () => {
 			cancelled = true;
 		};
-	}, [manifestsLoaded, pluginItems]);
+	}, [manifestsLoaded, pluginItems, pluginService.appVersion]);
 
 	const onDelete = useCallback(async (event: ItemEvent) => {
 		const item = event.item;
@@ -225,7 +225,7 @@ export default function(props: Props) {
 		];
 
 		const menu = bridge().Menu.buildFromTemplate(template);
-		menu.popup(bridge().window());
+		menu.popup({ window: bridge().window() });
 	}, [onInstall, onBrowsePlugins]);
 
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {

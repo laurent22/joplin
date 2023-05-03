@@ -9,7 +9,7 @@ import loadStorageDriver from './items/storage/loadStorageDriver';
 import { ErrorPayloadTooLarge } from '../utils/errors';
 import { isSqlite } from '../db';
 
-describe('ItemModel', function() {
+describe('ItemModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ItemModel');
@@ -82,7 +82,7 @@ describe('ItemModel', function() {
 	// 	}
 	// });
 
-	test('should find all items within a shared folder', async function() {
+	test('should find all items within a shared folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -137,7 +137,7 @@ describe('ItemModel', function() {
 		}
 	});
 
-	test('should count items', async function() {
+	test('should count items', async () => {
 		const { user: user1 } = await createUserAndSession(1, true);
 
 		await createItemTree(user1.id, '', {
@@ -149,7 +149,7 @@ describe('ItemModel', function() {
 		expect(await models().item().childrenCount(user1.id)).toBe(2);
 	});
 
-	test('should calculate the total size', async function() {
+	test('should calculate the total size', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
@@ -203,7 +203,7 @@ describe('ItemModel', function() {
 		expect((await models().user().load(user3.id)).total_item_size).toBe(totalSize3);
 	});
 
-	test('should update total size when an item is deleted', async function() {
+	test('should update total size when an item is deleted', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		await createItemTree3(user1.id, '', '', [
@@ -231,7 +231,7 @@ describe('ItemModel', function() {
 		expect((await models().user().load(user1.id)).total_item_size).toBe(folder1.content_size);
 	});
 
-	test('should include shared items in total size calculation', async function() {
+	test('should include shared items in total size calculation', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
@@ -272,7 +272,7 @@ describe('ItemModel', function() {
 		expect((await models().user().load(user3.id)).total_item_size).toBe(expected3);
 	});
 
-	test('should respect the hard item size limit', async function() {
+	test('should respect the hard item size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		let models = newModelFactory(db(), config());
@@ -339,7 +339,7 @@ describe('ItemModel', function() {
 		};
 	};
 
-	test('should allow importing content to item storage', async function() {
+	test('should allow importing content to item storage', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		const {
@@ -393,7 +393,7 @@ describe('ItemModel', function() {
 		expect(toContent.toString()).toBe(fromContent.toString());
 	});
 
-	test('should skip large items when importing content to item storage', async function() {
+	test('should skip large items when importing content to item storage', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		const {
@@ -425,7 +425,7 @@ describe('ItemModel', function() {
 		expect(await toDriver.exists(itemId, { models: fromModels })).toBe(true);
 	});
 
-	test('should delete the database item content', async function() {
+	test('should delete the database item content', async () => {
 		if (isSqlite(db())) {
 			expect(1).toBe(1);
 			return;
@@ -462,7 +462,7 @@ describe('ItemModel', function() {
 		expect(await models().item().dbContent(note1.id)).toEqual(Buffer.from(''));
 	});
 
-	test('should delete the database item content - maxProcessedItems handling', async function() {
+	test('should delete the database item content - maxProcessedItems handling', async () => {
 		if (isSqlite(db())) {
 			expect(1).toBe(1);
 			return;

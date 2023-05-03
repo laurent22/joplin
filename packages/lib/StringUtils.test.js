@@ -3,19 +3,24 @@
 const { splitCommandBatch } = require('./string-utils');
 const StringUtils = require('./string-utils');
 
-describe('StringUtils', function() {
+describe('StringUtils', () => {
 
 
 
 	it('should surround keywords with strings', (async () => {
 		const testCases = [
-			[[], 'test', 'a', 'b', 'test'],
-			[['test'], 'test', 'a', 'b', 'atestb'],
-			[['test'], 'Test', 'a', 'b', 'aTestb'],
-			[['te[]st'], 'Te[]st', 'a', 'b', 'aTe[]stb'],
+			[[], 'test', 'a', 'b', null, 'test'],
+			[['test'], 'test', 'a', 'b', null, 'atestb'],
+			[['test'], 'Test', 'a', 'b', null, 'aTestb'],
+			[['te[]st'], 'Te[]st', 'a', 'b', null, 'aTe[]stb'],
 			// [['test1', 'test2'], 'bla test1 blabla test1 bla test2 not this one - test22', 'a', 'b', 'bla atest1b blabla atest1b bla atest2b not this one - test22'],
-			[['test1', 'test2'], 'bla test1 test1 bla test2', '<span class="highlighted-keyword">', '</span>', 'bla <span class="highlighted-keyword">test1</span> <span class="highlighted-keyword">test1</span> bla <span class="highlighted-keyword">test2</span>'],
+			[['test1', 'test2'], 'bla test1 test1 bla test2', '<span class="highlighted-keyword">', '</span>', null, 'bla <span class="highlighted-keyword">test1</span> <span class="highlighted-keyword">test1</span> bla <span class="highlighted-keyword">test2</span>'],
 			// [[{ type:'regex', value:'test.*?'}], 'bla test1 test1 bla test2 test tttest', 'a', 'b', 'bla atest1b atest1b bla atest2b atestb tttest'],
+			[['test'], 'testTest', 'a', 'b', { escapeHtml: true }, 'atestbaTestb'],
+			[['test'], 'test test Test', 'a', 'b', { escapeHtml: true }, 'atestb atestb aTestb'],
+			[['d'], 'dfasdf', '[', ']', { escapeHtml: true }, '[d]fas[d]f'],
+			[[{ scriptType: 'en', type: 'regex', value: 'd*', valueRegex: 'd[^ \t\n\r,\\.,\\+\\-\\*\\?\\!\\=\\{\\}\\<\\>\\|\\:"\'\\(\\)\\[\\]]*?' }], 'dfasdf', '[', ']', { escapeHtml: true }, '[d]fas[d]f'],
+			[['zzz'], 'zzz<img src=q onerror=eval("require(\'child_process\').exec(\'mate-calc\');");>', 'a', 'b', { escapeHtml: true }, 'azzzb&lt;img src=q onerror=eval(&quot;require(&apos;child_process&apos;).exec(&apos;mate-calc&apos;);&quot;);&gt;'],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
@@ -25,9 +30,10 @@ describe('StringUtils', function() {
 			const input = t[1];
 			const prefix = t[2];
 			const suffix = t[3];
-			const expected = t[4];
+			const options = t[4];
+			const expected = t[5];
 
-			const actual = StringUtils.surroundKeywords(keywords, input, prefix, suffix);
+			const actual = StringUtils.surroundKeywords(keywords, input, prefix, suffix, options);
 
 			expect(actual).toBe(expected, `Test case ${i}`);
 		}

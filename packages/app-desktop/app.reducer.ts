@@ -38,6 +38,7 @@ export interface AppState extends State {
 	watchedResources: any;
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
+	isResettingLayout: boolean;
 }
 
 export function createAppDefaultState(windowContentSize: any, resourceEditWatcherDefaultState: any): AppState {
@@ -60,6 +61,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		mainLayout: null,
 		startupPluginsLoaded: false,
 		dialogs: [],
+		isResettingLayout: false,
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -308,7 +310,15 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
+
+		case 'RESET_LAYOUT':
+			newState = {
+				...state,
+				isResettingLayout: action.value,
+			};
+			break;
 		}
+
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 		throw error;

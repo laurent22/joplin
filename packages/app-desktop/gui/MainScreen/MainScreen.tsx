@@ -78,6 +78,7 @@ interface Props {
 	isSafeMode: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
+	isResettingLayout: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -122,7 +123,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private styles_: any;
 	private promptOnClose_: Function;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -172,7 +173,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private openCallbackUrl(url: string) {
-		console.log(`openUrl ${url}`);
 		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command.toString(), params.id);
 	}
@@ -250,11 +250,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return this.updateLayoutPluginViews(output, plugins);
 	}
 
-	window_resize() {
+	private window_resize() {
 		this.updateRootLayoutSize();
 	}
 
-	setupAppCloseHandling() {
+	public setupAppCloseHandling() {
 		this.waitForNotesSavedIID_ = null;
 
 		// This event is dispached from the main process when the app is about
@@ -289,11 +289,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 		});
 	}
 
-	notePropertiesDialog_close() {
+	private notePropertiesDialog_close() {
 		this.setState({ notePropertiesDialogOptions: {} });
 	}
 
-	noteContentPropertiesDialog_close() {
+	private noteContentPropertiesDialog_close() {
 		this.setState({ noteContentPropertiesDialogOptions: {} });
 	}
 
@@ -305,14 +305,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.setState({ shareFolderDialogOptions: { visible: false, folderId: '' } });
 	}
 
-	updateMainLayout(layout: LayoutItem) {
+	public updateMainLayout(layout: LayoutItem) {
 		this.props.dispatch({
 			type: 'MAIN_LAYOUT_SET',
 			value: layout,
 		});
 	}
 
-	updateRootLayoutSize() {
+	public updateRootLayoutSize() {
 		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
 			const s = this.rootLayoutSize();
 			draft.width = s.width;
@@ -320,7 +320,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}));
 	}
 
-	componentDidUpdate(prevProps: Props, prevState: State) {
+	public componentDidUpdate(prevProps: Props, prevState: State) {
 		if (prevProps.style.width !== this.props.style.width ||
 			prevProps.style.height !== this.props.style.height ||
 			this.messageBoxVisible(prevProps) !== this.messageBoxVisible(this.props)
@@ -372,35 +372,46 @@ class MainScreenComponent extends React.Component<Props, State> {
 				name: 'promptDialog',
 			});
 		}
+
+		if (this.props.isResettingLayout) {
+			Setting.setValue('ui.layout', null);
+			this.updateMainLayout(this.buildLayout(this.props.plugins));
+			this.props.dispatch({
+				type: 'RESET_LAYOUT',
+				value: false,
+			});
+		}
 	}
 
-	layoutModeListenerKeyDown(event: any) {
+	public layoutModeListenerKeyDown(event: any) {
 		if (event.key !== 'Escape') return;
 		if (!this.props.layoutMoveMode) return;
 		void CommandService.instance().execute('toggleLayoutMoveMode');
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		this.unregisterCommands();
 
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
 	}
 
-	async waitForNoteToSaved(noteId: string) {
+	public async waitForNoteToSaved(noteId: string) {
 		while (noteId && this.props.editorNoteStatuses[noteId] === 'saving') {
+			// eslint-disable-next-line no-console
 			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
 			await time.msleep(100);
 		}
 	}
 
-	async printTo_(target: string, options: any) {
+	public async printTo_(target: string, options: any) {
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (this.isPrinting_) {
+			// eslint-disable-next-line no-console
 			console.info(`Printing ${options.path} to ${target} disallowed, already printing.`);
 			return;
 		}
@@ -438,23 +449,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.isPrinting_ = false;
 	}
 
-	rootLayoutSize() {
+	public rootLayoutSize() {
 		return {
 			width: window.innerWidth,
 			height: this.rowHeight(),
 		};
 	}
 
-	rowHeight() {
+	public rowHeight() {
 		if (!this.props) return 0;
 		return this.props.style.height - (this.messageBoxVisible() ? this.messageBoxHeight() : 0);
 	}
 
-	messageBoxHeight() {
+	public messageBoxHeight() {
 		return 50;
 	}
 
-	styles(themeId: number, width: number, height: number, messageBoxVisible: boolean) {
+	public styles(themeId: number, width: number, height: number, messageBoxVisible: boolean) {
 		const styleKey = [themeId, width, height, messageBoxVisible].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -528,7 +539,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
-	renderNotification(theme: any, styles: any) {
+	public renderNotification(theme: any, styles: any) {
 		if (!this.messageBoxVisible()) return null;
 
 		const onViewStatusScreen = () => {
@@ -647,33 +658,33 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
-	messageBoxVisible(props: Props = null) {
+	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
 		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
 	}
 
-	registerCommands() {
+	public registerCommands() {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(this));
 		}
 	}
 
-	unregisterCommands() {
+	public unregisterCommands() {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
 		}
 	}
 
-	resizableLayout_resize(event: any) {
+	private resizableLayout_resize(event: any) {
 		this.updateMainLayout(event.layout);
 	}
 
-	resizableLayout_moveButtonClick(event: MoveButtonClickEvent) {
+	private resizableLayout_moveButtonClick(event: MoveButtonClickEvent) {
 		const newLayout = move(this.props.mainLayout, event.itemKey, event.direction);
 		this.updateMainLayout(newLayout);
 	}
 
-	resizableLayout_renderItem(key: string, event: any) {
+	private resizableLayout_renderItem(key: string, event: any) {
 		// Key should never be undefined but somehow it can happen, also not
 		// clear how. For now in this case render nothing so that the app
 		// doesn't crash.
@@ -759,7 +770,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
-	renderPluginDialogs() {
+	public renderPluginDialogs() {
 		const output = [];
 		const infos = pluginUtils.viewInfosByType(this.props.plugins, 'webview');
 
@@ -790,7 +801,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign(
 			{
@@ -879,6 +890,7 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
+		isResettingLayout: state.isResettingLayout,
 	};
 };
 

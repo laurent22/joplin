@@ -82,6 +82,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	const options = cmd.options();
 	const booleanFlags = [];
 	const aliases = {};
+	const flagSpecs = [];
 	for (let i = 0; i < options.length; i++) {
 		if (options[i].length !== 2) throw new Error(`Invalid options: ${options[i]}`);
 		let flags = options[i][0];
@@ -96,6 +97,8 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		if (flags.short && flags.long) {
 			aliases[flags.long] = [flags.short];
 		}
+
+		flagSpecs.push(flags);
 	}
 
 	const args = yargParser(argv, {
@@ -119,6 +122,19 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		if (!args.hasOwnProperty(key)) continue;
 		if (key === '_') continue;
 		argOptions[key] = args[key];
+	}
+
+	for (const [key, value] of Object.entries(argOptions)) {
+		const flagSpec = flagSpecs.find(s => {
+			return s.short === key || s.long === key;
+		});
+		if (flagSpec?.arg?.required) {
+			// If a flag is required, and no value is provided for it, Yargs
+			// sets the value to `true`.
+			if (value === true) {
+				throw new Error(_('Missing required flag value: %s', `-${flagSpec.short} <${flagSpec.arg.name}>`));
+			}
+		}
 	}
 
 	output.options = argOptions;

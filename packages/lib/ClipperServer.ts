@@ -24,11 +24,11 @@ export default class ClipperServer {
 
 	private static instance_: ClipperServer = null;
 
-	constructor() {
+	public constructor() {
 		this.logger_ = new Logger();
 	}
 
-	static instance() {
+	public static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new ClipperServer();
 		return this.instance_;
@@ -38,30 +38,30 @@ export default class ClipperServer {
 		return this.api_;
 	}
 
-	initialize(actionApi: any = null) {
+	public initialize(actionApi: any = null) {
 		this.api_ = new Api(() => {
 			return Setting.value('api.token');
 		}, (action: any) => { this.dispatch(action); }, actionApi);
 	}
 
-	setLogger(l: Logger) {
+	public setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	setDispatch(d: Function) {
+	public setDispatch(d: Function) {
 		this.dispatch_ = d;
 	}
 
-	dispatch(action: any) {
+	public dispatch(action: any) {
 		if (!this.dispatch_) throw new Error('dispatch not set!');
 		this.dispatch_(action);
 	}
 
-	setStartState(v: StartState) {
+	public setStartState(v: StartState) {
 		if (this.startState_ === v) return;
 		this.startState_ = v;
 		this.dispatch({
@@ -70,7 +70,7 @@ export default class ClipperServer {
 		});
 	}
 
-	setPort(v: number) {
+	public setPort(v: number) {
 		if (this.port_ === v) return;
 		this.port_ = v;
 		this.dispatch({
@@ -79,7 +79,7 @@ export default class ClipperServer {
 		});
 	}
 
-	async findAvailablePort() {
+	public async findAvailablePort() {
 		const tcpPortUsed = require('tcp-port-used');
 
 		let state = null;
@@ -92,14 +92,14 @@ export default class ClipperServer {
 		throw new Error('All potential ports are in use or not available.');
 	}
 
-	async isRunning() {
+	public async isRunning() {
 		const tcpPortUsed = require('tcp-port-used');
 		const port = Setting.value('api.port') ? Setting.value('api.port') : startPort(Setting.value('env'));
 		const inUse = await tcpPortUsed.check(port);
 		return inUse ? port : 0;
 	}
 
-	async start() {
+	public async start() {
 		this.setPort(null);
 
 		this.setStartState(StartState.Starting);
@@ -198,7 +198,7 @@ export default class ClipperServer {
 				if (contentType.indexOf('multipart/form-data') === 0) {
 					const form = new multiparty.Form();
 
-					form.parse(request, function(error: any, fields: any, files: any) {
+					form.parse(request, (error: any, fields: any, files: any) => {
 						if (error) {
 							writeResponse(error.httpCode ? error.httpCode : 500, error.message);
 							return;
@@ -237,7 +237,7 @@ export default class ClipperServer {
 		return new Promise(() => {});
 	}
 
-	async stop() {
+	public async stop() {
 		this.server_.destroy();
 		this.server_ = null;
 		this.setStartState(StartState.Idle);

@@ -56,6 +56,7 @@ if (bridge().env() === 'dev') {
 	window.console = newConsole;
 }
 
+// eslint-disable-next-line no-console
 console.info(`Environment: ${bridge().env()}`);
 
 const fsDriver = new FsDriverNode();
@@ -77,7 +78,9 @@ BaseItem.loadClass('Revision', Revision);
 Setting.setConstant('appId', `net.cozic.joplin${bridge().env() === 'dev' ? 'dev' : ''}-desktop`);
 Setting.setConstant('appType', 'desktop');
 
+// eslint-disable-next-line no-console
 console.info(`appId: ${Setting.value('appId')}`);
+// eslint-disable-next-line no-console
 console.info(`appType: ${Setting.value('appType')}`);
 
 let keytar;

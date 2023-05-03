@@ -12,6 +12,8 @@ export interface Props {
 	customCss: string;
 	notesParentType: string;
 	noteSortOrder: string;
+	uncompletedTodosOnTop: boolean;
+	showCompletedTodos: boolean;
 	resizableLayoutEventEmitter: any;
 	isInsertingNotes: boolean;
 	folders: FolderEntity[];
@@ -21,4 +23,5 @@ export interface Props {
 	highlightedWords: string[];
 	provisionalNoteIds: string[];
 	visible: boolean;
+	focusedField: string;
 }

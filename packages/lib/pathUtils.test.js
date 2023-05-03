@@ -1,6 +1,6 @@
 const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath } = require('./path-utils');
 
-describe('pathUtils', function() {
+describe('pathUtils', () => {
 
 
 

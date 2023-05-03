@@ -10,7 +10,7 @@ export function shuffle<T>(array: T[]): T[] {
 }
 
 export function unique<T>(array: T[]): T[] {
-	return array.filter(function(elem, index, self) {
+	return array.filter((elem, index, self) => {
 		return index === self.indexOf(elem);
 	});
 }

@@ -8,7 +8,7 @@ export default class AlarmServiceDriver {
 	private inAppNotificationHandler_: any = null;
 	private logger_: Logger;
 
-	constructor(logger: Logger) {
+	public constructor(logger: Logger) {
 		this.logger_ = logger;
 		PushNotificationIOS.addEventListener('localNotification', (instance: any) => {
 			if (!this.inAppNotificationHandler_) return;
@@ -23,19 +23,19 @@ export default class AlarmServiceDriver {
 		});
 	}
 
-	hasPersistentNotifications() {
+	public hasPersistentNotifications() {
 		return true;
 	}
 
-	notificationIsSet() {
+	public notificationIsSet() {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	setInAppNotificationHandler(v: any) {
+	public setInAppNotificationHandler(v: any) {
 		this.inAppNotificationHandler_ = v;
 	}
 
-	async hasPermissions(perm: any = null) {
+	public async hasPermissions(perm: any = null) {
 		if (perm !== null) return perm.alert && perm.badge && perm.sound;
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
@@ -49,7 +49,7 @@ export default class AlarmServiceDriver {
 		});
 	}
 
-	async requestPermissions() {
+	public async requestPermissions() {
 		const options: any = {
 			alert: 1,
 			badge: 1,
@@ -60,11 +60,11 @@ export default class AlarmServiceDriver {
 		return this.hasPermissions(newPerm);
 	}
 
-	async clearNotification(id: number) {
+	public async clearNotification(id: number) {
 		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 
-	async scheduleNotification(notification: Notification) {
+	public async scheduleNotification(notification: Notification) {
 		if (!(await this.hasPermissions())) {
 			const ok = await this.requestPermissions();
 			if (!ok) return;

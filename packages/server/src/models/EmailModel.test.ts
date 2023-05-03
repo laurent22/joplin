@@ -2,7 +2,7 @@ import { EmailSender } from '../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession } from '../utils/testing/testUtils';
 import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 
-describe('EmailModel', function() {
+describe('EmailModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('EmailModel');
@@ -16,7 +16,7 @@ describe('EmailModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should not send the same keyed email twice', async function() {
+	test('should not send the same keyed email twice', async () => {
 		const { user } = await createUserAndSession();
 
 		const sendEmail = async (key: string) => {

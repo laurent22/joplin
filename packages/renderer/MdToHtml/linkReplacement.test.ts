@@ -1,4 +1,5 @@
 import linkReplacement from './linkReplacement';
+import { describe, test, expect } from '@jest/globals';
 
 describe('linkReplacement', () => {
 
@@ -57,4 +58,24 @@ describe('linkReplacement', () => {
 		expect(r.indexOf(expectedPrefix)).toBe(0);
 	});
 
+	test('should create ontouch listeners to handle longpress', () => {
+		const resourceId = 'e6afba55bdf74568ac94f8d1e3578d2c';
+
+		const linkHtml = linkReplacement(`:/${resourceId}`, {
+			ResourceModel: {},
+			resources: {
+				[resourceId]: {
+					item: {},
+					localState: {
+						fetch_status: 2, // FETCH_STATUS_DONE
+					},
+				},
+			},
+			enableLongPress: true,
+		}).html;
+
+		expect(linkHtml).toContain('ontouchstart');
+		expect(linkHtml).toContain('ontouchend');
+		expect(linkHtml).toContain('ontouchcancel');
+	});
 });

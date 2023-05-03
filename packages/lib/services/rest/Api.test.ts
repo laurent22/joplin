@@ -35,7 +35,7 @@ const createNoteForPagination = async (numOrTitle: number | string, time: number
 
 let api: Api = null;
 
-describe('services_rest_Api', function() {
+describe('services_rest_Api', () => {
 
 	beforeEach(async () => {
 		api = new Api();
@@ -468,6 +468,11 @@ describe('services_rest_Api', function() {
 				language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 				body: 'test text \n ![img 1](https://example.com/img1.png) [embedded_pdf](https://example.com/sample1.pdf) [embedded_pdf](https://example.com/file.PDF)',
 				result: ['https://example.com/img1.png', 'https://example.com/sample1.pdf', 'https://example.com/file.PDF'],
+			},
+			{
+				language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
+				body: '> <a id="attachment68076"></a>[![Enable or Disable Sync Your Settings in Windows 10-disabled_sync_your_settings.png](https://www.tenforums.com/attachments/tutorials/68076d1485964056t-enable-disable-sync-your-settings-windows-10-a-disabled_sync_your_settings.png?s=0bbd1c630a9a924f05134d51b4768d2b "Enable or Disable Sync Your Settings in Windows 10-disabled_sync_your_settings.png")](https://www.tenforums.com/attachments/tutorials/68076d1457326453-enable-disable-sync-your-settings-windows-10-a-disabled_sync_your_settings.png?s=0bbd1c630a9a924f05134d51b4768d2b)',
+				result: ['https://www.tenforums.com/attachments/tutorials/68076d1485964056t-enable-disable-sync-your-settings-windows-10-a-disabled_sync_your_settings.png?s=0bbd1c630a9a924f05134d51b4768d2b'],
 			},
 			{
 				language: MarkupToHtml.MARKUP_LANGUAGE_HTML,

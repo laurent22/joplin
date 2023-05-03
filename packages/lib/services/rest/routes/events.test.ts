@@ -7,7 +7,7 @@ import Api, { RequestMethod } from '../Api';
 
 let api: Api = null;
 
-describe('routes/events', function() {
+describe('routes/events', () => {
 
 	beforeEach(async () => {
 		api = new Api();

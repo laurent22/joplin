@@ -5,15 +5,15 @@ import BaseItem from './BaseItem';
 import uuid from '../uuid';
 
 export default class MasterKey extends BaseItem {
-	static tableName() {
+	public static tableName() {
 		return 'master_keys';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_MASTER_KEY;
 	}
 
-	static encryptionSupported() {
+	public static encryptionSupported() {
 		return false;
 	}
 
@@ -28,7 +28,7 @@ export default class MasterKey extends BaseItem {
 		return output;
 	}
 
-	static allWithoutEncryptionMethod(masterKeys: MasterKeyEntity[], methods: number[]) {
+	public static allWithoutEncryptionMethod(masterKeys: MasterKeyEntity[], methods: number[]) {
 		return masterKeys.filter(m => !methods.includes(m.encryption_method));
 	}
 

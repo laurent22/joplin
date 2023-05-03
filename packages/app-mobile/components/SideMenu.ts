@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 
 class SideMenuComponent extends SideMenu_ {
-	onLayoutChange(e: any) {
+	public onLayoutChange(e: any) {
 		const { width, height } = e.nativeEvent.layout;
 		const openMenuOffsetPercentage = this.props.openMenuOffset / Dimensions.get('window').width;
 		const openMenuOffset = width * openMenuOffsetPercentage;

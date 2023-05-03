@@ -66,6 +66,7 @@ packages/lib/welcomeAssets.js
 packages/plugins/**/api
 packages/plugins/**/dist
 packages/server/dist/
+packages/utils/dist/
 packages/tools/node_modules
 packages/tools/PortableAppsLauncher
 packages/turndown-plugin-gfm/
@@ -79,6 +80,8 @@ packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/base-command.js
 packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-e2ee.js
+packages/app-cli/app/command-mkbook.js
+packages/app-cli/app/command-mkbook.test.js
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-testing.js
@@ -177,6 +180,7 @@ packages/app-desktop/gui/MainScreen/commands/openTag.js
 packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/renameFolder.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
+packages/app-desktop/gui/MainScreen/commands/resetLayout.js
 packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/setTags.js
@@ -221,6 +225,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
@@ -228,6 +233,7 @@ packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
+packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
 packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js
@@ -390,6 +396,7 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js
 packages/app-mobile/components/NoteEditor/types.js
+packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
@@ -399,11 +406,13 @@ packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
+packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/Note.js
+packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
@@ -479,6 +488,7 @@ packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
+packages/lib/components/shared/note-screen-shared.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
@@ -508,6 +518,7 @@ packages/lib/markdownUtils.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils2.test.js
 packages/lib/markupLanguageUtils.js
+packages/lib/migrations/42.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.js
 packages/lib/models/Folder.js
@@ -701,6 +712,7 @@ packages/lib/services/searchengine/SearchFilter.test.js
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.test.js
 packages/lib/services/searchengine/gotoAnythingStyleQuery.js
+packages/lib/services/searchengine/gotoAnythingStyleQuery.test.js
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/ShareService.test.js
@@ -754,8 +766,11 @@ packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/joplinCloud.js
+packages/lib/utils/webDAVUtils.js
+packages/lib/utils/webDAVUtils.test.js
 packages/lib/uuid.js
 packages/lib/versionInfo.js
+packages/lib/versionInfo.test.js
 packages/pdf-viewer/FullViewer.js
 packages/pdf-viewer/Page.js
 packages/pdf-viewer/PdfDocument.js
@@ -796,6 +811,8 @@ packages/renderer/HtmlToHtml.js
 packages/renderer/InMemoryCache.js
 packages/renderer/MarkupToHtml.js
 packages/renderer/MdToHtml.js
+packages/renderer/MdToHtml/createEventHandlingAttrs.js
+packages/renderer/MdToHtml/createEventHandlingAttrs.test.js
 packages/renderer/MdToHtml/linkReplacement.js
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/renderMedia.js
@@ -822,6 +839,7 @@ packages/renderer/index.js
 packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
+packages/tools/build-release-stats.js
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
@@ -832,6 +850,7 @@ packages/tools/convertThemesToCss.js
 packages/tools/generate-database-types.js
 packages/tools/generate-images.js
 packages/tools/git-changelog.js
+packages/tools/git-changelog.test.js
 packages/tools/licenseChecker.js
 packages/tools/release-android.js
 packages/tools/release-cli.js
@@ -847,6 +866,7 @@ packages/tools/update-readme-download.js
 packages/tools/update-readme-sponsors.js
 packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.js
+packages/tools/utils/loadSponsors.js
 packages/tools/utils/translation.js
 packages/tools/website/build.js
 packages/tools/website/buildTranslations.js
@@ -854,6 +874,8 @@ packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateNews.js
 packages/tools/website/utils/applyTranslations.js
 packages/tools/website/utils/applyTranslations.test.js
+packages/tools/website/utils/convertLinksToLocale.js
+packages/tools/website/utils/convertLinksToLocale.test.js
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/news.js
 packages/tools/website/utils/openGraph.js

@@ -2,7 +2,7 @@ import { afterAllTests, beforeAllDb, beforeEachDb, createUserAndSession, expectT
 import { cookieGet, cookieSet } from '../../../../utils/cookies';
 import { startImpersonating, stopImpersonating } from './impersonate';
 
-describe('users/impersonate', function() {
+describe('users/impersonate', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('users/impersonate');
@@ -16,7 +16,7 @@ describe('users/impersonate', function() {
 		await beforeEachDb();
 	});
 
-	test('should impersonate a user', async function() {
+	test('should impersonate a user', async () => {
 		const ctx = await koaAppContext();
 
 		const { user: adminUser, session: adminSession } = await createUserAndSession(1, true);
@@ -41,7 +41,7 @@ describe('users/impersonate', function() {
 		}
 	});
 
-	test('should not impersonate if not admin', async function() {
+	test('should not impersonate if not admin', async () => {
 		const ctx = await koaAppContext();
 
 		const { user: adminUser } = await createUserAndSession(1, true);

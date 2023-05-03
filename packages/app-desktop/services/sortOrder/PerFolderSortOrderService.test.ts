@@ -6,14 +6,14 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const folderId1 = 'aa012345678901234567890123456789';
 const folderId2 = 'bb012345678901234567890123456789';
 
-beforeAll(async () => {
-	shimInit();
-	Setting.autoSaveEnabled = false;
-	PerFolderSortOrderService.initialize();
-	Setting.setValue('notes.perFolderSortOrderEnabled', true);
-});
-
 describe('PerFolderSortOrderService', () => {
+
+	beforeAll(async () => {
+		shimInit();
+		Setting.autoSaveEnabled = false;
+		PerFolderSortOrderService.initialize();
+		Setting.setValue('notes.perFolderSortOrderEnabled', true);
+	});
 
 	test('get(), isSet() and set()', async () => {
 		// Clear all per-folder sort order

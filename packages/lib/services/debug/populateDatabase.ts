@@ -61,7 +61,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	const createdTagIds: string[] = [];
 	const createdFolderDepths: Record<string, number> = {};
 	const folderDepthToId: Record<number, string[]> = {};
-	let rootFolderCount: number = 0;
+	let rootFolderCount = 0;
 
 	for (let i = 0; i < options.folderCount; i++) {
 		const folder: any = {
@@ -72,7 +72,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 
 		if (options.rootFolderCount && rootFolderCount >= options.rootFolderCount) isRoot = false;
 
-		let depth: number = 0;
+		let depth = 0;
 
 		if (!isRoot) {
 			let possibleFolderIds: string[] = [];
@@ -99,6 +99,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 		if (!folderDepthToId[depth]) folderDepthToId[depth] = [];
 		folderDepthToId[depth].push(savedFolder.id);
 
+		// eslint-disable-next-line no-console
 		if (!options.silent) console.info(`Folders: ${i} / ${options.folderCount}`);
 	}
 
@@ -108,6 +109,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		tagBatch.push(Tag.save({ title: tagTitle }, { dispatchUpdateAction: false }).then((savedTag: any) => {
 			createdTagIds.push(savedTag.id);
+			// eslint-disable-next-line no-console
 			if (!options.silent) console.info(`Tags: ${i} / ${options.tagCount}`);
 		}));
 
@@ -131,6 +133,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		noteBatch.push(Note.save(note, { dispatchUpdateAction: false }).then((savedNote: any) => {
 			createdNoteIds.push(savedNote.id);
+			// eslint-disable-next-line no-console
 			console.info(`Notes: ${i} / ${options.noteCount}`);
 		}));
 
