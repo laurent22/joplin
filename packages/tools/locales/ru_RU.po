@@ -2461,7 +2461,7 @@ msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Ссылка скопирована в буфер обмена!"
 msgstr[1] "Ссылки скопированы в буфер обмена!"
-msgstr[2] "Ссылок скопировано в буфер обмена!"
+msgstr[2] "Ссылок скопированы в буфер обмена!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link text"
