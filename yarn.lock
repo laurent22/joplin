@@ -27561,6 +27561,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::locator=root%40workspace%3A.":
+  version: 0.1.12
+  resolution: "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::version=0.1.12&hash=edde10&locator=root%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 53cd3db17e859466345dd80a485c9ceaa35498dbcf2159af95a70151e09b56aff8743b0323b3cb6f04653c2f24aed06e31045988a5af91331ad7bdb8c50be0b3
+  languageName: node
+  linkType: hard
+
 "react-native-webview@npm:11.26.1":
   version: 11.26.1
   resolution: "react-native-webview@npm:11.26.1"
