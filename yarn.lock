@@ -5297,7 +5297,7 @@ __metadata:
     jquery: 3.6.4
     jsdom: 21.1.1
     knex: 2.4.2
-    koa: 2.14.1
+    koa: 2.14.2
     markdown-it: 13.0.1
     mustache: 4.2.0
     nanoid: 2.1.11
@@ -21816,9 +21816,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.14.1":
-  version: 2.14.1
-  resolution: "koa@npm:2.14.1"
+"koa@npm:2.14.2":
+  version: 2.14.2
+  resolution: "koa@npm:2.14.2"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
@@ -21843,7 +21843,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: 84cfce48d72cf434831bd9f4f06beb3815da030325a7e89b13ee684f5afd158221e16c2d450ca637b221aa0c4a0ab235edd129e4efea656dc5d8384801d3e90f
+  checksum: 17fe3b8f5e0b4759004a942cc6ba2a9507299943a697dff9766b85f41f45caed4077ca2645ac9ad254d3359fffedfc4c9ebdd7a70493e5df8cdfac159a8ee835
   languageName: node
   linkType: hard
 
