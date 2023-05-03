@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) (Pre-release) - 2023-05-03T11:57:27Z
+
+- New: Add support for offline speech to text (Beta - FR only) (#8115)
+- Improved: Updated packages @react-native-community/netinfo (v9.3.9), aws, react-native-document-picker (v8.2.0), react-native-paper (v5.5.2), react-native-safe-area-context (v4.5.1), sass (v1.60.0)
+- Fixed: Fixed sync crash (#8056) (#8017 by Arun Kumar)
+- Fixed: Fixes issue where the note body is not updated after attaching a file (991c120)
+
 ## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) (Pre-release) - 2023-04-09T12:04:06Z
 
 - Improved: Resolve #8022: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)
