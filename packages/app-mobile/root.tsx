@@ -86,9 +86,6 @@ const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 
-import Vosk from 'react-native-vosk';
-
-
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
@@ -712,8 +709,6 @@ class AppComponent extends React.Component {
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
 
-	private voskResult_: any = null;
-
 	public constructor() {
 		super();
 
@@ -840,24 +835,6 @@ class AppComponent extends React.Component {
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
-
-
-
-		logger.info('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Starting recognition...');
-		const voiceRecognition = new Vosk();
-		await voiceRecognition.loadModel('model-fr-fr');
-
-		setTimeout(() => {
-			voiceRecognition.stop();
-			logger.info('RFRRRRRRRRRRRRRRRRRRRRR', this.voskResult_);
-		}, 5000);
-
-
-		this.voskResult_ = await voiceRecognition.start();
-		// voiceRecognition.onResult((res) => {
-		// 	console.log('A onResult event has been caught: ' + res.data);
-		//   });
-
 
 		// Setting.setValue('encryption.masterPassword', 'WRONG');
 		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
