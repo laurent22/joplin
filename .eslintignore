@@ -74,6 +74,7 @@ packages/turndown/
 packages/pdf-viewer/dist
 plugin_types/
 readme/
+packages/react-native-vosk/lib/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
