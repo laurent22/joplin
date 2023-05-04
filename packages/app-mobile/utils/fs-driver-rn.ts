@@ -1,5 +1,5 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
-const RNFetchBlob = require('rn-fetch-blob').default;
+const RNFetchBlob = require('react-native-blob-util').default;
 const RNFS = require('react-native-fs');
 const DocumentPicker = require('react-native-document-picker').default;
 import { openDocument } from '@joplin/react-native-saf-x';

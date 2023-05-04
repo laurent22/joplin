@@ -4959,6 +4959,7 @@ __metadata:
     react: 18.2.0
     react-native: 0.70.6
     react-native-action-button: 2.8.5
+    react-native-blob-util: 0.17.3
     react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.2.0
@@ -4985,6 +4986,7 @@ __metadata:
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
     react-native-webview: 11.26.1
+    react-native-zip-archive: 6.0.9
     react-redux: 7.2.9
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
@@ -27278,6 +27280,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-blob-util@npm:0.17.3":
+  version: 0.17.3
+  resolution: "react-native-blob-util@npm:0.17.3"
+  dependencies:
+    base-64: 0.1.0
+    glob: ^7.2.3
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 32121a10f6015b97c1a2fd4aa089c68855098b8cfc706c8fa36efb1f8aa601d8275b64ebb3d81877f93d818301891d8cdca2218f09a88b02cf9a374461ed02e2
+  languageName: node
+  linkType: hard
+
 "react-native-camera@npm:4.2.1":
   version: 4.2.1
   resolution: "react-native-camera@npm:4.2.1"
@@ -27581,6 +27596,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: d2f95a89e944a2f1e8cf402e4e274f3568edae42e7ef190915e9fba8004a01d699c962459bdc9688c159060538e90aea3017cab24e6f4112021cbbc10ef57104
+  languageName: node
+  linkType: hard
+
+"react-native-zip-archive@npm:6.0.9":
+  version: 6.0.9
+  resolution: "react-native-zip-archive@npm:6.0.9"
+  peerDependencies:
+    react: ">=16.8.6"
+    react-native: ">=0.60.0"
+  checksum: 96c83864a596fcd8a82f55a01fa5e97822c9e80c7cf55de6b011a27cc436fbf58371207cb61c63b19dbd22b852ee62b95935358b4b9a73686695133dffdcfe27
   languageName: node
   linkType: hard
 

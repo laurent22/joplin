@@ -308,6 +308,8 @@ PODS:
     - glog
   - react-native-alarm-notification (2.11.0):
     - React
+  - react-native-blob-util (0.17.3):
+    - React-Core
   - react-native-camera (4.2.1):
     - React-Core
     - react-native-camera/RCT (= 4.2.1)
@@ -438,7 +440,15 @@ PODS:
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
+  - RNZipArchive (6.0.9):
+    - React-Core
+    - RNZipArchive/Core (= 6.0.9)
+    - SSZipArchive (~> 2.2)
+  - RNZipArchive/Core (6.0.9):
+    - React-Core
+    - SSZipArchive (~> 2.2)
   - SocketRocket (0.6.0)
+  - SSZipArchive (2.4.3)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -493,6 +503,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-alarm-notification (from `../node_modules/@joplin/react-native-alarm-notification`)"
+  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
@@ -532,6 +543,7 @@ DEPENDENCIES:
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNZipArchive (from `../node_modules/react-native-zip-archive`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -550,6 +562,7 @@ SPEC REPOS:
     - libevent
     - OpenSSL-Universal
     - SocketRocket
+    - SSZipArchive
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -601,6 +614,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-alarm-notification:
     :path: "../node_modules/@joplin/react-native-alarm-notification"
+  react-native-blob-util:
+    :path: "../node_modules/react-native-blob-util"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
   react-native-document-picker:
@@ -679,6 +694,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-share"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  RNZipArchive:
+    :path: "../node_modules/react-native-zip-archive"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -720,6 +737,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-alarm-notification: 26527410a6162d07a9dc57f4bbc62e94ff48e65d
+  react-native-blob-util: 99f4d79189252f597fe0d810c57a3733b1b1dea6
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 495c444c0c773c6e83a5d91165890ecb1c0a399a
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
@@ -759,7 +777,9 @@ SPEC CHECKSUMS:
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: eaee3dd5a06dad397c7d3b14762007035c5de405
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
+  RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

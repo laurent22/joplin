@@ -116,6 +116,7 @@ import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+// import { unzip } from 'react-native-zip-archive'
 
 const logger = Logger.create('root');
 
@@ -700,6 +701,21 @@ async function initialize(dispatch: Function) {
 	// just print some messages in the console.
 	// ----------------------------------------------------------------------------
 	if (Setting.value('env') === 'dev') await runIntegrationTests();
+
+
+
+	// await shim.fsDriver().remove(`${Setting.value('resourceDir')}/vosk_models`);
+	// await shim.fsDriver().mkdir(`${Setting.value('resourceDir')}/vosk_models`);
+	// await shim.fetchBlob('https://alphacephei.com/vosk/models/vosk-model-small-fr-0.22.zip', { path: `${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22.zip` });
+
+	// await unzip(`${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22.zip`, `${Setting.value('resourceDir')}/vosk_models`);
+	// console.info('FFFFFFFFFFFFFFFFFFFFFFFFF', await shim.fsDriver().readDirStats(`${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22`));
+
+	// await shim.fsDriver().writeFile(`${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22/uuid`, '6cefb4d8-32d7-4292-97f2-44993f815dcd', 'uf8');
+	await shim.fsDriver().writeFile(`${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22/uuid`, '539611e3-2c1c-41ed-ab17-a6bac40b8478', 'uf8');
+	console.info('FFFFFFFFFFFFFFFFFFFFFFFFF', await shim.fsDriver().readDirStats(`${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22`));
+
+	console.info('UUUUUUUUUUUUUUUUUUUUUUUUU', await shim.fsDriver().readFile('/data/user/0/net.cozic.joplin/files/vosk_models/vosk-model-small-fr-0.22/uuid', 'utf8'));
 
 	reg.logger().info('Application initialized');
 }

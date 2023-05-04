@@ -762,7 +762,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 	private async getVosk() {
 		if (this.vosk_) return this.vosk_;
 		this.vosk_ = new Vosk();
-		await this.vosk_.loadModel('model-fr-fr');
+		const result = await this.vosk_.loadModel(`${Setting.value('resourceDir')}/vosk_models/vosk-model-small-fr-0.22`);//'model-fr-fr');
+		logger.info('Vosk: Loaded model:', result);
 		return this.vosk_;
 	}
 
