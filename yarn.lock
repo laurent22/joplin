@@ -53,16 +53,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@arkweid/lefthook@npm:0.7.7":
-  version: 0.7.7
-  resolution: "@arkweid/lefthook@npm:0.7.7"
-  bin:
-    lefthook: bin/index.js
-  checksum: 45d9364b125a3fe05ad32f3dc1ebe779c3d237bb550ba083e8e8d273fcc0fae80cd3a59e989c3aedd1e7775033fae617af91c2817cd0ce53a1694b833e9b5b54
-  conditions: (os=darwin | os=linux | os=win32) & (cpu=x64 | cpu=arm64 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
 "@aws-crypto/crc32@npm:3.0.0":
   version: 3.0.0
   resolution: "@aws-crypto/crc32@npm:3.0.0"
@@ -6853,7 +6843,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-vosk@workspace:packages/react-native-vosk"
   dependencies:
-    "@arkweid/lefthook": 0.7.7
     "@babel/eslint-parser": 7.18.2
     "@commitlint/config-conventional": 17.0.2
     "@react-native-community/eslint-config": 3.0.2
