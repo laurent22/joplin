@@ -130,6 +130,7 @@ export const parseRenovateMessage = (message: string): RenovateMessage => {
 	const regexes = [
 		/^Update dependency ([^\s]+) to ([^\s]+)/,
 		/^Update ([^\s]+) monorepo to ([^\s]+)/,
+		/^Update ([^\s]+)/,
 	];
 
 	for (const regex of regexes) {
@@ -138,7 +139,7 @@ export const parseRenovateMessage = (message: string): RenovateMessage => {
 		if (m) {
 			return {
 				package: m[1],
-				version: m[2],
+				version: m.length >= 3 ? m[2] : '',
 			};
 		}
 	}
@@ -172,7 +173,7 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 
 	const temp: Record<string, string> = {};
 	for (const message of messages) {
-		if (!temp[message.package]) {
+		if (!(message.package in temp)) {
 			temp[message.package] = message.version;
 		} else {
 			if (message.version > temp[message.package]) {
@@ -183,7 +184,8 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 
 	const temp2: string[] = [];
 	for (const [pkg, version] of Object.entries(temp)) {
-		temp2.push(`${pkg} (${version})`);
+		const versionString = version ? ` (${version})` : '';
+		temp2.push(`${pkg}${versionString}`);
 	}
 
 	temp2.sort();
