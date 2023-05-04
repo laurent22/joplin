@@ -1,0 +1,1 @@
+Here was the folder `vosk-model-spk-0.4`. You can restore it from the original repo: https://github.com/riderodd/react-native-vosk
