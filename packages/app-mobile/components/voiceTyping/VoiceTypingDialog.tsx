@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Dialog, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import Vosk from '@joplin/react-native-vosk';
 import { getVosk, Recorder, startRecording } from '../../services/voiceTyping/vosk';
-import Logger from '@joplin/lib/Logger';
-
-const logger = Logger.create('VoiceTypingDialog');
+import { Alert } from 'react-native';
 
 interface Props {
 	onDismiss: ()=> void;
+	onText: (text: string)=> void;
 }
 
 enum RecorderState {
 	Loading = 1,
 	Recording = 2,
-	Closing = 3,
+	Processing = 3,
 }
 
 const useVosk = (): Vosk|null => {
@@ -33,12 +32,13 @@ const useVosk = (): Vosk|null => {
 
 export default (props: Props) => {
 	const [recorder, setRecorder] = useState<Recorder>(null);
+	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
 
 	const vosk = useVosk();
 
-	const recorderState: RecorderState = useMemo(() => {
-		if (!vosk) return RecorderState.Loading;
-		return RecorderState.Recording;
+	useEffect(() => {
+		if (!vosk) return;
+		setRecorderState(RecorderState.Recording);
 	}, [vosk]);
 
 	useEffect(() => {
@@ -47,37 +47,45 @@ export default (props: Props) => {
 		}
 	}, [recorderState, vosk]);
 
+	const onDismiss = useCallback(() => {
+		recorder.cleanup();
+		props.onDismiss();
+	}, [recorder, props.onDismiss]);
+
 	const onStop = useCallback(async () => {
-		const result = await recorder.stop();
-		logger.info('GOT RESULT', result);
-	}, [recorder]);
+		try {
+			setRecorderState(RecorderState.Processing);
+			const result = await recorder.stop();
+			props.onText(result);
+		} catch (error) {
+			Alert.alert(error.message);
+		}
+		onDismiss();
+	}, [recorder, onDismiss, props.onText]);
 
 	const renderContent = () => {
-		if (recorderState === RecorderState.Loading) {
-			return <Text variant="bodyMedium">Loading...</Text>;
-		}
+		const components: Record<RecorderState, any> = {
+			[RecorderState.Loading]: <Text variant="bodyMedium">Loading...</Text>,
+			[RecorderState.Recording]: <Text variant="bodyMedium">Please record your voice...</Text>,
+			[RecorderState.Processing]: <Text variant="bodyMedium">Converting speech to text...</Text>,
+		};
 
-		if (recorderState === RecorderState.Recording) {
-			return <Text variant="bodyMedium">Please record your voice...</Text>;
-		}
-
-		return <Text variant="bodyMedium">Converting speech to text...</Text>;
+		return components[recorderState];
 	};
 
 	const renderActions = () => {
-		if (recorderState === RecorderState.Loading) {
-			return <Dialog.Actions><Button onPress={()=>{}}>Wait</Button></Dialog.Actions>;
-		}
-
-		if (recorderState === RecorderState.Recording) {
-			return (
+		const components: Record<RecorderState, any> = {
+			[RecorderState.Loading]: null,
+			[RecorderState.Recording]: (
 				<Dialog.Actions>
-					<Button onPress={onStop}>Stop</Button>
+					<Button onPress={onDismiss}>Cancel</Button>
+					<Button onPress={onStop}>Done</Button>
 				</Dialog.Actions>
-			);
-		}
+			),
+			[RecorderState.Processing]: null,
+		};
 
-		return <Dialog.Actions><Button onPress={()=>{}}>Wait</Button></Dialog.Actions>;
+		return components[recorderState];
 	};
 
 	return (

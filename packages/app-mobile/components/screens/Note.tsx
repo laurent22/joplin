@@ -86,6 +86,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
+
+			voiceTypingDialogShown: false,
 		};
 
 		this.saveActionQueues_ = {};
@@ -240,6 +242,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
+		this.voiceTypingDialog_onText = this.voiceTypingDialog_onText.bind(this);
+		this.voiceTypingDialog_onDismiss = this.voiceTypingDialog_onDismiss.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -978,9 +982,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (shim.mobilePlatform() === 'android') {
 			output.push({
-				title: 'Voice recording (Beta - FR only)',
+				title: 'Voice typing',
 				onPress: () => {
-					void this.voiceRecording_onPress();
+					this.setState({ voiceTypingDialogShown: true });
 				},
 			});
 		}
@@ -1102,6 +1106,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
+	}
+
+	private voiceTypingDialog_onText(text: string) {
+		const newNote: NoteEntity = { ...this.state.note };
+		newNote.body = `${newNote.body} ${text}`;
+		this.setState({ note: newNote });
+		this.scheduleSave();
+	}
+
+	private voiceTypingDialog_onDismiss() {
+		this.setState({ voiceTypingDialogShown: false });
 	}
 
 	public render() {
@@ -1260,7 +1275,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
 		const renderVoiceTypingDialog = () => {
-			return <VoiceTypingDialog onDismiss={() => {}}/>;
+			if (!this.state.voiceTypingDialogShown) return null;
+			return <VoiceTypingDialog onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
 		};
 
 		return (

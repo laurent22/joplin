@@ -67,19 +67,23 @@ repositories {
 }
 
 // Generate UUIDs for each models contained in android/src/main/assets/
-tasks.register('genUUID') {
-  doLast {
-    fileTree(dir: "$rootDir/app/src/main/assets", exclude: ['*/*']).visit { fileDetails ->
-      if (fileDetails.directory) {
-        def odir = file("$rootDir/app/src/main/assets/$fileDetails.relativePath")
-        def ofile = file("$odir/uuid")
-        mkdir odir
-        ofile.text = UUID.randomUUID().toString()
-      }
-    }
-  }
-}
-preBuild.dependsOn genUUID
+
+// We don't want this because it's going to generate a different one on each
+// build, even when nothing has changed.
+
+// tasks.register('genUUID') {
+//   doLast {
+//     fileTree(dir: "$rootDir/app/src/main/assets", exclude: ['*/*']).visit { fileDetails ->
+//       if (fileDetails.directory) {
+//         def odir = file("$rootDir/app/src/main/assets/$fileDetails.relativePath")
+//         def ofile = file("$odir/uuid")
+//         mkdir odir
+//         ofile.text = UUID.randomUUID().toString()
+//       }
+//     }
+//   }
+// }
+// preBuild.dependsOn genUUID
 
 def kotlin_version = getExtOrDefault('kotlinVersion')
 

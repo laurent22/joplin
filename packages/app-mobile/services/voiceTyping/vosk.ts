@@ -12,6 +12,7 @@ let state_: State = State.Idle;
 
 export interface Recorder {
 	stop: ()=> Promise<string>;
+	cleanup: ()=> void;
 }
 
 export const getVosk = async () => {
@@ -29,9 +30,10 @@ export const startRecording = (vosk: Vosk): Recorder => {
 	const result: string[] = [];
 	const eventHandlers: any[] = [];
 	let finalResultPromiseResolve: Function = null;
+	let finalResultPromiseReject: Function = null;
 	let finalResultTimeout = false;
 
-	const completeRecording = (finalResult: string) => {
+	const completeRecording = (finalResult: string, error: Error) => {
 		for (const eventHandler of eventHandlers) {
 			eventHandler.remove();
 		}
@@ -40,7 +42,11 @@ export const startRecording = (vosk: Vosk): Recorder => {
 
 		state_ = State.Idle;
 
-		finalResultPromiseResolve(finalResult);
+		if (error) {
+			if (finalResultPromiseReject) finalResultPromiseReject(error);
+		} else {
+			if (finalResultPromiseResolve) finalResultPromiseResolve(finalResult);
+		}
 	};
 
 	eventHandlers.push(vosk.onResult(e => {
@@ -64,7 +70,7 @@ export const startRecording = (vosk: Vosk): Recorder => {
 			return;
 		}
 
-		completeRecording(e.data);
+		completeRecording(e.data, null);
 	}));
 
 	logger.info('Starting recording...');
@@ -82,12 +88,19 @@ export const startRecording = (vosk: Vosk): Recorder => {
 			setTimeout(() => {
 				finalResultTimeout = true;
 				logger.warn('Timed out waiting for finalResult event');
-				completeRecording('');
+				completeRecording('', new Error('Could not process your message. Please try again.'));
 			}, 5000);
 
-			return new Promise((resolve: Function) => {
+			return new Promise((resolve: Function, reject: Function) => {
 				finalResultPromiseResolve = resolve;
+				finalResultPromiseReject = reject;
 			});
+		},
+		cleanup: () => {
+			if (state_ !== State.Idle) {
+				vosk.stopOnly();
+				completeRecording('', null);
+			}
 		},
 	};
 };
