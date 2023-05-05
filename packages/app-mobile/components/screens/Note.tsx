@@ -44,6 +44,7 @@ import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
+import Vosk from 'react-native-vosk';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -51,6 +52,10 @@ const emptyArray: any[] = [];
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
+
+	private vosk_: Vosk|null = null;
+	private voskResult_: string[] = [];
+
 	public static navigationOptions(): any {
 		return { header: null };
 	}
@@ -754,6 +759,65 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 	}
 
+	private async getVosk() {
+		if (this.vosk_) return this.vosk_;
+		this.vosk_ = new Vosk();
+		await this.vosk_.loadModel('model-fr-fr');
+		return this.vosk_;
+	}
+
+	private async voiceRecording_onPress() {
+		logger.info('Vosk: Getting instance...');
+
+		const vosk = await this.getVosk();
+
+		this.voskResult_ = [];
+
+		const eventHandlers: any[] = [];
+
+		eventHandlers.push(vosk.onResult(e => {
+			logger.info('Vosk: result', e.data);
+			this.voskResult_.push(e.data);
+		}));
+
+		eventHandlers.push(vosk.onError(e => {
+			logger.warn('Vosk: error', e.data);
+		}));
+
+		eventHandlers.push(vosk.onTimeout(e => {
+			logger.warn('Vosk: timeout', e.data);
+		}));
+
+		eventHandlers.push(vosk.onFinalResult(e => {
+			logger.info('Vosk: final result', e.data);
+		}));
+
+		logger.info('Vosk: Starting recording...');
+
+		void vosk.start();
+
+		const buttonId = await dialogs.pop(this, 'Voice recording in progress...', [
+			{ text: 'Stop recording', id: 'stop' },
+			{ text: _('Cancel'), id: 'cancel' },
+		]);
+
+		logger.info('Vosk: Stopping recording...');
+		vosk.stop();
+
+		for (const eventHandler of eventHandlers) {
+			eventHandler.remove();
+		}
+
+		logger.info('Vosk: Recording stopped:', this.voskResult_);
+
+		if (buttonId === 'cancel') return;
+
+		const newNote: NoteEntity = { ...this.state.note };
+		newNote.body = `${newNote.body} ${this.voskResult_.join(' ')}`;
+		this.setState({ note: newNote });
+		this.scheduleSave();
+	}
+
 	private toggleIsTodo_onPress() {
 		shared.toggleIsTodo_onPress(this);
 
@@ -914,6 +978,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 				void this.share_onPress();
 			},
 		});
+
+		if (shim.mobilePlatform() === 'android') {
+			output.push({
+				title: 'Voice recording (Beta - FR only)',
+				onPress: () => {
+					void this.voiceRecording_onPress();
+				},
+			});
+		}
+
 		if (isSaved) {
 			output.push({
 				title: _('Tags'),
