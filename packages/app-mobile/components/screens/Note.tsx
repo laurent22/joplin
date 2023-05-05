@@ -29,7 +29,7 @@ import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
-const { _ } = require('@joplin/lib/locale');
+import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
@@ -980,9 +980,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 		});
 
-		if (shim.mobilePlatform() === 'android') {
+		// Voice typing is enabled only for French language and on Android for now
+		if (shim.mobilePlatform() === 'android' && currentLocale() === 'fr_FR') {
 			output.push({
-				title: 'Voice typing',
+				title: _('Voice typing...'),
 				onPress: () => {
 					this.setState({ voiceTypingDialogShown: true });
 				},
@@ -1109,10 +1110,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	private voiceTypingDialog_onText(text: string) {
-		const newNote: NoteEntity = { ...this.state.note };
-		newNote.body = `${newNote.body} ${text}`;
-		this.setState({ note: newNote });
-		this.scheduleSave();
+		if (this.state.mode === 'view') {
+			const newNote: NoteEntity = { ...this.state.note };
+			newNote.body = `${newNote.body} ${text}`;
+			this.setState({ note: newNote });
+			this.scheduleSave();
+		} else {
+			if (this.useEditorBeta()) {
+				this.editorRef.current.insertText(text);
+			} else {
+				logger.warn('Voice typing is not supported in plaintext editor');
+			}
+		}
 	}
 
 	private voiceTypingDialog_onDismiss() {
@@ -1330,6 +1339,10 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+
+		// What we call "beta editor" in this component is actually the (now
+		// default) CodeMirror editor. That should be refactored to make it less
+		// confusing.
 		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);

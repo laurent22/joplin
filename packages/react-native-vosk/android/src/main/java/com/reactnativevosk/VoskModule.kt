@@ -19,6 +19,16 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     return "Vosk"
   }
 
+  @ReactMethod
+  fun addListener(type: String?) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
+  @ReactMethod
+  fun removeListeners(type: Int?) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
   override fun onResult(hypothesis: String) {
     // Get text data from string object
     val text = getHypothesisText(hypothesis)

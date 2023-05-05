@@ -34,6 +34,8 @@ export const startRecording = (vosk: Vosk): Recorder => {
 	let finalResultTimeout = false;
 
 	const completeRecording = (finalResult: string, error: Error) => {
+		logger.info(`Complete recording. Final result: ${finalResult}. Error:`, error);
+
 		for (const eventHandler of eventHandlers) {
 			eventHandler.remove();
 		}
@@ -98,6 +100,7 @@ export const startRecording = (vosk: Vosk): Recorder => {
 		},
 		cleanup: () => {
 			if (state_ !== State.Idle) {
+				logger.info('Cancelling...');
 				vosk.stopOnly();
 				completeRecording('', null);
 			}
