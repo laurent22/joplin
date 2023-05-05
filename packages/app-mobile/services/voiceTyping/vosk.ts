@@ -10,6 +10,10 @@ enum State {
 let vosk_: Vosk|null = null;
 let state_: State = State.Idle;
 
+export const voskEnabled = true;
+
+export { Vosk };
+
 export interface Recorder {
 	stop: ()=> Promise<string>;
 	cleanup: ()=> void;

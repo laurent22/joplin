@@ -3,8 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button, Dialog, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-import Vosk from '@joplin/react-native-vosk';
-import { getVosk, Recorder, startRecording } from '../../services/voiceTyping/vosk';
+import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
 import { Alert } from 'react-native';
 
 interface Props {

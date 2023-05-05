@@ -425,6 +425,7 @@ packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/voiceTyping/vosk.dummy.js
 packages/app-mobile/services/voiceTyping/vosk.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
@@ -810,7 +811,6 @@ packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
 packages/react-native-saf-x/src/index.js
-packages/react-native-vosk/src/__tests__/index.test.js
 packages/react-native-vosk/src/index.js
 packages/renderer/HtmlToHtml.js
 packages/renderer/InMemoryCache.js

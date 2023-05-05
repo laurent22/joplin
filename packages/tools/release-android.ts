@@ -69,6 +69,13 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 		await fs.writeFile(filename, content);
 	}
 
+	if (name !== 'vosk') {
+		const filename = `${rnDir}/services/voiceTyping/vosk.js`;
+		originalContents[filename] = await fs.readFile(filename, 'utf8');
+		const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.js`, 'utf8');
+		await fs.writeFile(filename, newContent);
+	}
+
 	const apkFilename = `joplin-v${suffix}.apk`;
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
 	const downloadUrl = `https://github.com/laurent22/${projectName}/releases/download/${tagName}/${apkFilename}`;
@@ -83,30 +90,6 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 	let apkBuildCmd = '';
 	const apkBuildCmdArgs = ['assembleRelease', '-PbuildDir=build'];
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
-		// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
-
-		//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd packages\app-mobile\android && gradlew.bat assembleRelease -PbuildDir=build"
-
-		//     FAILURE: Build failed with an exception.
-
-		//     * What went wrong:
-		//     Could not determine if Stdout is a console: could not get handle file information (errno 1)
-
-		// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
-
-		// console.info('Run this command from DOS:');
-		// console.info('');
-		// console.info(`cd "${wslToWinPath(rootDir)}\\packages\\app-mobile\\android" && gradlew.bat ${apkBuildCmd}"`);
-		// console.info('');
-		// await readline('Press Enter when done:');
-		// apkBuildCmd = ''; // Clear the command because we've already ran it
-
-		// process.chdir(`${rnDir}/android`);
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
-		// restoreDir = rootDir;
-
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
-
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
 	} else {
@@ -159,21 +142,12 @@ async function main() {
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
-	const releaseNames = ['main', '32bit'];
+	const releaseNames = ['main', '32bit', 'vosk'];
 	const releaseFiles: Record<string, Release> = {};
 
 	for (const releaseName of releaseNames) {
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
-
-	// NOT TESTED: These commands should not be necessary anymore since they are
-	// done in completeReleaseWithChangelog()
-
-	// await execCommandVerbose('git', ['add', '-A']);
-	// await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
-	// await execCommandVerbose('git', ['tag', tagName]);
-	// await execCommandVerbose('git', ['push']);
-	// await execCommandVerbose('git', ['push', '--tags']);
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
