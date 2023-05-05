@@ -70,10 +70,19 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 	}
 
 	if (name !== 'vosk') {
-		const filename = `${rnDir}/services/voiceTyping/vosk.js`;
-		originalContents[filename] = await fs.readFile(filename, 'utf8');
-		const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.js`, 'utf8');
-		await fs.writeFile(filename, newContent);
+		{
+			const filename = `${rnDir}/services/voiceTyping/vosk.js`;
+			originalContents[filename] = await fs.readFile(filename, 'utf8');
+			const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.js`, 'utf8');
+			await fs.writeFile(filename, newContent);
+		}
+		{
+			const filename = `${rnDir}/package.json`;
+			let content = await fs.readFile(filename, 'utf8');
+			originalContents[filename] = content;
+			content = content.replace(/\s+"@joplin\/react-native-vosk": ".*",/, '');
+			await fs.writeFile(filename, content);
+		}
 	}
 
 	const apkFilename = `joplin-v${suffix}.apk`;
@@ -86,9 +95,13 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	console.info(`Building APK file v${suffix}...`);
 
+	const buildDirName = `build-${name}`;
+	const buildDirBasePath = `${rnDir}/android/app/${buildDirName}`;
+	await fs.remove(buildDirBasePath);
+
 	let restoreDir = null;
 	let apkBuildCmd = '';
-	const apkBuildCmdArgs = ['assembleRelease', '-PbuildDir=build'];
+	const apkBuildCmdArgs = ['assembleRelease', `-PbuildDir=${buildDirName}`]; // TOOD: change build dir, delete before
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
@@ -106,12 +119,18 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	await fs.mkdirp(releaseDir);
 
+	const builtApk = `${buildDirBasePath}/outputs/apk/release/app-release.apk`;
+	const builtApkStat = await fs.stat(builtApk);
+
+	console.info(`Built APK at ${builtApk}`);
+	console.info('APK size:', builtApkStat.size);
+
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, apkFilePath);
+	await fs.copy(builtApk, apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, `${releaseDir}/joplin-latest.apk`);
+		await fs.copy(builtApk, `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
@@ -132,6 +151,7 @@ async function main() {
 	await gitPullTry(false);
 
 	const isPreRelease = !('type' in argv) || argv.type === 'prerelease';
+	const releaseNameOnly = argv['release-name'];
 
 	process.chdir(rnDir);
 	await execCommand('yarn run build', { showStdout: false });
@@ -146,6 +166,7 @@ async function main() {
 	const releaseFiles: Record<string, Release> = {};
 
 	for (const releaseName of releaseNames) {
+		if (releaseNameOnly && releaseName !== releaseNameOnly) continue;
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
 
