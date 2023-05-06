@@ -1,4 +1,4 @@
-import { EmitterSubscription, EventSubscription } from 'react-native';
+import { EventSubscription } from 'react-native';
 declare type VoskEvent = {
     /**
      * Event datas
@@ -7,7 +7,7 @@ declare type VoskEvent = {
 };
 export default class Vosk {
     loadModel: (path: string) => any;
-    currentRegisteredEvents: EmitterSubscription[];
+    private currentRegisteredEvents;
     start: (grammar?: string[] | null) => Promise<String>;
     stop: () => void;
     stopOnly: () => void;

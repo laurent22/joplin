@@ -8,10 +8,10 @@ var _reactNative = require("react-native");
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-const LINKING_ERROR = `The package 'react-native-vosk' doesn't seem to be linked. Make sure: \n\n` + _reactNative.Platform.select({
-  ios: "- You have run 'pod install'\n",
+const LINKING_ERROR = `The package 'react-native-vosk' doesn't seem to be linked. Make sure: \n\n${_reactNative.Platform.select({
+  ios: '- You have run \'pod install\'\n',
   default: ''
-}) + '- You rebuilt the app after installing the package\n' + '- You are not using Expo managed workflow\n';
+})}- You rebuilt the app after installing the package\n` + '- You are not using Expo managed workflow\n';
 const VoskModule = _reactNative.NativeModules.Vosk ? _reactNative.NativeModules.Vosk : new Proxy({}, {
   get() {
     throw new Error(LINKING_ERROR);
@@ -27,7 +27,9 @@ class Vosk {
       let grammar = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       return new Promise((resolve, reject) => {
         // Check for permission
-        _this.requestRecordPermission().then(granted => {
+        _this.requestRecordPermission()
+        // eslint-disable-next-line promise/prefer-await-to-then
+        .then(granted => {
           if (!granted) return reject('Audio record permission denied');
 
           // Setup events
@@ -38,9 +40,12 @@ class Vosk {
 
           // Start recognition
           VoskModule.start(grammar);
-        }).catch(e => {
+        })
+        // eslint-disable-next-line promise/prefer-await-to-then
+        .catch(e => {
           reject(e);
         });
+        // eslint-disable-next-line promise/prefer-await-to-then
       }).finally(() => {
         _this.cleanListeners();
       });
@@ -73,7 +78,7 @@ class Vosk {
       return eventEmitter.addListener('onTimeout', onTimeout);
     });
     _defineProperty(this, "requestRecordPermission", async () => {
-      if (_reactNative.Platform.OS === "ios") return true;
+      if (_reactNative.Platform.OS === 'ios') return true;
       const granted = await _reactNative.PermissionsAndroid.request(_reactNative.PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
       return granted === _reactNative.PermissionsAndroid.RESULTS.GRANTED;
     });
