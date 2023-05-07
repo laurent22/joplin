@@ -6654,7 +6654,7 @@ __metadata:
     "@types/react-native": 0.68.0
     eslint: 8.4.1
     jest: 28.1.1
-    pod-install: 0.1.0
+    pod-install: 0.1.38
     react: 18.2.0
     react-native: 0.71.4
     react-native-builder-bob: 0.18.3
@@ -30377,12 +30377,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pod-install@npm:0.1.0":
-  version: 0.1.0
-  resolution: "pod-install@npm:0.1.0"
+"pod-install@npm:0.1.38":
+  version: 0.1.38
+  resolution: "pod-install@npm:0.1.38"
   bin:
     pod-install: build/index.js
-  checksum: ece2bafc2cab278d540db314c3ea1b62c21e511c927478cf30bd6424d92b7f970c8d255e0b18a48b4ec2f83fdd0775ea3a983b0596819a2b5c324340a592104d
+  checksum: 9ff3e8f50dba2cee1c174deeb394312d6a950096f39c5a413a9dbf9acf4acb890440a9c316381799c8e125858c4c84d2c4f0c3d7ef2ceb056ea820a417004fd7
   languageName: node
   linkType: hard
 
