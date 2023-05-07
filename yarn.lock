@@ -6648,7 +6648,7 @@ __metadata:
   dependencies:
     "@babel/eslint-parser": 7.18.2
     "@react-native-community/eslint-config": 3.0.2
-    "@release-it/conventional-changelog": 5.0.0
+    "@release-it/conventional-changelog": 5.1.1
     "@types/jest": 28.1.2
     "@types/react": ~17.0.21
     "@types/react-native": 0.68.0
@@ -8752,16 +8752,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@release-it/conventional-changelog@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@release-it/conventional-changelog@npm:5.0.0"
+"@release-it/conventional-changelog@npm:5.1.1":
+  version: 5.1.1
+  resolution: "@release-it/conventional-changelog@npm:5.1.1"
   dependencies:
     concat-stream: ^2.0.0
     conventional-changelog: ^3.1.25
     conventional-recommended-bump: ^6.1.0
+    semver: 7.3.8
   peerDependencies:
-    release-it: ^15.0.0-esm.4
-  checksum: 205a743018451c3c7fe4ab233bbc0142c54dae8dbf607d4629ed2e16e810791ce85db600b0c7dd8e7bab8ebc5ff890cc82bf5d7c053c7b7c7b10d34c4a9d6cea
+    release-it: ^15.4.1
+  checksum: 15ade4ab88dabea7664b28494db035707eb84acc897b51472142abcac6c6acae0e90f9db7d8c93bb1de697678e7321d31192362565c538d4f62a4e7600bc30b2
   languageName: node
   linkType: hard
 
@@ -33567,16 +33568,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.0.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.2.0, semver@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "semver@npm:6.3.0"
-  bin:
-    semver: ./bin/semver.js
-  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.0.0, semver@npm:^7.3.8":
+"semver@npm:7.3.8, semver@npm:^7.0.0, semver@npm:^7.3.8":
   version: 7.3.8
   resolution: "semver@npm:7.3.8"
   dependencies:
@@ -33584,6 +33576,15 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: ba9c7cbbf2b7884696523450a61fee1a09930d888b7a8d7579025ad93d459b2d1949ee5bbfeb188b2be5f4ac163544c5e98491ad6152df34154feebc2cc337c1
+  languageName: node
+  linkType: hard
+
+"semver@npm:^6.0.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.2.0, semver@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "semver@npm:6.3.0"
+  bin:
+    semver: ./bin/semver.js
+  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
   languageName: node
   linkType: hard
 
