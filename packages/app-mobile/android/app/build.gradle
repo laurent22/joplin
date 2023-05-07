@@ -79,6 +79,8 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
+    // 2023/05/07: Leave that to `false` for now because Hermes is rubbish at
+    // reporting errors, which it makes it impossible to investigate crashes.
     enableHermes: false,  // clean and rebuild if changing
 ]
 
