@@ -35,7 +35,7 @@
     "node-fetch": "2.6.7",
     "relative": "3.0.2",
     "request": "2.88.2",
-    "sharp": "0.31.3",
+    "sharp": "0.32.0",
     "source-map-support": "0.5.21",
     "uri-template": "2.0.0",
     "yargs": "17.7.1"

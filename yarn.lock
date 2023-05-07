@@ -6298,7 +6298,7 @@ __metadata:
     react-toggle-button: 2.2.0
     react-tooltip: 4.5.1
     redux: 4.2.1
-    reselect: 4.1.7
+    reselect: 4.1.8
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
     sqlite3: 5.1.6
@@ -6396,7 +6396,7 @@ __metadata:
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.5.1
     react-native-securerandom: 1.0.1
-    react-native-share: 8.2.1
+    react-native-share: 8.2.2
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 1.3.0
@@ -6538,9 +6538,9 @@ __metadata:
     read-chunk: 2.1.0
     redux: 4.2.1
     relative: 3.0.2
-    reselect: 4.1.7
+    reselect: 4.1.8
     server-destroy: 1.0.1
-    sharp: 0.31.3
+    sharp: 0.32.0
     sprintf-js: 1.1.2
     sqlite3: 5.1.6
     string-padding: 1.0.2
@@ -6739,7 +6739,7 @@ __metadata:
     jquery: 3.6.4
     jsdom: 21.1.1
     knex: 2.4.2
-    koa: 2.14.1
+    koa: 2.14.2
     markdown-it: 13.0.1
     mustache: 4.2.0
     nanoid: 2.1.11
@@ -6797,7 +6797,7 @@ __metadata:
     request: 2.88.2
     rss: 1.2.2
     sass: 1.60.0
-    sharp: 0.31.3
+    sharp: 0.32.0
     source-map-support: 0.5.21
     sqlite3: 5.1.6
     typescript: 4.9.4
@@ -24596,7 +24596,7 @@ __metadata:
     proper-lockfile: 4.1.2
     read-chunk: 2.1.0
     server-destroy: 1.0.1
-    sharp: 0.31.3
+    sharp: 0.32.0
     sprintf-js: 1.1.2
     sqlite3: 5.1.6
     string-padding: 1.0.2
@@ -25265,9 +25265,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.14.1":
-  version: 2.14.1
-  resolution: "koa@npm:2.14.1"
+"koa@npm:2.14.2":
+  version: 2.14.2
+  resolution: "koa@npm:2.14.2"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
@@ -25292,7 +25292,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: 84cfce48d72cf434831bd9f4f06beb3815da030325a7e89b13ee684f5afd158221e16c2d450ca637b221aa0c4a0ab235edd129e4efea656dc5d8384801d3e90f
+  checksum: 17fe3b8f5e0b4759004a942cc6ba2a9507299943a697dff9766b85f41f45caed4077ca2645ac9ad254d3359fffedfc4c9ebdd7a70493e5df8cdfac159a8ee835
   languageName: node
   linkType: hard
 
@@ -28219,12 +28219,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-addon-api@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "node-addon-api@npm:5.0.0"
+"node-addon-api@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "node-addon-api@npm:6.1.0"
   dependencies:
     node-gyp: latest
-  checksum: 7c5e2043ac37f6108784d94ed73a44ae6d3e68eb968de60680922fc6bc3d17fa69448c0feb4e0c9d3f4c74a0324822e566a8340a56916d9d6f23cb3e85620334
+  checksum: 3a539510e677cfa3a833aca5397300e36141aca064cdc487554f2017110709a03a95da937e98c2a14ec3c626af7b2d1b6dabe629a481f9883143d0d5bff07bf2
   languageName: node
   linkType: hard
 
@@ -31687,10 +31687,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:8.2.1":
-  version: 8.2.1
-  resolution: "react-native-share@npm:8.2.1"
-  checksum: 5158518eec9582aa738f61c3e424c1791cb58df8943475812cd3343b36988fadf0609847bdc5d384b6e100d979c6e56003eab3c3934a673be55dff7ae4deb50e
+"react-native-share@npm:8.2.2":
+  version: 8.2.2
+  resolution: "react-native-share@npm:8.2.2"
+  checksum: 0f69911fda2ca1856b439d8b4fcc2ac9c74bd92590fb6a7db60282181f0a9612f218985b3c69b0bbe73da5395a3aa197e91ac8de9a05c07c0b0da5a096a0e294
   languageName: node
   linkType: hard
 
@@ -32744,10 +32744,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reselect@npm:4.1.7":
-  version: 4.1.7
-  resolution: "reselect@npm:4.1.7"
-  checksum: 738d8e2b8f0dca154ad29de6a209c9fbca2d70ae6788fd85df87f2c74b95a65bbf2d16d43a9e2faff39de34d17a29d706ba08a6b2ee5660c09589edbd19af7e1
+"reselect@npm:4.1.8":
+  version: 4.1.8
+  resolution: "reselect@npm:4.1.8"
+  checksum: a4ac87cedab198769a29be92bc221c32da76cfdad6911eda67b4d3e7136dca86208c3b210e31632eae31ebd2cded18596f0dd230d3ccc9e978df22f233b5583e
   languageName: node
   linkType: hard
 
@@ -33760,20 +33760,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.31.3":
-  version: 0.31.3
-  resolution: "sharp@npm:0.31.3"
+"sharp@npm:0.32.0":
+  version: 0.32.0
+  resolution: "sharp@npm:0.32.0"
   dependencies:
     color: ^4.2.3
     detect-libc: ^2.0.1
-    node-addon-api: ^5.0.0
+    node-addon-api: ^6.0.0
     node-gyp: latest
     prebuild-install: ^7.1.1
     semver: ^7.3.8
     simple-get: ^4.0.1
     tar-fs: ^2.1.1
     tunnel-agent: ^0.6.0
-  checksum: 29fd1dfbc616c6389f53f366cec342b4353d9f2a37e98952ca273db38dca57dfa0f336322d6d763f0fae876042ead22fd86ffe26d70c32ade2458d421db60d04
+  checksum: 82c6046038f45f1fdeb732cff8be6a8a3fb5eb25f46f4c3ecb4b71363c2c387b52de8c0c5c4674f2400663e467b8a7b93dbc5d70b3f0e145cb45fc27d39c5709
   languageName: node
   linkType: hard
 
