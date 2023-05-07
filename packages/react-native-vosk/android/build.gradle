@@ -1,0 +1,107 @@
+buildscript {
+  // Buildscript is evaluated before everything else so we can't use getExtOrDefault
+  def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["Vosk_kotlinVersion"]
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:7.2.1"
+    // noinspection DifferentKotlinGradleVersion
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+
+def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
+
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["Vosk_" + name]
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Vosk_" + name]).toInteger()
+}
+
+android {
+  compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
+
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault("minSdkVersion")
+    targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+
+  lintOptions {
+    disable 'GradleCompatible'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+}
+
+repositories {
+  mavenCentral()
+  google()
+}
+
+// Generate UUIDs for each models contained in android/src/main/assets/
+
+// We don't want this because it's going to generate a different one on each
+// build, even when nothing has changed.
+
+// tasks.register('genUUID') {
+//   doLast {
+//     fileTree(dir: "$rootDir/app/src/main/assets", exclude: ['*/*']).visit { fileDetails ->
+//       if (fileDetails.directory) {
+//         def odir = file("$rootDir/app/src/main/assets/$fileDetails.relativePath")
+//         def ofile = file("$odir/uuid")
+//         mkdir odir
+//         ofile.text = UUID.randomUUID().toString()
+//       }
+//     }
+//   }
+// }
+// preBuild.dependsOn genUUID
+
+def kotlin_version = getExtOrDefault('kotlinVersion')
+
+dependencies {
+  // For < 0.71, this will be from the local maven repo
+  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+  //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native:+"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  // From node_modules
+  implementation 'net.java.dev.jna:jna:5.12.1@aar'
+  implementation 'com.alphacephei:vosk-android:0.3.46@aar'
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "Vosk"
+    codegenJavaPackageName = "com.reactnativevosk"
+  }
+}
