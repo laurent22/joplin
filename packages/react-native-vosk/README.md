@@ -2,6 +2,8 @@
 
 * * *
 
+**NOTE:** For some reason this module doesn't work (events are not being fired), so for now we use the actual `react-native-vosk` module, but with a patch
+
 **Joplin fork** of `react-native-vosk@0.1.12` with the following changes:
 
 - The `onResult()` event doesn't automatically stop the recorder - because we need it to keep running so that it captures the whole text. The original package was designed to record one keyword, but we need whole sentences.

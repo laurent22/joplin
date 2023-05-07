@@ -6339,7 +6339,6 @@ __metadata:
     "@joplin/lib": ~2.11
     "@joplin/react-native-alarm-notification": ~2.11
     "@joplin/react-native-saf-x": ~2.11
-    "@joplin/react-native-vosk": ~0.1
     "@joplin/renderer": ~2.11
     "@joplin/tools": ~2.11
     "@lezer/highlight": 1.1.4
@@ -6402,6 +6401,7 @@ __metadata:
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
+    react-native-vosk: 0.1.12
     react-native-webview: 11.26.1
     react-redux: 7.2.9
     redux: 4.2.1
@@ -6642,7 +6642,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/react-native-vosk@workspace:packages/react-native-vosk, @joplin/react-native-vosk@~0.1":
+"@joplin/react-native-vosk@workspace:packages/react-native-vosk":
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-vosk@workspace:packages/react-native-vosk"
   dependencies:
@@ -31742,6 +31742,26 @@ __metadata:
   peerDependencies:
     react-native: ">= 0.60.2"
   checksum: ad9c05066f790980a1c4def49e1d6d3f4b63d570f611a09a4834ac48907c8e145461cdd014f8d809ac8c5a50aba996a025912ecf7d760001c3740d19181c193c
+  languageName: node
+  linkType: hard
+
+"react-native-vosk@npm:0.1.12":
+  version: 0.1.12
+  resolution: "react-native-vosk@npm:0.1.12"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 49dd234d0822d7f3deb9563a903260a8478bb78eb20367b50284df40e1e64e23dc52d632b329176883c048b8224182eee000fd7dbd3c42401a9a03bd0ce1ae10
+  languageName: node
+  linkType: hard
+
+"react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::locator=root%40workspace%3A.":
+  version: 0.1.12
+  resolution: "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::version=0.1.12&hash=8a1ee1&locator=root%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 42ca9a0a4f60706b718c95207fcc27ec43571c0a5e83b358422fd35e45d006762277c30556edb1b470ade40198076d69260c4233fd07e30cd33c0f03024f5d11
   languageName: node
   linkType: hard
 

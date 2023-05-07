@@ -1,5 +1,5 @@
 import Logger from '@joplin/lib/Logger';
-import Vosk from '@joplin/react-native-vosk';
+import Vosk from 'react-native-vosk';
 const logger = Logger.create('voiceTyping/vosk');
 
 enum State {
