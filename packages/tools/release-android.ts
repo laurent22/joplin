@@ -80,7 +80,7 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 			const filename = `${rnDir}/package.json`;
 			let content = await fs.readFile(filename, 'utf8');
 			originalContents[filename] = content;
-			content = content.replace(/\s+"@joplin\/react-native-vosk": ".*",/, '');
+			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
 			await fs.writeFile(filename, content);
 		}
 	}
