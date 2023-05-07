@@ -927,8 +927,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {
-					this.voiceRecording_onPress();
-					// this.setState({ voiceTypingDialogShown: true });
+					this.setState({ voiceTypingDialogShown: true });
 				},
 			});
 		}
