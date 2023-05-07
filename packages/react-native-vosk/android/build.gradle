@@ -94,7 +94,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   // From node_modules
-  implementation 'net.java.dev.jna:jna:5.12.1@aar'
+  implementation 'net.java.dev.jna:jna:5.13.0@aar'
   implementation 'com.alphacephei:vosk-android:0.3.46@aar'
 }
 
