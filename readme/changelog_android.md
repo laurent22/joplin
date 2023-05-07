@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.11.6](https://github.com/laurent22/joplin/releases/tag/android-v2.11.6) (Pre-release) - 2023-05-07T13:53:31Z
+
+- Disabled Hermes engine
+
 ## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) (Pre-release) - 2023-05-07T12:14:21Z
 
 - Improved: Improved Vosk support (beta, fr only) (#8131)
