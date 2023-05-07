@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) (Pre-release) - 2023-05-07T12:14:21Z
+
+- Improved: Improved Vosk support (beta, fr only) (#8131)
+- Improved: Updated packages react-native-share (v8.2.2), reselect (v4.1.8), sharp (v0.32.0)
+
 ## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) (Pre-release) - 2023-05-03T11:57:27Z
 
 - New: Add support for offline speech to text (Beta - FR only) (#8115)
