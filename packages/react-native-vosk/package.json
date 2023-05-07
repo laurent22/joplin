@@ -53,7 +53,7 @@
     "pod-install": "0.1.0",
     "react": "18.2.0",
     "react-native": "0.71.4",
-    "react-native-builder-bob": "0.18.3",
+    "react-native-builder-bob": "0.20.4",
     "release-it": "15.0.0",
     "typescript": "4.5.2"
   },

@@ -6657,7 +6657,7 @@ __metadata:
     pod-install: 0.1.0
     react: 18.2.0
     react-native: 0.71.4
-    react-native-builder-bob: 0.18.3
+    react-native-builder-bob: 0.20.4
     release-it: 15.0.0
     typescript: 4.5.2
   peerDependencies:
@@ -31420,9 +31420,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-builder-bob@npm:0.18.3":
-  version: 0.18.3
-  resolution: "react-native-builder-bob@npm:0.18.3"
+"react-native-builder-bob@npm:0.20.4":
+  version: 0.20.4
+  resolution: "react-native-builder-bob@npm:0.20.4"
   dependencies:
     "@babel/core": ^7.18.5
     "@babel/plugin-proposal-class-properties": ^7.17.12
@@ -31449,7 +31449,7 @@ __metadata:
       optional: true
   bin:
     bob: bin/bob
-  checksum: 98770d20cecfde7f2b44bc0ad0222b4764f35703a2a20981b96b20250ccbe9ab946140a635e38f3786554286020a958cfc85c2b2934c66863f44678bd1bc22f0
+  checksum: 258da6ecd03be52cc05a3e3a7c481890c7c0b7b62ae9f263c5f3d6fafeae95bd9445ad2f6c2513f7f4e4569eee935a18ae94c7491f58d6916af515c88de9e0a1
   languageName: node
   linkType: hard
 
