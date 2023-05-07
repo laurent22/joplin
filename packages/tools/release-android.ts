@@ -71,9 +71,9 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	if (name !== 'vosk') {
 		{
-			const filename = `${rnDir}/services/voiceTyping/vosk.js`;
+			const filename = `${rnDir}/services/voiceTyping/vosk.ts`;
 			originalContents[filename] = await fs.readFile(filename, 'utf8');
-			const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.js`, 'utf8');
+			const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
 			await fs.writeFile(filename, newContent);
 		}
 		{
@@ -93,6 +93,9 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	console.info(`Running from: ${process.cwd()}`);
 
+	await execCommand('yarn install', { showStdout: false });
+	await execCommand('yarn run tsc', { showStdout: false });
+
 	console.info(`Building APK file v${suffix}...`);
 
 	const buildDirName = `build-${name}`;
@@ -101,17 +104,21 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	let restoreDir = null;
 	let apkBuildCmd = '';
+	let apkCleanBuild = '';
 	const apkBuildCmdArgs = ['assembleRelease', `-PbuildDir=${buildDirName}`]; // TOOD: change build dir, delete before
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
+		throw new Error('TODO: apkCleanBuild must be set');
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = './gradlew';
+		apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
 		restoreDir = rootDir;
 	}
 
 	if (apkBuildCmd) {
+		await execCommand(apkCleanBuild);
 		await execCommandVerbose(apkBuildCmd, apkBuildCmdArgs);
 	}
 
@@ -154,7 +161,6 @@ async function main() {
 	const releaseNameOnly = argv['release-name'];
 
 	process.chdir(rnDir);
-	await execCommand('yarn run build', { showStdout: false });
 
 	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');
@@ -162,7 +168,8 @@ async function main() {
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
-	const releaseNames = ['main', '32bit', 'vosk'];
+	// const releaseNames = ['main', '32bit', 'vosk'];
+	const releaseNames = ['main', 'vosk'];
 	const releaseFiles: Record<string, Release> = {};
 
 	for (const releaseName of releaseNames) {
