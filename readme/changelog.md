@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.10.17](https://github.com/laurent22/joplin/releases/tag/v2.10.17) - 2023-05-08T17:27:28Z
+
+- Fixed: Enter Key No Longer Saves and Closes The Tag Dialog ([#8072](https://github.com/laurent22/joplin/issues/8072))
+- Fixed: Fixes crash when using multiple profiles along with certain plugins ([#8143](https://github.com/laurent22/joplin/issues/8143))
+
 ## [v2.10.16](https://github.com/laurent22/joplin/releases/tag/v2.10.16) - 2023-04-27T09:27:45Z
 
 - Improved: Revert to "normal" package compression ([2e2feab](https://github.com/laurent22/joplin/commit/2e2feab))
