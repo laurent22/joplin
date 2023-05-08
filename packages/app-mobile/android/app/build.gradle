@@ -79,7 +79,9 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
-    enableHermes: true,  // clean and rebuild if changing
+    // 2023/05/07: Leave that to `false` for now because Hermes is rubbish at
+    // reporting errors, which it makes it impossible to investigate crashes.
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -150,8 +152,8 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097689
-		versionName "2.11.4"
+		versionCode 2097695
+		versionName "2.11.10"
 		// ndk {
 		// 	abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		// }

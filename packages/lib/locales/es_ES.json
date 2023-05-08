@@ -184,7 +184,6 @@
  "Could not switch profile: %s": "No se pudo cambiar el perfil: %s",
  "Could not upgrade master key: %s": "No se pudo actualizar la clave maestra: %s",
  "Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": "No se ha podido verificar el estado de compartición de esta libreta - abortando. Por favor, inténtelo de nuevo cuando esté conectado a Internet.",
- "Could not verify your identify": "No se pudo verificar su identidad",
  "Create": "Crear",
  "Create a notebook": "Crea una libreta",
  "Create new profile...": "Crear nuevo perfil...",

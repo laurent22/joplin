@@ -69,6 +69,22 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 		await fs.writeFile(filename, content);
 	}
 
+	if (name !== 'vosk') {
+		{
+			const filename = `${rnDir}/services/voiceTyping/vosk.ts`;
+			originalContents[filename] = await fs.readFile(filename, 'utf8');
+			const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
+			await fs.writeFile(filename, newContent);
+		}
+		{
+			const filename = `${rnDir}/package.json`;
+			let content = await fs.readFile(filename, 'utf8');
+			originalContents[filename] = content;
+			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
+			await fs.writeFile(filename, content);
+		}
+	}
+
 	const apkFilename = `joplin-v${suffix}.apk`;
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
 	const downloadUrl = `https://github.com/laurent22/${projectName}/releases/download/${tagName}/${apkFilename}`;
@@ -77,45 +93,32 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	console.info(`Running from: ${process.cwd()}`);
 
+	await execCommand('yarn install', { showStdout: false });
+	await execCommand('yarn run tsc', { showStdout: false });
+
 	console.info(`Building APK file v${suffix}...`);
+
+	const buildDirName = `build-${name}`;
+	const buildDirBasePath = `${rnDir}/android/app/${buildDirName}`;
+	await fs.remove(buildDirBasePath);
 
 	let restoreDir = null;
 	let apkBuildCmd = '';
-	const apkBuildCmdArgs = ['assembleRelease', '-PbuildDir=build'];
+	let apkCleanBuild = '';
+	const apkBuildCmdArgs = ['assembleRelease', `-PbuildDir=${buildDirName}`]; // TOOD: change build dir, delete before
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
-		// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
-
-		//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd packages\app-mobile\android && gradlew.bat assembleRelease -PbuildDir=build"
-
-		//     FAILURE: Build failed with an exception.
-
-		//     * What went wrong:
-		//     Could not determine if Stdout is a console: could not get handle file information (errno 1)
-
-		// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
-
-		// console.info('Run this command from DOS:');
-		// console.info('');
-		// console.info(`cd "${wslToWinPath(rootDir)}\\packages\\app-mobile\\android" && gradlew.bat ${apkBuildCmd}"`);
-		// console.info('');
-		// await readline('Press Enter when done:');
-		// apkBuildCmd = ''; // Clear the command because we've already ran it
-
-		// process.chdir(`${rnDir}/android`);
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
-		// restoreDir = rootDir;
-
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
-
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
+		throw new Error('TODO: apkCleanBuild must be set');
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = './gradlew';
+		apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
 		restoreDir = rootDir;
 	}
 
 	if (apkBuildCmd) {
+		await execCommand(apkCleanBuild);
 		await execCommandVerbose(apkBuildCmd, apkBuildCmdArgs);
 	}
 
@@ -123,12 +126,18 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	await fs.mkdirp(releaseDir);
 
+	const builtApk = `${buildDirBasePath}/outputs/apk/release/app-release.apk`;
+	const builtApkStat = await fs.stat(builtApk);
+
+	console.info(`Built APK at ${builtApk}`);
+	console.info('APK size:', builtApkStat.size);
+
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, apkFilePath);
+	await fs.copy(builtApk, apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, `${releaseDir}/joplin-latest.apk`);
+		await fs.copy(builtApk, `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
@@ -149,9 +158,9 @@ async function main() {
 	await gitPullTry(false);
 
 	const isPreRelease = !('type' in argv) || argv.type === 'prerelease';
+	const releaseNameOnly = argv['release-name'];
 
 	process.chdir(rnDir);
-	await execCommand('yarn run build', { showStdout: false });
 
 	if (isPreRelease) console.info('Creating pre-release');
 	console.info('Updating version numbers in build.gradle...');
@@ -159,21 +168,14 @@ async function main() {
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
-	const releaseNames = ['main', '32bit'];
+	// const releaseNames = ['main', '32bit', 'vosk'];
+	const releaseNames = ['main', 'vosk'];
 	const releaseFiles: Record<string, Release> = {};
 
 	for (const releaseName of releaseNames) {
+		if (releaseNameOnly && releaseName !== releaseNameOnly) continue;
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
-
-	// NOT TESTED: These commands should not be necessary anymore since they are
-	// done in completeReleaseWithChangelog()
-
-	// await execCommandVerbose('git', ['add', '-A']);
-	// await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
-	// await execCommandVerbose('git', ['tag', tagName]);
-	// await execCommandVerbose('git', ['push']);
-	// await execCommandVerbose('git', ['push', '--tags']);
 
 	console.info(`Creating GitHub release ${tagName}...`);
 

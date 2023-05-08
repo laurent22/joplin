@@ -73,7 +73,6 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - hermes-engine (0.70.6)
   - JoplinCommonShareExtension (1.0.0)
   - JoplinRNShareExtension (1.0.0):
     - JoplinCommonShareExtension
@@ -91,12 +90,6 @@ PODS:
     - DoubleConversion
     - fmt (~> 6.2.1)
     - glog
-  - RCT-Folly/Futures (2021.07.22.00):
-    - boost
-    - DoubleConversion
-    - fmt (~> 6.2.1)
-    - glog
-    - libevent
   - RCTRequired (0.70.6)
   - RCTTypeSafety (0.70.6):
     - FBLazyVector (= 0.70.6)
@@ -274,17 +267,6 @@ PODS:
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
     - React-runtimeexecutor (= 0.70.6)
-  - React-hermes (0.70.6):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2021.07.22.00)
-    - RCT-Folly/Futures (= 2021.07.22.00)
-    - React-cxxreact (= 0.70.6)
-    - React-jsi (= 0.70.6)
-    - React-jsiexecutor (= 0.70.6)
-    - React-jsinspector (= 0.70.6)
-    - React-perflogger (= 0.70.6)
   - React-jsi (0.70.6):
     - boost (= 1.76.0)
     - DoubleConversion
@@ -434,7 +416,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (8.2.1):
+  - RNShare (8.2.2):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -470,10 +452,8 @@ DEPENDENCIES:
   - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.125.0)
   - FlipperKit/SKIOSNetworkPlugin (= 0.125.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - hermes-engine (from `../node_modules/react-native/sdks/hermes/hermes-engine.podspec`)
   - JoplinCommonShareExtension (from `ShareExtension`)
   - JoplinRNShareExtension (from `ShareExtension`)
-  - libevent (~> 2.1.12)
   - OpenSSL-Universal (= 1.1.1100)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -487,7 +467,6 @@ DEPENDENCIES:
   - React-Core/RCTWebSocket (from `../node_modules/react-native/`)
   - React-CoreModules (from `../node_modules/react-native/React/CoreModules`)
   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
-  - React-hermes (from `../node_modules/react-native/ReactCommon/hermes`)
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
@@ -563,8 +542,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  hermes-engine:
-    :podspec: "../node_modules/react-native/sdks/hermes/hermes-engine.podspec"
   JoplinCommonShareExtension:
     :path: ShareExtension
   JoplinRNShareExtension:
@@ -589,8 +566,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/CoreModules"
   React-cxxreact:
     :path: "../node_modules/react-native/ReactCommon/cxxreact"
-  React-hermes:
-    :path: "../node_modules/react-native/ReactCommon/hermes"
   React-jsi:
     :path: "../node_modules/react-native/ReactCommon/jsi"
   React-jsiexecutor:
@@ -699,7 +674,6 @@ SPEC CHECKSUMS:
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  hermes-engine: 2af7b7a59128f250adfd86f15aa1d5a2ecd39995
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -714,7 +688,6 @@ SPEC CHECKSUMS:
   React-Core: b587d0a624f9611b0e032505f3d6f25e8daa2bee
   React-CoreModules: c6ff48b985e7aa622e82ca51c2c353c7803eb04e
   React-cxxreact: ade3d9e63c599afdead3c35f8a8bd12b3da6730b
-  React-hermes: ed09ae33512bbb8d31b2411778f3af1a2eb681a1
   React-jsi: 5a3952e0c6d57460ad9ee2c905025b4c28f71087
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
@@ -757,12 +730,12 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
-  RNShare: eaee3dd5a06dad397c7d3b14762007035c5de405
+  RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 1f5ea1b29b693e847adf004360d019d064a024ca
+PODFILE CHECKSUM: 0235ffbfa2e655de806a80d996148182dd493d8d
 
 COCOAPODS: 1.11.3

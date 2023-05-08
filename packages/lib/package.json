@@ -80,7 +80,7 @@
     "read-chunk": "2.1.0",
     "redux": "4.2.1",
     "relative": "3.0.2",
-    "reselect": "4.1.7",
+    "reselect": "4.1.8",
     "server-destroy": "1.0.1",
     "sprintf-js": "1.1.2",
     "sqlite3": "5.1.6",
