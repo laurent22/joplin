@@ -61,11 +61,11 @@ describe('models/Setting', () => {
 		await Setting.reset();
 
 		await expectNotThrow(async () => Setting.load());
-		await expectThrow(async () => Setting.value('itsgone'));
+		await expectThrow(async () => Setting.value('itsgone'), 'unknown_key');
 	}));
 
 	it('should allow registering new settings dynamically', (async () => {
-		await expectThrow(async () => Setting.setValue('myCustom', '123'));
+		await expectThrow(async () => Setting.setValue('myCustom', '123'), 'unknown_key');
 
 		await Setting.registerSetting('myCustom', {
 			public: true,
