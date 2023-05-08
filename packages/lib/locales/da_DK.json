@@ -186,7 +186,6 @@
  "Could not switch profile: %s": "Kunne ikke skifte profil: %s",
  "Could not upgrade master key: %s": "Kunne ikke opgradere hovednøgle: %s",
  "Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": "Kunne ikke verificere denne notesbogs status for deling - afbryder. Prøv venligst igen, når du har forbindelse til internettet.",
- "Could not verify your identify": "Kunne ikke bekræfte din identitet",
  "Create": "Opret",
  "Create a notebook": "Opret en notesbog",
  "Create new profile...": "Opret ny note...",
