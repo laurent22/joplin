@@ -1,6 +1,6 @@
 # Joplin changelog
 
-## [v2.10.16](https://github.com/laurent22/joplin/releases/tag/v2.10.16) (Pre-release) - 2023-04-27T09:27:45Z
+## [v2.10.16](https://github.com/laurent22/joplin/releases/tag/v2.10.16) - 2023-04-27T09:27:45Z
 
 - Improved: Revert to "normal" package compression ([2e2feab](https://github.com/laurent22/joplin/commit/2e2feab))
 
