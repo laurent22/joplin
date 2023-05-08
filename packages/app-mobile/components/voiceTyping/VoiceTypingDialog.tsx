@@ -64,9 +64,9 @@ export default (props: Props) => {
 
 	const renderContent = () => {
 		const components: Record<RecorderState, any> = {
-			[RecorderState.Loading]: <Text variant="bodyMedium">Loading...</Text>,
-			[RecorderState.Recording]: <Text variant="bodyMedium">Please record your voice...</Text>,
-			[RecorderState.Processing]: <Text variant="bodyMedium">Converting speech to text...</Text>,
+			[RecorderState.Loading]: <Text variant="bodyMedium">{_('Loading...')}</Text>,
+			[RecorderState.Recording]: <Text variant="bodyMedium">{_('Please record your voice...')}</Text>,
+			[RecorderState.Processing]: <Text variant="bodyMedium">{_('Converting speech to text...')}</Text>,
 		};
 
 		return components[recorderState];
@@ -77,8 +77,8 @@ export default (props: Props) => {
 			[RecorderState.Loading]: null,
 			[RecorderState.Recording]: (
 				<Dialog.Actions>
-					<Button onPress={onDismiss}>Cancel</Button>
-					<Button onPress={onStop}>Done</Button>
+					<Button onPress={onDismiss}>{_('Cancel')}</Button>
+					<Button onPress={onStop}>{_('Done')}</Button>
 				</Dialog.Actions>
 			),
 			[RecorderState.Processing]: null,
