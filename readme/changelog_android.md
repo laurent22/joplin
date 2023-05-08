@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.11.9](https://github.com/laurent22/joplin/releases/tag/android-v2.11.9) (Pre-release) - 2023-05-07T18:07:15Z
+## [android-v2.11.10](https://github.com/laurent22/joplin/releases/tag/android-v2.11.10) (Pre-release) - 2023-05-08T10:26:14Z
 
 - Improved: Disable Hermes engine (e9e9986)
 - Fixed: Fix voice typing (d5eeb12)
