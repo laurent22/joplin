@@ -6,6 +6,8 @@
   "private": true,
   "scripts": {
     "dist": "yarn run electronRebuild && npx electron-builder",
+    "pack-html": "rollup --config rollup-main-html.config.js",
+    "pack-main": "rollup --config rollup-main.config.js",
     "build": "gulp build",
     "postinstall": "yarn run build",
     "electronBuilder": "gulp electronBuilder",
@@ -35,6 +37,9 @@
       "build/icons/**",
       "build/images/**",
       "build/defaultPlugins/**"
+    ],
+    "files": [
+      "!node_modules/**/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
@@ -110,6 +115,8 @@
   "devDependencies": {
     "@joplin/tools": "~2.11",
     "@rollup/plugin-commonjs": "24.1.0",
+    "@rollup/plugin-json": "6.0.0",
+    "@rollup/plugin-node-resolve": "15.0.2",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.2.6",
     "@types/node": "18.11.18",

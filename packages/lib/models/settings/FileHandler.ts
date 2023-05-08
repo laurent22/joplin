@@ -1,6 +1,6 @@
 import Logger from '../../Logger';
 import shim from '../../shim';
-import Setting from '../Setting';
+import { schemaUrl } from './types';
 
 const logger = Logger.create('Settings');
 
@@ -41,7 +41,7 @@ export default class FileHandler {
 
 	public async save(values: SettingValues) {
 		const json = `${JSON.stringify({
-			'$schema': Setting.schemaUrl,
+			'$schema': schemaUrl,
 			...values,
 		}, null, '\t')}\n`;
 

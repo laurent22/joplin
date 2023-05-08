@@ -551,6 +551,7 @@ packages/lib/models/SmartFilter.js
 packages/lib/models/Tag.js
 packages/lib/models/dateTimeFormats.test.js
 packages/lib/models/settings/FileHandler.js
+packages/lib/models/settings/types.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
@@ -685,8 +686,6 @@ packages/lib/services/plugins/utils/validatePluginVersion.test.js
 packages/lib/services/profileConfig/index.js
 packages/lib/services/profileConfig/index.test.js
 packages/lib/services/profileConfig/initProfile.js
-packages/lib/services/profileConfig/mergeGlobalAndLocalSettings.js
-packages/lib/services/profileConfig/splitGlobalAndLocalSettings.js
 packages/lib/services/profileConfig/types.js
 packages/lib/services/rest/Api.js
 packages/lib/services/rest/Api.test.js

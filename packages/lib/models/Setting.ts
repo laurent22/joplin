@@ -7,14 +7,50 @@ import SyncTargetRegistry from '../SyncTargetRegistry';
 import time from '../time';
 import FileHandler, { SettingValues } from './settings/FileHandler';
 import Logger from '../Logger';
-import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
-import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
 const { rtrimSlashes, toSystemSlashes } = require('../path-utils');
 
 const logger = Logger.create('models/Setting');
+
+const mergeGlobalAndLocalSettings = (rootSettings: Record<string, any>, subProfileSettings: Record<string, any>) => {
+	const output: Record<string, any> = { ...subProfileSettings };
+
+	for (const k of Object.keys(output)) {
+		const md = Setting.settingMetadata(k);
+		if (md.isGlobal) {
+			delete output[k];
+			if (k in rootSettings) output[k] = rootSettings[k];
+		}
+	}
+
+	for (const k of Object.keys(rootSettings)) {
+		const md = Setting.settingMetadata(k);
+		if (md.isGlobal) {
+			output[k] = rootSettings[k];
+		}
+	}
+
+	return output;
+};
+
+const splitGlobalAndLocalSettings = (settings: SettingValues) => {
+	const globalSettings: SettingValues = {};
+	const localSettings: SettingValues = {};
+
+	for (const [k, v] of Object.entries(settings)) {
+		const md = Setting.settingMetadata(k);
+
+		if (md.isGlobal) {
+			globalSettings[k] = v;
+		} else {
+			localSettings[k] = v;
+		}
+	}
+
+	return { globalSettings, localSettings };
+};
 
 export enum SettingItemType {
 	Int = 1,
@@ -218,8 +254,6 @@ const userSettingMigration: UserSettingMigration[] = [
 ];
 
 class Setting extends BaseModel {
-
-	public static schemaUrl = 'https://joplinapp.org/schema/settings.json';
 
 	// For backward compatibility
 	public static TYPE_INT = SettingItemType.Int;

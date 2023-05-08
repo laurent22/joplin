@@ -1,4 +1,5 @@
 import Setting, { SettingStorage } from '@joplin/lib/models/Setting';
+import { schemaUrl } from '@joplin/lib/models/settings/types';
 import { SettingItemType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 
@@ -38,7 +39,7 @@ class Command extends BaseCommand {
 	public async action(args: any) {
 		const schema: Record<string, any> = {
 			title: 'JSON schema for Joplin setting files',
-			'$id': Setting.schemaUrl,
+			'$id': schemaUrl,
 			'$schema': 'https://json-schema.org/draft-07/schema#',
 			type: 'object',
 			properties: {},

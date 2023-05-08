@@ -15,3 +15,4 @@ build/lib/
 vendor/*
 !vendor/loadEmojiLib.js
 main-html.bundle.js
+main.js

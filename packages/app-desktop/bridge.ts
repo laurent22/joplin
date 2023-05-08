@@ -84,35 +84,35 @@ export class Bridge {
 	// Perhaps the easiest would be to patch electron-context-menu to
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
-	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
-		require('electron-context-menu')({
-			allWindows: [this.window()],
+	// public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
+	// 	require('electron-context-menu')({
+	// 		allWindows: [this.window()],
 
-			electronApp: this.electronApp(),
+	// 		electronApp: this.electronApp(),
 
-			shouldShowMenu: (_event: any, params: any) => {
-				// params.inputFieldType === 'none' when right-clicking the text
-				// editor. This is a bit of a hack to detect it because in this
-				// case we don't want to use the built-in context menu but a
-				// custom one.
-				return params.isEditable && params.inputFieldType !== 'none';
-			},
+	// 		shouldShowMenu: (_event: any, params: any) => {
+	// 			// params.inputFieldType === 'none' when right-clicking the text
+	// 			// editor. This is a bit of a hack to detect it because in this
+	// 			// case we don't want to use the built-in context menu but a
+	// 			// custom one.
+	// 			return params.isEditable && params.inputFieldType !== 'none';
+	// 		},
 
-			// menu: (actions: any, props: any) => {
-			// 	const items = spellCheckerMenuItemsHandler(props.misspelledWord, props.dictionarySuggestions);
-			// 	const spellCheckerMenuItems = items.map((item: any) => new MenuItem(item)); //SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
+	// 		// menu: (actions: any, props: any) => {
+	// 		// 	const items = spellCheckerMenuItemsHandler(props.misspelledWord, props.dictionarySuggestions);
+	// 		// 	const spellCheckerMenuItems = items.map((item: any) => new MenuItem(item)); //SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
 
-			// 	const output = [
-			// 		actions.cut(),
-			// 		actions.copy(),
-			// 		actions.paste(),
-			// 		...spellCheckerMenuItems,
-			// 	];
+	// 		// 	const output = [
+	// 		// 		actions.cut(),
+	// 		// 		actions.copy(),
+	// 		// 		actions.paste(),
+	// 		// 		...spellCheckerMenuItems,
+	// 		// 	];
 
-			// 	return output;
-			// },
-		});
-	}
+	// 		// 	return output;
+	// 		// },
+	// 	});
+	// }
 
 	public window() {
 		return this.electronWrapper_.window();
