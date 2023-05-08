@@ -15,7 +15,6 @@
 					"@joplin/tools",
 					"@joplin/react-native-saf-x",
 					"@joplin/react-native-alarm-notification",
-					"@joplin/react-native-vosk",
 					"@joplin/utils"
 				]
 		  	}

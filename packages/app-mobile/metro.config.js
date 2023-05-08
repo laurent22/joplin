@@ -24,7 +24,6 @@ const localPackages = {
 	'@joplin/fork-uslug': path.resolve(__dirname, '../fork-uslug/'),
 	'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
 	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
-	'@joplin/react-native-vosk': path.resolve(__dirname, '../react-native-vosk/'),
 };
 
 const watchedFolders = [];
