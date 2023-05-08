@@ -125,6 +125,8 @@ function defaultTemplateParams(assetUrls: AssetUrls, locale: Locale = null): Tem
 }
 
 function renderPageToHtml(md: string, targetPath: string, templateParams: TemplateParams) {
+	if (templateParams.isNews) templateParams.locale = enGbLocale;
+
 	// Remove the header because it's going to be added back as HTML
 	md = md.replace(/# Joplin\n/, '');
 
@@ -428,7 +430,7 @@ async function main() {
 			const openGraph = await extractOpenGraphTags(mdFile, makeTargetUrl(mdFile, locale.pathPrefix));
 
 			const isNews = isNewsFile(mdFile);
-			if (isNews) newsFilePaths.push(mdFile);
+			if (isNews && localeName === 'en_GB') newsFilePaths.push(mdFile);
 
 			let sourceFile = mdFile;
 
