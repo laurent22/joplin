@@ -9,6 +9,7 @@ import FileHandler, { SettingValues } from './settings/FileHandler';
 import Logger from '../Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -1810,7 +1811,7 @@ class Setting extends BaseModel {
 
 	public static settingMetadata(key: string): SettingItem {
 		const metadata = this.metadata();
-		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
+		if (!(key in metadata)) throw new JoplinError(`Unknown key: ${key}`, 'unknown_key');
 		const output = Object.assign({}, metadata[key]);
 		output.key = key;
 		return output;
