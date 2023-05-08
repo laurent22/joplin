@@ -1,4 +1,4 @@
-import Setting, { SettingSectionSource, SettingStorage } from '../models/Setting';
+import Setting, { SettingItemType, SettingSectionSource, SettingStorage } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
 import Logger from '../Logger';
@@ -297,12 +297,21 @@ describe('models/Setting', () => {
 		expect(Setting.isSet('spellChecker.languages')).toBe(false);
 	}));
 
-	it('should load sub-profile settings - 1', async () => {
+	it('should load sub-profile settings', async () => {
 		await Setting.reset();
+
+		await Setting.registerSetting('non_builtin', {
+			public: true,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			type: SettingItemType.Bool,
+			value: false,
+		});
 
 		Setting.setValue('locale', 'fr_FR'); // Global setting
 		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
 		Setting.setValue('sync.target', 9); // Local setting
+		Setting.setValue('non_builtin', true); // Local setting
 		await Setting.saveAll();
 
 		await switchToSubProfileSettings();
@@ -311,6 +320,9 @@ describe('models/Setting', () => {
 		expect(Setting.value('theme')).toBe(Setting.THEME_DARK); // Should come from the root profile
 		expect(Setting.value('sync.target')).toBe(0); // Should come from the local profile
 
+		// Non-built-in variables are not copied
+		expect(() => Setting.value('non_builtin')).toThrow();
+
 		// Also check that the special loadOne() function works as expected
 
 		expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
@@ -318,7 +330,7 @@ describe('models/Setting', () => {
 		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
 	});
 
-	it('should save sub-profile settings - 2', async () => {
+	it('should save sub-profile settings', async () => {
 		await Setting.reset();
 		Setting.setValue('locale', 'fr_FR'); // Global setting
 		Setting.setValue('theme', Setting.THEME_DARK); // Global setting

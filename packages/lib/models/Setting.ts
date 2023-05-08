@@ -313,6 +313,7 @@ class Setting extends BaseModel {
 	private static fileHandler_: FileHandler = null;
 	private static rootFileHandler_: FileHandler = null;
 	private static settingFilename_: string = 'settings.json';
+	private static buildInMetadata_: SettingItems = null;
 
 	static tableName() {
 		return 'settings';
@@ -407,7 +408,7 @@ class Setting extends BaseModel {
 			return output;
 		};
 
-		this.metadata_ = {
+		this.buildInMetadata_ = {
 			'clientId': {
 				value: '',
 				type: SettingItemType.String,
@@ -1686,6 +1687,8 @@ class Setting extends BaseModel {
 
 		};
 
+		this.metadata_ = { ...this.buildInMetadata_ };
+
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
 
 		if (this.constants_.env === Env.Dev) this.validateMetadata(this.metadata_);
@@ -1697,6 +1700,10 @@ class Setting extends BaseModel {
 		for (const [k, v] of Object.entries(md)) {
 			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
 		}
+	}
+
+	public static isBuiltinKey(key: string): boolean {
+		return key in this.buildInMetadata_;
 	}
 
 	public static customCssFilePath(filename: string): string {
@@ -2245,7 +2252,7 @@ class Setting extends BaseModel {
 
 	static enumOptions(key: string) {
 		const metadata = this.metadata();
-		if (!metadata[key]) throw new Error(`Unknown key: ${key}`);
+		if (!metadata[key]) throw new JoplinError(`Unknown key: ${key}`, 'unknown_key');
 		if (!metadata[key].options) throw new Error(`No options for: ${key}`);
 		return metadata[key].options();
 	}
