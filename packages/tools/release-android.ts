@@ -1,5 +1,5 @@
 import { execCommand } from '@joplin/utils';
-import * as fs from 'fs-extra';
+import { copy, mkdirp, readFile, readFileSync, remove, stat, writeFile, writeFileSync } from 'fs-extra';
 import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
@@ -15,6 +15,45 @@ interface Release {
 	apkFilename: string;
 	apkFilePath: string;
 }
+
+// class Patcher {
+
+// 	private workDir_:string;
+// 	private originalContents_:Record<string, string> = {};
+// 	private removedFiles_:Record<string, string> = {};
+
+// 	public constructor(workDir:string) {
+// 		this.workDir_ = workDir;
+// 	}
+
+// 	public removeFile = async (path:string) => {
+// 		const targetPath = this.workDir_ + '/' + path.substring(1);
+// 		await move(path, targetPath);
+// 		this.removedFiles_[path] = targetPath;
+// 	}
+
+// 	public updateFileContent = async (path:string, callback:Function) => {
+// 		const content = await readFile(path, 'utf8');
+// 		this.originalContents_[path] = content;
+// 		const newContent = callback(content);
+// 		await writeFile(path, newContent);
+// 	}
+
+// 	public restore = async () => {
+// 		for (const filename in this.originalContents_) {
+// 			const content = this.originalContents_[filename];
+// 			await writeFile(filename, content);
+// 		}
+
+// 		for (const [originalPath, backupPath] of Object.entries(this.removedFiles_)) {
+// 			await move(backupPath, originalPath);
+// 		}
+
+// 		this.removedFiles_ = {};
+// 		this.originalContents_ = {};
+// 	}
+
+// }
 
 function increaseGradleVersionCode(content: string) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, (_a, versionCode: string) => {
@@ -41,10 +80,10 @@ function increaseGradleVersionName(content: string) {
 }
 
 function updateGradleConfig() {
-	let content = fs.readFileSync(`${rnDir}/android/app/build.gradle`, 'utf8');
+	let content = readFileSync(`${rnDir}/android/app/build.gradle`, 'utf8');
 	content = increaseGradleVersionCode(content);
 	content = increaseGradleVersionName(content);
-	fs.writeFileSync(`${rnDir}/android/app/build.gradle`, content);
+	writeFileSync(`${rnDir}/android/app/build.gradle`, content);
 	return content;
 }
 
@@ -62,26 +101,26 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	if (name === '32bit') {
 		const filename = `${rnDir}/android/app/build.gradle`;
-		let content = await fs.readFile(filename, 'utf8');
+		let content = await readFile(filename, 'utf8');
 		originalContents[filename] = content;
 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
 		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
-		await fs.writeFile(filename, content);
+		await writeFile(filename, content);
 	}
 
 	if (name !== 'vosk') {
 		{
 			const filename = `${rnDir}/services/voiceTyping/vosk.ts`;
-			originalContents[filename] = await fs.readFile(filename, 'utf8');
-			const newContent = await fs.readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
-			await fs.writeFile(filename, newContent);
+			originalContents[filename] = await readFile(filename, 'utf8');
+			const newContent = await readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
+			await writeFile(filename, newContent);
 		}
 		{
 			const filename = `${rnDir}/package.json`;
-			let content = await fs.readFile(filename, 'utf8');
+			let content = await readFile(filename, 'utf8');
 			originalContents[filename] = content;
 			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
-			await fs.writeFile(filename, content);
+			await writeFile(filename, content);
 		}
 	}
 
@@ -100,7 +139,7 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	const buildDirName = `build-${name}`;
 	const buildDirBasePath = `${rnDir}/android/app/${buildDirName}`;
-	await fs.remove(buildDirBasePath);
+	await remove(buildDirBasePath);
 
 	let restoreDir = null;
 	let apkBuildCmd = '';
@@ -124,25 +163,25 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	if (restoreDir) process.chdir(restoreDir);
 
-	await fs.mkdirp(releaseDir);
+	await mkdirp(releaseDir);
 
 	const builtApk = `${buildDirBasePath}/outputs/apk/release/app-release.apk`;
-	const builtApkStat = await fs.stat(builtApk);
+	const builtApkStat = await stat(builtApk);
 
 	console.info(`Built APK at ${builtApk}`);
 	console.info('APK size:', builtApkStat.size);
 
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy(builtApk, apkFilePath);
+	await copy(builtApk, apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy(builtApk, `${releaseDir}/joplin-latest.apk`);
+		await copy(builtApk, `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
 		const content = originalContents[filename];
-		await fs.writeFile(filename, content);
+		await writeFile(filename, content);
 	}
 
 	return {
@@ -189,7 +228,7 @@ async function main() {
 		const releaseFile = releaseFiles[releaseFilename];
 		const uploadUrl = uploadUrlTemplate.expand({ name: releaseFile.apkFilename });
 
-		const binaryBody = await fs.readFile(releaseFile.apkFilePath);
+		const binaryBody = await readFile(releaseFile.apkFilePath);
 
 		console.info(`Uploading ${releaseFile.apkFilename} to ${uploadUrl}`);
 
