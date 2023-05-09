@@ -830,6 +830,7 @@ packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.js
+packages/tools/build-welcome.js
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js

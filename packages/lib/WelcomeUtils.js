@@ -2,7 +2,6 @@ const welcomeAssets = require('./welcomeAssets');
 const Note = require('./models/Note').default;
 const Setting = require('./models/Setting').default;
 const Folder = require('./models/Folder').default;
-const Tag = require('./models/Tag').default;
 const shim = require('./shim').default;
 const uuid = require('./uuid').default;
 const { fileExtension, basename } = require('./path-utils');
@@ -45,13 +44,13 @@ class WelcomeUtils {
 				noteBody = noteBody.replace(regex, `(:/${resource.id})`);
 			}
 
-			const note = await Note.save({
+			await Note.save({
 				parent_id: output.defaultFolderId,
 				title: noteAsset.title,
 				body: noteBody,
 			});
 
-			if (noteAsset.tags) await Tag.setNoteTagsByTitles(note.id, noteAsset.tags);
+			// if (noteAsset.tags) await Tag.setNoteTagsByTitles(note.id, noteAsset.tags);
 		}
 
 		return output;

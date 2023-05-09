@@ -1,33 +1,32 @@
-const fs = require('fs-extra');
-const dirname = require('path').dirname;
-const { fileExtension, basename } = require('@joplin/lib/path-utils');
-const markdownUtils = require('@joplin/lib/markdownUtils').default;
+import { readFileSync, readdirSync, writeFileSync } from 'fs-extra';
+import { dirname } from 'path';
+import { fileExtension, basename } from '@joplin/lib/path-utils';
+import markdownUtils from '@joplin/lib/markdownUtils';
 
 const rootDir = dirname(dirname(__dirname));
 const welcomeDir = `${rootDir}/readme/welcome`;
 
 const createdDate = new Date('2018-06-22T12:00:00Z');
 
-const itemMetadata_ = {
+interface ItemMetadatum {
+	id: string;
+}
+
+const itemMetadata_: Record<string, ItemMetadatum> = {
 	'1_welcome_to_joplin.md': {
 		id: '8a1556e382704160808e9a7bef7135d3',
-		// tags: 'markdown,organising',
 	},
 	'2_importing_and_exporting_notes.md': {
 		id: 'b863cbc514cb4cafbae8dd6a4fcad919',
-		// tags: 'importing,exporting',
 	},
 	'3_synchronising_your_notes.md': {
 		id: '25b656aac0564d1a91ab98295aa3cc58',
-		// tags: 'synchronising',
 	},
 	'4_tips.md': {
 		id: '2ee48f80889447429a3cccb04a466072',
-		// tags: 'attachment,search',
 	},
 	'5_privacy.md': {
 		id: '5ec2e7505ec2e7505ec2e7505ec2e750',
-		// tags: 'privacy',
 	},
 	'AllClients.png': { id: '5c05172554194f95b60971f6d577cc1a' },
 	'SubNotebooks.png': { id: '3a851ab0c0e849b7bc9e8cd5c4feb34a' },
@@ -43,36 +42,43 @@ const itemMetadata_ = {
 	'search': { id: '83eae47427df4805905103d4a91727b7' },
 };
 
-function itemMetadata(path) {
+function itemMetadata(path: string) {
 	const f = basename(path);
 	const md = itemMetadata_[f];
 	if (!md) throw new Error(`No metadata for: ${path}`);
 	return md;
 }
 
-function noteTags(path) {
-	const md = itemMetadata(path);
-	if (!md.tags) return [];
-	return md.tags.split(',');
-}
-
-function itemIdFromPath(path) {
+function itemIdFromPath(path: string) {
 	const md = itemMetadata(path);
 	if (!md.id) throw new Error(`No ID for ${path}`);
 	return md.id;
 }
 
-function fileToBase64(filePath) {
-	const content = fs.readFileSync(filePath);
+function fileToBase64(filePath: string) {
+	const content = readFileSync(filePath);
 	return Buffer.from(content).toString('base64');
 }
 
-async function parseNoteFile(filePath) {
+interface Resource {
+	id: string;
+	body: string;
+}
+
+interface Note {
+	id: string;
+	parent_id: string;
+	title: string;
+	body: string;
+	resources: Record<string, Resource>;
+}
+
+function parseNoteFile(filePath: string): Note {
 	const n = basename(filePath);
 	const number = n.split('_')[0];
-	const body = fs.readFileSync(filePath, 'utf8');
+	const body = readFileSync(filePath, 'utf8');
 	const title = `${number}. ${body.split('\n')[0].substr(2)}`;
-	const resources = {};
+	const resources: Record<string, Resource> = {};
 
 	const imagePaths = markdownUtils.extractImageUrls(body);
 
@@ -91,15 +97,14 @@ async function parseNoteFile(filePath) {
 		id: itemIdFromPath(filePath),
 		title: title,
 		body: body,
-		tags: noteTags(filePath),
 		resources: resources,
+		parent_id: '',
 	};
 }
 
 async function main() {
 	const notes = [];
-	const tagIdsToTag = {};
-	const filenames = fs.readdirSync(welcomeDir);
+	const filenames = readdirSync(welcomeDir);
 
 	const rootFolder = {
 		id: itemIdFromPath('folder_Welcome'),
@@ -113,35 +118,17 @@ async function main() {
 		if (ext === 'md') {
 			const note = await parseNoteFile(`${welcomeDir}/${f}`);
 			note.parent_id = rootFolder.id;
-
-			for (let j = 0; j < note.tags.length; j++) {
-				const tagTitle = note.tags[j];
-				const tagId = itemIdFromPath(tagTitle);
-				if (!tagIdsToTag[tagId]) {
-					tagIdsToTag[tagId] = {
-						id: tagId,
-						title: tagTitle,
-					};
-				}
-			}
-
 			notes.push(note);
 		}
-	}
-
-	const tags = [];
-	for (const n in tagIdsToTag) {
-		if (!tagIdsToTag.hasOwnProperty(n)) continue;
-		tags.push(tagIdsToTag[n]);
 	}
 
 	const folders = [];
 	folders.push(rootFolder);
 
-	const content = { notes: notes, folders: folders, tags: tags, timestamp: createdDate.getTime() };
+	const content = { notes: notes, folders: folders, timestamp: createdDate.getTime() };
 	const jsonContent = JSON.stringify(content, null, 4);
 	const jsContent = `module.exports = ${jsonContent}`;
-	fs.writeFileSync(`${rootDir}/packages/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
+	writeFileSync(`${rootDir}/packages/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
 }
 
 main().catch((error) => {
