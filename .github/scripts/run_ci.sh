@@ -183,7 +183,12 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 	# cd "$ROOT_DIR/packages/tools"
 	# node bundleDefaultPlugins.js
 	cd "$ROOT_DIR/packages/app-desktop"
-	USE_HARD_LINKS=false yarn run dist
+
+	if [ "$IS_MACOS" == "1" ]; then
+		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist
+	else
+		USE_HARD_LINKS=false yarn run dist
+	fi	
 elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
