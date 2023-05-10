@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) (Pre-release) - 2023-05-10T12:24:40Z
+
+- Improved: Translate Welcome notes (#8154)
+
 ## [android-v2.11.13](https://github.com/laurent22/joplin/releases/tag/android-v2.11.13) (Pre-release) - 2023-05-08T20:28:29Z
 
 - Improved: Tells whether Hermes engine is enabled or not (5ecae17)
