@@ -504,6 +504,7 @@ packages/lib/import-enex-md-gen.js
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex.js
 packages/lib/locale.js
+packages/lib/locale.test.js
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils2.test.js
