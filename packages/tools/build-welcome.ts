@@ -2,17 +2,14 @@ import { readFileSync, readdirSync, writeFileSync } from 'fs-extra';
 import { dirname } from 'path';
 import { fileExtension, basename } from '@joplin/lib/path-utils';
 import markdownUtils from '@joplin/lib/markdownUtils';
+import { AssetContent, ItemMetadata, WelcomeAssetNote, WelcomeAssetResource, WelcomeAssets } from '@joplin/lib/WelcomeUtils';
 
 const rootDir = dirname(dirname(__dirname));
-const welcomeDir = `${rootDir}/readme/welcome`;
+const enWelcomeDir = `${rootDir}/readme/welcome`;
 
 const createdDate = new Date('2018-06-22T12:00:00Z');
 
-interface ItemMetadatum {
-	id: string;
-}
-
-const itemMetadata_: Record<string, ItemMetadatum> = {
+const itemMetadata_: ItemMetadata = {
 	'1_welcome_to_joplin.md': {
 		id: '8a1556e382704160808e9a7bef7135d3',
 	},
@@ -42,15 +39,44 @@ const itemMetadata_: Record<string, ItemMetadatum> = {
 	'search': { id: '83eae47427df4805905103d4a91727b7' },
 };
 
-function itemMetadata(path: string) {
+const allMetadata_: Record<string, ItemMetadata> = {};
+
+allMetadata_['en_GB'] = itemMetadata_;
+
+allMetadata_['fr_FR'] = {
+	...itemMetadata_,
+	'1_welcome_to_joplin.md': {
+		id: '223a99e0dad4c8882988f446815ea28c',
+	},
+	'2_importing_and_exporting_notes.md': {
+		id: '21648b1b1b541e7bb87cff262bcc6b54',
+	},
+	'3_synchronising_your_notes.md': {
+		id: '3adfa574c0264f68f4c33c4133e734fb',
+	},
+	'4_tips.md': {
+		id: '4d0ffc5beb024e6c498129ad814d156e',
+	},
+	'5_privacy.md': {
+		id: '69f9b160ddb50a954157716e3d916c68',
+	},
+	'folder_Welcome': { id: '5494e8c3dcfc84c1549ed22fb3a89265' },
+};
+
+const getWelcomeDir = (locale: string) => {
+	if (locale === 'en_GB') return enWelcomeDir;
+	return `${rootDir}/readme/_i18n/${locale}/welcome`;
+};
+
+function itemMetadata(metadata: ItemMetadata, path: string) {
 	const f = basename(path);
-	const md = itemMetadata_[f];
+	const md = metadata[f];
 	if (!md) throw new Error(`No metadata for: ${path}`);
 	return md;
 }
 
-function itemIdFromPath(path: string) {
-	const md = itemMetadata(path);
+function itemIdFromPath(metadata: ItemMetadata, path: string) {
+	const md = itemMetadata(metadata, path);
 	if (!md.id) throw new Error(`No ID for ${path}`);
 	return md.id;
 }
@@ -60,41 +86,30 @@ function fileToBase64(filePath: string) {
 	return Buffer.from(content).toString('base64');
 }
 
-interface Resource {
-	id: string;
-	body: string;
-}
-
-interface Note {
-	id: string;
-	parent_id: string;
-	title: string;
-	body: string;
-	resources: Record<string, Resource>;
-}
-
-function parseNoteFile(filePath: string): Note {
+function parseNoteFile(metadata: ItemMetadata, locale: string, filePath: string): WelcomeAssetNote {
 	const n = basename(filePath);
 	const number = n.split('_')[0];
 	const body = readFileSync(filePath, 'utf8');
 	const title = `${number}. ${body.split('\n')[0].substr(2)}`;
-	const resources: Record<string, Resource> = {};
+	const resources: Record<string, WelcomeAssetResource> = {};
 
-	const imagePaths = markdownUtils.extractImageUrls(body);
+	if (locale === 'en_GB') {
+		const imagePaths = markdownUtils.extractImageUrls(body);
 
-	for (let i = 0; i < imagePaths.length; i++) {
-		const imagePath = imagePaths[i];
-		const fullImagePath = `${welcomeDir}/${imagePath}`;
-		const base64 = fileToBase64(fullImagePath);
+		for (let i = 0; i < imagePaths.length; i++) {
+			const imagePath = imagePaths[i];
+			const fullImagePath = `${enWelcomeDir}/${imagePath}`;
+			const base64 = fileToBase64(fullImagePath);
 
-		resources[imagePath] = {
-			id: itemIdFromPath(fullImagePath),
-			body: base64,
-		};
+			resources[imagePath] = {
+				id: itemIdFromPath(metadata, fullImagePath),
+				body: base64,
+			};
+		}
 	}
 
 	return {
-		id: itemIdFromPath(filePath),
+		id: itemIdFromPath(metadata, filePath),
 		title: title,
 		body: body,
 		resources: resources,
@@ -103,30 +118,40 @@ function parseNoteFile(filePath: string): Note {
 }
 
 async function main() {
-	const notes = [];
-	const filenames = readdirSync(welcomeDir);
+	const supportedLocales = ['en_GB', 'fr_FR'];
+	const allContent: WelcomeAssets = {};
 
-	const rootFolder = {
-		id: itemIdFromPath('folder_Welcome'),
-		title: 'Welcome!',
-	};
+	for (const locale of supportedLocales) {
+		const metadata = allMetadata_[locale];
+		const welcomeDir = getWelcomeDir(locale);
 
-	for (let i = 0; i < filenames.length; i++) {
-		const f = filenames[i];
-		const ext = fileExtension(f);
+		const notes = [];
+		const filenames = readdirSync(welcomeDir);
 
-		if (ext === 'md') {
-			const note = await parseNoteFile(`${welcomeDir}/${f}`);
-			note.parent_id = rootFolder.id;
-			notes.push(note);
+		const rootFolder = {
+			id: itemIdFromPath(metadata, 'folder_Welcome'),
+			title: '',
+		};
+
+		for (let i = 0; i < filenames.length; i++) {
+			const f = filenames[i];
+			const ext = fileExtension(f);
+
+			if (ext === 'md') {
+				const note = await parseNoteFile(metadata, locale, `${welcomeDir}/${f}`);
+				note.parent_id = rootFolder.id;
+				notes.push(note);
+			}
 		}
+
+		const folders = [];
+		folders.push(rootFolder);
+
+		const content: AssetContent = { notes: notes, folders: folders, timestamp: createdDate.getTime() };
+		allContent[locale] = content;
 	}
 
-	const folders = [];
-	folders.push(rootFolder);
-
-	const content = { notes: notes, folders: folders, timestamp: createdDate.getTime() };
-	const jsonContent = JSON.stringify(content, null, 4);
+	const jsonContent = JSON.stringify(allContent, null, 4);
 	const jsContent = `module.exports = ${jsonContent}`;
 	writeFileSync(`${rootDir}/packages/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
 }

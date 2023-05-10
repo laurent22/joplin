@@ -483,6 +483,7 @@ packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetRegistry.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.js
+packages/lib/WelcomeUtils.js
 packages/lib/array.js
 packages/lib/callbackUrlUtils.js
 packages/lib/callbackUrlUtils.test.js

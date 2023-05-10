@@ -5,7 +5,7 @@
   "version": "2.11.0",
   "private": true,
   "scripts": {
-    "start": "react-native start --reset-cache",
+    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start --reset-cache",
     "android": "react-native run-android",
     "build": "gulp build",
     "tsc": "tsc --project tsconfig.json",

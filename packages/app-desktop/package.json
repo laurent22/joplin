@@ -12,7 +12,7 @@
     "electronRebuild": "gulp electronRebuild",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-    "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
+    "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
     "test-ci": "yarn test"
   },

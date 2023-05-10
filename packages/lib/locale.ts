@@ -584,7 +584,16 @@ function localesFromLanguageCode(languageCode: string, locales: string[]): strin
 }
 
 function _(s: string, ...args: any[]): string {
-	const strings = localeStrings(currentLocale_);
+	return stringByLocale(currentLocale_, s, ...args);
+}
+
+function _n(singular: string, plural: string, n: number, ...args: any[]) {
+	if (n > 1) return _(plural, ...args);
+	return _(singular, ...args);
+}
+
+const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
+	const strings = localeStrings(locale);
 	let result = strings[s];
 	if (result === '' || result === undefined) result = s;
 	try {
@@ -592,11 +601,6 @@ function _(s: string, ...args: any[]): string {
 	} catch (error) {
 		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
 	}
-}
-
-function _n(singular: string, plural: string, n: number, ...args: any[]) {
-	if (n > 1) return _(plural, ...args);
-	return _(singular, ...args);
-}
+};
 
 export { _, _n, supportedLocales, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
