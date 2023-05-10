@@ -255,7 +255,8 @@ async function main() {
 		appLogger().info(`Starting server v${config().appVersion} (${env}) on port ${config().port} and PID ${process.pid}...`);
 
 		if (config().maxTimeDrift) {
-			const timeDrift = await getDeviceTimeDrift();
+			appLogger().info(`Checking for time drift using NTP server: ${config().NTP_SERVER}`);
+			const timeDrift = await getDeviceTimeDrift(config().NTP_SERVER);
 			if (Math.abs(timeDrift) > config().maxTimeDrift) {
 				throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check, or set to 0 to disabled the check.`);
 			}
