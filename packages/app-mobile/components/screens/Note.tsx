@@ -121,7 +121,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.backHandler = async () => {
-
 			if (this.isModified()) {
 				await this.saveNoteButton_press();
 			}
@@ -160,6 +159,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 				return true;
 			}
 
+			if (this.props.navigation.state.fromParentLinkNote) {
+				this.props.dispatch({
+					type: 'NAV_BACK',
+				});
+				shim.setTimeout(() => {
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Note',
+						noteId: this.props.navigation.state.parentLinkedNoteId,
+					});
+				}, 5);
+
+				return true;
+			}
+
 			return false;
 		};
 
@@ -189,6 +203,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 								routeName: 'Note',
 								noteId: item.id,
 								noteHash: resourceUrlInfo.hash,
+								fromParentLinkNote: true,
+								parentLinkedNoteId: this.state.note.id,
 							});
 						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
