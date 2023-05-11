@@ -19,21 +19,24 @@ function downloadUrl(release: GitHubRelease, os: string, portable = false) {
 		const name = asset.name;
 		const ext = fileExtension(name);
 
-		if (ext === 'dmg' && os === 'macos') return asset.browser_download_url;
+		const githubUrl = 'github.com/laurent22/joplin/releases/download';
+		const joplinDomain = 'objects.joplinusercontent.com';
+
+		if (ext === 'dmg' && os === 'macos') return asset.browser_download_url.replace(githubUrl, joplinDomain);
 
 		if (ext === 'exe' && os === 'windows') {
 			if (portable) {
-				if (name === 'JoplinPortable.exe') return asset.browser_download_url;
+				if (name === 'JoplinPortable.exe') return asset.browser_download_url.replace(githubUrl, joplinDomain);
 			} else {
-				if (name.match(/^Joplin-Setup-[\d.]+\.exe$/)) return asset.browser_download_url;
+				if (name.match(/^Joplin-Setup-[\d.]+\.exe$/)) return asset.browser_download_url.replace(githubUrl, joplinDomain);
 			}
 		}
 
-		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url;
+		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url.replace(githubUrl, joplinDomain);
 
-		if (os === 'android32' && name.endsWith('32bit.apk')) return asset.browser_download_url;
+		if (os === 'android32' && name.endsWith('32bit.apk')) return asset.browser_download_url.replace(githubUrl, joplinDomain);
 
-		if (os === 'android' && ext === 'apk' && !name.endsWith('32bit.apk')) return asset.browser_download_url;
+		if (os === 'android' && ext === 'apk' && !name.endsWith('32bit.apk')) return asset.browser_download_url.replace(githubUrl, joplinDomain);
 	}
 
 	throw new Error(`Could not find download URL for: ${os}`);
@@ -85,16 +88,16 @@ async function main(argv: any) {
 
 	let content = readmeContent();
 
-	if (winUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-Setup-.*?\.exe)/, winUrl);
-	if (winPortableUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/JoplinPortable.exe)/, winPortableUrl);
-	if (macOsUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-.*?\.dmg)/, macOsUrl);
-	if (linuxUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-.*?\.AppImage)/, linuxUrl);
+	if (winUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-Setup-.*?\.exe)/, winUrl);
+	if (winPortableUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/JoplinPortable.exe)/, winPortableUrl);
+	if (macOsUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?\.dmg)/, macOsUrl);
+	if (linuxUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?\.AppImage)/, linuxUrl);
 
 	// Disable for now due to broken /latest API end point, which returns a
 	// version from 6 months ago.
 
-	if (androidUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
-	if (android32Url) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
+	if (androidUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
+	if (android32Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
 
 	setReadmeContent(content);
 
