@@ -144,6 +144,11 @@ class HtmlUtils {
 			.replace(/</g, '&lt;');
 	}
 
+	private isAcceptedUrl(url: string): boolean {
+		url = url.toLowerCase();
+		return url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto://');
+	}
+
 	public sanitizeHtml(html: string, options: any = null) {
 		options = Object.assign({}, {
 			// If true, adds a "jop-noMdConv" class to all the tags.
@@ -182,8 +187,12 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name: string, attrs: any) => {
-				tagStack.push(name.toLowerCase());
+			onopentag: (name: string, attrs: Record<string, string>) => {
+				// Note: "name" and attribute names are always lowercase even
+				// when the input is not. So there is no need to call
+				// "toLowerCase" on them.
+
+				tagStack.push(name);
 
 				if (disallowedTags.includes(currentTag())) {
 					disallowedTagDepth++;
@@ -202,11 +211,25 @@ class HtmlUtils {
 				// regular harmless attribute that starts with "on" will also
 				// be removed.
 				// 0: https://developer.mozilla.org/en-US/docs/Web/Events
-				for (const name in attrs) {
-					if (!attrs.hasOwnProperty(name)) continue;
-					if (name.length <= 2) continue;
-					if (name.toLowerCase().substr(0, 2) !== 'on') continue;
-					delete attrs[name];
+				for (const attrName in attrs) {
+					if (!attrs.hasOwnProperty(attrName)) continue;
+					if (attrName.length <= 2) continue;
+					if (attrName.substr(0, 2) !== 'on') continue;
+					delete attrs[attrName];
+				}
+
+				if (name === 'a') {
+					// Make sure that only non-acceptable URLs are filtered out.
+					// In particular we want to exclude `javascript:` URLs.
+					if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
+						attrs['href'] = '#';
+					}
+
+					// We need to clear any such attribute, otherwise it will
+					// make any arbitrary link open within the application.
+					if ('data-from-md' in attrs) {
+						delete attrs['data-from-md'];
+					}
 				}
 
 				if (options.addNoMdConvClass) {
@@ -222,7 +245,7 @@ class HtmlUtils {
 				// attribute. It doesn't always happen and it seems to depend on
 				// what else is in the note but in any case adding the "href"
 				// fixes it. https://github.com/laurent22/joplin/issues/5687
-				if (name.toLowerCase() === 'a' && !attrs['href']) {
+				if (name === 'a' && !attrs['href']) {
 					attrs['href'] = '#';
 				}
 
