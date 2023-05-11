@@ -19,6 +19,7 @@ function downloadUrl(release: GitHubRelease, os: string, portable = false) {
 		const name = asset.name;
 		const ext = fileExtension(name);
 
+		const githubAndroidUrl = 'github.com/laurent22/joplin-android/releases/download';
 		const githubUrl = 'github.com/laurent22/joplin/releases/download';
 		const joplinDomain = 'objects.joplinusercontent.com';
 
@@ -34,9 +35,9 @@ function downloadUrl(release: GitHubRelease, os: string, portable = false) {
 
 		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url.replace(githubUrl, joplinDomain);
 
-		if (os === 'android32' && name.endsWith('32bit.apk')) return asset.browser_download_url.replace(githubUrl, joplinDomain);
+		if (os === 'android32' && name.endsWith('32bit.apk')) return asset.browser_download_url.replace(githubAndroidUrl, joplinDomain);
 
-		if (os === 'android' && ext === 'apk' && !name.endsWith('32bit.apk')) return asset.browser_download_url.replace(githubUrl, joplinDomain);
+		if (os === 'android' && ext === 'apk' && !name.endsWith('32bit.apk')) return asset.browser_download_url.replace(githubAndroidUrl, joplinDomain);
 	}
 
 	throw new Error(`Could not find download URL for: ${os}`);
