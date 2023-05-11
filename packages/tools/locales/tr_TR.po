@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.3\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -44,7 +46,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:71
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(Şu eklentide: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -92,12 +94,12 @@ msgstr "%d gün"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB depolama alanı"
 
 #: packages/lib/models/Setting.ts:1356
 msgid "%d hour"
@@ -110,13 +112,12 @@ msgstr "%d saat"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "Ek Dosyalar"
+msgstr "Not veya ek dosya başına %d MB"
 
 #: packages/lib/models/Setting.ts:1353 packages/lib/models/Setting.ts:1354
 #: packages/lib/models/Setting.ts:1355
@@ -129,9 +130,8 @@ msgstr "%d not eşleşti. Silinsin mi?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:254
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -259,7 +259,7 @@ msgstr "Kabul Et"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "Hesap"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -284,9 +284,8 @@ msgid "Add body"
 msgstr "Gövde Ekle"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
-#, fuzzy
 msgid "Add new"
-msgstr "Başlık ekle"
+msgstr "Yeni bir şey ekle: "
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -325,6 +324,8 @@ msgstr "Gelişmiş araçlar"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Not defterleri, etiketler ve notlar da dahil olmak üzere tüm veriler kalıcı "
+"olarak silinecek."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:504
 #: packages/app-mobile/components/screens/Notes.tsx:174
@@ -355,6 +356,9 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"\"%s\" not defteri belirlenemedi. Lütfen not defteri id'lerini kulllanın. "
+"\"ti\" a basarak not defterinin kısa id'sini görebilir, veya $b ile mevcut "
+"seçili not defteri hakkında bilgiye erişebilirsiniz"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
@@ -362,6 +366,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
+"\"%s\" not defteri belirlenemedi. Lütfen kısa not defteri id'sini kullanın. "
+"\"ti\" a basarak kısa not defteri id'sini görebilirsiniz"
 
 #: packages/app-desktop/checkForUpdates.ts:197
 msgid "An update is available, do you want to download it now?"
@@ -388,6 +394,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Standart uygulama görünümüne geri dönmek istediğinizden emin misiniz? Tüm "
+"kişiselleştirilmiş mevcut uygulama görünümü (layout) kaybolacak."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -398,9 +406,8 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
-#, fuzzy
 msgid "Attach"
-msgstr "Ekle..."
+msgstr "Ekle"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
@@ -493,7 +500,7 @@ msgstr "Geri"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
-msgstr ""
+msgstr "Temel"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -501,6 +508,9 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"Bu cihazda biyometrik kilit açma etkineltirilmemiş. Lütfen Joplin'i açmak "
+"için bunu ayarlayın. Eğer cihazda bunu yapamıyorsanız ayarı açıp kapatarak "
+"biyometrik doğrulamayı sıfırlayabilirsiniz."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -521,9 +531,8 @@ msgid "Bulleted List"
 msgstr "Maddeli liste"
 
 #: packages/server/src/routes/admin/users.ts:154
-#, fuzzy
 msgid "Can Share"
-msgstr "Paylaş"
+msgstr "Paylaşılabilir"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
@@ -607,9 +616,8 @@ msgid "Cannot find \"%s\"."
 msgstr "\"%s\" bulunamıyor."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "\"%s\" bulunamıyor."
+msgstr "\"%s\" bulunamadı"
 
 #: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
@@ -662,7 +670,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Büyük küçük harf duyarlı"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -752,9 +760,8 @@ msgid "Close"
 msgstr "Kapat"
 
 #: packages/app-mobile/components/Dropdown.tsx:166
-#, fuzzy
 msgid "Close dropdown"
-msgstr "Pencereyi Kapat"
+msgstr "Açılır menüyü kapat"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:596
@@ -780,7 +787,7 @@ msgstr "Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 
 #: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Collapse"
-msgstr ""
+msgstr "Daralt"
 
 #: packages/lib/services/ReportService.ts:307
 msgid "Coming alarms"
@@ -866,7 +873,7 @@ msgstr "Çakışmalar (ek dosyalar)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Birleştirilmiş faturalandırma"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 msgid "Content provided by %s"
@@ -874,7 +881,7 @@ msgstr "İçerik %s tarafından sağlandı"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "Devam et"
 
 #: packages/app-mobile/components/screens/Note.tsx:1010
 msgid "Convert to note"
@@ -885,9 +892,8 @@ msgid "Convert to todo"
 msgstr "Yapılacak listesi olarak çevir"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "Nota çevir"
+msgstr "Ses metne dönüştürülüyor..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -984,9 +990,8 @@ msgstr ""
 "Hata mesajı: \"%s\""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "Eklenti yüklenemedi: %s"
+msgstr "Profil değiştirilemedi: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -1001,9 +1006,8 @@ msgstr ""
 "ediliyor. Lütfen internet bağlantınız varken bu işlemi yeniden deneyin."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "Notlar dışarı aktarılamadı: %s"
+msgstr "Kimliğiniz doğrulanamadı: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
@@ -1011,9 +1015,8 @@ msgid "Create"
 msgstr "Oluştur"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Yeni bir not defteri oluşturur."
+msgstr "Ana not defteri altında yeni bir not defteri oluştur."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1144,7 +1147,7 @@ msgstr "gün"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:109
 msgid "Decrease indent level"
-msgstr ""
+msgstr "Girintileme derecesini düşür"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1235,14 +1238,12 @@ msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" eklentisi silinsin mi?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:101
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "\"%s\" notu silinsin mi?"
+msgstr "\"%s\" profilini sil"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:420
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "Bu notlar silinsin mi?"
+msgstr "Seçili notları sil"
 
 #: packages/lib/models/Note.ts:773
 msgid "Delete these %d notes?"
@@ -1255,9 +1256,8 @@ msgid ""
 msgstr "Bu davetiye kaldırılsın mi? Alıcı paylaşılan nota artık erişemeyecek."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "Bu %d not silinsin mi?"
+msgstr "Bu profil silinsin mi?"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1409,7 +1409,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
 msgid "Done"
-msgstr ""
+msgstr "Tamam"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1466,9 +1466,8 @@ msgid "Duplicate line"
 msgstr "Satırı Kopyala"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "Satırı Kopyala"
+msgstr "Seçili notları klonla"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -1490,9 +1489,8 @@ msgid "Edit in external editor"
 msgstr "Harici editörde düzenle"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
-#, fuzzy
 msgid "Edit link"
-msgstr "Not defterini düzenle"
+msgstr "Link'i düzenle"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -1504,9 +1502,8 @@ msgid "Edit notebook"
 msgstr "Not defterini düzenle"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "Profili dışarı aktar"
+msgstr "Profili düzenle"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1598,7 +1595,7 @@ msgstr "Ses / Müzik oynatıcıyı aktifleştir"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Biyometrik doğrulama kullanılsın mı?"
 
 #: packages/lib/models/Setting.ts:1157
 msgid "Enable deflist syntax"
@@ -1651,16 +1648,15 @@ msgstr "Kelime kaydırmasını etkinleştir"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Metin düzenleyicide yazım doğrulamasını aktifleştir"
 
 #: packages/lib/models/Setting.ts:1154
 msgid "Enable table of contents extension"
 msgstr "Tablo içerik eklentisini etkinleştir"
 
 #: packages/lib/models/Setting.ts:1059
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "Markdown emoji desteğini etkinleştir"
+msgstr "Markdown araç çubuğunu etkinleştir"
 
 #: packages/lib/models/Setting.ts:1142
 msgid "Enable typographer support"
@@ -1786,7 +1782,7 @@ msgstr "Uygulamadan çıkar."
 
 #: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Expand"
-msgstr ""
+msgstr "Genişlet"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:394
@@ -1879,12 +1875,11 @@ msgstr "Etikerleri filtrele"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
-msgstr ""
+msgstr "Bul ve değiştir"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "Bulundu: %d."
+msgstr "Ara:"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
@@ -1926,7 +1921,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1495
 msgid "For example \"%s\""
-msgstr ""
+msgstr "Örneğin \"%s\""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -1954,9 +1949,8 @@ msgid "Force path style"
 msgstr "Zorlanan yol biçimi"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:276
-#, fuzzy
 msgid "Formatting"
-msgstr "Bilgi"
+msgstr "Biçimlendirme"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1977,9 +1971,8 @@ msgid "Full changelog"
 msgstr "Tüm sürüm geçmişi"
 
 #: packages/server/src/routes/admin/users.ts:130
-#, fuzzy
 msgid "Full name"
-msgstr "Tüm sürüm geçmişi"
+msgstr "Tam adı"
 
 #: packages/lib/models/Setting.ts:2494
 #: packages/server/src/services/MustacheService.ts:108
@@ -2030,11 +2023,11 @@ msgstr "Yetkilendirme ver"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Header %d"
-msgstr ""
+msgstr "Başlık %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
-msgstr ""
+msgstr "Başlıklar"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -2049,14 +2042,12 @@ msgid "Hide %s"
 msgstr "Şunu Gizle: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
-#, fuzzy
 msgid "Hide advanced"
-msgstr "Metadata'yı gizle"
+msgstr "Gelişmiş'leri gizle"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Hide disabled"
-msgstr "İnaktif anahtarları gizle"
+msgstr "İptal edilmişleri gizle"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
@@ -2067,14 +2058,12 @@ msgid "Hide Joplin"
 msgstr "Joplin'i Gizle"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:253
-#, fuzzy
 msgid "Hide keyboard"
-msgstr "Metadata'yı gizle"
+msgstr "Klavyeyi gizle"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Hide more actions"
-msgstr "Metadata'yı gizle"
+msgstr "Daha fazla seçenekler kısmını gizle"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2236,7 +2225,7 @@ msgstr "İçinde: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:119
 msgid "Increase indent level"
-msgstr ""
+msgstr "Girintileme seviyesini artır"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 msgid "Indent less"
@@ -2265,9 +2254,8 @@ msgstr "Köprü Link ekle"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:628
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
-#, fuzzy
 msgid "Insert time"
-msgstr "Tarih Ekle"
+msgstr "Zaman ekle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 msgid "Install"
@@ -2333,7 +2321,7 @@ msgstr "Senkronize edilemeyen öğeler"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Twitter'da bize katılın"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2418,7 +2406,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1541
 msgid "Keep note history for"
@@ -2489,14 +2477,12 @@ msgid "Lines"
 msgstr "Satır"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:174
-#, fuzzy
 msgid "Link"
 msgstr "Bağlantı"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "Şifreleme"
+msgstr "Link açıklaması"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Link has been copied to clipboard!"
@@ -2505,9 +2491,8 @@ msgstr[0] "Bağlantı panoya kopyalandı!"
 msgstr[1] "Bağlantılar panoya kopyalandı!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "Bağlantı"
+msgstr "Bağlantı metni"
 
 #: packages/app-mobile/components/screens/Note.tsx:205
 msgid "Links with protocol \"%s\" are not supported"
@@ -2521,16 +2506,15 @@ msgstr "Öğeyi listele"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
-msgstr ""
+msgstr "Listeler"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
 msgstr "Yüklenme"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
-#, fuzzy
 msgid "Loading..."
-msgstr "Güncelleniyor..."
+msgstr "Yükleniyor..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
@@ -2590,14 +2574,12 @@ msgid "Manage master password..."
 msgstr "Ana parolayı yönet..."
 
 #: packages/lib/utils/joplinCloud.ts:165
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "Ana parolayı yönet"
+msgstr "Çoklu kullanıcıları yönet"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:638
-#, fuzzy
 msgid "Manage profiles"
-msgstr "Profili güncelle"
+msgstr "Profilleri yönet"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -2661,17 +2643,15 @@ msgstr "Maksimum aynı anda bağlantı"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "Maks. öğe adedi"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "Ek Dosyalar"
+msgstr "Azami not veya ek dosya ebatı"
 
 #: packages/server/src/routes/admin/users.ts:150
-#, fuzzy
 msgid "Max Total Size"
-msgstr "Asıl Boyut"
+msgstr "Maks. Toplam Boyut"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 msgid "Missing keys"
@@ -2686,7 +2666,6 @@ msgid "Missing required argument: %s"
 msgstr "Gerekli parametre eksik gözüküyor: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
 msgstr "Gerekli parametre eksik gözüküyor: %s"
 
@@ -2723,9 +2702,8 @@ msgid "Move to notebook..."
 msgstr "Not defterine taşı..."
 
 #: packages/app-cli/app/command-mv.js:14
-#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr "<note> ile eşleşen tüm notları [notebook] defterine taşı."
+msgstr "Verilen <item> bileşenini [notebook] not defterine taşır"
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:20
@@ -2782,7 +2760,7 @@ msgstr "Yeni sürüm: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "Sonraki eşleşen"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -2870,9 +2848,8 @@ msgid "Not generated"
 msgstr "Oluşturulmamış"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:90
-#, fuzzy
 msgid "Not now"
-msgstr "Hemen yap"
+msgstr "Şimdi değil"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
@@ -2907,9 +2884,8 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" notu mevcut değil. Oluşturulsun mu?"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:83
-#, fuzzy
 msgid "Note editor"
-msgstr "Not Geçmişi"
+msgstr "Not düzenleyici"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3060,9 +3036,8 @@ msgid "Open %s"
 msgstr "Aç %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
-msgstr "PDF görüntüleyiciyi aktifleştir"
+msgstr "PDF görüntüleyiciyi aç"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3093,9 +3068,8 @@ msgid "Or create an account."
 msgstr "Ya da yeni bir hesap oluştur."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:82
-#, fuzzy
 msgid "Ordered list"
-msgstr "Kullanıcı oluştur"
+msgstr "Dizilmiş liste"
 
 #: packages/app-desktop/gui/MenuBar.tsx:410
 msgid "Other applications..."
@@ -3141,7 +3115,7 @@ msgstr "Yapıştır"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "Metin olarak yapıştır"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3154,7 +3128,7 @@ msgstr "PDF Dosyası"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Kullanıcı başına. Minimum %d kullanıcı."
 
 #: packages/app-mobile/components/screens/Note.tsx:413
 msgid "Permission needed"
@@ -3208,7 +3182,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Lütfen sesinizi kaydedin..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3306,7 +3280,7 @@ msgstr "Şifre çözücü parolayı belirlemek için basın."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "Önceki eşleşme"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
@@ -3319,16 +3293,15 @@ msgstr "Yazdır"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr ""
+msgstr "Öncelikli destek"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:730
 msgid "Privacy Policy"
 msgstr "Gizlilik Politikası"
 
 #: packages/lib/utils/joplinCloud.ts:316
-#, fuzzy
 msgid "Pro"
-msgstr "Profil"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3347,9 +3320,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
-#, fuzzy
 msgid "Profile name"
-msgstr "Profil adı:"
+msgstr "Profil adı"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3360,26 +3332,24 @@ msgid "Profile Version: %s"
 msgstr "Profil sürümü: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profiller"
 
 #: packages/app-mobile/components/screens/Note.tsx:1024
 msgid "Properties"
 msgstr "Özellikler"
 
 #: packages/lib/models/Setting.ts:1484
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "Etkin"
+msgstr "Proxy etkinleştirildi"
 
 #: packages/lib/models/Setting.ts:1506
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "Proxy zaman aşımı (saniye)"
 
 #: packages/lib/models/Setting.ts:1494
 msgid "Proxy URL"
-msgstr ""
+msgstr "Proxy URL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
@@ -3453,9 +3423,8 @@ msgid "Refresh"
 msgstr "Yenile"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
-#, fuzzy
 msgid "Regular expression"
-msgstr "Matematik ifadelerini etkinleştir"
+msgstr "Düzenli ifade (Regex)"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 #: packages/app-desktop/gui/Root.tsx:179
@@ -3498,25 +3467,23 @@ msgstr "Jetonu yenile"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "Değiştir"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
-#, fuzzy
 msgid "Replace all"
-msgstr "Tümünü seç"
+msgstr "Tümünü değiştir"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "Şununla değiştir..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "Değiştir:"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "Ugulama görünümünü değiştir"
+msgstr "Ugulama görünümünü sıfırla"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3656,9 +3623,8 @@ msgid "Search for plugins..."
 msgstr "Eklentileri ara..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
-#, fuzzy
 msgid "Search for..."
-msgstr "Ara..."
+msgstr "Şunu ara..."
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3758,9 +3724,8 @@ msgid "Share"
 msgstr "Paylaş"
 
 #: packages/lib/utils/joplinCloud.ts:159
-#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "Notlar yalnızca bir not defterinde oluşturulabilir."
+msgstr "Bir not defteri paylaş ve üstünde ortak düzenlemeler yap"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:339
 msgid "Share Notebook"
@@ -3772,7 +3737,7 @@ msgstr "No deferini paylaş..."
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Sharing access control"
-msgstr ""
+msgstr "Paylaşım erişim kontrolü"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:305
 msgid "Sharing notebook..."
@@ -3783,9 +3748,8 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "CLI modunda kısayollar mevcut değil."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
-#, fuzzy
 msgid "Show advanced"
-msgstr "Gelişmiş Seçenekleri Göster"
+msgstr "Gelişmiş seçenekleri göster"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:217
 msgid "Show Advanced Settings"
@@ -3800,18 +3764,16 @@ msgid "Show completed to-dos"
 msgstr "Tamamlanan yapılacaklar listesini göster"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Show disabled"
-msgstr "İnaktif anahtarları görüntüle"
+msgstr "İptal olmuşları görüntüle"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Show disabled keys"
 msgstr "İnaktif anahtarları görüntüle"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Show more actions"
-msgstr "Not sayacını göster"
+msgstr "Daha fazla seçenekler kısmını göster"
 
 #: packages/lib/models/Setting.ts:883
 msgid "Show note counts"
@@ -3827,7 +3789,7 @@ msgstr "Tepsi simgesini göster"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:290
 msgid "Show/hide the sidebar"
-msgstr ""
+msgstr "Kenar çubuğunu göster/gizle"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:289
@@ -4001,7 +3963,7 @@ msgstr "Dış düzenlemeyi durdur"
 
 #: packages/lib/utils/joplinCloud.ts:129
 msgid "Storage space"
-msgstr ""
+msgstr "Depolama alanı"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4069,7 +4031,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "İstediğin kadar cihazı senkronize et"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:639
 msgid "Sync Status"
@@ -4177,7 +4139,6 @@ msgid "Take photo"
 msgstr "Fotoğraf çek"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:95
-#, fuzzy
 msgid "Task list"
 msgstr "Görevler"
 
@@ -4188,7 +4149,7 @@ msgstr "Görevler"
 
 #: packages/lib/utils/joplinCloud.ts:338
 msgid "Teams"
-msgstr ""
+msgstr "Ekipler"
 
 #: packages/lib/models/Setting.ts:1377
 msgid "Text editor command"
@@ -4204,7 +4165,7 @@ msgstr ""
 msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
-msgstr ""
+msgstr "Profil aktifken silinemez. Bir başka profile geçip yeniden deneyin."
 
 #: packages/app-desktop/bridge.ts:280
 msgid ""
@@ -4272,7 +4233,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "Varsayılan profil silinemez."
 
 #: packages/lib/models/Setting.ts:1377
 msgid ""
@@ -4422,6 +4383,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"%s için olan WebDAV implementasyonu Joplin ile uyumlu değil, ce bu sebepten "
+"artık desteklenmiyor. Lütfen başka bir senkronizasyon metodu kullanın."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4433,7 +4396,7 @@ msgstr "Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:342
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "Kaydedilmemiş değişiklikler var."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
@@ -4658,6 +4621,8 @@ msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
+"Profil değiştirmek için uygulama kapanacak, ve de yeniden başlatmanız "
+"gerekecek."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:678
 msgid ""
@@ -4674,9 +4639,8 @@ msgid "to-do"
 msgstr "yapılacak"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "yapılacak"
+msgstr "yapılacak: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:112
 msgid "Toggle comment"
@@ -4727,9 +4691,8 @@ msgid "Tools"
 msgstr "Araçlar"
 
 #: packages/server/src/routes/admin/users.ts:146
-#, fuzzy
 msgid "Total Size"
-msgstr "Asıl Boyut"
+msgstr "Toplam Boyut"
 
 #: packages/lib/services/ReportService.ts:284
 msgid "Total: %d/%d"
@@ -4742,9 +4705,8 @@ msgstr "Yeniden dene"
 
 #: packages/lib/utils/joplinCloud.ts:309 packages/lib/utils/joplinCloud.ts:331
 #: packages/lib/utils/joplinCloud.ts:353
-#, fuzzy
 msgid "Try it now"
-msgstr "Hemen yap"
+msgstr "Şimdi dene"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4799,9 +4761,8 @@ msgstr ""
 "güncelleyin"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
-#, fuzzy
 msgid "Unordered list"
-msgstr "Kullanıcı oluştur"
+msgstr "Dizilmemiş liste"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:162
 msgid "Unpublish note"
@@ -4905,7 +4866,7 @@ msgstr "Kullanım: %s"
 
 #: packages/lib/models/Setting.ts:1657
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Uygulamaya erişimde güvenliği artırmak için biyometrik kullanımı"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4946,6 +4907,9 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"Biyometriğinizi kullanarak uygulamaya güvenli bir biçimde giriş "
+"yapabilirsiniz. Bu ayarı dilediğiniz zaman Ayarlar kısmından sonra da "
+"aktifleştirebilirsiniz."
 
 #: packages/lib/models/Setting.ts:1255
 msgid ""
@@ -4982,7 +4946,7 @@ msgstr "Geçerli"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr ""
+msgstr "Kimliğini doğrula"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
@@ -5010,11 +4974,11 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
 msgid "Voice typing"
-msgstr ""
+msgstr "Sesle yazılıyor"
 
 #: packages/app-mobile/components/screens/Note.tsx:993
 msgid "Voice typing..."
-msgstr ""
+msgstr "Sesle yazılıyor..."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
