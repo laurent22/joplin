@@ -1,5 +1,23 @@
 # Joplin changelog
 
+## [v2.10.18](https://github.com/laurent22/joplin/releases/tag/v2.10.18) - 2023-05-09T13:27:43Z
+
+- Fixed: Application cannot be installed on Windows 10 in some cases ([#8149](https://github.com/laurent22/joplin/issues/8149))
+
+## [v2.10.17](https://github.com/laurent22/joplin/releases/tag/v2.10.17) - 2023-05-08T17:27:28Z
+
+- Fixed: Enter Key No Longer Saves and Closes The Tag Dialog ([#8072](https://github.com/laurent22/joplin/issues/8072))
+- Fixed: Fixes crash when using multiple profiles along with certain plugins ([#8143](https://github.com/laurent22/joplin/issues/8143))
+
+## [v2.10.16](https://github.com/laurent22/joplin/releases/tag/v2.10.16) - 2023-04-27T09:27:45Z
+
+- Improved: Revert to "normal" package compression ([2e2feab](https://github.com/laurent22/joplin/commit/2e2feab))
+
+## [v2.10.15](https://github.com/laurent22/joplin/releases/tag/v2.10.15) (Pre-release) - 2023-04-26T22:02:16Z
+
+- Improved: Remove custom PDF viewer to reduce application size ([#8028](https://github.com/laurent22/joplin/issues/8028))
+- Improved: Compress installer to reduce size ([#8068](https://github.com/laurent22/joplin/issues/8068)) ([#8028](https://github.com/laurent22/joplin/issues/8028))
+
 ## [v2.10.13](https://github.com/laurent22/joplin/releases/tag/v2.10.13) (Pre-release) - 2023-04-03T16:53:46Z
 
 - Fixed: Encode the non-ASCII characters in OneDrive URI ([#7868](https://github.com/laurent22/joplin/issues/7868)) ([#7851](https://github.com/laurent22/joplin/issues/7851) by Self Not Found)

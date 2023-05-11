@@ -22,6 +22,7 @@
 		"packages/app-clipper/popup",
 		"packages/app-mobile/android/app/build.gradle",
 		"packages/plugins/**",
+		"packages/react-native-vosk",
 	],
 	"ignoreDeps": [
 		"@babel/core",

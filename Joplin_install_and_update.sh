@@ -134,10 +134,16 @@ else
     print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
 fi
 
+# Check if it's an update or a new install
+DOWNLOAD_TYPE="New"
+if [[ -f ~/.joplin/Joplin.AppImage ]]; then
+    DOWNLOAD_TYPE="Update"
+fi
+
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O "${TEMP_DIR}/Joplin.AppImage" "https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage"
+wget -O "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
 wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------

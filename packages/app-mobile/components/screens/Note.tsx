@@ -29,7 +29,7 @@ import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
-const { _ } = require('@joplin/lib/locale');
+import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
@@ -47,13 +47,18 @@ import Logger from '@joplin/lib/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
 import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
 import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
+import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
+import { voskEnabled } from '../../services/voiceTyping/vosk';
 const urlUtils = require('@joplin/lib/urlUtils');
+
+// import Vosk from 'react-native-vosk';
 
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
+
 	public static navigationOptions(): any {
 		return { header: null };
 	}
@@ -90,6 +95,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
+
+			voiceTypingDialogShown: false,
 		};
 
 		this.saveActionQueues_ = {};
@@ -244,6 +251,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
+		this.voiceTypingDialog_onText = this.voiceTypingDialog_onText.bind(this);
+		this.voiceTypingDialog_onDismiss = this.voiceTypingDialog_onDismiss.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -965,6 +974,69 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (buttonId === 'drawPicture') void this.drawPicture_onPress();
 	}
 
+	// private vosk_:Vosk;
+
+	// private async getVosk() {
+	// 	if (this.vosk_) return this.vosk_;
+	// 	this.vosk_ = new Vosk();
+	// 	await this.vosk_.loadModel('model-fr-fr');
+	// 	return this.vosk_;
+	// }
+
+	// private async voiceRecording_onPress() {
+	// 	logger.info('Vosk: Getting instance...');
+
+	// 	const vosk = await this.getVosk();
+
+	// 	this.voskResult_ = [];
+
+	// 	const eventHandlers: any[] = [];
+
+	// 	eventHandlers.push(vosk.onResult(e => {
+	// 		logger.info('Vosk: result', e.data);
+	// 		this.voskResult_.push(e.data);
+	// 	}));
+
+	// 	eventHandlers.push(vosk.onError(e => {
+	// 		logger.warn('Vosk: error', e.data);
+	// 	}));
+
+	// 	eventHandlers.push(vosk.onTimeout(e => {
+	// 		logger.warn('Vosk: timeout', e.data);
+	// 	}));
+
+	// 	eventHandlers.push(vosk.onFinalResult(e => {
+	// 		logger.info('Vosk: final result', e.data);
+	// 	}));
+
+	// 	logger.info('Vosk: Starting recording...');
+
+	// 	void vosk.start();
+
+	// 	const buttonId = await dialogs.pop(this, 'Voice recording in progress...', [
+	// 		{ text: 'Stop recording', id: 'stop' },
+	// 		{ text: _('Cancel'), id: 'cancel' },
+	// 	]);
+
+	// 	logger.info('Vosk: Stopping recording...');
+	// 	vosk.stop();
+
+	// 	for (const eventHandler of eventHandlers) {
+	// 		eventHandler.remove();
+	// 	}
+
+	// 	logger.info('Vosk: Recording stopped:', this.voskResult_);
+
+	// 	if (buttonId === 'cancel') return;
+
+	// 	const newNote: NoteEntity = { ...this.state.note };
+	// 	newNote.body = `${newNote.body} ${this.voskResult_.join(' ')}`;
+	// 	this.setState({ note: newNote });
+	// 	this.scheduleSave();
+	// }
+
+
+
 	public menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -1008,6 +1080,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 				void this.share_onPress();
 			},
 		});
+
+		// Voice typing is enabled only for French language and on Android for now
+		if (voskEnabled && shim.mobilePlatform() === 'android' && currentLocale() === 'fr_FR') {
+			output.push({
+				title: _('Voice typing...'),
+				onPress: () => {
+					// this.voiceRecording_onPress();
+					this.setState({ voiceTypingDialogShown: true });
+				},
+			});
+		}
+
 		if (isSaved) {
 			output.push({
 				title: _('Tags'),
@@ -1125,6 +1209,25 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
+	}
+
+	private voiceTypingDialog_onText(text: string) {
+		if (this.state.mode === 'view') {
+			const newNote: NoteEntity = { ...this.state.note };
+			newNote.body = `${newNote.body} ${text}`;
+			this.setState({ note: newNote });
+			this.scheduleSave();
+		} else {
+			if (this.useEditorBeta()) {
+				this.editorRef.current.insertText(text);
+			} else {
+				logger.warn('Voice typing is not supported in plaintext editor');
+			}
+		}
+	}
+
+	private voiceTypingDialog_onDismiss() {
+		this.setState({ voiceTypingDialogShown: false });
 	}
 
 	public render() {
@@ -1290,6 +1393,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const renderVoiceTypingDialog = () => {
+			if (!this.state.voiceTypingDialogShown) return null;
+			return <VoiceTypingDialog onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+		};
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -1318,6 +1426,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 				/>
 				{noteTagDialog}
+				{renderVoiceTypingDialog()}
 			</View>
 		);
 	}
@@ -1340,6 +1449,10 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+
+		// What we call "beta editor" in this component is actually the (now
+		// default) CodeMirror editor. That should be refactored to make it less
+		// confusing.
 		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);

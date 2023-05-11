@@ -16,15 +16,15 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:657
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- カメラ: 撮った写真をノートに添付するのに必要です。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:660
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- 位置情報: ノートに位置情報を添付するのに必要です。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:654
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -84,7 +84,7 @@ msgstr "ツール(&T)"
 msgid "&View"
 msgstr "表示(&V)"
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1539
 msgid "%d days"
 msgstr "%d 日"
 
@@ -98,11 +98,11 @@ msgstr ""
 msgid "%d GB storage space"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1345
+#: packages/lib/models/Setting.ts:1356
 msgid "%d hour"
 msgstr "%d 時間"
 
-#: packages/lib/models/Setting.ts:1346 packages/lib/models/Setting.ts:1347
+#: packages/lib/models/Setting.ts:1357 packages/lib/models/Setting.ts:1358
 msgid "%d hours"
 msgstr "%d 時間"
 
@@ -117,8 +117,8 @@ msgstr ""
 msgid "%d MB per note or attachment"
 msgstr "添付ファイル一覧"
 
-#: packages/lib/models/Setting.ts:1342 packages/lib/models/Setting.ts:1343
-#: packages/lib/models/Setting.ts:1344
+#: packages/lib/models/Setting.ts:1353 packages/lib/models/Setting.ts:1354
+#: packages/lib/models/Setting.ts:1355
 msgid "%d minutes"
 msgstr "%d 分"
 
@@ -126,8 +126,8 @@ msgstr "%d 分"
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d 個のノートが一致しました。削除しますか？"
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:254
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
 #, fuzzy
 msgid "%s"
 msgstr "(%s)"
@@ -136,7 +136,7 @@ msgstr "(%s)"
 msgid "%s - Copy"
 msgstr "%s - コピー"
 
-#: packages/lib/services/ReportService.ts:183
+#: packages/lib/services/ReportService.ts:185
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s)はアップロードできませんでした：%s"
 
@@ -144,7 +144,7 @@ msgstr "%s (%s)はアップロードできませんでした：%s"
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) があなたとノートブックを共有したがっています。"
 
-#: packages/lib/services/ReportService.ts:262
+#: packages/lib/services/ReportService.ts:264
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
@@ -161,7 +161,7 @@ msgstr "%s / %s"
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/versionInfo.ts:58
+#: packages/lib/versionInfo.ts:60
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
@@ -173,23 +173,23 @@ msgstr "%s = %s"
 msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: packages/lib/services/ReportService.ts:242
-#: packages/lib/services/ReportService.ts:243
 #: packages/lib/services/ReportService.ts:244
-#: packages/lib/services/ReportService.ts:247
+#: packages/lib/services/ReportService.ts:245
+#: packages/lib/services/ReportService.ts:246
+#: packages/lib/services/ReportService.ts:249
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/ReportService.ts:297
+#: packages/lib/services/ReportService.ts:299
 msgid "%s: %d notes"
 msgstr "%s: %d ノート"
 
-#: packages/lib/services/ReportService.ts:279
+#: packages/lib/services/ReportService.ts:281
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
 #: packages/app-cli/app/cli-utils.js:156
-#: packages/lib/services/ReportService.ts:217
+#: packages/lib/services/ReportService.ts:219
 msgid "%s: %s"
 msgstr "%s: %s"
 
@@ -217,15 +217,15 @@ msgstr ""
 "であれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換"
 "できます。"
 
-#: packages/lib/models/Setting.ts:1371
+#: packages/lib/models/Setting.ts:1382
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1369
+#: packages/lib/models/Setting.ts:1380
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1372
+#: packages/lib/models/Setting.ts:1383
 msgid "A5"
 msgstr "A5"
 
@@ -277,7 +277,7 @@ msgstr "アクティブ"
 msgid "Actual Size"
 msgstr "100%%表示"
 
-#: packages/app-mobile/components/screens/Note.tsx:1113
+#: packages/app-mobile/components/screens/Note.tsx:1212
 msgid "Add body"
 msgstr "本文を追加"
 
@@ -294,7 +294,7 @@ msgstr "タグの追加・削除："
 msgid "Add recipient:"
 msgstr "受信者を追加:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1186
+#: packages/app-mobile/components/screens/Note.tsx:1286
 msgid "Add title"
 msgstr "題名を追加"
 
@@ -311,7 +311,7 @@ msgstr "管理者"
 msgid "Admin dashboard"
 msgstr "管理者ダッシュボード"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid "Advanced options"
 msgstr "詳細な設定"
 
@@ -324,8 +324,8 @@ msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
-#: packages/app-mobile/components/screens/Notes.tsx:203
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:504
+#: packages/app-mobile/components/screens/Notes.tsx:174
 #: packages/app-mobile/components/side-menu-content.tsx:473
 msgid "All notes"
 msgstr "すべてのノート"
@@ -363,11 +363,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "アップデートがあります。すぐにダウンロードしますか？"
 
-#: packages/lib/models/Setting.ts:2478
+#: packages/lib/models/Setting.ts:2496
 msgid "Appearance"
 msgstr "スタイル"
 
-#: packages/lib/models/Setting.ts:2483
+#: packages/lib/models/Setting.ts:2501
 msgid "Application"
 msgstr "アプリケーション"
 
@@ -375,7 +375,7 @@ msgstr "アプリケーション"
 msgid "Apply"
 msgstr "適用"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:45
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:36
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "認証トークンを更新してもよろしいですか?"
 
@@ -399,16 +399,16 @@ msgid "Attach"
 msgstr "添付..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:604
-#: packages/app-mobile/components/screens/Note.tsx:864
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
+#: packages/app-mobile/components/screens/Note.tsx:869
 msgid "Attach file"
 msgstr "ファイルを添付する"
 
-#: packages/app-mobile/components/screens/Note.tsx:868
+#: packages/app-mobile/components/screens/Note.tsx:873
 msgid "Attach photo"
 msgstr "写真を添付"
 
-#: packages/app-mobile/components/screens/Note.tsx:901
+#: packages/app-mobile/components/screens/Note.tsx:969
 msgid "Attach..."
 msgstr "添付..."
 
@@ -429,11 +429,11 @@ msgstr "添付ファイルの衝突: \"%s\""
 msgid "Attachment download behaviour"
 msgstr "添付ファイルのダウンロードの動作"
 
-#: packages/lib/services/ReportService.ts:233
+#: packages/lib/services/ReportService.ts:235
 msgid "Attachments"
 msgstr "添付ファイル"
 
-#: packages/lib/services/ReportService.ts:257
+#: packages/lib/services/ReportService.ts:259
 msgid "Attachments that could not be downloaded"
 msgstr "ダウンロードできなかった添付ファイル"
 
@@ -454,7 +454,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "認証は完了していません(認証トークンが得られませんでした)"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:149
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Authorisation token:"
 msgstr "認証トークン:"
 
@@ -470,7 +470,7 @@ msgstr "無効アカウントを削除に自動追加"
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 
-#: packages/lib/models/Setting.ts:1329
+#: packages/lib/models/Setting.ts:1340
 msgid "Automatically check for updates"
 msgstr "アップデートを自動的に確認する"
 
@@ -489,6 +489,13 @@ msgstr "戻る"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
+msgstr ""
+
+#: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
+msgid ""
+"Biometric unlock is not setup on the device. Please set it up in order to "
+"unlock Joplin. If the device is on lockout, consider switching it off and on "
+"to reset biometrics scanning."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
@@ -520,10 +527,11 @@ msgstr "共有"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:337
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:684
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
 #: packages/app-mobile/components/CameraView.tsx:194
@@ -531,17 +539,18 @@ msgstr "共有"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:103
-#: packages/app-mobile/components/screens/Note.tsx:576
+#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.tsx:170
 #: packages/app-mobile/components/side-menu-content.tsx:179
 #: packages/app-mobile/components/side-menu-content.tsx:444
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:80
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: packages/app-cli/app/app.js:138
+#: packages/app-cli/app/app.js:139
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
 
@@ -675,7 +684,7 @@ msgid "Check for updates..."
 msgstr "アップデートのチェック..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:435
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:436
 msgid "Check synchronisation configuration"
 msgstr "同期の設定を確認する"
 
@@ -691,7 +700,7 @@ msgstr "チェックボックスリスト"
 msgid "Checking... Please wait."
 msgstr "確認中...お待ちください。"
 
-#: packages/app-mobile/components/screens/Note.tsx:871
+#: packages/app-mobile/components/screens/Note.tsx:876
 msgid "Choose an option"
 msgstr "オプションを選択"
 
@@ -701,6 +710,7 @@ msgid "Chrome Web Store"
 msgstr "Chrome ウェブストア"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 msgid "Clear"
 msgstr "クリア"
@@ -722,7 +732,7 @@ msgstr ""
 msgid "Click to add tags..."
 msgstr "クリックしてタグを追加..."
 
-#: packages/lib/versionInfo.ts:60
+#: packages/lib/versionInfo.ts:62
 msgid "Client ID: %s"
 msgstr "クライアントID: %s"
 
@@ -753,11 +763,11 @@ msgstr "ウィンドウを閉じる"
 msgid "Code"
 msgstr "コード"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:614
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:604
 msgid "Code Block"
 msgstr "コードブロック"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1195
 msgid "Code View"
 msgstr "コードビュー"
 
@@ -769,11 +779,11 @@ msgstr "ノートブック上で共同作業を行う"
 msgid "Collapse"
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:305
+#: packages/lib/services/ReportService.ts:307
 msgid "Coming alarms"
 msgstr "直近のアラーム"
 
-#: packages/lib/models/Setting.ts:1441
+#: packages/lib/models/Setting.ts:1452
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -819,7 +829,7 @@ msgid "Compress old changes"
 msgstr "古い変更を圧縮する"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:729
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
 #: packages/app-mobile/components/side-menu-content.tsx:422
 msgid "Configuration"
 msgstr "設定"
@@ -838,7 +848,7 @@ msgstr "パスワード(確認用):"
 msgid "Confirmation"
 msgstr "確認"
 
-#: packages/lib/services/ReportService.ts:284
+#: packages/lib/services/ReportService.ts:286
 msgid "Conflicted: %d"
 msgstr "衝突: %d"
 
@@ -862,13 +872,18 @@ msgstr "%s によって提供されたコンテンツ"
 msgid "Continue"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:930
+#: packages/app-mobile/components/screens/Note.tsx:1010
 msgid "Convert to note"
 msgstr "ノートに変換"
 
-#: packages/app-mobile/components/screens/Note.tsx:930
+#: packages/app-mobile/components/screens/Note.tsx:1010
 msgid "Convert to todo"
 msgstr "ToDoに変換"
+
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
+#, fuzzy
+msgid "Converting speech to text..."
+msgstr "ノートに変換"
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -881,8 +896,8 @@ msgstr "コピー"
 msgid "Copy dev mode command to clipboard"
 msgstr "開発モードコマンドをクリップボードにコピー"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:390
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:404
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:410
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:424
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 msgid "Copy external link"
 msgstr "外部リンクをコピー"
@@ -896,7 +911,7 @@ msgid "Copy Link Address"
 msgstr "リンクアドレスをコピー"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:937
+#: packages/app-mobile/components/screens/Note.tsx:1017
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
 
@@ -909,7 +924,7 @@ msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "共有可能なリンクをコピー"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:153
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:144
 msgid "Copy token"
 msgstr "トークンのコピー"
 
@@ -980,10 +995,12 @@ msgstr ""
 "このノートブックの共有状態を確認できなかったため処理を中断します。インター"
 "ネット接続を確認してから再度お試しください。"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
-msgid "Could not verify your identify"
-msgstr ""
+#: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
+#, fuzzy
+msgid "Could not verify your identify: %s"
+msgstr "ノートをエクスポートできませんでした: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 msgid "Create"
 msgstr "作成"
@@ -993,7 +1010,7 @@ msgstr "作成"
 msgid "Create a new notebook under a parent notebook."
 msgstr "あたらしいノートブックを作成します。"
 
-#: packages/app-mobile/components/note-list.js:101
+#: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
 msgstr "ノートブックを作成します"
 
@@ -1023,7 +1040,7 @@ msgstr "作成日"
 msgid "Created local items: %d."
 msgstr "ローカルアイテムの作成: %d."
 
-#: packages/lib/services/ReportService.ts:244
+#: packages/lib/services/ReportService.ts:246
 msgid "Created locally"
 msgstr "ローカルに作成"
 
@@ -1042,7 +1059,7 @@ msgid "Created: %d."
 msgstr "新規作成: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:835
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "Created: %s"
 msgstr "作成しました：%s"
 
@@ -1062,7 +1079,7 @@ msgstr "新しいToDoを作成します。"
 msgid "Creating new %s..."
 msgstr "新しい %s を作成中..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Creating report..."
 msgstr "レポート を作成中..."
 
@@ -1078,15 +1095,15 @@ msgstr "任意順"
 msgid "Custom order"
 msgstr "任意順"
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1309
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "カスタムスタイルシート (アプリ全般の外観調整用)"
 
-#: packages/lib/models/Setting.ts:1281
+#: packages/lib/models/Setting.ts:1292
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "カスタムスタイルシート (Markdownビューアー)"
 
-#: packages/lib/models/Setting.ts:1440
+#: packages/lib/models/Setting.ts:1451
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
 
@@ -1104,7 +1121,7 @@ msgstr "暗い"
 msgid "Dashboard"
 msgstr "ダッシュボード"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:717
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:744
 msgid "Database v%s"
 msgstr "データベース v%s"
 
@@ -1116,7 +1133,7 @@ msgstr "日時"
 msgid "Date format"
 msgstr "日付の形式"
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1539
 msgid "days"
 msgstr "日"
 
@@ -1132,13 +1149,13 @@ msgstr "復号済み（非暗号化）アイテム: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "復号済み（非暗号化）アイテム: %s/%s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:738
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:758
 #: packages/app-mobile/components/side-menu-content.tsx:431
 msgid "Decrypting items: %d/%d"
 msgstr "復号中のアイテム: %d/%d"
 
-#: packages/lib/models/Setting.ts:1223 packages/lib/models/Setting.ts:1230
-#: packages/lib/models/Setting.ts:1406
+#: packages/lib/models/Setting.ts:1234 packages/lib/models/Setting.ts:1241
+#: packages/lib/models/Setting.ts:1417
 msgid "Default"
 msgstr "標準"
 
@@ -1149,13 +1166,13 @@ msgstr "既定値: %s"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:311
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
 #: packages/app-mobile/components/ScreenHeader.tsx:418
 #: packages/app-mobile/components/ScreenHeader.tsx:485
-#: packages/app-mobile/components/screens/Note.tsx:950
+#: packages/app-mobile/components/screens/Note.tsx:1030
 #: packages/app-mobile/components/side-menu-content.tsx:160
 msgid "Delete"
 msgstr "削除"
@@ -1176,7 +1193,7 @@ msgstr "期限切れトークンを削除"
 msgid "Delete line"
 msgstr "行を削除"
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1333
 msgid "Delete local data and re-download from sync target"
 msgstr "ローカルデータを削除して同期先から再ダウンロードする"
 
@@ -1185,11 +1202,11 @@ msgid "Delete note \"%s\"?"
 msgstr "ノート \"%s\" を削除しますか？"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:526
+#: packages/app-mobile/components/screens/Note.tsx:535
 msgid "Delete note?"
 msgstr "ノートを削除しますか？"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:290
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:310
 #: packages/app-mobile/components/side-menu-content.tsx:162
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1201,7 +1218,6 @@ msgstr ""
 "このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 
 #: packages/app-cli/app/command-rmbook.js:26
-#: packages/app-mobile/components/screens/Notes.tsx:154
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
@@ -1289,7 +1305,7 @@ msgstr "暗号化を無効にする"
 msgid "Disable safe mode and restart"
 msgstr "セーフモードを終了して再起動"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:102
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:93
 msgid "Disable Web Clipper Service"
 msgstr "Webクリッパーサービスを無効にする"
 
@@ -1297,7 +1313,7 @@ msgstr "Webクリッパーサービスを無効にする"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1341
+#: packages/lib/models/Setting.ts:1352
 msgid "Disabled"
 msgstr "無効"
 
@@ -1311,8 +1327,8 @@ msgstr ""
 "暗号化を無効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
 "ゲットに暗号化を解除した状態で送ることを意味します。本当に継続しますか？"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:350
-#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:351
+#: packages/app-mobile/components/screens/Note.tsx:110
 msgid "Discard changes"
 msgstr "変更を破棄"
 
@@ -1386,6 +1402,7 @@ msgstr ""
 "ワードを入力してください。"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
 msgid "Done"
 msgstr ""
 
@@ -1393,7 +1410,7 @@ msgstr ""
 msgid "Download"
 msgstr "ダウンロード"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:131
 msgid "Download and install the relevant extension for your browser:"
 msgstr "ご使用のブラウザーに対応する拡張機能をインストールします:"
 
@@ -1401,11 +1418,11 @@ msgstr "ご使用のブラウザーに対応する拡張機能をインストー
 msgid "Downloaded"
 msgstr "ダウンロード済み"
 
-#: packages/lib/services/ReportService.ts:242
+#: packages/lib/services/ReportService.ts:244
 msgid "Downloaded and decrypted"
 msgstr "ダウンロード済み（復号済み）"
 
-#: packages/lib/services/ReportService.ts:243
+#: packages/lib/services/ReportService.ts:245
 msgid "Downloaded and encrypted"
 msgstr "ダウンロード済み（未復号）"
 
@@ -1421,7 +1438,7 @@ msgstr "リソースをダウンロード中..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1195
 msgid "Drop notes or files here"
 msgstr "ノートやファイルをここにドロップします"
 
@@ -1459,7 +1476,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
-#: packages/app-mobile/components/screens/Note.tsx:1148
+#: packages/app-mobile/components/screens/Note.tsx:1248
 msgid "Edit"
 msgstr "編集"
 
@@ -1496,23 +1513,23 @@ msgstr "プロファイル設定を編集..."
 msgid "Editor"
 msgstr "エディター"
 
-#: packages/lib/models/Setting.ts:1216
+#: packages/lib/models/Setting.ts:1227
 msgid "Editor font"
 msgstr "エディターのフォント"
 
-#: packages/lib/models/Setting.ts:1242
+#: packages/lib/models/Setting.ts:1253
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
-#: packages/lib/models/Setting.ts:1204
+#: packages/lib/models/Setting.ts:1215
 msgid "Editor font size"
 msgstr "エディターのフォントサイズ"
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1272
 msgid "Editor maximum width"
 msgstr "エディター内での最大表示幅"
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1265
 msgid "Editor monospace font family"
 msgstr "エディターの等幅フォントファミリー"
 
@@ -1525,7 +1542,7 @@ msgstr "エディター: %s"
 msgid "Either \"text\" or \"json\""
 msgstr "\"text\"または\"json\""
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1418
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1545,40 +1562,40 @@ msgid "emphasised text"
 msgstr "強調したいテキスト"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:65
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:85
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "有効"
 
-#: packages/lib/models/Setting.ts:1145
+#: packages/lib/models/Setting.ts:1156
 msgid "Enable ^sup^ syntax"
 msgstr "^上付きテキスト^構文を有効にする"
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1160
 msgid "Enable ++insert++ syntax"
 msgstr "++追加++構文を有効にする"
 
-#: packages/lib/models/Setting.ts:1141
+#: packages/lib/models/Setting.ts:1152
 msgid "Enable ==mark== syntax"
 msgstr "==ハイライト==構文を有効にする"
 
-#: packages/lib/models/Setting.ts:1144
+#: packages/lib/models/Setting.ts:1155
 msgid "Enable ~sub~ syntax"
 msgstr "~下付きテキスト~構文を有効にする"
 
-#: packages/lib/models/Setting.ts:1147
+#: packages/lib/models/Setting.ts:1158
 msgid "Enable abbreviation syntax"
 msgstr "略語構文を有効にする"
 
-#: packages/lib/models/Setting.ts:1138
+#: packages/lib/models/Setting.ts:1149
 msgid "Enable audio player"
 msgstr "オーディオプレーヤーを有効にする"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Enable biometrics authentication?"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1146
+#: packages/lib/models/Setting.ts:1157
 msgid "Enable deflist syntax"
 msgstr "定義リスト構文を有効にする"
 
@@ -1587,43 +1604,43 @@ msgstr "定義リスト構文を有効にする"
 msgid "Enable encryption"
 msgstr "暗号化を有効にする"
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1153
 msgid "Enable footnotes"
 msgstr "脚注を有効にする"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/lib/models/Setting.ts:1146
 msgid "Enable Fountain syntax support"
 msgstr "Fountain構文を有効にする"
 
-#: packages/lib/models/Setting.ts:1132
+#: packages/lib/models/Setting.ts:1143
 msgid "Enable Linkify"
 msgstr "Linkifyを有効にする"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1159
 msgid "Enable markdown emoji"
 msgstr "マークダウン絵文字を有効にする"
 
-#: packages/lib/models/Setting.ts:1134
+#: packages/lib/models/Setting.ts:1145
 msgid "Enable math expressions"
 msgstr "数式表現を有効にする"
 
-#: packages/lib/models/Setting.ts:1136
+#: packages/lib/models/Setting.ts:1147
 msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid（作図機能）を有効にする"
 
-#: packages/lib/models/Setting.ts:1150
+#: packages/lib/models/Setting.ts:1161
 msgid "Enable multimarkdown table extension"
 msgstr "MultiMarkdownのテーブル拡張を有効にする"
 
-#: packages/lib/models/Setting.ts:1518
+#: packages/lib/models/Setting.ts:1529
 msgid "Enable note history"
 msgstr "ノートの履歴を有効にする"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1151
 msgid "Enable PDF viewer"
 msgstr "PDFビューアーを有効にする"
 
-#: packages/lib/models/Setting.ts:1130
+#: packages/lib/models/Setting.ts:1141
 msgid "Enable soft breaks"
 msgstr "ソフトブレークを有効にする"
 
@@ -1631,19 +1648,24 @@ msgstr "ソフトブレークを有効にする"
 msgid "Enable spellcheck in the text editor"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1143
+#: packages/lib/models/Setting.ts:1154
 msgid "Enable table of contents extension"
 msgstr "目次拡張を有効にする"
 
-#: packages/lib/models/Setting.ts:1131
+#: packages/lib/models/Setting.ts:1059
+#, fuzzy
+msgid "Enable the Markdown toolbar"
+msgstr "マークダウン絵文字を有効にする"
+
+#: packages/lib/models/Setting.ts:1142
 msgid "Enable typographer support"
 msgstr "Typographer（記号文字）を有効にする"
 
-#: packages/lib/models/Setting.ts:1139
+#: packages/lib/models/Setting.ts:1150
 msgid "Enable video player"
 msgstr "動画プレーヤーを有効にする"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:113
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "Enable Web Clipper Service"
 msgstr "Webクリッパーサービスを有効にする"
 
@@ -1673,11 +1695,11 @@ msgstr "暗号化したアイテムは修正できません"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "暗号化したアイテムはリネームできません"
 
-#: packages/lib/models/Setting.ts:2485
+#: packages/lib/models/Setting.ts:2503
 msgid "Encryption"
 msgstr "暗号化"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:444
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:445
 #: packages/app-mobile/components/screens/encryption-config.tsx:287
 msgid "Encryption Config"
 msgstr "暗号化の設定"
@@ -1761,7 +1783,7 @@ msgid "Expand"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:374
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:394
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "エクスポート"
@@ -1775,15 +1797,15 @@ msgstr "すべてをエクスポート"
 msgid "Export debug report"
 msgstr "デバッグレポートの出力"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Export Debug Report"
 msgstr "デバッグレポートの出力"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Export profile"
 msgstr "プロファイルをエクスポート"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Exporting profile..."
 msgstr "プロファイルのエクスポート中..."
 
@@ -1808,11 +1830,11 @@ msgstr "選択されたノートのみを出力する。"
 msgid "Exports only the given notebook."
 msgstr "選択されたノートブックのみを出力する。"
 
-#: packages/lib/models/Setting.ts:1504
+#: packages/lib/models/Setting.ts:1515
 msgid "Fail-safe"
 msgstr "フェイルセーフ"
 
-#: packages/lib/models/Setting.ts:1505
+#: packages/lib/models/Setting.ts:1516
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1824,7 +1846,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "致命的なエラー:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:637
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:664
 msgid "Feature flags"
 msgstr "フィーチャーフラグ"
 
@@ -1832,7 +1854,7 @@ msgstr "フィーチャーフラグ"
 msgid "Fetched items: %d/%d."
 msgstr "取得したアイテム: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:743
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:763
 #: packages/app-mobile/components/side-menu-content.tsx:436
 msgid "Fetching resources: %d/%d"
 msgstr "取得中のリソース: %d/%d"
@@ -1863,11 +1885,11 @@ msgstr "総数: %d."
 msgid "Firefox Extension"
 msgstr "Firefox 拡張機能"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
 msgid "Fix search index"
 msgstr "検索インデックスの修正"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
 msgid "Fixing search index..."
 msgstr "検索インデックスの修正中..."
 
@@ -1879,23 +1901,23 @@ msgstr "検索インデックスの修正中..."
 msgid "Focus"
 msgstr "フォーカス"
 
-#: packages/lib/models/Setting.ts:1079 packages/lib/models/Setting.ts:1096
+#: packages/lib/models/Setting.ts:1090 packages/lib/models/Setting.ts:1107
 msgid "Focus body"
 msgstr "本文にフォーカス"
 
-#: packages/lib/models/Setting.ts:1078 packages/lib/models/Setting.ts:1095
+#: packages/lib/models/Setting.ts:1089 packages/lib/models/Setting.ts:1106
 msgid "Focus title"
 msgstr "題名にフォーカス"
 
-#: packages/lib/services/ReportService.ts:289
+#: packages/lib/services/ReportService.ts:291
 msgid "Folders"
 msgstr "フォルダー"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
 
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1495
 msgid "For example \"%s\""
 msgstr ""
 
@@ -1937,7 +1959,7 @@ msgstr "進む"
 msgid "Found: %d."
 msgstr "総数: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:723
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:750
 msgid "FTS enabled: %d"
 msgstr "FTS有効:  %d"
 
@@ -1950,7 +1972,7 @@ msgstr "全変更点一覧"
 msgid "Full name"
 msgstr "全変更点一覧"
 
-#: packages/lib/models/Setting.ts:2476
+#: packages/lib/models/Setting.ts:2494
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "全般"
@@ -1969,7 +1991,7 @@ msgstr[0] "リンクを生成中..."
 msgid "Get it now:"
 msgstr "今すぐ取得:"
 
-#: packages/lib/models/Setting.ts:1330
+#: packages/lib/models/Setting.ts:1341
 msgid "Get pre-releases when checking for updates"
 msgstr "更新をチェックする時、開発版を取得する"
 
@@ -1982,7 +2004,7 @@ msgstr ""
 "設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示しま"
 "す。両方とも指定されていない場合は、現在の設定のリストを表示します。"
 
-#: packages/app-mobile/components/screens/Note.tsx:847
+#: packages/app-mobile/components/screens/Note.tsx:852
 msgid "Go to source URL"
 msgstr "ソースURLに行く"
 
@@ -2089,7 +2111,7 @@ msgstr "待機中"
 msgid "Ignore"
 msgstr "無視"
 
-#: packages/lib/models/Setting.ts:1463
+#: packages/lib/models/Setting.ts:1474
 msgid "Ignore TLS certificate errors"
 msgstr "TLS証明書のエラーを無視"
 
@@ -2104,7 +2126,7 @@ msgstr "画像"
 msgid "Import"
 msgstr "インポート"
 
-#: packages/app-desktop/gui/MenuBar.tsx:247
+#: packages/app-desktop/gui/MenuBar.tsx:248
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
@@ -2137,7 +2159,7 @@ msgstr ""
 "物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテ"
 "ムを参照できます。"
 
-#: packages/app-mobile/components/screens/Note.tsx:403
+#: packages/app-mobile/components/screens/Note.tsx:412
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2177,15 +2199,15 @@ msgstr ""
 "\n"
 "重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 "ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Webクリッパーを使用するためには、次のことを行う必要があります:"
 
@@ -2209,11 +2231,11 @@ msgstr "インデントを減らす"
 msgid "Indent more"
 msgstr "インデントを増やす"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:209
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
 msgid "Information"
 msgstr "情報"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:612
 msgid "Inline Code"
 msgstr "インラインコード"
 
@@ -2226,7 +2248,7 @@ msgid "Insert Hyperlink"
 msgstr "ハイパーリンクの挿入"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:638
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:628
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
 #, fuzzy
 msgid "Insert time"
@@ -2264,7 +2286,7 @@ msgstr "無効な入力：%s"
 msgid "Invalid command: \"%s\""
 msgstr "無効な命令: \"%s\""
 
-#: packages/lib/models/Setting.ts:2004
+#: packages/lib/models/Setting.ts:2022
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
 
@@ -2277,7 +2299,7 @@ msgstr "無効なパスワード"
 msgid "Italic"
 msgstr "斜体"
 
-#: packages/lib/services/ReportService.ts:185
+#: packages/lib/services/ReportService.ts:187
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
 
@@ -2286,11 +2308,11 @@ msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
 msgid "Items"
 msgstr "アイテム"
 
-#: packages/lib/services/ReportService.ts:208
+#: packages/lib/services/ReportService.ts:210
 msgid "Items that cannot be decrypted"
 msgstr "復号ができなかったアイテム"
 
-#: packages/lib/services/ReportService.ts:173
+#: packages/lib/services/ReportService.ts:175
 msgid "Items that cannot be synchronised"
 msgstr "同期ができなかったアイテム"
 
@@ -2328,7 +2350,7 @@ msgstr "Joplin エクスポートディレクトリ"
 msgid "Joplin Export File"
 msgstr "Joplin エクスポートファイル"
 
-#: packages/lib/services/ReportService.ts:210
+#: packages/lib/services/ReportService.ts:212
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
@@ -2358,7 +2380,7 @@ msgstr "Joplin Serverパスワード"
 msgid "Joplin Server URL"
 msgstr "Joplin Server URL"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
@@ -2366,7 +2388,7 @@ msgstr ""
 "Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保"
 "存します。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:689
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:716
 msgid "Joplin website"
 msgstr "JoplinのWebサイト"
 
@@ -2382,11 +2404,11 @@ msgstr ""
 msgid "KaTeX"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1530
+#: packages/lib/models/Setting.ts:1541
 msgid "Keep note history for"
 msgstr "ノート履歴の保存期間"
 
-#: packages/lib/models/Setting.ts:1403
+#: packages/lib/models/Setting.ts:1414
 msgid "Keyboard Mode"
 msgstr "キーバインド"
 
@@ -2394,11 +2416,11 @@ msgstr "キーバインド"
 msgid "Keyboard Shortcut"
 msgstr "ショートカットキー"
 
-#: packages/lib/models/Setting.ts:2487
+#: packages/lib/models/Setting.ts:2505
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: packages/lib/versionInfo.ts:63
+#: packages/lib/versionInfo.ts:65
 msgid "Keychain Supported: %s"
 msgstr "キーチェーンのサポート: %s"
 
@@ -2406,7 +2428,7 @@ msgstr "キーチェーンのサポート: %s"
 msgid "Keys that need upgrading"
 msgstr "アップグレードが必要なキー"
 
-#: packages/lib/models/Setting.ts:1380
+#: packages/lib/models/Setting.ts:1391
 msgid "Landscape"
 msgstr "横"
 
@@ -2434,11 +2456,11 @@ msgstr "レイアウトボタンによる切り替え順"
 msgid "Leave notebook..."
 msgstr "ノートブックを離れる..."
 
-#: packages/lib/models/Setting.ts:1374
+#: packages/lib/models/Setting.ts:1385
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1370
+#: packages/lib/models/Setting.ts:1381
 msgid "Letter"
 msgstr "Letter"
 
@@ -2470,7 +2492,7 @@ msgstr[0] "リンクをクリップボードにコピーしました！"
 msgid "Link text"
 msgstr "リンク"
 
-#: packages/app-mobile/components/screens/Note.tsx:198
+#: packages/app-mobile/components/screens/Note.tsx:205
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "プロトコル \"%s\" でのリンクはサポートされていません"
 
@@ -2488,6 +2510,11 @@ msgstr ""
 msgid "Loaded"
 msgstr "読み込み済み"
 
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
+#, fuzzy
+msgid "Loading..."
+msgstr "アップデート中..."
+
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Location"
@@ -2502,7 +2529,7 @@ msgstr ""
 "ロックファイルがすでに保持されています。同期作業が行われていない場合"
 "は、\"%s\"にあるロックファイルを削除して、作業を再度行ってください。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:613
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:640
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
@@ -2533,7 +2560,7 @@ msgid "Logs"
 msgstr "ログ"
 
 #: packages/app-desktop/gui/MenuBar.tsx:795
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:675
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:702
 msgid "Make a donation"
 msgstr "寄付する"
 
@@ -2550,7 +2577,7 @@ msgstr "マスターパスワードの管理..."
 msgid "Manage multiple users"
 msgstr "マスターパスワードの管理"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:638
 #, fuzzy
 msgid "Manage profiles"
 msgstr "プロファイルの更新"
@@ -2572,7 +2599,7 @@ msgstr ""
 msgid "Manual"
 msgstr "手動"
 
-#: packages/lib/models/Setting.ts:2481
+#: packages/lib/models/Setting.ts:2499
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2654,11 +2681,11 @@ msgstr "モバイルデータ通信 - 自動同期無効"
 msgid "More info"
 msgstr "詳細情報"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:668
 msgid "More information"
 msgstr "詳細情報"
 
-#: packages/app-cli/app/app.js:64
+#: packages/app-cli/app/app.js:65
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
@@ -2694,7 +2721,9 @@ msgid "N"
 msgstr "N"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
-#: packages/app-mobile/components/screens/Notes.tsx:268
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:143
+#: packages/app-mobile/components/screens/Notes.tsx:239
 #: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "新しいノート"
@@ -2724,7 +2753,9 @@ msgid "New tags:"
 msgstr "新しいタグ:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:6
-#: packages/app-mobile/components/screens/Notes.tsx:258
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:153
+#: packages/app-mobile/components/screens/Notes.tsx:229
 #: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "新しいToDo"
@@ -2758,8 +2789,8 @@ msgid "no"
 msgstr "いいえ"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:575
-#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:63
+#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "No"
 msgstr "No"
 
@@ -2767,15 +2798,15 @@ msgstr "No"
 msgid "No active notebook."
 msgstr "有効なノートブックがありません。"
 
-#: packages/app-mobile/components/screens/Note.tsx:169
+#: packages/app-mobile/components/screens/Note.tsx:176
 msgid "No item with ID %s"
 msgstr "ID %s のアイテムはありません"
 
-#: packages/app-cli/app/app.js:100
+#: packages/app-cli/app/app.js:101
 msgid "No notebook has been specified."
 msgstr "ノートブックが選択されていません。"
 
-#: packages/app-cli/app/app.js:94
+#: packages/app-cli/app/app.js:95
 msgid "No notebook selected."
 msgstr "ノートブックが選択されていません。"
 
@@ -2791,7 +2822,7 @@ msgstr "リソースがありません!"
 msgid "No results"
 msgstr "該当なし"
 
-#: packages/app-cli/app/app.js:224
+#: packages/app-cli/app/app.js:225
 msgid "No such command: %s"
 msgstr "コマンドが違います：%s"
 
@@ -2822,22 +2853,24 @@ msgstr "未ダウンロード"
 msgid "Not generated"
 msgstr "生成されていません"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:70
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:90
 #, fuzzy
 msgid "Not now"
 msgstr "今すぐ実行"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:141
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
 msgid "note"
 msgstr "ノート"
 
-#: packages/lib/models/Setting.ts:2479
+#: packages/lib/models/Setting.ts:2497
 msgid "Note"
 msgstr "ノート"
 
-#: packages/lib/models/Setting.ts:1594
+#: packages/lib/models/Setting.ts:1605
 msgid "Note area growth factor"
 msgstr "ノートエリアのストレッチ係数"
 
@@ -2845,7 +2878,7 @@ msgstr "ノートエリアのストレッチ係数"
 msgid "Note attachments"
 msgstr "添付ファイル一覧"
 
-#: packages/app-desktop/gui/MenuBar.tsx:469
+#: packages/app-desktop/gui/MenuBar.tsx:470
 msgid "Note attachments..."
 msgstr "添付ファイル一覧..."
 
@@ -2857,7 +2890,7 @@ msgstr "ノートの本文"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" というノートはありません。作成しますか？"
 
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:83
 #, fuzzy
 msgid "Note editor"
 msgstr "ノートの履歴"
@@ -2868,7 +2901,7 @@ msgstr "ノートは保存されました。"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
-#: packages/lib/models/Setting.ts:2484
+#: packages/lib/models/Setting.ts:2502
 msgid "Note History"
 msgstr "ノートの履歴"
 
@@ -2880,7 +2913,7 @@ msgstr "ノートはToDoリストではありません：\"%s\""
 msgid "Note list"
 msgstr "ノート一覧"
 
-#: packages/lib/models/Setting.ts:1579
+#: packages/lib/models/Setting.ts:1590
 msgid "Note list growth factor"
 msgstr "ノート一覧のストレッチ係数"
 
@@ -2894,7 +2927,7 @@ msgstr "ノートのプロパティ"
 msgid "Note title"
 msgstr "ノートの題名"
 
-#: packages/lib/models/Setting.ts:1164
+#: packages/lib/models/Setting.ts:1175
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: すべてのデスクトップ環境で動作するわけではありません。"
 
@@ -2908,11 +2941,11 @@ msgstr ""
 msgid "Note&book"
 msgstr "ノートブック(&B)"
 
-#: packages/lib/models/Setting.ts:2480
+#: packages/lib/models/Setting.ts:2498
 msgid "Notebook"
 msgstr "ノートブック"
 
-#: packages/lib/models/Setting.ts:1564
+#: packages/lib/models/Setting.ts:1575
 msgid "Notebook list growth factor"
 msgstr "ノートブック一覧のストレッチ係数"
 
@@ -2920,7 +2953,7 @@ msgstr "ノートブック一覧のストレッチ係数"
 msgid "Notebook: %s"
 msgstr "ノートブック: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:690
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:710
 #: packages/app-mobile/components/side-menu-content.tsx:477
 msgid "Notebooks"
 msgstr "ノートブック"
@@ -2936,7 +2969,7 @@ msgstr ""
 msgid "Notes"
 msgstr "ノート"
 
-#: packages/lib/models/Setting.ts:2496
+#: packages/lib/models/Setting.ts:2514
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
 
@@ -2954,11 +2987,12 @@ msgstr "番号つきリスト"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
 #: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:212
 #: packages/app-mobile/components/side-menu-content.tsx:164
 msgid "OK"
 msgstr "OK"
@@ -2967,7 +3001,7 @@ msgstr "OK"
 msgid "OLED Dark"
 msgstr "ダークモード"
 
-#: packages/lib/services/ReportService.ts:310
+#: packages/lib/services/ReportService.ts:312
 msgid "On %s: %s"
 msgstr "日時 %s: %s"
 
@@ -3035,7 +3069,7 @@ msgid "Operation cancelled"
 msgstr "操作をキャンセルしました"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:455
+#: packages/app-desktop/gui/MenuBar.tsx:456
 #: packages/app-desktop/gui/Root.tsx:226
 msgid "Options"
 msgstr "オプション"
@@ -3049,7 +3083,7 @@ msgstr "またはアカウントを作成。"
 msgid "Ordered list"
 msgstr "ユーザーを作成"
 
-#: packages/app-desktop/gui/MenuBar.tsx:409
+#: packages/app-desktop/gui/MenuBar.tsx:410
 msgid "Other applications..."
 msgstr "その他のアプリケーション..."
 
@@ -3057,11 +3091,11 @@ msgstr "その他のアプリケーション..."
 msgid "Output format: %s"
 msgstr "出力フォーマット: %s"
 
-#: packages/lib/models/Setting.ts:1377
+#: packages/lib/models/Setting.ts:1388
 msgid "Page orientation for PDF export"
 msgstr "PDFページの向き"
 
-#: packages/lib/models/Setting.ts:1367
+#: packages/lib/models/Setting.ts:1378
 msgid "Page size for PDF export"
 msgstr "エクスポートするPDFのページサイズ"
 
@@ -3108,7 +3142,7 @@ msgstr "PDF ファイル"
 msgid "Per user. Minimum of %d users."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:404
+#: packages/app-mobile/components/screens/Note.tsx:413
 msgid "Permission needed"
 msgstr "許可が必要"
 
@@ -3158,6 +3192,10 @@ msgstr ""
 "きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスし"
 "ません。第三者にデータが共有されることもありません。"
 
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
+msgid "Please record your voice..."
+msgstr ""
+
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
 msgstr "まずはノートブックを選択して下さい。"
@@ -3182,7 +3220,7 @@ msgstr "ノートをどのノートブックにインポートするのか指定
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "このプラグインを使うにはJoplinをアップグレードしてください"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1195
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -3200,11 +3238,11 @@ msgid "Plugin tools"
 msgstr "プラグインツール"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2482
+#: packages/lib/models/Setting.ts:2500
 msgid "Plugins"
 msgstr "プラグイン"
 
-#: packages/lib/models/Setting.ts:1379
+#: packages/lib/models/Setting.ts:1390
 msgid "Portrait"
 msgstr "縦"
 
@@ -3269,7 +3307,7 @@ msgstr "印刷"
 msgid "Priority support"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:703
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:730
 msgid "Privacy Policy"
 msgstr "プライバシーポリシー"
 
@@ -3303,7 +3341,7 @@ msgstr "プロファイル名:"
 msgid "Profile name:"
 msgstr "プロファイル名:"
 
-#: packages/lib/versionInfo.ts:62
+#: packages/lib/versionInfo.ts:64
 msgid "Profile Version: %s"
 msgstr "プロファイルバージョン: %s"
 
@@ -3312,20 +3350,20 @@ msgstr "プロファイルバージョン: %s"
 msgid "Profiles"
 msgstr "プロファイル"
 
-#: packages/app-mobile/components/screens/Note.tsx:944
+#: packages/app-mobile/components/screens/Note.tsx:1024
 msgid "Properties"
 msgstr "プロパティ"
 
-#: packages/lib/models/Setting.ts:1473
+#: packages/lib/models/Setting.ts:1484
 #, fuzzy
 msgid "Proxy enabled"
 msgstr "有効"
 
-#: packages/lib/models/Setting.ts:1495
+#: packages/lib/models/Setting.ts:1506
 msgid "Proxy timeout (seconds)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1483
+#: packages/lib/models/Setting.ts:1494
 msgid "Proxy URL"
 msgstr ""
 
@@ -3348,7 +3386,7 @@ msgstr "ノートをインターネットに公開する"
 
 #: packages/app-desktop/app.ts:180
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:317
+#: packages/app-desktop/gui/MenuBar.tsx:318
 msgid "Quit"
 msgstr "終了"
 
@@ -3360,7 +3398,7 @@ msgstr "データを再暗号化する"
 msgid "Re-encryption"
 msgstr "再暗号化"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1322
 msgid "Re-upload local data to sync target"
 msgstr "ローカルデータを同期先に再アップロードする"
 
@@ -3410,15 +3448,15 @@ msgstr "数式表現を有効にする"
 msgid "Reject"
 msgstr "拒否"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:287
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:307
 msgid "Remove"
 msgstr "削除"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:294
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:314
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:296
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:316
 msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
 
@@ -3440,7 +3478,7 @@ msgstr "タグの変更:"
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr "<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:150
 msgid "Renew token"
 msgstr "トークンを更新する"
 
@@ -3519,7 +3557,7 @@ msgstr "逆順に並び替え"
 msgid "Reverses the sorting order."
 msgstr "逆順に並び替えます。"
 
-#: packages/lib/versionInfo.ts:45
+#: packages/lib/versionInfo.ts:47
 msgid "Revision: %s (%s)"
 msgstr "リビジョン: %s (%s)"
 
@@ -3585,8 +3623,8 @@ msgid "Save as..."
 msgstr "名前を付けて保存..."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:330
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:343
-#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:344
+#: packages/app-mobile/components/screens/Note.tsx:110
 msgid "Save changes"
 msgstr "変更を保存"
 
@@ -3622,7 +3660,7 @@ msgstr "検索:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:165
+#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 #: packages/app-desktop/gui/NoteSearchBar.tsx:179
 msgid "Search..."
 msgstr "検索..."
@@ -3631,7 +3669,7 @@ msgstr "検索..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "指定された<pattern>をすべてのノートから検索する。"
 
-#: packages/lib/models/Setting.ts:1330
+#: packages/lib/models/Setting.ts:1341
 msgid "See the pre-release page for more details: %s"
 msgstr "詳細についてはプレリリースページを参照してください: %s"
 
@@ -3666,7 +3704,7 @@ msgid "Server is running on port %d"
 msgstr "サーバーはポート %d で実行中です"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:908
+#: packages/app-mobile/components/screens/Note.tsx:976
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "アラームをセット"
@@ -3675,7 +3713,7 @@ msgstr "アラームをセット"
 msgid "Set alarm:"
 msgstr "アラームをセット:"
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1272
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3700,7 +3738,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/screens/Note.tsx:984
 msgid "Share"
 msgstr "共有"
 
@@ -3768,7 +3806,7 @@ msgstr "ノートの数を表示"
 msgid "Show sort order buttons"
 msgstr "ソート方法切り替えボタンを表示"
 
-#: packages/lib/models/Setting.ts:1162
+#: packages/lib/models/Setting.ts:1173
 msgid "Show tray icon"
 msgstr "トレイアイコンの表示"
 
@@ -3847,7 +3885,7 @@ msgstr "ソースフォーマット: %s"
 msgid "Source: "
 msgstr "ソース: "
 
-#: packages/lib/models/Setting.ts:1510
+#: packages/lib/models/Setting.ts:1521
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3865,7 +3903,7 @@ msgstr "スペルチェッカー"
 msgid "Split View"
 msgstr "分割ビュー"
 
-#: packages/lib/models/Setting.ts:1170
+#: packages/lib/models/Setting.ts:1181
 msgid "Start application minimised in the tray icon"
 msgstr "アプリケーションをトレイアイコンで最小化して起動"
 
@@ -3907,15 +3945,15 @@ msgstr "統計..."
 msgid "Status"
 msgstr "状態"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:96
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:87
 msgid "Status: %s"
 msgstr "状態: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:90
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:81
 msgid "Status: Started on port %d"
 msgstr "状態: ポート %d で起動中"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:124
 msgid "Step 1: Enable the clipper service"
 msgstr "ステップ1: クリッパーサービスを有効にする"
 
@@ -3931,7 +3969,7 @@ msgstr "ステップ1: アプリケーションを認証するためにこのURL
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "ステップ2: Dropboxによって提供されたコードを入力する:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
 msgid "Step 2: Install the extension"
 msgstr "ステップ2: 拡張機能のインストール"
 
@@ -3985,7 +4023,7 @@ msgstr "前の行と入れ替え"
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
-#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-desktop/gui/MenuBar.tsx:447
 #: packages/app-mobile/components/side-menu-content.tsx:419
 msgid "Switch profile"
 msgstr "プロファイルを切り替え"
@@ -4016,11 +4054,11 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:612
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
 msgid "Sync Status"
 msgstr "同期の状態"
 
-#: packages/lib/services/ReportService.ts:275
+#: packages/lib/services/ReportService.ts:277
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
 
@@ -4037,7 +4075,7 @@ msgstr "同期先のアップグレード"
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
 
-#: packages/lib/versionInfo.ts:61
+#: packages/lib/versionInfo.ts:63
 msgid "Sync Version: %s"
 msgstr "同期バージョン: %s"
 
@@ -4045,11 +4083,11 @@ msgstr "同期バージョン: %s"
 msgid "Sync your notes"
 msgstr "ノートを同期する"
 
-#: packages/lib/models/Setting.ts:2477
+#: packages/lib/models/Setting.ts:2495
 msgid "Synchronisation"
 msgstr "同期"
 
-#: packages/lib/models/Setting.ts:1338
+#: packages/lib/models/Setting.ts:1349
 msgid "Synchronisation interval"
 msgstr "同期間隔"
 
@@ -4057,7 +4095,7 @@ msgstr "同期間隔"
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
 
-#: packages/app-desktop/gui/MenuBar.tsx:425
+#: packages/app-desktop/gui/MenuBar.tsx:426
 #: packages/app-desktop/gui/Root.tsx:228
 msgid "Synchronisation Status"
 msgstr "同期状況"
@@ -4070,13 +4108,13 @@ msgstr "同期先"
 msgid "Synchronisation target: %s (%s)"
 msgstr "同期先: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:684
 #: packages/app-mobile/components/side-menu-content.tsx:444
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "同期"
 
-#: packages/lib/models/Setting.ts:1358
+#: packages/lib/models/Setting.ts:1369
 msgid "Synchronise only over WiFi connection"
 msgstr "WiFi経由でのみ同期する"
 
@@ -4092,7 +4130,7 @@ msgstr "同期中..."
 msgid "Synchronizing..."
 msgstr "同期中..."
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1384
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -4107,14 +4145,14 @@ msgid "Tagged: %d."
 msgstr "タグ付き: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:719
-#: packages/app-mobile/components/screens/Note.tsx:923
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
+#: packages/app-mobile/components/screens/Note.tsx:1003
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.tsx:416
 msgid "Tags"
 msgstr "タグ"
 
-#: packages/app-mobile/components/screens/Note.tsx:869
+#: packages/app-mobile/components/screens/Note.tsx:874
 msgid "Take photo"
 msgstr "写真を撮影する"
 
@@ -4132,7 +4170,7 @@ msgstr "タスク"
 msgid "Teams"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1366
+#: packages/lib/models/Setting.ts:1377
 msgid "Text editor command"
 msgstr "テキストエディターのコマンド"
 
@@ -4183,7 +4221,7 @@ msgid ""
 "note."
 msgstr "添付ファイルの監視は他のノートに移動すると終了します。"
 
-#: packages/app-cli/app/app.js:273
+#: packages/app-cli/app/app.js:274
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "コマンド \"%s\"は、GUIのみで有効です"
 
@@ -4215,7 +4253,7 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1366
+#: packages/lib/models/Setting.ts:1377
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -4223,8 +4261,8 @@ msgstr ""
 "このエディターコマンド（と引数）はノートを開く際に使用されます。空欄の場合は"
 "既定のエディターを自動的に検出します。"
 
-#: packages/lib/models/Setting.ts:1566 packages/lib/models/Setting.ts:1581
-#: packages/lib/models/Setting.ts:1596
+#: packages/lib/models/Setting.ts:1577 packages/lib/models/Setting.ts:1592
+#: packages/lib/models/Setting.ts:1607
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4249,7 +4287,7 @@ msgstr ""
 "すめします。キーをアップグレードしても既存データはこれまでどおり復号化/暗号化"
 "が可能です。"
 
-#: packages/app-mobile/components/screens/Note.tsx:194
+#: packages/app-mobile/components/screens/Note.tsx:201
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
 
@@ -4346,11 +4384,11 @@ msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 "Webクリッパーがデータにアクセスすることについてあなたの許可が必要です。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:84
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:75
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Webクリッパーサービスは有効で、自動起動します。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:108
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:99
 msgid "The web clipper service is not enabled."
 msgstr "Webクリッパーサービスは有効になっていません。"
 
@@ -4364,11 +4402,11 @@ msgstr ""
 msgid "Theme"
 msgstr "テーマ"
 
-#: packages/app-mobile/components/note-list.js:105
+#: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:341
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:342
 msgid "There are unsaved changes."
 msgstr ""
 
@@ -4407,7 +4445,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/lib/services/ReportService.ts:175
+#: packages/lib/services/ReportService.ts:177
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -4417,7 +4455,7 @@ msgstr ""
 "のようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索"
 "してください。"
 
-#: packages/lib/models/Setting.ts:2495
+#: packages/lib/models/Setting.ts:2513
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4439,11 +4477,11 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません"
 
-#: packages/app-mobile/components/screens/Note.tsx:188
+#: packages/app-mobile/components/screens/Note.tsx:195
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
@@ -4464,7 +4502,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "このノートには位置情報がありません。"
 
-#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/Note.tsx:110
 msgid "This note has been modified:"
 msgstr "ノートは変更されています："
 
@@ -4489,7 +4527,7 @@ msgstr ""
 "リッチテキストエディターには多くの制限がありますので、それらをご承知の上でご"
 "使用ください。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:134
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:125
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
@@ -4499,7 +4537,7 @@ msgstr ""
 "ビスを有効化する際には、Joplinが特定のポートで接続を待ち受けることについて、"
 "お使いのファイアーウォールから許可を求められる場合があります。"
 
-#: packages/lib/models/Setting.ts:1164
+#: packages/lib/models/Setting.ts:1175
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4548,7 +4586,7 @@ msgstr "続行するには、マスターパスワードを入力してくださ
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
 
-#: packages/lib/services/ReportService.ts:285
+#: packages/lib/services/ReportService.ts:287
 msgid "To delete: %d"
 msgstr "削除予定: %d"
 
@@ -4589,7 +4627,7 @@ msgid ""
 "restart it."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:651
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:678
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4598,6 +4636,8 @@ msgstr ""
 "> 権限 で有効にしてください"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:151
 msgid "to-do"
 msgstr "to-do"
 
@@ -4646,11 +4686,11 @@ msgstr "サイドバーの表示切り替え"
 msgid "Toggle sort order field"
 msgstr "ソート対象フィールドを切り替える"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:32
 msgid "Token has been copied to the clipboard!"
 msgstr "トークンをクリップボードにコピーしました！"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:609
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:636
 msgid "Tools"
 msgstr "ツール"
 
@@ -4659,12 +4699,12 @@ msgstr "ツール"
 msgid "Total Size"
 msgstr "100%%表示"
 
-#: packages/lib/services/ReportService.ts:282
+#: packages/lib/services/ReportService.ts:284
 msgid "Total: %d/%d"
 msgstr "総数: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:96
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:122
 msgid "Try again"
 msgstr "再試行"
 
@@ -4714,7 +4754,7 @@ msgstr "未完のToDoをリストの上部に表示"
 msgid "Undo"
 msgstr "元に戻す"
 
-#: packages/lib/BaseApplication.ts:288
+#: packages/lib/BaseApplication.ts:294
 msgid "Unknown flag: %s"
 msgstr "不明なフラグ: %s"
 
@@ -4746,7 +4786,7 @@ msgstr ""
 "このノートブックの共有を解除しますか? 解除後は招待の受信者がノートブックにア"
 "クセスできなくなります。"
 
-#: packages/app-mobile/components/screens/Note.tsx:658
+#: packages/app-mobile/components/screens/Note.tsx:667
 msgid "Unsupported image type: %s"
 msgstr "サポートされていない画像の形式: %s"
 
@@ -4804,7 +4844,7 @@ msgstr "更新: "
 msgid "Updated: %d."
 msgstr "アップデート: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "Updated: %s"
 msgstr "アップデート: %s"
 
@@ -4828,11 +4868,11 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/lib/BaseApplication.ts:170 packages/lib/BaseApplication.ts:183
-#: packages/lib/BaseApplication.ts:220
+#: packages/lib/BaseApplication.ts:226
 msgid "Usage: %s"
 msgstr "使用方法: %s"
 
-#: packages/lib/models/Setting.ts:1640
+#: packages/lib/models/Setting.ts:1657
 msgid "Use biometrics to secure access to the app"
 msgstr ""
 
@@ -4859,7 +4899,7 @@ msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "矢印を使ってレイアウトアイテムを移動してください。\"Esc\" で終了します。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4867,13 +4907,13 @@ msgstr ""
 "検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。"
 "ノートの数に依存して、時間がかかる場合があります。"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:62
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1244
+#: packages/lib/models/Setting.ts:1255
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4881,7 +4921,7 @@ msgstr ""
 "Markdownエディター上の大部分のテキストに使用。指定フォントが見つからない場合"
 "は一般的なプロポーショナル（可変幅）フォントを使用します。"
 
-#: packages/lib/models/Setting.ts:1256
+#: packages/lib/models/Setting.ts:1267
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4904,7 +4944,7 @@ msgstr "ユーザー"
 msgid "Valid"
 msgstr "正当性"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:25
+#: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
 msgstr ""
 
@@ -4912,7 +4952,7 @@ msgstr ""
 msgid "View"
 msgstr "表示"
 
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:845
 msgid "View on map"
 msgstr "地図上に表示"
 
@@ -4928,11 +4968,19 @@ msgstr "今すぐ表示"
 msgid "Viewer"
 msgstr "ビューアー"
 
-#: packages/lib/models/Setting.ts:1408
+#: packages/lib/models/Setting.ts:1419
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
+msgid "Voice typing"
+msgstr ""
+
+#: packages/app-mobile/components/screens/Note.tsx:993
+msgid "Voice typing..."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
 msgstr "警告"
 
@@ -4940,7 +4988,7 @@ msgstr "警告"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
-#: packages/lib/models/Setting.ts:2486 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2504 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Webクリッパー"
 
@@ -4981,11 +5029,11 @@ msgstr ""
 "\n"
 "例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1103
 msgid "When creating a new note:"
 msgstr "新しいノートを作成した際:"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1086
 msgid "When creating a new to-do:"
 msgstr "新しいToDoを作成した場合:"
 
@@ -5007,12 +5055,12 @@ msgid "yes"
 msgstr "はい"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:574
-#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:63
+#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "Yes"
 msgstr "Yes"
 
-#: packages/app-mobile/components/screens/Note.tsx:573
+#: packages/app-mobile/components/screens/Note.tsx:582
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -5021,7 +5069,7 @@ msgstr ""
 "大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小"
 "してから添付しますか？"
 
-#: packages/app-mobile/components/note-list.js:97
+#: packages/app-mobile/components/NoteList.tsx:94
 msgid "You currently have no notebooks."
 msgstr "ノートブックがありません。"
 

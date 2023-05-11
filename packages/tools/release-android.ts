@@ -1,11 +1,10 @@
 import { execCommand } from '@joplin/utils';
-import * as fs from 'fs-extra';
+import { copy, mkdirp, move, readFile, readFileSync, remove, stat, writeFile, writeFileSync } from 'fs-extra';
 import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
-const projectName = 'joplin-android';
 const rootDir = path.dirname(path.dirname(__dirname));
 const rnDir = `${rootDir}/packages/app-mobile`;
 const releaseDir = `${rnDir}/dist`;
@@ -14,6 +13,47 @@ interface Release {
 	downloadUrl: string;
 	apkFilename: string;
 	apkFilePath: string;
+}
+
+type PatcherCallback = (content: string)=> Promise<string>;
+
+class Patcher {
+
+	private workDir_: string;
+	private originalContents_: Record<string, string> = {};
+	private removedFiles_: Record<string, string> = {};
+
+	public constructor(workDir: string) {
+		this.workDir_ = workDir;
+	}
+
+	public removeFile = async (path: string) => {
+		const targetPath = `${this.workDir_}/${path.substring(1)}`;
+		await move(path, targetPath);
+		this.removedFiles_[path] = targetPath;
+	};
+
+	public updateFileContent = async (path: string, callback: PatcherCallback) => {
+		const content = await readFile(path, 'utf8');
+		this.originalContents_[path] = content;
+		const newContent = await callback(content);
+		await writeFile(path, newContent);
+	};
+
+	public restore = async () => {
+		for (const filename in this.originalContents_) {
+			const content = this.originalContents_[filename];
+			await writeFile(filename, content);
+		}
+
+		for (const [originalPath, backupPath] of Object.entries(this.removedFiles_)) {
+			await move(backupPath, originalPath);
+		}
+
+		this.removedFiles_ = {};
+		this.originalContents_ = {};
+	};
+
 }
 
 function increaseGradleVersionCode(content: string) {
@@ -41,10 +81,10 @@ function increaseGradleVersionName(content: string) {
 }
 
 function updateGradleConfig() {
-	let content = fs.readFileSync(`${rnDir}/android/app/build.gradle`, 'utf8');
+	let content = readFileSync(`${rnDir}/android/app/build.gradle`, 'utf8');
 	content = increaseGradleVersionCode(content);
 	content = increaseGradleVersionName(content);
-	fs.writeFileSync(`${rnDir}/android/app/build.gradle`, content);
+	writeFileSync(`${rnDir}/android/app/build.gradle`, content);
 	return content;
 }
 
@@ -54,19 +94,32 @@ function gradleVersionName(content: string) {
 	return matches[1];
 }
 
-async function createRelease(name: string, tagName: string, version: string): Promise<Release> {
+async function createRelease(projectName: string, name: string, tagName: string, version: string): Promise<Release> {
 	const originalContents: Record<string, string> = {};
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
+
+	const patcher = new Patcher(`${rnDir}/patcher-work`);
 
 	console.info(`Creating release: ${suffix}`);
 
 	if (name === '32bit') {
-		const filename = `${rnDir}/android/app/build.gradle`;
-		let content = await fs.readFile(filename, 'utf8');
-		originalContents[filename] = content;
-		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
-		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
-		await fs.writeFile(filename, content);
+		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+			content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
+			content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
+			return content;
+		});
+	}
+
+	if (name !== 'vosk') {
+		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (_content: string) => {
+			return readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
+		});
+
+		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
+			content = content.replace(/(\s+)"applicationId "net.cozic.joplin"/, '$1"applicationId "net.cozic.joplin-mod"');
+			return content;
+		});
 	}
 
 	const apkFilename = `joplin-v${suffix}.apk`;
@@ -77,63 +130,56 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 
 	console.info(`Running from: ${process.cwd()}`);
 
+	await execCommand('yarn install', { showStdout: false });
+	await execCommand('yarn run tsc', { showStdout: false });
+
 	console.info(`Building APK file v${suffix}...`);
+
+	const buildDirName = `build-${name}`;
+	const buildDirBasePath = `${rnDir}/android/app/${buildDirName}`;
+	await remove(buildDirBasePath);
 
 	let restoreDir = null;
 	let apkBuildCmd = '';
-	const apkBuildCmdArgs = ['assembleRelease', '-PbuildDir=build'];
+	let apkCleanBuild = '';
+	const apkBuildCmdArgs = ['assembleRelease', `-PbuildDir=${buildDirName}`]; // TOOD: change build dir, delete before
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
-		// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
-
-		//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd packages\app-mobile\android && gradlew.bat assembleRelease -PbuildDir=build"
-
-		//     FAILURE: Build failed with an exception.
-
-		//     * What went wrong:
-		//     Could not determine if Stdout is a console: could not get handle file information (errno 1)
-
-		// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
-
-		// console.info('Run this command from DOS:');
-		// console.info('');
-		// console.info(`cd "${wslToWinPath(rootDir)}\\packages\\app-mobile\\android" && gradlew.bat ${apkBuildCmd}"`);
-		// console.info('');
-		// await readline('Press Enter when done:');
-		// apkBuildCmd = ''; // Clear the command because we've already ran it
-
-		// process.chdir(`${rnDir}/android`);
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
-		// restoreDir = rootDir;
-
-		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}"`;
-
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
+		throw new Error('TODO: apkCleanBuild must be set');
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = './gradlew';
+		apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
 		restoreDir = rootDir;
 	}
 
 	if (apkBuildCmd) {
+		await execCommand(apkCleanBuild);
 		await execCommandVerbose(apkBuildCmd, apkBuildCmdArgs);
 	}
 
 	if (restoreDir) process.chdir(restoreDir);
 
-	await fs.mkdirp(releaseDir);
+	await mkdirp(releaseDir);
+
+	const builtApk = `${buildDirBasePath}/outputs/apk/release/app-release.apk`;
+	const builtApkStat = await stat(builtApk);
+
+	console.info(`Built APK at ${builtApk}`);
+	console.info('APK size:', builtApkStat.size);
 
 	console.info(`Copying APK to ${apkFilePath}`);
-	await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, apkFilePath);
+	await copy(builtApk, apkFilePath);
 
 	if (name === 'main') {
 		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
-		await fs.copy(`${rnDir}/android/app/build/outputs/apk/release/app-release.apk`, `${releaseDir}/joplin-latest.apk`);
+		await copy(builtApk, `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (const filename in originalContents) {
 		const content = originalContents[filename];
-		await fs.writeFile(filename, content);
+		await writeFile(filename, content);
 	}
 
 	return {
@@ -143,38 +189,7 @@ async function createRelease(name: string, tagName: string, version: string): Pr
 	};
 }
 
-async function main() {
-	const argv = require('yargs').argv;
-
-	await gitPullTry(false);
-
-	const isPreRelease = !('type' in argv) || argv.type === 'prerelease';
-
-	process.chdir(rnDir);
-	await execCommand('yarn run build', { showStdout: false });
-
-	if (isPreRelease) console.info('Creating pre-release');
-	console.info('Updating version numbers in build.gradle...');
-
-	const newContent = updateGradleConfig();
-	const version = gradleVersionName(newContent);
-	const tagName = `android-v${version}`;
-	const releaseNames = ['main', '32bit'];
-	const releaseFiles: Record<string, Release> = {};
-
-	for (const releaseName of releaseNames) {
-		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
-	}
-
-	// NOT TESTED: These commands should not be necessary anymore since they are
-	// done in completeReleaseWithChangelog()
-
-	// await execCommandVerbose('git', ['add', '-A']);
-	// await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
-	// await execCommandVerbose('git', ['tag', tagName]);
-	// await execCommandVerbose('git', ['push']);
-	// await execCommandVerbose('git', ['push', '--tags']);
-
+const uploadToGitHubRelease = async (projectName: string, tagName: string, isPreRelease: boolean, releaseFiles: Record<string, Release>) => {
 	console.info(`Creating GitHub release ${tagName}...`);
 
 	const releaseOptions = { isPreRelease: isPreRelease };
@@ -187,7 +202,7 @@ async function main() {
 		const releaseFile = releaseFiles[releaseFilename];
 		const uploadUrl = uploadUrlTemplate.expand({ name: releaseFile.apkFilename });
 
-		const binaryBody = await fs.readFile(releaseFile.apkFilePath);
+		const binaryBody = await readFile(releaseFile.apkFilePath);
 
 		console.info(`Uploading ${releaseFile.apkFilename} to ${uploadUrl}`);
 
@@ -205,6 +220,41 @@ async function main() {
 		const uploadResponseObject = JSON.parse(uploadResponseText);
 		if (!uploadResponseObject || !uploadResponseObject.browser_download_url) throw new Error('Could not upload file to GitHub');
 	}
+};
+
+async function main() {
+	const argv = require('yargs').argv;
+
+	await gitPullTry(false);
+
+	const isPreRelease = !('type' in argv) || argv.type === 'prerelease';
+	const releaseNameOnly = argv['release-name'];
+
+	process.chdir(rnDir);
+
+	if (isPreRelease) console.info('Creating pre-release');
+	console.info('Updating version numbers in build.gradle...');
+
+	const newContent = updateGradleConfig();
+	const version = gradleVersionName(newContent);
+	const tagName = `android-v${version}`;
+	// const releaseNames = ['main', '32bit', 'vosk'];
+	const releaseNames = ['main', 'vosk'];
+	const releaseFiles: Record<string, Release> = {};
+	const mainProjectName = 'joplin-android';
+	const modProjectName = 'joplin-android-mod';
+
+	for (const releaseName of releaseNames) {
+		if (releaseNameOnly && releaseName !== releaseNameOnly) continue;
+		const projectName = releaseName === 'vosk' ? modProjectName : mainProjectName;
+		releaseFiles[releaseName] = await createRelease(projectName, releaseName, tagName, version);
+	}
+
+	const voskRelease = releaseFiles['vosk'];
+	delete releaseFiles['vosk'];
+
+	await uploadToGitHubRelease(mainProjectName, tagName, isPreRelease, releaseFiles);
+	await uploadToGitHubRelease(modProjectName, tagName, isPreRelease, { 'vosk': voskRelease });
 
 	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 

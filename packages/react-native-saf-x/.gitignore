@@ -64,3 +64,5 @@ android/keystores/debug.keystore
 lib/
 .env
 docs
+
+android/build-*

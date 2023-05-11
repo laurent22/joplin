@@ -76,7 +76,7 @@ const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
+import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { themeStyle } = require('./components/global-style.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
@@ -142,7 +142,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -665,7 +665,7 @@ async function initialize(dispatch: Function) {
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
 	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	void reg.scheduleSync(1000, null, true).then(() => {
+	void reg.scheduleSync(100, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -673,7 +673,7 @@ async function initialize(dispatch: Function) {
 		void DecryptionWorker.instance().scheduleStart();
 	});
 
-	await WelcomeUtils.install(dispatch);
+	await WelcomeUtils.install(Setting.value('locale'), dispatch);
 
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.

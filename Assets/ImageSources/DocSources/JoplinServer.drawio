@@ -1,0 +1,70 @@
+<mxfile host="Electron" modified="2023-04-29T10:24:42.580Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="kcPEKHJGaBvNGFhEOF2g" version="21.2.1" type="device">
+  <diagram name="Page-1" id="5f0bae14-7c28-e335-631c-24af17079c00">
+    <mxGraphModel dx="1306" dy="797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-7" value="Joplin Server" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="630" height="465" as="geometry">
+            <mxRectangle x="350" y="300" width="120" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-2" value="Server application" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="t8PL5avYcYxuv0YEq-6K-7">
+          <mxGeometry x="270" y="92.5" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-3" value="PostgreSQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="t8PL5avYcYxuv0YEq-6K-7">
+          <mxGeometry x="190" y="262.5" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-5" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="t8PL5avYcYxuv0YEq-6K-7" source="t8PL5avYcYxuv0YEq-6K-3" target="t8PL5avYcYxuv0YEq-6K-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="232.5" as="sourcePoint" />
+            <mxPoint x="330" y="182.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-11" value="Note metadata,&lt;br&gt;user accounts, etc." style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="t8PL5avYcYxuv0YEq-6K-5">
+          <mxGeometry x="0.0586" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-4" value="AWS S3" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="t8PL5avYcYxuv0YEq-6K-7">
+          <mxGeometry x="430" y="277.5" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-6" value="Note and attachment&lt;br&gt;content" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=50;exitDy=0;exitPerimeter=0;" edge="1" parent="t8PL5avYcYxuv0YEq-6K-7" source="t8PL5avYcYxuv0YEq-6K-4" target="t8PL5avYcYxuv0YEq-6K-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="242.5" as="sourcePoint" />
+            <mxPoint x="440" y="192.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-12" value="Reverse proxy" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="t8PL5avYcYxuv0YEq-6K-7">
+          <mxGeometry x="70" y="97.5" width="75" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-13" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="t8PL5avYcYxuv0YEq-6K-7" source="t8PL5avYcYxuv0YEq-6K-12" target="t8PL5avYcYxuv0YEq-6K-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="180" y="160" as="sourcePoint" />
+            <mxPoint x="230" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="t8PL5avYcYxuv0YEq-6K-7" source="t8PL5avYcYxuv0YEq-6K-14" target="t8PL5avYcYxuv0YEq-6K-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-14" value="Env file (config)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" vertex="1" parent="t8PL5avYcYxuv0YEq-6K-7">
+          <mxGeometry x="540" y="90" width="60" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-8" value="Joplin Application (mobile, desktop, ...)" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="130" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-9" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="t8PL5avYcYxuv0YEq-6K-8" target="t8PL5avYcYxuv0YEq-6K-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="270" as="sourcePoint" />
+            <mxPoint x="310" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="t8PL5avYcYxuv0YEq-6K-10" value="HTTP REST requests" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="t8PL5avYcYxuv0YEq-6K-9">
+          <mxGeometry x="0.0435" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

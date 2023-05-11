@@ -68,6 +68,10 @@ export class Bridge {
 		return process.argv;
 	}
 
+	public getLocale = () => {
+		return this.electronApp().electronApp().getLocale();
+	};
+
 	// Applies to electron-context-menu@3:
 	//
 	// For now we have to disable spell checking in non-editor text
