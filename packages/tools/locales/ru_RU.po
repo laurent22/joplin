@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Dmitriy Q <krotesk@mail.ru>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -129,9 +131,8 @@ msgstr "%d заметок соответствуют указанному выр
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:254
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -392,6 +393,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Вы уверены, что хотите вернуться к макету по умолчанию? Текущая конфигурация "
+"макета будет потеряна."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
 msgid "Arguments:"
@@ -505,6 +508,9 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"Биометрическая разблокировка не настроена на устройстве. Пожалуйста, "
+"настройте ее, чтобы разблокировать Joplin. Если устройство заблокировано - "
+"выключите и включите его, чтобы сбросить сканирование биометрии."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -610,9 +616,8 @@ msgid "Cannot find \"%s\"."
 msgstr "Не удалось найти \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "Не удалось найти \"%s\"."
+msgstr "Не удалось найти \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
@@ -889,9 +894,8 @@ msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "Преобразовать в заметку"
+msgstr "Преобразование речи в текст..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -1004,9 +1008,8 @@ msgstr ""
 "Пожалуйста, повторите попытку при подключении к Интернету."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "Не удалось проверить вашу личность"
+msgstr "Не удалось проверить вашу личность: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
@@ -1014,9 +1017,8 @@ msgid "Create"
 msgstr "Создать"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Создает новый блокнот."
+msgstr "Создать новый блокнот под родительским блокнотом."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1649,16 +1651,15 @@ msgstr "Включить мягкие отступы"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Включите проверку орфографии в текстовом редакторе"
 
 #: packages/lib/models/Setting.ts:1154
 msgid "Enable table of contents extension"
 msgstr "Включить расширение поддержки оглавления"
 
 #: packages/lib/models/Setting.ts:1059
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "Включить эмодзи markdown"
+msgstr "Включить панель инструментов Markdown"
 
 #: packages/lib/models/Setting.ts:1142
 msgid "Enable typographer support"
@@ -2320,7 +2321,7 @@ msgstr "Элементы, которые не могут быть синхрон
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Присоединяйтесь к нам в Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2513,9 +2514,8 @@ msgid "Loaded"
 msgstr "Загружено"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
-#, fuzzy
 msgid "Loading..."
-msgstr "Обновление..."
+msgstr "Загрузка..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
@@ -2668,9 +2668,8 @@ msgid "Missing required argument: %s"
 msgstr "Отсутствует обязательный аргумент: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "Отсутствует обязательный аргумент: %s"
+msgstr "Отсутствует необходимое значение флага: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
@@ -3123,7 +3122,7 @@ msgstr "Вставить"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "Вставить как текст"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3193,7 +3192,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Пожалуйста, запишите свой голос..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3495,9 +3494,8 @@ msgid "Replace: "
 msgstr "Замена: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "Изменить расположение элементов"
+msgstr "Сброс макета приложения"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3679,7 +3677,7 @@ msgstr "Выбрать все"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:141
 msgid "Select emoji..."
-msgstr "Поиск эмодзи..."
+msgstr "Выбрать эмодзи..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:145
 msgid "Select file..."
@@ -4130,7 +4128,7 @@ msgstr "Синхронизация..."
 
 #: packages/lib/models/Setting.ts:1384
 msgid "Tabloid"
-msgstr "Tabloid"
+msgstr "Таблоид"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:182
 msgid "tag1, tag2, ..."
@@ -4400,6 +4398,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"Реализация WebDAV для %s несовместима с Joplin и поэтому больше не "
+"поддерживается. Пожалуйста, используйте другой метод синхронизации."
 
 #: packages/lib/models/Setting.ts:827
 msgid "Theme"
@@ -4985,11 +4985,11 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
 msgid "Voice typing"
-msgstr ""
+msgstr "Голосовой набор"
 
 #: packages/app-mobile/components/screens/Note.tsx:993
 msgid "Voice typing..."
-msgstr ""
+msgstr "Голосовой набор..."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
