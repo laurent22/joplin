@@ -557,7 +557,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'inserttable', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			const editors = await (window as any).tinymce.init({
@@ -576,6 +576,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				branding: false,
 				statusbar: false,
 				target_list: false,
+				// Handle the first table row as table header.
+				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
+				table_header_type: 'sectionCells',
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
@@ -621,6 +624,22 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							return function() {
 								if (unbind) unbind();
 							};
+						},
+					});
+
+					editor.ui.registry.addMenuButton('inserttable', {
+						icon: 'table',
+						tooltip: 'Table',
+						fetch: (callback: any) => {
+							callback([
+								{
+									type: 'fancymenuitem',
+									fancytype: 'inserttable',
+									onAction: (data: any) => {
+										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
+									},
+								},
+							]);
 						},
 					});
 
