@@ -110,7 +110,7 @@ async function createRelease(projectName: string, name: string, tagName: string,
 	}
 
 	if (name !== 'vosk') {
-		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (_content: string) => {
+		await patcher.updateFileContent(`${rnDir}/services/voiceTyping/vosk.ts`, async (_content: string) => {
 			return readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
 		});
 
