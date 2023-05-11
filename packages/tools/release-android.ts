@@ -95,7 +95,6 @@ function gradleVersionName(content: string) {
 }
 
 async function createRelease(projectName: string, name: string, tagName: string, version: string): Promise<Release> {
-	const originalContents: Record<string, string> = {};
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
 	const patcher = new Patcher(`${rnDir}/patcher-work`);
@@ -179,10 +178,7 @@ async function createRelease(projectName: string, name: string, tagName: string,
 		await copy(builtApk, `${releaseDir}/joplin-latest.apk`);
 	}
 
-	for (const filename in originalContents) {
-		const content = originalContents[filename];
-		await writeFile(filename, content);
-	}
+	await patcher.restore();
 
 	return {
 		downloadUrl: downloadUrl,
