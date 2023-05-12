@@ -120,6 +120,8 @@ async function createRelease(projectName: string, name: string, tagName: string,
 			content = content.replace(/(\s+)"applicationId "net.cozic.joplin"/, '$1"applicationId "net.cozic.joplin-mod"');
 			return content;
 		});
+
+		await patcher.removeFile(`${rnDir}/android/app/src/main/assets/model-fr-fr`);
 	}
 
 	const apkFilename = `joplin-v${suffix}.apk`;
