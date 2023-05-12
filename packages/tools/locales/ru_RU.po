@@ -100,7 +100,7 @@ msgstr "%d ГБ"
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr "storage space %d ГБ"
+msgstr "%d ГБ дискового пространства"
 
 #: packages/lib/models/Setting.ts:1356
 msgid "%d hour"
@@ -835,7 +835,7 @@ msgstr "Расшифровка завершена."
 
 #: packages/lib/Synchronizer.ts:190
 msgid "Completed: %s (%s)"
-msgstr "Завершено: %s"
+msgstr "Завершено: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Compress old changes"
@@ -1478,7 +1478,7 @@ msgid ""
 "specified the note is duplicated in the current notebook."
 msgstr ""
 "Дублирует заметки, соответствующие выражению <note>, в блокнот [notebook]. "
-"Если блокнот не указан, заметки дублируются в текущем блокноте."
+"Если блокнот не указан - заметки дублируются в текущем блокноте."
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
@@ -1651,7 +1651,7 @@ msgstr "Включить мягкие отступы"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr "Включите проверку орфографии в текстовом редакторе"
+msgstr "Включить проверку орфографии в текстовом редакторе"
 
 #: packages/lib/models/Setting.ts:1154
 msgid "Enable table of contents extension"
