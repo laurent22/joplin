@@ -94,11 +94,6 @@ function gradleVersionName(content: string) {
 	return matches[1];
 }
 
-const assembleCommandName = (releaseName: string) => {
-	if (releaseName === 'vosk') return 'assembleMod';
-	return 'assembleRelease';
-};
-
 async function createRelease(projectName: string, name: string, tagName: string, version: string): Promise<Release> {
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
@@ -119,13 +114,20 @@ async function createRelease(projectName: string, name: string, tagName: string,
 			return readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
 		});
 
-		// await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-		// 	content = content.replace(/\s+"react-native-vosk": ".*",/, '');
-		// 	content = content.replace(/(\s+)"applicationId "net.cozic.joplin"/, '$1"applicationId "net.cozic.joplin-mod"');
-		// 	return content;
-		// });
+		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
+			return content;
+		});
 
 		await patcher.removeFile(`${rnDir}/android/app/src/main/assets/model-fr-fr`);
+	}
+
+	if (name === 'vosk') {
+		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+			content = content.replace(/(\s+)applicationId "net.cozic.joplin"/, '$1applicationId "net.cozic.joplin.mod"');
+			content = content.replace(/(\s+)versionName "(\d+\.\d+\.\d+)"/, '$1versionName "$2-mod"');
+			return content;
+		});
 	}
 
 	const apkFilename = `joplin-v${suffix}.apk`;
@@ -148,7 +150,7 @@ async function createRelease(projectName: string, name: string, tagName: string,
 	let restoreDir = null;
 	let apkBuildCmd = '';
 	let apkCleanBuild = '';
-	const apkBuildCmdArgs = [assembleCommandName(name), `-PbuildDir=${buildDirName}`];
+	const apkBuildCmdArgs = ['assembleRelease', `-PbuildDir=${buildDirName}`];
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';
@@ -252,6 +254,9 @@ async function main() {
 		const projectName = releaseName === 'vosk' ? modProjectName : mainProjectName;
 		releaseFiles[releaseName] = await createRelease(projectName, releaseName, tagName, version);
 	}
+
+	console.info('Created releases:');
+	console.info(releaseFiles);
 
 	const voskRelease = releaseFiles['vosk'];
 	delete releaseFiles['vosk'];
