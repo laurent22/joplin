@@ -94,6 +94,11 @@ function gradleVersionName(content: string) {
 	return matches[1];
 }
 
+const assembleCommandName = (releaseName: string) => {
+	if (releaseName === 'vosk') return 'assembleMod';
+	return 'assembleRelease';
+};
+
 async function createRelease(projectName: string, name: string, tagName: string, version: string): Promise<Release> {
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
@@ -114,11 +119,11 @@ async function createRelease(projectName: string, name: string, tagName: string,
 			return readFile(`${rnDir}/services/voiceTyping/vosk.dummy.ts`, 'utf8');
 		});
 
-		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
-			content = content.replace(/(\s+)"applicationId "net.cozic.joplin"/, '$1"applicationId "net.cozic.joplin-mod"');
-			return content;
-		});
+		// await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+		// 	content = content.replace(/\s+"react-native-vosk": ".*",/, '');
+		// 	content = content.replace(/(\s+)"applicationId "net.cozic.joplin"/, '$1"applicationId "net.cozic.joplin-mod"');
+		// 	return content;
+		// });
 
 		await patcher.removeFile(`${rnDir}/android/app/src/main/assets/model-fr-fr`);
 	}
@@ -143,7 +148,7 @@ async function createRelease(projectName: string, name: string, tagName: string,
 	let restoreDir = null;
 	let apkBuildCmd = '';
 	let apkCleanBuild = '';
-	const apkBuildCmdArgs = ['assembleRelease', `-PbuildDir=${buildDirName}`]; // TOOD: change build dir, delete before
+	const apkBuildCmdArgs = [assembleCommandName(name), `-PbuildDir=${buildDirName}`];
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
 		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd packages\\app-mobile\\android && gradlew.bat ${apkBuildCmd}`]);
 		apkBuildCmd = '';

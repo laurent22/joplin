@@ -139,6 +139,16 @@ def reactNativeArchitectures() {
 }
 
 android {
+    flavorDimensions "version"
+    
+    productFlavors {
+        mod {
+            dimension "version"
+            applicationIdSuffix ".mod"
+            versionNameSuffix = "-mod"
+        }
+    }
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
