@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
+
+- Fixed: Fix "Download interrupted" error (b023f58)
+
 ## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
 
 - Improved: Updated packages react-native-paper (v5.6.0)
