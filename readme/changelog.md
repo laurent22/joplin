@@ -233,6 +233,35 @@
 - Fixed: Prevent certain errors from stopping the revision service ([#5531](https://github.com/laurent22/joplin/issues/5531))
 - Fixed: Note export could fail in some cases (regression) ([#6203](https://github.com/laurent22/joplin/issues/6203))
 
+## [v2.7.13](https://github.com/laurent22/joplin/releases/tag/v2.7.13) - 2022-02-24T17:42:12Z
+
+- Fixed: Fixed search marker background color in Markdown editor ([440618e](https://github.com/laurent22/joplin/commit/440618e))
+- Updated translations
+
+## [v2.7.12](https://github.com/laurent22/joplin/releases/tag/v2.7.12) (Pre-release) - 2022-02-14T15:06:14Z
+
+- Fixed: Exported JEX notebook should not contain share metadata ([#6129](https://github.com/laurent22/joplin/issues/6129))
+
+## [v2.7.11](https://github.com/laurent22/joplin/releases/tag/v2.7.11) (Pre-release) - 2022-02-12T13:00:02Z
+
+- Improved: Resize custom icon down to 256px when it is too large ([064891d](https://github.com/laurent22/joplin/commit/064891d))
+- Updated translations
+
+## [v2.7.10](https://github.com/laurent22/joplin/releases/tag/v2.7.10) (Pre-release) - 2022-02-11T18:19:09Z
+
+Important: If you use custom notebook icons and sync with the mobile app, make sure also install the latest 2.7 mobile app.
+
+- New: Add additional time format HH.mm ([#6086](https://github.com/laurent22/joplin/issues/6086) by [@vincentjocodes](https://github.com/vincentjocodes))
+- New: Add support for custom notebook icons ([#6110](https://github.com/laurent22/joplin/issues/6110))
+- Improved: Fixed sync scroll issue ([#6059](https://github.com/laurent22/joplin/issues/6059)) ([#5808](https://github.com/laurent22/joplin/issues/5808) by Caleb John)
+- Improved: Make heading 4, 5 and 6 styling more consistent ([fca5875](https://github.com/laurent22/joplin/commit/fca5875))
+- Improved: Update Mermaid 8.13.5 -&gt; 8.13.9 and Katex dependencies ([#6039](https://github.com/laurent22/joplin/issues/6039) by Helmut K. C. Tessarek)
+- Fixed: Add "Other applications" import menu item ([#6118](https://github.com/laurent22/joplin/issues/6118)) ([#6108](https://github.com/laurent22/joplin/issues/6108) by Helmut K. C. Tessarek)
+- Fixed: Global search focuses text in notes so that edits overwrite highlighted text ([#6040](https://github.com/laurent22/joplin/issues/6040)) ([#6035](https://github.com/laurent22/joplin/issues/6035) by Caleb John)
+- Fixed: Login field was sometimes disabled on Sync Wizard dialog ([#6075](https://github.com/laurent22/joplin/issues/6075))
+- Fixed: Scroll position is not remembered (regression) ([#6043](https://github.com/laurent22/joplin/issues/6043)) ([#6042](https://github.com/laurent22/joplin/issues/6042) by Kenichi Kobayashi)
+- Fixed: Shared resource was not encrypted with correct encryption key ([#6092](https://github.com/laurent22/joplin/issues/6092))
+
 ## [v2.7.8](https://github.com/laurent22/joplin/releases/tag/v2.7.8) (Pre-release) - 2022-01-19T09:35:27Z
 
 - Improved: Disable plugin throttling for now ([6bb0318](https://github.com/laurent22/joplin/commit/6bb0318))
@@ -453,38 +482,6 @@
 - Improved: Various improvements to Markdown import and export ([#5290](https://github.com/laurent22/joplin/issues/5290) by [@CalebJohn](https://github.com/CalebJohn))
 - Fixed: "Move to notebook" would break with empty input ([#5346](https://github.com/laurent22/joplin/issues/5346))
 - Fixed: Prevent it from crashing with too long search queries ([#5380](https://github.com/laurent22/joplin/issues/5380))
-
-## [v2.4.1](https://github.com/laurent22/joplin/releases/tag/v2.4.1) (Pre-release) - 2021-08-21T11:52:30Z
-
-- New: Add Sync Wizard dialog ([fe4900d](https://github.com/laurent22/joplin/commit/fe4900d))
-- New: Add a way to disable a master key ([7faa58e](https://github.com/laurent22/joplin/commit/7faa58e))
-- New: Added "None" sync target to allow disabling synchronisation ([f5f05e6](https://github.com/laurent22/joplin/commit/f5f05e6))
-- Improved: Improved sync locks so that they do not prevent upgrading a sync target ([06ed58b](https://github.com/laurent22/joplin/commit/06ed58b))
-- Improved: Place code-block background in the back in Markdown editor ([#5322](https://github.com/laurent22/joplin/issues/5322) by [@CalebJohn](https://github.com/CalebJohn))
-- Improved: Plugins: Improved support for fitToContent webview property ([#5298](https://github.com/laurent22/joplin/issues/5298)) ([#5288](https://github.com/laurent22/joplin/issues/5288) by [@Ahmad45123](https://github.com/Ahmad45123))
-- Improved: Removes markdown inline code padding ([#5331](https://github.com/laurent22/joplin/issues/5331) by [@CalebJohn](https://github.com/CalebJohn))
-- Improved: Split code block class in two ([#5359](https://github.com/laurent22/joplin/issues/5359) by [@CalebJohn](https://github.com/CalebJohn))
-- Fixed: Add more specific classes for CodeMirror elements ([#5333](https://github.com/laurent22/joplin/issues/5333)) ([#5327](https://github.com/laurent22/joplin/issues/5327) by [@CalebJohn](https://github.com/CalebJohn))
-- Fixed: Fixed file paths when exporting as HTML ([#5325](https://github.com/laurent22/joplin/issues/5325))
-- Fixed: GotoAnything is not working on first try ([#5184](https://github.com/laurent22/joplin/issues/5184))
-
-## [v2.3.5](https://github.com/laurent22/joplin/releases/tag/v2.3.5) - 2021-08-17T06:43:30Z
-
-- Improved: Allow setting a max width for the editor content ([8063c94](https://github.com/laurent22/joplin/commit/8063c94))
-- Improved: Improved Markdown editor code styling, and add CSS classes for code ([#5314](https://github.com/laurent22/joplin/issues/5314)) ([#5297](https://github.com/laurent22/joplin/issues/5297) by [@CalebJohn](https://github.com/CalebJohn))
-- Fixed: Bump hightlight.js to v11.2 ([#5278](https://github.com/laurent22/joplin/issues/5278)) ([#5245](https://github.com/laurent22/joplin/issues/5245) by Roman Musin)
-- Fixed (Regression): Fixed file paths when exporting as HTML ([#5325](https://github.com/laurent22/joplin/issues/5325))
-
-## [v2.3.3](https://github.com/laurent22/joplin/releases/tag/v2.3.3) - 2021-08-14T09:19:40Z
-
-CAUTION: This release will ask you to upgrade your sync target, whether it's Dropbox, OneDrive, Joplin Cloud, etc. Once it is done, only apps version 2.3+ will be able to sync with it, so make sure you are ready to upgrade all your apps before installing this version.
-
-- Improved: Improved E2EE usability by making its state a property of the sync target ([#5276](https://github.com/laurent22/joplin/issues/5276))
-
-## [v2.2.7](https://github.com/laurent22/joplin/releases/tag/v2.2.7) - 2021-08-11T11:03:26Z
-
-- Revert "Plugins: Add ability to make dialogs fit the application window ([#5219](https://github.com/laurent22/joplin/issues/5219))" as it breaks several plugin webviews.
-- Revert "Resolves [#4810](https://github.com/laurent22/joplin/issues/4810), Resolves [#4610](https://github.com/laurent22/joplin/issues/4610): Fix AWS S3 sync error and upgrade framework to v3 ([#5212](https://github.com/laurent22/joplin/issues/5212))" due to incompatibility with some AWS providers.
 
 ## [v2.4.1](https://github.com/laurent22/joplin/releases/tag/v2.4.1) (Pre-release) - 2021-08-21T11:52:30Z
 
