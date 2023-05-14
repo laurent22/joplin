@@ -1,5 +1,5 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
-const RNFetchBlob = require('rn-fetch-blob').default;
+import RNFetchBlob, { Encoding as RNFetchBlobEncoding } from 'react-native-blob-util';
 const RNFS = require('react-native-fs');
 const DocumentPicker = require('react-native-document-picker').default;
 import { openDocument } from '@joplin/react-native-saf-x';
@@ -32,7 +32,7 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 		// We need to use rn-fetch-blob here due to this bug:
 		// https://github.com/itinance/react-native-fs/issues/700
-		return RNFetchBlob.fs.writeFile(path, content, encoding);
+		return RNFetchBlob.fs.writeFile(path, content, encoding as RNFetchBlobEncoding);
 	}
 
 	// same as rm -rf
