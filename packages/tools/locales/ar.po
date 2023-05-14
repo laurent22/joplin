@@ -822,7 +822,7 @@ msgstr "مكتملة: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Compress old changes"
-msgstr ""
+msgstr "ضغّط التغييرات القديمة"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:756
@@ -858,7 +858,7 @@ msgstr "التعارضات (المرفقات)"
 
 #: packages/lib/utils/joplinCloud.ts:171
 msgid "Consolidated billing"
-msgstr ""
+msgstr "الفواتير الموحّدة"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:110
 #, fuzzy
@@ -867,7 +867,7 @@ msgstr "خصائص الملاحظة"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid "Continue"
-msgstr ""
+msgstr "واصل"
 
 #: packages/app-mobile/components/screens/Note.tsx:1010
 msgid "Convert to note"
@@ -975,7 +975,7 @@ msgid ""
 "notebook owner if they are still sharing it.\n"
 "\n"
 "The error was: \"%s\""
-msgstr ""
+msgstr "الخطأ هو: "%s""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:55
 #, fuzzy
@@ -989,8 +989,9 @@ msgstr "تعذرت ترقية المفتاح الرئيسي: %s\\"
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
+msgstr "تعذّر التحقق من حالة المشاركة لهذا الدفتر - الإحباط. يرجى المحاولة مرة أخرى."
 "again when you are connected to the internet."
-msgstr ""
+msgstr "حاول مرة أخرى عند الاتصال بالإنترنت."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
 #, fuzzy
@@ -1120,7 +1121,7 @@ msgstr "غامقة"
 
 #: packages/server/src/services/MustacheService.ts:111
 msgid "Dashboard"
-msgstr ""
+msgstr "لوحة القيادة"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:744
 msgid "Database v%s"
@@ -1140,7 +1141,7 @@ msgstr "أيام"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:109
 msgid "Decrease indent level"
-msgstr ""
+msgstr "تخفيض مستوى المسافة البادئة"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1408,7 +1409,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
 msgid "Done"
-msgstr ""
+msgstr "تم"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1509,7 +1510,7 @@ msgstr "تصديرملف التعريف"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "تعديل تكوين الملف الشخصي..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
 #: packages/lib/models/Setting.ts:892 packages/lib/models/Setting.ts:893
@@ -1560,7 +1561,7 @@ msgstr ""
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:127
 msgid "Emails"
-msgstr ""
+msgstr "البريد الإلكتروني"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:197
 msgid "emphasised text"
@@ -1598,7 +1599,7 @@ msgstr "تفعيل مشغّل الصوت"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "تمكين المصادقة الحيوية ؟"
 
 #: packages/lib/models/Setting.ts:1157
 msgid "Enable deflist syntax"
@@ -1651,7 +1652,7 @@ msgstr "تمكين الاستراحات الناعمة"
 
 #: packages/lib/models/Setting.ts:1048
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "تمكين التدقيق الإملائي في محرر النصوص"
 
 #: packages/lib/models/Setting.ts:1154
 msgid "Enable table of contents extension"
@@ -1789,7 +1790,7 @@ msgstr "الخروج من التطبيق."
 
 #: packages/app-mobile/components/side-menu-content.tsx:347
 msgid "Expand"
-msgstr ""
+msgstr "تمديد"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:394
@@ -1882,7 +1883,7 @@ msgstr "وسوم جديدة:"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:218
 msgid "Find and replace"
-msgstr ""
+msgstr "البحث والاستبدال"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 #, fuzzy
@@ -1930,7 +1931,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1495
 msgid "For example \"%s\""
-msgstr ""
+msgstr "على سبيل المثال، "%s""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -1952,7 +1953,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:632
 msgid "Force path style"
-msgstr ""
+msgstr "إجبار نمط المسار"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:276
 #, fuzzy
@@ -2036,11 +2037,11 @@ msgstr "منح ال"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:48
 msgid "Header %d"
-msgstr ""
+msgstr "رأس %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:280
 msgid "Headers"
-msgstr ""
+msgstr "الرؤوس"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -2090,7 +2091,7 @@ msgstr "تَمييز النَص"
 #: packages/server/src/services/MustacheService.ts:140
 #: packages/server/src/services/MustacheService.ts:271
 msgid "Home"
-msgstr ""
+msgstr "الصفحة الرئيسية"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -2110,7 +2111,7 @@ msgstr "ارتباط تشعبي"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:137
 msgid "Icon"
-msgstr ""
+msgstr "الرمز"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
@@ -2135,7 +2136,7 @@ msgstr "تجاهل أخطاء شهادات TLS"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:103
 msgid "Images"
-msgstr ""
+msgstr "الصّور"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:546
@@ -2241,7 +2242,7 @@ msgstr "في: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:119
 msgid "Increase indent level"
-msgstr ""
+msgstr "زيادة مستوى المسافة البادئة"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:104
 msgid "Indent less"
@@ -2327,7 +2328,7 @@ msgstr "العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:273
 msgid "Items"
-msgstr ""
+msgstr "العناصر"
 
 #: packages/lib/services/ReportService.ts:210
 msgid "Items that cannot be decrypted"
@@ -2339,7 +2340,7 @@ msgstr "العناصر التي لا يمكن مزامنتها"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "انضمّ إلينا على تويتر"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2421,7 +2422,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1541
 msgid "Keep note history for"
@@ -2530,7 +2531,7 @@ msgstr "عنصر قائمة"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:284
 msgid "Lists"
-msgstr ""
+msgstr "القوائم"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #, fuzzy
@@ -2580,11 +2581,11 @@ msgstr "تسجيل الدخول عبر OneDrive"
 
 #: packages/server/src/services/MustacheService.ts:277
 msgid "Logout"
-msgstr ""
+msgstr "تسجيل الخروج"
 
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Logs"
-msgstr ""
+msgstr "السجلات"
 
 #: packages/app-desktop/gui/MenuBar.tsx:795
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:702
@@ -2638,7 +2639,7 @@ msgstr "تنسيق Markdown"
 #: packages/lib/services/interop/InteropService.ts:119
 #: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "تنسيق الماركداون + المعلومات الأساسيّة"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2676,7 +2677,7 @@ msgstr "الاتصالات المتزامنة القصوى"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "أقصى حجم للعنصر"
 
 #: packages/lib/utils/joplinCloud.ts:117
 #, fuzzy
@@ -2796,7 +2797,7 @@ msgstr "النسخة الجديدة: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "المطابقة التالية"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3156,7 +3157,7 @@ msgstr "لصق"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "لصق كنص"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
 msgid "Path:"
@@ -3169,7 +3170,7 @@ msgstr "ملف PDF"
 
 #: packages/lib/utils/joplinCloud.ts:355
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "لكل مستخدم، الحد الأدنى %d مستخدمين."
 
 #: packages/app-mobile/components/screens/Note.tsx:413
 msgid "Permission needed"
@@ -3183,7 +3184,8 @@ msgstr "الإذن باستخدام الكاميرا"
 msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
-msgstr ""
+msgstr "يرجى النقر على \"%s\" للمتابعة، أو تعيين كلمات المرور في القائمة \"%s\""
+"بالأسفل"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid ""
@@ -3202,7 +3204,8 @@ msgstr ""
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
-msgstr ""
+msgstr "يرجى ملاحظة أنه إذا كان الدفتر كبيرًا، فقد يستغرق الأمر بضع دقائق لـِ..."
+"...ظهور جميع الملاحظات على جهاز المستلم."
 
 #: packages/lib/onedrive-api-node-utils.js:118
 msgid ""
@@ -3219,7 +3222,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
 msgid "Please record your voice..."
-msgstr ""
+msgstr "يرجى تسجيل صوتك..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3317,7 +3320,7 @@ msgstr "إضغط لضبط كلمة مرور فك التشفير."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "المطابقة السابقة"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
@@ -3330,7 +3333,7 @@ msgstr "اطبع"
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Priority support"
-msgstr ""
+msgstr "الأولوية العالية"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:730
 msgid "Privacy Policy"
@@ -3338,23 +3341,23 @@ msgstr "سياسة الخصوصية"
 
 #: packages/lib/utils/joplinCloud.ts:316
 msgid "Pro"
-msgstr ""
+msgstr "لإصدار المحترف"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "معالجة الاشتراكات غير المدفوعة بنجاح"
 
 #: packages/server/src/services/TaskService.ts:22
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "معالجة الحسابات الكبيرة بنجاح"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Process user deletions"
-msgstr ""
+msgstr "معالجة حذف المستخدمين بنجاح"
 
 #: packages/server/src/routes/admin/users.ts:247
 msgid "Profile"
-msgstr ""
+msgstr "الملف الشخصي"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
 #, fuzzy
@@ -3386,15 +3389,15 @@ msgstr "مفعَّل"
 
 #: packages/lib/models/Setting.ts:1506
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "مهلة الخادم الوكيل (بالثواني)"
 
 #: packages/lib/models/Setting.ts:1494
 msgid "Proxy URL"
-msgstr ""
+msgstr "عنوان URL للخادم الوكيل"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "زوج مفاتيح العامة والخاصة:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -3510,7 +3513,7 @@ msgstr "تجديد الرمز المميز"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "استبدال"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
 #, fuzzy
@@ -3519,11 +3522,11 @@ msgstr "اختيار الكل"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "استبدال بـ ..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "استبدال: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 #, fuzzy
@@ -3611,7 +3614,7 @@ msgstr "حاوية AWS S3"
 
 #: packages/lib/models/Setting.ts:599
 msgid "S3 region"
-msgstr ""
+msgstr "منطقة S3"
 
 #: packages/lib/models/Setting.ts:621
 #, fuzzy
