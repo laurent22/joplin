@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
+
+- Improved: Updated packages react-native-paper (v5.6.0)
+
 ## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) (Pre-release) - 2023-05-12T12:43:08Z
 
 - Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
