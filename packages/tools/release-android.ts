@@ -259,10 +259,13 @@ async function main() {
 	console.info(releaseFiles);
 
 	const voskRelease = releaseFiles['vosk'];
-	delete releaseFiles['vosk'];
 
 	await uploadToGitHubRelease(mainProjectName, tagName, isPreRelease, releaseFiles);
-	await uploadToGitHubRelease(modProjectName, tagName, isPreRelease, { 'vosk': voskRelease });
+
+	if (voskRelease) {
+		delete releaseFiles['vosk'];
+		await uploadToGitHubRelease(modProjectName, tagName, isPreRelease, { 'vosk': voskRelease });
+	}
 
 	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 
