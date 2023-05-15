@@ -3,12 +3,12 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorCode, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
-import { DbConnection, returningSupported } from '../db';
+import { DbConnection, isUniqueConstraintError, returningSupported } from '../db';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
@@ -20,6 +20,8 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
+
+const modelLogger = Logger.create('ItemModel');
 
 export interface DeleteOptions extends BaseDeleteOptions {
 	deleteChanges?: boolean;
@@ -928,7 +930,16 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
-			item = await super.save(item, options);
+			try {
+				item = await super.save(item, options);
+			} catch (error) {
+				if (isUniqueConstraintError(error)) {
+					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.jop_id}`);
+				} else {
+					throw error;
+				}
+			}
 
 			if (isNew) await this.models().userItem().add(userId, item.id);
 
