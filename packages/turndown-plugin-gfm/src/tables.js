@@ -41,8 +41,8 @@ rules.tableCell = {
   replacement: function (content, node) {
     if (tableShouldBeSkipped(nodeParentTable(node))) return content;
     return cell(content, node)
-  },
-};
+  }
+}
 
 rules.tableRow = {
   filter: 'tr',
@@ -90,7 +90,7 @@ rules.table = {
     var columnCount = tableColCount(node);
     var emptyHeader = ''
     if (columnCount && !secondLineIsDivider) {
-      emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|';
+      emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|'
       for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
         emptyHeader += ' ' + getBorder(getColumnAlignment(node, columnIndex)) + ' |';
       }
@@ -101,11 +101,11 @@ rules.table = {
 }
 
 rules.tableSection = {
-  filter: ["thead", "tbody", "tfoot"],
+  filter: ['thead', 'tbody', 'tfoot'],
   replacement: function (content) {
-    return content;
-  },
-};
+    return content
+  }
+}
 
 // A tr is a heading row if:
 // - the parent is a THEAD
