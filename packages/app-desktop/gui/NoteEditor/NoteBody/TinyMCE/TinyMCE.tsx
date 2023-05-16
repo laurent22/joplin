@@ -25,6 +25,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
+import type { Editor } from 'tinymce';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -592,7 +593,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 				},
-				setup: (editor: any) => {
+				setup: (editor: Editor) => {
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: _('Attach file'),
 						icon: 'paperclip',
@@ -617,7 +618,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						onAction: function() {
 							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' });
 						},
-						onSetup: function(api: any) {
+						onSetup: function(api) {
 							api.setActive(editor.formatter.match('code'));
 							const unbind = editor.formatter.formatChanged('code', api.setActive).unbind;
 
@@ -630,12 +631,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.ui.registry.addMenuButton('inserttable', {
 						icon: 'table',
 						tooltip: 'Table',
-						fetch: (callback: any) => {
+						fetch: (callback) => {
 							callback([
 								{
 									type: 'fancymenuitem',
 									fancytype: 'inserttable',
-									onAction: (data: any) => {
+									onAction: (data) => {
 										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
 									},
 								},
@@ -666,13 +667,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
 					// TODO: remove event on unmount?
-					editor.on('DblClick', (event: any) => {
+					editor.on('DblClick', (event) => {
 						const editable = findEditableContainer(event.target);
 						if (editable) openEditDialog(editor, markupToHtml, dispatchDidUpdate, editable);
 					});
 
 					// This is triggered when an external file is dropped on the editor
-					editor.on('drop', (event: any) => {
+					editor.on('drop', (event) => {
 						// Prevent the message "Dropped file type is not
 						// supported" to show up. It was added in a recent
 						// TinyMCE version and doesn't apply since we do support
@@ -683,7 +684,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						props_onDrop.current(event);
 					});
 
-					editor.on('ObjectResized', (event: any) => {
+					editor.on('ObjectResized', (event) => {
 						if (event.target.nodeName === 'IMG') {
 							editor.fire(TinyMceEditorEvents.JoplinChange);
 							dispatchDidUpdate(editor);
