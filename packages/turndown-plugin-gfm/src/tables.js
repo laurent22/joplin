@@ -22,7 +22,7 @@ function getColumnAlignment(table, columnIndex) {
   var align = '';
 
   for (var i = 0; i < table.rows.length; ++i) {
-    var row = tables.rows[i];
+    var row = table.rows[i];
     if (columnIndex < row.childNodes.length) {
       var cellAlignment = getAlignment(row.childNodes[columnIndex]);
       ++votes[cellAlignment];
@@ -56,7 +56,7 @@ rules.tableRow = {
       const colCount = tableColCount(parentTable);
       for (var i = 0; i < colCount; i++) {
         const childNode = i < node.childNodes.length ? node.childNodes[i] : null;
-        var border = getBorder(getAlignment(childNode));
+        var border = getBorder(getColumnAlignment(parentTable, i));
 
         if (childNode) {
           borderCells += cell(border, node.childNodes[i])
