@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.11.2",
+  "version": "2.11.4",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -27,7 +27,7 @@
   },
   "build": {
     "appId": "net.cozic.joplin-desktop",
-    "compression": "maximum",
+    "compression": "normal",
     "productName": "Joplin",
     "npmRebuild": false,
     "afterSign": "./tools/notarizeMacApp.js",
