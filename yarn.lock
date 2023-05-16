@@ -4970,7 +4970,7 @@ __metadata:
     react-native-image-picker: 5.3.1
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
-    react-native-paper: 5.6.0
+    react-native-paper: 5.8.0
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -5247,7 +5247,7 @@ __metadata:
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
-    markdown-it-multimd-table: 4.2.1
+    markdown-it-multimd-table: 4.2.2
     markdown-it-sub: 1.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
@@ -5302,7 +5302,7 @@ __metadata:
     node-cron: 3.0.2
     node-env-file: 0.1.8
     node-mocks-http: 1.12.2
-    nodemailer: 6.9.1
+    nodemailer: 6.9.2
     nodemon: 2.0.22
     pg: 8.10.0
     pretty-bytes: 5.6.0
@@ -5352,7 +5352,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.60.0
+    sass: 1.62.1
     sharp: 0.32.0
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -22774,10 +22774,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:4.2.1":
-  version: 4.2.1
-  resolution: "markdown-it-multimd-table@npm:4.2.1"
-  checksum: a494d9485fe4b69c37bdf363be1d4243113c2f73b1c5cbb533764c9ffae5b7f3b8f43c9a6c4a147c87368388bbce04dc63fac00bd36cb1000200643ae48eaa43
+"markdown-it-multimd-table@npm:4.2.2":
+  version: 4.2.2
+  resolution: "markdown-it-multimd-table@npm:4.2.2"
+  checksum: 2f7e0c68979a0a23a0722d6ead5838050532b3e5dba714a0a17ba5277a21f7fde5a4f7449a6d031e5541abc0ef1356d7f77b4e6137a73749a95b8fdce90b94ab
   languageName: node
   linkType: hard
 
@@ -24574,10 +24574,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.1":
-  version: 6.9.1
-  resolution: "nodemailer@npm:6.9.1"
-  checksum: b1b9670afc170b4454665abae3fc9acd7e781adb9f579d1c2cd991bf75c647ebe345593f8a057e48d7bf9e4c9a9218869f87db8fb7171c614f557000ab654572
+"nodemailer@npm:6.9.2":
+  version: 6.9.2
+  resolution: "nodemailer@npm:6.9.2"
+  checksum: 76a7ea0cff221914d3ebb666f26f30c9374f84dd80c1b95bb186873295ecf8dea887ed36a1e8d5d90930c36b30f85ceac062fc9efb7bc75821fe497be4103d25
   languageName: node
   linkType: hard
 
@@ -27467,9 +27467,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.6.0":
-  version: 5.6.0
-  resolution: "react-native-paper@npm:5.6.0"
+"react-native-paper@npm:5.8.0":
+  version: 5.8.0
+  resolution: "react-native-paper@npm:5.8.0"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.8
     color: ^3.1.2
@@ -27479,7 +27479,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: ecdd746ff5fe26044a559f3321579cfa560f360bc8c62d8cf020a21cc9befeb7f9c9cae1b74890e1293edcb926f9249d500de98ba1f21638416f1f38ef547b26
+  checksum: b1cdf33b8d3140991c8fb7397ddcb7e898ce592f1ad76f505bda5b2d9cf8d9a6b2da6f73430d1457a48f8b973b548451211e88a3299b6ce99a259215352d5457
   languageName: node
   linkType: hard
 
@@ -29094,16 +29094,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.60.0":
-  version: 1.60.0
-  resolution: "sass@npm:1.60.0"
+"sass@npm:1.62.1":
+  version: 1.62.1
+  resolution: "sass@npm:1.62.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 06e163c37af466ec194cf2ed8dab616372afeb19322d356947d48ea664fc38398ae77c4d91bea9cb0ace954ce289d5518d0f8555ecc49f6bf2539a8ef52fc580
+  checksum: 1b1b3584b38a63dd94156b65f13b90e3f84b170a38c3d5e3fa578b7a32a37aeb349b4926b0eaf9448d48e955e86b1ee01b13993f19611dad8068af07a607c13b
   languageName: node
   linkType: hard
 
