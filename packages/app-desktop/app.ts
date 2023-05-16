@@ -45,6 +45,7 @@ import libCommands from '@joplin/lib/commands/index';
 import { homedir } from 'os';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const electronContextMenu = require('./services/electron-context-menu');
+const ipcRenderer = require('electron').ipcRenderer;
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = mainScreenCommands
@@ -488,6 +489,8 @@ class Application extends BaseApplication {
 		shim.setTimeout(() => {
 			void AlarmService.garbageCollect();
 		}, 1000 * 60 * 60);
+
+		ipcRenderer.send('hide-splash');
 
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
 			// Keep it hidden

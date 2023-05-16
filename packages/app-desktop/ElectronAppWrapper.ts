@@ -65,6 +65,21 @@ export default class ElectronAppWrapper {
 		return this.initialCallbackUrl_;
 	}
 
+	private async createSplashScreen() {
+		const splash = new BrowserWindow({
+			width: 500,
+			height: 300,
+			transparent: true,
+			frame: false,
+			alwaysOnTop: true,
+		});
+
+		await splash.loadFile('splash.html');
+		splash.center();
+
+		return splash;
+	}
+
 	public createWindow() {
 		// Set to true to view errors if the application does not start
 		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
@@ -354,6 +369,12 @@ export default class ElectronAppWrapper {
 
 		const alreadyRunning = this.ensureSingleInstance();
 		if (alreadyRunning) return;
+
+		const splash = await this.createSplashScreen();
+
+		ipcMain.on('hide-splash', () => {
+			splash.destroy();
+		});
 
 		this.createWindow();
 
