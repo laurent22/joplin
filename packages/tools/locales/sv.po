@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -214,11 +216,11 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd "
-"\"toggle\" för att växla mellan givna uppgifter mellan slutförda och inte "
-"slutförda tillstånd (Om målet är en vanlig anteckning kommer den att "
-"konverteras till en att-göra). Använd \"clear\" för att konvertera uppgiften "
-"att-göra tillbaka till en vanlig anteckning."
+"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd \"toggle"
+"\" för att växla mellan givna uppgifter mellan slutförda och inte slutförda "
+"tillstånd (Om målet är en vanlig anteckning kommer den att konverteras till "
+"en att-göra). Använd \"clear\" för att konvertera uppgiften att-göra "
+"tillbaka till en vanlig anteckning."
 
 #: packages/lib/models/Setting.ts:1382
 msgid "A3"
@@ -362,8 +364,8 @@ msgstr ""
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Tvetydig anteckningsbok \"%s\". Använd kort anteckningsbok-id istället - "
 "tryck på \"ti\" för att se det korta anteckningsbok-id:t"
@@ -507,6 +509,9 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"Biometrisk upplåsning är inte inställd på enheten. Ställ in det för att låsa "
+"upp Joplin. Om enheten är låst, överväg att stänga av och på den för att "
+"återställa biometrisk skanning."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -894,9 +899,8 @@ msgid "Convert to todo"
 msgstr "Konvertera till att-göra"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "Konvertera till anteckning"
+msgstr "Konverterar tal till text..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -1009,9 +1013,8 @@ msgstr ""
 "avbryter. Försök igen när du är ansluten till internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "Det gick inte att verifiera din identitet"
+msgstr "Det gick inte att verifiera din identitet: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
@@ -1663,9 +1666,8 @@ msgid "Enable table of contents extension"
 msgstr "Aktivera innehållsförteckningen"
 
 #: packages/lib/models/Setting.ts:1059
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "Aktivera markdown-emoji"
+msgstr "Aktivera Markdown-verktygsfältet"
 
 #: packages/lib/models/Setting.ts:1142
 msgid "Enable typographer support"
@@ -2518,9 +2520,8 @@ msgid "Loaded"
 msgstr "Inläst"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
-#, fuzzy
 msgid "Loading..."
-msgstr "Uppdaterar..."
+msgstr "Läser in..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
@@ -2673,7 +2674,7 @@ msgstr "Saknade obligatoriskt argument: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
 msgid "Missing required flag value: %s"
-msgstr ""
+msgstr "Obligatoriskt flaggvärde saknas: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:457
 msgid "Mobile data - auto-sync disabled"
@@ -3150,8 +3151,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
-"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan "
-"\"%s\" nedan."
+"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan \"%s"
+"\" nedan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid ""
@@ -3189,7 +3190,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Spela in din röst..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -4023,7 +4024,7 @@ msgstr "Byt till anteckningstyp"
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
 msgid "Switch to profile %d"
-msgstr "Byt till profilen %d"
+msgstr "Byt till profil %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -4976,11 +4977,11 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
 msgid "Voice typing"
-msgstr ""
+msgstr "Röstskrivning"
 
 #: packages/app-mobile/components/screens/Note.tsx:993
 msgid "Voice typing..."
-msgstr ""
+msgstr "Röstskrivning..."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"

@@ -175,6 +175,10 @@ export default class FileApiDriverJoplinServer {
 		// they can have names such as ".resources/xxxxxxxxxx'
 	}
 
+	private isRejectedBySyncTargetError(error: any) {
+		return error.code === 413 || error.code === 409 || error.httpCode === 413 || error.httpCode === 409;
+	}
+
 	public async put(path: string, content: any, options: any = null) {
 		try {
 			const output = await this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
@@ -182,7 +186,7 @@ export default class FileApiDriverJoplinServer {
 			}, options);
 			return output;
 		} catch (error) {
-			if (error.code === 413) {
+			if (this.isRejectedBySyncTargetError(error)) {
 				throw new JoplinError(error.message, 'rejectedByTarget');
 			}
 			throw error;
@@ -190,7 +194,15 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	public async multiPut(items: MultiPutItem[], options: any = null) {
-		return this.api().exec('PUT', 'api/batch_items', null, { items: items }, null, options);
+		const output = await this.api().exec('PUT', 'api/batch_items', null, { items: items }, null, options);
+
+		for (const [, response] of Object.entries<any>(output.items)) {
+			if (response.error && this.isRejectedBySyncTargetError(response.error)) {
+				response.error.code = 'rejectedByTarget';
+			}
+		}
+
+		return output;
 	}
 
 	public async delete(path: string) {

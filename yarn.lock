@@ -4984,7 +4984,7 @@ __metadata:
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
     sqlite3: 5.1.6
-    styled-components: 5.3.9
+    styled-components: 5.3.10
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
@@ -5028,7 +5028,7 @@ __metadata:
     "@react-native-community/datetimepicker": 6.7.5
     "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.9
-    "@react-native-community/push-notification-ios": 1.10.1
+    "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
@@ -5059,6 +5059,7 @@ __metadata:
     react: 18.2.0
     react-native: 0.70.6
     react-native-action-button: 2.8.5
+    react-native-blob-util: 0.17.3
     react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.2.0
@@ -5073,7 +5074,7 @@ __metadata:
     react-native-image-picker: 5.3.1
     react-native-image-resizer: 1.4.5
     react-native-modal-datetime-picker: 14.0.1
-    react-native-paper: 5.5.2
+    react-native-paper: 5.8.0
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-reanimated: 3.0.2
@@ -5089,7 +5090,6 @@ __metadata:
     react-native-webview: 11.26.1
     react-redux: 7.2.9
     redux: 4.2.1
-    rn-fetch-blob: 0.12.0
     stream: 0.0.2
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
@@ -5262,7 +5262,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     style-loader: 3.3.2
-    styled-components: 5.3.9
+    styled-components: 5.3.10
     ts-jest: 29.0.5
     ts-loader: 9.4.2
     typescript: 4.9.4
@@ -5351,7 +5351,7 @@ __metadata:
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
-    markdown-it-multimd-table: 4.2.1
+    markdown-it-multimd-table: 4.2.2
     markdown-it-sub: 1.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
@@ -5406,7 +5406,7 @@ __metadata:
     node-cron: 3.0.2
     node-env-file: 0.1.8
     node-mocks-http: 1.12.2
-    nodemailer: 6.9.1
+    nodemailer: 6.9.2
     nodemon: 2.0.22
     pg: 8.10.0
     pretty-bytes: 5.6.0
@@ -5442,7 +5442,7 @@ __metadata:
     dayjs: 1.11.7
     execa: 4.1.0
     fs-extra: 11.1.1
-    gettext-extractor: 3.7.1
+    gettext-extractor: 3.7.2
     gettext-parser: 6.0.0
     glob: 8.1.0
     gulp: 4.0.2
@@ -5456,7 +5456,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.60.0
+    sass: 1.62.1
     sharp: 0.32.0
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -7095,15 +7095,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/push-notification-ios@npm:1.10.1":
-  version: 1.10.1
-  resolution: "@react-native-community/push-notification-ios@npm:1.10.1"
+"@react-native-community/push-notification-ios@npm:1.11.0":
+  version: 1.11.0
+  resolution: "@react-native-community/push-notification-ios@npm:1.11.0"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
     react: ">=16.6.3"
     react-native: ">=0.58.4"
-  checksum: 64de91355791618f770057a903e3004b76d0f627e8db1477add81091db7e9675ef8d9a0fea6f20b7d166701a8b193f4e87396ae95c6778f42ca7bf3055d3e901
+  checksum: d8c8cdd0d4e8112752a13bf2c426618ec8edd91eacadf03f05375648b5f12ffa761e8676e9d6ac9e5bc5ded73c991ab2219c67fe02e110dfaf38f4cb59695868
   languageName: node
   linkType: hard
 
@@ -17456,9 +17456,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-extractor@npm:3.7.1":
-  version: 3.7.1
-  resolution: "gettext-extractor@npm:3.7.1"
+"gettext-extractor@npm:3.7.2":
+  version: 3.7.2
+  resolution: "gettext-extractor@npm:3.7.2"
   dependencies:
     "@types/glob": 5 - 7
     "@types/parse5": ^5
@@ -17467,7 +17467,7 @@ __metadata:
     parse5: 5 - 6
     pofile: 1.0.x
     typescript: 4 - 5
-  checksum: c78b07ab602c1cc97260f0e8ae4f947e5a06b8151581dd2c50e719f7ba79abc1686eb05cf443392ae7b5ab339083614e1d3476a3744d22d43e87a647e8d0f904
+  checksum: e402b17b1f07b79469528a60dd6379287337a49cada6804fc02843b3cda06c5e591192c1ed58bbe98bc558f4d37a604d34713056321e80cc2fed949895b907c6
   languageName: node
   linkType: hard
 
@@ -17664,20 +17664,6 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: 78a8ea942331f08ed2e055cb5b9e40fe6f46f579d7fd3d694f3412fe5db23223d29b7fee1575440202e9a7ff9a72ab106a39fee39934c7bedafe5e5f8ae20134
-  languageName: node
-  linkType: hard
-
-"glob@npm:7.0.6":
-  version: 7.0.6
-  resolution: "glob@npm:7.0.6"
-  dependencies:
-    fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^3.0.2
-    once: ^1.3.0
-    path-is-absolute: ^1.0.0
-  checksum: 6ad065f51982f9a76f7052984121c95bca376ea02060b21200ad62b400422b05f0dc331f72da89a73c21a2451cbe9bec16bb17dcf37a516dc51bbbb6efe462a1
   languageName: node
   linkType: hard
 
@@ -22906,10 +22892,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:4.2.1":
-  version: 4.2.1
-  resolution: "markdown-it-multimd-table@npm:4.2.1"
-  checksum: a494d9485fe4b69c37bdf363be1d4243113c2f73b1c5cbb533764c9ffae5b7f3b8f43c9a6c4a147c87368388bbce04dc63fac00bd36cb1000200643ae48eaa43
+"markdown-it-multimd-table@npm:4.2.2":
+  version: 4.2.2
+  resolution: "markdown-it-multimd-table@npm:4.2.2"
+  checksum: 2f7e0c68979a0a23a0722d6ead5838050532b3e5dba714a0a17ba5277a21f7fde5a4f7449a6d031e5541abc0ef1356d7f77b4e6137a73749a95b8fdce90b94ab
   languageName: node
   linkType: hard
 
@@ -24706,10 +24692,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.9.1":
-  version: 6.9.1
-  resolution: "nodemailer@npm:6.9.1"
-  checksum: b1b9670afc170b4454665abae3fc9acd7e781adb9f579d1c2cd991bf75c647ebe345593f8a057e48d7bf9e4c9a9218869f87db8fb7171c614f557000ab654572
+"nodemailer@npm:6.9.2":
+  version: 6.9.2
+  resolution: "nodemailer@npm:6.9.2"
+  checksum: 76a7ea0cff221914d3ebb666f26f30c9374f84dd80c1b95bb186873295ecf8dea887ed36a1e8d5d90930c36b30f85ceac062fc9efb7bc75821fe497be4103d25
   languageName: node
   linkType: hard
 
@@ -27429,6 +27415,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-blob-util@npm:0.17.3":
+  version: 0.17.3
+  resolution: "react-native-blob-util@npm:0.17.3"
+  dependencies:
+    base-64: 0.1.0
+    glob: ^7.2.3
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 32121a10f6015b97c1a2fd4aa089c68855098b8cfc706c8fa36efb1f8aa601d8275b64ebb3d81877f93d818301891d8cdca2218f09a88b02cf9a374461ed02e2
+  languageName: node
+  linkType: hard
+
 "react-native-camera@npm:4.2.1":
   version: 4.2.1
   resolution: "react-native-camera@npm:4.2.1"
@@ -27616,9 +27615,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.5.2":
-  version: 5.5.2
-  resolution: "react-native-paper@npm:5.5.2"
+"react-native-paper@npm:5.8.0":
+  version: 5.8.0
+  resolution: "react-native-paper@npm:5.8.0"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.8
     color: ^3.1.2
@@ -27628,7 +27627,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: fd87b64409e51a2a8c64019710c79c17d6dd016ea3744d869e9aa6a891093418ca6a2326f8ab063ef460d781459b8ed676952a030e64acf8312bc4d05a4c50eb
+  checksum: b1cdf33b8d3140991c8fb7397ddcb7e898ce592f1ad76f505bda5b2d9cf8d9a6b2da6f73430d1457a48f8b973b548451211e88a3299b6ce99a259215352d5457
   languageName: node
   linkType: hard
 
@@ -29003,26 +29002,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rn-fetch-blob@npm:0.12.0":
-  version: 0.12.0
-  resolution: "rn-fetch-blob@npm:0.12.0"
-  dependencies:
-    base-64: 0.1.0
-    glob: 7.0.6
-  checksum: 56e5832be583e97d58f955c0c4f6dcb0eb62c97dde331182c6effb726253731cb555d4a5f6c81079ed2fcb957f81633cbe95b37d326d063405f912506de20ff4
-  languageName: node
-  linkType: hard
-
-"rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::locator=root%40workspace%3A.":
-  version: 0.12.0
-  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=9431c2&locator=root%40workspace%3A."
-  dependencies:
-    base-64: 0.1.0
-    glob: 7.0.6
-  checksum: 6535ee347b3e76733a10c3873c14622b35613caa86242536b68f130b75a3379d9bb060ad5c8832d78e639c88869e321c288e5c8e89373cdb0c14f23253c31c50
-  languageName: node
-  linkType: hard
-
 "roarr@npm:^2.15.3":
   version: 2.15.4
   resolution: "roarr@npm:2.15.4"
@@ -29273,16 +29252,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.60.0":
-  version: 1.60.0
-  resolution: "sass@npm:1.60.0"
+"sass@npm:1.62.1":
+  version: 1.62.1
+  resolution: "sass@npm:1.62.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 06e163c37af466ec194cf2ed8dab616372afeb19322d356947d48ea664fc38398ae77c4d91bea9cb0ace954ce289d5518d0f8555ecc49f6bf2539a8ef52fc580
+  checksum: 1b1b3584b38a63dd94156b65f13b90e3f84b170a38c3d5e3fa578b7a32a37aeb349b4926b0eaf9448d48e955e86b1ee01b13993f19611dad8068af07a607c13b
   languageName: node
   linkType: hard
 
@@ -31028,9 +31007,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.9":
-  version: 5.3.9
-  resolution: "styled-components@npm:5.3.9"
+"styled-components@npm:5.3.10":
+  version: 5.3.10
+  resolution: "styled-components@npm:5.3.10"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
@@ -31046,7 +31025,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 404311cc7028259218674d3f9f39bdda2342fc02f2ebbba8f057ef560b2ad205c5bd63b82deed4d0bf217ac7eb960d0e1127510b0b606e32cbd5a48c10373ce8
+  checksum: 46dfea6c435516b22aae25798cf01f9b08423cfb517cfea9db760a18c941bddf79abaad9bedb9b3cca6faad24bd7eb4ef4dd21ae84b356ae29d279b2d571f7b7
   languageName: node
   linkType: hard
 

@@ -45,12 +45,13 @@ export default class JoplinServerApi {
 	private options_: Options;
 	private session_: Session;
 	private debugRequests_: boolean = false;
+	private debugRequestsShowPasswords_: boolean = false;
 
 	public constructor(options: Options) {
 		this.options_ = options;
 
-		if (options.env === Env.Dev) {
-			// this.debugRequests_ = true;
+		if (options.env !== Env.Dev) {
+			this.debugRequestsShowPasswords_ = false;
 		}
 	}
 
@@ -97,15 +98,15 @@ export default class JoplinServerApi {
 			try {
 				const output = JSON.parse(o);
 				if (!output) return o;
-				if (output.password) output.password = '******';
+				if (output.password && !this.debugRequestsShowPasswords_) output.password = '******';
 				return JSON.stringify(output);
 			} catch (error) {
 				return o;
 			}
 		} else {
 			const output = { ...o };
-			if (output.password) output.password = '******';
-			if (output['X-API-AUTH']) output['X-API-AUTH'] = '******';
+			if (output.password && !this.debugRequestsShowPasswords_) output.password = '******';
+			if (output['X-API-AUTH'] && !this.debugRequestsShowPasswords_) output['X-API-AUTH'] = '******';
 			return output;
 		}
 	}

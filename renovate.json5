@@ -14,6 +14,11 @@
 	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
+
+	// It seems we need to delete the branches after merge or else it causes this problem:
+	// https://github.com/renovatebot/renovate/discussions/21256#discussioncomment-5898418
+	"pruneBranchAfterAutomerge": true,
+	
 	"ignorePaths": [
 		"**/bower_components/**",
 		"**/node_modules/**",

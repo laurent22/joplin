@@ -145,7 +145,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -662,7 +662,7 @@ async function initialize(dispatch: Function) {
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
 	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	void reg.scheduleSync(1000, null, true).then(() => {
+	void reg.scheduleSync(100, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
