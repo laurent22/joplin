@@ -181,7 +181,6 @@
  "Could not switch profile: %s": "无法切换到配置文件：%s",
  "Could not upgrade master key: %s": "无法升级主密钥(master key)：%s",
  "Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": "无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。",
- "Could not verify your identify": "无法验证您的身份",
  "Create": "创建",
  "Create a notebook": "新建一个笔记本",
  "Create new profile...": "创建新的配置文件...",

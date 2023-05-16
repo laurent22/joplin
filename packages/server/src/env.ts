@@ -31,6 +31,7 @@ const defaultEnvValues: EnvVariables = {
 	// check. https://github.com/laurent22/joplin/issues/5738
 
 	MAX_TIME_DRIFT: 2000,
+	NTP_SERVER: 'pool.ntp.org:123',
 
 	// ==================================================
 	// URL config
@@ -109,6 +110,7 @@ export interface EnvVariables {
 	COOKIES_SECURE: boolean;
 	RUNNING_IN_DOCKER: boolean;
 	MAX_TIME_DRIFT: number;
+	NTP_SERVER: string;
 
 	APP_BASE_URL: string;
 	USER_CONTENT_BASE_URL: string;

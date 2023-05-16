@@ -72,3 +72,4 @@ components/NoteEditor/CodeMirror/CodeMirror.bundle.min.js
 components/NoteEditor/**/*.bundle.js.md5
 
 utils/fs-driver-android.js
+android/app/build-*

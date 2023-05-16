@@ -76,7 +76,7 @@ const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
+import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { themeStyle } = require('./components/global-style.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
@@ -670,7 +670,7 @@ async function initialize(dispatch: Function) {
 		void DecryptionWorker.instance().scheduleStart();
 	});
 
-	await WelcomeUtils.install(dispatch);
+	await WelcomeUtils.install(Setting.value('locale'), dispatch);
 
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.

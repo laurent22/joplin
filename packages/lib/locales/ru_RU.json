@@ -184,7 +184,6 @@
  "Could not switch profile: %s": "Не удалось переключить профиль: %s",
  "Could not upgrade master key: %s": "Не удалось обновить мастер-ключ: %s",
  "Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": "Не удалось проверить состояние общего доступа к этому блокноту - прерывание. Пожалуйста, повторите попытку при подключении к Интернету.",
- "Could not verify your identify": "Не удалось проверить вашу личность",
  "Create": "Создать",
  "Create a notebook": "Создать новый блокнот",
  "Create new profile...": "Создание нового профиля...",

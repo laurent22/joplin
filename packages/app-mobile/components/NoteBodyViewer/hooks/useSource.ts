@@ -3,7 +3,10 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import Logger from '@joplin/lib/Logger';
 const { assetsToHeaders } = require('@joplin/renderer');
+
+const logger = Logger.create('NoteBodyViewer/useSource');
 
 interface UseSourceResult {
 	// [html] can be null if the note is still being rendered.
@@ -18,6 +21,23 @@ function usePrevious(value: any, initialValue: any = null): any {
 	});
 	return ref.current;
 }
+
+const onlyCheckboxHasChangedHack = (previousBody: string, newBody: string) => {
+	if (previousBody.length !== newBody.length) return false;
+
+	for (let i = 0; i < previousBody.length; i++) {
+		const c1 = previousBody.charAt(i);
+		const c2 = newBody.charAt(i);
+
+		if (c1 !== c2) {
+			if (c1 === ' ' && (c2 === 'x' || c2 === 'X')) continue;
+			if (c2 === ' ' && (c1 === 'x' || c1 === 'X')) continue;
+			return false;
+		}
+	}
+
+	return true;
+};
 
 export default function useSource(noteBody: string, noteMarkupLanguage: number, themeId: number, highlightedKeywords: string[], noteResources: any, paddingBottom: number, noteHash: string): UseSourceResult {
 	const [html, setHtml] = useState<string>('');
@@ -42,14 +62,20 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 
 	// To address https://github.com/laurent22/joplin/issues/433
 	//
-	// If a checkbox in a note is ticked, the body changes, which normally
-	// would trigger a re-render of this component, which has the
-	// unfortunate side effect of making the view scroll back to the top.
-	// This re-rendering however is uncessary since the component is
-	// already visually updated via JS. So here, if the note has not
-	// changed, we prevent the component from updating. This fixes the
-	// above issue. A drawback of this is if the note is updated via sync,
-	// this change will not be displayed immediately.
+	// If a checkbox in a note is ticked, the body changes, which normally would
+	// trigger a re-render of this component, which has the unfortunate side
+	// effect of making the view scroll back to the top. This re-rendering
+	// however is uncessary since the component is already visually updated via
+	// JS. So here, if the note has not changed, we prevent the component from
+	// updating. This fixes the above issue. A drawback of this is if the note
+	// is updated via sync, this change will not be displayed immediately.
+	//
+	// 2022-05-03: However we sometimes need the HTML to be updated, even when
+	// only the body has changed - for example when attaching a resource, or
+	// when adding text via speech recognition. So the logic has been narrowed
+	// down so that updates are skipped only when checkbox has been changed.
+	// Checkboxes still work as expected, without making the note scroll, and
+	// other text added to the note is displayed correctly.
 	//
 	// IMPORTANT: KEEP noteBody AS THE FIRST dependency in the array as the
 	// below logic rely on this.
@@ -62,9 +88,13 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 		return accum;
 	}, {});
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
+	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousDeps[0], noteBody);
 
 	useEffect(() => {
-		if (onlyNoteBodyHasChanged) return () => {};
+		if (onlyNoteBodyHasChanged && onlyCheckboxesHaveChanged) {
+			logger.info('Only a checkbox has changed - not updating HTML');
+			return () => {};
+		}
 
 		let cancelled = false;
 

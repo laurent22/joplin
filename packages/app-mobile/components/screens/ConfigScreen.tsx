@@ -751,6 +751,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			</View>
 		);
 
+		settingComps.push(
+			<View key="version_info_hermes" style={this.styles().settingContainer}>
+				<Text style={this.styles().settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
+			</View>
+		);
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />

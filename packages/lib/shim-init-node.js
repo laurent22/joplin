@@ -139,7 +139,7 @@ function shimInit(options = null) {
 	};
 
 	shim.detectAndSetLocale = function(Setting) {
-		let locale = process.env.LANG;
+		let locale = shim.isElectron() ? shim.electronBridge().getLocale() : process.env.LANG;
 		if (!locale) locale = defaultLocale();
 		locale = locale.split('.');
 		locale = locale[0];

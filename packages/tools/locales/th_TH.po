@@ -16,15 +16,15 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.0\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:657
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- กล้อง: สำหรับถ่ายภาพและแนบไว้กับบันทึก"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:660
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- สถานที่ตั้ง: สำหรับแนบข้อมูลที่ตั้งทางภูมิศาสตร์ไว้กับบันทึก"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:654
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -83,7 +83,7 @@ msgstr "&เครื่องมือ"
 msgid "&View"
 msgstr "&มุมมอง"
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1539
 msgid "%d days"
 msgstr "%d วัน"
 
@@ -97,11 +97,11 @@ msgstr ""
 msgid "%d GB storage space"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1345
+#: packages/lib/models/Setting.ts:1356
 msgid "%d hour"
 msgstr "%d ชั่วโมง"
 
-#: packages/lib/models/Setting.ts:1346 packages/lib/models/Setting.ts:1347
+#: packages/lib/models/Setting.ts:1357 packages/lib/models/Setting.ts:1358
 msgid "%d hours"
 msgstr "%d ชั่วโมง"
 
@@ -116,8 +116,8 @@ msgstr ""
 msgid "%d MB per note or attachment"
 msgstr "ไฟล์แนบ"
 
-#: packages/lib/models/Setting.ts:1342 packages/lib/models/Setting.ts:1343
-#: packages/lib/models/Setting.ts:1344
+#: packages/lib/models/Setting.ts:1353 packages/lib/models/Setting.ts:1354
+#: packages/lib/models/Setting.ts:1355
 msgid "%d minutes"
 msgstr "%d นาที"
 
@@ -125,8 +125,8 @@ msgstr "%d นาที"
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:135
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:144
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:254
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
 msgid "%s"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "%s - Copy"
 msgstr "%s - คัดลอก"
 
-#: packages/lib/services/ReportService.ts:183
+#: packages/lib/services/ReportService.ts:185
 #, fuzzy
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) ไม่สามารถอัพโหลด: %s"
@@ -144,7 +144,7 @@ msgstr "%s (%s) ไม่สามารถอัพโหลด: %s"
 msgid "%s (%s) would like to share a notebook with you."
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:262
+#: packages/lib/services/ReportService.ts:264
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
@@ -162,7 +162,7 @@ msgstr "%s / %s"
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/versionInfo.ts:58
+#: packages/lib/versionInfo.ts:60
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
@@ -174,23 +174,23 @@ msgstr "%s = %s"
 msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: packages/lib/services/ReportService.ts:242
-#: packages/lib/services/ReportService.ts:243
 #: packages/lib/services/ReportService.ts:244
-#: packages/lib/services/ReportService.ts:247
+#: packages/lib/services/ReportService.ts:245
+#: packages/lib/services/ReportService.ts:246
+#: packages/lib/services/ReportService.ts:249
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/ReportService.ts:297
+#: packages/lib/services/ReportService.ts:299
 msgid "%s: %d notes"
 msgstr "%s: %d บันทึก"
 
-#: packages/lib/services/ReportService.ts:279
+#: packages/lib/services/ReportService.ts:281
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
 #: packages/app-cli/app/cli-utils.js:156
-#: packages/lib/services/ReportService.ts:217
+#: packages/lib/services/ReportService.ts:219
 msgid "%s: %s"
 msgstr "%s: %s"
 
@@ -210,15 +210,15 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1371
+#: packages/lib/models/Setting.ts:1382
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1369
+#: packages/lib/models/Setting.ts:1380
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1372
+#: packages/lib/models/Setting.ts:1383
 msgid "A5"
 msgstr "A5"
 
@@ -272,7 +272,7 @@ msgstr "การกระทำ"
 msgid "Actual Size"
 msgstr "ขนาดจริง"
 
-#: packages/app-mobile/components/screens/Note.tsx:1113
+#: packages/app-mobile/components/screens/Note.tsx:1212
 msgid "Add body"
 msgstr "เพิ่มเนื้อความ"
 
@@ -289,7 +289,7 @@ msgstr "เพิ่มหรือลบแท็ก:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1186
+#: packages/app-mobile/components/screens/Note.tsx:1286
 msgid "Add title"
 msgstr "เพิ่มชื่อเรื่อง"
 
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Admin dashboard"
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid "Advanced options"
 msgstr "ตัวเลือกขั้นสูง"
 
@@ -320,8 +320,8 @@ msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:484
-#: packages/app-mobile/components/screens/Notes.tsx:203
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:504
+#: packages/app-mobile/components/screens/Notes.tsx:174
 #: packages/app-mobile/components/side-menu-content.tsx:473
 msgid "All notes"
 msgstr "บันทึกทั้งหมด"
@@ -362,12 +362,12 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "มีอัพเดทใหม่ คุณต้องการดาวน์โหลดเลยหรือไม่?"
 
-#: packages/lib/models/Setting.ts:2478
+#: packages/lib/models/Setting.ts:2496
 #, fuzzy
 msgid "Appearance"
 msgstr "รูปร่างหน้าตา"
 
-#: packages/lib/models/Setting.ts:2483
+#: packages/lib/models/Setting.ts:2501
 msgid "Application"
 msgstr "แอปพลิเคชัน"
 
@@ -375,7 +375,7 @@ msgstr "แอปพลิเคชัน"
 msgid "Apply"
 msgstr "ใช้"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:45
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:36
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr ""
 
@@ -399,16 +399,16 @@ msgid "Attach"
 msgstr "แนบ..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:604
-#: packages/app-mobile/components/screens/Note.tsx:864
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
+#: packages/app-mobile/components/screens/Note.tsx:869
 msgid "Attach file"
 msgstr "แนบไฟล์"
 
-#: packages/app-mobile/components/screens/Note.tsx:868
+#: packages/app-mobile/components/screens/Note.tsx:873
 msgid "Attach photo"
 msgstr "แนบรูปภาพ"
 
-#: packages/app-mobile/components/screens/Note.tsx:901
+#: packages/app-mobile/components/screens/Note.tsx:969
 msgid "Attach..."
 msgstr "แนบ..."
 
@@ -432,12 +432,12 @@ msgstr "ไฟล์แนบ"
 msgid "Attachment download behaviour"
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:233
+#: packages/lib/services/ReportService.ts:235
 #, fuzzy
 msgid "Attachments"
 msgstr "ไฟล์แนบ"
 
-#: packages/lib/services/ReportService.ts:257
+#: packages/lib/services/ReportService.ts:259
 msgid "Attachments that could not be downloaded"
 msgstr "ไฟล์แนบไม่สามารถดาวน์โหลดได้"
 
@@ -455,7 +455,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:149
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Authorisation token:"
 msgstr "Token สำหรับการขออนุมัติ:"
 
@@ -472,7 +472,7 @@ msgstr ""
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "จับคู่อัตโนมัติ {}, (), \"\", ฯลฯ"
 
-#: packages/lib/models/Setting.ts:1329
+#: packages/lib/models/Setting.ts:1340
 #, fuzzy
 msgid "Automatically check for updates"
 msgstr "ตรวจสอบการอัพเดท..."
@@ -493,6 +493,13 @@ msgstr "กลับ"
 
 #: packages/lib/utils/joplinCloud.ts:294
 msgid "Basic"
+msgstr ""
+
+#: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
+msgid ""
+"Biometric unlock is not setup on the device. Please set it up in order to "
+"unlock Joplin. If the device is on lockout, consider switching it off and on "
+"to reset biometrics scanning."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
@@ -526,10 +533,11 @@ msgstr "แบ่งปัน"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:274
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:317
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:337
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:684
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
 #: packages/app-mobile/components/CameraView.tsx:194
@@ -537,17 +545,18 @@ msgstr "แบ่งปัน"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:103
-#: packages/app-mobile/components/screens/Note.tsx:576
+#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.tsx:170
 #: packages/app-mobile/components/side-menu-content.tsx:179
 #: packages/app-mobile/components/side-menu-content.tsx:444
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:80
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "ยกเลิก"
 
-#: packages/app-cli/app/app.js:138
+#: packages/app-cli/app/app.js:139
 #, fuzzy
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "กำลังยกเลิกการซิงโครไนซ์เบื้องหลัง... โปรดรอสักครู่"
@@ -680,7 +689,7 @@ msgid "Check for updates..."
 msgstr "ตรวจสอบการอัพเดท..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:435
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:436
 msgid "Check synchronisation configuration"
 msgstr "ตรวจสอบการตั้งค่าซิงโครไนซ์"
 
@@ -697,7 +706,7 @@ msgstr "ช่องทำเครื่องหมาย"
 msgid "Checking... Please wait."
 msgstr "กำลังตรวจสอบ... โปรดรอสักครู่..."
 
-#: packages/app-mobile/components/screens/Note.tsx:871
+#: packages/app-mobile/components/screens/Note.tsx:876
 msgid "Choose an option"
 msgstr "เลือก"
 
@@ -707,6 +716,7 @@ msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:281
 #, fuzzy
 msgid "Clear"
@@ -728,7 +738,7 @@ msgstr ""
 msgid "Click to add tags..."
 msgstr "ตรวจสอบการอัพเดท..."
 
-#: packages/lib/versionInfo.ts:60
+#: packages/lib/versionInfo.ts:62
 msgid "Client ID: %s"
 msgstr "Client ID: %s"
 
@@ -759,11 +769,11 @@ msgstr "ปิดหน้าต่าง"
 msgid "Code"
 msgstr "Code"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:614
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:604
 msgid "Code Block"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1195
 #, fuzzy
 msgid "Code View"
 msgstr "Code"
@@ -777,11 +787,11 @@ msgstr "โปรดสร้างสมุดบันทึกก่อน"
 msgid "Collapse"
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:305
+#: packages/lib/services/ReportService.ts:307
 msgid "Coming alarms"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1441
+#: packages/lib/models/Setting.ts:1452
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -824,7 +834,7 @@ msgid "Compress old changes"
 msgstr ""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:729
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
 #: packages/app-mobile/components/side-menu-content.tsx:422
 msgid "Configuration"
 msgstr "การตั้งค่า"
@@ -844,7 +854,7 @@ msgstr "ยืนยันรหัสผ่าน:"
 msgid "Confirmation"
 msgstr "การตั้งค่า"
 
-#: packages/lib/services/ReportService.ts:284
+#: packages/lib/services/ReportService.ts:286
 msgid "Conflicted: %d"
 msgstr ""
 
@@ -870,13 +880,18 @@ msgstr "คุณสมบัติของบันทึก"
 msgid "Continue"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:930
+#: packages/app-mobile/components/screens/Note.tsx:1010
 msgid "Convert to note"
 msgstr "แปลงเป็นบันทึก"
 
-#: packages/app-mobile/components/screens/Note.tsx:930
+#: packages/app-mobile/components/screens/Note.tsx:1010
 msgid "Convert to todo"
 msgstr "แปลงเป็น to-do"
+
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
+#, fuzzy
+msgid "Converting speech to text..."
+msgstr "แปลงเป็นบันทึก"
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -890,8 +905,8 @@ msgstr "คัดลอก"
 msgid "Copy dev mode command to clipboard"
 msgstr "คัดลอกที่อยู่ (path) ไปที่คลิปบอร์ด"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:390
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:404
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:410
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:424
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 #, fuzzy
 msgid "Copy external link"
@@ -907,7 +922,7 @@ msgid "Copy Link Address"
 msgstr "คัดลอกที่อยู่ลิงก์"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:937
+#: packages/app-mobile/components/screens/Note.tsx:1017
 msgid "Copy Markdown link"
 msgstr "คัดลอกลิงก์ Markdown"
 
@@ -920,7 +935,7 @@ msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "คัดลอกลิงก์ที่สามารถแบ่งปันได้"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:153
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:144
 msgid "Copy token"
 msgstr "คัดลอก Token"
 
@@ -981,10 +996,12 @@ msgid ""
 "again when you are connected to the internet."
 msgstr ""
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:29
-msgid "Could not verify your identify"
-msgstr ""
+#: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
+#, fuzzy
+msgid "Could not verify your identify: %s"
+msgstr "เปลี่ยนชนิดเป็นบันทึก"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:260
 #, fuzzy
 msgid "Create"
@@ -995,7 +1012,7 @@ msgstr "สร้างเมื่อ"
 msgid "Create a new notebook under a parent notebook."
 msgstr "สร้างสมุดบันทึกใหม่"
 
-#: packages/app-mobile/components/note-list.js:101
+#: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
 msgstr "สร้างสมุดบันทึก"
 
@@ -1029,7 +1046,7 @@ msgstr "สร้างเมื่อ"
 msgid "Created local items: %d."
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:244
+#: packages/lib/services/ReportService.ts:246
 #, fuzzy
 msgid "Created locally"
 msgstr "สร้างเมื่อ"
@@ -1050,7 +1067,7 @@ msgid "Created: %d."
 msgstr "สร้างเมื่อ: %d"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:835
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "Created: %s"
 msgstr "สร้างเมื่อ: %s"
 
@@ -1070,7 +1087,7 @@ msgstr "สร้าง to-do ใหม่"
 msgid "Creating new %s..."
 msgstr "สร้าง %s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Creating report..."
 msgstr "กำลังสร้างรายงาน..."
 
@@ -1087,17 +1104,17 @@ msgstr ""
 msgid "Custom order"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1309
 #, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
 
-#: packages/lib/models/Setting.ts:1281
+#: packages/lib/models/Setting.ts:1292
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
 
-#: packages/lib/models/Setting.ts:1440
+#: packages/lib/models/Setting.ts:1451
 msgid "Custom TLS certificates"
 msgstr "TLS certificate แบบกำหนดเอง"
 
@@ -1116,7 +1133,7 @@ msgstr "มืด"
 msgid "Dashboard"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:717
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:744
 #, fuzzy
 msgid "Database v%s"
 msgstr "ฐานข้อมูล v%s"
@@ -1129,7 +1146,7 @@ msgstr ""
 msgid "Date format"
 msgstr "รูปแบบวันที่"
 
-#: packages/lib/models/Setting.ts:1528
+#: packages/lib/models/Setting.ts:1539
 msgid "days"
 msgstr "วัน"
 
@@ -1146,13 +1163,13 @@ msgstr "รายการที่ถูกถอดรหัส: %s / %s"
 msgid "Decrypted items: %s / %s"
 msgstr "รายการที่ถูกถอดรหัส: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:738
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:758
 #: packages/app-mobile/components/side-menu-content.tsx:431
 msgid "Decrypting items: %d/%d"
 msgstr "กำลังถอดรหัสรายการ: %d/%d"
 
-#: packages/lib/models/Setting.ts:1223 packages/lib/models/Setting.ts:1230
-#: packages/lib/models/Setting.ts:1406
+#: packages/lib/models/Setting.ts:1234 packages/lib/models/Setting.ts:1241
+#: packages/lib/models/Setting.ts:1417
 msgid "Default"
 msgstr "ค่าเริ่มต้น"
 
@@ -1163,13 +1180,13 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:291
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:311
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
 #: packages/app-mobile/components/ScreenHeader.tsx:418
 #: packages/app-mobile/components/ScreenHeader.tsx:485
-#: packages/app-mobile/components/screens/Note.tsx:950
+#: packages/app-mobile/components/screens/Note.tsx:1030
 #: packages/app-mobile/components/side-menu-content.tsx:160
 msgid "Delete"
 msgstr "ลบ"
@@ -1194,7 +1211,7 @@ msgstr "ลบบันทึก %d เหล่านี้?"
 msgid "Delete line"
 msgstr "ลบบันทึก?"
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1333
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
@@ -1204,11 +1221,11 @@ msgid "Delete note \"%s\"?"
 msgstr "ลบบันทึก \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:526
+#: packages/app-mobile/components/screens/Note.tsx:535
 msgid "Delete note?"
 msgstr "ลบบันทึก?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:290
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:310
 #: packages/app-mobile/components/side-menu-content.tsx:162
 #, fuzzy
 msgid ""
@@ -1221,7 +1238,6 @@ msgstr ""
 "บันทึกทั้งหมดและสมุดบันทึกย่อยภายในสมุดบันทึกนี้จะถูกลบไปด้วย"
 
 #: packages/app-cli/app/command-rmbook.js:26
-#: packages/app-mobile/components/screens/Notes.tsx:154
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
@@ -1310,7 +1326,7 @@ msgstr "ปิดการเข้ารหัส"
 msgid "Disable safe mode and restart"
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:102
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:93
 msgid "Disable Web Clipper Service"
 msgstr "ปิดบริการ Web Clipper"
 
@@ -1318,7 +1334,7 @@ msgstr "ปิดบริการ Web Clipper"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1341
+#: packages/lib/models/Setting.ts:1352
 msgid "Disabled"
 msgstr "ปิด"
 
@@ -1330,8 +1346,8 @@ msgid ""
 "continue?"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:350
-#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:351
+#: packages/app-mobile/components/screens/Note.tsx:110
 msgid "Discard changes"
 msgstr "ยกเลิกการเปลี่ยนแปลง"
 
@@ -1399,6 +1415,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
 msgid "Done"
 msgstr ""
 
@@ -1407,7 +1424,7 @@ msgstr ""
 msgid "Download"
 msgstr "ดาวน์โหลดแล้ว"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:131
 msgid "Download and install the relevant extension for your browser:"
 msgstr "ดาวน์โหลดและติดตั้งส่วนเสริมที่เกี่ยวข้องสำหรับเว็บเบราว์เซอร์ของคุณ:"
 
@@ -1415,11 +1432,11 @@ msgstr "ดาวน์โหลดและติดตั้งส่วนเ
 msgid "Downloaded"
 msgstr "ดาวน์โหลดแล้ว"
 
-#: packages/lib/services/ReportService.ts:242
+#: packages/lib/services/ReportService.ts:244
 msgid "Downloaded and decrypted"
 msgstr "ดาวน์โหลดและถอดรหัสแล้ว"
 
-#: packages/lib/services/ReportService.ts:243
+#: packages/lib/services/ReportService.ts:245
 msgid "Downloaded and encrypted"
 msgstr "ดาวน์โหลดและเข้ารหัสแล้ว"
 
@@ -1435,7 +1452,7 @@ msgstr "กำลังดาวน์โหลดทรัพยากร..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1195
 msgid "Drop notes or files here"
 msgstr ""
 
@@ -1472,7 +1489,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
-#: packages/app-mobile/components/screens/Note.tsx:1148
+#: packages/app-mobile/components/screens/Note.tsx:1248
 msgid "Edit"
 msgstr "แก้ไข"
 
@@ -1510,23 +1527,23 @@ msgstr ""
 msgid "Editor"
 msgstr "ตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1216
+#: packages/lib/models/Setting.ts:1227
 msgid "Editor font"
 msgstr "แบบตัวอักษรของตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1242
+#: packages/lib/models/Setting.ts:1253
 msgid "Editor font family"
 msgstr "ตระกูลของแบบตัวอักษรของตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1204
+#: packages/lib/models/Setting.ts:1215
 msgid "Editor font size"
 msgstr "ขนาดตัวอักษรของตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1272
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1265
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "ตระกูลของแบบตัวอักษรของตัวแก้ไข"
@@ -1542,7 +1559,7 @@ msgstr "ตัวแก้ไข"
 msgid "Either \"text\" or \"json\""
 msgstr "ไม่ “text” ก็ “json”"
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1418
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1562,41 +1579,41 @@ msgid "emphasised text"
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:65
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:85
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "เปิด"
 
-#: packages/lib/models/Setting.ts:1145
+#: packages/lib/models/Setting.ts:1156
 msgid "Enable ^sup^ syntax"
 msgstr "เปิดใช้งาน ^sup^ syntax"
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1160
 msgid "Enable ++insert++ syntax"
 msgstr "เปิดใช้งาน ++insert++syntax"
 
-#: packages/lib/models/Setting.ts:1141
+#: packages/lib/models/Setting.ts:1152
 msgid "Enable ==mark== syntax"
 msgstr "เปิดใช้งาน ==mark== syntax"
 
-#: packages/lib/models/Setting.ts:1144
+#: packages/lib/models/Setting.ts:1155
 msgid "Enable ~sub~ syntax"
 msgstr "เปิดใช้งาน ~sub~ syntax"
 
-#: packages/lib/models/Setting.ts:1147
+#: packages/lib/models/Setting.ts:1158
 msgid "Enable abbreviation syntax"
 msgstr "เปิดใช้งาน abbreviation syntax"
 
-#: packages/lib/models/Setting.ts:1138
+#: packages/lib/models/Setting.ts:1149
 #, fuzzy
 msgid "Enable audio player"
 msgstr "เปิดใช้งาน Markdown Emoji"
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:61
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Enable biometrics authentication?"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1146
+#: packages/lib/models/Setting.ts:1157
 msgid "Enable deflist syntax"
 msgstr "เปิดใช้งาน deflist syntax"
 
@@ -1606,44 +1623,44 @@ msgstr "เปิดใช้งาน deflist syntax"
 msgid "Enable encryption"
 msgstr "เปิดการเข้ารหัส"
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1153
 msgid "Enable footnotes"
 msgstr "เปิดใช้งาน Footnotes"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/lib/models/Setting.ts:1146
 msgid "Enable Fountain syntax support"
 msgstr "เปิดใช้งานการรองรับ Fountain syntax"
 
-#: packages/lib/models/Setting.ts:1132
+#: packages/lib/models/Setting.ts:1143
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "เปิดใช้ประวัติบันทึกย้อนหลัง"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1159
 msgid "Enable markdown emoji"
 msgstr "เปิดใช้งาน Markdown Emoji"
 
-#: packages/lib/models/Setting.ts:1134
+#: packages/lib/models/Setting.ts:1145
 msgid "Enable math expressions"
 msgstr "เปิดใช้งาน Math Expressions"
 
-#: packages/lib/models/Setting.ts:1136
+#: packages/lib/models/Setting.ts:1147
 msgid "Enable Mermaid diagrams support"
 msgstr "เปิดใช้งานการรองรับ Mermaid diagram"
 
-#: packages/lib/models/Setting.ts:1150
+#: packages/lib/models/Setting.ts:1161
 msgid "Enable multimarkdown table extension"
 msgstr "เปิดใช้งานส่วนเสริมตาราง Multimarkdown"
 
-#: packages/lib/models/Setting.ts:1518
+#: packages/lib/models/Setting.ts:1529
 msgid "Enable note history"
 msgstr "เปิดใช้ประวัติบันทึกย้อนหลัง"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1151
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1130
+#: packages/lib/models/Setting.ts:1141
 msgid "Enable soft breaks"
 msgstr "เปิดใช้งาน Soft Break"
 
@@ -1651,20 +1668,25 @@ msgstr "เปิดใช้งาน Soft Break"
 msgid "Enable spellcheck in the text editor"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1143
+#: packages/lib/models/Setting.ts:1154
 msgid "Enable table of contents extension"
 msgstr "เปิดใช้งานส่วนเสริมสารบัญ"
 
-#: packages/lib/models/Setting.ts:1131
+#: packages/lib/models/Setting.ts:1059
+#, fuzzy
+msgid "Enable the Markdown toolbar"
+msgstr "เปิดใช้งาน Markdown Emoji"
+
+#: packages/lib/models/Setting.ts:1142
 #, fuzzy
 msgid "Enable typographer support"
 msgstr "เปิดใช้งานการรองรับ Typographer"
 
-#: packages/lib/models/Setting.ts:1139
+#: packages/lib/models/Setting.ts:1150
 msgid "Enable video player"
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:113
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "Enable Web Clipper Service"
 msgstr "เปิดใช้บริการ Web Clipper"
 
@@ -1693,11 +1715,11 @@ msgstr "รายการที่เข้ารหัสแล้วไม่
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "สมุดบันทึกที่ถูกเข้ารหัสจะไม่สามารถแก้ไขชื่อได้"
 
-#: packages/lib/models/Setting.ts:2485
+#: packages/lib/models/Setting.ts:2503
 msgid "Encryption"
 msgstr "การเข้ารหัส"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:444
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:445
 #: packages/app-mobile/components/screens/encryption-config.tsx:287
 msgid "Encryption Config"
 msgstr "ตั้งค่าการเข้ารหัส"
@@ -1785,7 +1807,7 @@ msgid "Expand"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:374
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:394
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "ส่งออก"
@@ -1800,16 +1822,16 @@ msgstr "ส่งออก"
 msgid "Export debug report"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:615
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Export Debug Report"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 #, fuzzy
 msgid "Export profile"
 msgstr "ส่งออกโปรไฟล์"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 #, fuzzy
 msgid "Exporting profile..."
 msgstr "กำลังส่งออกโปรไฟล์..."
@@ -1834,11 +1856,11 @@ msgstr "ส่งออกเฉพาะบันทึกที่เลือ
 msgid "Exports only the given notebook."
 msgstr "ส่งออกเฉพาะสมุดบันทึกที่เลือก"
 
-#: packages/lib/models/Setting.ts:1504
+#: packages/lib/models/Setting.ts:1515
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1505
+#: packages/lib/models/Setting.ts:1516
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1848,7 +1870,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "ผิดพลาดร้ายแรง:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:637
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:664
 msgid "Feature flags"
 msgstr ""
 
@@ -1856,7 +1878,7 @@ msgstr ""
 msgid "Fetched items: %d/%d."
 msgstr ""
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:743
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:763
 #: packages/app-mobile/components/side-menu-content.tsx:436
 msgid "Fetching resources: %d/%d"
 msgstr ""
@@ -1888,11 +1910,11 @@ msgstr "พบ: %d"
 msgid "Firefox Extension"
 msgstr "ส่วนเสริมของ Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
 msgid "Fix search index"
 msgstr "ซ่อมดัชนีย์ค้นหา"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
 msgid "Fixing search index..."
 msgstr "กำลังซ่อมดัชนีค้นหา..."
 
@@ -1904,25 +1926,25 @@ msgstr "กำลังซ่อมดัชนีค้นหา..."
 msgid "Focus"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1079 packages/lib/models/Setting.ts:1096
+#: packages/lib/models/Setting.ts:1090 packages/lib/models/Setting.ts:1107
 #, fuzzy
 msgid "Focus body"
 msgstr "โฟกัสที่เนื้อเรื่อง"
 
-#: packages/lib/models/Setting.ts:1078 packages/lib/models/Setting.ts:1095
+#: packages/lib/models/Setting.ts:1089 packages/lib/models/Setting.ts:1106
 #, fuzzy
 msgid "Focus title"
 msgstr "โฟกัสที่ชื่อเรื่อง"
 
-#: packages/lib/services/ReportService.ts:289
+#: packages/lib/services/ReportService.ts:291
 msgid "Folders"
 msgstr "โฟลเดอร์"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1495
 msgid "For example \"%s\""
 msgstr ""
 
@@ -1963,7 +1985,7 @@ msgstr ""
 msgid "Found: %d."
 msgstr "พบ: %d"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:723
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:750
 #, fuzzy
 msgid "FTS enabled: %d"
 msgstr "เปิดใช้ FTS: %d"
@@ -1976,7 +1998,7 @@ msgstr ""
 msgid "Full name"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2476
+#: packages/lib/models/Setting.ts:2494
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "ทั่วไป"
@@ -1996,7 +2018,7 @@ msgstr[0] "กำลังสร้างลิงก์..."
 msgid "Get it now:"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1330
+#: packages/lib/models/Setting.ts:1341
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
@@ -2007,7 +2029,7 @@ msgid ""
 "current configuration."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:847
+#: packages/app-mobile/components/screens/Note.tsx:852
 msgid "Go to source URL"
 msgstr "ไปที่ URL แหล่งที่มา"
 
@@ -2116,7 +2138,7 @@ msgstr "ว่าง"
 msgid "Ignore"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1463
+#: packages/lib/models/Setting.ts:1474
 msgid "Ignore TLS certificate errors"
 msgstr "เพิกเฉยข้อผิดพลาด TLS certificate"
 
@@ -2131,7 +2153,7 @@ msgstr ""
 msgid "Import"
 msgstr "นำเข้า"
 
-#: packages/app-desktop/gui/MenuBar.tsx:247
+#: packages/app-desktop/gui/MenuBar.tsx:248
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
 
@@ -2157,7 +2179,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:403
+#: packages/app-mobile/components/screens/Note.tsx:412
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2182,14 +2204,14 @@ msgid ""
 "Important: you only need to run this ONCE on one device."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "ในการที่จะใช้ web clipper คุณจำเป็นต้องทำสิ่งต่อไปนี้:"
 
@@ -2213,11 +2235,11 @@ msgstr ""
 msgid "Indent more"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:209
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
 msgid "Information"
 msgstr "ข้อมูล"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:612
 msgid "Inline Code"
 msgstr ""
 
@@ -2230,7 +2252,7 @@ msgid "Insert Hyperlink"
 msgstr "แทรกไฮเปอร์ลิงก์"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:638
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:628
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
 #, fuzzy
 msgid "Insert time"
@@ -2270,7 +2292,7 @@ msgstr ""
 msgid "Invalid command: \"%s\""
 msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 
-#: packages/lib/models/Setting.ts:2004
+#: packages/lib/models/Setting.ts:2022
 #, fuzzy
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "ค่าของตัวเลือกไม่ถูกต้อง: \"%s\" ค่าที่เป็นไปได้คือ: %s."
@@ -2285,7 +2307,7 @@ msgstr "ยืนยันรหัสผ่าน:"
 msgid "Italic"
 msgstr "ตัวเอียง"
 
-#: packages/lib/services/ReportService.ts:185
+#: packages/lib/services/ReportService.ts:187
 #, fuzzy
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "รายการ “%s” ไม่สามารถดาวน์โหลด: %s"
@@ -2295,11 +2317,11 @@ msgstr "รายการ “%s” ไม่สามารถดาวน์�
 msgid "Items"
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:208
+#: packages/lib/services/ReportService.ts:210
 msgid "Items that cannot be decrypted"
 msgstr "รายการที่ไม่สามารถทำการถอดรหัส"
 
-#: packages/lib/services/ReportService.ts:173
+#: packages/lib/services/ReportService.ts:175
 msgid "Items that cannot be synchronised"
 msgstr "รายการที่ไม่สามารถทำการซิงโครไนซ์"
 
@@ -2338,7 +2360,7 @@ msgstr "ไดเรกทอรี่ส่งออก Joplin"
 msgid "Joplin Export File"
 msgstr "ไฟล์ส่งออก Joplin"
 
-#: packages/lib/services/ReportService.ts:210
+#: packages/lib/services/ReportService.ts:212
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
@@ -2369,13 +2391,13 @@ msgstr "ตั้งรหัสผ่าน"
 msgid "Joplin Server URL"
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:689
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:716
 msgid "Joplin website"
 msgstr "เว็บไซต์ของ Joplin"
 
@@ -2389,12 +2411,12 @@ msgstr ""
 msgid "KaTeX"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1530
+#: packages/lib/models/Setting.ts:1541
 #, fuzzy
 msgid "Keep note history for"
 msgstr "เก็บประวัติบันทึกย้อนหลังเป็นเวลา"
 
-#: packages/lib/models/Setting.ts:1403
+#: packages/lib/models/Setting.ts:1414
 msgid "Keyboard Mode"
 msgstr "โหมดของคีย์บอร์ด"
 
@@ -2403,12 +2425,12 @@ msgstr "โหมดของคีย์บอร์ด"
 msgid "Keyboard Shortcut"
 msgstr "โหมดของคีย์บอร์ด"
 
-#: packages/lib/models/Setting.ts:2487
+#: packages/lib/models/Setting.ts:2505
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "โหมดของคีย์บอร์ด"
 
-#: packages/lib/versionInfo.ts:63
+#: packages/lib/versionInfo.ts:65
 msgid "Keychain Supported: %s"
 msgstr ""
 
@@ -2416,7 +2438,7 @@ msgstr ""
 msgid "Keys that need upgrading"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1380
+#: packages/lib/models/Setting.ts:1391
 msgid "Landscape"
 msgstr "แนวนอน"
 
@@ -2445,11 +2467,11 @@ msgstr ""
 msgid "Leave notebook..."
 msgstr "แบ่งปันบันทึก..."
 
-#: packages/lib/models/Setting.ts:1374
+#: packages/lib/models/Setting.ts:1385
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1370
+#: packages/lib/models/Setting.ts:1381
 msgid "Letter"
 msgstr "Letter"
 
@@ -2482,7 +2504,7 @@ msgstr[0] "ลิงก์ได้ถูกคัดลอกไปที่ค
 msgid "Link text"
 msgstr "ลิงก์"
 
-#: packages/app-mobile/components/screens/Note.tsx:198
+#: packages/app-mobile/components/screens/Note.tsx:205
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
 
@@ -2501,6 +2523,11 @@ msgstr ""
 msgid "Loaded"
 msgstr "ดาวน์โหลดแล้ว"
 
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
+#, fuzzy
+msgid "Loading..."
+msgstr "กำลังยกเลิก..."
+
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 #, fuzzy
@@ -2514,7 +2541,7 @@ msgid ""
 "operation."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:613
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:640
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
@@ -2545,7 +2572,7 @@ msgid "Logs"
 msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:795
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:675
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:702
 #, fuzzy
 msgid "Make a donation"
 msgstr "บริจาคช่วยเหลือ"
@@ -2565,7 +2592,7 @@ msgstr "ตั้งรหัสผ่าน"
 msgid "Manage multiple users"
 msgstr "ตั้งรหัสผ่าน"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:638
 #, fuzzy
 msgid "Manage profiles"
 msgstr "ส่งออกโปรไฟล์"
@@ -2588,7 +2615,7 @@ msgstr ""
 msgid "Manual"
 msgstr "ทำด้วยตนเอง"
 
-#: packages/lib/models/Setting.ts:2481
+#: packages/lib/models/Setting.ts:2499
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2672,11 +2699,11 @@ msgstr ""
 msgid "More info"
 msgstr "ข้อมูลเพิ่มเติม"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:668
 msgid "More information"
 msgstr "ข้อมูลเพิ่มเติม"
 
-#: packages/app-cli/app/app.js:64
+#: packages/app-cli/app/app.js:65
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 
@@ -2713,7 +2740,9 @@ msgid "N"
 msgstr "N"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:8
-#: packages/app-mobile/components/screens/Notes.tsx:268
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:143
+#: packages/app-mobile/components/screens/Notes.tsx:239
 #: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "สร้างบันทึกใหม่"
@@ -2742,7 +2771,9 @@ msgid "New tags:"
 msgstr "แท็กใหม่:"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.ts:6
-#: packages/app-mobile/components/screens/Notes.tsx:258
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:153
+#: packages/app-mobile/components/screens/Notes.tsx:229
 #: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "สร้าง to-do"
@@ -2777,8 +2808,8 @@ msgid "no"
 msgstr "n"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:575
-#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:63
+#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "No"
 msgstr "ไม่"
 
@@ -2786,16 +2817,16 @@ msgstr "ไม่"
 msgid "No active notebook."
 msgstr "ไม่มีสมุดบันทึกที่ถูกใช้งาน"
 
-#: packages/app-mobile/components/screens/Note.tsx:169
+#: packages/app-mobile/components/screens/Note.tsx:176
 msgid "No item with ID %s"
 msgstr "ไม่มีรายการที่มี ID %s"
 
-#: packages/app-cli/app/app.js:100
+#: packages/app-cli/app/app.js:101
 #, fuzzy
 msgid "No notebook has been specified."
 msgstr "สมุดบันทึกไม่ได้ระบุ"
 
-#: packages/app-cli/app/app.js:94
+#: packages/app-cli/app/app.js:95
 #, fuzzy
 msgid "No notebook selected."
 msgstr "สมุดบันทึกไม่ได้ถูกเลือก"
@@ -2813,7 +2844,7 @@ msgstr "ไม่มีทรัพยากร"
 msgid "No results"
 msgstr "ไม่มีทรัพยากร"
 
-#: packages/app-cli/app/app.js:224
+#: packages/app-cli/app/app.js:225
 msgid "No such command: %s"
 msgstr "ไม่มีคำสั่ง: %s"
 
@@ -2842,22 +2873,24 @@ msgstr "ยังไม่ได้ดาวน์โหลด"
 msgid "Not generated"
 msgstr ""
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:70
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:90
 #, fuzzy
 msgid "Not now"
 msgstr "ทำตอนนี้"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:141
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
 msgid "note"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.ts:2479
+#: packages/lib/models/Setting.ts:2497
 msgid "Note"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.ts:1594
+#: packages/lib/models/Setting.ts:1605
 msgid "Note area growth factor"
 msgstr ""
 
@@ -2866,7 +2899,7 @@ msgstr ""
 msgid "Note attachments"
 msgstr "ไฟล์แนบ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:469
+#: packages/app-desktop/gui/MenuBar.tsx:470
 #, fuzzy
 msgid "Note attachments..."
 msgstr "ไฟล์แนบ"
@@ -2880,7 +2913,7 @@ msgstr "เนื้อความบันทึก"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr ""
 
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:82
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:83
 #, fuzzy
 msgid "Note editor"
 msgstr "ประวัติบันทึกย้อนหลัง"
@@ -2892,7 +2925,7 @@ msgstr "สมุดบันทึกไม่ได้ระบุ"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
-#: packages/lib/models/Setting.ts:2484
+#: packages/lib/models/Setting.ts:2502
 msgid "Note History"
 msgstr "ประวัติบันทึกย้อนหลัง"
 
@@ -2904,7 +2937,7 @@ msgstr ""
 msgid "Note list"
 msgstr "รายการบันทึก"
 
-#: packages/lib/models/Setting.ts:1579
+#: packages/lib/models/Setting.ts:1590
 msgid "Note list growth factor"
 msgstr ""
 
@@ -2918,7 +2951,7 @@ msgstr "คุณสมบัติของบันทึก"
 msgid "Note title"
 msgstr "ชื่อบันทึก"
 
-#: packages/lib/models/Setting.ts:1164
+#: packages/lib/models/Setting.ts:1175
 #, fuzzy
 msgid "Note: Does not work in all desktop environments."
 msgstr "หมายเหตุ: ทำงานได้กับบาง Desktop Environment เท่านั้น"
@@ -2933,12 +2966,12 @@ msgstr ""
 msgid "Note&book"
 msgstr "สมุดบันทึก"
 
-#: packages/lib/models/Setting.ts:2480
+#: packages/lib/models/Setting.ts:2498
 #, fuzzy
 msgid "Notebook"
 msgstr "สมุดบันทึก"
 
-#: packages/lib/models/Setting.ts:1564
+#: packages/lib/models/Setting.ts:1575
 msgid "Notebook list growth factor"
 msgstr ""
 
@@ -2946,7 +2979,7 @@ msgstr ""
 msgid "Notebook: %s"
 msgstr "สมุดบันทึก: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:690
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:710
 #: packages/app-mobile/components/side-menu-content.tsx:477
 msgid "Notebooks"
 msgstr "สมุดบันทึก"
@@ -2962,7 +2995,7 @@ msgstr "สมุดบันทึกไม่สามารถใช้ชื
 msgid "Notes"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.ts:2496
+#: packages/lib/models/Setting.ts:2514
 #, fuzzy
 msgid "Notes and settings are stored in: %s"
 msgstr "บันทึก และ การตั้งค่า จะถูกเก็บไว้ใน: %s"
@@ -2981,11 +3014,12 @@ msgstr "รายการแบบตัวเลข"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:267
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
 #: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:212
 #: packages/app-mobile/components/side-menu-content.tsx:164
 msgid "OK"
 msgstr "ตกลง"
@@ -2994,7 +3028,7 @@ msgstr "ตกลง"
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
-#: packages/lib/services/ReportService.ts:310
+#: packages/lib/services/ReportService.ts:312
 #, fuzzy
 msgid "On %s: %s"
 msgstr "เมื่อ %s: %s"
@@ -3060,7 +3094,7 @@ msgid "Operation cancelled"
 msgstr "ระบวนการถูกยกเลิก"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:455
+#: packages/app-desktop/gui/MenuBar.tsx:456
 #: packages/app-desktop/gui/Root.tsx:226
 msgid "Options"
 msgstr "ตัวเลือก"
@@ -3075,7 +3109,7 @@ msgstr "สร้างบันทึกใหม่"
 msgid "Ordered list"
 msgstr "สร้างเมื่อ: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:409
+#: packages/app-desktop/gui/MenuBar.tsx:410
 #, fuzzy
 msgid "Other applications..."
 msgstr "ออกจากแอปพลิเคชั่น"
@@ -3085,12 +3119,12 @@ msgstr "ออกจากแอปพลิเคชั่น"
 msgid "Output format: %s"
 msgstr "ฟอร์แมตต้นฉบับ: %s"
 
-#: packages/lib/models/Setting.ts:1377
+#: packages/lib/models/Setting.ts:1388
 #, fuzzy
 msgid "Page orientation for PDF export"
 msgstr "การจัดวางหน้า สำหรับการส่งออก PDF"
 
-#: packages/lib/models/Setting.ts:1367
+#: packages/lib/models/Setting.ts:1378
 msgid "Page size for PDF export"
 msgstr "ขนาดของหน้า สำหรับการส่งออก PDF"
 
@@ -3138,7 +3172,7 @@ msgstr "ไฟล์ PDF"
 msgid "Per user. Minimum of %d users."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:404
+#: packages/app-mobile/components/screens/Note.tsx:413
 #, fuzzy
 msgid "Permission needed"
 msgstr "สิทธิ์การเข้าใช้งานกล้อง"
@@ -3179,6 +3213,10 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
+msgid "Please record your voice..."
+msgstr ""
+
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
 msgstr "โปรดเลือกสมุดบันทึกก่อน"
@@ -3205,7 +3243,7 @@ msgstr "โปรดระบุสมุดบันทึกสำหรับ
 msgid "Please upgrade Joplin to use this plugin"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1205
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1195
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -3222,11 +3260,11 @@ msgid "Plugin tools"
 msgstr "ปลั๊กอิน"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2482
+#: packages/lib/models/Setting.ts:2500
 msgid "Plugins"
 msgstr "ปลั๊กอิน"
 
-#: packages/lib/models/Setting.ts:1379
+#: packages/lib/models/Setting.ts:1390
 msgid "Portrait"
 msgstr "แนวตั้ง"
 
@@ -3289,7 +3327,7 @@ msgstr "พิมพ์"
 msgid "Priority support"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:703
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:730
 msgid "Privacy Policy"
 msgstr ""
 
@@ -3323,7 +3361,7 @@ msgstr "เวอร์ชั่นโปรไฟล์: %s"
 msgid "Profile name:"
 msgstr "เวอร์ชั่นโปรไฟล์: %s"
 
-#: packages/lib/versionInfo.ts:62
+#: packages/lib/versionInfo.ts:64
 msgid "Profile Version: %s"
 msgstr "เวอร์ชั่นโปรไฟล์: %s"
 
@@ -3332,20 +3370,20 @@ msgstr "เวอร์ชั่นโปรไฟล์: %s"
 msgid "Profiles"
 msgstr "เวอร์ชั่นโปรไฟล์: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:944
+#: packages/app-mobile/components/screens/Note.tsx:1024
 msgid "Properties"
 msgstr "คุณสมบัติ"
 
-#: packages/lib/models/Setting.ts:1473
+#: packages/lib/models/Setting.ts:1484
 #, fuzzy
 msgid "Proxy enabled"
 msgstr "เปิด"
 
-#: packages/lib/models/Setting.ts:1495
+#: packages/lib/models/Setting.ts:1506
 msgid "Proxy timeout (seconds)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1483
+#: packages/lib/models/Setting.ts:1494
 msgid "Proxy URL"
 msgstr ""
 
@@ -3369,7 +3407,7 @@ msgstr ""
 
 #: packages/app-desktop/app.ts:180
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:317
+#: packages/app-desktop/gui/MenuBar.tsx:318
 msgid "Quit"
 msgstr "ออก"
 
@@ -3383,7 +3421,7 @@ msgstr "เลือกวันที่"
 msgid "Re-encryption"
 msgstr "การเข้ารหัส"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1322
 msgid "Re-upload local data to sync target"
 msgstr ""
 
@@ -3433,16 +3471,16 @@ msgstr "เปิดใช้งาน Math Expressions"
 msgid "Reject"
 msgstr "ปฏิเสธ"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:287
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:307
 #, fuzzy
 msgid "Remove"
 msgstr "ลบ"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:294
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:314
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "ลบแท็ก \"%s\" ออกจากบันทึกทั้งหมด?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:296
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:316
 msgid "Remove this search from the sidebar?"
 msgstr "ลบการค้นหานี้ออกจากแถบด้านข้าง?"
 
@@ -3464,7 +3502,7 @@ msgstr "แก้ไขชื่อแท็ก"
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:150
 msgid "Renew token"
 msgstr ""
 
@@ -3547,7 +3585,7 @@ msgstr "จัดเรียงย้อนกลับ"
 msgid "Reverses the sorting order."
 msgstr ""
 
-#: packages/lib/versionInfo.ts:45
+#: packages/lib/versionInfo.ts:47
 #, fuzzy
 msgid "Revision: %s (%s)"
 msgstr "Revision: %s (%s)"
@@ -3612,8 +3650,8 @@ msgid "Save as..."
 msgstr "บันทึกเป็น..."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:330
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:343
-#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:344
+#: packages/app-mobile/components/screens/Note.tsx:110
 msgid "Save changes"
 msgstr "บันทึกการเปลี่ยนแปลง"
 
@@ -3651,7 +3689,7 @@ msgstr "ค้นหา:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:165
+#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 #: packages/app-desktop/gui/NoteSearchBar.tsx:179
 msgid "Search..."
 msgstr "ค้นหา..."
@@ -3660,7 +3698,7 @@ msgstr "ค้นหา..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1330
+#: packages/lib/models/Setting.ts:1341
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
@@ -3699,7 +3737,7 @@ msgid "Server is running on port %d"
 msgstr "เซิร์ฟเวอร์กำลังทำงานที่พอร์ต %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:908
+#: packages/app-mobile/components/screens/Note.tsx:976
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "ตั้งการแจ้งเตือน"
@@ -3708,7 +3746,7 @@ msgstr "ตั้งการแจ้งเตือน"
 msgid "Set alarm:"
 msgstr "ตั้งการแจ้งเตือน:"
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1272
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3728,7 +3766,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/screens/Note.tsx:984
 msgid "Share"
 msgstr "แบ่งปัน"
 
@@ -3805,7 +3843,7 @@ msgstr "แสดงจำนวนบันทึก"
 msgid "Show sort order buttons"
 msgstr "แสดงจำนวนบันทึก"
 
-#: packages/lib/models/Setting.ts:1162
+#: packages/lib/models/Setting.ts:1173
 msgid "Show tray icon"
 msgstr "แสดงไอคอนใน System tray"
 
@@ -3886,7 +3924,7 @@ msgstr "ฟอร์แมตต้นฉบับ: %s"
 msgid "Source: "
 msgstr "ต้นฉบับ"
 
-#: packages/lib/models/Setting.ts:1510
+#: packages/lib/models/Setting.ts:1521
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3902,7 +3940,7 @@ msgstr ""
 msgid "Split View"
 msgstr "มุมมองแบบแบ่งครึ่ง"
 
-#: packages/lib/models/Setting.ts:1170
+#: packages/lib/models/Setting.ts:1181
 msgid "Start application minimised in the tray icon"
 msgstr "เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
 
@@ -3943,15 +3981,15 @@ msgstr ""
 msgid "Status"
 msgstr "สถานะ"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:96
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:87
 msgid "Status: %s"
 msgstr "สถานะ: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:90
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:81
 msgid "Status: Started on port %d"
 msgstr "สถานะ: เริ่มทำงาน ที่พอร์ต %d"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:124
 msgid "Step 1: Enable the clipper service"
 msgstr "ขั้นตอนที่ 1: เปิดใช้บริการ clipper"
 
@@ -3967,7 +4005,7 @@ msgstr "ขั้นตอนที่ 1: เปิด URL นี้ในเว
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
 msgid "Step 2: Install the extension"
 msgstr "ขั้นตอนที่ 2: ติดตั้งส่วนเสริม"
 
@@ -4023,7 +4061,7 @@ msgstr ""
 msgid "Switch between note and to-do type"
 msgstr "สลับไปมาระหว่างชนิดของ บันทึก และ to-do"
 
-#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-desktop/gui/MenuBar.tsx:447
 #: packages/app-mobile/components/side-menu-content.tsx:419
 #, fuzzy
 msgid "Switch profile"
@@ -4056,11 +4094,11 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:612
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
 msgid "Sync Status"
 msgstr "สถานะการซิงค์"
 
-#: packages/lib/services/ReportService.ts:275
+#: packages/lib/services/ReportService.ts:277
 msgid "Sync status (synced items / total items)"
 msgstr "สถานะซิงค์ (รายการที่ซิงค์ไปแล้ว / รายการทั้งหมด)"
 
@@ -4076,7 +4114,7 @@ msgstr ""
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: packages/lib/versionInfo.ts:61
+#: packages/lib/versionInfo.ts:63
 msgid "Sync Version: %s"
 msgstr "ซิงค์เวอร์ชั่น: %s"
 
@@ -4085,11 +4123,11 @@ msgstr "ซิงค์เวอร์ชั่น: %s"
 msgid "Sync your notes"
 msgstr "จัดเรียงบันทึกโดย"
 
-#: packages/lib/models/Setting.ts:2477
+#: packages/lib/models/Setting.ts:2495
 msgid "Synchronisation"
 msgstr "การซิงโครไนซ์"
 
-#: packages/lib/models/Setting.ts:1338
+#: packages/lib/models/Setting.ts:1349
 msgid "Synchronisation interval"
 msgstr "ความถี่ในการซิงโครไนซ์"
 
@@ -4098,7 +4136,7 @@ msgstr "ความถี่ในการซิงโครไนซ์"
 msgid "Synchronisation is already in progress."
 msgstr "การซิงโครไนซ์กำลังดำเนินการอยู่"
 
-#: packages/app-desktop/gui/MenuBar.tsx:425
+#: packages/app-desktop/gui/MenuBar.tsx:426
 #: packages/app-desktop/gui/Root.tsx:228
 msgid "Synchronisation Status"
 msgstr "สถานะการซิงโครไนซ์"
@@ -4111,13 +4149,13 @@ msgstr "จุดหมายการซิงโครไนซ์"
 msgid "Synchronisation target: %s (%s)"
 msgstr "จุดหมายการซิงโครไนซ์: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:664
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:684
 #: packages/app-mobile/components/side-menu-content.tsx:444
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "ซิงโครไนซ์"
 
-#: packages/lib/models/Setting.ts:1358
+#: packages/lib/models/Setting.ts:1369
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
@@ -4134,7 +4172,7 @@ msgstr "กำลังซิงโครไนซ์..."
 msgid "Synchronizing..."
 msgstr "กำลังซิงโครไนซ์..."
 
-#: packages/lib/models/Setting.ts:1373
+#: packages/lib/models/Setting.ts:1384
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -4149,14 +4187,14 @@ msgid "Tagged: %d."
 msgstr "แท็ก: %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:719
-#: packages/app-mobile/components/screens/Note.tsx:923
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
+#: packages/app-mobile/components/screens/Note.tsx:1003
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.tsx:416
 msgid "Tags"
 msgstr "แท็ก"
 
-#: packages/app-mobile/components/screens/Note.tsx:869
+#: packages/app-mobile/components/screens/Note.tsx:874
 #, fuzzy
 msgid "Take photo"
 msgstr "ถ่ายรูป"
@@ -4175,7 +4213,7 @@ msgstr ""
 msgid "Teams"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1366
+#: packages/lib/models/Setting.ts:1377
 msgid "Text editor command"
 msgstr ""
 
@@ -4222,7 +4260,7 @@ msgid ""
 "note."
 msgstr ""
 
-#: packages/app-cli/app/app.js:273
+#: packages/app-cli/app/app.js:274
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "คำสั่ง “%s” มีเฉพาะในโหมด GUI เท่านั้น"
 
@@ -4248,14 +4286,14 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1366
+#: packages/lib/models/Setting.ts:1377
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1566 packages/lib/models/Setting.ts:1581
-#: packages/lib/models/Setting.ts:1596
+#: packages/lib/models/Setting.ts:1577 packages/lib/models/Setting.ts:1592
+#: packages/lib/models/Setting.ts:1607
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4274,7 +4312,7 @@ msgid ""
 "and encrypt your data as usual."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:194
+#: packages/app-mobile/components/screens/Note.tsx:201
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s"
 
@@ -4352,11 +4390,11 @@ msgstr ""
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:84
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:75
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:108
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:99
 msgid "The web clipper service is not enabled."
 msgstr ""
 
@@ -4370,11 +4408,11 @@ msgstr ""
 msgid "Theme"
 msgstr "ธีม"
 
-#: packages/app-mobile/components/note-list.js:105
+#: packages/app-mobile/components/NoteList.tsx:102
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "ไม่มีบันทึกอยู่เลย สามารถสร้างบันทึกใหม่ได้โดยคลิกที่ปุ่ม (+)"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:341
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:342
 msgid "There are unsaved changes."
 msgstr ""
 
@@ -4407,14 +4445,14 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:175
+#: packages/lib/services/ReportService.ts:177
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2495
+#: packages/lib/models/Setting.ts:2513
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4430,11 +4468,11 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:188
+#: packages/app-mobile/components/screens/Note.tsx:195
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
@@ -4451,7 +4489,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "บันทึกนี้ไม่มีตำแหน่งภูมิศาสตร์"
 
-#: packages/app-mobile/components/screens/Note.tsx:103
+#: packages/app-mobile/components/screens/Note.tsx:110
 #, fuzzy
 msgid "This note has been modified:"
 msgstr "บันทึกนี้ได้ถูกแก้ไขเมื่อ:"
@@ -4473,7 +4511,7 @@ msgid ""
 "be aware of them before using it."
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:134
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:125
 #, fuzzy
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -4483,7 +4521,7 @@ msgstr ""
 "บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว "
 "ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin ในการเข้าถึงพอร์ตบางพอร์ต"
 
-#: packages/lib/models/Setting.ts:1164
+#: packages/lib/models/Setting.ts:1175
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4531,7 +4569,7 @@ msgstr "ตั้งรหัสผ่าน"
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:285
+#: packages/lib/services/ReportService.ts:287
 msgid "To delete: %d"
 msgstr ""
 
@@ -4569,13 +4607,15 @@ msgid ""
 "restart it."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:651
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:678
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:151
 msgid "to-do"
 msgstr "to-do"
 
@@ -4632,11 +4672,11 @@ msgstr "สลับแถบด้านข้าง"
 msgid "Toggle sort order field"
 msgstr "สลับแถบด้านข้าง"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:32
 msgid "Token has been copied to the clipboard!"
 msgstr "Token ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:609
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:636
 msgid "Tools"
 msgstr "เครื่องมือ"
 
@@ -4645,12 +4685,12 @@ msgstr "เครื่องมือ"
 msgid "Total Size"
 msgstr "ขนาดจริง"
 
-#: packages/lib/services/ReportService.ts:282
+#: packages/lib/services/ReportService.ts:284
 msgid "Total: %d/%d"
 msgstr "ทั้งหมด: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:308
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:96
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:122
 msgid "Try again"
 msgstr "ลองอีกครั้ง"
 
@@ -4700,7 +4740,7 @@ msgstr "to-do ที่ยังไม่เสร็จไว้บนสุด
 msgid "Undo"
 msgstr ""
 
-#: packages/lib/BaseApplication.ts:288
+#: packages/lib/BaseApplication.ts:294
 msgid "Unknown flag: %s"
 msgstr ""
 
@@ -4730,7 +4770,7 @@ msgid ""
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:658
+#: packages/app-mobile/components/screens/Note.tsx:667
 #, fuzzy
 msgid "Unsupported image type: %s"
 msgstr "ไม่รองรับภาพนี้ประเภทนี้: %s"
@@ -4794,7 +4834,7 @@ msgstr "แก้ไขเมื่อ: %s"
 msgid "Updated: %d."
 msgstr "แก้ไขเมื่อ: %d"
 
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:841
 #, fuzzy
 msgid "Updated: %s"
 msgstr "แก้ไขเมื่อ: %s"
@@ -4820,11 +4860,11 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/lib/BaseApplication.ts:170 packages/lib/BaseApplication.ts:183
-#: packages/lib/BaseApplication.ts:220
+#: packages/lib/BaseApplication.ts:226
 msgid "Usage: %s"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1640
+#: packages/lib/models/Setting.ts:1657
 msgid "Use biometrics to secure access to the app"
 msgstr ""
 
@@ -4848,25 +4888,25 @@ msgstr ""
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:617
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:62
+#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1244
+#: packages/lib/models/Setting.ts:1255
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1256
+#: packages/lib/models/Setting.ts:1267
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4888,7 +4928,7 @@ msgstr ""
 msgid "Valid"
 msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 
-#: packages/app-mobile/components/biometrics/BiometricPopup.tsx:25
+#: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
 msgstr ""
 
@@ -4897,7 +4937,7 @@ msgstr ""
 msgid "View"
 msgstr "&มุมมอง"
 
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:845
 msgid "View on map"
 msgstr "แสดงในแผนที่"
 
@@ -4914,11 +4954,19 @@ msgstr ""
 msgid "Viewer"
 msgstr "Viewer"
 
-#: packages/lib/models/Setting.ts:1408
+#: packages/lib/models/Setting.ts:1419
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:82
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
+msgid "Voice typing"
+msgstr ""
+
+#: packages/app-mobile/components/screens/Note.tsx:993
+msgid "Voice typing..."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 #, fuzzy
 msgid "Warning"
 msgstr "คำเตือน"
@@ -4928,7 +4976,7 @@ msgstr "คำเตือน"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "คำเตือน: ทรัพยากรทั้งหมดไม่ได้ถูกแสดง ด้วยเห็นผลเรื่องสมรรถภาพ (จำกัด: %s)"
 
-#: packages/lib/models/Setting.ts:2486 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2504 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4968,12 +5016,12 @@ msgstr ""
 "\n"
 "ตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1103
 #, fuzzy
 msgid "When creating a new note:"
 msgstr "เมื่อสร้างบันทึกใหม่:"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1086
 msgid "When creating a new to-do:"
 msgstr "เมื่อสร้าง to-do ใหม่:"
 
@@ -4996,19 +5044,19 @@ msgid "yes"
 msgstr "ใช่"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:574
-#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:63
+#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "Yes"
 msgstr "ใช่"
 
-#: packages/app-mobile/components/screens/Note.tsx:573
+#: packages/app-mobile/components/screens/Note.tsx:582
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
 
-#: packages/app-mobile/components/note-list.js:97
+#: packages/app-mobile/components/NoteList.tsx:94
 #, fuzzy
 msgid "You currently have no notebooks."
 msgstr "คุณยังไม่มีสมุดบันทึกใดเลย"

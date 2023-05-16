@@ -840,13 +840,8 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			// If it's a sub-profile, the locale must come from the root
-			// profile.
-			if (!Setting.value('isSubProfile')) {
-				const locale = shim.detectAndSetLocale(Setting);
-				reg.logger().info(`First start: detected locale as ${locale}`);
-			}
-
+			const locale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${locale}`);
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
