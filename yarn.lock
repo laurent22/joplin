@@ -4926,7 +4926,7 @@ __metadata:
     "@react-native-community/datetimepicker": 6.7.5
     "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.9
-    "@react-native-community/push-notification-ios": 1.10.1
+    "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.6
@@ -6991,15 +6991,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/push-notification-ios@npm:1.10.1":
-  version: 1.10.1
-  resolution: "@react-native-community/push-notification-ios@npm:1.10.1"
+"@react-native-community/push-notification-ios@npm:1.11.0":
+  version: 1.11.0
+  resolution: "@react-native-community/push-notification-ios@npm:1.11.0"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
     react: ">=16.6.3"
     react-native: ">=0.58.4"
-  checksum: 64de91355791618f770057a903e3004b76d0f627e8db1477add81091db7e9675ef8d9a0fea6f20b7d166701a8b193f4e87396ae95c6778f42ca7bf3055d3e901
+  checksum: d8c8cdd0d4e8112752a13bf2c426618ec8edd91eacadf03f05375648b5f12ffa761e8676e9d6ac9e5bc5ded73c991ab2219c67fe02e110dfaf38f4cb59695868
   languageName: node
   linkType: hard
 
