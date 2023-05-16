@@ -27,7 +27,7 @@
   },
   "build": {
     "appId": "net.cozic.joplin-desktop",
-    "compression": "maximum",
+    "compression": "normal",
     "productName": "Joplin",
     "npmRebuild": false,
     "afterSign": "./tools/notarizeMacApp.js",
