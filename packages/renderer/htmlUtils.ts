@@ -30,9 +30,13 @@ const selfClosingElements = [
 	'wbr',
 ];
 
+interface SanitizeHtmlOptions {
+	addNoMdConvClass: boolean;
+}
+
 class HtmlUtils {
 
-	public attributesHtml(attr: any) {
+	public attributesHtml(attr: Record<string, string>) {
 		const output = [];
 
 		for (const n in attr) {
@@ -76,8 +80,15 @@ class HtmlUtils {
 	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 
+		interface Action {
+			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
+			href: string;
+			html: string;
+			attrs: Record<string, string>;
+		}
+
 		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action = callback({ href: href });
+			const action: Action = callback({ href: href });
 
 			if (!action) return `<a${before}href="${href}"${after}>`;
 
@@ -149,7 +160,7 @@ class HtmlUtils {
 		return url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto://');
 	}
 
-	public sanitizeHtml(html: string, options: any = null) {
+	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
 		options = Object.assign({}, {
 			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
