@@ -172,17 +172,21 @@ class HtmlUtils {
 
 		// The BASE tag allows changing the base URL from which files are
 		// loaded, and that can break several plugins, such as Katex (which
-		// needs to load CSS files using a relative URL). For that reason
-		// it is disabled. More info:
-		// https://github.com/laurent22/joplin/issues/3021
+		// needs to load CSS files using a relative URL). For that reason it is
+		// disabled. More info: https://github.com/laurent22/joplin/issues/3021
 		//
-		// "link" can be used to escape the parser and inject JavaScript.
-		// Adding "meta" too for the same reason as it shouldn't be used in
-		// notes anyway.
+		// "link" can be used to escape the parser and inject JavaScript. Adding
+		// "meta" too for the same reason as it shouldn't be used in notes
+		// anyway.
+		//
+		// There are too many issues with SVG tags and to handle them properly
+		// we should parse them separately. Currently we are not so it is better
+		// to disable them. SVG graphics are still supported via the IMG tag.
 		const disallowedTags = [
 			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
 			'embed', 'link', 'meta', 'noscript', 'button', 'form',
 			'input', 'select', 'textarea', 'option', 'optgroup',
+			'svg',
 		];
 
 		const parser = new htmlparser2.Parser({
