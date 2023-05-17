@@ -39,6 +39,7 @@ interface GlobalParams {
 	prefersDarkEnabled?: boolean;
 	notifications?: NotificationView[];
 	hasNotifications?: boolean;
+	fullYear?: number;
 	owner?: User;
 	fullVersionString?: string;
 	appName?: string;
@@ -177,6 +178,7 @@ export default class MustacheService {
 			privacyUrl: config().termsEnabled ? makeUrl(UrlType.Privacy) : '',
 			showErrorStackTraces: config().showErrorStackTraces,
 			isJoplinCloud: config().isJoplinCloud,
+			fullYear: (new Date()).getFullYear(),
 		};
 	}
 
