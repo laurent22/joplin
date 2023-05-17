@@ -32,16 +32,7 @@ Linux | <a href='https://objects.joplinusercontent.com/v2.10.18/Joplin-2.10.18.A
 
 <pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash</code></pre>
 
-The install and update script supports the following flags:
-
-| Flag | Decription |
-| --- | --- |
-| --help | Show this help information |
-| --allow-root | Allow the install to be run as root |
-| --changelog | Show the changelog after installation |
-| --force | Always download the latest version |
-| --silent | Don't print any output |
-| --prerelease | Check for new Versions including Pre-Releases |
+The install and update script supports the [following flags](https://github.com/laurent22/joplin/blob/215434bb4f9c1033e217e4d5c5a04d077cf9bb18/Joplin_install_and_update.sh#L48).
 
 ## Mobile applications
 
