@@ -114,6 +114,15 @@
 - Fixed: Mermaid images are incorrectly sized when exported as PNG ([#7546](https://github.com/laurent22/joplin/issues/7546)) ([#7521](https://github.com/laurent22/joplin/issues/7521) by Adarsh Singh)
 - Fixed: Note editor scrolls back to top when editing certain notes ([#7617](https://github.com/laurent22/joplin/issues/7617))
 
+## [v2.10.5](https://github.com/laurent22/joplin/releases/tag/v2.10.5) - 2023-01-16T15:00:53Z
+
+- Fixed: Api: Fixes [#6862](https://github.com/laurent22/joplin/issues/6862) set todo related fields when adding or changing a todo ([#7395](https://github.com/laurent22/joplin/issues/7395) by [@Wartijn](https://github.com/Wartijn))
+- Fixed: Fixed crash when loading certain plugins ([#7598](https://github.com/laurent22/joplin/issues/7598))
+- Fixed: Fixes crash when changing note time from properties dialog ([6b9a270](https://github.com/laurent22/joplin/commit/6b9a270))
+- Fixed: Hyperlink insertion no longer works in Markdown editor ([#7605](https://github.com/laurent22/joplin/issues/7605))
+- Fixed: Optimise sidebar rendering speed ([#7610](https://github.com/laurent22/joplin/issues/7610))
+- Fixed: Try to replace the external link with internal link when attachment file is pasted in Markdown editor ([#6865](https://github.com/laurent22/joplin/issues/6865)) ([#6211](https://github.com/laurent22/joplin/issues/6211) by Self Not Found)
+
 ## [v2.10.4](https://github.com/laurent22/joplin/releases/tag/v2.10.4) (Pre-release) - 2023-01-05T13:09:20Z
 
 - Fixed: Fixed certain plugins that were using the sqlite3 database ([a43ce33](https://github.com/laurent22/joplin/commit/a43ce33))
