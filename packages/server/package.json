@@ -54,7 +54,7 @@
     "sqlite3": "5.1.6",
     "stripe": "8.222.0",
     "uuid": "9.0.0",
-    "yargs": "17.7.1",
+    "yargs": "17.7.2",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
