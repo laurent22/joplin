@@ -1,7 +1,7 @@
 import * as Mustache from 'mustache';
 import * as fs from 'fs-extra';
 import { extname } from 'path';
-import config from '../config';
+import config, { fullVersionString } from '../config';
 import { filename } from '@joplin/lib/path-utils';
 import { NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
@@ -40,7 +40,7 @@ interface GlobalParams {
 	notifications?: NotificationView[];
 	hasNotifications?: boolean;
 	owner?: User;
-	appVersion?: string;
+	fullVersionString?: string;
 	appName?: string;
 	termsUrl?: string;
 	privacyUrl?: string;
@@ -171,7 +171,7 @@ export default class MustacheService {
 			baseUrl: config().baseUrl,
 			joplinAppBaseUrl: config().joplinAppBaseUrl,
 			prefersDarkEnabled: this.prefersDarkEnabled_,
-			appVersion: config().appVersion,
+			fullVersionString: fullVersionString(config()),
 			appName: config().appName,
 			termsUrl: config().termsEnabled ? makeUrl(UrlType.Terms) : '',
 			privacyUrl: config().termsEnabled ? makeUrl(UrlType.Privacy) : '',
