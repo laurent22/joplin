@@ -117,12 +117,19 @@ fi
 #-----------------------------------------------------
 print "Checking dependencies..."
 ## Check if libfuse2 is present.
-LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
-if [[ $LIBFUSE == "" ]] ; then
+set +e
+trap - ERR
+LIBFUSE=$(ldconfig -p 2>/dev/null | grep "libfuse.so.2")
+if [[ $? -ne 0 ]]; then
+  print "${COLOR_RED}Could not check dependencies. Continuing anyway.${COLOR_RESET}"
+  print "If starting Joplin fails you might want to check https://joplinapp.org/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
+elif [[ $LIBFUSE == "" ]] ; then
   print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
   print "See https://joplinapp.org/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
   exit 1
 fi
+set -e
+trap 'handleError' ERR
 
 #-----------------------------------------------------
 # Download Joplin
