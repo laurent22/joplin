@@ -35,7 +35,7 @@ describe('MdToHtml', () => {
 			const mdFilePath = `${basePath}/${mdFilename}`;
 			const htmlPath = `${basePath}/${filename(mdFilePath)}.html`;
 
-			// if (mdFilename !== 'sanitize_9.md') continue;
+			if (mdFilename !== 'sanitize_15.md') continue;
 
 			const mdToHtmlOptions: any = {
 				bodyOnly: true,

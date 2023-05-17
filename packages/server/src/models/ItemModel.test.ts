@@ -497,68 +497,65 @@ describe('ItemModel', () => {
 		expect(emptyOnes.length).toBe(4);
 	});
 
-	// test('should stop importing item if it has been deleted', async function() {
-	// 	const { user: user1 } = await createUserAndSession(1);
+	// Case where an item is orphaned by the associated user has since then been
+	// deleted.
+	test('should process orphaned items - 1', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
 
-	// 	const tempDir1 = await tempDir('storage1');
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+			},
+		]);
 
-	// 	const driver = await loadStorageDriver({
-	// 		type: StorageDriverType.Filesystem,
-	// 		path: tempDir1,
-	// 	}, db());
+		await createItemTree3(user2.id, '', '', [
+			{
+				id: '000000000000000000000000000000F2',
+			},
+		]);
 
-	// 	let waitWrite = false;
-	// 	const previousWrite = driver.write.bind(driver);
-	// 	driver.write = async (itemId:string, content:Buffer, context: Context) => {
-	// 		return new Promise((resolve) => {
-	// 			const iid = setInterval(async () => {
-	// 				if (waitWrite) return;
-	// 				clearInterval(iid);
-	// 				await previousWrite(itemId, content, context);
-	// 				resolve(null);
-	// 			}, 10);
-	// 		});
-	// 	}
+		await db()('users').where('id', '=', user1.id).delete();
+		await db()('user_items').where('user_id', '=', user1.id).delete();
 
-	// 	await models().item().saveFromRawContent(user1, {
-	// 		body: Buffer.from(JSON.stringify({ 'version': 1 })),
-	// 		name: 'info.json',
-	// 	});
+		expect(await models().item().count()).toBe(2);
 
-	// 	const item = (await models().item().all())[0];
+		await models().item().processOrphanedItems();
 
-	// 	const promise = models().item().importContentToStorage(driver);
-	// 	waitWrite = false;
-	// 	await promise;
+		expect(await models().item().count()).toBe(1);
 
-	// 	expect(await driver.exists(item.id, { models: models() })).toBe(true);
+		const item = await models().item().all();
+		expect(item[0].name).toBe('000000000000000000000000000000F2.md');
+	});
 
+	// Case where an item is orphaned and the associated user is still prsent.
+	test('should process orphaned items - 2', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
 
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+			},
+		]);
 
+		await createItemTree3(user2.id, '', '', [
+			{
+				id: '000000000000000000000000000000F2',
+			},
+		]);
 
+		await db()('user_items').where('user_id', '=', user1.id).delete();
 
+		expect(await models().userItem().count()).toBe(1);
 
+		await models().item().processOrphanedItems();
 
-	// 	{
-	// 		const result = await models().item().saveFromRawContent(user1, {
-	// 			body: Buffer.from(JSON.stringify({ 'version': 2 })),
-	// 			name: 'info2.json',
-	// 		});
+		expect(await models().item().count()).toBe(2);
+		expect(await models().userItem().count()).toBe(2);
 
-	// 		const item2 = result['info2.json'].item;
-
-	// 		waitWrite = true;
-	// 		const promise = models().item().importContentToStorage(driver);
-
-	// 		await msleep(100);
-
-	// 		await models().item().delete(item2.id);
-
-	// 		waitWrite = false;
-	// 		await promise;
-
-	// 		expect(await driver.exists(item2.id, { models: models() })).toBe(false);
-	// 	}
-	// });
+		expect((await models().userItem().byUserId(user1.id)).length).toBe(1);
+		expect((await models().userItem().byUserId(user2.id)).length).toBe(1);
+	});
 
 });

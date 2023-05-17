@@ -30,9 +30,13 @@ const selfClosingElements = [
 	'wbr',
 ];
 
+interface SanitizeHtmlOptions {
+	addNoMdConvClass: boolean;
+}
+
 class HtmlUtils {
 
-	public attributesHtml(attr: any) {
+	public attributesHtml(attr: Record<string, string>) {
 		const output = [];
 
 		for (const n in attr) {
@@ -76,8 +80,15 @@ class HtmlUtils {
 	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 
+		interface Action {
+			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
+			href: string;
+			html: string;
+			attrs: Record<string, string>;
+		}
+
 		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action = callback({ href: href });
+			const action: Action = callback({ href: href });
 
 			if (!action) return `<a${before}href="${href}"${after}>`;
 
@@ -149,7 +160,7 @@ class HtmlUtils {
 		return url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto://');
 	}
 
-	public sanitizeHtml(html: string, options: any = null) {
+	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
 		options = Object.assign({}, {
 			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
@@ -172,17 +183,21 @@ class HtmlUtils {
 
 		// The BASE tag allows changing the base URL from which files are
 		// loaded, and that can break several plugins, such as Katex (which
-		// needs to load CSS files using a relative URL). For that reason
-		// it is disabled. More info:
-		// https://github.com/laurent22/joplin/issues/3021
+		// needs to load CSS files using a relative URL). For that reason it is
+		// disabled. More info: https://github.com/laurent22/joplin/issues/3021
 		//
-		// "link" can be used to escape the parser and inject JavaScript.
-		// Adding "meta" too for the same reason as it shouldn't be used in
-		// notes anyway.
+		// "link" can be used to escape the parser and inject JavaScript. Adding
+		// "meta" too for the same reason as it shouldn't be used in notes
+		// anyway.
+		//
+		// There are too many issues with SVG tags and to handle them properly
+		// we should parse them separately. Currently we are not so it is better
+		// to disable them. SVG graphics are still supported via the IMG tag.
 		const disallowedTags = [
 			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
 			'embed', 'link', 'meta', 'noscript', 'button', 'form',
 			'input', 'select', 'textarea', 'option', 'optgroup',
+			'svg',
 		];
 
 		const parser = new htmlparser2.Parser({
