@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v2.10.19](https://github.com/laurent22/joplin/releases/tag/v2.10.19) - 2023-05-17T12:25:41Z
+
+- Improved: Improved handling of items with duplicate IDs when synchronising with Joplin Cloud or Server ([d4c43a8](https://github.com/laurent22/joplin/commit/d4c43a8))
+- Security: Fixed possible XSS injection ([b26bc9e](https://github.com/laurent22/joplin/commit/b26bc9e)) (Discovery and PoC by [@maple3142](https://twitter.com/maple3142))
+- Security: Prevent XSS and potential RCE when using a special HTML tag ([19bdda2](https://github.com/laurent22/joplin/commit/19bdda2)) (Discovery and PoC by [Yaniv Nizry](https://twitter.com/YNizry) ([SonarSource](https://www.sonarsource.com/)))
+
 ## [v2.11.4](https://github.com/laurent22/joplin/releases/tag/v2.11.4) (Pre-release) - 2023-05-16T10:02:21Z
 
 - Fixed: Fix slow startup time ([#8087](https://github.com/laurent22/joplin/issues/8087))
