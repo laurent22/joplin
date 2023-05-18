@@ -32,6 +32,8 @@ Linux | <a href='https://objects.joplinusercontent.com/v2.10.19/Joplin-2.10.19.A
 
 <pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash</code></pre>
 
+The install and update script supports the [following flags](https://github.com/laurent22/joplin/blob/dev/Joplin_install_and_update.sh#L50) (around line 50 at the time of this writing).
+
 ## Mobile applications
 
 Operating System | Download | Alt. Download
