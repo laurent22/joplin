@@ -38,7 +38,7 @@
     "sharp": "0.32.1",
     "source-map-support": "0.5.21",
     "uri-template": "2.0.0",
-    "yargs": "17.7.1"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "@joplin/fork-htmlparser2": "^4.1.43",
