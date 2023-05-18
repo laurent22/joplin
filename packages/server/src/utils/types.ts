@@ -133,6 +133,7 @@ export interface StorageDriverConfig {
 
 export interface Config extends EnvVariables {
 	appVersion: string;
+	joplinServerVersion: string; // May be different from appVersion, if this is a fork of JS
 	appName: string;
 	env: Env;
 	port: number;

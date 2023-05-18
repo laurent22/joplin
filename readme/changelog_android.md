@@ -1,5 +1,80 @@
 # Joplin Android app changelog
 
+## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
+
+- Fixed: Fix "Download interrupted" error (b023f58)
+
+## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
+
+- Improved: Updated packages react-native-paper (v5.6.0)
+
+## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) (Pre-release) - 2023-05-12T12:43:08Z
+
+- Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
+
+## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) (Pre-release) - 2023-05-10T12:24:40Z
+
+- Improved: Translate Welcome notes (#8154)
+
+## [android-v2.11.13](https://github.com/laurent22/joplin/releases/tag/android-v2.11.13) (Pre-release) - 2023-05-08T20:28:29Z
+
+- Improved: Tells whether Hermes engine is enabled or not (5ecae17)
+
+## [android-v2.11.10](https://github.com/laurent22/joplin/releases/tag/android-v2.11.10) (Pre-release) - 2023-05-08T10:26:14Z
+
+- Improved: Disable Hermes engine (e9e9986)
+- Fixed: Fix voice typing (d5eeb12)
+
+## [android-v2.11.7](https://github.com/laurent22/joplin/releases/tag/android-v2.11.7) (Pre-release) - 2023-05-07T14:29:08Z
+
+- Fixed crash when starting voice typing.
+
+## [android-v2.11.6](https://github.com/laurent22/joplin/releases/tag/android-v2.11.6) (Pre-release) - 2023-05-07T13:53:31Z
+
+- Disabled Hermes engine
+
+## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) (Pre-release) - 2023-05-07T12:14:21Z
+
+- Improved: Improved Vosk support (beta, fr only) (#8131)
+- Improved: Updated packages react-native-share (v8.2.2), reselect (v4.1.8), sharp (v0.32.0)
+
+## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) (Pre-release) - 2023-05-03T11:57:27Z
+
+- New: Add support for offline speech to text (Beta - FR only) (#8115)
+- Improved: Updated packages @react-native-community/netinfo (v9.3.9), aws, react-native-document-picker (v8.2.0), react-native-paper (v5.5.2), react-native-safe-area-context (v4.5.1), sass (v1.60.0)
+- Fixed: Fixed sync crash (#8056) (#8017 by Arun Kumar)
+- Fixed: Fixes issue where the note body is not updated after attaching a file (991c120)
+
+## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) (Pre-release) - 2023-04-09T12:04:06Z
+
+- Improved: Resolve #8022: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)
+- Improved: Updated packages @react-native-community/netinfo (v9.3.8)
+- Fixed: Removed `MasterKey` from Sync Status report (#8026) (#7940 by Arun Kumar)
+- Security: Prevent bypassing fingerprint lock on certain devices (6b72f86)
+
+## [android-v2.11.1](https://github.com/laurent22/joplin/releases/tag/android-v2.11.1) (Pre-release) - 2023-04-08T08:49:19Z
+
+- New: Add log info for biometrics feature (efdbaeb)
+- New: Add setting to enable/disable the markdown toolbar (#7929 by Henry Heino)
+- Fixed: Encode the non-ASCII characters in OneDrive URI (#7868) (#7851 by Self Not Found)
+- Fixed: Fix OneDrive sync attempting to call method on `null` variable (#7987) (#7986 by Henry Heino)
+- Updated packages @lezer/highlight (v1.1.4), fs-extra (v11.1.1), jsdom (v21.1.1), markdown-it-multimd-table (v4.2.1), nanoid (v3.3.6), node-persist (v3.1.3), nodemon (v2.0.22), react-native-document-picker (v8.1.4), react-native-image-picker (v5.3.1), react-native-paper (v5.4.1), react-native-share (v8.2.1), sass (v1.59.3), sqlite3 (v5.1.6), turndown (v7.1.2), yargs (v17.7.1)
+
+## [android-v2.10.9](https://github.com/laurent22/joplin/releases/tag/android-v2.10.9) (Pre-release) - 2023-03-22T18:40:57Z
+
+- Improved: Mark biometrics feature as beta and ensure no call is made if it is not enabled (e44a934)
+
+## [android-v2.10.8](https://github.com/laurent22/joplin/releases/tag/android-v2.10.8) (Pre-release) - 2023-02-28T18:09:21Z
+
+- Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
+- Fixed: Custom sort order not synchronized (#7729) (#6956 by Tao Klerks)
+- Fixed: Fix camera attachment (#7775) (#7675 by [@vikneshwar](https://github.com/vikneshwar))
+- Fixed: Fixed duplicate sharing issue (#7799) (#7791 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixed error when sharing a file (#7801) (#6942 by [@jd1378](https://github.com/jd1378))
+- Fixed: Fixed issue where app would close after sharing a file (#7791)
+- Fixed: Hide main content while biometric is enabled and not authenticated (#7781) (#7762 by [@pedr](https://github.com/pedr))
+- Fixed: Sharing pictures to Joplin creates recurring duplications (#7807) (#7791 by [@jd1378](https://github.com/jd1378))
+
 ## [android-v2.10.6](https://github.com/laurent22/joplin/releases/tag/android-v2.10.6) (Pre-release) - 2023-02-10T16:22:28Z
 
 - Improved: Add create sub-notebook feature (#7728) (#1044 by [@carlosngo](https://github.com/carlosngo))

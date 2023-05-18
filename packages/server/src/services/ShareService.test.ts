@@ -4,7 +4,7 @@ import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models,
 import { Env } from '../utils/types';
 import ShareService from './ShareService';
 
-describe('ShareService', function() {
+describe('ShareService', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ShareService');
@@ -18,7 +18,7 @@ describe('ShareService', function() {
 		await beforeEachDb();
 	});
 
-	test('should run maintenance when an item is changed', async function() {
+	test('should run maintenance when an item is changed', async () => {
 		jest.useFakeTimers();
 
 		const { user: user1, session: session1 } = await createUserAndSession(1);

@@ -2,7 +2,7 @@ import { ErrorForbidden } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext, expectNotThrow, expectHttpError, createUserAndSession } from '../utils/testing/testUtils';
 import checkAdminHandler from './checkAdminHandler';
 
-describe('checkAdminHandler', function() {
+describe('checkAdminHandler', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('checkAdminHandler');
@@ -16,7 +16,7 @@ describe('checkAdminHandler', function() {
 		await beforeEachDb();
 	});
 
-	test('should access /admin if the user is admin', async function() {
+	test('should access /admin if the user is admin', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const context = await koaAppContext({
@@ -30,7 +30,7 @@ describe('checkAdminHandler', function() {
 		await expectNotThrow(async () => checkAdminHandler(context, koaNext));
 	});
 
-	test('should not access /admin if the user is not admin', async function() {
+	test('should not access /admin if the user is not admin', async () => {
 		const { session } = await createUserAndSession(1);
 
 		const context = await koaAppContext({
@@ -44,7 +44,7 @@ describe('checkAdminHandler', function() {
 		await expectHttpError(async () => checkAdminHandler(context, koaNext), ErrorForbidden.httpCode);
 	});
 
-	test('should not access /admin if the user is not logged in', async function() {
+	test('should not access /admin if the user is not logged in', async () => {
 		const context = await koaAppContext({
 			request: {
 				method: 'GET',

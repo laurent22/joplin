@@ -5,6 +5,7 @@ const { FileApi } = require('./file-api.js');
 const Synchronizer = require('./Synchronizer').default;
 const WebDavApi = require('./WebDavApi');
 const { FileApiDriverWebDav } = require('./file-api-driver-webdav');
+const checkProviderIsSupported = require('./utils/webDAVUtils').default;
 
 class SyncTargetWebDAV extends BaseSyncTarget {
 	static id() {
@@ -56,6 +57,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 		};
 
 		try {
+			checkProviderIsSupported(options.path());
 			const result = await fileApi.stat('');
 			if (!result) throw new Error(`WebDAV directory not found: ${options.path()}`);
 			output.ok = true;

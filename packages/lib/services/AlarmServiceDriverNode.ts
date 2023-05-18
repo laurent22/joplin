@@ -14,29 +14,29 @@ export default class AlarmServiceDriverNode {
 	private notifications_: any = {};
 	private service_: any = null;
 
-	constructor(options: Options) {
+	public constructor(options: Options) {
 		// Note: appName is required to get the notification to work. It must be the same as the appId defined in package.json
 		// https://github.com/mikaelbr/node-notifier/issues/144#issuecomment-319324058
 		this.appName_ = options.appName;
 	}
 
-	setService(s: any) {
+	public setService(s: any) {
 		this.service_ = s;
 	}
 
-	logger() {
+	public logger() {
 		return this.service_.logger();
 	}
 
-	hasPersistentNotifications() {
+	public hasPersistentNotifications() {
 		return false;
 	}
 
-	notificationIsSet(id: number) {
+	public notificationIsSet(id: number) {
 		return id in this.notifications_;
 	}
 
-	clearNotification(id: number) {
+	public clearNotification(id: number) {
 		if (!this.notificationIsSet(id)) return;
 		shim.clearTimeout(this.notifications_[id].timeoutId);
 		delete this.notifications_[id];
@@ -126,7 +126,7 @@ export default class AlarmServiceDriverNode {
 		return 'granted';
 	}
 
-	async scheduleNotification(notification: Notification) {
+	public async scheduleNotification(notification: Notification) {
 		const now = Date.now();
 		const interval = notification.date.getTime() - now;
 		if (interval < 0) return;

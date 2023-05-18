@@ -1,7 +1,7 @@
 const shim = require('@joplin/lib/shim').default;
 const { GeolocationReact } = require('./geolocation-react.js');
 const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
-const RNFetchBlob = require('rn-fetch-blob').default;
+const RNFetchBlob = require('react-native-blob-util').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('./fs-driver-rn').default;
 const { Buffer } = require('buffer');
@@ -215,8 +215,8 @@ function shimInit() {
 	};
 
 	shim.waitForFrame = () => {
-		return new Promise(function(resolve) {
-			requestAnimationFrame(function() {
+		return new Promise((resolve) => {
+			requestAnimationFrame(() => {
 				resolve();
 			});
 		});

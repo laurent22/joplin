@@ -32,7 +32,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
 	public state: State = { error: null, errorInfo: null, pluginInfos: [], plugins: {} };
 
-	componentDidCatch(error: any, errorInfo: ErrorInfo) {
+	public componentDidCatch(error: any, errorInfo: ErrorInfo) {
 		if (typeof error === 'string') error = { message: error };
 
 		const pluginInfos: PluginInfo[] = [];
@@ -58,7 +58,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 		this.setState({ error, errorInfo, pluginInfos, plugins });
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		const onAppClose = () => {
 			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
 				canClose: true,
@@ -68,12 +68,12 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 		ipcRenderer.on('appClose', onAppClose);
 	}
 
-	renderMessage() {
+	public renderMessage() {
 		const message = this.props.message || 'Joplin encountered a fatal error and could not continue.';
 		return <p>{message}</p>;
 	}
 
-	render() {
+	public render() {
 		if (this.state.error) {
 			const safeMode_click = async () => {
 				Setting.setValue('isSafeMode', true);

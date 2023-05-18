@@ -1,4 +1,5 @@
 import { Plan, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+import { Sponsors } from '../../utils/loadSponsors';
 import { OpenGraphTags } from './openGraph';
 
 export enum Env {
@@ -6,21 +7,14 @@ export enum Env {
 	Prod = 'prod',
 }
 
-export interface GithubSponsor {
-	name: string;
+export interface Locale {
+	htmlTranslations: Record<string, string>;
+	lang: string;
+	pathPrefix: string;
+}
+
+export interface GithubUser {
 	id: string;
-}
-
-export interface OrgSponsor {
-	url: string;
-	urlWebsite?: string;
-	title: string;
-	imageName: string;
-}
-
-export interface Sponsors {
-	github: GithubSponsor[];
-	orgs: OrgSponsor[];
 }
 
 interface PressCarouselItem {
@@ -74,6 +68,7 @@ export interface TemplateParams {
 	showBottomLinks?: boolean;
 	openGraph: OpenGraphTags;
 	isNews?: boolean;
+	locale?: Locale;
 }
 
 export interface PlanPageParams extends TemplateParams {

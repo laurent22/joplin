@@ -24,43 +24,43 @@ export default class ResourceFetcher extends BaseService {
 	private scheduleQueueProcessIID_: any;
 	private scheduleAutoAddResourcesIID_: any;
 
-	constructor(fileApi: any = null) {
+	public constructor(fileApi: any = null) {
 		super();
 		this.setFileApi(fileApi);
 	}
 
-	static instance() {
+	public static instance() {
 		if (ResourceFetcher.instance_) return ResourceFetcher.instance_;
 		ResourceFetcher.instance_ = new ResourceFetcher();
 		return ResourceFetcher.instance_;
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	setLogger(logger: Logger) {
+	public setLogger(logger: Logger) {
 		this.logger_ = logger;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	setFileApi(v: any) {
+	public setFileApi(v: any) {
 		if (v !== null && typeof v !== 'function') throw new Error(`fileApi must be a function that returns the API. Type is ${typeof v}`);
 		this.fileApi_ = v;
 	}
 
-	async fileApi() {
+	public async fileApi() {
 		return this.fileApi_();
 	}
 
-	queuedItemIndex_(resourceId: string) {
+	private queuedItemIndex_(resourceId: string) {
 		for (let i = 0; i < this.fetchingItems_.length; i++) {
 			const item = this.fetchingItems_[i];
 			if (item.id === resourceId) return i;
@@ -68,7 +68,7 @@ export default class ResourceFetcher extends BaseService {
 		return -1;
 	}
 
-	updateReport() {
+	public updateReport() {
 		const fetchingCount = Object.keys(this.fetchingItems_).length;
 		this.dispatch({
 			type: 'RESOURCE_FETCHER_SET',
@@ -77,7 +77,7 @@ export default class ResourceFetcher extends BaseService {
 		});
 	}
 
-	async markForDownload(resourceIds: string[]) {
+	public async markForDownload(resourceIds: string[]) {
 		if (!Array.isArray(resourceIds)) resourceIds = [resourceIds];
 
 		const fetchStatuses = await Resource.fetchStatuses(resourceIds);
@@ -97,7 +97,7 @@ export default class ResourceFetcher extends BaseService {
 		}
 	}
 
-	queueDownload_(resourceId: string, priority: string = null) {
+	public queueDownload_(resourceId: string, priority: string = null) {
 		if (priority === null) priority = 'normal';
 
 		const index = this.queuedItemIndex_(resourceId);
@@ -118,7 +118,7 @@ export default class ResourceFetcher extends BaseService {
 		return true;
 	}
 
-	async startDownload_(resourceId: string) {
+	private async startDownload_(resourceId: string) {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
 
@@ -195,7 +195,7 @@ export default class ResourceFetcher extends BaseService {
 			});
 	}
 
-	processQueue_() {
+	private processQueue_() {
 		while (Object.getOwnPropertyNames(this.fetchingItems_).length < this.maxDownloads_) {
 			if (!this.queue_.length) break;
 			const item = this.queue_.splice(0, 1)[0];
@@ -207,7 +207,7 @@ export default class ResourceFetcher extends BaseService {
 		}
 	}
 
-	async waitForAllFinished() {
+	public async waitForAllFinished() {
 		return new Promise((resolve) => {
 			const iid = shim.setInterval(() => {
 				if (!this.updateReportIID_ &&
@@ -223,7 +223,7 @@ export default class ResourceFetcher extends BaseService {
 		});
 	}
 
-	async autoAddResources(limit: number = null) {
+	public async autoAddResources(limit: number = null) {
 		this.autoAddResourcesCalls_.push(true);
 		try {
 			if (limit === null) limit = 10;
@@ -251,12 +251,12 @@ export default class ResourceFetcher extends BaseService {
 		}
 	}
 
-	async start() {
+	public async start() {
 		await Resource.resetStartedFetchStatus();
 		void this.autoAddResources(10);
 	}
 
-	scheduleQueueProcess() {
+	public scheduleQueueProcess() {
 		if (this.scheduleQueueProcessIID_) {
 			shim.clearTimeout(this.scheduleQueueProcessIID_);
 			this.scheduleQueueProcessIID_ = null;
@@ -268,7 +268,7 @@ export default class ResourceFetcher extends BaseService {
 		}, 100);
 	}
 
-	scheduleAutoAddResources() {
+	public scheduleAutoAddResources() {
 		if (this.scheduleAutoAddResourcesIID_) return;
 
 		this.scheduleAutoAddResourcesIID_ = shim.setTimeout(() => {
@@ -277,12 +277,12 @@ export default class ResourceFetcher extends BaseService {
 		}, 1000);
 	}
 
-	async fetchAll() {
+	public async fetchAll() {
 		await Resource.resetStartedFetchStatus();
 		void this.autoAddResources(null);
 	}
 
-	async destroy() {
+	public async destroy() {
 		this.eventEmitter_.removeAllListeners();
 		if (this.scheduleQueueProcessIID_) {
 			shim.clearTimeout(this.scheduleQueueProcessIID_);

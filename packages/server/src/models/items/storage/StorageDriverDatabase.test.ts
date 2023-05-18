@@ -16,7 +16,7 @@ const newConfig = (): StorageDriverConfig => {
 	};
 };
 
-describe('StorageDriverDatabase', function() {
+describe('StorageDriverDatabase', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('StorageDriverDatabase');
@@ -39,12 +39,12 @@ describe('StorageDriverDatabase', function() {
 	shouldUpdateContentStorageIdAfterSwitchingDriver(newConfig(), { type: StorageDriverType.Memory });
 	shouldThrowNotFoundIfNotExist(newConfig());
 
-	test('should fail if the item row does not exist', async function() {
+	test('should fail if the item row does not exist', async () => {
 		const driver = newDriver();
 		await expectThrow(async () => driver.read('oops', { models: models() }));
 	});
 
-	test('should do nothing if deleting non-existing row', async function() {
+	test('should do nothing if deleting non-existing row', async () => {
 		const driver = newDriver();
 		await expectNotThrow(async () => driver.delete('oops', { models: models() }));
 	});

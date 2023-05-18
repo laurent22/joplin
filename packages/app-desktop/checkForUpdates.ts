@@ -97,7 +97,8 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 		}
 
 		if (found) {
-			downloadUrl = asset.browser_download_url;
+			downloadUrl = asset.browser_download_url.replace('github.com/laurent22/joplin/releases/download', 'objects.joplinusercontent.com');
+			downloadUrl.concat('?source=DesktopApp&type=Update');
 			break;
 		}
 	}

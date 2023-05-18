@@ -1,8 +1,8 @@
 import { join } from 'path';
-import { execCommand2 } from './tool-utils';
 import { pathExists, mkdir, readFile, move, remove, writeFile } from 'fs-extra';
 import { DefaultPluginsInfo } from '@joplin/lib/services/plugins/PluginService';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import { execCommand } from '@joplin/utils';
 const fetch = require('node-fetch');
 
 interface PluginAndVersion {
@@ -41,7 +41,7 @@ async function downloadFile(url: string, outputPath: string) {
 
 export async function extractPlugins(currentDir: string, defaultPluginDir: string, downloadedPluginsNames: PluginIdAndName): Promise<void> {
 	for (const pluginId of Object.keys(downloadedPluginsNames)) {
-		await execCommand2(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`, { quiet: true });
+		await execCommand(`tar xzf ${currentDir}/${downloadedPluginsNames[pluginId]}`, { quiet: true });
 		await move(`package/publish/${pluginId}.jpl`, `${defaultPluginDir}/${pluginId}/plugin.jpl`, { overwrite: true });
 		await move(`package/publish/${pluginId}.json`, `${defaultPluginDir}/${pluginId}/manifest.json`, { overwrite: true });
 		await remove(`${downloadedPluginsNames[pluginId]}`);

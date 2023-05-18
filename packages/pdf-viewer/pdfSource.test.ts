@@ -22,7 +22,7 @@ function loadFile(filePath: string) {
 
 describe('pdfData', () => {
 
-	test('Should have correct page count', async () => {
+	test('should have correct page count', async () => {
 		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfDocument(document);
 		await pdf.loadDoc(file);
@@ -39,7 +39,7 @@ describe('pdfData', () => {
 	// 	}).rejects.toThrowError();
 	// });
 
-	test('Should get correct page size', async () => {
+	test('should get correct page size', async () => {
 		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfDocument(document);
 		await pdf.loadDoc(file);
@@ -48,7 +48,7 @@ describe('pdfData', () => {
 		expect(size.width).toBeCloseTo(594.95996);
 	});
 
-	test('Should calculate scaled size', async () => {
+	test('should calculate scaled size', async () => {
 		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfDocument(document);
 		await pdf.loadDoc(file);
@@ -56,7 +56,7 @@ describe('pdfData', () => {
 		expect(scaledSize.scale).toBeCloseTo(0.336157);
 	});
 
-	test('Should get correct active page', async () => {
+	test('should get correct active page', async () => {
 		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfDocument(document);
 		await pdf.loadDoc(file);

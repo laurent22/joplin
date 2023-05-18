@@ -26,6 +26,7 @@ export const taskIdToLabel = (taskId: TaskId): string => {
 		[TaskId.CompressOldChanges]: _('Compress old changes'),
 		[TaskId.ProcessUserDeletions]: _('Process user deletions'),
 		[TaskId.AutoAddDisabledAccountsForDeletion]: _('Auto-add disabled accounts for deletion'),
+		[TaskId.ProcessOrphanedItems]: 'Process orphaned items',
 	};
 
 	const s = strings[taskId];

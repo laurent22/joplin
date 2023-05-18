@@ -1,6 +1,6 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 
-describe('KeyValueModel', function() {
+describe('KeyValueModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('KeyValueModel');
@@ -14,7 +14,7 @@ describe('KeyValueModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should set and get value', async function() {
+	test('should set and get value', async () => {
 		const m = models().keyValue();
 
 		await m.setValue('testing1', 'something');
@@ -27,7 +27,7 @@ describe('KeyValueModel', function() {
 		expect(await m.value('testing1')).toBe(456);
 	});
 
-	test('should delete value', async function() {
+	test('should delete value', async () => {
 		const m = models().keyValue();
 
 		await m.setValue('testing1', 'something');

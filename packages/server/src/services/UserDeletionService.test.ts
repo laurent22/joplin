@@ -9,7 +9,7 @@ const newService = () => {
 	return new UserDeletionService(Env.Dev, models(), config());
 };
 
-describe('UserDeletionService', function() {
+describe('UserDeletionService', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('UserDeletionService');
@@ -23,7 +23,7 @@ describe('UserDeletionService', function() {
 		await beforeEachDb();
 	});
 
-	test('should delete user data', async function() {
+	test('should delete user data', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		await createNote(session1.id, { title: 'testing1' });
@@ -58,7 +58,7 @@ describe('UserDeletionService', function() {
 		expect(await models().session().count()).toBe(2);
 	});
 
-	test('should delete user account', async function() {
+	test('should delete user account', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
@@ -99,7 +99,7 @@ describe('UserDeletionService', function() {
 		expect(content.flags.length).toBe(1);
 	});
 
-	test('should not delete notebooks that are not owned', async function() {
+	test('should not delete notebooks that are not owned', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
@@ -128,7 +128,7 @@ describe('UserDeletionService', function() {
 		expect(await models().item().count()).toBe(2);
 	});
 
-	test('should not delete notebooks that are owned', async function() {
+	test('should not delete notebooks that are owned', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -157,7 +157,7 @@ describe('UserDeletionService', function() {
 		expect(await models().item().count()).toBe(0);
 	});
 
-	test('should not do anything if the user is still enabled', async function() {
+	test('should not do anything if the user is still enabled', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
 		const t0 = new Date('2021-12-14').getTime();

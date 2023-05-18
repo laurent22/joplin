@@ -1,6 +1,16 @@
 # Joplin Server Changelog
 
-## [server-v2.10.9](https://github.com/laurent22/joplin/releases/tag/server-v2.10.9) - 2023-02-09T19:43:03Z
+## [server-v2.11.1](https://github.com/laurent22/joplin/releases/tag/server-v2.11.1) - 2023-05-15T17:16:13Z
+
+- Improved: Allow setting NTP server using NTP_SERVER env variable (#8153)
+- Improved: Improved handling of items with duplicate IDs (a0b707c)
+- Improved: Updated packages aws, fs-extra (v11.1.1), jquery (v3.6.4), jsdom (v21.1.1), koa (v2.14.2), markdown-it-multimd-table (v4.2.1), nanoid (v3.3.6), node-mocks-http (v1.12.2), nodemon (v2.0.22), pg (v8.10.0), reselect (v4.1.8), sass (v1.60.0), sharp (v0.32.0), sqlite3 (v5.1.6), turndown (v7.1.2)
+
+## [server-v2.10.11](https://github.com/laurent22/joplin/releases/tag/server-v2.10.11) - 2023-03-17T17:50:13Z
+
+- Improved: Updated packages nodemon (v2.0.21)
+
+## [server-v2.10.10](https://github.com/laurent22/joplin/releases/tag/server-v2.10.10) - 2023-03-09T14:37:07Z
 
 - Improved: Clean up share logic (107f2e1)
 

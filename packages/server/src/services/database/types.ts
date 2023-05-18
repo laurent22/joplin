@@ -123,6 +123,7 @@ export enum TaskId {
 	CompressOldChanges = 7,
 	ProcessUserDeletions = 8,
 	AutoAddDisabledAccountsForDeletion = 9,
+	ProcessOrphanedItems = 10,
 }
 
 // AUTO-GENERATED-TYPES

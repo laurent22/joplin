@@ -2,7 +2,7 @@ import routeHandler from '../../middleware/routeHandler';
 import { cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, createUserAndSession } from '../../utils/testing/testUtils';
 
-describe('index_logout', function() {
+describe('index_logout', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_logout');
@@ -16,7 +16,7 @@ describe('index_logout', function() {
 		await beforeEachDb();
 	});
 
-	test('should logout', async function() {
+	test('should logout', async () => {
 		const { session } = await createUserAndSession();
 
 		const context = await koaAppContext({

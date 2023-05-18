@@ -53,6 +53,13 @@ export default async function(env: Env, models: Models, config: Config, services
 			schedule: '0 */6 * * *',
 			run: (models: Models) => models.session().deleteExpiredSessions(),
 		},
+
+		{
+			id: TaskId.ProcessOrphanedItems,
+			description: taskIdToLabel(TaskId.ProcessOrphanedItems),
+			schedule: '15 * * * *',
+			run: (models: Models) => models.item().processOrphanedItems(),
+		},
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {

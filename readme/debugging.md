@@ -15,6 +15,16 @@ Otherwise, follow these instructions:
 
 Make sure you disable debugging once you've finished. Leaving it enabled can cause your log.txt to grow very quickly. To disable debugging, simply delete the "flags.txt" file created.
 
+### Safe mode
+
+Safe mode is a special mode that disables all plugins and renders the notes as plain text. You can use this if, for example, the app is crashing or freezing on startup, or is very slow to run. By starting in safe mode you can verify if it's an issue with the app itself or with one of the plugins. In some rare cases, certain notes can also freeze the app, and safe mode would allow you to either change the note or delete it if it causing problems.
+
+There's two ways to start in safe mode:
+
+1. From the app, click on **Help &gt; Toggle safe mode**. The app will restart in safe mode.
+
+2. If that doesn't work, if for example the app freezes before you can access this menu, you can set a debug flag in "flags.txt" file, [as described above](#desktop-application). Simply set the content to `--safe-mode --open-dev-tools --debug --log-level debug`.
+
 ## CLI application
 
 - Start the app with `joplin --debug --log-level debug`

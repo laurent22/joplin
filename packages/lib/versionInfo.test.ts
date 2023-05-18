@@ -5,8 +5,6 @@ import Plugin from './services/plugins/Plugin';
 
 jest.mock('./registry');
 
-const info = jest.spyOn(console, 'info').mockImplementation(() => {});
-
 const mockedVersion = jest.fn(() => 'test');
 const mockedDb = { version: mockedVersion };
 
@@ -33,7 +31,7 @@ const packageInfo = {
 	},
 };
 
-describe('getPluginLists', function() {
+describe('getPluginLists', () => {
 
 	beforeAll(() => {
 		(reg.db as jest.Mock).mockReturnValue(mockedDb);
@@ -88,6 +86,7 @@ describe('getPluginLists', function() {
 			);
 			plugins[plugin.manifest.id] = plugin;
 		}
+
 		const v = versionInfo(packageInfo, plugins);
 
 		expect(v.body).toMatch(/\n\nPlugin1: 1\nPlugin2: 1\nPlugin3: 1/);
@@ -112,6 +111,7 @@ describe('getPluginLists', function() {
 
 			plugins[plugin.manifest.id] = plugin;
 		}
+
 		const v = versionInfo(packageInfo, plugins);
 
 		const body = '\n';
@@ -127,6 +127,4 @@ describe('getPluginLists', function() {
 		message.concat('\n...');
 		expect(v.message).toMatch(new RegExp(message));
 	});
-
-	info.mockReset();
 });

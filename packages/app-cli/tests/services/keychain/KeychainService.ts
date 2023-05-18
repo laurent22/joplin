@@ -1,3 +1,5 @@
+/* eslint-disable jest/require-top-level-describe */
+
 import KeychainService from '@joplin/lib/services/keychain/KeychainService';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
@@ -11,7 +13,7 @@ function describeIfCompatible(name: string, fn: any, elseFn: any) {
 	}
 }
 
-describeIfCompatible('services_KeychainService', function() {
+describeIfCompatible('services_KeychainService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1, { keychainEnabled: true });

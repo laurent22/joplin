@@ -80,7 +80,7 @@ function memoryExportModule() {
 	return { result, module };
 }
 
-describe('services_InteropService', function() {
+describe('services_InteropService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

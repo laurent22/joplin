@@ -107,7 +107,7 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 			template = template.concat(menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu));
 
 			const menu = bridge().Menu.buildFromTemplate(template);
-			menu.popup(bridge().window());
+			menu.popup({ window: bridge().window() });
 		}
 
 		bridge().window().webContents.on('context-menu', onContextMenu);

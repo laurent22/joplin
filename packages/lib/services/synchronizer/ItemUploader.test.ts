@@ -41,7 +41,7 @@ function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = nu
 	return apiCall;
 }
 
-describe('synchronizer/ItemUploader', function() {
+describe('synchronizer/ItemUploader', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -159,7 +159,7 @@ describe('synchronizer/ItemUploader', function() {
 		await itemUploader.preUploadItems(notes);
 
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[0]), notes[0]));
-		await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]));
+		await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]), null);
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[2]), notes[2]));
 	}));
 

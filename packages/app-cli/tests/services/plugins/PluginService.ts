@@ -29,7 +29,7 @@ function newPluginService(appVersion: string = '1.4') {
 	return service;
 }
 
-describe('services_PluginService', function() {
+describe('services_PluginService', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

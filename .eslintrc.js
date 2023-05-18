@@ -42,6 +42,8 @@ module.exports = {
 		'zxcvbn': 'readonly',
 
 		'tinymce': 'readonly',
+
+		'JSX': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
@@ -91,7 +93,12 @@ module.exports = {
 		// Disable because of this: https://github.com/facebook/react/issues/16265
 		// "react-hooks/exhaustive-deps": "warn",
 
+		'jest/require-top-level-describe': ['error', { 'maxNumberOfTopLevelDescribes': 1 }],
+		'jest/no-identical-title': ['error'],
+		'jest/prefer-lowercase-title': ['error', { 'ignoreTopLevelDescribe': true }],
+
 		'promise/prefer-await-to-then': 'error',
+		'no-unneeded-ternary': 'error',
 
 		// -------------------------------
 		// Formatting
@@ -143,6 +150,7 @@ module.exports = {
 		// - notebook: In code, it should always be "folder" (not "notebook").
 		//   In user-facing text, it should be "notebook".
 		'id-denylist': ['error', 'err', 'notebook', 'notebooks'],
+		'prefer-arrow-callback': ['error'],
 	},
 	'plugins': [
 		'react',
@@ -153,6 +161,7 @@ module.exports = {
 		// 'react-hooks',
 		'import',
 		'promise',
+		'jest',
 	],
 	'overrides': [
 		{
@@ -173,9 +182,7 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
-				// Warn only because it would make it difficult to convert JS classes to TypeScript, unless we
-				// make everything public which is not great. New code however should specify member accessibility.
-				'@typescript-eslint/explicit-member-accessibility': ['warn'],
+				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
 				'@typescript-eslint/comma-dangle': ['error', {

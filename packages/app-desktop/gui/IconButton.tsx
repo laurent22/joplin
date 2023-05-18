@@ -9,7 +9,7 @@ interface Props {
 }
 
 class IconButton extends React.Component<Props> {
-	render() {
+	public render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 		const iconStyle = {

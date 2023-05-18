@@ -1,7 +1,7 @@
 {
 	"manifest_version": 1,
 	"id": "<%= pluginId %>",
-	"app_min_version": "2.10",
+	"app_min_version": "2.11",
 	"version": "1.0.0",
 	"name": "<%= pluginName %>",
 	"description": "<%= pluginDescription %>",

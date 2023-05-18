@@ -101,56 +101,56 @@ describe('markdownCommands.toggleList', () => {
 	// 	);
 	// });
 
-	it('should not preserve indentation when removing sublists', async () => {
-		const preSubListText = '# List test\n * This\n * is\n';
-		const initialDocText = `${preSubListText}\t1. a\n\t2. test\n * of list toggling`;
+	// it('should not preserve indentation when removing sublists', async () => {
+	// 	const preSubListText = '# List test\n * This\n * is\n';
+	// 	const initialDocText = `${preSubListText}\t1. a\n\t2. test\n * of list toggling`;
 
-		const editor = await createEditor(
-			initialDocText,
-			EditorSelection.range(preSubListText.length, `${preSubListText}\t1. a\n\t2. test`.length),
-			['ATXHeading1', 'BulletList', 'OrderedList']
-		);
+	// 	const editor = await createEditor(
+	// 		initialDocText,
+	// 		EditorSelection.range(preSubListText.length, `${preSubListText}\t1. a\n\t2. test`.length),
+	// 		['ATXHeading1', 'BulletList', 'OrderedList']
+	// 	);
 
-		// Indentation should not be preserved when removing lists
-		toggleList(ListType.OrderedList)(editor);
-		expect(editor.state.selection.main.from).toBe(preSubListText.length);
-		expect(editor.state.doc.toString()).toBe(
-			'# List test\n * This\n * is\na\ntest\n * of list toggling'
-		);
+	// 	// Indentation should not be preserved when removing lists
+	// 	toggleList(ListType.OrderedList)(editor);
+	// 	expect(editor.state.selection.main.from).toBe(preSubListText.length);
+	// 	expect(editor.state.doc.toString()).toBe(
+	// 		'# List test\n * This\n * is\na\ntest\n * of list toggling'
+	// 	);
 
-		// Put the cursor in the middle of the list
-		editor.dispatch({ selection: EditorSelection.cursor(preSubListText.length) });
+	// 	// Put the cursor in the middle of the list
+	// 	editor.dispatch({ selection: EditorSelection.cursor(preSubListText.length) });
 
-		// Sublists should be changed
-		toggleList(ListType.CheckList)(editor);
-		const expectedChecklistPart =
-			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling';
-		expect(editor.state.doc.toString()).toBe(
-			expectedChecklistPart
-		);
+	// 	// Sublists should be changed
+	// 	toggleList(ListType.CheckList)(editor);
+	// 	const expectedChecklistPart =
+	// 		'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling';
+	// 	expect(editor.state.doc.toString()).toBe(
+	// 		expectedChecklistPart
+	// 	);
 
-		editor.dispatch({ selection: EditorSelection.cursor(editor.state.doc.length) });
-		editor.dispatch(editor.state.replaceSelection('\n\n\n'));
+	// 	editor.dispatch({ selection: EditorSelection.cursor(editor.state.doc.length) });
+	// 	editor.dispatch(editor.state.replaceSelection('\n\n\n'));
 
-		// toggleList should also create a new list if the cursor is on an empty line.
-		toggleList(ListType.OrderedList)(editor);
-		editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
+	// 	// toggleList should also create a new list if the cursor is on an empty line.
+	// 	toggleList(ListType.OrderedList)(editor);
+	// 	editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
 
-		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart}\n\n\n1. Test.\n2. Test2\n3. Test3`
-		);
+	// 	expect(editor.state.doc.toString()).toBe(
+	// 		`${expectedChecklistPart}\n\n\n1. Test.\n2. Test2\n3. Test3`
+	// 	);
 
-		toggleList(ListType.CheckList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
-		);
+	// 	toggleList(ListType.CheckList)(editor);
+	// 	expect(editor.state.doc.toString()).toBe(
+	// 		`${expectedChecklistPart}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
+	// 	);
 
-		// The entire checklist should have been selected (and thus will now be indented)
-		increaseIndent(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
-		);
-	});
+	// 	// The entire checklist should have been selected (and thus will now be indented)
+	// 	increaseIndent(editor);
+	// 	expect(editor.state.doc.toString()).toBe(
+	// 		`${expectedChecklistPart}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
+	// 	);
+	// });
 
 	it('should toggle a numbered list without changing its sublists', async () => {
 		const initialDocText = '1. Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo';

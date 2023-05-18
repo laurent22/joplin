@@ -40,7 +40,7 @@ yarn install
 # to change after installation.
 git reset --hard
 
-yarn run updateMarkdownDoc
+JOPLIN_GITHUB_OAUTH_TOKEN=$JOPLIN_GITHUB_OAUTH_TOKEN yarn run updateMarkdownDoc
 yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 # We commit and push the change. It will be a noop if nothing was actually

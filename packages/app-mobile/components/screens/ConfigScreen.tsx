@@ -23,9 +23,10 @@ const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
+import biometricAuthenticate from '../biometrics/biometricAuthenticate';
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	static navigationOptions(): any {
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
@@ -200,7 +201,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 	}
 
-	async checkFilesystemPermission() {
+	public async checkFilesystemPermission() {
 		if (Platform.OS !== 'android') {
 			// Not implemented yet
 			return true;
@@ -212,11 +213,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
 
-	styles() {
+	public styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 
@@ -376,7 +377,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
 	}
 
-	renderHeader(key: string, title: string) {
+	public renderHeader(key: string, title: string) {
 		const theme = themeStyle(this.props.themeId);
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle} onLayout={(event: any) => this.onHeaderLayout(key, event)}>
@@ -410,7 +411,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	sectionToComponent(key: string, section: any, settings: any) {
+	public sectionToComponent(key: string, section: any, settings: any) {
 		const settingComps = [];
 
 		for (let i = 0; i < section.metadatas.length; i++) {
@@ -463,7 +464,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().switchSettingText}>
 						{label}
 					</Text>
-					<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => updateSettingValue(key, value)} />
+					<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => void updateSettingValue(key, value)} />
 				</View>
 				{descriptionComp}
 			</View>
@@ -474,13 +475,39 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return !hasDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
 	}
 
-	settingToComponent(key: string, value: any) {
+	private async handleSetting(key: string, value: any): Promise<boolean> {
+		// When the user tries to enable biometrics unlock, we ask for the
+		// fingerprint or Face ID, and if it's correct we save immediately. If
+		// it's not, we don't turn on the setting.
+		if (key === 'security.biometricsEnabled' && !!value) {
+			try {
+				await biometricAuthenticate();
+				shared.updateSettingValue(this, key, value);
+				await this.saveButton_press();
+			} catch (error) {
+				shared.updateSettingValue(this, key, false);
+				Alert.alert(error.message);
+			}
+			return true;
+		}
+
+		if (key === 'security.biometricsEnabled' && !value) {
+			shared.updateSettingValue(this, key, value);
+			await this.saveButton_press();
+			return true;
+		}
+
+		return false;
+	}
+
+	public settingToComponent(key: string, value: any) {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
 		const output: any = null;
 
-		const updateSettingValue = (key: string, value: any) => {
-			return shared.updateSettingValue(this, key, value);
+		const updateSettingValue = async (key: string, value: any) => {
+			const handled = await this.handleSetting(key, value);
+			if (!handled) shared.updateSettingValue(this, key, value);
 		};
 
 		const md = Setting.settingMetadata(key);
@@ -517,7 +544,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 								fontSize: theme.fontSize,
 							}}
 							onValueChange={(itemValue: string) => {
-								updateSettingValue(key, itemValue);
+								void updateSettingValue(key, itemValue);
 							}}
 						/>
 					</View>
@@ -553,7 +580,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={minimum} maximumValue={maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={minimum} maximumValue={maximum} value={value} onValueChange={value => void updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
@@ -577,7 +604,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().settingText}>
 						{md.label()}
 					</Text>
-					<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => void updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
@@ -599,7 +626,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return output;
 	}
 
-	render() {
+	public render() {
 		const settings = this.state.settings;
 
 		const theme = themeStyle(this.props.themeId);
@@ -721,6 +748,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		settingComps.push(
 			<View key="version_info_fts" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
+			</View>
+		);
+
+		settingComps.push(
+			<View key="version_info_hermes" style={this.styles().settingContainer}>
+				<Text style={this.styles().settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
 			</View>
 		);
 

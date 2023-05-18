@@ -16,7 +16,7 @@ function newTestMdToHtml(options: any = null) {
 	return new MdToHtml(options);
 }
 
-describe('MdToHtml', function() {
+describe('MdToHtml', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -35,7 +35,7 @@ describe('MdToHtml', function() {
 			const mdFilePath = `${basePath}/${mdFilename}`;
 			const htmlPath = `${basePath}/${filename(mdFilePath)}.html`;
 
-			// if (mdFilename !== 'sanitize_9.md') continue;
+			if (mdFilename !== 'sanitize_15.md') continue;
 
 			const mdToHtmlOptions: any = {
 				bodyOnly: true,

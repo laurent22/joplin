@@ -4,16 +4,21 @@
 		"config:base"
 	],
 	"major": {
-		"stabilityDays": 30,
+		"stabilityDays": 80,
 	},
 	"minor": {
-		"stabilityDays": 20,
+		"stabilityDays": 40,
 	},
 	"patch": {
-		"stabilityDays": 10,
+		"stabilityDays": 20,
 	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
+
+	// It seems we need to delete the branches after merge or else it causes this problem:
+	// https://github.com/renovatebot/renovate/discussions/21256#discussioncomment-5898418
+	"pruneBranchAfterAutomerge": true,
+	
 	"ignorePaths": [
 		"**/bower_components/**",
 		"**/node_modules/**",
@@ -22,6 +27,7 @@
 		"packages/app-clipper/popup",
 		"packages/app-mobile/android/app/build.gradle",
 		"packages/plugins/**",
+		"packages/react-native-vosk",
 	],
 	"ignoreDeps": [
 		"@babel/core",
@@ -38,6 +44,7 @@
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@lezer/highlight",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
@@ -106,6 +113,7 @@
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
+		"execa"
 	],
 	"packageRules": [
 		{
@@ -125,6 +133,8 @@
 				// updated so having them here reduces noise.
 				"eslint",
 				"eslint-*",
+				"jest",
+				"jest-*",
 				"@typescript-eslint/*",
 				"yarn",
 				"typescript",

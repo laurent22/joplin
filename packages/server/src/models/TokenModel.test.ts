@@ -1,6 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 
-describe('TokenModel', function() {
+describe('TokenModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('TokenModel');
@@ -14,7 +14,7 @@ describe('TokenModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should delete old tokens', async function() {
+	test('should delete old tokens', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		await models().token().generate(user1.id);
 
