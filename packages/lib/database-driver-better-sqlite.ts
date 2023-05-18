@@ -46,7 +46,7 @@ export default class DatabaseDriverBetterSqlite {
 		return this.db_.prepare(sql).run(params ? params : []);
 	}
 
-	lastInsertId() {
+	public lastInsertId() {
 		throw new Error('NOT IMPLEMENTED');
 	}
 }

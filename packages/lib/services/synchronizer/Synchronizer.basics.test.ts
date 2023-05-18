@@ -4,9 +4,9 @@ import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSyn
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
-const WelcomeUtils = require('../../WelcomeUtils');
+import WelcomeUtils from '../../WelcomeUtils';
 
-describe('Synchronizer.basics', function() {
+describe('Synchronizer.basics', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -332,12 +332,12 @@ describe('Synchronizer.basics', function() {
 	it('should create a new Welcome notebook on each client', (async () => {
 		// Create the Welcome items on two separate clients
 
-		await WelcomeUtils.createWelcomeItems();
+		await WelcomeUtils.createWelcomeItems('en_GB');
 		await synchronizerStart();
 
 		await switchClient(2);
 
-		await WelcomeUtils.createWelcomeItems();
+		await WelcomeUtils.createWelcomeItems('en_GB');
 		const beforeFolderCount = (await Folder.all()).length;
 		const beforeNoteCount = (await Note.all()).length;
 		expect(beforeFolderCount === 1).toBe(true);

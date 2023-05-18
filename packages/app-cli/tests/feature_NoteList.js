@@ -8,7 +8,7 @@ const time = require('@joplin/lib/time').default;
 
 let testApp = null;
 
-describe('integration_NoteList', function() {
+describe('integration_NoteList', () => {
 
 	beforeEach(async () => {
 		testApp = new TestApp();

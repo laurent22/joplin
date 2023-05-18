@@ -2,7 +2,7 @@ import { UserFlagType } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUser, models, db } from '../../utils/testing/testUtils';
 import { disabledUserIds, setUserAccountDisabledTimes } from '../20220131185922_account_disabled_timestamp';
 
-describe('20220131185922_account_disabled_timestamp', function() {
+describe('20220131185922_account_disabled_timestamp', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('20220131185922_account_disabled_timestamp');
@@ -16,7 +16,7 @@ describe('20220131185922_account_disabled_timestamp', function() {
 		await beforeEachDb();
 	});
 
-	test('should set the user account disabled time', async function() {
+	test('should set the user account disabled time', async () => {
 		const user1 = await createUser(1);
 		const user2 = await createUser(2);
 		const user3 = await createUser(3);

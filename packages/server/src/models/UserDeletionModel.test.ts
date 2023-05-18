@@ -1,7 +1,7 @@
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUser, expectThrow } from '../utils/testing/testUtils';
 import { Day } from '../utils/time';
 
-describe('UserDeletionModel', function() {
+describe('UserDeletionModel', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('UserDeletionModel');
@@ -15,7 +15,7 @@ describe('UserDeletionModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should add a deletion operation', async function() {
+	test('should add a deletion operation', async () => {
 		{
 			const user = await createUser(1);
 
@@ -53,7 +53,7 @@ describe('UserDeletionModel', function() {
 		}
 	});
 
-	test('should provide the next deletion operation', async function() {
+	test('should provide the next deletion operation', async () => {
 		expect(await models().userDeletion().next()).toBeFalsy();
 
 		jest.useFakeTimers();
@@ -91,7 +91,7 @@ describe('UserDeletionModel', function() {
 		jest.useRealTimers();
 	});
 
-	test('should start and stop deletion jobs', async function() {
+	test('should start and stop deletion jobs', async () => {
 		jest.useFakeTimers();
 
 		const t0 = new Date('2021-12-14').getTime();
@@ -144,7 +144,7 @@ describe('UserDeletionModel', function() {
 		jest.useRealTimers();
 	});
 
-	test('should auto-add users for deletion', async function() {
+	test('should auto-add users for deletion', async () => {
 		jest.useFakeTimers();
 
 		const t0 = new Date('2022-02-22').getTime();

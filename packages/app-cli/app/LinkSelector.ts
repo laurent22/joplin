@@ -6,14 +6,14 @@ interface LinkStoreEntry {
 }
 
 class LinkSelector {
-	noteId_: string;
-	scrollTop_: number;
-	renderedText_: string;
-	currentLinkIndex_: number;
-	linkStore_: LinkStoreEntry[];
-	linkRegex_: RegExp;
+	private noteId_: string;
+	private scrollTop_: number;
+	private renderedText_: string;
+	private currentLinkIndex_: number;
+	private linkStore_: LinkStoreEntry[];
+	private linkRegex_: RegExp;
 
-	constructor() {
+	public constructor() {
 		this.noteId_ = null;
 		this.scrollTop_ = null; // used so 'o' won't open unhighlighted link after scrolling
 		this.renderedText_ = null;
@@ -22,22 +22,22 @@ class LinkSelector {
 		this.linkRegex_ = /http:\/\/[0-9.]+:[0-9]+\/[0-9]+/g;
 	}
 
-	get link(): string | null {
+	public get link(): string | null {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].link;
 	}
 
-	get noteX(): number | null {
+	public get noteX(): number | null {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].noteX;
 	}
 
-	get noteY(): number | null {
+	public get noteY(): number | null {
 		if (this.currentLinkIndex_ === null) return null;
 		return this.linkStore_[this.currentLinkIndex_].noteY;
 	}
 
-	findLinks(renderedText: string): LinkStoreEntry[] {
+	public findLinks(renderedText: string): LinkStoreEntry[] {
 		const newLinkStore: LinkStoreEntry[] = [];
 		const lines: string[] = renderedText.split('\n');
 		for (let i = 0; i < lines.length; i++) {
@@ -56,19 +56,19 @@ class LinkSelector {
 		return newLinkStore;
 	}
 
-	updateText(renderedText: string): void {
+	public updateText(renderedText: string): void {
 		this.currentLinkIndex_ = null;
 		this.renderedText_ = renderedText;
 		this.linkStore_ = this.findLinks(this.renderedText_);
 	}
 
-	updateNote(textWidget: any): void {
+	public updateNote(textWidget: any): void {
 		this.noteId_ = textWidget.noteId;
 		this.scrollTop_ = textWidget.scrollTop_;
 		this.updateText(textWidget.renderedText_);
 	}
 
-	scrollWidget(textWidget: any): void {
+	public scrollWidget(textWidget: any): void {
 		if (this.currentLinkIndex_ === null) return;
 
 		const noteY = this.linkStore_[this.currentLinkIndex_].noteY;
@@ -93,7 +93,7 @@ class LinkSelector {
 		return;
 	}
 
-	changeLink(textWidget: any, offset: number): void | null {
+	public changeLink(textWidget: any, offset: number): void | null {
 		if (textWidget.noteId !== this.noteId_) {
 			this.updateNote(textWidget);
 			this.changeLink(textWidget, offset);
@@ -123,7 +123,7 @@ class LinkSelector {
 		return;
 	}
 
-	openLink(textWidget: any): void {
+	public openLink(textWidget: any): void {
 		if (textWidget.noteId !== this.noteId_) return;
 		if (textWidget.renderedText_ !== this.renderedText_) return;
 		if (textWidget.scrollTop_ !== this.scrollTop_) return;

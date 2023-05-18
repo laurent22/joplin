@@ -12,7 +12,7 @@ const shim = require('@joplin/lib/shim').default;
 const HtmlToHtml = require('@joplin/renderer/HtmlToHtml').default;
 const { enexXmlToMd } = require('@joplin/lib/import-enex-md-gen.js');
 
-describe('HtmlToHtml', function() {
+describe('HtmlToHtml', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

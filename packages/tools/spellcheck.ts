@@ -1,6 +1,7 @@
 import yargs = require('yargs');
 import { chdir } from 'process';
-import { execCommand2, rootDir } from './tool-utils';
+import { rootDir } from './tool-utils';
+import { execCommand } from '@joplin/utils';
 
 const main = async () => {
 	const argv = await yargs.argv;
@@ -10,7 +11,7 @@ const main = async () => {
 	chdir(rootDir);
 
 	try {
-		await execCommand2(['yarn', 'run', 'cspell'].concat(filePaths), { showStderr: false, showStdout: false });
+		await execCommand(['yarn', 'run', 'cspell'].concat(filePaths), { showStderr: false, showStdout: false });
 	} catch (error) {
 		if (!error.stdout.trim()) return;
 

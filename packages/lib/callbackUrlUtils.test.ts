@@ -1,6 +1,6 @@
 import * as callbackUrlUtils from './callbackUrlUtils';
 
-describe('callbackUrlUtils', function() {
+describe('callbackUrlUtils', () => {
 
 	it('should identify valid callback urls', () => {
 		const url = 'joplin://x-callback-url/123?a=b';

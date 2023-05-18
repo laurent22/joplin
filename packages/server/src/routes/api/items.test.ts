@@ -9,10 +9,10 @@ import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
 
-describe('api_items', function() {
+describe('api/items', () => {
 
 	beforeAll(async () => {
-		await beforeAllDb('api_items');
+		await beforeAllDb('api/items');
 	});
 
 	afterAll(async () => {
@@ -23,7 +23,7 @@ describe('api_items', function() {
 		await beforeEachDb();
 	});
 
-	test('should create an item', async function() {
+	test('should create an item', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const noteId = '00000000000000000000000000000001';
@@ -58,7 +58,7 @@ describe('api_items', function() {
 		}
 	});
 
-	test('should modify an item', async function() {
+	test('should modify an item', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const noteId = '00000000000000000000000000000001';
@@ -80,7 +80,7 @@ describe('api_items', function() {
 		expect(note.title).toBe('new title');
 	});
 
-	test('should delete an item', async function() {
+	test('should delete an item', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const tree: any = {
@@ -99,7 +99,7 @@ describe('api_items', function() {
 		expect((await itemModel.all())[0].jop_id).toBe('000000000000000000000000000000F1');
 	});
 
-	test('should delete all items', async function() {
+	test('should delete all items', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, true);
 		const { user: user2 } = await createUserAndSession(2, true);
 
@@ -125,7 +125,7 @@ describe('api_items', function() {
 		expect(ids.sort()).toEqual(['000000000000000000000000000000F2', '00000000000000000000000000000002'].sort());
 	});
 
-	test('should get back the serialized note', async function() {
+	test('should get back the serialized note', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const noteId = '00000000000000000000000000000001';
@@ -139,7 +139,7 @@ describe('api_items', function() {
 		expect(result).toBe(serializedNote);
 	});
 
-	test('should get back the item metadata', async function() {
+	test('should get back the item metadata', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const noteId = '00000000000000000000000000000001';
@@ -151,7 +151,7 @@ describe('api_items', function() {
 		expect(result.name).toBe(`${noteId}.md`);
 	});
 
-	test('should batch upload items', async function() {
+	test('should batch upload items', async () => {
 		const { session: session1 } = await createUserAndSession(1, false);
 
 		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
@@ -171,7 +171,7 @@ describe('api_items', function() {
 		expect(Object.keys(result.items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
 	});
 
-	test('should report errors when batch uploading', async function() {
+	test('should report errors when batch uploading', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, false);
 
 		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
@@ -201,7 +201,7 @@ describe('api_items', function() {
 		expect(items['00000000000000000000000000000002.md'].error.httpCode).toBe(ErrorPayloadTooLarge.httpCode);
 	});
 
-	test('should list children', async function() {
+	test('should list children', async () => {
 		const { session } = await createUserAndSession(1, true);
 
 		const itemNames = [
@@ -256,7 +256,7 @@ describe('api_items', function() {
 		}
 	});
 
-	test('should associate a resource blob with a share', async function() {
+	test('should associate a resource blob with a share', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 
@@ -273,7 +273,7 @@ describe('api_items', function() {
 		expect(item.jop_share_id).toBe(share.id);
 	});
 
-	test('should not upload or download items if the account is disabled', async function() {
+	test('should not upload or download items if the account is disabled', async () => {
 		const { session, user } = await createUserAndSession(1);
 
 		// Should work
@@ -286,7 +286,7 @@ describe('api_items', function() {
 		await expectHttpError(async () => getItem(session.id, 'root:/test1.txt:'), ErrorForbidden.httpCode);
 	});
 
-	test('should check permissions - only share participants can associate an item with a share', async function() {
+	test('should check permissions - only share participants can associate an item with a share', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
 		const { session: session3 } = await createUserAndSession(3);
@@ -304,7 +304,7 @@ describe('api_items', function() {
 		);
 	});
 
-	test('should check permissions - uploaded item should be below the allowed limit', async function() {
+	test('should check permissions - uploaded item should be below the allowed limit', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		{
@@ -341,7 +341,7 @@ describe('api_items', function() {
 		}
 	});
 
-	test('should check permissions - uploaded item should not make the account go over the allowed max limit', async function() {
+	test('should check permissions - uploaded item should not make the account go over the allowed max limit', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		{
@@ -379,7 +379,7 @@ describe('api_items', function() {
 		}
 	});
 
-	test('should check permissions - should not allow uploading items if disabled', async function() {
+	test('should check permissions - should not allow uploading items if disabled', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 
 		await models().user().save({ id: user1.id, can_upload: 0 });

@@ -6,6 +6,7 @@ on: [push, pull_request]
 
 jobs:
   pre_job:
+    if: github.repository == 'laurent22/joplin'
     runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
@@ -17,7 +18,7 @@ jobs:
 
   BuildAndroidDebug:
     needs: pre_job
-    if: needs.pre_job.outputs.should_skip != 'true'
+    if: github.repository == 'laurent22/joplin' && needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Install Linux dependencies

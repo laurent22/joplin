@@ -24,7 +24,7 @@ interface State {
 }
 
 class ImportScreenComponent extends React.Component<Props, State> {
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({
 			doImport: true,
 			filePath: this.props.filePath,
@@ -32,7 +32,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 		});
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: Props) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if (newProps.filePath) {
 			this.setState(
 				{
@@ -47,13 +47,13 @@ class ImportScreenComponent extends React.Component<Props, State> {
 		}
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		if (this.state.filePath && this.state.doImport) {
 			void this.doImport();
 		}
 	}
 
-	addMessage(key: string, text: string) {
+	public addMessage(key: string, text: string) {
 		const messages = this.state.messages.slice();
 
 		messages.push({ key: key, text: text });
@@ -61,7 +61,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 		this.setState({ messages: messages });
 	}
 
-	uniqueMessages() {
+	public uniqueMessages() {
 		const output = [];
 		const messages = this.state.messages.slice();
 		const foundKeys = [];
@@ -74,7 +74,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 		return output;
 	}
 
-	async doImport() {
+	public async doImport() {
 		const filePath = this.props.filePath;
 		const folderTitle = await Folder.findUniqueItemTitle(filename(filePath));
 
@@ -109,7 +109,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 		this.setState({ doImport: false });
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const messages = this.uniqueMessages();
 

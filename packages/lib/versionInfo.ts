@@ -16,6 +16,8 @@ function getPluginLists(plugins: Plugins): PluginList {
 		}
 	}
 
+	pluginList.sort(Intl.Collator().compare);
+
 	let completeList = '';
 	let summary = '';
 	if (pluginList.length > 0) {

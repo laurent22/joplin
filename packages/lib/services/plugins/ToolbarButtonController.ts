@@ -3,7 +3,7 @@ import ViewController from './ViewController';
 
 export default class ToolbarButtonController extends ViewController {
 
-	constructor(id: string, pluginId: string, store: any, commandName: string, location: ToolbarButtonLocation) {
+	public constructor(id: string, pluginId: string, store: any, commandName: string, location: ToolbarButtonLocation) {
 		super(id, pluginId, store);
 
 		this.store.dispatch({

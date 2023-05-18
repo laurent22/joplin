@@ -32,7 +32,7 @@ import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinate
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 const debounce = require('debounce');
-const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';

@@ -72,10 +72,10 @@ async function main() {
 			src: langSourceDir,
 			dest: `${buildLibDir}/tinymce/langs`,
 		},
-		{
-			src: resolve(__dirname, '../../pdf-viewer/dist'),
-			dest: `${buildLibDir}/@joplin/pdf-viewer`,
-		},
+		// {
+		// 	src: resolve(__dirname, '../../pdf-viewer/dist'),
+		// 	dest: `${buildLibDir}/@joplin/pdf-viewer`,
+		// },
 	];
 
 	const files = [
@@ -93,10 +93,10 @@ async function main() {
 			src: resolve(__dirname, '../../lib/services/plugins/sandboxProxy.js'),
 			dest: `${buildLibDir}/@joplin/lib/services/plugins/sandboxProxy.js`,
 		},
-		{
-			src: resolve(__dirname, '../../pdf-viewer/index.html'),
-			dest: `${buildLibDir}/@joplin/pdf-viewer/index.html`,
-		},
+		// {
+		// 	src: resolve(__dirname, '../../pdf-viewer/index.html'),
+		// 	dest: `${buildLibDir}/@joplin/pdf-viewer/index.html`,
+		// },
 	];
 
 	// First we delete all the destination directories, then we copy the files.

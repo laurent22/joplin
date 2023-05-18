@@ -11,7 +11,7 @@ import { NoteEntity, ResourceEntity } from '../database/types.js';
 import InteropService from './InteropService.js';
 import { fileExtension } from '../../path-utils.js';
 
-describe('interop/InteropService_Exporter_Md', function() {
+describe('interop/InteropService_Exporter_Md', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

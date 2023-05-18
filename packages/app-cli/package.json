@@ -30,34 +30,36 @@
       2019,
       2020,
       2021,
-      2022
+      2022,
+      2023
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.10.0",
+  "version": "2.11.0",
   "bin": "./main.js",
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplin/lib": "~2.10",
-    "@joplin/renderer": "~2.10",
-    "aws-sdk": "2.1290.0",
+    "@joplin/lib": "~2.11",
+    "@joplin/renderer": "~2.11",
+    "@joplin/utils": "~2.11",
+    "aws-sdk": "2.1340.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
-    "fs-extra": "11.1.0",
+    "fs-extra": "11.1.1",
     "html-entities": "1.4.0",
     "image-type": "3.1.0",
     "keytar": "7.9.0",
     "md5": "2.3.0",
     "node-rsa": "1.1.1",
-    "open": "8.4.0",
+    "open": "8.4.2",
     "proper-lockfile": "4.1.2",
     "read-chunk": "2.1.0",
     "server-destroy": "1.0.1",
-    "sharp": "0.31.3",
+    "sharp": "0.32.1",
     "sprintf-js": "1.1.2",
-    "sqlite3": "5.1.4",
+    "sqlite3": "5.1.6",
     "string-padding": "1.0.2",
     "strip-ansi": "6.0.1",
     "tcp-port-used": "1.0.2",
@@ -68,12 +70,13 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@joplin/tools": "~2.10",
+    "@joplin/tools": "~2.11",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.6",
     "@types/node": "18.11.18",
+    "@types/proper-lockfile": "^4.1.2",
     "gulp": "4.0.2",
-    "jest": "29.4.1",
+    "jest": "29.4.3",
     "temp": "0.9.4",
     "typescript": "4.9.4"
   }

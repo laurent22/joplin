@@ -3,7 +3,7 @@ const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 
-describe('HtmlToMd', function() {
+describe('HtmlToMd', () => {
 
 	it('should convert from Html to Markdown', (async () => {
 		const basePath = `${__dirname}/html_to_md`;

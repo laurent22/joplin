@@ -36,7 +36,7 @@ export default class ResourceEditWatcher {
 	private tempDir_: string = '';
 	private openItem_: OpenItemFn;
 
-	constructor() {
+	public constructor() {
 		this.logger_ = new Logger();
 		this.dispatch = () => {};
 		this.watcher_ = null;
@@ -44,13 +44,13 @@ export default class ResourceEditWatcher {
 		this.eventEmitter_ = new EventEmitter();
 	}
 
-	initialize(logger: any, dispatch: Function, openItem: OpenItemFn) {
+	public initialize(logger: any, dispatch: Function, openItem: OpenItemFn) {
 		this.logger_ = logger;
 		this.dispatch = dispatch;
 		this.openItem_ = openItem;
 	}
 
-	static instance() {
+	public static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new ResourceEditWatcher();
 		return this.instance_;
@@ -65,19 +65,19 @@ export default class ResourceEditWatcher {
 		return this.tempDir_;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	externalApi() {
+	public externalApi() {
 		return {
 			openAndWatch: async ({ resourceId }: any) => {
 				return this.openAndWatch(resourceId);
@@ -260,7 +260,7 @@ export default class ResourceEditWatcher {
 		this.openItem_(watchedItem.path);
 	}
 
-	async stopWatching(resourceId: string) {
+	public async stopWatching(resourceId: string) {
 		if (!resourceId) return;
 
 		const item = this.watchedItemByResourceId(resourceId);

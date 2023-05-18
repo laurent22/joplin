@@ -14,7 +14,7 @@ const { fileExtension } = require('../../path-utils');
 import uuid from '../../uuid';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
-	async exec(result: ImportExportResult) {
+	public async exec(result: ImportExportResult) {
 		const itemIdMap: any = {};
 		const createdResources: any = {};
 		const noteTagsToCreate = [];

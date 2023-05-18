@@ -6,7 +6,7 @@ interface Props {
 }
 
 class ToolbarSpace extends React.Component<Props> {
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign({}, theme.toolbarStyle);
 		style.minWidth = style.height / 2;

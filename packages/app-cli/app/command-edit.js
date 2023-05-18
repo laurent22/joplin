@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const BaseCommand = require('./base-command').default;
-const { splitCommandString } = require('@joplin/lib/string-utils.js');
+const { splitCommandString } = require('@joplin/utils');
 const uuid = require('@joplin/lib/uuid').default;
 const { app } = require('./app.js');
 const { _ } = require('@joplin/lib/locale');

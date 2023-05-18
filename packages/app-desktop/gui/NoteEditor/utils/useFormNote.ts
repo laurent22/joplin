@@ -192,7 +192,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
 
-	const onResourceChange = useCallback(async function(event: any = null) {
+	const onResourceChange = useCallback(async (event: any = null) => {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {
 			clearResourceCache();

@@ -57,7 +57,7 @@ const calculateScore = (searchString, notes) => {
 	return scores;
 };
 
-describe('services_SearchEngine', function() {
+describe('services_SearchEngine', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -431,6 +431,7 @@ describe('services_SearchEngine', function() {
 			['title:abcd efgh', { _: ['efgh'], title: ['abcd'] }],
 			['title:abcd', { title: ['abcd'] }],
 			['"abcd efgh"', { _: ['abcd efgh'] }],
+			['"abcd efgh" ijkl', { _: ['abcd efgh', 'ijkl'] }],
 			['title:abcd title:efgh', { title: ['abcd', 'efgh'] }],
 		];
 

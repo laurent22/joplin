@@ -26,22 +26,27 @@ export default class PromptDialog extends React.Component<Props, any> {
 	private focusInput_: boolean;
 	private styles_: any;
 	private styleKey_: string;
+	private menuIsOpened_: boolean = false;
 
-	constructor(props: Props) {
+	public constructor(props: Props) {
 		super(props);
 
 		this.answerInput_ = React.createRef();
+
+		this.select_menuOpen = this.select_menuOpen.bind(this);
+		this.select_menuClose = this.select_menuClose.bind(this);
 	}
 
-	UNSAFE_componentWillMount() {
+	public UNSAFE_componentWillMount() {
 		this.setState({
 			visible: false,
 			answer: this.props.defaultValue ? this.props.defaultValue : '',
 		});
 		this.focusInput_ = true;
+		this.menuIsOpened_ = false;
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: Props) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if ('visible' in newProps && newProps.visible !== this.props.visible) {
 			this.setState({ visible: newProps.visible });
 			if (newProps.visible) this.focusInput_ = true;
@@ -52,12 +57,20 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 	}
 
-	componentDidUpdate() {
+	private select_menuOpen() {
+		this.menuIsOpened_ = true;
+	}
+
+	private select_menuClose() {
+		this.menuIsOpened_ = false;
+	}
+
+	public componentDidUpdate() {
 		if (this.focusInput_ && this.answerInput_.current) this.answerInput_.current.focus();
 		this.focusInput_ = false;
 	}
 
-	styles(themeId: number, width: number, height: number, visible: boolean) {
+	public styles(themeId: number, width: number, height: number, visible: boolean) {
 		const styleKey = `${themeId}_${width}_${height}_${visible}`;
 		if (styleKey === this.styleKey_) return this.styles_;
 
@@ -181,7 +194,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		return this.styles_;
 	}
 
-	render() {
+	public render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 		const buttonTypes = this.props.buttons ? this.props.buttons : ['ok', 'cancel'];
@@ -224,16 +237,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		const onKeyDown = (event: any) => {
 			if (event.key === 'Enter') {
-				if (this.props.inputType === 'tags' || this.props.inputType === 'dropdown') {
+				// If the dropdown is open, we don't close the dialog - instead
+				// the currently item will be selcted. If it is closed however
+				// we confirm the dialog.
+				if ((this.props.inputType === 'tags' || this.props.inputType === 'dropdown') && this.menuIsOpened_) {
 					// Do nothing
 				} else {
 					onClose(true);
 				}
-
-				// } else if (this.answerInput_.current && !this.answerInput_.current.state.menuIsOpen) {
-				// 	// The menu will be open if the user is selecting a new item
-				// 	onClose(true);
-				// }
 			} else if (event.key === 'Escape') {
 				onClose(false);
 			}
@@ -246,9 +257,9 @@ export default class PromptDialog extends React.Component<Props, any> {
 		if (this.props.inputType === 'datetime') {
 			inputComp = <Datetime className="datetime-picker" value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={(momentObject: any) => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
-			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
+			inputComp = <CreatableSelect className="tag-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}

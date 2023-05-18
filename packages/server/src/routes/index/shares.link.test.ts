@@ -40,7 +40,7 @@ async function getShareContent(shareId: string, query: any = {}): Promise<string
 	return context.response.body as any;
 }
 
-describe('shares.link', function() {
+describe('shares.link', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('shares.link');
@@ -54,7 +54,7 @@ describe('shares.link', function() {
 		await beforeEachDb();
 	});
 
-	test('should display a simple note', async function() {
+	test('should display a simple note', async () => {
 		const { session } = await createUserAndSession();
 
 		const noteItem = await createNote(session.id, {
@@ -76,7 +76,7 @@ describe('shares.link', function() {
 		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
 	});
 
-	test('should load plugins', async function() {
+	test('should load plugins', async () => {
 		const { session } = await createUserAndSession();
 
 		const noteItem = await createNote(session.id, {
@@ -93,7 +93,7 @@ describe('shares.link', function() {
 		expect(bodyHtml).toContain('class="katex-mathml"');
 	});
 
-	test('should render attached images', async function() {
+	test('should render attached images', async () => {
 		const { session } = await createUserAndSession();
 
 		const noteItem = await createNote(session.id, {
@@ -129,7 +129,7 @@ describe('shares.link', function() {
 		expect(resourceContent.byteLength).toBe(resourceSize);
 	});
 
-	test('should share a linked note', async function() {
+	test('should share a linked note', async () => {
 		const { session } = await createUserAndSession();
 
 		const linkedNote1 = await createNote(session.id, {
@@ -165,7 +165,7 @@ describe('shares.link', function() {
 		expect(resourceContent.toString()).toBe('test');
 	});
 
-	test('should not share items that are not linked to a shared note', async function() {
+	test('should not share items that are not linked to a shared note', async () => {
 		const { session } = await createUserAndSession();
 
 		const notSharedResource = await createResource(session.id, {
@@ -192,7 +192,7 @@ describe('shares.link', function() {
 		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000E2' }), ErrorNotFound.httpCode);
 	});
 
-	test('should not share linked notes if the "recursive" field is not set', async function() {
+	test('should not share linked notes if the "recursive" field is not set', async () => {
 		const { session } = await createUserAndSession();
 
 		const linkedNote1 = await createNote(session.id, {
@@ -212,7 +212,7 @@ describe('shares.link', function() {
 		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000C1' }), ErrorForbidden.httpCode);
 	});
 
-	test('should not throw an error if the note contains links to non-existing items', async function() {
+	test('should not throw an error if the note contains links to non-existing items', async () => {
 		const { session } = await createUserAndSession();
 
 		{
@@ -244,7 +244,7 @@ describe('shares.link', function() {
 		}
 	});
 
-	test('should throw an error if owner of share is disabled', async function() {
+	test('should throw an error if owner of share is disabled', async () => {
 		const { user, session } = await createUserAndSession();
 
 		const noteItem = await createNote(session.id, {

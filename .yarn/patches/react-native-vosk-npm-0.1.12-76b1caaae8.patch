@@ -1,0 +1,127 @@
+diff --git a/android/build.gradle b/android/build.gradle
+index 6afcbbf0cc8ca2d69dd78077d61e59a90b2136bb..9f8d72b4ec5b2b3d290975d6a255917c95300854 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -67,19 +67,19 @@ repositories {
+ }
+ 
+ // Generate UUIDs for each models contained in android/src/main/assets/
+-tasks.register('genUUID') {
+-  doLast {
+-    fileTree(dir: "$rootDir/app/src/main/assets", exclude: ['*/*']).visit { fileDetails ->
+-      if (fileDetails.directory) {
+-        def odir = file("$rootDir/app/src/main/assets/$fileDetails.relativePath")
+-        def ofile = file("$odir/uuid")
+-        mkdir odir
+-        ofile.text = UUID.randomUUID().toString()
+-      }
+-    }
+-  }
+-}
+-preBuild.dependsOn genUUID
++// tasks.register('genUUID') {
++//   doLast {
++//     fileTree(dir: "$rootDir/app/src/main/assets", exclude: ['*/*']).visit { fileDetails ->
++//       if (fileDetails.directory) {
++//         def odir = file("$rootDir/app/src/main/assets/$fileDetails.relativePath")
++//         def ofile = file("$odir/uuid")
++//         mkdir odir
++//         ofile.text = UUID.randomUUID().toString()
++//       }
++//     }
++//   }
++// }
++// preBuild.dependsOn genUUID
+ 
+ def kotlin_version = getExtOrDefault('kotlinVersion')
+ 
+diff --git a/android/src/main/java/com/reactnativevosk/VoskModule.kt b/android/src/main/java/com/reactnativevosk/VoskModule.kt
+index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..f3da440bc2863a59db6d2d1691c54d8d4870cb3f 100644
+--- a/android/src/main/java/com/reactnativevosk/VoskModule.kt
++++ b/android/src/main/java/com/reactnativevosk/VoskModule.kt
+@@ -19,13 +19,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
+     return "Vosk"
+   }
+ 
++  @ReactMethod
++  fun addListener(type: String?) {
++    // Keep: Required for RN built in Event Emitter Calls.
++  }
++
++  @ReactMethod
++  fun removeListeners(type: Int?) {
++    // Keep: Required for RN built in Event Emitter Calls.
++  }
++
+   override fun onResult(hypothesis: String) {
+     // Get text data from string object
+     val text = getHypothesisText(hypothesis)
+ 
+     // Stop recording if data found
+     if (text != null && text.isNotEmpty()) {
+-      cleanRecognizer();
++      // Don't auto-stop the recogniser - we want to do that when the user
++      // presses on "stop" only.
++      // cleanRecognizer();
+       sendEvent("onResult", text)
+     }
+   }
+@@ -153,6 +165,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
+     cleanRecognizer();
+   }
+ 
++  @ReactMethod
++  fun stopOnly() {
++    if (speechService != null) {
++      speechService!!.stop()
++    }
++  }
++
++  @ReactMethod
++  fun cleanup() {
++    if (speechService != null) {
++      speechService!!.shutdown();
++      speechService = null
++    }
++    if (recognizer != null) {
++      recognizer!!.close();
++      recognizer = null;
++    }
++  }
++
+   @ReactMethod
+   fun unload() {
+     cleanRecognizer();
+diff --git a/lib/typescript/index.d.ts b/lib/typescript/index.d.ts
+index 441e41cc402cca3a60b34978ef4fea976076259c..a173acebb4b314402550442ad471e0f7c706e3c4 100644
+--- a/lib/typescript/index.d.ts
++++ b/lib/typescript/index.d.ts
+@@ -10,6 +10,8 @@ export default class Vosk {
+     currentRegisteredEvents: EmitterSubscription[];
+     start: (grammar?: string[] | null) => Promise<String>;
+     stop: () => void;
++    stopOnly: () => void;
++    cleanup: () => void;
+     unload: () => void;
+     onResult: (onResult: (e: VoskEvent) => void) => EventSubscription;
+     onFinalResult: (onFinalResult: (e: VoskEvent) => void) => EventSubscription;
+diff --git a/src/index.tsx b/src/index.tsx
+index d9f90c921d89b1b4d85e145443ed3376546a368a..29e4068dbd7500828a73145bd25497a52c9bf638 100644
+--- a/src/index.tsx
++++ b/src/index.tsx
+@@ -69,6 +69,15 @@ export default class Vosk {
+     VoskModule.stop();
+   };
+ 
++  stopOnly = () => {
++		VoskModule.stopOnly();
++	};
++
++	cleanup = () => {
++		this.cleanListeners();
++		VoskModule.cleanup();
++	};
++
+   unload = () => {
+     this.cleanListeners();
+     VoskModule.unload();

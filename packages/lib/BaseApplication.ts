@@ -20,7 +20,7 @@ import Folder from './models/Folder';
 import BaseItem from './models/BaseItem';
 import Note from './models/Note';
 import Tag from './models/Tag';
-const { splitCommandString } = require('./string-utils.js');
+import { splitCommandString } from '@joplin/utils';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
@@ -188,6 +188,12 @@ export default class BaseApplication {
 
 			if (arg === '--is-demo') {
 				Setting.setConstant('isDemo', true);
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg === '--safe-mode') {
+				matched.isSafeMode = true;
 				argv.splice(0, 1);
 				continue;
 			}
@@ -418,7 +424,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
-	reducerActionToString(action: any) {
+	public reducerActionToString(action: any) {
 		const o = [action.type];
 		if ('id' in action) o.push(action.id);
 		if ('noteId' in action) o.push(action.noteId);
@@ -700,7 +706,7 @@ export default class BaseApplication {
 
 		flagContent = flagContent.trim();
 
-		let flags = splitCommandString(flagContent);
+		let flags: any = splitCommandString(flagContent);
 		flags.splice(0, 0, 'cmd');
 		flags.splice(0, 0, 'node');
 
@@ -829,14 +835,13 @@ export default class BaseApplication {
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
-		if (Setting.value('firstStart')) {
-			// If it's a sub-profile, the locale must come from the root
-			// profile.
-			if (!Setting.value('isSubProfile')) {
-				const locale = shim.detectAndSetLocale(Setting);
-				reg.logger().info(`First start: detected locale as ${locale}`);
-			}
+		if (initArgs?.isSafeMode) {
+			Setting.setValue('isSafeMode', true);
+		}
 
+		if (Setting.value('firstStart')) {
+			const locale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${locale}`);
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {

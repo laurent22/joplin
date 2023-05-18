@@ -18,7 +18,7 @@ The technical spec template they provide however is too detailed for our needs, 
 
 > Investing in a technical spec ultimately results in a superior product.  Since the team is aligned and in agreement on what needs to be done through the spec, big projects can progress faster.
 
-# Tehnical spec template
+# Technical spec template
 
 ## Overview
 

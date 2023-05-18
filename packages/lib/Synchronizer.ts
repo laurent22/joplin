@@ -91,31 +91,31 @@ export default class Synchronizer {
 		this.apiCall = this.apiCall.bind(this);
 	}
 
-	state() {
+	public state() {
 		return this.state_;
 	}
 
-	db() {
+	public db() {
 		return this.db_;
 	}
 
-	api() {
+	public api() {
 		return this.api_;
 	}
 
-	clientId() {
+	public clientId() {
 		return this.clientId_;
 	}
 
-	setLogger(l: Logger) {
+	public setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	lockHandler() {
+	public lockHandler() {
 		if (this.lockHandler_) return this.lockHandler_;
 		this.lockHandler_ = new LockHandler(this.api());
 		return this.lockHandler_;
@@ -127,13 +127,13 @@ export default class Synchronizer {
 		return this.lockClientType_;
 	}
 
-	migrationHandler() {
+	public migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
 		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.lockClientType(), this.clientId_);
 		return this.migrationHandler_;
 	}
 
-	maxResourceSize() {
+	public maxResourceSize() {
 		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
 		return this.appType_ === AppType.Mobile ? 100 * 1000 * 1000 : Infinity;
 	}
@@ -146,7 +146,7 @@ export default class Synchronizer {
 		this.encryptionService_ = v;
 	}
 
-	encryptionService() {
+	public encryptionService() {
 		return this.encryptionService_;
 	}
 
@@ -158,7 +158,7 @@ export default class Synchronizer {
 		return this.resourceService_;
 	}
 
-	async waitForSyncToFinish() {
+	public async waitForSyncToFinish() {
 		if (this.state() === 'idle') return;
 
 		while (true) {
@@ -177,7 +177,7 @@ export default class Synchronizer {
 		return `${duration}ms`;
 	}
 
-	static reportToLines(report: any) {
+	public static reportToLines(report: any) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
@@ -193,7 +193,7 @@ export default class Synchronizer {
 		return lines;
 	}
 
-	logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
+	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -237,7 +237,7 @@ export default class Synchronizer {
 		this.dispatch({ type: 'SYNC_REPORT_UPDATE', report: reportCopy });
 	}
 
-	async logSyncSummary(report: any) {
+	public async logSyncSummary(report: any) {
 		logger.info('Operations completed: ');
 		for (const n in report) {
 			if (!report.hasOwnProperty(n)) continue;
@@ -265,7 +265,7 @@ export default class Synchronizer {
 		}
 	}
 
-	async cancel() {
+	public async cancel() {
 		if (this.cancelling_ || this.state() === 'idle') return;
 
 		// Stop queue but don't set it to null as it may be used to
@@ -285,11 +285,11 @@ export default class Synchronizer {
 		});
 	}
 
-	cancelling() {
+	public cancelling() {
 		return this.cancelling_;
 	}
 
-	logLastRequests() {
+	public logLastRequests() {
 		const lastRequests = this.api().lastRequests();
 		if (!lastRequests || !lastRequests.length) return;
 
@@ -300,17 +300,17 @@ export default class Synchronizer {
 		}
 	}
 
-	static stateToLabel(state: string) {
+	public static stateToLabel(state: string) {
 		if (state === 'idle') return _('Idle');
 		if (state === 'in_progress') return _('In progress');
 		return state;
 	}
 
-	isFullSync(steps: string[]) {
+	public isFullSync(steps: string[]) {
 		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
 	}
 
-	async lockErrorStatus_() {
+	private async lockErrorStatus_() {
 		const locks = await this.lockHandler().locks();
 		const currentDate = await this.lockHandler().currentDate();
 

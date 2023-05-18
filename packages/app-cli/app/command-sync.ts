@@ -9,11 +9,11 @@ import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler
 const BaseCommand = require('./base-command').default;
 const { app } = require('./app.js');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
-const { reg } = require('@joplin/lib/registry.js');
+import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
-const locker = require('proper-lockfile');
-const fs = require('fs-extra');
+import * as locker from 'proper-lockfile';
+import { pathExists, writeFile } from 'fs-extra';
 
 class Command extends BaseCommand {
 
@@ -21,15 +21,15 @@ class Command extends BaseCommand {
 	private releaseLockFn_: Function = null;
 	private oneDriveApiUtils_: any = null;
 
-	usage() {
+	public usage() {
 		return 'sync';
 	}
 
-	description() {
+	public description() {
 		return _('Synchronises with remote storage.');
 	}
 
-	options() {
+	public options() {
 		return [
 			['--target <target>', _('Sync to provided target (defaults to sync.target config value)')],
 			['--upgrade', _('Upgrade the sync target to the latest version.')],
@@ -37,24 +37,15 @@ class Command extends BaseCommand {
 		];
 	}
 
-	static async lockFile(filePath: string): Promise<Function> {
+	private static async lockFile(filePath: string) {
 		return locker.lock(filePath, { stale: 1000 * 60 * 5 });
 	}
 
-	static isLocked(filePath: string) {
-		return new Promise((resolve, reject) => {
-			locker.check(filePath, (error: any, isLocked: boolean) => {
-				if (error) {
-					reject(error);
-					return;
-				}
-
-				resolve(isLocked);
-			});
-		});
+	private static async isLocked(filePath: string) {
+		return locker.check(filePath);
 	}
 
-	async doAuth() {
+	public async doAuth() {
 		const syncTarget = reg.syncTarget(this.syncTargetId_);
 		const syncTargetMd = SyncTargetRegistry.idToMetadata(this.syncTargetId_);
 
@@ -98,23 +89,23 @@ class Command extends BaseCommand {
 		return false;
 	}
 
-	cancelAuth() {
+	public cancelAuth() {
 		if (this.oneDriveApiUtils_) {
 			this.oneDriveApiUtils_.cancelOAuthDance();
 			return;
 		}
 	}
 
-	doingAuth() {
+	public doingAuth() {
 		return !!this.oneDriveApiUtils_;
 	}
 
-	async action(args: any) {
+	public async action(args: any) {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
 		const lockFilePath = `${require('os').tmpdir()}/synclock_${md5(escape(Setting.value('profileDir')))}`; // https://github.com/pvorb/node-md5/issues/41
-		if (!(await fs.pathExists(lockFilePath))) await fs.writeFile(lockFilePath, 'synclock');
+		if (!(await pathExists(lockFilePath))) await writeFile(lockFilePath, 'synclock');
 
 		const useLock = args.options.useLock !== 0;
 
@@ -247,7 +238,7 @@ class Command extends BaseCommand {
 		cleanUp();
 	}
 
-	async cancel() {
+	public async cancel() {
 		if (this.doingAuth()) {
 			this.cancelAuth();
 			return;
@@ -272,7 +263,7 @@ class Command extends BaseCommand {
 		this.syncTargetId_ = null;
 	}
 
-	cancellable() {
+	public cancellable() {
 		return true;
 	}
 }

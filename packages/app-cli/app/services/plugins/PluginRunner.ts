@@ -35,7 +35,7 @@ export default class PluginRunner extends BasePluginRunner {
 	private eventHandlers_: EventHandlers = {};
 	private activeSandboxCalls_: any = {};
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.eventHandler = this.eventHandler.bind(this);
@@ -64,7 +64,7 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 	}
 
-	async run(plugin: Plugin, sandbox: Global): Promise<void> {
+	public async run(plugin: Plugin, sandbox: Global): Promise<void> {
 		return new Promise((resolve: Function, reject: Function) => {
 			const onStarted = () => {
 				plugin.off('started', onStarted);

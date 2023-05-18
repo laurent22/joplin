@@ -23,16 +23,16 @@ export default class TaskQueue {
 	private name_: string;
 	private logger_: Logger;
 
-	constructor(name: string, logger: Logger = null) {
+	public constructor(name: string, logger: Logger = null) {
 		this.name_ = name;
 		this.logger_ = logger ? logger : new Logger();
 	}
 
-	concurrency() {
+	public concurrency() {
 		return Setting.value('sync.maxConcurrentConnections');
 	}
 
-	push(id: string, callback: Function) {
+	public push(id: string, callback: Function) {
 		if (this.stopping_) throw new Error('Cannot push task when queue is stopping');
 
 		this.waitingTasks_.push({
@@ -42,7 +42,7 @@ export default class TaskQueue {
 		this.processQueue_();
 	}
 
-	processQueue_() {
+	private processQueue_() {
 		if (this.processingQueue_ || this.stopping_) return;
 
 		this.processingQueue_ = true;
@@ -84,19 +84,19 @@ export default class TaskQueue {
 		this.processingQueue_ = false;
 	}
 
-	isWaiting(taskId: string) {
+	public isWaiting(taskId: string) {
 		return this.waitingTasks_.find(task => task.id === taskId);
 	}
 
-	isProcessing(taskId: string) {
+	public isProcessing(taskId: string) {
 		return taskId in this.processingTasks_;
 	}
 
-	isDone(taskId: string) {
+	public isDone(taskId: string) {
 		return taskId in this.results_;
 	}
 
-	async waitForAll() {
+	public async waitForAll() {
 		return new Promise((resolve) => {
 			const checkIID = setInterval(() => {
 				if (this.waitingTasks_.length) return;
@@ -107,16 +107,16 @@ export default class TaskQueue {
 		});
 	}
 
-	taskExists(taskId: string) {
+	public taskExists(taskId: string) {
 		return this.isWaiting(taskId) || this.isProcessing(taskId) || this.isDone(taskId);
 	}
 
-	taskResult(taskId: string) {
+	public taskResult(taskId: string) {
 		if (!this.taskExists(taskId)) throw new Error(`No such task: ${taskId}`);
 		return this.results_[taskId];
 	}
 
-	async waitForResult(taskId: string) {
+	public async waitForResult(taskId: string) {
 		if (!this.taskExists(taskId)) throw new Error(`No such task: ${taskId}`);
 
 		while (true) {
@@ -126,7 +126,7 @@ export default class TaskQueue {
 		}
 	}
 
-	async stop() {
+	public async stop() {
 		this.stopping_ = true;
 
 		this.logger_.info(`TaskQueue.stop: ${this.name_}: waiting for tasks to complete: ${Object.keys(this.processingTasks_).length}`);
@@ -146,7 +146,7 @@ export default class TaskQueue {
 		this.logger_.info(`TaskQueue.stop: ${this.name_}: Done, waited for ${Date.now() - startTime}`);
 	}
 
-	isStopping() {
+	public isStopping() {
 		return this.stopping_;
 	}
 }

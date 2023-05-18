@@ -14,11 +14,11 @@ export interface ObjectPatch {
 }
 
 export default class Revision extends BaseItem {
-	static tableName() {
+	public static tableName() {
 		return 'revisions';
 	}
 
-	static modelType() {
+	public static modelType() {
 		return BaseModel.TYPE_REVISION;
 	}
 
@@ -181,7 +181,7 @@ export default class Revision extends BaseItem {
 		};
 	}
 
-	static revisionPatchStatsText(rev: RevisionEntity) {
+	public static revisionPatchStatsText(rev: RevisionEntity) {
 		const titleStats = this.patchStats(rev.title_diff);
 		const bodyStats = this.patchStats(rev.body_diff);
 		const total = {
@@ -195,28 +195,28 @@ export default class Revision extends BaseItem {
 		return output.join(', ');
 	}
 
-	static async countRevisions(itemType: ModelType, itemId: string) {
+	public static async countRevisions(itemType: ModelType, itemId: string) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM revisions WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
 
 		return r ? r.total : 0;
 	}
 
-	static latestRevision(itemType: ModelType, itemId: string) {
+	public static latestRevision(itemType: ModelType, itemId: string) {
 		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC LIMIT 1', [itemType, itemId]);
 	}
 
-	static allByType(itemType: ModelType, itemId: string) {
+	public static allByType(itemType: ModelType, itemId: string) {
 		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time ASC', [itemType, itemId]);
 	}
 
-	static async itemsWithRevisions(itemType: ModelType, itemIds: string[]) {
+	public static async itemsWithRevisions(itemType: ModelType, itemIds: string[]) {
 		if (!itemIds.length) return [];
 		const rows = await this.db().selectAll(`SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("${itemIds.join('","')}")`, [itemType]);
 
 		return rows.map((r: RevisionEntity) => r.item_id);
 	}
 
-	static async itemsWithNoRevisions(itemType: ModelType, itemIds: string[]) {
+	public static async itemsWithNoRevisions(itemType: ModelType, itemIds: string[]) {
 		const withRevs = await this.itemsWithRevisions(itemType, itemIds);
 		const output = [];
 		for (let i = 0; i < itemIds.length; i++) {
@@ -225,7 +225,7 @@ export default class Revision extends BaseItem {
 		return ArrayUtils.unique(output);
 	}
 
-	static moveRevisionToTop(revision: RevisionEntity, revs: RevisionEntity[]) {
+	public static moveRevisionToTop(revision: RevisionEntity, revs: RevisionEntity[]) {
 		let targetIndex = -1;
 		for (let i = revs.length - 1; i >= 0; i--) {
 			const rev = revs[i];
@@ -295,7 +295,7 @@ export default class Revision extends BaseItem {
 		return output;
 	}
 
-	static async deleteOldRevisions(ttl: number) {
+	public static async deleteOldRevisions(ttl: number) {
 		// When deleting old revisions, we need to make sure that the oldest surviving revision
 		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
 		// we deleted a revision, we need to find if there's a corresponding surviving revision
@@ -342,7 +342,7 @@ export default class Revision extends BaseItem {
 		}
 	}
 
-	static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
+	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}

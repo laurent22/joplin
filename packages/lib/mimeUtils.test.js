@@ -1,6 +1,6 @@
 const mimeUtils = require('./mime-utils.js').mime;
 
-describe('mimeUils', function() {
+describe('mimeUils', () => {
 
 
 
