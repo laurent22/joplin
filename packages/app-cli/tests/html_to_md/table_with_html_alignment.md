@@ -1,0 +1,3 @@
+| abc | defghi |
+| :---: | ---: |
+| bar | baz |

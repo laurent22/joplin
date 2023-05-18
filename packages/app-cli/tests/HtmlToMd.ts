@@ -45,37 +45,7 @@ describe('HtmlToMd', function() {
 				actualMd = actualMd.replace(/\r\n/g, '\n');
 			}
 
-			if (actualMd !== expectedMd) {
-				const result = [];
-
-				result.push('');
-				result.push(`Error converting file: ${htmlFilename}`);
-				result.push('--------------------------------- Got:');
-				result.push(actualMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
-				result.push('--------------------------------- Expected:');
-				result.push(expectedMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
-				result.push('--------------------------------------------');
-				result.push('');
-
-				// eslint-disable-next-line no-console
-				console.info(result.join('\n'));
-
-				// console.info('');
-				// console.info(`Error converting file: ${htmlFilename}`);
-				// console.info('--------------------------------- Got:');
-				// console.info(actualMd);
-				// console.info('--------------------------------- Raw:');
-				// console.info(actualMd.split('\n'));
-				// console.info('--------------------------------- Expected:');
-				// console.info(expectedMd.split('\n'));
-				// console.info('--------------------------------------------');
-				// console.info('');
-
-				expect(false).toBe(true);
-				// return;
-			} else {
-				expect(true).toBe(true);
-			}
+			expect(actualMd).toBe(expectedMd);
 		}
 	}));
 
