@@ -57,12 +57,7 @@ rules.tableRow = {
       for (var i = 0; i < colCount; i++) {
         const childNode = i < node.childNodes.length ? node.childNodes[i] : null;
         var border = getBorder(getColumnAlignment(parentTable, i));
-
-        if (childNode) {
-          borderCells += cell(border, node.childNodes[i])
-        } else {
-          borderCells += cell(border, null, i);
-        }
+        borderCells += cell(border, childNode, i);
       }
     }
     return '\n' + content + (borderCells ? '\n' + borderCells : '')
