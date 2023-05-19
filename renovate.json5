@@ -113,7 +113,13 @@
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
-		"execa"
+		"execa",
+
+		// Don't think we can trust this lib because they don't release a
+		// changelog and the latest version appears to have breaking changes
+		// (v0.5.0). Doesn't seem serious unfortunately.
+		// https://github.com/Leonidas-from-XIV/node-xml2js/issues/677
+		"xml2js",
 	],
 	"packageRules": [
 		{
