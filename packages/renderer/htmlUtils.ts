@@ -233,18 +233,18 @@ class HtmlUtils {
 					delete attrs[attrName];
 				}
 
-				if (name === 'a') {
-					// Make sure that only non-acceptable URLs are filtered out.
-					// In particular we want to exclude `javascript:` URLs.
-					if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
-						attrs['href'] = '#';
-					}
+				// Make sure that only non-acceptable URLs are filtered out. In
+				// particular we want to exclude `javascript:` URLs. This
+				// applies to A tags, and also AREA ones but to be safe we don't
+				// filter on the tag name and process all HREF attributes.
+				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
+					attrs['href'] = '#';
+				}
 
-					// We need to clear any such attribute, otherwise it will
-					// make any arbitrary link open within the application.
-					if ('data-from-md' in attrs) {
-						delete attrs['data-from-md'];
-					}
+				// We need to clear any such attribute, otherwise it will
+				// make any arbitrary link open within the application.
+				if ('data-from-md' in attrs) {
+					delete attrs['data-from-md'];
 				}
 
 				if (options.addNoMdConvClass) {
