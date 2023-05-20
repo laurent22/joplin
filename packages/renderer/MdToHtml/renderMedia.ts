@@ -73,7 +73,7 @@ export default function(link: Link, options: Options, linkIndexes: LinkIndexes) 
 		 class="media-player media-pdf"></iframe>`;
 		}
 
-		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;
+		return `<object data="${escapedResourcePath}#view=Fit" class="media-player media-pdf" type="${escapedMime}"></object>`;
 	}
 
 	return '';
