@@ -330,8 +330,6 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-vosk (0.1.12):
-    - React-Core
   - react-native-webview (11.26.1):
     - React-Core
   - React-perflogger (0.70.6)
@@ -516,7 +514,6 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-info (from `../node_modules/react-native-version-info`)
-  - react-native-vosk (from `../node_modules/react-native-vosk`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -637,8 +634,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-sqlite-storage"
   react-native-version-info:
     :path: "../node_modules/react-native-version-info"
-  react-native-vosk:
-    :path: "../node_modules/react-native-vosk"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -743,7 +738,6 @@ SPEC CHECKSUMS:
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-vosk: 33b8e82a46cc56f31bb4847a40efa2d160270e2e
   react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466

@@ -1,3 +1,5 @@
+// Currently disabled on iOS
+
 type Vosk = any;
 
 export { Vosk };

@@ -27758,11 +27758,11 @@ __metadata:
 
 "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::locator=root%40workspace%3A.":
   version: 0.1.12
-  resolution: "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::version=0.1.12&hash=8a1ee1&locator=root%40workspace%3A."
+  resolution: "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::version=0.1.12&hash=b82215&locator=root%40workspace%3A."
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 42ca9a0a4f60706b718c95207fcc27ec43571c0a5e83b358422fd35e45d006762277c30556edb1b470ade40198076d69260c4233fd07e30cd33c0f03024f5d11
+  checksum: 9451534de711f28274e117087a2c27266ee60ffc46723136841669c02345fd5644333a204c98c18d82e2c4221bb65906ac20529fd63fdcd5439c8aad86710e3b
   languageName: node
   linkType: hard
 
