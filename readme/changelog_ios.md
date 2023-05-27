@@ -1,6 +1,6 @@
 # Joplin iOS app changelog
 
-## [ios-v12.11.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.1) - 2023-05-27T13:28:43Z
+## [ios-v12.11.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.2) - 2023-05-27T15:31:26Z
 
 - New: Add log info for biometrics feature (efdbaeb)
 - New: Add setting to enable/disable the markdown toolbar (#7929 by Henry Heino)
