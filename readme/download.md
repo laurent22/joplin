@@ -14,6 +14,10 @@ Access your notes on Windows, macOS or Linux.
 
 </div>
 
+## Synchronise your notes with Joplin Cloud
+
+To synchronise your notes on all your devices, whether it's on desktop, mobile or tablet, and to share notes with others, try [Joplin Cloud](https://joplinapp.org/plans/)!
+
 ## Joplin App for Mobile
 
 Access your notes on your phone or tablet from the Android and iOS apps.
