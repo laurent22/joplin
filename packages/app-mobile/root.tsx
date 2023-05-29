@@ -866,7 +866,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	public componentDidUpdate(prevProps: any) {
+	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -979,6 +979,7 @@ class AppComponent extends React.Component {
 		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
 		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
 
+		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
 		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
@@ -1008,7 +1009,7 @@ class AppComponent extends React.Component {
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							{ this.state.sensorInfo && <BiometricPopup
+							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
@@ -1054,6 +1055,7 @@ const mapStateToProps = (state: any) => {
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
 		biometricsDone: state.biometricsDone,
+		biometricsEnabled: state.settings['security.biometricsEnabled'],
 	};
 };
 

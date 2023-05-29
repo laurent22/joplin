@@ -75,7 +75,9 @@ shared.checkSyncConfigMessages = function(comp) {
 	return output;
 };
 
-shared.updateSettingValue = function(comp, key, value) {
+shared.updateSettingValue = function(comp, key, value, callback = null) {
+	if (!callback) callback = () => {};
+
 	comp.setState(state => {
 		// @react-native-community/slider (4.4.0) will emit a valueChanged event
 		// when the component is mounted, even though the value hasn't changed.
@@ -99,7 +101,7 @@ shared.updateSettingValue = function(comp, key, value) {
 			settings: settings,
 			changedSettingKeys: changedSettingKeys,
 		};
-	});
+	}, callback);
 };
 
 shared.scheduleSaveSettings = function(comp) {
