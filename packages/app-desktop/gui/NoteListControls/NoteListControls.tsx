@@ -181,7 +181,7 @@ function NoteListControls(props: Props) {
 	useEffect(() => {
 		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
-			searchAndSortRef.current.style.flex = '2 1 60%';
+			searchAndSortRef.current.style.flex = '2 1 Md';
 			props.onContentHeightChange(true);
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
