@@ -5039,7 +5039,7 @@ __metadata:
     buffer: 6.0.3
     constants-browserify: 1.0.0
     crypto-browserify: 3.12.0
-    deprecated-react-native-prop-types: 4.0.0
+    deprecated-react-native-prop-types: 4.1.0
     events: 3.3.0
     execa: 4.1.0
     fs-extra: 11.1.1
@@ -14242,14 +14242,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deprecated-react-native-prop-types@npm:4.0.0":
-  version: 4.0.0
-  resolution: "deprecated-react-native-prop-types@npm:4.0.0"
+"deprecated-react-native-prop-types@npm:4.1.0":
+  version: 4.1.0
+  resolution: "deprecated-react-native-prop-types@npm:4.1.0"
   dependencies:
     "@react-native/normalize-colors": "*"
     invariant: "*"
     prop-types: "*"
-  checksum: 3542c70d0379153c946bc2e23202405df4337be3dc2a96601b6696247097e13405091efa7640841f8c920d3239145d8c024e13758c65a884a207b88ec2c826aa
+  checksum: bba96622e196f650e782963598a2868a9c89b32e88fba1555fe1308d324eb387ab2a1f16235162b7bccc1900e8f43b7f8eae4f149a37f10cdf52e071990a7c9a
   languageName: node
   linkType: hard
 

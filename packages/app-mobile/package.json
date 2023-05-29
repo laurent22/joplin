@@ -32,7 +32,7 @@
     "buffer": "6.0.3",
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.0",
-    "deprecated-react-native-prop-types": "4.0.0",
+    "deprecated-react-native-prop-types": "4.1.0",
     "events": "3.3.0",
     "jsc-android": "241213.1.0",
     "lodash": "4.17.21",
