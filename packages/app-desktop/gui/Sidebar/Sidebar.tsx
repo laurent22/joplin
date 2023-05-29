@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useRef, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import shim from '@joplin/lib/shim';
 import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
@@ -40,23 +40,14 @@ const { clipboard } = require('electron');
 
 const logger = Logger.create('Sidebar');
 
-const StyledFoldersHolder = styled.div`
-	// linux bug: https://github.com/laurent22/joplin/issues/7506#issuecomment-1447101057
-	& a.list-item {
-		${shim.isLinux() && {
-		opacity: 1,
-	}}
-	}
+// Workaround sidebar rendering bug on Linux Intel GPU.
+// https://github.com/laurent22/joplin/issues/7506
+const StyledSpanFix = styled.span`
+	${shim.isLinux() && css`
+		position: relative;
+	`}
 `;
-const TagsHolder = styled.div`
-	// linux bug: https://github.com/laurent22/joplin/issues/8000
-	// solution ref: https://github.com/laurent22/joplin/issues/7506#issuecomment-1447101057
-	& a.list-item {
-		${shim.isLinux() && {
-		opacity: 1,
-	}}
-	}
-`;
+
 
 interface Props {
 	themeId: number;
@@ -138,7 +129,7 @@ function FolderItem(props: any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{showFolderIcon ? renderFolderIcon(folderIcon) : null}<span className="title" style={{ lineHeight: 0 }}>{folderTitle}</span>
+				{showFolderIcon ? renderFolderIcon(folderIcon) : null}<StyledSpanFix className="title" style={{ lineHeight: 0 }}>{folderTitle}</StyledSpanFix>
 				{shareIcon} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
@@ -573,7 +564,7 @@ const SidebarComponent = (props: Props) => {
 						tagItem_click(tag);
 					}}
 				>
-					<span className="tag-label">{Tag.displayTitle(tag)}</span>
+					<StyledSpanFix className="tag-label">{Tag.displayTitle(tag)}</StyledSpanFix>
 					{noteCount}
 				</StyledListItemAnchor>
 			</StyledListItem>
@@ -725,13 +716,13 @@ const SidebarComponent = (props: Props) => {
 		const folderItems = [renderAllNotesItem(theme, allNotesSelected)].concat(result.items);
 		folderItemsOrder_.current = result.order;
 		items.push(
-			<StyledFoldersHolder
+			<div
 				className={`folders ${props.folderHeaderIsExpanded ? 'expanded' : ''}`}
 				key="folder_items"
 				style={foldersStyle}
 			>
 				{folderItems}
-			</StyledFoldersHolder>
+			</div>
 		);
 	}
 
@@ -747,9 +738,9 @@ const SidebarComponent = (props: Props) => {
 		tagItemsOrder_.current = result.order;
 
 		items.push(
-			<TagsHolder className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
+			<div className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
 				{tagItems}
-			</TagsHolder>
+			</div>
 		);
 	}
 
