@@ -866,7 +866,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
-	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((K) => !!K.enabled)).length;
+	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
 
 	return {
 		themeId: state.settings.theme,
