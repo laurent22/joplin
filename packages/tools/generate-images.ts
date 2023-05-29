@@ -4,6 +4,7 @@ import { execCommand } from './tool-utils';
 import { fileExtension } from '@joplin/lib/path-utils';
 const md5File = require('md5-file');
 const sharp = require('sharp');
+const svg2vectordrawable = require('svg2vectordrawable/src/svg-file-to-vectordrawable-file');
 
 interface Source {
 	id: number;
@@ -60,6 +61,14 @@ const sources: Source[] = [
 		id: 9,
 		name: 'WebsiteTopImageCn.png',
 	},
+	{
+		id: 10,
+		name: 'JoplinIconForeground.svg',
+	},
+	{
+		id: 11,
+		name: 'JoplinNotificationIcon.svg',
+	},
 ];
 
 function sourceById(id: number) {
@@ -70,6 +79,47 @@ function sourceById(id: number) {
 }
 
 const operations: Operation[] = [
+
+	// ============================================================================
+	// Android icons
+	// ============================================================================
+
+	{
+		source: 10,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable/ic_launcher_foreground.xml',
+		width: 108,
+		height: 108,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-anydpi-v24/ic_notification.xml',
+		width: 24,
+		height: 24,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-mdpi/ic_notification.png',
+		width: 24,
+		height: 24,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-hdpi/ic_notification.png',
+		width: 36,
+		height: 36,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-xhdpi/ic_notification.png',
+		width: 48,
+		height: 48,
+	},
+	{
+		source: 11,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable-xxhdpi/ic_notification.png',
+		width: 72,
+		height: 72,
+	},
 
 	// ============================================================================
 	// iOS icons
@@ -534,6 +584,15 @@ async function main() {
 				s.webp({
 					// quality: 90,
 				});
+			} else if (destExt === 'xml') {
+				const options = {
+					floatPrecision: 2,
+					fillBlack: false,
+					xmlTag: false,
+					tint: '#FFFFFFFF',
+				};
+				svg2vectordrawable.convertFile(sourcePath, destPath, options);
+				continue;
 			} else {
 				throw new Error(`Unsupported extension: ${destExt}`);
 			}

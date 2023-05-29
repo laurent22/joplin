@@ -1,5 +1,9 @@
 package com.emekalites.react.alarm.notification;
 
+import static com.emekalites.react.alarm.notification.Constants.ADD_INTENT;
+import static com.emekalites.react.alarm.notification.Constants.NOTIFICATION_ACTION_DISMISS;
+import static com.emekalites.react.alarm.notification.Constants.NOTIFICATION_ACTION_SNOOZE;
+
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.Notification;
@@ -21,6 +25,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.AlarmManagerCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.facebook.react.bridge.WritableMap;
@@ -33,10 +38,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 
-import static com.emekalites.react.alarm.notification.Constants.ADD_INTENT;
-import static com.emekalites.react.alarm.notification.Constants.NOTIFICATION_ACTION_DISMISS;
-import static com.emekalites.react.alarm.notification.Constants.NOTIFICATION_ACTION_SNOOZE;
-
 class AlarmUtil {
 
     private static final long[] DEFAULT_VIBRATE_PATTERN = {0, 250, 250, 250};
@@ -47,7 +48,7 @@ class AlarmUtil {
 
     AlarmUtil(Application context) {
         this.context = context;
-        this.alarmDB =  new AlarmDatabase(context);
+        this.alarmDB = new AlarmDatabase(context);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             defaultFlags = PendingIntent.FLAG_IMMUTABLE;
@@ -110,12 +111,12 @@ class AlarmUtil {
         String scheduleType = alarm.getScheduleType();
 
         if (scheduleType.equals("once")) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    AlarmManagerCompat.setAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                }
             } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             }
         } else if (scheduleType.equals("repeat")) {
             long interval = this.getInterval(alarm.getInterval(), alarm.getIntervalValue());
@@ -152,12 +153,12 @@ class AlarmUtil {
         String scheduleType = alarm.getScheduleType();
 
         if (scheduleType.equals("once")) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    AlarmManagerCompat.setAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                }
             } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             }
         } else if (scheduleType.equals("repeat")) {
             long interval = this.getInterval(alarm.getInterval(), alarm.getIntervalValue());
@@ -176,7 +177,7 @@ class AlarmUtil {
                 duration = value;
                 break;
             case "hourly":
-                duration = 60 * value;
+                duration = 60L * value;
                 break;
             case "daily":
                 duration = 60 * 24;
@@ -317,9 +318,9 @@ class AlarmUtil {
             int smallIconResId;
             String smallIcon = alarm.getSmallIcon();
             if (smallIcon != null && !smallIcon.equals("")) {
-                smallIconResId = res.getIdentifier(smallIcon, "mipmap", packageName);
+                smallIconResId = res.getIdentifier(smallIcon, "drawable", packageName);
             } else {
-                smallIconResId = res.getIdentifier("ic_launcher", "mipmap", packageName);
+                smallIconResId = res.getIdentifier("ic_notification", "drawable", packageName);
             }
 
             Intent intent = new Intent(context, intentClass);
@@ -329,7 +330,7 @@ class AlarmUtil {
             intent.putExtra(Constants.NOTIFICATION_ID, alarm.getId());
             intent.putExtra("data", alarm.getData());
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelID)
                     .setSmallIcon(smallIconResId)
@@ -378,11 +379,9 @@ class AlarmUtil {
             }
 
             //color
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String color = alarm.getColor();
-                if (color != null && !color.equals("")) {
-                    mBuilder.setColor(Color.parseColor(color));
-                }
+            String color = alarm.getColor();
+            if (color != null && !color.equals("")) {
+                mBuilder.setColor(Color.parseColor(color));
             }
 
             mBuilder.setContentIntent(pendingIntent);
@@ -410,8 +409,8 @@ class AlarmUtil {
 
             //large icon
             String largeIcon = alarm.getLargeIcon();
-            if (largeIcon != null && !largeIcon.equals("") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                int largeIconResId = res.getIdentifier(largeIcon, "mipmap", packageName);
+            if (largeIcon != null && !largeIcon.equals("")) {
+                int largeIconResId = res.getIdentifier(largeIcon, "drawable", packageName);
                 Bitmap largeIconBitmap = BitmapFactory.decodeResource(res, largeIconResId);
                 if (largeIconResId != 0) {
                     mBuilder.setLargeIcon(largeIconBitmap);

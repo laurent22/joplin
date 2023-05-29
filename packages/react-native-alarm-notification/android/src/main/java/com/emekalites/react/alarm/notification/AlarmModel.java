@@ -369,7 +369,7 @@ public class AlarmModel implements Serializable {
         alarm.setActive(1);
         alarm.setAutoCancel(bundle.getBoolean("auto_cancel", true));
         alarm.setChannel(bundle.getString("channel", "my_channel_id"));
-        alarm.setColor(bundle.getString("color", "red"));
+        alarm.setColor(bundle.getString("color", ""));
 
         Bundle data = bundle.getBundle("data");
         alarm.setData(data);
@@ -380,7 +380,7 @@ public class AlarmModel implements Serializable {
         alarm.setMessage(bundle.getString("message", "My Notification Message"));
         alarm.setPlaySound(bundle.getBoolean("play_sound", true));
         alarm.setScheduleType(bundle.getString("schedule_type", "once"));
-        alarm.setSmallIcon(bundle.getString("small_icon", "ic_launcher"));
+        alarm.setSmallIcon(bundle.getString("small_icon", "ic_notification"));
         alarm.setSnoozeInterval((int) bundle.getDouble("snooze_interval", 1.0));
         alarm.setSoundName(bundle.getString("sound_name", null));
         alarm.setSoundNames(bundle.getString("sound_names", null));

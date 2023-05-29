@@ -37,6 +37,7 @@
     "request": "2.88.2",
     "sharp": "0.32.1",
     "source-map-support": "0.5.21",
+    "svg2vectordrawable": "2.9.1",
     "uri-template": "2.0.0",
     "yargs": "17.7.2"
   },
