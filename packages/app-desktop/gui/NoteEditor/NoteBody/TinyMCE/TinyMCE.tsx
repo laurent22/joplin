@@ -563,7 +563,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			// Available table toolbar buttons:
 			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
-			const table_toolbar = [
+			const tableToolbar = [
 				'tabledelete',
 				'tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
 				'tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
@@ -588,7 +588,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				table_toolbar: table_toolbar.join(' | '),
+				table_toolbar: tableToolbar.join(' | '),
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
