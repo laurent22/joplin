@@ -363,6 +363,7 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
