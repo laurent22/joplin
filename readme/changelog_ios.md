@@ -1,5 +1,11 @@
 # Joplin iOS app changelog
 
+## [ios-v12.11.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.3) - 2023-05-29T12:27:45Z
+
+- Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
+- Fixed: Fixed broken domain detection (192bfb5)
+- Fixed: Fixed regression in biometric check (b19f1a1)
+
 ## [ios-v12.11.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.2) - 2023-05-27T15:31:26Z
 
 - New: Add log info for biometrics feature (efdbaeb)
