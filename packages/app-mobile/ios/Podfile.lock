@@ -290,8 +290,6 @@ PODS:
     - glog
   - react-native-alarm-notification (2.11.0):
     - React
-  - react-native-blob-util (0.17.3):
-    - React-Core
   - react-native-camera (4.2.1):
     - React-Core
     - react-native-camera/RCT (= 4.2.1)
@@ -398,6 +396,8 @@ PODS:
     - React-jsi (= 0.70.6)
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
@@ -499,7 +499,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-alarm-notification (from `../node_modules/@joplin/react-native-alarm-notification`)"
-  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
@@ -527,6 +526,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
@@ -604,8 +604,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-alarm-notification:
     :path: "../node_modules/@joplin/react-native-alarm-notification"
-  react-native-blob-util:
-    :path: "../node_modules/react-native-blob-util"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
   react-native-document-picker:
@@ -660,6 +658,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
   RNCPushNotificationIOS:
@@ -723,7 +723,6 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-alarm-notification: 26527410a6162d07a9dc57f4bbc62e94ff48e65d
-  react-native-blob-util: 99f4d79189252f597fe0d810c57a3733b1b1dea6
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 495c444c0c773c6e83a5d91165890ecb1c0a399a
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
@@ -751,6 +750,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: c75ceef7aa60a33b2d5731ebe5800ddde40cefc4
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd

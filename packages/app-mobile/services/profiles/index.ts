@@ -4,7 +4,7 @@
 const RNExitApp = require('react-native-exit-app').default;
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
-import RNFetchBlob from 'react-native-blob-util';
+import RNFetchBlob from 'rn-fetch-blob';
 
 let dispatch_: Function = null;
 export const setDispatch = (dispatch: Function) => {
