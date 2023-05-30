@@ -1,14 +1,13 @@
 const React = require('react');
 
-import { Component } from 'react';
+import { Component, FunctionComponent } from 'react';
 
 import { connect } from 'react-redux';
-import { FlatList, Text, StyleSheet, Button, View, Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import { FlatList, Text, StyleSheet, Button, View, ViewStyle, TextStyle, ImageStyle, PanResponder } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import Setting from '@joplin/lib/models/Setting';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
 
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
@@ -27,15 +26,75 @@ interface NoteListProps {
 	onSorted: (sortedId: string, newIndex: number)=> void;
 }
 
-interface AdditionalNoteItemProps {
-	drag?: Function;
-	isActive?: boolean;
-}
-
 interface NoteListState {
 	items: NoteEntity[];
 	selectedItemIds: string[];
 }
+
+interface NoteItemWrapperProps {
+	note: NoteEntity;
+	dialogbox: any;
+	drag: Function;
+	isActive: boolean;
+	style: ViewStyle | TextStyle | ImageStyle;
+	noteSelectionEnabled?: boolean;
+	dispatch: (payload: any)=> void;
+}
+
+const NoteItemWrapper: FunctionComponent<NoteItemWrapperProps> = ({
+	note,
+	drag,
+	isActive,
+	style,
+	dialogbox,
+	noteSelectionEnabled,
+	dispatch,
+}) => {
+	if (Setting.value('notes.sortOrder.field') !== 'order') {
+		drag = async () => {
+			const doIt = await dialogs.confirmRef(dialogbox, `${_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by'))}\n\n${_('Do you want to do this')}`);
+
+			if (doIt) {
+				Setting.setValue('notes.sortOrder.field', 'order');
+			}
+		};
+	}
+
+	const panResponder = React.useRef(
+		PanResponder.create({
+			// Ask to be the responder:
+			onStartShouldSetPanResponder: () => false,
+			onStartShouldSetPanResponderCapture: () => false,
+			onMoveShouldSetPanResponder: (_) => true,
+			onMoveShouldSetPanResponderCapture: (_) => true,
+			onPanResponderGrant: () => {
+				drag();
+			},
+			onShouldBlockNativeResponder: () => false,
+		})
+	).current;
+
+	return (
+		<View style={style} {...panResponder.panHandlers}>
+			<NoteItem
+				note={note}
+				onLongPress={() => {
+					dispatch({
+						type: noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
+						id: note.id,
+					});
+				}}
+				disabled={isActive}
+			/>
+		</View>
+	);
+};
+
+const ConnectedNoteItemWrapper = connect((state: AppState) => {
+	return {
+		noteSelectionEnabled: state.noteSelectionEnabled,
+	};
+})(NoteItemWrapper);
 
 class NoteListComponent extends Component<NoteListProps, NoteListState> {
 	private rootRef_: FlatList;
@@ -116,73 +175,6 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 		});
 	}
 
-	public renderNoteItem(note: NoteEntity, additionalProps?: AdditionalNoteItemProps) {
-		let currentSwipeable: Swipeable = null;
-
-		const renderLeftActions = (_progress: Animated.AnimatedInterpolation<string | number>, dragX: Animated.AnimatedInterpolation<string | number>) => {
-			const trans = dragX.interpolate({
-				inputRange: [0, 50, 100, 101],
-				outputRange: [-20, 0, 0, 1],
-				extrapolate: 'clamp',
-			});
-
-			return (
-				<RectButton style={this.styles().selectAction} onPress={() => { }}>
-					<Animated.Text
-						style={[
-							this.styles().actionText,
-							{
-								transform: [{ translateX: trans }],
-							},
-						]}>
-						{_('Select')}
-					</Animated.Text>
-				</RectButton>
-			);
-		};
-
-		const onOpen = (side: 'left' | 'right') => {
-			if (side === 'left') {
-				if (currentSwipeable) {
-					currentSwipeable.close();
-				}
-
-				this.props.dispatch({
-					type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
-					id: note.id,
-				});
-			}
-		};
-
-		let drag = additionalProps && additionalProps.drag;
-
-		if (Setting.value('notes.sortOrder.field') !== 'order') {
-			drag = async () => {
-				const doIt = await dialogs.confirmRef(this.dialogbox, `${_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by'))}\n\n${_('Do you want to do this')}`);
-
-				if (doIt) {
-					Setting.setValue('notes.sortOrder.field', 'order');
-				}
-			};
-		}
-
-		const noteContent = (
-			<View style={this.styles().noteContainer}>
-				<NoteItem
-					note={note}
-					onLongPress={drag}
-					disabled={additionalProps && additionalProps.isActive}
-				/>
-			</View>
-		);
-
-		return (
-			<Swipeable renderLeftActions={renderLeftActions} onSwipeableOpen={onOpen} ref={(swipeable) => currentSwipeable = swipeable}>
-				{noteContent}
-			</Swipeable>
-		);
-	}
-
 	public renderMainContent() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
@@ -192,9 +184,17 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 					<DraggableFlatList
 						ref={(ref: any) => (this.rootRef_ = ref)}
 						data={this.state.items}
-						renderItem={({ item, drag, isActive }) => (<ScaleDecorator>
-							{this.renderNoteItem(item, { drag, isActive })}
-						</ScaleDecorator>)}
+						renderItem={({ item, drag, isActive }) => (
+							<ScaleDecorator>
+								<ConnectedNoteItemWrapper
+									note={item}
+									drag={drag}
+									isActive={isActive}
+									style={this.styles().noteContainer}
+									dialogbox={this.dialogbox}
+								/>
+							</ScaleDecorator>
+						)}
 						keyExtractor={item => item.id}
 						onDragEnd={async ({ data, to, from }) => {
 							if (this.props.selectedFolderId) {
@@ -250,7 +250,6 @@ const NoteList = connect((state: AppState) => {
 		selectedFolderId: state.selectedFolderId,
 		notesSource: state.notesSource,
 		themeId: state.settings.theme,
-		noteSelectionEnabled: state.noteSelectionEnabled,
 	};
 })(NoteListComponent);
 
