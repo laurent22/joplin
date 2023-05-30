@@ -98,6 +98,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			}
 		};
 
+		this.saveButton_press = this.saveButton_press.bind(this);
+
 		this.syncStatusButtonPress_ = () => {
 			void NavService.go('Status');
 		};
@@ -199,6 +201,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.logButtonPress_ = () => {
 			void NavService.go('Log');
 		};
+
+		this.handleSetting = this.handleSetting.bind(this);
 	}
 
 	public async checkFilesystemPermission() {
@@ -482,8 +486,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (key === 'security.biometricsEnabled' && !!value) {
 			try {
 				await biometricAuthenticate();
-				shared.updateSettingValue(this, key, value);
-				await this.saveButton_press();
+				shared.updateSettingValue(this, key, value, async () => await this.saveButton_press());
 			} catch (error) {
 				shared.updateSettingValue(this, key, false);
 				Alert.alert(error.message);
@@ -492,8 +495,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		if (key === 'security.biometricsEnabled' && !value) {
-			shared.updateSettingValue(this, key, value);
-			await this.saveButton_press();
+			shared.updateSettingValue(this, key, value, async () => await this.saveButton_press());
 			return true;
 		}
 
@@ -748,6 +750,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		settingComps.push(
 			<View key="version_info_fts" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
+			</View>
+		);
+
+		settingComps.push(
+			<View key="version_info_hermes" style={this.styles().settingContainer}>
+				<Text style={this.styles().settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
 			</View>
 		);
 

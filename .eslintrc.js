@@ -42,6 +42,8 @@ module.exports = {
 		'zxcvbn': 'readonly',
 
 		'tinymce': 'readonly',
+
+		'JSX': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,

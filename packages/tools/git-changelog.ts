@@ -12,6 +12,7 @@ interface LogEntry {
 }
 
 enum Platform {
+	Unknown = 'unknown',
 	Android = 'android',
 	Ios = 'ios',
 	Desktop = 'desktop',
@@ -94,7 +95,8 @@ function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('cloud') === 0) return Platform.Cloud;
 	if (tagName.indexOf('plugin-generator') === 0) return Platform.PluginGenerator;
 	if (tagName.indexOf('plugin-repo-cli') === 0) return Platform.PluginRepoCli;
-	throw new Error(`Could not determine platform from tag: "${tagName}"`);
+	return Platform.Unknown;
+	// throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
 
 export const filesApplyToPlatform = (files: string[], platform: string): boolean => {
@@ -130,6 +132,7 @@ export const parseRenovateMessage = (message: string): RenovateMessage => {
 	const regexes = [
 		/^Update dependency ([^\s]+) to ([^\s]+)/,
 		/^Update ([^\s]+) monorepo to ([^\s]+)/,
+		/^Update ([^\s]+)/,
 	];
 
 	for (const regex of regexes) {
@@ -138,7 +141,7 @@ export const parseRenovateMessage = (message: string): RenovateMessage => {
 		if (m) {
 			return {
 				package: m[1],
-				version: m[2],
+				version: m.length >= 3 ? m[2] : '',
 			};
 		}
 	}
@@ -172,7 +175,7 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 
 	const temp: Record<string, string> = {};
 	for (const message of messages) {
-		if (!temp[message.package]) {
+		if (!(message.package in temp)) {
 			temp[message.package] = message.version;
 		} else {
 			if (message.version > temp[message.package]) {
@@ -183,7 +186,8 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 
 	const temp2: string[] = [];
 	for (const [pkg, version] of Object.entries(temp)) {
-		temp2.push(`${pkg} (${version})`);
+		const versionString = version ? ` (${version})` : '';
+		temp2.push(`${pkg}${versionString}`);
 	}
 
 	temp2.sort();

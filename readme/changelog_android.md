@@ -1,5 +1,50 @@
 # Joplin Android app changelog
 
+## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
+
+- Fixed: Fix "Download interrupted" error (b023f58)
+
+## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
+
+- Improved: Updated packages react-native-paper (v5.6.0)
+
+## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) (Pre-release) - 2023-05-12T12:43:08Z
+
+- Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
+
+## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) (Pre-release) - 2023-05-10T12:24:40Z
+
+- Improved: Translate Welcome notes (#8154)
+
+## [android-v2.11.13](https://github.com/laurent22/joplin/releases/tag/android-v2.11.13) (Pre-release) - 2023-05-08T20:28:29Z
+
+- Improved: Tells whether Hermes engine is enabled or not (5ecae17)
+
+## [android-v2.11.10](https://github.com/laurent22/joplin/releases/tag/android-v2.11.10) (Pre-release) - 2023-05-08T10:26:14Z
+
+- Improved: Disable Hermes engine (e9e9986)
+- Fixed: Fix voice typing (d5eeb12)
+
+## [android-v2.11.7](https://github.com/laurent22/joplin/releases/tag/android-v2.11.7) (Pre-release) - 2023-05-07T14:29:08Z
+
+- Fixed crash when starting voice typing.
+
+## [android-v2.11.6](https://github.com/laurent22/joplin/releases/tag/android-v2.11.6) (Pre-release) - 2023-05-07T13:53:31Z
+
+- Disabled Hermes engine
+
+## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) (Pre-release) - 2023-05-07T12:14:21Z
+
+- Improved: Improved Vosk support (beta, fr only) (#8131)
+- Improved: Updated packages react-native-share (v8.2.2), reselect (v4.1.8), sharp (v0.32.0)
+
+## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) (Pre-release) - 2023-05-03T11:57:27Z
+
+- New: Add support for offline speech to text (Beta - FR only) (#8115)
+- Improved: Updated packages @react-native-community/netinfo (v9.3.9), aws, react-native-document-picker (v8.2.0), react-native-paper (v5.5.2), react-native-safe-area-context (v4.5.1), sass (v1.60.0)
+- Fixed: Fixed sync crash (#8056) (#8017 by Arun Kumar)
+- Fixed: Fixes issue where the note body is not updated after attaching a file (991c120)
+
 ## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) (Pre-release) - 2023-04-09T12:04:06Z
 
 - Improved: Resolve #8022: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)

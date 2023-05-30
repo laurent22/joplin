@@ -7,6 +7,12 @@ export enum Env {
 	Prod = 'prod',
 }
 
+export interface Locale {
+	htmlTranslations: Record<string, string>;
+	lang: string;
+	pathPrefix: string;
+}
+
 export interface GithubUser {
 	id: string;
 }
@@ -62,6 +68,7 @@ export interface TemplateParams {
 	showBottomLinks?: boolean;
 	openGraph: OpenGraphTags;
 	isNews?: boolean;
+	locale?: Locale;
 }
 
 export interface PlanPageParams extends TemplateParams {

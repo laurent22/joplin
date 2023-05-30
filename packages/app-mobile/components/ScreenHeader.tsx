@@ -10,9 +10,9 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
+import Folder from '@joplin/lib/models/Folder';
 const { themeStyle } = require('./global-style.js');
-import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
+import { OnValueChangedListener } from './Dropdown';
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
@@ -20,6 +20,7 @@ import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import CustomButton from './CustomButton';
+import FolderPicker from './FolderPicker';
 
 // We need this to suppress the useless warning
 // https://github.com/oblador/react-native-vector-icons/issues/1465
@@ -494,58 +495,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		const createTitleComponent = (disabled: boolean) => {
-			const themeId = Setting.value('theme');
-			const theme = themeStyle(themeId);
 			const folderPickerOptions = this.props.folderPickerOptions;
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
-				const addFolderChildren = (
-					folders: FolderEntityWithChildren[], pickerItems: DropdownListItem[], indent: number
-				) => {
-					folders.sort((a, b) => {
-						const aTitle = a && a.title ? a.title : '';
-						const bTitle = b && b.title ? b.title : '';
-						return aTitle.toLowerCase() < bTitle.toLowerCase() ? -1 : +1;
-					});
-
-					for (let i = 0; i < folders.length; i++) {
-						const f = folders[i];
-						const icon = Folder.unserializeIcon(f.icon);
-						const iconString = icon ? `${icon.emoji} ` : '';
-						pickerItems.push({ label: `${'      '.repeat(indent)} ${iconString + Folder.displayTitle(f)}`, value: f.id });
-						pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
-					}
-
-					return pickerItems;
-				};
-
-				const titlePickerItems = (mustSelect: boolean) => {
-					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
-					let output = [];
-					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
-					const folderTree = Folder.buildTree(folders);
-					output = addFolderChildren(folderTree, output, 0);
-					return output;
-				};
-
 				return (
-					<Dropdown
-						items={titlePickerItems(!!folderPickerOptions.mustSelect)}
+					<FolderPicker
+						themeId={themeId}
 						disabled={disabled}
-						labelTransform="trim"
-						selectedValue={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
-						itemListStyle={{
-							backgroundColor: theme.backgroundColor,
-						}}
-						headerStyle={{
-							color: theme.colorBright2,
-							fontSize: theme.fontSize,
-							opacity: disabled ? theme.disabledOpacity : 1,
-						}}
-						itemStyle={{
-							color: theme.color,
-							fontSize: theme.fontSize,
-						}}
+						selectedFolderId={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
 						onValueChange={async (folderId) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the
@@ -570,6 +527,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 								await Note.moveToFolder(noteIds[i], folderId);
 							}
 						}}
+						mustSelect={!!folderPickerOptions.mustSelect}
+						folders={this.props.folders}
 					/>
 				);
 			} else {

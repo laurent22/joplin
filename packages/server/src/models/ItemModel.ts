@@ -3,12 +3,12 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorCode, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
-import { DbConnection, returningSupported } from '../db';
+import { DbConnection, isUniqueConstraintError, returningSupported } from '../db';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
@@ -20,6 +20,8 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
+
+const modelLogger = Logger.create('ItemModel');
 
 export interface DeleteOptions extends BaseDeleteOptions {
 	deleteChanges?: boolean;
@@ -897,6 +899,44 @@ export default class ItemModel extends BaseModel<Item> {
 		}, 'ItemModel::makeTestItems');
 	}
 
+	// I hate that this hack is necessary but it seems certain items end up with
+	// no associated user_items in the database. Thus when the user tries to
+	// update the items, the system thinks it's a new one, but then the query
+	// fails due to the UNIQUE constraints. This is now mitigated by making
+	// these items as "rejectedByTarget", which move them out of the way so that
+	// the rest of the items can be synced.
+	//
+	// To be safe we should however fix these orphaned items and that's what
+	// this function is doing.
+	//
+	// Why this happens is unclear. It's probably related to sharing notes,
+	// maybe moving them from one folder to another, then unsharing, etc. It
+	// can't be replicated so far. On Joplin Cloud it happens on only 0.0008% of
+	// items, so a simple processing task like this one is sufficient for now
+	// but it would be nice to get to the bottom of this bug.
+	public processOrphanedItems = async () => {
+		await this.withTransaction(async () => {
+			const orphanedItems: Item[] = await this.db(this.tableName)
+				.select(['items.id', 'items.owner_id'])
+				.leftJoin('user_items', 'user_items.item_id', 'items.id')
+				.whereNull('user_items.user_id');
+
+			const userIds: string[] = orphanedItems.map(i => i.owner_id);
+			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
+
+			for (const orphanedItem of orphanedItems) {
+				if (!users.find(u => u.id)) {
+					// The user may have been deleted since then. In that case, we
+					// simply delete the orphaned item.
+					await this.delete(orphanedItem.id);
+				} else {
+					// Otherwise we add it back to the user's collection
+					await this.models().userItem().add(orphanedItem.owner_id, orphanedItem.id);
+				}
+			}
+		}, 'ItemModel::processOrphanedItems');
+	};
+
 	// This method should be private because items should only be saved using
 	// saveFromRawContent, which is going to deal with the content driver. But
 	// since it's used in various test units, it's kept public for now.
@@ -928,7 +968,16 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
-			item = await super.save(item, options);
+			try {
+				item = await super.save(item, options);
+			} catch (error) {
+				if (isUniqueConstraintError(error)) {
+					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+				} else {
+					throw error;
+				}
+			}
 
 			if (isNew) await this.models().userItem().add(userId, item.id);
 

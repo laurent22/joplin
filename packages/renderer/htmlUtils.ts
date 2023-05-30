@@ -30,9 +30,13 @@ const selfClosingElements = [
 	'wbr',
 ];
 
+interface SanitizeHtmlOptions {
+	addNoMdConvClass: boolean;
+}
+
 class HtmlUtils {
 
-	public attributesHtml(attr: any) {
+	public attributesHtml(attr: Record<string, string>) {
 		const output = [];
 
 		for (const n in attr) {
@@ -76,8 +80,15 @@ class HtmlUtils {
 	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 
+		interface Action {
+			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
+			href: string;
+			html: string;
+			attrs: Record<string, string>;
+		}
+
 		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action = callback({ href: href });
+			const action: Action = callback({ href: href });
 
 			if (!action) return `<a${before}href="${href}"${after}>`;
 
@@ -144,7 +155,12 @@ class HtmlUtils {
 			.replace(/</g, '&lt;');
 	}
 
-	public sanitizeHtml(html: string, options: any = null) {
+	private isAcceptedUrl(url: string): boolean {
+		url = url.toLowerCase();
+		return url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto://');
+	}
+
+	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
 		options = Object.assign({}, {
 			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
@@ -167,23 +183,31 @@ class HtmlUtils {
 
 		// The BASE tag allows changing the base URL from which files are
 		// loaded, and that can break several plugins, such as Katex (which
-		// needs to load CSS files using a relative URL). For that reason
-		// it is disabled. More info:
-		// https://github.com/laurent22/joplin/issues/3021
+		// needs to load CSS files using a relative URL). For that reason it is
+		// disabled. More info: https://github.com/laurent22/joplin/issues/3021
 		//
-		// "link" can be used to escape the parser and inject JavaScript.
-		// Adding "meta" too for the same reason as it shouldn't be used in
-		// notes anyway.
+		// "link" can be used to escape the parser and inject JavaScript. Adding
+		// "meta" too for the same reason as it shouldn't be used in notes
+		// anyway.
+		//
+		// There are too many issues with SVG tags and to handle them properly
+		// we should parse them separately. Currently we are not so it is better
+		// to disable them. SVG graphics are still supported via the IMG tag.
 		const disallowedTags = [
 			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
 			'embed', 'link', 'meta', 'noscript', 'button', 'form',
 			'input', 'select', 'textarea', 'option', 'optgroup',
+			'svg',
 		];
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name: string, attrs: any) => {
-				tagStack.push(name.toLowerCase());
+			onopentag: (name: string, attrs: Record<string, string>) => {
+				// Note: "name" and attribute names are always lowercase even
+				// when the input is not. So there is no need to call
+				// "toLowerCase" on them.
+
+				tagStack.push(name);
 
 				if (disallowedTags.includes(currentTag())) {
 					disallowedTagDepth++;
@@ -202,11 +226,25 @@ class HtmlUtils {
 				// regular harmless attribute that starts with "on" will also
 				// be removed.
 				// 0: https://developer.mozilla.org/en-US/docs/Web/Events
-				for (const name in attrs) {
-					if (!attrs.hasOwnProperty(name)) continue;
-					if (name.length <= 2) continue;
-					if (name.toLowerCase().substr(0, 2) !== 'on') continue;
-					delete attrs[name];
+				for (const attrName in attrs) {
+					if (!attrs.hasOwnProperty(attrName)) continue;
+					if (attrName.length <= 2) continue;
+					if (attrName.substr(0, 2) !== 'on') continue;
+					delete attrs[attrName];
+				}
+
+				// Make sure that only non-acceptable URLs are filtered out. In
+				// particular we want to exclude `javascript:` URLs. This
+				// applies to A tags, and also AREA ones but to be safe we don't
+				// filter on the tag name and process all HREF attributes.
+				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
+					attrs['href'] = '#';
+				}
+
+				// We need to clear any such attribute, otherwise it will
+				// make any arbitrary link open within the application.
+				if ('data-from-md' in attrs) {
+					delete attrs['data-from-md'];
 				}
 
 				if (options.addNoMdConvClass) {
@@ -222,7 +260,7 @@ class HtmlUtils {
 				// attribute. It doesn't always happen and it seems to depend on
 				// what else is in the note but in any case adding the "href"
 				// fixes it. https://github.com/laurent22/joplin/issues/5687
-				if (name.toLowerCase() === 'a' && !attrs['href']) {
+				if (name === 'a' && !attrs['href']) {
 					attrs['href'] = '#';
 				}
 
@@ -235,11 +273,18 @@ class HtmlUtils {
 			ontext: (decodedText: string) => {
 				if (disallowedTagDepth) return;
 
+
 				if (currentTag() === 'style') {
-					// For CSS, we have to put the style as-is inside the tag because if we html-entities encode
-					// it, it's not going to work. But it's ok because JavaScript won't run within the style tag.
-					// Ideally CSS should be loaded from an external file.
-					output.push(decodedText);
+					// For CSS, we have to put the style as-is inside the tag
+					// because if we html-entities encode it, it's not going to
+					// work. But it's ok because JavaScript won't run within the
+					// style tag. Ideally CSS should be loaded from an external
+					// file.
+
+					// We however have to encode at least the `<` characters to
+					// prevent certain XSS injections that would rely on the
+					// content not being encoded (see sanitize_13.md)
+					output.push(decodedText.replace(/</g, '&lt;'));
 				} else {
 					output.push(htmlentities(decodedText));
 				}

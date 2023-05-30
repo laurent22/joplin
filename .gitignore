@@ -349,6 +349,7 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
@@ -389,7 +390,6 @@ packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
 packages/app-mobile/components/ScreenHeader.js
 packages/app-mobile/components/SelectDateTimeDialog.js
-packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
@@ -404,12 +404,15 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/side-menu-content.js
+packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/voiceTyping/vosk.android.js
+packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
@@ -466,6 +469,7 @@ packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetRegistry.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.js
+packages/lib/WelcomeUtils.js
 packages/lib/array.js
 packages/lib/callbackUrlUtils.js
 packages/lib/callbackUrlUtils.test.js
@@ -501,6 +505,7 @@ packages/lib/import-enex-md-gen.js
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex.js
 packages/lib/locale.js
+packages/lib/locale.test.js
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils2.test.js
@@ -827,6 +832,7 @@ packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.js
+packages/tools/build-welcome.js
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
@@ -861,6 +867,8 @@ packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateNews.js
 packages/tools/website/utils/applyTranslations.js
 packages/tools/website/utils/applyTranslations.test.js
+packages/tools/website/utils/convertLinksToLocale.js
+packages/tools/website/utils/convertLinksToLocale.test.js
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/news.js
 packages/tools/website/utils/openGraph.js

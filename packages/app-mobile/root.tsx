@@ -28,7 +28,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
+const { Keyboard, NativeModules, BackHandler, View, StatusBar, Platform, Dimensions } = require('react-native');
 import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -67,7 +67,7 @@ const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js'
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
-import SideMenu from './components/SideMenu';
+import { Drawer } from 'react-native-drawer-layout';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
@@ -76,7 +76,7 @@ const { defaultState } = require('@joplin/lib/reducer');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
+import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { themeStyle } = require('./components/global-style.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
@@ -117,6 +117,9 @@ import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ReactNode } from 'react';
+
+type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
@@ -143,7 +146,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -660,7 +663,7 @@ async function initialize(dispatch: Function) {
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
 	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	void reg.scheduleSync(1000, null, true).then(() => {
+	void reg.scheduleSync(100, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -668,7 +671,7 @@ async function initialize(dispatch: Function) {
 		void DecryptionWorker.instance().scheduleStart();
 	});
 
-	await WelcomeUtils.install(dispatch);
+	await WelcomeUtils.install(Setting.value('locale'), dispatch);
 
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.
@@ -714,7 +717,6 @@ class AppComponent extends React.Component {
 		super();
 
 		this.state = {
-			sideMenuContentOpacity: new Animated.Value(0),
 			sideMenuWidth: this.getSideMenuWidth(),
 			sensorInfo: null,
 		};
@@ -865,14 +867,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	public componentDidUpdate(prevProps: any) {
-		if (this.props.showSideMenu !== prevProps.showSideMenu) {
-			Animated.timing(this.state.sideMenuContentOpacity, {
-				toValue: this.props.showSideMenu ? 0.5 : 0,
-				duration: 600,
-			}).start();
-		}
-
+	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -951,8 +946,8 @@ class AppComponent extends React.Component {
 		if (this.props.appState !== 'ready') return null;
 		const theme: Theme = themeStyle(this.props.themeId);
 
-		let sideMenuContent = null;
-		let menuPosition = 'left';
+		let sideMenuContent: ReactNode = null;
+		let menuPosition: SideMenuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
@@ -985,24 +980,27 @@ class AppComponent extends React.Component {
 		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
 		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
 
+		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
 		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={5}
-					openMenuOffset={this.state.sideMenuWidth}
-					menuPosition={menuPosition}
-					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
-					onSliding={(percent: number) => {
-						this.props.dispatch({
-							type: 'SIDE_MENU_OPEN_PERCENT',
-							value: percent,
-						});
+				<Drawer
+					// Need to reset the key here based on menu position, otherwise
+					// the drawer will flash open on screen and close every time the
+					// drawer position switches (i.e. when opening or closing a note)
+					key={`main-drawer-${menuPosition}`}
+					open={this.props.showSideMenu}
+					onOpen={() => this.sideMenu_change(true)}
+					onClose={() => this.sideMenu_change(false)}
+					drawerPosition={menuPosition}
+					swipeEdgeWidth={15}
+					drawerStyle={{
+						width: this.state.sideMenuWidth,
 					}}
+					renderDrawerContent={() => sideMenuContent}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuContext style={{ flex: 1 }}>
@@ -1012,15 +1010,14 @@ class AppComponent extends React.Component {
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-							{ this.state.sensorInfo && <BiometricPopup
+							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
 							/> }
 						</SafeAreaView>
 					</MenuContext>
-				</SideMenu>
+				</Drawer>
 			</View>
 		);
 
@@ -1061,6 +1058,7 @@ const mapStateToProps = (state: any) => {
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
 		biometricsDone: state.biometricsDone,
+		biometricsEnabled: state.settings['security.biometricsEnabled'],
 	};
 };
 
