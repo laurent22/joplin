@@ -28148,6 +28148,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-draggable-flatlist@npm:4.0.1":
+  version: 4.0.1
+  resolution: "react-native-draggable-flatlist@npm:4.0.1"
+  dependencies:
+    "@babel/preset-typescript": ^7.17.12
+  peerDependencies:
+    react-native: ">=0.64.0"
+    react-native-gesture-handler: ">=2.0.0"
+    react-native-reanimated: ">=2.8.0"
+  checksum: f904e3f30737a883b683e12e119856188e81d7b6cd8811e38124353630391326385bec040a3c200a06535bcd4bbbe973e504c2e0546f7aa4cc96aa573787813d
+  languageName: node
+  linkType: hard
+
 "react-native-drawer-layout@npm:3.2.0":
   version: 3.2.0
   resolution: "react-native-drawer-layout@npm:3.2.0"
