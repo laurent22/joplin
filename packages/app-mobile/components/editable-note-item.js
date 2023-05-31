@@ -175,7 +175,10 @@ class EditableNoteItemComponent extends Component {
 									}}
 									placeholder={'Untitled'}
 									blurOnSubmit={false}
-									label={'New to-do'}
+									label={
+										this.props.isTodo ?
+											'New to-do' : 'New note'
+									}
 									autoFocus={true}
 								/>
 							}

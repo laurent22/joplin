@@ -18,9 +18,15 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 
+interface NotesScreenComponentState {
+	showQuickItem: false | 'todo' | 'note';
+}
+
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
+
+	private state: NotesScreenComponentState;
 
 	public constructor() {
 		super();
@@ -79,7 +85,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		};
 
 		this.state = {
-			showQuickNote: false,
+			showQuickItem: false,
 		};
 	}
 
@@ -235,10 +241,20 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 					label: _('Quick to-dos'),
 					onPress: () => this.setState({
 						...this.state,
-						showQuickNote: true,
+						showQuickItem: 'todo',
 					}),
 					color: '#9b59b6',
 					icon: 'md-checkbox-outline',
+				});
+
+				buttons.push({
+					label: _('Quick notes'),
+					onPress: () => this.setState({
+						...this.state,
+						showQuickItem: 'note',
+					}),
+					color: '#9b59b6',
+					icon: 'md-document',
 				});
 
 				buttons.push({
@@ -267,20 +283,22 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
+		const isTodo = this.state.showQuickItem === 'todo';
+
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
-				{this.state.showQuickNote &&
+				{this.state.showQuickItem &&
 				<EditableNoteItem
 					note={{}}
-					isTodo={false}
+					isTodo={isTodo}
 					onHide={() =>
-						this.setState({ ...this.state, showQuickNote: false })
+						this.setState({ ...this.state, showQuickItem: false })
 					}
 					onSubmit={async (text: string) => {
 						await Note.save({
 							parent_id: buttonFolderId,
-							is_todo: 1,
+							is_todo: isTodo ? 1 : 0,
 							title: text,
 						}, { provisional: false });
 					}}
