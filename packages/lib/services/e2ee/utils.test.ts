@@ -145,6 +145,11 @@ describe('e2ee/utils', () => {
 		expect(localSyncInfo().ppk.id).not.toBe(previousPpk.id);
 		expect(localSyncInfo().ppk.privateKey.ciphertext).not.toBe(previousPpk.privateKey.ciphertext);
 		expect(localSyncInfo().ppk.publicKey).not.toBe(previousPpk.publicKey);
+
+		// Also check that a new master key has been created, that it is active and enabled
+		expect(localSyncInfo().masterKeys.length).toBe(3);
+		expect(localSyncInfo().activeMasterKeyId).toBe(localSyncInfo().masterKeys[2].id);
+		expect(masterKeyEnabled(localSyncInfo().masterKeys[2])).toBe(true);
 	});
 
 	it('should fix active key selection issues - 1', async () => {

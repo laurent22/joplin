@@ -311,6 +311,10 @@ export async function resetMasterPassword(encryptionService: EncryptionService, 
 	}
 
 	Setting.setValue('encryption.masterPassword', newPassword);
+
+	const masterKey = await encryptionService.generateMasterKey(newPassword);
+	await MasterKey.save(masterKey);
+	await loadMasterKeysFromSettings(encryptionService);
 }
 
 export enum MasterPasswordStatus {
