@@ -5076,7 +5076,7 @@ __metadata:
     react-native-paper: 5.8.0
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
-    react-native-reanimated: 3.1.0
+    react-native-reanimated: 3.2.0
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.5.2
     react-native-securerandom: 1.0.1
@@ -27793,9 +27793,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:3.1.0":
-  version: 3.1.0
-  resolution: "react-native-reanimated@npm:3.1.0"
+"react-native-reanimated@npm:3.2.0":
+  version: 3.2.0
+  resolution: "react-native-reanimated@npm:3.2.0"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -27810,7 +27810,7 @@ __metadata:
     "@babel/plugin-transform-template-literals": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 28279642056c7b214649ff14d3c9f1e914c9dd3dd74afc734fc10d1af088a2c3b0e187751e2713d54fc0a9916c394068b29aec51e754b51625a4179f10e38bcd
+  checksum: 40941f53aaba3b5f92fef363a5b9e65160cc07473d58c3bbb22a00d6549406bf9d9cf0cd9b91baacf2887459b30936bc3c4a96d3bb0ea7725951cd27dab1aa92
   languageName: node
   linkType: hard
 
