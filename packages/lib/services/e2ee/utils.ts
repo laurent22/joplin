@@ -4,7 +4,7 @@ import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
-import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
+import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
 import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
 import KvStore from '../KvStore';
@@ -131,6 +131,8 @@ export async function findMasterKeyPassword(service: EncryptionService, masterKe
 }
 
 export async function loadMasterKeysFromSettings(service: EncryptionService) {
+	activeMasterKeySanityCheck();
+
 	const masterKeys = await MasterKey.all();
 	const activeMasterKeyId = getActiveMasterKeyId();
 
@@ -152,6 +154,35 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 
 	logger.info(`Loaded master keys: ${service.loadedMasterKeysCount()}`);
 }
+
+// In some rare cases (normally should no longer be possible), a disabled master
+// key end up being the active one (the one used to encrypt data). This sanity
+// check resolves this by making an enabled key the active one.
+export const activeMasterKeySanityCheck = () => {
+	const syncInfo = localSyncInfo();
+	const activeMasterKeyId = syncInfo.activeMasterKeyId;
+	const enabledMasterKeys = syncInfo.masterKeys.filter(mk => masterKeyEnabled(mk));
+	if (!enabledMasterKeys.length) return;
+
+	if (enabledMasterKeys.find(mk => mk.id === activeMasterKeyId)) {
+		logger.info('activeMasterKeySanityCheck: Active key is an enabled key - nothing to do');
+		return;
+	}
+
+	logger.info('activeMasterKeySanityCheck: Active key is **not** an enabled key - selecting a different key as the active key...');
+
+	const latestMasterKey = enabledMasterKeys.reduce((acc: MasterKeyEntity, current: MasterKeyEntity) => {
+		if (current.created_time > acc.created_time) {
+			return current;
+		} else {
+			return acc;
+		}
+	});
+
+	logger.info('activeMasterKeySanityCheck: Selected new active key:', latestMasterKey);
+
+	setActiveMasterKeyId(latestMasterKey.id);
+};
 
 export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterKeys: string[]) {
 	if (!syncInfo.masterKeys.length) return false;
