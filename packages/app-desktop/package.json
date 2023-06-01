@@ -110,9 +110,9 @@
   "devDependencies": {
     "@joplin/tools": "~2.11",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.2.6",
-    "@types/node": "18.11.18",
-    "@types/react": "16.14.35",
+    "@types/jest": "29.5.1",
+    "@types/node": "18.15.13",
+    "@types/react": "16.14.41",
     "@types/react-redux": "7.1.25",
     "@types/styled-components": "5.1.26",
     "electron": "19.1.4",
@@ -121,12 +121,12 @@
     "electron-rebuild": "3.2.9",
     "glob": "8.1.0",
     "gulp": "4.0.2",
-    "jest": "29.4.3",
-    "jest-environment-jsdom": "29.4.3",
+    "jest": "29.5.0",
+    "jest-environment-jsdom": "29.5.0",
     "js-sha512": "0.8.0",
     "nan": "2.17.0",
     "react-test-renderer": "18.2.0",
-    "typescript": "4.9.4"
+    "typescript": "4.9.5"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
