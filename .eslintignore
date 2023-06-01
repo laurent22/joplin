@@ -404,6 +404,7 @@ packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
 packages/app-mobile/components/ScreenHeader.js
 packages/app-mobile/components/SelectDateTimeDialog.js
+packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
