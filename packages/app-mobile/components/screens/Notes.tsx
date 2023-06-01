@@ -122,6 +122,14 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
 			await this.refreshNotes(this.props);
 		}
+
+		if (prevProps.navigation?.state !== this.props.navigation?.state) {
+			const showQuickItemNew = this.props.navigation?.state?.showQuickItem;
+			this.setState({
+				...this.state,
+				showQuickItem: showQuickItemNew || this.state.showQuickItem,
+			});
+		}
 	}
 
 	public async refreshNotes(props: any = null) {

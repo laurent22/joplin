@@ -257,7 +257,13 @@ const appReducer = (state = appDefaultState, action: any) => {
 					if (currentRoute.routeName === action.routeName) {
 					// nothing
 					} else {
-						navHistory.push(currentRoute);
+						// Quick item status should not be determined by history.
+						let route = currentRoute;
+						if (currentRoute.routeName === 'Notes') {
+							route = { ...currentRoute, showQuickItem: false };
+						}
+
+						navHistory.push(route);
 					}
 				}
 
