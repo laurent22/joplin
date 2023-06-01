@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
@@ -53,7 +51,7 @@ msgstr "(В плагине: %s)"
 msgid "(None)"
 msgstr "(Нет)"
 
-#: packages/lib/models/Setting.ts:386 packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:388 packages/lib/models/Setting.ts:389
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
@@ -88,7 +86,7 @@ msgstr "&Сервис"
 msgid "&View"
 msgstr "&Вид"
 
-#: packages/lib/models/Setting.ts:1539
+#: packages/lib/models/Setting.ts:1541
 msgid "%d days"
 msgstr "%d дней"
 
@@ -102,11 +100,11 @@ msgstr "%d ГБ"
 msgid "%d GB storage space"
 msgstr "%d ГБ дискового пространства"
 
-#: packages/lib/models/Setting.ts:1356
+#: packages/lib/models/Setting.ts:1358
 msgid "%d hour"
 msgstr "%d час"
 
-#: packages/lib/models/Setting.ts:1357 packages/lib/models/Setting.ts:1358
+#: packages/lib/models/Setting.ts:1359 packages/lib/models/Setting.ts:1360
 msgid "%d hours"
 msgstr "%d часов"
 
@@ -120,8 +118,8 @@ msgstr "%d МБ"
 msgid "%d MB per note or attachment"
 msgstr "%d МБ на заметку или вложение"
 
-#: packages/lib/models/Setting.ts:1353 packages/lib/models/Setting.ts:1354
-#: packages/lib/models/Setting.ts:1355
+#: packages/lib/models/Setting.ts:1355 packages/lib/models/Setting.ts:1356
+#: packages/lib/models/Setting.ts:1357
 msgid "%d minutes"
 msgstr "%d минут"
 
@@ -142,7 +140,7 @@ msgstr "%s - Копия"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Не удается выгрузить файл %s (%s): %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) желает поделиться блокнотом с вами."
 
@@ -150,16 +148,16 @@ msgstr "%s (%s) желает поделиться блокнотом с вами
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/app-desktop/checkForUpdates.ts:193
+#: packages/app-desktop/checkForUpdates.ts:194
 msgid "%s (pre-release)"
 msgstr "%s (предварительный выпуск)"
 
-#: packages/lib/models/Setting.ts:893 packages/lib/models/Setting.ts:894
-#: packages/lib/models/Setting.ts:895
+#: packages/lib/models/Setting.ts:895 packages/lib/models/Setting.ts:896
+#: packages/lib/models/Setting.ts:897
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:894
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -220,15 +218,15 @@ msgstr ""
 "наоборот). При применении к обычной заметке она преобразуется в задачу. "
 "\"clear\" преобразует выбранную задачу в обычную заметку."
 
-#: packages/lib/models/Setting.ts:1382
+#: packages/lib/models/Setting.ts:1384
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1380
+#: packages/lib/models/Setting.ts:1382
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1383
+#: packages/lib/models/Setting.ts:1385
 msgid "A5"
 msgstr "A5"
 
@@ -254,7 +252,7 @@ msgstr ""
 "Сочетание клавиш \"%s\" используется для команд \"%s\" и \"%s\". Это может "
 "привести к неожиданному поведению."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "Accept"
 msgstr "Принять"
 
@@ -304,8 +302,8 @@ msgstr "Добавить заголовок"
 msgid "Add to dictionary"
 msgstr "Добавить в словарь"
 
-#: packages/server/src/services/MustacheService.ts:156
-#: packages/server/src/services/MustacheService.ts:278
+#: packages/server/src/services/MustacheService.ts:157
+#: packages/server/src/services/MustacheService.ts:280
 msgid "Admin"
 msgstr "Амдинистратор"
 
@@ -313,11 +311,11 @@ msgstr "Амдинистратор"
 msgid "Admin dashboard"
 msgstr "Панель администратора"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:135
 msgid "Advanced options"
 msgstr "Расширенные настройки"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:175
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:173
 msgid "Advanced tools"
 msgstr "Расширенные инструменты"
 
@@ -327,9 +325,9 @@ msgid ""
 msgstr ""
 "Все данные, включая заметки, блокноты и теги, будут удалены безвозвратно."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:504
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:495
 #: packages/app-mobile/components/screens/Notes.tsx:174
-#: packages/app-mobile/components/side-menu-content.tsx:473
+#: packages/app-mobile/components/side-menu-content.tsx:468
 msgid "All notes"
 msgstr "Все заметки"
 
@@ -345,7 +343,7 @@ msgstr "Также выводит неустановленные и скрыты
 msgid "Also publish linked notes"
 msgstr "Также публикуйте связанные заметки"
 
-#: packages/lib/models/Setting.ts:729
+#: packages/lib/models/Setting.ts:731
 msgid "Always"
 msgstr "Всегда"
 
@@ -368,15 +366,15 @@ msgstr ""
 "идентификатор блокнота - нажмите \"ti\", чтобы увидеть короткий "
 "идентификатор блокнота"
 
-#: packages/app-desktop/checkForUpdates.ts:197
+#: packages/app-desktop/checkForUpdates.ts:198
 msgid "An update is available, do you want to download it now?"
 msgstr "Доступно обновление, хотите загрузить его сейчас?"
 
-#: packages/lib/models/Setting.ts:2496
+#: packages/lib/models/Setting.ts:2502
 msgid "Appearance"
 msgstr "Внешний вид"
 
-#: packages/lib/models/Setting.ts:2501
+#: packages/lib/models/Setting.ts:2507
 msgid "Application"
 msgstr "Приложение"
 
@@ -396,11 +394,11 @@ msgstr ""
 "Вы уверены, что хотите вернуться к макету по умолчанию? Текущая конфигурация "
 "макета будет потеряна."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:517
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:501
 msgid "Arguments:"
 msgstr "Аргументы:"
 
-#: packages/lib/models/Setting.ts:404
+#: packages/lib/models/Setting.ts:406
 msgid "Aritim Dark"
 msgstr "Aritim тёмная"
 
@@ -435,7 +433,7 @@ msgstr "вложение"
 msgid "Attachment conflict: \"%s\""
 msgstr "Конфликт вложения: \"%s\""
 
-#: packages/lib/models/Setting.ts:725
+#: packages/lib/models/Setting.ts:727
 msgid "Attachment download behaviour"
 msgstr "Режим загрузки вложений"
 
@@ -447,7 +445,7 @@ msgstr "Вложения"
 msgid "Attachments that could not be downloaded"
 msgstr "Не удается загрузить следующие вложения"
 
-#: packages/lib/models/Setting.ts:390
+#: packages/lib/models/Setting.ts:392
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -465,11 +463,11 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Authorisation token:"
 msgstr "Токен авторизации:"
 
-#: packages/lib/models/Setting.ts:731
+#: packages/lib/models/Setting.ts:733
 msgid "Auto"
 msgstr "Автоматически"
 
@@ -477,23 +475,23 @@ msgstr "Автоматически"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Автоматическое добавление отключенных учетных записей для удаления"
 
-#: packages/lib/models/Setting.ts:928
+#: packages/lib/models/Setting.ts:930
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Автоматическое закрытие скобок, кавычек и т. д."
 
-#: packages/lib/models/Setting.ts:1340
+#: packages/lib/models/Setting.ts:1342
 msgid "Automatically check for updates"
 msgstr "Автоматическая проверка наличия обновлений"
 
-#: packages/lib/models/Setting.ts:840
+#: packages/lib/models/Setting.ts:842
 msgid "Automatically switch theme to match system theme"
 msgstr "Автоматическая смена темы в соответствии с настройками системы"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:738
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:720
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:209
-#: packages/app-mobile/components/ScreenHeader.tsx:305
+#: packages/app-mobile/components/ScreenHeader.tsx:306
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
 msgstr "Назад"
@@ -522,7 +520,7 @@ msgstr "Полужирный"
 msgid "Browse all plugins"
 msgstr "Просмотр всех плагинов"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:554
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:538
 msgid "Browse..."
 msgstr "Обзор..."
 
@@ -534,30 +532,30 @@ msgstr "Маркированный список"
 msgid "Can Share"
 msgstr "Можно поделиться"
 
-#: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
-#: packages/app-desktop/checkForUpdates.ts:199
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:738
+#: packages/app-desktop/bridge.ts:200 packages/app-desktop/bridge.ts:218
+#: packages/app-desktop/checkForUpdates.ts:200
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:720
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 #: packages/app-desktop/gui/PromptDialog.min.js:249
-#: packages/app-desktop/gui/PromptDialog.tsx:274
+#: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:337
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:684
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:328
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:675
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
 #: packages/app-mobile/components/CameraView.tsx:194
-#: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/ModalDialog.js:68
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
 #: packages/app-mobile/components/screens/Note.tsx:110
 #: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
-#: packages/app-mobile/components/side-menu-content.tsx:170
-#: packages/app-mobile/components/side-menu-content.tsx:179
-#: packages/app-mobile/components/side-menu-content.tsx:444
+#: packages/app-mobile/components/side-menu-content.tsx:165
+#: packages/app-mobile/components/side-menu-content.tsx:174
+#: packages/app-mobile/components/side-menu-content.tsx:439
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:80
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
@@ -575,7 +573,7 @@ msgstr "Отмена..."
 msgid "Cancelling... Please wait."
 msgstr "Отмена... Пожалуйста, подождите."
 
-#: packages/lib/shim-init-node.js:266
+#: packages/lib/shim-init-node.js:264
 msgid "Cannot access %s"
 msgstr "Не удалось получить доступ к %s"
 
@@ -583,7 +581,7 @@ msgstr "Не удалось получить доступ к %s"
 msgid "Cannot change encrypted item"
 msgstr "Невозможно изменить зашифрованный элемент"
 
-#: packages/lib/models/Note.ts:532
+#: packages/lib/models/Note.ts:526
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Не удалось скопировать заметку в блокнот \"%s\""
 
@@ -632,11 +630,12 @@ msgstr ""
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\" и цели \"%s\""
 
-#: packages/lib/models/Note.ts:544
+#: packages/lib/models/Note.ts:538
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Не удалось переместить заметку в блокнот \"%s\""
 
-#: packages/lib/models/Folder.ts:706
+#: packages/app-mobile/components/screens/folder.js:73
+#: packages/lib/models/Folder.ts:704
 msgid "Cannot move notebook to this location"
 msgstr "Не удается переместить блокнот в указанное расположение"
 
@@ -697,7 +696,7 @@ msgid "Check for updates..."
 msgstr "Проверить обновления..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:194
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:436
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:438
 msgid "Check synchronisation configuration"
 msgstr "Проверить настройки синхронизации"
 
@@ -724,7 +723,7 @@ msgstr "Интернет-магазин Chrome"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
 #: packages/app-desktop/gui/PromptDialog.min.js:256
-#: packages/app-desktop/gui/PromptDialog.tsx:281
+#: packages/app-desktop/gui/PromptDialog.tsx:297
 msgid "Clear"
 msgstr "Очистить"
 
@@ -741,7 +740,7 @@ msgstr ""
 "Нажмите “%s”, чтобы восстановить заметку. Она будет скопирована в блокнот "
 "“%s”. Текущая версия заметки не будет заменена или изменена."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:387
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:385
 msgid "Click to add tags..."
 msgstr "Щелкните для добавления тегов..."
 
@@ -761,7 +760,7 @@ msgstr "Идентификатор клиента: %s"
 msgid "Close"
 msgstr "Закрыть"
 
-#: packages/app-mobile/components/Dropdown.tsx:166
+#: packages/app-mobile/components/Dropdown.tsx:156
 msgid "Close dropdown"
 msgstr "Закрыть выпадающий список"
 
@@ -787,7 +786,7 @@ msgstr "Просмотр кода"
 msgid "Collaborate on notebooks with others"
 msgstr "Делитесь блокнотами с другими"
 
-#: packages/app-mobile/components/side-menu-content.tsx:347
+#: packages/app-mobile/components/side-menu-content.tsx:342
 msgid "Collapse"
 msgstr "Коллапс"
 
@@ -795,7 +794,7 @@ msgstr "Коллапс"
 msgid "Coming alarms"
 msgstr "Ближайшие напоминания"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1454
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -816,7 +815,7 @@ msgstr "команда"
 msgid "Command"
 msgstr "Команда"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:624
+#: packages/app-desktop/plugins/GotoAnything.tsx:620
 msgid "Command palette"
 msgstr "Палитра команд"
 
@@ -842,8 +841,8 @@ msgid "Compress old changes"
 msgstr "Сжатие старых изменений"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
-#: packages/app-mobile/components/side-menu-content.tsx:422
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:762
+#: packages/app-mobile/components/side-menu-content.tsx:417
 msgid "Configuration"
 msgstr "Конфигурация"
 
@@ -865,7 +864,7 @@ msgstr "Подтверждение"
 msgid "Conflicted: %d"
 msgstr "Конфликтов: %d"
 
-#: packages/lib/models/Folder.ts:112
+#: packages/lib/models/Folder.ts:110
 msgid "Conflicts"
 msgstr "Конфликты"
 
@@ -908,8 +907,8 @@ msgstr "Копировать"
 msgid "Copy dev mode command to clipboard"
 msgstr "Скопировать команду режима разработчика в буфер обмена"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:410
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:424
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:401
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:415
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 msgid "Copy external link"
 msgstr "Копирование внешней ссылки"
@@ -938,7 +937,7 @@ msgstr[0] "Скопировать общедоступную ссылку"
 msgstr[1] "Скопировать общедоступные ссылки"
 msgstr[2] "Скопировать общедоступные ссылки"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:144
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
 msgstr "Скопировать токен"
 
@@ -956,7 +955,7 @@ msgstr ""
 "\n"
 "Попробуйте еще раз."
 
-#: packages/lib/JoplinServerApi.ts:92
+#: packages/lib/JoplinServerApi.ts:93
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
@@ -971,7 +970,7 @@ msgstr ""
 msgid "Could not connect to plugin repository."
 msgstr "Не удалось соединиться с репозиторием плагинов."
 
-#: packages/app-desktop/InteropServiceHelper.ts:198
+#: packages/app-desktop/InteropServiceHelper.ts:196
 msgid "Could not export notes: %s"
 msgstr "Не удалось экспортировать заметки: %s"
 
@@ -1012,7 +1011,7 @@ msgid "Could not verify your identify: %s"
 msgstr "Не удалось проверить вашу личность: %s"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/PromptDialog.tsx:260
+#: packages/app-desktop/gui/PromptDialog.tsx:276
 msgid "Create"
 msgstr "Создать"
 
@@ -1093,7 +1092,7 @@ msgstr "Создание новой %s..."
 msgid "Creating report..."
 msgstr "Создание отчета…"
 
-#: packages/app-desktop/checkForUpdates.ts:180
+#: packages/app-desktop/checkForUpdates.ts:181
 msgid "Current version is up-to-date."
 msgstr "Установлена последняя версия."
 
@@ -1105,15 +1104,15 @@ msgstr "пользовательский порядок"
 msgid "Custom order"
 msgstr "Пользовательский порядок"
 
-#: packages/lib/models/Setting.ts:1309
+#: packages/lib/models/Setting.ts:1311
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Пользовательская таблица стилей для приложения"
 
-#: packages/lib/models/Setting.ts:1292
+#: packages/lib/models/Setting.ts:1294
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Пользовательская таблица стилей для отображаемых заметок"
 
-#: packages/lib/models/Setting.ts:1451
+#: packages/lib/models/Setting.ts:1453
 msgid "Custom TLS certificates"
 msgstr "Пользовательские сертификаты TLS"
 
@@ -1123,11 +1122,11 @@ msgstr "Пользовательские сертификаты TLS"
 msgid "Cut"
 msgstr "Вырезать"
 
-#: packages/lib/models/Setting.ts:399
+#: packages/lib/models/Setting.ts:401
 msgid "Dark"
 msgstr "Тёмная"
 
-#: packages/server/src/services/MustacheService.ts:111
+#: packages/server/src/services/MustacheService.ts:112
 msgid "Dashboard"
 msgstr "Панель управления"
 
@@ -1139,11 +1138,11 @@ msgstr "База данных v%s"
 msgid "Date"
 msgstr "Дата"
 
-#: packages/lib/models/Setting.ts:782
+#: packages/lib/models/Setting.ts:784
 msgid "Date format"
 msgstr "Формат даты"
 
-#: packages/lib/models/Setting.ts:1539
+#: packages/lib/models/Setting.ts:1541
 msgid "days"
 msgstr "дни"
 
@@ -1159,13 +1158,13 @@ msgstr "Расшифровано элементов: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "Расшифровано элементов: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:758
-#: packages/app-mobile/components/side-menu-content.tsx:431
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:749
+#: packages/app-mobile/components/side-menu-content.tsx:426
 msgid "Decrypting items: %d/%d"
 msgstr "Расшифровка элементов: %d/%d"
 
-#: packages/lib/models/Setting.ts:1234 packages/lib/models/Setting.ts:1241
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1236 packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1419
 msgid "Default"
 msgstr "По умолчанию: %s"
 
@@ -1176,14 +1175,14 @@ msgstr "По умолчанию: %s"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:311
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:302
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
-#: packages/app-mobile/components/ScreenHeader.tsx:418
-#: packages/app-mobile/components/ScreenHeader.tsx:485
+#: packages/app-mobile/components/ScreenHeader.tsx:419
+#: packages/app-mobile/components/ScreenHeader.tsx:486
 #: packages/app-mobile/components/screens/Note.tsx:1030
-#: packages/app-mobile/components/side-menu-content.tsx:160
+#: packages/app-mobile/components/side-menu-content.tsx:155
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1203,11 +1202,11 @@ msgstr "Удаление просроченных токенов"
 msgid "Delete line"
 msgstr "Удалить строку"
 
-#: packages/lib/models/Setting.ts:1333
+#: packages/lib/models/Setting.ts:1335
 msgid "Delete local data and re-download from sync target"
 msgstr "Удалить локальные данные и перегрузить данные с цели синхронизации"
 
-#: packages/lib/models/Note.ts:771
+#: packages/lib/models/Note.ts:765
 msgid "Delete note \"%s\"?"
 msgstr "Удалить заметку \"%s\"?"
 
@@ -1216,8 +1215,8 @@ msgstr "Удалить заметку \"%s\"?"
 msgid "Delete note?"
 msgstr "Удалить заметку?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:310
-#: packages/app-mobile/components/side-menu-content.tsx:162
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:301
+#: packages/app-mobile/components/side-menu-content.tsx:157
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
@@ -1243,11 +1242,11 @@ msgstr "Удалить плагин \"%s\"?"
 msgid "Delete profile \"%s\""
 msgstr "Удалить профиль \"%s\""
 
-#: packages/app-mobile/components/ScreenHeader.tsx:420
+#: packages/app-mobile/components/ScreenHeader.tsx:421
 msgid "Delete selected notes"
 msgstr "Удаление выбранных заметок"
 
-#: packages/lib/models/Note.ts:773
+#: packages/lib/models/Note.ts:767
 msgid "Delete these %d notes?"
 msgstr "Удалить эти %d заметки?"
 
@@ -1295,7 +1294,7 @@ msgstr "Целевой формат: %s"
 msgid "Directory"
 msgstr "Каталог"
 
-#: packages/lib/models/Setting.ts:480
+#: packages/lib/models/Setting.ts:482
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"
 
@@ -1308,11 +1307,11 @@ msgstr "Отключить"
 msgid "Disable encryption"
 msgstr "Отключить шифрование"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:596
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:594
 msgid "Disable safe mode and restart"
 msgstr "Отключить безопасный режим и перезапустить"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:93
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Disable Web Clipper Service"
 msgstr "Отключить службу веб-клиппера"
 
@@ -1320,7 +1319,7 @@ msgstr "Отключить службу веб-клиппера"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1352
+#: packages/lib/models/Setting.ts:1354
 msgid "Disabled"
 msgstr "Отключено"
 
@@ -1335,12 +1334,12 @@ msgstr ""
 "расшифрованы и отправлены в незашифрованном виде к цели синхронизации. Вы "
 "хотите продолжить?"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:351
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:353
 #: packages/app-mobile/components/screens/Note.tsx:110
 msgid "Discard changes"
 msgstr "Отменить изменения"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:455
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:453
 msgid "Dismiss"
 msgstr "Отклонить"
 
@@ -1390,7 +1389,7 @@ msgstr "Отображает справочную информацию."
 msgid "Displays version information"
 msgstr "Отображает информацию о версии"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:653
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:637
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 msgid "Do it now"
 msgstr "Загрузить сейчас"
@@ -1414,11 +1413,11 @@ msgstr ""
 msgid "Done"
 msgstr "Готово"
 
-#: packages/app-desktop/checkForUpdates.ts:199
+#: packages/app-desktop/checkForUpdates.ts:200
 msgid "Download"
 msgstr "Загрузить"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:131
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:127
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Скачайте и установите расширение для вашего браузера:"
 
@@ -1442,7 +1441,7 @@ msgstr "Загрузка"
 msgid "Downloading resources..."
 msgstr "Загрузка ресурсов..."
 
-#: packages/lib/models/Setting.ts:400
+#: packages/lib/models/Setting.ts:402
 msgid "Dracula"
 msgstr "Дракула"
 
@@ -1459,8 +1458,8 @@ msgid "Dropbox Login"
 msgstr "Вход в Dropbox"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/ScreenHeader.tsx:436
-#: packages/app-mobile/components/ScreenHeader.tsx:491
+#: packages/app-mobile/components/ScreenHeader.tsx:437
+#: packages/app-mobile/components/ScreenHeader.tsx:492
 msgid "Duplicate"
 msgstr "Создать дубликат"
 
@@ -1468,7 +1467,7 @@ msgstr "Создать дубликат"
 msgid "Duplicate line"
 msgstr "Дубликат строки"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:438
+#: packages/app-mobile/components/ScreenHeader.tsx:439
 msgid "Duplicate selected notes"
 msgstr "Дублирование выбранных заметок"
 
@@ -1484,6 +1483,7 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
 #: packages/app-mobile/components/screens/Note.tsx:1248
+#: packages/app-mobile/components/side-menu-content.tsx:143
 msgid "Edit"
 msgstr "Правка"
 
@@ -1500,7 +1500,7 @@ msgid "Edit note."
 msgstr "Редактировать заметку."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:162
-#: packages/app-mobile/components/screens/folder.js:90
+#: packages/app-mobile/components/screens/folder.js:97
 msgid "Edit notebook"
 msgstr "Редактировать блокнот"
 
@@ -1513,28 +1513,28 @@ msgid "Edit profile configuration..."
 msgstr "Редактирование конфигурации профиля..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:892 packages/lib/models/Setting.ts:893
-#: packages/lib/models/Setting.ts:894
+#: packages/lib/models/Setting.ts:894 packages/lib/models/Setting.ts:895
+#: packages/lib/models/Setting.ts:896
 msgid "Editor"
 msgstr "Редактор"
 
-#: packages/lib/models/Setting.ts:1227
+#: packages/lib/models/Setting.ts:1229
 msgid "Editor font"
 msgstr "Шрифт редактора"
 
-#: packages/lib/models/Setting.ts:1253
+#: packages/lib/models/Setting.ts:1255
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
-#: packages/lib/models/Setting.ts:1215
+#: packages/lib/models/Setting.ts:1217
 msgid "Editor font size"
 msgstr "Размер шрифта редактора"
 
-#: packages/lib/models/Setting.ts:1272
+#: packages/lib/models/Setting.ts:1274
 msgid "Editor maximum width"
 msgstr "Максимальная ширина редктора"
 
-#: packages/lib/models/Setting.ts:1265
+#: packages/lib/models/Setting.ts:1267
 msgid "Editor monospace font family"
 msgstr "Семейство моноширинных шрифтов редактора"
 
@@ -1547,7 +1547,7 @@ msgstr "Редактор: %s"
 msgid "Either \"text\" or \"json\""
 msgstr "Или \"text\" или \"json\""
 
-#: packages/lib/models/Setting.ts:1418
+#: packages/lib/models/Setting.ts:1420
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1558,7 +1558,7 @@ msgid "Email"
 msgstr "Email"
 
 #: packages/server/src/routes/admin/emails.ts:111
-#: packages/server/src/services/MustacheService.ts:127
+#: packages/server/src/services/MustacheService.ts:128
 msgid "Emails"
 msgstr "Email'ы"
 
@@ -1572,27 +1572,27 @@ msgstr "курсивный текст"
 msgid "Enable"
 msgstr "Включить"
 
-#: packages/lib/models/Setting.ts:1156
+#: packages/lib/models/Setting.ts:1158
 msgid "Enable ^sup^ syntax"
 msgstr "Включить синтаксис ^sup^"
 
-#: packages/lib/models/Setting.ts:1160
+#: packages/lib/models/Setting.ts:1162
 msgid "Enable ++insert++ syntax"
 msgstr "Включить синтаксис ++insert++"
 
-#: packages/lib/models/Setting.ts:1152
+#: packages/lib/models/Setting.ts:1154
 msgid "Enable ==mark== syntax"
 msgstr "Включить синтаксис ==mark=="
 
-#: packages/lib/models/Setting.ts:1155
+#: packages/lib/models/Setting.ts:1157
 msgid "Enable ~sub~ syntax"
 msgstr "Включить синтаксис ~sub~"
 
-#: packages/lib/models/Setting.ts:1158
+#: packages/lib/models/Setting.ts:1160
 msgid "Enable abbreviation syntax"
 msgstr "Включить синтаксис аббревиатур"
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1151
 msgid "Enable audio player"
 msgstr "Включить аудиоплеер"
 
@@ -1600,7 +1600,7 @@ msgstr "Включить аудиоплеер"
 msgid "Enable biometrics authentication?"
 msgstr "Включить биометрическую аутентификацию?"
 
-#: packages/lib/models/Setting.ts:1157
+#: packages/lib/models/Setting.ts:1159
 msgid "Enable deflist syntax"
 msgstr "Включить синтаксис deflist"
 
@@ -1609,67 +1609,67 @@ msgstr "Включить синтаксис deflist"
 msgid "Enable encryption"
 msgstr "Включить шифрование"
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1155
 msgid "Enable footnotes"
 msgstr "Включить постраничные сноски"
 
-#: packages/lib/models/Setting.ts:1146
+#: packages/lib/models/Setting.ts:1148
 msgid "Enable Fountain syntax support"
 msgstr "Включить поддержку синтаксиса Fountain"
 
-#: packages/lib/models/Setting.ts:1143
+#: packages/lib/models/Setting.ts:1145
 msgid "Enable Linkify"
 msgstr "Включить Linkify"
 
-#: packages/lib/models/Setting.ts:1159
+#: packages/lib/models/Setting.ts:1161
 msgid "Enable markdown emoji"
 msgstr "Включить эмодзи markdown"
 
-#: packages/lib/models/Setting.ts:1145
+#: packages/lib/models/Setting.ts:1147
 msgid "Enable math expressions"
 msgstr "Включить математические выражения"
 
-#: packages/lib/models/Setting.ts:1147
+#: packages/lib/models/Setting.ts:1149
 msgid "Enable Mermaid diagrams support"
 msgstr "Включить поддержку диаграмм Mermaid"
 
-#: packages/lib/models/Setting.ts:1161
+#: packages/lib/models/Setting.ts:1163
 msgid "Enable multimarkdown table extension"
 msgstr "Включить расширение таблиц multimarkdown"
 
-#: packages/lib/models/Setting.ts:1529
+#: packages/lib/models/Setting.ts:1531
 msgid "Enable note history"
 msgstr "Включить историю заметок"
 
-#: packages/lib/models/Setting.ts:1151
+#: packages/lib/models/Setting.ts:1153
 msgid "Enable PDF viewer"
 msgstr "Включить программу для просмотра PDF файлов"
 
-#: packages/lib/models/Setting.ts:1141
+#: packages/lib/models/Setting.ts:1143
 msgid "Enable soft breaks"
 msgstr "Включить мягкие отступы"
 
-#: packages/lib/models/Setting.ts:1048
+#: packages/lib/models/Setting.ts:1050
 msgid "Enable spellcheck in the text editor"
 msgstr "Включить проверку орфографии в текстовом редакторе"
 
-#: packages/lib/models/Setting.ts:1154
+#: packages/lib/models/Setting.ts:1156
 msgid "Enable table of contents extension"
 msgstr "Включить расширение поддержки оглавления"
 
-#: packages/lib/models/Setting.ts:1059
+#: packages/lib/models/Setting.ts:1061
 msgid "Enable the Markdown toolbar"
 msgstr "Включить панель инструментов Markdown"
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1144
 msgid "Enable typographer support"
 msgstr "Включить поддержку typographer"
 
-#: packages/lib/models/Setting.ts:1150
+#: packages/lib/models/Setting.ts:1152
 msgid "Enable video player"
 msgstr "Включить видеоплеер"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:102
 msgid "Enable Web Clipper Service"
 msgstr "Включить службу веб-клиппера"
 
@@ -1696,15 +1696,11 @@ msgstr "Зашифровано"
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифрованные элементы не могут быть изменены"
 
-#: packages/app-mobile/components/side-menu-content.tsx:146
-msgid "Encrypted notebooks cannot be renamed"
-msgstr "Зашифрованные блокноты не могут быть переименованы"
-
-#: packages/lib/models/Setting.ts:2503
+#: packages/lib/models/Setting.ts:2509
 msgid "Encryption"
 msgstr "Шифрование"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:445
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:447
 #: packages/app-mobile/components/screens/encryption-config.tsx:287
 msgid "Encryption Config"
 msgstr "Конфигурация шифрования"
@@ -1736,7 +1732,7 @@ msgstr "Введите код здесь"
 msgid "Enter master password:"
 msgstr "Введите мастер-пароль:"
 
-#: packages/app-mobile/components/screens/folder.js:93
+#: packages/app-mobile/components/screens/folder.js:100
 msgid "Enter notebook title"
 msgstr "Введите название блокнота"
 
@@ -1783,12 +1779,12 @@ msgstr "Файл экспорта Evernote (Markdown)"
 msgid "Exits the application."
 msgstr "Выйти из приложения."
 
-#: packages/app-mobile/components/side-menu-content.tsx:347
+#: packages/app-mobile/components/side-menu-content.tsx:342
 msgid "Expand"
 msgstr "Развернуть"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:394
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:385
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "Экспорт"
@@ -1798,7 +1794,7 @@ msgstr "Экспорт"
 msgid "Export all"
 msgstr "Экспорт"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:178
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:176
 msgid "Export debug report"
 msgstr "Экспортировать отладочный отчет"
 
@@ -1814,7 +1810,7 @@ msgstr "Экспорт профиля"
 msgid "Exporting profile..."
 msgstr "Экспортирование профиля..."
 
-#: packages/app-desktop/InteropServiceHelper.ts:177
+#: packages/app-desktop/InteropServiceHelper.ts:175
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
@@ -1834,11 +1830,11 @@ msgstr "Экспортирует только заданную заметку."
 msgid "Exports only the given notebook."
 msgstr "Экспортирует только заданный блокнот."
 
-#: packages/lib/models/Setting.ts:1515
+#: packages/lib/models/Setting.ts:1517
 msgid "Fail-safe"
 msgstr "Режим защиты от сбоев"
 
-#: packages/lib/models/Setting.ts:1516
+#: packages/lib/models/Setting.ts:1518
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1858,8 +1854,8 @@ msgstr "Флаги функций"
 msgid "Fetched items: %d/%d."
 msgstr "Получено элементов: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:763
-#: packages/app-mobile/components/side-menu-content.tsx:436
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:754
+#: packages/app-mobile/components/side-menu-content.tsx:431
 msgid "Fetching resources: %d/%d"
 msgstr "Загрузка ресурсов: %d/%d"
 
@@ -1904,11 +1900,11 @@ msgstr "Исправление индекса поиска..."
 msgid "Focus"
 msgstr "Фокус"
 
-#: packages/lib/models/Setting.ts:1090 packages/lib/models/Setting.ts:1107
+#: packages/lib/models/Setting.ts:1092 packages/lib/models/Setting.ts:1109
 msgid "Focus body"
 msgstr "Фокус на содержимом"
 
-#: packages/lib/models/Setting.ts:1089 packages/lib/models/Setting.ts:1106
+#: packages/lib/models/Setting.ts:1091 packages/lib/models/Setting.ts:1108
 msgid "Focus title"
 msgstr "Фокус на названии"
 
@@ -1920,7 +1916,7 @@ msgstr "Каталоги"
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Только для отладки: экспорт вашего профиля на внешнюю SD карту."
 
-#: packages/lib/models/Setting.ts:1495
+#: packages/lib/models/Setting.ts:1497
 msgid "For example \"%s\""
 msgstr "Например \"%s\""
 
@@ -1943,7 +1939,7 @@ msgstr ""
 "Чтобы получить список сочетаний клавиш и настроек конфигурации, введите "
 "`help keymap`"
 
-#: packages/lib/models/Setting.ts:632
+#: packages/lib/models/Setting.ts:634
 msgid "Force path style"
 msgstr "Принудительный путь стиля"
 
@@ -1965,7 +1961,7 @@ msgstr "Найдено: %d."
 msgid "FTS enabled: %d"
 msgstr "FTS включен: %d"
 
-#: packages/app-desktop/checkForUpdates.ts:199
+#: packages/app-desktop/checkForUpdates.ts:200
 msgid "Full changelog"
 msgstr "Полный список изменений"
 
@@ -1973,8 +1969,8 @@ msgstr "Полный список изменений"
 msgid "Full name"
 msgstr "Имя и фамилия"
 
-#: packages/lib/models/Setting.ts:2494
-#: packages/server/src/services/MustacheService.ts:108
+#: packages/lib/models/Setting.ts:2500
+#: packages/server/src/services/MustacheService.ts:109
 msgid "General"
 msgstr "Основные"
 
@@ -1994,7 +1990,7 @@ msgstr[2] "Создание ссылок..."
 msgid "Get it now:"
 msgstr "Загрузить сейчас:"
 
-#: packages/lib/models/Setting.ts:1341
+#: packages/lib/models/Setting.ts:1343
 msgid "Get pre-releases when checking for updates"
 msgstr "Получать предварительные выпуски при проверке обновлений"
 
@@ -2013,7 +2009,7 @@ msgid "Go to source URL"
 msgstr "Перейти к исходному URL"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:616
+#: packages/app-desktop/plugins/GotoAnything.tsx:612
 msgid "Goto Anything..."
 msgstr "Перейти к чему-либо…"
 
@@ -2033,9 +2029,14 @@ msgstr "Заголовки"
 msgid "Heading"
 msgstr "Заголовок"
 
-#: packages/server/src/services/MustacheService.ts:276
+#: packages/server/src/services/MustacheService.ts:278
 msgid "Help"
 msgstr "Помощь"
+
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
+#, fuzzy
+msgid "Hermes enabled: %d"
+msgstr "FTS включен: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
@@ -2069,8 +2070,8 @@ msgstr "Скрыть дополнительные действия"
 msgid "Highlight"
 msgstr "Выделение"
 
-#: packages/server/src/services/MustacheService.ts:140
-#: packages/server/src/services/MustacheService.ts:271
+#: packages/server/src/services/MustacheService.ts:141
+#: packages/server/src/services/MustacheService.ts:273
 msgid "Home"
 msgstr "Дом"
 
@@ -2111,7 +2112,7 @@ msgstr "Простой"
 msgid "Ignore"
 msgstr "Игнорировать"
 
-#: packages/lib/models/Setting.ts:1474
+#: packages/lib/models/Setting.ts:1476
 msgid "Ignore TLS certificate errors"
 msgstr "Игнорировать ошибки сертификата TLS"
 
@@ -2138,7 +2139,7 @@ msgstr "Импорт заметок..."
 msgid "Imports data into Joplin."
 msgstr "Импортирует данные в Joplin."
 
-#: packages/lib/models/Setting.ts:726
+#: packages/lib/models/Setting.ts:728
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2202,7 +2203,7 @@ msgstr ""
 "\n"
 "Важно: вам нужно запустить процесс ОДИН РАЗ на одном устройстве."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:211
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:215
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid ""
 "In order to use file system synchronisation your permission to write to "
@@ -2211,7 +2212,7 @@ msgstr ""
 "Для использование синхронизации файловой системы необходимо дать разрешение "
 "на запись во внешнее хранилище."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Для использования веб-клиппера сделайте следующее:"
 
@@ -2219,7 +2220,7 @@ msgstr "Для использования веб-клиппера сделайт
 msgid "In progress"
 msgstr "Выполнение"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:540
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:538
 msgid "In: %s"
 msgstr "В: %s"
 
@@ -2235,7 +2236,7 @@ msgstr "Уменьшить отступ"
 msgid "Indent more"
 msgstr "Увеличить отступ"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:210
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:214
 msgid "Information"
 msgstr "Информация"
 
@@ -2289,7 +2290,7 @@ msgstr "Неверный ответ: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Неверная команда: \"%s\""
 
-#: packages/lib/models/Setting.ts:2022
+#: packages/lib/models/Setting.ts:2028
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
 
@@ -2306,8 +2307,8 @@ msgstr "Курсивный"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Не удается загрузить файл “%s”: %s"
 
-#: packages/server/src/services/MustacheService.ts:148
-#: packages/server/src/services/MustacheService.ts:273
+#: packages/server/src/services/MustacheService.ts:149
+#: packages/server/src/services/MustacheService.ts:275
 msgid "Items"
 msgstr "Пункты"
 
@@ -2335,11 +2336,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:700
+#: packages/lib/models/Setting.ts:702
 msgid "Joplin Cloud email"
 msgstr "E-mail для Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:711
+#: packages/lib/models/Setting.ts:713
 msgid "Joplin Cloud password"
 msgstr "Пароль для Joplin Cloud"
 
@@ -2371,19 +2372,19 @@ msgstr "Форум Joplin"
 msgid "Joplin Server"
 msgstr "Сервер Joplin"
 
-#: packages/lib/models/Setting.ts:661
+#: packages/lib/models/Setting.ts:663
 msgid "Joplin Server email"
 msgstr "E-mail сервера Joplin"
 
-#: packages/lib/models/Setting.ts:672
+#: packages/lib/models/Setting.ts:674
 msgid "Joplin Server password"
 msgstr "Пароль сервера Joplin"
 
-#: packages/lib/models/Setting.ts:643
+#: packages/lib/models/Setting.ts:645
 msgid "Joplin Server URL"
 msgstr "URL сервера Joplin"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:116
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
@@ -2408,11 +2409,11 @@ msgstr ""
 msgid "KaTeX"
 msgstr "KaTeX"
 
-#: packages/lib/models/Setting.ts:1541
+#: packages/lib/models/Setting.ts:1543
 msgid "Keep note history for"
 msgstr "Хранить историю заметки"
 
-#: packages/lib/models/Setting.ts:1414
+#: packages/lib/models/Setting.ts:1416
 msgid "Keyboard Mode"
 msgstr "Режим работы клавиатуры"
 
@@ -2420,7 +2421,7 @@ msgstr "Режим работы клавиатуры"
 msgid "Keyboard Shortcut"
 msgstr "Сочетание клавиш"
 
-#: packages/lib/models/Setting.ts:2505
+#: packages/lib/models/Setting.ts:2511
 msgid "Keyboard Shortcuts"
 msgstr "Сочетания клавиш"
 
@@ -2432,11 +2433,11 @@ msgstr "Поддерживаемая связка ключей: %s"
 msgid "Keys that need upgrading"
 msgstr "Ключи, которые нуждаются в обновлении"
 
-#: packages/lib/models/Setting.ts:1391
+#: packages/lib/models/Setting.ts:1393
 msgid "Landscape"
 msgstr "Горизонтально"
 
-#: packages/lib/models/Setting.ts:770
+#: packages/lib/models/Setting.ts:772
 msgid "Language"
 msgstr "Язык"
 
@@ -2444,7 +2445,7 @@ msgstr "Язык"
 msgid "Last error: %s"
 msgstr "Последняя ошибка: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:653
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:637
 msgid "Later"
 msgstr "Позже"
 
@@ -2460,15 +2461,15 @@ msgstr "Порядок переключения вида"
 msgid "Leave notebook..."
 msgstr "Покинуть блокнот..."
 
-#: packages/lib/models/Setting.ts:1385
+#: packages/lib/models/Setting.ts:1387
 msgid "Legal"
 msgstr "Юр. сведения"
 
-#: packages/lib/models/Setting.ts:1381
+#: packages/lib/models/Setting.ts:1383
 msgid "Letter"
 msgstr "Письмо"
 
-#: packages/lib/models/Setting.ts:398
+#: packages/lib/models/Setting.ts:400
 msgid "Light"
 msgstr "Светлая"
 
@@ -2534,7 +2535,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:640
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:274
+#: packages/server/src/services/MustacheService.ts:276
 msgid "Log"
 msgstr "Журнал"
 
@@ -2554,11 +2555,11 @@ msgstr "Войти с Dropbox"
 msgid "Login with OneDrive"
 msgstr "Войти с OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:277
+#: packages/server/src/services/MustacheService.ts:279
 msgid "Logout"
 msgstr "Выйти из системы"
 
-#: packages/server/src/services/MustacheService.ts:152
+#: packages/server/src/services/MustacheService.ts:153
 msgid "Logs"
 msgstr "Логи"
 
@@ -2596,11 +2597,11 @@ msgstr ""
 "Управляет конфигурацией E2EE. Команды: `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` и `target-status`."
 
-#: packages/lib/models/Setting.ts:730
+#: packages/lib/models/Setting.ts:732
 msgid "Manual"
 msgstr "Ручной"
 
-#: packages/lib/models/Setting.ts:2499
+#: packages/lib/models/Setting.ts:2505
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2639,7 +2640,7 @@ msgstr "Мастер-пароль"
 msgid "Master password:"
 msgstr "Главный пароль:"
 
-#: packages/lib/models/Setting.ts:754
+#: packages/lib/models/Setting.ts:756
 msgid "Max concurrent connections"
 msgstr "Максимальное число одновременных соединений"
 
@@ -2671,11 +2672,11 @@ msgstr "Отсутствует обязательный аргумент: %s"
 msgid "Missing required flag value: %s"
 msgstr "Отсутствует необходимое значение флага: %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:457
+#: packages/app-mobile/components/side-menu-content.tsx:452
 msgid "Mobile data - auto-sync disabled"
 msgstr "Мобильная сеть - авто-синхронизация отключена"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
 msgid "More info"
 msgstr "Дополнительная информация"
 
@@ -2689,7 +2690,7 @@ msgstr ""
 "Более одного элемента соответствуют выражению \"%s\". Пожалуйста, уточните "
 "ваш запрос."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:565
+#: packages/app-mobile/components/ScreenHeader.tsx:522
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Переместить %d заметок в блокнот \"%s\"?"
 
@@ -2701,7 +2702,7 @@ msgstr "Переместить в блокнот"
 msgid "Move to notebook:"
 msgstr "Переместить в блокнот:"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:525
+#: packages/app-mobile/components/FolderPicker.tsx:57
 msgid "Move to notebook..."
 msgstr "Переместить в блокнот..."
 
@@ -2730,7 +2731,7 @@ msgstr "Новая заметка"
 msgid "New notebook"
 msgstr "Новый блокнот"
 
-#: packages/app-mobile/components/side-menu-content.tsx:414
+#: packages/app-mobile/components/side-menu-content.tsx:409
 msgid "New Notebook"
 msgstr "Новый блокнот"
 
@@ -2757,7 +2758,7 @@ msgstr "Новые метки:"
 msgid "New to-do"
 msgstr "Новая задача"
 
-#: packages/app-desktop/checkForUpdates.ts:198
+#: packages/app-desktop/checkForUpdates.ts:199
 msgid "New version: %s"
 msgstr "Новая версия: %s"
 
@@ -2769,19 +2770,19 @@ msgstr "Следующее совпадение"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:516
+#: packages/lib/models/Setting.ts:518
 msgid "Nextcloud password"
 msgstr "Пароль Nextcloud"
 
-#: packages/lib/models/Setting.ts:505
+#: packages/lib/models/Setting.ts:507
 msgid "Nextcloud username"
 msgstr "Имя пользователя Nextcloud"
 
-#: packages/lib/models/Setting.ts:493
+#: packages/lib/models/Setting.ts:495
 msgid "Nextcloud WebDAV URL"
 msgstr "URL-адрес WebDAV-сервера Nextcloud"
 
-#: packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:389
 msgid "no"
 msgstr "нет"
 
@@ -2834,7 +2835,7 @@ msgstr ""
 "Текстовый редактор не задан. Задайте его командой `config editor <editor-"
 "path>`"
 
-#: packages/lib/models/Setting.ts:403
+#: packages/lib/models/Setting.ts:405
 msgid "Nord"
 msgstr "Север"
 
@@ -2864,11 +2865,11 @@ msgstr "Не сейчас"
 msgid "note"
 msgstr "заметка"
 
-#: packages/lib/models/Setting.ts:2497
+#: packages/lib/models/Setting.ts:2503
 msgid "Note"
 msgstr "Заметка"
 
-#: packages/lib/models/Setting.ts:1605
+#: packages/lib/models/Setting.ts:1607
 msgid "Note area growth factor"
 msgstr "Фактор роста поля заметки"
 
@@ -2898,7 +2899,7 @@ msgstr "Заметка сохранена."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
-#: packages/lib/models/Setting.ts:2502
+#: packages/lib/models/Setting.ts:2508
 msgid "Note History"
 msgstr "История заметок"
 
@@ -2910,7 +2911,7 @@ msgstr "Заметка не является задачей: \"%s\""
 msgid "Note list"
 msgstr "Список заметок"
 
-#: packages/lib/models/Setting.ts:1590
+#: packages/lib/models/Setting.ts:1592
 msgid "Note list growth factor"
 msgstr "Фактор роста списка заметки"
 
@@ -2924,7 +2925,7 @@ msgstr "Свойства заметки"
 msgid "Note title"
 msgstr "Название заметки"
 
-#: packages/lib/models/Setting.ts:1175
+#: packages/lib/models/Setting.ts:1177
 msgid "Note: Does not work in all desktop environments."
 msgstr "Примечание: работает не во всех окружениях рабочего стола."
 
@@ -2939,11 +2940,11 @@ msgstr ""
 msgid "Note&book"
 msgstr "Блок&ноты"
 
-#: packages/lib/models/Setting.ts:2498
+#: packages/lib/models/Setting.ts:2504
 msgid "Notebook"
 msgstr "Блокнот"
 
-#: packages/lib/models/Setting.ts:1575
+#: packages/lib/models/Setting.ts:1577
 msgid "Notebook list growth factor"
 msgstr "Фактор роста списка блокнотов"
 
@@ -2951,12 +2952,12 @@ msgstr "Фактор роста списка блокнотов"
 msgid "Notebook: %s"
 msgstr "Блокнот: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:710
-#: packages/app-mobile/components/side-menu-content.tsx:477
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:701
+#: packages/app-mobile/components/side-menu-content.tsx:472
 msgid "Notebooks"
 msgstr "Блокноты"
 
-#: packages/lib/models/Folder.ts:758
+#: packages/lib/models/Folder.ts:756
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Блокнот не может быть назван \"%s\", так как это зарезервированное название."
@@ -2966,7 +2967,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Заметки"
 
-#: packages/lib/models/Setting.ts:2514
+#: packages/lib/models/Setting.ts:2520
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
 
@@ -2979,22 +2980,22 @@ msgstr "Заметки могут быть созданы только в бло
 msgid "Numbered List"
 msgstr "Нумерованный список"
 
-#: packages/app-desktop/bridge.ts:190 packages/app-desktop/bridge.ts:196
-#: packages/app-desktop/bridge.ts:217 packages/app-desktop/bridge.ts:227
+#: packages/app-desktop/bridge.ts:194 packages/app-desktop/bridge.ts:200
+#: packages/app-desktop/bridge.ts:218 packages/app-desktop/bridge.ts:226
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/PromptDialog.min.js:242
-#: packages/app-desktop/gui/PromptDialog.tsx:267
+#: packages/app-desktop/gui/PromptDialog.tsx:283
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
-#: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:212
-#: packages/app-mobile/components/side-menu-content.tsx:164
+#: packages/app-mobile/components/ModalDialog.js:65
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:216
+#: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "OK"
 msgstr "OK"
 
-#: packages/lib/models/Setting.ts:405
+#: packages/lib/models/Setting.ts:407
 msgid "OLED Dark"
 msgstr "OLED Тёмная"
 
@@ -3002,7 +3003,7 @@ msgstr "OLED Тёмная"
 msgid "On %s: %s"
 msgstr "В %s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:613
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:611
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Один из ваших мастер-ключей использует устаревший метод шифрования."
 
@@ -3018,7 +3019,7 @@ msgstr ""
 "Если мастер-пароль уже был введен, зашифрованные элементы уже "
 "расшифровываются в фоновом режиме и вскоре будут доступны."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
 msgid "One or more master keys need a password."
 msgstr "Для одного или нескольких мастер-ключей требуется пароль."
 
@@ -3050,7 +3051,7 @@ msgstr "Открыть просмотрщик PDF-файлов"
 msgid "Open profile directory"
 msgstr "Открыть директорию с настройками"
 
-#: packages/lib/models/Setting.ts:429
+#: packages/lib/models/Setting.ts:431
 msgid "Open Sync Wizard..."
 msgstr "Открытие мастера синхронизации..."
 
@@ -3086,11 +3087,11 @@ msgstr "Другие приложения..."
 msgid "Output format: %s"
 msgstr "Выходной формат: %s"
 
-#: packages/lib/models/Setting.ts:1388
+#: packages/lib/models/Setting.ts:1390
 msgid "Page orientation for PDF export"
 msgstr "Ориентация страницы при экспорте в PDF"
 
-#: packages/lib/models/Setting.ts:1378
+#: packages/lib/models/Setting.ts:1380
 msgid "Page size for PDF export"
 msgstr "Размер страницы при экспорте в PDF"
 
@@ -3124,7 +3125,7 @@ msgstr "Вставить"
 msgid "Paste as text"
 msgstr "Вставить как текст"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:541
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:525
 msgid "Path:"
 msgstr "Путь:"
 
@@ -3238,11 +3239,11 @@ msgid "Plugin tools"
 msgstr "Утилиты для плагинов"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2500
+#: packages/lib/models/Setting.ts:2506
 msgid "Plugins"
 msgstr "Плагины"
 
-#: packages/lib/models/Setting.ts:1390
+#: packages/lib/models/Setting.ts:1392
 msgid "Portrait"
 msgstr "Вертикально"
 
@@ -3262,11 +3263,11 @@ msgstr "Настройки"
 msgid "Preferences..."
 msgstr "Настройки…"
 
-#: packages/lib/models/Setting.ts:870
+#: packages/lib/models/Setting.ts:872
 msgid "Preferred dark theme"
 msgstr "Предпочитаемая тёмная тема"
 
-#: packages/lib/models/Setting.ts:854
+#: packages/lib/models/Setting.ts:856
 msgid "Preferred light theme"
 msgstr "Предпочитаемая светлая тема"
 
@@ -3286,7 +3287,7 @@ msgstr ""
 "Нажмите нужное сочетание клавиш и затем нажмите Enter. Для очистки сочетания "
 "клавиш нажмите Backspace."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:583
+#: packages/app-mobile/components/ScreenHeader.tsx:542
 msgid "Press to set the decryption password."
 msgstr "Нажмите, чтобы установить пароль для расшифровки."
 
@@ -3351,15 +3352,15 @@ msgstr "Профили"
 msgid "Properties"
 msgstr "Свойства"
 
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1486
 msgid "Proxy enabled"
 msgstr "Прокси включен"
 
-#: packages/lib/models/Setting.ts:1506
+#: packages/lib/models/Setting.ts:1508
 msgid "Proxy timeout (seconds)"
 msgstr "Таймаут прокси-сервера (секунды)"
 
-#: packages/lib/models/Setting.ts:1494
+#: packages/lib/models/Setting.ts:1496
 msgid "Proxy URL"
 msgstr "Адрес прокси-сервера"
 
@@ -3394,11 +3395,11 @@ msgstr "Повторно зашифровать данные"
 msgid "Re-encryption"
 msgstr "Зашифровать заново"
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1324
 msgid "Re-upload local data to sync target"
 msgstr "Перегрузка локальных данных в цель синхронизации"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:454
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:452
 msgid "Read more about it"
 msgstr "Узнать подробнее"
 
@@ -3424,7 +3425,7 @@ msgstr "Получатели:"
 
 #: packages/app-desktop/gui/MenuBar.tsx:650
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
-#: packages/app-mobile/components/ScreenHeader.tsx:377
+#: packages/app-mobile/components/ScreenHeader.tsx:378
 msgid "Redo"
 msgstr "Повторить"
 
@@ -3438,26 +3439,25 @@ msgstr "Обновить"
 msgid "Regular expression"
 msgstr "Регулярное выражение"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
 #: packages/app-desktop/gui/Root.tsx:179
 msgid "Reject"
 msgstr "Отказаться"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:307
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:298
 msgid "Remove"
 msgstr "Удалить"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:314
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:305
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Удалить метку “%s” из всех заметок?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:316
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:307
 msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.ts:8
-#: packages/app-mobile/components/side-menu-content.tsx:143
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -3473,7 +3473,7 @@ msgstr "Переименовать метку:"
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr "Переименовывает элемент <item> (заметку или блокнот) в <name>."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:150
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:146
 msgid "Renew token"
 msgstr "Обновить токен"
 
@@ -3508,11 +3508,11 @@ msgstr "Сбросить мастер-пароль"
 msgid "Resources: %d."
 msgstr "Ресурсов: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:602
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:600
 msgid "Restart and upgrade"
 msgstr "Перезапустить и обновить"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:700
 msgid "Restart now"
 msgstr "Перезагрузить сейчас"
 
@@ -3522,16 +3522,16 @@ msgstr "Перезагрузить сейчас"
 msgid "Restore"
 msgstr "Восстановить"
 
-#: packages/lib/services/RevisionService.ts:243
+#: packages/lib/services/RevisionService.ts:241
 msgid "Restored Notes"
 msgstr "Восстановленные заметки"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:108
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:106
 #: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "Повторить попытку"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:80
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:78
 #: packages/app-mobile/components/screens/status.js:112
 msgid "Retry All"
 msgstr "Повторить попытку для всех"
@@ -3542,7 +3542,7 @@ msgid "Reveal file in folder"
 msgstr "Показать файл в папке"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:1009 packages/lib/models/Setting.ts:932
+#: packages/lib/models/Setting.ts:1011 packages/lib/models/Setting.ts:934
 msgid "Reverse sort order"
 msgstr "Обратный порядок сортировки"
 
@@ -3565,27 +3565,27 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
-#: packages/lib/models/Setting.ts:610
+#: packages/lib/models/Setting.ts:612
 msgid "S3 access key"
 msgstr "Ключ доступа S3"
 
-#: packages/lib/models/Setting.ts:570
+#: packages/lib/models/Setting.ts:572
 msgid "S3 bucket"
 msgstr "S3 bucket"
 
-#: packages/lib/models/Setting.ts:599
+#: packages/lib/models/Setting.ts:601
 msgid "S3 region"
 msgstr "Регион S3"
 
-#: packages/lib/models/Setting.ts:621
+#: packages/lib/models/Setting.ts:623
 msgid "S3 secret key"
 msgstr "Секретный ключ S3"
 
-#: packages/lib/models/Setting.ts:585
+#: packages/lib/models/Setting.ts:587
 msgid "S3 URL"
 msgstr "S3 URL"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:595
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:593
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -3614,17 +3614,17 @@ msgstr "Сохранить как %s"
 msgid "Save as..."
 msgstr "Сохранить как..."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:330
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:344
+#: packages/app-mobile/components/ScreenHeader.tsx:331
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:346
 #: packages/app-mobile/components/screens/Note.tsx:110
 msgid "Save changes"
 msgstr "Сохранить изменения"
 
-#: packages/lib/models/Setting.ts:1010
+#: packages/lib/models/Setting.ts:1012
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о географическом местоположении в заметках"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:402
+#: packages/app-mobile/components/ScreenHeader.tsx:403
 #: packages/app-mobile/components/screens/search.tsx:172
 msgid "Search"
 msgstr "Поиск"
@@ -3652,7 +3652,7 @@ msgstr "Поиск:"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
 #: packages/app-desktop/gui/NoteSearchBar.min.js:164
-#: packages/app-desktop/gui/NoteSearchBar.tsx:179
+#: packages/app-desktop/gui/NoteSearchBar.tsx:175
 msgid "Search..."
 msgstr "Поиск..."
 
@@ -3660,7 +3660,7 @@ msgstr "Поиск..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Осуществляет поиск по шаблону <pattern> во всех заметках."
 
-#: packages/lib/models/Setting.ts:1341
+#: packages/lib/models/Setting.ts:1343
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 "См. страницу предварительных выпусков для получения более подробной "
@@ -3671,7 +3671,7 @@ msgid "Select"
 msgstr "Выбрать"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
-#: packages/app-mobile/components/ScreenHeader.tsx:389
+#: packages/app-mobile/components/ScreenHeader.tsx:390
 msgid "Select all"
 msgstr "Выбрать все"
 
@@ -3682,6 +3682,11 @@ msgstr "Выбрать эмодзи..."
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:145
 msgid "Select file..."
 msgstr "Выбрать файл..."
+
+#: packages/app-mobile/components/screens/folder.js:109
+#, fuzzy
+msgid "Select parent notebook"
+msgstr "Удалить блокнот"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3706,7 +3711,7 @@ msgstr "Установить напоминание"
 msgid "Set alarm:"
 msgstr "Установить напоминание:"
 
-#: packages/lib/models/Setting.ts:1272
+#: packages/lib/models/Setting.ts:1274
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3714,7 +3719,7 @@ msgstr ""
 "Установите 0, чтобы он занимал все свободное пространство. Рекомендуемая "
 "ширина - 600."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
 msgid "Set the password"
 msgstr "Установить пароль"
 
@@ -3772,7 +3777,7 @@ msgstr "Показать расширенные настройки"
 msgid "Show all"
 msgstr "Показать все"
 
-#: packages/lib/models/Setting.ts:901
+#: packages/lib/models/Setting.ts:903
 msgid "Show completed to-dos"
 msgstr "Показать завершенные задачи"
 
@@ -3788,24 +3793,24 @@ msgstr "Показать отключенные ключи"
 msgid "Show more actions"
 msgstr "Показать больше действий"
 
-#: packages/lib/models/Setting.ts:883
+#: packages/lib/models/Setting.ts:885
 msgid "Show note counts"
 msgstr "Показывать число заметок"
 
-#: packages/lib/models/Setting.ts:942
+#: packages/lib/models/Setting.ts:944
 msgid "Show sort order buttons"
 msgstr "Показать кнопки порядка сортировки"
 
-#: packages/lib/models/Setting.ts:1173
+#: packages/lib/models/Setting.ts:1175
 msgid "Show tray icon"
 msgstr "Показывать иконку в трее"
 
-#: packages/app-mobile/components/ScreenHeader.tsx:290
+#: packages/app-mobile/components/ScreenHeader.tsx:291
 msgid "Show/hide the sidebar"
 msgstr "Показать/скрыть боковую панель"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
-#: packages/app-mobile/components/ScreenHeader.tsx:289
+#: packages/app-mobile/components/ScreenHeader.tsx:290
 msgid "Sidebar"
 msgstr "Боковая панель"
 
@@ -3813,7 +3818,7 @@ msgstr "Боковая панель"
 msgid "Size"
 msgstr "Размер"
 
-#: packages/app-desktop/checkForUpdates.ts:199
+#: packages/app-desktop/checkForUpdates.ts:200
 msgid "Skip this version"
 msgstr "Пропустить эту версию"
 
@@ -3829,35 +3834,35 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Пропущено: %d."
 
-#: packages/lib/models/Setting.ts:402
+#: packages/lib/models/Setting.ts:404
 msgid "Solarised Dark"
 msgstr "Солнечная тёмная"
 
-#: packages/lib/models/Setting.ts:401
+#: packages/lib/models/Setting.ts:403
 msgid "Solarised Light"
 msgstr "Солнечная светлая"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:607
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:605
 msgid "Some items cannot be decrypted."
 msgstr "Некоторые элементы не могут быть расшифрованы."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
 msgid "Some items cannot be synchronised."
 msgstr "Некоторые элементы не могут быть синхронизированы."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:584
+#: packages/app-mobile/components/ScreenHeader.tsx:543
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Некоторые элементы не могут быть синхронизированы. Нажмите для получения "
 "дополнительной информации."
 
-#: packages/lib/models/Setting.ts:997
+#: packages/lib/models/Setting.ts:999
 msgid "Sort notebooks by"
 msgstr "Сортировать блокноты по"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/app-mobile/components/ScreenHeader.tsx:452
-#: packages/lib/models/Setting.ts:909
+#: packages/app-mobile/components/ScreenHeader.tsx:453
+#: packages/lib/models/Setting.ts:911
 msgid "Sort notes by"
 msgstr "Сортировать заметки по"
 
@@ -3878,7 +3883,7 @@ msgstr "Исходный формат: %s"
 msgid "Source: "
 msgstr "Источник: "
 
-#: packages/lib/models/Setting.ts:1521
+#: packages/lib/models/Setting.ts:1523
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3891,12 +3896,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Проверка орфографии"
 
-#: packages/lib/models/Setting.ts:892 packages/lib/models/Setting.ts:894
-#: packages/lib/models/Setting.ts:895
+#: packages/lib/models/Setting.ts:894 packages/lib/models/Setting.ts:896
+#: packages/lib/models/Setting.ts:897
 msgid "Split View"
 msgstr "Раздельный вид"
 
-#: packages/lib/models/Setting.ts:1181
+#: packages/lib/models/Setting.ts:1183
 msgid "Start application minimised in the tray icon"
 msgstr "Запускать приложение свернутым в трее"
 
@@ -3939,32 +3944,32 @@ msgstr "Статистика..."
 msgid "Status"
 msgstr "Статус"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:87
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: %s"
 msgstr "Статус: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:81
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "Status: Started on port %d"
 msgstr "Статус: запущен. Порт: %d"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:124
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
 msgid "Step 1: Enable the clipper service"
 msgstr "Шаг 1: Включите службу веб-клиппера"
 
 #: packages/app-cli/app/command-sync.ts:74
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
+#: packages/app-desktop/gui/DropboxLoginScreen.tsx:44
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Шаг 1: Для авторизации приложения откройте следующую ссылку в вашем браузере:"
 
 #: packages/app-cli/app/command-sync.ts:76
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
+#: packages/app-desktop/gui/DropboxLoginScreen.tsx:48
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Шаг 2: Введите код, предоставленный Dropbox:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:130
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:126
 msgid "Step 2: Install the extension"
 msgstr "Шаг 2: Установите расширение"
 
@@ -3988,7 +3993,7 @@ msgstr "Зачеркнутый"
 msgid "strong text"
 msgstr "полужирный текст"
 
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:55
+#: packages/app-desktop/gui/DropboxLoginScreen.tsx:53
 #: packages/app-mobile/components/screens/dropbox-login.js:68
 msgid "Submit"
 msgstr "Отправить"
@@ -4018,7 +4023,7 @@ msgid "Switch between note and to-do type"
 msgstr "Переключить между заметкой и задачей"
 
 #: packages/app-desktop/gui/MenuBar.tsx:447
-#: packages/app-mobile/components/side-menu-content.tsx:419
+#: packages/app-mobile/components/side-menu-content.tsx:414
 msgid "Switch profile"
 msgstr "Переключение профиля"
 
@@ -4079,11 +4084,11 @@ msgstr "Синхронизированная версия: %s"
 msgid "Sync your notes"
 msgstr "Сортировать ваши заметки"
 
-#: packages/lib/models/Setting.ts:2495
+#: packages/lib/models/Setting.ts:2501
 msgid "Synchronisation"
 msgstr "Синхронизация"
 
-#: packages/lib/models/Setting.ts:1349
+#: packages/lib/models/Setting.ts:1351
 msgid "Synchronisation interval"
 msgstr "Период синхронизации"
 
@@ -4096,7 +4101,7 @@ msgstr "Синхронизация уже выполняется."
 msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
 
-#: packages/lib/models/Setting.ts:440
+#: packages/lib/models/Setting.ts:442
 msgid "Synchronisation target"
 msgstr "Цель синхронизации"
 
@@ -4104,13 +4109,13 @@ msgstr "Цель синхронизации"
 msgid "Synchronisation target: %s (%s)"
 msgstr "Цель синхронизации: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:684
-#: packages/app-mobile/components/side-menu-content.tsx:444
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:675
+#: packages/app-mobile/components/side-menu-content.tsx:439
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Синхронизировать"
 
-#: packages/lib/models/Setting.ts:1369
+#: packages/lib/models/Setting.ts:1371
 msgid "Synchronise only over WiFi connection"
 msgstr "Синхронизировать только через Wi-Fi"
 
@@ -4126,7 +4131,7 @@ msgstr "Синхронизация..."
 msgid "Synchronizing..."
 msgstr "Синхронизация..."
 
-#: packages/lib/models/Setting.ts:1384
+#: packages/lib/models/Setting.ts:1386
 msgid "Tabloid"
 msgstr "Таблоид"
 
@@ -4141,10 +4146,10 @@ msgid "Tagged: %d."
 msgstr "С метками: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:730
 #: packages/app-mobile/components/screens/Note.tsx:1003
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.tsx:416
+#: packages/app-mobile/components/side-menu-content.tsx:411
 msgid "Tags"
 msgstr "Метки"
 
@@ -4156,8 +4161,8 @@ msgstr "Сделать фото"
 msgid "Task list"
 msgstr "Список задач"
 
-#: packages/server/src/services/MustacheService.ts:123
-#: packages/server/src/services/MustacheService.ts:275
+#: packages/server/src/services/MustacheService.ts:124
+#: packages/server/src/services/MustacheService.ts:277
 msgid "Tasks"
 msgstr "Задачи"
 
@@ -4165,7 +4170,7 @@ msgstr "Задачи"
 msgid "Teams"
 msgstr "Команды"
 
-#: packages/lib/models/Setting.ts:1377
+#: packages/lib/models/Setting.ts:1379
 msgid "Text editor command"
 msgstr "Команда текстового редактора"
 
@@ -4182,7 +4187,7 @@ msgstr ""
 "Активный профиль не может быть удален. Переключитесь на другой профиль и "
 "повторите попытку."
 
-#: packages/app-desktop/bridge.ts:280
+#: packages/app-desktop/bridge.ts:278
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
@@ -4209,11 +4214,11 @@ msgstr "Приложение успешно авторизовано!"
 msgid "The application has been successfully authorised."
 msgstr "Приложение успешно авторизовано."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:642
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:626
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Необходимо перезапустить приложение, чтобы применились изменения."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:527
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:525
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -4239,7 +4244,7 @@ msgstr ""
 "Метод шифрования по умолчанию был изменен на более безопасный, рекомендуется "
 "применять его к своим данным."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:617
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -4251,7 +4256,7 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr "Профиль по умолчанию не может быть удален"
 
-#: packages/lib/models/Setting.ts:1377
+#: packages/lib/models/Setting.ts:1379
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -4260,8 +4265,8 @@ msgstr ""
 "командной строки). Если команда не задана, будет произведена попытка "
 "автоматического определения редактора по умолчанию."
 
-#: packages/lib/models/Setting.ts:1577 packages/lib/models/Setting.ts:1592
-#: packages/lib/models/Setting.ts:1607
+#: packages/lib/models/Setting.ts:1579 packages/lib/models/Setting.ts:1594
+#: packages/lib/models/Setting.ts:1609
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4273,7 +4278,7 @@ msgstr ""
 "займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите "
 "приложение, чтобы изменения вступили в силу."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:526
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "The following attachments are being watched for changes:"
 msgstr "Отслеживаются изменения следующих вложений:"
 
@@ -4325,11 +4330,11 @@ msgstr ""
 "элементов, однако у приложения сейчас нет к ним доступа. Скорее всего, они "
 "загрузятся при синхронизации."
 
-#: packages/lib/services/RevisionService.ts:267
+#: packages/lib/services/RevisionService.ts:265
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Заметка “%s” была успешно восстановлена в блокнот “%s”."
 
-#: packages/app-mobile/components/screens/folder.js:69
+#: packages/app-mobile/components/screens/folder.js:76
 msgid "The notebook could not be saved: %s"
 msgstr "Блокнот не может быть сохранен: %s"
 
@@ -4353,7 +4358,7 @@ msgstr ""
 "\n"
 "Ошибка была: \"%s\""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:601
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:599
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -4363,17 +4368,17 @@ msgstr ""
 "потребовать несколько минут для завершения и приложение нужно будет "
 "перезапустить. Чтобы продолжить нажмите на ссылку."
 
-#: packages/app-mobile/components/ScreenHeader.tsx:585
+#: packages/app-mobile/components/ScreenHeader.tsx:544
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Необходимо обновить цель синхронизации. Нажмите на этот баннер, чтобы "
 "продолжить."
 
-#: packages/lib/models/Tag.ts:204
+#: packages/lib/models/Tag.ts:200
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
 
-#: packages/lib/models/Setting.ts:442
+#: packages/lib/models/Setting.ts:444
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -4385,15 +4390,15 @@ msgstr ""
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr "Web Clipper требуется ваше разрешение на доступ к вашим данным."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:75
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:73
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Служба веб-клиппера включена и настроена на автоматический запуск."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:99
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "The web clipper service is not enabled."
 msgstr "Служба веб-клиппера не включена."
 
-#: packages/lib/utils/webDAVUtils.ts:16
+#: packages/lib/utils/webDAVUtils.ts:28
 msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
@@ -4401,7 +4406,7 @@ msgstr ""
 "Реализация WebDAV для %s несовместима с Joplin и поэтому больше не "
 "поддерживается. Пожалуйста, используйте другой метод синхронизации."
 
-#: packages/lib/models/Setting.ts:827
+#: packages/lib/models/Setting.ts:829
 msgid "Theme"
 msgstr "Тема"
 
@@ -4409,7 +4414,7 @@ msgstr "Тема"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Заметки отсутствуют. Создайте новую, нажав кнопку (+)."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:342
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:344
 msgid "There are unsaved changes."
 msgstr "Существуют несохраненные изменения."
 
@@ -4458,7 +4463,7 @@ msgstr ""
 "синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию "
 "или ID (указан в квадратных скобках выше)."
 
-#: packages/lib/models/Setting.ts:2513
+#: packages/lib/models/Setting.ts:2519
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4484,7 +4489,7 @@ msgstr "Это вложение еще не загружено или еще н�
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Это вложение еще не загружено или еще не расшифровано."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
@@ -4523,7 +4528,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Эта заметка не имеет предыдущих версий"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:453
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:451
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4531,7 +4536,7 @@ msgstr ""
 "Рекомендуется принять во внимание ряд ограничений, которые имеются у данного "
 "текстового редактора, перед его использованием."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.tsx:125
+#: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
@@ -4541,7 +4546,7 @@ msgstr ""
 "ее включения брандмауэр ОС может запросить разрешение на использование "
 "Joplin определенного порта."
 
-#: packages/lib/models/Setting.ts:1175
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4563,7 +4568,7 @@ msgstr ""
 "Это удалит блокнот из вашей коллекции, и вы больше не будете иметь доступа к "
 "его содержимому. Хотите продолжить?"
 
-#: packages/lib/models/Setting.ts:805
+#: packages/lib/models/Setting.ts:807
 msgid "Time format"
 msgstr "Формат времени"
 
@@ -4577,7 +4582,7 @@ msgid "Title"
 msgstr "Заглавие"
 
 #: packages/app-cli/app/command-sync.ts:73
-#: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
+#: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
@@ -4732,7 +4737,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Введите `joplin help` для получения справочной информации."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:579
+#: packages/app-desktop/plugins/GotoAnything.tsx:575
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4749,13 +4754,13 @@ msgstr "Введите новые метки или выберите из спи
 msgid "Type: %s."
 msgstr "Тип: %s."
 
-#: packages/lib/models/Setting.ts:900
+#: packages/lib/models/Setting.ts:902
 msgid "Uncompleted to-dos on top"
 msgstr "Незавершенные задачи сверху"
 
 #: packages/app-desktop/gui/MenuBar.tsx:646
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#: packages/app-mobile/components/ScreenHeader.tsx:367
+#: packages/app-mobile/components/ScreenHeader.tsx:368
 msgid "Undo"
 msgstr "Отменить"
 
@@ -4876,7 +4881,7 @@ msgstr "URL"
 msgid "Usage: %s"
 msgstr "Использовано: %s"
 
-#: packages/lib/models/Setting.ts:1657
+#: packages/lib/models/Setting.ts:1659
 msgid "Use biometrics to secure access to the app"
 msgstr "Используйте биометрические данные для защиты доступа к приложению"
 
@@ -4900,7 +4905,7 @@ msgstr ""
 "Используйте стрелки и клавиши page up/down для прокрутки списков и текстовых "
 "областей (включая эту консоль)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:842
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:838
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Используйте стрелки чтобы переместить элементы программы. Нажмите Esc для "
@@ -4923,7 +4928,7 @@ msgstr ""
 "Используйте биометрические данные для защиты доступа к вашему приложению. Вы "
 "всегда можете настроить ее позже в Настройках."
 
-#: packages/lib/models/Setting.ts:1255
+#: packages/lib/models/Setting.ts:1257
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4931,7 +4936,7 @@ msgstr ""
 "Используется для большинства текста в редакторе Mardown. Если не найден - "
 "используется подменный пропорциональный шрифт."
 
-#: packages/lib/models/Setting.ts:1267
+#: packages/lib/models/Setting.ts:1269
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4941,13 +4946,13 @@ msgstr ""
 "отображения текста (таблицы, отметки, код). Если не найден - используется "
 "подменный моноширинный шрифт."
 
-#: packages/server/src/services/MustacheService.ts:119
+#: packages/server/src/services/MustacheService.ts:120
 msgid "User deletions"
 msgstr "Удаление пользователей"
 
 #: packages/server/src/routes/admin/users.ts:191
-#: packages/server/src/services/MustacheService.ts:115
-#: packages/server/src/services/MustacheService.ts:272
+#: packages/server/src/services/MustacheService.ts:116
+#: packages/server/src/services/MustacheService.ts:274
 msgid "Users"
 msgstr "Пользователи"
 
@@ -4967,19 +4972,19 @@ msgstr "Вид"
 msgid "View on map"
 msgstr "Посмотреть на карте"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:608
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:614
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:606
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
 msgid "View them now"
 msgstr "Просмотреть сейчас"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:140
-#: packages/lib/models/Setting.ts:892 packages/lib/models/Setting.ts:893
-#: packages/lib/models/Setting.ts:895
+#: packages/lib/models/Setting.ts:894 packages/lib/models/Setting.ts:895
+#: packages/lib/models/Setting.ts:897
 msgid "Viewer"
 msgstr "Просмотрщик"
 
-#: packages/lib/models/Setting.ts:1419
+#: packages/lib/models/Setting.ts:1421
 msgid "Vim"
 msgstr "Vim"
 
@@ -5001,7 +5006,7 @@ msgstr ""
 "Предупреждение: не все данные показаны по соображениям производительности "
 "(ограничение:%s)."
 
-#: packages/lib/models/Setting.ts:2504 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2510 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Настройки веб-клиппера"
 
@@ -5009,15 +5014,15 @@ msgstr "Настройки веб-клиппера"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:551
+#: packages/lib/models/Setting.ts:553
 msgid "WebDAV password"
 msgstr "Пароль WebDAV"
 
-#: packages/lib/models/Setting.ts:528
+#: packages/lib/models/Setting.ts:530
 msgid "WebDAV URL"
 msgstr "URL-адрес WebDAV"
 
-#: packages/lib/models/Setting.ts:540
+#: packages/lib/models/Setting.ts:542
 msgid "WebDAV username"
 msgstr "Имя пользователя WebDAV"
 
@@ -5042,11 +5047,16 @@ msgstr ""
 "\n"
 "Например, для создания блокнота введите `mb`, для создания заметки - `mn`."
 
-#: packages/lib/models/Setting.ts:1103
+#: packages/lib/WelcomeUtils.ts:63
+#, fuzzy
+msgid "Welcome!"
+msgstr "Добро пожаловать"
+
+#: packages/lib/models/Setting.ts:1105
 msgid "When creating a new note:"
 msgstr "При создании новой заметки:"
 
-#: packages/lib/models/Setting.ts:1086
+#: packages/lib/models/Setting.ts:1088
 msgid "When creating a new to-do:"
 msgstr "При создании новой задачи:"
 
@@ -5063,7 +5073,7 @@ msgstr "y"
 msgid "Y"
 msgstr "Y"
 
-#: packages/lib/models/Setting.ts:386
+#: packages/lib/models/Setting.ts:388
 msgid "yes"
 msgstr "да"
 
@@ -5127,7 +5137,7 @@ msgstr ""
 msgid "Your permission to use your camera is required."
 msgstr "Необходимо ваше разрешение на использование камеры."
 
-#: packages/app-desktop/checkForUpdates.ts:198
+#: packages/app-desktop/checkForUpdates.ts:199
 msgid "Your version: %s"
 msgstr "Ваша версия: %s"
 
@@ -5139,6 +5149,9 @@ msgstr "Приблизить"
 #: packages/app-desktop/gui/MenuBar.tsx:742
 msgid "Zoom Out"
 msgstr "Отдалить"
+
+#~ msgid "Encrypted notebooks cannot be renamed"
+#~ msgstr "Зашифрованные блокноты не могут быть переименованы"
 
 #, fuzzy
 #~ msgid "Changes have been saved"
@@ -5487,9 +5500,6 @@ msgstr "Отдалить"
 #~ msgid "Show metadata"
 #~ msgstr "Показать метаданные"
 
-#~ msgid "Delete notebook"
-#~ msgstr "Удалить блокнот"
-
 #~ msgid ""
 #~ "Click on the (+) button to create a new note or notebook. Click on the "
 #~ "side menu to access your existing notebooks."
@@ -5500,9 +5510,6 @@ msgstr "Отдалить"
 #~ msgid ""
 #~ "You currently have no notebook. Create one by clicking on (+) button."
 #~ msgstr "У вас сейчас нет блокнота. Создайте его нажатием на кнопку (+)."
-
-#~ msgid "Welcome"
-#~ msgstr "Добро пожаловать"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Разделяйте каждую метку запятой."

@@ -251,7 +251,6 @@
  "Enabled": "Ativada",
  "Encrypted": "Encriptado",
  "Encrypted items cannot be modified": "Não é possível modificar itens encriptados",
- "Encrypted notebooks cannot be renamed": "Não é possível mudar o nome de cadernos encriptados",
  "Encryption": "Encriptação",
  "Encryption Config": "Configuração de encriptação",
  "Encryption is: %s": "Encriptação é: %s",

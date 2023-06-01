@@ -301,7 +301,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Habilitar el xifrat significa que totes les notes i adjunts es tornaran a sincronitzar i s'enviaran de forma xifrada a la destinació de sincronització.",
  "Encrypted": "Xifrat",
  "Encrypted items cannot be modified": "Els elements xifrats no es poden modificar",
- "Encrypted notebooks cannot be renamed": "No es pot canviar el nom dels blocs de notes xifrats",
  "Encryption": "Xifratge",
  "Encryption Config": "Configuració del xifratge",
  "Encryption is: %s": "El xifratge és: %s",

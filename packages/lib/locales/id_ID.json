@@ -301,7 +301,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Mengaktifkan enkripsi berarti *semua* catatan dan lampiran Anda akan disinkronkan ulang dan dikirim dalam keadaan terenkripsi ke target sinkronisasi.",
  "Encrypted": "Terenkripsi",
  "Encrypted items cannot be modified": "Item yang terenkripsi tidak bisa diubah",
- "Encrypted notebooks cannot be renamed": "Buku catatan terenkripsi tidak bisa diganti nama",
  "Encryption": "Enkripsi",
  "Encryption Config": "Konfigurasi Enkripsi",
  "Encryption is: %s": "Enkripsi adalah: %s",

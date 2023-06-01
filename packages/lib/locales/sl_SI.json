@@ -276,7 +276,6 @@
  "Enabled": "Omogočeno",
  "Encrypted": "Šifrirano",
  "Encrypted items cannot be modified": "Šifrirane predmeti ni možno spreminjati",
- "Encrypted notebooks cannot be renamed": "Šifrirane zvezke ni možno preimenovati",
  "Encryption": "Šifriranje",
  "Encryption Config": "Nastavitve enkripcije",
  "Encryption is: %s": "Šifriranje je: %s",

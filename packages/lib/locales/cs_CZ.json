@@ -334,7 +334,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Povolení šifrování znamená, že *všechny* vaše poznámky a přílohy budou znovu synchronizovány a odeslány do cíle synchronizace šifrovaně. Přejete si pokračovat?",
  "Encrypted": "Zašifrováno",
  "Encrypted items cannot be modified": "Nelze editovat zašifrovanou položku",
- "Encrypted notebooks cannot be renamed": "Nelze přejmenovat zašifrovanou položku",
  "Encryption": "Šifrování",
  "Encryption Config": "Nastavení šifrování",
  "Encryption is: %s": "Šifrování je: %s",
