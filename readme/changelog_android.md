@@ -1,5 +1,17 @@
 # Joplin Android app changelog
 
+## [android-v2.11.23](https://github.com/laurent22/joplin/releases/tag/android-v2.11.23) (Pre-release) - 2023-06-01T17:19:16Z
+
+- Improved: Auto-detect language on start (e48d55c)
+- Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
+- Improved: Updated packages @react-native-community/netinfo (v9.3.10), @react-native-community/push-notification-ios (v1.11.0), aws, jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), react-native-paper (v5.8.0), react-native-reanimated (v3.1.0), react-native-safe-area-context (v4.5.2), sass (v1.62.1), sharp (v0.32.1), tar (v6.1.14), yargs (v17.7.2)
+- Improved: When resetting the master password, also create a new master key with that password (e647775)
+- Fixed: Fixed regression in biometric check (b19f1a1)
+- Fixed: Improve selection of active E2EE key (#8254)
+- Fixed: Support monochrome icons (#7772) (#7766 by Andrey Mukamolov)
+- Security: Disable SVG tag support in editor to prevent XSS (caf6606)
+- Security: Prevent XSS by sanitizing certain HTML attributes (9e90d90)
+
 ## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
 
 - Fixed: Fix "Download interrupted" error (b023f58)
