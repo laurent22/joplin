@@ -412,6 +412,8 @@ PODS:
     - React-Core
   - RNGestureHandler (2.9.0):
     - React-Core
+  - RNLocalize (3.0.0):
+    - React-Core
   - RNQuickAction (0.3.13):
     - React
   - RNReanimated (3.1.0):
@@ -534,6 +536,7 @@ DEPENDENCIES:
   - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNQuickAction (from `../node_modules/react-native-quick-actions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
@@ -674,6 +677,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNQuickAction:
     :path: "../node_modules/react-native-quick-actions"
   RNReanimated:
@@ -758,6 +763,7 @@ SPEC CHECKSUMS:
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
+  RNLocalize: 5944c97d2fe8150913a51ddd5eab4e23a82bd80d
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef

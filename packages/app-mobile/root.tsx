@@ -22,13 +22,13 @@ import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
-import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
+import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, NativeModules, BackHandler, View, StatusBar, Platform, Dimensions } = require('react-native');
+const { Keyboard, BackHandler, View, StatusBar, Platform, Dimensions } = require('react-native');
 import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -516,10 +516,11 @@ async function initialize(dispatch: Function) {
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
+
 		if (Setting.value('firstStart')) {
-			let locale = NativeModules.I18nManager.localeIdentifier;
-			if (!locale) locale = defaultLocale();
-			Setting.setValue('locale', closestSupportedLocale(locale));
+			const detectedLocale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
+
 			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', 0);
 		} else {
