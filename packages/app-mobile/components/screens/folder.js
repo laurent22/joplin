@@ -29,14 +29,14 @@ class FolderScreenComponent extends BaseScreenComponent {
 			const folder = Folder.new();
 			this.setState({
 				folder: folder,
-				lastSavedFolder: Object.assign({}, folder),
+				lastSavedFolder: { ...folder },
 			});
 		} else {
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			Folder.load(this.props.folderId).then(folder => {
 				this.setState({
 					folder: folder,
-					lastSavedFolder: Object.assign({}, folder),
+					lastSavedFolder: { ...folder },
 				});
 			});
 		}
@@ -51,7 +51,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 	folderComponent_change(propName, propValue) {
 		this.setState((prevState) => {
-			const folder = Object.assign({}, prevState.folder);
+			const folder = { ...prevState.folder };
 			folder[propName] = propValue;
 			return { folder: folder };
 		});
@@ -67,7 +67,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 
 	async saveFolderButton_press() {
-		let folder = Object.assign({}, this.state.folder);
+		let folder = { ...this.state.folder };
 
 		try {
 			if (folder.id && !(await Folder.canNestUnder(folder.id, folder.parent_id))) throw new Error(_('Cannot move notebook to this location'));
@@ -78,7 +78,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		}
 
 		this.setState({
-			lastSavedFolder: Object.assign({}, folder),
+			lastSavedFolder: { ...folder },
 			folder: folder,
 		});
 

@@ -104,7 +104,7 @@ class CameraView extends Component {
 		}
 
 		return (
-			<TouchableOpacity onPress={onPress} style={Object.assign({}, style)}>
+			<TouchableOpacity onPress={onPress} style={{ ...style }}>
 				<View style={{ borderRadius: 32, width: 60, height: 60, borderColor: '#00000040', borderWidth: 1, borderStyle: 'solid', backgroundColor: '#ffffff77', justifyContent: 'center', alignItems: 'center', alignSelf: 'baseline' }}>
 					{ icon }
 				</View>
@@ -177,10 +177,10 @@ class CameraView extends Component {
 		cameraRect.top = (this.state.screenHeight - cameraRect.height) / 2;
 
 		return (
-			<View style={Object.assign({}, this.props.style, { position: 'relative' })} onLayout={this.onLayout}>
+			<View style={{ ...this.props.style, position: 'relative' }} onLayout={this.onLayout}>
 				<View style={{ position: 'absolute', backgroundColor: '#000000', width: '100%', height: '100%' }}/>
 				<RNCamera
-					style={Object.assign({ position: 'absolute' }, cameraRect)}
+					style={({ position: 'absolute', ...cameraRect })}
 					ref={(ref: any) => {
 						this.camera = ref;
 					}}

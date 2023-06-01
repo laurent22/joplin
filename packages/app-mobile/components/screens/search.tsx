@@ -57,13 +57,13 @@ class SearchScreenComponent extends BaseScreenComponent {
 			},
 		};
 
-		styles.searchTextInput = Object.assign({}, theme.lineInput);
+		styles.searchTextInput = { ...theme.lineInput };
 		styles.searchTextInput.paddingLeft = theme.marginLeft;
 		styles.searchTextInput.flex = 1;
 		styles.searchTextInput.backgroundColor = theme.backgroundColor;
 		styles.searchTextInput.color = theme.color;
 
-		styles.clearIcon = Object.assign({}, theme.icon);
+		styles.clearIcon = { ...theme.icon };
 		styles.clearIcon.color = theme.colorFaded;
 		styles.clearIcon.paddingRight = theme.marginRight;
 		styles.clearIcon.backgroundColor = theme.backgroundColor;

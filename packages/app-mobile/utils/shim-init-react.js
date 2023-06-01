@@ -251,7 +251,7 @@ function shimInit() {
 		await shim.fsDriver().copy(filePath, targetPath);
 
 		if (defaultProps) {
-			resource = Object.assign({}, resource, defaultProps);
+			resource = { ...resource, ...defaultProps };
 		}
 
 		const itDoes = await shim.fsDriver().waitTillExists(targetPath);

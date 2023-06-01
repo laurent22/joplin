@@ -26,7 +26,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		this.onAppStateChange_ = async () => {
 			// Force an update to the notes list when app state changes
-			const newProps = Object.assign({}, this.props);
+			const newProps = { ...this.props };
 			newProps.notesSource = '';
 			await this.refreshNotes(newProps);
 		};

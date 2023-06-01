@@ -559,7 +559,7 @@ function localeStrings(canonicalName: string) {
 
 	if (loadedLocales_[locale]) return loadedLocales_[locale];
 
-	loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]);
+	loadedLocales_[locale] = { ...supportedLocales_[locale] };
 
 	return loadedLocales_[locale];
 }

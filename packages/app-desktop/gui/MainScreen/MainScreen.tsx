@@ -501,16 +501,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 			height: height,
 		};
 
-		this.styles_.modalLayer = Object.assign({}, theme.textStyle, {
-			zIndex: 10000,
+		this.styles_.modalLayer = { ...theme.textStyle, zIndex: 10000,
 			position: 'absolute',
 			top: 0,
 			left: 0,
 			backgroundColor: theme.backgroundColor,
 			width: width - 20,
 			height: height - 20,
-			padding: 10,
-		});
+			padding: 10 };
 
 		return this.styles_;
 	}
@@ -803,13 +801,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public render() {
 		const theme = themeStyle(this.props.themeId);
-		const style = Object.assign(
-			{
-				color: theme.color,
-				backgroundColor: theme.backgroundColor,
-			},
-			this.props.style
-		);
+		const style = {
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			...this.props.style,
+		};
 		const promptOptions = this.state.promptOptions;
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible());
 
@@ -824,7 +820,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.pluginsLegacy);
 		const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
 
-		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
+		const modalLayerStyle = { ...styles.modalLayer, display: this.state.modalLayer.visible ? 'block' : 'none' };
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;

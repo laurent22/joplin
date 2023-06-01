@@ -148,10 +148,8 @@ class ItemList extends React.Component<Props, State> {
 
 	public render() {
 		const items = this.props.items;
-		const style = Object.assign({}, this.props.style, {
-			overflowX: 'hidden',
-			overflowY: 'auto',
-		});
+		const style = { ...this.props.style, overflowX: 'hidden',
+			overflowY: 'auto' };
 
 		// if (this.props.disabled) style.opacity = 0.5;
 

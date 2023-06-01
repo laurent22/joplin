@@ -284,7 +284,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 }
 
 function formatCommitMessage(commit: string, msg: string, author: Author, options: Options): string {
-	options = Object.assign({}, { publishFormat: 'full' }, options);
+	options = { publishFormat: 'full', ...options };
 
 	let output = '';
 

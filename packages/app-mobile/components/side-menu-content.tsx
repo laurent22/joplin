@@ -85,18 +85,18 @@ const SideMenuContentComponent = (props: Props) => {
 			},
 		};
 
-		styles.folderButton = Object.assign({}, styles.button);
+		styles.folderButton = { ...styles.button };
 		styles.folderButton.paddingLeft = 0;
-		styles.folderButtonText = Object.assign({}, styles.buttonText, { paddingLeft: 0 });
-		styles.folderButtonSelected = Object.assign({}, styles.folderButton);
+		styles.folderButtonText = { ...styles.buttonText, paddingLeft: 0 };
+		styles.folderButtonSelected = { ...styles.folderButton };
 		styles.folderButtonSelected.backgroundColor = theme.selectedColor;
-		styles.folderIcon = Object.assign({}, theme.icon);
+		styles.folderIcon = { ...theme.icon };
 		styles.folderIcon.color = theme.colorFaded; // '#0072d5';
 		styles.folderIcon.paddingTop = 3;
 
-		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
-		styles.sideButtonSelected = Object.assign({}, styles.sideButton, { backgroundColor: theme.selectedColor });
-		styles.sideButtonText = Object.assign({}, styles.buttonText);
+		styles.sideButton = { ...styles.button, flex: 0 };
+		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
+		styles.sideButtonText = { ...styles.buttonText };
 
 		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 20 };
 

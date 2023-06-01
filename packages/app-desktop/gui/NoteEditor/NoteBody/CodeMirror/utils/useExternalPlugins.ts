@@ -31,7 +31,7 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 				}
 
 				if (mod.codeMirrorOptions) {
-					newOptions = Object.assign({}, newOptions, mod.codeMirrorOptions);
+					newOptions = { ...newOptions, ...mod.codeMirrorOptions };
 				}
 
 				if (mod.assets) {

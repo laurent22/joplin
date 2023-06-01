@@ -148,7 +148,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	const control = props.searchControl;
 
 	const updateSearchState = (changedData: any) => {
-		const newState = Object.assign({}, state, changedData);
+		const newState = { ...state, ...changedData };
 		control.setSearchState(newState);
 	};
 

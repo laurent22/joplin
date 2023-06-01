@@ -67,8 +67,8 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 				flex: 1,
 				flexDirection: 'column',
 			},
-			titleInput: Object.assign({}, theme.inputStyle, { flex: 1 }),
-			revisionList: Object.assign({}, theme.dropdownList, { marginLeft: 10, flex: 0.5 }),
+			titleInput: { ...theme.inputStyle, flex: 1 },
+			revisionList: { ...theme.dropdownList, marginLeft: 10, flex: 0.5 },
 		};
 
 		return style;
@@ -205,14 +205,14 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 
 		const titleInput = (
 			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom: 10 }}>
-				<button onClick={this.backButton_click} style={Object.assign({}, theme.buttonStyle, { marginRight: 10, height: theme.inputStyle.height })}>
+				<button onClick={this.backButton_click} style={{ ...theme.buttonStyle, marginRight: 10, height: theme.inputStyle.height }}>
 					<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>{_('Back')}
 				</button>
 				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''} />
 				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>
 					{revisionListItems}
 				</select>
-				<button disabled={!this.state.revisions.length || this.state.restoring} onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>
+				<button disabled={!this.state.revisions.length || this.state.restoring} onClick={this.importButton_onClick} style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 					{restoreButtonTitle}
 				</button>
 				<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={this.helpButton_onClick} />

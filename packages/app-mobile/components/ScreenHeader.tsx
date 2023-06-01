@@ -201,17 +201,17 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 		};
 
-		styleObject.topIcon = Object.assign({}, theme.icon);
+		styleObject.topIcon = { ...theme.icon };
 		styleObject.topIcon.flex = 1;
 		styleObject.topIcon.textAlignVertical = 'center';
 		styleObject.topIcon.color = theme.colorBright2;
 
-		styleObject.backButton = Object.assign({}, styleObject.iconButton);
+		styleObject.backButton = { ...styleObject.iconButton };
 		styleObject.backButton.marginRight = 1;
 
-		styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, { opacity: theme.disabledOpacity });
-		styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, { opacity: theme.disabledOpacity });
-		styleObject.iconButtonDisabled = Object.assign({}, styleObject.iconButton, { opacity: theme.disabledOpacity });
+		styleObject.backButtonDisabled = { ...styleObject.backButton, opacity: theme.disabledOpacity };
+		styleObject.saveButtonDisabled = { ...styleObject.saveButton, opacity: theme.disabledOpacity };
+		styleObject.iconButtonDisabled = { ...styleObject.iconButton, opacity: theme.disabledOpacity };
 
 		this.cachedStyles[themeId] = StyleSheet.create(styleObject);
 		return this.cachedStyles[themeId];

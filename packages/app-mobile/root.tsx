@@ -216,13 +216,11 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState: AppState = Object.assign({}, defaultState, {
-	sideMenuOpenPercent: 0,
+const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
-	isOnMobileData: false,
-});
+	isOnMobileData: false };
 
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -275,11 +273,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 				for (let i = 0; i < navHistory.length; i++) {
 					const n = navHistory[i];
 					if (n.routeName === action.routeName) {
-						navHistory[i] = Object.assign({}, action);
+						navHistory[i] = { ...action };
 					}
 				}
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				newState.selectedNoteHash = '';
 
@@ -323,32 +321,32 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'SIDE_MENU_TOGGLE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = !newState.showSideMenu;
 			break;
 
 		case 'SIDE_MENU_OPEN':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = true;
 			break;
 
 		case 'SIDE_MENU_CLOSE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = false;
 			break;
 
 		case 'SIDE_MENU_OPEN_PERCENT':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
 
 			{
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				const noteId = action.id;
 				const newSelectedNoteIds = state.selectedNoteIds.slice();
@@ -368,7 +366,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'NOTE_SELECTION_START':
 
 			if (!state.noteSelectionEnabled) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				newState.noteSelectionEnabled = true;
 				newState.selectedNoteIds = [action.id];
 			}
@@ -376,20 +374,20 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'NOTE_SELECTION_END':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSelectionEnabled = false;
 			newState.selectedNoteIds = [];
 			break;
 
 		case 'NOTE_SIDE_MENU_OPTIONS_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSideMenuOptions = action.options;
 			break;
 
 		case 'MOBILE_DATA_WARNING_UPDATE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 

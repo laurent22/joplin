@@ -62,7 +62,7 @@ export default function useNoteSearchBar({ noteSearchBarRef }: UseNoteSearchBarP
 
 	const noteSearchBarNextPrevious = useCallback((inc: number) => {
 		setLocalSearch((prev: LocalSearch) => {
-			const ls = Object.assign({}, prev);
+			const ls = { ...prev };
 			ls.selectedIndex += inc;
 			ls.timestamp = Date.now();
 			if (ls.selectedIndex < 0) ls.selectedIndex = ls.resultCount - 1;

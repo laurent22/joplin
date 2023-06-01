@@ -3,7 +3,7 @@ const slugify = require('slugify');
 // "source" is the framework current version.
 // "dest" is the user existing version.
 function mergePackageKey(parentKey, source, dest) {
-	const output = Object.assign({}, dest);
+	const output = { ...dest };
 
 	for (const k in source) {
 		if (k === 'keywords' && !Array.isArray(output[k])) {

@@ -44,11 +44,9 @@ export default class SearchEngineUtils {
 			todoCompletedAutoAdded = true;
 		}
 
-		const previewOptions = Object.assign({}, {
-			order: [],
+		const previewOptions = { order: [],
 			fields: fields,
-			conditions: [`id IN ("${noteIds.join('","')}")`],
-		}, options);
+			conditions: [`id IN ("${noteIds.join('","')}")`], ...options };
 
 		const notes = await Note.previews(null, previewOptions);
 

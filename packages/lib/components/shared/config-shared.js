@@ -44,9 +44,9 @@ shared.checkSyncConfig = async function(comp, settings) {
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
-	const options = Object.assign({},
-		Setting.subValues(`sync.${syncTargetId}`, settings),
-		Setting.subValues('net', settings));
+	const options = {
+		...Setting.subValues(`sync.${syncTargetId}`, settings),
+		...Setting.subValues('net', settings) };
 
 	comp.setState({ checkSyncConfigResult: 'checking' });
 	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
@@ -92,7 +92,7 @@ shared.updateSettingValue = function(comp, key, value, callback = null) {
 			return {};
 		}
 
-		const settings = Object.assign({}, state.settings);
+		const settings = { ...state.settings };
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);
 		if (changedSettingKeys.indexOf(key) < 0) changedSettingKeys.push(key);

@@ -82,7 +82,7 @@ export default function(state: AppState, action: any) {
 
 				const currentRoute = state.route;
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				const newNavHistory = state.navHistory.slice();
 
 				if (goingBack) {
@@ -119,7 +119,7 @@ export default function(state: AppState, action: any) {
 
 		case 'WINDOW_CONTENT_SIZE_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.windowContentSize = action.size;
 			break;
 
@@ -147,7 +147,7 @@ export default function(state: AppState, action: any) {
 					return nextLayout === 'both' ? ['editor', 'viewer'] : [nextLayout];
 				};
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				const panes = state.noteVisiblePanes.slice();
 				newState.noteVisiblePanes = getNextLayout(panes);
@@ -156,7 +156,7 @@ export default function(state: AppState, action: any) {
 
 		case 'NOTE_VISIBLE_PANES_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteVisiblePanes = action.panes;
 			break;
 
@@ -194,7 +194,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_FILE_WATCHER_ADD':
 
 			if (newState.watchedNoteFiles.indexOf(action.id) < 0) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				const watchedNoteFiles = newState.watchedNoteFiles.slice();
 				watchedNoteFiles.push(action.id);
 				newState.watchedNoteFiles = watchedNoteFiles;
@@ -204,7 +204,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_FILE_WATCHER_REMOVE':
 
 			{
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				const idx = newState.watchedNoteFiles.indexOf(action.id);
 				if (idx >= 0) {
 					const watchedNoteFiles = newState.watchedNoteFiles.slice();
@@ -217,7 +217,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_FILE_WATCHER_CLEAR':
 
 			if (state.watchedNoteFiles.length) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				newState.watchedNoteFiles = [];
 			}
 			break;
@@ -225,38 +225,38 @@ export default function(state: AppState, action: any) {
 		case 'EDITOR_SCROLL_PERCENT_SET':
 
 			{
-				newState = Object.assign({}, state);
-				const newPercents = Object.assign({}, newState.lastEditorScrollPercents);
+				newState = { ...state };
+				const newPercents = { ...newState.lastEditorScrollPercents };
 				newPercents[action.noteId] = action.percent;
 				newState.lastEditorScrollPercents = newPercents;
 			}
 			break;
 
 		case 'NOTE_DEVTOOLS_TOGGLE':
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.devToolsVisible = !newState.devToolsVisible;
 			break;
 
 		case 'NOTE_DEVTOOLS_SET':
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.devToolsVisible = action.value;
 			break;
 
 		case 'VISIBLE_DIALOGS_ADD':
-			newState = Object.assign({}, state);
-			newState.visibleDialogs = Object.assign({}, newState.visibleDialogs);
+			newState = { ...state };
+			newState.visibleDialogs = { ...newState.visibleDialogs };
 			newState.visibleDialogs[action.name] = true;
 			break;
 
 		case 'VISIBLE_DIALOGS_REMOVE':
-			newState = Object.assign({}, state);
-			newState.visibleDialogs = Object.assign({}, newState.visibleDialogs);
+			newState = { ...state };
+			newState.visibleDialogs = { ...newState.visibleDialogs };
 			delete newState.visibleDialogs[action.name];
 			break;
 
 		case 'FOCUS_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.focusedField = action.field;
 			break;
 
@@ -264,7 +264,7 @@ export default function(state: AppState, action: any) {
 
 			// A field can only clear its own state
 			if (action.field === state.focusedField) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				newState.focusedField = null;
 			}
 			break;
@@ -281,7 +281,7 @@ export default function(state: AppState, action: any) {
 					isOpen = action.isOpen !== false;
 				}
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				if (isOpen) {
 					const newDialogs = newState.dialogs.slice();

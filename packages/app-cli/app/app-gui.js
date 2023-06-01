@@ -302,7 +302,7 @@ class AppGui {
 		const output = [];
 
 		for (let i = 0; i < keymap.length; i++) {
-			const item = Object.assign({}, keymap[i]);
+			const item = { ...keymap[i] };
 
 			if (!item.command) throw new Error(`Missing command for keymap item: ${JSON.stringify(item)}`);
 
@@ -427,7 +427,7 @@ class AppGui {
 	async handleModelAction(action) {
 		this.logger().info('Action:', action);
 
-		const state = Object.assign({}, defaultState);
+		const state = { ...defaultState };
 		state.notes = this.widget('noteList').items;
 
 		const newState = reducer(state, action);

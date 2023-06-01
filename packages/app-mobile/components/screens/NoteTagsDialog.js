@@ -46,7 +46,7 @@ class NoteTagsDialogComponent extends React.Component {
 			for (let i = 0; i < newData.length; i++) {
 				const t = newData[i];
 				if (t.id === tagId) {
-					const newTag = Object.assign({}, t);
+					const newTag = { ...t };
 					newTag.selected = !newTag.selected;
 					newData[i] = newTag;
 					break;
@@ -142,7 +142,7 @@ class NoteTagsDialogComponent extends React.Component {
 				flexDirection: 'row',
 				alignItems: 'center',
 			},
-			tagText: Object.assign({}, theme.normalText),
+			tagText: { ...theme.normalText },
 			tagCheckbox: {
 				marginRight: 8,
 				fontSize: 20,
@@ -156,8 +156,8 @@ class NoteTagsDialogComponent extends React.Component {
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
 			},
-			newTagBoxLabel: Object.assign({}, theme.normalText, { marginRight: 8 }),
-			tagBoxInput: Object.assign({}, theme.lineInput, { flex: 1 }),
+			newTagBoxLabel: { ...theme.normalText, marginRight: 8 },
+			tagBoxInput: { ...theme.lineInput, flex: 1 },
 		};
 
 		this.styles_[themeId] = StyleSheet.create(styles);

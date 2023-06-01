@@ -161,11 +161,9 @@ class HtmlUtils {
 	}
 
 	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
-		options = Object.assign({}, {
-			// If true, adds a "jop-noMdConv" class to all the tags.
+		options = { // If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
-			addNoMdConvClass: false,
-		}, options);
+			addNoMdConvClass: false, ...options };
 
 		const output: string[] = [];
 
@@ -216,7 +214,7 @@ class HtmlUtils {
 
 				if (disallowedTagDepth) return;
 
-				attrs = Object.assign({}, attrs);
+				attrs = { ...attrs };
 
 				// Remove all the attributes that start with "on", which
 				// normally should be JavaScript events. A better solution

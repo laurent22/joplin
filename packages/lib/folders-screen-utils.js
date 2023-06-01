@@ -6,19 +6,17 @@ class FoldersScreenUtils {
 	static async allForDisplay(options = {}) {
 		const orderDir = Setting.value('folders.sortOrder.reverse') ? 'DESC' : 'ASC';
 
-		const folderOptions = Object.assign(
-			{},
-			{
-				caseInsensitive: true,
-				order: [
-					{
-						by: 'title',
-						dir: orderDir,
-					},
-				],
-			},
-			options
-		);
+		const folderOptions = {
+
+			caseInsensitive: true,
+			order: [
+				{
+					by: 'title',
+					dir: orderDir,
+				},
+			],
+			...options,
+		};
 
 		let folders = await Folder.all(folderOptions);
 

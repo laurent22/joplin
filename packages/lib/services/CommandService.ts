@@ -194,7 +194,7 @@ export default class CommandService extends BaseService {
 
 		const command = this.commandByName(commandName);
 
-		runtime = Object.assign({}, runtime);
+		runtime = { ...runtime };
 		if (!runtime.enabledCondition) runtime.enabledCondition = 'true';
 		command.runtime = runtime;
 	}

@@ -410,7 +410,7 @@ class Bridge {
 
 		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
 
-		query = Object.assign(query || {}, { token: this.token_ });
+		query = { ...query, token: this.token_ };
 
 		let queryString = '';
 		if (query) {

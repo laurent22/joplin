@@ -32,9 +32,7 @@ export default class Tag extends BaseItem {
 
 		return Note.previews(
 			null,
-			Object.assign({}, options, {
-				conditions: [`id IN ("${noteIds.join('","')}")`],
-			})
+			{ ...options, conditions: [`id IN ("${noteIds.join('","')}")`] }
 		);
 	}
 
@@ -191,10 +189,8 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async save(o: TagEntity, options: any = null) {
-		options = Object.assign({}, {
-			dispatchUpdateAction: true,
-			userSideValidation: false,
-		}, options);
+		options = { dispatchUpdateAction: true,
+			userSideValidation: false, ...options };
 
 		if (options.userSideValidation) {
 			if ('title' in o) {

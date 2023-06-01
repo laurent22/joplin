@@ -360,10 +360,8 @@ export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelea
 }
 
 export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
-	options = Object.assign({}, {
-		isDraft: false,
-		isPreRelease: false,
-	}, options);
+	options = { isDraft: false,
+		isPreRelease: false, ...options };
 
 	const oauthToken = await githubOauthToken();
 

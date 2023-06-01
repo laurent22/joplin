@@ -364,13 +364,11 @@ function NoteEditor(props: NoteEditorProps) {
 	}, [props.dispatch, formNote]);
 
 	function renderNoNotes(rootStyle: any) {
-		const emptyDivStyle = Object.assign(
-			{
-				backgroundColor: 'black',
-				opacity: 0.1,
-			},
-			rootStyle
-		);
+		const emptyDivStyle = {
+			backgroundColor: 'black',
+			opacity: 0.1,
+			...rootStyle,
+		};
 		return <div style={emptyDivStyle}></div>;
 	}
 

@@ -5,9 +5,10 @@ const htmlentities = (new Entities()).encode;
 function attributesHtml(attributes, options = null) {
   if (!attributes) return '';
 
-  options = Object.assign({}, {
+  options = {
     skipEmptyClass: false,
-  }, options);
+    ...options,
+  };
 
   const output = [];
 
@@ -424,9 +425,10 @@ rules.code = {
 }
 
 function imageMarkdownFromNode(node, options = null) {
-  options = Object.assign({}, {
+  options = {
     preserveImageTagsWithSize: false,
-  }, options);
+    ...options,
+  };
 
   if (options.preserveImageTagsWithSize && (node.getAttribute('width') || node.getAttribute('height'))) {
     return node.outerHTML;

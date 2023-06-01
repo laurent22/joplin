@@ -136,7 +136,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				Keyboard.dismiss();
 
 				this.setState({
-					note: Object.assign({}, this.state.lastSavedNote),
+					note: { ...this.state.lastSavedNote },
 					mode: 'view',
 				});
 
@@ -281,7 +281,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (!undoState) return;
 
 		this.setState((state: any) => {
-			const newNote = Object.assign({}, state.note);
+			const newNote = { ...state.note };
 			newNote.body = undoState.body;
 			return {
 				note: newNote,
@@ -380,7 +380,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			borderBottomWidth: 1,
 		};
 
-		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
 
 		styles.titleTextInput = {
@@ -692,7 +692,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const resourceTag = Resource.markdownTag(resource);
 
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 
 		if (this.state.mode === 'edit' && !!this.selection) {
 			const newText = `\n${resourceTag}\n`;
@@ -787,7 +787,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -1085,7 +1085,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const folder = await Folder.load(note.parent_id);
 
 		this.setState({
-			lastSavedNote: Object.assign({}, note),
+			lastSavedNote: { ...note },
 			note: note,
 			folder: folder,
 		});
