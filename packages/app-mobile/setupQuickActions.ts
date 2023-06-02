@@ -53,10 +53,13 @@ export default (dispatch: Function, folderId: string) => {
 			});
 		} else {
 			dispatch({
+				type: 'SHOW_QUICK_ITEM_UPDATE',
+				showQuickItem: data.type === 'Quick to-dos' ? 'todo' : 'note',
+			});
+			dispatch({
 				type: 'NAV_GO',
 				folderId,
 				routeName: 'Notes',
-				showQuickItem: data.type === 'Quick to-dos' ? 'todo' : 'note',
 			});
 		}
 

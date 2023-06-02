@@ -18,15 +18,9 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 
-interface NotesScreenComponentState {
-	showQuickItem: false | 'todo' | 'note';
-}
-
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
-
-	private state: NotesScreenComponentState;
 
 	public constructor() {
 		super();
@@ -83,10 +77,6 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 			}
 			return false;
 		};
-
-		this.state = {
-			showQuickItem: false,
-		};
 	}
 
 	public styles() {
@@ -121,14 +111,6 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 	public async componentDidUpdate(prevProps: any) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
 			await this.refreshNotes(this.props);
-		}
-
-		if (prevProps.navigation?.state !== this.props.navigation?.state) {
-			const showQuickItemNew = this.props.navigation?.state?.showQuickItem;
-			this.setState({
-				...this.state,
-				showQuickItem: showQuickItemNew || this.state.showQuickItem,
-			});
 		}
 	}
 
@@ -247,8 +229,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 				buttons.push({
 					label: _('Quick to-dos'),
-					onPress: () => this.setState({
-						...this.state,
+					onPress: () => this.props.dispatch({
+						type: 'SHOW_QUICK_ITEM_UPDATE',
 						showQuickItem: 'todo',
 					}),
 					color: '#9b59b6',
@@ -257,8 +239,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 				buttons.push({
 					label: _('Quick notes'),
-					onPress: () => this.setState({
-						...this.state,
+					onPress: () => this.props.dispatch({
+						type: 'SHOW_QUICK_ITEM_UPDATE',
 						showQuickItem: 'note',
 					}),
 					color: '#9b59b6',
@@ -291,16 +273,19 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
-		const isTodo = this.state.showQuickItem === 'todo';
+		const isTodo = this.props.showQuickItem === 'todo';
 
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
-				{this.state.showQuickItem &&
+				{this.props.showQuickItem &&
 				<QuickItem
 					isTodo={isTodo}
 					onHide={() =>
-						this.setState({ ...this.state, showQuickItem: false })
+						this.props.dispatch({
+							type: 'SHOW_QUICK_ITEM_UPDATE',
+							showQuickItem: false,
+						})
 					}
 					onSubmit={async (text: string) => {
 						await Note.save({
@@ -340,6 +325,7 @@ const NotesScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
+		showQuickItem: state.showQuickItem,
 	};
 })(NotesScreenComponent as any);
 
