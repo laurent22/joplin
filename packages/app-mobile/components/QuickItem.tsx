@@ -1,39 +1,60 @@
-const React = require('react');
-const Component = React.Component;
-const { connect } = require('react-redux');
-const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
-const { TextInput } = require('react-native-paper');
+import React = require('react');
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
 const { themeStyle } = require('./global-style.js');
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { AppState } from '../utils/types';
 
-interface State {
-	text: string;
-}
-
-interface Props {
+interface QuickItemProps {
 	isTodo: boolean;
 	onHide: ()=> void;
-	onSubmit: (text: string)=> void;
-	themeId: number;
+	onSubmit: (text: string)=> Promise<void>;
 }
 
-class QuickItemComponent extends Component<Props, State> {
+const QuickItem = (props: QuickItemProps) => {
 
-	public constructor() {
-		super();
-		this.styles_ = {};
-		this.state = {
-			text: '',
-		};
-	}
+	const [text, setText] = useState('');
 
-	public styles() {
-		const theme = themeStyle(this.props.themeId);
+	const themeId = useSelector((state: AppState) => state.settings.theme);
+	const styles = useStyles(themeId);
 
-		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
-		this.styles_ = {};
+	const listItemStyle = styles.listItem;
+	const listItemTextStyle = styles.listItemText;
+	const hideButtonStyle = styles.hideButtonStyle;
 
-		const styles = {
+	return (
+		<View style={listItemStyle}>
+			{
+				<TextInput
+					style={listItemTextStyle}
+					value={text}
+					onChangeText={setText}
+					onSubmitEditing={async (_event: any) => {
+						await props.onSubmit(text);
+						setText('');
+					}}
+					placeholder={'Untitled'}
+					blurOnSubmit={false}
+					label={props.isTodo ? 'New to-do' : 'New note'}
+					autoFocus={true}
+				/>
+			}
+			<TouchableOpacity
+				onPress={props.onHide}
+				style={hideButtonStyle}
+			>
+				<Text>Hide</Text>
+			</TouchableOpacity>
+		</View>
+	);
+};
+
+const useStyles = (themeId: number) => {
+	return useMemo(() => {
+		const theme: any = themeStyle(themeId);
+
+		return StyleSheet.create({
 			listItem: {
 				flexDirection: 'row',
 				borderBottomWidth: 1,
@@ -55,60 +76,8 @@ class QuickItemComponent extends Component<Props, State> {
 				paddingTop: theme.itemMarginTop + 15,
 				paddingLeft: 10,
 			},
-		};
-
-		this.styles_[this.props.themeId] = StyleSheet.create(styles);
-		return this.styles_[this.props.themeId];
-	}
-
-	public render() {
-		const listItemStyle = this.styles().listItem;
-		const listItemTextStyle = this.styles().listItemText;
-		const hideButtonStyle = this.styles().hideButtonStyle;
-
-		return (
-			<View style={listItemStyle}>
-				{
-					<TextInput
-						style={listItemTextStyle}
-						value={this.state.text}
-						onChangeText={(text: string) => this.setState(
-							{
-								...this.state,
-								text: text,
-							}
-						)}
-						onSubmitEditing={async (_event: any) => {
-							await this.props.onSubmit(this.state.text);
-							this.setState({
-								...this.state,
-								text: '',
-							});
-						}}
-						placeholder={'Untitled'}
-						blurOnSubmit={false}
-						label={
-							this.props.isTodo ?
-								'New to-do' : 'New note'
-						}
-						autoFocus={true}
-					/>
-				}
-				<TouchableOpacity
-					onPress={this.props.onHide}
-					style={hideButtonStyle}
-				>
-					<Text>Hide</Text>
-				</TouchableOpacity>
-			</View>
-		);
-	}
-}
-
-const QuickItem = connect((state: AppState) => {
-	return {
-		themeId: state.settings.theme,
-	};
-})(QuickItemComponent);
+		});
+	}, [themeId]);
+};
 
 export default QuickItem;
