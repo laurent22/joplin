@@ -4,9 +4,22 @@ const { connect } = require('react-redux');
 const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
 const { TextInput } = require('react-native-paper');
 const { themeStyle } = require('./global-style.js');
+import { AppState } from '../utils/types';
 
-class QuickItemComponent extends Component {
-	constructor() {
+interface State {
+	text: string;
+}
+
+interface Props {
+	isTodo: boolean;
+	onHide: ()=> void;
+	onSubmit: (text: string)=> void;
+	themeId: number;
+}
+
+class QuickItemComponent extends Component<Props, State> {
+
+	public constructor() {
 		super();
 		this.styles_ = {};
 		this.state = {
@@ -14,7 +27,7 @@ class QuickItemComponent extends Component {
 		};
 	}
 
-	styles() {
+	public styles() {
 		const theme = themeStyle(this.props.themeId);
 
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
@@ -48,7 +61,7 @@ class QuickItemComponent extends Component {
 		return this.styles_[this.props.themeId];
 	}
 
-	render() {
+	public render() {
 		const listItemStyle = this.styles().listItem;
 		const listItemTextStyle = this.styles().listItemText;
 		const hideButtonStyle = this.styles().hideButtonStyle;
@@ -59,13 +72,13 @@ class QuickItemComponent extends Component {
 					<TextInput
 						style={listItemTextStyle}
 						value={this.state.text}
-						onChangeText={(text) => this.setState(
+						onChangeText={(text: string) => this.setState(
 							{
 								...this.state,
 								text: text,
 							}
 						)}
-						onSubmitEditing={async (_event) => {
+						onSubmitEditing={async (_event: any) => {
 							await this.props.onSubmit(this.state.text);
 							this.setState({
 								...this.state,
@@ -92,10 +105,10 @@ class QuickItemComponent extends Component {
 	}
 }
 
-const QuickItem = connect(state => {
+const QuickItem = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
 })(QuickItemComponent);
 
-module.exports = { QuickItem };
+export default QuickItem;

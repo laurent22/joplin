@@ -881,3 +881,4 @@ packages/tools/website/utils/render.js
 packages/tools/website/utils/types.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 
+packages/app-mobile/components/QuickItem.js

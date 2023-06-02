@@ -3,7 +3,7 @@ import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } fro
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import NoteList from '../NoteList';
-const { QuickItem } = require('../QuickItem.js');
+import QuickItem from '../QuickItem';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
@@ -298,7 +298,6 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				{this.state.showQuickItem &&
 				<QuickItem
-					note={{}}
 					isTodo={isTodo}
 					onHide={() =>
 						this.setState({ ...this.state, showQuickItem: false })
