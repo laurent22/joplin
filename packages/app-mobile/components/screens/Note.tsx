@@ -1244,6 +1244,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
+			if (this.state.voiceTypingDialogShown) return null;
+
 			const editButton = {
 				label: _('Edit'),
 				icon: 'md-create',
@@ -1258,8 +1260,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return <ActionButton mainButton={editButton} />;
 		};
-
-		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1314,7 +1314,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{renderActionButton()}
+				{renderVoiceTypingDialog()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1324,7 +1325,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 				/>
 				{noteTagDialog}
-				{renderVoiceTypingDialog()}
 			</View>
 		);
 	}

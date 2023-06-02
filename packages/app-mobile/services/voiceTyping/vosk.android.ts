@@ -7,6 +7,10 @@ enum State {
 	Recording,
 }
 
+interface StartOptions {
+	onResult: (text: string)=> void;
+}
+
 let vosk_: Vosk|null = null;
 let state_: State = State.Idle;
 
@@ -26,7 +30,7 @@ export const getVosk = async () => {
 	return vosk_;
 };
 
-export const startRecording = (vosk: Vosk): Recorder => {
+export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 	if (state_ !== State.Idle) throw new Error('Vosk is already recording');
 
 	state_ = State.Recording;
@@ -56,8 +60,10 @@ export const startRecording = (vosk: Vosk): Recorder => {
 	};
 
 	eventHandlers.push(vosk.onResult(e => {
-		logger.info('Result', e.data);
-		result.push(e.data);
+		const text = e.data;
+		logger.info('Result', text);
+		result.push(text);
+		options.onResult(text);
 	}));
 
 	eventHandlers.push(vosk.onError(e => {
