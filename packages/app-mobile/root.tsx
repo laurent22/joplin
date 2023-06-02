@@ -390,7 +390,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'SHOW_QUICK_ITEM_UPDATE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showQuickItem = action.showQuickItem;
 			break;
 
