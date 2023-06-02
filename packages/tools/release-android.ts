@@ -259,11 +259,11 @@ async function main() {
 	console.info(releaseFiles);
 
 	const voskRelease = releaseFiles['vosk'];
+	delete releaseFiles['vosk'];
 
 	await uploadToGitHubRelease(mainProjectName, tagName, isPreRelease, releaseFiles);
 
 	if (voskRelease) {
-		delete releaseFiles['vosk'];
 		await uploadToGitHubRelease(modProjectName, tagName, isPreRelease, { 'vosk': voskRelease });
 	}
 
