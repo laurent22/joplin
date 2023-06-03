@@ -29024,16 +29024,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::locator=root%40workspace%3A.":
-  version: 0.12.0
-  resolution: "rn-fetch-blob@patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch::version=0.12.0&hash=9431c2&locator=root%40workspace%3A."
-  dependencies:
-    base-64: 0.1.0
-    glob: 7.0.6
-  checksum: 6535ee347b3e76733a10c3873c14622b35613caa86242536b68f130b75a3379d9bb060ad5c8832d78e639c88869e321c288e5c8e89373cdb0c14f23253c31c50
-  languageName: node
-  linkType: hard
-
 "roarr@npm:^2.15.3":
   version: 2.15.4
   resolution: "roarr@npm:2.15.4"
