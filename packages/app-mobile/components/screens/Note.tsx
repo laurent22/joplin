@@ -1125,7 +1125,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.scheduleSave();
 		} else {
 			if (this.useEditorBeta()) {
-				this.editorRef.current.insertText(text);
+				// We add a space so that if the feature is used twice in a row,
+				// the sentences are not stuck to each others.
+				this.editorRef.current.insertText(`${text} `);
 			} else {
 				logger.warn('Voice typing is not supported in plaintext editor');
 			}
