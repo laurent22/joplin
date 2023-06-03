@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.11.25](https://github.com/laurent22/joplin/releases/tag/android-v2.11.25) (Pre-release) - 2023-06-03T16:40:08Z
+
+- Fixed: Fix Vosk logic (60b3921)
+- Fixed: Fixed error "Download interrupted" when downloading resources from Joplin Cloud/Server.
+
 ## [android-v2.11.24](https://github.com/laurent22/joplin/releases/tag/android-v2.11.24) (Pre-release) - 2023-06-02T15:22:04Z
 
 - Improved: Write to note in realtime using voice typing (7779879)
