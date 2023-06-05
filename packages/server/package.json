@@ -61,10 +61,10 @@
     "@joplin/tools": "~2.11",
     "@rmp135/sql-ts": "1.16.0",
     "@types/formidable": "2.0.6",
-    "@types/fs-extra": "9.0.13",
+    "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.1",
     "@types/jest-expect-message": "1.0.4",
-    "@types/jsdom": "16.2.15",
+    "@types/jsdom": "21.1.0",
     "@types/koa": "2.13.6",
     "@types/markdown-it": "12.2.3",
     "@types/mustache": "4.2.2",
@@ -77,6 +77,6 @@
     "jsdom": "21.1.2",
     "node-mocks-http": "1.12.2",
     "source-map-support": "0.5.21",
-    "typescript": "4.9.5"
+    "typescript": "5.0.2"
   }
 }
