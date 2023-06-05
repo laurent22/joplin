@@ -75,6 +75,7 @@ packages/pdf-viewer/dist
 plugin_types/
 readme/
 packages/react-native-vosk/lib/
+packages/lib/countable/Countable.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
