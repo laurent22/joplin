@@ -80,6 +80,7 @@ const appDefaultState = createAppDefaultState(
 class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
+	private initPluginServiceDone_: boolean = false;
 
 	public constructor() {
 		super();
@@ -258,6 +259,9 @@ class Application extends BaseApplication {
 	}
 
 	private async initPluginService() {
+		if (this.initPluginServiceDone_) return;
+		this.initPluginServiceDone_ = true;
+
 		const service = PluginService.instance();
 
 		const pluginRunner = new PluginRunner();
