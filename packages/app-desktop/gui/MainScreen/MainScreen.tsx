@@ -46,6 +46,7 @@ import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
+import eventManager from '@joplin/lib/eventManager';
 
 interface LayerModalState {
 	visible: boolean;
@@ -391,6 +392,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	componentDidMount() {
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+		eventManager.emit('mainScreenReady');
 	}
 
 	componentWillUnmount() {
