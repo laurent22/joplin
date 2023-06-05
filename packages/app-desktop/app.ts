@@ -553,7 +553,15 @@ class Application extends BaseApplication {
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 
-		await this.initPluginService();
+		// We need to delay plugin initialisation until the main screen is
+		// ready. Otherwise plugins might try to modify the application layout,
+		// which will cause an error related to an empty layout item. This in
+		// turns will cause the screen to go white on startup.
+		//
+		// https://discourse.joplinapp.org/t/upgrade-produces-blank-window/31138/8
+		eventManager.on('mainScreenReady', () => {
+			void this.initPluginService();
+		});
 
 		this.setupContextMenu();
 
