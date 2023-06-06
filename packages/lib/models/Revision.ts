@@ -113,7 +113,7 @@ export default class Revision extends BaseItem {
 
 	public static applyObjectPatch(object: any, patch: string) {
 		const parsedPatch: ObjectPatch = JSON.parse(this.sanitizeObjectPatch(patch));
-		const output = Object.assign({}, object);
+		const output = { ...object };
 
 		for (const k in parsedPatch.new) {
 			output[k] = parsedPatch.new[k];

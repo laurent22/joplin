@@ -75,6 +75,7 @@ packages/pdf-viewer/dist
 plugin_types/
 readme/
 packages/react-native-vosk/lib/
+packages/lib/countable/Countable.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
@@ -363,6 +364,7 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
@@ -425,8 +427,8 @@ packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
-packages/app-mobile/services/voiceTyping/vosk.dummy.js
-packages/app-mobile/services/voiceTyping/vosk.js
+packages/app-mobile/services/voiceTyping/vosk.android.js
+packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js

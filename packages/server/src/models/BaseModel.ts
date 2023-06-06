@@ -324,7 +324,7 @@ export default abstract class BaseModel<T> {
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
-		const toSave = Object.assign({}, object);
+		const toSave = { ...object };
 
 		const isNew = await this.isNew(object, options);
 

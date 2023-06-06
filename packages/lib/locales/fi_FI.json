@@ -334,7 +334,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Salauksen ottaminen käyttöön tarkoittaa, että *kaikki* muistiinpanosi ja liitteesi synkronoidaan uudelleen ja lähetetään salattuina synkronointikohteeseen.",
  "Encrypted": "Salattu",
  "Encrypted items cannot be modified": "Salattuja kohteita ei voi muokata",
- "Encrypted notebooks cannot be renamed": "Salattuja muistikirjoja ei voi nimetä uudelleen",
  "Encryption": "Salaus",
  "Encryption Config": "Salauksen määritys",
  "Encryption is: %s": "Salaus on: %s",

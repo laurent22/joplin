@@ -378,7 +378,7 @@
 				tags: command.tags || '',
 				image_sizes: imageSizes,
 				anchor_names: anchorNames,
-				source_command: Object.assign({}, command),
+				source_command: { ...command },
 				convert_to: convertToMarkup,
 				stylesheets: stylesheets,
 			};
@@ -392,7 +392,7 @@
 			} catch (error) {
 				console.warn(error);
 				console.warn('Sending full page HTML instead');
-				const newCommand = Object.assign({}, command, { name: 'completePageHtml' });
+				const newCommand = { ...command, name: 'completePageHtml' };
 				const response = await prepareCommandResponse(newCommand);
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;

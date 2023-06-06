@@ -144,7 +144,6 @@
  "Enable ~sub~ syntax": "เปิดใช้งาน ~sub~ syntax",
  "Enabled": "เปิด",
  "Encrypted": "เข้ารหัสแล้ว",
- "Encrypted notebooks cannot be renamed": "สมุดบันทึกที่ถูกเข้ารหัสจะไม่สามารถแก้ไขชื่อได้",
  "Encryption": "การเข้ารหัส",
  "Encryption Config": "ตั้งค่าการเข้ารหัส",
  "Enter code here": "กรอกรหัสที่นี่",

@@ -42,7 +42,7 @@ export function addJoplinChecklistCommands(editor, ToggleList) {
   });
 
   editor.addCommand('InsertJoplinChecklist', function (ui, detail) {
-    detail = Object.assign({}, detail, { listType: 'joplinChecklist' });
+    detail = { ...detail,  listType: 'joplinChecklist'  };
     ToggleList.toggleList(editor, 'UL', detail);
   });
 }

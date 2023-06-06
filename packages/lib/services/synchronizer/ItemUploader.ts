@@ -1,5 +1,6 @@
 import { ModelType } from '../../BaseModel';
 import { FileApi, MultiPutItem } from '../../file-api';
+import JoplinError from '../../JoplinError';
 import Logger from '../../Logger';
 import BaseItem from '../../models/BaseItem';
 import { BaseItemEntity } from '../database/types';
@@ -45,7 +46,8 @@ export default class ItemUploader {
 				// the regular upload.
 				logger.warn(`Pre-uploaded item updated_time has changed. It is going to be re-uploaded again: ${path} (From ${this.preUploadedItemUpdatedTimes_[path]} to ${local.updated_time})`);
 			} else {
-				if (preUploadItem.error) throw new Error(preUploadItem.error.message ? preUploadItem.error.message : 'Unknown pre-upload error');
+				const error = preUploadItem.error;
+				if (error) throw new JoplinError(error.message ? error.message : 'Unknown pre-upload error', error.code);
 				return;
 			}
 		}

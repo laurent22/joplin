@@ -41,13 +41,9 @@ const style = createSelector(
 			},
 		};
 
-		output.buttonIconSelected = Object.assign({}, output.buttonIcon, {
-			color: theme.highlightedColor,
-		});
+		output.buttonIconSelected = { ...output.buttonIcon, color: theme.highlightedColor };
 
-		output.buttonLabelSelected = Object.assign({}, output.buttonLabel, {
-			color: theme.color,
-		});
+		output.buttonLabelSelected = { ...output.buttonLabel, color: theme.color };
 
 		return output;
 	}

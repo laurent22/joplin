@@ -44,7 +44,7 @@ shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 
 	reg.logger().info('Note has been deleted while it was being edited - recreating it.');
 
-	let newNote = Object.assign({}, note);
+	let newNote = { ...note };
 	delete newNote.id;
 	newNote = await Note.save(newNote);
 
@@ -52,13 +52,11 @@ shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 };
 
 shared.saveNoteButton_press = async function(comp: any, folderId: string = null, options: any = null) {
-	options = Object.assign({}, {
-		autoTitle: true,
-	}, options);
+	options = { autoTitle: true, ...options };
 
 	const releaseMutex = await saveNoteMutex_.acquire();
 
-	let note = Object.assign({}, comp.state.note);
+	let note = { ...comp.state.note };
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
 	if (recreatedNote) note = recreatedNote;
@@ -86,7 +84,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
-	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? Object.assign({}, note) : await Note.save(note, saveOptions);
+	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? { ...note } : await Note.save(note, saveOptions);
 
 	const stateNote = comp.state.note;
 
@@ -94,7 +92,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 	if (!recreatedNote && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
 
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
-	note = Object.assign(note, savedNote);
+	note = { ...note, ...savedNote };
 
 	if (stateNote.id === note.id) {
 		// But we preserve the current title and body because
@@ -109,7 +107,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 	}
 
 	const newState: any = {
-		lastSavedNote: Object.assign({}, note),
+		lastSavedNote: { ...note },
 		note: note,
 	};
 
@@ -136,8 +134,8 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 				altitude: geoNote.altitude,
 			};
 
-			const modNote = Object.assign({}, stateNote, geoInfo);
-			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
+			const modNote = { ...stateNote, ...geoInfo };
+			const modLastSavedNote = { ...comp.state.lastSavedNote, ...geoInfo };
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
 		};
@@ -150,7 +148,7 @@ shared.saveNoteButton_press = async function(comp: any, folderId: string = null,
 };
 
 shared.saveOneProperty = async function(comp: any, name: string, value: any) {
-	let note = Object.assign({}, comp.state.note);
+	let note = { ...comp.state.note };
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
 	if (recreatedNote) note = recreatedNote;
@@ -161,7 +159,7 @@ shared.saveOneProperty = async function(comp: any, name: string, value: any) {
 	note[name] = toSave[name];
 
 	comp.setState({
-		lastSavedNote: Object.assign({}, note),
+		lastSavedNote: { ...note },
 		note: note,
 	});
 };
@@ -169,7 +167,7 @@ shared.saveOneProperty = async function(comp: any, name: string, value: any) {
 shared.noteComponent_change = function(comp: any, propName: string, propValue: any) {
 	const newState: any = {};
 
-	const note = Object.assign({}, comp.state.note);
+	const note = { ...comp.state.note };
 	note[propName] = propValue;
 	newState.note = note;
 
@@ -231,7 +229,7 @@ shared.initState = async function(comp: any) {
 	const folder = Folder.byId(comp.props.folders, note.parent_id);
 
 	comp.setState({
-		lastSavedNote: Object.assign({}, note),
+		lastSavedNote: { ...note },
 		note: note,
 		mode: mode,
 		folder: folder,

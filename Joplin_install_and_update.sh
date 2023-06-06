@@ -115,6 +115,20 @@ elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]] ; then
 fi
 
 #-----------------------------------------------------
+print "Checking dependencies..."
+## Check if libfuse2 is present.
+if [[ $(command -v ldconfig) ]]; then
+	LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
+else
+	LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
+fi
+if [[ $LIBFUSE == "" ]] ; then
+  print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
+  print "See https://joplinapp.org/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
+  exit 1
+fi
+
+#-----------------------------------------------------
 # Download Joplin
 #-----------------------------------------------------
 
@@ -134,10 +148,16 @@ else
     print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
 fi
 
+# Check if it's an update or a new install
+DOWNLOAD_TYPE="New"
+if [[ -f ~/.joplin/Joplin.AppImage ]]; then
+    DOWNLOAD_TYPE="Update"
+fi
+
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O "${TEMP_DIR}/Joplin.AppImage" "https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage"
+wget -O "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
 wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------

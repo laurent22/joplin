@@ -25,7 +25,7 @@ export default class InteropService_Exporter_Base {
 	}
 
 	public updateContext(context: any) {
-		this.context_ = Object.assign({}, this.context_, context);
+		this.context_ = { ...this.context_, ...context };
 	}
 
 	public context() {

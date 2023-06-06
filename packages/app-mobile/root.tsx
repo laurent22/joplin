@@ -22,13 +22,13 @@ import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
-import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
+import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
+const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
 import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -142,7 +142,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -213,13 +213,11 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState: AppState = Object.assign({}, defaultState, {
-	sideMenuOpenPercent: 0,
+const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
-	isOnMobileData: false,
-});
+	isOnMobileData: false };
 
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -272,11 +270,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 				for (let i = 0; i < navHistory.length; i++) {
 					const n = navHistory[i];
 					if (n.routeName === action.routeName) {
-						navHistory[i] = Object.assign({}, action);
+						navHistory[i] = { ...action };
 					}
 				}
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				newState.selectedNoteHash = '';
 
@@ -320,32 +318,32 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'SIDE_MENU_TOGGLE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = !newState.showSideMenu;
 			break;
 
 		case 'SIDE_MENU_OPEN':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = true;
 			break;
 
 		case 'SIDE_MENU_CLOSE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = false;
 			break;
 
 		case 'SIDE_MENU_OPEN_PERCENT':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
 
 			{
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				const noteId = action.id;
 				const newSelectedNoteIds = state.selectedNoteIds.slice();
@@ -365,7 +363,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'NOTE_SELECTION_START':
 
 			if (!state.noteSelectionEnabled) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				newState.noteSelectionEnabled = true;
 				newState.selectedNoteIds = [action.id];
 			}
@@ -373,20 +371,20 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'NOTE_SELECTION_END':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSelectionEnabled = false;
 			newState.selectedNoteIds = [];
 			break;
 
 		case 'NOTE_SIDE_MENU_OPTIONS_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSideMenuOptions = action.options;
 			break;
 
 		case 'MOBILE_DATA_WARNING_UPDATE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
@@ -515,10 +513,11 @@ async function initialize(dispatch: Function) {
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
+
 		if (Setting.value('firstStart')) {
-			let locale = NativeModules.I18nManager.localeIdentifier;
-			if (!locale) locale = defaultLocale();
-			Setting.setValue('locale', closestSupportedLocale(locale));
+			const detectedLocale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
+
 			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', 0);
 		} else {
@@ -659,7 +658,7 @@ async function initialize(dispatch: Function) {
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
 	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	void reg.scheduleSync(1000, null, true).then(() => {
+	void reg.scheduleSync(100, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -864,14 +863,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	public componentDidUpdate(prevProps: any) {
-		if (this.props.showSideMenu !== prevProps.showSideMenu) {
-			Animated.timing(this.state.sideMenuContentOpacity, {
-				toValue: this.props.showSideMenu ? 0.5 : 0,
-				duration: 600,
-			}).start();
-		}
-
+	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -984,6 +976,7 @@ class AppComponent extends React.Component {
 		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
 		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
 
+		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
 		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
@@ -1011,8 +1004,7 @@ class AppComponent extends React.Component {
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-							{ this.state.sensorInfo && <BiometricPopup
+							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
@@ -1058,6 +1050,7 @@ const mapStateToProps = (state: any) => {
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
 		biometricsDone: state.biometricsDone,
+		biometricsEnabled: state.settings['security.biometricsEnabled'],
 	};
 };
 

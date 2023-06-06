@@ -1,6 +1,12 @@
+// Currently disabled on iOS
+
 type Vosk = any;
 
 export { Vosk };
+
+interface StartOptions {
+	onResult: (text: string)=> void;
+}
 
 export interface Recorder {
 	stop: ()=> Promise<string>;
@@ -11,7 +17,7 @@ export const getVosk = async () => {
 	return {} as any;
 };
 
-export const startRecording = (_vosk: Vosk): Recorder => {
+export const startRecording = (_vosk: Vosk, _options: StartOptions): Recorder => {
 	return {
 		stop: async () => { return ''; },
 		cleanup: () => {},

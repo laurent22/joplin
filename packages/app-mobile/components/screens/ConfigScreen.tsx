@@ -98,6 +98,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			}
 		};
 
+		this.saveButton_press = this.saveButton_press.bind(this);
+
 		this.syncStatusButtonPress_ = () => {
 			void NavService.go('Status');
 		};
@@ -199,6 +201,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.logButtonPress_ = () => {
 			void NavService.go('Log');
 		};
+
+		this.handleSetting = this.handleSetting.bind(this);
 	}
 
 	public async checkFilesystemPermission() {
@@ -280,30 +284,28 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			},
 		};
 
-		styles.settingContainerNoBottomBorder = Object.assign({}, styles.settingContainer, {
-			borderBottomWidth: 0,
-			paddingBottom: theme.marginBottom / 2,
-		});
+		styles.settingContainerNoBottomBorder = { ...styles.settingContainer, borderBottomWidth: 0,
+			paddingBottom: theme.marginBottom / 2 };
 
 		styles.settingControl.borderBottomWidth = 1;
 		styles.settingControl.borderBottomColor = theme.dividerColor;
 
-		styles.switchSettingText = Object.assign({}, styles.settingText);
+		styles.switchSettingText = { ...styles.settingText };
 		styles.switchSettingText.width = '80%';
 
-		styles.switchSettingContainer = Object.assign({}, styles.settingContainer);
+		styles.switchSettingContainer = { ...styles.settingContainer };
 		styles.switchSettingContainer.flexDirection = 'row';
 		styles.switchSettingContainer.justifyContent = 'space-between';
 
-		styles.linkText = Object.assign({}, styles.settingText);
+		styles.linkText = { ...styles.settingText };
 		styles.linkText.borderBottomWidth = 1;
 		styles.linkText.borderBottomColor = theme.color;
 		styles.linkText.flex = 0;
 		styles.linkText.fontWeight = 'normal';
 
-		styles.headerWrapperStyle = Object.assign({}, styles.settingContainer, theme.headerWrapperStyle);
+		styles.headerWrapperStyle = { ...styles.settingContainer, ...theme.headerWrapperStyle };
 
-		styles.switchSettingControl = Object.assign({}, styles.settingControl);
+		styles.switchSettingControl = { ...styles.settingControl };
 		delete styles.switchSettingControl.color;
 		// styles.switchSettingControl.width = '20%';
 		styles.switchSettingControl.flex = 0;
@@ -482,8 +484,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (key === 'security.biometricsEnabled' && !!value) {
 			try {
 				await biometricAuthenticate();
-				shared.updateSettingValue(this, key, value);
-				await this.saveButton_press();
+				shared.updateSettingValue(this, key, value, async () => await this.saveButton_press());
 			} catch (error) {
 				shared.updateSettingValue(this, key, false);
 				Alert.alert(error.message);
@@ -492,8 +493,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		if (key === 'security.biometricsEnabled' && !value) {
-			shared.updateSettingValue(this, key, value);
-			await this.saveButton_press();
+			shared.updateSettingValue(this, key, value, async () => await this.saveButton_press());
 			return true;
 		}
 

@@ -40,34 +40,34 @@ function reducer(state = defaultState, action) {
 
 	if (action.type === 'WARNING_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.warning = action.text;
 
 	} else if (action.type === 'IS_PROBABLY_READERABLE') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.isProbablyReaderable = action.value;
 
 	} else if (action.type === 'CLIPPED_CONTENT_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.clippedContent = action.content;
 
 	} else if (action.type === 'CLIPPED_CONTENT_TITLE_SET') {
 
-		newState = Object.assign({}, state);
-		const newContent = newState.clippedContent ? Object.assign({}, newState.clippedContent) : {};
+		newState = { ...state };
+		const newContent = newState.clippedContent ? { ...newState.clippedContent } : {};
 		newContent.title = action.text;
 		newState.clippedContent = newContent;
 
 	} else if (action.type === 'CONTENT_UPLOAD') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.contentUploadOperation = action.operation;
 
 	} else if (action.type === 'FOLDERS_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.folders = action.folders;
 
 		if (!newState.selectedFolderId && action.folders.length) {
@@ -76,30 +76,30 @@ function reducer(state = defaultState, action) {
 
 	} else if (action.type === 'TAGS_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.tags = action.tags;
 
 	} else if (action.type === 'SELECTED_FOLDER_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.selectedFolderId = action.id;
 
 	} else if (action.type === 'CLIPPER_SERVER_SET') {
 
-		newState = Object.assign({}, state);
-		const clipperServer = Object.assign({}, newState.clipperServer);
+		newState = { ...state };
+		const clipperServer = { ...newState.clipperServer };
 		if ('foundState' in action) clipperServer.foundState = action.foundState;
 		if ('port' in action) clipperServer.port = action.port;
 		newState.clipperServer = clipperServer;
 
 	} else if (action.type === 'ENV_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.env = action.env;
 
 	} else if (action.type === 'AUTH_STATE_SET') {
 
-		newState = Object.assign({}, state);
+		newState = { ...state };
 		newState.authStatus = action.value;
 
 	}

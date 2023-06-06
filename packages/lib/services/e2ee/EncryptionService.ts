@@ -237,9 +237,7 @@ export default class EncryptionService {
 	}
 
 	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
-		options = Object.assign({}, {
-			encryptionMethod: this.defaultMasterKeyEncryptionMethod_,
-		}, options);
+		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
 
 		const bytes: any[] = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
@@ -412,9 +410,7 @@ export default class EncryptionService {
 	}
 
 	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
-		options = Object.assign({}, {
-			encryptionMethod: this.defaultEncryptionMethod(),
-		}, options);
+		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();

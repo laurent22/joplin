@@ -135,7 +135,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				Keyboard.dismiss();
 
 				this.setState({
-					note: Object.assign({}, this.state.lastSavedNote),
+					note: { ...this.state.lastSavedNote },
 					mode: 'view',
 				});
 
@@ -297,7 +297,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (!undoState) return;
 
 		this.setState((state: any) => {
-			const newNote = Object.assign({}, state.note);
+			const newNote = { ...state.note };
 			newNote.body = undoState.body;
 			return {
 				note: newNote,
@@ -396,7 +396,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			borderBottomWidth: 1,
 		};
 
-		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
 
 		styles.titleTextInput = {
@@ -708,7 +708,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const resourceTag = Resource.markdownTag(resource);
 
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 
 		if (this.state.mode === 'edit' && !!this.selection) {
 			const newText = `\n${resourceTag}\n`;
@@ -803,7 +803,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -1101,7 +1101,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const folder = await Folder.load(note.parent_id);
 
 		this.setState({
-			lastSavedNote: Object.assign({}, note),
+			lastSavedNote: { ...note },
 			note: note,
 			folder: folder,
 		});
@@ -1141,7 +1141,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.scheduleSave();
 		} else {
 			if (this.useEditorBeta()) {
-				this.editorRef.current.insertText(text);
+				// We add a space so that if the feature is used twice in a row,
+				// the sentences are not stuck to each others.
+				this.editorRef.current.insertText(`${text} `);
 			} else {
 				logger.warn('Voice typing is not supported in plaintext editor');
 			}
@@ -1260,6 +1262,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
+			if (this.state.voiceTypingDialogShown) return null;
+
 			const editButton = {
 				label: _('Edit'),
 				icon: 'md-create',
@@ -1274,8 +1278,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return <ActionButton mainButton={editButton} />;
 		};
-
-		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1330,7 +1332,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{renderActionButton()}
+				{renderVoiceTypingDialog()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1340,7 +1343,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 				/>
 				{noteTagDialog}
-				{renderVoiceTypingDialog()}
 			</View>
 		);
 	}

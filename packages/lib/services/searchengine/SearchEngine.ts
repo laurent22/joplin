@@ -508,7 +508,7 @@ export default class SearchEngine {
 
 		allTerms = allTerms.map(x => {
 			if (x.name === 'text' || x.name === 'title' || x.name === 'body') {
-				return Object.assign(x, { value: this.normalizeText_(x.value) });
+				return { ...x, value: this.normalizeText_(x.value) };
 			}
 			return x;
 		});
@@ -539,7 +539,7 @@ export default class SearchEngine {
 	}
 
 	private normalizeNote_(note: NoteEntity) {
-		const n = Object.assign({}, note);
+		const n = { ...note };
 		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;

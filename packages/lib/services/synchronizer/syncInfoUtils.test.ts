@@ -120,4 +120,38 @@ describe('syncInfoUtils', () => {
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
 	});
 
+	it('should merge sync target info, but should not make a disabled key the active one', async () => {
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.masterKeys = [{
+			id: '1',
+			content: 'content1',
+			hasBeenUsed: true,
+			enabled: 0,
+		}];
+		syncInfo1.activeMasterKeyId = '1';
+
+		await msleep(1);
+
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.masterKeys = [{
+			id: '2',
+			content: 'content2',
+			enabled: 1,
+			hasBeenUsed: false,
+		}];
+		syncInfo2.activeMasterKeyId = '2';
+
+		// Normally, if one master key has been used (1) and the other not (2),
+		// it should select the one that's been used regardless of timestamps.
+		// **However**, if the key 1 has been disabled by user, it should
+		// **not** be picked as the active one. Instead it should use key 2,
+		// because it's still enabled.
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
+
+		// If both key are disabled, we go back to the original logic, where we
+		// select the key that's been used.
+		syncInfo2.masterKeys[0].enabled = 0;
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
+	});
+
 });

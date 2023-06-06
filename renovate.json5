@@ -14,6 +14,11 @@
 	},
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
+
+	// It seems we need to delete the branches after merge or else it causes this problem:
+	// https://github.com/renovatebot/renovate/discussions/21256#discussioncomment-5898418
+	"pruneBranchAfterAutomerge": true,
+	
 	"ignorePaths": [
 		"**/bower_components/**",
 		"**/node_modules/**",
@@ -108,7 +113,38 @@
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
-		"execa"
+		"execa",
+
+		// Don't think we can trust this lib because they don't release a
+		// changelog and the latest version appears to have breaking changes
+		// (v0.5.0). Doesn't seem serious unfortunately.
+		// https://github.com/Leonidas-from-XIV/node-xml2js/issues/677
+		"xml2js",
+
+		// Looks like upgrading AWS causes the mobile build to fail with the following error:
+		//
+		// error: Error: Unable to resolve module @aws-sdk/chunked-blob-reader from /Users/laurent/src/joplin/packages/lib/node_modules/@aws-sdk/hash-blob-browser/dist-cjs/index.js: @aws-sdk/chunked-blob-reader could not be found within the project or in these directories:
+		//   ../lib/node_modules
+		//   ../../node_modules
+		//   ../../../node_modules
+		//   /Users/laurent/src/joplin/packages/app-mobile/node_modules/@aws-sdk/chunked-blob-reader
+		//   2 | Object.defineProperty(exports, "__esModule", { value: true });
+		//   3 | exports.blobHasher = void 0;
+		// > 4 | const chunked_blob_reader_1 = require("@aws-sdk/chunked-blob-reader");
+		//     |                                        ^
+		//   5 | const blobHasher = async function blobHasher(hashCtor, blob) {
+		//   6 |     const hash = new hashCtor();
+		//   7 |     await (0, chunked_blob_reader_1.blobReader)(blob, (chunk) => {
+		//     at ModuleResolver.resolveDependency (/Users/laurent/src/joplin/packages/app-mobile/node_modules/metro/src/node-haste/DependencyGraph/ModuleResolution.js:178:15)
+		//
+		// Started failing with:
+		//
+		//  "aws-sdk": "2.1340.0"
+		// "@aws-sdk/client-s3": "3.296.0"
+		// "@aws-sdk/s3-request-presigner": "3.296.0"
+		"aws-sdk",
+		"@aws-sdk/client-s3",
+		"@aws-sdk/s3-request-presigner",
 	],
 	"packageRules": [
 		{
@@ -139,18 +175,18 @@
 				"@types/*",
 			],
 		},
-		{
-			"matchUpdateTypes": ["minor", "patch"],
-			"automerge": true,
-			"groupName": "aws",
-			"labels": ["automerge"],
-			"extends": ["schedule:monthly"],
-			"matchPackagePatterns": [
-				// AWS packages are updated too frequently and we can assume minor
-				// updates are stable.
-				"@aws-sdk/*",
-				"aws-sdk",
-			],
-		},
+		// {
+		// 	"matchUpdateTypes": ["minor", "patch"],
+		// 	"automerge": true,
+		// 	"groupName": "aws",
+		// 	"labels": ["automerge"],
+		// 	"extends": ["schedule:monthly"],
+		// 	"matchPackagePatterns": [
+		// 		// AWS packages are updated too frequently and we can assume minor
+		// 		// updates are stable.
+		// 		"@aws-sdk/*",
+		// 		"aws-sdk",
+		// 	],
+		// },
 	]
 }

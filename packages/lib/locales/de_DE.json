@@ -334,7 +334,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Durch die Aktivierung der Verschlüsselung werden *alle* Notizen und Anhänge neu synchronisiert und verschlüsselt an das Synchronisationsziel gesendet.",
  "Encrypted": "Verschlüsselt",
  "Encrypted items cannot be modified": "Verschlüsselte Elemente können nicht verändert werden",
- "Encrypted notebooks cannot be renamed": "Verschlüsselte Notizbücher können nicht umbenannt werden",
  "Encryption": "Verschlüsselung",
  "Encryption Config": "Verschlüsselungskonfiguration",
  "Encryption is: %s": "Verschlüsselung ist: %s",

@@ -44,9 +44,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static noteIds(parentId: string, options: any = null) {
-		options = Object.assign({}, {
-			includeConflicts: false,
-		}, options);
+		options = { includeConflicts: false, ...options };
 
 		const where = ['parent_id = ?'];
 		if (!options.includeConflicts) {
@@ -619,7 +617,7 @@ export default class Folder extends BaseItem {
 	public static buildTree(folders: FolderEntity[]): FolderEntityWithChildren[] {
 		const idToFolders: Record<string, any> = {};
 		for (let i = 0; i < folders.length; i++) {
-			idToFolders[folders[i].id] = Object.assign({}, folders[i]);
+			idToFolders[folders[i].id] = { ...folders[i] };
 			idToFolders[folders[i].id].children = [];
 		}
 

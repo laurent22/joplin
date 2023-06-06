@@ -119,16 +119,14 @@ export default class ClipperServer {
 
 		this.server_.on('request', async (request: any, response: any) => {
 			const writeCorsHeaders = (code: any, contentType = 'application/json', additionalHeaders: any = null) => {
-				const headers = Object.assign(
-					{},
-					{
-						'Content-Type': contentType,
-						'Access-Control-Allow-Origin': '*',
-						'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-						'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
-					},
-					additionalHeaders ? additionalHeaders : {}
-				);
+				const headers = {
+
+					'Content-Type': contentType,
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+					'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
+					...(additionalHeaders ? additionalHeaders : {}),
+				};
 				response.writeHead(code, headers);
 			};
 

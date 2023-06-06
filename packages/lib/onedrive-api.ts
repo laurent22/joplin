@@ -141,7 +141,7 @@ export default class OneDriveApi {
 	}
 
 	public async uploadChunk(url: string, handle: any, buffer: any, options: any) {
-		options = Object.assign({}, options);
+		options = { ...options };
 		if (!options.method) { options.method = 'POST'; }
 
 		if (!options.contentLength) throw new Error('uploadChunk: contentLength is missing');
