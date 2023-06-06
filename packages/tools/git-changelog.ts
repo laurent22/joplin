@@ -83,7 +83,12 @@ async function gitLog(sinceTag: string) {
 
 async function gitTags() {
 	const lines: string = await execCommand('git tag --sort=committerdate');
-	return lines.split('\n').map(l => l.trim()).filter(l => !!l);
+	const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+	return lines
+		.split('\n')
+		.map(l => l.trim())
+		.filter(l => !!l)
+		.sort((a, b) => collator.compare(a, b));
 }
 
 function platformFromTag(tagName: string): Platform {
