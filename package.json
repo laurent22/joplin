@@ -85,10 +85,10 @@
     "madge": "6.0.0",
     "npm-package-json-lint": "6.4.0",
     "typedoc": "0.17.8",
-    "typescript": "4.9.5"
+    "typescript": "5.0.2"
   },
   "dependencies": {
-    "@types/fs-extra": "9.0.13",
+    "@types/fs-extra": "11.0.1",
     "http-server": "14.1.1",
     "node-gyp": "9.3.1",
     "nodemon": "2.0.22"

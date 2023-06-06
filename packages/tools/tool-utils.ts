@@ -23,7 +23,7 @@ export interface GitHubRelease {
 async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl: string = '') {
 	repoTagUrl = repoTagUrl || 'https://github.com/laurent22/joplin/releases/tag';
 
-	const currentText = await readFile(changelogPath, 'UTF-8');
+	const currentText = await readFile(changelogPath, 'utf8');
 	const lines = currentText.split('\n');
 
 	const beforeLines = [];

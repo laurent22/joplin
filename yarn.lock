@@ -4701,7 +4701,7 @@ __metadata:
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
-    typescript: 4.9.5
+    typescript: 5.0.2
   dependenciesMeta:
     7zip-bin-linux:
       optional: true
@@ -4743,7 +4743,7 @@ __metadata:
     "@react-native-community/netinfo": 9.3.10
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.25
@@ -4809,7 +4809,7 @@ __metadata:
     ts-jest: 29.1.0
     ts-loader: 9.4.2
     ts-node: 10.9.1
-    typescript: 4.9.5
+    typescript: 5.0.2
     uglify-js: 3.17.4
     url: 0.11.0
     webpack: 5.74.0
@@ -4834,7 +4834,7 @@ __metadata:
     jest: 29.5.0
     prettier: 2.8.8
     ts-jest: 29.1.0
-    typescript: 4.9.5
+    typescript: 5.0.2
   languageName: unknown
   linkType: soft
 
@@ -4862,7 +4862,7 @@ __metadata:
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.43
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     css: 3.0.0
     datauri: 4.1.0
     fs-extra: 11.1.1
@@ -4884,7 +4884,7 @@ __metadata:
     "@joplin/turndown": ^4.0.65
     "@joplin/turndown-plugin-gfm": ^1.0.47
     "@joplin/utils": ~2.11
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
@@ -4943,7 +4943,7 @@ __metadata:
     string-to-stream: 3.0.1
     tar: 6.1.15
     tcp-port-used: 1.0.2
-    typescript: 4.9.5
+    typescript: 5.0.2
     uglifycss: 0.0.29
     url-parse: 1.5.10
     uuid: 9.0.0
@@ -4977,7 +4977,7 @@ __metadata:
     styled-components: 5.3.10
     ts-jest: 29.1.0
     ts-loader: 9.4.2
-    typescript: 4.9.5
+    typescript: 5.0.2
     webpack: 5.74.0
     webpack-cli: 4.10.0
   languageName: unknown
@@ -4990,7 +4990,7 @@ __metadata:
     "@joplin/lib": ~2.11
     "@joplin/tools": ~2.11
     "@joplin/utils": ~2.11
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/node": 18.15.13
     fs-extra: 11.1.1
@@ -4999,7 +4999,7 @@ __metadata:
     node-fetch: 2.6.7
     source-map-loader: 4.0.1
     source-map-support: 0.5.21
-    typescript: 4.9.5
+    typescript: 5.0.2
     webpack: 5.65.0
     webpack-cli: 4.10.0
     yargs: 17.7.2
@@ -5031,7 +5031,7 @@ __metadata:
     "@types/react-native": 0.64.19
     react: 18.2.0
     react-native: 0.70.6
-    typescript: 4.9.5
+    typescript: 5.0.2
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -5070,7 +5070,7 @@ __metadata:
     md5: 2.3.0
     mermaid: 9.2.2
     ts-jest: 29.1.0
-    typescript: 4.9.5
+    typescript: 5.0.2
   languageName: unknown
   linkType: soft
 
@@ -5086,10 +5086,10 @@ __metadata:
     "@koa/cors": 3.1.0
     "@rmp135/sql-ts": 1.16.0
     "@types/formidable": 2.0.6
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/jest-expect-message": 1.0.4
-    "@types/jsdom": 16.2.15
+    "@types/jsdom": 21.1.0
     "@types/koa": 2.13.6
     "@types/markdown-it": 12.2.3
     "@types/mustache": 4.2.2
@@ -5129,7 +5129,7 @@ __metadata:
     source-map-support: 0.5.21
     sqlite3: 5.1.6
     stripe: 8.222.0
-    typescript: 4.9.5
+    typescript: 5.0.2
     uuid: 9.0.0
     yargs: 17.7.2
     zxcvbn: 4.4.2
@@ -5145,7 +5145,7 @@ __metadata:
     "@joplin/renderer": ~2.11
     "@joplin/utils": ~2.11
     "@rmp135/sql-ts": 1.16.0
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/mustache": 4.2.2
     "@types/node": 18.15.13
@@ -5172,7 +5172,7 @@ __metadata:
     sharp: 0.32.1
     source-map-support: 0.5.21
     sqlite3: 5.1.6
-    typescript: 4.9.5
+    typescript: 5.0.2
     uri-template: 2.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -7349,7 +7349,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:9.0.13, @types/fs-extra@npm:^9.0.11":
+"@types/fs-extra@npm:11.0.1":
+  version: 11.0.1
+  resolution: "@types/fs-extra@npm:11.0.1"
+  dependencies:
+    "@types/jsonfile": "*"
+    "@types/node": "*"
+  checksum: 3e930346e5d84f419deb8ced1c582beef8cb20d0bd8a0eb145a37d75bab0572a1895f0e48a0d681d386b3a58b9a992b2d2acecc464bcaec2548f53ea00718651
+  languageName: node
+  linkType: hard
+
+"@types/fs-extra@npm:^9.0.11":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
   dependencies:
@@ -7469,14 +7479,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsdom@npm:16.2.15":
-  version: 16.2.15
-  resolution: "@types/jsdom@npm:16.2.15"
+"@types/jsdom@npm:21.1.0":
+  version: 21.1.0
+  resolution: "@types/jsdom@npm:21.1.0"
   dependencies:
     "@types/node": "*"
-    "@types/parse5": ^6.0.3
     "@types/tough-cookie": "*"
-  checksum: e038335321bef42ebf220aaf597e186e2eec8de6107ce7a70de1c046a84c1fbb42d454e195a20383a6870b18c7ef6fa6b73812a626f88a4a2ef1f711d2e2e13c
+    parse5: ^7.0.0
+  checksum: 39d3c580283cb7cc3b2729738fd2cd64344e44c815d08f7b6ee7d9c973f7512eff7e7187408649c9da69b76ec81c118868e8b8787d50320f3e2f9cbbd0b000d4
   languageName: node
   linkType: hard
 
@@ -7509,6 +7519,15 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/jsonfile@npm:*":
+  version: 6.1.1
+  resolution: "@types/jsonfile@npm:6.1.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 0f8fe0a9221a00e8413cffba723dfe16553868724b830237256fb0052ecd5cac96498189d1235a001cfa815f352008261c9ceb373f0aa58227f891e0c7a12c4d
   languageName: node
   linkType: hard
 
@@ -7704,13 +7723,6 @@ __metadata:
   version: 5.0.3
   resolution: "@types/parse5@npm:5.0.3"
   checksum: d6b7495cb1850f9f2e9c5e103ede9f2d30a5320669707b105c403868adc9e4bf8d3a7ff314cc23f67826bbbbbc0e6147346ce9062ab429f099dba7a01f463919
-  languageName: node
-  linkType: hard
-
-"@types/parse5@npm:^6.0.3":
-  version: 6.0.3
-  resolution: "@types/parse5@npm:6.0.3"
-  checksum: ddb59ee4144af5dfcc508a8dcf32f37879d11e12559561e65788756b95b33e6f03ea027d88e1f5408f9b7bfb656bf630ace31a2169edf44151daaf8dd58df1b7
   languageName: node
   linkType: hard
 
@@ -20545,7 +20557,7 @@ __metadata:
     "@joplin/renderer": ~2.11
     "@joplin/tools": ~2.11
     "@joplin/utils": ~2.11
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/node": 18.15.13
     "@types/proper-lockfile": ^4.1.2
@@ -20573,7 +20585,7 @@ __metadata:
     temp: 0.9.4
     terminal-kit: 3.0.0
     tkwidgets: 0.5.27
-    typescript: 4.9.5
+    typescript: 5.0.2
     url-parse: 1.5.10
     word-wrap: 1.2.3
     yargs-parser: 21.1.1
@@ -28383,7 +28395,7 @@ __metadata:
   dependencies:
     "@joplin/utils": ~2.11
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@typescript-eslint/eslint-plugin": 5.59.0
     "@typescript-eslint/parser": 5.59.0
     cspell: 5.21.2
@@ -28406,7 +28418,7 @@ __metadata:
     nodemon: 2.0.22
     npm-package-json-lint: 6.4.0
     typedoc: 0.17.8
-    typescript: 4.9.5
+    typescript: 5.0.2
   languageName: unknown
   linkType: soft
 
@@ -31733,13 +31745,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.9.5, typescript@npm:^4.0.0, typescript@npm:^4.5.5":
-  version: 4.9.5
-  resolution: "typescript@npm:4.9.5"
+"typescript@npm:5.0.2":
+  version: 5.0.2
+  resolution: "typescript@npm:5.0.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: ee000bc26848147ad423b581bd250075662a354d84f0e06eb76d3b892328d8d4440b7487b5a83e851b12b255f55d71835b008a66cbf8f255a11e4400159237db
+  checksum: bef1dcd166acfc6934b2ec4d72f93edb8961a5fab36b8dd2aaf6f4f4cd5c0210f2e0850aef4724f3b4913d5aef203a94a28ded731b370880c8bcff7e4ff91fc1
   languageName: node
   linkType: hard
 
@@ -31753,6 +31765,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:^4.0.0, typescript@npm:^4.5.5":
+  version: 4.9.5
+  resolution: "typescript@npm:4.9.5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: ee000bc26848147ad423b581bd250075662a354d84f0e06eb76d3b892328d8d4440b7487b5a83e851b12b255f55d71835b008a66cbf8f255a11e4400159237db
+  languageName: node
+  linkType: hard
+
 "typescript@patch:typescript@4 - 5#~builtin<compat/typescript>":
   version: 5.0.4
   resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=ad5954"
@@ -31763,13 +31785,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.9.5#~builtin<compat/typescript>, typescript@patch:typescript@^4.0.0#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
-  version: 4.9.5
-  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
+"typescript@patch:typescript@5.0.2#~builtin<compat/typescript>":
+  version: 5.0.2
+  resolution: "typescript@patch:typescript@npm%3A5.0.2#~builtin<compat/typescript>::version=5.0.2&hash=ad5954"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8f6260acc86b56bfdda6004bc53f32ea548f543e8baef7071c8e34d29d292f3e375c8416556c8de10b24deef6933cd1c16a8233dc84a3dd43a13a13265d0faab
+  checksum: bdbf3d0aac0d6cf010fbe0536753dc19f278eb4aba88140dcd25487dfe1c56ca8b33abc0dcd42078790a939b08ebc4046f3e9bb961d77d3d2c3cfa9829da4d53
   languageName: node
   linkType: hard
 
@@ -31780,6 +31802,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: dc7141ab555b23a8650a6787f98845fc11692063d02b75ff49433091b3af2fe3d773650dea18389d7c21f47d620fb3b110ea363dab4ab039417a6ccbbaf96fc2
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.0.0#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
+  version: 4.9.5
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 8f6260acc86b56bfdda6004bc53f32ea548f543e8baef7071c8e34d29d292f3e375c8416556c8de10b24deef6933cd1c16a8233dc84a3dd43a13a13265d0faab
   languageName: node
   linkType: hard
 

@@ -96,7 +96,7 @@
     "@codemirror/view": "6.9.3",
     "@joplin/tools": "~2.11",
     "@lezer/highlight": "1.1.4",
-    "@types/fs-extra": "9.0.13",
+    "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.1",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.25",
@@ -114,7 +114,7 @@
     "ts-jest": "29.1.0",
     "ts-loader": "9.4.2",
     "ts-node": "10.9.1",
-    "typescript": "4.9.5",
+    "typescript": "5.0.2",
     "uglify-js": "3.17.4",
     "webpack": "5.74.0"
   }
