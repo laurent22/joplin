@@ -352,6 +352,6 @@
 			"vendor/": true,
 			"web/bundles/": true,
 			"web/env.php": true,
-    }
+		}
 	}
 }
