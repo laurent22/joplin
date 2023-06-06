@@ -38,6 +38,12 @@ export default (props: Props) => {
 			rect = span.getBoundingClientRect();
 		}
 
+		if (rect.height <= props.height) {
+			spanFontSize = 15;
+			span.style.fontSize = `${spanFontSize}px`;
+			rect = span.getBoundingClientRect();
+		}
+
 		span.remove();
 
 		fontSizeCache_[cacheKey] = spanFontSize;
