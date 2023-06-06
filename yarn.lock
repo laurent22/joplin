@@ -5151,6 +5151,7 @@ __metadata:
     "@types/node": 18.15.13
     "@types/node-fetch": 2.6.3
     "@types/yargs": 17.0.24
+    compare-versions: 6.0.0-rc.1
     dayjs: 1.11.7
     execa: 4.1.0
     fs-extra: 11.1.1
@@ -11867,6 +11868,13 @@ __metadata:
   version: 3.6.0
   resolution: "compare-versions@npm:3.6.0"
   checksum: 7492a50cdaa2c27f5254eee7c4b38856e1c164991bab3d98d7fd067fe4b570d47123ecb92523b78338be86aa221668fd3868bfe8caa5587dc3ebbe1a03d52b5d
+  languageName: node
+  linkType: hard
+
+"compare-versions@npm:6.0.0-rc.1":
+  version: 6.0.0-rc.1
+  resolution: "compare-versions@npm:6.0.0-rc.1"
+  checksum: ada8d19dab267ef432e7aea91ff7b4422284e3b44245a4d7b4caaf1353d0279e5f17b3767050e06a9cf84670120d19b427b5191b71b7284a125482fcd1eda789
   languageName: node
   linkType: hard
 

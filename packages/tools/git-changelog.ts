@@ -3,6 +3,7 @@
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
 import { execCommand, githubUsername } from './tool-utils';
+import * as compareVersions from 'compare-versions';
 
 interface LogEntry {
 	message: string;
@@ -195,6 +196,11 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 	if (temp2.length) return `Updated packages ${temp2.join(', ')}`;
 
 	return '';
+};
+
+const versionFromTag = (tag: string) => {
+	const s = tag.split('-');
+	return s[s.length - 1];
 };
 
 function filterLogs(logs: LogEntry[], platform: Platform) {
@@ -445,10 +451,13 @@ function capitalizeFirstLetter(string: string) {
 async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags: string[]) {
 	let baseTagIndex = allTags.indexOf(baseTag);
 	if (baseTagIndex < 0) baseTagIndex = allTags.length;
+	const baseVersion = versionFromTag(baseTag);
 
 	for (let i = baseTagIndex - 1; i >= 0; i--) {
 		const tag = allTags[i];
 		if (platformFromTag(tag) !== platform) continue;
+		const currentVersion = versionFromTag(tag);
+		if (compareVersions(baseVersion, currentVersion) <= 0) continue;
 
 		try {
 			const logs = await gitLog(tag);
