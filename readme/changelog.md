@@ -1,5 +1,13 @@
 # Joplin changelog
 
+## [v2.11.8](https://github.com/laurent22/joplin/releases/tag/v2.11.8) (Pre-release) - 2023-06-05T20:59:17Z
+
+- Improved: Add support for AVIF image format ([#8175](https://github.com/laurent22/joplin/issues/8175))
+- Improved: Improved word count when em-dash is used ([#8083](https://github.com/laurent22/joplin/issues/8083))
+- Improved: Updated packages aws, buildTools
+- Fixed: "New note" buttons so large they occlude Search ([#8249](https://github.com/laurent22/joplin/issues/8249)) ([#8159](https://github.com/laurent22/joplin/issues/8159) by Rio Sinnott)
+- Fixed: Window is white on startup ([#7484](https://github.com/laurent22/joplin/issues/7484))
+
 ## [v2.11.6](https://github.com/laurent22/joplin/releases/tag/v2.11.6) (Pre-release) - 2023-05-31T20:13:08Z
 
 - Improved: When resetting the master password, also create a new master key with that password ([e647775](https://github.com/laurent22/joplin/commit/e647775))
