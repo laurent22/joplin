@@ -1,6 +1,6 @@
 # Support Joplin development
 
-Joplin is an open source project, and your donations support the developer. Developing quality applications mostly takes time, but there are also expenses, such as digital certificates to sign the applications, app store fees, hosting, as well as the hardware to develop and test a cross-platform app.
+Joplin is an open source project, and your donations support [the developer](https://github.com/laurent22/). Developing quality applications mostly takes time, but there are also expenses, such as digital certificates to sign the applications, app store fees, hosting, as well as the hardware to develop and test a cross-platform app.
 
 Most of all, your donation will make it possible to keep up the current development standards, and will bring new features and improvements to the app.
 
