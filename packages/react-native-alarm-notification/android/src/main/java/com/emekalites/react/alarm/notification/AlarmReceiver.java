@@ -9,7 +9,6 @@ import android.util.Log;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -28,7 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         alarmUtil.sendNotification(alarm);
                         alarmUtil.setBootReceiver();
 
-                        List<AlarmModel> alarms = alarmDB.getAlarmList(1);
+                        ArrayList<AlarmModel> alarms = alarmDB.getAlarmList(1);
                         Log.d(Constants.TAG, "alarm start: " + alarm.toString() + ", alarms left: " + alarms.size());
                     } catch (Exception e) {
                         Log.e(Constants.TAG, "Failed to add alarm", e);
