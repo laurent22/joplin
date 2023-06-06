@@ -4,6 +4,9 @@ import { defaultState, State } from '@joplin/lib/reducer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('app.reducer');
 
 export interface AppStateRoute {
 	type: string;
@@ -171,22 +174,31 @@ export default function(state: AppState, action: any) {
 		case 'MAIN_LAYOUT_SET_ITEM_PROP':
 
 			{
-				let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
-					iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
-						if (item.key === action.itemKey) {
-							(item as any)[action.propName] = action.propValue;
-							return false;
-						}
-						return true;
+				if (!state.mainLayout) {
+					logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Trying to set an item prop on the layout, but layout is empty: ', JSON.stringify(action));
+				} else {
+					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
+						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
+							if (!item) {
+								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
+							} else {
+								if (item.key === action.itemKey) {
+									(item as any)[action.propName] = action.propValue;
+									return false;
+								}
+							}
+
+							return true;
+						});
 					});
-				});
 
-				if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
+					if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
 
-				newState = {
-					...state,
-					mainLayout: newLayout,
-				};
+					newState = {
+						...state,
+						mainLayout: newLayout,
+					};
+				}
 			}
 
 			break;
