@@ -141,6 +141,7 @@ module.exports = {
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
 		'no-multi-spaces': ['error'],
+		'prefer-object-spread': ['error'],
 
 		// Regarding the keyword blacklist:
 		// - err: We generally avoid using too many abbreviations, so it should

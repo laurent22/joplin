@@ -5,20 +5,31 @@ import Note from '../../models/Note';
 import BaseModel from '../../BaseModel';
 import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
-import filterParser from './filterParser';
+import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
+enum SearchType {
+	Auto = 'auto',
+	Basic = 'basic',
+	Nonlatin = 'nonlatin',
+	Fts = 'fts',
+}
+
+interface SearchOptions {
+	searchType: SearchType;
+}
+
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
 	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
-	public static SEARCH_TYPE_AUTO = 'auto';
-	public static SEARCH_TYPE_BASIC = 'basic';
-	public static SEARCH_TYPE_NONLATIN_SCRIPT = 'nonlatin';
-	public static SEARCH_TYPE_FTS = 'fts';
+	public static SEARCH_TYPE_AUTO = SearchType.Auto;
+	public static SEARCH_TYPE_BASIC = SearchType.Basic;
+	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
+	public static SEARCH_TYPE_FTS = SearchType.Fts;
 
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
@@ -417,7 +428,7 @@ export default class SearchEngine {
 
 		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
-		let allTerms: any[] = [];
+		let allTerms: Term[] = [];
 
 		try {
 			allTerms = filterParser(query);
@@ -429,7 +440,20 @@ export default class SearchEngine {
 		const titleTerms = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
 		const bodyTerms = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
-		const terms: any = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
+		interface ComplexTerm {
+			type: 'regex' | 'text';
+			value: string;
+			scriptType: any;
+			valueRegex?: RegExp;
+		}
+
+		interface Terms {
+			_: (string | ComplexTerm)[];
+			title: (string | ComplexTerm)[];
+			body: (string | ComplexTerm)[];
+		}
+
+		const terms: Terms = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
 
 		// Filter terms:
 		// - Convert wildcards to regex
@@ -438,7 +462,9 @@ export default class SearchEngine {
 
 		let termCount = 0;
 		const keys = [];
-		for (const col in terms) {
+		for (const col2 in terms) {
+			const col = col2 as '_' | 'title' | 'body';
+
 			if (!terms.hasOwnProperty(col)) continue;
 
 			if (!terms[col].length) {
@@ -447,7 +473,7 @@ export default class SearchEngine {
 			}
 
 			for (let i = terms[col].length - 1; i >= 0; i--) {
-				const term = terms[col][i];
+				const term = terms[col][i] as string;
 
 				// SQlLite FTS doesn't allow "*" queries and neither shall we
 				if (term === '*') {
@@ -468,17 +494,21 @@ export default class SearchEngine {
 		}
 
 		//
-		// The object "allTerms" is used for query construction purposes (this contains all the filter terms)
-		// Since this is used for the FTS match query, we need to normalize text, title and body terms.
-		// Note, we're not normalizing terms like tag because these are matched using SQL LIKE operator and so we must preserve their diacritics.
+		// The object "allTerms" is used for query construction purposes (this
+		// contains all the filter terms) Since this is used for the FTS match
+		// query, we need to normalize text, title and body terms. Note, we're
+		// not normalizing terms like tag because these are matched using SQL
+		// LIKE operator and so we must preserve their diacritics.
 		//
-		// The object "terms" only include text, title, body terms and is used for highlighting.
-		// By not normalizing the text, title, body in "terms", highlighting still works correctly for words with diacritics.
+		// The object "terms" only include text, title, body terms and is used
+		// for highlighting. By not normalizing the text, title, body in
+		// "terms", highlighting still works correctly for words with
+		// diacritics.
 		//
 
 		allTerms = allTerms.map(x => {
 			if (x.name === 'text' || x.name === 'title' || x.name === 'body') {
-				return Object.assign(x, { value: this.normalizeText_(x.value) });
+				return { ...x, value: this.normalizeText_(x.value) };
 			}
 			return x;
 		});
@@ -509,7 +539,7 @@ export default class SearchEngine {
 	}
 
 	private normalizeNote_(note: NoteEntity) {
-		const n = Object.assign({}, note);
+		const n = { ...note };
 		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;
@@ -521,9 +551,9 @@ export default class SearchEngine {
 		const searchOptions: any = {};
 
 		for (const key of parsedQuery.keys) {
-			if (parsedQuery.terms[key].length === 0) continue;
+			if ((parsedQuery.terms as any)[key].length === 0) continue;
 
-			const term = parsedQuery.terms[key].map((x: any) => x.value).join(' ');
+			const term = (parsedQuery.terms as any)[key].map((x: Term) => x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
@@ -561,12 +591,13 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	public async search(searchString: string, options: any = null) {
+	public async search(searchString: string, options: SearchOptions = null) {
 		if (!searchString) return [];
 
-		options = Object.assign({}, {
+		options = {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
-		}, options);
+			...options,
+		};
 
 		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);

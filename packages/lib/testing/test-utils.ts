@@ -260,7 +260,7 @@ const settingFilename = (id: number): string => {
 };
 
 async function switchClient(id: number, options: any = null) {
-	options = Object.assign({}, { keychainEnabled: false }, options);
+	options = { keychainEnabled: false, ...options };
 
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
 
@@ -326,7 +326,7 @@ async function clearDatabase(id: number = null) {
 }
 
 async function setupDatabase(id: number = null, options: any = null) {
-	options = Object.assign({}, { keychainEnabled: false }, options);
+	options = { keychainEnabled: false, ...options };
 
 	if (id === null) id = currentClient_;
 
@@ -483,7 +483,7 @@ async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	const contextString = Setting.value(contextKey);
 	const context = contextString ? JSON.parse(contextString) : {};
 
-	const options = Object.assign({}, extraOptions);
+	const options = { ...extraOptions };
 	if (context) options.context = context;
 	const newContext = await synchronizer(id).start(options);
 

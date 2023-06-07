@@ -2,6 +2,7 @@ import config from '../config';
 import { Models } from '../models/factory';
 import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
+import { TaskId } from './database/types';
 import TaskService, { RunType, Task } from './TaskService';
 
 const newService = () => {
@@ -32,7 +33,7 @@ describe('TaskService', () => {
 		const service = newService();
 
 		const task: Task = {
-			id: 123456,
+			id: TaskId.DeleteExpiredTokens,
 			description: '',
 			run: (_models: Models) => {},
 			schedule: '',
@@ -40,7 +41,7 @@ describe('TaskService', () => {
 
 		await service.registerTask(task);
 
-		expect(service.tasks[123456]).toBeTruthy();
+		expect(service.tasks[TaskId.DeleteExpiredTokens]).toBeTruthy();
 		await expectThrow(async () => service.registerTask(task));
 	});
 
@@ -52,7 +53,7 @@ describe('TaskService', () => {
 	// 	let finishTask = false;
 	// 	let taskHasRan = false;
 
-	// 	const taskId = 123456;
+	// 	const taskId = TaskId.DeleteExpiredTokens;
 
 	// 	const task: Task = {
 	// 		id: taskId,
@@ -103,7 +104,7 @@ describe('TaskService', () => {
 
 		let taskHasRan = false;
 
-		const taskId = 123456;
+		const taskId = TaskId.DeleteExpiredTokens;
 
 		const task: Task = {
 			id: taskId,

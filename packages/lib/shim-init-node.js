@@ -139,7 +139,7 @@ function shimInit(options = null) {
 	};
 
 	shim.detectAndSetLocale = function(Setting) {
-		let locale = process.env.LANG;
+		let locale = shim.isElectron() ? shim.electronBridge().getLocale() : process.env.LANG;
 		if (!locale) locale = defaultLocale();
 		locale = locale.split('.');
 		locale = locale[0];
@@ -250,11 +250,9 @@ function shimInit(options = null) {
 	// destinationResourceId option. This method is indirectly tested in
 	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
-		options = Object.assign({
-			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
+		options = { resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
-			destinationResourceId: '',
-		}, options);
+			destinationResourceId: '', ...options };
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
@@ -332,9 +330,7 @@ function shimInit(options = null) {
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
-		options = Object.assign({}, {
-			createFileURL: false,
-		}, options);
+		options = { createFileURL: false, ...options };
 
 		const { basename } = require('path');
 		const { escapeTitleText } = require('./markdownUtils').default;
@@ -371,9 +367,7 @@ function shimInit(options = null) {
 		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
 		if (!newBody) return null;
 
-		const newNote = Object.assign({}, note, {
-			body: newBody,
-		});
+		const newNote = { ...note, body: newBody };
 		return Note.save(newNote);
 	};
 
@@ -570,9 +564,7 @@ function shimInit(options = null) {
 	shim.uploadBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
 		const content = await fs.readFile(options.path);
-		options = Object.assign({}, options, {
-			body: content,
-		});
+		options = { ...options, body: content };
 		return shim.fetch(url, options);
 	};
 

@@ -18,21 +18,19 @@ class IconButton extends React.Component<Props> {
 		};
 		const icon = <i style={iconStyle} className={`fas ${this.props.iconName}`}></i>;
 
-		const rootStyle = Object.assign(
-			{
-				display: 'flex',
-				textDecoration: 'none',
-				padding: 10,
-				width: theme.buttonMinHeight,
-				height: theme.buttonMinHeight,
-				boxSizing: 'border-box',
-				alignItems: 'center',
-				justifyContent: 'center',
-				backgroundColor: theme.backgroundColor,
-				cursor: 'default',
-			},
-			style
-		);
+		const rootStyle = {
+			display: 'flex',
+			textDecoration: 'none',
+			padding: 10,
+			width: theme.buttonMinHeight,
+			height: theme.buttonMinHeight,
+			boxSizing: 'border-box',
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundColor: theme.backgroundColor,
+			cursor: 'default',
+			...style,
+		};
 
 		return (
 			<a

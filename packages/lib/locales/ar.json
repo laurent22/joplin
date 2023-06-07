@@ -275,7 +275,6 @@
  "Enabled": "مفعَّل",
  "Encrypted": "مشفّر",
  "Encrypted items cannot be modified": "لا يمكن تعديل العناصر المشفَّرة",
- "Encrypted notebooks cannot be renamed": "دفاتر الملاحظات المشفرة لا يمكن إعادة تسميتها",
  "Encryption": "التشفير",
  "Encryption Config": "ضبط التشفير",
  "Encryption is: %s": "التشفير هو: %s",

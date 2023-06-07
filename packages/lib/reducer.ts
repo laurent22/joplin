@@ -421,7 +421,7 @@ function updateOneItem(draft: Draft<State>, action: any, keyName: string = '') {
 	for (let i = 0; i < newItems.length; i++) {
 		const n = newItems[i];
 		if (n.id === item.id) {
-			newItems[i] = Object.assign({}, newItems[i], item);
+			newItems[i] = { ...newItems[i], ...item };
 			found = true;
 			break;
 		}
@@ -474,11 +474,11 @@ function changeSelectedFolder(draft: Draft<State>, action: any, options: any = n
 }
 
 function recordLastSelectedNoteIds(draft: Draft<State>, noteIds: string[]) {
-	const newOnes: any = Object.assign({}, draft.lastSelectedNotesIds);
+	const newOnes: any = { ...draft.lastSelectedNotesIds };
 	const parent = stateUtils.parentItem(draft);
 	if (!parent) return;
 
-	newOnes[parent.type] = Object.assign({}, newOnes[parent.type]);
+	newOnes[parent.type] = { ...newOnes[parent.type] };
 	newOnes[parent.type][parent.id] = noteIds.slice();
 
 	draft.lastSelectedNotesIds = newOnes;
@@ -583,8 +583,8 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.forwardHistoryNotes = draft.forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		changeSelectedFolder(draft, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
-		changeSelectedNotes(draft, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		changeSelectedFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
+		changeSelectedNotes(draft, { ...action, type: 'NOTE_SELECT', noteId: note.id });
 
 		const ctx = draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1];
 		Object.assign(draft, getContextFromHistory(ctx));
@@ -599,8 +599,8 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		changeSelectedFolder(draft, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
-		changeSelectedNotes(draft, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		changeSelectedFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
+		changeSelectedNotes(draft, { ...action, type: 'NOTE_SELECT', noteId: note.id });
 
 		const ctx = draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1];
 		Object.assign(draft, getContextFromHistory(ctx));
@@ -633,14 +633,14 @@ function handleHistory(draft: Draft<State>, action: any) {
 
 		draft.backwardHistoryNotes = draft.backwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
 			}
 			return note;
 		});
 
 		draft.forwardHistoryNotes = draft.forwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
 			}
 			return note;
 		});
@@ -763,7 +763,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
 				changeSelectedFolder(draft, action);
-				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
+				const noteSelectAction = { ...action, type: 'NOTE_SELECT' };
 				changeSelectedNotes(draft, noteSelectAction);
 			}
 			break;
@@ -774,7 +774,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SETTING_UPDATE_ONE':
 			{
-				const newSettings = Object.assign({}, draft.settings);
+				const newSettings = { ...draft.settings };
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
 			}
@@ -827,7 +827,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
-							newNotes[i] = Object.assign({}, newNotes[i]);
+							newNotes[i] = { ...newNotes[i] };
 
 							for (const n in modNote) {
 								if (!modNote.hasOwnProperty(n)) continue;
@@ -918,9 +918,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_TOGGLE':
 			if (draft.collapsedFolderIds.indexOf(action.id) >= 0) {
-				folderSetCollapsed(draft, Object.assign({ collapsed: false }, action));
+				folderSetCollapsed(draft, { collapsed: false, ...action });
 			} else {
-				folderSetCollapsed(draft, Object.assign({ collapsed: true }, action));
+				folderSetCollapsed(draft, { collapsed: true, ...action });
 			}
 			break;
 
@@ -1054,7 +1054,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
 					if (searches[i].id === action.search.id) {
-						searches[i] = Object.assign({}, action.search);
+						searches[i] = { ...action.search };
 						found = true;
 						break;
 					}
@@ -1102,7 +1102,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'CLIPPER_SERVER_SET':
 			{
-				const clipperServer = Object.assign({}, draft.clipperServer);
+				const clipperServer = { ...draft.clipperServer };
 				if ('startState' in action) clipperServer.startState = action.startState;
 				if ('port' in action) clipperServer.port = action.port;
 				draft.clipperServer = clipperServer;
@@ -1111,7 +1111,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'DECRYPTION_WORKER_SET':
 			{
-				const decryptionWorker = Object.assign({}, draft.decryptionWorker);
+				const decryptionWorker = { ...draft.decryptionWorker };
 				for (const n in action) {
 					if (!action.hasOwnProperty(n) || n === 'type') continue;
 					(decryptionWorker as any)[n] = action[n];
@@ -1122,7 +1122,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'RESOURCE_FETCHER_SET':
 			{
-				const rf = Object.assign({}, action);
+				const rf = { ...action };
 				delete rf.type;
 				draft.resourceFetcher = rf;
 			}
@@ -1141,8 +1141,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'PLUGINLEGACY_DIALOG_SET':
 			{
 				if (!action.pluginName) throw new Error('action.pluginName not specified');
-				const newPluginsLegacy = Object.assign({}, draft.pluginsLegacy);
-				const newPlugin = draft.pluginsLegacy[action.pluginName] ? Object.assign({}, draft.pluginsLegacy[action.pluginName]) : {};
+				const newPluginsLegacy = { ...draft.pluginsLegacy };
+				const newPlugin = draft.pluginsLegacy[action.pluginName] ? { ...draft.pluginsLegacy[action.pluginName] } : {};
 				if ('open' in action) newPlugin.dialogOpen = action.open;
 				if ('userData' in action) newPlugin.userData = action.userData;
 				newPluginsLegacy[action.pluginName] = newPlugin;

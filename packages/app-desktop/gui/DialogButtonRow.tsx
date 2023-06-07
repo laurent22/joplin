@@ -74,7 +74,7 @@ export default function DialogButtonRow(props: Props) {
 
 	if (props.cancelButtonShow !== false) {
 		buttonComps.push(
-			<button disabled={props.cancelButtonDisabled} key="cancel" style={Object.assign({}, buttonStyle)} onClick={onCancelButtonClick}>
+			<button disabled={props.cancelButtonDisabled} key="cancel" style={{ ...buttonStyle }} onClick={onCancelButtonClick}>
 				{props.cancelButtonLabel ? props.cancelButtonLabel : _('Cancel')}
 			</button>
 		);

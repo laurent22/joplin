@@ -20,7 +20,7 @@ function JoplinSafeAreaView(props) {
 	if (Platform.OS === 'ios') {
 		return <SafeAreaView {...props}>{props.children}</SafeAreaView>;
 	} else {
-		const viewProps = Object.assign({}, props);
+		const viewProps = { ...props };
 
 		const style = [];
 

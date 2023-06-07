@@ -34,7 +34,7 @@ function getMajorMinorTagName(tagName: string) {
 }
 
 async function fetchLatestRelease(options: CheckForUpdateOptions) {
-	options = Object.assign({}, { includePreReleases: false }, options);
+	options = { includePreReleases: false, ...options };
 
 	const response = await shim.fetch('https://api.github.com/repos/laurent22/joplin/releases');
 
@@ -97,7 +97,8 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 		}
 
 		if (found) {
-			downloadUrl = asset.browser_download_url;
+			downloadUrl = asset.browser_download_url.replace('github.com/laurent22/joplin/releases/download', 'objects.joplinusercontent.com');
+			downloadUrl.concat('?source=DesktopApp&type=Update');
 			break;
 		}
 	}

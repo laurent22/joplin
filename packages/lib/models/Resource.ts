@@ -48,7 +48,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static isSupportedImageMimeType(type: string) {
-		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp', 'image/avif'];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
@@ -157,7 +157,7 @@ export default class Resource extends BaseItem {
 	public static async decrypt(item: ResourceEntity) {
 		// The item might already be decrypted but not the blob (for instance if it crashes while
 		// decrypting the blob or was otherwise interrupted).
-		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : Object.assign({}, item);
+		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : { ...item };
 		if (!decryptedItem.encryption_blob_encrypted) return decryptedItem;
 
 		const localState = await this.localState(item);
@@ -225,7 +225,7 @@ export default class Resource extends BaseItem {
 			throw error;
 		}
 
-		const resourceCopy = Object.assign({}, resource);
+		const resourceCopy = { ...resource };
 		resourceCopy.encryption_blob_encrypted = 1;
 		return { path: encryptedPath, resource: resourceCopy };
 	}
@@ -273,7 +273,7 @@ export default class Resource extends BaseItem {
 
 	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
-		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
+		await ResourceLocalState.save({ ...state, resource_id: id });
 	}
 
 	public static async needFileSizeSet() {

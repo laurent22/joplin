@@ -1,7 +1,4 @@
 import * as React from 'react';
-import Logger from '@joplin/lib/Logger';
-
-const logger = Logger.create('ItemList');
 
 interface Props {
 	style: any;
@@ -50,15 +47,6 @@ class ItemList extends React.Component<Props, State> {
 		let bottomItemIndex = topItemIndex + (visibleItemCount - 1);
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
 
-		// EDGE CASE:
-		// ref: https://github.com/laurent22/joplin/issues/4124
-		// when the note list is hidden, visibleItemCount is negative, and scroll top is positive when a note is selected
-		if (visibleItemCount < 0 && this.scrollTop_ > 0) {
-			logger.warn('Resetting scrollTop to 0. visibleItemCount is negative, scrollTop is positive.');
-			// we will reset the scroll top so that there is no blank space at the top of note list
-			this.scrollTop_ = 0;
-		}
-
 		this.setState({
 			topItemIndex: topItemIndex,
 			bottomItemIndex: bottomItemIndex,
@@ -79,21 +67,6 @@ class ItemList extends React.Component<Props, State> {
 
 	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		this.updateStateItemIndexes(newProps);
-	}
-
-	public componentDidUpdate(): void {
-		// EDGE CASE
-		// scroll top is not updated when item list visibility is toggled
-		// if the user was at the bottom of the item list before hiding, blank spaces are added at the bottom of the item list
-		if (this.offsetScroll() !== this.listRef.current?.scrollTop) {
-			logger.warn(`scrollTop mismatch. Updating scrollTop with current listRef scrollTop(${this.listRef.current.scrollTop})`);
-			// update scroll postion once if there is a mismatch in scroll position after showing item list
-			this.onScroll({
-				target: {
-					scrollTop: this.listRef.current.scrollTop,
-				},
-			});
-		}
 	}
 
 	public onScroll(event: any) {
@@ -148,10 +121,8 @@ class ItemList extends React.Component<Props, State> {
 
 	public render() {
 		const items = this.props.items;
-		const style = Object.assign({}, this.props.style, {
-			overflowX: 'hidden',
-			overflowY: 'auto',
-		});
+		const style = { ...this.props.style, overflowX: 'hidden',
+			overflowY: 'auto' };
 
 		// if (this.props.disabled) style.opacity = 0.5;
 

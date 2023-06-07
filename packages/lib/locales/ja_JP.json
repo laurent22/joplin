@@ -301,7 +301,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗号化した状態で送ることを意味します。",
  "Encrypted": "暗号化済",
  "Encrypted items cannot be modified": "暗号化したアイテムは修正できません",
- "Encrypted notebooks cannot be renamed": "暗号化したアイテムはリネームできません",
  "Encryption": "暗号化",
  "Encryption Config": "暗号化の設定",
  "Encryption is: %s": "暗号化: %s",

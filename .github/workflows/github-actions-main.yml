@@ -50,6 +50,7 @@ jobs:
           sudo apt-get install -y gettext
           sudo apt-get install -y libsecret-1-dev
           sudo apt-get install -y translate-toolkit
+          sudo apt-get install -y rsync
 
       - name: Install Docker Engine
         # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
@@ -71,7 +72,9 @@ jobs:
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          # We need to pin the version to 18.15, because 18.16+ fails with this error:
+          # https://github.com/facebook/react-native/issues/36440
+          node-version: '18.15.0'
 
       - name: Install Yarn
         run: |

@@ -60,7 +60,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 			for (let i = 0; i < report.length; i++) {
 				const section = report[i];
 
-				let style = Object.assign({}, baseStyle);
+				let style = { ...baseStyle };
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
 				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
@@ -70,7 +70,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 
 				for (const n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
-					style = Object.assign({}, baseStyle);
+					style = { ...baseStyle };
 					const item = section.body[n];
 
 					let text = '';
@@ -98,7 +98,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				<FlatList
 					data={lines}
 					renderItem={({ item }) => {
-						const style = Object.assign({}, baseStyle);
+						const style = { ...baseStyle };
 
 						if (item.isSection === true) {
 							style.fontWeight = 'bold';

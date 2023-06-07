@@ -1,5 +1,5 @@
 
-interface Term {
+export interface Term {
 	name: string;
 	value: string;
 	negated: boolean;

@@ -80,11 +80,9 @@ class FileApiDriverOneDrive {
 	}
 
 	async list(path, options = null) {
-		options = Object.assign({}, {
-			context: null,
-		}, options);
+		options = { context: null, ...options };
 
-		let query = Object.assign({}, this.itemFilter_(), { '$top': 1000 });
+		let query = { ...this.itemFilter_(), '$top': 1000 };
 		let url = `${this.makePath_(path)}:/children`;
 
 		if (options.context) {

@@ -79,6 +79,12 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
+    // 2023-05-09: This seems to be optional, but it's not. Without it, the app
+    // will crash on certain devices with this error:
+    //
+    // > java.lang.UnsatisfiedLinkError: couldn't find DSO to load: libhermes.so"
+    //
+    // https://github.com/laurent22/joplin/issues/8144#issuecomment-1539629812
     enableHermes: true,  // clean and rebuild if changing
 ]
 
@@ -150,8 +156,8 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097685
-		versionName "2.11.0"
+		versionCode 2097710
+		versionName "2.11.25"
 		// ndk {
 		// 	abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		// }
@@ -298,8 +304,11 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
-    
+    // implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation ("com.facebook.react:react-native") version {
+        strictly "0.70.6" // pass in your react-native version
+    }
+
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {

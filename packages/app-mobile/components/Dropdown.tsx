@@ -84,36 +84,26 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			width: windowWidth,
 		};
 
-		const itemListStyle = Object.assign({}, this.props.itemListStyle ? this.props.itemListStyle : {}, {
-			borderWidth: 1,
-			borderColor: '#ccc',
-		});
+		const itemListStyle = { ...(this.props.itemListStyle ? this.props.itemListStyle : {}), borderWidth: 1,
+			borderColor: '#ccc' };
 
-		const itemWrapperStyle = Object.assign({}, this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}, {
-			flex: 1,
+		const itemWrapperStyle = { ...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}), flex: 1,
 			justifyContent: 'center',
 			height: itemHeight,
 			paddingLeft: 20,
-			paddingRight: 10,
-		});
+			paddingRight: 10 };
 
-		const headerWrapperStyle = Object.assign({}, this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}, {
-			height: 35,
+		const headerWrapperStyle = { ...(this.props.headerWrapperStyle ? this.props.headerWrapperStyle : {}), height: 35,
 			flex: 1,
 			flexDirection: 'row',
-			alignItems: 'center',
-		});
+			alignItems: 'center' };
 
-		const headerStyle = Object.assign({}, this.props.headerStyle ? this.props.headerStyle : {}, {
-			flex: 1,
-		});
+		const headerStyle = { ...(this.props.headerStyle ? this.props.headerStyle : {}), flex: 1 };
 
-		const headerArrowStyle = Object.assign({}, this.props.headerStyle ? this.props.headerStyle : {}, {
-			flex: 0,
-			marginRight: 10,
-		});
+		const headerArrowStyle = { ...(this.props.headerStyle ? this.props.headerStyle : {}), flex: 0,
+			marginRight: 10 };
 
-		const itemStyle = Object.assign({}, this.props.itemStyle ? this.props.itemStyle : {}, {});
+		const itemStyle = { ...(this.props.itemStyle ? this.props.itemStyle : {}) };
 
 		let headerLabel = '...';
 		for (let i = 0; i < items.length; i++) {
@@ -136,7 +126,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			const key = item.value ? item.value.toString() : '__null'; // The top item ("Move item to notebook...") has a null value.
 			return (
 				<TouchableOpacity
-					style={itemWrapperStyle}
+					style={itemWrapperStyle as any}
 					accessibilityRole="menuitem"
 					key={key}
 					onPress={() => {
@@ -170,7 +160,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		return (
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<TouchableOpacity
-					style={headerWrapperStyle}
+					style={headerWrapperStyle as any}
 					ref={ref => (this.headerRef = ref)}
 					disabled={this.props.disabled}
 					onPress={() => {

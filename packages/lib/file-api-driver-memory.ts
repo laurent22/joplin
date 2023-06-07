@@ -57,7 +57,7 @@ export default class FileApiDriverMemory {
 
 	public stat(path: string) {
 		const item = this.itemByPath(path);
-		return Promise.resolve(item ? Object.assign({}, item) : null);
+		return Promise.resolve(item ? { ...item } : null);
 	}
 
 	public async setTimestamp(path: string, timestampMs: number): Promise<any> {
@@ -75,7 +75,7 @@ export default class FileApiDriverMemory {
 			if (item.path.indexOf(`${path}/`) === 0) {
 				const s = item.path.substr(path.length + 1);
 				if (s.split('/').length === 1) {
-					const it = Object.assign({}, item);
+					const it = { ...item };
 					it.path = it.path.substr(path.length + 1);
 					output.push(it);
 				}
@@ -155,7 +155,7 @@ export default class FileApiDriverMemory {
 	public async delete(path: string) {
 		const index = this.itemIndexByPath(path);
 		if (index >= 0) {
-			const item = Object.assign({}, this.items_[index]);
+			const item = { ...this.items_[index] };
 			item.isDeleted = true;
 			item.updated_time = time.unixMs();
 			this.deletedItems_.push(item);
@@ -178,7 +178,7 @@ export default class FileApiDriverMemory {
 		const getStatFn = async (path: string) => {
 			const output = this.items_.slice();
 			for (let i = 0; i < output.length; i++) {
-				const item = Object.assign({}, output[i]);
+				const item = { ...output[i] };
 				item.path = item.path.substr(path.length + 1);
 				output[i] = item;
 			}

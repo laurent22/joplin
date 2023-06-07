@@ -20,10 +20,13 @@ target 'Joplin' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-# Hermes is now enabled by default. Disable by setting this flag to false.
+    # Hermes is now enabled by default. Disable by setting this flag to false.
     # Upcoming versions of React Native may rely on get_default_flags(), but
     # we make it explicit here to aid in the React Native upgrade process.
-    :hermes_enabled => true,
+
+    # 2023/05/07: Leave that to `false` for now because Hermes is rubbish at
+    # reporting errors, which it makes it impossible to investigate crashes.
+    :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
     # Enables Flipper.
     #

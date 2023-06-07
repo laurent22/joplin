@@ -151,7 +151,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		const note = await super.importFile(filePath, parentFolderId);
 		const { metadata, tags } = this.parseYamlNote(note.body);
 
-		const updatedNote = Object.assign({}, note, metadata);
+		const updatedNote = { ...note, ...metadata };
 
 		const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 

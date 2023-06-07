@@ -23,7 +23,7 @@ describe('apiVersionHandler', () => {
 	});
 
 	test('should work if the header version number is lower than the server version', async () => {
-		config().appVersion = '2.1.0';
+		config().joplinServerVersion = '2.1.0';
 
 		const context = await koaAppContext({
 			request: {
@@ -39,7 +39,7 @@ describe('apiVersionHandler', () => {
 	});
 
 	test('should not work if the header version number is greater than the server version', async () => {
-		config().appVersion = '2.1.0';
+		config().joplinServerVersion = '2.1.0';
 
 		const context = await koaAppContext({
 			request: {

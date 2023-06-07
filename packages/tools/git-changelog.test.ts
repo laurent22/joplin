@@ -37,6 +37,7 @@ describe('git-changelog', () => {
 			['Update typescript-eslint monorepo to v5 (#7291)', 'typescript-eslint', 'v5'],
 			['Update aws-sdk-js-v3 monorepo to v3.215.0', 'aws-sdk-js-v3', 'v3.215.0'],
 			['Update dependency moment to v2.29.4 (#7087)', 'moment', 'v2.29.4'],
+			['Update aws (#8106)', 'aws', ''],
 		];
 
 		for (const testCase of testCases) {
@@ -59,8 +60,9 @@ describe('git-changelog', () => {
 					{ package: 'sas', version: 'v1.2' },
 					{ package: 'moment', version: 'v3.4' },
 					{ package: 'eslint', version: 'v1.2' },
+					{ package: 'aws', version: '' },
 				],
-				'Updated packages moment (v3.4), sas (v1.2)',
+				'Updated packages aws, moment (v3.4), sas (v1.2)',
 			],
 			[
 				[

@@ -9,10 +9,10 @@ import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
 
-describe('api_items', () => {
+describe('api/items', () => {
 
 	beforeAll(async () => {
-		await beforeAllDb('api_items');
+		await beforeAllDb('api/items');
 	});
 
 	afterAll(async () => {

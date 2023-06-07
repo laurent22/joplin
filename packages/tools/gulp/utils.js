@@ -95,10 +95,8 @@ utils.replaceFileText = async function(filePath, regex, toInsert) {
 };
 
 utils.copyDir = async function(src, dest, options) {
-	options = Object.assign({}, {
-		excluded: [],
-		delete: true,
-	}, options);
+	options = { excluded: [],
+		delete: true, ...options };
 
 	src = utils.toSystemSlashes(src);
 	dest = utils.toSystemSlashes(dest);

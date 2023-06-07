@@ -50,10 +50,10 @@ class LogScreenComponent extends BaseScreenComponent {
 			styles.rowText.fontFamily = 'monospace';
 		}
 
-		styles.rowTextError = Object.assign({}, styles.rowText);
+		styles.rowTextError = { ...styles.rowText };
 		styles.rowTextError.color = theme.colorError;
 
-		styles.rowTextWarn = Object.assign({}, styles.rowText);
+		styles.rowTextWarn = { ...styles.rowText };
 		styles.rowTextWarn.color = theme.colorWarn;
 
 		this.styles_[this.props.themeId] = StyleSheet.create(styles);

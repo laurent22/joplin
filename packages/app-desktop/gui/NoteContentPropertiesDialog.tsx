@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from './DialogButtonRow';
 const { themeStyle } = require('@joplin/lib/theme');
-const Countable = require('countable');
+const Countable = require('@joplin/lib/countable/Countable');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 
 interface NoteContentPropertiesDialogProps {

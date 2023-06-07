@@ -192,7 +192,7 @@ class Application extends BaseApplication {
 		let output = await this.cache_.getItem('metadata');
 		if (output) {
 			this.commandMetadata_ = output;
-			return Object.assign({}, this.commandMetadata_);
+			return { ...this.commandMetadata_ };
 		}
 
 		const commands = this.commands();
@@ -207,7 +207,7 @@ class Application extends BaseApplication {
 		await this.cache_.setItem('metadata', output, 1000 * 60 * 60 * 24);
 
 		this.commandMetadata_ = output;
-		return Object.assign({}, this.commandMetadata_);
+		return { ...this.commandMetadata_ };
 	}
 
 	hasGui() {

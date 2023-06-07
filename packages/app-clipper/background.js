@@ -94,12 +94,12 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		const imageSize = await getImageSize(imageDataUrl);
 		const imagePixelRatio = imageSize.width / command.content.windowInnerWidth;
 
-		const content = Object.assign({}, command.content);
+		const content = { ...command.content };
 		content.image_data_url = imageDataUrl;
 		if ('url' in content) content.source_url = content.url;
 
 		const ratio = browserZoom * imagePixelRatio;
-		const newArea = Object.assign({}, command.content.crop_rect);
+		const newArea = { ...command.content.crop_rect };
 		newArea.x *= ratio;
 		newArea.y *= ratio;
 		newArea.width *= ratio;
