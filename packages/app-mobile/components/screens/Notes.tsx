@@ -94,6 +94,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		const theme = themeStyle(themeId);
 
+		const btnTextTextBoxMulti = themeId === 1 ? { color: theme.popUpLabelColor } : { color: theme.color };
 		const styles: any = {
 			noteList: {
 				flex: 1,
@@ -114,6 +115,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				textAlign: 'center',
 				color: theme.color,
 			},
+			btnTextTextBoxMulti,
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -287,6 +289,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 					style={{
 						tipBoxView: this.styles().tipBoxView,
 						tipContent: this.styles().tipContent,
+						btnTextTextBoxMulti: this.styles().btnTextTextBoxMulti,
 					}}
 				/>
 			</View>

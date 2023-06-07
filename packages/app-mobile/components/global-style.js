@@ -12,6 +12,7 @@ const baseStyle = {
 	fontSizeSmaller: 14,
 	disabledOpacity: 0.2,
 	lineHeight: '1.6em',
+	popUpLabelColor: '#149ce0', // popUpLabelColor is used for the sort notes popup
 };
 
 const themeCache_ = {};
