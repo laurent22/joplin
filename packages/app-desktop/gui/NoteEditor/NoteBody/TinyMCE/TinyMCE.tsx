@@ -110,6 +110,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
 	const [draggingStarted, setDraggingStarted] = useState(false);
+	const [externalClicked, setExternalClicked] = useState(false);
 
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
@@ -368,7 +369,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		document.head.appendChild(element);
 		element.appendChild(document.createTextNode(`
 			.joplin-tinymce .tox-editor-header {
-				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
+				padding-left: ${(styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * (externalClicked ? 6.5 : 2))}px;
 				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
 			}
 			
@@ -517,7 +518,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editorReady, props.themeId]);
+	}, [editorReady, props.themeId, externalClicked]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -1150,11 +1151,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const buttons = [];
 		for (const info of props.noteToolbarButtonInfos) {
 			if (!leftButtonCommandNames.includes(info.name)) continue;
+			if (info.name === 'toggleExternalEditing') {
+				info.externalClickedState = externalClicked;
+				info.updateExternalClicked = setExternalClicked;
+			}
 			buttons.push(renderExtraToolbarButton(info.name, info));
 		}
 
 		return (
-			<div style={styles.leftExtraToolbarContainer}>
+			<div style={externalClicked ? styles.leftExtraToolbarContainerClicked : styles.leftExtraToolbarContainer}>
 				{buttons}
 			</div>
 		);

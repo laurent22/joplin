@@ -44,6 +44,14 @@ export default function ToolbarButton(props: Props) {
 
 	const onClick = getProp(props, 'onClick');
 
+	const updateExternal = () => {
+		const updateExternalClicked = getProp(props, 'updateExternalClicked');
+		const externalClickedState = getProp(props, 'externalClickedState');
+		if (typeof updateExternalClicked === 'function') {
+			updateExternalClicked(!externalClickedState);
+		}
+	};
+
 	return (
 		<StyledRoot
 			className={classes.join(' ')}
@@ -53,6 +61,7 @@ export default function ToolbarButton(props: Props) {
 			hasTitle={!!title}
 			onClick={() => {
 				if (isEnabled && onClick) onClick();
+				if (tooltip === 'Toggle external editing') updateExternal();
 			}}
 		>
 			{icon}
@@ -60,4 +69,3 @@ export default function ToolbarButton(props: Props) {
 		</StyledRoot>
 	);
 }
-

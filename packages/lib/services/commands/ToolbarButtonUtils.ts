@@ -11,6 +11,8 @@ export interface ToolbarButtonInfo {
 	enabled: boolean;
 	onClick(): void;
 	title: string;
+	updateExternalClicked?: (value: boolean)=> void;
+	externalClickedState?: boolean;
 }
 
 interface ToolbarButtonCacheItem {

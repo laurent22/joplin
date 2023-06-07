@@ -41,6 +41,11 @@ export default function styles(props: NoteBodyEditorProps) {
 				width: 80,
 				left: 0,
 			},
+			leftExtraToolbarContainerClicked: {
+				...extraToolbarContainer,
+				width: 120,
+				left: 0,
+			},
 			rightExtraToolbarContainer: {
 				...extraToolbarContainer,
 				alignItems: 'center',
