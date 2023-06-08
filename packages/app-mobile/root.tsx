@@ -113,7 +113,7 @@ import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
-import sensorInfo from './components/biometrics/sensorInfo';
+import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 
@@ -128,6 +128,10 @@ const logReducerAction = function(action: any) {
 	if (action.routeName) msg.push(action.routeName);
 
 	// reg.logger().debug('Reducer action', msg.join(', '));
+};
+
+const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
+	return !!sensorInfo && sensorInfo.enabled;
 };
 
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
@@ -803,7 +807,21 @@ class AppComponent extends React.Component {
 
 			await initialize(this.props.dispatch);
 
-			this.setState({ sensorInfo: await sensorInfo() });
+			const loadedSensorInfo = await sensorInfo();
+			this.setState({ sensorInfo: loadedSensorInfo });
+
+			// If biometrics is disabled we set biometricsDone to `true`. We do
+			// it with a delay so that the component is properly mounted, and
+			// the componentDidUpdate gets triggered (which in turns will handle
+			// the share data, if any).
+			setTimeout(() => {
+				if (!biometricsEnabled(loadedSensorInfo)) {
+					this.props.dispatch({
+						type: 'BIOMETRICS_DONE_SET',
+						value: true,
+					});
+				}
+			}, 100);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -973,11 +991,10 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
-		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
-		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
+		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
 		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
-		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
+		logger.info('root.biometrics: biometricsEnabled', biometricsEnabled(this.state.sensorInfo));
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
