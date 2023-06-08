@@ -622,7 +622,14 @@ export default class Note extends BaseItem {
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
 		const newNote = { ...originalNote };
-		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
+		const fieldsToReset = [
+			'id',
+			'created_time',
+			'updated_time',
+			'user_created_time',
+			'user_updated_time',
+			'is_shared',
+		];
 
 		for (const field of fieldsToReset) {
 			delete (newNote as any)[field];

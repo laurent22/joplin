@@ -380,8 +380,9 @@ export default class Resource extends BaseItem {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
-		let newResource = { ...resource };
+		let newResource: ResourceEntity = { ...resource };
 		delete newResource.id;
+		delete newResource.is_shared;
 		newResource = await Resource.save(newResource);
 
 		const newLocalState = { ...localState };
