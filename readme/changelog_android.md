@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.11.26](https://github.com/laurent22/joplin/releases/tag/android-v2.11.26) (Pre-release) - 2023-06-08T16:13:02Z
+
+- Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+- Fixed: Allow certain HTML anchor tags (#8286)
+- Fixed: Fix alarms for latest Android versions (#8229)
+- Fixed: Fix sharing data with the app (#8285)
+
 ## [android-v2.11.25](https://github.com/laurent22/joplin/releases/tag/android-v2.11.25) (Pre-release) - 2023-06-03T16:40:08Z
 
 - Fixed: Fix Vosk logic (60b3921)
