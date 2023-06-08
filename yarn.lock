@@ -4738,7 +4738,7 @@ __metadata:
     "@joplin/tools": ~2.11
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
-    "@react-native-community/datetimepicker": 7.0.0
+    "@react-native-community/datetimepicker": 7.0.1
     "@react-native-community/geolocation": 2.1.0
     "@react-native-community/netinfo": 9.3.10
     "@react-native-community/push-notification-ios": 1.11.0
@@ -6780,12 +6780,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:7.0.0":
-  version: 7.0.0
-  resolution: "@react-native-community/datetimepicker@npm:7.0.0"
+"@react-native-community/datetimepicker@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@react-native-community/datetimepicker@npm:7.0.1"
   dependencies:
     invariant: ^2.2.4
-  checksum: 2a92cfa30b8ea90699ff53cc5ee89f442106290dece29a5a8f0cabccfc023c0e1a98d5e8448b4d6181a2e573799e6b81f78ef1113dd5491c279cf0edc100332a
+  checksum: 108724a239d086e165ab17fd39fac43a8daf91a852ea9fd40d5bf9a2dd984ad8a473079e6228bc7f9fed0d6cf5610b2f4438142765e228f25aef37f9c6c4f85f
   languageName: node
   linkType: hard
 
