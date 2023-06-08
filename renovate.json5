@@ -114,6 +114,7 @@
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
 		"execa",
+		"open",
 
 		// Don't think we can trust this lib because they don't release a
 		// changelog and the latest version appears to have breaking changes
