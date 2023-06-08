@@ -157,7 +157,12 @@ class HtmlUtils {
 
 	private isAcceptedUrl(url: string): boolean {
 		url = url.toLowerCase();
-		return url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto://');
+		return url.startsWith('https://') ||
+			url.startsWith('http://') ||
+			url.startsWith('mailto://') ||
+			// We also allow anchors but only with a specific set of a characters.
+			// Fixes https://github.com/laurent22/joplin/issues/8286
+			!!url.match(/^#[a-zA-Z0-9-]+$/);
 	}
 
 	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
