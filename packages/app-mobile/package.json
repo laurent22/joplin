@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
-    "@babel/preset-env": "7.20.2",
+    "@babel/preset-env": "7.21.5",
     "@babel/runtime": "7.20.0",
     "@codemirror/commands": "6.2.2",
     "@codemirror/lang-cpp": "6.0.2",
