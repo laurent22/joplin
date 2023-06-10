@@ -122,6 +122,11 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
+
+	// 2023-06-10: When the source is falsy, we set it to `{ uri: undefined }`
+	// to avoid various crashes and errors:
+	// https://github.com/react-native-webview/react-native-webview/issues/2920
+	// https://github.com/react-native-webview/react-native-webview/issues/2995
 	return (
 		<WebView
 			style={{
@@ -131,7 +136,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			ref={webviewRef}
 			scrollEnabled={props.scrollEnabled}
 			useWebKit={true}
-			source={source}
+			source={source ? source : { uri: undefined }}
 			setSupportMultipleWindows={true}
 			hideKeyboardAccessoryView={true}
 			allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
