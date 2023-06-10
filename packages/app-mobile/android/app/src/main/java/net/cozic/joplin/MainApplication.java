@@ -4,7 +4,7 @@ import android.app.Application;
 import android.database.CursorWindow;
 import android.webkit.WebView;
 
-import androidx.multidex.MultiDex;
+// import androidx.multidex.MultiDex;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -25,11 +25,11 @@ import java.util.List;
 public class MainApplication extends Application implements ReactApplication {
 
   // Needed to fix: The number of method references in a .dex file cannot exceed 64K
-  @Override
-  protected void attachBaseContext(Context base) {
-     super.attachBaseContext(base);
-     MultiDex.install(this);
-  }
+  // @Override
+  // protected void attachBaseContext(Context base) {
+  //    super.attachBaseContext(base);
+  //    MultiDex.install(this);
+  // }
 
   private final ReactNativeHost mReactNativeHost =
       new DefaultReactNativeHost(this) {

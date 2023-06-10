@@ -18,20 +18,40 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("de.undercouch:gradle-download-task:5.0.1")
     }
 }
 
 allprojects {
     repositories {
+        jcenter()
+
+        // Seems to be required for react-native-vosk, otherwise the lib looks for it at "https://maven.aliyun.com/repository/jcenter/com/alphacephei/vosk-android/0.3.46/vosk-android-0.3.46.aar" but it's not there. And we get this error:
+        //
+        // Execution failed for task ':app:checkDebugAarMetadata'.
+        // > Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
+        //    > Failed to transform vosk-android-0.3.46.aar (com.alphacephei:vosk-android:0.3.46) to match attributes {artifactType=android-aar-metadata, org.gradle.status=release}.
+        //       > Could not find vosk-android-0.3.46.aar (com.alphacephei:vosk-android:0.3.46).
+        //         Searched in the following locations:
+        //             https://maven.aliyun.com/repository/jcenter/com/alphacephei/vosk-android/0.3.46/vosk-android-0.3.46.aar
+        //
+        // But according to this page, the lib is on the Apache repository:
+        //
+        // https://search.maven.org/artifact/com.alphacephei/vosk-android/0.3.46/aar
+        maven { url "https://maven.apache.org" }
+
         maven {
             // Required by react-native-fingerprint-scanner
             // https://github.com/hieuvp/react-native-fingerprint-scanner/issues/192
             url "https://maven.aliyun.com/repository/jcenter"
         }
 
+        // Also required for react-native-vosk?
+        maven { url "https://maven.google.com" }
+
         // Maybe still needed to fetch above package?
-        //
-        // google()
-        // maven { url 'https://www.jitpack.io' }
+        
+        google()
+        maven { url 'https://www.jitpack.io' }
     }
 }

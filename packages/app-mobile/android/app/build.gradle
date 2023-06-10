@@ -84,17 +84,14 @@ def jscFlavor = 'org.webkit:android-jsc-intl:+'
  * This reads the value from reactNativeArchitectures in your gradle.properties
  * file and works together with the --active-arch-only flag of react-native run-android.
  */
-def enableHermes = project.ext.react.get("enableHermes", false);
-
-/**
- * Architectures to build native code for.
- */
 def reactNativeArchitectures() {
     def value = project.getProperties().get("reactNativeArchitectures")
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
 android {
+    ndkVersion rootProject.ext.ndkVersion
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -102,11 +99,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dexOptions {
-        // To fix "GC overhead limit exceeded"
-        // https://stackoverflow.com/q/32133013/561309
-        javaMaxHeapSize "4g"
-    }
+    // dexOptions {
+    //     // To fix "GC overhead limit exceeded"
+    //     // https://stackoverflow.com/q/32133013/561309
+    //     javaMaxHeapSize "4g"
+    // }
 
     namespace "net.cozic.joplin"
     defaultConfig {
@@ -185,10 +182,10 @@ android {
     // > Execution failed for task ':app:lintVitalRelease'
     //
     // https://stackoverflow.com/a/62603296/561309
-    lintOptions {
-        disable 'InvalidPackage'
-        checkReleaseBuilds false
-    }
+    // lintOptions {
+    //     disable 'InvalidPackage'
+    //     checkReleaseBuilds false
+    // }
 }
 
 dependencies {
@@ -197,6 +194,8 @@ dependencies {
     implementation (project(':react-native-camera')){
         exclude group: 'com.google.android.gms', module: 'play-services-vision'
     }
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -216,7 +215,7 @@ dependencies {
     }
 
     // Needed to fix: The number of method references in a .dex file cannot exceed 64K
-    implementation 'com.android.support:multidex:2.0.1'
+    // implementation 'com.android.support:multidex:2.0.1'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
