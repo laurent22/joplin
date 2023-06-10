@@ -92,7 +92,9 @@
 
 		// React Native stuff should be updated only when
 		// upgrading React Native.
+		"@babel/preset-env",
 		"@babel/runtime",
+		"@tsconfig/react-native",
 		"@types/react-native",
 		"androidx.appcompat:appcompat",
 		"babel-plugin-module-resolver",
