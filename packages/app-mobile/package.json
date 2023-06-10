@@ -97,7 +97,7 @@
     "@codemirror/view": "6.9.3",
     "@joplin/tools": "~2.11",
     "@lezer/highlight": "1.1.4",
-    "@tsconfig/react-native": "2.0.2",
+    "@tsconfig/react-native": "2.0.3",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.1",
     "@types/react": "18.0.24",

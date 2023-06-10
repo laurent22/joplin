@@ -4366,7 +4366,7 @@ __metadata:
     "@react-native-community/netinfo": 9.3.10
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
-    "@tsconfig/react-native": 2.0.2
+    "@tsconfig/react-native": 2.0.3
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/react": 18.0.24
@@ -7017,10 +7017,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/react-native@npm:2.0.2":
-  version: 2.0.2
-  resolution: "@tsconfig/react-native@npm:2.0.2"
-  checksum: 336c23587b64a2b12edc9a5469b0a826f506b6c767dc77fa5a401834c2cc2335b9a9c9c0396c14d0c59a3161279a37c4dc7c11f634a2d19f725384fd91582d42
+"@tsconfig/react-native@npm:2.0.3":
+  version: 2.0.3
+  resolution: "@tsconfig/react-native@npm:2.0.3"
+  checksum: 757edb4435a12d4ece9cf61c010df3dab771fbf6065c5b03445ecf440398df641d2859fc3ace3790a1f07eca990f54d16912fab59f144090871bf70612f47a80
   languageName: node
   linkType: hard
 
