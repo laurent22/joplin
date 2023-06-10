@@ -26,7 +26,8 @@ export interface Recorder {
 export const getVosk = async () => {
 	if (vosk_) return vosk_;
 	vosk_ = new Vosk();
-	await vosk_.loadModel('model-fr-fr');
+	const result = await vosk_.loadModel('model-fr-fr');
+	logger.info('getVosk:', result);
 	return vosk_;
 };
 
