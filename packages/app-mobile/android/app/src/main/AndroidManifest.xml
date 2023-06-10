@@ -1,5 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.cozic.joplin"
 	android:installLocation="auto">
 
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -8,6 +7,7 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-permission android:name="android.permission.USE_BIOMETRIC" />
+	<uses-permission android:name="android.permission.POST_NOTIFICATION" />
 
 	<!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
