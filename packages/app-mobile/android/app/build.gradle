@@ -195,7 +195,7 @@ dependencies {
         exclude group: 'com.google.android.gms', module: 'play-services-vision'
     }
 
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    // implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
