@@ -787,6 +787,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
+			logger.warn('POST_NOTIFICATION permission was not granted');
+			return;
+		}
+
 		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
 
