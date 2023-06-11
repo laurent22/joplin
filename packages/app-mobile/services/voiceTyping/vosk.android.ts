@@ -1,5 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import Vosk from 'react-native-vosk';
+import RNFetchBlob from 'rn-fetch-blob';
+
 const logger = Logger.create('voiceTyping/vosk');
 
 enum State {
@@ -26,7 +28,7 @@ export interface Recorder {
 export const getVosk = async () => {
 	if (vosk_) return vosk_;
 	vosk_ = new Vosk();
-	const result = await vosk_.loadModel('model-fr-fr');
+	const result = await vosk_.loadModel(RNFetchBlob.fs.dirs.DocumentDir + '/vosk-model/vosk-model-small-en-us/vosk-model-small-en-us-0.15'); //'model-fr-fr');
 	logger.info('getVosk:', result);
 	return vosk_;
 };
