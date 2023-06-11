@@ -15,30 +15,39 @@ enum RecorderState {
 	Loading = 1,
 	Recording = 2,
 	Processing = 3,
+	Error = 4,
 }
 
-const useVosk = (): Vosk|null => {
+const useVosk = (): [Error | null, Vosk|null] => {
 	const [vosk, setVosk] = useState<Vosk>(null);
+	const [error, setError] = useState<Error>(null);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const v = await getVosk();
-		if (event.cancelled) return;
-		setVosk(v);
+		try {
+			const v = await getVosk();
+			if (event.cancelled) return;
+			setVosk(v);
+		} catch (error) {
+			setError(error);
+		}
 	}, []);
 
-	return vosk;
+	return [error, vosk];
 };
 
 export default (props: Props) => {
 	const [recorder, setRecorder] = useState<Recorder>(null);
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
 
-	const vosk = useVosk();
+	const [voskError, vosk] = useVosk();
 
 	useEffect(() => {
-		if (!vosk) return;
-		setRecorderState(RecorderState.Recording);
-	}, [vosk]);
+		if (voskError) {
+			setRecorderState(RecorderState.Error);
+		} else if (vosk) {
+			setRecorderState(RecorderState.Recording);
+		}
+	}, [vosk, voskError]);
 
 	useEffect(() => {
 		if (recorderState === RecorderState.Recording) {
@@ -56,13 +65,14 @@ export default (props: Props) => {
 	}, [recorder, props.onDismiss]);
 
 	const renderContent = () => {
-		const components: Record<RecorderState, string> = {
-			[RecorderState.Loading]: _('Loading...'),
-			[RecorderState.Recording]: _('Please record your voice...'),
-			[RecorderState.Processing]: _('Converting speech to text...'),
+		const components: Record<RecorderState, Function> = {
+			[RecorderState.Loading]: () => _('Loading...'),
+			[RecorderState.Recording]: () => _('Please record your voice...'),
+			[RecorderState.Processing]: () => _('Converting speech to text...'),
+			[RecorderState.Error]: () => _('Error: %s', voskError.message),
 		};
 
-		return components[recorderState];
+		return components[recorderState]();
 	};
 
 	const renderIcon = () => {
@@ -70,6 +80,7 @@ export default (props: Props) => {
 			[RecorderState.Loading]: ({ size }: { size: number }) => <ActivityIndicator animating={true} style={{ width: size, height: size }} />,
 			[RecorderState.Recording]: 'microphone',
 			[RecorderState.Processing]: 'microphone',
+			[RecorderState.Error]: 'alert-circle-outline',
 		};
 
 		return components[recorderState];
