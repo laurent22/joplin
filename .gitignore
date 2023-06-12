@@ -542,6 +542,8 @@ packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/types.js
+packages/lib/models/utils/userData.js
+packages/lib/models/utils/userData.test.js
 packages/lib/net-utils.js
 packages/lib/ntp.js
 packages/lib/onedrive-api.js

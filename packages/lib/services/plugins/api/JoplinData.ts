@@ -1,7 +1,10 @@
 import { ModelType } from '../../../BaseModel';
 import BaseItem from '../../../models/BaseItem';
+import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
+import { getNoteUserData, setNoteUserData, deleteNoteUserData } from '../../../models/utils/userData';
 import Api from '../../rest/Api';
+import Plugin from '../Plugin';
 import { Path } from './types';
 
 /**
@@ -44,6 +47,11 @@ export default class JoplinData {
 
 	private api_: any = new Api();
 	private pathSegmentRegex_: RegExp;
+	private plugin: Plugin;
+
+	public constructor(plugin: Plugin) {
+		this.plugin = plugin;
+	}
 
 	private serializeApiBody(body: any) {
 		if (typeof body !== 'string') { return JSON.stringify(body); }
@@ -92,6 +100,38 @@ export default class JoplinData {
 		const item = await Resource.load(resourceId);
 		if (!item) throw new Error(`No such resource: ${resourceId}`);
 		return Resource.fullPath(item);
+	}
+
+	/**
+	 * Gets a note user data. User data are key/value pairs. The `key` can be any
+	 * arbitrary string, while the `value` can be of any type supported by
+	 * [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description)
+	 *
+	 * User data is synchronised across devices, and each value wil be merged based on their timestamp:
+	 *
+	 * - If value is modified by client 1, then modified by client 2, it will take the value from client 2
+	 * - If value is modified by client 1, then deleted by client 2, the value will be deleted after merge
+	 * - If value is deleted by client 1, then updated by client 2, the value will be restored and set to the value from client 2 after merge
+	 */
+	public async userDataGet<T>(noteId: string, key: string) {
+		const note = await Note.load(noteId, { fields: ['user_data'] });
+		return getNoteUserData<T>(note, this.plugin.id, key);
+	}
+
+	/**
+	 * Sets a note user data. See {@link JoplinData.userDataGet} for more details.
+	 */
+	public async userDataSet<T>(noteId: string, key: string, value: T) {
+		const note = await Note.load(noteId, { fields: ['id', 'parent_id', 'user_data'] });
+		await setNoteUserData<T>(note, this.plugin.id, key, value);
+	}
+
+	/**
+	 * Deletes a note user data. See {@link JoplinData.userDataGet} for more details.
+	 */
+	public async userDataDelete(noteId: string, key: string) {
+		const note = await Note.load(noteId, { fields: ['id', 'parent_id', 'user_data'] });
+		await deleteNoteUserData(note, this.plugin.id, key);
 	}
 
 }

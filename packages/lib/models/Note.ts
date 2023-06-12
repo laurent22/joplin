@@ -14,6 +14,7 @@ import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
+import { LoadOptions } from './utils/types';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -662,6 +663,10 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
+	public static load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
+		return super.load(id, options);
+	}
+
 	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
@@ -705,7 +710,7 @@ export default class Note extends BaseItem {
 		if (oldNote) {
 			for (const field in o) {
 				if (!o.hasOwnProperty(field)) continue;
-				if ((o as any)[field] !== oldNote[field]) {
+				if ((o as any)[field] !== (oldNote as any)[field]) {
 					changedFields.push(field);
 				}
 			}
