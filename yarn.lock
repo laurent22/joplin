@@ -4433,7 +4433,7 @@ __metadata:
     string-natural-compare: 3.0.1
     timers: 0.1.1
     ts-jest: 29.1.0
-    ts-loader: 9.4.2
+    ts-loader: 9.4.3
     ts-node: 10.9.1
     typescript: 5.0.2
     uglify-js: 3.17.4
@@ -4602,7 +4602,7 @@ __metadata:
     style-loader: 3.3.3
     styled-components: 5.3.10
     ts-jest: 29.1.0
-    ts-loader: 9.4.2
+    ts-loader: 9.4.3
     typescript: 5.0.2
     webpack: 5.74.0
     webpack-cli: 4.10.0
@@ -31747,9 +31747,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:9.4.2":
-  version: 9.4.2
-  resolution: "ts-loader@npm:9.4.2"
+"ts-loader@npm:9.4.3":
+  version: 9.4.3
+  resolution: "ts-loader@npm:9.4.3"
   dependencies:
     chalk: ^4.1.0
     enhanced-resolve: ^5.0.0
@@ -31758,7 +31758,7 @@ __metadata:
   peerDependencies:
     typescript: "*"
     webpack: ^5.0.0
-  checksum: 6f306ee4c615c2a159fb177561e3fb86ca2cbd6c641e710d408a64b4978e1ff3f2c9733df07bff27d3f82efbfa7c287523d4306049510c7485ac2669a9c37eb0
+  checksum: 139ed53bc60717d0ca231cdffbdef7566b9feda11c72fecc697983113f1266ccca2e1cdf191f841a43afa6b87d6afe57a0caf4feecf02f30845aa7ac6f2411a4
   languageName: node
   linkType: hard
 

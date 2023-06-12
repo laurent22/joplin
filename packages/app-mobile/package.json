@@ -116,7 +116,7 @@
     "metro-react-native-babel-preset": "0.73.9",
     "nodemon": "2.0.22",
     "ts-jest": "29.1.0",
-    "ts-loader": "9.4.2",
+    "ts-loader": "9.4.3",
     "ts-node": "10.9.1",
     "typescript": "5.0.2",
     "uglify-js": "3.17.4",
