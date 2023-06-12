@@ -1,4 +1,5 @@
 import { ModelType } from '../../../BaseModel';
+import Plugin from '../Plugin';
 import { Path } from './types';
 /**
  * This module provides access to the Joplin data API: https://joplinapp.org/api/references/rest_api/
@@ -39,6 +40,8 @@ import { Path } from './types';
 export default class JoplinData {
     private api_;
     private pathSegmentRegex_;
+    private plugin;
+    constructor(plugin: Plugin);
     private serializeApiBody;
     private pathToString;
     get(path: Path, query?: any): Promise<any>;
@@ -47,4 +50,24 @@ export default class JoplinData {
     delete(path: Path, query?: any): Promise<any>;
     itemType(itemId: string): Promise<ModelType>;
     resourcePath(resourceId: string): Promise<string>;
+    /**
+     * Gets a note user data. User data are key/value pairs. The `key` can be any
+     * arbitrary string, while the `value` can be of any type supported by
+     * [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description)
+     *
+     * User data is synchronised across devices, and each value wil be merged based on their timestamp:
+     *
+     * - If value is modified by client 1, then modified by client 2, it will take the value from client 2
+     * - If value is modified by client 1, then deleted by client 2, the value will be deleted after merge
+     * - If value is deleted by client 1, then updated by client 2, the value will be restored and set to the value from client 2 after merge
+     */
+    userDataGet<T>(noteId: string, key: string): Promise<T>;
+    /**
+     * Sets a note user data. See {@link JoplinData.userDataGet} for more details.
+     */
+    userDataSet<T>(noteId: string, key: string, value: T): Promise<void>;
+    /**
+     * Deletes a note user data. See {@link JoplinData.userDataGet} for more details.
+     */
+    userDataDelete(noteId: string, key: string): Promise<void>;
 }
