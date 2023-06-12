@@ -2,7 +2,7 @@ import joplin from 'api';
 
 joplin.plugins.register({
 	onStart: async function() {
-		const joplinData = (joplin.data as any);
+		const joplinData = (joplin.data);
 		
 		await joplinData.userDataSet('mykey', 'abcd');
 
