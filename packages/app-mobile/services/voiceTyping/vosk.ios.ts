@@ -13,7 +13,15 @@ export interface Recorder {
 	cleanup: ()=> void;
 }
 
-export const getVosk = async () => {
+export const isSupportedLanguage = (_locale: string) => {
+	return false;
+};
+
+export const modelIsDownloaded = async (_locale: string) => {
+	return false;
+};
+
+export const getVosk = async (_locale: string) => {
 	return {} as any;
 };
 

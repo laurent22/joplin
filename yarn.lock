@@ -4425,6 +4425,7 @@ __metadata:
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
     react-native-webview: 12.4.0
+    react-native-zip-archive: 6.0.9
     react-redux: 7.2.9
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
@@ -27380,11 +27381,11 @@ __metadata:
 
 "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::locator=root%40workspace%3A.":
   version: 0.1.12
-  resolution: "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::version=0.1.12&hash=b82215&locator=root%40workspace%3A."
+  resolution: "react-native-vosk@patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch::version=0.1.12&hash=5deb2c&locator=root%40workspace%3A."
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 9451534de711f28274e117087a2c27266ee60ffc46723136841669c02345fd5644333a204c98c18d82e2c4221bb65906ac20529fd63fdcd5439c8aad86710e3b
+  checksum: ca31cf6345f422b778c18bc2365f5114ab2c3e20214e684bbb77220e6476cd877bb5c256d88070b2235f01714e8cd8e5bee999b854894b066d31834b9b17dca4
   languageName: node
   linkType: hard
 
@@ -27398,6 +27399,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: f7bd69b71af6bd2f62ae290aa40d8d7e7191dd7fd451327b2b6fcde7f8035e85de89d9f8f9e6c8ca913850e0efc91e195181f41c17df68516a47ff50977a49a1
+  languageName: node
+  linkType: hard
+
+"react-native-zip-archive@npm:6.0.9":
+  version: 6.0.9
+  resolution: "react-native-zip-archive@npm:6.0.9"
+  peerDependencies:
+    react: ">=16.8.6"
+    react-native: ">=0.60.0"
+  checksum: 96c83864a596fcd8a82f55a01fa5e97822c9e80c7cf55de6b011a27cc436fbf58371207cb61c63b19dbd22b852ee62b95935358b4b9a73686695133dffdcfe27
   languageName: node
   linkType: hard
 
