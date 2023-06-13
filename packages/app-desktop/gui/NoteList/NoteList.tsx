@@ -96,7 +96,6 @@ const NoteListComponent = (props: Props) => {
 			},
 			listItemTitleCompleted: {
 				opacity: 0.5,
-				textDecoration: 'line-through',
 			},
 		};
 	}, [props.themeId, itemHeight]);
