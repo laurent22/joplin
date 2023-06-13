@@ -15,3 +15,8 @@ export interface Pagination {
 	page: number;
 	caseInsensitive?: boolean;
 }
+
+export interface LoadOptions {
+	caseInsensitive?: boolean;
+	fields?: string | string[];
+}

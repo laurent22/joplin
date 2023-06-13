@@ -4,6 +4,7 @@ import Database from './database';
 import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
+import { LoadOptions } from './models/utils/types';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -254,7 +255,7 @@ class BaseModel {
 			});
 	}
 
-	public static load(id: string, options: any = null) {
+	public static load(id: string, options: LoadOptions = null) {
 		return this.loadByField('id', id, options);
 	}
 
@@ -352,7 +353,7 @@ class BaseModel {
 			});
 	}
 
-	public static loadByField(fieldName: string, fieldValue: any, options: any = null) {
+	public static loadByField(fieldName: string, fieldValue: any, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -361,7 +362,7 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	public static loadByFields(fields: any, options: any = null) {
+	public static loadByFields(fields: any, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
