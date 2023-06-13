@@ -38,13 +38,15 @@ export const defaultFolderIcon = () => {
   return icon;
 }
 
-export interface NoteUserDataValue {
+export interface UserDataValue {
   v: any; // value
   t: Number; // timestamp
   d?: Number; // deleted - 0 or 1 (default = 0)
 }
 
-export type NoteUserData = Record<string, Record<string, NoteUserDataValue>>;
+export type UserData = Record<string, Record<string, UserDataValue>>;
+
+
 
 
 

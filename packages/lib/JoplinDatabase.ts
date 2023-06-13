@@ -919,6 +919,9 @@ export default class JoplinDatabase extends Database {
 
 			if (targetVersion === 43) {
 				queries.push('ALTER TABLE `notes` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE `tags` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE `folders` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE `resources` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

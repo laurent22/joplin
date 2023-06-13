@@ -1,9 +1,12 @@
-import { NoteUserData } from '../../services/database/types';
+import { ModelType } from '../../BaseModel';
+import { UserData } from '../../services/database/types';
 import { msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import Folder from '../Folder';
 import Note from '../Note';
+import Resource from '../Resource';
+import Tag from '../Tag';
 import { LoadOptions } from './types';
-import { deleteNoteUserData, getNoteUserData, mergeUserData, setNoteUserData } from './userData';
+import { deleteItemUserData, deleteNoteUserData, getItemUserData, getNoteUserData, mergeUserData, setItemUserData, setNoteUserData } from './userData';
 
 const loadOptions: LoadOptions = { fields: ['id', 'parent_id', 'user_data', 'updated_time'] };
 
@@ -14,7 +17,7 @@ describe('utils/userData', () => {
 		await switchClient(1);
 	});
 
-	it('should set and get user data', async () => {
+	it('should set and get user data on a note', async () => {
 		const folder = await Folder.save({});
 		let note = await Note.save({ parent_id: folder.id });
 		note = await Note.load(note.id, loadOptions);
@@ -22,7 +25,7 @@ describe('utils/userData', () => {
 		await setNoteUserData(note, 'org.joplin', 'my-key', 'something');
 
 		const noteReloaded = await Note.load(note.id);
-		expect(getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe('something');
+		expect(await getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe('something');
 
 		// Check that the updated_time has been updated (for sync purposes), but
 		// not the user_updated_time.
@@ -30,8 +33,29 @@ describe('utils/userData', () => {
 		expect(noteReloaded.user_updated_time).toBe(note.updated_time);
 
 		// Check for non-existing props
-		expect(getNoteUserData(noteReloaded, 'org.doesntexist', 'my-key')).toBe(undefined);
-		expect(getNoteUserData(noteReloaded, 'org.joplin', 'doesntexist')).toBe(undefined);
+		expect(await getNoteUserData(noteReloaded, 'org.doesntexist', 'my-key')).toBe(undefined);
+		expect(await getNoteUserData(noteReloaded, 'org.joplin', 'doesntexist')).toBe(undefined);
+	});
+
+	it('should set and get user data on any item', async () => {
+		const folder = await Folder.save({});
+		const tag = await Tag.save({});
+		const resource = await Resource.save({ mime: 'plain/text' });
+
+		await setItemUserData(ModelType.Folder, folder.id, 'foldertest', 'folderkey', 123);
+		expect(await getItemUserData(ModelType.Folder, folder.id, 'foldertest', 'folderkey')).toBe(123);
+		await deleteItemUserData(ModelType.Folder, folder.id, 'foldertest', 'folderkey');
+		expect(await getItemUserData(ModelType.Folder, folder.id, 'foldertest', 'folderkey')).toBe(undefined);
+
+		await setItemUserData(ModelType.Tag, tag.id, 'tagtest', 'tagkey', 123);
+		expect(await getItemUserData(ModelType.Tag, tag.id, 'tagtest', 'tagkey')).toBe(123);
+		await deleteItemUserData(ModelType.Tag, tag.id, 'tagtest', 'tagkey');
+		expect(await getItemUserData(ModelType.Tag, tag.id, 'tagtest', 'tagkey')).toBe(undefined);
+
+		await setItemUserData(ModelType.Resource, resource.id, 'resourcetest', 'resourcekey', 123);
+		expect(await getItemUserData(ModelType.Resource, resource.id, 'resourcetest', 'resourcekey')).toBe(123);
+		await deleteItemUserData(ModelType.Resource, resource.id, 'resourcetest', 'resourcekey');
+		expect(await getItemUserData(ModelType.Resource, resource.id, 'resourcetest', 'resourcekey')).toBe(undefined);
 	});
 
 	it('should delete user data', async () => {
@@ -41,19 +65,19 @@ describe('utils/userData', () => {
 		await setNoteUserData(note, 'org.joplin', 'my-key', 'something');
 
 		let noteReloaded = await Note.load(note.id);
-		expect(getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe('something');
+		expect(await getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe('something');
 
 		noteReloaded = await deleteNoteUserData(noteReloaded, 'org.joplin', 'my-key');
-		expect(getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe(undefined);
+		expect(await getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe(undefined);
 
 		// Check that it works if we set it again
 		await setNoteUserData(note, 'org.joplin', 'my-key', 'something else');
 		noteReloaded = await Note.load(noteReloaded.id, loadOptions);
-		expect(getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe('something else');
+		expect(await getNoteUserData(noteReloaded, 'org.joplin', 'my-key')).toBe('something else');
 	});
 
 	it('should merge user data', async () => {
-		const testCases: [NoteUserData, NoteUserData, NoteUserData][] = [
+		const testCases: [UserData, UserData, UserData][] = [
 			[
 				{
 					'org.joplin': {
