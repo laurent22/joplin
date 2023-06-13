@@ -46,6 +46,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
+import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -988,7 +989,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 
 		// Voice typing is enabled only for French language and on Android for now
-		if (voskEnabled && shim.mobilePlatform() === 'android' && currentLocale() === 'fr_FR') {
+		if (voskEnabled && shim.mobilePlatform() === 'android' && isSupportedLanguage(currentLocale())) {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {
@@ -1295,7 +1296,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const renderVoiceTypingDialog = () => {
 			if (!this.state.voiceTypingDialogShown) return null;
-			return <VoiceTypingDialog onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
 		};
 
 		return (

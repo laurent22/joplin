@@ -402,7 +402,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDateTimePicker (7.0.0):
+  - RNDateTimePicker (7.0.1):
     - React-Core
   - RNExitApp (1.1.0):
     - React
@@ -420,7 +420,15 @@ PODS:
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
+  - RNZipArchive (6.0.9):
+    - React-Core
+    - RNZipArchive/Core (= 6.0.9)
+    - SSZipArchive (~> 2.2)
+  - RNZipArchive/Core (6.0.9):
+    - React-Core
+    - SSZipArchive (~> 2.2)
   - SocketRocket (0.6.0)
+  - SSZipArchive (2.4.3)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -511,6 +519,7 @@ DEPENDENCIES:
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNZipArchive (from `../node_modules/react-native-zip-archive`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -529,6 +538,7 @@ SPEC REPOS:
     - libevent
     - OpenSSL-Universal
     - SocketRocket
+    - SSZipArchive
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -654,6 +664,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-share"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  RNZipArchive:
+    :path: "../node_modules/react-native-zip-archive"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -679,6 +691,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
+<<<<<<< HEAD
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
   RCTTypeSafety: 27c2ac1b00609a432ced1ae701247593f07f901e
   React: bb3e06418d2cc48a84f9666a576c7b38e89cd7db
@@ -692,6 +705,21 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
+=======
+  RCTRequired: 8ef706f91e2b643cd32c26a57700b5f24fab0585
+  RCTTypeSafety: 5fbddd8eb9242b91ac0d901c01da3673f358b1b7
+  React: e5d2d559e89d256a1d6da64d51adaecda9c8ddae
+  React-callinvoker: 352ecbafbdccca5fdf4aed99c98ae5b7fc28e39b
+  React-Codegen: fa660a71e24078b2e52a62ecc2f3048c2f8ae6d7
+  React-Core: 4ec45c2d537fe58e6d878bec6a13e3e2bed9c182
+  React-CoreModules: 63f7f9fda3d4b214040a80e3f47ab4fb9a3e88e6
+  React-cxxreact: 1a729807190ebf98ce5fb0c3d2ed211e8b5f2f87
+  React-hermes: eb93eb6e7921ecd4abcc6e741b327f40763e850f
+  React-jsi: 1995961abdff0c9af9aae8a6b24468f21811000e
+  React-jsiexecutor: 4bb480a183a354e4dbfb1012936b1a2bb9357de7
+  React-jsinspector: cdc854f8b13abd202afa54bc12578e5afb9cfae1
+  React-logger: ef2269b3afa6ba868da90496c3e17a4ec4f4cee0
+>>>>>>> 13cda9a72 (Android: Add support for Voice Typing for most languages (#8309))
   react-native-alarm-notification: 26527410a6162d07a9dc57f4bbc62e94ff48e65d
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
@@ -723,7 +751,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
-  RNDateTimePicker: 66cb21772d462d02efc6826adac37f1fd40984cf
+  RNDateTimePicker: e073697ac3e8a378968d68ab0581fef542b8af8a
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
@@ -732,8 +760,14 @@ SPEC CHECKSUMS:
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
+  RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+<<<<<<< HEAD
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
+=======
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  Yoga: e7ea9e590e27460d28911403b894722354d73479
+>>>>>>> 13cda9a72 (Android: Add support for Voice Typing for most languages (#8309))
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 0235ffbfa2e655de806a80d996148182dd493d8d
