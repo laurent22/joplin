@@ -118,8 +118,6 @@ async function createRelease(projectName: string, name: string, tagName: string,
 			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
 			return content;
 		});
-
-		await patcher.removeFile(`${rnDir}/android/app/src/main/assets/model-fr-fr`);
 	}
 
 	if (name === 'vosk') {

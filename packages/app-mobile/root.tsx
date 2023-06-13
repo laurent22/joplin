@@ -86,10 +86,6 @@ const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 
-import RNFetchBlob from 'rn-fetch-blob';
-import { zip, unzip, unzipAssets, subscribe } from 'react-native-zip-archive'
-
-
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
@@ -707,22 +703,6 @@ async function initialize(dispatch: Function) {
 	// just print some messages in the console.
 	// ----------------------------------------------------------------------------
 	if (Setting.value('env') === 'dev') await runIntegrationTests();
-
-
-
-
-	const modelDir = RNFetchBlob.fs.dirs.DocumentDir + '/vosk-models';
-
-	// await shim.fetchBlob('https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip', {
-	// 	path: modelDir + '/vosk-model-small-en-us-0.15.zip',
-	// });
-
-	// await unzip(modelDir + '/vosk-model-small-en-us-0.15.zip', modelDir + '/vosk-model-small-en-us');
-
-	console.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa', await shim.fsDriver().readDirStats(modelDir + '/vosk-model-small-en-us/vosk-model-small-en-us-0.15'));
-
-	// await shim.fsDriver().writeFile(modelDir + '/vosk-model-small-en-us/vosk-model-small-en-us-0.15/uuid', '1b7180e6-e500-4818-adc8-a41fe97a84cf', 'utf8')
-
 
 	reg.logger().info('Application initialized');
 }

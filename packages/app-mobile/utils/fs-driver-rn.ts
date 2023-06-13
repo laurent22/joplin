@@ -116,6 +116,13 @@ export default class FsDriverRN extends FsDriverBase {
 		return RNFS.moveFile(source, dest);
 	}
 
+	public async rename(source: string, dest: string) {
+		if (isScopedUri(source) || isScopedUri(dest)) {
+			await RNSAF.rename(source, dest);
+		}
+		return RNFS.moveFile(source, dest);
+	}
+
 	public async exists(path: string) {
 		if (isScopedUri(path)) {
 			return RNSAF.exists(path);

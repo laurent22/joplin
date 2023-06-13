@@ -36,7 +36,7 @@ index 6afcbbf0cc8ca2d69dd78077d61e59a90b2136bb..9f8d72b4ec5b2b3d290975d6a255917c
  def kotlin_version = getExtOrDefault('kotlinVersion')
  
 diff --git a/android/src/main/java/com/reactnativevosk/VoskModule.kt b/android/src/main/java/com/reactnativevosk/VoskModule.kt
-index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..f3da440bc2863a59db6d2d1691c54d8d4870cb3f 100644
+index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..5a8539b9cce8951967640dba755e29a4e3ff404a 100644
 --- a/android/src/main/java/com/reactnativevosk/VoskModule.kt
 +++ b/android/src/main/java/com/reactnativevosk/VoskModule.kt
 @@ -19,13 +19,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
@@ -66,7 +66,25 @@ index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..f3da440bc2863a59db6d2d1691c54d8d
        sendEvent("onResult", text)
      }
    }
-@@ -153,6 +165,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
+@@ -93,12 +105,11 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
+   @ReactMethod
+   fun loadModel(path: String, promise: Promise) {
+     cleanModel();
+-    StorageService.unpack(context, path, "models",
+-      { model: Model? ->
+-        this.model = model
+-        promise.resolve("Model successfully loaded")
+-      }
+-    ) { e: IOException ->
++    
++    try {
++      this.model = Model(path);
++      promise.resolve("Model successfully loaded")
++    } catch (e: IOException) {
+       this.model = null
+       promise.reject(e)
+     }
+@@ -153,6 +164,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
      cleanRecognizer();
    }
  
