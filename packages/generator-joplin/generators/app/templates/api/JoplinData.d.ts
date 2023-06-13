@@ -51,7 +51,7 @@ export default class JoplinData {
     itemType(itemId: string): Promise<ModelType>;
     resourcePath(resourceId: string): Promise<string>;
     /**
-     * Gets a note user data. User data are key/value pairs. The `key` can be any
+     * Gets an item user data. User data are key/value pairs. The `key` can be any
      * arbitrary string, while the `value` can be of any type supported by
      * [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description)
      *
@@ -61,13 +61,13 @@ export default class JoplinData {
      * - If value is modified by client 1, then deleted by client 2, the value will be deleted after merge
      * - If value is deleted by client 1, then updated by client 2, the value will be restored and set to the value from client 2 after merge
      */
-    userDataGet<T>(noteId: string, key: string): Promise<T>;
+    userDataGet<T>(itemType: ModelType, itemId: string, key: string): Promise<T>;
     /**
      * Sets a note user data. See {@link JoplinData.userDataGet} for more details.
      */
-    userDataSet<T>(noteId: string, key: string, value: T): Promise<void>;
+    userDataSet<T>(itemType: ModelType, itemId: string, key: string, value: T): Promise<void>;
     /**
      * Deletes a note user data. See {@link JoplinData.userDataGet} for more details.
      */
-    userDataDelete(noteId: string, key: string): Promise<void>;
+    userDataDelete(itemType: ModelType, itemId: string, key: string): Promise<void>;
 }

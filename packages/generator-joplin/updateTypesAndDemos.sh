@@ -15,7 +15,7 @@ LIB_DIR="$SCRIPT_DIR/../lib"
 
 ./updateTypes.sh
 
-# yarn link
+npm link
 
 "$CLI_DIR/tests/support/plugins/updatePlugins.sh"
 
