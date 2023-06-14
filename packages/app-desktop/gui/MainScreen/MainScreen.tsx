@@ -34,7 +34,7 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
@@ -173,6 +173,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private openCallbackUrl(url: string) {
+		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
 		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command.toString(), params.id);
 	}
