@@ -529,6 +529,7 @@ is_shared: 1
 share_id: ${note.share_id || ''}
 conflict_original_id: 
 master_key_id: 
+user_data: 
 type_: 1`;
 }
 
@@ -545,6 +546,7 @@ encryption_applied: 0
 parent_id: ${folder.parent_id || ''}
 is_shared: 0
 share_id: ${folder.share_id || ''}
+user_data: 
 type_: 2`;
 }
 
