@@ -26,6 +26,7 @@ import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
 import type { Editor } from 'tinymce';
+import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -77,23 +78,6 @@ function stripMarkup(markupLanguage: number, markup: string, options: any = null
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
-
-interface TinyMceCommand {
-	name: string;
-	value?: any;
-	ui?: boolean;
-}
-
-interface JoplinCommandToTinyMceCommands {
-	[key: string]: TinyMceCommand;
-}
-
-const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
-	'textBold': { name: 'mceToggleFormat', value: 'bold' },
-	'textItalic': { name: 'mceToggleFormat', value: 'italic' },
-	'textLink': { name: 'mceLink' },
-	'search': { name: 'SearchReplace' },
-};
 
 interface LastOnChangeEventInfo {
 	content: string;
@@ -274,11 +258,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					return false;
 				}
 
-				const tinyMceCmd: TinyMceCommand = { ...joplinCommandToTinyMceCommands[cmd.name] };
-				if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
-				if (!('value' in tinyMceCmd)) tinyMceCmd.value = null;
+				if (joplinCommandToTinyMceCommands[cmd.name] === true) {
+					// Already handled in useWindowCommandHandlers.ts
+				} else if (joplinCommandToTinyMceCommands[cmd.name] === false) {
+					// Explicitely not supported
+				} else {
+					const tinyMceCmd: TinyMceCommand = { ...(joplinCommandToTinyMceCommands[cmd.name] as TinyMceCommand) };
+					if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
+					if (!('value' in tinyMceCmd)) tinyMceCmd.value = null;
 
-				editor.execCommand(tinyMceCmd.name, tinyMceCmd.ui, tinyMceCmd.value);
+					editor.execCommand(tinyMceCmd.name, tinyMceCmd.ui, tinyMceCmd.value);
+				}
 
 				return true;
 			},
@@ -603,11 +593,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSup: { inline: 'sup', remove: 'all' },
 				},
 				setup: (editor: Editor) => {
+					editor.addCommand('joplinAttach', () => {
+						insertResourcesIntoContentRef.current();
+					});
+
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: _('Attach file'),
 						icon: 'paperclip',
 						onAction: async function() {
-							insertResourcesIntoContentRef.current();
+							editor.execCommand('joplinAttach');
 						},
 					});
 

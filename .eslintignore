@@ -225,6 +225,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollHandler.j
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
