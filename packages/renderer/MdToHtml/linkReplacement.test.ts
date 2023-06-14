@@ -5,7 +5,7 @@ describe('linkReplacement', () => {
 
 	test('should handle non-resource links', () => {
 		const r = linkReplacement('https://example.com/test').html;
-		expect(r).toBe('<a data-from-md href=\'https://example.com/test\' onclick=\'postMessage("https://example.com/test", { resourceId: "" }); return false;\'>');
+		expect(r).toBe('<a data-from-md href=\'https://example.com/test\' onclick=\'postMessage(&quot;https://example.com/test&quot;, { resourceId: &quot;&quot; }); return false;\'>');
 	});
 
 	test('should handle non-resource links - simple rendering', () => {
@@ -17,7 +17,7 @@ describe('linkReplacement', () => {
 		// Handles a link such as:
 		// [Google](https://www.goo'onclick=javascript:alert(/1/);f=')
 		const r = linkReplacement('https://www.goo\'onclick=javascript:alert(/1/);f=\'', { linkRenderingType: 1 }).html;
-		expect(r).toBe('<a data-from-md href=\'https://www.goo&apos;onclick=javascript:alert(/1/);f=&apos;\' onclick=\'postMessage("https://www.goo%27onclick=javascript:alert(/1/);f=%27", { resourceId: "" }); return false;\'>');
+		expect(r).toBe('<a data-from-md href=\'https://www.goo&apos;onclick=javascript:alert(/1/);f=&apos;\' onclick=\'postMessage(&quot;https://www.goo%27onclick=javascript:alert(/1/);f=%27&quot;, { resourceId: &quot;&quot; }); return false;\'>');
 	});
 
 	test('should handle resource links - downloaded status', () => {
@@ -35,7 +35,7 @@ describe('linkReplacement', () => {
 			},
 		}).html;
 
-		expect(r).toBe(`<a data-from-md data-resource-id='${resourceId}' href='#' onclick='postMessage("joplin://${resourceId}", { resourceId: "${resourceId}" }); return false;'><span class="resource-icon fa-joplin"></span>`);
+		expect(r).toBe(`<a data-from-md data-resource-id='${resourceId}' href='#' onclick='postMessage(&quot;joplin://${resourceId}&quot;, { resourceId: &quot;${resourceId}&quot; }); return false;'><span class="resource-icon fa-joplin"></span>`);
 	});
 
 	test('should handle resource links - idle status', () => {
