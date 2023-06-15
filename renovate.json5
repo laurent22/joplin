@@ -55,7 +55,6 @@
 		"browserify",
 		"codemirror",
 		"cspell",
-		"electron",
 		"file-loader",
 		"gradle",
 		"html-webpack-plugin",
@@ -71,6 +70,10 @@
 		"typedoc",
 		"webpack-cli",
 		"webpack",
+
+		// Electron and dependencies should be updated manually.
+		"electron",
+		"electron-builder",
 
 		// pdfjs-dist requires the canvas package, which cannot be built in
 		// Windows.
