@@ -70,7 +70,7 @@
     "react-native-vosk": "0.1.12",
     "react-native-webview": "12.4.0",
     "react-native-zip-archive": "6.0.9",
-    "react-redux": "7.2.9",
+    "react-redux": "8.0.5",
     "redux": "4.2.1",
     "rn-fetch-blob": "0.12.0",
     "stream": "0.0.2",
