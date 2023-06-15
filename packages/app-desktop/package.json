@@ -116,7 +116,7 @@
     "@types/react-redux": "7.1.25",
     "@types/styled-components": "5.1.26",
     "electron": "19.1.4",
-    "electron-builder": "22.11.7",
+    "electron-builder": "24.1.1",
     "electron-notarize": "1.2.2",
     "electron-rebuild": "3.2.9",
     "glob": "8.1.0",
