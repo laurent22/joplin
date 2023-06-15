@@ -120,6 +120,7 @@
 		"node-fetch",
 		"execa",
 		"open",
+		"pretty-bytes",
 
 		// Don't think we can trust this lib because they don't release a
 		// changelog and the latest version appears to have breaking changes
