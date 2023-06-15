@@ -4304,7 +4304,7 @@ __metadata:
     node-fetch: 2.6.7
     node-notifier: 10.0.1
     node-rsa: 1.1.1
-    pretty-bytes: 5.6.0
+    pretty-bytes: 6.1.0
     re-resizable: 6.9.9
     react: 18.2.0
     react-datetime: 3.2.0
@@ -4748,7 +4748,7 @@ __metadata:
     nodemailer: 6.9.2
     nodemon: 2.0.22
     pg: 8.10.0
-    pretty-bytes: 5.6.0
+    pretty-bytes: 6.1.0
     prettycron: 0.10.0
     query-string: 7.1.3
     rate-limiter-flexible: 2.4.1
@@ -26359,10 +26359,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:5.6.0":
-  version: 5.6.0
-  resolution: "pretty-bytes@npm:5.6.0"
-  checksum: 9c082500d1e93434b5b291bd651662936b8bd6204ec9fa17d563116a192d6d86b98f6d328526b4e8d783c07d5499e2614a807520249692da9ec81564b2f439cd
+"pretty-bytes@npm:6.1.0":
+  version: 6.1.0
+  resolution: "pretty-bytes@npm:6.1.0"
+  checksum: cca3be45a299a28d1d3d95056ac709b8aeb01540aae7d906ed674c076b5f4b48cb6bf118f172d486c17e47b092a00e827b7f69608bc731ca35ca6f8d93e130f1
   languageName: node
   linkType: hard
 
