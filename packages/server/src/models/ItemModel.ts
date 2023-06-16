@@ -537,10 +537,10 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
+	public async saveFromRawContent(user: User, rawContentItemOrItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
 
-		if (!Array.isArray(rawContentItems)) rawContentItems = [rawContentItems];
+		const rawContentItems = !Array.isArray(rawContentItemOrItems) ? [rawContentItemOrItems] : rawContentItemOrItems;
 
 		// In this function, first we process the input items, which may be
 		// serialized Joplin items or actual buffers (for resources) and convert
@@ -555,73 +555,78 @@ export default class ItemModel extends BaseModel<Item> {
 			joplinItem?: any;
 		}
 
-		const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name));
-		const itemsToProcess: Record<string, ItemToProcess> = {};
-
-		for (const rawItem of rawContentItems) {
-			try {
-				const isJoplinItem = isJoplinItemName(rawItem.name);
-				let isNote = false;
-
-				const item: Item = {
-					name: rawItem.name,
-				};
-
-				let joplinItem: any = null;
-
-				let resourceIds: string[] = [];
-
-				if (isJoplinItem) {
-					joplinItem = await unserializeJoplinItem(rawItem.body.toString());
-					isNote = joplinItem.type_ === ModelType.Note;
-					resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
-
-					item.jop_id = joplinItem.id;
-					item.jop_parent_id = joplinItem.parent_id || '';
-					item.jop_type = joplinItem.type_;
-					item.jop_encryption_applied = joplinItem.encryption_applied || 0;
-					item.jop_share_id = joplinItem.share_id || '';
-					item.jop_updated_time = joplinItem.updated_time;
-
-					const joplinItemToSave = { ...joplinItem };
-
-					delete joplinItemToSave.id;
-					delete joplinItemToSave.parent_id;
-					delete joplinItemToSave.share_id;
-					delete joplinItemToSave.type_;
-					delete joplinItemToSave.encryption_applied;
-					delete joplinItemToSave.updated_time;
-
-					item.content = Buffer.from(JSON.stringify(joplinItemToSave));
-				} else {
-					item.content = rawItem.body;
-				}
-
-				const existingItem = existingItems.find(i => i.name === rawItem.name);
-				if (existingItem) item.id = existingItem.id;
-
-				if (options.shareId) item.jop_share_id = options.shareId;
-
-				await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
-
-				itemsToProcess[rawItem.name] = {
-					item: item,
-					error: null,
-					resourceIds,
-					isNote,
-					joplinItem,
-				};
-			} catch (error) {
-				itemsToProcess[rawItem.name] = {
-					item: null,
-					error: error,
-				};
-			}
+		interface ExistingItem {
+			id: Uuid;
+			name: string;
 		}
 
-		const output: SaveFromRawContentResult = {};
+		return this.withTransaction(async () => {
+			const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name), { fields: ['id', 'name'] }) as ExistingItem[];
+			const itemsToProcess: Record<string, ItemToProcess> = {};
 
-		await this.withTransaction(async () => {
+			for (const rawItem of rawContentItems) {
+				try {
+					const isJoplinItem = isJoplinItemName(rawItem.name);
+					let isNote = false;
+
+					const item: Item = {
+						name: rawItem.name,
+					};
+
+					let joplinItem: any = null;
+
+					let resourceIds: string[] = [];
+
+					if (isJoplinItem) {
+						joplinItem = await unserializeJoplinItem(rawItem.body.toString());
+						isNote = joplinItem.type_ === ModelType.Note;
+						resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
+
+						item.jop_id = joplinItem.id;
+						item.jop_parent_id = joplinItem.parent_id || '';
+						item.jop_type = joplinItem.type_;
+						item.jop_encryption_applied = joplinItem.encryption_applied || 0;
+						item.jop_share_id = joplinItem.share_id || '';
+						item.jop_updated_time = joplinItem.updated_time;
+
+						const joplinItemToSave = { ...joplinItem };
+
+						delete joplinItemToSave.id;
+						delete joplinItemToSave.parent_id;
+						delete joplinItemToSave.share_id;
+						delete joplinItemToSave.type_;
+						delete joplinItemToSave.encryption_applied;
+						delete joplinItemToSave.updated_time;
+
+						item.content = Buffer.from(JSON.stringify(joplinItemToSave));
+					} else {
+						item.content = rawItem.body;
+					}
+
+					const existingItem = existingItems.find(i => i.name === rawItem.name);
+					if (existingItem) item.id = existingItem.id;
+
+					if (options.shareId) item.jop_share_id = options.shareId;
+
+					await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
+
+					itemsToProcess[rawItem.name] = {
+						item: item,
+						error: null,
+						resourceIds,
+						isNote,
+						joplinItem,
+					};
+				} catch (error) {
+					itemsToProcess[rawItem.name] = {
+						item: null,
+						error: error,
+					};
+				}
+			}
+
+			const output: SaveFromRawContentResult = {};
+
 			for (const name of Object.keys(itemsToProcess)) {
 				const o = itemsToProcess[name];
 
@@ -690,9 +695,9 @@ export default class ItemModel extends BaseModel<Item> {
 					};
 				}
 			}
-		}, 'ItemModel::saveFromRawContent');
 
-		return output;
+			return output;
+		}, 'ItemModel::saveFromRawContent');
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {
