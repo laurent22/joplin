@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.createTable('subscriptions', (table: Knex.CreateTableBuilder) => {
 		table.increments('id').unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
@@ -12,8 +12,8 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('updated_time').notNullable();
 		table.bigInteger('created_time').notNullable();
 	});
-}
+};
 
-export async function down(_db: DbConnection): Promise<any> {
+export const down = async (_db: DbConnection) => {
 
-}
+};

@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.integer('email_confirmed').defaultTo(0).notNullable();
 		table.integer('must_set_password').defaultTo(0).notNullable();
@@ -40,8 +40,8 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('tokens', (table: Knex.CreateTableBuilder) => {
 		table.index(['value', 'user_id']);
 	});
-}
+};
 
-export async function down(_db: DbConnection): Promise<any> {
+export const down = async (_db: DbConnection) => {
 
-}
+};

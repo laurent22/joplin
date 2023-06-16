@@ -3,7 +3,7 @@ import { DbConnection, defaultAdminEmail, defaultAdminPassword } from '../db';
 import { hashPassword } from '../utils/auth';
 import uuidgen from '../utils/uuidgen';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.createTable('users', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();
 		table.text('email', 'mediumtext').unique().notNullable();
@@ -123,13 +123,13 @@ export async function up(db: DbConnection): Promise<any> {
 		updated_time: now,
 		created_time: now,
 	});
-}
+};
 
-export async function down(db: DbConnection): Promise<any> {
+export const down = async (db: DbConnection) => {
 	await db.schema.dropTable('users');
 	await db.schema.dropTable('sessions');
 	await db.schema.dropTable('permissions');
 	await db.schema.dropTable('files');
 	await db.schema.dropTable('api_clients');
 	await db.schema.dropTable('changes');
-}
+};
