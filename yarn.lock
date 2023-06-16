@@ -2797,6 +2797,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cloudcmd/create-element@npm:^2.0.0":
+  version: 2.0.2
+  resolution: "@cloudcmd/create-element@npm:2.0.2"
+  dependencies:
+    currify: ^4.0.0
+    fullstore: ^3.0.0
+  checksum: cb1ee97980266326289df56f6d2639eaf9ca5180ef4d2d3cf9f0efbb196b66da31d3aca4bbe500f90cf17d8a4a4411b4468950d774dd50401619c6dc83cf2b51
+  languageName: node
+  linkType: hard
+
 "@codemirror/autocomplete@npm:^6.0.0":
   version: 6.4.2
   resolution: "@codemirror/autocomplete@npm:6.4.2"
@@ -4317,7 +4327,7 @@ __metadata:
     redux: 4.2.1
     reselect: 4.1.8
     roboto-fontface: 0.10.0
-    smalltalk: 2.5.1
+    smalltalk: 4.1.1
     sqlite3: 5.1.6
     styled-components: 5.3.10
     styled-system: 5.1.5
@@ -12573,10 +12583,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"currify@npm:^2.0.3":
-  version: 2.0.6
-  resolution: "currify@npm:2.0.6"
-  checksum: c145dde3a97368beac34d5e39bb33199602ad737a1d9af81efe1bc2d213ceb949486c0dcad3f564e807713ba17a97353398e48de3466262b979134e82ce52ae6
+"currify@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "currify@npm:4.0.0"
+  checksum: a0b1ded58985cd5f9ec08b8ca2b9307c7c379504ff8edfe68be69e368108c14384d63a28ae3ac3591e05287ae06261243ea812e137ed91b165bcbc7f725b9cac
   languageName: node
   linkType: hard
 
@@ -14973,7 +14983,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es6-promise@npm:^4.0.3, es6-promise@npm:^4.1.1":
+"es6-promise@npm:^4.0.3":
   version: 4.2.8
   resolution: "es6-promise@npm:4.2.8"
   checksum: 95614a88873611cb9165a85d36afa7268af5c03a378b35ca7bda9508e1d4f1f6f19a788d4bc755b3fd37c8ebba40782018e02034564ff24c9d6fa37e959ad57d
@@ -16787,10 +16797,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fullstore@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "fullstore@npm:1.1.0"
-  checksum: 372bfdc0742ca010abee737e7c7522b5b31abe41812a785392bf8e941c3ca14c04b9716b3358ce0a75f1afa20d0656a984d89fa6985dcde2445ca8b42ff8d9fb
+"fullstore@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "fullstore@npm:3.0.0"
+  checksum: 3a84de9d9133eaa0b19a0ab8062d602bae565be0fde404911c5a77306cff368549a19e27abd39aac119526dde30dcef74e575d8ac878b579ee539bc2bf32163a
   languageName: node
   linkType: hard
 
@@ -29604,14 +29614,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smalltalk@npm:2.5.1":
-  version: 2.5.1
-  resolution: "smalltalk@npm:2.5.1"
+"smalltalk@npm:4.1.1":
+  version: 4.1.1
+  resolution: "smalltalk@npm:4.1.1"
   dependencies:
-    currify: ^2.0.3
-    es6-promise: ^4.1.1
-    fullstore: ^1.0.0
-  checksum: 17a7f8acde9bed94cd83ac089d60f30368b76a5a43025f506b6ce3e99a8549c7533c914ddbaad0fb0ddc068799c441be9df4d827f3d48bc09794fe08aaa6afd1
+    "@cloudcmd/create-element": ^2.0.0
+    currify: ^4.0.0
+    fullstore: ^3.0.0
+  checksum: 80a2f749149696f54472bfdfd92362f49304fd6d3d8bcd4ca5f95e651a78758c4b4157be1b45a81cadeb5f1a700397cbb86d3d056269f5b7782007fce16f40da
   languageName: node
   linkType: hard
 
