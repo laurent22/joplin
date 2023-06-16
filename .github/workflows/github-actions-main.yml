@@ -157,6 +157,8 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      - uses: actions/github-script@v3
+
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
@@ -176,7 +178,7 @@ jobs:
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
           docker run joplin/server:0.0.0-beta node dist/app.js migrate list
-      
+ 
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
