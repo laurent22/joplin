@@ -4319,7 +4319,7 @@ __metadata:
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
     sqlite3: 5.1.6
-    styled-components: 5.3.10
+    styled-components: 5.3.11
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
@@ -4601,7 +4601,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     style-loader: 3.3.3
-    styled-components: 5.3.10
+    styled-components: 5.3.11
     ts-jest: 29.1.0
     ts-loader: 9.4.3
     typescript: 5.0.2
@@ -30684,9 +30684,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.10":
-  version: 5.3.10
-  resolution: "styled-components@npm:5.3.10"
+"styled-components@npm:5.3.11":
+  version: 5.3.11
+  resolution: "styled-components@npm:5.3.11"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
@@ -30702,7 +30702,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 46dfea6c435516b22aae25798cf01f9b08423cfb517cfea9db760a18c941bddf79abaad9bedb9b3cca6faad24bd7eb4ef4dd21ae84b356ae29d279b2d571f7b7
+  checksum: 10edd4dae3b0231ec02d86bdd09c88e894eedfa7e9d4f8e562b09fb69c67a27d586cbcf35c785002d59b3bf11e6c0940b0efce40d13ae9ed148b26b1dc8f3284
   languageName: node
   linkType: hard
 
