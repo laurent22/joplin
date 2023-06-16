@@ -123,6 +123,10 @@
 		"pretty-bytes",
 		"strip-ansi",
 
+		// @koa/cors has undocumented breaking changes, and the package is not
+		// well supported so we're stuck with latest v3 for now
+		"@koa/cors",
+
 		// Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
 		// upgrade again, check that adding a link from the CodeMirror editor works.
 		// See /packages/app-desktop/gui/dialogs.ts

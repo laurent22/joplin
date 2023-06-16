@@ -4710,7 +4710,7 @@ __metadata:
     "@joplin/lib": ~2.11
     "@joplin/renderer": ~2.11
     "@joplin/tools": ~2.11
-    "@koa/cors": 4.0.0
+    "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.16.0
     "@types/formidable": 2.0.6
     "@types/fs-extra": 11.0.1
@@ -4952,12 +4952,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@koa/cors@npm:4.0.0":
-  version: 4.0.0
-  resolution: "@koa/cors@npm:4.0.0"
+"@koa/cors@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@koa/cors@npm:3.4.3"
   dependencies:
     vary: ^1.1.2
-  checksum: e0760544823532f2d71d792e3076858e38bab9b1c090abea175f1319fd91ea58a1da384a2fe7f5108f1c681e3830b01f62a1cafe271d6406751976af443187aa
+  checksum: 51a5b89b4ea19078272ea2702916c90375853b6cfb9b65bf7720653e99b36950c1fd90df66a77fb17839bb130dc7c9f83ccc0bcec40f9d09769f9ed77ced5f23
   languageName: node
   linkType: hard
 
