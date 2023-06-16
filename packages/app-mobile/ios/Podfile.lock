@@ -347,7 +347,7 @@ PODS:
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
-  - react-native-geolocation (2.1.0):
+  - react-native-geolocation (3.0.6):
     - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
@@ -779,7 +779,7 @@ SPEC CHECKSUMS:
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
-  react-native-geolocation: 69f4fd37650b8e7fee91816d395e62dd16f5ab8d
+  react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
