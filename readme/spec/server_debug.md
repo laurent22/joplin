@@ -7,7 +7,8 @@ In the debug screen you can select "Server" and hit the play button to start the
 
 ![image](https://github.com/laurent22/joplin/assets/5051088/cda6e3d6-32f3-4997-bd16-8413a6c962c5)
 
-Before running the server there is a task called `transpile-server` that runs `yarn tsc` to make sure that the latest changes in the `package/server` are being executed. 
+Before running the server there is a task called `transpile-server` that runs `yarn tsc` to make sure that the 
+latest changes in the `package/server` are being executed. 
 
 https://github.com/laurent22/joplin/blob/4f37e6073ad549fe72206e2a125c27174b5d96a9/joplin.code-workspace#L360-L365
 
@@ -18,7 +19,13 @@ If there is any new environment variables that need to be included before execut
 
 https://github.com/laurent22/joplin/blob/4f37e6073ad549fe72206e2a125c27174b5d96a9/joplin.code-workspace#L387-L391
 
-Things that we could do to improve the experience is adding a build process to other projects that are used by the server project, but this still can be done with other terminals open.
+Things that we could do to improve the experience is adding a build process to other projects that are used by the server project, 
+but this still can be done with other terminals open.
+
+### Modifying the configuration:
+
+To modify the configuration, for now, it is all in the `jopli.code-workspace` file, but if the needed we could also break
+the configuration in two files, one for the `launch.json` and other for the `tasks.json`.
 
 
 ### References:
