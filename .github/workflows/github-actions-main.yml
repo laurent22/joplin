@@ -193,6 +193,8 @@ jobs:
           actual_status=$(curl -I -X GET http://localhost:22300/api/ping | head -n 1)
           if [[ ! "$actual_status" =~ "$expected_status" ]]; then 
             echo 'Failed while checking the status code after request to /api/ping'
+            echo 'expected: ' $expected_status
+            echo 'actual:   ' $actual_status
             exit 1; 
           fi
           
