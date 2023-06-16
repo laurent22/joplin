@@ -4729,7 +4729,7 @@ __metadata:
     bulma-prefers-dark: 0.1.0-beta.1
     compare-versions: 3.6.0
     dayjs: 1.11.7
-    formidable: 2.1.1
+    formidable: 2.1.2
     fs-extra: 11.1.1
     gulp: 4.0.2
     html-entities: 1.4.0
@@ -16549,15 +16549,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:2.1.1":
-  version: 2.1.1
-  resolution: "formidable@npm:2.1.1"
+"formidable@npm:2.1.2":
+  version: 2.1.2
+  resolution: "formidable@npm:2.1.2"
   dependencies:
     dezalgo: ^1.0.4
     hexoid: ^1.0.0
     once: ^1.4.0
     qs: ^6.11.0
-  checksum: b407bf89abf0dc40e00efe20edd80aa60ff7e7f4928b3a7048b630d3bb61012f316b69cd3350ccc9aab2d4c682516fea917bc31aef3479d4a652ed97cf8ba9aa
+  checksum: 81c8e5d89f5eb873e992893468f0de22c01678ca3d315db62be0560f9de1c77d4faefc9b1f4575098eb2263b3c81ba1024833a9fc3206297ddbac88a4f69b7a8
   languageName: node
   linkType: hard
 
