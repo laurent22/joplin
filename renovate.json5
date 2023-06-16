@@ -121,6 +121,12 @@
 		"execa",
 		"open",
 		"pretty-bytes",
+		"strip-ansi",
+
+		// Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
+		// upgrade again, check that adding a link from the CodeMirror editor works.
+		// See /packages/app-desktop/gui/dialogs.ts
+		"smalltalk",
 
 		// Don't think we can trust this lib because they don't release a
 		// changelog and the latest version appears to have breaking changes
