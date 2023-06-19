@@ -38,17 +38,17 @@ export const disabledUserIds = async (db: DbConnection): Promise<string[]> => {
 	return users.map(u => u.id);
 };
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.bigInteger('disabled_time').defaultTo(0).notNullable();
 	});
 
 	const userIds = await disabledUserIds(db);
 	await setUserAccountDisabledTimes(db, userIds);
-}
+};
 
-export async function down(db: DbConnection): Promise<any> {
+export const down = async (db: DbConnection) => {
 	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.dropColumn('disabled_time');
 	});
-}
+};

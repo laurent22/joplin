@@ -5,14 +5,14 @@ import { DbConnection } from '../db';
 // recreate it in the same migration. So this is split into two migrations.
 // https://github.com/knex/knex/issues/2581
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.dropColumn('max_item_size');
 		table.dropColumn('can_share_folder');
 		table.dropColumn('can_share_note');
 	});
-}
+};
 
-export async function down(_db: DbConnection): Promise<any> {
+export const down = async (_db: DbConnection) => {
 
-}
+};

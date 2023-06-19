@@ -1,7 +1,7 @@
 // import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
-export async function up(_db: DbConnection): Promise<any> {
+export const up = async (_db: DbConnection) => {
 	// try {
 	// 	await db.schema.alterTable('emails', function(table: Knex.CreateTableBuilder) {
 	// 		table.dropUnique(['recipient_email', 'key']);
@@ -9,8 +9,8 @@ export async function up(_db: DbConnection): Promise<any> {
 	// } catch (error) {
 	// 	// console.warn('Could not drop unique constraint - this is not an error.', error);
 	// }
-}
+};
 
-export async function down(_db: DbConnection): Promise<any> {
+export const down = async (_db: DbConnection) => {
 
-}
+};
