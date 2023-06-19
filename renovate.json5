@@ -122,6 +122,7 @@
 		"open",
 		"pretty-bytes",
 		"strip-ansi",
+		"formidable",
 
 		// @koa/cors has undocumented breaking changes, and the package is not
 		// well supported so we're stuck with latest v3 for now
