@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v2.11.2](https://github.com/laurent22/joplin/releases/tag/server-v2.11.2) - 2023-06-20T08:40:54Z
+
+- Improved: Allow giving a different version number to forks (091eff9)
+- Improved: Improve performance and reliability when adding an item (17888a2)
+- Improved: Process orphaned items (84b130e)
+- Improved: Updated packages @koa/cors (v4), aws, buildTools, domhandler (v5), domutils (v3.1.0), formidable (v3), highlight.js (v11.8.0), jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), nodemailer (v6.9.3), sass (v1.62.1), sharp (v0.32.1), tar (v6.1.15), yargs (v17.7.2)
+- Fixed: Fixed copyright year (a7e185e)
+
 ## [server-v2.11.1](https://github.com/laurent22/joplin/releases/tag/server-v2.11.1) - 2023-05-15T17:16:13Z
 
 - Improved: Allow setting NTP server using NTP_SERVER env variable (#8153)
