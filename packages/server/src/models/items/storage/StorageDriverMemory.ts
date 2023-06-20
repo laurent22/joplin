@@ -1,4 +1,4 @@
-import { CustomError, ErrorCode } from '../../../utils/errors';
+import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
@@ -15,7 +15,7 @@ export default class StorageDriverMemory extends StorageDriverBase {
 	}
 
 	public async read(itemId: string): Promise<Buffer> {
-		if (!(itemId in this.data_)) throw new CustomError(`No such item: ${itemId}`, ErrorCode.NotFound);
+		if (!(itemId in this.data_)) throw new CustomError(`No such item: ${itemId}`, CustomErrorCode.NotFound);
 		return this.data_[itemId];
 	}
 

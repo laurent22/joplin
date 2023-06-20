@@ -466,7 +466,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
-export async function expectHttpError(asyncFn: Function, expectedHttpCode: number): Promise<void> {
+export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -479,6 +479,10 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 		expect('not throw').toBe('throw');
 	} else {
 		expect(thrownError.httpCode).toBe(expectedHttpCode);
+
+		if (expectedErrorCode !== null) {
+			expect(thrownError.code).toBe(expectedErrorCode);
+		}
 	}
 }
 

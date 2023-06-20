@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
@@ -311,7 +311,7 @@ export default class ItemModel extends BaseModel<Item> {
 			try {
 				content = await fromDriver.read(item.id, { models: this.models() });
 			} catch (error) {
-				if (error.code === ErrorCode.NotFound) {
+				if (error.code === CustomErrorCode.NotFound) {
 					logger.info(`Could not process item, because content was deleted: ${item.id}`);
 					return;
 				}
@@ -789,7 +789,7 @@ export default class ItemModel extends BaseModel<Item> {
 	// that shared folder. It returns null otherwise.
 	public async joplinItemSharedRootInfo(jopId: string): Promise<SharedRootInfo | null> {
 		const path = await this.joplinItemPath(jopId);
-		if (!path.length) throw new ApiError(`Cannot retrieve path for item: ${jopId}`, null, 'noPathForItem');
+		if (!path.length) throw new ApiError(`Cannot retrieve path for item: ${jopId}`, null, ErrorCode.NoPathForItem);
 		const rootFolderItem = path[path.length - 1];
 		const share = await this.models().share().itemShare(ShareType.Folder, rootFolderItem.id);
 		if (!share) return null;

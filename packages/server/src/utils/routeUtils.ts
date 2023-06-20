@@ -1,6 +1,6 @@
 import config, { baseUrl } from '../config';
 import { Item, ItemAddressingType, User, Uuid } from '../services/database/types';
-import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
+import { ErrorBadRequest, ErrorCode, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
 import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
@@ -206,7 +206,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
-	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, 'invalidOrigin');
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
 
 	const isPublicRoute = match.route.isPublic(match.subPath.schema);
 
