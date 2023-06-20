@@ -101,32 +101,32 @@ async function createRelease(projectName: string, name: string, tagName: string,
 
 	console.info(`Creating release: ${suffix}`);
 
-	if (name === '32bit') {
-		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-			content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
-			content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
-			return content;
-		});
-	}
+	// if (name === '32bit') {
+	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+	// 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
+	// 		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
+	// 		return content;
+	// 	});
+	// }
 
-	if (name !== 'vosk') {
-		await patcher.updateFileContent(`${rnDir}/services/voiceTyping/vosk.android.ts`, async (_content: string) => {
-			return readFile(`${rnDir}/services/voiceTyping/vosk.ios.ts`, 'utf8');
-		});
+	// if (name !== 'vosk') {
+	// 	await patcher.updateFileContent(`${rnDir}/services/voiceTyping/vosk.android.ts`, async (_content: string) => {
+	// 		return readFile(`${rnDir}/services/voiceTyping/vosk.ios.ts`, 'utf8');
+	// 	});
 
-		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-			content = content.replace(/\s+"react-native-vosk": ".*",/, '');
-			return content;
-		});
-	}
+	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+	// 		content = content.replace(/\s+"react-native-vosk": ".*",/, '');
+	// 		return content;
+	// 	});
+	// }
 
-	if (name === 'vosk') {
-		await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-			content = content.replace(/(\s+)applicationId "net.cozic.joplin"/, '$1applicationId "net.cozic.joplin.mod"');
-			content = content.replace(/(\s+)versionName "(\d+\.\d+\.\d+)"/, '$1versionName "$2-mod"');
-			return content;
-		});
-	}
+	// if (name === 'vosk') {
+	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+	// 		content = content.replace(/(\s+)applicationId "net.cozic.joplin"/, '$1applicationId "net.cozic.joplin.mod"');
+	// 		content = content.replace(/(\s+)versionName "(\d+\.\d+\.\d+)"/, '$1versionName "$2-mod"');
+	// 		return content;
+	// 	});
+	// }
 
 	const apkFilename = `joplin-v${suffix}.apk`;
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
@@ -242,7 +242,7 @@ async function main() {
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
 	// const releaseNames = ['main', '32bit', 'vosk'];
-	const releaseNames = ['main', 'vosk'];
+	const releaseNames = ['main'];
 	const releaseFiles: Record<string, Release> = {};
 	const mainProjectName = 'joplin-android';
 	const modProjectName = 'joplin-android-mod';
