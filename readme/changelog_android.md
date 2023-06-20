@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.11.29](https://github.com/laurent22/joplin/releases/tag/android-v2.11.29) (Pre-release) - 2023-06-20T14:56:42Z
+
+- New: Add support for Voice Typing for most languages (#8309)
+
 ## [android-v2.11.26](https://github.com/laurent22/joplin/releases/tag/android-v2.11.26) (Pre-release) - 2023-06-08T16:13:02Z
 
 - Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
