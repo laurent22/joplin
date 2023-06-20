@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.11.29](https://github.com/laurent22/joplin/releases/tag/android-v2.11.29) (Pre-release) - 2023-06-20T14:56:42Z
+## [android-v2.11.30](https://github.com/laurent22/joplin/releases/tag/android-v2.11.30) (Pre-release) - 2023-06-20T15:21:15Z
 
 - New: Add support for Voice Typing for most languages (#8309)
 
