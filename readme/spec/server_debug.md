@@ -1,7 +1,7 @@
 # Debugging Server project with vscode
 
 Using a debugger sometimes is much easier than trying to just print things to understand a bug, 
-for the server project we have a configuration that makes easy for everyone to run in debug mode inside vscode.
+for the server project we have a configuration that makes it easy for everyone to run in debug mode inside vscode.
 
 In the debug screen you can select "Server" and hit the play button to start the process. 
 
@@ -12,20 +12,20 @@ latest changes in the `package/server` are being executed.
 
 https://github.com/laurent22/joplin/blob/4f37e6073ad549fe72206e2a125c27174b5d96a9/joplin.code-workspace#L360-L365
 
-In a optiomal solution we would be doing this `transpile-server` task in the `tasks.json` file 
+In a optimal solution we would be doing this `transpile-server` task in the `tasks.json` file 
 (inside the `tasks.json` we can use a `type` `npm` for the task that is more ergonomic)
 
-If there is any new environment variables that need to be included before execution, there is a place where they can be added:
+If there are any new environment variables that need to be included before execution, there is a place where they can be added:
 
 https://github.com/laurent22/joplin/blob/4f37e6073ad549fe72206e2a125c27174b5d96a9/joplin.code-workspace#L387-L391
 
-Things that we could do to improve the experience is adding a build process to other projects that are used by the server project, 
+Something that we could do to improve the experience is adding a build process to other projects that are used by the server project, 
 but this still can be done with other terminals open.
 
 ### Modifying the configuration:
 
-To modify the configuration, for now, it is all in the `jopli.code-workspace` file, but if the needed we could also break
-the configuration in two files, one for the `launch.json` and other for the `tasks.json`.
+To modify the configuration, for now, it is all in the `joplin.code-workspace` file, but if needed we could also break
+the configuration into two files, one for the `launch.json` and other for the `tasks.json`.
 
 
 ### References:
