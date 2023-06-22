@@ -1106,7 +1106,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		function onPasteAsText() {
-			pasteAsPlainText(null);
+			const clipboardWithoutMarkdown = stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, clipboard.readText());
+			pasteAsPlainText(clipboardWithoutMarkdown);
 		}
 
 		editor.on(TinyMceEditorEvents.KeyUp, onKeyUp);
