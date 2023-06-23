@@ -342,6 +342,7 @@ packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
+packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js

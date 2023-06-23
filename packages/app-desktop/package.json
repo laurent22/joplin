@@ -117,7 +117,6 @@
     "@types/styled-components": "5.1.26",
     "electron": "19.1.4",
     "electron-builder": "22.11.7",
-    "electron-notarize": "1.2.2",
     "electron-rebuild": "3.2.9",
     "glob": "8.1.0",
     "gulp": "4.0.2",
@@ -134,6 +133,7 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
+    "@electron/notarize": "1.2.4",
     "@electron/remote": "2.0.9",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
