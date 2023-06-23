@@ -1,5 +1,18 @@
 # Joplin changelog
 
+## [v2.11.11](https://github.com/laurent22/joplin/releases/tag/v2.11.11) (Pre-release) - 2023-06-23T15:16:37Z
+
+- Improved: Add support for plugin user data ([#8312](https://github.com/laurent22/joplin/issues/8312)) ([#8080](https://github.com/laurent22/joplin/issues/8080))
+- Improved: Configure Rich Text editor to handle the first table row as header ([#8163](https://github.com/laurent22/joplin/issues/8163)) ([#3535](https://github.com/laurent22/joplin/issues/3535) by [@Marph](https://github.com/Marph))
+- Improved: Updated packages css-loader (v6.7.4), dayjs (v1.11.8), domhandler (v5), domutils (v3.1.0), highlight.js (v11.8.0), react-redux (v8.0.7), style-loader (v3.3.3), styled-components (v5.3.11), ts-loader (v9.4.3)
+- Improved: Upgrade E2EE encryption method to AES-256 ([#7686](https://github.com/laurent22/joplin/issues/7686))
+- Fixed: Allow certain HTML anchor tags ([#8286](https://github.com/laurent22/joplin/issues/8286))
+- Fixed: Display plugin console in dev mode ([#8210](https://github.com/laurent22/joplin/issues/8210))
+- Fixed: Duplicated published notes retain the published note's label's color ([#8287](https://github.com/laurent22/joplin/issues/8287))
+- Fixed: Include more Rich Text editor commands in the menu ([#8316](https://github.com/laurent22/joplin/issues/8316))
+- Security: Prevent XSS when passing specially encoded string to a link (PoC by lin@UCCU Hacker) ([57b4198](https://github.com/laurent22/joplin/commit/57b4198))
+- Security: Prevent calling arbitrary commands via x-callback-url (PoC by lin@UCCU Hacker) ([6982661](https://github.com/laurent22/joplin/commit/6982661))
+
 ## [v2.11.9](https://github.com/laurent22/joplin/releases/tag/v2.11.9) (Pre-release) - 2023-06-06T16:23:27Z
 
 - Improved: Add support for AVIF image format ([#8175](https://github.com/laurent22/joplin/issues/8175))
