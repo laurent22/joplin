@@ -16,7 +16,7 @@
     "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn run tsc",
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
     "buildCommandIndex": "node packages/tools/gulp/tasks/buildCommandIndexRun.js",
-    "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out ../joplin-website/docs/api/references/plugin_api packages/lib/services/plugins/api/",
+    "buildPluginDoc": "cd packages/generate-plugin-doc && yarn run buildPluginDoc_",
     "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "updateNews": "node ./packages/tools/website/updateNews",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
@@ -84,7 +84,6 @@
     "lint-staged": "13.2.2",
     "madge": "6.0.0",
     "npm-package-json-lint": "6.4.0",
-    "typedoc": "0.17.8",
     "typescript": "5.0.2"
   },
   "dependencies": {
