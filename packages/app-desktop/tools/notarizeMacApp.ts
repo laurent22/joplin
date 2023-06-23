@@ -67,7 +67,12 @@ export default async (params: Params) => {
 			// Use this to get it:
 			//
 			// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
-			ascProvider: process.env.APPLE_ASC_PROVIDER,
+			// ascProvider: process.env.APPLE_ASC_PROVIDER,
+
+			// In our case, the team ID is the same as the legacy ASC_PROVIDER
+			teamId: process.env.APPLE_ASC_PROVIDER,
+
+			tool: 'notarytool',
 		});
 	} catch (error) {
 		console.error(error);
