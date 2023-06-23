@@ -17,11 +17,9 @@ export const runtime = (): CommandRuntime => {
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
-			let newNote = Object.assign({}, defaultValues, {
-				parent_id: folderId,
+			let newNote = { ...defaultValues, parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
-				body: body,
-			});
+				body: body };
 
 			newNote = await Note.save(newNote, { provisional: true });
 

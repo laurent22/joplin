@@ -1,0 +1,11 @@
+{
+  "name": "generate-plugin-doc",
+  "packageManager": "yarn@3.3.1",
+  "scripts": {
+    "buildPluginDoc_": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme '../../Assets/PluginDocTheme/' --readme '../../Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out ../../../joplin-website/docs/api/references/plugin_api ../lib/services/plugins/api/"
+  },
+  "dependencies": {
+    "typedoc": "0.17.8",
+    "typescript": "4.7.4"
+  }
+}

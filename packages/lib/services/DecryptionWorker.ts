@@ -110,7 +110,7 @@ export default class DecryptionWorker {
 	}
 
 	public dispatchReport(report: any) {
-		const action = Object.assign({}, report);
+		const action = { ...report };
 		action.type = 'DECRYPTION_WORKER_SET';
 		this.dispatch(action);
 	}
@@ -280,7 +280,7 @@ export default class DecryptionWorker {
 			error: null,
 		};
 
-		this.dispatchReport(Object.assign({}, finalReport, { state: 'idle' }));
+		this.dispatchReport({ ...finalReport, state: 'idle' });
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);

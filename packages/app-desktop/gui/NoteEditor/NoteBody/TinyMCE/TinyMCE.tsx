@@ -25,6 +25,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
+import type { Editor } from 'tinymce';
+import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -76,23 +78,6 @@ function stripMarkup(markupLanguage: number, markup: string, options: any = null
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
-
-interface TinyMceCommand {
-	name: string;
-	value?: any;
-	ui?: boolean;
-}
-
-interface JoplinCommandToTinyMceCommands {
-	[key: string]: TinyMceCommand;
-}
-
-const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
-	'textBold': { name: 'mceToggleFormat', value: 'bold' },
-	'textItalic': { name: 'mceToggleFormat', value: 'italic' },
-	'textLink': { name: 'mceLink' },
-	'search': { name: 'SearchReplace' },
-};
 
 interface LastOnChangeEventInfo {
 	content: string;
@@ -273,11 +258,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					return false;
 				}
 
-				const tinyMceCmd: TinyMceCommand = { ...joplinCommandToTinyMceCommands[cmd.name] };
-				if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
-				if (!('value' in tinyMceCmd)) tinyMceCmd.value = null;
+				if (joplinCommandToTinyMceCommands[cmd.name] === true) {
+					// Already handled in useWindowCommandHandlers.ts
+				} else if (joplinCommandToTinyMceCommands[cmd.name] === false) {
+					// Explicitely not supported
+				} else {
+					const tinyMceCmd: TinyMceCommand = { ...(joplinCommandToTinyMceCommands[cmd.name] as TinyMceCommand) };
+					if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
+					if (!('value' in tinyMceCmd)) tinyMceCmd.value = null;
 
-				editor.execCommand(tinyMceCmd.name, tinyMceCmd.ui, tinyMceCmd.value);
+					editor.execCommand(tinyMceCmd.name, tinyMceCmd.ui, tinyMceCmd.value);
+				}
 
 				return true;
 			},
@@ -557,7 +548,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'inserttable', `joplinInsertDateTime${toolbarPluginButtons}`,
+			];
+
+			// Available table toolbar buttons:
+			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
+			const tableToolbar = [
+				'tabledelete',
+				'tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
+				'tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
 			];
 
 			const editors = await (window as any).tinymce.init({
@@ -576,6 +575,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				branding: false,
 				statusbar: false,
 				target_list: false,
+				// Handle the first table row as table header.
+				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
+				table_header_type: 'sectionCells',
+				table_toolbar: tableToolbar.join(' | '),
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
@@ -589,12 +592,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 				},
-				setup: (editor: any) => {
+				setup: (editor: Editor) => {
+					editor.addCommand('joplinAttach', () => {
+						insertResourcesIntoContentRef.current();
+					});
+
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: _('Attach file'),
 						icon: 'paperclip',
 						onAction: async function() {
-							insertResourcesIntoContentRef.current();
+							editor.execCommand('joplinAttach');
 						},
 					});
 
@@ -614,13 +621,29 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						onAction: function() {
 							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' });
 						},
-						onSetup: function(api: any) {
+						onSetup: function(api) {
 							api.setActive(editor.formatter.match('code'));
 							const unbind = editor.formatter.formatChanged('code', api.setActive).unbind;
 
 							return function() {
 								if (unbind) unbind();
 							};
+						},
+					});
+
+					editor.ui.registry.addMenuButton('inserttable', {
+						icon: 'table',
+						tooltip: 'Table',
+						fetch: (callback) => {
+							callback([
+								{
+									type: 'fancymenuitem',
+									fancytype: 'inserttable',
+									onAction: (data) => {
+										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
+									},
+								},
+							]);
 						},
 					});
 
@@ -647,13 +670,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
 					// TODO: remove event on unmount?
-					editor.on('DblClick', (event: any) => {
+					editor.on('DblClick', (event) => {
 						const editable = findEditableContainer(event.target);
 						if (editable) openEditDialog(editor, markupToHtml, dispatchDidUpdate, editable);
 					});
 
 					// This is triggered when an external file is dropped on the editor
-					editor.on('drop', (event: any) => {
+					editor.on('drop', (event) => {
 						// Prevent the message "Dropped file type is not
 						// supported" to show up. It was added in a recent
 						// TinyMCE version and doesn't apply since we do support
@@ -664,7 +687,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						props_onDrop.current(event);
 					});
 
-					editor.on('ObjectResized', (event: any) => {
+					editor.on('ObjectResized', (event) => {
 						if (event.target.nodeName === 'IMG') {
 							editor.fire(TinyMceEditorEvents.JoplinChange);
 							dispatchDidUpdate(editor);

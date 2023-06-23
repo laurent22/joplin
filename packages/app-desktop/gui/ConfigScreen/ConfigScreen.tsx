@@ -135,7 +135,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const theme = themeStyle(this.props.themeId);
 		return (
-			<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
+			<div style={{ ...theme.textStyle, marginBottom: 15 }}>
 				{description}
 			</div>
 		);
@@ -177,7 +177,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
-			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
+			const statusStyle = { ...theme.textStyle, marginTop: 10 };
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
@@ -207,7 +207,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (advancedSettingComps.length) {
 			const iconName = this.state.showAdvancedSettings ? 'fa fa-angle-down' : 'fa fa-angle-right';
-			// const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
+			// const advancedSettingsButtonStyle = { ...theme.buttonStyle,  marginBottom: 10  };
 			advancedSettingsButton = (
 				<div style={{ marginBottom: 10 }}>
 					<Button
@@ -233,23 +233,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private labelStyle(themeId: number) {
 		const theme = themeStyle(themeId);
-		return Object.assign({}, theme.textStyle, {
-			display: 'block',
+		return { ...theme.textStyle, display: 'block',
 			color: theme.color,
 			fontSize: theme.fontSize * 1.083333,
 			fontWeight: 500,
-			marginBottom: theme.mainPadding / 2,
-		});
+			marginBottom: theme.mainPadding / 2 };
 	}
 
 	private descriptionStyle(themeId: number) {
 		const theme = themeStyle(themeId);
-		return Object.assign({}, theme.textStyle, {
-			color: theme.colorFaded,
+		return { ...theme.textStyle, color: theme.colorFaded,
 			fontStyle: 'italic',
 			maxWidth: '70em',
-			marginTop: 5,
-		});
+			marginTop: 5 };
 	}
 
 	private renderLabel(themeId: number, label: string) {
@@ -264,14 +260,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	private renderHeader(themeId: number, label: string, style: any = null) {
 		const theme = themeStyle(themeId);
 
-		const labelStyle = Object.assign({}, theme.textStyle, {
-			display: 'block',
+		const labelStyle = { ...theme.textStyle, display: 'block',
 			color: theme.color,
 			fontSize: theme.fontSize * 1.25,
 			fontWeight: 500,
 			marginBottom: theme.mainPadding,
-			...style,
-		});
+			...style };
 
 		return (
 			<div style={labelStyle}>
@@ -295,17 +289,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const labelStyle = this.labelStyle(this.props.themeId);
 
-		const subLabel = Object.assign({}, labelStyle, {
-			display: 'block',
+		const subLabel = { ...labelStyle, display: 'block',
 			opacity: 0.7,
-			marginBottom: labelStyle.marginBottom,
-		});
+			marginBottom: labelStyle.marginBottom };
 
-		const checkboxLabelStyle = Object.assign({}, labelStyle, {
-			marginLeft: 8,
+		const checkboxLabelStyle = { ...labelStyle, marginLeft: 8,
 			display: 'inline',
-			backgroundColor: 'transparent',
-		});
+			backgroundColor: 'transparent' };
 
 		const controlStyle = {
 			display: 'inline-block',
@@ -314,8 +304,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			backgroundColor: theme.backgroundColor,
 		};
 
-		const textInputBaseStyle = Object.assign({}, controlStyle, {
-			fontFamily: theme.fontFamily,
+		const textInputBaseStyle = { ...controlStyle, fontFamily: theme.fontFamily,
 			border: '1px solid',
 			padding: '4px 6px',
 			boxSizing: 'border-box',
@@ -324,8 +313,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			paddingLeft: 6,
 			paddingRight: 6,
 			paddingTop: 4,
-			paddingBottom: 4,
-		});
+			paddingBottom: 4 };
 
 		const updateSettingValue = (key: string, value: any) => {
 			const md = Setting.settingMetadata(key);
@@ -381,14 +369,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 
-			const selectStyle = Object.assign({}, controlStyle, {
-				paddingLeft: 6,
+			const selectStyle = { ...controlStyle, paddingLeft: 6,
 				paddingRight: 6,
 				paddingTop: 4,
 				paddingBottom: 4,
 				borderColor: theme.borderColor4,
-				borderRadius: 3,
-			});
+				borderRadius: 3 };
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -443,10 +429,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			const inputStyle: any = Object.assign({}, textInputBaseStyle, {
-				width: '50%',
-				minWidth: '20em',
-			});
+			const inputStyle: any = { ...textInputBaseStyle, width: '50%',
+				minWidth: '20em' };
 			const inputType = md.secure === true ? 'password' : 'text';
 
 			if (md.subType === 'file_path_and_args' || md.subType === 'file_path' || md.subType === 'directory_path') {
@@ -542,7 +526,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
 										<input
 											type={inputType}
-											style={Object.assign({}, inputStyle, { marginBottom: 0, marginRight: 5 })}
+											style={{ ...inputStyle, marginBottom: 0, marginRight: 5 }}
 											onChange={(event: any) => {
 												onPathChange(event);
 											}}
@@ -595,7 +579,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			const label = [md.label()];
 			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
 
-			const inputStyle: any = Object.assign({}, textInputBaseStyle);
+			const inputStyle: any = { ...textInputBaseStyle };
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -679,15 +663,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style = Object.assign({},
-			this.props.style,
-			{
-				overflow: 'hidden',
-				display: 'flex',
-				flexDirection: 'column',
-				backgroundColor: theme.backgroundColor3,
-			}
-		);
+		const style = {
+			...this.props.style,
+			overflow: 'hidden',
+			display: 'flex',
+			flexDirection: 'column',
+			backgroundColor: theme.backgroundColor3,
+		};
 
 		const settings = this.state.settings;
 

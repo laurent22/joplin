@@ -1,6 +1,40 @@
 var indexOf = Array.prototype.indexOf
 var every = Array.prototype.every
 var rules = {}
+var alignMap = { left: ':---', right: '---:', center: ':---:' };
+
+function getAlignment(node) {
+  return node ? (node.getAttribute('align') || node.style.textAlign || '').toLowerCase() : '';
+}
+
+function getBorder(alignment) {
+  return alignment ? alignMap[alignment] : '---';
+}
+
+function getColumnAlignment(table, columnIndex) {
+  var votes = {
+    left: 0,
+    right: 0,
+    center: 0,
+    '': 0,
+  };
+
+  var align = '';
+
+  for (var i = 0; i < table.rows.length; ++i) {
+    var row = table.rows[i];
+    if (columnIndex < row.childNodes.length) {
+      var cellAlignment = getAlignment(row.childNodes[columnIndex]);
+      ++votes[cellAlignment];
+
+      if (votes[cellAlignment] > votes[align]) {
+        align = cellAlignment;
+      }
+    }
+  }
+
+  return align;
+}
 
 rules.tableCell = {
   filter: ['th', 'td'],
@@ -17,22 +51,13 @@ rules.tableRow = {
     if (tableShouldBeSkipped(parentTable)) return content;
 
     var borderCells = ''
-    var alignMap = { left: ':--', right: '--:', center: ':-:' }
 
     if (isHeadingRow(node)) {
       const colCount = tableColCount(parentTable);
       for (var i = 0; i < colCount; i++) {
-        const childNode = colCount >= node.childNodes.length ? null : node.childNodes[i];
-        var border = '---'
-        var align = childNode ? (childNode.getAttribute('align') || '').toLowerCase() : '';
-
-        if (align) border = alignMap[align] || border
-
-        if (childNode) {
-          borderCells += cell(border, node.childNodes[i])
-        } else {
-          borderCells += cell(border, null, i);
-        }
+        const childNode = i < node.childNodes.length ? node.childNodes[i] : null;
+        var border = getBorder(getColumnAlignment(parentTable, i));
+        borderCells += cell(border, childNode, i);
       }
     }
     return '\n' + content + (borderCells ? '\n' + borderCells : '')
@@ -55,12 +80,15 @@ rules.table = {
     // If table has no heading, add an empty one so as to get a valid Markdown table
     var secondLine = content.trim().split('\n');
     if (secondLine.length >= 2) secondLine = secondLine[1]
-    var secondLineIsDivider = secondLine.indexOf('| ---') === 0
+    var secondLineIsDivider = /\| :?---/.test(secondLine);
     
     var columnCount = tableColCount(node);
     var emptyHeader = ''
     if (columnCount && !secondLineIsDivider) {
-      emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|' + ' --- |'.repeat(columnCount)
+      emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|'
+      for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
+        emptyHeader += ' ' + getBorder(getColumnAlignment(node, columnIndex)) + ' |';
+      }
     }
 
     return '\n\n' + emptyHeader + content + '\n\n'

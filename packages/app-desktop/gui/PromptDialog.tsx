@@ -132,43 +132,49 @@ export default class PromptDialog extends React.Component<Props, any> {
 		};
 
 		this.styles_.select = {
-			control: (provided: any) =>
-				Object.assign(provided, {
+			control: (provided: any) => {
+				return { ...provided,
 					minWidth: width * 0.2,
 					maxWidth: width * 0.5,
 					fontFamily: theme.fontFamily,
-				}),
-			input: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			input: (provided: any) => {
+				return { ...provided,
 					minWidth: '20px',
 					color: theme.color,
-				}),
-			menu: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			menu: (provided: any) => {
+				return { ...provided,
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
-				}),
-			option: (provided: any, state: any) =>
-				Object.assign(provided, {
+				};
+			},
+			option: (provided: any, state: any) => {
+				return { ...provided,
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
-				}),
-			multiValueLabel: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			multiValueLabel: (provided: any) => {
+				return { ...provided,
 					fontFamily: theme.fontFamily,
-				}),
-			multiValueRemove: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			multiValueRemove: (provided: any) => {
+				return { ...provided,
 					color: theme.color,
-				}),
+				};
+			},
 		};
 
-		this.styles_.selectTheme = (tagTheme: any) =>
-			Object.assign(tagTheme, {
+		this.styles_.selectTheme = (tagTheme: any) => {
+			return { ...tagTheme,
 				borderRadius: 2,
-				colors: Object.assign(tagTheme.colors, {
+				colors: { ...tagTheme.colors,
 					primary: theme.raisedBackgroundColor,
 					primary25: theme.raisedBackgroundColor,
 					neutral0: theme.backgroundColor,
@@ -184,12 +190,11 @@ export default class PromptDialog extends React.Component<Props, any> {
 					neutral90: theme.color,
 					danger: theme.backgroundColor,
 					dangerLight: theme.colorError2,
-				}),
-			});
+				},
+			};
+		};
 
-		this.styles_.desc = Object.assign({}, theme.textStyle, {
-			marginTop: 10,
-		});
+		this.styles_.desc = { ...theme.textStyle, marginTop: 10 };
 
 		return this.styles_;
 	}

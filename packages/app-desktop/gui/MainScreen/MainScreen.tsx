@@ -34,7 +34,7 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
@@ -173,6 +173,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private openCallbackUrl(url: string) {
+		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
 		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command.toString(), params.id);
 	}
@@ -501,16 +502,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 			height: height,
 		};
 
-		this.styles_.modalLayer = Object.assign({}, theme.textStyle, {
-			zIndex: 10000,
+		this.styles_.modalLayer = { ...theme.textStyle, zIndex: 10000,
 			position: 'absolute',
 			top: 0,
 			left: 0,
 			backgroundColor: theme.backgroundColor,
 			width: width - 20,
 			height: height - 20,
-			padding: 10,
-		});
+			padding: 10 };
 
 		return this.styles_;
 	}
@@ -803,13 +802,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public render() {
 		const theme = themeStyle(this.props.themeId);
-		const style = Object.assign(
-			{
-				color: theme.color,
-				backgroundColor: theme.backgroundColor,
-			},
-			this.props.style
-		);
+		const style = {
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			...this.props.style,
+		};
 		const promptOptions = this.state.promptOptions;
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible());
 
@@ -824,7 +821,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.pluginsLegacy);
 		const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
 
-		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
+		const modalLayerStyle = { ...styles.modalLayer, display: this.state.modalLayer.visible ? 'block' : 'none' };
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
@@ -866,6 +863,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
+	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
 
 	return {
 		themeId: state.settings.theme,
@@ -873,7 +871,7 @@ const mapStateToProps = (state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
-		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys).length,
+		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		pluginsLegacy: state.pluginsLegacy,

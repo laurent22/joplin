@@ -1,5 +1,50 @@
 # Joplin Android app changelog
 
+## [android-v2.11.27](https://github.com/laurent22/joplin/releases/tag/android-v2.11.27) (Pre-release) - 2023-06-10T15:58:58Z
+
+- Upgraded to React Native 0.71
+- Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+
+## [android-v2.11.26](https://github.com/laurent22/joplin/releases/tag/android-v2.11.26) (Pre-release) - 2023-06-08T16:13:02Z
+
+- Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+- Fixed: Allow certain HTML anchor tags (#8286)
+- Fixed: Fix alarms for latest Android versions (#8229)
+- Fixed: Fix sharing data with the app (#8285)
+
+## [android-v2.11.25](https://github.com/laurent22/joplin/releases/tag/android-v2.11.25) (Pre-release) - 2023-06-03T16:40:08Z
+
+- Fixed: Fix Vosk logic (60b3921)
+- Fixed: Fixed error "Download interrupted" when downloading resources from Joplin Cloud/Server.
+
+## [android-v2.11.24](https://github.com/laurent22/joplin/releases/tag/android-v2.11.24) (Pre-release) - 2023-06-02T15:22:04Z
+
+- Improved: Write to note in realtime using voice typing (7779879)
+
+## [android-v2.11.23](https://github.com/laurent22/joplin/releases/tag/android-v2.11.23) (Pre-release) - 2023-06-01T17:19:16Z
+
+- Improved: Auto-detect language on start (e48d55c)
+- Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
+- Improved: Updated packages @react-native-community/netinfo (v9.3.10), @react-native-community/push-notification-ios (v1.11.0), aws, jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), react-native-paper (v5.8.0), react-native-reanimated (v3.1.0), react-native-safe-area-context (v4.5.2), sass (v1.62.1), sharp (v0.32.1), tar (v6.1.14), yargs (v17.7.2)
+- Improved: When resetting the master password, also create a new master key with that password (e647775)
+- Fixed: Fixed regression in biometric check (b19f1a1)
+- Fixed: Improve selection of active E2EE key (#8254)
+- Fixed: Support monochrome icons (#7772) (#7766 by Andrey Mukamolov)
+- Security: Disable SVG tag support in editor to prevent XSS (caf6606)
+- Security: Prevent XSS by sanitizing certain HTML attributes (9e90d90)
+
+## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
+
+- Fixed: Fix "Download interrupted" error (b023f58)
+
+## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
+
+- Improved: Updated packages react-native-paper (v5.6.0)
+
+## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) (Pre-release) - 2023-05-12T12:43:08Z
+
+- Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
+
 ## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) (Pre-release) - 2023-05-10T12:24:40Z
 
 - Improved: Translate Welcome notes (#8154)

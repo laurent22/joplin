@@ -100,7 +100,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 			enableEditPopup: false,
 		}, onClick);
 	} else {
-		js = `onclick='${js}'`;
+		js = `onclick='${htmlentities(js)}'`;
 	}
 
 	if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place

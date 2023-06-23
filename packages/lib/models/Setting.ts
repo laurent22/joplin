@@ -1718,7 +1718,7 @@ class Setting extends BaseModel {
 
 		this.metadata_ = { ...this.buildInMetadata_ };
 
-		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
+		this.metadata_ = { ...this.metadata_, ...this.customMetadata_ };
 
 		if (this.constants_.env === Env.Dev) this.validateMetadata(this.metadata_);
 
@@ -1837,7 +1837,7 @@ class Setting extends BaseModel {
 	public static settingMetadata(key: string): SettingItem {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new JoplinError(`Unknown key: ${key}`, 'unknown_key');
-		const output = Object.assign({}, metadata[key]);
+		const output = { ...metadata[key] };
 		output.key = key;
 		return output;
 	}
@@ -1867,9 +1867,7 @@ class Setting extends BaseModel {
 	}
 
 	public static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
-		options = Object.assign({}, {
-			secureOnly: false,
-		}, options);
+		options = { secureOnly: false, ...options };
 
 		if (!this.keys_) {
 			const metadata = this.metadata();
@@ -2227,7 +2225,7 @@ class Setting extends BaseModel {
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
-			if (typeof value === 'object') return Object.assign({}, value);
+			if (typeof value === 'object') return { ...value };
 			return value;
 		}
 
@@ -2335,7 +2333,7 @@ class Setting extends BaseModel {
 		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
 
 		for (let i = 0; i < this.cache_.length; i++) {
-			const s = Object.assign({}, this.cache_[i]);
+			const s = { ...this.cache_[i] };
 			const valueAsString = this.valueToString(s.key, s.value);
 
 			if (this.isSecureKey(s.key)) {
@@ -2459,7 +2457,7 @@ class Setting extends BaseModel {
 		const output: any = {};
 		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
-			const s = Object.assign({}, metadata[key]);
+			const s = { ...metadata[key] };
 			if (!s.public) continue;
 			if (s.appTypes && s.appTypes.indexOf(appType) < 0) continue;
 			s.value = this.value(key);

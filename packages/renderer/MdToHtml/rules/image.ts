@@ -33,7 +33,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 				destroyEditPopupSyntax: ruleOptions.destroyEditPopupSyntax,
 			}, null);
 
-			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title, alt: token.content }))} ${js}/>`;
+			return `<img data-from-md ${htmlUtils.attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

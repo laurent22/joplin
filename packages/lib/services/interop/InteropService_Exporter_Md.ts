@@ -130,7 +130,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 			const noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
 
 			const noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
-			const modNote = Object.assign({}, item, { body: noteBody });
+			const modNote = { ...item, body: noteBody };
 			const noteContent = await this.getNoteExportContent_(modNote);
 			await shim.fsDriver().mkdir(dirname(noteFilePath));
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');

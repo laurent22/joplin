@@ -258,9 +258,7 @@ export default class MdToHtml {
 		if (name === 'link_close') name = 'mediaPlayers';
 
 		let o = this.pluginOptions_[name] ? this.pluginOptions_[name] : {};
-		o = Object.assign({
-			enabled: true,
-		}, o);
+		o = { enabled: true, ...o };
 
 		return o;
 	}
@@ -324,12 +322,10 @@ export default class MdToHtml {
 					const name = `${pluginName}/${asset.name}`;
 					const assetPath = rule?.assetPath ? `${rule.assetPath}/${asset.name}` : `pluginAssets/${name}`;
 
-					files.push(Object.assign({}, asset, {
-						name: name,
+					files.push({ ...asset, name: name,
 						path: assetPath,
 						pathIsAbsolute: !!rule && !!rule.assetPathIsAbsolute,
-						mime: mime,
-					}));
+						mime: mime });
 				}
 			}
 		}
@@ -447,7 +443,7 @@ export default class MdToHtml {
 			postMessageSyntax: 'postMessage',
 			highlightedKeywords: [],
 			codeTheme: 'atom-one-light.css',
-			theme: Object.assign({}, defaultNoteStyle, theme),
+			theme: { ...defaultNoteStyle, ...theme },
 			plugins: {},
 
 			audioPlayerEnabled: this.pluginEnabled('audioPlayer'),
@@ -471,10 +467,8 @@ export default class MdToHtml {
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
-		const ruleOptions = Object.assign({}, options, {
-			resourceBaseUrl: this.resourceBaseUrl_,
-			ResourceModel: this.ResourceModel_,
-		});
+		const ruleOptions = { ...options, resourceBaseUrl: this.resourceBaseUrl_,
+			ResourceModel: this.ResourceModel_ };
 
 		const context: PluginContext = {
 			css: {},
@@ -562,7 +556,7 @@ export default class MdToHtml {
 		// Using the `context` object, a plugin can define what additional assets they need (css, fonts, etc.) using context.pluginAssets.
 		// The calling application will need to handle loading these assets.
 
-		const allRules = Object.assign({}, rules, this.extraRendererRules_);
+		const allRules = { ...rules, ...this.extraRendererRules_ };
 
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;

@@ -7,6 +7,9 @@ import parseStorageDriverConnectionString from './models/items/storage/parseStor
 
 interface PackageJson {
 	version: string;
+	joplinServer: {
+		forkVersion: string;
+	};
 }
 
 const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
@@ -31,6 +34,13 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 
 	return null;
 }
+
+export const fullVersionString = (config: Config) => {
+	const output: string[] = [];
+	output.push(`v${config.appVersion}`);
+	if (config.appVersion !== config.joplinServerVersion) output.push(`(Based on Joplin Server v${config.joplinServerVersion})`);
+	return output.join(' ');
+};
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
 	const baseConfig: DatabaseConfig = {
@@ -114,10 +124,12 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const baseUrl = baseUrlFromEnv(env, appPort);
 	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
 	const supportEmail = env.SUPPORT_EMAIL;
+	const forkVersion = packageJson.joplinServer?.forkVersion;
 
 	config_ = {
 		...env,
-		appVersion: packageJson.version,
+		appVersion: forkVersion ? forkVersion : packageJson.version,
+		joplinServerVersion: packageJson.version,
 		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
 		env: envType,

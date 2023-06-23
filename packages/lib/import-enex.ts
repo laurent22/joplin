@@ -175,7 +175,7 @@ async function processNoteResource(resource: ExtractedResource) {
 		}
 
 		if (!resource.id || !resource.size) {
-			const debugTemp = Object.assign({}, resource);
+			const debugTemp = { ...resource };
 			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
 			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
 		}
@@ -189,7 +189,7 @@ async function saveNoteResources(note: ExtractedNote) {
 	for (let i = 0; i < note.resources.length; i++) {
 		const resource = note.resources[i];
 
-		const toSave = Object.assign({}, resource);
+		const toSave = { ...resource };
 		delete toSave.dataFilePath;
 		delete toSave.dataEncoding;
 		delete toSave.hasData;
@@ -230,9 +230,7 @@ interface ImportOptions {
 }
 
 async function saveNoteToStorage(note: ExtractedNote, importOptions: ImportOptions) {
-	importOptions = Object.assign({}, {
-		fuzzyMatching: false,
-	}, importOptions);
+	importOptions = { fuzzyMatching: false, ...importOptions };
 
 	note = Note.filter(note as any);
 

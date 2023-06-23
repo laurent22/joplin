@@ -301,7 +301,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同步目標。",
  "Encrypted": "已加密",
  "Encrypted items cannot be modified": "無法修改已加密項目",
- "Encrypted notebooks cannot be renamed": "無法重新命名已加密項目",
  "Encryption": "加密",
  "Encryption Config": "加密設定",
  "Encryption is: %s": "加密: %s",

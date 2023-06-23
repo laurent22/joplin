@@ -22,13 +22,13 @@ import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
-import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
+import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
+const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
 import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -113,7 +113,7 @@ import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
-import sensorInfo from './components/biometrics/sensorInfo';
+import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 
@@ -128,6 +128,10 @@ const logReducerAction = function(action: any) {
 	if (action.routeName) msg.push(action.routeName);
 
 	// reg.logger().debug('Reducer action', msg.join(', '));
+};
+
+const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
+	return !!sensorInfo && sensorInfo.enabled;
 };
 
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
@@ -213,14 +217,13 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState: AppState = Object.assign({}, defaultState, {
-	sideMenuOpenPercent: 0,
+const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
-});
+};
 
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -273,11 +276,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 				for (let i = 0; i < navHistory.length; i++) {
 					const n = navHistory[i];
 					if (n.routeName === action.routeName) {
-						navHistory[i] = Object.assign({}, action);
+						navHistory[i] = { ...action };
 					}
 				}
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				newState.selectedNoteHash = '';
 
@@ -321,32 +324,32 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'SIDE_MENU_TOGGLE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = !newState.showSideMenu;
 			break;
 
 		case 'SIDE_MENU_OPEN':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = true;
 			break;
 
 		case 'SIDE_MENU_CLOSE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = false;
 			break;
 
 		case 'SIDE_MENU_OPEN_PERCENT':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
 
 			{
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				const noteId = action.id;
 				const newSelectedNoteIds = state.selectedNoteIds.slice();
@@ -366,7 +369,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'NOTE_SELECTION_START':
 
 			if (!state.noteSelectionEnabled) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				newState.noteSelectionEnabled = true;
 				newState.selectedNoteIds = [action.id];
 			}
@@ -374,25 +377,25 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'NOTE_SELECTION_END':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSelectionEnabled = false;
 			newState.selectedNoteIds = [];
 			break;
 
 		case 'NOTE_SIDE_MENU_OPTIONS_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSideMenuOptions = action.options;
 			break;
 
 		case 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED':
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.disableSideMenuGestures = action.disableSideMenuGestures;
 			break;
 
 		case 'MOBILE_DATA_WARNING_UPDATE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
@@ -521,10 +524,11 @@ async function initialize(dispatch: Function) {
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
+
 		if (Setting.value('firstStart')) {
-			let locale = NativeModules.I18nManager.localeIdentifier;
-			if (!locale) locale = defaultLocale();
-			Setting.setValue('locale', closestSupportedLocale(locale));
+			const detectedLocale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
+
 			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', 0);
 		} else {
@@ -810,7 +814,21 @@ class AppComponent extends React.Component {
 
 			await initialize(this.props.dispatch);
 
-			this.setState({ sensorInfo: await sensorInfo() });
+			const loadedSensorInfo = await sensorInfo();
+			this.setState({ sensorInfo: loadedSensorInfo });
+
+			// If biometrics is disabled we set biometricsDone to `true`. We do
+			// it with a delay so that the component is properly mounted, and
+			// the componentDidUpdate gets triggered (which in turns will handle
+			// the share data, if any).
+			setTimeout(() => {
+				if (!biometricsEnabled(loadedSensorInfo)) {
+					this.props.dispatch({
+						type: 'BIOMETRICS_DONE_SET',
+						value: true,
+					});
+				}
+			}, 100);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -870,14 +888,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	public componentDidUpdate(prevProps: any) {
-		if (this.props.showSideMenu !== prevProps.showSideMenu) {
-			Animated.timing(this.state.sideMenuContentOpacity, {
-				toValue: this.props.showSideMenu ? 0.5 : 0,
-				duration: 600,
-			}).start();
-		}
-
+	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -987,10 +998,10 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
-		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
-		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
+		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
-		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
+		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
+		logger.info('root.biometrics: biometricsEnabled', biometricsEnabled(this.state.sensorInfo));
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
@@ -1018,8 +1029,7 @@ class AppComponent extends React.Component {
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-							{ this.state.sensorInfo && <BiometricPopup
+							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
@@ -1066,6 +1076,7 @@ const mapStateToProps = (state: any) => {
 		noteSideMenuOptions: state.noteSideMenuOptions,
 		disableSideMenuGestures: state.disableSideMenuGestures,
 		biometricsDone: state.biometricsDone,
+		biometricsEnabled: state.settings['security.biometricsEnabled'],
 	};
 };
 

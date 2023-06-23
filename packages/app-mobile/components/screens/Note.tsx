@@ -49,6 +49,7 @@ import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosa
 import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
+import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -142,7 +143,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				Keyboard.dismiss();
 
 				this.setState({
-					note: Object.assign({}, this.state.lastSavedNote),
+					note: { ...this.state.lastSavedNote },
 					mode: 'view',
 				});
 
@@ -287,7 +288,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (!undoState) return;
 
 		this.setState((state: any) => {
-			const newNote = Object.assign({}, state.note);
+			const newNote = { ...state.note };
 			newNote.body = undoState.body;
 			return {
 				note: newNote,
@@ -386,7 +387,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			borderBottomWidth: 1,
 		};
 
-		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
 
 		styles.titleTextInput = {
@@ -714,14 +715,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const resourceTag = Resource.markdownTag(resource);
 
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 
-		if (this.state.mode === 'edit' && !!this.selection) {
-			const newText = `\n${resourceTag}\n`;
+		if (this.state.mode === 'edit') {
+			let newText = '';
 
-			const prefix = newNote.body.substring(0, this.selection.start);
-			const suffix = newNote.body.substring(this.selection.end);
-			newNote.body = `${prefix}${newText}${suffix}`;
+			if (this.selection) {
+				newText = `\n${resourceTag}\n`;
+				const prefix = newNote.body.substring(0, this.selection.start);
+				const suffix = newNote.body.substring(this.selection.end);
+				newNote.body = `${prefix}${newText}${suffix}`;
+			} else {
+				newText = `\n${resourceTag}`;
+				newNote.body = `${newNote.body}\n${newText}`;
+			}
 
 			if (this.useEditorBeta()) {
 				// The beta editor needs to be explicitly informed of changes
@@ -879,7 +886,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
-		const newNote = Object.assign({}, this.state.note);
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
+			logger.warn('POST_NOTIFICATION permission was not granted');
+			return;
+		}
+
+		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -1082,7 +1095,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 
 		// Voice typing is enabled only for French language and on Android for now
-		if (voskEnabled && shim.mobilePlatform() === 'android' && currentLocale() === 'fr_FR') {
+		if (voskEnabled && shim.mobilePlatform() === 'android' && isSupportedLanguage(currentLocale())) {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {
@@ -1179,7 +1192,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const folder = await Folder.load(note.parent_id);
 
 		this.setState({
-			lastSavedNote: Object.assign({}, note),
+			lastSavedNote: { ...note },
 			note: note,
 			folder: folder,
 		});
@@ -1219,7 +1232,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.scheduleSave();
 		} else {
 			if (this.useEditorBeta()) {
-				this.editorRef.current.insertText(text);
+				// We add a space so that if the feature is used twice in a row,
+				// the sentences are not stuck to each others.
+				this.editorRef.current.insertText(`${text} `);
 			} else {
 				logger.warn('Voice typing is not supported in plaintext editor');
 			}
@@ -1346,6 +1361,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
+			if (this.state.voiceTypingDialogShown) return null;
+
 			const editButton = {
 				label: _('Edit'),
 				icon: 'md-create',
@@ -1360,8 +1377,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return <ActionButton mainButton={editButton} />;
 		};
-
-		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1395,7 +1410,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const renderVoiceTypingDialog = () => {
 			if (!this.state.voiceTypingDialogShown) return null;
-			return <VoiceTypingDialog onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
 		};
 
 		return (
@@ -1416,7 +1431,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{renderActionButton()}
+				{renderVoiceTypingDialog()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1426,7 +1442,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 				/>
 				{noteTagDialog}
-				{renderVoiceTypingDialog()}
 			</View>
 		);
 	}

@@ -258,7 +258,6 @@
  "Enabled": "Включено",
  "Encrypted": "Зашифровано",
  "Encrypted items cannot be modified": "Зашифровані елементи не можуть бути змінені",
- "Encrypted notebooks cannot be renamed": "Зашифровані блокноти не модуть бути переіменовані",
  "Encryption": "Шифрування",
  "Encryption Config": "Налаштування шифрування",
  "Encryption is: %s": "Шифрування: %s",

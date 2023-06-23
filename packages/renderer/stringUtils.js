@@ -57,9 +57,7 @@ function replaceRegexDiacritics(regexString) {
 // { value: 'actualkeyword', type: 'regex/string' }
 // The function surrounds the keywords wherever they are, even within other words.
 function surroundKeywords(keywords, text, prefix, suffix, options = null) {
-	options = Object.assign({}, {
-		escapeHtml: false,
-	}, options);
+	options = { escapeHtml: false, ...options };
 
 	if (!keywords.length) return text;
 

@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.createTable('events', (table: Knex.CreateTableBuilder) => {
 		table.uuid('id').unique().notNullable();
 		table.increments('counter').unique().primary().notNullable();
@@ -14,8 +14,8 @@ export async function up(db: DbConnection): Promise<any> {
 		table.index('type');
 		table.index('name');
 	});
-}
+};
 
-export async function down(db: DbConnection): Promise<any> {
+export const down = async (db: DbConnection) => {
 	await db.schema.dropTable('events');
-}
+};

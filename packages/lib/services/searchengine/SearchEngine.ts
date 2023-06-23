@@ -22,6 +22,19 @@ interface SearchOptions {
 	searchType: SearchType;
 }
 
+export interface ComplexTerm {
+	type: 'regex' | 'text';
+	value: string;
+	scriptType: any;
+	valueRegex?: RegExp;
+}
+
+export interface Terms {
+	_: (string | ComplexTerm)[];
+	title: (string | ComplexTerm)[];
+	body: (string | ComplexTerm)[];
+}
+
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
@@ -440,19 +453,6 @@ export default class SearchEngine {
 		const titleTerms = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
 		const bodyTerms = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
 
-		interface ComplexTerm {
-			type: 'regex' | 'text';
-			value: string;
-			scriptType: any;
-			valueRegex?: RegExp;
-		}
-
-		interface Terms {
-			_: (string | ComplexTerm)[];
-			title: (string | ComplexTerm)[];
-			body: (string | ComplexTerm)[];
-		}
-
 		const terms: Terms = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
 
 		// Filter terms:
@@ -508,7 +508,7 @@ export default class SearchEngine {
 
 		allTerms = allTerms.map(x => {
 			if (x.name === 'text' || x.name === 'title' || x.name === 'body') {
-				return Object.assign(x, { value: this.normalizeText_(x.value) });
+				return { ...x, value: this.normalizeText_(x.value) };
 			}
 			return x;
 		});
@@ -539,7 +539,7 @@ export default class SearchEngine {
 	}
 
 	private normalizeNote_(note: NoteEntity) {
-		const n = Object.assign({}, note);
+		const n = { ...note };
 		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;

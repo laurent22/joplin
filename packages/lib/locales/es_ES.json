@@ -329,7 +329,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Habilitar el cifrado significa que *todas* sus notas y adjuntos van a ser resincronizados y enviados cifrados al objetivo de sincronización.",
  "Encrypted": "Cifrado",
  "Encrypted items cannot be modified": "Los elementos cifrados no pueden ser modificados",
- "Encrypted notebooks cannot be renamed": "Las libretas cifradas no pueden ser renombradas",
  "Encryption": "Cifrado",
  "Encryption Config": "Configuración del Cifrado",
  "Encryption is: %s": "El cifrado está: %s",

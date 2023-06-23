@@ -50,6 +50,7 @@ jobs:
           sudo apt-get install -y gettext
           sudo apt-get install -y libsecret-1-dev
           sudo apt-get install -y translate-toolkit
+          sudo apt-get install -y rsync
 
       - name: Install Docker Engine
         # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
@@ -175,3 +176,35 @@ jobs:
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
           docker run joplin/server:0.0.0-beta node dist/app.js migrate list
+ 
+      - name: Check HTTP request
+        run: |
+          # Need to pass environment variables:
+          docker run -p 22300:22300 joplin/server:0.0.0-beta node dist/app.js --env dev &
+
+          # Wait for server to start
+          sleep 10
+
+          # Check if status code is correct
+          # if the actual_status DOES NOT include the expected_status
+          # it exits the process with code 1
+          
+          expected_status="HTTP/1.1 200 OK"
+          actual_status=$(curl -I -X GET http://localhost:22300/api/ping | head -n 1)
+          if [[ ! "$actual_status" =~ "$expected_status" ]]; then 
+            echo 'Failed while checking the status code after request to /api/ping'
+            echo 'expected: ' $expected_status
+            echo 'actual:   ' $actual_status
+            exit 1; 
+          fi
+          
+          # Check if the body response is correct
+          # if the actual_body is different of expected_body exit with code 1
+          expected_body='{"status":"ok","message":"Joplin Server is running"}'
+          actual_body=$(curl http://localhost:22300/api/ping)
+          
+          if [[ "$actual_body" != "$expected_body" ]]; then
+            echo 'Failed while checking the body response after request to /api/ping'
+            exit 1;
+          fi
+

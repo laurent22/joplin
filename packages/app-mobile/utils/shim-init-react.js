@@ -10,6 +10,8 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
 const Resource = require('@joplin/lib/models/Resource').default;
+const { getLocales } = require('react-native-localize');
+const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
 
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
@@ -85,6 +87,30 @@ function shimInit() {
 	};
 
 	/* eslint-enable */
+
+	shim.detectAndSetLocale = (Setting) => {
+		// [
+		// 	{
+		// 		"countryCode": "US",
+		// 		"isRTL": false,
+		// 		"languageCode": "fr",
+		// 		"languageTag": "fr-US"
+		// 	},
+		// 	{
+		// 		"countryCode": "US",
+		// 		"isRTL": false,
+		// 		"languageCode": "en",
+		// 		"languageTag": "en-US"
+		// 	}
+		// ]
+
+		const locales = getLocales();
+		let locale = locales.length ? locales[0].languageTag : defaultLocale();
+		locale = closestSupportedLocale(locale);
+		Setting.setValue('locale', locale);
+		setLocale(locale);
+		return locale;
+	};
 
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatchable error that crashes the
@@ -252,7 +278,7 @@ function shimInit() {
 		await shim.fsDriver().copy(filePath, targetPath);
 
 		if (defaultProps) {
-			resource = Object.assign({}, resource, defaultProps);
+			resource = { ...resource, ...defaultProps };
 		}
 
 		const itDoes = await shim.fsDriver().waitTillExists(targetPath);

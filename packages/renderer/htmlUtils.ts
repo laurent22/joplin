@@ -30,9 +30,13 @@ const selfClosingElements = [
 	'wbr',
 ];
 
+interface SanitizeHtmlOptions {
+	addNoMdConvClass: boolean;
+}
+
 class HtmlUtils {
 
-	public attributesHtml(attr: any) {
+	public attributesHtml(attr: Record<string, string>) {
 		const output = [];
 
 		for (const n in attr) {
@@ -76,8 +80,15 @@ class HtmlUtils {
 	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 
+		interface Action {
+			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
+			href: string;
+			html: string;
+			attrs: Record<string, string>;
+		}
+
 		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action = callback({ href: href });
+			const action: Action = callback({ href: href });
 
 			if (!action) return `<a${before}href="${href}"${after}>`;
 
@@ -146,15 +157,18 @@ class HtmlUtils {
 
 	private isAcceptedUrl(url: string): boolean {
 		url = url.toLowerCase();
-		return url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto://');
+		return url.startsWith('https://') ||
+			url.startsWith('http://') ||
+			url.startsWith('mailto://') ||
+			// We also allow anchors but only with a specific set of a characters.
+			// Fixes https://github.com/laurent22/joplin/issues/8286
+			!!url.match(/^#[a-zA-Z0-9-]+$/);
 	}
 
-	public sanitizeHtml(html: string, options: any = null) {
-		options = Object.assign({}, {
-			// If true, adds a "jop-noMdConv" class to all the tags.
+	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
+		options = { // If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
-			addNoMdConvClass: false,
-		}, options);
+			addNoMdConvClass: false, ...options };
 
 		const output: string[] = [];
 
@@ -172,17 +186,21 @@ class HtmlUtils {
 
 		// The BASE tag allows changing the base URL from which files are
 		// loaded, and that can break several plugins, such as Katex (which
-		// needs to load CSS files using a relative URL). For that reason
-		// it is disabled. More info:
-		// https://github.com/laurent22/joplin/issues/3021
+		// needs to load CSS files using a relative URL). For that reason it is
+		// disabled. More info: https://github.com/laurent22/joplin/issues/3021
 		//
-		// "link" can be used to escape the parser and inject JavaScript.
-		// Adding "meta" too for the same reason as it shouldn't be used in
-		// notes anyway.
+		// "link" can be used to escape the parser and inject JavaScript. Adding
+		// "meta" too for the same reason as it shouldn't be used in notes
+		// anyway.
+		//
+		// There are too many issues with SVG tags and to handle them properly
+		// we should parse them separately. Currently we are not so it is better
+		// to disable them. SVG graphics are still supported via the IMG tag.
 		const disallowedTags = [
 			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
 			'embed', 'link', 'meta', 'noscript', 'button', 'form',
 			'input', 'select', 'textarea', 'option', 'optgroup',
+			'svg',
 		];
 
 		const parser = new htmlparser2.Parser({
@@ -201,7 +219,7 @@ class HtmlUtils {
 
 				if (disallowedTagDepth) return;
 
-				attrs = Object.assign({}, attrs);
+				attrs = { ...attrs };
 
 				// Remove all the attributes that start with "on", which
 				// normally should be JavaScript events. A better solution
@@ -218,18 +236,18 @@ class HtmlUtils {
 					delete attrs[attrName];
 				}
 
-				if (name === 'a') {
-					// Make sure that only non-acceptable URLs are filtered out.
-					// In particular we want to exclude `javascript:` URLs.
-					if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
-						attrs['href'] = '#';
-					}
+				// Make sure that only non-acceptable URLs are filtered out. In
+				// particular we want to exclude `javascript:` URLs. This
+				// applies to A tags, and also AREA ones but to be safe we don't
+				// filter on the tag name and process all HREF attributes.
+				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
+					attrs['href'] = '#';
+				}
 
-					// We need to clear any such attribute, otherwise it will
-					// make any arbitrary link open within the application.
-					if ('data-from-md' in attrs) {
-						delete attrs['data-from-md'];
-					}
+				// We need to clear any such attribute, otherwise it will
+				// make any arbitrary link open within the application.
+				if ('data-from-md' in attrs) {
+					delete attrs['data-from-md'];
 				}
 
 				if (options.addNoMdConvClass) {

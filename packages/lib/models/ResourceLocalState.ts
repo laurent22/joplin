@@ -33,7 +33,7 @@ export default class ResourceLocalState extends BaseModel {
 	}
 
 	public static batchDelete(ids: string[], options: any = null) {
-		options = options ? Object.assign({}, options) : {};
+		options = options ? { ...options } : {};
 		options.idFieldName = 'resource_id';
 		return super.batchDelete(ids, options);
 	}

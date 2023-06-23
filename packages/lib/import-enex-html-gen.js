@@ -103,7 +103,7 @@ function enexXmlToHtml_(stream, resources) {
 					for (let i = 0; i < remainingResources.length; i++) {
 						const r = remainingResources[i];
 						if (!r.id) {
-							resource = Object.assign({}, r);
+							resource = { ...r };
 							resource.id = hash;
 							remainingResources.splice(i, 1);
 							found = true;

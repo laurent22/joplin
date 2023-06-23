@@ -75,6 +75,7 @@ packages/pdf-viewer/dist
 plugin_types/
 readme/
 packages/react-native-vosk/lib/
+packages/lib/countable/Countable.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
@@ -224,6 +225,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollHandler.j
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
@@ -355,6 +357,7 @@ packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
+packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
@@ -363,6 +366,7 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.test.js
@@ -433,8 +437,8 @@ packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
-packages/app-mobile/services/voiceTyping/vosk.dummy.js
-packages/app-mobile/services/voiceTyping/vosk.js
+packages/app-mobile/services/voiceTyping/vosk.android.js
+packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
@@ -563,6 +567,8 @@ packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/types.js
+packages/lib/models/utils/userData.js
+packages/lib/models/utils/userData.test.js
 packages/lib/net-utils.js
 packages/lib/ntp.js
 packages/lib/onedrive-api.js

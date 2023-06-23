@@ -1,6 +1,16 @@
+export enum ErrorCode {
+	ResyncRequired = 'resyncRequired',
+	NoPathForItem = 'noPathForItem',
+	HasExclusiveSyncLock = 'hasExclusiveLock',
+	HasSyncLock = 'hasSyncLock',
+	NoSub = 'no_sub',
+	NoStripeSub = 'no_stripe_sub',
+	InvalidOrigin = 'invalidOrigin',
+}
+
 export interface ErrorOptions {
 	details?: any;
-	code?: string;
+	code?: ErrorCode;
 }
 
 // For explanation of the setPrototypeOf call, see:
@@ -9,10 +19,10 @@ export class ApiError extends Error {
 	public static httpCode: number = 400;
 
 	public httpCode: number;
-	public code: string;
+	public code: ErrorCode;
 	public details: any;
 
-	public constructor(message: string, httpCode: number = null, code: string | ErrorOptions = undefined) {
+	public constructor(message: string, httpCode: number = null, code: ErrorCode | ErrorOptions = undefined) {
 		super(message);
 
 		this.httpCode = httpCode === null ? 400 : httpCode;
@@ -30,7 +40,7 @@ export class ApiError extends Error {
 }
 
 export class ErrorWithCode extends ApiError {
-	public constructor(message: string, code: string) {
+	public constructor(message: string, code: ErrorCode) {
 		super(message, null, code);
 	}
 }
@@ -47,7 +57,7 @@ export class ErrorMethodNotAllowed extends ApiError {
 export class ErrorNotFound extends ApiError {
 	public static httpCode: number = 404;
 
-	public constructor(message: string = 'Not Found', code: string = undefined) {
+	public constructor(message: string = 'Not Found', code: ErrorCode = undefined) {
 		super(message, ErrorNotFound.httpCode, code);
 		Object.setPrototypeOf(this, ErrorNotFound.prototype);
 	}
@@ -94,7 +104,7 @@ export class ErrorUnprocessableEntity extends ApiError {
 export class ErrorConflict extends ApiError {
 	public static httpCode: number = 409;
 
-	public constructor(message: string = 'Conflict', code: string = undefined) {
+	public constructor(message: string = 'Conflict', code: ErrorCode = undefined) {
 		super(message, ErrorConflict.httpCode, code);
 		Object.setPrototypeOf(this, ErrorConflict.prototype);
 	}
@@ -104,7 +114,7 @@ export class ErrorResyncRequired extends ApiError {
 	public static httpCode: number = 400;
 
 	public constructor(message: string = 'Delta cursor is invalid and the complete data should be resynced') {
-		super(message, ErrorResyncRequired.httpCode, 'resyncRequired');
+		super(message, ErrorResyncRequired.httpCode, ErrorCode.ResyncRequired);
 		Object.setPrototypeOf(this, ErrorResyncRequired.prototype);
 	}
 }
@@ -156,13 +166,13 @@ export function errorToPlainObject(error: any): PlainObjectError {
 	return output;
 }
 
-export enum ErrorCode {
+export enum CustomErrorCode {
 	NotFound,
 }
 
 export class CustomError extends Error {
-	public code: ErrorCode;
-	public constructor(message: string, code: ErrorCode) {
+	public code: CustomErrorCode;
+	public constructor(message: string, code: CustomErrorCode) {
 		super(message);
 		this.code = code;
 		Object.setPrototypeOf(this, CustomError.prototype);

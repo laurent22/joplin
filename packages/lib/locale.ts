@@ -508,7 +508,8 @@ function languageNameInEnglish(languageCode: string) {
 	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
 }
 
-function languageName(languageCode: string, defaultToEnglish: boolean = true) {
+function languageName(canonicalName: string, defaultToEnglish: boolean = true) {
+	const languageCode = languageCodeOnly(canonicalName);
 	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
 	if (defaultToEnglish) return languageNameInEnglish(languageCode);
 	return '';
@@ -559,7 +560,7 @@ function localeStrings(canonicalName: string) {
 
 	if (loadedLocales_[locale]) return loadedLocales_[locale];
 
-	loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]);
+	loadedLocales_[locale] = { ...supportedLocales_[locale] };
 
 	return loadedLocales_[locale];
 }
@@ -603,4 +604,4 @@ const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	}
 };
 
-export { _, _n, supportedLocales, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

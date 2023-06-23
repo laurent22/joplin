@@ -41,7 +41,7 @@ export default class Joplin {
 
 	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any) {
 		this.implementation_ = implementation;
-		this.data_ = new JoplinData();
+		this.data_ = new JoplinData(plugin);
 		this.plugins_ = new JoplinPlugins(plugin);
 		this.workspace_ = new JoplinWorkspace(store);
 		this.filters_ = new JoplinFilters();

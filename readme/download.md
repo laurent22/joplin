@@ -10,9 +10,13 @@ Your download of <span class="downloaded-filename">Joplin</span> is in progress.
   
 Access your notes on Windows, macOS or Linux.
 
-<!-- DESKTOP-DOWNLOAD-LINKS --><a href='https://objects.joplinusercontent.com/v2.10.18/Joplin-Setup-2.10.18.exe?source=JoplinWebsite&type=New'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a> <a href='https://objects.joplinusercontent.com/v2.10.18/Joplin-2.10.18.dmg?source=JoplinWebsite&type=New'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a> <a href='https://objects.joplinusercontent.com/v2.10.18/Joplin-2.10.18.AppImage?source=JoplinWebsite&type=New'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a><!-- DESKTOP-DOWNLOAD-LINKS -->
+<!-- DESKTOP-DOWNLOAD-LINKS --><a href='https://objects.joplinusercontent.com/v2.10.19/Joplin-Setup-2.10.19.exe?source=JoplinWebsite&type=New'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a> <a href='https://objects.joplinusercontent.com/v2.10.19/Joplin-2.10.19.dmg?source=JoplinWebsite&type=New'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a> <a href='https://objects.joplinusercontent.com/v2.10.19/Joplin-2.10.19.AppImage?source=JoplinWebsite&type=New'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a><!-- DESKTOP-DOWNLOAD-LINKS -->
 
 </div>
+
+## Synchronise your notes with Joplin Cloud
+
+To synchronise your notes on all your devices, whether it's on desktop, mobile or tablet, and to share notes with others, try [Joplin Cloud](https://joplinapp.org/plans/)!
 
 ## Joplin App for Mobile
 

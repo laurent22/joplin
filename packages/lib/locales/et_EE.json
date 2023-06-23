@@ -160,7 +160,6 @@
  "Enabled": "Lubatud",
  "Encrypted": "Krüpteeritud",
  "Encrypted items cannot be modified": "Krüpteeritud üksusi ei saa muuta",
- "Encrypted notebooks cannot be renamed": "Krüptitud märkmikke ei saa ümber nimetada",
  "Encryption": "Krüpteerimine",
  "Encryption Config": "Krüptimise konfiguratsioon",
  "Encryption is: %s": "Krüpteerimine on: %s",

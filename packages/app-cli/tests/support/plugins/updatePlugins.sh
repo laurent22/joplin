@@ -20,3 +20,4 @@ cd "$SCRIPT_DIR/withExternalModules/" && yo joplin --update --skip-install --sil
 cd "$SCRIPT_DIR/post_messages/" && yo joplin --update --skip-install --silent
 cd "$SCRIPT_DIR/nativeModule/" && yo joplin --update --skip-install --silent
 cd "$SCRIPT_DIR/external_assets/" && yo joplin --update --skip-install --silent
+cd "$SCRIPT_DIR/user_data/" && yo joplin --update --skip-install --silent
