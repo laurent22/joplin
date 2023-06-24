@@ -88,6 +88,10 @@ export const getEditPopupSource = (theme: Theme) => {
 		editPopup.replaceChildren(popupIcon, popupLabel);
 
 		parent.insertAdjacentElement('beforeBegin', editPopup);
+
+		// Ensure that the edit popup is focused immediately by screen
+		// readers.
+		editPopup.focus();
 		window.lastEditPopupTarget = parent;
 	}`;
 

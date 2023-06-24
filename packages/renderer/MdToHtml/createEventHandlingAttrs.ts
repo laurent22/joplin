@@ -67,8 +67,7 @@ export const createEventHandlingListeners = (resourceId: string, options: Option
 		const createEditPopup = ` (${options.createEditPopupSyntax})(this, ${JSON.stringify(resourceId)}, ${editPopupClick}); `;
 		eventHandlers.ontouchstart += createEditPopup;
 
-		eventHandlers.onmouseenter += createEditPopup;
-		eventHandlers.onmouseleave += ` (${options.destroyEditPopupSyntax})(this, ${JSON.stringify(resourceId)}); `;
+		eventHandlers.onclick += createEditPopup;
 	}
 
 	if (onClickAction) {
