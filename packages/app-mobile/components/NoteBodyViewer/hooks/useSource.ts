@@ -91,7 +91,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
 	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousDeps[0], noteBody);
 
-	const { createEditPopupSyntax, destroyEditPopupSyntax, editPopupCss } = useEditPopup();
+	const { createEditPopupSyntax, destroyEditPopupSyntax, editPopupCss } = useEditPopup(themeId);
 
 	useEffect(() => {
 		if (onlyNoteBodyHasChanged && onlyCheckboxesHaveChanged) {

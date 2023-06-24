@@ -36,7 +36,7 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 };
 
 describe('createJsDrawEditor', () => {
-	it('should trigger autosave callback every few minutes', () => {
+	it('should trigger autosave callback every few minutes', async () => {
 		let calledAutosaveCount = 0;
 
 		jest.useFakeTimers();
@@ -47,13 +47,16 @@ describe('createJsDrawEditor', () => {
 		});
 
 		expect(calledAutosaveCount).toBe(0);
-		jest.advanceTimersByTime(1000 * 60 * 4);
+
+		// Using the synchronous version of advanceTimersByTime seems to not
+		// run the asynchronous code used to autosave drawings in createJsDrawEditor.ts.
+		await jest.advanceTimersByTimeAsync(1000 * 60 * 4);
 
 		const lastAutosaveCount = calledAutosaveCount;
 		expect(calledAutosaveCount).toBeGreaterThanOrEqual(1);
 		expect(calledAutosaveCount).toBeLessThan(10);
 
-		jest.advanceTimersByTime(1000 * 60 * 10);
+		await jest.advanceTimersByTimeAsync(1000 * 60 * 10);
 
 		expect(calledAutosaveCount).toBeGreaterThan(lastAutosaveCount);
 	});

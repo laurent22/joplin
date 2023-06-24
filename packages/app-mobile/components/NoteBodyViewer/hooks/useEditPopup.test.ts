@@ -2,16 +2,29 @@
  * @jest-environment jsdom
  */
 
+// Mock react-native-vector-icons -- it uses ESM imports, which, by default, are not
+// supported by jest.
+jest.mock('react-native-vector-icons/Ionicons', () => {
+	return {
+		default: {
+			getImageSourceSync: () => {
+				return { uri: '' };
+			},
+		},
+	};
+});
+
+import lightTheme from '@joplin/lib/themes/light';
 import { editPopupClass, getEditPopupSource } from './useEditPopup';
 import { describe, it, expect, jest } from '@jest/globals';
 
 const createEditPopup = (target: HTMLElement) => {
-	const { createEditPopupSyntax } = getEditPopupSource();
+	const { createEditPopupSyntax } = getEditPopupSource(lightTheme);
 	eval(`(${createEditPopupSyntax})`)(target, 'someresourceid', '() => {}');
 };
 
 const destroyEditPopup = () => {
-	const { destroyEditPopupSyntax } = getEditPopupSource();
+	const { destroyEditPopupSyntax } = getEditPopupSource(lightTheme);
 	eval(`(${destroyEditPopupSyntax})`)();
 };
 
