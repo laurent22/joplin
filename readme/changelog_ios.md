@@ -1,5 +1,15 @@
 # Joplin iOS app changelog
 
+## [ios-v12.11.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.4) - 2023-06-25T13:05:29Z
+
+- Improved: Auto-detect language on start (e48d55c)
+- Improved: Updated packages @react-native-community/datetimepicker (v7), aws, buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-reanimated (v3.1.0), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+- Improved: Upgrade E2EE encryption method to AES-256 (#7686)
+- Improved: When resetting the master password, also create a new master key with that password (e647775)
+- Fixed: Allow certain HTML anchor tags (#8286)
+- Fixed: Fix sharing data with the app (#8285)
+- Fixed: Improve selection of active E2EE key (#8254)
+
 ## [ios-v12.11.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.3) - 2023-05-29T12:27:45Z
 
 - Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
