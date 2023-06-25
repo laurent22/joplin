@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.11.31](https://github.com/laurent22/joplin/releases/tag/android-v2.11.31) (Pre-release) - 2023-06-25T14:26:21Z
+
+- Improved: Upgrade E2EE encryption method to AES-256 (#7686)
+
 ## [android-v2.11.30](https://github.com/laurent22/joplin/releases/tag/android-v2.11.30) (Pre-release) - 2023-06-20T15:21:15Z
 
 - New: Add support for Voice Typing for most languages (#8309)
