@@ -40,7 +40,7 @@ interface NavButtonPressEvent {
 	screen: string;
 }
 
-interface MenuOptionType {
+export interface MenuOptionType {
 	onPress: OnPressCallback;
 	isDivider?: boolean;
 	title: string;

@@ -1,21 +1,25 @@
-const React = require('react');
+import * as React from 'react';
 
-const { FlatList, View, Text, Button, StyleSheet, Platform } = require('react-native');
-const { connect } = require('react-redux');
-const { reg } = require('@joplin/lib/registry.js');
-const { ScreenHeader } = require('../ScreenHeader');
-const time = require('@joplin/lib/time').default;
+import { FlatList, View, Text, Button, StyleSheet, Platform, Share } from 'react-native';
+import { connect } from 'react-redux';
+import { reg } from '@joplin/lib/registry.js';
+import { ScreenHeader } from '../ScreenHeader';
+import time from '@joplin/lib/time';
 const { themeStyle } = require('../global-style.js');
-const Logger = require('@joplin/lib/Logger').default;
+import Logger from '@joplin/lib/Logger';
 const { BaseScreenComponent } = require('../base-screen.js');
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
+import { MenuOptionType } from '../ScreenHeader';
+import { AppState } from '../../utils/types';
 
 class LogScreenComponent extends BaseScreenComponent {
-	static navigationOptions() {
+	private readonly menuOptions: MenuOptionType[];
+
+	public static navigationOptions(): any {
 		return { header: null };
 	}
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.state = {
@@ -23,15 +27,34 @@ class LogScreenComponent extends BaseScreenComponent {
 			showErrorsOnly: false,
 		};
 		this.styles_ = {};
+
+		this.menuOptions = [
+			{
+				title: _('Share'),
+				onPress: () => {
+					void this.onSharePress();
+				},
+			},
+		];
 	}
 
-	styles() {
+	private async onSharePress() {
+		// Share all log entries included in the list. As the list only displays a subset of the log,
+		// only a subset of the log is shared.
+		const log = (this.state.logEntries as any[]).map(entry => this.formatLogEntry(entry));
+		await Share.share({
+			message: log.join('\n'),
+			title: _('Log'),
+		});
+	}
+
+	public styles() {
 		const theme = themeStyle(this.props.themeId);
 
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
-		const styles = {
+		const styles: any = {
 			row: {
 				flexDirection: 'row',
 				paddingLeft: 1,
@@ -60,11 +83,11 @@ class LogScreenComponent extends BaseScreenComponent {
 		return this.styles_[this.props.themeId];
 	}
 
-	UNSAFE_componentWillMount() {
-		this.resfreshLogEntries();
+	public UNSAFE_componentWillMount() {
+		void this.resfreshLogEntries();
 	}
 
-	async resfreshLogEntries(showErrorsOnly = null) {
+	private async resfreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
 
 		let levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
@@ -76,19 +99,23 @@ class LogScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	toggleErrorsOnly() {
-		this.resfreshLogEntries(!this.state.showErrorsOnly);
+	private toggleErrorsOnly() {
+		void this.resfreshLogEntries(!this.state.showErrorsOnly);
 	}
 
-	render() {
-		const renderRow = ({ item }) => {
+	private formatLogEntry(item: any) {
+		return `${time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss')}: ${item.message}`;
+	}
+
+	public render() {
+		const renderRow = ({ item }: any) => {
 			let textStyle = this.styles().rowText;
 			if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
 			if (item.level === Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
 
 			return (
 				<View style={this.styles().row}>
-					<Text style={textStyle}>{`${time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss')}: ${item.message}`}</Text>
+					<Text style={textStyle}>{this.formatLogEntry(item)}</Text>
 				</View>
 			);
 		};
@@ -97,7 +124,9 @@ class LogScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
-				<ScreenHeader title={_('Log')} />
+				<ScreenHeader
+					title={_('Log')}
+					menuOptions={this.menuOptions}/>
 				<FlatList
 					data={this.state.logEntries}
 					renderItem={renderRow}
@@ -108,7 +137,7 @@ class LogScreenComponent extends BaseScreenComponent {
 						<Button
 							title={_('Refresh')}
 							onPress={() => {
-								this.resfreshLogEntries();
+								void this.resfreshLogEntries();
 							}}
 						/>
 					</View>
@@ -126,10 +155,10 @@ class LogScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const LogScreen = connect(state => {
+const LogScreen = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
-})(LogScreenComponent);
+})(LogScreenComponent as any);
 
-module.exports = { LogScreen };
+export default LogScreen;

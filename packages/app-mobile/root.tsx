@@ -60,7 +60,7 @@ import NotesScreen from './components/screens/Notes';
 const { TagsScreen } = require('./components/screens/tags.js');
 import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
-const { LogScreen } = require('./components/screens/log.js');
+import LogScreen from './components/screens/LogScreen';
 const { StatusScreen } = require('./components/screens/status.js');
 const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
