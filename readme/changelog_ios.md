@@ -1,6 +1,6 @@
 # Joplin iOS app changelog
 
-## [ios-v12.11.4](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.4) - 2023-06-25T13:05:29Z
+## [ios-v12.11.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.5) - 2023-06-25T14:05:43Z
 
 - Improved: Auto-detect language on start (e48d55c)
 - Improved: Updated packages @react-native-community/datetimepicker (v7), aws, buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-reanimated (v3.1.0), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
