@@ -25,9 +25,9 @@ export const defaultSearchState: SearchState = {
 };
 
 export interface SearchPanelProps {
-    searchControl: SearchControl;
-    searchState: SearchState;
-    editorSettings: EditorSettings;
+	searchControl: SearchControl;
+	searchState: SearchState;
+	editorSettings: EditorSettings;
 }
 
 interface ActionButtonProps {

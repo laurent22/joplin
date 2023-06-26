@@ -9,8 +9,8 @@ interface Term {
 }
 
 enum Relation {
-    OR = 'OR',
-    AND = 'AND',
+	OR = 'OR',
+	AND = 'AND',
 }
 
 enum Operation {

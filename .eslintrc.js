@@ -107,6 +107,9 @@ module.exports = {
 		'semi': ['error', 'always'],
 		'eol-last': ['error', 'always'],
 		'quotes': ['error', 'single'],
+
+		// Note that "indent" only applies to JavaScript files. See
+		// https://github.com/laurent22/joplin/issues/8360
 		'indent': ['error', 'tab'],
 		'comma-dangle': ['error', {
 			'arrays': 'always-multiline',
@@ -181,6 +184,12 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
+				'@typescript-eslint/indent': ['error', 'tab', {
+					'ignoredNodes': [
+						// See https://github.com/typescript-eslint/typescript-eslint/issues/1824
+						'TSUnionType',
+					],
+				}],
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],

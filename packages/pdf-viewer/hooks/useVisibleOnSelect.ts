@@ -2,9 +2,9 @@ import { useRef, useEffect, MutableRefObject } from 'react';
 
 export interface VisibleOnSelect {
 	container: MutableRefObject<HTMLElement>;
-    wrapperRef: MutableRefObject<HTMLElement>;
+	wrapperRef: MutableRefObject<HTMLElement>;
 	isVisible: boolean;
-    isSelected: boolean;
+	isSelected: boolean;
 }
 
 // Used in thumbnail view, to scroll to the newly selected page.

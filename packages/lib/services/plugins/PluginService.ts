@@ -38,7 +38,7 @@ export interface DefaultPluginSettings {
 }
 
 export interface DefaultPluginsInfo {
-    [pluginId: string]: DefaultPluginSettings;
+	[pluginId: string]: DefaultPluginSettings;
 }
 
 export interface PluginSetting {

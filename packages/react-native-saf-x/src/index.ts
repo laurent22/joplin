@@ -30,66 +30,66 @@ export type Encoding = 'utf8' | 'base64' | 'ascii';
 
 /** Native interface of the module */
 interface SafxInterface {
-  openDocumentTree(persist: boolean): Promise<DocumentFileDetail | null>;
-  openDocument(
-    persist: boolean,
-    multiple: boolean,
-  ): Promise<DocumentFileDetail[] | null>;
-  createDocument(
-    data: String,
-    encoding?: String,
-    initialName?: string,
-    mimeType?: String,
-  ): Promise<DocumentFileDetail | null>;
-  hasPermission(uriString: string): Promise<boolean>;
-  exists(uriString: string): Promise<boolean>;
-  readFile(uriString: string, encoding?: Encoding): Promise<string>;
-  writeFile(
-    uriString: string,
-    data: string,
-    encoding?: Encoding,
-    mimeType?: string,
-    append?: boolean,
-  ): Promise<void>;
-  createFile(uriString: string, mimeType?: String): Promise<DocumentFileDetail>;
-  unlink(uriString: string): Promise<boolean>;
-  mkdir(uriString: string): Promise<DocumentFileDetail>;
-  rename(uriString: string, newName: string): Promise<DocumentFileDetail>;
-  getPersistedUriPermissions(): Promise<Array<string>>;
-  releasePersistableUriPermission(uriString: string): Promise<void>;
-  listFiles(uriString: string): Promise<DocumentFileDetail[]>;
-  stat(uriString: string): Promise<DocumentFileDetail>;
-  transferFile(
-    srcUri: string,
-    destUri: string,
-    replaceIfDestExist: boolean,
-    copy: boolean,
-  ): Promise<DocumentFileDetail | null>;
+	openDocumentTree(persist: boolean): Promise<DocumentFileDetail | null>;
+	openDocument(
+		persist: boolean,
+		multiple: boolean,
+	): Promise<DocumentFileDetail[] | null>;
+	createDocument(
+		data: String,
+		encoding?: String,
+		initialName?: string,
+		mimeType?: String,
+	): Promise<DocumentFileDetail | null>;
+	hasPermission(uriString: string): Promise<boolean>;
+	exists(uriString: string): Promise<boolean>;
+	readFile(uriString: string, encoding?: Encoding): Promise<string>;
+	writeFile(
+		uriString: string,
+		data: string,
+		encoding?: Encoding,
+		mimeType?: string,
+		append?: boolean,
+	): Promise<void>;
+	createFile(uriString: string, mimeType?: String): Promise<DocumentFileDetail>;
+	unlink(uriString: string): Promise<boolean>;
+	mkdir(uriString: string): Promise<DocumentFileDetail>;
+	rename(uriString: string, newName: string): Promise<DocumentFileDetail>;
+	getPersistedUriPermissions(): Promise<Array<string>>;
+	releasePersistableUriPermission(uriString: string): Promise<void>;
+	listFiles(uriString: string): Promise<DocumentFileDetail[]>;
+	stat(uriString: string): Promise<DocumentFileDetail>;
+	transferFile(
+		srcUri: string,
+		destUri: string,
+		replaceIfDestExist: boolean,
+		copy: boolean,
+	): Promise<DocumentFileDetail | null>;
 }
 
 export type DocumentFileDetail = {
-  uri: string;
-  name: string;
-  type: 'directory' | 'file';
-  lastModified: number;
-  mime: string;
-  size: number;
+	uri: string;
+	name: string;
+	type: 'directory' | 'file';
+	lastModified: number;
+	mime: string;
+	size: number;
 };
 
 export type FileOperationOptions = {
-  /** Defaults to `'utf8'` */
-  encoding?: Encoding;
+	/** Defaults to `'utf8'` */
+	encoding?: Encoding;
 
-  /** Append data to the file. If not set file content will be overwritten. */
-  append?: boolean;
+	/** Append data to the file. If not set file content will be overwritten. */
+	append?: boolean;
 
-  /** mime type of the file being saved. Defaults to '\*\/\*' */
-  mimeType?: string;
+	/** mime type of the file being saved. Defaults to '\*\/\*' */
+	mimeType?: string;
 };
 
 export type CreateDocumentOptions = FileOperationOptions & {
-  /** initial display name when opening file picker */
-  initialName?: string;
+	/** initial display name when opening file picker */
+	initialName?: string;
 };
 
 /**
@@ -101,10 +101,10 @@ export function openDocumentTree(persist: boolean) {
 }
 
 export type OpenDocumentOptions = {
-  /** should the permission of returned document(s) be persisted ? */
-  persist?: boolean;
-  /** should the file picker allow multiple documents ? */
-  multiple?: boolean;
+	/** should the permission of returned document(s) be persisted ? */
+	persist?: boolean;
+	/** should the file picker allow multiple documents ? */
+	multiple?: boolean;
 };
 
 /**
@@ -223,7 +223,7 @@ export function stat(uriString: string) {
 }
 
 type FileTransferOptions = {
-  replaceIfDestinationExists?: boolean;
+	replaceIfDestinationExists?: boolean;
 };
 
 /**

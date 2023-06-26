@@ -15,9 +15,9 @@ export interface EditorSettings {
 	// [themeStyle(themeId: number)] doesn't work. As such, we need both
 	// the [themeId] and [themeData].
 	themeId: number;
-    themeData: Theme;
+	themeData: Theme;
 
-    katexEnabled: boolean;
+	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 }
 
@@ -41,14 +41,14 @@ export interface SelectionChangeEvent {
 }
 
 export interface SearchControl {
-    findNext(): void;
-    findPrevious(): void;
-    replaceCurrent(): void;
-    replaceAll(): void;
+	findNext(): void;
+	findPrevious(): void;
+	replaceCurrent(): void;
+	replaceAll(): void;
 	setSearchState(state: SearchState): void;
 
-    showSearch(): void;
-    hideSearch(): void;
+	showSearch(): void;
+	hideSearch(): void;
 }
 
 export interface SearchState {
@@ -57,7 +57,7 @@ export interface SearchState {
 
 	searchText: string;
 	replaceText: string;
-    dialogVisible: boolean;
+	dialogVisible: boolean;
 }
 
 // Possible types of lists in the editor
