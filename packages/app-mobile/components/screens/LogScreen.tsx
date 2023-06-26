@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FlatList, View, Text, Button, StyleSheet, Platform, Share } from 'react-native';
+import { FlatList, View, Text, Button, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry.js';
 import { ScreenHeader } from '../ScreenHeader';
@@ -11,6 +11,9 @@ const { BaseScreenComponent } = require('../base-screen.js');
 import { _ } from '@joplin/lib/locale';
 import { MenuOptionType } from '../ScreenHeader';
 import { AppState } from '../../utils/types';
+import Share from 'react-native-share';
+import { writeTextToCacheFile } from '../../utils/ShareUtils';
+import shim from '@joplin/lib/shim';
 
 class LogScreenComponent extends BaseScreenComponent {
 	private readonly menuOptions: MenuOptionType[];
@@ -41,26 +44,17 @@ class LogScreenComponent extends BaseScreenComponent {
 	private async onSharePress() {
 		const limit: number|null = null; // no limit
 		const levels = this.getLogLevels(this.state.showErrorsOnly);
-		const allEntries = await reg.logger().lastEntries(limit, { levels });
+		const allEntries: any[] = await reg.logger().lastEntries(limit, { levels });
+		const logData = allEntries.map(entry => this.formatLogEntry(entry)).join('\n');
+		const fileToShare = await writeTextToCacheFile(logData);
 
-		// On Android, the maximum size of an Intent (what is used to share data internally
-		// by React Native) is about 500 KB, but this varies and the documentation suggests limiting
-		// shared data to a few kilobytes). See
-		// https://developer.android.com/guide/components/activities/parcelables-and-bundles#sdba
-		const maxSizeChars = 50 * 1000; // about 50 KB
-		let currentSizeChars = 0;
-		const messageLines = [];
-
-		for (let i = allEntries.length - 1; i >= 0 && currentSizeChars < maxSizeChars; i--) {
-			const formattedEntry = this.formatLogEntry(allEntries[i]);
-			messageLines.push(formattedEntry);
-			currentSizeChars += formattedEntry.length;
-		}
-
-		await Share.share({
-			message: messageLines.join('\n'),
-			title: _('Log'),
+		await Share.open({
+			type: 'text/plain',
+			filename: 'log.txt',
+			url: `file://${fileToShare}`,
+			failOnCancel: false,
 		});
+		await shim.fsDriver().remove(fileToShare);
 	}
 
 	public styles() {

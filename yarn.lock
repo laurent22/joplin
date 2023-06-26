@@ -4383,6 +4383,7 @@ __metadata:
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.25
     assert-browserify: 2.0.0
+    async-mutex: 0.4.0
     babel-jest: 29.2.1
     babel-plugin-module-resolver: 4.1.0
     buffer: 6.0.3
