@@ -39,11 +39,26 @@ class LogScreenComponent extends BaseScreenComponent {
 	}
 
 	private async onSharePress() {
-		// Share all log entries included in the list. As the list only displays a subset of the log,
-		// only a subset of the log is shared.
-		const log = (this.state.logEntries as any[]).map(entry => this.formatLogEntry(entry));
+		const limit: number|null = null; // no limit
+		const levels = this.getLogLevels(this.state.showErrorsOnly);
+		const allEntries = await reg.logger().lastEntries(limit, { levels });
+
+		// On Android, the maximum size of an Intent (what is used to share data internally
+		// by React Native) is about 500 KB, but this varies and the documentation suggests limiting
+		// shared data to a few kilobytes). See
+		// https://developer.android.com/guide/components/activities/parcelables-and-bundles#sdba
+		const maxSizeChars = 50 * 1000; // about 50 KB
+		let currentSizeChars = 0;
+		const messageLines = [];
+
+		for (let i = allEntries.length - 1; i >= 0 && currentSizeChars < maxSizeChars; i--) {
+			const formattedEntry = this.formatLogEntry(allEntries[i]);
+			messageLines.push(formattedEntry);
+			currentSizeChars += formattedEntry.length;
+		}
+
 		await Share.share({
-			message: log.join('\n'),
+			message: messageLines.join('\n'),
 			title: _('Log'),
 		});
 	}
@@ -87,11 +102,17 @@ class LogScreenComponent extends BaseScreenComponent {
 		void this.resfreshLogEntries();
 	}
 
+	private getLogLevels(showErrorsOnly: boolean) {
+		let levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
+		if (showErrorsOnly) levels = [Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
+
+		return levels;
+	}
+
 	private async resfreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
 
-		let levels = [Logger.LEVEL_DEBUG, Logger.LEVEL_INFO, Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
-		if (showErrorsOnly) levels = [Logger.LEVEL_WARN, Logger.LEVEL_ERROR];
+		const levels = this.getLogLevels(showErrorsOnly);
 
 		this.setState({
 			logEntries: await reg.logger().lastEntries(1000, { levels: levels }),
