@@ -1106,6 +1106,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		function onPasteAsText() {
+			// clipboard.readText returns Markdown instead of text when copying content from
+			// the Rich Text Editor. When the user "Paste as text" he does not expect to see
+			// anything besides text, that is why we are stripping here before pasting
+			// https://github.com/laurent22/joplin/pull/8351
 			const clipboardWithoutMarkdown = stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, clipboard.readText());
 			pasteAsPlainText(clipboardWithoutMarkdown);
 		}
