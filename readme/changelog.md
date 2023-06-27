@@ -1,6 +1,6 @@
 # Joplin changelog
 
-## [v2.11.11](https://github.com/laurent22/joplin/releases/tag/v2.11.11) (Pre-release) - 2023-06-23T15:16:37Z
+## [v2.11.11](https://github.com/laurent22/joplin/releases/tag/v2.11.11) - 2023-06-23T15:16:37Z
 
 - Improved: Add support for plugin user data ([#8312](https://github.com/laurent22/joplin/issues/8312)) ([#8080](https://github.com/laurent22/joplin/issues/8080))
 - Improved: Configure Rich Text editor to handle the first table row as header ([#8163](https://github.com/laurent22/joplin/issues/8163)) ([#3535](https://github.com/laurent22/joplin/issues/3535) by [@Marph](https://github.com/Marph))
