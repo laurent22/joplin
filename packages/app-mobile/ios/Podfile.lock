@@ -349,7 +349,7 @@ PODS:
     - React
   - react-native-geolocation (3.0.6):
     - React-Core
-  - react-native-get-random-values (1.8.0):
+  - react-native-get-random-values (1.9.0):
     - React-Core
   - react-native-image-picker (5.3.1):
     - React-Core
@@ -359,7 +359,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.11.0):
+  - react-native-saf-x (2.11.1):
     - React-Core
   - react-native-safe-area-context (4.5.3):
     - RCT-Folly
@@ -815,12 +815,12 @@ SPEC CHECKSUMS:
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
-  react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
+  react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-netinfo: ccbe1085dffd16592791d550189772e13bf479e2
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: 9bd5238d3b43d76bbec64aa82c173ac20a4bce9f
+  react-native-saf-x: 3bcf57a3e334ecbcdde74a2c5fc00d7b335588de
   react-native-safe-area-context: b8979f5eda6ed5903d4dbc885be3846ea3daa753
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
@@ -849,7 +849,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNLocalize: 5944c97d2fe8150913a51ddd5eab4e23a82bd80d
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
-  RNReanimated: 47df570b2e2b9eba34e78a299dd6d44596ff7bb6
+  RNReanimated: b1220a0e5168745283ff5d53bfc7d2144b2cee1b
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
