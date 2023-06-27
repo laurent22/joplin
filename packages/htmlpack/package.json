@@ -1,6 +1,6 @@
 {
   "name": "@joplin/htmlpack",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
   "main": "dist/index.js",
   "types": "src/index.ts",
@@ -14,7 +14,7 @@
   "author": "Laurent Cozic",
   "license": "MIT",
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.44",
+    "@joplin/fork-htmlparser2": "^4.1.45",
     "css": "3.0.0",
     "datauri": "4.1.0",
     "fs-extra": "11.1.1",
