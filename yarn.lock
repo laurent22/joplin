@@ -4420,7 +4420,7 @@ __metadata:
     react-native-image-picker: 5.3.1
     react-native-image-resizer: 1.4.5
     react-native-localize: 3.0.0
-    react-native-modal-datetime-picker: 14.0.1
+    react-native-modal-datetime-picker: 15.0.0
     react-native-paper: 5.8.0
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
@@ -27256,15 +27256,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-modal-datetime-picker@npm:14.0.1":
-  version: 14.0.1
-  resolution: "react-native-modal-datetime-picker@npm:14.0.1"
+"react-native-modal-datetime-picker@npm:15.0.0":
+  version: 15.0.0
+  resolution: "react-native-modal-datetime-picker@npm:15.0.0"
   dependencies:
     prop-types: ^15.7.2
   peerDependencies:
-    "@react-native-community/datetimepicker": ">=3.0.0"
+    "@react-native-community/datetimepicker": ">=6.7.0"
     react-native: ">=0.65.0"
-  checksum: 15df05f76bea0303a0130fee435ec6e42def6e7cb5d113f45b16edba92ddf482264dc3d34b23b31ec37a64ff7a5330e58cd553987cb1fdf25b6163e281d1e3da
+  checksum: df70ac4d8d0b0eb7828e5f7e0387d70c4eb34f0717d8460f80b7f1bd28e7edc9da2790dbebbd155bd8f667fc9f083e0a88c410cf53dfae58686e82670190acd3
   languageName: node
   linkType: hard
 
