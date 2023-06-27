@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FlatList, View, Text, Button, StyleSheet, Platform } from 'react-native';
+import { FlatList, View, Text, Button, StyleSheet, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry.js';
 import { ScreenHeader } from '../ScreenHeader';
@@ -14,6 +14,8 @@ import { AppState } from '../../utils/types';
 import Share from 'react-native-share';
 import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
+
+const logger = Logger.create('LogScreen');
 
 class LogScreenComponent extends BaseScreenComponent {
 	private readonly menuOptions: MenuOptionType[];
@@ -46,15 +48,27 @@ class LogScreenComponent extends BaseScreenComponent {
 		const levels = this.getLogLevels(this.state.showErrorsOnly);
 		const allEntries: any[] = await reg.logger().lastEntries(limit, { levels });
 		const logData = allEntries.map(entry => this.formatLogEntry(entry)).join('\n');
-		const fileToShare = await writeTextToCacheFile(logData);
 
-		await Share.open({
-			type: 'text/plain',
-			filename: 'log.txt',
-			url: `file://${fileToShare}`,
-			failOnCancel: false,
-		});
-		await shim.fsDriver().remove(fileToShare);
+		let fileToShare;
+		try {
+			fileToShare = await writeTextToCacheFile(logData);
+
+			await Share.open({
+				type: 'text/plain',
+				filename: 'log.txt',
+				url: `file://${fileToShare}`,
+				failOnCancel: false,
+			});
+		} catch (e) {
+			logger.error('Unable to share log data:', e);
+
+			// Display a message to the user (e.g. in the case where the user is out of disk space).
+			Alert.alert(_('Error'), _('Unable to share log data. Reason: %s', e.toString()));
+		} finally {
+			if (fileToShare) {
+				await shim.fsDriver().remove(fileToShare);
+			}
+		}
 	}
 
 	public styles() {
