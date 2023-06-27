@@ -4,7 +4,8 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import shim from '@joplin/lib/shim';
 
-// Mock the CachesDirectoryPath
+// react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
+// Use a temporary file instead.
 const tempDirectoryPath = mkdtempSync(join(tmpdir(), 'ShareUtilsTest'));
 jest.mock('react-native-fs', () => {
 	return {
