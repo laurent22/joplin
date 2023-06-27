@@ -4396,7 +4396,7 @@ __metadata:
     jest: 29.5.0
     jest-environment-jsdom: 29.5.0
     jetifier: 2.0.0
-    js-draw: 0.23.1
+    js-draw: 0.24.0
     jsc-android: 241213.1.0
     jsdom: 21.1.2
     lodash: 4.17.21
@@ -5930,10 +5930,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@melloware/coloris@npm:^0.19.1":
-  version: 0.19.1
-  resolution: "@melloware/coloris@npm:0.19.1"
-  checksum: f60c8028fb88fa83a422a4b8193abd3a47a321c5d82bdaeff8639a214da5a3f0c23414211fb53e483787b72024cab3260bfb0355faff767932e7009a5c75cae3
+"@melloware/coloris@npm:0.20.0":
+  version: 0.20.0
+  resolution: "@melloware/coloris@npm:0.20.0"
+  checksum: 71d92adeac8ab8fb22cc78e61cb25cf6c3dd53492f269fe74bc54ff2bfc9b1bce08e554358ac7a07ec043c9359ca320fb2131850c3aa28dffea1811e6c4472b6
   languageName: node
   linkType: hard
 
@@ -9944,7 +9944,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bezier-js@npm:^6.1.3":
+"bezier-js@npm:6.1.3":
   version: 6.1.3
   resolution: "bezier-js@npm:6.1.3"
   checksum: 5ca3317b00c844c15b4b179f1b54638bc943d393d17dd1551777c7178017663f3d61e469e56c2c2cc5b28459380706ccc12e46d80677b9375970ca55f48b5338
@@ -20572,13 +20572,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:0.23.1":
-  version: 0.23.1
-  resolution: "js-draw@npm:0.23.1"
+"js-draw@npm:0.24.0":
+  version: 0.24.0
+  resolution: "js-draw@npm:0.24.0"
   dependencies:
-    "@melloware/coloris": ^0.19.1
-    bezier-js: ^6.1.3
-  checksum: 3904777a3795cb38976a68ca92c2a400df47d09a21ab0e027cdb87f01cc978302e51f04b47f43215765ad147b8bb1ae27bd96e5814f32355f882c57e33e6d680
+    "@melloware/coloris": 0.20.0
+    bezier-js: 6.1.3
+  checksum: decbfd9cfa90552252418962aed9cb7b06d1a2353d7b3ffe7722766b92a51c9da8e05fafb38dced58ab6c5894b0c4f22b0911b7132fa85e6d416d88a7784106f
   languageName: node
   linkType: hard
 
