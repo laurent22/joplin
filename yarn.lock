@@ -2722,7 +2722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:7.22.5, @babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.22.5
   resolution: "@babel/runtime@npm:7.22.5"
   dependencies:
@@ -4153,7 +4153,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/transform@npm:^29.2.1, @jest/transform@npm:^29.5.0":
+"@jest/transform@npm:^29.5.0":
   version: 29.5.0
   resolution: "@jest/transform@npm:29.5.0"
   dependencies:
@@ -4384,7 +4384,6 @@ __metadata:
     "@types/react-redux": 7.1.25
     assert-browserify: 2.0.0
     async-mutex: 0.4.0
-    babel-jest: 29.2.1
     babel-plugin-module-resolver: 4.1.0
     buffer: 6.0.3
     constants-browserify: 1.0.0
@@ -4440,6 +4439,7 @@ __metadata:
     react-redux: 8.0.7
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
+    sqlite3: 5.1.6
     stream: 0.0.2
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
@@ -9576,23 +9576,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-jest@npm:29.2.1":
-  version: 29.2.1
-  resolution: "babel-jest@npm:29.2.1"
-  dependencies:
-    "@jest/transform": ^29.2.1
-    "@types/babel__core": ^7.1.14
-    babel-plugin-istanbul: ^6.1.1
-    babel-preset-jest: ^29.2.0
-    chalk: ^4.0.0
-    graceful-fs: ^4.2.9
-    slash: ^3.0.0
-  peerDependencies:
-    "@babel/core": ^7.8.0
-  checksum: c340c10d8cee4b3ef5990443627b5f70dbe2649faa1fef671c8b4fd4a9f8d559b78e5644e18de8063974cd6606033caf1afcaa52744309f6e3176c0b37c2e8f9
-  languageName: node
-  linkType: hard
-
 "babel-jest@npm:29.5.0, babel-jest@npm:^29.5.0":
   version: 29.5.0
   resolution: "babel-jest@npm:29.5.0"
@@ -9819,7 +9802,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-preset-jest@npm:^29.2.0, babel-preset-jest@npm:^29.5.0":
+"babel-preset-jest@npm:^29.5.0":
   version: 29.5.0
   resolution: "babel-preset-jest@npm:29.5.0"
   dependencies:
@@ -28766,6 +28749,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@babel/runtime": 7.22.5
     "@joplin/utils": ~2.11
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 11.0.1

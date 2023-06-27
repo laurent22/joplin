@@ -34,19 +34,22 @@ const writeNextCacheFileMutex = new Mutex();
 export async function writeTextToCacheFile(text: string): Promise<string> {
 	const targetDir = await makeShareCacheDirectory();
 
-	const release = await writeNextCacheFileMutex.acquire();
-
-	// Find an unused filename
-	let nextTmpFileId = 0;
+	const releaseLock = await writeNextCacheFileMutex.acquire();
 	let filePath;
-	do {
-		filePath = `${targetDir}/tmp-share-file.${nextTmpFileId}.txt`;
-		nextTmpFileId++;
-	}
-	while (await shim.fsDriver().exists(filePath));
 
-	await shim.fsDriver().writeFile(filePath, text, 'utf8');
-	release();
+	try {
+		// Find an unused filename
+		let nextTmpFileId = 0;
+		do {
+			filePath = `${targetDir}/tmp-share-file.${nextTmpFileId}.txt`;
+			nextTmpFileId++;
+		}
+		while (await shim.fsDriver().exists(filePath));
+
+		await shim.fsDriver().writeFile(filePath, text, 'utf8');
+	} finally {
+		releaseLock();
+	}
 
 	return filePath;
 }
