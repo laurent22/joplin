@@ -3,7 +3,7 @@ import { Modal, ModalProps, StyleSheet, View, ViewStyle } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
 
 interface ModalElementProps extends ModalProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 	containerStyle?: ViewStyle;
 	elevation?: Number;
 }
