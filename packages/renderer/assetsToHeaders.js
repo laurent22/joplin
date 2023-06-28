@@ -1,7 +1,7 @@
 // Utility function to convert the plugin assets to a list of LINK or SCRIPT tags
 // that can be included in the HEAD tag.
 function assetsToHeaders(pluginAssets, options = null) {
-	options = Object.assign({}, { asHtml: false }, options);
+	options = { asHtml: false, ...options };
 
 	const headers = {};
 	for (let i = 0; i < pluginAssets.length; i++) {

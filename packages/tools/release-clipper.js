@@ -148,14 +148,14 @@ async function main() {
 	const dists = {
 		chrome: {
 			removeManifestKeys: (manifest) => {
-				manifest = Object.assign({}, manifest);
+				manifest = { ...manifest };
 				delete manifest.applications;
 				return manifest;
 			},
 		},
 		firefox: {
 			removeManifestKeys: (manifest) => {
-				manifest = Object.assign({}, manifest);
+				manifest = { ...manifest };
 				delete manifest.background.persistent;
 				return manifest;
 			},

@@ -129,7 +129,10 @@ export default class PluginRunner extends BasePluginRunner {
 
 		if (plugin.devMode) {
 			pluginWindow.webContents.once('dom-ready', () => {
-				pluginWindow.webContents.openDevTools({ mode: 'detach' });
+				// Need to open with a delay, otherwise it doesn't show up
+				setTimeout(() => {
+					pluginWindow.webContents.openDevTools({ mode: 'detach' });
+				}, 3000);
 			});
 		}
 

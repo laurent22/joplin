@@ -296,7 +296,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Ενεργοποίηση κρυπτογράφησης σημαίνει *όλες* οι σημειώσεις και τα συνημμένα σας πρόκειται να συγχρονιστούν εκ νέου και να σταλούν κρυπτογραφημένα στο στόχο συγχρονισμού.",
  "Encrypted": "Κρυπτογραφημένο",
  "Encrypted items cannot be modified": "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων",
- "Encrypted notebooks cannot be renamed": "Τα κρυπτογραφημένα σημειωματάρια δεν μπορούν να μετονομαστούν",
  "Encryption": "Κρυπτογράφηση",
  "Encryption Config": "Ρυθμίσεις κρυπτογράφησης",
  "Encryption is: %s": "Η κρυπτογράφηση είναι: %s",

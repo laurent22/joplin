@@ -1,5 +1,5 @@
 import { mkdirp, pathExists, readFile, remove, writeFile } from 'fs-extra';
-import { CustomError, ErrorCode } from '../../../utils/errors';
+import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
@@ -36,7 +36,7 @@ export default class StorageDriverFs extends StorageDriverBase {
 			const result = await readFile(this.itemPath(itemId));
 			return result;
 		} catch (error) {
-			if (error.code === 'ENOENT') throw new CustomError(`Not found: ${itemId}`, ErrorCode.NotFound);
+			if (error.code === 'ENOENT') throw new CustomError(`Not found: ${itemId}`, CustomErrorCode.NotFound);
 			throw error;
 		}
 	}
@@ -47,7 +47,7 @@ export default class StorageDriverFs extends StorageDriverBase {
 			try {
 				await remove(this.itemPath(id));
 			} catch (error) {
-				if (error.code === 'ENOENT') throw new CustomError(`Not found: ${itemId}`, ErrorCode.NotFound);
+				if (error.code === 'ENOENT') throw new CustomError(`Not found: ${itemId}`, CustomErrorCode.NotFound);
 				throw error;
 			}
 		}

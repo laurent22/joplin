@@ -1,6 +1,6 @@
 {
   "name": "@joplin/utils",
-  "version": "2.11.0",
+  "version": "2.11.1",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
@@ -24,9 +24,9 @@
     "node-fetch": "2.6.7"
   },
   "devDependencies": {
-    "@types/jest": "29.5.0",
-    "@types/node-fetch": "2.6.2",
+    "@types/jest": "29.5.1",
+    "@types/node-fetch": "2.6.3",
     "jest": "29.5.0",
-    "ts-jest": "29.0.5"
+    "ts-jest": "29.1.0"
   }
 }

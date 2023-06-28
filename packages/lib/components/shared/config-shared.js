@@ -44,9 +44,9 @@ shared.checkSyncConfig = async function(comp, settings) {
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
-	const options = Object.assign({},
-		Setting.subValues(`sync.${syncTargetId}`, settings),
-		Setting.subValues('net', settings));
+	const options = {
+		...Setting.subValues(`sync.${syncTargetId}`, settings),
+		...Setting.subValues('net', settings) };
 
 	comp.setState({ checkSyncConfigResult: 'checking' });
 	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
@@ -75,7 +75,9 @@ shared.checkSyncConfigMessages = function(comp) {
 	return output;
 };
 
-shared.updateSettingValue = function(comp, key, value) {
+shared.updateSettingValue = function(comp, key, value, callback = null) {
+	if (!callback) callback = () => {};
+
 	comp.setState(state => {
 		// @react-native-community/slider (4.4.0) will emit a valueChanged event
 		// when the component is mounted, even though the value hasn't changed.
@@ -90,7 +92,7 @@ shared.updateSettingValue = function(comp, key, value) {
 			return {};
 		}
 
-		const settings = Object.assign({}, state.settings);
+		const settings = { ...state.settings };
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);
 		if (changedSettingKeys.indexOf(key) < 0) changedSettingKeys.push(key);
@@ -99,7 +101,7 @@ shared.updateSettingValue = function(comp, key, value) {
 			settings: settings,
 			changedSettingKeys: changedSettingKeys,
 		};
-	});
+	}, callback);
 };
 
 shared.scheduleSaveSettings = function(comp) {

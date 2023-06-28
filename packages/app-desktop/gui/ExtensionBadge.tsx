@@ -82,7 +82,7 @@ function ExtensionBadge(props: Props) {
 		void bridge().openExternal(props.url);
 	};
 
-	const rootStyle = props.style ? Object.assign({}, style.root, props.style) : style.root;
+	const rootStyle = props.style ? { ...style.root, ...props.style } : style.root;
 
 	return (
 		<a style={rootStyle} onClick={onClick} href="#">

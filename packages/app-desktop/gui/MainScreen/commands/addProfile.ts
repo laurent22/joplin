@@ -22,7 +22,7 @@ export const runtime = (comp: any): CommandRuntime => {
 							const { newConfig, newProfile } = createNewProfile(context.state.profileConfig, answer);
 							newConfig.currentProfileId = newProfile.id;
 							await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-							await restart(false);
+							await restart();
 						}
 
 						comp.setState({ promptOptions: null });

@@ -11,6 +11,7 @@ import ShareService from '../services/share/ShareService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
+import { LoadOptions } from './utils/types';
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
 
@@ -227,9 +228,10 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.loadByField(field, value);
 	}
 
-	public static loadItem(itemType: ModelType, id: string) {
+	public static loadItem(itemType: ModelType, id: string, options: LoadOptions = null) {
+		if (!options) options = {};
 		const ItemClass = this.itemClass(itemType);
-		return ItemClass.load(id);
+		return ItemClass.load(id, options);
 	}
 
 	public static deleteItem(itemType: ModelType, id: string) {

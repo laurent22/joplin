@@ -145,7 +145,7 @@ export default class BaseApplication {
 
 	public switchCurrentFolder(folder: any) {
 		if (!this.hasGui()) {
-			this.currentFolder_ = Object.assign({}, folder);
+			this.currentFolder_ = { ...folder };
 			Setting.setValue('activeFolderId', folder ? folder.id : '');
 		} else {
 			this.dispatch({
@@ -792,7 +792,7 @@ export default class BaseApplication {
 		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
 
 		const extraFlags = await this.readFlagsFromFile(`${profileDir}/flags.txt`);
-		initArgs = Object.assign(initArgs, extraFlags);
+		initArgs = { ...initArgs, ...extraFlags };
 
 
 
@@ -840,13 +840,8 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
-			// If it's a sub-profile, the locale must come from the root
-			// profile.
-			if (!Setting.value('isSubProfile')) {
-				const locale = shim.detectAndSetLocale(Setting);
-				reg.logger().info(`First start: detected locale as ${locale}`);
-			}
-
+			const locale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${locale}`);
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {

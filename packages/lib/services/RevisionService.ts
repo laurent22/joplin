@@ -224,13 +224,11 @@ export default class RevisionService extends BaseService {
 		const rev = revisions[index];
 		const merged = await Revision.mergeDiffs(rev, revisions);
 
-		const output: NoteEntity = Object.assign(
-			{
-				title: merged.title,
-				body: merged.body,
-			},
-			merged.metadata
-		);
+		const output: NoteEntity = {
+			title: merged.title,
+			body: merged.body,
+			...merged.metadata,
+		};
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
 		(output as any).type_ = BaseModel.TYPE_NOTE;
@@ -268,7 +266,7 @@ export default class RevisionService extends BaseService {
 	}
 
 	public async importRevisionNote(note: NoteEntity): Promise<NoteEntity> {
-		const toImport = Object.assign({}, note);
+		const toImport = { ...note };
 		delete toImport.id;
 		delete toImport.updated_time;
 		delete toImport.created_time;

@@ -133,8 +133,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		this.styles_[styleKey] = {
-			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
-			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
+			dialogBox: { ...theme.dialogBox, minWidth: '50%', maxWidth: '50%' },
+			input: { ...theme.inputStyle, flex: 1 },
 			row: {
 				overflow: 'hidden',
 				height: itemHeight,
@@ -148,7 +148,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				borderBottomColor: theme.dividerColor,
 				boxSizing: 'border-box',
 			},
-			help: Object.assign({}, theme.textStyle, { marginBottom: 10 }),
+			help: { ...theme.textStyle, marginBottom: 10 },
 			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};
 
@@ -163,19 +163,15 @@ class Dialog extends React.PureComponent<Props, State> {
 			userSelect: 'none',
 		};
 
-		const rowTitleStyle = Object.assign({}, rowTextStyle, {
-			fontSize: rowTextStyle.fontSize * 1.4,
+		const rowTitleStyle = { ...rowTextStyle, fontSize: rowTextStyle.fontSize * 1.4,
 			marginBottom: this.state.resultsInBody ? 6 : 4,
-			color: theme.colorFaded,
-		});
+			color: theme.colorFaded };
 
-		const rowFragmentsStyle = Object.assign({}, rowTextStyle, {
-			fontSize: rowTextStyle.fontSize * 1.2,
+		const rowFragmentsStyle = { ...rowTextStyle, fontSize: rowTextStyle.fontSize * 1.2,
 			marginBottom: this.state.resultsInBody ? 8 : 6,
-			color: theme.colorFaded,
-		});
+			color: theme.colorFaded };
 
-		this.styles_[styleKey].rowSelected = Object.assign({}, this.styles_[styleKey].row, { backgroundColor: theme.selectedColor });
+		this.styles_[styleKey].rowSelected = { ...this.styles_[styleKey].row, backgroundColor: theme.selectedColor };
 		this.styles_[styleKey].rowPath = rowTextStyle;
 		this.styles_[styleKey].rowTitle = rowTitleStyle;
 		this.styles_[styleKey].rowFragments = rowFragmentsStyle;
@@ -304,7 +300,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				for (let i = 0; i < results.length; i++) {
 					const row = results[i];
 					const path = Folder.folderPathString(this.props.folders, row.parent_id);
-					results[i] = Object.assign({}, row, { path: path ? path : '/' });
+					results[i] = { ...row, path: path ? path : '/' };
 				}
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
@@ -317,7 +313,7 @@ class Dialog extends React.PureComponent<Props, State> {
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
-						results[i] = Object.assign({}, row, { path: path });
+						results[i] = { ...row, path: path };
 					}
 				} else {
 					const limit = 20;
@@ -365,9 +361,9 @@ class Dialog extends React.PureComponent<Props, State> {
 
 							}
 
-							results[i] = Object.assign({}, row, { path, fragments });
+							results[i] = { ...row, path, fragments };
 						} else {
-							results[i] = Object.assign({}, row, { path: path, fragments: '' });
+							results[i] = { ...row, path: path, fragments: '' };
 						}
 					}
 

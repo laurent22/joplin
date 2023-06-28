@@ -1,5 +1,91 @@
 # Joplin Android app changelog
 
+## [android-v2.11.31](https://github.com/laurent22/joplin/releases/tag/android-v2.11.31) (Pre-release) - 2023-06-25T14:26:21Z
+
+- Improved: Upgrade E2EE encryption method to AES-256 (#7686)
+
+## [android-v2.11.30](https://github.com/laurent22/joplin/releases/tag/android-v2.11.30) (Pre-release) - 2023-06-20T15:21:15Z
+
+- New: Add support for Voice Typing for most languages (#8309)
+
+## [android-v2.11.27](https://github.com/laurent22/joplin/releases/tag/android-v2.11.27) (Pre-release) - 2023-06-10T15:58:58Z
+
+- Upgraded to React Native 0.71
+- Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+
+## [android-v2.11.26](https://github.com/laurent22/joplin/releases/tag/android-v2.11.26) (Pre-release) - 2023-06-08T16:13:02Z
+
+- Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+- Fixed: Allow certain HTML anchor tags (#8286)
+- Fixed: Fix alarms for latest Android versions (#8229)
+- Fixed: Fix sharing data with the app (#8285)
+
+## [android-v2.11.25](https://github.com/laurent22/joplin/releases/tag/android-v2.11.25) (Pre-release) - 2023-06-03T16:40:08Z
+
+- Fixed: Fix Vosk logic (60b3921)
+- Fixed: Fixed error "Download interrupted" when downloading resources from Joplin Cloud/Server.
+
+## [android-v2.11.24](https://github.com/laurent22/joplin/releases/tag/android-v2.11.24) (Pre-release) - 2023-06-02T15:22:04Z
+
+- Improved: Write to note in realtime using voice typing (7779879)
+
+## [android-v2.11.23](https://github.com/laurent22/joplin/releases/tag/android-v2.11.23) (Pre-release) - 2023-06-01T17:19:16Z
+
+- Improved: Auto-detect language on start (e48d55c)
+- Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
+- Improved: Updated packages @react-native-community/netinfo (v9.3.10), @react-native-community/push-notification-ios (v1.11.0), aws, jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), react-native-paper (v5.8.0), react-native-reanimated (v3.1.0), react-native-safe-area-context (v4.5.2), sass (v1.62.1), sharp (v0.32.1), tar (v6.1.14), yargs (v17.7.2)
+- Improved: When resetting the master password, also create a new master key with that password (e647775)
+- Fixed: Fixed regression in biometric check (b19f1a1)
+- Fixed: Improve selection of active E2EE key (#8254)
+- Fixed: Support monochrome icons (#7772) (#7766 by Andrey Mukamolov)
+- Security: Disable SVG tag support in editor to prevent XSS (caf6606)
+- Security: Prevent XSS by sanitizing certain HTML attributes (9e90d90)
+
+## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
+
+- Fixed: Fix "Download interrupted" error (b023f58)
+
+## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
+
+- Improved: Updated packages react-native-paper (v5.6.0)
+
+## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) (Pre-release) - 2023-05-12T12:43:08Z
+
+- Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
+
+## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) (Pre-release) - 2023-05-10T12:24:40Z
+
+- Improved: Translate Welcome notes (#8154)
+
+## [android-v2.11.13](https://github.com/laurent22/joplin/releases/tag/android-v2.11.13) (Pre-release) - 2023-05-08T20:28:29Z
+
+- Improved: Tells whether Hermes engine is enabled or not (5ecae17)
+
+## [android-v2.11.10](https://github.com/laurent22/joplin/releases/tag/android-v2.11.10) (Pre-release) - 2023-05-08T10:26:14Z
+
+- Improved: Disable Hermes engine (e9e9986)
+- Fixed: Fix voice typing (d5eeb12)
+
+## [android-v2.11.7](https://github.com/laurent22/joplin/releases/tag/android-v2.11.7) (Pre-release) - 2023-05-07T14:29:08Z
+
+- Fixed crash when starting voice typing.
+
+## [android-v2.11.6](https://github.com/laurent22/joplin/releases/tag/android-v2.11.6) (Pre-release) - 2023-05-07T13:53:31Z
+
+- Disabled Hermes engine
+
+## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) (Pre-release) - 2023-05-07T12:14:21Z
+
+- Improved: Improved Vosk support (beta, fr only) (#8131)
+- Improved: Updated packages react-native-share (v8.2.2), reselect (v4.1.8), sharp (v0.32.0)
+
+## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) (Pre-release) - 2023-05-03T11:57:27Z
+
+- New: Add support for offline speech to text (Beta - FR only) (#8115)
+- Improved: Updated packages @react-native-community/netinfo (v9.3.9), aws, react-native-document-picker (v8.2.0), react-native-paper (v5.5.2), react-native-safe-area-context (v4.5.1), sass (v1.60.0)
+- Fixed: Fixed sync crash (#8056) (#8017 by Arun Kumar)
+- Fixed: Fixes issue where the note body is not updated after attaching a file (991c120)
+
 ## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) (Pre-release) - 2023-04-09T12:04:06Z
 
 - Improved: Resolve #8022: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)

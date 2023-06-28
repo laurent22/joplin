@@ -183,12 +183,32 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 	# cd "$ROOT_DIR/packages/tools"
 	# node bundleDefaultPlugins.js
 	cd "$ROOT_DIR/packages/app-desktop"
-	USE_HARD_LINKS=false yarn run dist
+
+	if [ "$IS_MACOS" == "1" ]; then
+		# This is to fix this error:
+		# 
+		# Exit code: ENOENT. spawn /usr/bin/python ENOENT
+		#
+		# Ref: https://github.com/electron-userland/electron-builder/issues/6767#issuecomment-1096589528
+		#
+		# It can be removed once we upgrade to electron-builder@23, however we
+		# cannot currently do this due to this error:
+		# https://github.com/laurent22/joplin/issues/8149
+		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist
+	else
+		USE_HARD_LINKS=false yarn run dist
+	fi	
 elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
 	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
-	USE_HARD_LINKS=false yarn run dist --publish=never
+	
+	if [ "$IS_MACOS" == "1" ]; then
+		# See above why we need to specify Python
+		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+	else
+		USE_HARD_LINKS=false yarn run dist --publish=never
+	fi
 fi

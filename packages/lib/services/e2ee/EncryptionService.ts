@@ -38,6 +38,7 @@ export enum EncryptionMethod {
 	SJCL4 = 4,
 	SJCL1a = 5,
 	Custom = 6,
+	SJCL1b = 7,
 }
 
 export interface EncryptOptions {
@@ -68,7 +69,7 @@ export default class EncryptionService {
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
-	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
+	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1b; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
 	private headerTemplates_ = {
@@ -78,34 +79,6 @@ export default class EncryptionService {
 			fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
 		},
 	};
-
-	public constructor() {
-		// Note: 1 MB is very slow with Node and probably even worse on mobile.
-		//
-		// On mobile the time it takes to decrypt increases exponentially for some reason, so it's important
-		// to have a relatively small size so as not to freeze the app. For example, on Android 7.1 simulator
-		// with 4.1 GB RAM, it takes this much to decrypt a block;
-		//
-		// 50KB => 1000 ms
-		// 25KB => 250ms
-		// 10KB => 200ms
-		// 5KB => 10ms
-		//
-		// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
-		// changed easily since the chunk size is incorporated into the encrypted data.
-		this.chunkSize_ = 5000;
-		this.decryptedMasterKeys_ = {};
-		this.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
-		this.defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
-
-		this.headerTemplates_ = {
-			// Template version 1
-			1: {
-				// Fields are defined as [name, valueSize, valueType]
-				fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
-			},
-		};
-	}
 
 	public static instance() {
 		if (this.instance_) return this.instance_;
@@ -237,9 +210,7 @@ export default class EncryptionService {
 	}
 
 	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
-		options = Object.assign({}, {
-			encryptionMethod: this.defaultMasterKeyEncryptionMethod_,
-		}, options);
+		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
 
 		const bytes: any[] = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
@@ -298,96 +269,128 @@ export default class EncryptionService {
 
 		const sjcl = shim.sjclModule;
 
-		// 2020-01-23: Deprecated and no longer secure due to the use og OCB2 mode - do not use.
-		if (method === EncryptionMethod.SJCL) {
-			try {
-				// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
-				return sjcl.json.encrypt(key, plainText, {
-					v: 1, // version
-					iter: 1000, // Defaults to 1000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
-					ks: 128, // Key size - "128 bits should be secure enough"
-					ts: 64, // ???
-					mode: 'ocb2', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
-					// "adata":"", // Associated Data - not needed?
-					cipher: 'aes',
-				});
-			} catch (error) {
-				throw this.wrapSjclError(error);
-			}
-		}
+		const handlers: Record<EncryptionMethod, ()=> string> = {
+			// 2020-01-23: Deprecated and no longer secure due to the use og OCB2 mode - do not use.
+			[EncryptionMethod.SJCL]: () => {
+				try {
+					// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
+					return sjcl.json.encrypt(key, plainText, {
+						v: 1, // version
+						iter: 1000, // Defaults to 1000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
+						ks: 128, // Key size - "128 bits should be secure enough"
+						ts: 64, // ???
+						mode: 'ocb2', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
+						// "adata":"", // Associated Data - not needed?
+						cipher: 'aes',
+					});
+				} catch (error) {
+					throw this.wrapSjclError(error);
+				}
+			},
 
-		// 2020-03-06: Added method to fix https://github.com/laurent22/joplin/issues/2591
-		//             Also took the opportunity to change number of key derivations, per Isaac Potoczny's suggestion
-		if (method === EncryptionMethod.SJCL1a) {
-			try {
-				// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
-				// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
-				// invalid UTF-8 data. Fixes https://github.com/laurent22/joplin/issues/2591
-				return sjcl.json.encrypt(key, escape(plainText), {
-					v: 1, // version
-					iter: 101, // Since the master key already uses key derivations and is secure, additional iteration here aren't necessary, which will make decryption faster. SJCL enforces an iter strictly greater than 100
-					ks: 128, // Key size - "128 bits should be secure enough"
-					ts: 64, // ???
-					mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
-					// "adata":"", // Associated Data - not needed?
-					cipher: 'aes',
-				});
-			} catch (error) {
-				throw this.wrapSjclError(error);
-			}
-		}
+			// 2020-03-06: Added method to fix https://github.com/laurent22/joplin/issues/2591
+			//             Also took the opportunity to change number of key derivations, per Isaac Potoczny's suggestion
+			// 2023-06-10: Deprecated in favour of SJCL1b
+			[EncryptionMethod.SJCL1a]: () => {
+				try {
+					// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
+					// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
+					// invalid UTF-8 data. Fixes https://github.com/laurent22/joplin/issues/2591
+					return sjcl.json.encrypt(key, escape(plainText), {
+						v: 1, // version
+						iter: 101, // Since the master key already uses key derivations and is secure, additional iteration here aren't necessary, which will make decryption faster. SJCL enforces an iter strictly greater than 100
+						ks: 128, // Key size - "128 bits should be secure enough"
+						ts: 64, // ???
+						mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
+						// "adata":"", // Associated Data - not needed?
+						cipher: 'aes',
+					});
+				} catch (error) {
+					throw this.wrapSjclError(error);
+				}
+			},
 
-		// 2020-01-23: Deprecated - see above.
-		// Was used to encrypt master keys
-		if (method === EncryptionMethod.SJCL2) {
-			try {
-				return sjcl.json.encrypt(key, plainText, {
-					v: 1,
-					iter: 10000,
-					ks: 256,
-					ts: 64,
-					mode: 'ocb2',
-					cipher: 'aes',
-				});
-			} catch (error) {
-				throw this.wrapSjclError(error);
-			}
-		}
+			// 2023-06-10: Changed AES-128 to AES-256 per TheQuantumPhysicist's suggestions
+			// https://github.com/laurent22/joplin/issues/7686
+			[EncryptionMethod.SJCL1b]: () => {
+				try {
+					// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
+					// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
+					// invalid UTF-8 data. Fixes https://github.com/laurent22/joplin/issues/2591
+					return sjcl.json.encrypt(key, escape(plainText), {
+						v: 1, // version
+						iter: 101, // Since the master key already uses key derivations and is secure, additional iteration here aren't necessary, which will make decryption faster. SJCL enforces an iter strictly greater than 100
+						ks: 256, // Key size - "256-bit is the golden standard that we should follow."
+						ts: 64, // ???
+						mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
+						// "adata":"", // Associated Data - not needed?
+						cipher: 'aes',
+					});
+				} catch (error) {
+					throw this.wrapSjclError(error);
+				}
+			},
 
-		if (method === EncryptionMethod.SJCL3) {
-			try {
-				// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
-				return sjcl.json.encrypt(key, plainText, {
-					v: 1, // version
-					iter: 1000, // Defaults to 1000 in sjcl. Since we're running this on mobile devices we need to be careful it doesn't affect performances too much. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
-					ks: 128, // Key size - "128 bits should be secure enough"
-					ts: 64, // ???
-					mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
-					// "adata":"", // Associated Data - not needed?
-					cipher: 'aes',
-				});
-			} catch (error) {
-				throw this.wrapSjclError(error);
-			}
-		}
+			// 2020-01-23: Deprecated - see above.
+			// Was used to encrypt master keys
+			[EncryptionMethod.SJCL2]: () => {
+				try {
+					return sjcl.json.encrypt(key, plainText, {
+						v: 1,
+						iter: 10000,
+						ks: 256,
+						ts: 64,
+						mode: 'ocb2',
+						cipher: 'aes',
+					});
+				} catch (error) {
+					throw this.wrapSjclError(error);
+				}
+			},
 
-		// Same as above but more secure (but slower) to encrypt master keys
-		if (method === EncryptionMethod.SJCL4) {
-			try {
-				return sjcl.json.encrypt(key, plainText, {
-					v: 1,
-					iter: 10000,
-					ks: 256,
-					ts: 64,
-					mode: 'ccm',
-					cipher: 'aes',
-				});
-			} catch (error) {
-				throw this.wrapSjclError(error);
-			}
-		}
+			// Don't know why we have this - it's not used anywhere. It must be
+			// kept however, in case some note somewhere is encrypted using this
+			// method.
+			[EncryptionMethod.SJCL3]: () => {
+				try {
+					// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
+					return sjcl.json.encrypt(key, plainText, {
+						v: 1, // version
+						iter: 1000, // Defaults to 1000 in sjcl. Since we're running this on mobile devices we need to be careful it doesn't affect performances too much. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
+						ks: 128, // Key size - "128 bits should be secure enough"
+						ts: 64, // ???
+						mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
+						// "adata":"", // Associated Data - not needed?
+						cipher: 'aes',
+					});
+				} catch (error) {
+					throw this.wrapSjclError(error);
+				}
+			},
 
-		throw new Error(`Unknown encryption method: ${method}`);
+			// Same as above but more secure (but slower) to encrypt master keys
+			[EncryptionMethod.SJCL4]: () => {
+				try {
+					return sjcl.json.encrypt(key, plainText, {
+						v: 1,
+						iter: 10000,
+						ks: 256,
+						ts: 64,
+						mode: 'ccm',
+						cipher: 'aes',
+					});
+				} catch (error) {
+					throw this.wrapSjclError(error);
+				}
+			},
+
+			[EncryptionMethod.Custom]: () => {
+				// This is handled elsewhere but as a sanity check, throw an exception
+				throw new Error('Custom encryption method is not supported here');
+			},
+		};
+
+		return handlers[method]();
 	}
 
 	public async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
@@ -400,7 +403,7 @@ export default class EncryptionService {
 		try {
 			const output = sjcl.json.decrypt(key, cipherText);
 
-			if (method === EncryptionMethod.SJCL1a) {
+			if (method === EncryptionMethod.SJCL1a || method === EncryptionMethod.SJCL1b) {
 				return unescape(output);
 			} else {
 				return output;
@@ -412,9 +415,7 @@ export default class EncryptionService {
 	}
 
 	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
-		options = Object.assign({}, {
-			encryptionMethod: this.defaultEncryptionMethod(),
-		}, options);
+		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
@@ -653,7 +654,7 @@ export default class EncryptionService {
 	}
 
 	public isValidEncryptionMethod(method: EncryptionMethod) {
-		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
+		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
 	public async itemIsEncrypted(item: any) {

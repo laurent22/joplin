@@ -1,9 +1,9 @@
 import { DbConnection } from '../db';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db('users').update({ email: db.raw('LOWER(email)') });
-}
+};
 
-export async function down(_db: DbConnection): Promise<any> {
+export const down = async (_db: DbConnection) => {
 
-}
+};

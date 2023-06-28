@@ -1,5 +1,43 @@
 # Joplin iOS app changelog
 
+## [ios-v12.11.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.5) - 2023-06-25T14:05:43Z
+
+- Improved: Auto-detect language on start (e48d55c)
+- Improved: Updated packages @react-native-community/datetimepicker (v7), aws, buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-reanimated (v3.1.0), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
+- Improved: Upgrade E2EE encryption method to AES-256 (#7686)
+- Improved: When resetting the master password, also create a new master key with that password (e647775)
+- Fixed: Allow certain HTML anchor tags (#8286)
+- Fixed: Fix sharing data with the app (#8285)
+- Fixed: Improve selection of active E2EE key (#8254)
+
+## [ios-v12.11.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.3) - 2023-05-29T12:27:45Z
+
+- Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
+- Fixed: Fixed broken domain detection (192bfb5)
+- Fixed: Fixed regression in biometric check (b19f1a1)
+
+## [ios-v12.11.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.2) - 2023-05-27T15:31:26Z
+
+- New: Add log info for biometrics feature (efdbaeb)
+- New: Add setting to enable/disable the markdown toolbar (#7929 by Henry Heino)
+- Improved: Disable Hermes engine (e9e9986)
+- Improved: Mark biometrics feature as beta and ensure no call is made if it is not enabled (e44a934)
+- Improved: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)
+- Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
+- Improved: Tells whether Hermes engine is enabled or not (5ecae17)
+- Improved: Translate Welcome notes (#8154)
+- Improved: Updated packages @lezer/highlight (v1.1.4), @react-native-community/netinfo (v9.3.9), @react-native-community/push-notification-ios (v1.11.0), aws, fs-extra (v11.1.1), jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), nanoid (v3.3.6), node-persist (v3.1.3), nodemon (v2.0.22), react-native-document-picker (v8.2.0), react-native-image-picker (v5.3.1), react-native-paper (v5.8.0), react-native-safe-area-context (v4.5.2), react-native-share (v8.2.2), reselect (v4.1.8), sass (v1.62.1), sharp (v0.32.1), sqlite3 (v5.1.6), tar (v6.1.14), turndown (v7.1.2), yargs (v17.7.2)
+- Fixed: Encode the non-ASCII characters in OneDrive URI (#7868) (#7851 by Self Not Found)
+- Fixed: Fix "Download interrupted" error (b023f58)
+- Fixed: Fix OneDrive sync attempting to call method on `null` variable (#7987) (#7986 by Henry Heino)
+- Fixed: Fixed sync crash  (#8056) (#8017 by Arun Kumar)
+- Fixed: Fixes issue where the note body is not updated after attaching a file (991c120)
+- Fixed: Removed `MasterKey` from Sync Status report (#8026) (#7940 by Arun Kumar)
+- Fixed: Use react-native-drawer-layout instead of react-native-side-menu-updated (#7953) (#7918 by [@jcgurango](https://github.com/jcgurango))
+- Security: Disable SVG tag support in editor to prevent XSS (caf6606)
+- Security: Prevent XSS by sanitizing certain HTML attributes (9e90d90)
+- Security: Prevent bypassing fingerprint lock on certain devices (6b72f86)
+
 ## [ios-v12.10.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.10.5) - 2023-03-06T14:43:37Z
 
 - Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))

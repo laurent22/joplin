@@ -115,13 +115,20 @@ export function localSyncInfoFromState(state: State): SyncInfo {
 // has already been used to encrypt data. In this case, at the moment we compare
 // local and remote sync info (before synchronising the data), key1.hasBeenUsed
 // is true, but key2.hasBeenUsed is false.
+//
+// 2023-05-30: Additionally, if one key is enabled and the other is not, we
+// always pick the enabled one regardless of usage.
 const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => {
 	const activeMasterKey1 = getActiveMasterKey(s1);
 	const activeMasterKey2 = getActiveMasterKey(s2);
 	let doDefaultAction = false;
 
 	if (activeMasterKey1 && activeMasterKey2) {
-		if (activeMasterKey1.hasBeenUsed && !activeMasterKey2.hasBeenUsed) {
+		if (masterKeyEnabled(activeMasterKey1) && !masterKeyEnabled(activeMasterKey2)) {
+			output.setWithTimestamp(s1, 'activeMasterKeyId');
+		} else if (!masterKeyEnabled(activeMasterKey1) && masterKeyEnabled(activeMasterKey2)) {
+			output.setWithTimestamp(s2, 'activeMasterKeyId');
+		} else if (activeMasterKey1.hasBeenUsed && !activeMasterKey2.hasBeenUsed) {
 			output.setWithTimestamp(s1, 'activeMasterKeyId');
 		} else if (!activeMasterKey1.hasBeenUsed && activeMasterKey2.hasBeenUsed) {
 			output.setWithTimestamp(s2, 'activeMasterKeyId');

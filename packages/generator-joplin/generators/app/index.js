@@ -100,7 +100,7 @@ module.exports = class extends Generator {
 
 			if (!derivedProps.packageName) derivedProps.packageName = defaultPackageName;
 
-			this.props = Object.assign({}, initialProps, derivedProps);
+			this.props = { ...initialProps, ...derivedProps };
 		}
 	}
 

@@ -9,6 +9,7 @@ import FileHandler, { SettingValues } from './settings/FileHandler';
 import Logger from '../Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -312,6 +313,7 @@ class Setting extends BaseModel {
 	private static fileHandler_: FileHandler = null;
 	private static rootFileHandler_: FileHandler = null;
 	private static settingFilename_: string = 'settings.json';
+	private static buildInMetadata_: SettingItems = null;
 
 	public static tableName() {
 		return 'settings';
@@ -406,7 +408,7 @@ class Setting extends BaseModel {
 			return output;
 		};
 
-		this.metadata_ = {
+		this.buildInMetadata_ = {
 			'clientId': {
 				value: '',
 				type: SettingItemType.String,
@@ -1395,7 +1397,7 @@ class Setting extends BaseModel {
 			useCustomPdfViewer: {
 				value: false,
 				type: SettingItemType.Bool,
-				public: true,
+				public: false,
 				advanced: true,
 				appTypes: [AppType.Desktop],
 				label: () => 'Use custom PDF viewer (Beta)',
@@ -1696,7 +1698,9 @@ class Setting extends BaseModel {
 
 		};
 
-		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
+		this.metadata_ = { ...this.buildInMetadata_ };
+
+		this.metadata_ = { ...this.metadata_, ...this.customMetadata_ };
 
 		if (this.constants_.env === Env.Dev) this.validateMetadata(this.metadata_);
 
@@ -1707,6 +1711,10 @@ class Setting extends BaseModel {
 		for (const [k, v] of Object.entries(md)) {
 			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
 		}
+	}
+
+	public static isBuiltinKey(key: string): boolean {
+		return key in this.buildInMetadata_;
 	}
 
 	public static customCssFilePath(filename: string): string {
@@ -1810,8 +1818,8 @@ class Setting extends BaseModel {
 
 	public static settingMetadata(key: string): SettingItem {
 		const metadata = this.metadata();
-		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
-		const output = Object.assign({}, metadata[key]);
+		if (!(key in metadata)) throw new JoplinError(`Unknown key: ${key}`, 'unknown_key');
+		const output = { ...metadata[key] };
 		output.key = key;
 		return output;
 	}
@@ -1841,9 +1849,7 @@ class Setting extends BaseModel {
 	}
 
 	public static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
-		options = Object.assign({}, {
-			secureOnly: false,
-		}, options);
+		options = { secureOnly: false, ...options };
 
 		if (!this.keys_) {
 			const metadata = this.metadata();
@@ -2201,7 +2207,7 @@ class Setting extends BaseModel {
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
-			if (typeof value === 'object') return Object.assign({}, value);
+			if (typeof value === 'object') return { ...value };
 			return value;
 		}
 
@@ -2255,7 +2261,7 @@ class Setting extends BaseModel {
 
 	public static enumOptions(key: string) {
 		const metadata = this.metadata();
-		if (!metadata[key]) throw new Error(`Unknown key: ${key}`);
+		if (!metadata[key]) throw new JoplinError(`Unknown key: ${key}`, 'unknown_key');
 		if (!metadata[key].options) throw new Error(`No options for: ${key}`);
 		return metadata[key].options();
 	}
@@ -2309,7 +2315,7 @@ class Setting extends BaseModel {
 		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
 
 		for (let i = 0; i < this.cache_.length; i++) {
-			const s = Object.assign({}, this.cache_[i]);
+			const s = { ...this.cache_[i] };
 			const valueAsString = this.valueToString(s.key, s.value);
 
 			if (this.isSecureKey(s.key)) {
@@ -2433,7 +2439,7 @@ class Setting extends BaseModel {
 		const output: any = {};
 		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
-			const s = Object.assign({}, metadata[key]);
+			const s = { ...metadata[key] };
 			if (!s.public) continue;
 			if (s.appTypes && s.appTypes.indexOf(appType) < 0) continue;
 			s.value = this.value(key);

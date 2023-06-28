@@ -200,7 +200,7 @@ export default class Api {
 				if (!this.bodyJson_) this.bodyJson_ = JSON.parse(this.body);
 
 				if (disallowedProperties) {
-					const filteredBody = Object.assign({}, this.bodyJson_);
+					const filteredBody = { ...this.bodyJson_ };
 					for (let i = 0; i < disallowedProperties.length; i++) {
 						const n = disallowedProperties[i];
 						delete filteredBody[n];
@@ -257,7 +257,7 @@ export default class Api {
 	private async execServiceActionFromRequest_(externalApi: any, request: Request) {
 		const action = externalApi[request.action];
 		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);
-		const args = Object.assign({}, request);
+		const args = { ...request };
 		delete args.action;
 		return action(args);
 	}

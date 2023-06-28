@@ -154,7 +154,7 @@ class Registry {
 
 						try {
 							this.logger().info('Starting scheduled sync');
-							const options = Object.assign({}, syncOptions, { context: context });
+							const options = { ...syncOptions, context: context };
 							if (!options.saveContextHandler) {
 								options.saveContextHandler = (newContext: any) => {
 									Setting.setValue(contextKey, JSON.stringify(newContext));

@@ -67,7 +67,7 @@ class AppComponent extends Component {
 		});
 
 		this.confirm_click = async () => {
-			const content = Object.assign({}, this.props.clippedContent);
+			const content = { ...this.props.clippedContent };
 			content.tags = this.state.selectedTags.join(',');
 			content.parent_id = this.props.selectedFolderId;
 			const response = await bridge().sendContentToJoplin(content);

@@ -177,7 +177,7 @@ export default class AlarmServiceDriverNode {
 			}, interval);
 		}
 
-		this.notifications_[notification.id] = Object.assign({}, notification);
+		this.notifications_[notification.id] = { ...notification };
 		this.notifications_[notification.id].timeoutId = timeoutId;
 	}
 }

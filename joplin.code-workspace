@@ -107,7 +107,10 @@
 			".eslintignore": true,
 			".gitignore": true,
 			".vscode/*": true,
-			".yarn": true,
+			".yarn/cache": true,
+			".yarn/install-state.gz": true,
+			".yarn/plugins": true,
+			".yarn/releases": true,
 			"*.sublime-workspace": true,
 			"**/_mydocs": true,
 			"**/_mydocs/EnexSamples/*.enex": true,
@@ -350,5 +353,43 @@
 			"web/bundles/": true,
 			"web/env.php": true,
 		}
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "transpile-server",
+				"type": "shell",
+				"command": "cd ${workspaceFolder}/packages/server && yarn tsc",
+				"group": "build",
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Server",
+				"type": "node",
+				"request": "launch",
+				"preLaunchTask": "transpile-server",
+				"skipFiles": [
+					"<node_internals>/**"
+				],
+				"outFiles": [
+					"${workspaceFolder}/**/*.js",
+					"!**/node_modules/**"
+				],
+				"program": "${workspaceFolder}/packages/server/src/app.ts",
+				"args": [
+					"--env", "dev"
+				],
+				"env": {
+					"JOPLIN_IS_TESTING": "1",
+					"TERMS_URL": "https://example.com",
+					"PRIVACY_URL": "https://example.com",
+				}
+			}
+		]
 	}
 }

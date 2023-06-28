@@ -25,7 +25,7 @@ import { DbConnection } from '../db';
 // is_shared: 1
 // type_: 1`;
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.createTable('items', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();
 		table.text('name').notNullable();
@@ -109,8 +109,8 @@ export async function up(db: DbConnection): Promise<any> {
 
 	await db.schema.dropTable('permissions');
 	await db.schema.dropTable('joplin_file_contents');
-}
+};
 
-export async function down(db: DbConnection): Promise<any> {
+export const down = async (db: DbConnection) => {
 	await db.schema.dropTable('items');
-}
+};

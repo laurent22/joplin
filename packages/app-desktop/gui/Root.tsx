@@ -27,7 +27,7 @@ import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 import ImportScreen from './ImportScreen';
 const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
-const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
+import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -141,7 +141,7 @@ class RootComponent extends React.Component<Props, any> {
 			});
 		}
 
-		await WelcomeUtils.install(this.props.dispatch);
+		await WelcomeUtils.install(Setting.value('locale'), this.props.dispatch);
 	}
 
 	private renderModalMessage(props: ModalDialogProps) {

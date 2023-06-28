@@ -48,13 +48,11 @@ export class MarkupLanguageUtils {
 			pluginOptions[n] = { enabled: subValues[n] };
 		}
 
-		options = Object.assign({
-			ResourceModel: Resource,
+		options = { ResourceModel: Resource,
 			pluginOptions: pluginOptions,
 			tempDir: Setting.value('tempDir'),
 			fsDriver: shim.fsDriver(),
-			isSafeMode: Setting.value('isSafeMode'),
-		}, options);
+			isSafeMode: Setting.value('isSafeMode'), ...options };
 
 		return new MarkupToHtml(options);
 	}

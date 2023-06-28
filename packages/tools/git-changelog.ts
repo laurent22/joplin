@@ -3,6 +3,7 @@
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
 import { execCommand, githubUsername } from './tool-utils';
+import * as compareVersions from 'compare-versions';
 
 interface LogEntry {
 	message: string;
@@ -12,6 +13,7 @@ interface LogEntry {
 }
 
 enum Platform {
+	Unknown = 'unknown',
 	Android = 'android',
 	Ios = 'ios',
 	Desktop = 'desktop',
@@ -81,7 +83,12 @@ async function gitLog(sinceTag: string) {
 
 async function gitTags() {
 	const lines: string = await execCommand('git tag --sort=committerdate');
-	return lines.split('\n').map(l => l.trim()).filter(l => !!l);
+	const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+	return lines
+		.split('\n')
+		.map(l => l.trim())
+		.filter(l => !!l)
+		.sort((a, b) => collator.compare(a, b));
 }
 
 function platformFromTag(tagName: string): Platform {
@@ -94,7 +101,8 @@ function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('cloud') === 0) return Platform.Cloud;
 	if (tagName.indexOf('plugin-generator') === 0) return Platform.PluginGenerator;
 	if (tagName.indexOf('plugin-repo-cli') === 0) return Platform.PluginRepoCli;
-	throw new Error(`Could not determine platform from tag: "${tagName}"`);
+	return Platform.Unknown;
+	// throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
 
 export const filesApplyToPlatform = (files: string[], platform: string): boolean => {
@@ -130,6 +138,7 @@ export const parseRenovateMessage = (message: string): RenovateMessage => {
 	const regexes = [
 		/^Update dependency ([^\s]+) to ([^\s]+)/,
 		/^Update ([^\s]+) monorepo to ([^\s]+)/,
+		/^Update ([^\s]+)/,
 	];
 
 	for (const regex of regexes) {
@@ -138,7 +147,7 @@ export const parseRenovateMessage = (message: string): RenovateMessage => {
 		if (m) {
 			return {
 				package: m[1],
-				version: m[2],
+				version: m.length >= 3 ? m[2] : '',
 			};
 		}
 	}
@@ -172,7 +181,7 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 
 	const temp: Record<string, string> = {};
 	for (const message of messages) {
-		if (!temp[message.package]) {
+		if (!(message.package in temp)) {
 			temp[message.package] = message.version;
 		} else {
 			if (message.version > temp[message.package]) {
@@ -183,7 +192,8 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 
 	const temp2: string[] = [];
 	for (const [pkg, version] of Object.entries(temp)) {
-		temp2.push(`${pkg} (${version})`);
+		const versionString = version ? ` (${version})` : '';
+		temp2.push(`${pkg}${versionString}`);
 	}
 
 	temp2.sort();
@@ -191,6 +201,11 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 	if (temp2.length) return `Updated packages ${temp2.join(', ')}`;
 
 	return '';
+};
+
+const versionFromTag = (tag: string) => {
+	const s = tag.split('-');
+	return s[s.length - 1];
 };
 
 function filterLogs(logs: LogEntry[], platform: Platform) {
@@ -280,7 +295,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 }
 
 function formatCommitMessage(commit: string, msg: string, author: Author, options: Options): string {
-	options = Object.assign({}, { publishFormat: 'full' }, options);
+	options = { publishFormat: 'full', ...options };
 
 	let output = '';
 
@@ -441,10 +456,13 @@ function capitalizeFirstLetter(string: string) {
 async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags: string[]) {
 	let baseTagIndex = allTags.indexOf(baseTag);
 	if (baseTagIndex < 0) baseTagIndex = allTags.length;
+	const baseVersion = versionFromTag(baseTag);
 
 	for (let i = baseTagIndex - 1; i >= 0; i--) {
 		const tag = allTags[i];
 		if (platformFromTag(tag) !== platform) continue;
+		const currentVersion = versionFromTag(tag);
+		if (compareVersions(baseVersion, currentVersion) <= 0) continue;
 
 		try {
 			const logs = await gitLog(tag);

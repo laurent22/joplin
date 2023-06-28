@@ -29,7 +29,7 @@ import ScreenHeader from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
-const { _ } = require('@joplin/lib/locale');
+import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
@@ -44,13 +44,19 @@ import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
+import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
+import { voskEnabled } from '../../services/voiceTyping/vosk';
+import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
 const urlUtils = require('@joplin/lib/urlUtils');
+
+// import Vosk from 'react-native-vosk';
 
 const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
+
 	public static navigationOptions(): any {
 		return { header: null };
 	}
@@ -84,6 +90,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				canUndo: false,
 				canRedo: false,
 			},
+
+			voiceTypingDialogShown: false,
 		};
 
 		this.saveActionQueues_ = {};
@@ -129,7 +137,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				Keyboard.dismiss();
 
 				this.setState({
-					note: Object.assign({}, this.state.lastSavedNote),
+					note: { ...this.state.lastSavedNote },
 					mode: 'view',
 				});
 
@@ -238,6 +246,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
+		this.voiceTypingDialog_onText = this.voiceTypingDialog_onText.bind(this);
+		this.voiceTypingDialog_onDismiss = this.voiceTypingDialog_onDismiss.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -272,7 +282,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (!undoState) return;
 
 		this.setState((state: any) => {
-			const newNote = Object.assign({}, state.note);
+			const newNote = { ...state.note };
 			newNote.body = undoState.body;
 			return {
 				note: newNote,
@@ -371,7 +381,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			borderBottomWidth: 1,
 		};
 
-		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
 
 		styles.titleTextInput = {
@@ -683,14 +693,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const resourceTag = Resource.markdownTag(resource);
 
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 
-		if (this.state.mode === 'edit' && !!this.selection) {
-			const newText = `\n${resourceTag}\n`;
+		if (this.state.mode === 'edit') {
+			let newText = '';
 
-			const prefix = newNote.body.substring(0, this.selection.start);
-			const suffix = newNote.body.substring(this.selection.end);
-			newNote.body = `${prefix}${newText}${suffix}`;
+			if (this.selection) {
+				newText = `\n${resourceTag}\n`;
+				const prefix = newNote.body.substring(0, this.selection.start);
+				const suffix = newNote.body.substring(this.selection.end);
+				newNote.body = `${prefix}${newText}${suffix}`;
+			} else {
+				newText = `\n${resourceTag}`;
+				newNote.body = `${newNote.body}\n${newText}`;
+			}
 
 			if (this.useEditorBeta()) {
 				// The beta editor needs to be explicitly informed of changes
@@ -778,7 +794,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
-		const newNote = Object.assign({}, this.state.note);
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
+			logger.warn('POST_NOTIFICATION permission was not granted');
+			return;
+		}
+
+		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -871,6 +893,69 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
 	}
 
+	// private vosk_:Vosk;
+
+	// private async getVosk() {
+	// 	if (this.vosk_) return this.vosk_;
+	// 	this.vosk_ = new Vosk();
+	// 	await this.vosk_.loadModel('model-fr-fr');
+	// 	return this.vosk_;
+	// }
+
+	// private async voiceRecording_onPress() {
+	// 	logger.info('Vosk: Getting instance...');
+
+	// 	const vosk = await this.getVosk();
+
+	// 	this.voskResult_ = [];
+
+	// 	const eventHandlers: any[] = [];
+
+	// 	eventHandlers.push(vosk.onResult(e => {
+	// 		logger.info('Vosk: result', e.data);
+	// 		this.voskResult_.push(e.data);
+	// 	}));
+
+	// 	eventHandlers.push(vosk.onError(e => {
+	// 		logger.warn('Vosk: error', e.data);
+	// 	}));
+
+	// 	eventHandlers.push(vosk.onTimeout(e => {
+	// 		logger.warn('Vosk: timeout', e.data);
+	// 	}));
+
+	// 	eventHandlers.push(vosk.onFinalResult(e => {
+	// 		logger.info('Vosk: final result', e.data);
+	// 	}));
+
+	// 	logger.info('Vosk: Starting recording...');
+
+	// 	void vosk.start();
+
+	// 	const buttonId = await dialogs.pop(this, 'Voice recording in progress...', [
+	// 		{ text: 'Stop recording', id: 'stop' },
+	// 		{ text: _('Cancel'), id: 'cancel' },
+	// 	]);
+
+	// 	logger.info('Vosk: Stopping recording...');
+	// 	vosk.stop();
+
+	// 	for (const eventHandler of eventHandlers) {
+	// 		eventHandler.remove();
+	// 	}
+
+	// 	logger.info('Vosk: Recording stopped:', this.voskResult_);
+
+	// 	if (buttonId === 'cancel') return;
+
+	// 	const newNote: NoteEntity = { ...this.state.note };
+	// 	newNote.body = `${newNote.body} ${this.voskResult_.join(' ')}`;
+	// 	this.setState({ note: newNote });
+	// 	this.scheduleSave();
+	// }
+
+
+
 	public menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
@@ -914,6 +999,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 				void this.share_onPress();
 			},
 		});
+
+		// Voice typing is enabled only for French language and on Android for now
+		if (voskEnabled && shim.mobilePlatform() === 'android' && isSupportedLanguage(currentLocale())) {
+			output.push({
+				title: _('Voice typing...'),
+				onPress: () => {
+					// this.voiceRecording_onPress();
+					this.setState({ voiceTypingDialogShown: true });
+				},
+			});
+		}
+
 		if (isSaved) {
 			output.push({
 				title: _('Tags'),
@@ -1001,7 +1098,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const folder = await Folder.load(note.parent_id);
 
 		this.setState({
-			lastSavedNote: Object.assign({}, note),
+			lastSavedNote: { ...note },
 			note: note,
 			folder: folder,
 		});
@@ -1031,6 +1128,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
+	}
+
+	private voiceTypingDialog_onText(text: string) {
+		if (this.state.mode === 'view') {
+			const newNote: NoteEntity = { ...this.state.note };
+			newNote.body = `${newNote.body} ${text}`;
+			this.setState({ note: newNote });
+			this.scheduleSave();
+		} else {
+			if (this.useEditorBeta()) {
+				// We add a space so that if the feature is used twice in a row,
+				// the sentences are not stuck to each others.
+				this.editorRef.current.insertText(`${text} `);
+			} else {
+				logger.warn('Voice typing is not supported in plaintext editor');
+			}
+		}
+	}
+
+	private voiceTypingDialog_onDismiss() {
+		this.setState({ voiceTypingDialogShown: false });
 	}
 
 	public render() {
@@ -1141,6 +1259,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
+			if (this.state.voiceTypingDialogShown) return null;
+
 			const editButton = {
 				label: _('Edit'),
 				icon: 'md-create',
@@ -1155,8 +1275,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return <ActionButton mainButton={editButton} />;
 		};
-
-		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1188,6 +1306,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const renderVoiceTypingDialog = () => {
+			if (!this.state.voiceTypingDialogShown) return null;
+			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+		};
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -1206,7 +1329,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{renderActionButton()}
+				{renderVoiceTypingDialog()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1238,6 +1362,10 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+
+		// What we call "beta editor" in this component is actually the (now
+		// default) CodeMirror editor. That should be refactored to make it less
+		// confusing.
 		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
 })(NoteScreenComponent);

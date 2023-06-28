@@ -388,7 +388,7 @@ export default class Synchronizer {
 
 		const synchronizationId = time.unixMs().toString();
 
-		const outputContext = Object.assign({}, lastContext);
+		const outputContext = { ...lastContext };
 
 		this.progressReport_.startTime = time.unixMs();
 
@@ -1036,7 +1036,7 @@ export default class Synchronizer {
 					// the update will simply be skipped.
 					if (!hasCancelled) {
 						if (options.saveContextHandler) {
-							const deltaToSave = Object.assign({}, listResult.context);
+							const deltaToSave = { ...listResult.context };
 							// Remove these two variables because they can be large and can be rebuilt
 							// the next time the sync is started.
 							delete deltaToSave.statsCache;

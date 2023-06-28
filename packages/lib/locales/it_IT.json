@@ -296,7 +296,6 @@
  "Enabled": "Attivato",
  "Encrypted": "Crittografato",
  "Encrypted items cannot be modified": "Gli elementi crittografati non possono essere modificati",
- "Encrypted notebooks cannot be renamed": "I Taccuini crittografati non possono essere rinominati",
  "Encryption": "Crittografia",
  "Encryption Config": "Configurazione Crittografia",
  "Encryption is: %s": "La crittografia è: %s",

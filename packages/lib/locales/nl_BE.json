@@ -266,7 +266,6 @@
  "Enabled": "Ingeschakeld",
  "Encrypted": "Versleuteld",
  "Encrypted items cannot be modified": "Versleutelde items kunnen niet aangepast worden",
- "Encrypted notebooks cannot be renamed": "Versleutelde notitieboeken kunnen niet hernoemd worden",
  "Encryption": "Encryptie",
  "Encryption Config": "Encryptie configuratie",
  "Encryption is: %s": "Encryptie is: %s",

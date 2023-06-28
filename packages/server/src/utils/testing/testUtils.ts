@@ -466,7 +466,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
-export async function expectHttpError(asyncFn: Function, expectedHttpCode: number): Promise<void> {
+export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -479,6 +479,10 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 		expect('not throw').toBe('throw');
 	} else {
 		expect(thrownError.httpCode).toBe(expectedHttpCode);
+
+		if (expectedErrorCode !== null) {
+			expect(thrownError.code).toBe(expectedErrorCode);
+		}
 	}
 }
 
@@ -529,6 +533,7 @@ is_shared: 1
 share_id: ${note.share_id || ''}
 conflict_original_id: 
 master_key_id: 
+user_data: 
 type_: 1`;
 }
 
@@ -545,6 +550,7 @@ encryption_applied: 0
 parent_id: ${folder.parent_id || ''}
 is_shared: 0
 share_id: ${folder.share_id || ''}
+user_data: 
 type_: 2`;
 }
 

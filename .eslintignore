@@ -74,6 +74,8 @@ packages/turndown/
 packages/pdf-viewer/dist
 plugin_types/
 readme/
+packages/react-native-vosk/lib/
+packages/lib/countable/Countable.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
@@ -223,6 +225,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollHandler.j
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
@@ -354,6 +357,7 @@ packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
+packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
@@ -362,6 +366,7 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
@@ -396,6 +401,7 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js
 packages/app-mobile/components/NoteEditor/types.js
+packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
@@ -416,12 +422,15 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/side-menu-content.js
+packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/voiceTyping/vosk.android.js
+packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
@@ -478,6 +487,7 @@ packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetRegistry.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.js
+packages/lib/WelcomeUtils.js
 packages/lib/array.js
 packages/lib/callbackUrlUtils.js
 packages/lib/callbackUrlUtils.test.js
@@ -513,6 +523,7 @@ packages/lib/import-enex-md-gen.js
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex.js
 packages/lib/locale.js
+packages/lib/locale.test.js
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils2.test.js
@@ -548,6 +559,8 @@ packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/types.js
+packages/lib/models/utils/userData.js
+packages/lib/models/utils/userData.test.js
 packages/lib/net-utils.js
 packages/lib/ntp.js
 packages/lib/onedrive-api.js
@@ -711,6 +724,7 @@ packages/lib/services/searchengine/SearchFilter.test.js
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.test.js
 packages/lib/services/searchengine/gotoAnythingStyleQuery.js
+packages/lib/services/searchengine/gotoAnythingStyleQuery.test.js
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/ShareService.test.js
@@ -838,6 +852,7 @@ packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.js
+packages/tools/build-welcome.js
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
@@ -872,6 +887,8 @@ packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateNews.js
 packages/tools/website/utils/applyTranslations.js
 packages/tools/website/utils/applyTranslations.test.js
+packages/tools/website/utils/convertLinksToLocale.js
+packages/tools/website/utils/convertLinksToLocale.test.js
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/news.js
 packages/tools/website/utils/openGraph.js

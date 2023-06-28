@@ -29,13 +29,11 @@ export default class InteropServiceHelper {
 	private static async exportNoteToHtmlFile(noteId: string, exportOptions: ExportNoteOptions) {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
 
-		const fullExportOptions: ExportOptions = Object.assign({}, {
-			path: tempFile,
+		const fullExportOptions: ExportOptions = { path: tempFile,
 			format: 'html',
 			target: FileSystemItem.File,
 			sourceNoteIds: [noteId],
-			customCss: '',
-		}, exportOptions);
+			customCss: '', ...exportOptions };
 
 		const service = InteropService.instance();
 

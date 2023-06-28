@@ -4,7 +4,7 @@ require('source-map-support').install();
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, runningInDocker } from './config';
+import config, { fullVersionString, initConfig, runningInDocker } from './config';
 import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
@@ -252,10 +252,11 @@ async function main() {
 	} else {
 		runCommandAndExitApp = false;
 
-		appLogger().info(`Starting server v${config().appVersion} (${env}) on port ${config().port} and PID ${process.pid}...`);
+		appLogger().info(`Starting server ${fullVersionString(config())} (${env}) on port ${config().port} and PID ${process.pid}...`);
 
 		if (config().maxTimeDrift) {
-			const timeDrift = await getDeviceTimeDrift();
+			appLogger().info(`Checking for time drift using NTP server: ${config().NTP_SERVER}`);
+			const timeDrift = await getDeviceTimeDrift(config().NTP_SERVER);
 			if (Math.abs(timeDrift) > config().maxTimeDrift) {
 				throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check, or set to 0 to disabled the check.`);
 			}

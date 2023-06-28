@@ -2,7 +2,7 @@ import BaseModel, { UuidType } from './BaseModel';
 import { Uuid } from '../services/database/types';
 import { LockType, Lock, LockClientType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
 import { Value } from './KeyValueModel';
-import { ErrorConflict, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorConflict, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 
 export default class LockModel extends BaseModel<Lock> {
@@ -59,7 +59,7 @@ export default class LockModel extends BaseModel<Lock> {
 			const exclusiveLock = activeLock(locks, new Date(), this.lockTtl, LockType.Exclusive);
 
 			if (exclusiveLock) {
-				throw new ErrorConflict(`Cannot acquire lock because there is already an exclusive lock for client: ${exclusiveLock.clientType} #${exclusiveLock.clientId}`, 'hasExclusiveLock');
+				throw new ErrorConflict(`Cannot acquire lock because there is already an exclusive lock for client: ${exclusiveLock.clientType} #${exclusiveLock.clientId}`, ErrorCode.HasExclusiveSyncLock);
 			}
 
 			const syncLock = activeLock(locks, new Date(), this.lockTtl, LockType.Sync, clientType, clientId);
@@ -111,7 +111,7 @@ export default class LockModel extends BaseModel<Lock> {
 
 					return JSON.stringify(locks);
 				} else {
-					throw new ErrorConflict(`Cannot acquire lock because there is already an exclusive lock for client: ${exclusiveLock.clientType} #${exclusiveLock.clientId}`, 'hasExclusiveLock');
+					throw new ErrorConflict(`Cannot acquire lock because there is already an exclusive lock for client: ${exclusiveLock.clientType} #${exclusiveLock.clientId}`, ErrorCode.HasExclusiveSyncLock);
 				}
 			}
 
@@ -121,7 +121,7 @@ export default class LockModel extends BaseModel<Lock> {
 				if (syncLock.clientId === clientId) {
 					locks = locks.filter(l => l.id !== syncLock.id);
 				} else {
-					throw new ErrorConflict(`Cannot acquire exclusive lock because there is an active sync lock for client: ${syncLock.clientType} #${syncLock.clientId}`, 'hasSyncLock');
+					throw new ErrorConflict(`Cannot acquire exclusive lock because there is an active sync lock for client: ${syncLock.clientType} #${syncLock.clientId}`, ErrorCode.HasSyncLock);
 				}
 			}
 

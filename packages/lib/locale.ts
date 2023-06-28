@@ -508,7 +508,8 @@ function languageNameInEnglish(languageCode: string) {
 	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
 }
 
-function languageName(languageCode: string, defaultToEnglish: boolean = true) {
+function languageName(canonicalName: string, defaultToEnglish: boolean = true) {
+	const languageCode = languageCodeOnly(canonicalName);
 	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
 	if (defaultToEnglish) return languageNameInEnglish(languageCode);
 	return '';
@@ -559,7 +560,7 @@ function localeStrings(canonicalName: string) {
 
 	if (loadedLocales_[locale]) return loadedLocales_[locale];
 
-	loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]);
+	loadedLocales_[locale] = { ...supportedLocales_[locale] };
 
 	return loadedLocales_[locale];
 }
@@ -584,14 +585,7 @@ function localesFromLanguageCode(languageCode: string, locales: string[]): strin
 }
 
 function _(s: string, ...args: any[]): string {
-	const strings = localeStrings(currentLocale_);
-	let result = strings[s];
-	if (result === '' || result === undefined) result = s;
-	try {
-		return sprintf(result, ...args);
-	} catch (error) {
-		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
-	}
+	return stringByLocale(currentLocale_, s, ...args);
 }
 
 function _n(singular: string, plural: string, n: number, ...args: any[]) {
@@ -599,4 +593,15 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	return _(singular, ...args);
 }
 
-export { _, _n, supportedLocales, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
+	const strings = localeStrings(locale);
+	let result = strings[s];
+	if (result === '' || result === undefined) result = s;
+	try {
+		return sprintf(result, ...args);
+	} catch (error) {
+		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
+	}
+};
+
+export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

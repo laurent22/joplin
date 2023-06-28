@@ -68,6 +68,10 @@ export class Bridge {
 		return process.argv;
 	}
 
+	public getLocale = () => {
+		return this.electronApp().electronApp().getLocale();
+	};
+
 	// Applies to electron-context-menu@3:
 	//
 	// For now we have to disable spell checking in non-editor text
@@ -197,12 +201,10 @@ export class Bridge {
 			...options,
 		};
 
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'question',
+		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,
 			cancelId: 1,
-			buttons: options.buttons,
-		}, options));
+			buttons: options.buttons, ...options });
 
 		return result === 0;
 	}
@@ -211,21 +213,17 @@ export class Bridge {
 	public showMessageBox(message: string, options: any = null) {
 		if (options === null) options = {};
 
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'question',
+		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,
-			buttons: [_('OK'), _('Cancel')],
-		}, options));
+			buttons: [_('OK'), _('Cancel')], ...options });
 
 		return result;
 	}
 
 	public showInfoMessageBox(message: string, options: any = {}) {
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'info',
+		const result = this.showMessageBox_(this.window(), { type: 'info',
 			message: message,
-			buttons: [_('OK')],
-		}, options));
+			buttons: [_('OK')], ...options });
 		return result === 0;
 	}
 
