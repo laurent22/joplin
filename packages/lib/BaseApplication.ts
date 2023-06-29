@@ -59,6 +59,9 @@ import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 
+import RotatingLogs from './RotatingLogs';
+import FsDriveNode from './fs-driver-node';
+
 const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
@@ -925,6 +928,9 @@ export default class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
+
+		RotatingLogs.fsDriver_ = new FsDriveNode();
+		new RotatingLogs(profileDir);
 
 		return argv;
 	}
