@@ -77,7 +77,7 @@
     "eslint-plugin-react": "7.32.2",
     "execa": "5.1.1",
     "fs-extra": "11.1.1",
-    "glob": "8.1.0",
+    "glob": "10.0.0",
     "gulp": "4.0.2",
     "husky": "3.1.0",
     "lerna": "3.22.1",
