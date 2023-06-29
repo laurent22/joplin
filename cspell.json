@@ -478,6 +478,7 @@
 		"multimd",
 		"multistatus",
 		"multitable",
+		"codewrap",
 		"mybucket",
 		"mydir",
 		"myfile",

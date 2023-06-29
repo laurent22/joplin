@@ -464,6 +464,22 @@ class Application extends BaseApplication {
 			css: cssString,
 		});
 
+		// markdown.plugin.codewrap control code wrap css, this work for mobile app
+		const codewrap = Setting.value('markdown.plugin.codewrap');
+		this.logger().info(`codewrap: ${codewrap}`);
+		const softbreaks = Setting.value('markdown.plugin.softbreaks');
+		this.logger().info(`softbreaks: ${softbreaks}`);
+		if (codewrap) {
+			const cssString_code = `code {
+				white-space: pre-wrap;
+			}`;
+			this.store().dispatch({
+				type: 'CUSTOM_CSS_APPEND',
+				css: cssString_code,
+			});
+			this.logger().info(`cssString_code: ${cssString_code}`);
+		}
+
 		this.store().dispatch({
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),

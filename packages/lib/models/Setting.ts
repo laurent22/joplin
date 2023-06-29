@@ -1161,6 +1161,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.emoji': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
 			'markdown.plugin.insert': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ++insert++ syntax')}${wysiwygYes}` },
 			'markdown.plugin.multitable': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
+			'markdown.plugin.codewrap': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable code block wrap, need restart app')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
