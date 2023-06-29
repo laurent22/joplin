@@ -14,7 +14,7 @@ npm install -g generator-joplin
 Then generate your new project:
 
 ```bash
-yo joplin
+yo --node-package-manager npm joplin
 ```
 
 ## Development
@@ -38,6 +38,10 @@ The plugin is built using Webpack, which creates the compiled code in `/dist`. A
 To build the plugin, simply run `npm run dist`.
 
 The project is setup to use TypeScript, although you can change the configuration to use plain JavaScript.
+
+## Updating the manifest version number
+
+You can run `npm run updateVersion` to bump the patch part of the version number, so for example 1.0.3 will become 1.0.4. This script will update both the package.json and manifest.json version numbers so as to keep them in sync.
 
 ## Publishing the plugin
 
@@ -66,6 +70,13 @@ By default, the compiler (webpack) is going to compile `src/index.ts` only (as w
 - The script requires modules you've added to package.json. In that case, the script, whether JS or TS, must be compiled so that the dependencies are bundled with the JPL file.
 
 To get such an external script file to compile, you need to add it to the `extraScripts` array in `plugin.config.json`. The path you add should be relative to /src. For example, if you have a file in "/src/webviews/index.ts", the path should be set to "webviews/index.ts". Once compiled, the file will always be named with a .js extension. So you will get "webviews/index.js" in the plugin package, and that's the path you should use to reference the file.
+
+## More information
+
+- [Joplin Plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html)
+- [Joplin Data API](https://joplinapp.org/api/references/rest_api/)
+- [Joplin Plugin Manifest](https://joplinapp.org/api/references/plugin_manifest/)
+- Ask for help on the [forum](https://discourse.joplinapp.org/) or our [Discord channel](https://discord.gg/VSj7AFHvpq)
 
 ## License
 
