@@ -464,6 +464,20 @@ class Application extends BaseApplication {
 			css: cssString,
 		});
 
+		// setting option to control add css for code wrap
+		const codewrap = Setting.value('markdown.plugin.codewrap');
+		this.logger().info(`codewrap: ${codewrap}`);
+		if (codewrap) {
+			const cssString_code = `code {
+				white-space: pre-wrap;
+			}`;
+			this.store().dispatch({
+				type: 'CUSTOM_CSS_APPEND',
+				css: cssString_code,
+			});
+			this.logger().info(`cssString_code: ${cssString_code}`);
+		}
+
 		this.store().dispatch({
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
