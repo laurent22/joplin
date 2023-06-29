@@ -252,17 +252,13 @@ class Logger {
 				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
-					// eslint-disable-next-line promise/prefer-await-to-then
-					return Logger.fsDriver().appendFile(target.path, `${line.join(': ')}\n`, 'utf8').then(() => {
-						this.cleanLogFile(target.path);
-					});
+					return Logger.fsDriver().appendFile(target.path, `${line.join(': ')}\n`, 'utf8');
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				}).finally(() => {
 					if (release) release();
-					this.deleteOlderLogFiles(target.path);
 				});
 			} else if (target.type === 'database') {
 				const msg = [];
@@ -289,45 +285,6 @@ class Logger {
 				target.database.transactionExecBatch(queries);
 			}
 		}
-	}
-
-	private cleanLogFile(logFileFullPath) {
-		// eslint-disable-next-line promise/prefer-await-to-then
-		return Logger.fsDriver().stat(logFileFullPath).then(({ size }) => {
-			const logFileMaximumSize = 1024 * 1024 * 5;
-			const fullPathToOldLogFile = `${Logger.getOnlyLogFileDir(logFileFullPath)}/${Logger.getLogFileNameWithTimestamp()}`;
-			if (size >= logFileMaximumSize) {
-				Logger.fsDriver().move(logFileFullPath, fullPathToOldLogFile);
-			}
-		});
-	}
-
-	private deleteOlderLogFiles(logFileFullPath) {
-		const deleteLogFilesOlderThan = 30;
-		const logFileDir = Logger.getOnlyLogFileDir(logFileFullPath);
-		// eslint-disable-next-line promise/prefer-await-to-then
-		return Logger.fsDriver().readDirStats(logFileDir).then(files => {
-			const regex = Logger.getAllLogFilesRegex();
-			const logs = files.filter(({ path }) => path.match(regex));
-			logs.forEach(log => {
-				if (moment(log.birthtime).add(deleteLogFilesOlderThan, 'days').isBefore(moment.now())) {
-					Logger.fsDriver().remove(`${logFileDir}/${log.path}`);
-				}
-			});
-		});
-	}
-
-	private static getOnlyLogFileDir(fullPath) {
-		const arr = fullPath.split('/');
-		const dir = arr.slice(0, arr.length - 1);
-		return dir.join('/');
-	}
-	private static getLogFileNameWithTimestamp() {
-		return `log-${moment.now()}.txt`;
-	}
-
-	private static getAllLogFilesRegex() {
-		return new RegExp('^log-[0-9]+.txt$', 'gi');
 	}
 
 	public error(...object: any[]) {
