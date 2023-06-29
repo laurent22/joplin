@@ -555,8 +555,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
 			const tableToolbar = [
 				'tabledelete',
-				'tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
-				'tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
+				'tableinsertrowbefore tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
+				'tableinsertcolbefore tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
 			];
 
 			const editors = await (window as any).tinymce.init({
