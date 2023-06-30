@@ -548,7 +548,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'inserttable', `joplinInsertDateTime${toolbarPluginButtons}`,
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			// Available table toolbar buttons:
@@ -628,22 +628,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							return function() {
 								if (unbind) unbind();
 							};
-						},
-					});
-
-					editor.ui.registry.addMenuButton('inserttable', {
-						icon: 'table',
-						tooltip: 'Table',
-						fetch: (callback) => {
-							callback([
-								{
-									type: 'fancymenuitem',
-									fancytype: 'inserttable',
-									onAction: (data) => {
-										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
-									},
-								},
-							]);
 						},
 					});
 
