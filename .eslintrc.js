@@ -184,6 +184,7 @@ module.exports = {
 			},
 			'rules': {
 				'@typescript-eslint/ban-ts-comment': ['error'],
+				'@typescript-eslint/ban-types': 'error',
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/array-type': 'error',

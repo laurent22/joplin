@@ -40,9 +40,13 @@ interface Target extends TargetOptions {
 }
 
 export interface LoggerWrapper {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	debug: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	info: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	warn: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	error: Function;
 }
 
@@ -248,8 +252,9 @@ class Logger {
 				// because that would slow down the main process, especially
 				// when many log operations are being done (eg. during sync in
 				// dev mode).
+				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 				let release: Function = null;
-				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+				/* eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied */
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
 					return Logger.fsDriver().appendFile(target.path, `${line.join(': ')}\n`, 'utf8');

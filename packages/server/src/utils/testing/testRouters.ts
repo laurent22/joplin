@@ -28,6 +28,7 @@ const execCommand = function(command: string, returnStdErr = false): Promise<str
 };
 
 async function sleep(seconds: number) {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	return new Promise((resolve: Function) => {
 		setTimeout(() => {
 			resolve();

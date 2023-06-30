@@ -33,6 +33,7 @@ function migrationHandler(clientId = 'abcd'): MigrationHandler {
 }
 
 interface MigrationTests {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	[key: string]: Function;
 }
 

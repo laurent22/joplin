@@ -30,6 +30,7 @@ async function saveFileData(data: any, filename: string) {
 	await writeFile(newFilePath, data);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function openItemById(itemId: string, dispatch: Function, hash = '') {
 
 	const item = await BaseItem.loadItemById(itemId);
@@ -68,6 +69,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export function menuItems(dispatch: Function): ContextMenuItems {
 	return {
 		open: {
@@ -194,6 +196,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 

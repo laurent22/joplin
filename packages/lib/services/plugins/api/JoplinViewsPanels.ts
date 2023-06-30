@@ -76,6 +76,7 @@ export default class JoplinViewsPanels {
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
 	 *
 	 */
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onMessage(handle: ViewHandle, callback: Function): Promise<void> {
 		return this.controller(handle).onMessage(callback);
 	}

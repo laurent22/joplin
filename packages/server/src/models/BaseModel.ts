@@ -205,6 +205,7 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
 		const debugSteps = false;
 		const debugTimeout = true;

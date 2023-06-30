@@ -30,7 +30,7 @@ export default function useKeymap(CodeMirror: any) {
 	}
 
 	// Converts a command of the form editor.command to just command
-	function editorCommandToCodeMirror(command: String) {
+	function editorCommandToCodeMirror(command: string) {
 		return command.slice(7); // 7 is the length of editor.
 	}
 
@@ -38,7 +38,7 @@ export default function useKeymap(CodeMirror: any) {
 	// CodeMirror requires a - between keys while Electron want's a +
 	// CodeMirror doesn't recognize Option (it uses Alt instead)
 	// CodeMirror requires Shift to be first
-	function normalizeAccelerator(accelerator: String) {
+	function normalizeAccelerator(accelerator: string) {
 		const command = accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
 		// From here is taken out of codemirror/lib/codemirror.js
 		const parts = command.split(/-(?!$)/);

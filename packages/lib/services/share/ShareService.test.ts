@@ -79,6 +79,7 @@ describe('ShareService', () => {
 		}
 	});
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}, options: TestShareFolderServiceOptions = {}) {
 		return mockService({
 			exec: async (method: string, path: string, query: Record<string, any>, body: any) => {

@@ -86,6 +86,7 @@ class CameraView extends Component {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public renderButton(onPress: Function, iconNameOrIcon: any, style: any) {
 		let icon = null;
 

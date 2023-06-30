@@ -12,6 +12,7 @@ type IntervalId = number;
 
 interface Interval {
 	id: IntervalId;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	callback: Function;
 	interval: number;
 	lastIntervalTime: number;
@@ -29,6 +30,7 @@ export default class PoorManIntervals {
 	private static intervalId_: IntervalId = 0;
 	private static intervals_: Intervals = {};
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static setInterval(callback: Function, interval: number): IntervalId {
 		if (interval <= this.maxNativeTimerDuration_) return setInterval(callback, interval);
 
@@ -46,6 +48,7 @@ export default class PoorManIntervals {
 		return id;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static setTimeout(callback: Function, interval: number): IntervalId {
 		if (interval <= this.maxNativeTimerDuration_) return setTimeout(callback, interval);
 

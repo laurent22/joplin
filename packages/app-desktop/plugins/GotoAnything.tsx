@@ -37,6 +37,7 @@ interface SearchResult {
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	folders: any[];
 	showCompletedTodos: boolean;
@@ -61,6 +62,7 @@ interface CommandQuery {
 
 class GotoAnything {
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function;
 	public static Dialog: any;
 	public static manifest: any;

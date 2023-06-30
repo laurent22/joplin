@@ -147,7 +147,9 @@ export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 
 	const result: string[] = [];
 	const eventHandlers: any[] = [];
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	let finalResultPromiseResolve: Function = null;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	let finalResultPromiseReject: Function = null;
 	let finalResultTimeout = false;
 
@@ -213,6 +215,7 @@ export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 				completeRecording('', new Error('Could not process your message. Please try again.'));
 			}, 5000);
 
+			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 			return new Promise((resolve: Function, reject: Function) => {
 				finalResultPromiseResolve = resolve;
 				finalResultPromiseReject = reject;

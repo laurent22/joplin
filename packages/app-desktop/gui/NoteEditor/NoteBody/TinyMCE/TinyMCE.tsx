@@ -905,9 +905,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Need to save the onChange handler to a ref to make sure
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const props_onChangeRef = useRef<Function>();
 	props_onChangeRef.current = props.onChange;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const prop_htmlToMarkdownRef = useRef<Function>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 

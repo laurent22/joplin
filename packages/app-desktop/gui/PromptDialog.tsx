@@ -12,6 +12,7 @@ interface Props {
 	visible: boolean;
 	style: any;
 	buttons: any[];
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	inputType: string;
 	description: string;

@@ -14,7 +14,9 @@ export interface Options {
 }
 
 interface CloseResponse {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	resolve: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	reject: Function;
 }
 
@@ -41,6 +43,7 @@ function findItemByKey(layout: any, key: string): any {
 export default class WebviewController extends ViewController {
 
 	private baseDir_: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private messageListener_: Function = null;
 	private closeResponse_: CloseResponse = null;
 
@@ -165,6 +168,7 @@ export default class WebviewController extends ViewController {
 
 		this.setStoreProp('opened', true);
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function, reject: Function) => {
 			this.closeResponse_ = { resolve, reject };
 		});

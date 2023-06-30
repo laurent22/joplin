@@ -133,6 +133,7 @@ class Time {
 	}
 
 	public msleep(ms: number) {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
 			shim.setTimeout(() => {
 				resolve();

@@ -93,6 +93,7 @@ class Registry {
 			if (delay === null) delay = 1000 * 10;
 			if (syncOptions === null) syncOptions = {};
 
+			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 			let promiseResolve: Function = null;
 			const promise = new Promise((resolve) => {
 				promiseResolve = resolve;

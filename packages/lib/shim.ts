@@ -31,6 +31,7 @@ const shim = {
 	},
 
 	msleep_: (ms: number) => {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
 			shim.setTimeout(() => {
 				resolve(null);
@@ -156,6 +157,7 @@ const shim = {
 		return previous;
 	},
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
@@ -218,6 +220,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	detectAndSetLocale: null as Function,
 
 	attachFileToNote: async (_note: any, _filePath: string): Promise<NoteEntity> => {
@@ -303,10 +306,12 @@ const shim = {
 	//
 	// Having the timers wrapped in that way would also make it easier to debug timing issue and
 	// find out what timers have been fired or not.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setTimeout: (_fn: Function, _interval: number) => {
 		throw new Error('Not implemented');
 	},
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setInterval: (_fn: Function, _interval: number) => {
 		throw new Error('Not implemented');
 	},

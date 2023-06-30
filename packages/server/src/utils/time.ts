@@ -22,6 +22,7 @@ export const Week = 7 * Day;
 export const Month = 30 * Day;
 
 export function msleep(ms: number) {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	return new Promise((resolve: Function) => {
 		setTimeout(() => {
 			resolve(null);

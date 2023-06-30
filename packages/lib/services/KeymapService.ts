@@ -410,10 +410,12 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		eventManager.off(eventName, callback);
 	}

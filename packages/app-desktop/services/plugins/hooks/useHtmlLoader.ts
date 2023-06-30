@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 const md5 = require('md5');
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(frameWindow: any, isReady: boolean, postMessage: Function, html: string) {
 	const [loadedHtmlHash, setLoadedHtmlHash] = useState('');
 

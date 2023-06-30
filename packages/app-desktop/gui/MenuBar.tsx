@@ -54,6 +54,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
 	const output: any = {
 		label: label,
@@ -108,6 +109,7 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 };
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	menuItemProps: any;
 	routeName: string;

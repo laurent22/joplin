@@ -38,6 +38,7 @@ export default class DbCommand extends BaseCommand {
 	public async run(argv: Argv): Promise<void> {
 
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const commands: Record<ArgvCommand, Function> = {
 			create: async () => {
 				await createDb(config().database);

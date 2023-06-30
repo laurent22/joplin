@@ -44,6 +44,7 @@ export default class SearchEngine {
 	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
 	public static SEARCH_TYPE_FTS = SearchType.Fts;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
 	private db_: any = null;

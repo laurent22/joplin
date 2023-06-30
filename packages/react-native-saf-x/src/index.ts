@@ -35,10 +35,10 @@ interface SafxInterface {
     multiple: boolean,
   ): Promise<DocumentFileDetail[] | null>;
   createDocument(
-    data: String,
-    encoding?: String,
+    data: string,
+    encoding?: string,
     initialName?: string,
-    mimeType?: String,
+    mimeType?: string,
   ): Promise<DocumentFileDetail | null>;
   hasPermission(uriString: string): Promise<boolean>;
   exists(uriString: string): Promise<boolean>;
@@ -50,7 +50,7 @@ interface SafxInterface {
     mimeType?: string,
     append?: boolean,
   ): Promise<void>;
-  createFile(uriString: string, mimeType?: String): Promise<DocumentFileDetail>;
+  createFile(uriString: string, mimeType?: string): Promise<DocumentFileDetail>;
   unlink(uriString: string): Promise<boolean>;
   mkdir(uriString: string): Promise<DocumentFileDetail>;
   rename(uriString: string, newName: string): Promise<DocumentFileDetail>;

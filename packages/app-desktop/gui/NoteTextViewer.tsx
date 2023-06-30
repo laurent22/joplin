@@ -3,7 +3,9 @@ import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDomReady: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onIpcMessage: Function;
 	viewerStyle: any;
 	contentMaxWidth?: number;

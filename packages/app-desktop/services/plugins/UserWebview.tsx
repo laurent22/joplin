@@ -23,8 +23,11 @@ export interface Props {
 	fitToContent?: boolean;
 	borderBottom?: boolean;
 	theme?: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSubmit?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDismiss?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onReady?: Function;
 }
 

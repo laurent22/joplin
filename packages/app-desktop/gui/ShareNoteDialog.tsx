@@ -21,6 +21,7 @@ const { clipboard } = require('electron');
 interface Props {
 	themeId: number;
 	noteIds: string[];
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	shares: StateShare[];
 	syncTargetId: number;

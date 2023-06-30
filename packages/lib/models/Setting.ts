@@ -57,6 +57,7 @@ export interface SettingItem {
 	isEnum?: boolean;
 	section?: string;
 	label?(): string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	description?: Function;
 	options?(): any;
 	optionsOrder?(): string[];
@@ -69,6 +70,7 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	unitLabel?: Function;
 	needRestart?: boolean;
 	autoSave?: boolean;
@@ -207,6 +209,7 @@ const defaultMigrations: DefaultMigration[] = [
 interface UserSettingMigration {
 	oldName: string;
 	newName: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	transformValue: Function;
 }
 

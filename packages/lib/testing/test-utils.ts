@@ -678,6 +678,7 @@ function objectsEqual(o1: any, o2: any) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function checkThrowAsync(asyncFn: Function) {
 	let hasThrown = false;
 	try {
@@ -688,6 +689,7 @@ async function checkThrowAsync(asyncFn: Function) {
 	return hasThrown;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
@@ -708,6 +710,7 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function expectNotThrow(asyncFn: Function) {
 	let thrownError = null;
 	try {
@@ -724,6 +727,7 @@ async function expectNotThrow(asyncFn: Function) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function checkThrow(fn: Function) {
 	let hasThrown = false;
 	try {

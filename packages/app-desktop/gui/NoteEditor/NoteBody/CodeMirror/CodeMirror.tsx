@@ -62,6 +62,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorRef = useRef(null);
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 

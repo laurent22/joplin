@@ -77,6 +77,7 @@ function editableInnerHtml(html: string): string {
 	return editable[0].innerHTML;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function openEditDialog(editor: any, markupToHtml: any, dispatchDidUpdate: Function, editable: any) {
 	const source = editable ? findBlockSource(editable) : newBlockSource();
 
