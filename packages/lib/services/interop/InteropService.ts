@@ -196,13 +196,11 @@ export default class InteropService {
 		}
 	}
 
-	/**
-	 * NOTE TO FUTURE SELF: It might make sense to simply move all the existing
-	 * formatters to the `newModuleFromPath_` approach, so that there's only one way
-	 * to do this mapping. This isn't a priority right now (per the convo in:
-	 * https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
-	 * we can do it if it ever becomes necessary.
-	 */
+	// NOTE TO FUTURE SELF: It might make sense to simply move all the existing
+	// formatters to the `newModuleFromPath_` approach, so that there's only one way
+	// to do this mapping. This isn't a priority right now (per the convo in:
+	// https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
+	// we can do it if it ever becomes necessary.
 	private newModuleByFormat_(type: ModuleType, format: string, outputFormat: ImportModuleOutputFormat = ImportModuleOutputFormat.Markdown) {
 		const moduleMetadata = this.findModuleByFormat_(type, format, null, outputFormat);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
@@ -221,14 +219,12 @@ export default class InteropService {
 		return output;
 	}
 
-	/**
-	 * The existing `newModuleByFormat_` fn would load by the input format. This
-	 * was fine when there was a 1-1 mapping of input formats to output formats,
-	 * but now that we have 2 possible outputs for an `enex` input, we need to be
-	 * explicit with which importer we want to use.
-	 *
-	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
-	 */
+	// The existing `newModuleByFormat_` fn would load by the input format. This
+	// was fine when there was a 1-1 mapping of input formats to output formats,
+	// but now that we have 2 possible outputs for an `enex` input, we need to be
+	// explicit with which importer we want to use.
+	//
+	// https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	private newModuleFromPath_(type: ModuleType, options: any) {
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));

@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import { ModelType } from '../../../BaseModel';
 import eventManager from '../../../eventManager';
 import Setting from '../../../models/Setting';

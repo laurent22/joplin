@@ -137,7 +137,7 @@ module.exports = {
 			'named': 'never',
 			'asyncArrow': 'always',
 		}],
-		'multiline-comment-style': ['error', 'separate-lines'],
+		'multiline-comment-style': ['error', 'separate-lines', { checkJSDoc: true }],
 		'space-before-blocks': 'error',
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
@@ -183,7 +183,7 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
-				'github/array-foreach': ['error'],
+
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/array-type': 'error',

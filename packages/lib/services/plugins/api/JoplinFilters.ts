@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import eventManager from '../../../eventManager';
 
 /**

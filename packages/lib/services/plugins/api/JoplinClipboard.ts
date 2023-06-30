@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 export default class JoplinClipboard {
 
 	private electronClipboard_: any = null;

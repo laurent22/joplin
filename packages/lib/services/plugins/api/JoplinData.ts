@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import { ModelType } from '../../../BaseModel';
 import BaseItem from '../../../models/BaseItem';
 import Resource from '../../../models/Resource';

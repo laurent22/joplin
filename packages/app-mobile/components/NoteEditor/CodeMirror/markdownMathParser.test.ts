@@ -1,6 +1,8 @@
+/* eslint-disable multiline-comment-style */
 /**
  * @jest-environment jsdom
  */
+/* eslint-enable multiline-comment-style */
 
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';

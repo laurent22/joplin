@@ -1,9 +1,5 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
+// Metro configuration for React Native
+// https://github.com/facebook/react-native
 
 // The technique below to get the symlinked packages to work with the Metro
 // bundler comes from this comment:
