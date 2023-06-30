@@ -863,6 +863,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				}));
 			}
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});

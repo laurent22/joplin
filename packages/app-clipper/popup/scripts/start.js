@@ -130,6 +130,7 @@ checkBrowsers(paths.appPath, isInteractive)
 			openBrowser(urls.localUrlForBrowser);
 		});
 
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		['SIGINT', 'SIGTERM'].forEach((sig) => {
 			process.on(sig, () => {
 				devServer.close();

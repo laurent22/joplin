@@ -365,6 +365,7 @@ export default class SearchEngine {
 			const row = rows[i];
 			row.weight = 0;
 			for (let j = 0; j < numPhrases; j++) {
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				columns.forEach(column => {
 					const rowsWithHits = docsWithHits(X[i], column, j);
 					const frequencyHits = hitsThisRow(X[i], column, j);

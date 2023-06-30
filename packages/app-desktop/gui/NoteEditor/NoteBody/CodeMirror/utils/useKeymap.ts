@@ -89,6 +89,7 @@ export default function useKeymap(CodeMirror: any) {
 	function registerKeymap() {
 		const keymapItems = KeymapService.instance().getKeymapItems();
 		// Register all commands with the codemirror editor
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		keymapItems.forEach((key) => { registerJoplinCommand(key); });
 	}
 

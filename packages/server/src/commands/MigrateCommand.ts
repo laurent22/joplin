@@ -64,6 +64,7 @@ export default class MigrateCommand extends BaseCommand {
 			},
 			list: async () => {
 				const s = (await migrateList(runContext.db)) as string;
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				s.split('\n').forEach(l => logger.info(l));
 			},
 			unlock: async () => {

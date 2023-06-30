@@ -1752,6 +1752,7 @@ class Setting extends BaseModel {
 
 	public static applyUserSettingMigration() {
 		// Function to translate existing user settings to new setting.
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		userSettingMigration.forEach(userMigration => {
 			if (!this.isSet(userMigration.newName) && this.isSet(userMigration.oldName)) {
 				this.setValue(userMigration.newName, userMigration.transformValue(this.value(userMigration.oldName)));

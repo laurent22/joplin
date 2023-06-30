@@ -44,6 +44,7 @@ class Command extends BaseCommand {
 					return reject(new Error(`Invalid JSON passed to config --import: \n${error.message}.`));
 				}
 				if (settingsObj) {
+					// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 					Object.entries(settingsObj)
 						.forEach(([key, value]) => {
 							Setting.setValue(key, value);

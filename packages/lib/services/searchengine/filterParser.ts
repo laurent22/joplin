@@ -90,6 +90,7 @@ const parseQuery = (query: string): Term[] => {
 				// Trim quotes since we don't support phrase query here
 				// eg. Split title:"hello world" to title:hello title:world
 				const values = trimQuotes(value).split(/[\s-_]+/);
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				values.forEach(value => {
 					result.push({ name, value, negated, wildcard: value.indexOf('*') >= 0 });
 				});

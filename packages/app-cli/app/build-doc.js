@@ -49,6 +49,7 @@ function renderCommand(cmd) {
 
 function getCommands() {
 	const output = [];
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	fs.readdirSync(__dirname).forEach(path => {
 		if (path.indexOf('command-') !== 0) return;
 		const ext = fileExtension(path);

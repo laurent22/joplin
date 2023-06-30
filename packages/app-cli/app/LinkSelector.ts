@@ -43,6 +43,7 @@ class LinkSelector {
 		for (let i = 0; i < lines.length; i++) {
 			const r = (lines[i] as any).matchAll(this.linkRegex_);
 			const matches = [...r];
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			matches.forEach((_e, n) => {
 				newLinkStore.push(
 					{

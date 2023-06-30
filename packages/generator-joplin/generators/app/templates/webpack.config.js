@@ -85,6 +85,7 @@ function currentGitInfo() {
 function validateCategories(categories) {
 	if (!categories) return null;
 	if ((categories.length !== new Set(categories).size)) throw new Error('Repeated categories are not allowed');
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	categories.forEach(category => {
 		if (!allPossibleCategories.map(category => { return category.name; }).includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid categories are: \n${allPossibleCategories.map(category => { return category.name; })}\n`);
 	});
@@ -92,6 +93,7 @@ function validateCategories(categories) {
 
 function validateScreenshots(screenshots) {
 	if (!screenshots) return null;
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	screenshots.forEach(screenshot => {
 		if (!screenshot.src) throw new Error('You must specify a src for each screenshot');
 

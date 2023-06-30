@@ -262,6 +262,7 @@ export default class KeymapService extends BaseService {
 
 	public getCustomKeymapItems() {
 		const customkeymapItems: KeymapItem[] = [];
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
 			const currentAccelerator = this.getAccelerator(command);
 

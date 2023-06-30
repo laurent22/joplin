@@ -97,6 +97,7 @@ module.exports = {
 
 		'promise/prefer-await-to-then': 'error',
 		'no-unneeded-ternary': 'error',
+		'github/array-foreach': ['error'],
 
 		// -------------------------------
 		// Formatting
@@ -161,6 +162,7 @@ module.exports = {
 		'import',
 		'promise',
 		'jest',
+		'github',
 	],
 	'overrides': [
 		{
@@ -181,6 +183,7 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
+				'github/array-foreach': ['error'],
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/array-type': 'error',

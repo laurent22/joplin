@@ -146,6 +146,7 @@ class Application extends BaseApplication {
 
 	commands(uiType = null) {
 		if (!this.allCommandsLoaded_) {
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			fs.readdirSync(__dirname).forEach(path => {
 				if (path.indexOf('command-') !== 0) return;
 				if (path.endsWith('.test.js')) return;
