@@ -30,6 +30,7 @@ export default class DecryptionWorker {
 	private maxDecryptionAttempts_ = 2;
 	private startCalls_: boolean[] = [];
 	private encryptionService_: EncryptionService = null;
+	private itemIdToErrorMap_: Map<string, string> = new Map();
 
 	public constructor() {
 		this.state_ = 'idle';
@@ -101,6 +102,16 @@ export default class DecryptionWorker {
 		return items;
 	}
 
+	public getDecryptionError(itemId: string) {
+		if (!this.itemIdToErrorMap_.has(itemId)) {
+			// If there was an error, it happened in a previous attempt to decrypt
+			// (e.g. the app was restarted and this.itemIdToErrorMap_ was thus cleared).
+			return null;
+		}
+
+		return this.itemIdToErrorMap_.get(itemId);
+	}
+
 	public async clearDisabledItem(typeId: string, itemId: string) {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
@@ -118,7 +129,7 @@ export default class DecryptionWorker {
 	private async start_(options: any = null): Promise<DecryptionResult> {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
-		if (!('errorHandler' in options)) options.errorHandler = 'log';
+		if (!('errorHandler' in options)) options.errorHandler = 'dispatchAndLog';
 
 		if (this.state_ !== 'idle') {
 			const msg = `DecryptionWorker: cannot start because state is "${this.state_}"`;
@@ -166,8 +177,11 @@ export default class DecryptionWorker {
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
+		this.dispatch({ type: 'CLEAR_DECRYPTION_ERROR_LIST' });
+
 		try {
 			const notLoadedMasterKeyDisptaches = [];
+			const dispatchedErrorTypes = [];
 
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
@@ -204,6 +218,7 @@ export default class DecryptionWorker {
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
+						this.itemIdToErrorMap_.delete(item.id);
 
 						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
 
@@ -243,7 +258,20 @@ export default class DecryptionWorker {
 							throw error;
 						}
 
-						if (options.errorHandler === 'log') {
+						if (options.errorHandler === 'log' || options.errorHandler === 'dispatchAndLog') {
+							const errorType = Object.getPrototypeOf(error);
+
+							if (options.errorHandler === 'dispatchAndLog' && dispatchedErrorTypes.indexOf(errorType) === -1) {
+								this.dispatch({
+									type: 'UPDATE_DECRYPTION_ERROR_LIST',
+									errorType,
+								});
+
+								// Add the error's type to the list
+								dispatchedErrorTypes.push(errorType);
+							}
+
+							this.itemIdToErrorMap_.set(item.id, `${error.message ?? error}`);
 							this.logger().warn(`DecryptionWorker: error for: ${item.id} (${ItemClass.tableName()})`, error, item);
 						} else {
 							throw error;

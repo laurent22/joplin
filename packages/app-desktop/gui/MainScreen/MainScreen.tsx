@@ -44,6 +44,8 @@ import restart from '../../services/restart';
 const { connect } = require('react-redux');
 import PromptDialog from '../PromptDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
+import checkForUpdates from '../../checkForUpdates';
+import { UnknownDecryptionMethodError } from '@joplin/lib/services/e2ee/errors';
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -66,6 +68,7 @@ interface Props {
 	shouldUpgradeSyncTarget: boolean;
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
+	showUnknownEncryptionMethodMessage: boolean;
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
@@ -574,6 +577,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 			await restart();
 		};
 
+		const onCheckForUpdates = async () => {
+			const inBackground = false;
+			const parentWindow = bridge().window();
+			await checkForUpdates(inBackground, parentWindow, {
+				includePreReleases: Setting.value('autoUpdate.includePreReleases'),
+			});
+		};
+
 		const onDisableSafeModeAndRestart = async () => {
 			Setting.setValue('isSafeMode', false);
 			await Setting.saveAll();
@@ -642,6 +653,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Set the password'),
 				onViewEncryptionConfigScreen
 			);
+		} else if (this.props.showUnknownEncryptionMethodMessage) {
+			msg = this.renderNotificationMessage(
+				_('One or more notes uses an unknown encryption method and could not be decrypted. These notes may have been encrypted by a newer version of Joplin.'),
+				_('More info'),
+				onViewEncryptionConfigScreen,
+				_('Check for updates'),
+				onCheckForUpdates
+			);
 		} else if (this.props.showInstallTemplatesPlugin) {
 			msg = this.renderNotificationMessage(
 				'The template feature has been moved to a plugin called "Templates".',
@@ -659,7 +678,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
+		return props.hasDisabledSyncItems
+			|| props.showMissingMasterKeyMessage
+			|| props.showNeedUpgradingMasterKeyMessage
+			|| props.showShouldReencryptMessage
+			|| props.showUnknownEncryptionMethodMessage
+			|| props.hasDisabledEncryptionItems
+			|| this.props.shouldUpgradeSyncTarget
+			|| props.isSafeMode
+			|| this.showShareInvitationNotification(props)
+			|| this.props.needApiAuth
+			|| this.props.showInstallTemplatesPlugin;
 	}
 
 	public registerCommands() {
@@ -864,12 +893,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
+	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorTypes.some(
+		errorType => errorType === UnknownDecryptionMethodError.prototype
+	);
 
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
+		showUnknownEncryptionMethodMessage: hasItemsWithUnknownEncryptionMethod,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,

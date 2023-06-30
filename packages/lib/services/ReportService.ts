@@ -210,13 +210,18 @@ export default class ReportService {
 			section = { title: _('Items that cannot be decrypted'), body: [], name: 'failedDecryption', canRetryAll: false, retryAllHandler: null };
 
 			section.body.push(_('Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.'));
-
 			section.body.push('');
 
 			for (let i = 0; i < decryptionDisabledItems.length; i++) {
 				const row = decryptionDisabledItems[i];
+
+				let itemError = DecryptionWorker.instance().getDecryptionError(row.id);
+				if (!itemError) {
+					itemError = _('Click "retry" for more information');
+				}
+
 				section.body.push({
-					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
+					text: _('%s: %s (%s)', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id, itemError),
 					canRetry: true,
 					canRetryType: CanRetryType.E2EE,
 					retryHandler: async () => {

@@ -609,6 +609,7 @@ packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.js
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/RSA.node.js
+packages/lib/services/e2ee/errors.js
 packages/lib/services/e2ee/ppk.js
 packages/lib/services/e2ee/ppk.test.js
 packages/lib/services/e2ee/ppkTestUtils.js

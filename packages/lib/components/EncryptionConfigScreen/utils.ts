@@ -7,29 +7,44 @@ import { findMasterKeyPassword, getMasterPasswordStatus, masterPasswordIsValid, 
 import EncryptionService from '../../services/e2ee/EncryptionService';
 import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
 import MasterKey from '../../models/MasterKey';
+import DecryptionWorker from '../../services/DecryptionWorker';
 import { reg } from '../../registry';
 import Setting from '../../models/Setting';
 const { useCallback, useEffect, useState } = shim.react();
 
 type PasswordChecks = Record<string, boolean>;
 
+// Like EncryptedItemStats, but includes additional decryption information
+interface EncryptionStats extends EncryptedItemsStats {
+	decryptionDisabledCount: number|null;
+}
+
+const statsUpdateInterval = 3000;
+
 export const useStats = () => {
-	const [stats, setStats] = useState<EncryptedItemsStats>({ encrypted: null, total: null });
+	const [stats, setStats] = useState<EncryptionStats>({ encrypted: null, decryptionDisabledCount: null, total: null });
 	const [statsUpdateTime, setStatsUpdateTime] = useState<number>(0);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const r = await BaseItem.encryptedItemsStats();
+		const encryptionStats = await BaseItem.encryptedItemsStats();
+		const decryptionDisabledItems = await DecryptionWorker.instance().decryptionDisabledItems();
 		if (event.cancelled) return;
+
+		const newStats = {
+			...encryptionStats,
+			decryptionDisabledCount: decryptionDisabledItems.length,
+		};
+
 		setStats(stats => {
-			if (JSON.stringify(stats) === JSON.stringify(r)) return stats;
-			return r;
+			if (JSON.stringify(stats) === JSON.stringify(newStats)) return stats;
+			return newStats;
 		});
 	}, [statsUpdateTime]);
 
 	useEffect(() => {
 		const iid = shim.setInterval(() => {
 			setStatsUpdateTime(Date.now());
-		}, 3000);
+		}, statsUpdateInterval);
 
 		return () => {
 			shim.clearInterval(iid);

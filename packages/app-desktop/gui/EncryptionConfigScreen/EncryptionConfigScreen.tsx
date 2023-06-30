@@ -12,21 +12,27 @@ import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsVa
 import Button, { ButtonLevel } from '../Button/Button';
 import { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { AppState } from '../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
+import checkForUpdates from '../../checkForUpdates';
+import bridge from '../../services/bridge';
+import { UnknownDecryptionMethodError } from '@joplin/lib/services/e2ee/errors';
 
 interface Props {
 	themeId: any;
 	masterKeys: MasterKeyEntity[];
 	passwords: Record<string, string>;
 	notLoadedMasterKeys: string[];
+	hasItemsWithUnknownEncryptionMethod: boolean;
 	encryptionEnabled: boolean;
 	shouldReencrypt: boolean;
 	activeMasterKeyId: string;
 	masterPassword: string;
 	ppk: PublicPrivateKeyPair;
+	dispatch: Dispatch;
 }
 
 const EncryptionConfigScreen = (props: Props) => {
@@ -229,8 +235,41 @@ const EncryptionConfigScreen = (props: Props) => {
 		}
 	}, [props.masterPassword]);
 
+	const onCheckForUpdates = useCallback(async () => {
+		const inBackground = false;
+		const parentWindow = bridge().window();
+		await checkForUpdates(inBackground, parentWindow, {
+			includePreReleases: Setting.value('autoUpdate.includePreReleases'),
+		});
+	}, []);
+
+	const renderFixUnknownDecryptionMethod = () => {
+		if (!props.hasItemsWithUnknownEncryptionMethod) return null;
+
+		return (
+			<div>
+				<h2>{_('Items encrypted with an unknown method')}</h2>
+				<p style={theme.textStyle}>{_(
+					'Some items were encrypted with an unknown method. These items may have been created with a newer version of Joplin than the current instance.'
+				)}</p>
+				<button style={theme.buttonStyle} onClick={onCheckForUpdates}>{_('Check for updates...')}</button>
+			</div>
+		);
+	};
+
+	const openStatusScreen = useCallback(() => {
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Status',
+		});
+	}, [props.dispatch]);
+
 	const renderEncryptionSection = () => {
-		const decryptedItemsInfo = <p>{decryptedStatText(stats)}</p>;
+		const decryptedItemsInfo = <p>
+			{decryptedStatText(stats)}
+			<a href="#" onClick={openStatusScreen} style={{ ...theme.urlStyle, marginLeft: '5px' }}>{_('(Details)')}</a>
+		</p>;
+
 		const toggleButton = (
 			<Button
 				onClick={onToggleButtonClick}
@@ -240,6 +279,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		);
 		const needUpgradeSection = renderNeedUpgradeSection();
 		const reencryptDataSection = renderReencryptData();
+		const fixUnknownDecryptionMethodSection = renderFixUnknownDecryptionMethod();
 
 		return (
 			<div className="section">
@@ -254,6 +294,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					{decryptedItemsInfo}
 					{toggleButton}
 					{needUpgradeSection}
+					{props.hasItemsWithUnknownEncryptionMethod ? fixUnknownDecryptionMethodSection : null}
 					{props.shouldReencrypt ? reencryptDataSection : null}
 				</div>
 			</div>
@@ -352,11 +393,15 @@ const EncryptionConfigScreen = (props: Props) => {
 
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorTypes.some(
+		errorType => errorType === UnknownDecryptionMethodError.prototype
+	);
 
 	return {
 		themeId: state.settings.theme,
 		masterKeys: syncInfo.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
+		hasItemsWithUnknownEncryptionMethod,
 		encryptionEnabled: syncInfo.e2ee,
 		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		shouldReencrypt: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,

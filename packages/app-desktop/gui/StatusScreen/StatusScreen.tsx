@@ -11,11 +11,13 @@ import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
 const fs = require('fs-extra');
 import styled from 'styled-components';
+import { State } from '@joplin/lib/reducer';
 
 interface Props {
 	themeId: string;
 	style: any;
 	dispatch: Function;
+	decryptionWorkerState?: string;
 }
 
 const StyledAdvancedToolItem = styled.div`
@@ -46,9 +48,15 @@ function StatusScreen(props: Props) {
 		setReport(r);
 	}
 
+
+	const [haveDoneInitialRefresh, setHaveDoneInitialRefresh] = useState<boolean>(false);
+
 	useEffect(() => {
-		void resfreshScreen();
-	}, []);
+		if (props.decryptionWorkerState === 'idle' || !haveDoneInitialRefresh) {
+			setHaveDoneInitialRefresh(true);
+			void resfreshScreen();
+		}
+	}, [props.decryptionWorkerState, haveDoneInitialRefresh]);
 
 	const theme = themeStyle(props.themeId);
 	const style = { ...props.style,
@@ -194,11 +202,12 @@ function StatusScreen(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: State) => {
 	return {
 		themeId: state.settings.theme,
 		settings: state.settings,
 		locale: state.settings.locale,
+		decryptionWorkerState: state.decryptionWorker?.state,
 	};
 };
 

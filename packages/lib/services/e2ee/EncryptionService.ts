@@ -6,6 +6,7 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
+import { UnknownDecryptionMethodError, UnknownEncryptionMethodError } from './errors';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
@@ -390,6 +391,10 @@ export default class EncryptionService {
 			},
 		};
 
+		if (!(method in handlers)) {
+			throw new UnknownEncryptionMethodError(method);
+		}
+
 		return handlers[method]();
 	}
 
@@ -398,7 +403,7 @@ export default class EncryptionService {
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
-		if (!this.isValidEncryptionMethod(method)) throw new Error(`Unknown decryption method: ${method}`);
+		if (!this.isValidEncryptionMethod(method)) throw new UnknownDecryptionMethodError(method);
 
 		try {
 			const output = sjcl.json.decrypt(key, cipherText);
