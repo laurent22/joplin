@@ -216,17 +216,21 @@ export default class ReportService {
 			for (let i = 0; i < decryptionDisabledItems.length; i++) {
 				const row = decryptionDisabledItems[i];
 
-				let itemError = DecryptionWorker.instance().getDecryptionError(row.id);
-				if (!itemError) {
-					itemError = _('Click "retry" for more information');
+				const resourceTypeName = toTitleCase(BaseModel.modelTypeToName(row.type_));
+				let message = _('%s: %s', resourceTypeName, row.id);
+
+				// If the error message is known, also include it in the output.
+				const itemError = DecryptionWorker.instance().getDecryptionError(row.id);
+				if (itemError) {
+					message = _('%s: %s (%s)', resourceTypeName, row.id, itemError);
 				}
 
 				section.body.push({
-					text: _('%s: %s (%s)', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id, itemError),
+					text: message,
 					canRetry: true,
 					canRetryType: CanRetryType.E2EE,
 					retryHandler: async () => {
-						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
+						await DecryptionWorker.instance().retryDisabledItem(row.type_, row.id);
 						void DecryptionWorker.instance().scheduleStart();
 					},
 				});

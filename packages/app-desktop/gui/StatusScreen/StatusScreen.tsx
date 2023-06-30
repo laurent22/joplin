@@ -18,7 +18,7 @@ interface Props {
 	style: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	decryptionWorkerState?: string;
+	decryptionWorkerState: string;
 }
 
 const StyledAdvancedToolItem = styled.div`
@@ -50,14 +50,9 @@ function StatusScreen(props: Props) {
 	}
 
 
-	const [haveDoneInitialRefresh, setHaveDoneInitialRefresh] = useState<boolean>(false);
-
 	useEffect(() => {
-		if (props.decryptionWorkerState === 'idle' || !haveDoneInitialRefresh) {
-			setHaveDoneInitialRefresh(true);
-			void resfreshScreen();
-		}
-	}, [props.decryptionWorkerState, haveDoneInitialRefresh]);
+		void resfreshScreen();
+	}, [props.decryptionWorkerState]);
 
 	const theme = themeStyle(props.themeId);
 	const style = { ...props.style,
