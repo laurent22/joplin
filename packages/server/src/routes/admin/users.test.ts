@@ -28,7 +28,7 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
-async function patchUser(sessionId: string, user: any, url: string = ''): Promise<User> {
+async function patchUser(sessionId: string, user: any, url = ''): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {

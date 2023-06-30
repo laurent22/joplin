@@ -408,7 +408,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	}
 }
 
-function updateOneItem(draft: Draft<State>, action: any, keyName: string = '') {
+function updateOneItem(draft: Draft<State>, action: any, keyName = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';

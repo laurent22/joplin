@@ -143,6 +143,7 @@ export default class ReportService {
 	}
 
 	private addRetryAllHandler(section: ReportSection): ReportSection {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const retryHandlers: Function[] = [];
 
 		for (let i = 0; i < section.body.length; i++) {

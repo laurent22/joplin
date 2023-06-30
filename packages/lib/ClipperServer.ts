@@ -20,6 +20,7 @@ export default class ClipperServer {
 	private server_: any = null;
 	private port_: number = null;
 	private api_: Api = null;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
 
 	private static instance_: ClipperServer = null;
@@ -52,6 +53,7 @@ export default class ClipperServer {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setDispatch(d: Function) {
 		this.dispatch_ = d;
 	}

@@ -16,6 +16,7 @@ import FolderIconBox from '../FolderIconBox';
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	folderId: string;
 	parentId: string;

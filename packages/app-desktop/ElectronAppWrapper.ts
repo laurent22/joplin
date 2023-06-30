@@ -26,7 +26,7 @@ export default class ElectronAppWrapper {
 	private isDebugMode_: boolean;
 	private profilePath_: string;
 	private win_: BrowserWindow = null;
-	private willQuitApp_: boolean = false;
+	private willQuitApp_ = false;
 	private tray_: any = null;
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;

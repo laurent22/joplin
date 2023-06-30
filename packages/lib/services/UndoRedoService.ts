@@ -4,7 +4,7 @@ const EventEmitter = require('events');
 class UndoQueue {
 
 	private inner_: any[] = [];
-	private size_: number = 20;
+	private size_ = 20;
 
 	public pop() {
 		return this.inner_.pop();
@@ -33,16 +33,18 @@ export default class UndoRedoService {
 	private undoStates: UndoQueue = new UndoQueue();
 	private redoStates: UndoQueue = new UndoQueue();
 	private eventEmitter: any = new EventEmitter();
-	private isUndoing: boolean = false;
+	private isUndoing = false;
 
 	public constructor() {
 		this.push = this.push.bind(this);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		return this.eventEmitter.removeListener(eventName, callback);
 	}

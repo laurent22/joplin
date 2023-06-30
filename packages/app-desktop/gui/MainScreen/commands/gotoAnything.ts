@@ -29,6 +29,7 @@ export const runtime = (): CommandRuntime => {
 			} else if (uiType === UiType.CommandPalette) {
 				menuItemById('commandPalette').click();
 			} else if (uiType === UiType.ControlledApi) {
+				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 				return new Promise((resolve: Function, reject: Function) => {
 					const menuItem = PluginManager.instance().menuItems().find((i: any) => i.id === 'controlledApi');
 					menuItem.userData = {

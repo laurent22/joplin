@@ -3,7 +3,9 @@ import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDomReady: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onIpcMessage: Function;
 	viewerStyle: any;
 	contentMaxWidth?: number;
@@ -12,8 +14,8 @@ interface Props {
 
 export default class NoteTextViewerComponent extends React.Component<Props, any> {
 
-	private initialized_: boolean = false;
-	private domReady_: boolean = false;
+	private initialized_ = false;
+	private domReady_ = false;
 	private webviewRef_: any;
 	private webviewListeners_: any = null;
 

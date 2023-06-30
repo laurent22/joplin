@@ -8,6 +8,7 @@ export default function iterateItems(layout: LayoutItem, callback: ItemItemCallb
 	const result = callback(0, layout, null);
 	if (result === false) return;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function recurseFind(item: LayoutItem, callback: Function): boolean {
 		if (item.children) {
 			for (let childIndex = 0; childIndex < item.children.length; childIndex++) {

@@ -15,8 +15,11 @@ const md5 = require('md5');
 const inMemoryCache = new InMemoryCache(10);
 
 interface FsDriver {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	writeFile: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	exists: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	cacheCssToFile: Function;
 }
 

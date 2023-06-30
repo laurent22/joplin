@@ -26,6 +26,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)>/gi;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const handleImageTags = function(defaultRender: Function) {
 		return function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			const token = tokens[idx];

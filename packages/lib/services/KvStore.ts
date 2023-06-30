@@ -87,7 +87,7 @@ export default class KvStore extends BaseService {
 
 	// Note: atomicity is done at application level so two difference instances
 	// accessing the db at the same time could mess up the increment.
-	public async incValue(key: string, inc: number = 1) {
+	public async incValue(key: string, inc = 1) {
 		const release = await this.incMutex_.acquire();
 
 		try {

@@ -76,6 +76,7 @@ describe('Synchronizer.resources', () => {
 		const fetcher = new ResourceFetcher(() => {
 			return {
 			// Simulate a failed download
+				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 				get: () => { return new Promise((_resolve: Function, reject: Function) => { reject(new Error('did not work')); }); },
 			};
 		});

@@ -150,6 +150,7 @@ export default class Folder extends BaseItem {
 		`;
 
 		const noteCounts = await this.db().selectAll(sql);
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		noteCounts.forEach((noteCount: any) => {
 			let parentId = noteCount.folder_id;
 			do {

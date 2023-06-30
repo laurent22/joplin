@@ -2,7 +2,9 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { isInsideContainer } from '@joplin/lib/dom';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onOkButtonClick: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onCancelButtonClick: Function;
 }
 

@@ -7,6 +7,7 @@ const styled = require('styled-components').default;
 
 interface Props {
 	selection: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSelectionChange: Function;
 	sections: any[];
 }

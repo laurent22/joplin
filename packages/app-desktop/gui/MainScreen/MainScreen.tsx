@@ -59,6 +59,7 @@ interface Props {
 	pluginHtmlContents: PluginHtmlContents;
 	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	mainLayout: LayoutItem;
 	style: any;
@@ -124,6 +125,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private isPrinting_: boolean;
 	private styleKey_: string;
 	private styles_: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private promptOnClose_: Function;
 
 	public constructor(props: Props) {
@@ -517,6 +519,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return this.styles_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private renderNotificationMessage(message: string, callForAction: string, callForActionHandler: Function, callForAction2: string = null, callForActionHandler2: Function = null) {
 		const theme = themeStyle(this.props.themeId);
 		const urlStyle: any = { color: theme.colorWarnUrl, textDecoration: 'underline' };
@@ -875,9 +878,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				{this.renderPluginDialogs()}
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{/* @ts-ignore */}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
-				{/* @ts-ignore */}
 				{shareFolderDialogOptions.visible && <ShareFolderDialog themeId={this.props.themeId} folderId={shareFolderDialogOptions.folderId} onClose={this.shareFolderDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />

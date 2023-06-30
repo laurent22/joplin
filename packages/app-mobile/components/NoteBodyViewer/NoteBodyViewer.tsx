@@ -19,9 +19,13 @@ interface Props {
 	noteResources: any;
 	paddingBottom: number;
 	noteHash: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onJoplinLinkClick: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onCheckboxChange?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onMarkForDownload?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onLoadEnd?: Function;
 }
 

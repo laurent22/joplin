@@ -60,6 +60,7 @@ function requestCanBeRepeated(error: any) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function tryAndRepeat(fn: Function, count: number) {
 	let retryCount = 0;
 
@@ -99,6 +100,7 @@ class FileApi {
 	private remoteDateMutex_ = new Mutex();
 	private initialized_ = false;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(baseDir: string | Function, driver: any) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
@@ -397,6 +399,7 @@ function basicDeltaContextFromOptions_(options: any) {
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function basicDelta(path: string, getDirStatFn: Function, options: any) {
 	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();

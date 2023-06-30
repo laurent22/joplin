@@ -224,7 +224,9 @@ async function saveNoteTags(note: ExtractedNote) {
 
 interface ImportOptions {
 	fuzzyMatching?: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onProgress?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onError?: Function;
 	outputFormat?: string;
 }
@@ -326,6 +328,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function handleSaxStreamEvent(fn: Function) {
 		return function(...args: any[]) {
 			// Pass the parser to the wrapped function for debugging purposes

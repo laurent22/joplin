@@ -13,7 +13,9 @@ const formatcoords = require('formatcoords');
 
 interface Props {
 	noteId: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onRevisionLinkClick: Function;
 	themeId: number;
 }
@@ -210,6 +212,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public async saveProperty() {
 		if (!this.state.editedKey) return;
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
 			const newFormNote = { ...this.state.formNote };
 
@@ -234,6 +237,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async cancelProperty() {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
 			this.okButton.current.focus();
 			this.setState({

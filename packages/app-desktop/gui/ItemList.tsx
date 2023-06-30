@@ -5,9 +5,12 @@ interface Props {
 	itemHeight: number;
 	items: any[];
 	disabled?: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onKeyDown?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	itemRenderer: Function;
 	className?: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onNoteDrop?: Function;
 }
 

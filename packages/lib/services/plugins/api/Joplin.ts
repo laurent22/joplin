@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import Plugin from '../Plugin';
 import JoplinData from './JoplinData';
 import JoplinPlugins from './JoplinPlugins';

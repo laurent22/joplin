@@ -29,13 +29,14 @@ export default {
 	},
 
 	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const defaultRender: Function = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 
 		const exportButtonMarkup = isDesktop(ruleOptions.platformName) ? exportGraphButton(ruleOptions) : '';
 
-		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: {}, env: any, self: any) {
+		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			const token = tokens[idx];
 			if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
 			const contentHtml = markdownIt.utils.escapeHtml(token.content);

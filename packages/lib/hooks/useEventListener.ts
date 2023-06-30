@@ -7,7 +7,7 @@ function useEventListener(
 	element?: any
 ) {
 	// Create a ref that stores handler
-	const savedHandler = useRef();
+	const savedHandler = useRef<any>();
 
 	useEffect(() => {
 		// Define the listening target
@@ -25,7 +25,6 @@ function useEventListener(
 		const eventListener = (event: Event) => {
 			// eslint-disable-next-line no-extra-boolean-cast
 			if (!!savedHandler?.current) {
-				// @ts-ignore
 				savedHandler.current(event);
 			}
 		};

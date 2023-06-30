@@ -1,7 +1,7 @@
 export default class JoplinError extends Error {
 
 	public code: any = null;
-	public details: string = '';
+	public details = '';
 
 	public constructor(message: string, code: any = null, details: string = null) {
 		super(message);
