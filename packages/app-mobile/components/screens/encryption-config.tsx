@@ -24,7 +24,6 @@ interface Props {
 	shouldReencrypt: boolean;
 	activeMasterKeyId: string;
 	masterPassword: string;
-	itemsWithUnknownEncryptionMethod: boolean;
 }
 
 const EncryptionConfigScreen = (props: Props) => {
@@ -325,7 +324,6 @@ export default connect((state: State) => {
 		encryptionEnabled: syncInfo.e2ee,
 		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
-		itemsWithUnknownEncryptionMethod: state.hasItemsWithUnknownEncryptionMethod,
 		masterPassword: state.settings['encryption.masterPassword'],
 	};
 })(EncryptionConfigScreen);

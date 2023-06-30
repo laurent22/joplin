@@ -6,6 +6,7 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { UnknownDecryptionMethodError } from './errors';
 
 let service: EncryptionService = null;
 
@@ -116,6 +117,14 @@ describe('services_EncryptionService', () => {
 
 		expect(hasThrown).toBe(true);
 	}));
+
+	it('should throw an error if given data encrypted with an unknown method', async () => {
+		const fakeMethod: any = 123456;
+
+		await expect(service.decrypt(fakeMethod, 'fakeKey', 'fakeCipherText'))
+			.rejects
+			.toThrowError(new UnknownDecryptionMethodError(fakeMethod));
+	});
 
 	it('should return the master keys that need an upgrade', (async () => {
 		const masterKey1 = await MasterKey.save(await service.generateMasterKey('123456', {

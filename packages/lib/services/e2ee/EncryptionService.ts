@@ -6,7 +6,7 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
-import { UnknownDecryptionMethodError, UnknownEncryptionMethodError } from './errors';
+import { NoActiveMasterKeyError, UnknownDecryptionMethodError } from './errors';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
@@ -111,9 +111,7 @@ export default class EncryptionService {
 	public activeMasterKeyId() {
 		const id = getActiveMasterKeyId();
 		if (!id) {
-			const error: any = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
-			error.code = 'noActiveMasterKey';
-			throw error;
+			throw new NoActiveMasterKeyError();
 		}
 		return id;
 	}
@@ -391,10 +389,6 @@ export default class EncryptionService {
 				throw new Error('Custom encryption method is not supported here');
 			},
 		};
-
-		if (!(method in handlers)) {
-			throw new UnknownEncryptionMethodError(method);
-		}
 
 		return handlers[method]();
 	}
