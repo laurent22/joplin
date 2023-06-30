@@ -44,8 +44,8 @@ export default class JoplinServerApi {
 
 	private options_: Options;
 	private session_: Session;
-	private debugRequests_: boolean = false;
-	private debugRequestsShowPasswords_: boolean = false;
+	private debugRequests_ = false;
+	private debugRequestsShowPasswords_ = false;
 
 	public constructor(options: Options) {
 		this.options_ = options;

@@ -21,7 +21,7 @@ export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
 
-	private state_: string = 'idle';
+	private state_ = 'idle';
 	private logger_: Logger;
 	public dispatch: Function = () => {};
 	private scheduleId_: any = null;

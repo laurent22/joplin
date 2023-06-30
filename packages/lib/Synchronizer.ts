@@ -49,14 +49,14 @@ function isCannotSyncError(error: any): boolean {
 
 export default class Synchronizer {
 
-	public static verboseMode: boolean = true;
+	public static verboseMode = true;
 
 	private db_: JoplinDatabase;
 	private api_: FileApi;
 	private appType_: AppType;
 	private logger_: Logger = new Logger();
-	private state_: string = 'idle';
-	private cancelling_: boolean = false;
+	private state_ = 'idle';
+	private cancelling_ = false;
 	public maxResourceSize_: number = null;
 	private downloadQueue_: any = null;
 	private clientId_: string;
@@ -64,7 +64,7 @@ export default class Synchronizer {
 	private migrationHandler_: MigrationHandler;
 	private encryptionService_: EncryptionService = null;
 	private resourceService_: ResourceService = null;
-	private syncTargetIsLocked_: boolean = false;
+	private syncTargetIsLocked_ = false;
 	private shareService_: ShareService = null;
 	private lockClientType_: LockClientType = null;
 

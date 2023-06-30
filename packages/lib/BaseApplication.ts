@@ -75,8 +75,8 @@ export default class BaseApplication {
 	private database_: any = null;
 	private profileConfig_: ProfileConfig = null;
 
-	protected showStackTraces_: boolean = false;
-	protected showPromptString_: boolean = false;
+	protected showStackTraces_ = false;
+	protected showPromptString_ = false;
 
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the

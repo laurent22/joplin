@@ -16,7 +16,7 @@ export interface ErrorOptions {
 // For explanation of the setPrototypeOf call, see:
 // https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
 export class ApiError extends Error {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
 	public httpCode: number;
 	public code: ErrorCode;
@@ -46,7 +46,7 @@ export class ErrorWithCode extends ApiError {
 }
 
 export class ErrorMethodNotAllowed extends ApiError {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
 	public constructor(message: string = 'Method Not Allowed', options: ErrorOptions = null) {
 		super(message, ErrorMethodNotAllowed.httpCode, options);
@@ -55,7 +55,7 @@ export class ErrorMethodNotAllowed extends ApiError {
 }
 
 export class ErrorNotFound extends ApiError {
-	public static httpCode: number = 404;
+	public static httpCode = 404;
 
 	public constructor(message: string = 'Not Found', code: ErrorCode = undefined) {
 		super(message, ErrorNotFound.httpCode, code);
@@ -64,7 +64,7 @@ export class ErrorNotFound extends ApiError {
 }
 
 export class ErrorForbidden extends ApiError {
-	public static httpCode: number = 403;
+	public static httpCode = 403;
 
 	public constructor(message: string = 'Forbidden', options: ErrorOptions = null) {
 		super(message, ErrorForbidden.httpCode, options);
@@ -73,7 +73,7 @@ export class ErrorForbidden extends ApiError {
 }
 
 export class ErrorBadRequest extends ApiError {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
 	public constructor(message: string = 'Bad Request', options: ErrorOptions = null) {
 		super(message, ErrorBadRequest.httpCode, options);
@@ -83,7 +83,7 @@ export class ErrorBadRequest extends ApiError {
 }
 
 export class ErrorPreconditionFailed extends ApiError {
-	public static httpCode: number = 412;
+	public static httpCode = 412;
 
 	public constructor(message: string = 'Precondition Failed', options: ErrorOptions = null) {
 		super(message, ErrorPreconditionFailed.httpCode, options);
@@ -93,7 +93,7 @@ export class ErrorPreconditionFailed extends ApiError {
 }
 
 export class ErrorUnprocessableEntity extends ApiError {
-	public static httpCode: number = 422;
+	public static httpCode = 422;
 
 	public constructor(message: string = 'Unprocessable Entity', options: ErrorOptions = null) {
 		super(message, ErrorUnprocessableEntity.httpCode, options);
@@ -102,7 +102,7 @@ export class ErrorUnprocessableEntity extends ApiError {
 }
 
 export class ErrorConflict extends ApiError {
-	public static httpCode: number = 409;
+	public static httpCode = 409;
 
 	public constructor(message: string = 'Conflict', code: ErrorCode = undefined) {
 		super(message, ErrorConflict.httpCode, code);
@@ -111,7 +111,7 @@ export class ErrorConflict extends ApiError {
 }
 
 export class ErrorResyncRequired extends ApiError {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
 	public constructor(message: string = 'Delta cursor is invalid and the complete data should be resynced') {
 		super(message, ErrorResyncRequired.httpCode, ErrorCode.ResyncRequired);
@@ -120,7 +120,7 @@ export class ErrorResyncRequired extends ApiError {
 }
 
 export class ErrorPayloadTooLarge extends ApiError {
-	public static httpCode: number = 413;
+	public static httpCode = 413;
 
 	public constructor(message: string = 'Payload Too Large', options: ErrorOptions = null) {
 		super(message, ErrorPayloadTooLarge.httpCode, options);
@@ -129,8 +129,8 @@ export class ErrorPayloadTooLarge extends ApiError {
 }
 
 export class ErrorTooManyRequests extends ApiError {
-	public static httpCode: number = 429;
-	public retryAfterMs: number = 0;
+	public static httpCode = 429;
+	public retryAfterMs = 0;
 
 	public constructor(message: string = null, retryAfterMs: number = 0) {
 		super(message === null ? 'Too Many Requests' : message, ErrorTooManyRequests.httpCode);

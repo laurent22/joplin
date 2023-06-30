@@ -25,7 +25,7 @@ interface Intervals {
 export default class PoorManIntervals {
 
 	private static maxNativeTimerDuration_ = 10 * 1000;
-	private static lastUpdateTime_: number = 0;
+	private static lastUpdateTime_ = 0;
 	private static intervalId_: IntervalId = 0;
 	private static intervals_: Intervals = {};
 

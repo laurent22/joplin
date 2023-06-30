@@ -26,7 +26,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 	private focusInput_: boolean;
 	private styles_: any;
 	private styleKey_: string;
-	private menuIsOpened_: boolean = false;
+	private menuIsOpened_ = false;
 
 	public constructor(props: Props) {
 		super(props);

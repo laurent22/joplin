@@ -174,7 +174,7 @@ export function syncInfoEquals(s1: SyncInfo, s2: SyncInfo): boolean {
 
 export class SyncInfo {
 
-	private version_: number = 0;
+	private version_ = 0;
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];

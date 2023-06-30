@@ -61,7 +61,7 @@ class Logger {
 	private targets_: Target[] = [];
 	private level_: LogLevel = LogLevel.Info;
 	private lastDbCleanup_: number = time.unixMs();
-	private enabled_: boolean = true;
+	private enabled_ = true;
 
 	public static fsDriver() {
 		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();

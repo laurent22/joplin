@@ -4,7 +4,7 @@ const EventEmitter = require('events');
 class UndoQueue {
 
 	private inner_: any[] = [];
-	private size_: number = 20;
+	private size_ = 20;
 
 	public pop() {
 		return this.inner_.pop();
@@ -33,7 +33,7 @@ export default class UndoRedoService {
 	private undoStates: UndoQueue = new UndoQueue();
 	private redoStates: UndoQueue = new UndoQueue();
 	private eventEmitter: any = new EventEmitter();
-	private isUndoing: boolean = false;
+	private isUndoing = false;
 
 	public constructor() {
 		this.push = this.push.bind(this);

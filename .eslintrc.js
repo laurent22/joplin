@@ -183,7 +183,7 @@ module.exports = {
 			'rules': {
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
-				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
+				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true }],
 				'@typescript-eslint/comma-dangle': ['error', {
 					'arrays': 'always-multiline',
 					'objects': 'always-multiline',

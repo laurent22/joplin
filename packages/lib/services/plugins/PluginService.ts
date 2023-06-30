@@ -87,7 +87,7 @@ export default class PluginService extends BaseService {
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
-	private isSafeMode_: boolean = false;
+	private isSafeMode_ = false;
 
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;

@@ -13,8 +13,8 @@ const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
 
-	public static isRunningInBackground_: boolean = false;
-	private isIndexing_: boolean = false;
+	public static isRunningInBackground_ = false;
+	private isIndexing_ = false;
 
 	private maintenanceCalls_: boolean[] = [];
 	private maintenanceTimer1_: any = null;

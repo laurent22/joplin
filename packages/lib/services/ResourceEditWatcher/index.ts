@@ -33,7 +33,7 @@ export default class ResourceEditWatcher {
 	private chokidar_: any;
 	private watchedItems_: WatchedItems = {};
 	private eventEmitter_: any;
-	private tempDir_: string = '';
+	private tempDir_ = '';
 	private openItem_: OpenItemFn;
 
 	public constructor() {

@@ -30,11 +30,11 @@ export default class Plugin {
 	private contentScripts_: ContentScripts = {};
 	private dispatch_: Function;
 	private eventEmitter_: any;
-	private devMode_: boolean = false;
+	private devMode_ = false;
 	private messageListener_: Function = null;
 	private contentScriptMessageListeners_: Record<string, Function> = {};
 	private dataDir_: string;
-	private dataDirCreated_: boolean = false;
+	private dataDirCreated_ = false;
 
 	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);

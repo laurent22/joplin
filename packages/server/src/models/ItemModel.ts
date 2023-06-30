@@ -68,7 +68,7 @@ export interface ItemLoadOptions extends LoadOptions {
 
 export default class ItemModel extends BaseModel<Item> {
 
-	private updatingTotalSizes_: boolean = false;
+	private updatingTotalSizes_ = false;
 	private storageDriverConfig_: StorageDriverConfig;
 	private storageDriverConfigFallback_: StorageDriverConfig;
 

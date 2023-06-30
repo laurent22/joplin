@@ -7,7 +7,7 @@ import Setting from '../../models/Setting';
 export default class InteropService_Importer_Base {
 
 	private metadata_: any = null;
-	protected sourcePath_: string = '';
+	protected sourcePath_ = '';
 	protected options_: any = {};
 
 	public setMetadata(md: any) {

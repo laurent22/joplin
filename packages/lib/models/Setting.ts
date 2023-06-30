@@ -312,7 +312,7 @@ class Setting extends BaseModel {
 	private static changedKeys_: string[] = [];
 	private static fileHandler_: FileHandler = null;
 	private static rootFileHandler_: FileHandler = null;
-	private static settingFilename_: string = 'settings.json';
+	private static settingFilename_ = 'settings.json';
 	private static buildInMetadata_: SettingItems = null;
 
 	public static tableName() {

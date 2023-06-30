@@ -12,8 +12,8 @@ interface Props {
 
 export default class NoteTextViewerComponent extends React.Component<Props, any> {
 
-	private initialized_: boolean = false;
-	private domReady_: boolean = false;
+	private initialized_ = false;
+	private domReady_ = false;
 	private webviewRef_: any;
 	private webviewListeners_: any = null;
 
