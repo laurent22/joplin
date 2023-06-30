@@ -1,11 +1,11 @@
-const moment = require('moment');
+import dayjs = require('dayjs');
 import shim from './shim';
 
 export default class RotatingLogs {
 
-	private logFileDir: string = '';
-	private logFileName: string = 'log.txt';
-	private logFileExpirationTimeInDays: number = 30;
+	private logFileDir = '';
+	private logFileName = 'log.txt';
+	private logFileExpirationTimeInDays = 30;
 	private logFileMaximumSizeInBytes: number = 1024 * 1024 * 10;
 	private logFileRotetionalInterval: number = 43200 * 1000;
 
@@ -36,23 +36,23 @@ export default class RotatingLogs {
 	}
 
 	private getNameToNonActiveLogFile(): string {
-		return `log-${moment.now()}.txt`;
+		return `log-${dayjs().valueOf()}.txt`;
 	}
 
 	public async deleteOldLogsFiles() {
-		const files: Array<string> = await this.fsDriver().readDirStats(this.logFileDir);
-		const logs: Array<string> = this.getNonActiveLogs(files.map((file: any) => file.path));
+		const files: any[] = await this.fsDriver().readDirStats(this.logFileDir);
+		const logs: string[] = this.getNonActiveLogs(files.map((file) => file.path));
 		for (const log of logs) {
 			const stats: any = await this.fsDriver().stat(this.logFileFullpath(log));
 			const birthtime: Date = stats.birthtime;
-			const diffInDays: number = moment().diff(birthtime, 'days');
+			const diffInDays: number = dayjs().diff(birthtime, 'days');
 			if (diffInDays >= this.logFileExpirationTimeInDays) {
 				await this.fsDriver().remove(this.logFileFullpath(log));
 			}
 		}
 	}
 
-	private getNonActiveLogs(files: Array<string>): Array<string> {
+	private getNonActiveLogs(files: string[]): string[] {
 		const regex = new RegExp('^log-[0-9]+.txt$', 'gi');
 		return files.filter(file => file.match(regex));
 	}
