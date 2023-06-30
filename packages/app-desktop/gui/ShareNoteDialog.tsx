@@ -20,7 +20,7 @@ const { clipboard } = require('electron');
 
 interface Props {
 	themeId: number;
-	noteIds: Array<string>;
+	noteIds: string[];
 	onClose: Function;
 	shares: StateShare[];
 	syncTargetId: number;

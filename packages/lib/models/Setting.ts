@@ -2082,7 +2082,7 @@ class Setting extends BaseModel {
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
 	public static setArrayValue(settingName: string, value: string): boolean {
-		const settingValue: Array<any> = this.value(settingName);
+		const settingValue: any[] = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);
 		this.setValue(settingName, settingValue);

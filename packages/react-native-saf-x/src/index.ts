@@ -55,7 +55,7 @@ interface SafxInterface {
   unlink(uriString: string): Promise<boolean>;
   mkdir(uriString: string): Promise<DocumentFileDetail>;
   rename(uriString: string, newName: string): Promise<DocumentFileDetail>;
-  getPersistedUriPermissions(): Promise<Array<string>>;
+  getPersistedUriPermissions(): Promise<string[]>;
   releasePersistableUriPermission(uriString: string): Promise<void>;
   listFiles(uriString: string): Promise<DocumentFileDetail[]>;
   stat(uriString: string): Promise<DocumentFileDetail>;
