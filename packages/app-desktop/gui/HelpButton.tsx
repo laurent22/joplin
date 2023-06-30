@@ -5,6 +5,7 @@ import { AppState } from '../app.reducer';
 
 interface Props {
 	tip: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClick: Function;
 	themeId: number;
 	style: any;

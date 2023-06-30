@@ -99,6 +99,7 @@ class WelcomeUtils {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static async install(locale: string, dispatch: Function) {
 		if (!Setting.value('welcome.enabled')) {
 			Setting.setValue('welcome.wasBuilt', true);

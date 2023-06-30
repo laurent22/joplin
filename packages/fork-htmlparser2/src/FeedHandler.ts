@@ -179,8 +179,7 @@ function addConditionally<T>(
     recurse = false
 ) {
     const tmp = fetch(what, where, recurse);
-    // @ts-ignore
-    if (tmp) obj[prop] = tmp;
+    if (tmp) (obj as any)[prop] = tmp;
 }
 
 function isValidFeed(value: string) {

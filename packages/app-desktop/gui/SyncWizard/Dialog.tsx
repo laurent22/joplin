@@ -16,6 +16,7 @@ import StyledLink from '../style/StyledLink';
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 
@@ -150,6 +151,7 @@ export default function(props: Props) {
 	const [joplinCloudPassword, setJoplinCloudPassword] = useState('');
 	const [joplinCloudLoginInProgress, setJoplinCloudLoginInProgress] = useState(false);
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function closeDialog(dispatch: Function) {
 		dispatch({
 			type: 'DIALOG_CLOSE',

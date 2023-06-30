@@ -14,6 +14,7 @@ import { PasswordInput } from '../PasswordInput/PasswordInput';
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 

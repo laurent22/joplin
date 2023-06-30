@@ -23,6 +23,7 @@ Icon.loadFont().catch((error: any) => { console.info(error); });
 interface Props {
 	syncStarted: boolean;
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
 	syncReport: any;
@@ -371,6 +372,7 @@ const SideMenuContentComponent = (props: Props) => {
 		);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: Function = null, selected = false) => {
 		let icon = <Icon name={iconName} style={styles_.sidebarIcon} />;
 

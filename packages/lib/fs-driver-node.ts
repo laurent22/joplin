@@ -18,7 +18,7 @@ export default class FsDriverNode extends FsDriverBase {
 		return fs.appendFileSync(path, string);
 	}
 
-	public async appendFile(path: string, string: string, encoding: string = 'base64') {
+	public async appendFile(path: string, string: string, encoding = 'base64') {
 		try {
 			return await fs.appendFile(path, string, { encoding: encoding });
 		} catch (error) {
@@ -26,7 +26,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async writeFile(path: string, string: string, encoding: string = 'base64') {
+	public async writeFile(path: string, string: string, encoding = 'base64') {
 		try {
 			if (encoding === 'buffer') {
 				return await fs.writeFile(path, string);
@@ -144,7 +144,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async readFile(path: string, encoding: string = 'utf8') {
+	public async readFile(path: string, encoding = 'utf8') {
 		try {
 			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
 			return await fs.readFile(path, encoding);
@@ -171,7 +171,7 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async readFileChunk(handle: any, length: number, encoding: string = 'base64') {
+	public async readFileChunk(handle: any, length: number, encoding = 'base64') {
 		// let buffer = new Buffer(length);
 		let buffer = Buffer.alloc(length);
 		const result = await fs.read(handle, buffer, 0, length, null);

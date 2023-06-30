@@ -73,6 +73,7 @@ interface AuthToken {
 }
 
 export interface RequestContext {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	authToken: AuthToken;
 	token: string;
@@ -86,13 +87,16 @@ interface ResourceNameToRoute {
 
 export default class Api {
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private token_: string | Function;
 	private authToken_: AuthToken = null;
 	private knownNounces_: any = {};
 	private actionApi_: any;
 	private resourceNameToRoute_: ResourceNameToRoute = {};
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(token: string | Function = null, dispatch: Function = null, actionApi: any = null) {
 		this.token_ = token;
 		this.actionApi_ = actionApi;

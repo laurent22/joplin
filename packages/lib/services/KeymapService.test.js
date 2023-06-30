@@ -30,8 +30,10 @@ describe('services_KeymapService', () => {
 				],
 			};
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			Object.entries(testCases).forEach(([platform, accelerators]) => {
 				keymapService.initialize([], platform);
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				accelerators.forEach(accelerator => {
 					expect(() => keymapService.validateAccelerator(accelerator)).not.toThrow();
 				});
@@ -68,8 +70,10 @@ describe('services_KeymapService', () => {
 				],
 			};
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			Object.entries(testCases).forEach(([platform, accelerators]) => {
 				keymapService.initialize([], platform);
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				accelerators.forEach(accelerator => {
 					expect(() => keymapService.validateAccelerator(accelerator)).toThrow();
 				});
@@ -142,6 +146,7 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteBody', accelerator: 'Ctrl+Option+Shift+Cmd+B' },
 			];
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			testCases_Darwin.forEach(({ command, accelerator }) => {
 				keymapService.setAccelerator(command, accelerator);
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
@@ -159,6 +164,7 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteBody', accelerator: 'Ctrl+Alt+Shift+B' },
 			];
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			testCases_Linux.forEach(({ command, accelerator }) => {
 				keymapService.setAccelerator(command, accelerator);
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
@@ -181,6 +187,7 @@ describe('services_KeymapService', () => {
 				{ command: 'focusElementNoteBody', accelerator: 'Ctrl+Alt+Shift+B' },
 			];
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			testCases.forEach(({ command, accelerator }) => {
 				// Remember the real default Accelerator value
 				const defaultAccelerator = keymapService.getAccelerator(command);
@@ -212,6 +219,7 @@ describe('services_KeymapService', () => {
 			];
 
 			expect(() => keymapService.overrideKeymap(customKeymapItems_Darwin)).not.toThrow();
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			customKeymapItems_Darwin.forEach(({ command, accelerator }) => {
 				// Also check if keymap is updated or not
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);
@@ -233,6 +241,7 @@ describe('services_KeymapService', () => {
 			];
 
 			expect(() => keymapService.overrideKeymap(customKeymapItems_Win32)).not.toThrow();
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			customKeymapItems_Win32.forEach(({ command, accelerator }) => {
 				// Also check if keymap is updated or not
 				expect(keymapService.getAccelerator(command)).toEqual(accelerator);

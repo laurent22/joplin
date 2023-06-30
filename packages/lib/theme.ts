@@ -387,6 +387,7 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export function buildStyle(cacheKey: any, themeId: number, callback: Function) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 

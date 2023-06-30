@@ -46,8 +46,10 @@ describe('StringUtils', () => {
 			['Joplin is a free, open source\n note taking and *to-do* application', [[0, 6], [12, 17], [23, 29], [48, 54]]],
 		];
 
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		testCases.forEach((t, i) => {
 			const str = t[0];
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			t[1].forEach((pair, j) => {
 				const begin = pair[0];
 				const expected = pair[1];
@@ -75,6 +77,7 @@ describe('StringUtils', () => {
 				[`command1 arg\\1 'arg2${eol}continue\\'continue' arg3`]],
 		];
 
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		testCases.forEach((t) => {
 			expect(splitCommandBatch(t[0])).toEqual(t[1]);
 		});

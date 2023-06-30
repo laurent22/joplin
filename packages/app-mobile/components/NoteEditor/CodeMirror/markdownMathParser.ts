@@ -1,9 +1,7 @@
-/**
- * Search for $s and $$s in markdown and mark the regions between them as math.
- *
- * Text between single $s is marked as InlineMath and text between $$s is marked
- * as BlockMath.
- */
+// Search for $s and $$s in markdown and mark the regions between them as math.
+//
+// Text between single $s is marked as InlineMath and text between $$s is marked
+// as BlockMath.
 
 import { tags, Tag } from '@lezer/highlight';
 import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from '@lezer/common';
@@ -34,13 +32,11 @@ export const inlineMathContentTagName = 'InlineMathContent';
 export const mathTag = Tag.define(tags.monospace);
 export const inlineMathTag = Tag.define(mathTag);
 
-/**
- * Wraps a TeX math-mode parser. This removes [nodeTag] from the syntax tree
- * and replaces it with a region handled by the sTeXMath parser.
- *
- * @param nodeTag Name of the nodes to replace with regions parsed by the sTeX parser.
- * @returns a wrapped sTeX parser.
- */
+// Wraps a TeX math-mode parser. This removes [nodeTag] from the syntax tree
+// and replaces it with a region handled by the sTeXMath parser.
+//
+// @param nodeTag Name of the nodes to replace with regions parsed by the sTeX parser.
+// @returns a wrapped sTeX parser.
 const wrappedTeXParser = (nodeTag: string): ParseWrapper => {
 	return parseMixed((node: SyntaxNodeRef, _input: Input): NestedParse => {
 		if (node.name !== nodeTag) {

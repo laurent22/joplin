@@ -1,6 +1,8 @@
+/* eslint-disable multiline-comment-style */
 /**
  * @jest-environment jsdom
  */
+/* eslint-enable multiline-comment-style */
 
 import { createEventHandlingListeners, Options } from './createEventHandlingAttrs';
 import { describe, beforeAll, it, jest, expect } from '@jest/globals';

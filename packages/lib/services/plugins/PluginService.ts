@@ -87,7 +87,7 @@ export default class PluginService extends BaseService {
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
-	private isSafeMode_: boolean = false;
+	private isSafeMode_ = false;
 
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
@@ -207,7 +207,7 @@ export default class PluginService extends BaseService {
 		};
 	}
 
-	public async loadPluginFromJsBundle(baseDir: string, jsBundleString: string, pluginIdIfNotSpecified: string = ''): Promise<Plugin> {
+	public async loadPluginFromJsBundle(baseDir: string, jsBundleString: string, pluginIdIfNotSpecified = ''): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const r = await this.parsePluginJsBundle(jsBundleString);
@@ -341,7 +341,7 @@ export default class PluginService extends BaseService {
 		return this.runner_.callStatsSummary(pluginId, duration);
 	}
 
-	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode: boolean = false) {
+	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode = false) {
 		let pluginPaths = [];
 
 		if (Array.isArray(pluginDirOrPaths)) {
@@ -438,7 +438,7 @@ export default class PluginService extends BaseService {
 		return this.installPluginFromRepo(repoApi, pluginId);
 	}
 
-	public async installPlugin(jplPath: string, loadPlugin: boolean = true): Promise<Plugin | null> {
+	public async installPlugin(jplPath: string, loadPlugin = true): Promise<Plugin | null> {
 		logger.info(`Installing plugin: "${jplPath}"`);
 
 		// Before moving the plugin to the profile directory, we load it

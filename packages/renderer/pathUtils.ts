@@ -11,7 +11,7 @@ export function basename(path: string) {
 	return s[s.length - 1];
 }
 
-export function filename(path: string, includeDir: boolean = false): string {
+export function filename(path: string, includeDir = false): string {
 	if (!path) throw new Error('Path is empty');
 	const output = includeDir ? path : basename(path);
 	if (output.indexOf('.') < 0) return output;

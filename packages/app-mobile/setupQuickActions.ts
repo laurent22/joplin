@@ -11,6 +11,7 @@ type TData = {
 	type: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
 	QuickActions.setShortcutItems([

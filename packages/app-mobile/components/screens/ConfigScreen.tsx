@@ -457,6 +457,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private renderToggle(key: string, label: string, value: any, updateSettingValue: Function, descriptionComp: any = null) {
 		const theme = themeStyle(this.props.themeId);
 
