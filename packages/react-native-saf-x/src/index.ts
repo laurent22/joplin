@@ -22,8 +22,7 @@ if (Platform.OS === 'android') {
 			)
 	) as SafxInterface;
 } else {
-	// @ts-ignore
-	SafX = {};
+	SafX = {} as any;
 }
 
 export type Encoding = 'utf8' | 'base64' | 'ascii';

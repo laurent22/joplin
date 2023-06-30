@@ -230,26 +230,22 @@ const appReducer = (state = appDefaultState, action: any) => {
 	try {
 		switch (action.type) {
 
-		// @ts-ignore
 		case 'NAV_BACK':
-
-		{
-			if (!navHistory.length) break;
-
-			let newAction = null;
-			while (navHistory.length) {
-				newAction = navHistory.pop();
-				if (newAction.routeName !== state.route.routeName) break;
-			}
-
-			action = newAction ? newAction : navHistory.pop();
-
-			historyGoingBack = true;
-		}
-
-		// Fall throught
-
 		case 'NAV_GO':
+
+			if (action.type === 'NAV_BACK') {
+				if (!navHistory.length) break;
+
+				let newAction = null;
+				while (navHistory.length) {
+					newAction = navHistory.pop();
+					if (newAction.routeName !== state.route.routeName) break;
+				}
+
+				action = newAction ? newAction : navHistory.pop();
+
+				historyGoingBack = true;
+			}
 
 			{
 				const currentRoute = state.route;
@@ -426,7 +422,6 @@ async function initialize(dispatch: Function) {
 		value: profileConfig,
 	});
 
-	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');

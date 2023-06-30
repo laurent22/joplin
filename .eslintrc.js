@@ -183,7 +183,7 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
-
+				'@typescript-eslint/ban-ts-comment': ['error'],
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
 				'@typescript-eslint/array-type': 'error',

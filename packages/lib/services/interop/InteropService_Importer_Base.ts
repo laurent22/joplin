@@ -23,8 +23,7 @@ export default class InteropService_Importer_Base {
 		this.options_ = options;
 	}
 
-	// @ts-ignore
-	public async exec(result: ImportExportResult): Promise<ImportExportResult> {}
+	public async exec(_result: ImportExportResult): Promise<ImportExportResult> { return null; }
 
 	protected async temporaryDirectory_(createIt: boolean) {
 		const md5 = require('md5');

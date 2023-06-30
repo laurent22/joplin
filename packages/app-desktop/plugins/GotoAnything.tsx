@@ -320,8 +320,7 @@ class Dialog extends React.PureComponent<Props, State> {
 					const searchKeywords = await this.keywords(searchQuery);
 					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
 					// Can't make any sense of this code so...
-					// @ts-ignore
-					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id] as any] = { id, body, markup_language }), obj), {});
 
 					// Filter out search results that are associated with non-existing notes.
 					// https://github.com/laurent22/joplin/issues/5417

@@ -234,4 +234,4 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-export default connect(mapStateToProps)(ShareNoteDialog as any);
+export default connect(mapStateToProps)(ShareNoteDialog);

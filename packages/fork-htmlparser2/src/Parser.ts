@@ -225,8 +225,7 @@ export class Parser extends EventEmitter {
     //Tokenizer event handlers
     ontext(data: string) {
         this._updatePosition(1);
-        // @ts-ignore
-        this.endIndex--;
+        this.endIndex = this.endIndex === null ? 0 : this.endIndex + 1;
         if (this._cbs.ontext) this._cbs.ontext(data);
     }
 
@@ -241,8 +240,7 @@ export class Parser extends EventEmitter {
         ) {
             for (
                 let el;
-                // @ts-ignore
-                openImpliesClose[name].has(
+                (openImpliesClose as any)[name].has(
                     (el = this._stack[this._stack.length - 1])
                 );
                 this.onclosetag(el)
@@ -305,8 +303,7 @@ export class Parser extends EventEmitter {
             if (pos !== -1) {
                 if (this._cbs.onclosetag) {
                     pos = this._stack.length - pos;
-                    // @ts-ignore
-                    while (pos--) this._cbs.onclosetag(this._stack.pop());
+                    while (pos--) this._cbs.onclosetag((this._stack as any).pop());
                 } else this._stack.length = pos;
             } else if (name === "p" && !this._options.xmlMode) {
                 this.onopentagname(name);

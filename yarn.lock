@@ -4488,7 +4488,6 @@ __metadata:
     domutils: 3.1.0
     entities: 2.2.0
     eslint: 8.39.0
-    eslint-config-prettier: 8.8.0
     jest: 29.5.0
     prettier: 2.8.8
     ts-jest: 29.1.0
@@ -15365,7 +15364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:8.8.0, eslint-config-prettier@npm:>=8.0.0":
+"eslint-config-prettier@npm:>=8.0.0":
   version: 8.8.0
   resolution: "eslint-config-prettier@npm:8.8.0"
   peerDependencies:

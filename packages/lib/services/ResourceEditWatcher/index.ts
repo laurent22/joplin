@@ -192,8 +192,7 @@ export default class ResourceEditWatcher {
 			// that event is not event triggered.
 			// https://github.com/laurent22/joplin/issues/3407
 			//
-			// @ts-ignore Leave unused path variable
-			this.watcher_.on('raw', (event: string, path: string, options: any) => {
+			this.watcher_.on('raw', (event: string, _path: string, options: any) => {
 				const watchedPath = options.watchedPath ? toSystemSlashes(options.watchedPath, 'linux') : '';
 
 				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${watchedPath}`);
