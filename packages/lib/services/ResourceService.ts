@@ -134,7 +134,7 @@ export default class ResourceService extends BaseService {
 		}
 	}
 
-	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists: boolean = true) {
+	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists = true) {
 		const itDoes = await shim.fsDriver().waitTillExists(filePath, waitTillExists ? 10000 : 0);
 		if (!itDoes) {
 			// this.logger().warn('Trying to set file size on non-existent resource:', resourceId, filePath);

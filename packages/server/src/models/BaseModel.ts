@@ -129,7 +129,7 @@ export default abstract class BaseModel<T> {
 		throw new Error('Must be overriden');
 	}
 
-	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = '', requiredFields: string[] = []): string[] {
+	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable = '', requiredFields: string[] = []): string[] {
 		let output: string[] = [];
 		if (options && options.fields) {
 			output = options.fields;

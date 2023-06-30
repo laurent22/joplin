@@ -119,7 +119,7 @@ export default class CommandService extends BaseService {
 		eventManager.off(eventName, callback);
 	}
 
-	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel: boolean = true): SearchResult[] {
+	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel = true): SearchResult[] {
 		query = query.toLowerCase();
 
 		const output = [];
@@ -148,7 +148,7 @@ export default class CommandService extends BaseService {
 		return output;
 	}
 
-	public commandNames(publicOnly: boolean = false) {
+	public commandNames(publicOnly = false) {
 		if (publicOnly) {
 			const output = [];
 			for (const name in this.commands_) {
@@ -298,7 +298,7 @@ export default class CommandService extends BaseService {
 		return command.declaration.iconName;
 	}
 
-	public label(commandName: string, fullLabel: boolean = false): string {
+	public label(commandName: string, fullLabel = false): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];

@@ -58,7 +58,7 @@ export default class EmailService extends BaseService {
 		return f.replace(/[\n\r"<>]/g, '');
 	}
 
-	private formatNameAndEmail(email: string, name: string = ''): string {
+	private formatNameAndEmail(email: string, name = ''): string {
 		if (!email) throw new Error('Email is required');
 		const output: string[] = [];
 		if (name) output.push(`"${this.escapeEmailField(name)}"`);

@@ -23,7 +23,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename: boolean = true) {
+	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {

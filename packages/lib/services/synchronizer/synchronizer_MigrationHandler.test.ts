@@ -26,7 +26,7 @@ function lockHandler(): LockHandler {
 	return lockHandler_;
 }
 
-function migrationHandler(clientId: string = 'abcd'): MigrationHandler {
+function migrationHandler(clientId = 'abcd'): MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
 	migrationHandler_ = new MigrationHandler(fileApi(), db(), lockHandler(), LockClientType.Desktop, clientId);
 	return migrationHandler_;

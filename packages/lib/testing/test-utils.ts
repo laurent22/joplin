@@ -375,7 +375,7 @@ async function clearSettingFile(id: number) {
 	await fs.remove(Setting.settingFilePath);
 }
 
-export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {
+export async function createFolderTree(parentId: string, tree: any[], num = 0): Promise<FolderEntity> {
 	let rootFolder: FolderEntity = null;
 
 	for (const item of tree) {
@@ -803,7 +803,7 @@ async function createNTestFolders(n: number) {
 	return folders;
 }
 
-async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title: string = 'note') {
+async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title = 'note') {
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;

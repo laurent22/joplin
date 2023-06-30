@@ -30,7 +30,7 @@ async function saveFileData(data: any, filename: string) {
 	await writeFile(newFilePath, data);
 }
 
-export async function openItemById(itemId: string, dispatch: Function, hash: string = '') {
+export async function openItemById(itemId: string, dispatch: Function, hash = '') {
 
 	const item = await BaseItem.loadItemById(itemId);
 

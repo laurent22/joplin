@@ -157,7 +157,7 @@ export default class BaseApplication {
 
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
-	private async handleStartFlags_(argv: string[], setDefaults: boolean = true) {
+	private async handleStartFlags_(argv: string[], setDefaults = true) {
 		const matched: any = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
@@ -318,7 +318,7 @@ export default class BaseApplication {
 		process.exit(code);
 	}
 
-	public async refreshNotes(state: any, useSelectedNoteId: boolean = false, noteHash: string = '') {
+	public async refreshNotes(state: any, useSelectedNoteId = false, noteHash = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 

@@ -193,7 +193,7 @@ export default class Synchronizer {
 		return lines;
 	}
 
-	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
+	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);

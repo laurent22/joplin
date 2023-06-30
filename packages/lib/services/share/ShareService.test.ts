@@ -43,7 +43,7 @@ describe('ShareService', () => {
 	it('should not change the note user timestamps when sharing or unsharing', async () => {
 		let note = await Note.save({});
 		const service = mockService({
-			exec: (method: string, path: string = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
+			exec: (method: string, path = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
 				if (method === 'GET' && path === 'api/shares') return { items: [] } as any;
 				return null;
 			},

@@ -102,7 +102,7 @@ const desktopData = {
 
 // This can be used to run integration tests directly on device. It will throw
 // an error if something cannot be decrypted, or else print info messages.
-export const runIntegrationTests = async (silent: boolean = false) => {
+export const runIntegrationTests = async (silent = false) => {
 	const log = (s: string) => {
 		if (silent) return;
 		// eslint-disable-next-line no-console

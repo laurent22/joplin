@@ -259,7 +259,7 @@ interface CreateUserAndSessionOptions {
 	password?: string;
 }
 
-export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
+export const createUserAndSession = async function(index = 1, isAdmin = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
 	const password = uuidgen();
 
 	options = {
@@ -278,7 +278,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 	};
 };
 
-export const createUser = async function(index: number = 1, isAdmin: boolean = false): Promise<User> {
+export const createUser = async function(index = 1, isAdmin = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 

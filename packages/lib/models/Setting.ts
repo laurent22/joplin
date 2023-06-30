@@ -1848,7 +1848,7 @@ class Setting extends BaseModel {
 		return this.metadata()[key] && this.metadata()[key].secure === true;
 	}
 
-	public static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
+	public static keys(publicOnly = false, appType: AppType = null, options: KeysOptions = null) {
 		options = { secureOnly: false, ...options };
 
 		if (!this.keys_) {

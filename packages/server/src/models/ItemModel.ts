@@ -460,7 +460,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return row.content;
 	}
 
-	public async sharedFolderChildrenItems(shareUserIds: Uuid[], folderId: string, includeResources: boolean = true): Promise<Item[]> {
+	public async sharedFolderChildrenItems(shareUserIds: Uuid[], folderId: string, includeResources = true): Promise<Item[]> {
 		if (!shareUserIds.length) throw new Error('User IDs must be specified');
 
 		let output: Item[] = [];
@@ -715,7 +715,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 
-	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery = '', count = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.innerJoin('items', 'user_items.item_id', 'items.id')
@@ -745,13 +745,13 @@ export default class ItemModel extends BaseModel<Item> {
 		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: ItemLoadOptions = {}): Promise<PaginatedItems> {
+	public async children(userId: Uuid, pathQuery = '', pagination: Pagination = null, options: ItemLoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
 		const query = this.childrenQuery(userId, pathQuery, false, options);
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
-	public async childrenCount(userId: Uuid, pathQuery: string = ''): Promise<number> {
+	public async childrenCount(userId: Uuid, pathQuery = ''): Promise<number> {
 		const query = this.childrenQuery(userId, pathQuery, true);
 		const r = await query.first();
 		return r ? r.total : 0;

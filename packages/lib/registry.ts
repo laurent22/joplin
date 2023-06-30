@@ -86,7 +86,7 @@ class Registry {
 		}
 	};
 
-	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck: boolean = false) => {
+	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {

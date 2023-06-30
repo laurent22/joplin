@@ -132,7 +132,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	private async exec_(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	private async exec_(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;
@@ -203,7 +203,7 @@ export default class JoplinServerApi {
 			};
 
 			// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
-			const newError = (message: string, code: number = 0) => {
+			const newError = (message: string, code = 0) => {
 				// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 				// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 				// return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
@@ -268,7 +268,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	public async exec(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		for (let i = 0; i < 2; i++) {
 			try {
 				const response = await this.exec_(method, path, query, body, headers, options);

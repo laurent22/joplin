@@ -101,7 +101,7 @@ export default class JoplinViewsPanels {
 	/**
 	 * Shows the panel
 	 */
-	public async show(handle: ViewHandle, show: boolean = true): Promise<void> {
+	public async show(handle: ViewHandle, show = true): Promise<void> {
 		await this.controller(handle).show(show);
 	}
 

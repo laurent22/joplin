@@ -21,7 +21,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	public async readFile(_path: string, _encoding: string = 'utf8'): Promise<any> {
+	public async readFile(_path: string, _encoding = 'utf8'): Promise<any> {
 		throw new Error('Not implemented');
 	}
 
@@ -41,7 +41,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
-	public async readFileChunk(_handle: any, _length: number, _encoding: string = 'base64'): Promise<string> {
+	public async readFileChunk(_handle: any, _length: number, _encoding = 'base64'): Promise<string> {
 		throw new Error('Not implemented');
 	}
 
@@ -70,7 +70,7 @@ export default class FsDriverBase {
 		return !stat ? false : stat.isDirectory();
 	}
 
-	public async writeFile(_path: string, _content: string, _encoding: string = 'base64'): Promise<void> {
+	public async writeFile(_path: string, _content: string, _encoding = 'base64'): Promise<void> {
 		throw new Error('Not implemented');
 	}
 
@@ -88,7 +88,7 @@ export default class FsDriverBase {
 		return output;
 	}
 
-	public async findUniqueFilename(name: string, reservedNames: string[] = null, markdownSafe: boolean = false): Promise<string> {
+	public async findUniqueFilename(name: string, reservedNames: string[] = null, markdownSafe = false): Promise<string> {
 		if (reservedNames === null) {
 			reservedNames = [];
 		}
@@ -128,7 +128,7 @@ export default class FsDriverBase {
 		}
 	}
 
-	public async waitTillExists(path: string, timeout: number = 10000) {
+	public async waitTillExists(path: string, timeout = 10000) {
 		const startTime = Date.now();
 
 		while (true) {

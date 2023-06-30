@@ -179,7 +179,7 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit: number = 100, options: any = null) {
+	public async lastEntries(limit = 100, options: any = null) {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];

@@ -47,7 +47,7 @@ function findBlockSource(node: any): SourceInfo {
 	};
 }
 
-function newBlockSource(language: string = '', content: string = '', previousSource: SourceInfo = null): SourceInfo {
+function newBlockSource(language = '', content = '', previousSource: SourceInfo = null): SourceInfo {
 	let fence = '```';
 
 	if (language === 'katex') {
