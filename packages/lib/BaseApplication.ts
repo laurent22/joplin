@@ -60,7 +60,6 @@ import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 
 import RotatingLogs from './RotatingLogs';
-import FsDriveNode from './fs-driver-node';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -929,8 +928,8 @@ export default class BaseApplication {
 
 		await MigrationService.instance().run();
 
-		RotatingLogs.fsDriver_ = new FsDriveNode();
-		new RotatingLogs(profileDir);
+		const rotationalLogs = new RotatingLogs(profileDir);
+		await rotationalLogs.rotateLogsFiles();
 
 		return argv;
 	}
