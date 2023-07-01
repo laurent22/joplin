@@ -23,7 +23,7 @@ enum ReportItemType {
 
 type RerportItemOrString = ReportItem | string;
 
-interface ReportSection {
+export interface ReportSection {
 	title: string;
 	body: RerportItemOrString[];
 	name?: string;
@@ -213,19 +213,15 @@ export default class ReportService {
 			section.body.push(_('Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.'));
 			section.body.push('');
 
+			const errorMessagesToItems: Map<string, ReportItem[]> = new Map();
+
 			for (let i = 0; i < decryptionDisabledItems.length; i++) {
 				const row = decryptionDisabledItems[i];
 
 				const resourceTypeName = toTitleCase(BaseModel.modelTypeToName(row.type_));
-				let message = _('%s: %s', resourceTypeName, row.id);
+				const message = _('%s: %s', resourceTypeName, row.id);
 
-				// If the error message is known, also include it in the output.
-				const itemError = DecryptionWorker.instance().getDecryptionError(row.id);
-				if (itemError) {
-					message = _('%s: %s (%s)', resourceTypeName, row.id, itemError);
-				}
-
-				section.body.push({
+				const item: ReportItem = {
 					text: message,
 					canRetry: true,
 					canRetryType: CanRetryType.E2EE,
@@ -233,7 +229,36 @@ export default class ReportService {
 						await DecryptionWorker.instance().retryDisabledItem(row.type_, row.id);
 						void DecryptionWorker.instance().scheduleStart();
 					},
-				});
+				};
+
+				const itemError = DecryptionWorker.instance().getDecryptionError(row.id);
+				if (itemError) {
+					// If the error message is known, postpone adding the repot item.
+					// Instead, add it under the error message as a heading
+					if (errorMessagesToItems.has(itemError)) {
+						errorMessagesToItems.get(itemError).push(item);
+					} else {
+						errorMessagesToItems.set(itemError, [item]);
+					}
+				} else {
+					// If there's no known error (e.g. the item was processed earlier and the
+					// error has been discarded), add the item directly:
+					section.body.push(item);
+				}
+			}
+
+			// Categorize any items under each known error:
+			let errorIdx = 0;
+			for (const itemError of errorMessagesToItems.keys()) {
+				section.body.push(_('Items with error: %s', itemError));
+
+				errorIdx++;
+				section.body.push({ type: ReportItemType.OpenList, key: `itemsWithError${errorIdx}` });
+
+				// Add all items associated with the header
+				section.body.push(...errorMessagesToItems.get(itemError));
+
+				section.body.push({ type: ReportItemType.CloseList });
 			}
 
 			section = this.addRetryAllHandler(section);

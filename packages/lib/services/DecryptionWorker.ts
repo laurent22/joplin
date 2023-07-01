@@ -17,6 +17,11 @@ interface DecryptionResult {
 	error: any;
 }
 
+interface ItemTypeAndId {
+	type_: number;
+	id: string;
+}
+
 export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
@@ -115,7 +120,7 @@ export default class DecryptionWorker {
 			};
 		});
 
-		type ItemRecordList = { type_: number; id: string }[];
+		type ItemRecordList = ItemTypeAndId[];
 		return items as ItemRecordList;
 	}
 
@@ -203,7 +208,7 @@ export default class DecryptionWorker {
 
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
-				const items = result.items;
+				const items: ItemTypeAndId[] = result.items;
 
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
