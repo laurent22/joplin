@@ -250,7 +250,8 @@ const EncryptionConfigScreen = (props: Props) => {
 			<div>
 				<h2>{_('Items encrypted with an unknown method')}</h2>
 				<p style={theme.textStyle}>{_(
-					'Some items were encrypted with an unknown method. These items may have been created with a newer version of Joplin than the current instance.'
+					'Some items were encrypted with an unknown method. These items may have been encrypted with a newer version of Joplin. '
+					+ 'An update may fix the issue.'
 				)}</p>
 				<button style={theme.buttonStyle} onClick={onCheckForUpdates}>{_('Check for updates...')}</button>
 			</div>
@@ -393,7 +394,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
-	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorTypes.some(
+	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorCodes.some(
 		errorType => errorType === UnknownDecryptionMethodError.code
 	);
 

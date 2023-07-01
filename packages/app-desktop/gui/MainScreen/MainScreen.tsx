@@ -615,6 +615,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Restart and upgrade'),
 				onRestartAndUpgrade
 			);
+		} else if (this.props.showUnknownEncryptionMethodMessage) {
+			msg = this.renderNotificationMessage(
+				_('One or more notes uses an unknown encryption method and could not be decrypted. These notes may have been encrypted by a newer version of Joplin.'),
+				_('More info'),
+				onViewEncryptionConfigScreen,
+				_('Check for updates'),
+				onCheckForUpdates
+			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be decrypted.'),
@@ -643,14 +651,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
 				_('Reject'),
 				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false)
-			);
-		} else if (this.props.showUnknownEncryptionMethodMessage) {
-			msg = this.renderNotificationMessage(
-				_('One or more notes uses an unknown encryption method and could not be decrypted. These notes may have been encrypted by a newer version of Joplin.'),
-				_('More info'),
-				onViewEncryptionConfigScreen,
-				_('Check for updates'),
-				onCheckForUpdates
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
@@ -894,8 +894,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
-	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorTypes.some(
-		errorType => errorType.code === UnknownDecryptionMethodError.code
+	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorCodes.some(
+		errorCode => errorCode === UnknownDecryptionMethodError.code
 	);
 
 	return {

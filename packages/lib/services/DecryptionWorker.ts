@@ -22,6 +22,8 @@ interface ItemTypeAndId {
 	id: string;
 }
 
+type ErrorHandlerType = 'log'|'dispatchAndLog';
+
 export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
@@ -36,7 +38,11 @@ export default class DecryptionWorker {
 	private maxDecryptionAttempts_ = 2;
 	private startCalls_: boolean[] = [];
 	private encryptionService_: EncryptionService = null;
-	private itemIdToErrorMap_: Map<string, string> = new Map();
+
+	// Error tracking
+	private itemIdToErrorCodeMap_: Record<string, string> = {};
+	private itemIdToErrorDetailMap_: Record<string, string> = {};
+	private errorCodeToCountMap_: Record<string, number> = {};
 
 	public constructor() {
 		this.state_ = 'idle';
@@ -98,13 +104,55 @@ export default class DecryptionWorker {
 	}
 
 	public getDecryptionError(itemId: string) {
-		if (!this.itemIdToErrorMap_.has(itemId)) {
+		if (!(itemId in this.itemIdToErrorCodeMap_)) {
 			// If there was an error, it happened in a previous attempt to decrypt
 			// (e.g. the app was restarted and this.itemIdToErrorMap_ was thus cleared).
 			return null;
 		}
 
-		return this.itemIdToErrorMap_.get(itemId);
+		return this.itemIdToErrorDetailMap_[itemId];
+	}
+
+	private clearErrorFor(itemId: string, errorHandler: ErrorHandlerType) {
+		if (itemId in this.itemIdToErrorCodeMap_) {
+			delete this.itemIdToErrorCodeMap_[itemId];
+			delete this.itemIdToErrorDetailMap_[itemId];
+			this.errorCodeToCountMap_[itemId] --;
+
+			// If the error was just cleared
+			if (this.errorCodeToCountMap_[itemId] === 0) {
+				delete this.errorCodeToCountMap_[itemId];
+
+				if (errorHandler === 'dispatchAndLog') {
+					this.dispatch({
+						type: 'SET_DECRYPTION_ERROR_LIST',
+						errorList: Object.keys(this.errorCodeToCountMap_),
+					});
+				}
+			}
+		}
+	}
+
+	private recordErrorFor(itemId: string, error: any, errorHandler: ErrorHandlerType) {
+		const errorCode = error.code ?? error.message;
+
+		const isNewError =
+			!(errorCode in this.errorCodeToCountMap_)
+			|| this.errorCodeToCountMap_[errorCode] === 0;
+
+		// Change the error associated with the ID
+		this.clearErrorFor(itemId, errorHandler);
+		this.itemIdToErrorCodeMap_[itemId] = errorCode;
+		this.itemIdToErrorDetailMap_[itemId] = `${error.message ?? error}`;
+		this.errorCodeToCountMap_[errorCode] ??= 0;
+		this.errorCodeToCountMap_[errorCode] ++;
+
+		if (errorHandler === 'dispatchAndLog' && isNewError) {
+			this.dispatch({
+				type: 'SET_DECRYPTION_ERROR_LIST',
+				errorList: Object.keys(this.errorCodeToCountMap_),
+			});
+		}
 	}
 
 	public async decryptionDisabledItems() {
@@ -195,8 +243,6 @@ export default class DecryptionWorker {
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
-		this.dispatch({ type: 'CLEAR_DECRYPTION_ERROR_LIST' });
-
 		const onItemDisabled = (itemType: number, itemId: string) => {
 			this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(itemType)} ${itemId}: Decryption has failed more than 2 times - skipping it`);
 			this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
@@ -204,7 +250,6 @@ export default class DecryptionWorker {
 
 		try {
 			const notLoadedMasterKeyDisptaches = [];
-			const dispatchedErrorTypes = [];
 
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
@@ -240,7 +285,7 @@ export default class DecryptionWorker {
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
-						this.itemIdToErrorMap_.delete(item.id);
+						this.clearErrorFor(item.id, options.errorHandler);
 
 						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
 
@@ -287,20 +332,9 @@ export default class DecryptionWorker {
 							throw error;
 						}
 
+						this.recordErrorFor(item.id, error, options.errorHandler);
+
 						if (options.errorHandler === 'log' || options.errorHandler === 'dispatchAndLog') {
-							const errorType = error.code;
-
-							if (options.errorHandler === 'dispatchAndLog' && dispatchedErrorTypes.indexOf(errorType) === -1) {
-								this.dispatch({
-									type: 'UPDATE_DECRYPTION_ERROR_LIST',
-									errorType,
-								});
-
-								// Add the error's type to the list
-								dispatchedErrorTypes.push(errorType);
-							}
-
-							this.itemIdToErrorMap_.set(item.id, `${error.message ?? error}`);
 							this.logger().warn(`DecryptionWorker: error for: ${item.id} (${ItemClass.tableName()})`, error, item);
 						} else {
 							throw error;

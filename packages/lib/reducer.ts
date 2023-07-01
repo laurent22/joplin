@@ -82,7 +82,7 @@ export interface State {
 	biometricsDone: boolean;
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
-	decryptionErrorTypes: any[];
+	decryptionErrorCodes: any[];
 	customCss: string;
 	hasLegacyTemplates: boolean;
 	collapsedFolderIds: string[];
@@ -139,7 +139,7 @@ export const defaultState: State = {
 	biometricsDone: false,
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
-	decryptionErrorTypes: [],
+	decryptionErrorCodes: [],
 	customCss: '',
 	hasLegacyTemplates: false,
 	collapsedFolderIds: [],
@@ -1022,12 +1022,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
-		case 'CLEAR_DECRYPTION_ERROR_LIST':
-			draft.decryptionErrorTypes = [];
-			break;
-
-		case 'UPDATE_DECRYPTION_ERROR_LIST':
-			draft.decryptionErrorTypes.push(action.errorType);
+		case 'SET_DECRYPTION_ERROR_LIST':
+			draft.decryptionErrorCodes = [...action.errorList];
 			break;
 
 		case 'CONTAINS_LEGACY_TEMPLATES':
