@@ -895,7 +895,7 @@ const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
 	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorTypes.some(
-		errorType => errorType === UnknownDecryptionMethodError.prototype
+		errorType => errorType.code === UnknownDecryptionMethodError.code
 	);
 
 	return {

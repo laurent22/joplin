@@ -288,7 +288,7 @@ export default class DecryptionWorker {
 						}
 
 						if (options.errorHandler === 'log' || options.errorHandler === 'dispatchAndLog') {
-							const errorType = Object.getPrototypeOf(error);
+							const errorType = error.code;
 
 							if (options.errorHandler === 'dispatchAndLog' && dispatchedErrorTypes.indexOf(errorType) === -1) {
 								this.dispatch({

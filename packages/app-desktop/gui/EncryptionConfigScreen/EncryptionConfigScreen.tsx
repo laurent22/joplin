@@ -394,7 +394,7 @@ const EncryptionConfigScreen = (props: Props) => {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
 	const hasItemsWithUnknownEncryptionMethod = state.decryptionErrorTypes.some(
-		errorType => errorType === UnknownDecryptionMethodError.prototype
+		errorType => errorType === UnknownDecryptionMethodError.code
 	);
 
 	return {
