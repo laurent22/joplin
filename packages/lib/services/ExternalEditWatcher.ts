@@ -12,7 +12,9 @@ const { ErrorNotFound } = require('./rest/utils/errors');
 
 export default class ExternalEditWatcher {
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private bridge_: Function;
 	private logger_: Logger = new Logger();
 	private watcher_: any = null;
@@ -28,6 +30,7 @@ export default class ExternalEditWatcher {
 		return this.instance_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public initialize(bridge: Function, dispatch: Function) {
 		this.bridge_ = bridge;
 		this.dispatch = dispatch;
@@ -59,10 +62,12 @@ export default class ExternalEditWatcher {
 		return Setting.value('profileDir');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}

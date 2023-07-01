@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import eventManager from '../../../eventManager';
 import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } from '../../../models/Setting';
 import Plugin from '../Plugin';

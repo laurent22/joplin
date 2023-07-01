@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import { EditorSelection, EditorState } from '@codemirror/state';

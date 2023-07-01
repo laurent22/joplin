@@ -174,7 +174,7 @@ export function syncInfoEquals(s1: SyncInfo, s2: SyncInfo): boolean {
 
 export class SyncInfo {
 
-	private version_: number = 0;
+	private version_ = 0;
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
@@ -296,7 +296,7 @@ export function getEncryptionEnabled() {
 	return localSyncInfo().e2ee;
 }
 
-export function setEncryptionEnabled(v: boolean, activeMasterKeyId: string = '') {
+export function setEncryptionEnabled(v: boolean, activeMasterKeyId = '') {
 	const s = localSyncInfo();
 	s.e2ee = v;
 	if (activeMasterKeyId) s.activeMasterKeyId = activeMasterKeyId;
@@ -319,7 +319,7 @@ export function getActiveMasterKey(s: SyncInfo = null): MasterKeyEntity | null {
 	return s.masterKeys.find(mk => mk.id === s.activeMasterKeyId);
 }
 
-export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
+export function setMasterKeyEnabled(mkId: string, enabled = true) {
 	const s = localSyncInfo();
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);

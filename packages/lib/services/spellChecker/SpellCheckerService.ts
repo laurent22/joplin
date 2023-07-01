@@ -45,6 +45,7 @@ export default class SpellCheckerService {
 		}
 
 		if (languages.length > languagesHistorySizeMax) {
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			this.latestSelectedLanguages_.forEach(l => {
 				if (!this.languages.includes(l) && languages.length > languagesHistorySizeMax) languages.splice(languages.indexOf(l), 1);
 			});

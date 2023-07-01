@@ -360,7 +360,7 @@ function tagAttributeToMdText(attr: string): string {
 	return attr;
 }
 
-function addResourceTag(lines: string[], resource: ResourceEntity, alt: string = ''): string[] {
+function addResourceTag(lines: string[], resource: ResourceEntity, alt = ''): string[] {
 	// Note: refactor to use Resource.markdownTag
 
 	if (!alt) alt = resource.title;

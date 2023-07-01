@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function useOnMessage(onCheckboxChange: Function, noteBody: string, onMarkForDownload: Function, onJoplinLinkClick: Function, onResourceLongPress: Function) {
 	return useCallback((event: any) => {
 		// 2021-05-19: Historically this was unescaped twice as it was

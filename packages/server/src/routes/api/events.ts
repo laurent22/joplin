@@ -9,6 +9,7 @@ interface Event {
 	name: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 const supportedEvents: Record<string, Function> = {
 	syncStart: async (_ctx: AppContext) => {
 		// await ctx.joplin.models.share().updateSharedItems2(ctx.joplin.owner.id);

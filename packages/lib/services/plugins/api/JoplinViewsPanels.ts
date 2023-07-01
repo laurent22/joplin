@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
@@ -74,6 +76,7 @@ export default class JoplinViewsPanels {
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
 	 *
 	 */
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onMessage(handle: ViewHandle, callback: Function): Promise<void> {
 		return this.controller(handle).onMessage(callback);
 	}
@@ -101,7 +104,7 @@ export default class JoplinViewsPanels {
 	/**
 	 * Shows the panel
 	 */
-	public async show(handle: ViewHandle, show: boolean = true): Promise<void> {
+	public async show(handle: ViewHandle, show = true): Promise<void> {
 		await this.controller(handle).show(show);
 	}
 

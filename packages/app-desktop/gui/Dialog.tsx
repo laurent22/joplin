@@ -26,8 +26,10 @@ const DialogRoot = styled.div`
 `;
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderContent: Function;
 	className?: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose?: Function;
 }
 

@@ -44,6 +44,7 @@ export default class OneDriveApi {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		this.listeners_[eventName].push(callback);
 	}

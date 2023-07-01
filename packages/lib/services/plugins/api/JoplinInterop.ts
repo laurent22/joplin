@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import InteropService from '../../interop/InteropService';
 import { Module, ModuleType } from '../../interop/types';
 import { ExportModule, ImportModule } from './types';

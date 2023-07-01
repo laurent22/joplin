@@ -137,7 +137,7 @@ export default class TaskService extends BaseService {
 		logger.info(`Completed ${this.taskDisplayString(id)} in ${Date.now() - startTime}ms`);
 	}
 
-	public async enableTask(taskId: TaskId, enabled: boolean = true) {
+	public async enableTask(taskId: TaskId, enabled = true) {
 		await this.models.taskState().enable(taskId, enabled);
 	}
 

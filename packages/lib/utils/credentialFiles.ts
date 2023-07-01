@@ -39,7 +39,7 @@ export function credentialFile(filename: string) {
 	return output;
 }
 
-export function readCredentialFile(filename: string, defaultValue: string = '') {
+export function readCredentialFile(filename: string, defaultValue = '') {
 	try {
 		const filePath = credentialFile(filename);
 		const r = readFileSync(filePath);

@@ -36,9 +36,13 @@ interface Props {
 	inputRef?: any;
 	value: string;
 	onChange(event: OnChangeEvent): void;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onFocus?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onBlur?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onKeyDown?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSearchButtonClick: Function;
 	searchStarted: boolean;
 	placeholder?: string;

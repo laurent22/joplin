@@ -62,6 +62,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const editorRef = useRef(null);
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
@@ -863,6 +864,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				}));
 			}
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});

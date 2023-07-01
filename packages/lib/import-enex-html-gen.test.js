@@ -28,17 +28,15 @@ const beautifyHtml = (html) => {
 	});
 };
 
-/**
- * Tests the importer for a single note, checking that the result of
- * processing the given `.enex` input file matches the contents of the given
- * `.html` file.
- *
- * Note that this does not test the importing of an entire exported `.enex`
- * archive, but rather a single node of such a file. Thus, the test data files
- * (e.g. `./enex_to_html/code1.enex`) correspond to the contents of a single
- * `<note>...</note>` node in an `.enex` file already extracted from
- * `<content><![CDATA[...]]</content>`.
- */
+// Tests the importer for a single note, checking that the result of
+// processing the given `.enex` input file matches the contents of the given
+// `.html` file.
+//
+// Note that this does not test the importing of an entire exported `.enex`
+// archive, but rather a single node of such a file. Thus, the test data files
+// (e.g. `./enex_to_html/code1.enex`) correspond to the contents of a single
+// `<note>...</note>` node in an `.enex` file already extracted from
+// `<content><![CDATA[...]]</content>`.
 const compareOutputToExpected = (options) => {
 	options = {
 		resources: [],

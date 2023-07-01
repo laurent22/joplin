@@ -7,6 +7,7 @@ const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
 const { Platform } = require('react-native');
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {

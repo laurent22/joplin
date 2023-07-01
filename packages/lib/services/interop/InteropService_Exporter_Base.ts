@@ -6,14 +6,10 @@ export default class InteropService_Exporter_Base {
 	private context_: any = {};
 	private metadata_: any = {};
 
-	// @ts-ignore
-	public async init(destDir: string, options: any = {}) {}
-	// @ts-ignore
-	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {}
-	// @ts-ignore
-	public async processItem(itemType: number, item: any) {}
-	// @ts-ignore
-	public async processResource(resource: any, filePath: string) {}
+	public async init(_destDir: string, _options: any = {}) {}
+	public async prepareForProcessingItemType(_itemType: number, _itemsToExport: any[]) {}
+	public async processItem(_itemType: number, _item: any) {}
+	public async processResource(_resource: any, _filePath: string) {}
 	public async close() {}
 
 	public setMetadata(md: any) {

@@ -1,6 +1,7 @@
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import { useEffect } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(frameWindow: any, isReady: boolean, pluginId: string, viewId: string, postMessage: Function) {
 	useEffect(() => {
 		PostMessageService.instance().registerResponder(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {

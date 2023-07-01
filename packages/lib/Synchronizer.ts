@@ -49,14 +49,14 @@ function isCannotSyncError(error: any): boolean {
 
 export default class Synchronizer {
 
-	public static verboseMode: boolean = true;
+	public static verboseMode = true;
 
 	private db_: JoplinDatabase;
 	private api_: FileApi;
 	private appType_: AppType;
 	private logger_: Logger = new Logger();
-	private state_: string = 'idle';
-	private cancelling_: boolean = false;
+	private state_ = 'idle';
+	private cancelling_ = false;
 	public maxResourceSize_: number = null;
 	private downloadQueue_: any = null;
 	private clientId_: string;
@@ -64,7 +64,7 @@ export default class Synchronizer {
 	private migrationHandler_: MigrationHandler;
 	private encryptionService_: EncryptionService = null;
 	private resourceService_: ResourceService = null;
-	private syncTargetIsLocked_: boolean = false;
+	private syncTargetIsLocked_ = false;
 	private shareService_: ShareService = null;
 	private lockClientType_: LockClientType = null;
 
@@ -72,9 +72,11 @@ export default class Synchronizer {
 	// such as cancelling in the middle of a loop.
 	public testingHooks_: string[] = [];
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private onProgress_: Function;
 	private progressReport_: any = {};
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function;
 
 	public constructor(db: JoplinDatabase, api: FileApi, appType: AppType) {
@@ -193,7 +195,7 @@ export default class Synchronizer {
 		return lines;
 	}
 
-	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
+	public logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);

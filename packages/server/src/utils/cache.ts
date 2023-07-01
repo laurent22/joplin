@@ -18,7 +18,7 @@ class Cache {
 		};
 	}
 
-	public async setObject(key: string, object: Object): Promise<void> {
+	public async setObject(key: string, object: any): Promise<void> {
 		if (!object) return;
 		return this.setAny(key, object);
 	}

@@ -90,10 +90,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		return splitted.join('#');
 	}
 
-	/**
-	 * Parse text for links, attempt to find local file, if found create Joplin resource
-	 * and update link accordingly.
-	 */
+	// Parse text for links, attempt to find local file, if found create Joplin resource
+	// and update link accordingly.
 	public async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
 		const markdownLinks = markdownUtils.extractFileUrls(md);

@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
 	const scrollTimeoutId_ = useRef<any>(null);
 	const scrollPercent_ = useRef(0);

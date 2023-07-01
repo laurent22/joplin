@@ -80,7 +80,7 @@ const appDefaultState = createAppDefaultState(
 class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
-	private initPluginServiceDone_: boolean = false;
+	private initPluginServiceDone_ = false;
 
 	public constructor() {
 		super();

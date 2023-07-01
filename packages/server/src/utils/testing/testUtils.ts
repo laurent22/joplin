@@ -259,7 +259,7 @@ interface CreateUserAndSessionOptions {
 	password?: string;
 }
 
-export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
+export const createUserAndSession = async function(index = 1, isAdmin = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
 	const password = uuidgen();
 
 	options = {
@@ -278,7 +278,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 	};
 };
 
-export const createUser = async function(index: number = 1, isAdmin: boolean = false): Promise<User> {
+export const createUser = async function(index = 1, isAdmin = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
@@ -435,6 +435,7 @@ export function readCredentialFileSync(filename: string, defaultValue: string = 
 	return r.toString();
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {
 		await asyncFn();
@@ -444,6 +445,7 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
@@ -466,6 +468,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
@@ -486,6 +489,7 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectNoHttpError(asyncFn: Function): Promise<void> {
 	let thrownError = null;
 
@@ -574,6 +578,7 @@ is_shared: 0
 type_: 4`;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectNotThrow(asyncFn: Function) {
 	let thrownError = null;
 	try {

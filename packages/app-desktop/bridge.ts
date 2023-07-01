@@ -88,6 +88,7 @@ export class Bridge {
 	// Perhaps the easiest would be to patch electron-context-menu to
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
 		require('electron-context-menu')({
 			allWindows: [this.window()],
@@ -255,6 +256,7 @@ export class Bridge {
 		return nativeTheme.shouldUseDarkColors;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public addEventListener(name: string, fn: Function) {
 		if (name === 'nativeThemeUpdated') {
 			nativeTheme.on('updated', fn);
