@@ -79,14 +79,18 @@ const getListItemsInBodyStartingWith = (section: ReportSection, keyPrefix: strin
 	);
 };
 
-const sectionBodyToContainsAllItemsOf = (section: ReportSection, searchText: string[]) => {
-	const asText = section.body.map(item => {
+const sectionBodyToText = (section: ReportSection) => {
+	return section.body.map(item => {
 		if (typeof item === 'string') {
 			return item;
 		}
 
 		return item.text;
 	}).join('\n');
+};
+
+const sectionBodyToContainsAllItemsOf = (section: ReportSection, searchText: string[]) => {
+	const asText = sectionBodyToText(section);
 
 	for (const testText of searchText) {
 		if (asText.indexOf(testText) === -1) {
@@ -94,6 +98,17 @@ const sectionBodyToContainsAllItemsOf = (section: ReportSection, searchText: str
 		}
 	}
 	return true;
+};
+
+const sectionBodyToContainsAnyItemOf = (section: ReportSection, searchText: string[]) => {
+	const asText = sectionBodyToText(section);
+
+	for (const testText of searchText) {
+		if (asText.indexOf(testText) !== -1) {
+			return true;
+		}
+	}
+	return false;
 };
 
 describe('ReportService', () => {
@@ -175,5 +190,54 @@ describe('ReportService', () => {
 
 		// There should, however, be testIds.length ReportItems with the IDs of the notes.
 		expect(sectionBodyToContainsAllItemsOf(undecryptableInfoSection, corruptedNoteIds)).toBe(true);
+	});
+
+	it('retry callback should return failed items to the "cannot be decrypted" list', async () => {
+		const service = new ReportService();
+		const syncTargetId = SyncTargetRegistry.nameToId('filesystem');
+		let report = await service.status(syncTargetId);
+
+		// Initially, should not have a "cannot be decrypted section"
+		expect(getDecyptionErrorSection(report)).toBeNull();
+
+		const corruptedNoteIds = await addCorruptedNotes(4);
+		const uncorruptedNoteIds = await addUncorruptedNotes(4);
+
+		// Disable decryption for all notes
+		await addIdsToUndecryptableList(decryptionWorker(), [
+			...corruptedNoteIds, ...uncorruptedNoteIds,
+		]);
+
+		// Because all items are disabled, this should not throw.
+		await decryptionWorker().start({ errorHandler: 'throw' });
+
+		// This should be true even if we call .start several times:
+		await decryptionWorker().start({ errorHandler: 'throw' });
+		await decryptionWorker().start({ errorHandler: 'throw' });
+
+		// The report should have a "cannot be decrypted section"
+		// that can be refreshed.
+		report = await service.status(syncTargetId);
+
+		let undecryptableInfoSection = getDecyptionErrorSection(report);
+		expect(undecryptableInfoSection).not.toBeNull();
+
+		const retryHandlers = undecryptableInfoSection.body.filter(item => {
+			return typeof item !== 'string' && item.canRetryType === 'e2ee';
+		}).map(item => (item as any).retryHandler);
+
+		// Retry all (individually)
+		await Promise.all(retryHandlers.map(handler => handler()));
+
+		// Call .start manually so we don't have to wait (there can be a delay
+		// between calling retry and the effects).
+		await decryptionWorker().start();
+
+		report = await service.status(syncTargetId);
+		undecryptableInfoSection = getDecyptionErrorSection(report);
+		expect(undecryptableInfoSection).not.toBeNull();
+
+		expect(sectionBodyToContainsAllItemsOf(undecryptableInfoSection, corruptedNoteIds)).toBe(true);
+		expect(sectionBodyToContainsAnyItemOf(undecryptableInfoSection, uncorruptedNoteIds)).toBe(false);
 	});
 });
