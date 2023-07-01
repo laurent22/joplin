@@ -644,6 +644,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Reject'),
 				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false)
 			);
+		} else if (this.props.showUnknownEncryptionMethodMessage) {
+			msg = this.renderNotificationMessage(
+				_('One or more notes uses an unknown encryption method and could not be decrypted. These notes may have been encrypted by a newer version of Joplin.'),
+				_('More info'),
+				onViewEncryptionConfigScreen,
+				_('Check for updates'),
+				onCheckForUpdates
+			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be synchronised.'),
@@ -655,14 +663,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('One or more master keys need a password.'),
 				_('Set the password'),
 				onViewEncryptionConfigScreen
-			);
-		} else if (this.props.showUnknownEncryptionMethodMessage) {
-			msg = this.renderNotificationMessage(
-				_('One or more notes uses an unknown encryption method and could not be decrypted. These notes may have been encrypted by a newer version of Joplin.'),
-				_('More info'),
-				onViewEncryptionConfigScreen,
-				_('Check for updates'),
-				onCheckForUpdates
 			);
 		} else if (this.props.showInstallTemplatesPlugin) {
 			msg = this.renderNotificationMessage(
