@@ -2,7 +2,7 @@ import { _ } from '../../locale';
 
 const initializeErrorSubclass = (instance: any, clss: any) => {
 	// See https://github.com/microsoft/TypeScript-wiki/blob/c1978865f2560a14aa6993b93a1b5c6383f7fed4/Breaking-Changes.md?plain=1#L2341
-	Object.setPrototypeOf(this, clss.prototype);
+	Object.setPrototypeOf(instance, clss.prototype);
 
 	// Also assume all error objects have a "code" property that they inherit
 	instance.code = clss.code;
