@@ -3545,6 +3545,86 @@ This release is mainly to fix various issues with the recently released Web Clip
 - Fix: Identify another Dropbox missing auth error, to allow resetting the token
 - Fixes [#531](https://github.com/laurent22/joplin/issues/531): Get WebDAV to work with certain servers that require a trailing slash on directories
 
+## [v1.0.94](https://github.com/laurent22/joplin/releases/tag/v1.0.94) - 2018-05-21T20:52:59Z
+
+- New: Allow copying path of resources
+- New: Adds functionality to allow for renaming of tags.
+- Improved: Evernote import
+- Fixes [#536](https://github.com/laurent22/joplin/issues/536): Allow changing sync target file path
+- Fixes [#535](https://github.com/laurent22/joplin/issues/535): Note preview was not always updated when it should
+- Fixes [#491](https://github.com/laurent22/joplin/issues/491): Handle non-standard ports and better handling of fetchBlob errors
+- Fixes [#528](https://github.com/laurent22/joplin/issues/528): Set translation in bridge functions too
+- Fixes [#527](https://github.com/laurent22/joplin/issues/527): Remove empty section separators from menus
+- Fix: Added styles to fix margin bottom for  nested lists
+
+## [v1.0.93](https://github.com/laurent22/joplin/releases/tag/v1.0.93) - 2018-05-14T11:36:01Z
+
+- New: A portable version is now available. To install it simply copy the file "JoplinPortable.exe" to your USB device. See the documentation for more information - https://joplin.cozic.net/#desktop-applications
+- Improved: Made import of ENEX files more robust and accurate
+- Improved: Auto-update process should be more reliable.
+- Fixed: Made sync-after-save interval longer to made synchronisations less frequent.
+
+## [v1.0.91](https://github.com/laurent22/joplin/releases/tag/v1.0.91) - 2018-05-10T14:48:04Z
+
+Same as v1.0.90 but with a fix for [#510](https://github.com/laurent22/joplin/issues/510) 
+
+- New: Resolves [#345](https://github.com/laurent22/joplin/issues/345): Option to hide completed todos
+- New: Resolves [#200](https://github.com/laurent22/joplin/issues/200), Resolves [#416](https://github.com/laurent22/joplin/issues/416): Allow attaching images by pasting them in. Allow attaching files by drag and dropping them. Insert attachment at cursor position.
+- Improved: Resolves [#443](https://github.com/laurent22/joplin/issues/443): Various optimisations to make dealing with large notes easier and make Katex re-rendering faster
+- Fixes [#481](https://github.com/laurent22/joplin/issues/481): Keyboard shortcuts were not working when text editor had focus in macOS
+- Fixed: Tag display
+- Security: Resolves [#500](https://github.com/laurent22/joplin/issues/500): Fixed XSS security vulnerability
+
+## [v1.0.89](https://github.com/laurent22/joplin/releases/tag/v1.0.89) - 2018-05-09T13:05:05Z
+
+- New: Resolves [#122](https://github.com/laurent22/joplin/issues/122): Added support for sub-notebooks. Please see doc for more info: https://joplin.cozic.net/#sub-notebooks
+- Improved: Export/Import links to notes
+- Fixes [#480](https://github.com/laurent22/joplin/issues/480): Ignore invalid flag automatically passed by macOS
+- Fixes [#61](https://github.com/laurent22/joplin/issues/61): Handle path that ends with slash for file system sync
+
+## [v1.0.85](https://github.com/laurent22/joplin/releases/tag/v1.0.85) - 2018-05-01T21:08:24Z
+
+Note: This is the same as v84 but with the note creation bug fixed.
+
+- New: Windows 32-bit support
+- New: Button to toggle the sidebar
+- Improved: Better handling of resources that are incorrectly flagged as encrypted
+- Improved: Various changes to make PortableApps format work
+- Improved: Resolves [#430](https://github.com/laurent22/joplin/issues/430): Support lowercase "x" in Markdown checkboxes
+- Fixes [#346](https://github.com/laurent22/joplin/issues/346): Make sure links have an address when exporting to PDF
+- Fixes [#355](https://github.com/laurent22/joplin/issues/355): Set undo state properly when loading new note to prevent overwriting content of one note with another
+- Fixes [#363](https://github.com/laurent22/joplin/issues/363): indentation and rendering of lists
+- Fixes [#470](https://github.com/laurent22/joplin/issues/470): Make it clear that spaces in URLs are invalid.
+- Fixes [#434](https://github.com/laurent22/joplin/issues/434): Handle Katex block mode
+
+## [v1.0.83](https://github.com/laurent22/joplin/releases/tag/v1.0.83) - 2018-04-04T19:43:58Z
+
+- Fixes [#365](https://github.com/laurent22/joplin/issues/365): Cannot paste in Dropbox screen
+
+## [v1.0.82](https://github.com/laurent22/joplin/releases/tag/v1.0.82) - 2018-03-31T19:16:31Z
+
+- Updated translations
+
+## [v1.0.81](https://github.com/laurent22/joplin/releases/tag/v1.0.81) - 2018-03-28T08:13:58Z
+
+- New: Dropbox synchronisation
+- New: Czech translation
+- Fixes [#318](https://github.com/laurent22/joplin/issues/318): Display full links in editor
+- Resolves [#329](https://github.com/laurent22/joplin/issues/329): Add link to E2EE doc
+
+## [v1.0.79](https://github.com/laurent22/joplin/releases/tag/v1.0.79) - 2018-03-23T18:00:11Z
+
+- New: Resolves [#144](https://github.com/laurent22/joplin/issues/144), Resolves [#311](https://github.com/laurent22/joplin/issues/311): Highlight search results and search in real time. Associated Ctrl+F with searching.
+- New: Resolves [#73](https://github.com/laurent22/joplin/issues/73): Show modified date next to note in editor
+- New: Danish translation
+- Improved: Fixes [#318](https://github.com/laurent22/joplin/issues/318), Fixes [#317](https://github.com/laurent22/joplin/issues/317): ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.
+- Updated: Resolves [#307](https://github.com/laurent22/joplin/issues/307): Use blue colour for sidebar, to be consistent with mobile app and logo
+- Updated: Translations
+
+## [v1.0.78](https://github.com/laurent22/joplin/releases/tag/v1.0.78) - 2018-03-17T15:27:18Z
+
+- Improved: Handle deletion of resources that are not linked to any note
+
 ## [v1.0.77](https://github.com/laurent22/joplin/releases/tag/v1.0.77) - 2018-03-16T15:12:35Z
 
 Note: This fixes an invalid database upgrade in the previous version.
@@ -3645,6 +3725,18 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixed: Attaching images in Linux was no longer working
 - Fixed crash in macOS
 
+## [v0.10.54](https://github.com/laurent22/joplin/releases/tag/v0.10.54) - 2018-01-31T20:21:30Z
+
+- Optimised Nextcloud functionality so that it is faster and consumes less resources
+- Fixed Nextcloud sync issue when processing many items.
+- Fixed: Handle case where file is left half-uploaded on Nextcloud instance (possibly an ocloud.de issue only)
+- Fixed: Allow decryption of other items to continue even if an item cannot be decrypted
+- Add Content-Size header for WebDAV, which is required by some services
+- Fixed auto-title when title is manually entered first
+- Improved auto-update process to avoid random crashes
+- New: Allow focusing either title or body when creating a new note or to-do
+- Fixed crash when having invalid UTF-8 string in text editor
+
 ## [v0.10.52](https://github.com/laurent22/joplin/releases/tag/v0.10.52) - 2018-01-31T19:25:18Z
 
 - Optimised Nextcloud functionality so that it is faster and consumes less resources
@@ -3670,85 +3762,6 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Dutch translation (Thanks @tcassaert)
 - Removed certain log statements so that sensitive info doesn't end up in logs
 - Fix: Handle case where resource blob is missing during sync
-
-## [v0.10.47](https://github.com/laurent22/joplin/releases/tag/v0.10.47) - 2018-01-16T17:27:17Z
-
-- Improved the way new note are created, and automatically add a title. Made saving and loading notes more reliable.
-- Fix: race condition when a note is being uploaded while it's being modified in the text editor
-- Fixes [#129](https://github.com/laurent22/joplin/issues/129): Tags are case insensitive
-- Schedule sync only after 30 seconds
-- Schedule sync after enabling or disabling encryption
-- Display sync items being fetched
-- Fixed logic of what note is used when right-clicking one or more notes
-- Fix: Don't scroll back to top when note is reloaded via sync
-- Display URL for links
-- Fix: Move prompt to top to avoid issue with date picker being hidden
-- Fixed table font size and family
-- Fixed logic to save, and make sure scheduled save always happen even when changing note
-- Fixed OneDrive sync when resync is requested
-- Fixes [#85](https://github.com/laurent22/joplin/issues/85): Don't record deleted_items entries for folders deleted via sync
-- Updated translations
-
-## [v0.10.43](https://github.com/laurent22/joplin/releases/tag/v0.10.43) - 2018-01-08T10:12:10Z
-
-- Fixed saving and loading of settings, which could affect synchronisation
-
-## [v0.10.41](https://github.com/laurent22/joplin/releases/tag/v0.10.41) - 2018-01-05T20:38:12Z
-
-- Added End-To-End Encryption support (E2EE)
-
-## [v0.10.40](https://github.com/laurent22/joplin/releases/tag/v0.10.40) - 2018-01-02T23:16:57Z
-
-- Fixed undo in text editor
-- Updated German translation
-- Added Russian, Japanese and Chinese translations
-
-## [v0.10.39](https://github.com/laurent22/joplin/releases/tag/v0.10.39) - 2017-12-11T21:19:44Z
-
-- Fixes [#55](https://github.com/laurent22/joplin/issues/55): Added support for HTML tags found in ENEX files: colgroup, col, ins, kbd, address, caption, var, area, map
-- Resolve [#7](https://github.com/laurent22/joplin/issues/7): Show storage location in Options screen
-- Fixes [#84](https://github.com/laurent22/joplin/issues/84): Fields losing focus in Config screen
-- Fixes [#86](https://github.com/laurent22/joplin/issues/86): App icon missing on Linux
-- Fixes [#87](https://github.com/laurent22/joplin/issues/87): Show warningn when deleting notebook that contains notes.
-- Fixes [#3](https://github.com/laurent22/joplin/issues/3): Paths with '.' would cause JSX compilation to fail
-
-## [v0.10.37](https://github.com/laurent22/joplin/releases/tag/v0.10.37) - 2017-12-07T19:38:05Z
-
-- Better handling of items that cannot be synchronised (for example, if they exceed the max file size supported by the target)
-- Added Synchronisation Status screen
-- Improved Enex support:
-    - Better handling of notes containing entire web pages (such as when imported via Web Clipper)
-    - Support for `<img>` tags
-    - Support for various other tags
-    - Improved importing web pages that contain tables within tables. In which case the outer tables (which are usually the website layout) are rendered as regular text block and only the inner tables are actually rendered as tables.
-     - Fixed many other minor warnings and errors
-- Allow setting installation directory in Windows
-
-## [v0.10.36](https://github.com/laurent22/joplin/releases/tag/v0.10.36) - 2017-12-05T09:34:40Z
-
-- All: Improved synchronisation when sync target has unreliable timestamps
-- All: Fixed display issue - when items were modified during sync it could result in blank rows being displayed in note lists.
-
-## [v0.10.35](https://github.com/laurent22/joplin/releases/tag/v0.10.35) - 2017-12-02T15:56:08Z
-
-- All: Fixed sync issue and database migration issue
-
-## [v0.10.34](https://github.com/laurent22/joplin/releases/tag/v0.10.34) - 2017-12-02T14:50:28Z
-
-- All: fixed database creation error
-- All: Improved Evernote import for blockquotes and sup tags
-- CLI: Fixed crash when inputting command without closed quote
-- CLI: Allow Backspace key to delete items on macOS
-- Electron: Fixed header font sizes
-- Electron: Fix [#33](https://github.com/laurent22/joplin/issues/33): Allow copy and paste in OneDrive login
-- Electron: Fixes [#32](https://github.com/laurent22/joplin/issues/32): Error when manually input alarm date
-- Electron: Allow attaching multiple files
-- All: Allow attaching files of unknown mime type
-- All: Added error for OneDrive for Business
-
-## [v0.10.33](https://github.com/laurent22/joplin/releases/tag/v0.10.33) - 2017-12-02T13:20:39Z
-
-- Improved Evernote import for blockquotes and sup tags
 
 ## [v0.10.47](https://github.com/laurent22/joplin/releases/tag/v0.10.47) - 2018-01-16T17:27:17Z
 
