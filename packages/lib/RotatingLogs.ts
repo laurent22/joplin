@@ -18,7 +18,7 @@ export default class RotatingLogs {
 	}
 
 	public async cleanActiveLogFile() {
-		const stats = await this.fsDriver().stat(this.logFileFullpath());
+		const stats: Stat = await this.fsDriver().stat(this.logFileFullpath());
 		const logFileSizeInBytes: number = stats.size;
 		if (logFileSizeInBytes >= this.activeLogFileMaximumSizeInBytes) {
 			const newLogFile: string = this.logFileFullpath(this.getNameToNonActiveLogFile());
