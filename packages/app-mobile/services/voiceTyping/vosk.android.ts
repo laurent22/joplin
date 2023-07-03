@@ -1,5 +1,7 @@
 import { languageCodeOnly } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
+import Setting from '@joplin/lib/models/Setting';
+import { rtrimSlashes } from '@joplin/lib/path-utils';
 import shim from '@joplin/lib/shim';
 import Vosk from 'react-native-vosk';
 import { unzip } from 'react-native-zip-archive';
@@ -31,9 +33,9 @@ export interface Recorder {
 	cleanup: ()=> void;
 }
 
-const supportedLanguages = {
+const defaultSupportedLanguages = {
 	'en': 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip',
-	'cn': 'https://alphacephei.com/vosk/models/vosk-model-small-cn-0.22.zip',
+	'zh': 'https://alphacephei.com/vosk/models/vosk-model-small-cn-0.22.zip',
 	'ru': 'https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip',
 	'fr': 'https://alphacephei.com/vosk/models/vosk-model-small-fr-0.22.zip',
 	'de': 'https://alphacephei.com/vosk/models/vosk-model-small-de-0.15.zip',
@@ -54,7 +56,7 @@ const supportedLanguages = {
 
 export const isSupportedLanguage = (locale: string) => {
 	const l = languageCodeOnly(locale).toLowerCase();
-	return Object.keys(supportedLanguages).includes(l);
+	return Object.keys(defaultSupportedLanguages).includes(l);
 };
 
 // Where all the models files for all the languages are
@@ -73,9 +75,18 @@ const getModelDir = (locale: string) => {
 };
 
 const languageModelUrl = (locale: string) => {
-	const l = languageCodeOnly(locale).toLowerCase();
-	if (!(l in supportedLanguages)) throw new Error(`No language file for: ${locale}`);
-	return (supportedLanguages as any)[l];
+	const lang = languageCodeOnly(locale).toLowerCase();
+	if (!(lang in defaultSupportedLanguages)) throw new Error(`No language file for: ${locale}`);
+
+	const urlTemplate = rtrimSlashes(Setting.value('voiceTypingBaseUrl').trim());
+
+	if (urlTemplate) {
+		let url = rtrimSlashes(urlTemplate);
+		if (!url.includes('{lang}')) url += '/{lang}.zip';
+		return url.replace(/\{lang\}/g, lang);
+	} else {
+		return (defaultSupportedLanguages as any)[lang];
+	}
 };
 
 export const modelIsDownloaded = async (locale: string) => {
@@ -114,9 +125,11 @@ const downloadModel = async (locale: string) => {
 
 	logger.info(`Downloading model from: ${modelUrl}`);
 
-	await shim.fetchBlob(languageModelUrl(locale), {
+	const response = await shim.fetchBlob(modelUrl, {
 		path: zipFilePath,
 	});
+
+	if (!response.ok || response.status >= 400) throw new Error(`Could not download from ${modelUrl}: Error ${response.status}`);
 
 	logger.info(`Unzipping ${zipFilePath} => ${unzipDir}`);
 
