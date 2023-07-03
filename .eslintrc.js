@@ -143,6 +143,7 @@ module.exports = {
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
 		'no-multi-spaces': ['error'],
 		'prefer-object-spread': ['error'],
+		'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
 
 		// Regarding the keyword blacklist:
 		// - err: We generally avoid using too many abbreviations, so it should
