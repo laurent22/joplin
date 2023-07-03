@@ -3,33 +3,24 @@ import dayjs = require('dayjs');
 import { Stat } from './fs-driver-base';
 
 export interface RotationalLogs {
-	rotateLogFiles(): void;
 	cleanActiveLogFile(): void;
-	deleteOldLogFiles(): void;
+	deleNonActiveLogFiles(): void;
 }
 
 export default class RotatingLogs {
 
-	private logFileDir = '';
-	private logFileMaximumSizeInBytes: number = 1024 * 1024 * 10;
+	private logFilesDir = '';
+	private nonActiveLogFileMaximumDaysAge = 30;
+	private activeLogFileMaximumSizeInBytes: number = 1024 * 1024 * 10;
 
-	public constructor(logFileDir: string) {
-		this.logFileDir = logFileDir;
-	}
-
-	private fsDriver() {
-		return shim.fsDriver();
-	}
-
-	public async rotateLogFiles() {
-		await this.cleanActiveLogFile();
-		await this.deleteOldLogFiles();
+	public constructor(logFilesDir: string) {
+		this.logFilesDir = logFilesDir;
 	}
 
 	public async cleanActiveLogFile() {
 		const stats = await this.fsDriver().stat(this.logFileFullpath());
 		const logFileSizeInBytes: number = stats.size;
-		if (logFileSizeInBytes >= this.logFileMaximumSizeInBytes) {
+		if (logFileSizeInBytes >= this.activeLogFileMaximumSizeInBytes) {
 			const newLogFile: string = this.logFileFullpath(this.getNameToNonActiveLogFile());
 			await this.fsDriver().move(this.logFileFullpath(), newLogFile);
 		}
@@ -39,19 +30,22 @@ export default class RotatingLogs {
 		return `log-${dayjs().valueOf()}.txt`;
 	}
 
-	public async deleteOldLogFiles() {
-		const files: Stat[] = await this.fsDriver().readDirStats(this.logFileDir);
+	public async deleNonActiveLogFiles() {
+		const files: Stat[] = await this.fsDriver().readDirStats(this.logFilesDir);
 		for (const file of files) {
 			if (!file.path.match(/^log-[0-9]+.txt$/gi)) continue;
-			const birthtime: number = file.birthtime;
-			const diffInDays: number = dayjs().diff(birthtime, 'days');
-			if (diffInDays >= 30) {
+			const diffInDays: number = dayjs().diff(file.birthtime, 'days');
+			if (diffInDays >= this.nonActiveLogFileMaximumDaysAge) {
 				await this.fsDriver().remove(this.logFileFullpath(file.path));
 			}
 		}
 	}
 
-	private logFileFullpath(fileName = 'log.txt') {
-		return `${this.logFileDir}/${fileName}`;
+	private logFileFullpath(fileName = 'log.txt'): string {
+		return `${this.logFilesDir}/${fileName}`;
+	}
+
+	private fsDriver() {
+		return shim.fsDriver();
 	}
 }

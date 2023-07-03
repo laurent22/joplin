@@ -936,13 +936,29 @@ export default class BaseApplication {
 
 	private startUpRotateLogFilesRoutine(profileDir: string) {
 		const rl: RotationalLogs = new RotatingLogs(profileDir);
+		this.cleanActiveLogWrapper(rl);
+		this.deleteNonActiveLogFilesWrapper(rl);
+	}
+
+	private cleanActiveLogWrapper(rl: RotationalLogs) {
 		const sixtySeconds: number = 60 * 1000;
-		shim.setTimeout(() => {
-			rl.rotateLogFiles();
+		shim.setTimeout(async () => {
+			try {
+				await rl.cleanActiveLogFile();
+			} catch (e) {
+				appLogger.error('Cannot clean the active log file.', e);
+			}
 		}, sixtySeconds);
+	}
+
+	private deleteNonActiveLogFilesWrapper(rl: RotationalLogs) {
 		const twentyFourHours: number = 60 * 60 * 24 * 1000;
-		shim.setInterval(() => {
-			rl.rotateLogFiles();
+		shim.setInterval(async () => {
+			try {
+				await rl.deleNonActiveLogFiles();
+			} catch (e) {
+				appLogger.error('Cannot delete the non active log file(s).', e);
+			}
 		}, twentyFourHours);
 	}
 }
