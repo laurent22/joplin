@@ -4446,7 +4446,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@^4.1.44, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@^4.1.44, @joplin/fork-htmlparser2@^4.1.45, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -4490,7 +4490,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.44
+    "@joplin/fork-htmlparser2": ^4.1.45
     "@types/fs-extra": 11.0.1
     css: 3.0.0
     datauri: 4.1.0
