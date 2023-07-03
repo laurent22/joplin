@@ -1696,6 +1696,16 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'voiceTypingBaseUrl': {
+				value: '',
+				type: SettingItemType.String,
+				public: true,
+				appTypes: [AppType.Mobile],
+				description: () => _('Leave it blank to download the language files from the default website'),
+				label: () => _('Voice typing language files (URL)'),
+				section: 'note',
+			},
+
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
