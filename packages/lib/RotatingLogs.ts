@@ -3,7 +3,7 @@ import dayjs = require('dayjs');
 import { Stat } from './fs-driver-base';
 
 export interface RotationalLogs {
-	rotateLogsFiles(): void;
+	rotateLogFiles(): void;
 	cleanActiveLogFile(): void;
 	deleteOldLogFiles(): void;
 }
@@ -21,7 +21,7 @@ export default class RotatingLogs {
 		return shim.fsDriver();
 	}
 
-	public async rotateLogsFiles() {
+	public async rotateLogFiles() {
 		await this.cleanActiveLogFile();
 		await this.deleteOldLogFiles();
 	}

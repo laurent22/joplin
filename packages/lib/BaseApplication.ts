@@ -936,11 +936,13 @@ export default class BaseApplication {
 
 	private startUpRotateLogFilesRoutine(profileDir: string) {
 		const rl: RotationalLogs = new RotatingLogs(profileDir);
+		const sixtySeconds: number = 60 * 1000;
 		shim.setTimeout(() => {
-			rl.rotateLogsFiles();
-		}, 60 * 1000);
+			rl.rotateLogFiles();
+		}, sixtySeconds);
+		const twentyFourHours: number = 60 * 60 * 24 * 1000;
 		shim.setInterval(() => {
-			rl.rotateLogsFiles();
-		}, 60 * 60 * 24 * 1000);
+			rl.rotateLogFiles();
+		}, twentyFourHours);
 	}
 }
