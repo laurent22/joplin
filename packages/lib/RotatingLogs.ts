@@ -1,13 +1,17 @@
-import dayjs = require('dayjs');
 import shim from './shim';
+import dayjs = require('dayjs');
+import { Stat } from './fs-driver-base';
+
+export interface RotationalLogs {
+	rotateLogsFiles(): void;
+	cleanActiveLogFile(): void;
+	deleteOldLogFiles(): void;
+}
 
 export default class RotatingLogs {
 
 	private logFileDir = '';
-	private logFileName = 'log.txt';
-	private logFileExpirationTimeInDays = 30;
 	private logFileMaximumSizeInBytes: number = 1024 * 1024 * 10;
-	private logFileRotetionalInterval: number = 43200 * 1000;
 
 	public constructor(logFileDir: string) {
 		this.logFileDir = logFileDir;
@@ -19,15 +23,11 @@ export default class RotatingLogs {
 
 	public async rotateLogsFiles() {
 		await this.cleanActiveLogFile();
-		await this.deleteOldLogsFiles();
-		setInterval(async () => {
-			await this.cleanActiveLogFile();
-			await this.deleteOldLogsFiles();
-		}, this.logFileRotetionalInterval);
+		await this.deleteOldLogFiles();
 	}
 
 	public async cleanActiveLogFile() {
-		const stats: any = await this.fsDriver().stat(this.logFileFullpath());
+		const stats = await this.fsDriver().stat(this.logFileFullpath());
 		const logFileSizeInBytes: number = stats.size;
 		if (logFileSizeInBytes >= this.logFileMaximumSizeInBytes) {
 			const newLogFile: string = this.logFileFullpath(this.getNameToNonActiveLogFile());
@@ -39,25 +39,19 @@ export default class RotatingLogs {
 		return `log-${dayjs().valueOf()}.txt`;
 	}
 
-	public async deleteOldLogsFiles() {
-		const files: any[] = await this.fsDriver().readDirStats(this.logFileDir);
-		const logs: string[] = this.getNonActiveLogs(files.map((file) => file.path));
-		for (const log of logs) {
-			const stats: any = await this.fsDriver().stat(this.logFileFullpath(log));
-			const birthtime: Date = stats.birthtime;
+	public async deleteOldLogFiles() {
+		const files: Stat[] = await this.fsDriver().readDirStats(this.logFileDir);
+		for (const file of files) {
+			if (!file.path.match(/^log-[0-9]+.txt$/gi)) continue;
+			const birthtime: number = file.birthtime;
 			const diffInDays: number = dayjs().diff(birthtime, 'days');
-			if (diffInDays >= this.logFileExpirationTimeInDays) {
-				await this.fsDriver().remove(this.logFileFullpath(log));
+			if (diffInDays >= 30) {
+				await this.fsDriver().remove(this.logFileFullpath(file.path));
 			}
 		}
 	}
 
-	private getNonActiveLogs(files: string[]): string[] {
-		const regex = new RegExp('^log-[0-9]+.txt$', 'gi');
-		return files.filter(file => file.match(regex));
-	}
-
-	private logFileFullpath(fileName: string = this.logFileName) {
+	private logFileFullpath(fileName = 'log.txt') {
 		return `${this.logFileDir}/${fileName}`;
 	}
 }

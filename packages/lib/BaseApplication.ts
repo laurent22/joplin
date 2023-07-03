@@ -59,7 +59,7 @@ import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 
-import RotatingLogs from './RotatingLogs';
+import RotatingLogs, { RotationalLogs } from './RotatingLogs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -929,9 +929,18 @@ export default class BaseApplication {
 
 		await MigrationService.instance().run();
 
-		const rotationalLogs = new RotatingLogs(profileDir);
-		await rotationalLogs.rotateLogsFiles();
+		this.startUpRotateLogFilesRoutine(profileDir);
 
 		return argv;
+	}
+
+	private startUpRotateLogFilesRoutine(profileDir: string) {
+		const rl: RotationalLogs = new RotatingLogs(profileDir);
+		shim.setTimeout(() => {
+			rl.rotateLogsFiles();
+		}, 60 * 1000);
+		shim.setInterval(() => {
+			rl.rotateLogsFiles();
+		}, 60 * 60 * 24 * 1000);
 	}
 }
