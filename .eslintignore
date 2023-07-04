@@ -585,6 +585,7 @@ packages/lib/services/MigrationService.js
 packages/lib/services/NavService.js
 packages/lib/services/PostMessageService.js
 packages/lib/services/ReportService.js
+packages/lib/services/ReportService.test.js
 packages/lib/services/ResourceEditWatcher/index.js
 packages/lib/services/ResourceEditWatcher/reducer.js
 packages/lib/services/ResourceFetcher.js

@@ -17,6 +17,11 @@ interface DecryptionResult {
 	error: any;
 }
 
+interface ItemTypeAndId {
+	type_: number;
+	id: string;
+}
+
 export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
@@ -93,7 +98,9 @@ export default class DecryptionWorker {
 
 	public async decryptionDisabledItems() {
 		let items = await this.kvStore().searchByPrefix('decrypt:');
-		items = items.filter(item => item.value > this.maxDecryptionAttempts_);
+
+		// An item is disabled if it won't be decrypted any more times.
+		items = items.filter(item => item.value >= this.maxDecryptionAttempts_);
 		items = items.map(item => {
 			const s = item.key.split(':');
 			return {
@@ -101,15 +108,23 @@ export default class DecryptionWorker {
 				id: s[2],
 			};
 		});
-		return items;
+
+		type ItemRecordList = ItemTypeAndId[];
+		return items as ItemRecordList;
 	}
 
-	public async clearDisabledItem(typeId: string, itemId: string) {
+	public async clearDisabledItem(typeId: number, itemId: string) {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
 	public async clearDisabledItems() {
 		await this.kvStore().deleteByPrefix('decrypt:');
+	}
+
+	public async retryDisabledItem(typeId: number, itemId: string) {
+		// Set the decryption attempt counter such that the specified item's decryption
+		// is attempted exactly once.
+		await this.kvStore().setValue(`decrypt:${typeId}:${itemId}`, this.maxDecryptionAttempts_ - 1);
 	}
 
 	public dispatchReport(report: any) {
@@ -169,12 +184,17 @@ export default class DecryptionWorker {
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
+		const onItemDisabled = (itemType: number, itemId: string) => {
+			this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(itemType)} ${itemId}: Decryption has failed more than 2 times - skipping it`);
+			this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
+		};
+
 		try {
 			const notLoadedMasterKeyDisptaches = [];
 
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
-				const items = result.items;
+				const items: ItemTypeAndId[] = result.items;
 
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
@@ -197,10 +217,9 @@ export default class DecryptionWorker {
 					try {
 						const decryptCounter = await this.kvStore().incValue(counterKey);
 						if (decryptCounter > this.maxDecryptionAttempts_) {
-							this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(item.type_)} ${item.id}: Decryption has failed more than 2 times - skipping it`);
-							this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
-							skippedItemCount++;
+							onItemDisabled(item.type_, item.id);
 							excludedIds.push(item.id);
+							skippedItemCount++;
 							continue;
 						}
 
@@ -228,6 +247,13 @@ export default class DecryptionWorker {
 						}
 					} catch (error) {
 						excludedIds.push(item.id);
+
+						const counter: number = await this.kvStore().value(counterKey);
+						// If the item's counter value will cause it not to be decrypted on future
+						// loop iterations,
+						if (counter >= this.maxDecryptionAttempts_) {
+							onItemDisabled(item.type_, item.id);
+						}
 
 						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'dispatch') {
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {

@@ -23,7 +23,7 @@ enum ReportItemType {
 
 type RerportItemOrString = ReportItem | string;
 
-interface ReportSection {
+export interface ReportSection {
 	title: string;
 	body: RerportItemOrString[];
 	name?: string;
@@ -221,7 +221,7 @@ export default class ReportService {
 					canRetry: true,
 					canRetryType: CanRetryType.E2EE,
 					retryHandler: async () => {
-						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
+						await DecryptionWorker.instance().retryDisabledItem(row.type_, row.id);
 						void DecryptionWorker.instance().scheduleStart();
 					},
 				});
