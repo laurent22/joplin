@@ -7,7 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/lib/Logger';
-import BackOffHandler from './BackOffHandler';
+// import BackOffHandler from './BackOffHandler';
 const ipcRenderer = require('electron').ipcRenderer;
 
 const logger = Logger.create('PluginRunner');
@@ -84,7 +84,7 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 export default class PluginRunner extends BasePluginRunner {
 
 	protected eventHandlers_: EventHandlers = {};
-	private backOffHandlers_: Record<string, BackOffHandler> = {};
+	// private backOffHandlers_: Record<string, BackOffHandler> = {};
 
 	public constructor() {
 		super();
@@ -97,13 +97,12 @@ export default class PluginRunner extends BasePluginRunner {
 		return cb(...args);
 	}
 
-	// @ts-ignore
-	private backOffHandler(pluginId: string): BackOffHandler {
-		if (!this.backOffHandlers_[pluginId]) {
-			this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
-		}
-		return this.backOffHandlers_[pluginId];
-	}
+	// private backOffHandler(pluginId: string): BackOffHandler {
+	// 	if (!this.backOffHandlers_[pluginId]) {
+	// 		this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
+	// 	}
+	// 	return this.backOffHandlers_[pluginId];
+	// }
 
 	public async run(plugin: Plugin, pluginApi: Global) {
 		const scriptPath = `${Setting.value('tempDir')}/plugin_${plugin.id}.js`;

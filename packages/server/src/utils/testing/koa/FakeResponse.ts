@@ -1,6 +1,6 @@
 export default class FakeResponse {
 
-	public status: number = 200;
+	public status = 200;
 	public body: any = null;
 	private headers_: any = {};
 

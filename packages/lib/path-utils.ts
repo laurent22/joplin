@@ -15,7 +15,7 @@ export function basename(path: string) {
 	return s[s.length - 1];
 }
 
-export function filename(path: string, includeDir: boolean = false) {
+export function filename(path: string, includeDir = false) {
 	if (!path) throw new Error('Path is empty');
 	const output = includeDir ? path : basename(path);
 	if (output.indexOf('.') < 0) return output;
@@ -50,7 +50,7 @@ export function safeFileExtension(e: string, maxLength: number = null) {
 	return e.replace(/[^a-zA-Z0-9]/g, '').substr(0, maxLength);
 }
 
-export function safeFilename(e: string, maxLength: number = null, allowSpaces: boolean = false) {
+export function safeFilename(e: string, maxLength: number = null, allowSpaces = false) {
 	if (maxLength === null) maxLength = 32;
 	if (!e || !e.replace) return '';
 	const regex = allowSpaces ? /[^a-zA-Z0-9\-_\(\)\. ]/g : /[^a-zA-Z0-9\-_\(\)\.]/g;
@@ -73,7 +73,7 @@ const friendlySafeFilename_blackListNames = ['.', '..', 'CON', 'PRN', 'AUX', 'NU
 // Markdown, etc.) - it still needs to be encoded by the calling code according
 // to the context.
 
-export function friendlySafeFilename(e: string, maxLength: number = null, preserveExtension: boolean = false) {
+export function friendlySafeFilename(e: string, maxLength: number = null, preserveExtension = false) {
 	// Although Windows supports paths up to 255 characters, but that includes the filename and its
 	// parent directory path. Also there's generally no good reason for dir or file names
 	// to be so long, so keep it at 50, which should prevent various errors.

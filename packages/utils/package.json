@@ -1,6 +1,6 @@
 {
   "name": "@joplin/utils",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {

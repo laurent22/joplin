@@ -75,8 +75,8 @@ export default class BaseApplication {
 	private database_: any = null;
 	private profileConfig_: ProfileConfig = null;
 
-	protected showStackTraces_: boolean = false;
-	protected showPromptString_: boolean = false;
+	protected showStackTraces_ = false;
+	protected showPromptString_ = false;
 
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
@@ -157,7 +157,7 @@ export default class BaseApplication {
 
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
-	private async handleStartFlags_(argv: string[], setDefaults: boolean = true) {
+	private async handleStartFlags_(argv: string[], setDefaults = true) {
 		const matched: any = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
@@ -309,6 +309,7 @@ export default class BaseApplication {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
@@ -318,7 +319,7 @@ export default class BaseApplication {
 		process.exit(code);
 	}
 
-	public async refreshNotes(state: any, useSelectedNoteId: boolean = false, noteHash: string = '') {
+	public async refreshNotes(state: any, useSelectedNoteId = false, noteHash = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 

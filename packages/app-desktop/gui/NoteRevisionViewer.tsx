@@ -22,6 +22,7 @@ import shared from '@joplin/lib/components/shared/note-screen-shared';
 interface Props {
 	themeId: number;
 	noteId: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onBack: Function;
 	customCss: string;
 }
@@ -36,6 +37,7 @@ interface State {
 class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 
 	private viewerRef_: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private helpButton_onClick: Function;
 
 	public constructor(props: Props) {

@@ -30,6 +30,7 @@ const dotenvFiles = [
 // that have already been set.  Variable expansion is supported in .env files.
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
+// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 dotenvFiles.forEach(dotenvFile => {
 	if (fs.existsSync(dotenvFile)) {
 		require('dotenv-expand')(

@@ -65,6 +65,7 @@ export default class PluginRunner extends BasePluginRunner {
 	}
 
 	public async run(plugin: Plugin, sandbox: Global): Promise<void> {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function, reject: Function) => {
 			const onStarted = () => {
 				plugin.off('started', onStarted);
@@ -85,6 +86,7 @@ export default class PluginRunner extends BasePluginRunner {
 
 	public async waitForSandboxCalls(): Promise<void> {
 		const startTime = Date.now();
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function, reject: Function) => {
 			const iid = setInterval(() => {
 				if (!Object.keys(this.activeSandboxCalls_).length) {

@@ -135,7 +135,7 @@ export function calculateMaxSizeAvailableForItem(item: LayoutItem, parent: Layou
 	return availableSize;
 }
 
-export default function useLayoutItemSizes(layout: LayoutItem, makeAllVisible: boolean = false) {
+export default function useLayoutItemSizes(layout: LayoutItem, makeAllVisible = false) {
 	return useMemo(() => {
 		let sizes: LayoutItemSizes = {};
 

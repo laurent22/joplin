@@ -214,7 +214,7 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 // }
 
 
-export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable: string = ''): Promise<PaginatedResults<any>> {
+export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable = ''): Promise<PaginatedResults<any>> {
 	pagination = {
 		...defaultPagination(),
 		...pagination,

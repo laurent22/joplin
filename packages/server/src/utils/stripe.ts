@@ -126,7 +126,7 @@ export async function isBetaUser(models: Models, userId: Uuid): Promise<boolean>
 	return !sub;
 }
 
-export function betaUserTrialPeriodDays(userCreatedTime: number, fromDateTime: number = 0, minDays: number = 7): number {
+export function betaUserTrialPeriodDays(userCreatedTime: number, fromDateTime = 0, minDays = 7): number {
 	fromDateTime = fromDateTime ? fromDateTime : Date.now();
 
 	const oneDayMs = 86400 * 1000;

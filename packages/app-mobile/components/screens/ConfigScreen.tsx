@@ -457,6 +457,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private renderToggle(key: string, label: string, value: any, updateSettingValue: Function, descriptionComp: any = null) {
 		const theme = themeStyle(this.props.themeId);
 
@@ -600,11 +601,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				);
 			}
 			return (
-				<View key={key} style={this.styles().settingContainer}>
-					<Text key="label" style={this.styles().settingText}>
-						{md.label()}
-					</Text>
-					<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => void updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
+					<View key={key} style={containerStyle}>
+						<Text key="label" style={this.styles().settingText}>
+							{md.label()}
+						</Text>
+						<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => void updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					</View>
+					{descriptionComp}
 				</View>
 			);
 		} else {

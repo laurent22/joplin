@@ -52,6 +52,7 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
@@ -77,6 +78,7 @@ class HtmlUtils {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 

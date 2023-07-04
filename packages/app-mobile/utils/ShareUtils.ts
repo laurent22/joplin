@@ -14,9 +14,7 @@ const makeShareCacheDirectory = async () => {
 	return targetDir;
 };
 
-/**
- * Copy a file to be shared to cache, renaming it to its orignal name
- */
+// Copy a file to be shared to cache, renaming it to its orignal name
 export async function copyToCache(resource: ResourceEntity): Promise<string> {
 	const filename = Resource.friendlySafeFilename(resource);
 
@@ -54,9 +52,7 @@ export async function writeTextToCacheFile(text: string): Promise<string> {
 	return filePath;
 }
 
-/**
- * Clear previously shared files from cache
- */
+// Clear previously shared files from cache
 export async function clearSharedFilesCache(): Promise<void> {
 	return shim.fsDriver().remove(`${CachesDirectoryPath}/sharedFiles`);
 }

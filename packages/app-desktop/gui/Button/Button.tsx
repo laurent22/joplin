@@ -20,6 +20,7 @@ interface Props {
 	iconName?: string;
 	level?: ButtonLevel;
 	className?: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClick?: Function;
 	color?: string;
 	iconAnimation?: string;

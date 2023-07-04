@@ -13,7 +13,7 @@ export default class Router {
 	// available (that ctx.joplin.owner is defined). It means by default any user, even
 	// not logged in, can access any route of this router. End points that
 	// should not be publicly available should call ownerRequired(ctx);
-	public public: boolean = false;
+	public public = false;
 	public publicSchemas: string[] = [];
 
 	public responseFormat: RouteResponseFormat = null;

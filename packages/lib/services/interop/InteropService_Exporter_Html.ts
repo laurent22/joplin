@@ -24,7 +24,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private markupToHtml_: MarkupToHtml;
 	private resources_: ResourceEntity[] = [];
 	private style_: any;
-	private packIntoSingleFile_: boolean = false;
+	private packIntoSingleFile_ = false;
 
 	public async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';

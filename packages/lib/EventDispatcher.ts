@@ -6,7 +6,7 @@ type CallbackHandler<EventType> = (data: EventType)=> void;
 export default class EventDispatcher<EventKeyType extends string|symbol|number, EventMessageType> {
 	// Partial marks all fields as optional. To initialize with an empty object, this is required.
 	// See https://stackoverflow.com/a/64526384
-	private listeners: Partial<Record<EventKeyType, Array<Listener<EventMessageType>>>>;
+	private listeners: Partial<Record<EventKeyType, Listener<EventMessageType>[]>>;
 	public constructor() {
 		this.listeners = {};
 	}

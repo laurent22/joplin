@@ -22,16 +22,16 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Fotoaparát: umožňuje pořízení fotografie a její připojení k poznámce."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:690
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- Poloha: umožňuje k poznámce připojit informaci o zeměpisné poloze."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -284,7 +284,7 @@ msgstr "Aktivní"
 msgid "Actual Size"
 msgstr "Skutečná velikost"
 
-#: packages/app-mobile/components/screens/Note.tsx:1212
+#: packages/app-mobile/components/screens/Note.tsx:1215
 msgid "Add body"
 msgstr "Přidat tělo"
 
@@ -300,7 +300,7 @@ msgstr "Přidat či odebrat štítky:"
 msgid "Add recipient:"
 msgstr "Přidat příjemce:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1286
+#: packages/app-mobile/components/screens/Note.tsx:1289
 msgid "Add title"
 msgstr "Přidejte nadpis"
 
@@ -376,11 +376,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Je k dispozici aktualizace, chcete ji stáhnout?"
 
-#: packages/lib/models/Setting.ts:2502
+#: packages/lib/models/Setting.ts:2512
 msgid "Appearance"
 msgstr "Vzhled"
 
-#: packages/lib/models/Setting.ts:2507
+#: packages/lib/models/Setting.ts:2517
 msgid "Application"
 msgstr "Aplikace"
 
@@ -414,15 +414,15 @@ msgstr "Připojit"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
-#: packages/app-mobile/components/screens/Note.tsx:869
+#: packages/app-mobile/components/screens/Note.tsx:870
 msgid "Attach file"
 msgstr "Přiložit soubor"
 
-#: packages/app-mobile/components/screens/Note.tsx:873
+#: packages/app-mobile/components/screens/Note.tsx:874
 msgid "Attach photo"
 msgstr "Přiložit obrázek"
 
-#: packages/app-mobile/components/screens/Note.tsx:969
+#: packages/app-mobile/components/screens/Note.tsx:970
 msgid "Attach..."
 msgstr "Přiložit..."
 
@@ -435,7 +435,7 @@ msgstr "Přiloží soubor k poznámce."
 msgid "attachment"
 msgstr "příloha"
 
-#: packages/lib/models/Resource.ts:423
+#: packages/lib/models/Resource.ts:424
 msgid "Attachment conflict: \"%s\""
 msgstr "Konflikt přílohy: \"%s\""
 
@@ -494,7 +494,6 @@ msgstr "Automaticky přepnout téma vzhledu podle nastavení systému"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:720
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:209
 #: packages/app-mobile/components/ScreenHeader.tsx:306
 #: packages/lib/commands/historyBackward.ts:6
@@ -540,7 +539,6 @@ msgstr "Může se sdílet"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:328
@@ -552,13 +550,12 @@ msgstr "Může se sdílet"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:110
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:111
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.tsx:165
 #: packages/app-mobile/components/side-menu-content.tsx:174
 #: packages/app-mobile/components/side-menu-content.tsx:439
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:80
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "Zrušit"
@@ -711,17 +708,15 @@ msgstr "Zaškrtávací pole"
 msgid "Checking... Please wait."
 msgstr "Probíhá kontrola... Počkejte prosím."
 
-#: packages/app-mobile/components/screens/Note.tsx:876
+#: packages/app-mobile/components/screens/Note.tsx:877
 msgid "Choose an option"
 msgstr "Zvolit možnost"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:70
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:297
 msgid "Clear"
 msgstr "Vyčistit"
@@ -730,7 +725,6 @@ msgstr "Vyčistit"
 msgid "Clear alarm"
 msgstr "Zrušit alarm"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -821,7 +815,6 @@ msgstr "Nabídka příkazů"
 msgid "Command palette..."
 msgstr "Příkazová paleta..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Completed"
 msgstr "Dokončeno"
@@ -839,7 +832,7 @@ msgid "Compress old changes"
 msgstr "Komprese starých změn"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:762
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:765
 #: packages/app-mobile/components/side-menu-content.tsx:417
 msgid "Configuration"
 msgstr "Nastavení"
@@ -866,7 +859,7 @@ msgstr "Konflikt: %d"
 msgid "Conflicts"
 msgstr "Konflikty"
 
-#: packages/lib/models/Resource.ts:407
+#: packages/lib/models/Resource.ts:408
 msgid "Conflicts (attachments)"
 msgstr "Konflikty (přílohy)"
 
@@ -882,15 +875,15 @@ msgstr "Obsah poskytl %s"
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: packages/app-mobile/components/screens/Note.tsx:1010
+#: packages/app-mobile/components/screens/Note.tsx:1011
 msgid "Convert to note"
 msgstr "Konvertovat na poznámku"
 
-#: packages/app-mobile/components/screens/Note.tsx:1010
+#: packages/app-mobile/components/screens/Note.tsx:1011
 msgid "Convert to todo"
 msgstr "Převést na úkolexpr"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 #, fuzzy
 msgid "Converting speech to text..."
 msgstr "Konvertovat na poznámku"
@@ -921,7 +914,7 @@ msgid "Copy Link Address"
 msgstr "Kopírovat adresu odkazu"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:1017
+#: packages/app-mobile/components/screens/Note.tsx:1018
 msgid "Copy Markdown link"
 msgstr "Vytvořit Markdown odkaz"
 
@@ -1011,7 +1004,6 @@ msgstr ""
 msgid "Could not verify your identify: %s"
 msgstr "Nepodařilo se ověřit vaši totožnost"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:276
 msgid "Create"
 msgstr "Vytvořit"
@@ -1037,7 +1029,6 @@ msgstr "Vytvořit zápisník"
 msgid "Create user"
 msgstr "Vytvořit uživatele"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:49
 msgid "Created"
 msgstr "Vytvořeno"
@@ -1063,13 +1054,12 @@ msgid "Created: "
 msgstr "Vytvořeno: "
 
 #: packages/app-cli/app/command-import.js:48
-#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Created: %d."
 msgstr "Vytvořeno: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "Created: %s"
 msgstr "Vytvořeno: %s"
 
@@ -1089,7 +1079,7 @@ msgstr "Vytvoří nový úkol."
 msgid "Creating new %s..."
 msgstr "%s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:645
 msgid "Creating report..."
 msgstr "Vytváření hlášení..."
 
@@ -1131,7 +1121,7 @@ msgstr "Tmavý"
 msgid "Dashboard"
 msgstr "Panel"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:744
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:747
 msgid "Database v%s"
 msgstr "Databáze v%s"
 
@@ -1182,7 +1172,7 @@ msgstr "Výchozí: %s"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
 #: packages/app-mobile/components/ScreenHeader.tsx:419
 #: packages/app-mobile/components/ScreenHeader.tsx:486
-#: packages/app-mobile/components/screens/Note.tsx:1030
+#: packages/app-mobile/components/screens/Note.tsx:1031
 #: packages/app-mobile/components/side-menu-content.tsx:155
 msgid "Delete"
 msgstr "Smazat"
@@ -1207,12 +1197,12 @@ msgstr "Smazat řádek"
 msgid "Delete local data and re-download from sync target"
 msgstr "Smazat místní data a stáhnout je z cíle synchronizace"
 
-#: packages/lib/models/Note.ts:765
+#: packages/lib/models/Note.ts:772
 msgid "Delete note \"%s\"?"
 msgstr "Smazat poznámku \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:535
+#: packages/app-mobile/components/screens/Note.tsx:536
 msgid "Delete note?"
 msgstr "Smazat poznámku?"
 
@@ -1247,7 +1237,7 @@ msgstr "Odstranění profilu \"%s\""
 msgid "Delete selected notes"
 msgstr "Odstranění vybraných poznámek"
 
-#: packages/lib/models/Note.ts:767
+#: packages/lib/models/Note.ts:774
 msgid "Delete these %d notes?"
 msgstr "Smazat tyto \"%d\" poznámky?"
 
@@ -1335,7 +1325,7 @@ msgstr ""
 "synchronizovány na cílové úložiště nešifrované. Přejete si pokračovat?"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:353
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "Discard changes"
 msgstr "Zahodit změny"
 
@@ -1407,7 +1397,7 @@ msgstr ""
 "jak data dešifrovat! Chcete-li povolit šifrování, zadejte níže heslo."
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
 msgid "Done"
 msgstr "Hotovo"
 
@@ -1435,6 +1425,11 @@ msgstr "Staženo a zašifrováno"
 #: packages/lib/models/Resource.ts:354
 msgid "Downloading"
 msgstr "Stahování"
+
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
+#, fuzzy
+msgid "Downloading %s language files..."
+msgstr "Stahování zdrojů..."
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -1481,7 +1476,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
-#: packages/app-mobile/components/screens/Note.tsx:1248
+#: packages/app-mobile/components/screens/Note.tsx:1253
 #: packages/app-mobile/components/side-menu-content.tsx:143
 msgid "Edit"
 msgstr "Upravit"
@@ -1696,7 +1691,7 @@ msgstr "Zašifrováno"
 msgid "Encrypted items cannot be modified"
 msgstr "Nelze editovat zašifrovanou položku"
 
-#: packages/lib/models/Setting.ts:2509
+#: packages/lib/models/Setting.ts:2519
 msgid "Encryption"
 msgstr "Šifrování"
 
@@ -1751,6 +1746,7 @@ msgstr "Chyba při otevírání poznámky v editoru: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
 #: packages/lib/services/KeymapService.ts:205
 msgid "Error: %s"
 msgstr "Chyba: %s"
@@ -1798,15 +1794,15 @@ msgstr "Exportovat vše"
 msgid "Export debug report"
 msgstr "Exportovat ladicí hlášení"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:645
 msgid "Export Debug Report"
 msgstr "Exportovat ladicí hlášení"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "Export profile"
 msgstr "Exportovat profil"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "Exporting profile..."
 msgstr "Probíhá export profilu..."
 
@@ -1846,7 +1842,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Fatální chyba:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:664
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:667
 msgid "Feature flags"
 msgstr "Příznaky funkcí"
 
@@ -1879,16 +1875,15 @@ msgstr "Najít a nahradit"
 msgid "Find: "
 msgstr "Najít: "
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
 msgstr "Doplněk pro Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Fix search index"
 msgstr "Opravit vyhledávací index"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Fixing search index..."
 msgstr "Probíhá oprava vyhledávacího indexu..."
 
@@ -1912,7 +1907,7 @@ msgstr "Kurzor v názvu"
 msgid "Folders"
 msgstr "Složky"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Pouze pro účely ladění: exportovat profil na externí SD kartu."
 
@@ -1951,12 +1946,11 @@ msgid "Forward"
 msgstr "Vpřed"
 
 #: packages/app-cli/app/command-import.js:47
-#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:88
 msgid "Found: %d."
 msgstr "Nalezeno: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:750
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:753
 msgid "FTS enabled: %d"
 msgstr "FTS povolené: %d"
 
@@ -1968,7 +1962,7 @@ msgstr "Úplný seznam změn"
 msgid "Full name"
 msgstr "Celé jméno"
 
-#: packages/lib/models/Setting.ts:2500
+#: packages/lib/models/Setting.ts:2510
 #: packages/server/src/services/MustacheService.ts:109
 msgid "General"
 msgstr "Obecná nastavení"
@@ -1984,7 +1978,6 @@ msgstr[0] "Vytváření odkazu..."
 msgstr[1] "Vytváření odkazů..."
 msgstr[2] "Vytváření odkazů..."
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
 msgstr "Získat hned:"
@@ -2003,7 +1996,7 @@ msgstr ""
 "zobrazí hodnotu položky [jméno]. Pokud není specifikována [hodnota] ani "
 "[jméno], je zobrazena současná konfigurace."
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:853
 msgid "Go to source URL"
 msgstr "Jít na zdrojovou URL"
 
@@ -2032,7 +2025,7 @@ msgstr "Nadpis"
 msgid "Help"
 msgstr "Nápověda"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:759
 #, fuzzy
 msgid "Hermes enabled: %d"
 msgstr "FTS povolené: %d"
@@ -2097,7 +2090,6 @@ msgstr "Ikona"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:76
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:48
 #: packages/app-desktop/gui/ResourceScreen.tsx:94
 msgid "ID"
@@ -2158,7 +2150,7 @@ msgstr ""
 "ID, nebo zkratkami `$n` a `$b` pro nyní vybranou poznámku či zápisník. `$c` "
 "odkazuje na současně vybranou položku."
 
-#: packages/app-mobile/components/screens/Note.tsx:412
+#: packages/app-mobile/components/screens/Note.tsx:413
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2287,7 +2279,7 @@ msgstr "Neplatná odpověď: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Neplatný příkaz: \"%s\""
 
-#: packages/lib/models/Setting.ts:2028
+#: packages/lib/models/Setting.ts:2038
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
 
@@ -2389,7 +2381,7 @@ msgstr ""
 "Joplin Web Clipper umožňuje ukládat webové stránky a screenshoty z vašeho "
 "prohlížeče do Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:716
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:719
 msgid "Joplin website"
 msgstr "Web Joplinu"
 
@@ -2418,7 +2410,7 @@ msgstr "Režim klávesnice"
 msgid "Keyboard Shortcut"
 msgstr "Klávesová zkratka"
 
-#: packages/lib/models/Setting.ts:2511
+#: packages/lib/models/Setting.ts:2521
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové zkratky"
 
@@ -2453,6 +2445,10 @@ msgstr "Rozložení"
 #: packages/app-desktop/gui/MenuBar.tsx:684
 msgid "Layout button sequence"
 msgstr "Posloupnost pro tlačítko Rozložení"
+
+#: packages/lib/models/Setting.ts:1704
+msgid "Leave it blank to download the language files from the default website"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2493,7 +2489,7 @@ msgstr[2] "Odkazy byly zkopírovány do schránky!"
 msgid "Link text"
 msgstr "Text odkazu"
 
-#: packages/app-mobile/components/screens/Note.tsx:205
+#: packages/app-mobile/components/screens/Note.tsx:206
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Odkazy s protokolem \"%s\" nejsou podporovány"
 
@@ -2511,12 +2507,11 @@ msgstr "Seznamy"
 msgid "Loaded"
 msgstr "Načteno"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:86
 #, fuzzy
 msgid "Loading..."
 msgstr "Probíhá aktualizace..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Location"
 msgstr "Poloha"
@@ -2530,7 +2525,7 @@ msgstr ""
 "Již je držen soubor se zámkem (lock file). Pokud jste si jistí, že nyní "
 "neprobíhá synchronizace, smažte zámek v \"%s\" a pokračujte v operaci."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:640
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:643
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:276
 msgid "Log"
@@ -2561,7 +2556,7 @@ msgid "Logs"
 msgstr "Logy"
 
 #: packages/app-desktop/gui/MenuBar.tsx:795
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:702
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:705
 msgid "Make a donation"
 msgstr "Přispět"
 
@@ -2577,7 +2572,7 @@ msgstr "Správa hlavního hesla..."
 msgid "Manage multiple users"
 msgstr "Správa více uživatelů"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:638
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
 msgid "Manage profiles"
 msgstr "Správa profilů"
 
@@ -2598,7 +2593,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Ručně"
 
-#: packages/lib/models/Setting.ts:2505
+#: packages/lib/models/Setting.ts:2515
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2617,7 +2612,6 @@ msgstr "Označí úkol jako hotový."
 msgid "Marks a to-do as non-completed."
 msgstr "Označí úkol jako nedokončený."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:55
 msgid "Markup"
 msgstr "Markup"
@@ -2677,7 +2671,7 @@ msgstr "Mobilní data - automatická synchronizace vypnutá"
 msgid "More info"
 msgstr "Více informací"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:668
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:671
 msgid "More information"
 msgstr "Více informací"
 
@@ -2731,7 +2725,6 @@ msgstr "Nový zápisník"
 msgid "New Notebook"
 msgstr "Nový zápisník"
 
-#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -2782,7 +2775,7 @@ msgid "no"
 msgstr "nekompatibilní"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "No"
 msgstr "Ne"
@@ -2791,7 +2784,7 @@ msgstr "Ne"
 msgid "No active notebook."
 msgstr "Není vybrán žádný zápisník."
 
-#: packages/app-mobile/components/screens/Note.tsx:176
+#: packages/app-mobile/components/screens/Note.tsx:177
 msgid "No item with ID %s"
 msgstr "Nenalezena položka s ID %s"
 
@@ -2858,7 +2851,7 @@ msgstr "Vyzkoušejte to hned"
 msgid "note"
 msgstr "Nová poznámka"
 
-#: packages/lib/models/Setting.ts:2503
+#: packages/lib/models/Setting.ts:2513
 msgid "Note"
 msgstr "Zápisníky"
 
@@ -2890,9 +2883,8 @@ msgstr "Poznámka editora"
 msgid "Note has been saved."
 msgstr "Poznámka uložena."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
-#: packages/lib/models/Setting.ts:2508
+#: packages/lib/models/Setting.ts:2518
 msgid "Note History"
 msgstr "Historie poznámek"
 
@@ -2909,7 +2901,6 @@ msgid "Note list growth factor"
 msgstr "Růstový faktor seznamu poznámek"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:403
 msgid "Note properties"
 msgstr "Informace o poznámce"
@@ -2931,7 +2922,7 @@ msgstr "Poznámka: pokud je poznámka sdílena, už nebude na serveru šifrován
 msgid "Note&book"
 msgstr "&Zápisník"
 
-#: packages/lib/models/Setting.ts:2504
+#: packages/lib/models/Setting.ts:2514
 msgid "Notebook"
 msgstr "Zápisníky"
 
@@ -2957,7 +2948,7 @@ msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
 msgid "Notes"
 msgstr "Poznámky"
 
-#: packages/lib/models/Setting.ts:2520
+#: packages/lib/models/Setting.ts:2530
 msgid "Notes and settings are stored in: %s"
 msgstr "Poznámky a nastavení uloženo v: %s"
 
@@ -2975,7 +2966,6 @@ msgstr "Číslovaný seznam"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:283
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3028,7 +3018,7 @@ msgstr "Naráz lze vytisknout pouze jednu poznámku."
 msgid "Open"
 msgstr "Otevřít"
 
-#: packages/app-desktop/app.ts:178
+#: packages/app-desktop/app.ts:179
 msgid "Open %s"
 msgstr "Otevřít %s"
 
@@ -3127,7 +3117,7 @@ msgstr "PDF soubor"
 msgid "Per user. Minimum of %d users."
 msgstr "Na uživatele. Minimálně %d uživatelů."
 
-#: packages/app-mobile/components/screens/Note.tsx:413
+#: packages/app-mobile/components/screens/Note.tsx:414
 msgid "Permission needed"
 msgstr "Vyžadováno oprávnění"
 
@@ -3176,7 +3166,7 @@ msgstr ""
 "nebude mít přístup k souborům mimo tuto složku ani k dalším osobním "
 "informacím. Žádná data nebudou sdílena s jakoukoliv třetí stranou."
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Please record your voice..."
 msgstr ""
 
@@ -3222,7 +3212,7 @@ msgid "Plugin tools"
 msgstr "Nástroje rozšíření"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2506
+#: packages/lib/models/Setting.ts:2516
 msgid "Plugins"
 msgstr "Rozšíření"
 
@@ -3278,7 +3268,6 @@ msgstr "Stiskněte pro zadání hesla k dešifrování."
 msgid "Previous match"
 msgstr "Předchozí zápas"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
 msgid "Previous versions of this note"
 msgstr "Předchozí verze poznámky"
@@ -3291,7 +3280,7 @@ msgstr "Tisk"
 msgid "Priority support"
 msgstr "Prioritní podpora"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:730
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:733
 msgid "Privacy Policy"
 msgstr "Zásady ochrany osobních údajů"
 
@@ -3331,7 +3320,7 @@ msgstr "Verze profilu: %s"
 msgid "Profiles"
 msgstr "Profily"
 
-#: packages/app-mobile/components/screens/Note.tsx:1024
+#: packages/app-mobile/components/screens/Note.tsx:1025
 msgid "Properties"
 msgstr "Nastavení"
 
@@ -3364,7 +3353,7 @@ msgstr "Zveřejnit poznámky"
 msgid "Publish notes to the internet"
 msgstr "Zveřejnění poznámek na internetu"
 
-#: packages/app-desktop/app.ts:180
+#: packages/app-desktop/app.ts:181
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:318
 msgid "Quit"
@@ -3486,7 +3475,6 @@ msgid "Reset master password"
 msgstr "Obnovit hlavní heslo"
 
 #: packages/app-cli/app/command-import.js:51
-#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Resources: %d."
 msgstr "Zdroje: %d."
@@ -3500,7 +3488,6 @@ msgid "Restart now"
 msgstr "Restartovat"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:79
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:203
 msgid "Restore"
 msgstr "Obnovit"
@@ -3600,7 +3587,7 @@ msgstr "Uložit jako..."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:331
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:346
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "Save changes"
 msgstr "Uložit změny"
 
@@ -3635,7 +3622,6 @@ msgstr "Hledat:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 #: packages/app-desktop/gui/NoteSearchBar.tsx:175
 msgid "Search..."
 msgstr "Hledat..."
@@ -3684,7 +3670,7 @@ msgid "Server is running on port %d"
 msgstr "Server je spuštěný na portu %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:976
+#: packages/app-mobile/components/screens/Note.tsx:977
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Nastavit alarm"
@@ -3719,7 +3705,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:984
+#: packages/app-mobile/components/screens/Note.tsx:985
 msgid "Share"
 msgstr "Sdílet"
 
@@ -3811,7 +3797,6 @@ msgstr ""
 "dešifrování)"
 
 #: packages/app-cli/app/command-import.js:50
-#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Skipped: %d."
 msgstr "Přeskočeno: %d."
@@ -4031,7 +4016,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr "Synchronizace libovolného počtu zařízení"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Sync Status"
 msgstr "Stav synchronizace"
 
@@ -4062,7 +4047,7 @@ msgstr "Verze synchronizace: %s"
 msgid "Sync your notes"
 msgstr "Synchronizace poznámek"
 
-#: packages/lib/models/Setting.ts:2501
+#: packages/lib/models/Setting.ts:2511
 msgid "Synchronisation"
 msgstr "Synchronizace"
 
@@ -4118,20 +4103,19 @@ msgid "tag1, tag2, ..."
 msgstr "štítek1, štítek2, ..."
 
 #: packages/app-cli/app/command-import.js:52
-#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Tagged: %d."
 msgstr "Označeno pomocí štítků: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:730
-#: packages/app-mobile/components/screens/Note.tsx:1003
+#: packages/app-mobile/components/screens/Note.tsx:1004
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.tsx:411
 msgid "Tags"
 msgstr "Štítky"
 
-#: packages/app-mobile/components/screens/Note.tsx:874
+#: packages/app-mobile/components/screens/Note.tsx:875
 msgid "Take photo"
 msgstr "Přiložit foto"
 
@@ -4169,7 +4153,7 @@ msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr "Aplikace se nyní vypne. Pro dokončení procesu ji znovu spusťte."
 
-#: packages/app-desktop/app.ts:340
+#: packages/app-desktop/app.ts:344
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr "Aplikace se správně neuzavřela. Chcete ji spustit v nouzovém režimu?"
@@ -4264,7 +4248,7 @@ msgstr ""
 "aktualizovat. Aktualizovaný klíč bude stále schopen dešifrovat a šifrovat "
 "vaše data jako obvykle."
 
-#: packages/app-mobile/components/screens/Note.tsx:201
+#: packages/app-mobile/components/screens/Note.tsx:202
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu: %s"
 
@@ -4309,7 +4293,6 @@ msgid "The notebook could not be saved: %s"
 msgstr "Nebylo možné uložit zápisník: %s"
 
 #: packages/app-cli/app/command-import.js:70
-#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
 msgstr "Poznámky importovány: %s"
@@ -4396,7 +4379,7 @@ msgstr "Nemáte žádný zápisník. Nový vytvoříte klepnutím na \"Nový zá
 msgid "There is no data to export."
 msgstr "Nic k exportování."
 
-#: packages/lib/models/Resource.ts:424
+#: packages/lib/models/Resource.ts:425
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -4432,7 +4415,7 @@ msgstr ""
 "synchronizace. Pro přístup k těmto souborům hledejte jejich název nebo ID (v "
 "hranatých závorkách)."
 
-#: packages/lib/models/Setting.ts:2519
+#: packages/lib/models/Setting.ts:2529
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4455,7 +4438,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Tato příloha ještě není stažena nebo dešifrována"
 
-#: packages/app-mobile/components/screens/Note.tsx:195
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Tato příloha není ještě stažena nebo dešifrována."
 
@@ -4481,7 +4464,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Tato poznámka nemá informace o zeměpisné poloze."
 
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "This note has been modified:"
 msgstr "Poznámka byla upravena:"
 
@@ -4491,7 +4474,6 @@ msgid ""
 "note."
 msgstr "Tato poznámka je prázdná. pro otevření editoru klepněte na \"%s\"."
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:126
 msgid "This note has no history"
 msgstr "Tato poznámka nemá historii"
@@ -4607,7 +4589,7 @@ msgid ""
 msgstr ""
 "Chcete-li profil přepnout, aplikace se zavře a musíte ji znovu spustit."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:678
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4669,7 +4651,7 @@ msgstr "Přepínání pole řazení"
 msgid "Token has been copied to the clipboard!"
 msgstr "Token byl zkopírován do schránky!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:636
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
 msgid "Tools"
 msgstr "Nástroje"
 
@@ -4762,12 +4744,11 @@ msgstr ""
 "Opravdu chcete přestat sdílet tento zápisník? Příjemci už pak nebudou mít "
 "přístup k jeho obsahu."
 
-#: packages/app-mobile/components/screens/Note.tsx:667
+#: packages/app-mobile/components/screens/Note.tsx:668
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný formát obrázku: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:168
 msgid "Unsupported link or message: %s"
 msgstr "Nepodporovaný odkaz či zpráva: %s"
@@ -4793,7 +4774,6 @@ msgstr "Aktualizace celkových velikostí"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:50
 msgid "Updated"
 msgstr "Upraveno"
@@ -4815,12 +4795,11 @@ msgid "Updated: "
 msgstr "Upraveno: "
 
 #: packages/app-cli/app/command-import.js:49
-#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Updated: %d."
 msgstr "Upraveno: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:842
 msgid "Updated: %s"
 msgstr "Upraveno: %s"
 
@@ -4836,7 +4815,6 @@ msgstr "Upgradovat"
 msgid "Upgrade the sync target to the latest version."
 msgstr "Upgradovat cíl synchronizace na nejnovější verzi."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:115
@@ -4878,7 +4856,7 @@ msgstr ""
 "Pro přesun položek v rozložení použijte šipky. Pro ukončení změn stiskněte "
 "klávesu \"Escape\"."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4936,7 +4914,7 @@ msgstr "Ověřte svou identitu"
 msgid "View"
 msgstr "Zobrazit"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:846
 msgid "View on map"
 msgstr "Zobrazit na map+"
 
@@ -4956,11 +4934,12 @@ msgstr "Prohlížeč"
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
-msgid "Voice typing"
+#: packages/lib/models/Setting.ts:1705
+msgid "Voice typing language files (URL)"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:993
+#: packages/app-mobile/components/screens/Note.tsx:994
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
 msgstr ""
 
@@ -4973,7 +4952,7 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Upozornění: nejsou zobrazeny všechny prostředky z důvodů výkonu (limit: %s)."
 
-#: packages/lib/models/Setting.ts:2510 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2520 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -5045,12 +5024,12 @@ msgid "yes"
 msgstr "kompatibilní"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/app-mobile/components/screens/Note.tsx:584
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "Yes"
 msgstr "Ano"
 
-#: packages/app-mobile/components/screens/Note.tsx:582
+#: packages/app-mobile/components/screens/Note.tsx:583
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

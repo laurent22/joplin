@@ -16,6 +16,7 @@ export enum MarkdownTableJustify {
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	filter?: Function;
 	disableEscape?: boolean;
 	justify?: MarkdownTableJustify;
@@ -69,7 +70,7 @@ const markdownUtils = {
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractFileUrls(md: string, onlyType: string = null): Array<string> {
+	extractFileUrls(md: string, onlyType: string = null): string[] {
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 

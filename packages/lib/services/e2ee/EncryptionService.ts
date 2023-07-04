@@ -43,6 +43,7 @@ export enum EncryptionMethod {
 
 export interface EncryptOptions {
 	encryptionMethod?: EncryptionMethod;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onProgress?: Function;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;

@@ -12,6 +12,7 @@ const useIsVisible = (elementRef: MutableRefObject<HTMLElement>, rootRef: Mutabl
 		if (elementRef.current) {
 			observer = new IntersectionObserver((entries, _observer) => {
 				let visible = false;
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						visible = true;

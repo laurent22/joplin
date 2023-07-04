@@ -10,6 +10,7 @@ interface NoteContentPropertiesDialogProps {
 	themeId: number;
 	text: string;
 	markupLanguage: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 }
 
@@ -28,6 +29,7 @@ function markupToHtml() {
 	return markupToHtml_;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function countElements(text: string, wordSetter: Function, characterSetter: Function, characterNoSpaceSetter: Function, lineSetter: Function) {
 	Countable.count(text, (counter: any) => {
 		wordSetter(counter.words);

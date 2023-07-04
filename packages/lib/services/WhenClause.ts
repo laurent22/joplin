@@ -60,7 +60,7 @@ export default class WhenClause {
 	private validate_: boolean;
 	private ruleCache_: Record<string, ContextKeyExpression> = {};
 
-	public constructor(expression: string, validate: boolean = true) {
+	public constructor(expression: string, validate = true) {
 		this.expression_ = parseAdvancedExpression(expression);
 		this.validate_ = validate;
 	}

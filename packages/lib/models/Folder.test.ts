@@ -138,6 +138,7 @@ describe('models/Folder', () => {
 			const folders = await Folder.all({ includeConflictFolder: false });
 			await Folder.addNoteCounts(folders);
 			const foldersById: any = {};
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
 			expect(folders.length).toBe(4);
@@ -151,6 +152,7 @@ describe('models/Folder', () => {
 			const folders = await Folder.all({ includeConflictFolder: true });
 			await Folder.addNoteCounts(folders);
 			const foldersById: any = {};
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
 			expect(folders.length).toBe(5);
@@ -176,6 +178,7 @@ describe('models/Folder', () => {
 		await Folder.addNoteCounts(folders, false);
 
 		const foldersById: any = {};
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
 		expect(folders.length).toBe(4);

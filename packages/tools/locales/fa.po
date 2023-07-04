@@ -16,15 +16,15 @@ msgstr ""
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- دوربین: برای عکس گرفتن به پیوست کردن آن به یک یادداشت."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:690
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- موقعیت: برای پیوست کردن اطلاعات ژئولوکیشن به یک یادداشت."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -267,7 +267,7 @@ msgstr "فعال"
 msgid "Actual Size"
 msgstr "اندازه واقعی"
 
-#: packages/app-mobile/components/screens/Note.tsx:1212
+#: packages/app-mobile/components/screens/Note.tsx:1215
 msgid "Add body"
 msgstr "افزودن بدنه"
 
@@ -284,7 +284,7 @@ msgstr "اضافه یا حذف کردن برچسب‌ها:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1286
+#: packages/app-mobile/components/screens/Note.tsx:1289
 msgid "Add title"
 msgstr "افزودن عنوان"
 
@@ -355,11 +355,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "یک بروزرسانی موجود است، آیا میخواهید هم اکنون بارگیری‌اش کنید؟"
 
-#: packages/lib/models/Setting.ts:2502
+#: packages/lib/models/Setting.ts:2512
 msgid "Appearance"
 msgstr "ظاهر"
 
-#: packages/lib/models/Setting.ts:2507
+#: packages/lib/models/Setting.ts:2517
 msgid "Application"
 msgstr "نرم‌افزار"
 
@@ -392,15 +392,15 @@ msgstr "پیوست..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
-#: packages/app-mobile/components/screens/Note.tsx:869
+#: packages/app-mobile/components/screens/Note.tsx:870
 msgid "Attach file"
 msgstr "پیوست فایل"
 
-#: packages/app-mobile/components/screens/Note.tsx:873
+#: packages/app-mobile/components/screens/Note.tsx:874
 msgid "Attach photo"
 msgstr "ضمیمه‌ی تصویر"
 
-#: packages/app-mobile/components/screens/Note.tsx:969
+#: packages/app-mobile/components/screens/Note.tsx:970
 msgid "Attach..."
 msgstr "پیوست..."
 
@@ -414,7 +414,7 @@ msgstr "فایل مشخص شده را به یادداشت پیوست کن."
 msgid "attachment"
 msgstr "پیوست ها"
 
-#: packages/lib/models/Resource.ts:423
+#: packages/lib/models/Resource.ts:424
 msgid "Attachment conflict: \"%s\""
 msgstr "تداخل پیوست: «%s»"
 
@@ -471,7 +471,6 @@ msgstr "به طور خودکار پوسته هماهنگ با پوسته سیس�
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:720
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:209
 #: packages/app-mobile/components/ScreenHeader.tsx:306
 #: packages/lib/commands/historyBackward.ts:6
@@ -518,7 +517,6 @@ msgstr "اشتراک گذاری"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:328
@@ -530,13 +528,12 @@ msgstr "اشتراک گذاری"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:110
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:111
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.tsx:165
 #: packages/app-mobile/components/side-menu-content.tsx:174
 #: packages/app-mobile/components/side-menu-content.tsx:439
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:80
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "لغو"
@@ -688,17 +685,15 @@ msgstr "لیست چک‌باکس"
 msgid "Checking... Please wait."
 msgstr "در حال بررسی... لطفا صبر کنید."
 
-#: packages/app-mobile/components/screens/Note.tsx:876
+#: packages/app-mobile/components/screens/Note.tsx:877
 msgid "Choose an option"
 msgstr "یک گزینه را انتخاب کنید"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:70
 msgid "Chrome Web Store"
 msgstr ""
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:297
 msgid "Clear"
 msgstr "پاک"
@@ -707,7 +702,6 @@ msgstr "پاک"
 msgid "Clear alarm"
 msgstr "پاک کردن هشدار"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -800,7 +794,6 @@ msgstr "فرمان"
 msgid "Command palette..."
 msgstr "فرمان"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Completed"
 msgstr "کامل شده"
@@ -819,7 +812,7 @@ msgid "Compress old changes"
 msgstr ""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:762
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:765
 #: packages/app-mobile/components/side-menu-content.tsx:417
 msgid "Configuration"
 msgstr "تنظیمات"
@@ -847,7 +840,7 @@ msgstr "تداخل پیدا کرده: %d"
 msgid "Conflicts"
 msgstr "تداخل ها"
 
-#: packages/lib/models/Resource.ts:407
+#: packages/lib/models/Resource.ts:408
 #, fuzzy
 msgid "Conflicts (attachments)"
 msgstr "پیوست‌های یادداشت"
@@ -865,15 +858,15 @@ msgstr "جزییات یادداشت"
 msgid "Continue"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1010
+#: packages/app-mobile/components/screens/Note.tsx:1011
 msgid "Convert to note"
 msgstr "تبدیل به یادداشت"
 
-#: packages/app-mobile/components/screens/Note.tsx:1010
+#: packages/app-mobile/components/screens/Note.tsx:1011
 msgid "Convert to todo"
 msgstr "تبدیل به فهرست کارها"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 #, fuzzy
 msgid "Converting speech to text..."
 msgstr "تبدیل به یادداشت"
@@ -907,7 +900,7 @@ msgid "Copy Link Address"
 msgstr "کپی کردن آدرس پیوند"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:1017
+#: packages/app-mobile/components/screens/Note.tsx:1018
 msgid "Copy Markdown link"
 msgstr "کپی کردن پیوند Markdown"
 
@@ -989,7 +982,6 @@ msgstr ""
 msgid "Could not verify your identify: %s"
 msgstr "یادداشت‌ها استخراج نشدند: %s"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:276
 #, fuzzy
 msgid "Create"
@@ -1020,7 +1012,6 @@ msgstr "ایجاد یک دفترچه"
 msgid "Create user"
 msgstr "ایجاد شده: %s"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:49
 msgid "Created"
 msgstr "ایجاد شده"
@@ -1048,13 +1039,12 @@ msgid "Created: "
 msgstr "ایجاد شده: %s"
 
 #: packages/app-cli/app/command-import.js:48
-#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Created: %d."
 msgstr "ایجاد شده: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "Created: %s"
 msgstr "ایجاد شده: %s"
 
@@ -1074,7 +1064,7 @@ msgstr "یک فهرست کار جدید می‌سازد."
 msgid "Creating new %s..."
 msgstr "ایجاد یک %s جدید..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:645
 msgid "Creating report..."
 msgstr "در حال ایجاد گزارش..."
 
@@ -1116,7 +1106,7 @@ msgstr "تیره"
 msgid "Dashboard"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:744
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:747
 msgid "Database v%s"
 msgstr "پایگاه داده ورژن %s"
 
@@ -1167,7 +1157,7 @@ msgstr "پیشفرض: %s"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
 #: packages/app-mobile/components/ScreenHeader.tsx:419
 #: packages/app-mobile/components/ScreenHeader.tsx:486
-#: packages/app-mobile/components/screens/Note.tsx:1030
+#: packages/app-mobile/components/screens/Note.tsx:1031
 #: packages/app-mobile/components/side-menu-content.tsx:155
 msgid "Delete"
 msgstr "حذف"
@@ -1195,12 +1185,12 @@ msgstr "یادداشت حذف شود؟"
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
-#: packages/lib/models/Note.ts:765
+#: packages/lib/models/Note.ts:772
 msgid "Delete note \"%s\"?"
 msgstr "یادداشت «%s» حذف شود؟"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:535
+#: packages/app-mobile/components/screens/Note.tsx:536
 msgid "Delete note?"
 msgstr "یادداشت حذف شود؟"
 
@@ -1238,7 +1228,7 @@ msgstr "یادداشت «%s» حذف شود؟"
 msgid "Delete selected notes"
 msgstr "این یادداشت ها حذف شوند؟"
 
-#: packages/lib/models/Note.ts:767
+#: packages/lib/models/Note.ts:774
 msgid "Delete these %d notes?"
 msgstr "تعداد %d یادداشت حذف شود؟"
 
@@ -1324,7 +1314,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:353
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "Discard changes"
 msgstr "لغو تغییرات"
 
@@ -1396,7 +1386,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
 msgid "Done"
 msgstr ""
 
@@ -1424,6 +1414,11 @@ msgstr "بارگیری شده و رمزنگاری شده"
 #: packages/lib/models/Resource.ts:354
 msgid "Downloading"
 msgstr "در حال بارگیری"
+
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
+#, fuzzy
+msgid "Downloading %s language files..."
+msgstr "در حال بارگیری منابع..."
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -1472,7 +1467,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
-#: packages/app-mobile/components/screens/Note.tsx:1248
+#: packages/app-mobile/components/screens/Note.tsx:1253
 #: packages/app-mobile/components/side-menu-content.tsx:143
 msgid "Edit"
 msgstr "ویرایش"
@@ -1690,7 +1685,7 @@ msgstr "رمزنگاری شده"
 msgid "Encrypted items cannot be modified"
 msgstr "موارد رمزنگاری شده نمی‌توانند تغییر پیدا کنند"
 
-#: packages/lib/models/Setting.ts:2509
+#: packages/lib/models/Setting.ts:2519
 msgid "Encryption"
 msgstr "رمزنگاری"
 
@@ -1748,6 +1743,7 @@ msgstr "خطا در بازکردن یادداشت در ویرایشگر: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
 #: packages/lib/services/KeymapService.ts:205
 #, fuzzy
 msgid "Error: %s"
@@ -1797,15 +1793,15 @@ msgstr "استخراج همه"
 msgid "Export debug report"
 msgstr "استخراج گزارش دیباگ"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:645
 msgid "Export Debug Report"
 msgstr "استخراج گزارش دیباگ"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "Export profile"
 msgstr "استخراج نمایه"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "Exporting profile..."
 msgstr "در حال استخراج نمایه..."
 
@@ -1843,7 +1839,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "خطای مهلک:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:664
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:667
 msgid "Feature flags"
 msgstr ""
 
@@ -1878,16 +1874,15 @@ msgstr ""
 msgid "Find: "
 msgstr "پیدا شده: %d."
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
 msgstr "افزونه Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Fix search index"
 msgstr "فهرست جستجو را درست کنید"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Fixing search index..."
 msgstr ""
 
@@ -1911,7 +1906,7 @@ msgstr ""
 msgid "Folders"
 msgstr "پوشه‌ها"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "تنها برای دیباگ: استخراج نمایه شما به یک حافظه خارجی SD."
 
@@ -1951,12 +1946,11 @@ msgid "Forward"
 msgstr "به جلو"
 
 #: packages/app-cli/app/command-import.js:47
-#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:88
 msgid "Found: %d."
 msgstr "پیدا شده: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:750
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:753
 msgid "FTS enabled: %d"
 msgstr "FTS فعال شده: %d"
 
@@ -1968,7 +1962,7 @@ msgstr ""
 msgid "Full name"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2500
+#: packages/lib/models/Setting.ts:2510
 #: packages/server/src/services/MustacheService.ts:109
 msgid "General"
 msgstr "کلی"
@@ -1984,7 +1978,6 @@ msgid_plural "Generating links..."
 msgstr[0] "در حال بوجود آوردن پیوند‌ها..."
 msgstr[1] "در حال بوجود آوردن پیوند..."
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
 msgstr "هم‌اکنون دریافت کنید:"
@@ -2003,7 +1996,7 @@ msgstr ""
 "مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] "
 "(مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود."
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:853
 msgid "Go to source URL"
 msgstr "رفتن به آدرس منبع"
 
@@ -2033,7 +2026,7 @@ msgstr "عنوان"
 msgid "Help"
 msgstr "کمک"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:759
 #, fuzzy
 msgid "Hermes enabled: %d"
 msgstr "FTS فعال شده: %d"
@@ -2102,7 +2095,6 @@ msgstr "آیکون"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:76
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:48
 #: packages/app-desktop/gui/ResourceScreen.tsx:94
 msgid "ID"
@@ -2157,7 +2149,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:412
+#: packages/app-mobile/components/screens/Note.tsx:413
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2272,7 +2264,7 @@ msgstr "پاسخ نامعتبر: %s"
 msgid "Invalid command: \"%s\""
 msgstr "دستور نامعتبر: «%s»"
 
-#: packages/lib/models/Setting.ts:2028
+#: packages/lib/models/Setting.ts:2038
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s."
 
@@ -2377,7 +2369,7 @@ msgid ""
 "to Joplin."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:716
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:719
 msgid "Joplin website"
 msgstr "سایت Joplin"
 
@@ -2403,7 +2395,7 @@ msgstr "حالت صفحه کلید"
 msgid "Keyboard Shortcut"
 msgstr "کلید های میانبر"
 
-#: packages/lib/models/Setting.ts:2511
+#: packages/lib/models/Setting.ts:2521
 msgid "Keyboard Shortcuts"
 msgstr "کلید های میانبر"
 
@@ -2439,6 +2431,10 @@ msgstr "قالب"
 #: packages/app-desktop/gui/MenuBar.tsx:684
 msgid "Layout button sequence"
 msgstr "توالی دکمه قالب"
+
+#: packages/lib/models/Setting.ts:1704
+msgid "Leave it blank to download the language files from the default website"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
@@ -2482,7 +2478,7 @@ msgstr[1] "پیوند در کلیپ بورد کپی شد!"
 msgid "Link text"
 msgstr "لینک"
 
-#: packages/app-mobile/components/screens/Note.tsx:205
+#: packages/app-mobile/components/screens/Note.tsx:206
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "پیوند‌های دارای پروتکل «%s» پشتیبانی نمی‌شوند"
 
@@ -2501,12 +2497,11 @@ msgstr ""
 msgid "Loaded"
 msgstr "بارگیری شده"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:86
 #, fuzzy
 msgid "Loading..."
 msgstr "در حال لغو..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Location"
 msgstr "مکان"
@@ -2518,7 +2513,7 @@ msgid ""
 "operation."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:640
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:643
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:276
 msgid "Log"
@@ -2549,7 +2544,7 @@ msgid "Logs"
 msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:795
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:702
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:705
 msgid "Make a donation"
 msgstr "کمک کردن"
 
@@ -2568,7 +2563,7 @@ msgstr "گذرواژه اصلی را وارد کنید:"
 msgid "Manage multiple users"
 msgstr "گذرواژه اصلی را وارد کنید:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:638
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
 #, fuzzy
 msgid "Manage profiles"
 msgstr "استخراج نمایه"
@@ -2591,7 +2586,7 @@ msgstr ""
 msgid "Manual"
 msgstr "دستی"
 
-#: packages/lib/models/Setting.ts:2505
+#: packages/lib/models/Setting.ts:2515
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2610,7 +2605,6 @@ msgstr "یک فهرست کار را به عنوان انجام شده علامت
 msgid "Marks a to-do as non-completed."
 msgstr "یک فهرست کار را به عنوان کامل نشده علامت می‌زند."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:55
 msgid "Markup"
 msgstr "نشانه گذاری"
@@ -2676,7 +2670,7 @@ msgstr ""
 msgid "More info"
 msgstr "اطلاعات بیشتر"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:668
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:671
 msgid "More information"
 msgstr "اطلاعات بیشتر"
 
@@ -2730,7 +2724,6 @@ msgstr "دفترچه جدید"
 msgid "New Notebook"
 msgstr "دفترچه جدید"
 
-#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -2781,7 +2774,7 @@ msgid "no"
 msgstr "خیر"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "No"
 msgstr "خیر"
@@ -2790,7 +2783,7 @@ msgstr "خیر"
 msgid "No active notebook."
 msgstr "دفترچه‌ی فعالی وجود ندارد."
 
-#: packages/app-mobile/components/screens/Note.tsx:176
+#: packages/app-mobile/components/screens/Note.tsx:177
 msgid "No item with ID %s"
 msgstr "هیچ موردی با شناسه %s وجود ندارد"
 
@@ -2859,7 +2852,7 @@ msgstr "هم‌اکنون انجام بده"
 msgid "note"
 msgstr "یادداشت"
 
-#: packages/lib/models/Setting.ts:2503
+#: packages/lib/models/Setting.ts:2513
 msgid "Note"
 msgstr "یادداشت"
 
@@ -2892,9 +2885,8 @@ msgstr "تاریخچه ی یادداشت"
 msgid "Note has been saved."
 msgstr "یادداشت ذخیره شد."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
-#: packages/lib/models/Setting.ts:2508
+#: packages/lib/models/Setting.ts:2518
 msgid "Note History"
 msgstr "تاریخچه ی یادداشت"
 
@@ -2911,7 +2903,6 @@ msgid "Note list growth factor"
 msgstr "فاکتور رشد لیست یادداشت"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:403
 msgid "Note properties"
 msgstr "جزییات یادداشت"
@@ -2934,7 +2925,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "دفترچه ها"
 
-#: packages/lib/models/Setting.ts:2504
+#: packages/lib/models/Setting.ts:2514
 #, fuzzy
 msgid "Notebook"
 msgstr "دفترچه ها"
@@ -2962,7 +2953,7 @@ msgstr "دفترچه نمی‌تواند «%s» نام داشته باشد، ا�
 msgid "Notes"
 msgstr "یادداشت"
 
-#: packages/lib/models/Setting.ts:2520
+#: packages/lib/models/Setting.ts:2530
 msgid "Notes and settings are stored in: %s"
 msgstr "یادداشت‌ها و تنظیمات در این محل ذخیره شده‌اند: %s"
 
@@ -2980,7 +2971,6 @@ msgstr "لیست شماره گذاری شده"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:283
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3035,7 +3025,7 @@ msgstr "هر دفعه فقط یک یادداشت می‌تواند پرینت گ
 msgid "Open"
 msgstr "باز کردن..."
 
-#: packages/app-desktop/app.ts:178
+#: packages/app-desktop/app.ts:179
 msgid "Open %s"
 msgstr "باز کردن %s"
 
@@ -3138,7 +3128,7 @@ msgstr "فایل PDF"
 msgid "Per user. Minimum of %d users."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:413
+#: packages/app-mobile/components/screens/Note.tsx:414
 #, fuzzy
 msgid "Permission needed"
 msgstr "اجازه برای استفاده از دوربین"
@@ -3182,7 +3172,7 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Please record your voice..."
 msgstr ""
 
@@ -3229,7 +3219,7 @@ msgid "Plugin tools"
 msgstr "پلاگین ها"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2506
+#: packages/lib/models/Setting.ts:2516
 msgid "Plugins"
 msgstr "پلاگین ها"
 
@@ -3286,7 +3276,6 @@ msgstr "برای تنظیم گذرواژه رمزگشایی بفشارید."
 msgid "Previous match"
 msgstr ""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
 msgid "Previous versions of this note"
 msgstr "نسخه‌های قبلی این یادداشت"
@@ -3299,7 +3288,7 @@ msgstr "پرینت"
 msgid "Priority support"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:730
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:733
 msgid "Privacy Policy"
 msgstr ""
 
@@ -3342,7 +3331,7 @@ msgstr "نسخه نمایه: %s"
 msgid "Profiles"
 msgstr "نسخه نمایه: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:1024
+#: packages/app-mobile/components/screens/Note.tsx:1025
 msgid "Properties"
 msgstr "جزییات"
 
@@ -3377,7 +3366,7 @@ msgstr ""
 msgid "Publish notes to the internet"
 msgstr ""
 
-#: packages/app-desktop/app.ts:180
+#: packages/app-desktop/app.ts:181
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:318
 msgid "Quit"
@@ -3504,7 +3493,6 @@ msgid "Reset master password"
 msgstr "گذرواژه اصلی را وارد کنید:"
 
 #: packages/app-cli/app/command-import.js:51
-#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Resources: %d."
 msgstr "منابع: %d."
@@ -3520,7 +3508,6 @@ msgid "Restart now"
 msgstr "هم‌اکنون دریافت کنید:"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:79
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:203
 msgid "Restore"
 msgstr "بازگرداندن"
@@ -3620,7 +3607,7 @@ msgstr "ذخیره به عنوان..."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:331
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:346
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "Save changes"
 msgstr "ذخیره ی تغییرات"
 
@@ -3657,7 +3644,6 @@ msgstr "جستجو:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 #: packages/app-desktop/gui/NoteSearchBar.tsx:175
 msgid "Search..."
 msgstr "جستجو..."
@@ -3709,7 +3695,7 @@ msgid "Server is running on port %d"
 msgstr "سرور بر روی پورت %d در حال اجراست"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:976
+#: packages/app-mobile/components/screens/Note.tsx:977
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "تنظیم هشدار"
@@ -3742,7 +3728,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:984
+#: packages/app-mobile/components/screens/Note.tsx:985
 msgid "Share"
 msgstr "اشتراک گذاری"
 
@@ -3843,7 +3829,6 @@ msgstr ""
 "استفاده کنید)"
 
 #: packages/app-cli/app/command-import.js:50
-#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Skipped: %d."
 msgstr "رد شده: %d."
@@ -4063,7 +4048,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Sync Status"
 msgstr "وضعیت همگام‌سازی"
 
@@ -4092,7 +4077,7 @@ msgstr "نسخه همگام‌سازی: %s"
 msgid "Sync your notes"
 msgstr "مرتب سازی یادداشت ها با"
 
-#: packages/lib/models/Setting.ts:2501
+#: packages/lib/models/Setting.ts:2511
 msgid "Synchronisation"
 msgstr "همگام‌سازی"
 
@@ -4149,20 +4134,19 @@ msgid "tag1, tag2, ..."
 msgstr ""
 
 #: packages/app-cli/app/command-import.js:52
-#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Tagged: %d."
 msgstr "برچسب گذاری شده: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:730
-#: packages/app-mobile/components/screens/Note.tsx:1003
+#: packages/app-mobile/components/screens/Note.tsx:1004
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.tsx:411
 msgid "Tags"
 msgstr "برچسب‌ها"
 
-#: packages/app-mobile/components/screens/Note.tsx:874
+#: packages/app-mobile/components/screens/Note.tsx:875
 msgid "Take photo"
 msgstr "گرفتن عکس"
 
@@ -4201,7 +4185,7 @@ msgstr ""
 "برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه "
 "اندازی کنید."
 
-#: packages/app-desktop/app.ts:340
+#: packages/app-desktop/app.ts:344
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
@@ -4291,7 +4275,7 @@ msgstr ""
 "پیشنهاد می‌شود که آن‌ها رو ارتقا دهید. کلید اصلی ارتقا یافته همچنان طبق معمول "
 "قادر به رمزگشایی و رمزنگاری داده شما خواهد بود."
 
-#: packages/app-mobile/components/screens/Note.tsx:201
+#: packages/app-mobile/components/screens/Note.tsx:202
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "برنامه موبایل Joplin در حال حاضر از این پیوند پشتیبانی نمی‌کند: %s"
 
@@ -4335,7 +4319,6 @@ msgid "The notebook could not be saved: %s"
 msgstr "دفترچه نتوانست ذخیره شود: %s"
 
 #: packages/app-cli/app/command-import.js:70
-#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
 msgstr "یادداشت‌ها وارد شدند: %s"
@@ -4417,7 +4400,7 @@ msgstr ""
 msgid "There is no data to export."
 msgstr "داده‌ای برای استخراج وجود ندارد."
 
-#: packages/lib/models/Resource.ts:424
+#: packages/lib/models/Resource.ts:425
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -4449,7 +4432,7 @@ msgstr ""
 "این پیدا کردن این موارد، عنوان و یا شناسه (که در براکت‌های بالا نمایش داده "
 "شده‌اند) را جستجو کنید."
 
-#: packages/lib/models/Setting.ts:2519
+#: packages/lib/models/Setting.ts:2529
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4465,7 +4448,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "این پیوست هنوز بارگیری یا رمزگشایی نشده"
 
-#: packages/app-mobile/components/screens/Note.tsx:195
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "این پیوست هنوز بارگیری یا رمزگشایی نشده."
 
@@ -4488,7 +4471,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "این یادداشت اطلاعات ژئولوکیشن ندارد."
 
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "This note has been modified:"
 msgstr "این یادداشت تغییر یافته است:"
 
@@ -4500,7 +4483,6 @@ msgstr ""
 "این یادداشت هیچ محتوایی ندارد. برای تغییر وضعیت ویرایشگر و ویرایش یادداشت ، "
 "روی \"%s\" کلیک کنید."
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:126
 msgid "This note has no history"
 msgstr "این یادداشت هیچ تاریخچه ای ندارد"
@@ -4607,7 +4589,7 @@ msgid ""
 "restart it."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:678
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4676,7 +4658,7 @@ msgstr "تغییر وضعیت نوار کناری"
 msgid "Token has been copied to the clipboard!"
 msgstr "توکن در کلیپ بورد کپی شد!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:636
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
 msgid "Tools"
 msgstr "&ابزار‌ها"
 
@@ -4769,12 +4751,11 @@ msgid ""
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:667
+#: packages/app-mobile/components/screens/Note.tsx:668
 msgid "Unsupported image type: %s"
 msgstr "نوع تصویر پشتیبانی نشده: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:168
 msgid "Unsupported link or message: %s"
 msgstr "پیوند یا پیام پشتیبانی نشده: %s"
@@ -4803,7 +4784,6 @@ msgstr "موارد محلی به‌روز شده: %d."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:50
 msgid "Updated"
 msgstr "به‌روز شده"
@@ -4826,12 +4806,11 @@ msgid "Updated: "
 msgstr "به‌روز شده: %s"
 
 #: packages/app-cli/app/command-import.js:49
-#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Updated: %d."
 msgstr "به‌روز شده: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:842
 msgid "Updated: %s"
 msgstr "به‌روز شده: %s"
 
@@ -4849,7 +4828,6 @@ msgstr "ارتقا"
 msgid "Upgrade the sync target to the latest version."
 msgstr "هدف همگام سازی را به آخرین نسخه ارتقا دهید."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:115
@@ -4891,7 +4869,7 @@ msgstr ""
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4939,7 +4917,7 @@ msgstr ""
 msgid "View"
 msgstr "نما"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:846
 msgid "View on map"
 msgstr "نمایش بر روی نقشه"
 
@@ -4959,11 +4937,12 @@ msgstr "بیننده"
 msgid "Vim"
 msgstr ""
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
-msgid "Voice typing"
+#: packages/lib/models/Setting.ts:1705
+msgid "Voice typing language files (URL)"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:993
+#: packages/app-mobile/components/screens/Note.tsx:994
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
 msgstr ""
 
@@ -4975,7 +4954,7 @@ msgstr "اخطار ها"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2510 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2520 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr ""
 
@@ -5049,12 +5028,12 @@ msgid "yes"
 msgstr "بله"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/app-mobile/components/screens/Note.tsx:584
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "Yes"
 msgstr "بله"
 
-#: packages/app-mobile/components/screens/Note.tsx:582
+#: packages/app-mobile/components/screens/Note.tsx:583
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

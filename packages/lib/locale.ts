@@ -483,7 +483,7 @@ function supportedLocalesToLanguages(options: SupportedLocalesToLanguagesOptions
 	return output;
 }
 
-function closestSupportedLocale(canonicalName: string, defaultToEnglish: boolean = true, locales: string[] = null) {
+function closestSupportedLocale(canonicalName: string, defaultToEnglish = true, locales: string[] = null) {
 	locales = locales === null ? supportedLocales() : locales;
 	if (locales.indexOf(canonicalName) >= 0) return canonicalName;
 
@@ -508,7 +508,7 @@ function languageNameInEnglish(languageCode: string) {
 	return codeToLanguageE_[languageCode] ? codeToLanguageE_[languageCode] : '';
 }
 
-function languageName(canonicalName: string, defaultToEnglish: boolean = true) {
+function languageName(canonicalName: string, defaultToEnglish = true) {
 	const languageCode = languageCodeOnly(canonicalName);
 	if (codeToLanguage_[languageCode]) return codeToLanguage_[languageCode];
 	if (defaultToEnglish) return languageNameInEnglish(languageCode);

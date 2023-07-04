@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(frameWindow: any, onSubmit: Function, onDismiss: Function, loadedHtmlHash: string) {
 	useEffect(() => {
 		if (!frameWindow) return () => {};

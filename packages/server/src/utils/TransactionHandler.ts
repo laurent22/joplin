@@ -17,8 +17,8 @@ export default class TransactionHandler {
 
 	private transactionStack_: TransactionInfo[] = [];
 	private activeTransaction_: Knex.Transaction = null;
-	private transactionIndex_: number = 0;
-	private logEnabled_: boolean = false;
+	private transactionIndex_ = 0;
+	private logEnabled_ = false;
 	private db_: Knex = null;
 
 	public constructor(db: DbConnection) {

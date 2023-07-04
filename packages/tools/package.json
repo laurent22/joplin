@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
@@ -20,15 +20,15 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/lib": "~2.11",
-    "@joplin/renderer": "~2.11",
-    "@joplin/utils": "~2.11",
+    "@joplin/lib": "~2.12",
+    "@joplin/renderer": "~2.12",
+    "@joplin/utils": "~2.12",
     "compare-versions": "3.6.0",
     "dayjs": "1.11.8",
     "execa": "4.1.0",
     "fs-extra": "11.1.1",
     "gettext-parser": "6.0.0",
-    "glob": "8.1.0",
+    "glob": "10.2.7",
     "markdown-it": "13.0.1",
     "md5-file": "5.0.0",
     "moment": "2.29.4",
@@ -42,7 +42,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.43",
+    "@joplin/fork-htmlparser2": "^4.1.44",
     "@rmp135/sql-ts": "1.16.0",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.1",

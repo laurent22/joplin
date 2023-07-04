@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import { ToolbarButtonLocation } from './types';
 import Plugin from '../Plugin';
 import ToolbarButtonController from '../ToolbarButtonController';

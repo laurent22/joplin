@@ -905,9 +905,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Need to save the onChange handler to a ref to make sure
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const props_onChangeRef = useRef<Function>();
 	props_onChangeRef.current = props.onChange;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const prop_htmlToMarkdownRef = useRef<Function>();
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
@@ -1106,7 +1108,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		function onPasteAsText() {
-			pasteAsPlainText(null);
+			// clipboard.readText returns Markdown instead of text when copying content from
+			// the Rich Text Editor. When the user "Paste as text" he does not expect to see
+			// anything besides text, that is why we are stripping here before pasting
+			// https://github.com/laurent22/joplin/pull/8351
+			const clipboardWithoutMarkdown = stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, clipboard.readText());
+			pasteAsPlainText(clipboardWithoutMarkdown);
 		}
 
 		editor.on(TinyMceEditorEvents.KeyUp, onKeyUp);

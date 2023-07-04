@@ -10,6 +10,7 @@ type EnabledCondition = string;
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
 	state: State;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 
@@ -102,8 +103,10 @@ export default class CommandService extends BaseService {
 	private commands_: Commands = {};
 	private store_: any;
 	private devMode_: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private stateToWhenClauseContext_: Function;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public initialize(store: any, devMode: boolean, stateToWhenClauseContext: Function) {
 		utils.store = store;
 		this.store_ = store;
@@ -111,15 +114,17 @@ export default class CommandService extends BaseService {
 		this.stateToWhenClauseContext_ = stateToWhenClauseContext;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		eventManager.off(eventName, callback);
 	}
 
-	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel: boolean = true): SearchResult[] {
+	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel = true): SearchResult[] {
 		query = query.toLowerCase();
 
 		const output = [];
@@ -148,7 +153,7 @@ export default class CommandService extends BaseService {
 		return output;
 	}
 
-	public commandNames(publicOnly: boolean = false) {
+	public commandNames(publicOnly = false) {
 		if (publicOnly) {
 			const output = [];
 			for (const name in this.commands_) {
@@ -298,7 +303,7 @@ export default class CommandService extends BaseService {
 		return command.declaration.iconName;
 	}
 
-	public label(commandName: string, fullLabel: boolean = false): string {
+	public label(commandName: string, fullLabel = false): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];

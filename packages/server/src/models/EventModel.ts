@@ -16,7 +16,7 @@ export default class EventModel extends BaseModel<Event> {
 		return UuidType.Native;
 	}
 
-	public async create(type: EventType, name: string = '') {
+	public async create(type: EventType, name = '') {
 		await this.save({
 			name,
 			type,
