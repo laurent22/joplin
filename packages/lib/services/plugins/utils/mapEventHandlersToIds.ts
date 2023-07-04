@@ -1,6 +1,7 @@
 let eventHandlerIndex_ = 1;
 
 export interface EventHandlers {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	[key: string]: Function;
 }
 

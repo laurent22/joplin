@@ -163,6 +163,11 @@
 		"aws-sdk",
 		"@aws-sdk/client-s3",
 		"@aws-sdk/s3-request-presigner",
+
+		// 2.x appears to have breaking changes since the generated HTML is
+		// different. Not important enough to fix since the package is only used
+		// for tests.
+		"clean-html",
 	],
 	"packageRules": [
 		{

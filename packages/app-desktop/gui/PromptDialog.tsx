@@ -12,6 +12,7 @@ interface Props {
 	visible: boolean;
 	style: any;
 	buttons: any[];
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	inputType: string;
 	description: string;
@@ -26,7 +27,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 	private focusInput_: boolean;
 	private styles_: any;
 	private styleKey_: string;
-	private menuIsOpened_: boolean = false;
+	private menuIsOpened_ = false;
 
 	public constructor(props: Props) {
 		super(props);

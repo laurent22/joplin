@@ -277,7 +277,7 @@ export async function migrateUnlock(db: DbConnection) {
 	await db.migrate.forceFreeMigrationsLock();
 }
 
-export async function migrateList(db: DbConnection, asString: boolean = true) {
+export async function migrateList(db: DbConnection, asString = true) {
 	const migrations: any = await db.migrate.list({
 		directory: migrationDir,
 	});

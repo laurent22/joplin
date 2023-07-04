@@ -1,16 +1,16 @@
 // Stores information about the current content of the user's selection
 
 export default class SelectionFormatting {
-	public bolded: boolean = false;
-	public italicized: boolean = false;
-	public inChecklist: boolean = false;
-	public inCode: boolean = false;
-	public inUnorderedList: boolean = false;
-	public inOrderedList: boolean = false;
-	public inMath: boolean = false;
-	public inLink: boolean = false;
-	public spellChecking: boolean = false;
-	public unspellCheckableRegion: boolean = false;
+	public bolded = false;
+	public italicized = false;
+	public inChecklist = false;
+	public inCode = false;
+	public inUnorderedList = false;
+	public inOrderedList = false;
+	public inMath = false;
+	public inLink = false;
+	public spellChecking = false;
+	public unspellCheckableRegion = false;
 
 	// Link data, both fields are null if not in a link.
 	public linkData: { linkText?: string; linkURL?: string } = {
@@ -20,11 +20,11 @@ export default class SelectionFormatting {
 
 	// If [headerLevel], [listLevel], etc. are zero, then the
 	// selection isn't in a header/list
-	public headerLevel: number = 0;
-	public listLevel: number = 0;
+	public headerLevel = 0;
+	public listLevel = 0;
 
 	// Content of the selection
-	public selectedText: string = '';
+	public selectedText = '';
 
 	// List of data properties (for serializing/deseralizing)
 	private static propNames: string[] = [

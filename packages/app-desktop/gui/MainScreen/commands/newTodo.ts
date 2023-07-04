@@ -9,7 +9,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, body: string = '') => {
+		execute: async (_context: CommandContext, body = '') => {
 			return CommandService.instance().execute('newNote', body, true);
 		},
 		enabledCondition: 'oneFolderSelected && !inConflictFolder',

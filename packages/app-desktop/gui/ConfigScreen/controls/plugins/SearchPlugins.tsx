@@ -25,6 +25,7 @@ interface Props {
 	onSearchQueryChange(event: OnChangeEvent): void;
 	pluginSettings: PluginSettings;
 	onPluginSettingsChange(event: any): void;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderDescription: Function;
 	maxWidth: number;
 	repoApi(): RepositoryApi;

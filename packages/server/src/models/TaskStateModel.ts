@@ -42,7 +42,7 @@ export default class TaskStateModel extends BaseModel<TaskState> {
 		await this.save({ id: state.id, running: 0 });
 	}
 
-	public async enable(taskId: TaskId, enabled: boolean = true) {
+	public async enable(taskId: TaskId, enabled = true) {
 		const state = await this.loadByTaskId(taskId);
 		if (state.enabled && enabled) throw new Error(`Task is already enabled: ${taskId}`);
 		if (!state.enabled && !enabled) throw new Error(`Task is already disabled: ${taskId}`);

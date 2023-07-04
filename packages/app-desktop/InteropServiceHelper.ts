@@ -151,6 +151,7 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static async export(_dispatch: Function, module: Module, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 

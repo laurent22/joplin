@@ -8,6 +8,7 @@ const outputDir = `${rootDir}/pluginAssets`;
 const walk = function(dir) {
 	let results = [];
 	const list = fs.readdirSync(dir);
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	list.forEach((file) => {
 		file = `${dir}/${file}`;
 		const stat = fs.statSync(file);

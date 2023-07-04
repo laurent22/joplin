@@ -27,6 +27,7 @@ const IFrame = styled.iframe`
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	resource: any;
 	pageNo: number;

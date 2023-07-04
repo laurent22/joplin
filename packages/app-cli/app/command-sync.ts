@@ -18,6 +18,7 @@ import { pathExists, writeFile } from 'fs-extra';
 class Command extends BaseCommand {
 
 	private syncTargetId_: number = null;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private releaseLockFn_: Function = null;
 	private oneDriveApiUtils_: any = null;
 

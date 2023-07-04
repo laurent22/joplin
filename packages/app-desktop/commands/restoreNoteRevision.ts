@@ -8,7 +8,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, noteId: string, reverseRevIndex: number = 0) => {
+		execute: async (_context: CommandContext, noteId: string, reverseRevIndex = 0) => {
 			try {
 				const note = await RevisionService.instance().restoreNoteById(noteId, reverseRevIndex);
 				alert(RevisionService.instance().restoreSuccessMessage(note));

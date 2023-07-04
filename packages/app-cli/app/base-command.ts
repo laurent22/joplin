@@ -54,6 +54,7 @@ export default class BaseCommand {
 		return r[0];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setDispatcher(fn: Function) {
 		this.dispatcher_ = fn;
 	}
@@ -63,6 +64,7 @@ export default class BaseCommand {
 		return this.dispatcher_(action);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setStdout(fn: Function) {
 		this.stdout_ = fn;
 	}
@@ -71,6 +73,7 @@ export default class BaseCommand {
 		if (this.stdout_) this.stdout_(text);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setPrompt(fn: Function) {
 		this.prompt_ = fn;
 	}

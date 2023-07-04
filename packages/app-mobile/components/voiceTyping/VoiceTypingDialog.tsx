@@ -82,6 +82,7 @@ export default (props: Props) => {
 	}, [recorder, props.onDismiss]);
 
 	const renderContent = () => {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const components: Record<RecorderState, Function> = {
 			[RecorderState.Loading]: () => _('Loading...'),
 			[RecorderState.Recording]: () => _('Please record your voice...'),

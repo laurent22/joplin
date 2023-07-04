@@ -48,10 +48,10 @@ const createEditor = async (
 		});
 
 		if (sawExpectedTagCount < expectedSyntaxTreeTags.length) {
-			const missingTags = expectedSyntaxTreeTags.filter(tagName => {
-				return !seenTags.has(tagName);
-			});
-			console.warn(`Didn't find all expected tags. Missing ${missingTags}. Retrying...`);
+			// const missingTags = expectedSyntaxTreeTags.filter(tagName => {
+			// 	return !seenTags.has(tagName);
+			// });
+			// console.warn(`Didn't find all expected tags. Missing ${missingTags}. Retrying...`);
 
 			await new Promise(resolve => {
 				setTimeout(resolve, 500);

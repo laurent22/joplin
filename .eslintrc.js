@@ -97,6 +97,7 @@ module.exports = {
 
 		'promise/prefer-await-to-then': 'error',
 		'no-unneeded-ternary': 'error',
+		'github/array-foreach': ['error'],
 
 		// -------------------------------
 		// Formatting
@@ -139,12 +140,13 @@ module.exports = {
 			'named': 'never',
 			'asyncArrow': 'always',
 		}],
-		'multiline-comment-style': ['error', 'separate-lines'],
+		'multiline-comment-style': ['error', 'separate-lines', { checkJSDoc: true }],
 		'space-before-blocks': 'error',
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
 		'no-multi-spaces': ['error'],
 		'prefer-object-spread': ['error'],
+		'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
 
 		// Regarding the keyword blacklist:
 		// - err: We generally avoid using too many abbreviations, so it should
@@ -164,6 +166,7 @@ module.exports = {
 		'import',
 		'promise',
 		'jest',
+		'github',
 	],
 	'overrides': [
 		{
@@ -190,9 +193,12 @@ module.exports = {
 						'TSUnionType',
 					],
 				}],
+				'@typescript-eslint/ban-ts-comment': ['error'],
+				'@typescript-eslint/ban-types': 'error',
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
-				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
+				'@typescript-eslint/array-type': 'error',
+				'@typescript-eslint/no-inferrable-types': ['error'],
 				'@typescript-eslint/comma-dangle': ['error', {
 					'arrays': 'always-multiline',
 					'objects': 'always-multiline',

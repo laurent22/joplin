@@ -12,7 +12,7 @@ export interface DeletionJobOptions {
 
 export default class UserDeletionService extends BaseService {
 
-	protected name_: string = 'UserDeletionService';
+	protected name_ = 'UserDeletionService';
 
 	private async deleteUserData(userId: Uuid, options: DeletionJobOptions) {
 		// While the "UserDeletionInProgress" flag is on, the account is

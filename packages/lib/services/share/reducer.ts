@@ -39,7 +39,7 @@ export interface ShareInvitation {
 
 export interface State {
 	shares: StateShare[];
-	shareUsers: Record<string, StateShareUser>;
+	shareUsers: Record<string, StateShareUser[]>;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 }

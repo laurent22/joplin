@@ -18,6 +18,7 @@ function newFakeApi(): FileApi {
 	return { supportsMultiPut: true } as any;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = null): ApiCallFunction {
 	const apiCall = async (callName: string, ...args: any[]): Promise<any> => {
 		callRecorder.push({ name: callName, args });

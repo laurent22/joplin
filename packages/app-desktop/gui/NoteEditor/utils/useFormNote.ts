@@ -28,6 +28,7 @@ interface HookDependencies {
 	onAfterLoad(event: OnLoadEvent): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function installResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceFetcher.instance().on('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().on('downloadStarted', onResourceChangeHandler);
@@ -35,6 +36,7 @@ function installResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceEditWatcher.instance().on('resourceChange', onResourceChangeHandler);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function uninstallResourceChangeHandler(onResourceChangeHandler: Function) {
 	ResourceFetcher.instance().off('downloadComplete', onResourceChangeHandler);
 	ResourceFetcher.instance().off('downloadStarted', onResourceChangeHandler);

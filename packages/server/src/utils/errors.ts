@@ -16,7 +16,7 @@ export interface ErrorOptions {
 // For explanation of the setPrototypeOf call, see:
 // https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
 export class ApiError extends Error {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
 	public httpCode: number;
 	public code: ErrorCode;
@@ -46,36 +46,36 @@ export class ErrorWithCode extends ApiError {
 }
 
 export class ErrorMethodNotAllowed extends ApiError {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
-	public constructor(message: string = 'Method Not Allowed', options: ErrorOptions = null) {
+	public constructor(message = 'Method Not Allowed', options: ErrorOptions = null) {
 		super(message, ErrorMethodNotAllowed.httpCode, options);
 		Object.setPrototypeOf(this, ErrorMethodNotAllowed.prototype);
 	}
 }
 
 export class ErrorNotFound extends ApiError {
-	public static httpCode: number = 404;
+	public static httpCode = 404;
 
-	public constructor(message: string = 'Not Found', code: ErrorCode = undefined) {
+	public constructor(message = 'Not Found', code: ErrorCode = undefined) {
 		super(message, ErrorNotFound.httpCode, code);
 		Object.setPrototypeOf(this, ErrorNotFound.prototype);
 	}
 }
 
 export class ErrorForbidden extends ApiError {
-	public static httpCode: number = 403;
+	public static httpCode = 403;
 
-	public constructor(message: string = 'Forbidden', options: ErrorOptions = null) {
+	public constructor(message = 'Forbidden', options: ErrorOptions = null) {
 		super(message, ErrorForbidden.httpCode, options);
 		Object.setPrototypeOf(this, ErrorForbidden.prototype);
 	}
 }
 
 export class ErrorBadRequest extends ApiError {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
-	public constructor(message: string = 'Bad Request', options: ErrorOptions = null) {
+	public constructor(message = 'Bad Request', options: ErrorOptions = null) {
 		super(message, ErrorBadRequest.httpCode, options);
 		Object.setPrototypeOf(this, ErrorBadRequest.prototype);
 	}
@@ -83,9 +83,9 @@ export class ErrorBadRequest extends ApiError {
 }
 
 export class ErrorPreconditionFailed extends ApiError {
-	public static httpCode: number = 412;
+	public static httpCode = 412;
 
-	public constructor(message: string = 'Precondition Failed', options: ErrorOptions = null) {
+	public constructor(message = 'Precondition Failed', options: ErrorOptions = null) {
 		super(message, ErrorPreconditionFailed.httpCode, options);
 		Object.setPrototypeOf(this, ErrorPreconditionFailed.prototype);
 	}
@@ -93,46 +93,46 @@ export class ErrorPreconditionFailed extends ApiError {
 }
 
 export class ErrorUnprocessableEntity extends ApiError {
-	public static httpCode: number = 422;
+	public static httpCode = 422;
 
-	public constructor(message: string = 'Unprocessable Entity', options: ErrorOptions = null) {
+	public constructor(message = 'Unprocessable Entity', options: ErrorOptions = null) {
 		super(message, ErrorUnprocessableEntity.httpCode, options);
 		Object.setPrototypeOf(this, ErrorUnprocessableEntity.prototype);
 	}
 }
 
 export class ErrorConflict extends ApiError {
-	public static httpCode: number = 409;
+	public static httpCode = 409;
 
-	public constructor(message: string = 'Conflict', code: ErrorCode = undefined) {
+	public constructor(message = 'Conflict', code: ErrorCode = undefined) {
 		super(message, ErrorConflict.httpCode, code);
 		Object.setPrototypeOf(this, ErrorConflict.prototype);
 	}
 }
 
 export class ErrorResyncRequired extends ApiError {
-	public static httpCode: number = 400;
+	public static httpCode = 400;
 
-	public constructor(message: string = 'Delta cursor is invalid and the complete data should be resynced') {
+	public constructor(message = 'Delta cursor is invalid and the complete data should be resynced') {
 		super(message, ErrorResyncRequired.httpCode, ErrorCode.ResyncRequired);
 		Object.setPrototypeOf(this, ErrorResyncRequired.prototype);
 	}
 }
 
 export class ErrorPayloadTooLarge extends ApiError {
-	public static httpCode: number = 413;
+	public static httpCode = 413;
 
-	public constructor(message: string = 'Payload Too Large', options: ErrorOptions = null) {
+	public constructor(message = 'Payload Too Large', options: ErrorOptions = null) {
 		super(message, ErrorPayloadTooLarge.httpCode, options);
 		Object.setPrototypeOf(this, ErrorPayloadTooLarge.prototype);
 	}
 }
 
 export class ErrorTooManyRequests extends ApiError {
-	public static httpCode: number = 429;
-	public retryAfterMs: number = 0;
+	public static httpCode = 429;
+	public retryAfterMs = 0;
 
-	public constructor(message: string = null, retryAfterMs: number = 0) {
+	public constructor(message: string = null, retryAfterMs = 0) {
 		super(message === null ? 'Too Many Requests' : message, ErrorTooManyRequests.httpCode);
 		this.retryAfterMs = retryAfterMs;
 		Object.setPrototypeOf(this, ErrorTooManyRequests.prototype);

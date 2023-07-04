@@ -44,7 +44,9 @@ interface CreateCheckoutSessionFields {
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
 interface PostHandlers {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	createCheckoutSession: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	webhook: Function;
 }
 
@@ -218,7 +220,7 @@ export const postHandlers: PostHandlers = {
 		return { sessionId: session.id };
 	},
 
-	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
+	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
 
 		const models = ctx.joplin.models;

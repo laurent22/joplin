@@ -5,9 +5,9 @@ type ConditionHandler = ()=> boolean;
 
 class Time {
 
-	private dateFormat_: string = 'DD/MM/YYYY';
-	private timeFormat_: string = 'HH:mm';
-	private locale_: string = 'en-us';
+	private dateFormat_ = 'DD/MM/YYYY';
+	private timeFormat_ = 'HH:mm';
+	private locale_ = 'en-us';
 
 	public locale() {
 		return this.locale_;
@@ -133,6 +133,7 @@ class Time {
 	}
 
 	public msleep(ms: number) {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
 			shim.setTimeout(() => {
 				resolve();

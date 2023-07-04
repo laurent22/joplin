@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -283,7 +285,7 @@ msgstr "Gövde Ekle"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
 msgid "Add new"
-msgstr "Yeni bir şey ekle: "
+msgstr "Yeni bir şey ekle"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -1875,7 +1877,7 @@ msgstr "Bul ve değiştir"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 msgid "Find: "
-msgstr "Ara:"
+msgstr "Ara: "
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
@@ -2034,9 +2036,8 @@ msgid "Help"
 msgstr "Yardım"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:756
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS aktif edildi: %d"
+msgstr "Hermes aktif edildi: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
@@ -3479,7 +3480,7 @@ msgstr "Şununla değiştir..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr "Değiştir:"
+msgstr "Değiştir: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -3671,9 +3672,8 @@ msgid "Select file..."
 msgstr "Dosya seç..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Not defterini sil"
+msgstr "Ana not defterini seç"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4238,7 +4238,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr "Varsayılan profil silinemez."
+msgstr "Varsayılan profil silinemez"
 
 #: packages/lib/models/Setting.ts:1379
 msgid ""
@@ -5036,9 +5036,8 @@ msgstr ""
 "tuşuna basın."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Hoş Geldiniz"
+msgstr "Hoş Geldiniz!"
 
 #: packages/lib/models/Setting.ts:1105
 msgid "When creating a new note:"

@@ -17,16 +17,16 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Камера: позволяет сделать снимок и прикрепить его к заметке."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:687
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:690
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Местоположение: позволяет прикрепить информацию о геолокации к заметке."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:684
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -278,7 +278,7 @@ msgstr "Активен"
 msgid "Actual Size"
 msgstr "Фактический размер"
 
-#: packages/app-mobile/components/screens/Note.tsx:1212
+#: packages/app-mobile/components/screens/Note.tsx:1215
 msgid "Add body"
 msgstr "Добавить текст заметки"
 
@@ -294,7 +294,7 @@ msgstr "Добавить или удалить метки:"
 msgid "Add recipient:"
 msgstr "Добавить получателя:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1286
+#: packages/app-mobile/components/screens/Note.tsx:1289
 msgid "Add title"
 msgstr "Добавить заголовок"
 
@@ -370,11 +370,11 @@ msgstr ""
 msgid "An update is available, do you want to download it now?"
 msgstr "Доступно обновление, хотите загрузить его сейчас?"
 
-#: packages/lib/models/Setting.ts:2502
+#: packages/lib/models/Setting.ts:2512
 msgid "Appearance"
 msgstr "Внешний вид"
 
-#: packages/lib/models/Setting.ts:2507
+#: packages/lib/models/Setting.ts:2517
 msgid "Application"
 msgstr "Приложение"
 
@@ -408,15 +408,15 @@ msgstr "Прикрепить"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
-#: packages/app-mobile/components/screens/Note.tsx:869
+#: packages/app-mobile/components/screens/Note.tsx:870
 msgid "Attach file"
 msgstr "Прикрепить файл"
 
-#: packages/app-mobile/components/screens/Note.tsx:873
+#: packages/app-mobile/components/screens/Note.tsx:874
 msgid "Attach photo"
 msgstr "Прикрепить фото"
 
-#: packages/app-mobile/components/screens/Note.tsx:969
+#: packages/app-mobile/components/screens/Note.tsx:970
 msgid "Attach..."
 msgstr "Прикрепить…"
 
@@ -429,7 +429,7 @@ msgstr "Прикрепляет заданный файл к заметке."
 msgid "attachment"
 msgstr "вложение"
 
-#: packages/lib/models/Resource.ts:423
+#: packages/lib/models/Resource.ts:424
 msgid "Attachment conflict: \"%s\""
 msgstr "Конфликт вложения: \"%s\""
 
@@ -489,7 +489,6 @@ msgstr "Автоматическая смена темы в соответств
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:720
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:209
 #: packages/app-mobile/components/ScreenHeader.tsx:306
 #: packages/lib/commands/historyBackward.ts:6
@@ -538,7 +537,6 @@ msgstr "Можно поделиться"
 #: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:82
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:168
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:328
@@ -550,13 +548,12 @@ msgstr "Можно поделиться"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:106
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:69
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:110
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:111
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.tsx:165
 #: packages/app-mobile/components/side-menu-content.tsx:174
 #: packages/app-mobile/components/side-menu-content.tsx:439
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:80
 #: packages/lib/shim-init-node.js:196
 msgid "Cancel"
 msgstr "Отмена"
@@ -712,17 +709,15 @@ msgstr "Список флажков"
 msgid "Checking... Please wait."
 msgstr "Проверка... Пожалуйста, подождите."
 
-#: packages/app-mobile/components/screens/Note.tsx:876
+#: packages/app-mobile/components/screens/Note.tsx:877
 msgid "Choose an option"
 msgstr "Выберите"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:70
 msgid "Chrome Web Store"
 msgstr "Интернет-магазин Chrome"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:146
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:297
 msgid "Clear"
 msgstr "Очистить"
@@ -731,7 +726,6 @@ msgstr "Очистить"
 msgid "Clear alarm"
 msgstr "Очистить напоминание"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -823,7 +817,6 @@ msgstr "Палитра команд"
 msgid "Command palette..."
 msgstr "Палитра команд..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Completed"
 msgstr "Завершено"
@@ -841,7 +834,7 @@ msgid "Compress old changes"
 msgstr "Сжатие старых изменений"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:762
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:765
 #: packages/app-mobile/components/side-menu-content.tsx:417
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -868,7 +861,7 @@ msgstr "Конфликтов: %d"
 msgid "Conflicts"
 msgstr "Конфликты"
 
-#: packages/lib/models/Resource.ts:407
+#: packages/lib/models/Resource.ts:408
 msgid "Conflicts (attachments)"
 msgstr "Конфликты (вложения)"
 
@@ -884,15 +877,15 @@ msgstr "Содержание предоставлено %s"
 msgid "Continue"
 msgstr "Продолжить"
 
-#: packages/app-mobile/components/screens/Note.tsx:1010
+#: packages/app-mobile/components/screens/Note.tsx:1011
 msgid "Convert to note"
 msgstr "Преобразовать в заметку"
 
-#: packages/app-mobile/components/screens/Note.tsx:1010
+#: packages/app-mobile/components/screens/Note.tsx:1011
 msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:69
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Converting speech to text..."
 msgstr "Преобразование речи в текст..."
 
@@ -922,7 +915,7 @@ msgid "Copy Link Address"
 msgstr "Скопировать ссылку"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:1017
+#: packages/app-mobile/components/screens/Note.tsx:1018
 msgid "Copy Markdown link"
 msgstr "Копировать ссылку Markdown"
 
@@ -1010,7 +1003,6 @@ msgstr ""
 msgid "Could not verify your identify: %s"
 msgstr "Не удалось проверить вашу личность: %s"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:276
 msgid "Create"
 msgstr "Создать"
@@ -1036,7 +1028,6 @@ msgstr "Создать блокнот"
 msgid "Create user"
 msgstr "Создание пользователя"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:49
 msgid "Created"
 msgstr "Создан"
@@ -1062,13 +1053,12 @@ msgid "Created: "
 msgstr "Создано: "
 
 #: packages/app-cli/app/command-import.js:48
-#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Created: %d."
 msgstr "Создано: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "Created: %s"
 msgstr "Создано: %s"
 
@@ -1088,7 +1078,7 @@ msgstr "Создает новую задачу."
 msgid "Creating new %s..."
 msgstr "Создание новой %s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:645
 msgid "Creating report..."
 msgstr "Создание отчета…"
 
@@ -1130,7 +1120,7 @@ msgstr "Тёмная"
 msgid "Dashboard"
 msgstr "Панель управления"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:744
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:747
 msgid "Database v%s"
 msgstr "База данных v%s"
 
@@ -1181,7 +1171,7 @@ msgstr "По умолчанию: %s"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:137
 #: packages/app-mobile/components/ScreenHeader.tsx:419
 #: packages/app-mobile/components/ScreenHeader.tsx:486
-#: packages/app-mobile/components/screens/Note.tsx:1030
+#: packages/app-mobile/components/screens/Note.tsx:1031
 #: packages/app-mobile/components/side-menu-content.tsx:155
 msgid "Delete"
 msgstr "Удалить"
@@ -1206,12 +1196,12 @@ msgstr "Удалить строку"
 msgid "Delete local data and re-download from sync target"
 msgstr "Удалить локальные данные и перегрузить данные с цели синхронизации"
 
-#: packages/lib/models/Note.ts:765
+#: packages/lib/models/Note.ts:772
 msgid "Delete note \"%s\"?"
 msgstr "Удалить заметку \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:535
+#: packages/app-mobile/components/screens/Note.tsx:536
 msgid "Delete note?"
 msgstr "Удалить заметку?"
 
@@ -1246,7 +1236,7 @@ msgstr "Удалить профиль \"%s\""
 msgid "Delete selected notes"
 msgstr "Удаление выбранных заметок"
 
-#: packages/lib/models/Note.ts:767
+#: packages/lib/models/Note.ts:774
 msgid "Delete these %d notes?"
 msgstr "Удалить эти %d заметки?"
 
@@ -1335,7 +1325,7 @@ msgstr ""
 "хотите продолжить?"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:353
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "Discard changes"
 msgstr "Отменить изменения"
 
@@ -1409,7 +1399,7 @@ msgstr ""
 "ниже."
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:81
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:115
 msgid "Done"
 msgstr "Готово"
 
@@ -1436,6 +1426,11 @@ msgstr "Загружено и зашифровано"
 #: packages/lib/models/Resource.ts:354
 msgid "Downloading"
 msgstr "Загрузка"
+
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
+#, fuzzy
+msgid "Downloading %s language files..."
+msgstr "Загрузка ресурсов..."
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -1482,7 +1477,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:84
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:132
-#: packages/app-mobile/components/screens/Note.tsx:1248
+#: packages/app-mobile/components/screens/Note.tsx:1253
 #: packages/app-mobile/components/side-menu-content.tsx:143
 msgid "Edit"
 msgstr "Правка"
@@ -1696,7 +1691,7 @@ msgstr "Зашифровано"
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифрованные элементы не могут быть изменены"
 
-#: packages/lib/models/Setting.ts:2509
+#: packages/lib/models/Setting.ts:2519
 msgid "Encryption"
 msgstr "Шифрование"
 
@@ -1751,6 +1746,7 @@ msgstr "Ошибка при открытии заметки в редактор�
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
 #: packages/lib/services/KeymapService.ts:205
 msgid "Error: %s"
 msgstr "Ошибка: %s"
@@ -1798,15 +1794,15 @@ msgstr "Экспорт"
 msgid "Export debug report"
 msgstr "Экспортировать отладочный отчет"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:645
 msgid "Export Debug Report"
 msgstr "Экспортировать отладочный отчет"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "Export profile"
 msgstr "Экспорт профиля"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "Exporting profile..."
 msgstr "Экспортирование профиля..."
 
@@ -1846,7 +1842,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Фатальная ошибка:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:664
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:667
 msgid "Feature flags"
 msgstr "Флаги функций"
 
@@ -1879,16 +1875,15 @@ msgstr "Найти и заменить"
 msgid "Find: "
 msgstr "Найти: "
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
 msgstr "Расширение Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Fix search index"
 msgstr "Исправить индекс поиска"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid "Fixing search index..."
 msgstr "Исправление индекса поиска..."
 
@@ -1912,7 +1907,7 @@ msgstr "Фокус на названии"
 msgid "Folders"
 msgstr "Каталоги"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:650
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Только для отладки: экспорт вашего профиля на внешнюю SD карту."
 
@@ -1952,12 +1947,11 @@ msgid "Forward"
 msgstr "Вперёд"
 
 #: packages/app-cli/app/command-import.js:47
-#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:88
 msgid "Found: %d."
 msgstr "Найдено: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:750
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:753
 msgid "FTS enabled: %d"
 msgstr "FTS включен: %d"
 
@@ -1969,7 +1963,7 @@ msgstr "Полный список изменений"
 msgid "Full name"
 msgstr "Имя и фамилия"
 
-#: packages/lib/models/Setting.ts:2500
+#: packages/lib/models/Setting.ts:2510
 #: packages/server/src/services/MustacheService.ts:109
 msgid "General"
 msgstr "Основные"
@@ -1985,7 +1979,6 @@ msgstr[0] "Создание ссылки..."
 msgstr[1] "Создание ссылок..."
 msgstr[2] "Создание ссылок..."
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
 msgstr "Загрузить сейчас:"
@@ -2004,7 +1997,7 @@ msgstr ""
 "указано, выведет текущее значение параметра [name]. Если не указаны ни имя "
 "[name], ни значение [value], выведет всю текущую конфигурацию."
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:853
 msgid "Go to source URL"
 msgstr "Перейти к исходному URL"
 
@@ -2033,7 +2026,7 @@ msgstr "Заголовок"
 msgid "Help"
 msgstr "Помощь"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:756
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:759
 #, fuzzy
 msgid "Hermes enabled: %d"
 msgstr "FTS включен: %d"
@@ -2098,7 +2091,6 @@ msgstr "Иконка"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:76
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:48
 #: packages/app-desktop/gui/ResourceScreen.tsx:94
 msgid "ID"
@@ -2161,7 +2153,7 @@ msgstr ""
 "блокнот, соответственно. С помощью `$c` можно ссылаться на текущий выбранный "
 "элемент."
 
-#: packages/app-mobile/components/screens/Note.tsx:412
+#: packages/app-mobile/components/screens/Note.tsx:413
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2290,7 +2282,7 @@ msgstr "Неверный ответ: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Неверная команда: \"%s\""
 
-#: packages/lib/models/Setting.ts:2028
+#: packages/lib/models/Setting.ts:2038
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
 
@@ -2392,7 +2384,7 @@ msgstr ""
 "Веб-клиппер Joplin позволяет сохранять веб-страницы и скриншоты из вашего "
 "браузера в Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:716
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:719
 msgid "Joplin website"
 msgstr "Сайт Joplin"
 
@@ -2421,7 +2413,7 @@ msgstr "Режим работы клавиатуры"
 msgid "Keyboard Shortcut"
 msgstr "Сочетание клавиш"
 
-#: packages/lib/models/Setting.ts:2511
+#: packages/lib/models/Setting.ts:2521
 msgid "Keyboard Shortcuts"
 msgstr "Сочетания клавиш"
 
@@ -2456,6 +2448,10 @@ msgstr "Вид редактора"
 #: packages/app-desktop/gui/MenuBar.tsx:684
 msgid "Layout button sequence"
 msgstr "Порядок переключения вида"
+
+#: packages/lib/models/Setting.ts:1704
+msgid "Leave it blank to download the language files from the default website"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2496,7 +2492,7 @@ msgstr[2] "Ссылки скопированы в буфер обмена!"
 msgid "Link text"
 msgstr "Текст ссылки"
 
-#: packages/app-mobile/components/screens/Note.tsx:205
+#: packages/app-mobile/components/screens/Note.tsx:206
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Ссылки с протоколом “%s” не поддерживаются"
 
@@ -2514,11 +2510,10 @@ msgstr "Списки"
 msgid "Loaded"
 msgstr "Загружено"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:67
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:86
 msgid "Loading..."
 msgstr "Загрузка..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Location"
 msgstr "Местоположение"
@@ -2533,7 +2528,7 @@ msgstr ""
 "выполняется, вы можете вручную удалить файл блокировки \"%s\" и возобновить "
 "операцию."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:640
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:643
 #: packages/app-mobile/components/screens/log.js:100
 #: packages/server/src/services/MustacheService.ts:276
 msgid "Log"
@@ -2564,7 +2559,7 @@ msgid "Logs"
 msgstr "Логи"
 
 #: packages/app-desktop/gui/MenuBar.tsx:795
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:702
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:705
 msgid "Make a donation"
 msgstr "Пожертвовать"
 
@@ -2580,7 +2575,7 @@ msgstr "Управление мастер-паролем..."
 msgid "Manage multiple users"
 msgstr "Управление несколькими пользователями"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:638
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:641
 msgid "Manage profiles"
 msgstr "Управление профилями"
 
@@ -2601,7 +2596,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Ручной"
 
-#: packages/lib/models/Setting.ts:2505
+#: packages/lib/models/Setting.ts:2515
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2620,7 +2615,6 @@ msgstr "Отмечает задачу как выполненную."
 msgid "Marks a to-do as non-completed."
 msgstr "Помечает задачу как незавершенную."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:55
 msgid "Markup"
 msgstr "Разметка"
@@ -2680,7 +2674,7 @@ msgstr "Мобильная сеть - авто-синхронизация отк
 msgid "More info"
 msgstr "Дополнительная информация"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:668
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:671
 msgid "More information"
 msgstr "Подробнее"
 
@@ -2735,7 +2729,6 @@ msgstr "Новый блокнот"
 msgid "New Notebook"
 msgstr "Новый блокнот"
 
-#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -2787,7 +2780,7 @@ msgid "no"
 msgstr "нет"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:584
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "No"
 msgstr "Нет"
@@ -2796,7 +2789,7 @@ msgstr "Нет"
 msgid "No active notebook."
 msgstr "Нет активного блокнота."
 
-#: packages/app-mobile/components/screens/Note.tsx:176
+#: packages/app-mobile/components/screens/Note.tsx:177
 msgid "No item with ID %s"
 msgstr "Нет элементов с ID %s"
 
@@ -2865,7 +2858,7 @@ msgstr "Не сейчас"
 msgid "note"
 msgstr "заметка"
 
-#: packages/lib/models/Setting.ts:2503
+#: packages/lib/models/Setting.ts:2513
 msgid "Note"
 msgstr "Заметка"
 
@@ -2897,9 +2890,8 @@ msgstr "Редактор заметок"
 msgid "Note has been saved."
 msgstr "Заметка сохранена."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
-#: packages/lib/models/Setting.ts:2508
+#: packages/lib/models/Setting.ts:2518
 msgid "Note History"
 msgstr "История заметок"
 
@@ -2916,7 +2908,6 @@ msgid "Note list growth factor"
 msgstr "Фактор роста списка заметки"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:403
 msgid "Note properties"
 msgstr "Свойства заметки"
@@ -2940,7 +2931,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "Блок&ноты"
 
-#: packages/lib/models/Setting.ts:2504
+#: packages/lib/models/Setting.ts:2514
 msgid "Notebook"
 msgstr "Блокнот"
 
@@ -2967,7 +2958,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Заметки"
 
-#: packages/lib/models/Setting.ts:2520
+#: packages/lib/models/Setting.ts:2530
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
 
@@ -2985,7 +2976,6 @@ msgstr "Нумерованный список"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.tsx:70
 #: packages/app-desktop/gui/MenuBar.tsx:495
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:283
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:193
@@ -3039,7 +3029,7 @@ msgstr "Только одна заметка может быть напечат�
 msgid "Open"
 msgstr "Открыть"
 
-#: packages/app-desktop/app.ts:178
+#: packages/app-desktop/app.ts:179
 msgid "Open %s"
 msgstr "Открыть %s"
 
@@ -3138,7 +3128,7 @@ msgstr "Файл PDF"
 msgid "Per user. Minimum of %d users."
 msgstr "На каждого пользователя. Минимум %d пользователей."
 
-#: packages/app-mobile/components/screens/Note.tsx:413
+#: packages/app-mobile/components/screens/Note.tsx:414
 msgid "Permission needed"
 msgstr "Необходимы разрешения"
 
@@ -3191,7 +3181,7 @@ msgstr ""
 "файлам за пределами этого каталога, ни к каким-либо другим личным данным. "
 "Никакая информация не будет передана третьим лицам."
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:68
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Please record your voice..."
 msgstr "Пожалуйста, запишите свой голос..."
 
@@ -3239,7 +3229,7 @@ msgid "Plugin tools"
 msgstr "Утилиты для плагинов"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2506
+#: packages/lib/models/Setting.ts:2516
 msgid "Plugins"
 msgstr "Плагины"
 
@@ -3295,7 +3285,6 @@ msgstr "Нажмите, чтобы установить пароль для ра
 msgid "Previous match"
 msgstr "Предыдущее совпадение"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:329
 msgid "Previous versions of this note"
 msgstr "Предыдущая версия заметки"
@@ -3308,7 +3297,7 @@ msgstr "Печать"
 msgid "Priority support"
 msgstr "Приоритетная поддержка"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:730
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:733
 msgid "Privacy Policy"
 msgstr "Политика конфиденциальности"
 
@@ -3348,7 +3337,7 @@ msgstr "Версия профиля: %s"
 msgid "Profiles"
 msgstr "Профили"
 
-#: packages/app-mobile/components/screens/Note.tsx:1024
+#: packages/app-mobile/components/screens/Note.tsx:1025
 msgid "Properties"
 msgstr "Свойства"
 
@@ -3381,7 +3370,7 @@ msgstr "Публиковать заметку"
 msgid "Publish notes to the internet"
 msgstr "Опубликовать заметки в Интернет"
 
-#: packages/app-desktop/app.ts:180
+#: packages/app-desktop/app.ts:181
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:318
 msgid "Quit"
@@ -3503,7 +3492,6 @@ msgid "Reset master password"
 msgstr "Сбросить мастер-пароль"
 
 #: packages/app-cli/app/command-import.js:51
-#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Resources: %d."
 msgstr "Ресурсов: %d."
@@ -3517,7 +3505,6 @@ msgid "Restart now"
 msgstr "Перезагрузить сейчас"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:79
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:203
 msgid "Restore"
 msgstr "Восстановить"
@@ -3616,7 +3603,7 @@ msgstr "Сохранить как..."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:331
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:346
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "Save changes"
 msgstr "Сохранить изменения"
 
@@ -3651,7 +3638,6 @@ msgstr "Поиск:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:167
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:65
-#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 #: packages/app-desktop/gui/NoteSearchBar.tsx:175
 msgid "Search..."
 msgstr "Поиск..."
@@ -3702,7 +3688,7 @@ msgid "Server is running on port %d"
 msgstr "Сервер запущен. Порт: %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:976
+#: packages/app-mobile/components/screens/Note.tsx:977
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Установить напоминание"
@@ -3737,7 +3723,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:249
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:984
+#: packages/app-mobile/components/screens/Note.tsx:985
 msgid "Share"
 msgstr "Поделиться"
 
@@ -3829,7 +3815,6 @@ msgstr ""
 "повторить попытку расшифровки)"
 
 #: packages/app-cli/app/command-import.js:50
-#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Skipped: %d."
 msgstr "Пропущено: %d."
@@ -4053,7 +4038,7 @@ msgstr ""
 msgid "Sync as many devices as you want"
 msgstr "Синхронизируйте столько устройств, сколько хотите"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:642
 msgid "Sync Status"
 msgstr "Статус синхронизации"
 
@@ -4084,7 +4069,7 @@ msgstr "Синхронизированная версия: %s"
 msgid "Sync your notes"
 msgstr "Сортировать ваши заметки"
 
-#: packages/lib/models/Setting.ts:2501
+#: packages/lib/models/Setting.ts:2511
 msgid "Synchronisation"
 msgstr "Синхронизация"
 
@@ -4140,20 +4125,19 @@ msgid "tag1, tag2, ..."
 msgstr "тег1, тег2, ..."
 
 #: packages/app-cli/app/command-import.js:52
-#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Tagged: %d."
 msgstr "С метками: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:730
-#: packages/app-mobile/components/screens/Note.tsx:1003
+#: packages/app-mobile/components/screens/Note.tsx:1004
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.tsx:411
 msgid "Tags"
 msgstr "Метки"
 
-#: packages/app-mobile/components/screens/Note.tsx:874
+#: packages/app-mobile/components/screens/Note.tsx:875
 msgid "Take photo"
 msgstr "Сделать фото"
 
@@ -4194,7 +4178,7 @@ msgstr ""
 "Приложение будет закрыто. Пожалуйста, перезапустите его чтобы завершить "
 "установку."
 
-#: packages/app-desktop/app.ts:340
+#: packages/app-desktop/app.ts:344
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
@@ -4292,7 +4276,7 @@ msgstr ""
 "рекомендуется их обновить. Обновленный ключ будет по-прежнему способен "
 "расшифровывать и шифровать ваши данные, как обычно."
 
-#: packages/app-mobile/components/screens/Note.tsx:201
+#: packages/app-mobile/components/screens/Note.tsx:202
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Мобильное приложение Joplin в настоящее время не поддерживает данный тип "
@@ -4339,7 +4323,6 @@ msgid "The notebook could not be saved: %s"
 msgstr "Блокнот не может быть сохранен: %s"
 
 #: packages/app-cli/app/command-import.js:70
-#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:108
 msgid "The notes have been imported: %s"
 msgstr "Импортировано заметок: %s"
@@ -4427,7 +4410,7 @@ msgstr "Блокноты отсутствуют. Создайте новый, н
 msgid "There is no data to export."
 msgstr "Нет данных для экспорта."
 
-#: packages/lib/models/Resource.ts:424
+#: packages/lib/models/Resource.ts:425
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -4463,7 +4446,7 @@ msgstr ""
 "синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию "
 "или ID (указан в квадратных скобках выше)."
 
-#: packages/lib/models/Setting.ts:2519
+#: packages/lib/models/Setting.ts:2529
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4485,7 +4468,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Это вложение еще не загружено или еще не расшифровано"
 
-#: packages/app-mobile/components/screens/Note.tsx:195
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Это вложение еще не загружено или еще не расшифровано."
 
@@ -4511,7 +4494,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Эта заметка не содержит информации о географическом местоположении."
 
-#: packages/app-mobile/components/screens/Note.tsx:110
+#: packages/app-mobile/components/screens/Note.tsx:111
 msgid "This note has been modified:"
 msgstr "Эта заметка была изменена:"
 
@@ -4523,7 +4506,6 @@ msgstr ""
 "Эта пустая заметка. Нажмите на \"%s\", чтобы переключиться в редактор и "
 "отредактировать ее."
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:126
 msgid "This note has no history"
 msgstr "Эта заметка не имеет предыдущих версий"
@@ -4640,7 +4622,7 @@ msgstr ""
 "Чтобы переключить профиль приложение закроется, и его нужно будет "
 "перезапустить."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:678
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:681
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4703,7 +4685,7 @@ msgstr "Переключение поля порядка сортировки"
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен скопирован в буфер обмена!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:636
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:639
 msgid "Tools"
 msgstr "Инструменты"
 
@@ -4795,12 +4777,11 @@ msgstr ""
 "Снять общий доступ? Получатели больше не смогут получить доступ к этому "
 "содержимому."
 
-#: packages/app-mobile/components/screens/Note.tsx:667
+#: packages/app-mobile/components/screens/Note.tsx:668
 msgid "Unsupported image type: %s"
 msgstr "Неподдерживаемый формат изображения: %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openItem.ts:40
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:168
 msgid "Unsupported link or message: %s"
 msgstr "Неподдерживаемая ссылка или сообщение: %s"
@@ -4826,7 +4807,6 @@ msgstr "Обновление общих размеров"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:50
 msgid "Updated"
 msgstr "Обновлен"
@@ -4848,12 +4828,11 @@ msgid "Updated: "
 msgstr "Обновлено: "
 
 #: packages/app-cli/app/command-import.js:49
-#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Updated: %d."
 msgstr "Обновлено: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:842
 msgid "Updated: %s"
 msgstr "Обновлено: %s"
 
@@ -4869,7 +4848,6 @@ msgstr "Обновить"
 msgid "Upgrade the sync target to the latest version."
 msgstr "Обновить цель синхронизации до последней версии."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:53
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:115
@@ -4911,7 +4889,7 @@ msgstr ""
 "Используйте стрелки чтобы переместить элементы программы. Нажмите Esc для "
 "выхода."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:647
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4968,7 +4946,7 @@ msgstr "Удостоверьте свою личность"
 msgid "View"
 msgstr "Вид"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:846
 msgid "View on map"
 msgstr "Посмотреть на карте"
 
@@ -4988,11 +4966,12 @@ msgstr "Просмотрщик"
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:92
-msgid "Voice typing"
-msgstr "Голосовой набор"
+#: packages/lib/models/Setting.ts:1705
+msgid "Voice typing language files (URL)"
+msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:993
+#: packages/app-mobile/components/screens/Note.tsx:994
+#: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
 msgstr "Голосовой набор..."
 
@@ -5006,7 +4985,7 @@ msgstr ""
 "Предупреждение: не все данные показаны по соображениям производительности "
 "(ограничение:%s)."
 
-#: packages/lib/models/Setting.ts:2510 packages/lib/utils/joplinCloud.ts:153
+#: packages/lib/models/Setting.ts:2520 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
 msgstr "Настройки веб-клиппера"
 
@@ -5078,12 +5057,12 @@ msgid "yes"
 msgstr "да"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:583
+#: packages/app-mobile/components/screens/Note.tsx:584
 #: packages/lib/shim-init-node.js:196 packages/lib/versionInfo.ts:65
 msgid "Yes"
 msgstr "Да"
 
-#: packages/app-mobile/components/screens/Note.tsx:582
+#: packages/app-mobile/components/screens/Note.tsx:583
 #: packages/lib/shim-init-node.js:195
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -5149,6 +5128,9 @@ msgstr "Приблизить"
 #: packages/app-desktop/gui/MenuBar.tsx:742
 msgid "Zoom Out"
 msgstr "Отдалить"
+
+#~ msgid "Voice typing"
+#~ msgstr "Голосовой набор"
 
 #~ msgid "Encrypted notebooks cannot be renamed"
 #~ msgstr "Зашифрованные блокноты не могут быть переименованы"

@@ -52,6 +52,7 @@ export default class MigrateCommand extends BaseCommand {
 	}
 
 	public async run(argv: Argv, runContext: RunContext): Promise<void> {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const commands: Record<ArgvCommand, Function> = {
 			up: async () => {
 				await migrateUp(runContext.db, argv.disableTransactions);
@@ -64,6 +65,7 @@ export default class MigrateCommand extends BaseCommand {
 			},
 			list: async () => {
 				const s = (await migrateList(runContext.db)) as string;
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				s.split('\n').forEach(l => logger.info(l));
 			},
 			unlock: async () => {

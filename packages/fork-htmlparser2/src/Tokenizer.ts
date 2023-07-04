@@ -563,8 +563,7 @@ export default class Tokenizer {
                 ),
                 map = this._xmlMode ? xmlMap : entityMap;
             if (Object.prototype.hasOwnProperty.call(map, entity)) {
-                // @ts-ignore
-                this._emitPartial(map[entity]);
+                this._emitPartial((map as any)[entity]);
                 this._sectionStart = this._index + 1;
             }
         }
@@ -578,8 +577,7 @@ export default class Tokenizer {
             // The min length of legacy entities is 2
             const entity = this._buffer.substr(start, limit);
             if (Object.prototype.hasOwnProperty.call(legacyMap, entity)) {
-                // @ts-ignore
-                this._emitPartial(legacyMap[entity]);
+                this._emitPartial((legacyMap as any)[entity]);
                 this._sectionStart += limit + 1;
                 return;
             } else {

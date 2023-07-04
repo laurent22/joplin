@@ -314,6 +314,7 @@ function NoteEditor(props: Props, ref: any) {
 
 		const msg = JSON.parse(data);
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
 				// eslint-disable-next-line no-console

@@ -295,6 +295,7 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: Function) {
 		await this.models().token().checkToken(userId, token);
 		const user = await this.models().user().load(userId);
@@ -450,6 +451,7 @@ export default class UserModel extends BaseModel<User> {
 	public async handleFailedPaymentSubscriptions() {
 		interface SubInfo {
 			subs: Subscription[];
+			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 			templateFn: Function;
 			emailKeyPrefix: string;
 			flagType: UserFlagType;

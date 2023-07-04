@@ -15,7 +15,7 @@ import { AppContext } from '../types';
 import { checkContextError, koaAppContext, testAssetDir } from './testUtils';
 import * as fs from 'fs-extra';
 
-export function testFilePath(ext: string = 'jpg') {
+export function testFilePath(ext = 'jpg') {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
 	return `${testAssetDir}/${basename}.${ext}`;
 }

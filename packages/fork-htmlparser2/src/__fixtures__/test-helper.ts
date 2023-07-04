@@ -51,8 +51,7 @@ function eventReducer(events: Event[], arr: [string, ...unknown[]]): Event[] {
         events[events.length - 1].event === "text"
     ) {
         // Combine text nodes
-        // @ts-ignore
-        events[events.length - 1].data[0] += arr[1];
+        (events as any)[events.length - 1].data[0] += arr[1];
     } else {
         events.push({
             event: arr[0].substr(2),

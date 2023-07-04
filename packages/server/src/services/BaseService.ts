@@ -10,12 +10,12 @@ export default class BaseService {
 	private env_: Env;
 	private models_: Models;
 	private config_: Config;
-	protected name_: string = 'Untitled';
-	protected enabled_: boolean = true;
-	private destroyed_: boolean = false;
-	protected maintenanceInterval_: number = 10000;
+	protected name_ = 'Untitled';
+	protected enabled_ = true;
+	private destroyed_ = false;
+	protected maintenanceInterval_ = 10000;
 	private scheduledMaintenances_: boolean[] = [];
-	private maintenanceInProgress_: boolean = false;
+	private maintenanceInProgress_ = false;
 
 	public constructor(env: Env, models: Models, config: Config) {
 		this.env_ = env;

@@ -28,7 +28,7 @@ const serializeUserData = (d: UserData): string => {
 	return JSON.stringify(d);
 };
 
-export const setUserData = <T>(userData: UserData, namespace: string, key: string, value: T, deleted: boolean = false): UserData => {
+export const setUserData = <T>(userData: UserData, namespace: string, key: string, value: T, deleted = false): UserData => {
 	if (key.length > maxKeyLength) new Error(`Key must no be longer than ${maxKeyLength} characters`);
 	if (!(namespace in userData)) userData[namespace] = {};
 	if (key in userData[namespace] && userData[namespace][key].v === value) return userData;
@@ -60,7 +60,7 @@ const checkIsSupportedItemType = (itemType: ModelType) => {
 	}
 };
 
-export const setItemUserData = async <T>(itemType: ModelType, itemId: string, namespace: string, key: string, value: T, deleted: boolean = false): Promise<SupportedEntity> => {
+export const setItemUserData = async <T>(itemType: ModelType, itemId: string, namespace: string, key: string, value: T, deleted = false): Promise<SupportedEntity> => {
 	checkIsSupportedItemType(itemType);
 
 	interface ItemSlice {
@@ -97,7 +97,7 @@ export const setItemUserData = async <T>(itemType: ModelType, itemId: string, na
 };
 
 // Deprecated - don't use
-export const setNoteUserData = async <T>(note: NoteEntity, namespace: string, key: string, value: T, deleted: boolean = false): Promise<NoteEntity> => {
+export const setNoteUserData = async <T>(note: NoteEntity, namespace: string, key: string, value: T, deleted = false): Promise<NoteEntity> => {
 	return setItemUserData(ModelType.Note, note.id, namespace, key, value, deleted);
 };
 

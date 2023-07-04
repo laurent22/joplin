@@ -26,7 +26,7 @@ export default class AsyncActionQueue {
 	private scheduleProcessingIID_: any = null;
 	private processing_ = false;
 
-	public constructor(interval: number = 100, intervalType: IntervalType = IntervalType.Debounce) {
+	public constructor(interval = 100, intervalType: IntervalType = IntervalType.Debounce) {
 		this.interval_ = interval;
 		this.intervalType_ = intervalType;
 	}

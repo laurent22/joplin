@@ -2,7 +2,7 @@
   "name": "@joplin/app-mobile",
   "description": "Joplin for Mobile",
   "license": "AGPL-3.0-or-later",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "private": true,
   "scripts": {
     "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start --reset-cache",
@@ -18,10 +18,10 @@
     "postinstall": "jetify && yarn run build"
   },
   "dependencies": {
-    "@joplin/lib": "~2.11",
-    "@joplin/react-native-alarm-notification": "~2.11",
-    "@joplin/react-native-saf-x": "~2.11",
-    "@joplin/renderer": "~2.11",
+    "@joplin/lib": "~2.12",
+    "@joplin/react-native-alarm-notification": "~2.12",
+    "@joplin/react-native-saf-x": "~2.12",
+    "@joplin/renderer": "~2.12",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/datetimepicker": "7.1.0",
     "@react-native-community/geolocation": "3.0.6",
@@ -50,11 +50,11 @@
     "react-native-file-viewer": "2.1.5",
     "react-native-fingerprint-scanner": "6.0.0",
     "react-native-fs": "2.20.0",
-    "react-native-get-random-values": "1.8.0",
+    "react-native-get-random-values": "1.9.0",
     "react-native-image-picker": "5.3.1",
     "react-native-image-resizer": "1.4.5",
     "react-native-localize": "3.0.0",
-    "react-native-modal-datetime-picker": "14.0.1",
+    "react-native-modal-datetime-picker": "15.0.1",
     "react-native-paper": "5.8.0",
     "react-native-popup-menu": "0.16.1",
     "react-native-quick-actions": "0.3.13",
@@ -77,7 +77,7 @@
     "stream-browserify": "3.0.0",
     "string-natural-compare": "3.0.1",
     "timers": "0.1.1",
-    "url": "0.11.0"
+    "url": "0.11.1"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
@@ -96,7 +96,7 @@
     "@codemirror/search": "6.3.0",
     "@codemirror/state": "6.2.0",
     "@codemirror/view": "6.9.3",
-    "@joplin/tools": "~2.11",
+    "@joplin/tools": "~2.12",
     "@lezer/highlight": "1.1.4",
     "@tsconfig/react-native": "2.0.2",
     "@types/fs-extra": "11.0.1",

@@ -179,6 +179,7 @@ class Command extends BaseCommand {
 
 			const dirPaths = function(targetPath: string) {
 				const paths: string[] = [];
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				fs.readdirSync(targetPath).forEach((path: string) => {
 					paths.push(path);
 				});

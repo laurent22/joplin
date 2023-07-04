@@ -198,7 +198,7 @@ export default class MdToHtml {
 	private pluginOptions_: any = {};
 	private extraRendererRules_: RendererRules = {};
 	private allProcessedAssets_: any = {};
-	private customCss_: string = '';
+	private customCss_ = '';
 
 	public constructor(options: Options = null) {
 		if (!options) options = {};

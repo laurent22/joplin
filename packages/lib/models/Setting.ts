@@ -57,6 +57,7 @@ export interface SettingItem {
 	isEnum?: boolean;
 	section?: string;
 	label?(): string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	description?: Function;
 	options?(): any;
 	optionsOrder?(): string[];
@@ -69,6 +70,7 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	unitLabel?: Function;
 	needRestart?: boolean;
 	autoSave?: boolean;
@@ -207,6 +209,7 @@ const defaultMigrations: DefaultMigration[] = [
 interface UserSettingMigration {
 	oldName: string;
 	newName: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	transformValue: Function;
 }
 
@@ -312,7 +315,7 @@ class Setting extends BaseModel {
 	private static changedKeys_: string[] = [];
 	private static fileHandler_: FileHandler = null;
 	private static rootFileHandler_: FileHandler = null;
-	private static settingFilename_: string = 'settings.json';
+	private static settingFilename_ = 'settings.json';
 	private static buildInMetadata_: SettingItems = null;
 
 	public static tableName() {
@@ -1696,6 +1699,16 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'voiceTypingBaseUrl': {
+				value: '',
+				type: SettingItemType.String,
+				public: true,
+				appTypes: [AppType.Mobile],
+				description: () => _('Leave it blank to download the language files from the default website'),
+				label: () => _('Voice typing language files (URL)'),
+				section: 'note',
+			},
+
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
@@ -1752,6 +1765,7 @@ class Setting extends BaseModel {
 
 	public static applyUserSettingMigration() {
 		// Function to translate existing user settings to new setting.
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		userSettingMigration.forEach(userMigration => {
 			if (!this.isSet(userMigration.newName) && this.isSet(userMigration.oldName)) {
 				this.setValue(userMigration.newName, userMigration.transformValue(this.value(userMigration.oldName)));
@@ -1848,7 +1862,7 @@ class Setting extends BaseModel {
 		return this.metadata()[key] && this.metadata()[key].secure === true;
 	}
 
-	public static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
+	public static keys(publicOnly = false, appType: AppType = null, options: KeysOptions = null) {
 		options = { secureOnly: false, ...options };
 
 		if (!this.keys_) {
@@ -2082,7 +2096,7 @@ class Setting extends BaseModel {
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
 	public static setArrayValue(settingName: string, value: string): boolean {
-		const settingValue: Array<any> = this.value(settingName);
+		const settingValue: any[] = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);
 		this.setValue(settingName, settingValue);
