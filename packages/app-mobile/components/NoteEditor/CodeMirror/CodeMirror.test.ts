@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-
 import { EditorSettings } from '../types';
 import { initCodeMirror } from './CodeMirror';
 import { themeStyle } from '@joplin/lib/theme';

@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+
 import { EditorSelection } from '@codemirror/state';
 import { ListType } from '../types';
 import createEditor from './testUtil/createEditor';

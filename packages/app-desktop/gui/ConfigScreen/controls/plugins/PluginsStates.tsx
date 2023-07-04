@@ -45,9 +45,13 @@ const RepoApiErrorMessage = styled(StyledMessage)<any>`
 interface Props {
 	value: any;
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onChange: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderLabel: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderDescription: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderHeader: Function;
 }
 
@@ -146,6 +150,7 @@ export default function(props: Props) {
 			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest), pluginService.appVersion);
 			if (cancelled) return;
 			const conv: Record<string, boolean> = {};
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			pluginIds.forEach(id => conv[id] = true);
 			setCanBeUpdatedPluginIds(conv);
 		}

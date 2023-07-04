@@ -9,6 +9,7 @@ const { createCachedSelector } = require('re-reselect');
 export interface MenuItem {
 	id?: string;
 	label?: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	click?: Function;
 	role?: any;
 	type?: string;
@@ -74,6 +75,7 @@ export default class MenuUtils {
 		return KeymapService.instance();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public commandToMenuItem(commandName: string, onClick: Function): MenuItem {
 		const command = this.service.commandByName(commandName);
 
@@ -99,6 +101,7 @@ export default class MenuUtils {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public commandsToMenuItems(commandNames: string[], onClick: Function, locale: string): MenuItems {
 		const key = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}_${locale}`;
 		if (this.menuItemCache_[key]) return this.menuItemCache_[key];

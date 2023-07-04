@@ -28,6 +28,7 @@ export const runtime = (): CommandRuntime => {
 			const languages = state.settings['spellChecker.languages'];
 			if (languages.length === 0) return null;
 			const s: string[] = [];
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			languages.forEach((language: string) => {
 				s.push(language.split('-')[0]);
 			});

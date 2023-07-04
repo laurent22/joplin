@@ -23,7 +23,7 @@ interface Props {
 	onCheckboxChange?: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onMarkForDownload?: OnMarkForDownloadCallback;
-	onLoadEnd?: Function;
+	onLoadEnd?: ()=> void;
 }
 
 const webViewStyle = {

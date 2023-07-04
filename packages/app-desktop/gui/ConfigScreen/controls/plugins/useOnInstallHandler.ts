@@ -13,6 +13,7 @@ export interface OnPluginSettingChangeEvent {
 
 type OnPluginSettingChangeHandler = (event: OnPluginSettingChangeEvent)=> void;
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(setInstallingPluginIds: Function, pluginSettings: PluginSettings, repoApi: Function, onPluginSettingsChange: OnPluginSettingChangeHandler, isUpdate: boolean) {
 	return useCallback(async (event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;

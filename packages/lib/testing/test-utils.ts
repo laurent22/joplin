@@ -375,7 +375,7 @@ async function clearSettingFile(id: number) {
 	await fs.remove(Setting.settingFilePath);
 }
 
-export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {
+export async function createFolderTree(parentId: string, tree: any[], num = 0): Promise<FolderEntity> {
 	let rootFolder: FolderEntity = null;
 
 	for (const item of tree) {
@@ -678,6 +678,7 @@ function objectsEqual(o1: any, o2: any) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function checkThrowAsync(asyncFn: Function) {
 	let hasThrown = false;
 	try {
@@ -688,6 +689,7 @@ async function checkThrowAsync(asyncFn: Function) {
 	return hasThrown;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
@@ -708,6 +710,7 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function expectNotThrow(asyncFn: Function) {
 	let thrownError = null;
 	try {
@@ -724,6 +727,7 @@ async function expectNotThrow(asyncFn: Function) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function checkThrow(fn: Function) {
 	let hasThrown = false;
 	try {
@@ -803,7 +807,7 @@ async function createNTestFolders(n: number) {
 	return folders;
 }
 
-async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title: string = 'note') {
+async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title = 'note') {
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;

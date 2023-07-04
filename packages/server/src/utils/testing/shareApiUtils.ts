@@ -66,7 +66,7 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 	}
 }
 
-export async function inviteUserToShare(share: Share, sharerSessionId: string, recipientEmail: string, acceptShare: boolean = true) {
+export async function inviteUserToShare(share: Share, sharerSessionId: string, recipientEmail: string, acceptShare = true) {
 	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
 		email: recipientEmail,
 	}) as ShareUser;
@@ -81,7 +81,7 @@ export async function inviteUserToShare(share: Share, sharerSessionId: string, r
 	return shareUser;
 }
 
-export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any, acceptShare: boolean = true): Promise<ShareResult> {
+export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any, acceptShare = true): Promise<ShareResult> {
 	itemTree = Array.isArray(itemTree) ? itemTree : convertTree(itemTree);
 
 	const sharee = await models().session().sessionUser(shareeSessionId);

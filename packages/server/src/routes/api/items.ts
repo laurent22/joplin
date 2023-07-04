@@ -84,7 +84,7 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 //   within that folder. Except that they cannot delete the root folder if they
 //   are not the owner, so there's a check in this case.
 
-async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, mustExists: boolean = true): Promise<Item> {
+async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, mustExists = true): Promise<Item> {
 	const name = itemModel.pathToName(path.id);
 	const item = await itemModel.loadByName(userId, name);
 	if (mustExists && !item) throw new ErrorNotFound(`Not found: ${path.id}`);

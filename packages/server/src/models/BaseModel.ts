@@ -129,7 +129,7 @@ export default abstract class BaseModel<T> {
 		throw new Error('Must be overriden');
 	}
 
-	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = '', requiredFields: string[] = []): string[] {
+	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable = '', requiredFields: string[] = []): string[] {
 		let output: string[] = [];
 		if (options && options.fields) {
 			output = options.fields;
@@ -205,6 +205,7 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
 		const debugSteps = false;
 		const debugTimeout = true;

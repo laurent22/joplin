@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 'use strict';
 
 const fs = require('fs');

@@ -44,8 +44,12 @@ for (const moduleName of builtinModules) {
 	moduleFallback[moduleName] = false;
 }
 
+const getPackageJson = () => {
+	return JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+};
+
 function validatePackageJson() {
-	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+	const content = getPackageJson();
 	if (!content.name || content.name.indexOf('joplin-plugin-') !== 0) {
 		console.warn(chalk.yellow(`WARNING: To publish the plugin, the package name should start with "joplin-plugin-" (found "${content.name}") in ${packageJsonPath}`));
 	}
@@ -81,6 +85,7 @@ function currentGitInfo() {
 function validateCategories(categories) {
 	if (!categories) return null;
 	if ((categories.length !== new Set(categories).size)) throw new Error('Repeated categories are not allowed');
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	categories.forEach(category => {
 		if (!allPossibleCategories.map(category => { return category.name; }).includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid categories are: \n${allPossibleCategories.map(category => { return category.name; })}\n`);
 	});
@@ -88,6 +93,7 @@ function validateCategories(categories) {
 
 function validateScreenshots(screenshots) {
 	if (!screenshots) return null;
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	screenshots.forEach(screenshot => {
 		if (!screenshot.src) throw new Error('You must specify a src for each screenshot');
 
@@ -101,7 +107,6 @@ function validateScreenshots(screenshots) {
 		if (fileSize > fileMaxSize) throw new Error(`Max screenshot file size is ${fileMaxSize}KB. ${screenshotPath} is ${fileSize}KB`);
 	});
 }
-
 
 function readManifest(manifestPath) {
 	const content = fs.readFileSync(manifestPath, 'utf8');
@@ -133,12 +138,16 @@ function createPluginArchive(sourceDir, destPath) {
 	console.info(chalk.cyan(`Plugin archive has been created in ${destPath}`));
 }
 
+const writeManifest = (manifestPath, content) => {
+	fs.writeFileSync(manifestPath, JSON.stringify(content, null, '\t'), 'utf8');
+};
+
 function createPluginInfo(manifestPath, destPath, jplFilePath) {
 	const contentText = fs.readFileSync(manifestPath, 'utf8');
 	const content = JSON.parse(contentText);
 	content._publish_hash = `sha256:${fileSha256(jplFilePath)}`;
 	content._publish_commit = currentGitInfo();
-	fs.writeFileSync(destPath, JSON.stringify(content, null, '\t'), 'utf8');
+	writeManifest(destPath, content);
 }
 
 function onBuildCompleted() {
@@ -262,6 +271,32 @@ function buildExtraScriptConfigs(userConfig) {
 	return output;
 }
 
+const increaseVersion = version => {
+	try {
+		const s = version.split('.');
+		const d = Number(s[s.length - 1]) + 1;
+		s[s.length - 1] = `${d}`;
+		return s.join('.');
+	} catch (error) {
+		error.message = `Could not parse version number: ${version}: ${error.message}`;
+		throw error;
+	}
+};
+
+const updateVersion = () => {
+	const packageJson = getPackageJson();
+	packageJson.version = increaseVersion(packageJson.version);
+	fs.writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
+
+	const manifest = readManifest(manifestPath);
+	manifest.version = increaseVersion(manifest.version);
+	writeManifest(manifestPath, manifest);
+
+	if (packageJson.version !== manifest.version) {
+		console.warn(chalk.yellow(`Version numbers have been updated but they do not match: package.json (${packageJson.version}), manifest.json (${manifest.version}). Set them to the required values to get them in sync.`));
+	}
+};
+
 function main(environ) {
 	const configName = environ['joplin-plugin-config'];
 	if (!configName) throw new Error('A config file must be specified via the --joplin-plugin-config flag');
@@ -296,6 +331,11 @@ function main(environ) {
 		fs.removeSync(distDir);
 		fs.removeSync(publishDir);
 		fs.mkdirpSync(publishDir);
+	}
+
+	if (configName === 'updateVersion') {
+		updateVersion();
+		return [];
 	}
 
 	return configs[configName];

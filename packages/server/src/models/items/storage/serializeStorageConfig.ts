@@ -14,7 +14,7 @@ const serializeMode = (mode: StorageDriverMode): string => {
 	throw new Error(`Invalid type: "${mode}"`);
 };
 
-export default function(config: StorageDriverConfig, locationOnly: boolean = true): string {
+export default function(config: StorageDriverConfig, locationOnly = true): string {
 	if (!config) return '';
 
 	const items: string[] = [];

@@ -178,6 +178,7 @@ describe('bundleDefaultPlugins', () => {
 
 			expect(mockFetch).toHaveBeenCalledTimes(testCase.numberOfCalls);
 
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			testCase.calledWith.forEach((callValue, index) => expect(mockFetch).toHaveBeenNthCalledWith(index + 1, callValue));
 
 			jest.clearAllMocks();

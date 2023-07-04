@@ -60,6 +60,7 @@ export interface Module {
 	importerClass?: string;
 	outputFormat?: ImportModuleOutputFormat;
 	isDefault?: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	fullLabel?: Function;
 
 	// Used only if `isCustom` is true

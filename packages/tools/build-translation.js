@@ -198,6 +198,7 @@ function buildIndex(locales, stats) {
 
 function availableLocales(defaultLocale) {
 	const output = [defaultLocale];
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	fs.readdirSync(localesDir).forEach((path) => {
 		if (fileExtension(path) !== 'po') return;
 		const locale = filename(path);

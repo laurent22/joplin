@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 
 interface HookDependencies {
 	editor: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onScroll: Function;
 }
 

@@ -59,7 +59,7 @@ export function initCodeMirror(
 	let searchVisible = false;
 
 	let schedulePostUndoRedoDepthChangeId_: any = 0;
-	const schedulePostUndoRedoDepthChange = (editor: EditorView, doItNow: boolean = false) => {
+	const schedulePostUndoRedoDepthChange = (editor: EditorView, doItNow = false) => {
 		if (schedulePostUndoRedoDepthChangeId_) {
 			if (doItNow) {
 				clearTimeout(schedulePostUndoRedoDepthChangeId_);

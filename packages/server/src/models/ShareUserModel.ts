@@ -80,7 +80,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		return this.db(this.tableName).where(link).first();
 	}
 
-	public async shareWithUserAndAccept(share: Share, shareeId: Uuid, masterKey: string = '') {
+	public async shareWithUserAndAccept(share: Share, shareeId: Uuid, masterKey = '') {
 		await this.models().shareUser().addById(share.id, shareeId, masterKey);
 		await this.models().shareUser().setStatus(share.id, shareeId, ShareUserStatus.Accepted);
 	}

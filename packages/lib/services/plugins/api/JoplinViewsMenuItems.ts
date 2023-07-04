@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import KeymapService from '../../KeymapService';
 import { CreateMenuItemOptions, MenuItemLocation } from './types';
 import MenuItemController from '../MenuItemController';

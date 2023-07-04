@@ -10,7 +10,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, field?: string | Array<any>, reverse?: boolean) => {
+		execute: async (_context: CommandContext, field?: string | any[], reverse?: boolean) => {
 			// field: Sort order's field. undefined means switching a field.
 			// reverse: whether the sort order is reversed or not. undefined means toggling.
 			//

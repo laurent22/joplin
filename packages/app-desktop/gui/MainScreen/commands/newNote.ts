@@ -11,7 +11,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, body: string = '', isTodo: boolean = false) => {
+		execute: async (_context: CommandContext, body = '', isTodo = false) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 

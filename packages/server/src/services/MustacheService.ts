@@ -67,7 +67,7 @@ export default class MustacheService {
 
 	private viewDir_: string;
 	private baseAssetUrl_: string;
-	private prefersDarkEnabled_: boolean = true;
+	private prefersDarkEnabled_ = true;
 	private partials_: Record<string, string> = {};
 	private fileContentCache_: Record<string, string> = {};
 

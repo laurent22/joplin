@@ -85,6 +85,7 @@ class HtmlUtils {
 		return html.replace(htmlReg, `:/${id}`);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceImageUrls(html: string, callback: Function) {
 		return this.processImageTags(html, (data: any) => {
 			const newSrc = callback(data.src);
@@ -95,6 +96,7 @@ class HtmlUtils {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceEmbedUrls(html: string, callback: Function) {
 		if (!html) return '';
 		// We are adding the link as <a> since joplin disabled <embed>, <object> tags due to security reasons.
@@ -110,6 +112,7 @@ class HtmlUtils {
 		return html;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceMediaUrls(html: string, callback: Function) {
 		html = this.replaceImageUrls(html, callback);
 		html = this.replaceEmbedUrls(html, callback);
@@ -121,6 +124,7 @@ class HtmlUtils {
 	// file path is going to be used, it will need to be unescaped first. The
 	// transformed SRC, must also be escaped before being sent back to this
 	// function.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 

@@ -81,6 +81,7 @@ class BaseModel {
 	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
 	public static TYPE_COMMAND = ModelType.Command;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static dispatch: Function = function() {};
 	private static saveMutexes_: any = {};
 
@@ -185,7 +186,7 @@ class BaseModel {
 		return fields.indexOf(name) >= 0;
 	}
 
-	public static fieldNames(withPrefix: boolean = false) {
+	public static fieldNames(withPrefix = false) {
 		const output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
 
@@ -430,6 +431,7 @@ class BaseModel {
 		return mutex;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static releaseSaveMutex(modelOrId: any, release: Function) {
 		if (!release) return;
 		if (!modelOrId) return release();

@@ -72,6 +72,7 @@ describe('ArrayUtils', () => {
 			],
 		];
 
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		testCases.forEach((t, i) => {
 			const intervals = t[0];
 			const expected = t[1];

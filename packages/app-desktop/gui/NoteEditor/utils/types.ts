@@ -18,6 +18,7 @@ export interface NoteEditorProps {
 	// style: any;
 	noteId: string;
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	selectedNoteIds: string[];
 	selectedFolderId: string;
@@ -59,9 +60,11 @@ export interface NoteBodyEditorProps {
 	onMessage(event: any): void;
 	onScroll(event: any): void;
 	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	htmlToMarkdown: Function;
 	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
@@ -70,6 +73,7 @@ export interface NoteBodyEditorProps {
 	keyboardMode: string;
 	resourceInfos: ResourceInfos;
 	locale: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDrop: Function;
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;

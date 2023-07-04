@@ -366,4 +366,4 @@ const mapStateToProps = (state: State) => {
 	};
 };
 
-export default connect(mapStateToProps)(ShareFolderDialog as any);
+export default connect(mapStateToProps)(ShareFolderDialog);

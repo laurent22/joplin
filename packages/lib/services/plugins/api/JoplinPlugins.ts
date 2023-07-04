@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import Plugin from '../Plugin';
 import Logger from '../../../Logger';
 import { ContentScriptType, Script } from './types';
