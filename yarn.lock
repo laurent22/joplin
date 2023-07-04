@@ -4713,7 +4713,7 @@ __metadata:
     "@joplin/renderer": ~2.12
     "@joplin/tools": ~2.12
     "@koa/cors": 3.4.3
-    "@rmp135/sql-ts": 1.16.0
+    "@rmp135/sql-ts": 1.17.0
     "@types/formidable": 2.0.6
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
@@ -4773,7 +4773,7 @@ __metadata:
     "@joplin/lib": ~2.12
     "@joplin/renderer": ~2.12
     "@joplin/utils": ~2.12
-    "@rmp135/sql-ts": 1.16.0
+    "@rmp135/sql-ts": 1.17.0
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/mustache": 4.2.2
@@ -6794,21 +6794,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rmp135/sql-ts@npm:1.16.0":
-  version: 1.16.0
-  resolution: "@rmp135/sql-ts@npm:1.16.0"
+"@rmp135/sql-ts@npm:1.17.0":
+  version: 1.17.0
+  resolution: "@rmp135/sql-ts@npm:1.17.0"
   dependencies:
     change-case: ^4.1.2
     handlebars: ^4.7.7
-    knex: ^2.4.0
-    yargs: ^17.6.2
+    knex: ^2.4.2
+    yargs: ^17.7.2
   peerDependencies:
-    better-sqlite3: ^7.5.0
-    mssql: ^8.0.2
+    better-sqlite3: ^8.4.0
+    mssql: ^9.1.1
     mysql: ^2.18.1
-    mysql2: ^2.3.3
-    pg: ^8.8.0
-    sqlite3: ^5.0.2
+    mysql2: ^3.3.2
+    pg: ^8.11.0
+    sqlite3: ^5.1.6
   peerDependenciesMeta:
     better-sqlite3:
       optional: true
@@ -6824,7 +6824,7 @@ __metadata:
       optional: true
   bin:
     sql-ts: bin/sql-ts
-  checksum: 5151e2b864c894d27dc61cc20dc08788f63067c551f3e2f607f5f16741eb24feff98ed09d60dbdffc28630524ec2a5884d3f6951f70c606f256361b5fbea1297
+  checksum: 88bdd92138a592d900755a73f132af5d1214f644a4f1051959faa59ac693e6c2111a27a89bc39ee45bebe1feadcf82022da59a3f8dbabfa2b9d5b3790ea0d5b2
   languageName: node
   linkType: hard
 
@@ -21649,7 +21649,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:2.4.2, knex@npm:^2.4.0":
+"knex@npm:2.4.2, knex@npm:^2.4.2":
   version: 2.4.2
   resolution: "knex@npm:2.4.2"
   dependencies:
@@ -34882,7 +34882,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.7.2":
+"yargs@npm:17.7.2, yargs@npm:^17.7.2":
   version: 17.7.2
   resolution: "yargs@npm:17.7.2"
   dependencies:
@@ -34980,7 +34980,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.5.1, yargs@npm:^17.6.2":
+"yargs@npm:^17.5.1":
   version: 17.6.2
   resolution: "yargs@npm:17.6.2"
   dependencies:
