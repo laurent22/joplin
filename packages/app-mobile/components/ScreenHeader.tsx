@@ -81,9 +81,9 @@ interface ScreenHeaderProps {
 	historyCanGoBack?: boolean;
 	showMissingMasterKeyMessage?: boolean;
 	hasDisabledSyncItems?: boolean;
+	hasDisabledEncryptionItems: boolean;
 	shouldUpgradeSyncTarget?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
-
 }
 
 interface ScreenHeaderState {
@@ -543,6 +543,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 		if (this.props.shouldUpgradeSyncTarget && this.props.showShouldUpgradeSyncTargetMessage !== false) warningComps.push(this.renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
 
+		if (this.props.hasDisabledEncryptionItems) {
+			warningComps.push(this.renderWarningBox('Status', _('Some items cannot be decrypted.')));
+		}
+
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSelectAllButton = this.props.noteSelectionEnabled;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
@@ -632,6 +636,7 @@ const ScreenHeader = connect((state: State) => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 	};

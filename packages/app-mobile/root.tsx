@@ -116,6 +116,7 @@ import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import NoteDecryptionScreen from './components/screens/NoteDecryptionScreen';
 
 const logger = Logger.create('root');
 
@@ -207,6 +208,10 @@ function historyCanGoBackTo(route: any) {
 	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...)
 	if (route.routeName === 'OneDriveLogin') return false;
 	if (route.routeName === 'DropboxLogin') return false;
+
+	// If a note decrypts successfully, it automatically navigates away from the status
+	// page. Thus, going back to this page would cause the user to immediately leave it.
+	if (route.routeName === 'NoteDecryptionStatus') return false;
 
 	return true;
 }
@@ -981,6 +986,7 @@ class AppComponent extends React.Component {
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
 			Config: { screen: ConfigScreen },
+			NoteDecryptionStatus: { screen: NoteDecryptionScreen },
 		};
 
 

@@ -79,7 +79,14 @@ class NoteItemComponent extends Component {
 
 	onPress() {
 		if (!this.props.note) return;
-		if (this.props.note.encryption_applied) return;
+		if (this.props.note.encryption_applied) {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'NoteDecryptionStatus',
+				noteId: this.props.note.id,
+			});
+			return;
+		}
 
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({

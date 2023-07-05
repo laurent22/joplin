@@ -91,7 +91,7 @@ export default class DecryptionWorker {
 		}, 1000);
 	}
 
-	public async decryptionDisabledItems() {
+	public async decryptionDisabledItems(): Promise<{ type_: number; id: string }[]> {
 		let items = await this.kvStore().searchByPrefix('decrypt:');
 		items = items.filter(item => item.value > this.maxDecryptionAttempts_);
 		items = items.map(item => {
@@ -104,7 +104,7 @@ export default class DecryptionWorker {
 		return items;
 	}
 
-	public async clearDisabledItem(typeId: string, itemId: string) {
+	public async clearDisabledItem(typeId: number, itemId: string) {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
@@ -228,6 +228,7 @@ export default class DecryptionWorker {
 						}
 					} catch (error) {
 						excludedIds.push(item.id);
+						this.eventEmitter_.emit('itemDecryptionFailed', { id: item.id, error });
 
 						if (error.code === 'masterKeyNotLoaded' && options.masterKeyNotLoadedHandler === 'dispatch') {
 							if (notLoadedMasterKeyDisptaches.indexOf(error.masterKeyId) < 0) {
