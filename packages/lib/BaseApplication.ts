@@ -59,7 +59,7 @@ import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 
-import RotatingLogs, { RotationalLogs } from './RotatingLogs';
+import RotatingLogs from './RotatingLogs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -86,6 +86,8 @@ export default class BaseApplication {
 	private currentFolder_: any = null;
 
 	protected store_: Store<any> = null;
+
+	private rotatingLogs: RotatingLogs;
 
 	public constructor() {
 		this.eventEmitter_ = new EventEmitter();
@@ -929,36 +931,18 @@ export default class BaseApplication {
 
 		await MigrationService.instance().run();
 
-		this.startUpRotateLogFilesRoutine(profileDir);
+		this.rotatingLogs = new RotatingLogs(profileDir);
+		const processLogs = async () => {
+			try {
+				await this.rotatingLogs.cleanActiveLogFile();
+				await this.rotatingLogs.deleteNonActiveLogFiles();
+			} catch (error) {
+				appLogger.error(error);
+			}
+		};
+		shim.setTimeout(() => { void processLogs(); }, 6000);
+		shim.setInterval(() => { void processLogs(); }, 24 * 60 * 60 * 1000);
 
 		return argv;
-	}
-
-	private startUpRotateLogFilesRoutine(profileDir: string) {
-		const rl: RotationalLogs = new RotatingLogs(profileDir);
-		this.cleanActiveLogWrapper(rl);
-		this.deleteNonActiveLogFilesWrapper(rl);
-	}
-
-	private cleanActiveLogWrapper(rl: RotationalLogs) {
-		const sixtySeconds: number = 60 * 1000;
-		shim.setTimeout(async () => {
-			try {
-				await rl.cleanActiveLogFile();
-			} catch (e) {
-				appLogger.error('Cannot clean the active log file.', e);
-			}
-		}, sixtySeconds);
-	}
-
-	private deleteNonActiveLogFilesWrapper(rl: RotationalLogs) {
-		const twentyFourHours: number = 60 * 60 * 24 * 1000;
-		shim.setInterval(async () => {
-			try {
-				await rl.deleNonActiveLogFiles();
-			} catch (e) {
-				appLogger.error('Cannot delete the non active log file(s).', e);
-			}
-		}, twentyFourHours);
 	}
 }
