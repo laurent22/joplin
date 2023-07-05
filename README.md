@@ -156,6 +156,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 	- [Changelog (Server)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
 	- [Guiding principles](https://github.com/laurent22/joplin/blob/dev/readme/principles.md)
 	- [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
+	- [Brand guidelines](https://joplinapp.org/brand)
 	- [Donate](https://github.com/laurent22/joplin/blob/dev/readme/donate.md)
 <!-- TOC -->
 
