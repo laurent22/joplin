@@ -1,8 +1,6 @@
-/* eslint-disable multiline-comment-style */
 /**
  * @jest-environment jsdom
  */
-/* eslint-enable multiline-comment-style */
 
 import { EditorSettings } from '../types';
 import { initCodeMirror } from './CodeMirror';

@@ -1,0 +1,15 @@
+diff --git a/lib/rules/multiline-comment-style.js b/lib/rules/multiline-comment-style.js
+index 9cb7f3473e5a124e2eedb12685650f047afa84b6..124e062955e1b51cbdddd0920c22446dc97dd261 100644
+--- a/lib/rules/multiline-comment-style.js
++++ b/lib/rules/multiline-comment-style.js
+@@ -377,6 +377,10 @@ module.exports = {
+                     commentLines = commentLines.slice(1, commentLines.length - 1);
+                 }
+ 
++                // We have to allow this because it's always a top comment and
++                // it has to be in a jsdoc block
++                if (commentLines.join('').trim().startsWith('@jest-environment')) return;
++
+                 const tokenAfter = sourceCode.getTokenAfter(firstComment, { includeComments: true });
+ 
+                 if (tokenAfter && firstComment.loc.end.line === tokenAfter.loc.start.line) {

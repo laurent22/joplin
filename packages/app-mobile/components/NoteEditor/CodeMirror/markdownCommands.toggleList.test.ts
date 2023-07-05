@@ -1,8 +1,6 @@
-/* eslint-disable multiline-comment-style */
 /**
  * @jest-environment jsdom
  */
-/* eslint-enable multiline-comment-style */
 
 import { EditorSelection, EditorState } from '@codemirror/state';
 import {

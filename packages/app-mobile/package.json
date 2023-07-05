@@ -51,7 +51,7 @@
     "react-native-fingerprint-scanner": "6.0.0",
     "react-native-fs": "2.20.0",
     "react-native-get-random-values": "1.9.0",
-    "react-native-image-picker": "5.3.1",
+    "react-native-image-picker": "5.4.0",
     "react-native-image-resizer": "1.4.5",
     "react-native-localize": "3.0.0",
     "react-native-modal-datetime-picker": "15.0.1",
@@ -77,7 +77,7 @@
     "stream-browserify": "3.0.0",
     "string-natural-compare": "3.0.1",
     "timers": "0.1.1",
-    "url": "0.11.0"
+    "url": "0.11.1"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
