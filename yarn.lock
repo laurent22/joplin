@@ -1404,6 +1404,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-create-class-features-plugin@npm:^7.22.5":
+  version: 7.22.6
+  resolution: "@babel/helper-create-class-features-plugin@npm:7.22.6"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.22.5
+    "@babel/helper-environment-visitor": ^7.22.5
+    "@babel/helper-function-name": ^7.22.5
+    "@babel/helper-member-expression-to-functions": ^7.22.5
+    "@babel/helper-optimise-call-expression": ^7.22.5
+    "@babel/helper-replace-supers": ^7.22.5
+    "@babel/helper-skip-transparent-expression-wrappers": ^7.22.5
+    "@babel/helper-split-export-declaration": ^7.22.6
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 10412e8a509a607cde6137288d3f12b1f91acd374e29e6dd6a277b67217e9f4c932a0acd89eeda837c8432916df775a8af6321aeb8d8b131ccdbf7688208dda1
+  languageName: node
+  linkType: hard
+
 "@babel/helper-create-regexp-features-plugin@npm:^7.18.6, @babel/helper-create-regexp-features-plugin@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-create-regexp-features-plugin@npm:7.22.5"
@@ -1564,6 +1583,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-split-export-declaration@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/helper-split-export-declaration@npm:7.22.6"
+  dependencies:
+    "@babel/types": ^7.22.5
+  checksum: e141cace583b19d9195f9c2b8e17a3ae913b7ee9b8120246d0f9ca349ca6f03cb2c001fd5ec57488c544347c0bb584afec66c936511e447fd20a360e591ac921
+  languageName: node
+  linkType: hard
+
 "@babel/helper-string-parser@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-string-parser@npm:7.22.5"
@@ -1578,7 +1606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-option@npm:^7.18.6, @babel/helper-validator-option@npm:^7.22.5":
+"@babel/helper-validator-option@npm:^7.18.6, @babel/helper-validator-option@npm:^7.21.0, @babel/helper-validator-option@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-validator-option@npm:7.22.5"
   checksum: bbeca8a85ee86990215c0424997438b388b8d642d69b9f86c375a174d3cdeb270efafd1ff128bc7a1d370923d13b6e45829ba8581c027620e83e3a80c5c414b3
@@ -2084,6 +2112,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-typescript@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/plugin-syntax-typescript@npm:7.22.5"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 8ab7718fbb026d64da93681a57797d60326097fd7cb930380c8bffd9eb101689e90142c760a14b51e8e69c88a73ba3da956cb4520a3b0c65743aee5c71ef360a
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-arrow-functions@npm:^7.0.0, @babel/plugin-transform-arrow-functions@npm:^7.18.6":
   version: 7.22.5
   resolution: "@babel/plugin-transform-arrow-functions@npm:7.22.5"
@@ -2542,6 +2581,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-transform-typescript@npm:^7.21.0":
+  version: 7.22.5
+  resolution: "@babel/plugin-transform-typescript@npm:7.22.5"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.22.5
+    "@babel/helper-create-class-features-plugin": ^7.22.5
+    "@babel/helper-plugin-utils": ^7.22.5
+    "@babel/plugin-syntax-typescript": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: d12f1ca1ef1f2a54432eb044d2999705d1205ebe211c2a7f05b12e8eb2d2a461fd7657b5486b2f2f1efe7c0c0dc8e80725b767073d40fe4ae059a7af057b05e4
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-unicode-escapes@npm:^7.18.10":
   version: 7.22.5
   resolution: "@babel/plugin-transform-unicode-escapes@npm:7.22.5"
@@ -2688,6 +2741,19 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 7fe0da5103eb72d3cf39cf3e138a794c8cdd19c0b38e3e101507eef519c46a87a0d6d0e8bc9e28a13ea2364001ebe7430b9d75758aab4c3c3a8db9a487b9dc7c
+  languageName: node
+  linkType: hard
+
+"@babel/preset-typescript@npm:^7.17.12":
+  version: 7.21.0
+  resolution: "@babel/preset-typescript@npm:7.21.0"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.20.2
+    "@babel/helper-validator-option": ^7.21.0
+    "@babel/plugin-transform-typescript": ^7.21.0
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 6e1f4d7294de2678fbaf36035e98847b2be432f40fe7a1204e5e45b8b05bcbe22902fe0d726e16af14de5bc08987fae28a7899871503fd661050d85f58755af6
   languageName: node
   linkType: hard
 
@@ -3383,6 +3449,15 @@ __metadata:
   version: 0.5.6
   resolution: "@discoveryjs/json-ext@npm:0.5.6"
   checksum: e97df618511fb202dffa2eb0d23e17dfb02943a70e5bc38f6b9603ad1cb1d6b525aa2b07ff9fb00b041abe425b341146ddd9e487f1e35ddadc8c6b8c56358ae0
+  languageName: node
+  linkType: hard
+
+"@egjs/hammerjs@npm:^2.0.17":
+  version: 2.0.17
+  resolution: "@egjs/hammerjs@npm:2.0.17"
+  dependencies:
+    "@types/hammerjs": ^2.0.36
+  checksum: 8945137cec5837edd70af3f2e0ea621543eb0aa3b667e6269ec6485350f4d120c2434b37c7c30b1cf42a65275dd61c1f24626749c616696d3956ac0c008c4766
   languageName: node
   linkType: hard
 
@@ -4403,12 +4478,15 @@ __metadata:
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 8.2.1
+    react-native-document-picker: 8.2.0
+    react-native-draggable-flatlist: 4.0.1
+    react-native-drawer-layout: 3.2.0
     react-native-dropdownalert: 4.5.1
     react-native-exit-app: 1.1.0
     react-native-file-viewer: 2.1.5
     react-native-fingerprint-scanner: 6.0.0
     react-native-fs: 2.20.0
+    react-native-gesture-handler: 2.12.0
     react-native-get-random-values: 1.9.0
     react-native-image-picker: 5.4.2
     react-native-image-resizer: 1.4.5
@@ -5942,6 +6020,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nicolo-ribaudo/semver-v6@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "@nicolo-ribaudo/semver-v6@npm:6.3.3"
+  bin:
+    semver: bin/semver.js
+  checksum: 8290855b1591477d2298364541fda64fafd4acc110b387067a71c9b05f4105c0a4ac079857ae9cd107c42ee884e8724a406b5116f069575e02d7ab87a35a5272
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -7366,6 +7453,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: d076bb61f45d0fc42dee496ef8b1c2f8742e15d5e47e90e20d0243386e426c04d4efd408a48875ab432f7960b4ce3414db20ed0fbbfc7bcc89d84e574f6e045a
+  languageName: node
+  linkType: hard
+
+"@types/hammerjs@npm:^2.0.36":
+  version: 2.0.41
+  resolution: "@types/hammerjs@npm:2.0.41"
+  checksum: d16fbd688fc9b18cc270abe8dea8d4c50ef7bd8375e593d92c233d299387933a6b003c8db69819344833052458bc5f9ef1b472001277a49f095928d184356006
   languageName: node
   linkType: hard
 
@@ -27918,9 +28012,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:8.2.1":
-  version: 8.2.1
-  resolution: "react-native-document-picker@npm:8.2.1"
+"react-native-document-picker@npm:8.2.0":
+  version: 8.2.0
+  resolution: "react-native-document-picker@npm:8.2.0"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -27930,7 +28024,34 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: 575d3bec391044fdaf8d4d740a115a0b3e5cbafdb893ce19157b0c5fefb052c208b9db6d352e171d358c723612e47fe67cda4634a60d3a245a30ff103b1cb84c
+  checksum: a33beddf8c90b6eb9314e2b880cdb27a7e4e1bcf47191786132df43568c09b9e5402a7405c470fa03ddcfab2c0b58c9b536ef50e65a56dadf24e7202c5220834
+  languageName: node
+  linkType: hard
+
+"react-native-draggable-flatlist@npm:4.0.1":
+  version: 4.0.1
+  resolution: "react-native-draggable-flatlist@npm:4.0.1"
+  dependencies:
+    "@babel/preset-typescript": ^7.17.12
+  peerDependencies:
+    react-native: ">=0.64.0"
+    react-native-gesture-handler: ">=2.0.0"
+    react-native-reanimated: ">=2.8.0"
+  checksum: f904e3f30737a883b683e12e119856188e81d7b6cd8811e38124353630391326385bec040a3c200a06535bcd4bbbe973e504c2e0546f7aa4cc96aa573787813d
+  languageName: node
+  linkType: hard
+
+"react-native-drawer-layout@npm:3.2.0":
+  version: 3.2.0
+  resolution: "react-native-drawer-layout@npm:3.2.0"
+  dependencies:
+    use-latest-callback: ^0.1.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">= 1.0.0"
+    react-native-reanimated: ">= 1.0.0"
+  checksum: 67237e650e1245297ec08b9cf90c74aed25dfefbf66c972dae6be5913df78d98f04c5e90e98e396e8ea2b97eca8df0db1872a7608509e29f86491b5d3db36b3a
   languageName: node
   linkType: hard
 
@@ -27981,6 +28102,22 @@ __metadata:
     react-native-windows:
       optional: true
   checksum: 0be9bb9a5c13b501d0a3006efc3aa5c0b5b211456ee04718297f4e522532f3527f1daa220bd67d3b82d819ed8fdab8f64b7d6e0d7b768c1fd1d8ec9122d94316
+  languageName: node
+  linkType: hard
+
+"react-native-gesture-handler@npm:2.12.0":
+  version: 2.12.0
+  resolution: "react-native-gesture-handler@npm:2.12.0"
+  dependencies:
+    "@egjs/hammerjs": ^2.0.17
+    hoist-non-react-statics: ^3.3.0
+    invariant: ^2.2.4
+    lodash: ^4.17.21
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 5147357b3212e269d0b8003e1be9e0993d0770f4880f1a8f52d2d61512c4569c48ec7b866d0a9ee44038785c29e0f84fbb99fd18a8e09552a25910c71602d788
   languageName: node
   linkType: hard
 

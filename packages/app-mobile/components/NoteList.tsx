@@ -1,15 +1,19 @@
 const React = require('react');
 
-import { Component } from 'react';
+import { Component, FunctionComponent } from 'react';
 
 import { connect } from 'react-redux';
-import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
+import { FlatList, Text, StyleSheet, Button, View, ViewStyle, TextStyle, ImageStyle, PanResponder } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import Setting from '@joplin/lib/models/Setting';
 
 const { _ } = require('@joplin/lib/locale');
 const { NoteItem } = require('./note-item.js');
 const { themeStyle } = require('./global-style.js');
+const { dialogs } = require('../utils/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 interface NoteListProps {
 	themeId: string;
@@ -19,17 +23,91 @@ interface NoteListProps {
 	folders: FolderEntity[];
 	noteSelectionEnabled?: boolean;
 	selectedFolderId?: string;
+	onSorted: (sortedId: string, newIndex: number)=> void;
 }
 
-class NoteListComponent extends Component<NoteListProps> {
+interface NoteListState {
+	items: NoteEntity[];
+	selectedItemIds: string[];
+}
+
+interface NoteItemWrapperProps {
+	note: NoteEntity;
+	dialogbox: any;
+	drag: ()=> Promise<void>;
+	isActive: boolean;
+	style: ViewStyle | TextStyle | ImageStyle;
+	noteSelectionEnabled?: boolean;
+	dispatch: (payload: any)=> void;
+}
+
+const NoteItemWrapper: FunctionComponent<NoteItemWrapperProps> = ({
+	note,
+	drag,
+	isActive,
+	style,
+	dialogbox,
+	noteSelectionEnabled,
+	dispatch,
+}) => {
+	if (Setting.value('notes.sortOrder.field') !== 'order') {
+		drag = async () => {
+			const doIt = await dialogs.confirmRef(dialogbox, `${_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by'))}\n\n${_('Do you want to do this')}`);
+
+			if (doIt) {
+				Setting.setValue('notes.sortOrder.field', 'order');
+			}
+		};
+	}
+
+	const panResponder = React.useRef(
+		PanResponder.create({
+			// Ask to be the responder:
+			onStartShouldSetPanResponder: () => false,
+			onStartShouldSetPanResponderCapture: () => false,
+			onMoveShouldSetPanResponder: (_) => true,
+			onMoveShouldSetPanResponderCapture: (_) => true,
+			onPanResponderGrant: () => {
+				void drag();
+			},
+			onShouldBlockNativeResponder: () => false,
+		})
+	).current;
+
+	return (
+		<View style={style} {...panResponder.panHandlers}>
+			<NoteItem
+				note={note}
+				onLongPress={() => {
+					dispatch({
+						type: noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
+						id: note.id,
+					});
+				}}
+				disabled={isActive}
+			/>
+		</View>
+	);
+};
+
+const ConnectedNoteItemWrapper = connect((state: AppState) => {
+	return {
+		noteSelectionEnabled: state.noteSelectionEnabled,
+	};
+})(NoteItemWrapper);
+
+class NoteListComponent extends Component<NoteListProps, NoteListState> {
 	private rootRef_: FlatList;
 	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
+
+	/** DialogBox isn't a type, so we can't use it here */
+	private dialogbox: any;
 
 	public constructor(props: NoteListProps) {
 		super(props);
 
 		this.state = {
-			items: [],
+			items: props.items || [],
 			selectedItemIds: [],
 		};
 		this.rootRef_ = null;
@@ -45,7 +123,7 @@ class NoteListComponent extends Component<NoteListProps> {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		const styles = {
+		const styles: Record<string, ViewStyle | TextStyle | ImageStyle> = {
 			noItemMessage: {
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -55,8 +133,22 @@ class NoteListComponent extends Component<NoteListProps> {
 				color: theme.color,
 				textAlign: 'center',
 			},
+			selectAction: {
+				flex: 1,
+				paddingLeft: theme.marginLeft,
+				// Reverse the color 4 to use for e.x. white text over blue bg
+				backgroundColor: theme.color4,
+				justifyContent: 'center',
+			},
+			actionText: {
+				// Reverse the color 4 to use for e.x. white text over blue bg
+				color: theme.backgroundColor4,
+				fontSize: theme.fontSize,
+			},
+			noteContainer: {
+				backgroundColor: theme.backgroundColor,
+			},
 			noNotebookView: {
-
 			},
 		};
 
@@ -77,18 +169,51 @@ class NoteListComponent extends Component<NoteListProps> {
 		if (this.rootRef_ && newProps.notesSource !== this.props.notesSource) {
 			this.rootRef_.scrollToOffset({ offset: 0, animated: false });
 		}
+
+		this.setState({
+			items: newProps.items || [],
+		});
 	}
 
-	public render() {
+	public renderMainContent() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
 		if (this.props.items.length) {
-			return <FlatList
-				ref={ref => (this.rootRef_ = ref)}
-				data={this.props.items}
-				renderItem={({ item }) => <NoteItem note={item} />}
-				keyExtractor={item => item.id}
-			/>;
+			return (
+				<View style={{ flex: 1 }}>
+					<DraggableFlatList
+						ref={(ref: any) => (this.rootRef_ = ref)}
+						data={this.state.items}
+						renderItem={({ item, drag, isActive }) => (
+							<ScaleDecorator>
+								<ConnectedNoteItemWrapper
+									note={item}
+									drag={drag}
+									isActive={isActive}
+									style={this.styles().noteContainer}
+									dialogbox={this.dialogbox}
+								/>
+							</ScaleDecorator>
+						)}
+						keyExtractor={item => item.id}
+						onDragEnd={async ({ data, to, from }) => {
+							if (this.props.selectedFolderId) {
+								this.setState({ items: data });
+
+								if (this.props.onSorted) {
+									let newIndex = to;
+
+									if (to > from) {
+										newIndex++;
+									}
+
+									this.props.onSorted(data[to].id, newIndex);
+								}
+							}
+						}}
+					/>
+				</View>
+			);
 		} else {
 			if (!this.props.folders.length) {
 				const noItemMessage = _('You currently have no notebooks.');
@@ -104,15 +229,27 @@ class NoteListComponent extends Component<NoteListProps> {
 			}
 		}
 	}
+	public render() {
+		return (
+			<>
+				{this.renderMainContent()}
+				<DialogBox
+					ref={(dialogbox: any) => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
+			</>
+		);
+	}
 }
 
 const NoteList = connect((state: AppState) => {
 	return {
 		items: state.notes,
 		folders: state.folders,
+		selectedFolderId: state.selectedFolderId,
 		notesSource: state.notesSource,
 		themeId: state.settings.theme,
-		noteSelectionEnabled: state.noteSelectionEnabled,
 	};
 })(NoteListComponent);
 

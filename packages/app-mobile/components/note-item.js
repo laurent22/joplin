@@ -98,10 +98,9 @@ class NoteItemComponent extends Component {
 	onLongPress() {
 		if (!this.props.note) return;
 
-		this.props.dispatch({
-			type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
-			id: this.props.note.id,
-		});
+		if (this.props.onLongPress) {
+			this.props.onLongPress();
+		}
 	}
 
 	render() {
@@ -132,7 +131,7 @@ class NoteItemComponent extends Component {
 		const noteTitle = Note.displayTitle(note);
 
 		return (
-			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()} activeOpacity={0.5}>
+			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()} disabled={this.props.disabled} activeOpacity={0.5}>
 				<View style={selectionWrapperStyle}>
 					<View style={opacityStyle}>
 						<View style={listItemStyle}>
