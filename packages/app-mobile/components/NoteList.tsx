@@ -34,7 +34,7 @@ interface NoteListState {
 interface NoteItemWrapperProps {
 	note: NoteEntity;
 	dialogbox: any;
-	drag: ()=> Promise<void>;
+	drag: ()=> void;
 	isActive: boolean;
 	style: ViewStyle | TextStyle | ImageStyle;
 	noteSelectionEnabled?: boolean;

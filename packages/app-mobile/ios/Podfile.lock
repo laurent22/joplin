@@ -479,6 +479,35 @@ PODS:
     - React-Core
   - RNQuickAction (0.3.13):
     - React
+  - RNReanimated (3.3.0):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-hermes
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNSecureRandom (1.0.1):
     - React
   - RNShare (8.2.2):
@@ -585,6 +614,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNQuickAction (from `../node_modules/react-native-quick-actions`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -733,6 +763,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localize"
   RNQuickAction:
     :path: "../node_modules/react-native-quick-actions"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNSecureRandom:
     :path: "../node_modules/react-native-securerandom"
   RNShare:
@@ -819,6 +851,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNLocalize: 5944c97d2fe8150913a51ddd5eab4e23a82bd80d
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
+  RNReanimated: 9976fbaaeb8a188c36026154c844bf374b3b7eeb
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
