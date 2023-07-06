@@ -29,7 +29,6 @@
     "@react-native-community/push-notification-ios": "1.11.0",
     "@react-native-community/slider": "4.4.2",
     "assert-browserify": "2.0.0",
-    "async-mutex": "0.4.0",
     "buffer": "6.0.3",
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.0",
