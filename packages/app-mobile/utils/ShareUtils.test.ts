@@ -1,8 +1,8 @@
-import { describe, test, expect } from '@jest/globals';
-import { mkdtempSync, rmdirSync } from 'fs';
+import { describe, test, expect, jest, afterAll } from '@jest/globals';
+import { mkdtempSync, existsSync } from 'fs';
+import { rmdir } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import shim from '@joplin/lib/shim';
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
 // Use a temporary file instead.
@@ -19,14 +19,14 @@ import { writeTextToCacheFile } from './ShareUtils';
 describe('ShareUtils', () => {
 	test('writeTextFileToCache should create a new, uniquely-named file', async () => {
 		const filePath1 = await writeTextToCacheFile('testing...');
-		expect(await shim.fsDriver().exists(filePath1)).toBe(true);
+		expect(existsSync(filePath1)).toBe(true);
 
 		const filePath2 = await writeTextToCacheFile('test 2');
 		expect(filePath2).not.toBe(filePath1);
-		expect(await shim.fsDriver().exists(filePath2)).toBe(true);
+		expect(existsSync(filePath2)).toBe(true);
 	});
 
-	afterAll(() => {
-		rmdirSync(tempDirectoryPath, { recursive: true });
+	afterAll(async () => {
+		await rmdir(tempDirectoryPath, { recursive: true });
 	});
 });
