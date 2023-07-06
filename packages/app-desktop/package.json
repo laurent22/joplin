@@ -78,7 +78,11 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": "dmg",
+      "artifactName": "${productName}-${version}.${ext}",
+      "target": {
+        "target": "dmg",
+        "arch": "universal"
+      },
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
