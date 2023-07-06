@@ -116,7 +116,7 @@ import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
-import NoteDecryptionScreen from './components/screens/NoteDecryptionScreen';
+import NoteDecryptionScreen from './components/screens/NoteDecryptionScreen/NoteDecryptionScreen';
 
 const logger = Logger.create('root');
 

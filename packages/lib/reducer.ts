@@ -8,6 +8,7 @@ import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
+import { DecryptionWorkerState } from './services/DecryptionWorker';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -39,7 +40,7 @@ interface StateClipperServer {
 }
 
 interface StateDecryptionWorker {
-	state: string;
+	state: DecryptionWorkerState;
 	itemIndex: number;
 	itemCount: number;
 	decryptedItemCounts: any;

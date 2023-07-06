@@ -17,11 +17,13 @@ interface DecryptionResult {
 	error: any;
 }
 
+export type DecryptionWorkerState = 'idle'|'started';
+
 export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
 
-	private state_ = 'idle';
+	private state_: DecryptionWorkerState = 'idle';
 	private logger_: Logger;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = () => {};
@@ -78,6 +80,10 @@ export default class DecryptionWorker {
 	public kvStore() {
 		if (!this.kvStore_) throw new Error('DecryptionWorker.kvStore_ is not set!!');
 		return this.kvStore_;
+	}
+
+	public getState() {
+		return this.state_;
 	}
 
 	public async scheduleStart() {

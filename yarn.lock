@@ -2722,6 +2722,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:7.22.6":
+  version: 7.22.6
+  resolution: "@babel/runtime@npm:7.22.6"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: e585338287c4514a713babf4fdb8fc2a67adcebab3e7723a739fc62c79cfda875b314c90fd25f827afb150d781af97bc16c85bfdbfa2889f06053879a1ddb597
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.7, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.22.5
   resolution: "@babel/runtime@npm:7.22.5"
@@ -4369,6 +4378,7 @@ __metadata:
     "@react-native-community/netinfo": 9.3.10
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
+    "@testing-library/react-native": 12.1.2
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
@@ -4430,8 +4440,10 @@ __metadata:
     react-native-webview: 12.4.0
     react-native-zip-archive: 6.0.9
     react-redux: 8.0.7
+    react-test-renderer: 18.2.0
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
+    sqlite3: 5.1.6
     stream: 0.0.2
     stream-browserify: 3.0.0
     string-natural-compare: 3.0.1
@@ -7077,6 +7089,23 @@ __metadata:
     react-test-renderer:
       optional: true
   checksum: 7fe44352e920deb5cb1876f80d64e48615232072c9d5382f1e0284b3aab46bb1c659a040b774c45cdf084a5257b8fe463f7e08695ad8480d8a15635d4d3d1f6d
+  languageName: node
+  linkType: hard
+
+"@testing-library/react-native@npm:12.1.2":
+  version: 12.1.2
+  resolution: "@testing-library/react-native@npm:12.1.2"
+  dependencies:
+    pretty-format: ^29.0.0
+  peerDependencies:
+    jest: ">=28.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.59"
+    react-test-renderer: ">=16.8.0"
+  peerDependenciesMeta:
+    jest:
+      optional: true
+  checksum: 912fc961f213a8fa171b9b980d6f4edd8f11a012498fcf1b8e0d3ac1d20e85b61469a80914fda893aa48cb0d4b3f6075ec2723c58dae96eeac0ee1cd6e6daa3e
   languageName: node
   linkType: hard
 
@@ -29573,6 +29602,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@babel/runtime": 7.22.6
     "@joplin/utils": ~2.11
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 11.0.1

@@ -402,7 +402,9 @@ packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/Note.js
-packages/app-mobile/components/screens/NoteDecryptionScreen.js
+packages/app-mobile/components/screens/NoteDecryptionScreen/NoteDecryptionScreen.js
+packages/app-mobile/components/screens/NoteDecryptionScreen/useNoteDecryptionStatus.js
+packages/app-mobile/components/screens/NoteDecryptionScreen/useNoteDecryptionStatus.test.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
@@ -748,6 +750,7 @@ packages/lib/services/synchronizer/tools.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim.js
+packages/lib/testing/setUpTwoClientEncryptionAndSync.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js

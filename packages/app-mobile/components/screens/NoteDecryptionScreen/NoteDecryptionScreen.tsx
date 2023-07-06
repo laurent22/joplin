@@ -2,17 +2,18 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('../global-style.js');
 import Logger from '@joplin/lib/Logger';
 import { Button } from 'react-native-paper';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AppState } from '../../utils/types';
+import { AppState } from '../../../utils/types';
 import { Theme } from '@joplin/lib/themes/type';
-import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import DecryptionWorker, { DecryptionWorkerState } from '@joplin/lib/services/DecryptionWorker';
 import Note from '@joplin/lib/models/Note';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import useNoteDecryptionStatus from './useNoteDecryptionStatus';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('screens/NoteDecryptionScreen');
@@ -21,7 +22,7 @@ interface Props {
 	noteId: string;
 	themeId: number;
 	dispatch: Dispatch;
-	decryptionWorkerState: string;
+	decryptionWorkerState: DecryptionWorkerState;
 }
 
 const useStyles = (themeId: number) => {
@@ -57,88 +58,9 @@ const useStyles = (themeId: number) => {
 	}, [themeId]);
 };
 
-const useDecryptionInfo = (note: NoteEntity|null, decryptionWorkerState: string) => {
-	const [decrypting, setDecrypting] = useState<boolean>(false);
-	const [decrypted, setDecrypted] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<string|null>(null);
-
-	const noteId = note?.id ?? null;
-
-	const decryptionWorker = useMemo(() => {
-		return DecryptionWorker.instance();
-	}, []);
-
-	useEffect(() => {
-		setDecrypted(!(note?.encryption_applied ?? true));
-	}, [note]);
-
-	useAsyncEffect(async event => {
-		if (noteId === null) {
-			return;
-		}
-
-		const disabledItems = await decryptionWorker.decryptionDisabledItems();
-		if (event.cancelled) return;
-
-		const disabled = disabledItems.map(item => item.id).includes(noteId);
-
-		if (disabled || decryptionWorkerState === 'idle') {
-			setDecrypted(false);
-			setDecrypting(false);
-		} else if (decryptionWorkerState === 'started') {
-			setDecrypting(true);
-		}
-	}, [decryptionWorker, noteId, decryptionWorkerState]);
-
-	// Listen for whether we're decrypting
-	useEffect(() => {
-		// No note, hence no error message.
-		if (noteId === null) {
-			setDecrypting(false);
-			setDecrypted(false);
-			setErrorMessage(null);
-
-			// No cleanup necessary
-			return () => {};
-		}
-
-		const decryptionFailureListener = (event: any) => {
-			if (event?.id === noteId) {
-				setErrorMessage(`${event.error}`);
-				setDecrypting(false);
-			}
-		};
-		const failureEventName = 'itemDecryptionFailed';
-		decryptionWorker.on(failureEventName, decryptionFailureListener);
-
-		const decryptionSuccessListener = (event: any) => {
-			if (event?.id === noteId) {
-				setDecrypting(false);
-				setDecrypted(true);
-				setErrorMessage(null);
-			}
-		};
-		const successEventName = 'resourceDecrypted';
-		decryptionWorker.on(successEventName, decryptionSuccessListener);
-
-
-		const cleanup = () => {
-			decryptionWorker.off(failureEventName, decryptionFailureListener);
-			decryptionWorker.off(successEventName, decryptionSuccessListener);
-		};
-		return cleanup;
-	}, [noteId, decryptionWorker, setDecrypted, setDecrypting, setErrorMessage]);
-
-	return {
-		decrypting,
-		decrypted,
-		errorMessage,
-	};
-};
-
 const NoteDecryptionScreenComponent = (props: Props) => {
 	const [note, setNote] = useState<NoteEntity|null>(null);
-	const { decrypted, decrypting, errorMessage } = useDecryptionInfo(note, props.decryptionWorkerState);
+	const { decrypted, decrypting, errorMessage } = useNoteDecryptionStatus(note, props.decryptionWorkerState);
 
 	// Load the note
 	useAsyncEffect(async (event) => {
@@ -210,6 +132,9 @@ const NoteDecryptionScreenComponent = (props: Props) => {
 		</View>
 	);
 };
+
+// Exported for testing.
+export { NoteDecryptionScreenComponent };
 
 const NoteDecryptionScreen = connect((state: AppState) => {
 	return {
