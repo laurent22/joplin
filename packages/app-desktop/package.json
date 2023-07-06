@@ -78,6 +78,7 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
+      "artifactName": "${productName}-${version}.${ext}",
       "target": {
         "target": "dmg",
         "arch": "universal"
