@@ -5,7 +5,7 @@ import { hasNotch } from 'react-native-device-info';
 interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
 	containerStyle?: ViewStyle;
-	elevation?: Number;
+	elevation?: number;
 }
 
 const ModalElement: React.FC<ModalElementProps> = ({
