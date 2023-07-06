@@ -77,7 +77,7 @@ const useNoteDecryptionStatus = (note: NoteEntity|null, decryptionWorkerState: '
 			decryptionWorker.off(failureEventName, decryptionFailureListener);
 			decryptionWorker.off(successEventName, decryptionSuccessListener);
 		};
-	}, [noteId, decryptionWorker, setDecrypted, setDecrypting, setErrorMessage]);
+	}, [noteId, decryptionWorker]);
 
 	return {
 		decrypting,

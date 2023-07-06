@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('../global-style.js');
+const { themeStyle } = require('../../global-style.js');
 import Logger from '@joplin/lib/Logger';
 import { Button } from 'react-native-paper';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -58,7 +58,7 @@ const useStyles = (themeId: number) => {
 	}, [themeId]);
 };
 
-const NoteDecryptionScreenComponent = (props: Props) => {
+export const NoteDecryptionScreenComponent = (props: Props) => {
 	const [note, setNote] = useState<NoteEntity|null>(null);
 	const { decrypted, decrypting, errorMessage } = useNoteDecryptionStatus(note, props.decryptionWorkerState);
 
@@ -116,10 +116,12 @@ const NoteDecryptionScreenComponent = (props: Props) => {
 		<Text style={styles.statusTextStyle}>{_('Decrypting...')}</Text>
 	);
 
-	return (
-		<View style={styles.rootStyle}>
-			<ScreenHeader />
+	const loadingMessage = (
+		<Text style={styles.statusTextStyle}>{_('Loading...')}</Text>
+	);
 
+	const decryptionDetails = (
+		<>
 			<Text style={styles.statusTextStyle}>
 				{decrypting ? _('Decrypting...') : _('The note with ID %s is encrypted.', props.noteId)}
 			</Text>
@@ -129,12 +131,17 @@ const NoteDecryptionScreenComponent = (props: Props) => {
 			<View style={styles.spacer}/>
 
 			{decrypting ? decryptingMessage : retryButton}
+		</>
+	);
+
+	return (
+		<View style={styles.rootStyle}>
+			<ScreenHeader />
+
+			{note === null ? loadingMessage : decryptionDetails}
 		</View>
 	);
 };
-
-// Exported for testing.
-export { NoteDecryptionScreenComponent };
 
 const NoteDecryptionScreen = connect((state: AppState) => {
 	return {

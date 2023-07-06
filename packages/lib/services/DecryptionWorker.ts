@@ -118,6 +118,13 @@ export default class DecryptionWorker {
 		await this.kvStore().deleteByPrefix('decrypt:');
 	}
 
+	public async disableItem(typeId: number, itemId: string) {
+		await this.kvStore().setValue(
+			`decrypt:${typeId}:${itemId}`,
+			this.maxDecryptionAttempts_ + 1
+		);
+	}
+
 	public dispatchReport(report: any) {
 		const action = { ...report };
 		action.type = 'DECRYPTION_WORKER_SET';
