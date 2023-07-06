@@ -1,9 +1,9 @@
 import EventDispatcher from './EventDispatcher';
 
 enum TestKey {
-    FooEvent,
-    BarEvent,
-    BazEvent,
+	FooEvent,
+	BarEvent,
+	BazEvent,
 }
 
 describe('EventDispatcher', () => {

@@ -6,7 +6,7 @@ import { execCommand } from '@joplin/utils';
 const fetch = require('node-fetch');
 
 interface PluginAndVersion {
-   [pluginId: string]: string;
+	[pluginId: string]: string;
 }
 
 interface PluginIdAndName {

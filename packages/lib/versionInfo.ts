@@ -4,8 +4,8 @@ import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
 
 interface PluginList {
-  completeList: string;
-  summary: string;
+	completeList: string;
+	summary: string;
 }
 
 function getPluginLists(plugins: Plugins): PluginList {
