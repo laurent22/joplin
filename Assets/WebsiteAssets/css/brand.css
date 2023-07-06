@@ -16,6 +16,12 @@
   * {
 	font-family: "Montserrat", sans-serif;
   }
+
+  h2 {
+	border-bottom: none;
+	margin-bottom: 0;
+	margin-top: 0.7em;
+  }
   
   #mobile_icon_logo{
 	display: none;
@@ -101,14 +107,15 @@
 	  align-items: flex-start;
 	}
   }
-  header .container nav h1.main-logo {
+  h1.main-logo {
   
 	font-weight: 600;
 	font-size: 48px;
-	color: var(--primary-White);
-	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	color: var(--primary-DarkBlue);
 	margin: 0;
-	text-align: right;
+	border-bottom: 1px solid #ddd;
+	line-height: 1.3em;
+	padding-bottom: 0.5em;
   }
   @media screen and (max-width: 992px) {
 	header .container nav img {
@@ -207,7 +214,7 @@
 	font-weight: 700;
 	font-size: 40px;
 	color: var(--primary-DarkBlue);
-	margin-bottom: 45px;
+	/* margin-bottom: 45px; */
   }
   @media screen and (max-width: 767px) {
 	.joplin__logos h2.main-logo {
@@ -223,16 +230,20 @@
 	margin-bottom: 6px;
   }
   .joplin__logos > .wrapper {
-	padding: 42px 59px 48px 66px;
+	padding: 40px 0 45px 0;
 	margin: 40px 45px;
-	width: calc(100% - 6.5vw);
+	/* width: calc(100% - 6.5vw); */
 	border: 1px solid var(--variationPrimary-VaraintDarkGray);
 	border-radius: 5px;
+	margin-left: 0;
+    margin-right: 0;
   }
   @media screen and (max-width: 1440px) {
 	.joplin__logos > .wrapper {
 	  padding: 40px 0 45px 0;
 	  margin: 40px auto;
+	  margin-left: 0;
+      margin-right: 0;
 	}
   }
   .joplin__logos .wrapper .para-1 {
