@@ -97,9 +97,7 @@ export const ExportScreenComponent = (props: Props) => {
 	);
 
 	const exportInProgressMessage = (
-		<>
-			<Text style={styles.statusTextStyle}>{_('Export in progress...')}</Text>
-		</>
+		<Text style={styles.statusTextStyle}>{_('Export in progress...')}</Text>
 	);
 
 	const exportedSuccessfullyMessage = (
