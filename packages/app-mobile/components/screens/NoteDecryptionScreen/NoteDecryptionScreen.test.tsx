@@ -11,8 +11,6 @@ import { _ } from '@joplin/lib/locale';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import Note from '@joplin/lib/models/Note';
 import setUpTwoClientEncryptionAndSync from '@joplin/lib/testing/setUpTwoClientEncryptionAndSync';
-// import DecryptionWorker, { DecryptionWorkerState } from '@joplin/lib/services/DecryptionWorker';
-// import { switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import { NoteDecryptionScreenComponent } from './NoteDecryptionScreen';
 
 
