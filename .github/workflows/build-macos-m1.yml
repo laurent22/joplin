@@ -48,7 +48,7 @@ jobs:
           BUILD_SEQUENCIAL: 1
         run: |
           export npm_config_arch=arm64
-          export npm_target_arch=arm64
+          export npm_config_target_arch=arm64
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
