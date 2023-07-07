@@ -5,9 +5,9 @@ export interface ScaledSize {
 }
 
 export interface IconButtonProps {
-    onClick: ()=> void;
-    size?: number;
-    color?: string;
+	onClick: ()=> void;
+	size?: number;
+	color?: string;
 }
 
 export interface RenderRequest {

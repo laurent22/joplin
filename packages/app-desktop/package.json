@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.12.0",
+  "version": "2.12.4",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -78,7 +78,6 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": "dmg",
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {

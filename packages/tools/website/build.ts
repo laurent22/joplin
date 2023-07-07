@@ -42,6 +42,7 @@ const readmeDir = `${rootDir}/readme`;
 const mainTemplateHtml = readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
+const brandTemplateHtml = readFileSync(`${websiteAssetDir}/templates/brand.mustache`, 'utf8');
 const stripeConfig = loadStripeConfig(buildConfig.env, `${rootDir}/packages/server/stripeConfig.json`);
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
@@ -364,6 +365,44 @@ async function main() {
 		templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
 
 		renderPageToHtml('', `${docDir}${pathPrefix}/plans/index.html`, templateParams);
+
+		// =============================================================
+		// BRAND GUIDELINES PAGE
+		// =============================================================
+
+		{
+			const brandAssetUrls: AssetUrls = {
+				css: {
+					...assetUrls.css,
+					brand: `${cssBaseUrl}/brand.css?h=${await md5File(`${cssBasePath}/brand.css`)}`,
+				},
+				js: {
+					...assetUrls.js,
+				},
+			};
+
+			const brandPageParams: TemplateParams = {
+				...defaultTemplateParams(brandAssetUrls, locale),
+				partials: translatePartials(partials, localeName, locale.htmlTranslations),
+				templateHtml: applyTranslations(brandTemplateHtml, localeName, locale.htmlTranslations),
+			};
+
+			const brandPageContentHtml = renderMustache('', brandPageParams);
+
+			const templateParams = {
+				...defaultTemplateParams(brandAssetUrls, locale),
+				pageName: 'plans',
+				partials,
+				showToc: false,
+				showImproveThisDoc: false,
+				contentHtml: brandPageContentHtml,
+				title: 'Joplin Brand Guidelines',
+			};
+
+			templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
+
+			renderPageToHtml('', `${docDir}${pathPrefix}/brand/index.html`, templateParams);
+		}
 	}
 
 	setLocale('en_GB');

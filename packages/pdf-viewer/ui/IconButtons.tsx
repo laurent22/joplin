@@ -24,12 +24,12 @@ const ButtonElement = styled.button<{ hoverColor?: string; size?: number; color?
 `;
 
 interface BaseButtonProps {
-    icon: IconDefinition;
-    onClick: ()=> void;
-    name: string;
-    size: number;
-    color: string;
-    hoverColor?: string;
+	icon: IconDefinition;
+	onClick: ()=> void;
+	name: string;
+	size: number;
+	color: string;
+	hoverColor?: string;
 }
 
 function BaseButton({ onClick, icon, name, size, color, hoverColor }: BaseButtonProps) {

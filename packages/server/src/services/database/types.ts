@@ -12,7 +12,7 @@ export enum NotificationLevel {
 }
 
 export enum ItemType {
-    Item = 1,
+	Item = 1,
 	UserItem = 2,
 	User,
 }

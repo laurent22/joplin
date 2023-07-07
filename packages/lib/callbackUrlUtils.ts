@@ -19,14 +19,14 @@ export function getTagCallbackUrl(tagId: string) {
 }
 
 export const enum CallbackUrlCommand {
-    OpenNote = 'openNote',
-    OpenFolder = 'openFolder',
-    OpenTag = 'openTag',
+	OpenNote = 'openNote',
+	OpenFolder = 'openFolder',
+	OpenTag = 'openTag',
 }
 
 export interface CallbackUrlInfo {
-    command: CallbackUrlCommand;
-    params: Record<string, string>;
+	command: CallbackUrlCommand;
+	params: Record<string, string>;
 }
 
 export function parseCallbackUrl(s: string): CallbackUrlInfo {
