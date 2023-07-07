@@ -27,14 +27,14 @@ export async function copyToCache(resource: ResourceEntity): Promise<string> {
 
 let tmpFileIdCounter = 0;
 // Writes the given text to a new temporary cache file and returns the file path.
-export async function writeTextToCacheFile(text: string): Promise<string> {
+export const writeTextToCacheFile = async (text: string): Promise<string> => {
 	const targetDir = await makeShareCacheDirectory();
 
 	const filePath = `${targetDir}/tmp-share-file.${tmpFileIdCounter++}.txt`;
 	await shim.fsDriver().writeFile(filePath, text, 'utf8');
 
 	return filePath;
-}
+};
 
 // Clear previously shared files from cache
 export async function clearSharedFilesCache(): Promise<void> {
