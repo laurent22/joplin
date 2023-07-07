@@ -37,15 +37,6 @@ const useStyles = (themeId: number) => {
 				backgroundColor: theme.backgroundColor,
 				flex: 1,
 			},
-			headerStyle: {
-				...baseTextStyle,
-				fontSize: 20,
-				marginTop: 20,
-			},
-			errorMessageStyle: {
-				...baseTextStyle,
-				color: theme.colorError,
-			},
 			statusTextStyle: {
 				...baseTextStyle,
 			},
@@ -106,7 +97,9 @@ export const ExportScreenComponent = (props: Props) => {
 	);
 
 	const exportInProgressMessage = (
-		<Text style={styles.statusTextStyle}>{_('Export in progress...')}</Text>
+		<>
+			<Text style={styles.statusTextStyle}>{_('Export in progress...')}</Text>
+		</>
 	);
 
 	const exportedSuccessfullyMessage = (
