@@ -98,7 +98,7 @@ export const ExportScreenComponent = (props: Props) => {
 	const startExportButton = (
 		<Button
 			mode='outlined'
-			icon='refresh'
+			icon='share'
 			onPress={startExport}
 		>
 			<Text>{_('Export to JEX')}</Text>
