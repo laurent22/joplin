@@ -403,6 +403,7 @@ packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteDecryptionScreen/NoteDecryptionScreen.js
+packages/app-mobile/components/screens/NoteDecryptionScreen/NoteDecryptionScreen.test.js
 packages/app-mobile/components/screens/NoteDecryptionScreen/useNoteDecryptionStatus.js
 packages/app-mobile/components/screens/NoteDecryptionScreen/useNoteDecryptionStatus.test.js
 packages/app-mobile/components/screens/Notes.js

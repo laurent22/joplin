@@ -4387,7 +4387,7 @@ __metadata:
     "@react-native-community/netinfo": 9.3.10
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
-    "@testing-library/jest-native": ^5.4.2
+    "@testing-library/jest-native": 5.4.2
     "@testing-library/react-native": 12.1.2
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.1
@@ -7087,7 +7087,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-native@npm:^5.4.2":
+"@testing-library/jest-native@npm:5.4.2":
   version: 5.4.2
   resolution: "@testing-library/jest-native@npm:5.4.2"
   dependencies:
