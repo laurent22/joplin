@@ -108,5 +108,7 @@ describe('NoteDecryptionScreen', () => {
 
 		// Firing the press event should have cleared the item from the disabled items list
 		await waitFor(async () => expect(await isItemDisabled(testNote.id!)).toBe(false));
+
+		act(() => view.unmount());
 	});
 });
