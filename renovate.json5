@@ -168,6 +168,9 @@
 		// different. Not important enough to fix since the package is only used
 		// for tests.
 		"clean-html",
+
+		// We are too many versions behind so it needs to be manually upgraded.
+		"immer",
 	],
 	"packageRules": [
 		{

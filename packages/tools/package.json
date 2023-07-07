@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@joplin/fork-htmlparser2": "^4.1.44",
-    "@rmp135/sql-ts": "1.16.0",
+    "@rmp135/sql-ts": "1.17.0",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.1",
     "@types/mustache": "4.2.2",

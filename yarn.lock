@@ -1385,7 +1385,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@npm:^7.18.6, @babel/helper-create-class-features-plugin@npm:^7.20.7, @babel/helper-create-class-features-plugin@npm:^7.21.0":
+"@babel/helper-create-class-features-plugin@npm:^7.18.6, @babel/helper-create-class-features-plugin@npm:^7.20.7, @babel/helper-create-class-features-plugin@npm:^7.21.0, @babel/helper-create-class-features-plugin@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-create-class-features-plugin@npm:7.22.5"
   dependencies:
@@ -1985,6 +1985,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-jsx@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/plugin-syntax-jsx@npm:7.22.5"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 8829d30c2617ab31393d99cec2978e41f014f4ac6f01a1cecf4c4dd8320c3ec12fdc3ce121126b2d8d32f6887e99ca1a0bad53dedb1e6ad165640b92b24980ce
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-syntax-logical-assignment-operators@npm:^7.10.4, @babel/plugin-syntax-logical-assignment-operators@npm:^7.8.3":
   version: 7.10.4
   resolution: "@babel/plugin-syntax-logical-assignment-operators@npm:7.10.4"
@@ -2081,6 +2092,17 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 6189c0b5c32ba3c9a80a42338bd50719d783b20ef29b853d4f03929e971913d3cefd80184e924ae98ad6db09080be8fe6f1ffde9a6db8972523234f0274d36f7
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-syntax-typescript@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/plugin-syntax-typescript@npm:7.22.5"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 8ab7718fbb026d64da93681a57797d60326097fd7cb930380c8bffd9eb101689e90142c760a14b51e8e69c88a73ba3da956cb4520a3b0c65743aee5c71ef360a
   languageName: node
   linkType: hard
 
@@ -2277,7 +2299,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-modules-commonjs@npm:^7.0.0, @babel/plugin-transform-modules-commonjs@npm:^7.13.8, @babel/plugin-transform-modules-commonjs@npm:^7.19.6":
+"@babel/plugin-transform-modules-commonjs@npm:^7.0.0, @babel/plugin-transform-modules-commonjs@npm:^7.13.8, @babel/plugin-transform-modules-commonjs@npm:^7.19.6, @babel/plugin-transform-modules-commonjs@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/plugin-transform-modules-commonjs@npm:7.22.5"
   dependencies:
@@ -2336,6 +2358,17 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 6b72112773487a881a1d6ffa680afde08bad699252020e86122180ee7a88854d5da3f15d9bca3331cf2e025df045604494a8208a2e63b486266b07c14e2ffbf3
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-object-assign@npm:^7.16.7":
+  version: 7.22.5
+  resolution: "@babel/plugin-transform-object-assign@npm:7.22.5"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 5b672d72c7b12973e5e5881c3e69ab02474c44add224a9972b9450f859e713b2065fa18b88797b1393ad72cb952c0b14d80fa36960a17d6b558f24ee5cde219c
   languageName: node
   linkType: hard
 
@@ -2542,6 +2575,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-transform-typescript@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/plugin-transform-typescript@npm:7.22.5"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.22.5
+    "@babel/helper-create-class-features-plugin": ^7.22.5
+    "@babel/helper-plugin-utils": ^7.22.5
+    "@babel/plugin-syntax-typescript": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: d12f1ca1ef1f2a54432eb044d2999705d1205ebe211c2a7f05b12e8eb2d2a461fd7657b5486b2f2f1efe7c0c0dc8e80725b767073d40fe4ae059a7af057b05e4
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-unicode-escapes@npm:^7.18.10":
   version: 7.22.5
   resolution: "@babel/plugin-transform-unicode-escapes@npm:7.22.5"
@@ -2688,6 +2735,21 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 7fe0da5103eb72d3cf39cf3e138a794c8cdd19c0b38e3e101507eef519c46a87a0d6d0e8bc9e28a13ea2364001ebe7430b9d75758aab4c3c3a8db9a487b9dc7c
+  languageName: node
+  linkType: hard
+
+"@babel/preset-typescript@npm:^7.16.7":
+  version: 7.22.5
+  resolution: "@babel/preset-typescript@npm:7.22.5"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+    "@babel/helper-validator-option": ^7.22.5
+    "@babel/plugin-syntax-jsx": ^7.22.5
+    "@babel/plugin-transform-modules-commonjs": ^7.22.5
+    "@babel/plugin-transform-typescript": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 7be1670cb4404797d3a473bd72d66eb2b3e0f2f8a672a5e40bdb0812cc66085ec84bcd7b896709764cabf042fdc6b7f2d4755ac7cce10515eb596ff61dab5154
   languageName: node
   linkType: hard
 
@@ -3383,6 +3445,15 @@ __metadata:
   version: 0.5.6
   resolution: "@discoveryjs/json-ext@npm:0.5.6"
   checksum: e97df618511fb202dffa2eb0d23e17dfb02943a70e5bc38f6b9603ad1cb1d6b525aa2b07ff9fb00b041abe425b341146ddd9e487f1e35ddadc8c6b8c56358ae0
+  languageName: node
+  linkType: hard
+
+"@egjs/hammerjs@npm:^2.0.17":
+  version: 2.0.17
+  resolution: "@egjs/hammerjs@npm:2.0.17"
+  dependencies:
+    "@types/hammerjs": ^2.0.36
+  checksum: 8945137cec5837edd70af3f2e0ea621543eb0aa3b667e6269ec6485350f4d120c2434b37c7c30b1cf42a65275dd61c1f24626749c616696d3956ac0c008c4766
   languageName: node
   linkType: hard
 
@@ -4401,26 +4472,29 @@ __metadata:
     react-native: 0.71.10
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
+    react-native-device-info: 10.6.0
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.2.1
+    react-native-drawer-layout: 3.2.0
     react-native-dropdownalert: 4.5.1
     react-native-exit-app: 1.1.0
     react-native-file-viewer: 2.1.5
     react-native-fingerprint-scanner: 6.0.0
     react-native-fs: 2.20.0
+    react-native-gesture-handler: 2.10.2
     react-native-get-random-values: 1.9.0
-    react-native-image-picker: 5.3.1
+    react-native-image-picker: 5.4.2
     react-native-image-resizer: 1.4.5
     react-native-localize: 3.0.0
     react-native-modal-datetime-picker: 15.0.1
     react-native-paper: 5.8.0
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
+    react-native-reanimated: 3.1.0
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.5.3
     react-native-securerandom: 1.0.1
     react-native-share: 8.2.2
-    react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 1.3.0
     react-native-vector-icons: 9.2.0
@@ -4713,7 +4787,7 @@ __metadata:
     "@joplin/renderer": ~2.12
     "@joplin/tools": ~2.12
     "@koa/cors": 3.4.3
-    "@rmp135/sql-ts": 1.16.0
+    "@rmp135/sql-ts": 1.17.0
     "@types/formidable": 2.0.6
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
@@ -4773,7 +4847,7 @@ __metadata:
     "@joplin/lib": ~2.12
     "@joplin/renderer": ~2.12
     "@joplin/utils": ~2.12
-    "@rmp135/sql-ts": 1.16.0
+    "@rmp135/sql-ts": 1.17.0
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/mustache": 4.2.2
@@ -6794,21 +6868,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rmp135/sql-ts@npm:1.16.0":
-  version: 1.16.0
-  resolution: "@rmp135/sql-ts@npm:1.16.0"
+"@rmp135/sql-ts@npm:1.17.0":
+  version: 1.17.0
+  resolution: "@rmp135/sql-ts@npm:1.17.0"
   dependencies:
     change-case: ^4.1.2
     handlebars: ^4.7.7
-    knex: ^2.4.0
-    yargs: ^17.6.2
+    knex: ^2.4.2
+    yargs: ^17.7.2
   peerDependencies:
-    better-sqlite3: ^7.5.0
-    mssql: ^8.0.2
+    better-sqlite3: ^8.4.0
+    mssql: ^9.1.1
     mysql: ^2.18.1
-    mysql2: ^2.3.3
-    pg: ^8.8.0
-    sqlite3: ^5.0.2
+    mysql2: ^3.3.2
+    pg: ^8.11.0
+    sqlite3: ^5.1.6
   peerDependenciesMeta:
     better-sqlite3:
       optional: true
@@ -6824,7 +6898,7 @@ __metadata:
       optional: true
   bin:
     sql-ts: bin/sql-ts
-  checksum: 5151e2b864c894d27dc61cc20dc08788f63067c551f3e2f607f5f16741eb24feff98ed09d60dbdffc28630524ec2a5884d3f6951f70c606f256361b5fbea1297
+  checksum: 88bdd92138a592d900755a73f132af5d1214f644a4f1051959faa59ac693e6c2111a27a89bc39ee45bebe1feadcf82022da59a3f8dbabfa2b9d5b3790ea0d5b2
   languageName: node
   linkType: hard
 
@@ -7366,6 +7440,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: d076bb61f45d0fc42dee496ef8b1c2f8742e15d5e47e90e20d0243386e426c04d4efd408a48875ab432f7960b4ce3414db20ed0fbbfc7bcc89d84e574f6e045a
+  languageName: node
+  linkType: hard
+
+"@types/hammerjs@npm:^2.0.36":
+  version: 2.0.41
+  resolution: "@types/hammerjs@npm:2.0.41"
+  checksum: d16fbd688fc9b18cc270abe8dea8d4c50ef7bd8375e593d92c233d299387933a6b003c8db69819344833052458bc5f9ef1b472001277a49f095928d184356006
   languageName: node
   linkType: hard
 
@@ -21632,7 +21713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:2.4.2, knex@npm:^2.4.0":
+"knex@npm:2.4.2, knex@npm:^2.4.2":
   version: 2.4.2
   resolution: "knex@npm:2.4.2"
   dependencies:
@@ -27889,6 +27970,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-device-info@npm:10.6.0":
+  version: 10.6.0
+  resolution: "react-native-device-info@npm:10.6.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: 7a7cc438844552aef687b4a5b8efd0cd0a2959e0a3b771febfbe0b6a9ca8ff05a563e2912b30b83523bd3d5143d6616ca8fac0476abf01936a726e1578211ebb
+  languageName: node
+  linkType: hard
+
 "react-native-dialogbox@npm:0.6.10":
   version: 0.6.10
   resolution: "react-native-dialogbox@npm:0.6.10"
@@ -27914,6 +28004,20 @@ __metadata:
     react-native-windows:
       optional: true
   checksum: 575d3bec391044fdaf8d4d740a115a0b3e5cbafdb893ce19157b0c5fefb052c208b9db6d352e171d358c723612e47fe67cda4634a60d3a245a30ff103b1cb84c
+  languageName: node
+  linkType: hard
+
+"react-native-drawer-layout@npm:3.2.0":
+  version: 3.2.0
+  resolution: "react-native-drawer-layout@npm:3.2.0"
+  dependencies:
+    use-latest-callback: ^0.1.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">= 1.0.0"
+    react-native-reanimated: ">= 1.0.0"
+  checksum: 67237e650e1245297ec08b9cf90c74aed25dfefbf66c972dae6be5913df78d98f04c5e90e98e396e8ea2b97eca8df0db1872a7608509e29f86491b5d3db36b3a
   languageName: node
   linkType: hard
 
@@ -27967,6 +28071,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-gesture-handler@npm:2.10.2":
+  version: 2.10.2
+  resolution: "react-native-gesture-handler@npm:2.10.2"
+  dependencies:
+    "@egjs/hammerjs": ^2.0.17
+    hoist-non-react-statics: ^3.3.0
+    invariant: ^2.2.4
+    lodash: ^4.17.21
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: e4ae47ef0b6acd30d820021ad70a73f7f0d5e22acd4fd1d6d9da9063e768a1ac11226b7ce518f7a93f2a9cd47de048756c9f0830a86c2784a991d30652a937df
+  languageName: node
+  linkType: hard
+
 "react-native-get-random-values@npm:1.9.0":
   version: 1.9.0
   resolution: "react-native-get-random-values@npm:1.9.0"
@@ -27992,13 +28112,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:5.3.1":
-  version: 5.3.1
-  resolution: "react-native-image-picker@npm:5.3.1"
+"react-native-image-picker@npm:5.4.2":
+  version: 5.4.2
+  resolution: "react-native-image-picker@npm:5.4.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 183485e9bab619938ab608fbca019c53c049e73bc798ea5ab4ab38d54ee2b7b9dc923b27f26ae070c9b4844af2b521fbd310e1c2f5aea99e851b7abbbcf7f166
+  checksum: a858cb8777c99a8ce9e338c9fb4dc3ab09bef5b23f0751dd9dec7da630cc299d3afdcb479a76db2aa473e9132ad7fb6ae75ef12cf32a12f48684461a0b351212
   languageName: node
   linkType: hard
 
@@ -28067,6 +28187,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-reanimated@npm:3.1.0":
+  version: 3.1.0
+  resolution: "react-native-reanimated@npm:3.1.0"
+  dependencies:
+    "@babel/plugin-transform-object-assign": ^7.16.7
+    "@babel/preset-typescript": ^7.16.7
+    convert-source-map: ^2.0.0
+    invariant: ^2.2.4
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.0.0-0
+    "@babel/plugin-proposal-optional-chaining": ^7.0.0-0
+    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
+    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
+    "@babel/plugin-transform-template-literals": ^7.0.0-0
+    react: "*"
+    react-native: "*"
+  checksum: 28279642056c7b214649ff14d3c9f1e914c9dd3dd74afc734fc10d1af088a2c3b0e187751e2713d54fc0a9916c394068b29aec51e754b51625a4179f10e38bcd
+  languageName: node
+  linkType: hard
+
 "react-native-rsa-native@npm:2.0.5":
   version: 2.0.5
   resolution: "react-native-rsa-native@npm:2.0.5"
@@ -28099,15 +28240,6 @@ __metadata:
   version: 8.2.2
   resolution: "react-native-share@npm:8.2.2"
   checksum: 0f69911fda2ca1856b439d8b4fcc2ac9c74bd92590fb6a7db60282181f0a9612f218985b3c69b0bbe73da5395a3aa197e91ac8de9a05c07c0b0da5a096a0e294
-  languageName: node
-  linkType: hard
-
-"react-native-side-menu-updated@npm:1.3.2":
-  version: 1.3.2
-  resolution: "react-native-side-menu-updated@npm:1.3.2"
-  dependencies:
-    prop-types: ^15.5.10
-  checksum: 5d7ae7d2b372c80d9f7a3472f945daa6c11b43f00193ebec92fdb40ee853e86f522686736aa6a510a4fb09479c8eb7e4f14b53ad117d7e23749cd58c3c9d6cb7
   languageName: node
   linkType: hard
 
@@ -34866,7 +34998,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.7.2":
+"yargs@npm:17.7.2, yargs@npm:^17.7.2":
   version: 17.7.2
   resolution: "yargs@npm:17.7.2"
   dependencies:
@@ -34964,7 +35096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.5.1, yargs@npm:^17.6.2":
+"yargs@npm:^17.5.1":
   version: 17.6.2
   resolution: "yargs@npm:17.6.2"
   dependencies:
