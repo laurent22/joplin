@@ -3,8 +3,9 @@
 const React = require('react');
 const { useState, useEffect, useMemo, useRef } = require('react');
 const { StyleSheet } = require('react-native');
-const { View, Modal, Text, TextInput, Button } = require('react-native');
+const { View, Text, TextInput, Button } = require('react-native');
 
+import Modal from '../Modal';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { EditorControl } from './types';
@@ -43,7 +44,6 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				margin: 15,
 				padding: 30,
 				backgroundColor: theme.backgroundColor,
-
 				elevation: 5,
 				shadowOffset: {
 					width: 1,
@@ -132,23 +132,22 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	return (
 		<Modal
 			animationType="slide"
+			containerStyle={styles.modalContent}
 			transparent={true}
 			visible={props.visible}
 			onRequestClose={() => {
 				props.editorControl.hideLinkDialog();
 			}}>
-			<View style={styles.modalContent}>
-				<Text style={styles.header}>{_('Edit link')}</Text>
-				<View>
-					{linkTextInput}
-					{linkURLInput}
-				</View>
-				<Button
-					style={styles.button}
-					onPress={onSubmit}
-					title={_('Done')}
-				/>
+			<Text style={styles.header}>{_('Edit link')}</Text>
+			<View>
+				{linkTextInput}
+				{linkURLInput}
 			</View>
+			<Button
+				style={styles.button}
+				onPress={onSubmit}
+				title={_('Done')}
+			/>
 		</Modal>
 	);
 };

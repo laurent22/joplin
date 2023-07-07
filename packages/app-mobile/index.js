@@ -10,6 +10,9 @@
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 
+// Set up required for react-native-drawer-layout (See: https://reactnavigation.org/docs/drawer-layout/ v6.x)
+import 'react-native-gesture-handler';
+
 import { LogBox, AppRegistry } from 'react-native';
 const Root = require('./root').default;
 

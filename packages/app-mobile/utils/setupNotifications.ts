@@ -3,8 +3,8 @@ import { Dispatch } from 'redux';
 const { NativeEventEmitter, NativeModules, Platform } = require('react-native');
 
 interface NotificationData {
-    joplinNotificationId: string;
-    noteId: string;
+	joplinNotificationId: string;
+	noteId: string;
 }
 
 export default async (dispatch: Dispatch) => {
