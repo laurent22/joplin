@@ -67,7 +67,8 @@ export const NoteDecryptionScreenComponent = (props: Props) => {
 		const loadedNote = await Note.load(props.noteId);
 		if (event.cancelled) return;
 
-		setNote(loadedNote);
+		// loadedNote can be undefined if the note failed to load
+		setNote(loadedNote ?? null);
 	}, [props.noteId]);
 
 	// Open the note when successful decryption happens
@@ -83,7 +84,7 @@ export const NoteDecryptionScreenComponent = (props: Props) => {
 
 	const retryDecryption = useCallback(async () => {
 		if (!note) {
-			logger.warn('Unable to retry decryption of non-existent note.');
+			logger.warn(`Unable to retry decryption of non-existent note. ${note}`);
 			return;
 		}
 

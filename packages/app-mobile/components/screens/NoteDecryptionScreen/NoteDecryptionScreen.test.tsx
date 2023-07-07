@@ -79,7 +79,7 @@ describe('NoteDecryptionScreen', () => {
 
 	test('clicking "retry decryption" should retry decryption', async () => {
 		await switchClient(1);
-		const testNote = await Note.save({ title: 'Another test', body: 'This is a test', encryption_applied: 1 });
+		const testNote = await Note.save({ title: 'Another test', body: 'This is a test' });
 
 		// Synchronize the encrypted note
 		await synchronizerStart();
@@ -102,11 +102,11 @@ describe('NoteDecryptionScreen', () => {
 
 		// Wait for the "retry decryption" button to appear
 		const retryButton = await waitFor(() => view.getByText(_('Retry Decryption')));
-		expect(dispatchMock).not.toHaveBeenCalled();
 
+		expect(dispatchMock).not.toHaveBeenCalled();
 		await act(() => fireEvent.press(retryButton));
 
 		// Firing the press event should have cleared the item from the disabled items list
-		expect(await act(() => isItemDisabled(testNote.id!))).toBe(false);
+		await waitFor(async () => expect(await isItemDisabled(testNote.id!)).toBe(false));
 	});
 });
