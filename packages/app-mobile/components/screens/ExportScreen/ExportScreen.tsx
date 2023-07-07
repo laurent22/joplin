@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { join } from 'path';
 import { View, Text, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -67,7 +66,7 @@ export const ExportScreenComponent = (props: Props) => {
 
 	const startExport = useCallback(async () => {
 		setExportStatus(ExportStatus.Exporting);
-		const exportTargetPath = join(await makeExportCacheDirectory(), 'jex-export.jex');
+		const exportTargetPath = `${await makeExportCacheDirectory()}/jex-export.jex`;
 		try {
 			await exportAllFolders(exportTargetPath);
 			// TODO: Use exportResult.warnings

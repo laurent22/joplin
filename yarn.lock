@@ -4467,6 +4467,7 @@ __metadata:
     md5-file: 5.0.0
     metro-react-native-babel-preset: 0.73.9
     nodemon: 2.0.22
+    path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.0
     react: 18.2.0
@@ -26466,6 +26467,13 @@ __metadata:
   version: 1.0.0
   resolution: "patch-console@npm:1.0.0"
   checksum: 8cd738aa470f2e9463fca35da6a19403384ac555004f698ddd3dfdb69135ab60fe9bd2edd1dbdd8c09d92c0a2190fd0f7337fe48123013baf8ffec8532885a3a
+  languageName: node
+  linkType: hard
+
+"path-browserify@npm:1.0.1":
+  version: 1.0.1
+  resolution: "path-browserify@npm:1.0.1"
+  checksum: c6d7fa376423fe35b95b2d67990060c3ee304fc815ff0a2dc1c6c3cfaff2bd0d572ee67e18f19d0ea3bbe32e8add2a05021132ac40509416459fffee35200699
   languageName: node
   linkType: hard
 

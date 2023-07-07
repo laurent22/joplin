@@ -111,6 +111,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			});
 		};
 
+		this.exportButtonPress_ = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Export',
+			});
+		};
+
 		this.exportDebugButtonPress_ = async () => {
 			this.setState({ creatingReport: true });
 			const service = new ReportService();
@@ -642,6 +649,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
 		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
+		settingComps.push(this.renderButton('export_button', _('Export'), this.exportButtonPress_));
 		if (Platform.OS === 'android') {
 			settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
 		}
