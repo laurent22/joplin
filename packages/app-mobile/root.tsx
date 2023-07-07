@@ -117,6 +117,7 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
+import ExportScreen from './components/screens/ExportScreen/ExportScreen';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -983,6 +984,7 @@ class AppComponent extends React.Component {
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
 			Config: { screen: ConfigScreen },
+			Export: { screen: ExportScreen },
 		};
 
 

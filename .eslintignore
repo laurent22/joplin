@@ -367,6 +367,7 @@ packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
+packages/app-mobile/components/Modal.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
@@ -415,6 +416,8 @@ packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/screens/ConfigScreen.js
+packages/app-mobile/components/screens/ExportScreen/ExportScreen.js
+packages/app-mobile/components/screens/ExportScreen/exportAllFolders.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
