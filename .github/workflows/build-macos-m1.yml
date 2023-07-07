@@ -53,5 +53,5 @@ jobs:
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
           npm pkg set 'build.mac.target.target'='default'
-          npm pkg set 'build.mac.target.arch[0]'='amd64'
+          npm pkg set 'build.mac.target.arch[0]'='arm64'
           PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
