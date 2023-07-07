@@ -80,6 +80,7 @@
     "stream": "0.0.2",
     "stream-browserify": "3.0.0",
     "string-natural-compare": "3.0.1",
+    "tar-stream": "3.1.6",
     "timers": "0.1.1",
     "url": "0.11.1"
   },
@@ -108,6 +109,7 @@
     "@types/react": "18.0.24",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.25",
+    "@types/tar-stream": "2.2.2",
     "babel-jest": "29.2.1",
     "babel-plugin-module-resolver": "4.1.0",
     "execa": "4.1.0",

@@ -22,6 +22,16 @@ const localPackages = {
 	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
 };
 
+const remappedPackages = {
+	...localPackages,
+};
+
+// Remap packages like
+const browserifiedPackages = ['path'];
+for (const package of browserifiedPackages) {
+	remappedPackages[package] = path.resolve(__dirname, `./node_modules/${package}-browserify/`);
+}
+
 const watchedFolders = [];
 for (const [, v] of Object.entries(localPackages)) {
 	watchedFolders.push(v);
@@ -49,7 +59,7 @@ module.exports = {
 			// included in your reusable module as they would be imported when
 			// the module is actually used.
 			//
-			localPackages,
+			remappedPackages,
 			{
 				get: (target, name) => {
 					if (target.hasOwnProperty(name)) {

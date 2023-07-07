@@ -1,5 +1,7 @@
 import { _ } from '../../locale';
 import { PluginStates } from '../plugins/reducer';
+import type InteropService_Exporter_Base from './InteropService_Exporter_Base';
+import type InteropService_Importer_Base from './InteropService_Importer_Base';
 
 export interface CustomImportContext {
 	sourcePath: string;
@@ -86,6 +88,10 @@ export interface ImportOptions {
 	destinationFolderId?: string;
 	destinationFolder?: any;
 	outputFormat?: ImportModuleOutputFormat;
+
+	// Overrides the settings above and directly supplies
+	// an importer class.
+	importer?: InteropService_Importer_Base;
 }
 
 export interface ExportOptions {
@@ -99,6 +105,12 @@ export interface ExportOptions {
 	plugins?: PluginStates;
 	customCss?: string;
 	packIntoSingleFile?: boolean;
+
+	// Overrides the settings above and directly supplies
+	// an exporter class. This may be used in environments
+	// where the default look-up logic fails (e.g. no dynamic
+	// importing).
+	exporter?: InteropService_Exporter_Base;
 }
 
 export interface ImportExportResult {

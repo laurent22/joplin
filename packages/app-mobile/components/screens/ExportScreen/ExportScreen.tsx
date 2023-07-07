@@ -11,6 +11,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { AppState } from '../../../utils/types';
 import { Theme } from '@joplin/lib/themes/type';
 import shim from '@joplin/lib/shim';
+import { join } from 'path';
 import Share from 'react-native-share';
 import exportAllFolders, { makeExportCacheDirectory } from './exportAllFolders';
 
@@ -66,7 +67,9 @@ export const ExportScreenComponent = (props: Props) => {
 
 	const startExport = useCallback(async () => {
 		setExportStatus(ExportStatus.Exporting);
-		const exportTargetPath = `${await makeExportCacheDirectory()}/jex-export.jex`;
+		const exportTargetPath = join(await makeExportCacheDirectory(), 'jex-export.jex');
+		logger.info(`Exporting all folders to path ${exportTargetPath}`);
+
 		try {
 			await exportAllFolders(exportTargetPath);
 			// TODO: Use exportResult.warnings

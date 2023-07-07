@@ -10,6 +10,7 @@ import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
 import * as ArrayUtils from '../../ArrayUtils';
+import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const { toTitleCase } = require('../../string-utils');
@@ -227,7 +228,15 @@ export default class InteropService {
 	// explicit with which importer we want to use.
 	//
 	// https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
-	private newModuleFromPath_(type: ModuleType, options: any) {
+	private newModuleFromPath_(type: ModuleType, options: ExportOptions&ImportOptions) {
+		if (type === ModuleType.Exporter && options.exporter) {
+			return options.exporter;
+		}
+
+		if (type === ModuleType.Importer && options.importer) {
+			return options.importer;
+		}
+
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 
@@ -385,7 +394,7 @@ export default class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModuleFromPath_(ModuleType.Exporter, options);
+		const exporter: InteropService_Exporter_Base = this.newModuleFromPath_(ModuleType.Exporter, options);
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
