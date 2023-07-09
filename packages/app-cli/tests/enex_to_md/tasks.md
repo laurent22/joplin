@@ -4,7 +4,7 @@ b
 
 List 1
 
-- [x] Clara 
+- [x] Clara
 - [ ] Bob
 
 List 2
