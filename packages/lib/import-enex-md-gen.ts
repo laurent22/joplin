@@ -58,6 +58,13 @@ interface ParserState {
 	currentCode?: string;
 }
 
+
+interface ExtractedTask {
+	title: string;
+	completed: boolean;
+	groupId: string;
+}
+
 interface EnexXmlToMdArrayResult {
 	content: Section;
 	resources: ResourceEntity[];
@@ -554,7 +561,7 @@ function isHighlight(context: any, _nodeName: string, attributes: any) {
 	return false;
 }
 
-function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
+function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: ExtractedTask[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
 
 	const removeRemainingResource = (id: string) => {
@@ -741,7 +748,17 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (isBlockTag(n)) {
-				section.lines.push(BLOCK_OPEN);
+				const isTodosList = cssValue(this, nodeAttributes.style, '--en-task-group') === 'true';
+				if (isTodosList) {
+					const todoGroup = cssValue(this, nodeAttributes.style, '--en-id');
+					section.lines.push(BLOCK_OPEN);
+					tasks.filter(t => t.groupId === todoGroup)
+						.forEach(t => {
+							section.lines.push(` - [${t.completed ? 'x' : ' '}] ${t.title}`);
+						});
+				} else {
+					section.lines.push(BLOCK_OPEN);
+				}
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 				const isCheckboxList = cssValue(this, nodeAttributes.style, '--en-todo') === 'true';
@@ -1370,9 +1387,9 @@ function renderLines(lines: any[]) {
 	return mdLines;
 }
 
-async function enexXmlToMd(xmlString: string, resources: ResourceEntity[]) {
+async function enexXmlToMd(xmlString: string, resources: ResourceEntity[], tasks: ExtractedTask[]) {
 	const stream = stringToStream(xmlString);
-	const result = await enexXmlToMdArray(stream, resources);
+	const result = await enexXmlToMdArray(stream, resources, tasks);
 
 	let mdLines = renderLines(result.content.lines);
 
