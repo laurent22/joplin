@@ -367,6 +367,7 @@ packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
+packages/app-mobile/components/Modal.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
@@ -880,6 +881,7 @@ packages/tools/spellcheck.js
 packages/tools/tagServerLatest.js
 packages/tools/tool-utils.js
 packages/tools/update-readme-download.js
+packages/tools/update-readme-download.test.js
 packages/tools/update-readme-sponsors.js
 packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.js
