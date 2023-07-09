@@ -57,6 +57,11 @@ const shim = {
 		return process && process.platform === 'linux';
 	},
 
+	isGNOME: () => {
+		return (shim.isLinux() || shim.isFreeBSD())
+			&& (process.env['XDG_CURRENT_DESKTOP'] ?? '').includes('GNOME');
+	},
+
 	isFreeBSD: () => {
 		return process && process.platform === 'freebsd';
 	},
