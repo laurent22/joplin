@@ -39,6 +39,7 @@ enum ListTag {
 	Ul = 'ul',
 	Ol = 'ol',
 	CheckboxList = 'checkboxList',
+	TaskList = 'taskList',
 }
 
 interface ParserStateList {
@@ -625,6 +626,12 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 		saxStream.on('text', (text: string) => {
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
 
+			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
+			if ((currentList) && (currentList.tag === ListTag.TaskList)) {
+				// skip text on task lists
+				return;
+			}
+
 			text = !state.inPre ? unwrapInnerText(text) : text;
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		});
@@ -754,8 +761,10 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					section.lines.push(BLOCK_OPEN);
 					tasks.filter(t => t.groupId === todoGroup)
 						.forEach(t => {
-							section.lines.push(` - [${t.completed ? 'x' : ' '}] ${t.title}`);
+							section.lines.push(`- [${t.completed ? 'x' : ' '}] ${t.title}\n`);
 						});
+					tagInfo.name = ListTag.TaskList;
+					state.lists.push({ tag: ListTag.TaskList, counter: 1, startedText: false });
 				} else {
 					section.lines.push(BLOCK_OPEN);
 				}
@@ -974,6 +983,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 					if (section && section.parent) section = section.parent;
 				}
 			} else if (isNewLineOnlyEndTag(n)) {
+				if (poppedTag.name === ListTag.TaskList) {
+					state.lists.pop();
+				}
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n === 'td' || n === 'th') {
 				if (section && section.parent) section = section.parent;
