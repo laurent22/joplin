@@ -58,8 +58,10 @@ const shim = {
 	},
 
 	isGNOME: () => {
+		// XDG_CURRENT_DESKTOP may be something like "ubuntu:GNOME" and not just "GNOME".
+		// Thus, we use .includes and not ===.
 		return (shim.isLinux() || shim.isFreeBSD())
-			&& (process.env['XDG_CURRENT_DESKTOP'] ?? '').includes('GNOME');
+			&& process && (process.env['XDG_CURRENT_DESKTOP'] ?? '').includes('GNOME');
 	},
 
 	isFreeBSD: () => {
