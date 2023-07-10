@@ -26,7 +26,10 @@ const remappedPackages = {
 	...localPackages,
 };
 
-// Remap packages like
+// Some packages aren't available in react-native and thus must be replaced by browserified
+// versions. For example, this allows us to `import {resolve} from 'path'` rather than
+// `const { resolve } = require('path-browserify')` ('path-browerify' doesn't have its own type
+// definitions).
 const browserifiedPackages = ['path'];
 for (const package of browserifiedPackages) {
 	remappedPackages[package] = path.resolve(__dirname, `./node_modules/${package}-browserify/`);
