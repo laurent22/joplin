@@ -878,6 +878,7 @@ packages/tools/spellcheck.js
 packages/tools/tagServerLatest.js
 packages/tools/tool-utils.js
 packages/tools/update-readme-download.js
+packages/tools/update-readme-download.test.js
 packages/tools/update-readme-sponsors.js
 packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.js

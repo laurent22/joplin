@@ -1,57 +1,64 @@
 name: Build macOS M1
 on: [push, pull_request]
 jobs:
-  pre_job:
-    if: github.repository == 'laurent22/joplin'
-    runs-on: ubuntu-latest
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - id: skip_check
-        uses: fkirc/skip-duplicate-actions@v5
-        with:
-          concurrent_skipping: 'same_content_newer'
+	pre_job:
+		if: github.repository == 'laurent22/joplin'
+		runs-on: ubuntu-latest
+		outputs:
+			should_skip: ${{ steps.skip_check.outputs.should_skip }}
+		steps:
+			- id: skip_check
+				uses: fkirc/skip-duplicate-actions@v5
+				with:
+					concurrent_skipping: 'same_content_newer'
 
-  Main:
-    needs: pre_job
-    # We always process server or desktop release tags, because they also publish the release
-    if: github.repository == 'laurent22/joplin' && (needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/v'))
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest]
-    steps:
+	Main:
+		needs: pre_job
+		# We always process server or desktop release tags, because they also publish the release
+		if: github.repository == 'laurent22/joplin' && (needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/v'))
+		runs-on: ${{ matrix.os }}
+		strategy:
+			matrix:
+				os: [macos-latest]
+		steps:
 
-      - uses: actions/checkout@v2
-      - uses: olegtarasov/get-tag@v2.1
-      - uses: actions/setup-node@v2
-        with:
-          # We need to pin the version to 18.15, because 18.16+ fails with this error:
-          # https://github.com/facebook/react-native/issues/36440
-          node-version: '18.15.0'
+			- uses: actions/checkout@v2
+			- uses: olegtarasov/get-tag@v2.1
+			- uses: actions/setup-node@v2
+				with:
+					# We need to pin the version to 18.15, because 18.16+ fails with this error:
+					# https://github.com/facebook/react-native/issues/36440
+					node-version: '18.15.0'
 
-      - name: Install Yarn
-        run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
+			- name: Install Yarn
+				run: |
+					# https://yarnpkg.com/getting-started/install
+					corepack enable
 
-      - name: Build macOS M1 app
-        env:
-          APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
-          CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          IS_CONTINUOUS_INTEGRATION: 1
-          BUILD_SEQUENCIAL: 1
-        run: |
-          export npm_config_arch=arm64
-          export npm_target_arch=arm64
-          yarn install
-          cd packages/app-desktop
-          npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
-          npm pkg set 'build.mac.target.target'='default'
-          npm pkg set 'build.mac.target.arch[0]'='arm64'
-          PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
+			- name: Build macOS M1 app
+				env:
+					APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
+					APPLE_ID: ${{ secrets.APPLE_ID }}
+					APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+					APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+					CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+					CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
+					GH_TOKEN: ${{ secrets.GH_TOKEN }}
+					IS_CONTINUOUS_INTEGRATION: 1
+					BUILD_SEQUENCIAL: 1
+				run: |
+					export npm_config_arch=arm64
+					export npm_config_target_arch=arm64
+					yarn install
+					cd packages/app-desktop
+					npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
+					npm pkg set 'build.mac.target.target'='default'
+					npm pkg set 'build.mac.target.arch[0]'='arm64'
+
+					if [[ $GIT_TAG_NAME = v* ]]; then
+						echo "Building and publishing desktop application..."
+						PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
+					else
+						echo "Building but *not* publishing desktop application..."
+						PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+					fi
