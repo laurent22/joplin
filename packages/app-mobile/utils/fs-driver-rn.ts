@@ -1,6 +1,6 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 const RNFetchBlob = require('rn-fetch-blob').default;
-const RNFS = require('react-native-fs');
+import * as RNFS from 'react-native-fs';
 const DocumentPicker = require('react-native-document-picker').default;
 import { openDocument } from '@joplin/react-native-saf-x';
 import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
@@ -73,7 +73,7 @@ export default class FsDriverRN extends FsDriverBase {
 
 		const isScoped = isScopedUri(path);
 
-		let stats = [];
+		let stats: any[] = [];
 		try {
 			if (isScoped) {
 				stats = await RNSAF.listFiles(path);
@@ -272,7 +272,8 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async tarCreate(options: any, filePaths: string[]) {
-		const cwd = options.cwd; // TODO: What if this is undefined?
+		// Choose a default cwd if not given
+		const cwd = options.cwd ?? RNFS.MainBundlePath;
 		const file = resolve(cwd, options.file);
 
 		if (await this.exists(file)) {
