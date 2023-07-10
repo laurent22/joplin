@@ -494,7 +494,7 @@ class Application extends BaseApplication {
 		}, 1000 * 60 * 60);
 
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
-			// Keep it hidden
+			bridge().window().hide();
 		} else {
 			bridge().window().show();
 		}
