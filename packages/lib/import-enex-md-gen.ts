@@ -759,10 +759,11 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 				if (isTodosList) {
 					const todoGroup = cssValue(this, nodeAttributes.style, '--en-id');
 					section.lines.push(BLOCK_OPEN);
-					tasks.filter(t => t.groupId === todoGroup)
-						.forEach(t => {
+					for (const t of tasks) {
+						if (t.groupId === todoGroup) {
 							section.lines.push(`- [${t.completed ? 'x' : ' '}] ${t.title}\n`);
-						});
+						}
+					}
 					tagInfo.name = ListTag.TaskList;
 					state.lists.push({ tag: ListTag.TaskList, counter: 1, startedText: false });
 				} else {
