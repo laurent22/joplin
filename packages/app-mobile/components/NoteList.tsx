@@ -1,9 +1,9 @@
 const React = require('react');
 
-import { Component, FunctionComponent } from 'react';
+import { Component, FunctionComponent, useState } from 'react';
 
 import { connect } from 'react-redux';
-import { FlatList, Text, StyleSheet, Button, View, ViewStyle, TextStyle, ImageStyle, PanResponder } from 'react-native';
+import { FlatList, Text, StyleSheet, Button, View, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -29,12 +29,13 @@ interface NoteListProps {
 interface NoteListState {
 	items: NoteEntity[];
 	selectedItemIds: string[];
+	dragStartTime: number;
 }
 
 interface NoteItemWrapperProps {
 	note: NoteEntity;
 	dialogbox: any;
-	drag: Function;
+	drag: ()=> void;
 	isActive: boolean;
 	style: ViewStyle | TextStyle | ImageStyle;
 	noteSelectionEnabled?: boolean;
@@ -50,6 +51,8 @@ const NoteItemWrapper: FunctionComponent<NoteItemWrapperProps> = ({
 	noteSelectionEnabled,
 	dispatch,
 }) => {
+	const [didMove, setDidMove] = useState(false);
+
 	if (Setting.value('notes.sortOrder.field') !== 'order') {
 		drag = async () => {
 			const doIt = await dialogs.confirmRef(dialogbox, `${_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by'))}\n\n${_('Do you want to do this')}`);
@@ -60,29 +63,26 @@ const NoteItemWrapper: FunctionComponent<NoteItemWrapperProps> = ({
 		};
 	}
 
-	const panResponder = React.useRef(
-		PanResponder.create({
-			// Ask to be the responder:
-			onStartShouldSetPanResponder: () => false,
-			onStartShouldSetPanResponderCapture: () => false,
-			onMoveShouldSetPanResponder: (_) => true,
-			onMoveShouldSetPanResponderCapture: (_) => true,
-			onPanResponderGrant: () => {
-				drag();
-			},
-			onShouldBlockNativeResponder: () => false,
-		})
-	).current;
-
 	return (
-		<View style={style} {...panResponder.panHandlers}>
-			<NoteItem
-				note={note}
-				onLongPress={() => {
+		<View
+			style={style}
+			onTouchMove={() => {
+				setDidMove(true);
+			}}
+			onTouchEnd={() => {
+				if (!didMove) {
 					dispatch({
 						type: noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
 						id: note.id,
 					});
+				}
+			}}
+		>
+			<NoteItem
+				note={note}
+				onLongPress={() => {
+					drag();
+					setDidMove(false);
 				}}
 				disabled={isActive}
 			/>
@@ -109,6 +109,7 @@ class NoteListComponent extends Component<NoteListProps, NoteListState> {
 		this.state = {
 			items: props.items || [],
 			selectedItemIds: [],
+			dragStartTime: -1,
 		};
 		this.rootRef_ = null;
 		this.styles_ = {};
