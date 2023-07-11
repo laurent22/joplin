@@ -542,7 +542,7 @@ export default class BaseApplication {
 		const newState = store.getState();
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] });
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
