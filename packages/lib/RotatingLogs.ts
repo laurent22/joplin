@@ -4,16 +4,18 @@ import { Stat } from './fs-driver-base';
 export default class RotatingLogs {
 
 	private logFilesDir = '';
-	private nonActiveLogFileMaximumDaysAge = 90 * 24 * 60 * 60 * 1000;
-	private activeLogFileMaximumSizeInBytes: number = 1024 * 1024 * 100;
+	private maxFileSize: number = 1024 * 1024 * 100;
+	private inactiveMaxAge: number = 90 * 24 * 60 * 60 * 1000;
 
-	public constructor(logFilesDir: string) {
+	public constructor(logFilesDir: string, maxFileSize: number = null, inactiveMaxAge: number = null) {
 		this.logFilesDir = logFilesDir;
+		if (maxFileSize) this.maxFileSize = maxFileSize;
+		if (inactiveMaxAge) this.inactiveMaxAge = inactiveMaxAge;
 	}
 
 	public async cleanActiveLogFile() {
 		const stats: Stat = await this.fsDriver().stat(this.logFileFullpath());
-		if (stats.size >= this.activeLogFileMaximumSizeInBytes) {
+		if (stats.size >= this.maxFileSize) {
 			const newLogFile: string = this.logFileFullpath(this.getNameToNonActiveLogFile());
 			await this.fsDriver().move(this.logFileFullpath(), newLogFile);
 		}
@@ -28,7 +30,7 @@ export default class RotatingLogs {
 		for (const file of files) {
 			if (!file.path.match(/^log-[0-9]+.txt$/gi)) continue;
 			const ageOfTheFile: number = Date.now() - file.birthtime;
-			if (ageOfTheFile >= this.nonActiveLogFileMaximumDaysAge) {
+			if (ageOfTheFile >= this.inactiveMaxAge) {
 				await this.fsDriver().remove(this.logFileFullpath(file.path));
 			}
 		}
