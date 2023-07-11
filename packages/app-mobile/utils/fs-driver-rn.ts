@@ -273,7 +273,7 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async tarCreate(options: any, filePaths: string[]) {
 		// Choose a default cwd if not given
-		const cwd = options.cwd ?? RNFS.MainBundlePath;
+		const cwd = options.cwd ?? RNFS.DocumentDirectoryPath;
 		const file = resolve(cwd, options.file);
 
 		if (await this.exists(file)) {
