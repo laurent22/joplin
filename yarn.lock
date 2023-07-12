@@ -4571,7 +4571,7 @@ __metadata:
     react-native-device-info: 10.6.0
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.2.1
-    react-native-drawer-layout: 3.2.0
+    react-native-drawer-layout: 3.2.1
     react-native-dropdownalert: 4.5.1
     react-native-exit-app: 1.1.0
     react-native-file-viewer: 2.1.5
@@ -27757,9 +27757,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-drawer-layout@npm:3.2.0":
-  version: 3.2.0
-  resolution: "react-native-drawer-layout@npm:3.2.0"
+"react-native-drawer-layout@npm:3.2.1":
+  version: 3.2.1
+  resolution: "react-native-drawer-layout@npm:3.2.1"
   dependencies:
     use-latest-callback: ^0.1.5
   peerDependencies:
@@ -27767,7 +27767,7 @@ __metadata:
     react-native: "*"
     react-native-gesture-handler: ">= 1.0.0"
     react-native-reanimated: ">= 1.0.0"
-  checksum: 67237e650e1245297ec08b9cf90c74aed25dfefbf66c972dae6be5913df78d98f04c5e90e98e396e8ea2b97eca8df0db1872a7608509e29f86491b5d3db36b3a
+  checksum: 2644175b2fc9fee33a2ff98802007721b1974e8b338b6932a8df8964741474a8549366f63130dce817ae8fe91055c7216314b717c9bf7ec7e78321f3fb50dd0f
   languageName: node
   linkType: hard
 
