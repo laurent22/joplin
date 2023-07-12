@@ -1,6 +1,6 @@
 import { open, close, write, readdir, rm } from 'fs-extra';
-import RotatingLogs from './RotatingLogs';
 import { createTempDir } from './testing/test-utils';
+import RotatingLogs from './RotatingLogs';
 
 jest.useFakeTimers();
 

@@ -940,19 +940,9 @@ export default class BaseApplication {
 				appLogger.error(error);
 			}
 		};
-		this.doAsync(processLogs, 60000, 24 * 60 * 60 * 1000);
+		shim.setTimeout(() => { void processLogs(); }, 60000);
+		shim.setInterval(() => { void processLogs(); }, 24 * 60 * 60 * 1000);
 
 		return argv;
-	}
-
-	public doAsync(callback, onTimeout: number = null, onInterval: number = null) {
-		const handlers = { timeout: null, interval: null };
-		if (onTimeout) {
-			handlers.timeout = shim.setTimeout(() => { void callback(); }, onTimeout);
-		}
-		if (onInterval) {
-			handlers.interval = shim.setInterval(() => { void callback(); }, onInterval);
-		}
-		return handlers;
 	}
 }
