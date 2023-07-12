@@ -3,7 +3,7 @@ import { Stat } from './fs-driver-base';
 
 export default class RotatingLogs {
 
-	private logFilesDir = '';
+	private logFilesDir: string;
 	private maxFileSize: number = 1024 * 1024 * 100;
 	private inactiveMaxAge: number = 90 * 24 * 60 * 60 * 1000;
 
