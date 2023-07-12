@@ -155,8 +155,9 @@ export default class FsDriverRN extends FsDriverBase {
 			}
 			return this.rnfsStatToStd_(r, path);
 		} catch (error) {
-			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
+			if (error && (error.code === 'ENOENT' || !(await this.exists(path)))) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
+				//     or   { [Error: The file {file} couldn’t be opened because there is no such file.], code: 'ENSCOCOAERRORDOMAIN260' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 				return null;
 			} else {
