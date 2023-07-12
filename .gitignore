@@ -138,6 +138,7 @@ packages/app-desktop/gui/HelpButton.js
 packages/app-desktop/gui/IconButton.js
 packages/app-desktop/gui/ImportScreen.js
 packages/app-desktop/gui/ItemList.js
+packages/app-desktop/gui/JoplinCloudConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js

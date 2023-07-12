@@ -2,4 +2,5 @@
 @use 'gui/EditFolderDialog/style.scss' as edit-folder-dialog;
 @use 'gui/EncryptionConfigScreen/style.scss' as encryption-config-screen;
 @use 'gui/PasswordInput/style.scss' as password-input;
+@use 'gui/JoplinCloudConfigScreen.scss' as joplin-cloud-config-screen;
 @use 'main.scss' as main;

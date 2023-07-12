@@ -186,6 +186,17 @@ shared.settingsSections = createSelector(
 			isScreen: true,
 		});
 
+		// Ideallly we would also check if the user was able to synchronize
+		// but we don't have a way of doing that besides making a request to Joplin Cloud
+		const syncTargetIsJoplinCloud = settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
+		if (syncTargetIsJoplinCloud) {
+			output.push({
+				name: 'joplinCloud',
+				metadatas: [],
+				isScreen: true,
+			});
+		}
+
 		return output;
 	}
 );
