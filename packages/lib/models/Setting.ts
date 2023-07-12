@@ -1709,6 +1709,8 @@ class Setting extends BaseModel {
 				section: 'note',
 			},
 
+			'emailToNote.inboxEmail': { value: '', type: SettingItemType.String, public: false },
+
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
@@ -2523,6 +2525,7 @@ class Setting extends BaseModel {
 		if (name === 'encryption') return _('Encryption');
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
+		if (name === 'joplinCloud') return _('Joplin Cloud');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
@@ -2551,6 +2554,7 @@ class Setting extends BaseModel {
 		if (name === 'encryption') return 'icon-encryption';
 		if (name === 'server') return 'far fa-hand-scissors';
 		if (name === 'keymap') return 'fa fa-keyboard';
+		if (name === 'joplinCloud') return 'fa fa-cloud';
 
 		if (this.customSections_[name] && this.customSections_[name].iconName) return this.customSections_[name].iconName;
 
