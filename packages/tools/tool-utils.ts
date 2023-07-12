@@ -334,7 +334,23 @@ export function githubOauthToken() {
 // says that nothing has changed on the API, although it used to work. So since
 // we can't use /latest anymore, we need to fetch all the releases to find the
 // latest published one.
+//
+// As of July 2023 /latest seems to be working again, so switching back to this
+// method, but let's keep the old method just in case they break the API again.
 export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
+	const response: any = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases/latest`, {
+		headers: {
+			'Content-Type': 'application/json',
+			'User-Agent': 'Joplin Readme Updater',
+		},
+	});
+
+	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+	return response.json();
+}
+
+export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(repoName: string): Promise<GitHubRelease> {
 	let pageNum = 1;
 
 	while (true) {

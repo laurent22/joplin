@@ -100,7 +100,10 @@ export default class ElectronAppWrapper {
 			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
 			// https://github.com/laurent22/joplin/issues/2031
-			show: debugEarlyBugs,
+			//
+			// On Linux/GNOME, however, the window doesn't show correctly if show is false initially:
+			// https://github.com/laurent22/joplin/issues/8256
+			show: debugEarlyBugs || shim.isGNOME(),
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098

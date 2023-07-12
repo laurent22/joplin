@@ -9,7 +9,7 @@ import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import versionInfo from '@joplin/lib/versionInfo';
-import { Module } from '@joplin/lib/services/interop/types';
+import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { isContextMenuItemLocation, MenuItem, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
@@ -230,7 +230,7 @@ function useMenu(props: Props) {
 		void CommandService.instance().execute(commandName);
 	}, []);
 
-	const onImportModuleClick = useCallback(async (module: Module, moduleSource: string) => {
+	const onImportModuleClick = useCallback(async (module: ImportModule, moduleSource: string) => {
 		let path = null;
 
 		if (moduleSource === 'file') {

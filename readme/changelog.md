@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v2.12.4](https://github.com/laurent22/joplin/releases/tag/v2.12.4) (Pre-release) - 2023-07-07T22:36:53Z
+
+
+
+## [v2.12.3](https://github.com/laurent22/joplin/releases/tag/v2.12.3) (Pre-release) - 2023-07-07T10:16:55Z
+
+- Improved: Build macOS app as Universal binary ([#8423](https://github.com/laurent22/joplin/issues/8423)) ([#6052](https://github.com/laurent22/joplin/issues/6052))
+- Improved: Updated packages @electron/remote (v2.0.10), @rmp135/sql-ts (v1.17.0), clean-html (v2), glob (v10.2.7)
+- Fixed: Removing Markdown when using 'Paste as Text' ([#8351](https://github.com/laurent22/joplin/issues/8351)) ([#8317](https://github.com/laurent22/joplin/issues/8317) by [@pedr](https://github.com/pedr))
+
 ## [v2.11.11](https://github.com/laurent22/joplin/releases/tag/v2.11.11) - 2023-06-23T15:16:37Z
 
 - Improved: Add support for plugin user data ([#8312](https://github.com/laurent22/joplin/issues/8312)) ([#8080](https://github.com/laurent22/joplin/issues/8080))
