@@ -29,6 +29,7 @@ export const ExportScreenComponent = (props: Props) => {
 					description={_('Share a copy of all notes in a file format that can be imported by Joplin on a computer.')}
 				/>
 				<NoteExportComponent
+					styles={styles}
 					themeId={props.themeId}
 					dispatch={props.dispatch} />
 

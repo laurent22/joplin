@@ -7,6 +7,7 @@ export interface ExportScreenStyles {
 	rootStyle: StyleProp<ViewStyle>;
 	sectionHeaderStyle: StyleProp<TextStyle>;
 	sectionDescriptionStyle: StyleProp<TextStyle>;
+	statusTextStyle: StyleProp<TextStyle>;
 
 	subsectionContainerStyle: StyleProp<ViewStyle>;
 
@@ -36,6 +37,10 @@ const useStyles = (themeId: number): ExportScreenStyles => {
 				...baseTextStyle,
 				color: theme.colorFaded,
 				fontStyle: 'italic',
+			},
+			statusTextStyle: {
+				...baseTextStyle,
+				textAlign: 'center',
 			},
 			subsectionContainerStyle: {
 				marginBottom: 15,

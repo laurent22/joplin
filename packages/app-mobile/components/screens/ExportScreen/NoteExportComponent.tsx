@@ -2,46 +2,22 @@ import * as React from 'react';
 import { Text, Alert } from 'react-native';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
-const { themeStyle } = require('../../global-style.js');
 import Logger from '@joplin/lib/Logger';
 import { Button } from 'react-native-paper';
-import { useCallback, useMemo, useState } from 'react';
-import { Theme } from '@joplin/lib/themes/type';
+import { useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
 import Share from 'react-native-share';
 import exportAllFolders, { makeExportCacheDirectory } from './utils/exportAllFolders';
+import { ExportScreenStyles } from './useStyles';
 
 const logger = Logger.create('NoteExportComponent');
 
 interface Props {
 	themeId: number;
+	styles: ExportScreenStyles;
 	dispatch: Dispatch;
 }
-
-const useStyles = (themeId: number) => {
-	return useMemo(() => {
-		const theme: Theme = themeStyle(themeId);
-
-		const baseTextStyle = {
-			color: theme.color,
-			fontSize: (theme as any).fontSize ?? 12,
-		};
-
-		return {
-			rootStyle: {
-				backgroundColor: theme.backgroundColor,
-				flex: 1,
-			},
-			statusTextStyle: {
-				...baseTextStyle,
-			},
-			spacer: {
-				flex: 1,
-			},
-		};
-	}, [themeId]);
-};
 
 enum ExportStatus {
 	NotStarted,
@@ -85,8 +61,6 @@ export const NoteExportComponent = (props: Props) => {
 		// TODO: Implement
 	}, []);
 
-	const styles = useStyles(props.themeId);
-
 	const startOrCancelExportButton = (
 		<Button
 			mode='elevated'
@@ -99,7 +73,7 @@ export const NoteExportComponent = (props: Props) => {
 	);
 
 	const exportedSuccessfullyMessage = (
-		<Text style={styles.statusTextStyle}>{_('Exported successfully!')}</Text>
+		<Text style={props.styles.statusTextStyle}>{_('Exported successfully!')}</Text>
 	);
 
 	let mainContent = null;
