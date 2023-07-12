@@ -66,7 +66,7 @@ jobs:
             # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
 
             export CSC_IDENTITY_AUTO_DISCOVERY=false
-            npm pkg set 'build.mac.indentify'=null --json
-            
+            npm pkg set 'build.mac.identity'=null --json
+
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
           fi
