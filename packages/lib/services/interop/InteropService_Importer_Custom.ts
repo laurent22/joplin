@@ -3,7 +3,7 @@ import { ImportExportResult } from './types';
 
 interface CustomImporter {
 	onExec(
-		context: { sourcePath: string, options: any, warnings: string[] }
+		context: { sourcePath: string; options: any; warnings: string[] }
 	): Promise<void>;
 }
 
@@ -29,7 +29,7 @@ export default class InteropService_Importer_Custom extends InteropService_Impor
 			}
 		}
 
-		this.module_.onExec({
+		await this.module_.onExec({
 			sourcePath: this.sourcePath_,
 			options: processedOptions,
 			warnings: result.warnings,

@@ -1,7 +1,7 @@
-import { _ } from "../../locale";
-import InteropService_Exporter_Base from "./InteropService_Exporter_Base";
-import InteropService_Importer_Base from "./InteropService_Importer_Base";
-import { FileSystemItem, ImportModuleOutputFormat, ModuleType } from "./types";
+import { _ } from '../../locale';
+import InteropService_Exporter_Base from './InteropService_Exporter_Base';
+import InteropService_Importer_Base from './InteropService_Importer_Base';
+import { ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
 
 // Metadata shared between importers and exporters.
 interface BaseMetadata {
@@ -10,11 +10,36 @@ interface BaseMetadata {
 	description: string;
 	isDefault: boolean;
 
+	// Returns the full label to be displayed in the UI.
+	fullLabel(moduleSource?: FileSystemItem): string;
+
 	// Only applies to single file exporters or importers
 	// It tells whether the format can package multiple notes into one file.
 	// For example JEX or ENEX can, but HTML cannot.
 	// Default: true.
 	isNoteArchive: boolean;
+}
+
+interface ImportMetadata extends BaseMetadata {
+	type: ModuleType.Importer;
+
+	sources: FileSystemItem[];
+	importerClass: string;
+	outputFormat: ImportModuleOutputFormat;
+}
+
+export interface ImportModule extends ImportMetadata {
+	factory(options?: ImportOptions): InteropService_Importer_Base;
+}
+
+interface ExportMetadata extends BaseMetadata {
+	type: ModuleType.Exporter;
+
+	target: FileSystemItem;
+}
+
+export interface ExportModule extends ExportMetadata {
+	factory(options?: ExportOptions): InteropService_Exporter_Base;
 }
 
 const defaultBaseMetadata = {
@@ -25,96 +50,74 @@ const defaultBaseMetadata = {
 	isDefault: false,
 };
 
-interface ImportMetadata extends BaseMetadata {
-	type: ModuleType.Importer;
-
-	sources: FileSystemItem[];
-	importerClass: string;
-	outputFormat: ImportModuleOutputFormat;
-}
-
-interface ExportMetadata extends BaseMetadata {
-	type: ModuleType.Exporter;
-
-	target: FileSystemItem;
-}
-
-// Either ImportMetadata or ExportMetadata
-type ImportExportMetadata<Type extends ModuleType>
-		= Type extends ModuleType.Importer ? ImportMetadata : ExportMetadata;
-
-type ImporterOrExporter<Type extends ModuleType>
-		= Type extends ModuleType.Importer ? InteropService_Importer_Base : InteropService_Exporter_Base;
-
-type FactoryFunction<Type extends ModuleType> = ()=>ImporterOrExporter<Type>;
-
-class ImporterExporterModule<Type extends ModuleType> {
-	private constructor(
-		public readonly type: Type,
-		public readonly metadata: ImportExportMetadata<Type>,
-		private readonly factory: FactoryFunction<Type>
-	) { }
-
-	public isImporter(): this is ImporterExporterModule<ModuleType.Importer> {
-		return this.metadata.type === ModuleType.Importer;
+const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: FileSystemItem = null) => {
+	const format = metadata.format.split('_')[0];
+	const label = [`${format.toUpperCase()} - ${metadata.description}`];
+	if (moduleSource && metadata.type === ModuleType.Importer && metadata.sources.length > 1) {
+		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
 	}
+	return label.join(' ');
+};
 
-	public supportsFileExtension(extension: string) {
-		return this.metadata.fileExtensions.includes(extension);
-	}
+export const makeImportModule = (
+	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base
+): ImportModule => {
+	const importerDefaults: ImportMetadata = {
+		...defaultBaseMetadata,
+		type: ModuleType.Importer,
+		sources: [],
+		importerClass: '',
+		outputFormat: ImportModuleOutputFormat.Markdown,
 
-	public fullLabel(source: FileSystemItem = null) {
-		const format = this.metadata.format.split('_')[0];
-		const label = [`${format.toUpperCase()} - ${this.metadata.description}`];
-		if (this.metadata.type === ModuleType.Importer) {
-			if (this.metadata.sources.length > 1) {
-				label.push(`(${source === 'file' ? _('File') : _('Directory')})`);
-			}
-		}
-		return label.join(' ');
-	}
+		fullLabel: (moduleSource?: FileSystemItem) => {
+			return moduleFullLabel(fullMetadata, moduleSource);
+		},
+	};
 
-	public createInstance(options?: any): ImporterOrExporter<Type> {
-		const result = this.factory();
-		result.setMetadata({ ...this.metadata, ...(options ?? {}) });
-		return result;
-	}
+	const fullMetadata = {
+		...importerDefaults,
+		...metadata,
+	};
 
-	public static fromImporter(
-		metadata: Partial<ImportMetadata>, factory: FactoryFunction<ModuleType.Importer>
-	) {
-		const importerDefaults: ImportMetadata = {
-			...defaultBaseMetadata,
-			type: ModuleType.Importer,
-			sources: [],
-			importerClass: '',
-			outputFormat: ImportModuleOutputFormat.Markdown,
-		};
+	return {
+		...fullMetadata,
+		factory: (options: ImportOptions = {}) => {
+			const result = factory();
+			result.setMetadata({ ...fullMetadata, ...(options ?? {}) });
 
-		return new ImporterExporterModule<ModuleType.Importer>(ModuleType.Importer, {
-			...importerDefaults,
-			...metadata
-		}, factory);
-	}
+			return result;
+		},
+	};
+};
 
-	public static fromExporter(
-		metadata: Partial<ExportMetadata>, factory: FactoryFunction<ModuleType.Exporter>
-	) {
-		const exporterDefaults: ExportMetadata = {
-			...defaultBaseMetadata,
-			type: ModuleType.Exporter,
-			target: FileSystemItem.File,
-		};
-		
-		return new ImporterExporterModule<ModuleType.Exporter>(ModuleType.Exporter, {
-			...exporterDefaults,
-			...metadata
-		}, factory);
-	}
-}
+export const makeExportModule = (
+	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base
+): ExportModule => {
+	const exporterDefaults: ExportMetadata = {
+		...defaultBaseMetadata,
+		type: ModuleType.Exporter,
+		target: FileSystemItem.File,
 
-export type ImportModule = ImporterExporterModule<ModuleType.Importer>;
-export type ExportModule = ImporterExporterModule<ModuleType.Exporter>;
+		fullLabel: (moduleSource?: FileSystemItem) => {
+			return moduleFullLabel(fullMetadata, moduleSource);
+		},
+	};
 
-export default ImporterExporterModule<ModuleType>;
+	const fullMetadata = {
+		...exporterDefaults,
+		...metadata,
+	};
 
+	return {
+		...fullMetadata,
+		factory: (options: ExportOptions = {}) => {
+			const result = factory();
+			result.setMetadata({ ...fullMetadata, ...(options ?? {}) });
+
+			return result;
+		},
+	};
+};
+
+type Module = ImportModule|ExportModule;
+export default Module;
