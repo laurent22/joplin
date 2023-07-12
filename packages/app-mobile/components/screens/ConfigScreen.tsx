@@ -4,10 +4,8 @@ const React = require('react');
 import { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
-import ReportService from '@joplin/lib/services/ReportService';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 import checkPermissions from '../../utils/checkPermissions';
-import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import setIgnoreTlsErrors from '../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
@@ -37,9 +35,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.styles_ = {};
 
 		this.state = {
-			creatingReport: false,
-			profileExportStatus: 'idle',
-			profileExportPath: '',
 			fileSystemSyncPath: Setting.value('sync.2.path'),
 		};
 
@@ -118,91 +113,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			});
 		};
 
-		this.exportDebugButtonPress_ = async () => {
-			this.setState({ creatingReport: true });
-			const service = new ReportService();
-
-			const logItems = await reg.logger().lastEntries(null);
-			const logItemRows = [['Date', 'Level', 'Message']];
-			for (let i = 0; i < logItems.length; i++) {
-				const item = logItems[i];
-				logItemRows.push([time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'), item.level, item.message]);
-			}
-			const logItemCsv = service.csvCreate(logItemRows);
-
-			const itemListCsv = await service.basicItemList({ format: 'csv' });
-
-			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
-
-			if (!externalDir) {
-				this.setState({ creatingReport: false });
-				return;
-			}
-
-			const filePath = `${externalDir}/syncReport-${new Date().getTime()}.txt`;
-
-			const finalText = [logItemCsv, itemListCsv].join('\n================================================================================\n');
-			await shim.fsDriver().writeFile(filePath, finalText, 'utf8');
-			alert(`Debug report exported to ${filePath}`);
-			this.setState({ creatingReport: false });
-		};
-
 		this.fixSearchEngineIndexButtonPress_ = async () => {
 			this.setState({ fixingSearchIndex: true });
 			await SearchEngine.instance().rebuildIndex();
 			this.setState({ fixingSearchIndex: false });
-		};
-
-		this.exportProfileButtonPress_ = async () => {
-			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
-			if (!externalDir) {
-				return;
-			}
-			const p = this.state.profileExportPath ? this.state.profileExportPath : `${externalDir}/JoplinProfileExport`;
-
-			this.setState({
-				profileExportStatus: 'prompt',
-				profileExportPath: p,
-			});
-		};
-
-		this.exportProfileButtonPress2_ = async () => {
-			this.setState({ profileExportStatus: 'exporting' });
-
-			const dbPath = '/data/data/net.cozic.joplin/databases';
-			const exportPath = this.state.profileExportPath;
-			const resourcePath = `${exportPath}/resources`;
-			try {
-				const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-				if (response !== PermissionsAndroid.RESULTS.GRANTED) {
-					throw new Error('Permission denied');
-				}
-
-				const copyFiles = async (source: string, dest: string) => {
-					await shim.fsDriver().mkdir(dest);
-
-					const files = await shim.fsDriver().readDirStats(source);
-
-					for (const file of files) {
-						const source_ = `${source}/${file.path}`;
-						const dest_ = `${dest}/${file.path}`;
-						if (!file.isDirectory()) {
-							reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
-							await shim.fsDriver().copy(source_, dest_);
-						} else {
-							await copyFiles(source_, dest_);
-						}
-					}
-				};
-				await copyFiles(dbPath, exportPath);
-				await copyFiles(Setting.value('resourceDir'), resourcePath);
-
-				alert('Profile has been exported!');
-			} catch (error) {
-				alert(`Could not export files: ${error.message}`);
-			} finally {
-				this.setState({ profileExportStatus: 'idle' });
-			}
 		};
 
 		this.logButtonPress_ = () => {
@@ -640,8 +554,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	public render() {
 		const settings = this.state.settings;
 
-		const theme = themeStyle(this.props.themeId);
-
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
 
 		settingComps.push(this.renderHeader('tools', _('Tools')));
@@ -650,26 +562,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
 		settingComps.push(this.renderButton('export_button', _('Export'), this.exportButtonPress_));
-		if (Platform.OS === 'android') {
-			settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
-		}
 		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
-
-		if (shim.mobilePlatform() === 'android') {
-			settingComps.push(this.renderButton('export_data', this.state.profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile'), this.exportProfileButtonPress_, { disabled: this.state.profileExportStatus === 'exporting', description: _('For debugging purpose only: export your profile to an external SD card.') }));
-
-			if (this.state.profileExportStatus === 'prompt') {
-				const profileExportPrompt = (
-					<View style={this.styles().settingContainer} key="profileExport">
-						<Text style={{ ...this.styles().settingText, flex: 0 }}>Path:</Text>
-						<TextInput style={{ ...this.styles().textInput, paddingRight: 20, width: '75%', marginRight: 'auto' }} onChange={(event: any) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard" keyboardAppearance={theme.keyboardAppearance} />
-						<Button title="OK" onPress={this.exportProfileButtonPress2_} />
-					</View>
-				);
-
-				settingComps.push(profileExportPrompt);
-			}
-		}
 
 		const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
 		if (featureFlagKeys.length) {
