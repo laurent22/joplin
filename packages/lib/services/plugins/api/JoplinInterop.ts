@@ -1,6 +1,8 @@
 /* eslint-disable multiline-comment-style */
 
 import InteropService from '../../interop/InteropService';
+import InteropService_Exporter_Custom from '../../interop/InteropService_Exporter_Custom';
+import InteropService_Importer_Custom from '../../interop/InteropService_Importer_Custom';
 import { Module, ModuleType } from '../../interop/types';
 import { ExportModule, ImportModule } from './types';
 
@@ -23,7 +25,12 @@ export default class JoplinInterop {
 			...module,
 			type: ModuleType.Exporter,
 			isCustom: true,
+			fullLabel: () => module.description,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
+
+			factory: () => {
+				return new InteropService_Exporter_Custom(module);
+			},
 		};
 
 		return InteropService.instance().registerModule(internalModule);
@@ -34,7 +41,12 @@ export default class JoplinInterop {
 			...module,
 			type: ModuleType.Importer,
 			isCustom: true,
+			fullLabel: () => module.description,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
+
+			factory: () => {
+				return new InteropService_Importer_Custom(module);
+			},
 		};
 
 		return InteropService.instance().registerModule(internalModule);

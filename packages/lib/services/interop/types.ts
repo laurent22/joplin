@@ -1,5 +1,7 @@
 import { _ } from '../../locale';
 import { PluginStates } from '../plugins/reducer';
+import type InteropService_Exporter_Base from './InteropService_Exporter_Base';
+import type InteropService_Importer_Base from './InteropService_Importer_Base';
 
 export interface CustomImportContext {
 	sourcePath: string;
@@ -27,19 +29,17 @@ export enum ImportModuleOutputFormat {
 	Html = 'html',
 }
 
-// For historical reasons the import and export modules share the same
-// interface, except that some properties are used only for import
-// and others only for export.
-export interface Module {
+interface BaseImportExportModule {
 	// ---------------------------------------
 	// Shared properties
 	// ---------------------------------------
 
-	type: ModuleType;
 	format: string;
 	fileExtensions: string[];
 	description: string;
 	// path?: string;
+	isDefault?: boolean;
+	fullLabel: (moduleSource?: FileSystemItem)=>void;
 
 	// Only applies to single file exporters or importers
 	// It tells whether the format can package multiple notes into one file.
@@ -51,33 +51,26 @@ export interface Module {
 	// by a plugin for example. If `isCustom` is `true` if it is expected that all
 	// the event handlers below are defined (it's enforced by the plugin API).
 	isCustom?: boolean;
+}
 
-	// ---------------------------------------
-	// Import-only properties
-	// ---------------------------------------
+export interface ImportModule extends BaseImportExportModule {
+	type: ModuleType.Importer;
 
 	sources?: FileSystemItem[];
 	importerClass?: string;
-	outputFormat?: ImportModuleOutputFormat;
-	isDefault?: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	fullLabel?: Function;
+	outputFormat: ImportModuleOutputFormat;
 
-	// Used only if `isCustom` is true
-	onExec?(context: any): Promise<any>;
+	factory: ()=>InteropService_Importer_Base;
+}
 
-	// ---------------------------------------
-	// Export-only properties
-	// ---------------------------------------
-
+export interface ExportModule extends BaseImportExportModule {
+	type: ModuleType.Exporter;
 	target?: FileSystemItem;
 
-	// Used only if `isCustom` is true
-	onInit?(context: any): Promise<void>;
-	onProcessItem?(context: any, itemType: number, item: any): Promise<void>;
-	onProcessResource?(context: any, resource: any, filePath: string): Promise<void>;
-	onClose?(context: any): Promise<void>;
+	factory: ()=>InteropService_Exporter_Base;
 }
+
+export type Module = ImportModule|ExportModule;
 
 export interface ImportOptions {
 	path?: string;
@@ -105,6 +98,31 @@ export interface ImportExportResult {
 	warnings: string[];
 }
 
+
+function moduleFullLabel(moduleSource: FileSystemItem = null): string {
+	const format = this.format.split('_')[0];
+	const label = [`${format.toUpperCase()} - ${this.description}`];
+	if (moduleSource && this.sources.length > 1) {
+		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
+	}
+	return label.join(' ');
+}
+
+export const defaultImportExportModule: BaseImportExportModule = {
+	format: '',
+	fileExtensions: [] as string[],
+	description: '',
+	isNoteArchive: true,
+	isDefault: false,
+	fullLabel: moduleFullLabel,
+	isCustom: false,
+};
+
+export const defaultImportModule = {
+	...defaultImportExportModule,
+	outputFormat: ImportModuleOutputFormat.Markdown,
+};
+
 // These are the fields that will be included in an exported Md+Front Matter note
 export interface MdFrontMatterExport {
 	'title'?: string;
@@ -118,30 +136,4 @@ export interface MdFrontMatterExport {
 	'updated'?: string;
 	'created'?: string;
 	'tags'?: string[];
-}
-
-function moduleFullLabel(moduleSource: FileSystemItem = null): string {
-	const format = this.format.split('_')[0];
-	const label = [`${format.toUpperCase()} - ${this.description}`];
-	if (moduleSource && this.sources.length > 1) {
-		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
-	}
-	return label.join(' ');
-}
-
-export function defaultImportExportModule(type: ModuleType): Module {
-	return {
-		type: type,
-		format: '',
-		fileExtensions: [],
-		sources: [],
-		description: '',
-		isNoteArchive: true,
-		importerClass: '',
-		outputFormat: ImportModuleOutputFormat.Markdown,
-		isDefault: false,
-		fullLabel: moduleFullLabel,
-		isCustom: false,
-		target: FileSystemItem.File,
-	};
 }

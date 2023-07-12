@@ -1,11 +1,17 @@
 import InteropService_Importer_Base from './InteropService_Importer_Base';
-import { ImportExportResult, Module } from './types';
+import { ImportExportResult } from './types';
+
+interface CustomImporter {
+	onExec(
+		context: { sourcePath: string, options: any, warnings: string[] }
+	): Promise<void>;
+}
 
 export default class InteropService_Importer_Custom extends InteropService_Importer_Base {
 
-	private module_: Module = null;
+	private module_: CustomImporter = null;
 
-	public constructor(handler: Module) {
+	public constructor(handler: CustomImporter) {
 		super();
 		this.module_ = handler;
 	}
@@ -23,10 +29,12 @@ export default class InteropService_Importer_Custom extends InteropService_Impor
 			}
 		}
 
-		return this.module_.onExec({
+		this.module_.onExec({
 			sourcePath: this.sourcePath_,
 			options: processedOptions,
 			warnings: result.warnings,
 		});
+
+		return result;
 	}
 }

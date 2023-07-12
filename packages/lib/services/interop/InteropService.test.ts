@@ -1,5 +1,5 @@
 import InteropService from '../../services/interop/InteropService';
-import { CustomExportContext, CustomImportContext, Module, ModuleType } from '../../services/interop/types';
+import { CustomExportContext, CustomImportContext, ImportModuleOutputFormat, Module, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
 import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
@@ -10,6 +10,8 @@ import * as fs from 'fs-extra';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import { ModelType } from '../../BaseModel';
 import * as ArrayUtils from '../../ArrayUtils';
+import InteropService_Importer_Custom from './InteropService_Importer_Custom';
+import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -50,31 +52,36 @@ function memoryExportModule() {
 	const module: Module = {
 		type: ModuleType.Exporter,
 		description: 'Memory Export Module',
+		fullLabel: () => 'Export module',
 		format: 'memory',
 		fileExtensions: ['memory'],
 		isCustom: true,
 
-		onInit: async (context: CustomExportContext) => {
-			result.destPath = context.destPath;
-		},
-
-		onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
-			result.items.push({
-				type: itemType,
-				object: item,
+		factory: () => {
+			return new InteropService_Exporter_Custom({
+				onInit: async (context: CustomExportContext) => {
+					result.destPath = context.destPath;
+				},
+		
+				onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
+					result.items.push({
+						type: itemType,
+						object: item,
+					});
+				},
+		
+				onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
+					result.resources.push({
+						filePath: filePath,
+						object: resource,
+					});
+				},
+		
+				onClose: async (_context: CustomExportContext) => {
+					// nothing
+				},
 			});
-		},
-
-		onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
-			result.resources.push({
-				filePath: filePath,
-				object: resource,
-			});
-		},
-
-		onClose: async (_context: CustomExportContext) => {
-			// nothing
-		},
+		}
 	};
 
 	return { result, module };
@@ -558,13 +565,19 @@ describe('services_InteropService', () => {
 		const module: Module = {
 			type: ModuleType.Importer,
 			description: 'Test Import Module',
+			fullLabel: () => 'Test module',
+			outputFormat: ImportModuleOutputFormat.Markdown,
 			format: 'testing',
 			fileExtensions: ['test'],
 			isCustom: true,
 
-			onExec: async (context: CustomImportContext) => {
-				result.hasBeenExecuted = true;
-				result.sourcePath = context.sourcePath;
+			factory: () => {
+				return new InteropService_Importer_Custom({
+					onExec: async (context: CustomImportContext) => {
+						result.hasBeenExecuted = true;
+						result.sourcePath = context.sourcePath;
+					},
+				});
 			},
 		};
 
@@ -599,26 +612,31 @@ describe('services_InteropService', () => {
 		const module: Module = {
 			type: ModuleType.Exporter,
 			description: 'Test Export Module',
+			fullLabel: () => 'Test export module',
 			format: 'testing',
 			fileExtensions: ['test'],
 			isCustom: true,
 
-			onInit: async (context: CustomExportContext) => {
-				result.destPath = context.destPath;
-			},
-
-			onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
-				result.itemTypes.push(itemType);
-				result.items.push(item);
-			},
-
-			onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
-				result.resources.push(resource);
-				result.filePaths.push(filePath);
-			},
-
-			onClose: async (_context: CustomExportContext) => {
-				result.closeCalled = true;
+			factory: () => {
+				return new InteropService_Exporter_Custom({
+					onInit: async (context: CustomExportContext) => {
+						result.destPath = context.destPath;
+					},
+		
+					onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
+						result.itemTypes.push(itemType);
+						result.items.push(item);
+					},
+		
+					onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
+						result.resources.push(resource);
+						result.filePaths.push(filePath);
+					},
+		
+					onClose: async (_context: CustomExportContext) => {
+						result.closeCalled = true;
+					},
+				});
 			},
 		};
 
