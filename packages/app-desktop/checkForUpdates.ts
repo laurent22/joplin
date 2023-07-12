@@ -3,8 +3,8 @@ import Logger from '@joplin/lib/Logger';
 import { _ } from '@joplin/lib/locale';
 import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
-const { fileExtension } = require('@joplin/lib/path-utils');
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
+import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
 const packageInfo = require('./packageInfo.js');
 const compareVersions = require('compare-versions');
 
@@ -12,10 +12,6 @@ const logger = Logger.create('checkForUpdates');
 
 let checkInBackground_ = false;
 let isCheckingForUpdate_ = false;
-
-interface CheckForUpdateOptions {
-	includePreReleases?: boolean;
-}
 
 function onCheckStarted() {
 	logger.info('Starting...');
@@ -27,15 +23,7 @@ function onCheckEnded() {
 	isCheckingForUpdate_ = false;
 }
 
-function getMajorMinorTagName(tagName: string) {
-	const s = tagName.split('.');
-	s.pop();
-	return s.join('.');
-}
-
-async function fetchLatestRelease(options: CheckForUpdateOptions) {
-	options = { includePreReleases: false, ...options };
-
+async function fetchLatestRelease() {
 	const response = await shim.fetch('https://api.github.com/repos/laurent22/joplin/releases');
 
 	if (!response.ok) {
@@ -43,89 +31,7 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 		throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
 	}
 
-	const releases = await response.json();
-	if (!releases.length) throw new Error('Cannot get latest release info (JSON)');
-
-	let release = null;
-
-	if (options.includePreReleases) {
-		release = releases[0];
-	} else {
-		for (const r of releases) {
-			if (!r.prerelease) {
-				release = r;
-				break;
-			}
-		}
-	}
-
-	if (!release) throw new Error('Could not get tag name');
-
-	const version = release.tag_name.substr(1);
-
-	// We concatenate all the release notes of the major/minor versions
-	// corresponding to the latest version. For example, if the latest version
-	// is 1.8.3, we concatenate all the 1.8.x versions. This is so that no
-	// matter from which version you upgrade, you always see the full changes,
-	// with the latest changes being on top.
-
-	const fullReleaseNotes = [];
-	const majorMinorTagName = getMajorMinorTagName(release.tag_name);
-
-	for (const release of releases) {
-		if (getMajorMinorTagName(release.tag_name) === majorMinorTagName) {
-			fullReleaseNotes.push(release.body.trim());
-		}
-	}
-
-	let downloadUrl = null;
-	const platform = process.platform;
-	for (let i = 0; i < release.assets.length; i++) {
-		const asset = release.assets[i];
-		let found = false;
-		const ext = fileExtension(asset.name);
-		if (platform === 'win32' && ext === 'exe') {
-			if (shim.isPortable()) {
-				found = asset.name === 'JoplinPortable.exe';
-			} else {
-				found = !!asset.name.match(/^Joplin-Setup-[\d.]+\.exe$/);
-			}
-		} else if (platform === 'darwin' && ext === 'dmg') {
-			found = true;
-		} else if (platform === 'linux' && ext === '.AppImage') {
-			found = true;
-		}
-
-		if (found) {
-			downloadUrl = asset.browser_download_url.replace('github.com/laurent22/joplin/releases/download', 'objects.joplinusercontent.com');
-			downloadUrl.concat('?source=DesktopApp&type=Update');
-			break;
-		}
-	}
-
-	function cleanUpReleaseNotes(releaseNotes: string[]) {
-		const lines = releaseNotes.join('\n\n* * *\n\n').split('\n');
-		const output = [];
-		for (const line of lines) {
-			const r = line
-				.replace(/\(#.* by .*\)/g, '') // Removes issue numbers and names - (#3157 by [@user](https://github.com/user))
-				.replace(/\([0-9a-z]{7}\)/g, '') // Removes commits - "sync state or data (a6caa35)"
-				.replace(/\(#[0-9]+\)/g, '') // Removes issue numbers - "(#4727)"
-				.replace(/ {2}/g, ' ')
-				.trim();
-
-			output.push(r);
-		}
-		return output.join('\n');
-	}
-
-	return {
-		version: version,
-		downloadUrl: downloadUrl,
-		notes: cleanUpReleaseNotes(fullReleaseNotes),
-		pageUrl: release.html_url,
-		prerelease: release.prerelease,
-	};
+	return (await response.json()) as GitHubRelease[];
 }
 
 function truncateText(text: string, length: number) {
@@ -170,7 +76,8 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 	logger.info(`Checking with options ${JSON.stringify(options)}`);
 
 	try {
-		const release = await fetchLatestRelease(options);
+		const releases = await fetchLatestRelease();
+		const release = extractVersionInfo(releases, process.platform, options);
 
 		logger.info(`Current version: ${packageInfo.version}`);
 		logger.info(`Latest version: ${release.version}`);

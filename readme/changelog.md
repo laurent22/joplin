@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v2.12.4](https://github.com/laurent22/joplin/releases/tag/v2.12.4) (Pre-release) - 2023-07-07T22:36:53Z
+
+
+
 ## [v2.12.3](https://github.com/laurent22/joplin/releases/tag/v2.12.3) (Pre-release) - 2023-07-07T10:16:55Z
 
 - Improved: Build macOS app as Universal binary ([#8423](https://github.com/laurent22/joplin/issues/8423)) ([#6052](https://github.com/laurent22/joplin/issues/6052))

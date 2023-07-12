@@ -252,4 +252,41 @@ describe('MdToHtml', () => {
 			);
 		}
 	}));
+
+	it('should attach source blocks to block KaTeX', async () => {
+		const mdToHtml = newTestMdToHtml();
+
+		const katex = [
+			'3 + 3',
+			'\n\\int_0^1 x dx\n\n',
+			'\n\\int_0^1 x dx\n3 + 3\n',
+			'\n\t2^{3^4}\n\t3 + 3\n',
+			'3\n4',
+		];
+		const surroundingTextChoices = [
+			['', ''],
+			['Test', ''],
+			['Test', 'Test!'],
+			['Test\n\n', '\n\nTest!'],
+		];
+
+		const tests = [];
+		for (const texSource of katex) {
+			for (const [start, end] of surroundingTextChoices) {
+				tests.push([texSource, `${start}\n$$${texSource}$$\n${end}`]);
+			}
+		}
+
+		for (const [tex, input] of tests) {
+			const html = await mdToHtml.render(input, null, { bodyOnly: true });
+
+			const opening = '<pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
+			const closing = '</pre>';
+
+			// Remove any single leading and trailing newlines, those are included in data-joplin-source-open
+			// and data-joplin-source-close.
+			const trimmedTex = tex.replace(/^[\n]/, '').replace(/[\n]$/, '');
+			expect(html.html).toContain(opening + trimmedTex + closing);
+		}
+	});
 });
