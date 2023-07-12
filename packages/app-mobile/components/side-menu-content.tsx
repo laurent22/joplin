@@ -35,6 +35,7 @@ interface Props {
 	folders: FolderEntity[];
 	opacity: number;
 	profileConfig: ProfileConfig;
+	inboxJopId: string;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -136,6 +137,31 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
+		const generateFolderDeletion = () => {
+			const folderDeletion = (message: string) => {
+				Alert.alert('', message, [
+					{
+						text: _('OK'),
+						onPress: () => {
+							void Folder.delete(folder.id);
+						},
+					},
+					{
+						text: _('Cancel'),
+						onPress: () => { },
+						style: 'cancel',
+					},
+				]);
+			};
+
+			if (folder.id === props.inboxJopId) {
+				return folderDeletion(
+					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.')
+				);
+			}
+			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
+		};
+
 		Alert.alert(
 			'',
 			_('Notebook: %s', folder.title),
@@ -154,21 +180,7 @@ const SideMenuContentComponent = (props: Props) => {
 				},
 				{
 					text: _('Delete'),
-					onPress: () => {
-						Alert.alert('', _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title), [
-							{
-								text: _('OK'),
-								onPress: () => {
-									void Folder.delete(folder.id);
-								},
-							},
-							{
-								text: _('Cancel'),
-								onPress: () => {},
-								style: 'cancel',
-							},
-						]);
-					},
+					onPress: generateFolderDeletion,
 					style: 'destructive',
 				},
 				{
@@ -516,5 +528,6 @@ export default connect((state: AppState) => {
 		isOnMobileData: state.isOnMobileData,
 		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
 		profileConfig: state.profileConfig,
+		inboxJopId: state.settings['emailToNote.inboxJopId'],
 	};
 })(SideMenuContentComponent);
