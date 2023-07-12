@@ -54,7 +54,7 @@ const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: 
 	const format = metadata.format.split('_')[0];
 	const label = [`${format.toUpperCase()} - ${metadata.description}`];
 	if (moduleSource && metadata.type === ModuleType.Importer && metadata.sources.length > 1) {
-		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
+		label.push(`(${moduleSource === FileSystemItem.File ? _('File') : _('Directory')})`);
 	}
 	return label.join(' ');
 };
