@@ -60,5 +60,13 @@ jobs:
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
           else
             echo "Building but *not* publishing desktop application..."
+
+            # We also want to disable signing the app in this case, because
+            # it doesn't work and we don't need it.
+            # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+
+            export CSC_IDENTITY_AUTO_DISCOVERY=false
+            npm pkg set 'build.mac.indentify'=null --json
+            
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
           fi
