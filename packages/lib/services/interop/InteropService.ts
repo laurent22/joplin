@@ -12,16 +12,13 @@ import InteropService_Importer_Jex from './InteropService_Importer_Jex';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import InteropService_Importer_Md_frontmatter from './InteropService_Importer_Md_frontmatter';
 import InteropService_Importer_Raw from './InteropService_Importer_Raw';
-import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd';
-import InteropService_Importer_EnexToHtml from './InteropService_Importer_EnexToHtml';
 import InteropService_Exporter_Jex from './InteropService_Exporter_Jex';
 import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
 import InteropService_Exporter_Md_frontmatter from './InteropService_Exporter_Md_frontmatter';
-import InteropService_Exporter_Html from './InteropService_Exporter_Html';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import Module, { makeExportModule, makeImportModule } from './Module';
+import Module, { dynamicRequireModuleFactory, makeExportModule, makeImportModule } from './Module';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const EventEmitter = require('events');
@@ -89,19 +86,18 @@ export default class InteropService {
 					fileExtensions: ['enex'],
 					sources: [FileSystemItem.File],
 					description: _('Evernote Export File (as Markdown)'),
-					importerClass: 'InteropService_Importer_EnexToMd',
+					supportsMobile: false,
 					isDefault: true,
-				}, () => new InteropService_Importer_EnexToMd()),
+				}, dynamicRequireModuleFactory('InteropService_Importer_EnexToMd')),
 
 				makeImportModule({
 					format: 'enex',
 					fileExtensions: ['enex'],
 					sources: [FileSystemItem.File],
 					description: _('Evernote Export File (as HTML)'),
-					// TODO: Consider doing this the same way as the multiple `md` importers are handled
-					importerClass: 'InteropService_Importer_EnexToHtml',
+					supportsMobile: false,
 					outputFormat: ImportModuleOutputFormat.Html,
-				}, () => new InteropService_Importer_EnexToHtml()),
+				}, dynamicRequireModuleFactory('InteropService_Importer_EnexToHtml')),
 			];
 
 			const exportModules = [
@@ -136,13 +132,15 @@ export default class InteropService {
 					target: FileSystemItem.File,
 					isNoteArchive: false,
 					description: _('HTML File'),
-				}, () => new InteropService_Exporter_Html()),
+					supportsMobile: false,
+				}, dynamicRequireModuleFactory('InteropService_Exporter_Html')),
 
 				makeExportModule({
 					format: 'html',
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory'),
-				}, () => new InteropService_Exporter_Html()),
+					supportsMobile: false,
+				}, dynamicRequireModuleFactory('InteropService_Exporter_Html')),
 			];
 
 			this.defaultModules_ = (importModules as Module[]).concat(exportModules);
@@ -164,8 +162,15 @@ export default class InteropService {
 	private findModuleByFormat_(type: ModuleType, format: string, target: FileSystemItem = null, outputFormat: ImportModuleOutputFormat = null) {
 		const modules = this.modules();
 		const matches = [];
+
+		const isMobile = shim.mobilePlatform() !== '';
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
+
+			if (!m.supportsMobile && isMobile) {
+				continue;
+			}
+
 			if (m.format === format && m.type === type) {
 				if (!target && !outputFormat) {
 					matches.push(m);
