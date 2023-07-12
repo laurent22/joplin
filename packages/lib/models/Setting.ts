@@ -1709,6 +1709,8 @@ class Setting extends BaseModel {
 				section: 'note',
 			},
 
+			'emailToNote.inboxJopId': { value: '', type: SettingItemType.String, public: false },
+
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
