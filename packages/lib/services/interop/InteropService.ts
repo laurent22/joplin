@@ -1,4 +1,4 @@
-import { ModuleType, FileSystemItem, ImportModuleOutputFormat, Module, ImportOptions, ExportOptions, ImportExportResult, defaultImportExportModule, ImportModule, ExportModule, defaultImportModule } from './types';
+import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult } from './types';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import BaseItem from '../../models/BaseItem';
@@ -21,15 +21,17 @@ import InteropService_Exporter_Md_frontmatter from './InteropService_Exporter_Md
 import InteropService_Exporter_Html from './InteropService_Exporter_Html';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import ImporterExporterFactory, { ImporterFactory } from './ImporterExporterFactory';
+import Module, { ExportModule, ImportModule } from './Module';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const EventEmitter = require('events');
 
+type ModuleList = Array<ImportModule|ExportModule>;
+
 export default class InteropService {
 
-	private defaultModules_: Module[];
-	private userModules_: Module[] = [];
+	private defaultModules_: ModuleList;
+	private userModules_: ModuleList = [];
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
 
@@ -54,65 +56,46 @@ export default class InteropService {
 
 	public modules() {
 		if (!this.defaultModules_) {
-			const importModules: ImporterFactory[] = [
-				new ImporterExporterFactory(, () => new InteropService_Importer_Jex()),
-				{
-					type: ModuleType.Importer,
-					...defaultImportModule,
+			const importModules = [
+				Module.fromImporter({
 					format: 'jex',
-					outputFormat: ImportModuleOutputFormat.Html,
 					fileExtensions: ['jex'],
 					sources: [FileSystemItem.File],
 					description: _('Joplin Export File'),
+				}, () => new InteropService_Importer_Jex()),
 
-					factory: () => new InteropService_Importer_Jex(),
-				},
-				{
-					type: ModuleType.Importer,
-					...defaultImportModule,
+				Module.fromImporter({
 					format: 'md',
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('Markdown'),
+				}, () => new InteropService_Importer_Md()),
 
-					factory: () => new InteropService_Importer_Md(),
-				},
-				{
-					type: ModuleType.Importer,
-					...defaultImportModule,
+				Module.fromImporter({
 					format: 'md_frontmatter',
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('Markdown + Front Matter'),
+				}, () => new InteropService_Importer_Md_frontmatter()),
 
-					factory: () => new InteropService_Importer_Md_frontmatter(),
-				},
-				{
-					type: ModuleType.Importer,
-					...defaultImportModule,
+				Module.fromImporter({
 					format: 'raw',
 					sources: [FileSystemItem.Directory],
 					description: _('Joplin Export Directory'),
+				}, () => new InteropService_Importer_Raw()),
 
-					factory: () => new InteropService_Importer_Raw(),
-				},
-				{
-					type: ModuleType.Importer,
-					...defaultImportModule,
+				Module.fromImporter({
 					format: 'enex',
 					fileExtensions: ['enex'],
 					sources: [FileSystemItem.File],
 					description: _('Evernote Export File (as Markdown)'),
 					importerClass: 'InteropService_Importer_EnexToMd',
 					isDefault: true,
+				}, () => new InteropService_Importer_EnexToMd()),
 
-					factory: () => new InteropService_Importer_EnexToMd(),
-				},
-				{
-					type: ModuleType.Importer,
-					...defaultImportModule,
+				Module.fromImporter({
 					format: 'enex',
 					fileExtensions: ['enex'],
 					sources: [FileSystemItem.File],
@@ -120,89 +103,57 @@ export default class InteropService {
 					// TODO: Consider doing this the same way as the multiple `md` importers are handled
 					importerClass: 'InteropService_Importer_EnexToHtml',
 					outputFormat: ImportModuleOutputFormat.Html,
-
-					factory: () => new InteropService_Importer_EnexToHtml(),
-				},
+				}, () => new InteropService_Importer_EnexToHtml()),
 			];
 
-			const exportModules: ExportModule[] = [
-				{
-					type: ModuleType.Exporter,
-					...defaultImportExportModule,
-
+			const exportModules = [
+				Module.fromExporter({
 					format: 'jex',
 					fileExtensions: ['jex'],
 					target: FileSystemItem.File,
 					description: _('Joplin Export File'),
-
-					factory: () => new InteropService_Exporter_Jex(),
-				},
-				{
-					type: ModuleType.Exporter,
-					...defaultImportExportModule,
-
+				}, () => new InteropService_Exporter_Jex()),
+				
+				Module.fromExporter({
 					format: 'raw',
 					target: FileSystemItem.Directory,
 					description: _('Joplin Export Directory'),
+				}, () => new InteropService_Exporter_Raw()),
 
-					factory: () => new InteropService_Exporter_Raw(),
-				},
-				{
-					type: ModuleType.Exporter,
-					...defaultImportExportModule,
-
+				Module.fromExporter({
 					format: 'md',
 					target: FileSystemItem.Directory,
 					description: _('Markdown'),
+				}, () => new InteropService_Exporter_Md()),
 
-					factory: () => new InteropService_Exporter_Md(),
-				},
-				{
-					type: ModuleType.Exporter,
-					...defaultImportExportModule,
-
+				Module.fromExporter({
 					format: 'md_frontmatter',
 					target: FileSystemItem.Directory,
 					description: _('Markdown + Front Matter'),
+				}, () => new InteropService_Exporter_Md_frontmatter()),
 
-					factory: () => new InteropService_Exporter_Md_frontmatter(),
-				},
-				{
-					type: ModuleType.Exporter,
-					...defaultImportExportModule,
-
+				Module.fromExporter({
 					format: 'html',
 					fileExtensions: ['html', 'htm'],
 					target: FileSystemItem.File,
 					isNoteArchive: false,
 					description: _('HTML File'),
+				}, () => new InteropService_Exporter_Html()),
 
-					factory: () => new InteropService_Exporter_Html(),
-				},
-				{
-					type: ModuleType.Exporter,
-					...defaultImportExportModule,
-
+				Module.fromExporter({
 					format: 'html',
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory'),
-
-					factory: () => new InteropService_Exporter_Html(),
-				},
+				}, () => new InteropService_Exporter_Html()),
 			];
 
-			this.defaultModules_ = (importModules as Module[]).concat(exportModules);
+			this.defaultModules_ = (importModules as ModuleList).concat(exportModules);
 		}
 
 		return this.defaultModules_.concat(this.userModules_);
 	}
 
-	public registerModule(module: Module) {
-		module = {
-			...defaultImportExportModule,
-			...module,
-		};
-
+	public registerModule(module: ImportModule|ExportModule) {
 		this.userModules_.push(module);
 		this.eventEmitter_.emit('modulesChanged');
 	}
@@ -238,24 +189,16 @@ export default class InteropService {
 		return matches.length ? matches[0] : null;
 	}
 
-	private moduleFromMetadata(metadata: Module, options?: any) {
-		const outputMetadata = {...metadata, ...(options ?? {}) };
-
-		const output = metadata.factory();
-		output.setMetadata(outputMetadata);
-		return output;
-	}
-
 	// NOTE TO FUTURE SELF: It might make sense to simply move all the existing
 	// formatters to the `newModuleFromPath_` approach, so that there's only one way
 	// to do this mapping. This isn't a priority right now (per the convo in:
 	// https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
 	// we can do it if it ever becomes necessary.
 	private newModuleByFormat_(type: ModuleType, format: string, outputFormat: ImportModuleOutputFormat = ImportModuleOutputFormat.Markdown) {
-		const moduleMetadata = this.findModuleByFormat_(type, format, null, outputFormat);
-		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
+		const module = this.findModuleByFormat_(type, format, null, outputFormat);
+		if (!module) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
 
-		return this.moduleFromMetadata(moduleMetadata);
+		return module.createInstance();
 	}
 
 	// The existing `newModuleByFormat_` fn would load by the input format. This
@@ -268,7 +211,7 @@ export default class InteropService {
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 
-		return this.moduleFromMetadata(moduleMetadata, options);
+		return moduleMetadata.createInstance(options);
 	}
 
 	private moduleByFileExtension_(type: ModuleType, ext: string) {
@@ -279,7 +222,7 @@ export default class InteropService {
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (type !== m.type) continue;
-			if (m.fileExtensions && m.fileExtensions.indexOf(ext) >= 0) return m;
+			if (m.supportsFileExtension(ext)) return m;
 		}
 
 		return null;
@@ -298,14 +241,12 @@ export default class InteropService {
 		if (options.format === 'auto') {
 			const module = this.moduleByFileExtension_(ModuleType.Importer, fileExtension(options.path));
 			if (!module) throw new Error(_('Please specify import format for %s', options.path));
-			// eslint-disable-next-line require-atomic-updates
-			options.format = module.format;
+			options.format = module.metadata.format;
 		}
 
 		if (options.destinationFolderId) {
 			const folder = await Folder.load(options.destinationFolderId);
 			if (!folder) throw new Error(_('Cannot find "%s".', options.destinationFolderId));
-			// eslint-disable-next-line require-atomic-updates
 			options.destinationFolder = folder;
 		}
 
