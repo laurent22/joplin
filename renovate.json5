@@ -112,6 +112,9 @@
 		"org.robolectric:robolectric",
 		"react-native",
 
+		// Lacks automated tests and updates have previously broken the app
+		"react-native-reanimated",
+
 		// Need special processing when upgrading
 		"katex",
 		"mermaid",
