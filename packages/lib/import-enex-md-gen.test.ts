@@ -22,7 +22,6 @@ describe('import-enex-md-gen', () => {
 
 	it('should convert ENEX content to Markdown', async () => {
 		const files = await shim.fsDriver().readDirStats(enexSampleBaseDir);
-
 		for (let i = 0; i < files.length; i++) {
 			const htmlFilename = files[i].path;
 			if (htmlFilename.indexOf('.html') < 0) continue;
@@ -106,6 +105,14 @@ describe('import-enex-md-gen', () => {
 		const all = await Resource.all();
 		expect(all.length).toBe(1);
 		expect(all[0].size).toBe(0);
+	});
+
+	it('should handle tasks', async () => {
+		const filePath = `${enexSampleBaseDir}/tasks.enex`;
+		await importEnex('', filePath);
+		const expectedMd = await shim.fsDriver().readFile(`${enexSampleBaseDir}/tasks.md`);
+		const note: NoteEntity = (await Note.all())[0];
+		expect(note.body).toEqual(expectedMd);
 	});
 
 	it('should handle empty note content', async () => {
