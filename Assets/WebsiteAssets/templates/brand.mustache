@@ -122,7 +122,6 @@
 						<div class="info">
 							<p class="joplin__para">Dark blue</p>
 							<p class="joplin__para">HEX - 043873</p>
-							<p class="joplin__para">RGB - 4, 56, 115</p>
 						</div>
 					</div>
 					<div class="circle-wrapper">
@@ -130,7 +129,6 @@
 						<div class="info">
 							<p class="joplin__para">White</p>
 							<p class="joplin__para">HEX - FFFFFF</p>
-							<p class="joplin__para">RGB - 255, 255,</p>
 						</div>
 					</div>
 					<div class="circle-wrapper">
@@ -138,7 +136,6 @@
 						<div class="info">
 							<p class="joplin__para">Dark gray</p>
 							<p class="joplin__para">HEX - 32363F</p>
-							<p class="joplin__para">RGB - 50, 54, 63</p>
 						</div>
 					</div>
 				</div>
@@ -152,7 +149,6 @@
 						<div class="info">
 							<p class="joplin__para">Light blue</p>
 							<p class="joplin__para">HEX - 4F9CF9</p>
-							<p class="joplin__para">RGB - 79, 156, 249</p>
 						</div>
 					</div>
 					<div class="circle-wrapper">
@@ -160,7 +156,6 @@
 						<div class="info">
 							<p class="joplin__para">Yellow</p>
 							<p class="joplin__para">HEX - FFE492</p>
-							<p class="joplin__para">RGB - 255, 228, 146</p>
 						</div>
 					</div>
 				</div>
@@ -181,7 +176,6 @@
 						<div class="info">
 							<p class="joplin__para">Variant dark</p>
 							<p class="joplin__para">HEX - 072445</p>
-							<p class="joplin__para">RGB - 7, 36, 69</p>
 						</div>
 					</div>
 					<div class="circle-wrapper">
@@ -189,7 +183,6 @@
 						<div class="info">
 							<p class="joplin__para">Variant white</p>
 							<p class="joplin__para">HEX - F8F9FA</p>
-							<p class="joplin__para">RGB - 248, 249,</p>
 						</div>
 					</div>
 					<div class="circle-wrapper">
@@ -197,7 +190,6 @@
 						<div class="info">
 							<p class="joplin__para">Variant dark gray</p>
 							<p class="joplin__para">HEX - 212529</p>
-							<p class="joplin__para">RGB - 33, 37, 41</p>
 						</div>
 					</div>
 				</div>
@@ -213,8 +205,7 @@
 						<div class="circle variant-light-blue"></div>
 						<div class="info">
 							<p class="joplin__para">Variant light blue</p>
-							<p class="joplin__para">HEX - D9E8F8</p>
-							<p class="joplin__para">RGB - 217, 232,</p>
+							<p class="joplin__para">HEX - F7FBFF</p>
 						</div>
 					</div>
 				</div>
@@ -328,13 +319,14 @@ const ctx = document.getElementById("chart1");
 const myChart = new Chart(ctx, {
   type: "pie",
   data: {
-    labels: ["Dark blue 60%", "White 20%", "light blue 10%", "yellow 7%", "dark gray 3%"],
+    labels: ["Dark blue 40%", "Gray 20%", "White 20%", "Light blue 10%", "Yellow 7%", "Dark gray 3%"],
     datasets: [
       {
         label: "# of Votes",
-        data: [60, 20, 10, 7, 3],
+        data: [40, 20, 20, 10, 7, 3],
         backgroundColor: [
           "#043873",
+          "#f7fbff",
           "#ffffff",
           "#4f9cf9",
           "#ffe492",
@@ -345,6 +337,11 @@ const myChart = new Chart(ctx, {
   },
   options: {
     layout: {},
+	elements: {
+        arc: {
+            borderColor: '#cccccc',
+        }
+    },
     plugins: {
       title: {
         display: true,
@@ -361,13 +358,14 @@ const ctx2 = document.getElementById("chart2");
 const myChart2 = new Chart(ctx2, {
   type: "pie",
   data: {
-    labels: ["White 60%", "Dark 20%", "light blue 10%", "dark gray 7%", "yellow 3%"],
+    labels: ["White 40%", "Gray 20%", "Dark blue 20%", "Light blue 10%", "Dark gray 7%", "Yellow 3%"],
     datasets: [
       {
         label: "# of Votes",
-        data: [60, 20, 10, 7, 3],
+        data: [40, 20, 20, 10, 7, 3],
         backgroundColor: [
           "#ffffff",
+          "#f7fbff",
           "#043873",
           "#4f9cf9",
           "#212529",
@@ -378,6 +376,11 @@ const myChart2 = new Chart(ctx2, {
   },
   options: {
     layout: {},
+	elements: {
+        arc: {
+            borderColor: '#cccccc',
+        }
+    },
     plugins: {
       title: {
         display: true,

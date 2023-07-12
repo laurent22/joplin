@@ -1,7 +1,8 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/interop/types';
+import { ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModule } from '@joplin/lib/services/interop/Module';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -152,7 +153,7 @@ export default class InteropServiceHelper {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static async export(_dispatch: Function, module: Module, options: ExportNoteOptions = null) {
+	public static async export(_dispatch: Function, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;
