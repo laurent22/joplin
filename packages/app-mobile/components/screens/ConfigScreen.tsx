@@ -24,6 +24,7 @@ const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
 import biometricAuthenticate from '../biometrics/biometricAuthenticate';
+import Clipboard from '@react-native-community/clipboard';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	public static navigationOptions(): any {
@@ -361,7 +362,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return false;
 	};
 
-	public componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
 			setTimeout(() => {
 				this.scrollViewRef_.current.scrollTo({
@@ -373,10 +374,24 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		BackButtonService.addHandler(this.handleBackButtonPress);
+		await this.loadInboxEmail();
 	}
 
 	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
+	}
+
+	private async loadInboxEmail() {
+		if (this.props.settings['emailToNote.inboxEmail'] !== '') return;
+		if (this.props.settings['sync.target'] !== SyncTargetRegistry.nameToId('joplinCloud')) return;
+
+		const syncTarget = reg.syncTarget();
+		const fileApi = await syncTarget.fileApi();
+		const api = fileApi.driver().api();
+
+		const owner = await api.exec('GET', `api/users/${api.userId}`);
+
+		Setting.setValue('emailToNote.inboxEmail', owner.inbox_email);
 	}
 
 	public renderHeader(key: string, title: string) {
@@ -445,6 +460,26 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		if (section.name === 'sync') {
 			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
+		}
+
+		if (section.name === 'joplinCloud') {
+			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
+			settingComps.push(
+				<View key="joplinCloud">
+					<View style={this.styles().settingContainerNoBottomBorder}>
+						<Text style={this.styles().settingText}>{_('Email to note')}</Text>
+						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['emailToNote.inboxEmail']}</Text>
+					</View>
+					{
+						this.renderButton(
+							'emailToNote.inboxEmail',
+							_('Copy to clipboard'),
+							() => Clipboard.setString(this.props.settings['emailToNote.inboxEmail']),
+							{ description }
+						)
+					}
+				</View>
+			);
 		}
 
 		if (!settingComps.length) return null;
