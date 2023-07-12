@@ -1,7 +1,10 @@
 /* eslint-disable multiline-comment-style */
 
 import InteropService from '../../interop/InteropService';
-import { Module, ModuleType } from '../../interop/types';
+import InteropService_Exporter_Custom from '../../interop/InteropService_Exporter_Custom';
+import InteropService_Importer_Custom from '../../interop/InteropService_Importer_Custom';
+import { makeExportModule, makeImportModule } from '../../interop/Module';
+import { ModuleType } from '../../interop/types';
 import { ExportModule, ImportModule } from './types';
 
 /**
@@ -19,23 +22,23 @@ import { ExportModule, ImportModule } from './types';
 export default class JoplinInterop {
 
 	public async registerExportModule(module: ExportModule) {
-		const internalModule: Module = {
+		const internalModule = makeExportModule({
 			...module,
 			type: ModuleType.Exporter,
-			isCustom: true,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
-		};
+		}, () => new InteropService_Exporter_Custom(module));
 
 		return InteropService.instance().registerModule(internalModule);
 	}
 
 	public async registerImportModule(module: ImportModule) {
-		const internalModule: Module = {
+		const internalModule = makeImportModule({
 			...module,
 			type: ModuleType.Importer,
-			isCustom: true,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
-		};
+		}, () => {
+			return new InteropService_Importer_Custom(module);
+		});
 
 		return InteropService.instance().registerModule(internalModule);
 	}

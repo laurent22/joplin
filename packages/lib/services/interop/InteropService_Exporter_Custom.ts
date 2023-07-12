@@ -1,13 +1,20 @@
 import { ExportContext } from '../plugins/api/types';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import { ExportOptions, Module } from './types';
+import { ExportOptions } from './types';
+
+interface CustomImporter {
+	onInit(context: any): Promise<void>;
+	onProcessItem(context: any, itemType: number, item: any): Promise<void>;
+	onProcessResource(context: any, resource: any, filePath: string): Promise<void>;
+	onClose(context: any): Promise<void>;
+}
 
 export default class InteropService_Exporter_Custom extends InteropService_Exporter_Base {
 
 	private customContext_: ExportContext;
-	private module_: Module = null;
+	private module_: CustomImporter = null;
 
-	public constructor(module: Module) {
+	public constructor(module: CustomImporter) {
 		super();
 		this.module_ = module;
 	}
