@@ -52,7 +52,6 @@ export interface ImportExportResult {
 	warnings: string[];
 }
 
-
 // These are the fields that will be included in an exported Md+Front Matter note
 export interface MdFrontMatterExport {
 	'title'?: string;

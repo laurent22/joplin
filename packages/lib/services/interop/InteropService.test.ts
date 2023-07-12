@@ -1,5 +1,5 @@
 import InteropService from '../../services/interop/InteropService';
-import { CustomExportContext, CustomImportContext, ImportModuleOutputFormat, ModuleType } from '../../services/interop/types';
+import { CustomExportContext, CustomImportContext, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
 import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
@@ -52,7 +52,6 @@ function memoryExportModule() {
 
 	const module: Module = makeExportModule({
 		description: 'Memory Export Module',
-		fullLabel: () => 'Export module',
 		format: 'memory',
 		fileExtensions: ['memory'],
 	}, () => {
@@ -562,8 +561,6 @@ describe('services_InteropService', () => {
 		const module = makeImportModule({
 			type: ModuleType.Importer,
 			description: 'Test Import Module',
-			fullLabel: () => 'Test module',
-			outputFormat: ImportModuleOutputFormat.Markdown,
 			format: 'testing',
 			fileExtensions: ['test'],
 		}, () => {
@@ -606,7 +603,6 @@ describe('services_InteropService', () => {
 		const module: Module = makeExportModule({
 			type: ModuleType.Exporter,
 			description: 'Test Export Module',
-			fullLabel: () => 'Test export module',
 			format: 'testing',
 			fileExtensions: ['test'],
 		}, () => {

@@ -25,7 +25,6 @@ export default class JoplinInterop {
 		const internalModule = makeExportModule({
 			...module,
 			type: ModuleType.Exporter,
-			fullLabel: () => module.description,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
 		}, () => new InteropService_Exporter_Custom(module));
 
@@ -36,7 +35,6 @@ export default class JoplinInterop {
 		const internalModule = makeImportModule({
 			...module,
 			type: ModuleType.Importer,
-			fullLabel: () => module.description,
 			fileExtensions: module.fileExtensions ? module.fileExtensions : [],
 		}, () => {
 			return new InteropService_Importer_Custom(module);
@@ -44,4 +42,5 @@ export default class JoplinInterop {
 
 		return InteropService.instance().registerModule(internalModule);
 	}
+
 }

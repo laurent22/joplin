@@ -21,17 +21,15 @@ import InteropService_Exporter_Md_frontmatter from './InteropService_Exporter_Md
 import InteropService_Exporter_Html from './InteropService_Exporter_Html';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import { ExportModule, ImportModule, makeExportModule, makeImportModule } from './Module';
+import Module, { makeExportModule, makeImportModule } from './Module';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const EventEmitter = require('events');
 
-type ModuleList = (ImportModule|ExportModule)[];
-
 export default class InteropService {
 
-	private defaultModules_: ModuleList;
-	private userModules_: ModuleList = [];
+	private defaultModules_: Module[];
+	private userModules_: Module[] = [];
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
 
@@ -147,13 +145,13 @@ export default class InteropService {
 				}, () => new InteropService_Exporter_Html()),
 			];
 
-			this.defaultModules_ = (importModules as ModuleList).concat(exportModules);
+			this.defaultModules_ = (importModules as Module[]).concat(exportModules);
 		}
 
 		return this.defaultModules_.concat(this.userModules_);
 	}
 
-	public registerModule(module: ImportModule|ExportModule) {
+	public registerModule(module: Module) {
 		this.userModules_.push(module);
 		this.eventEmitter_.emit('modulesChanged');
 	}
@@ -195,10 +193,10 @@ export default class InteropService {
 	// https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
 	// we can do it if it ever becomes necessary.
 	private newModuleByFormat_(type: ModuleType, format: string, outputFormat: ImportModuleOutputFormat = ImportModuleOutputFormat.Markdown) {
-		const module = this.findModuleByFormat_(type, format, null, outputFormat);
-		if (!module) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
+		const moduleMetadata = this.findModuleByFormat_(type, format, null, outputFormat);
+		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
 
-		return module.factory();
+		return moduleMetadata.factory();
 	}
 
 	// The existing `newModuleByFormat_` fn would load by the input format. This
