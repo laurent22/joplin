@@ -638,6 +638,8 @@ packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Raw.js
 packages/lib/services/interop/InteropService_Importer_Raw.test.js
+packages/lib/services/interop/Module.js
+packages/lib/services/interop/Module.test.js
 packages/lib/services/interop/types.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.js
