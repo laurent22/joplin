@@ -2,14 +2,14 @@
 
 import Setting from '../../models/Setting';
 
-export default abstract class InteropService_Exporter_Base {
+export default class InteropService_Exporter_Base {
 	private context_: any = {};
 	private metadata_: any = {};
 
-	public abstract init(destDir: string, options?: any): Promise<void>;
+	public async init(_destDir: string, _options: any = {}) {}
 	public async prepareForProcessingItemType(_itemType: number, _itemsToExport: any[]) {}
-	public abstract processItem(itemType: number, item: any): Promise<void>;
-	public abstract processResource(resource: any, filePath: string): Promise<void>;
+	public async processItem(_itemType: number, _item: any) {}
+	public async processResource(_resource: any, _filePath: string) {}
 	public async close() {}
 
 	public setMetadata(md: any) {
