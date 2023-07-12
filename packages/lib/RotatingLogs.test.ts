@@ -1,12 +1,10 @@
-import { open, close, write, readdir, rm } from 'fs-extra';
-import { createTempDir } from './testing/test-utils';
+import { open, close, writeFile, readdir, rm } from 'fs-extra';
+import { createTempDir, msleep } from './testing/test-utils';
 import RotatingLogs from './RotatingLogs';
 
-jest.useFakeTimers();
-
-const createEmptyFileOfSize = async (fileName: string, size: number) => {
+const createTestFile = async (fileName: string) => {
 	const fd = await open(fileName, 'w');
-	await write(fd, 'test', size);
+	await writeFile(fd, 'some content');
 	await close(fd);
 };
 
@@ -17,8 +15,8 @@ describe('RotatingLogs', () => {
 
 	beforeEach(async () => {
 		dir = await createTempDir();
-		rotatingLogs = new RotatingLogs(dir, 1024, 1000);
-		await createEmptyFileOfSize(`${dir}/log.txt`, 1024);
+		rotatingLogs = new RotatingLogs(dir, 1, 1);
+		await createTestFile(`${dir}/log.txt`);
 	});
 
 	afterEach(async () => {
@@ -38,14 +36,13 @@ describe('RotatingLogs', () => {
 		expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeTruthy();
 	});
 
-	test('should delete inactive log file older than 1 second', async () => {
+	test('should delete inactive log file older than 1ms', async () => {
 		await rotatingLogs.cleanActiveLogFile();
 		files = await readdir(dir);
 		expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeTruthy();
-		setTimeout(async () => {
-			await rotatingLogs.deleteNonActiveLogFiles();
-			files = await readdir(dir);
-			expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeFalsy();
-		}, 1000);
+		await msleep(2);
+		await rotatingLogs.deleteNonActiveLogFiles();
+		files = await readdir(dir);
+		expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeFalsy();
 	});
 });
