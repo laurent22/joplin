@@ -6,14 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: wh201906 <wh201906@yandex.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -124,9 +126,8 @@ msgstr "有 %d 条笔记匹配。是否删除？"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:254
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:263
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:61
 msgid "%s - Copy"
@@ -274,9 +275,8 @@ msgid "Add body"
 msgstr "添加内容"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
-#, fuzzy
 msgid "Add new"
-msgstr "添加标题"
+msgstr "新增"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -377,7 +377,7 @@ msgstr "确定要更新授权令牌吗？"
 msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
-msgstr ""
+msgstr "确定要返回到默认布局吗？当前布局配置将丢失。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:501
 msgid "Arguments:"
@@ -488,6 +488,8 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"设备上未设置生物识别解锁。请设置它以解锁Joplin。如果设备处于锁定状态，请考虑"
+"将其关闭和打开以重置生物特征扫描。"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -508,7 +510,6 @@ msgid "Bulleted List"
 msgstr "无序列表"
 
 #: packages/server/src/routes/admin/users.ts:154
-#, fuzzy
 msgid "Can Share"
 msgstr "分享"
 
@@ -592,9 +593,8 @@ msgid "Cannot find \"%s\"."
 msgstr "无法找到 “%s”。"
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "无法找到 “%s”。"
+msgstr "无法找到 “%s”"
 
 #: packages/app-cli/app/command-sync.ts:164
 msgid "Cannot initialise synchroniser."
@@ -730,9 +730,8 @@ msgid "Close"
 msgstr "关闭"
 
 #: packages/app-mobile/components/Dropdown.tsx:156
-#, fuzzy
 msgid "Close dropdown"
-msgstr "关闭窗口"
+msgstr "关闭下拉列表"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:596
@@ -860,9 +859,8 @@ msgid "Convert to todo"
 msgstr "转换为待办事项"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "转换为笔记"
+msgstr "正在将语音转换为文本..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -970,18 +968,16 @@ msgid ""
 msgstr "无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "无法验证您的身份"
+msgstr "无法验证您的身份: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:276
 msgid "Create"
 msgstr "创建"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "新建笔记本。"
+msgstr "在父笔记本下创建新笔记本。"
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1010,15 +1006,15 @@ msgstr "创建日期"
 
 #: packages/lib/Synchronizer.ts:182
 msgid "Created local items: %d."
-msgstr "已新建本地项目：%d。"
+msgstr "已新建本地条目：%d。"
 
 #: packages/lib/services/ReportService.ts:246
 msgid "Created locally"
-msgstr "已新建本地项目"
+msgstr "已新建本地条目"
 
 #: packages/lib/Synchronizer.ts:184
 msgid "Created remote items: %d."
-msgstr "已新建远程项目：%d。"
+msgstr "已新建远程条目：%d。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Created: "
@@ -1222,11 +1218,11 @@ msgstr "是否删除此配置文件？"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
-msgstr "已删除本地项目：%d。"
+msgstr "已删除本地条目：%d。"
 
 #: packages/lib/Synchronizer.ts:187
 msgid "Deleted remote items: %d."
-msgstr "已删除远程项目：%d。"
+msgstr "已删除远程条目：%d。"
 
 #: packages/app-cli/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
@@ -1314,7 +1310,7 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"仅显示指定类型的项目。可以把 `n` 用于笔记，`t` 用于待办事项，或者 `nt` 用于笔"
+"仅显示指定类型的条目。可以把 `n` 用于笔记，`t` 用于待办事项，或者 `nt` 用于笔"
 "记和待办事项（示例：`-tt` 只会显示待办事项，当使用 `-tnt` 时将会显示笔记和待"
 "办事项。）"
 
@@ -1392,9 +1388,8 @@ msgid "Downloading"
 msgstr "下载中"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "下载资源中..."
+msgstr "下载%s语言文件中..."
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -1557,7 +1552,7 @@ msgstr "启用音频播放器"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:81
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "启用生物特征验证？"
 
 #: packages/lib/models/Setting.ts:1159
 msgid "Enable deflist syntax"
@@ -1610,16 +1605,15 @@ msgstr "启用软换行"
 
 #: packages/lib/models/Setting.ts:1050
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "在文本编辑器中启用拼写检查"
 
 #: packages/lib/models/Setting.ts:1156
 msgid "Enable table of contents extension"
 msgstr "启用目录扩展 （[TOC]）"
 
 #: packages/lib/models/Setting.ts:1061
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "启用 Markdown Emoji"
+msgstr "启用“标记”工具栏"
 
 #: packages/lib/models/Setting.ts:1144
 msgid "Enable typographer support"
@@ -1811,7 +1805,7 @@ msgstr "特性标志"
 
 #: packages/lib/Synchronizer.ts:188
 msgid "Fetched items: %d/%d."
-msgstr "已获取项目：%d/%d."
+msgstr "已获取条目：%d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:754
 #: packages/app-mobile/components/side-menu-content.tsx:431
@@ -1836,7 +1830,7 @@ msgstr "查找和替换"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 msgid "Find: "
-msgstr "查找："
+msgstr "查找： "
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
@@ -1920,9 +1914,8 @@ msgid "Full changelog"
 msgstr "完整更新记录"
 
 #: packages/server/src/routes/admin/users.ts:130
-#, fuzzy
 msgid "Full name"
-msgstr "完整更新记录"
+msgstr "完整名称"
 
 #: packages/lib/models/Setting.ts:2510
 #: packages/server/src/services/MustacheService.ts:109
@@ -1985,9 +1978,8 @@ msgid "Help"
 msgstr "帮助"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:759
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS 已开启：%d"
+msgstr "已启用Hermes：%d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
@@ -2105,7 +2097,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "在任何命令中，某个笔记或笔记本可通过它的名称或 ID 引用，也可使用代表当前所选"
-"笔记和笔记本的快捷变量 ‘$n' 和 '$b'。`$c` 可用于引用当前所选的项目。"
+"笔记和笔记本的快捷变量 ‘$n' 和 '$b'。`$c` 可用于引用当前所选的条目。"
 
 #: packages/app-mobile/components/screens/Note.tsx:413
 msgid ""
@@ -2262,7 +2254,7 @@ msgstr "无法同步的条目"
 
 #: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "在Twitter上加入我们"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:330
 msgid ""
@@ -2393,7 +2385,7 @@ msgstr "布局按钮序列"
 
 #: packages/lib/models/Setting.ts:1704
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "留空可从默认网站下载语言文件"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2451,9 +2443,8 @@ msgid "Loaded"
 msgstr "已加载"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:86
-#, fuzzy
 msgid "Loading..."
-msgstr "正在更新…"
+msgstr "正在加载…"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Location"
@@ -2584,10 +2575,9 @@ msgstr "最大条目数"
 
 #: packages/lib/utils/joplinCloud.ts:117
 msgid "Max note or attachment size"
-msgstr "最大项目大小"
+msgstr "最大笔记或附件大小"
 
 #: packages/server/src/routes/admin/users.ts:150
-#, fuzzy
 msgid "Max Total Size"
 msgstr "最大总大小"
 
@@ -2604,9 +2594,8 @@ msgid "Missing required argument: %s"
 msgstr "缺失必选参数：%s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "缺失必选参数：%s"
+msgstr "缺失必选标志值：%s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:452
 msgid "Mobile data - auto-sync disabled"
@@ -2641,9 +2630,8 @@ msgid "Move to notebook..."
 msgstr "移动到笔记本..."
 
 #: packages/app-cli/app/command-mv.js:14
-#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr "移动符合 <note> 的笔记到 [notebook]。"
+msgstr "将给定的<item>移动到[notebook]。"
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:20
@@ -2783,9 +2771,8 @@ msgid "Not generated"
 msgstr "未生成"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:90
-#, fuzzy
 msgid "Not now"
-msgstr "立即执行"
+msgstr "不是现在"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
@@ -2820,7 +2807,6 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "笔记不存在：“%s” 。是否创建？"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:83
-#, fuzzy
 msgid "Note editor"
 msgstr "笔记编辑器"
 
@@ -2939,7 +2925,7 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"一个或多个项目当前已加密，您可能需要提供主密码(master password)。若需进行此操"
+"一个或多个条目当前已加密，您可能需要提供主密码(master password)。若需进行此操"
 "作请输入 `e2ee decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后"
 "即可使用。"
 
@@ -3047,7 +3033,7 @@ msgstr "粘贴"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "粘贴为文本"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:525
 msgid "Path:"
@@ -3109,7 +3095,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Please record your voice..."
-msgstr ""
+msgstr "请录下你的声音..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3222,9 +3208,8 @@ msgid "Privacy Policy"
 msgstr "隐私政策"
 
 #: packages/lib/utils/joplinCloud.ts:316
-#, fuzzy
 msgid "Pro"
-msgstr "配置文件"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:24
 msgid "Process failed payment subscriptions"
@@ -3404,9 +3389,8 @@ msgid "Replace: "
 msgstr "替换: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "更改应用布局"
+msgstr "重置应用布局"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -3587,9 +3571,8 @@ msgid "Select file..."
 msgstr "选择文件..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "新建一个笔记本"
+msgstr "选择父笔记本"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3666,7 +3649,6 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "快捷键在 CLI 模式下不可用。"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
-#, fuzzy
 msgid "Show advanced"
 msgstr "显示高级选项"
 
@@ -3683,7 +3665,6 @@ msgid "Show completed to-dos"
 msgstr "显示已完成待办事项"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Show disabled"
 msgstr "显示禁用的密钥"
 
@@ -3743,7 +3724,7 @@ msgstr "日光亮 (Solarised)"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:605
 msgid "Some items cannot be decrypted."
-msgstr "某些项目无法被解密。"
+msgstr "某些条目无法被解密。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
 msgid "Some items cannot be synchronised."
@@ -3769,7 +3750,7 @@ msgstr "排序所选行"
 
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "通过 <field> 排序项目（示例：title, updated_time, created_time）。"
+msgstr "通过 <field> 排序条目（示例：title, updated_time, created_time）。"
 
 #: packages/app-cli/app/command-import.js:25
 msgid "Source format: %s"
@@ -4041,7 +4022,6 @@ msgid "Take photo"
 msgstr "拍照"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:95
-#, fuzzy
 msgid "Task list"
 msgstr "任务列表"
 
@@ -4143,8 +4123,8 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"拉伸系数属性用于指定项目之间的容量比例。如，因子为 2 的项目所占容量是因子为 "
-"1 的项目的两倍。该更改在软件重启后生效。"
+"拉伸系数属性用于指定条目之间的容量比例。如，因子为 2 的条目所占容量是因子为 "
+"1 的条目的两倍。该更改在软件重启后生效。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "The following attachments are being watched for changes:"
@@ -4175,8 +4155,8 @@ msgid ""
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的密钥正被用于加密您的某些项，但应用程序目前无法访问它们。项目最"
-"终会通过同步获取，但目前可能仍未被同步。"
+"具有这些ID的密钥用于加密某些项目，但应用程序当前无法访问这些密钥。它们很可能"
+"最终会通过同步获取。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
@@ -4259,7 +4239,7 @@ msgstr "网页剪藏未启用。"
 msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
-msgstr ""
+msgstr "%s的WebDAV工具与Joplin不兼容，因此不再受支持。请使用其他同步方法。"
 
 #: packages/lib/models/Setting.ts:829
 msgid "Theme"
@@ -4464,7 +4444,7 @@ msgstr "按 Tab 键或 Shift+Tab 组合键切换面板。"
 #: packages/app-cli/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
-msgstr "运行 `e2ee decrypt —retry-failed-items` 来尝试再次解密这些项目"
+msgstr "运行 `e2ee decrypt —retry-failed-items` 来尝试再次解密这些条目"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:61
 msgid ""
@@ -4539,9 +4519,8 @@ msgid "Tools"
 msgstr "工具"
 
 #: packages/server/src/routes/admin/users.ts:146
-#, fuzzy
 msgid "Total Size"
-msgstr "实际大小"
+msgstr "总大小"
 
 #: packages/lib/services/ReportService.ts:284
 msgid "Total: %d/%d"
@@ -4603,7 +4582,7 @@ msgstr "未知标记：%s"
 #: packages/lib/Synchronizer.ts:1096
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr "已下载项目为未知类型，请将 Joplin 升级至最新版本"
+msgstr "已下载条目为未知类型，请将 Joplin 升级至最新版本"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:69
 msgid "Unordered list"
@@ -4707,7 +4686,7 @@ msgstr "使用情况：%s"
 
 #: packages/lib/models/Setting.ts:1659
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "使用生物识别技术确保对应用程序的访问安全"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4743,6 +4722,7 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"使用您的生物特征来确保对应用程序的访问安全。您可以稍后在“设置”中进行设置。"
 
 #: packages/lib/models/Setting.ts:1257
 msgid ""
@@ -4804,12 +4784,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1705
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "语音输入语言文件（URL）"
 
 #: packages/app-mobile/components/screens/Note.tsx:994
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr ""
+msgstr "语音输入中..."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
@@ -4861,7 +4841,7 @@ msgstr ""
 
 #: packages/lib/WelcomeUtils.ts:63
 msgid "Welcome!"
-msgstr ""
+msgstr "欢迎！"
 
 #: packages/lib/models/Setting.ts:1105
 msgid "When creating a new note:"
@@ -4924,7 +4904,7 @@ msgstr ""
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
-msgstr "您的选择："
+msgstr "您的选择： "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
