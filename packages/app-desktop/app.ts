@@ -46,6 +46,7 @@ import { homedir } from 'os';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
+import inboxFolderFetcher from '@joplin/lib/utils/inboxFolderFetcher';
 
 const commands = mainScreenCommands
 	.concat(noteEditorCommands)
@@ -486,6 +487,9 @@ class Application extends BaseApplication {
 			// Then every x hours
 			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
 		}
+
+		shim.setTimeout(() => { void inboxFolderFetcher(); }, 10000);
+		shim.setInterval(() => { void inboxFolderFetcher(); }, 1000 * 60 * 60);
 
 		this.updateTray();
 
