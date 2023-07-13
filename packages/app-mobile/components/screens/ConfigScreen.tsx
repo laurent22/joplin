@@ -391,7 +391,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		const owner = await api.exec('GET', `api/users/${api.userId}`);
 
-		Setting.setValue('emailToNote.inboxEmail', owner.inbox_email);
+		if (owner.inbox_email) {
+			Setting.setValue('emailToNote.inboxEmail', owner.inbox_email);
+		}
 	}
 
 	public renderHeader(key: string, title: string) {
