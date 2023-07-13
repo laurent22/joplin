@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.12.1](https://github.com/laurent22/joplin/releases/tag/server-v2.12.1) - 2023-07-13T10:23:24Z
+
+- New: Add yarn patches to Docker image (e91e38c)
+- Improved: Updated packages @rmp135/sql-ts (v1.17.0), clean-html (v2), dayjs (v1.11.8), glob (v10.2.7), jquery (v3.7.0), pg (v8.11.0), standard (v17.1.0)
+
 ## [server-v2.11.2](https://github.com/laurent22/joplin/releases/tag/server-v2.11.2) - 2023-06-20T08:40:54Z
 
 - Improved: Allow giving a different version number to forks (091eff9)
