@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../../utils/types';
@@ -11,7 +10,6 @@ import ExportDebugComponent from './ExportDebugComponent';
 
 interface Props {
 	themeId: number;
-	dispatch: Dispatch;
 }
 
 
@@ -23,9 +21,7 @@ export const ExportScreenComponent = (props: Props) => {
 			<ScreenHeader title={_('Export')}/>
 			<ScrollView>
 				<NoteExportComponent
-					styles={styles}
-					themeId={props.themeId}
-					dispatch={props.dispatch} />
+					styles={styles} />
 
 				<ExportDebugComponent
 					styles={styles} />

@@ -404,6 +404,7 @@ packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/ExportScreen/ExportDebugComponent.js
 packages/app-mobile/components/screens/ExportScreen/ExportScreen.js
 packages/app-mobile/components/screens/ExportScreen/NoteExportComponent.js
+packages/app-mobile/components/screens/ExportScreen/NoteExportComponent.test.js
 packages/app-mobile/components/screens/ExportScreen/SectionHeader.js
 packages/app-mobile/components/screens/ExportScreen/useStyles.js
 packages/app-mobile/components/screens/ExportScreen/utils/exportAllFolders.js

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Text, Alert, Button, View } from 'react-native';
-import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
 import { ProgressBar } from 'react-native-paper';
@@ -16,9 +15,7 @@ import SectionHeader from './SectionHeader';
 const logger = Logger.create('NoteExportComponent');
 
 interface Props {
-	themeId: number;
 	styles: ExportScreenStyles;
-	dispatch: Dispatch;
 }
 
 enum ExportStatus {
@@ -27,7 +24,7 @@ enum ExportStatus {
 	Exported,
 }
 
-export const NoteExportComponent = (props: Props) => {
+const NoteExportComponent = (props: Props) => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
 	const [exportProgress, setExportProgress] = useState<number|undefined>(0);
 	const [warnings, setWarnings] = useState<string>('');
