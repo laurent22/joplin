@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v2.12.5](https://github.com/laurent22/joplin/releases/tag/v2.12.5) (Pre-release) - 2023-07-12T15:03:46Z
+
+- Improved: Allow importing Evernote task lists ([#8440](https://github.com/laurent22/joplin/issues/8440) by Rob Moffat)
+- Improved: Prevent app from crashing when changing screens ([4c5837b](https://github.com/laurent22/joplin/commit/4c5837b))
+- Improved: Quickly synchronise immediately after changing a note ([004d2a1](https://github.com/laurent22/joplin/commit/004d2a1))
+- Improved: Updated packages standard (v17.1.0)
+- Fixed: Don't start window minimized in GNOME ([#8441](https://github.com/laurent22/joplin/issues/8441)) ([#8256](https://github.com/laurent22/joplin/issues/8256) by Henry Heino)
+- Fixed: Fix extra lines added to KaTeX source when toggling the rich text editor ([#8442](https://github.com/laurent22/joplin/issues/8442)) ([#6822](https://github.com/laurent22/joplin/issues/6822) by Henry Heino)
+- Fixed: Fixed macOS version check so that it does not return the ARM64 version ([1abfb1c](https://github.com/laurent22/joplin/commit/1abfb1c))
+
 ## [v2.12.4](https://github.com/laurent22/joplin/releases/tag/v2.12.4) (Pre-release) - 2023-07-07T22:36:53Z
 
 
