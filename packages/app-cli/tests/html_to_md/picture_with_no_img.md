@@ -1,1 +1,1 @@
-Some pictures: ![](https://static2.cbrimages.com/wp-content/uploads/2018/09/Die-01-cvrA.jpg?q=35&w=588&h=900&fit=crop&dpr=1.5) ![](http://example.com/test.gif)
+Some pictures: ![](https://static2.cbrimages.com/wp-content/uploads/2018/09/Die-01-cvrA.jpg?q=35&w=588&h=900&fit=crop&dpr=1.5)![](http://example.com/test.gif)
