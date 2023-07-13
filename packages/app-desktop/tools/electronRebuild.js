@@ -35,11 +35,11 @@ async function main() {
 	} else if (isArm64()) {
 		// Keytar needs it's own electron-rebuild or else it will not fetch the
 		// existing prebuilt binary, this will cause cross-compilation to fail.
-		// E.g. for MacOS arm64 it will download: 
+		// E.g. for MacOS arm64 it will download:
 		// https://github.com/atom/node-keytar/releases/download/v7.9.0/keytar-v7.9.0-napi-v3-darwin-arm64.tar.gz
-		console.info(await execCommand(['yarn', 'run', 'electron-rebuild', forceAbiArgs, '--arch=arm64 --only=keytar'].join(' ')));
+		console.info(await execCommand(['yarn', 'run', 'electron-rebuild', forceAbiArgs, '--arch=arm64', '--only=keytar'].join(' ')));
 		console.info(await execCommand(['yarn', 'run', 'electron-rebuild', forceAbiArgs].join(' ')));
-	}else {
+	} else {
 		console.info(await execCommand(['yarn', 'run', 'electron-rebuild', forceAbiArgs].join(' ')));
 	}
 }
