@@ -27,8 +27,8 @@ const ExportDebugComponent = (props: Props) => {
 
 	const exportDebugReportButton = (
 		<Button
-			icon="share"
-			mode="elevated"
+			icon={props.styles.shareButtonIconName}
+			mode='contained'
 			onPress={exportDebugButtonPress}
 			disabled={creatingReport}
 			loading={creatingReport}
@@ -54,8 +54,8 @@ const ExportDebugComponent = (props: Props) => {
 	const exportProfileButton = (
 		<View style={props.styles.subsectionContainerStyle}>
 			<Button
-				icon="share"
-				mode="elevated"
+				icon={props.styles.shareButtonIconName}
+				mode="contained"
 				onPress={exportProfileButtonPress}
 				disabled={profileExportStatus === 'exporting'}
 			>

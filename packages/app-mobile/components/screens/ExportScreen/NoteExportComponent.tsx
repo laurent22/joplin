@@ -28,8 +28,12 @@ enum ExportStatus {
 export const NoteExportComponent = (props: Props) => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
 
-
 	const startExport = useCallback(async () => {
+		// Don't run multiple exports at the same time.
+		if (exportStatus === ExportStatus.Exporting) {
+			return;
+		}
+
 		setExportStatus(ExportStatus.Exporting);
 		const exportTargetPath = join(await makeExportCacheDirectory(), 'jex-export.jex');
 		logger.info(`Exporting all folders to path ${exportTargetPath}`);
@@ -55,17 +59,14 @@ export const NoteExportComponent = (props: Props) => {
 		} finally {
 			await shim.fsDriver().remove(exportTargetPath);
 		}
-	}, []);
-
-	const cancelExport = useCallback(async () => {
-		// TODO: Implement
-	}, []);
+	}, [exportStatus]);
 
 	const startOrCancelExportButton = (
 		<Button
-			mode='elevated'
-			icon='share'
-			onPress={exportStatus === ExportStatus.Exporting ? cancelExport : startExport}
+			icon={props.styles.shareButtonIconName}
+			mode='contained'
+			onPress={startExport}
+			disabled={exportStatus === ExportStatus.Exporting}
 			loading={exportStatus === ExportStatus.Exporting}
 		>
 			<Text>{exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export to JEX')}</Text>
