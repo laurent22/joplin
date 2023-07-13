@@ -41,7 +41,8 @@ export const NoteExportComponent = (props: Props) => {
 
 		try {
 			const status = await exportAllFolders(exportTargetPath);
-			// TODO: Use exportResult.warnings
+
+			setExportStatus(ExportStatus.Exported);
 			setWarnings(status.warnings.join('\n'));
 
 			await Share.open({
@@ -50,8 +51,6 @@ export const NoteExportComponent = (props: Props) => {
 				url: `file://${exportTargetPath}`,
 				failOnCancel: false,
 			});
-
-			setExportStatus(ExportStatus.Exported);
 		} catch (e) {
 			logger.error('Unable to export:', e);
 
