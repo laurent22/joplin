@@ -12,7 +12,7 @@ shimInit({ nodeSqlite: sqlite3 });
 
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
-// Use a temporary file instead.
+// Use a temporary folder instead.
 const tempDirectoryPath = path.join(tmpdir(), `appmobile-test-${uuid.createNano()}`);
 
 jest.doMock('react-native-fs', () => {

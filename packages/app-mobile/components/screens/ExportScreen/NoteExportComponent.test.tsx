@@ -43,7 +43,7 @@ describe('NoteExportComponent', () => {
 		await createNTestNotes(10, folder2);
 	});
 
-	test('should export when clicking "Export"', async () => {
+	test('should show "Exported successfully!" after clicking "Export"', async () => {
 		const styles = getDefaultStyles();
 		const view = render(<NoteExportComponent
 			styles={styles}
@@ -56,7 +56,7 @@ describe('NoteExportComponent', () => {
 			expect(view.queryByText(_('Exported successfully!'))).not.toBeNull()
 		);
 
-		// By default, there should be no warnings
+		// With the default folder setup, there should be no warnings
 		expect(view.queryByText(/Warnings/g)).toBeNull();
 	});
 });
