@@ -1,6 +1,6 @@
 # What is a conflict?
 
-A conflict happens when one note or one attachment is modified in two different places, and then synchronized. In that case, it is not possible to determine which version of the note or attachment you want to keep, and thus a conflict is generated.
+A conflict happens when one note or one attachment is modified in two different places, and then synchronised. In that case, it is not possible to determine which version of the note or attachment you want to keep, and thus a conflict is generated.
 
 # How to resolve a conflict?
 
@@ -8,7 +8,9 @@ When Joplin detects a conflict, it creates a _Conflict_ notebook and copies the 
 
 If you are sure that the local version on one of your devices was good, you can restore the 'pre-sync' version on that device: Select the note, click on (i) Note Properties, select _Previous versions of this note_, choose the good version, click _Restore_.
 
-## If you do not remember your changes since the last failed synchronization
+There is a Joplin plugin that deals with conflict resolution: https://discourse.joplinapp.org/t/plugin-conflict-resolution/
+
+## If you do not remember your changes since the last failed synchronisation
 1. Use a merge tool, for example www.diffchecker.com
 2. Copy the entire content of your _Conflict_/note
 3. Paste it to the left side of your merge tool
@@ -17,14 +19,15 @@ If you are sure that the local version on one of your devices was good, you can 
 6. Decide which of the two versions is better (closer to complete)
 7. Merge all the missing changes from the other version to the better version
 8. Copy the better version and paste it into the Joplin local note
-9. Synchronize
+9. Synchronise
 10. Delete the Conflict/note (right-click, Delete)
+
 
 # How to avoid conflicts?
 
 Conflicts are always annoying to deal with so it is best to avoid them as much as possible.
 
-For this, the best way is to always synchronize before you start editing, and after you have finished editing. Make sure that synchronization completes.
+For this, the best way is to always synchronise before you start editing, and after you have finished editing. Make sure that synchronisation completes.
 
 Joplin attempts to do this by uploading your latest changes within a few seconds. However, downloading changes is done at fixed intervals, every few minutes (as defined in the Config screen) and this is where conflicts may happen. It can also happen if one of your device did not have an internet connection for some times, and then synchronises. A bad internet connection can also hinder synchronisation because it will interrupt the process, which may have to be restarted from the beginning to ensure consistency.
 
