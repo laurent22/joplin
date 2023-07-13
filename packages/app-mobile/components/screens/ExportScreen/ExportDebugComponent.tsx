@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { useCallback, useState } from 'react';
 import { ExportScreenStyles } from './useStyles';
-import { Text, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Text, View, Button } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import exportDebugReport from './utils/exportDebugReport';
 import shim from '@joplin/lib/shim';
@@ -27,14 +27,10 @@ const ExportDebugComponent = (props: Props) => {
 
 	const exportDebugReportButton = (
 		<Button
-			icon={props.styles.shareButtonIconName}
-			mode='contained'
+			title={creatingReport ? _('Creating report...') : _('Export Debug Report')}
 			onPress={exportDebugButtonPress}
 			disabled={creatingReport}
-			loading={creatingReport}
-		>
-			{creatingReport ? _('Creating report...') : _('Export Debug Report')}
-		</Button>
+		/>
 	);
 
 	const [profileExportStatus, setProfileExportStatus] = useState<'idle'|'prompt'|'exporting'>('idle');
@@ -54,13 +50,10 @@ const ExportDebugComponent = (props: Props) => {
 	const exportProfileButton = (
 		<View style={props.styles.subsectionContainerStyle}>
 			<Button
-				icon={props.styles.shareButtonIconName}
-				mode="contained"
 				onPress={exportProfileButtonPress}
 				disabled={profileExportStatus === 'exporting'}
-			>
-				{profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile')}
-			</Button>
+				title={profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile')}
+			/>
 			<Text style={props.styles.sectionDescriptionStyle}>
 				{_('For debugging purpose only: export your profile to an external SD card.')}
 			</Text>
@@ -83,9 +76,10 @@ const ExportDebugComponent = (props: Props) => {
 				value={profileExportPath}
 				placeholder="/path/to/sdcard"
 				keyboardAppearance={props.styles.keyboardAppearance} />
-			<Button onPress={exportProfileButtonPress2}>
-				{_('OK')}
-			</Button>
+			<Button
+				onPress={exportProfileButtonPress2}
+				title={_('OK')}
+			/>
 		</View>
 	);
 

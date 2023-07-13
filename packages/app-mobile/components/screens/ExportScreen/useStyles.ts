@@ -10,8 +10,6 @@ export interface ExportScreenStyles {
 	statusTextStyle: StyleProp<TextStyle>;
 	warningTextStyle: StyleProp<TextStyle>;
 
-	shareButtonIconName: string;
-
 	subsectionContainerStyle: StyleProp<ViewStyle>;
 
 	keyboardAppearance: 'default'|'light'|'dark';
@@ -53,8 +51,6 @@ const useStyles = (themeId: number): ExportScreenStyles => {
 			subsectionContainerStyle: {
 				marginBottom: 15,
 			},
-
-			shareButtonIconName: 'export',
 
 			keyboardAppearance: (theme as any).keyboardAppearance,
 		};

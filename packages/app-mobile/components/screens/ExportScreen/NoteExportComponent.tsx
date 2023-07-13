@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Text, Alert } from 'react-native';
+import { Text, Alert, Button } from 'react-native';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
-import { Button, ProgressBar } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 import { useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
@@ -42,7 +42,9 @@ export const NoteExportComponent = (props: Props) => {
 		logger.info(`Exporting all folders to path ${exportTargetPath}`);
 
 		try {
-			setExportProgress(0);
+			// Initially, undetermined progress
+			setExportProgress(undefined);
+
 			const status = await exportAllFolders(exportTargetPath, (status, progress) => {
 				if (progress !== null) {
 					setExportProgress(progress);
@@ -80,14 +82,10 @@ export const NoteExportComponent = (props: Props) => {
 				indeterminate={exportProgress === undefined}
 				progress={exportProgress}/>
 			<Button
-				icon={props.styles.shareButtonIconName}
-				mode='contained'
 				onPress={startExport}
 				disabled={exportStatus === ExportStatus.Exporting}
-				loading={exportStatus === ExportStatus.Exporting}
-			>
-				<Text>{exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export as JEX')}</Text>
-			</Button>
+				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export as JEX')}
+			/>
 		</>
 	);
 

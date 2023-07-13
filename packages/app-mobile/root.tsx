@@ -1064,8 +1064,6 @@ class AppComponent extends React.Component {
 					surfaceVariant: theme.backgroundColor,
 					onSurfaceVariant: theme.color,
 					primary: theme.color,
-					secondaryContainer: theme.backgroundColor2,
-					onSecondaryContainer: theme.color2,
 				},
 			}}>
 				{mainContent}
