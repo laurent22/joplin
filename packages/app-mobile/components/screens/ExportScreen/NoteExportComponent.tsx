@@ -46,9 +46,8 @@ export const NoteExportComponent = (props: Props) => {
 			const status = await exportAllFolders(exportTargetPath, (status, progress) => {
 				if (progress !== null) {
 					setExportProgress(progress);
-				} else if (status === ExportProgressState.Closing) {
-					// We don't have a numeric progress value and the closing
-					// state may take a while.
+				} else if (status === ExportProgressState.Closing || status === ExportProgressState.QueuingItems) {
+					// We don't have a numeric progress value and the closing/queuing state may take a while.
 					// Set a special progress value:
 					setExportProgress(undefined);
 				}

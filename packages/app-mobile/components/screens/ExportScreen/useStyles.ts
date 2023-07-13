@@ -47,7 +47,7 @@ const useStyles = (themeId: number): ExportScreenStyles => {
 			},
 			warningTextStyle: {
 				...baseTextStyle,
-				color: theme.colorWarn,
+				color: theme.color,
 				backgroundColor: theme.warningBackgroundColor,
 			},
 			subsectionContainerStyle: {
