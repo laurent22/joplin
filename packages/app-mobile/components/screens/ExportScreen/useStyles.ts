@@ -5,6 +5,7 @@ import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 export interface ExportScreenStyles {
 	rootStyle: StyleProp<ViewStyle>;
+	sectionContainerStyle: StyleProp<ViewStyle>;
 	sectionHeaderStyle: StyleProp<TextStyle>;
 	sectionDescriptionStyle: StyleProp<TextStyle>;
 	statusTextStyle: StyleProp<TextStyle>;
@@ -28,6 +29,11 @@ const useStyles = (themeId: number): ExportScreenStyles => {
 			rootStyle: {
 				backgroundColor: theme.backgroundColor,
 				flex: 1,
+			},
+			sectionContainerStyle: {
+				marginLeft: 10,
+				marginRight: 10,
+				marginBottom: 5,
 			},
 			sectionHeaderStyle: {
 				...baseTextStyle,

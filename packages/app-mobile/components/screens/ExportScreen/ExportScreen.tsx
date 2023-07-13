@@ -7,7 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../../utils/types';
 import NoteExportComponent from './NoteExportComponent';
 import useStyles from './useStyles';
-import SectionHeader from './SectionHeader';
 import ExportDebugComponent from './ExportDebugComponent';
 
 interface Props {
@@ -23,11 +22,6 @@ export const ExportScreenComponent = (props: Props) => {
 		<View style={styles.rootStyle}>
 			<ScreenHeader title={_('Export')}/>
 			<ScrollView>
-				<SectionHeader
-					styles={styles}
-					title={_('Export Notes')}
-					description={_('Share a copy of all notes in a file format that can be imported by Joplin on a computer.')}
-				/>
 				<NoteExportComponent
 					styles={styles}
 					themeId={props.themeId}

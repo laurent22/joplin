@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Alert, Button } from 'react-native';
+import { Text, Alert, Button, View } from 'react-native';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
@@ -11,6 +11,7 @@ import Share from 'react-native-share';
 import exportAllFolders, { makeExportCacheDirectory } from './utils/exportAllFolders';
 import { ExportScreenStyles } from './useStyles';
 import { ExportProgressState } from '@joplin/lib/services/interop/types';
+import SectionHeader from './SectionHeader';
 
 const logger = Logger.create('NoteExportComponent');
 
@@ -109,7 +110,16 @@ export const NoteExportComponent = (props: Props) => {
 		mainContent = postExportMessage;
 	}
 
-	return mainContent;
+	return (
+		<View style={props.styles.sectionContainerStyle}>
+			<SectionHeader
+				styles={props.styles}
+				title={_('Export Notes')}
+				description={_('Share a copy of all notes in a file format that can be imported by Joplin on a computer.')}
+			/>
+			{mainContent}
+		</View>
+	);
 };
 
 export default NoteExportComponent;

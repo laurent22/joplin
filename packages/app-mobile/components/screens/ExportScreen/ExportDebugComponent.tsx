@@ -84,7 +84,7 @@ const ExportDebugComponent = (props: Props) => {
 	);
 
 	const mainContent = (
-		<>
+		<View style={props.styles.sectionContainerStyle}>
 			<SectionHeader
 				title={_('Export Debug information')}
 				description={_('The following items may be helpful when creating a bug report.')}
@@ -99,7 +99,7 @@ const ExportDebugComponent = (props: Props) => {
 				{exportProfileButton}
 				{profileExportStatus === 'prompt' ? profileExportPrompt : null}
 			</View>
-		</>
+		</View>
 	);
 
 	// The debug functionality is only supported on Android.
