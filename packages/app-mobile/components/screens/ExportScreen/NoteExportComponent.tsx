@@ -27,6 +27,7 @@ enum ExportStatus {
 
 export const NoteExportComponent = (props: Props) => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
+	const [warnings, setWarnings] = useState<string>('');
 
 	const startExport = useCallback(async () => {
 		// Don't run multiple exports at the same time.
@@ -39,8 +40,9 @@ export const NoteExportComponent = (props: Props) => {
 		logger.info(`Exporting all folders to path ${exportTargetPath}`);
 
 		try {
-			await exportAllFolders(exportTargetPath);
+			const status = await exportAllFolders(exportTargetPath);
 			// TODO: Use exportResult.warnings
+			setWarnings(status.warnings.join('\n'));
 
 			await Share.open({
 				type: 'application/jex',
@@ -69,19 +71,28 @@ export const NoteExportComponent = (props: Props) => {
 			disabled={exportStatus === ExportStatus.Exporting}
 			loading={exportStatus === ExportStatus.Exporting}
 		>
-			<Text>{exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export to JEX')}</Text>
+			<Text>{exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export as JEX')}</Text>
 		</Button>
 	);
 
-	const exportedSuccessfullyMessage = (
-		<Text style={props.styles.statusTextStyle}>{_('Exported successfully!')}</Text>
+	const warningDisplay = (
+		<Text style={props.styles.warningTextStyle}>
+			{_('Warnings:\n%s', warnings)}
+		</Text>
+	);
+
+	const postExportMessage = (
+		<>
+			<Text style={props.styles.statusTextStyle}>{_('Exported successfully!')}</Text>
+			{warnings.length > 0 ? warningDisplay : null}
+		</>
 	);
 
 	let mainContent = null;
 	if (exportStatus === ExportStatus.NotStarted || exportStatus === ExportStatus.Exporting) {
 		mainContent = startOrCancelExportButton;
 	} else {
-		mainContent = exportedSuccessfullyMessage;
+		mainContent = postExportMessage;
 	}
 
 	return mainContent;

@@ -8,6 +8,7 @@ export interface ExportScreenStyles {
 	sectionHeaderStyle: StyleProp<TextStyle>;
 	sectionDescriptionStyle: StyleProp<TextStyle>;
 	statusTextStyle: StyleProp<TextStyle>;
+	warningTextStyle: StyleProp<TextStyle>;
 
 	shareButtonIconName: string;
 
@@ -43,6 +44,11 @@ const useStyles = (themeId: number): ExportScreenStyles => {
 			statusTextStyle: {
 				...baseTextStyle,
 				textAlign: 'center',
+			},
+			warningTextStyle: {
+				...baseTextStyle,
+				color: theme.colorWarn,
+				backgroundColor: theme.warningBackgroundColor,
 			},
 			subsectionContainerStyle: {
 				marginBottom: 15,
