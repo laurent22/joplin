@@ -36,6 +36,7 @@ export default function TurndownService (options) {
     linkReferenceStyle: 'full',
     anchorNames: [],
     br: '  ',
+    nonbreakingSpace: '&nbsp;',
     disableEscapeContent: false,
     preformattedCode: false,
     blankReplacement: function (content, node) {
@@ -214,10 +215,16 @@ function replacementForNode (node) {
   var content = process.call(this, node, rule.escapeContent ? rule.escapeContent() : 'auto')
   var whitespace = node.flankingWhitespace
   if (whitespace.leading || whitespace.trailing) content = content.trim()
+
+  const replaceNonbreakingSpaces = space => {
+    // \u{00A0} is a nonbreaking space
+    return space.replace(/\u{00A0}/ug, this.options.nonbreakingSpace);
+  };
+
   return (
-    whitespace.leading +
-    rule.replacement(content, node, this.options) +
-    whitespace.trailing
+    replaceNonbreakingSpaces(whitespace.leading) +
+    replaceNonbreakingSpaces(rule.replacement(content, node, this.options)) +
+    replaceNonbreakingSpaces(whitespace.trailing)
   )
 }
 
