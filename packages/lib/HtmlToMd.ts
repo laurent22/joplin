@@ -10,6 +10,7 @@ export interface ParseOptions {
 	baseUrl?: string;
 	disableEscapeContent?: boolean;
 	convertEmbeddedPdfsToLinks?: boolean;
+	softBreaksEnabled?: boolean;
 }
 
 export default class HtmlToMd {
@@ -23,7 +24,7 @@ export default class HtmlToMd {
 			bulletListMarker: '-',
 			emDelimiter: '*',
 			strongDelimiter: '**',
-			br: '',
+			br: options.softBreaksEnabled ? '<br/>' : '',
 			disableEscapeContent: 'disableEscapeContent' in options ? options.disableEscapeContent : false,
 		};
 		if (options.convertEmbeddedPdfsToLinks) {

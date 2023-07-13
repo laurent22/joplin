@@ -2,6 +2,7 @@ import { FormNote } from './types';
 
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
 const { MarkupToHtml } = require('@joplin/renderer');
 
 export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss: string): Promise<string> {
@@ -9,7 +10,10 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
 		const htmlToMd = new HtmlToMd();
-		newBody = htmlToMd.parse(html, { preserveImageTagsWithSize: true });
+		newBody = htmlToMd.parse(html, {
+			preserveImageTagsWithSize: true,
+			softBreaksEnabled: Setting.value('markdown.plugin.softbreaks'),
+		});
 		newBody = await Note.replaceResourceExternalToInternalLinks(newBody, { useAbsolutePaths: true });
 	} else {
 		newBody = await Note.replaceResourceExternalToInternalLinks(html, { useAbsolutePaths: true });

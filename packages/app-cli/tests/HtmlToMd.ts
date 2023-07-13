@@ -85,4 +85,10 @@ describe('HtmlToMd', () => {
 		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: false })).toBe('https://test.com/1\\_2\\_3.pdf');
 	});
 
+	it('should use <br/>s if softbreaks are enabled', () => {
+		const htmlToMd = new HtmlToMd();
+		expect(htmlToMd.parse('<div>This is<br/>a test</div>', { softBreaksEnabled: true })).toBe('This is<br/>\na test');
+		expect(htmlToMd.parse('<div>This is<br/>a test</div>', { softBreaksEnabled: false })).toBe('This is\na test');
+	});
+
 });
