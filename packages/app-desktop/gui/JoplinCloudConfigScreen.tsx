@@ -24,7 +24,6 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 	};
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (props.inboxEmail !== '') Setting.setValue('emailToNote.inboxEmail', '');
 		if (props.inboxEmail !== '') return;
 
 		const syncTarget = reg.syncTarget();
