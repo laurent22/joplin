@@ -294,7 +294,7 @@ export default class FsDriverRN extends FsDriverBase {
 				}
 			});
 
-			const chunkSize = 1024 * 10; // 10 KiB
+			const chunkSize = 1024 * 100; // 100 KiB
 			for (let offset = 0; offset < sizeBytes; offset += chunkSize) {
 				// The RNFS documentation suggests using base64 for binary files.
 				const part = await RNFS.read(absPath, chunkSize, offset, 'base64');

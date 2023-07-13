@@ -1,4 +1,4 @@
-import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult } from './types';
+import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState } from './types';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import BaseItem from '../../models/BaseItem';
@@ -294,7 +294,11 @@ export default class InteropService {
 		const result: ImportExportResult = { warnings: [] };
 		const itemsToExport: any[] = [];
 
+		options.onProgress?.(ExportProgressState.QueuingItems, null);
+		let totalItemsToProcess = 0;
+
 		const queueExportItem = (itemType: number, itemOrId: any) => {
+			totalItemsToProcess ++;
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -378,6 +382,7 @@ export default class InteropService {
 			await exporter.prepareForProcessingItemType(type, itemsToExport);
 		}
 
+		let itemsProcessed = 0;
 		for (let typeOrderIndex = 0; typeOrderIndex < typeOrder.length; typeOrderIndex++) {
 			const type = typeOrder[typeOrderIndex];
 
@@ -419,9 +424,13 @@ export default class InteropService {
 					console.error(error);
 					result.warnings.push(error.message);
 				}
+
+				itemsProcessed++;
+				options.onProgress?.(ExportProgressState.Exporting, itemsProcessed / totalItemsToProcess);
 			}
 		}
 
+		options.onProgress?.(ExportProgressState.Closing, null);
 		await exporter.close();
 
 		return result;

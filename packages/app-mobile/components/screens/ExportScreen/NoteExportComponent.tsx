@@ -3,13 +3,14 @@ import { Text, Alert } from 'react-native';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
-import { Button } from 'react-native-paper';
+import { Button, ProgressBar } from 'react-native-paper';
 import { useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
 import Share from 'react-native-share';
 import exportAllFolders, { makeExportCacheDirectory } from './utils/exportAllFolders';
 import { ExportScreenStyles } from './useStyles';
+import { ExportProgressState } from '@joplin/lib/services/interop/types';
 
 const logger = Logger.create('NoteExportComponent');
 
@@ -27,6 +28,7 @@ enum ExportStatus {
 
 export const NoteExportComponent = (props: Props) => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
+	const [exportProgress, setExportProgress] = useState<number|undefined>(0);
 	const [warnings, setWarnings] = useState<string>('');
 
 	const startExport = useCallback(async () => {
@@ -40,7 +42,17 @@ export const NoteExportComponent = (props: Props) => {
 		logger.info(`Exporting all folders to path ${exportTargetPath}`);
 
 		try {
-			const status = await exportAllFolders(exportTargetPath);
+			setExportProgress(0);
+			const status = await exportAllFolders(exportTargetPath, (status, progress) => {
+				if (progress !== null) {
+					setExportProgress(progress);
+				} else if (status === ExportProgressState.Closing) {
+					// We don't have a numeric progress value and the closing
+					// state may take a while.
+					// Set a special progress value:
+					setExportProgress(undefined);
+				}
+			});
 
 			setExportStatus(ExportStatus.Exported);
 			setWarnings(status.warnings.join('\n'));
@@ -63,15 +75,21 @@ export const NoteExportComponent = (props: Props) => {
 	}, [exportStatus]);
 
 	const startOrCancelExportButton = (
-		<Button
-			icon={props.styles.shareButtonIconName}
-			mode='contained'
-			onPress={startExport}
-			disabled={exportStatus === ExportStatus.Exporting}
-			loading={exportStatus === ExportStatus.Exporting}
-		>
-			<Text>{exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export as JEX')}</Text>
-		</Button>
+		<>
+			<ProgressBar
+				visible={exportStatus === ExportStatus.Exporting}
+				indeterminate={exportProgress === undefined}
+				progress={exportProgress}/>
+			<Button
+				icon={props.styles.shareButtonIconName}
+				mode='contained'
+				onPress={startExport}
+				disabled={exportStatus === ExportStatus.Exporting}
+				loading={exportStatus === ExportStatus.Exporting}
+			>
+				<Text>{exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export as JEX')}</Text>
+			</Button>
+		</>
 	);
 
 	const warningDisplay = (
