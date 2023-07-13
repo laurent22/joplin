@@ -637,7 +637,7 @@ async function initialize(dispatch: Function) {
 		reg.logger().error('Initialization error:', error);
 	}
 
-	PoorManIntervals.setTimeout(() => { void inboxFolderFetcher(); }, 10000);
+	PoorManIntervals.setTimeout(() => { void inboxFolderFetcher(); }, 30000);
 	PoorManIntervals.setInterval(() => { void inboxFolderFetcher(); }, 1000 * 60 * 60);
 
 	reg.setupRecurrentSync();
