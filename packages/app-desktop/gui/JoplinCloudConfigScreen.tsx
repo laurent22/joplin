@@ -35,7 +35,9 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 
 		if (event.cancelled) return;
 
-		Setting.setValue('emailToNote.inboxEmail', owner.inbox_email);
+		if (owner.inbox_email) {
+			Setting.setValue('emailToNote.inboxEmail', owner.inbox_email);
+		}
 	}, [props.inboxEmail, reg, Setting]);
 
 	return (
