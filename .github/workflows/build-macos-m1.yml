@@ -49,7 +49,7 @@ jobs:
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
-          npm pkg set 'build.mac.target.target'='default'
+          npm pkg set 'build.mac.target.target'='dmg'
           npm pkg set 'build.mac.target.arch[0]'='arm64'
 
           if [[ $GIT_TAG_NAME = v* ]]; then
