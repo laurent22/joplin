@@ -22389,9 +22389,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"madge@npm:6.0.0":
-  version: 6.0.0
-  resolution: "madge@npm:6.0.0"
+"madge@npm:6.1.0":
+  version: 6.1.0
+  resolution: "madge@npm:6.1.0"
   dependencies:
     chalk: ^4.1.1
     commander: ^7.2.0
@@ -22414,11 +22414,15 @@ __metadata:
     rc: ^1.2.7
     stream-to-array: ^2.3.0
     ts-graphviz: ^1.5.0
-    typescript: ^3.9.5
     walkdir: ^0.4.1
+  peerDependencies:
+    typescript: ^3.9.5 || ^4.9.5 || ^5
+  peerDependenciesMeta:
+    typescript:
+      optional: true
   bin:
     madge: bin/cli.js
-  checksum: d7e4af73e0be6b7e4250ba81278a974aaae9e2593e754d21dc72cdfe0440d2ad0041244290c20ed3ccfaf3d87baaf658a9cc770152cba819f0e8184d32a039de
+  checksum: cb8a629c1eb837640ca2416dbd2236f1ea8657eb188725ff42294718dd1769ece5ec635ef02c344c72e3b4faab3cd8f084b043ce8ecccf4018915738b3329096
   languageName: node
   linkType: hard
 
@@ -29413,7 +29417,7 @@ __metadata:
     husky: 3.1.0
     lerna: 3.22.1
     lint-staged: 13.2.2
-    madge: 6.0.0
+    madge: 6.1.0
     node-gyp: 9.3.1
     nodemon: 2.0.22
     npm-package-json-lint: 6.4.0
@@ -32795,7 +32799,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^3.9.5, typescript@npm:^3.9.7":
+"typescript@npm:^3.9.7":
   version: 3.9.10
   resolution: "typescript@npm:3.9.10"
   bin:
@@ -32845,7 +32849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^3.9.5#~builtin<compat/typescript>, typescript@patch:typescript@^3.9.7#~builtin<compat/typescript>":
+"typescript@patch:typescript@^3.9.7#~builtin<compat/typescript>":
   version: 3.9.10
   resolution: "typescript@patch:typescript@npm%3A3.9.10#~builtin<compat/typescript>::version=3.9.10&hash=3bd3d3"
   bin:
