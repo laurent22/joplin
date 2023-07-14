@@ -299,7 +299,11 @@ const SidebarComponent = (props: Props) => {
 		let deleteButtonLabel = _('Remove');
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const folder = await Folder.load(itemId);
-			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
+			if (itemId === state.settings['emailToNote.inboxJopId']) {
+				deleteMessage = _('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.');
+			} else {
+				deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
+			}
 			deleteButtonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
