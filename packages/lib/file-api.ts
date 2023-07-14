@@ -48,6 +48,10 @@ function requestCanBeRepeated(error: any) {
 	// permission issue, which won't be fixed by repeating the request.
 	if (errorCode === 403) return false;
 
+	// Forbidden error - missing credentials (e.g. empty password) or syncing
+	// to the wrong URL. This won't be fixed by repeating the request.
+	if (errorCode === 401) return false;
+
 	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget') return false;
 
