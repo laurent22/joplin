@@ -67,6 +67,7 @@ import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import inboxFetcher from '@joplin/lib/utils/inboxFetcher';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -486,6 +487,9 @@ class Application extends BaseApplication {
 			// Then every x hours
 			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
 		}
+
+		shim.setTimeout(() => { void inboxFetcher(); }, 30000);
+		shim.setInterval(() => { void inboxFetcher(); }, 1000 * 60 * 60);
 
 		this.updateTray();
 
