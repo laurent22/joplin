@@ -308,7 +308,7 @@ class HtmlUtils {
 				// The Markdown sanitization code can result in calls like this:
 				//     sanitizeHtml('<invlaid>')
 				//     sanitizeHtml('</invalid>')
-				// Thus, we need ot be able to remove '</invalid>'), even if there is no
+				// Thus, we need to be able to remove '</invalid>', even if there is no
 				// corresponding opening tag.
 				if (disallowedTags.includes(current) || disallowedTags.includes(name)) {
 					if (disallowedTagDepth > 0) {
