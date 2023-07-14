@@ -203,6 +203,11 @@ class HtmlUtils {
 			'embed', 'link', 'meta', 'noscript', 'button', 'form',
 			'input', 'select', 'textarea', 'option', 'optgroup',
 			'svg',
+
+			// Disallow map and area tags: <area ...> links are currently not
+			// sanitized as well as <a ...> links, allowing potential sandbox
+			// escape.
+			'map', 'area',
 		];
 
 		const parser = new htmlparser2.Parser({
@@ -300,8 +305,15 @@ class HtmlUtils {
 
 				if (current === name.toLowerCase()) tagStack.pop();
 
-				if (disallowedTags.includes(current)) {
-					disallowedTagDepth--;
+				// The Markdown sanitization code can result in calls like this:
+				//     sanitizeHtml('<invlaid>')
+				//     sanitizeHtml('</invalid>')
+				// Thus, we need ot be able to remove '</invalid>'), even if there is no
+				// corresponding opening tag.
+				if (disallowedTags.includes(current) || disallowedTags.includes(name)) {
+					if (disallowedTagDepth > 0) {
+						disallowedTagDepth--;
+					}
 					return;
 				}
 
