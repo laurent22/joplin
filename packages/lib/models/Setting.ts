@@ -1710,6 +1710,8 @@ class Setting extends BaseModel {
 			},
 
 			'emailToNote.inboxEmail': { value: '', type: SettingItemType.String, public: false },
+
+			'emailToNote.inboxJopId': { value: '', type: SettingItemType.String, public: false },
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
