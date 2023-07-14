@@ -21,7 +21,7 @@ Convert HTML into Markdown with JavaScript.
 - Added option `preserveImageTagsWithSize` to keep `<img/>` tags as HTML (no Markdown conversion) if they have width or height attributes
 - Added support for replacing unicode nonbreaking spaces with `&nbsp;` in output markdown.
 
-This fork is currently based on commit `97e4535ca76bb2e70d9caa2aa4d4686956b06d44` of the [upstream Turndown project](https://github.com/mixmark-io/turndown).
+The `src/` folder of this fork is currently based on commit `97e4535ca76bb2e70d9caa2aa4d4686956b06d44` of the [upstream Turndown project](https://github.com/mixmark-io/turndown). The `test` and `config` folders are based on an earlier commit.
 
 ### to-markdown has been renamed to Turndown. See the [migration guide](https://github.com/domchristie/to-markdown/wiki/Migrating-from-to-markdown-to-Turndown) for details.
 
