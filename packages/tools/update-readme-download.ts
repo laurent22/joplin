@@ -81,7 +81,7 @@ async function main(argv: any) {
 
 	const androidRelease = await gitHubLatestRelease('joplin-android');
 
-	const android32Url = downloadUrl(androidRelease, OS.Android32);
+	// const android32Url = downloadUrl(androidRelease, OS.Android32);
 	const androidUrl = downloadUrl(androidRelease, OS.Android);
 	const winUrl = downloadUrl(release, OS.Windows);
 	const winPortableUrl = downloadUrl(release, OS.Windows, true);
@@ -93,7 +93,7 @@ async function main(argv: any) {
 	console.info('macOS: ', macOsUrl);
 	console.info('Linux: ', linuxUrl);
 	console.info('Android: ', androidUrl);
-	console.info('Android 32: ', android32Url);
+	// console.info('Android 32: ', android32Url);
 
 	let content = readmeContent();
 
@@ -103,7 +103,7 @@ async function main(argv: any) {
 	if (linuxUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/Joplin-.*?\.AppImage)/, linuxUrl);
 
 	if (androidUrl) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
-	if (android32Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
+	// if (android32Url) content = content.replace(/(https:\/\/objects.joplinusercontent.com\/v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
 
 	setReadmeContent(content);
 }

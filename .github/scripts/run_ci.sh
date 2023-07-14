@@ -194,7 +194,12 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 		# It can be removed once we upgrade to electron-builder@23, however we
 		# cannot currently do this due to this error:
 		# https://github.com/laurent22/joplin/issues/8149
-		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist
+		#
+		# electron-builder@24, however, still expects the python binary to be named
+		# "python" and seems to no longer respect the PYTHON_PATH environment variable.
+		# We work around this by aliasing python.
+		alias python=$(which python3)
+		USE_HARD_LINKS=false yarn run dist
 	else
 		USE_HARD_LINKS=false yarn run dist
 	fi	
@@ -207,7 +212,15 @@ else
 	
 	if [ "$IS_MACOS" == "1" ]; then
 		# See above why we need to specify Python
-		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+		alias python=$(which python3)
+
+		# We also want to disable signing the app in this case, because
+		# it randomly fails and we don't even need it
+		# https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+		export CSC_IDENTITY_AUTO_DISCOVERY=false
+		npm pkg set 'build.mac.identity'=null --json
+		
+		USE_HARD_LINKS=false yarn run dist --publish=never
 	else
 		USE_HARD_LINKS=false yarn run dist --publish=never
 	fi
