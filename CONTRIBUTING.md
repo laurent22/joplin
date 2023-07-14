@@ -29,7 +29,7 @@ Joplin is available in multiple languages thanks to the help of its users. You c
 
 # Contributing to Joplin's code
 
-If you want to start contributing to the project's code, please follow these guidelines before creating a pull request: 
+If you want to start contributing to the project's code, please follow these guidelines before creating a pull request:
 
 - The top post of the pull request should contain a full, self-contained explanation of the feature: what it does, how it does it, with examples of usage and screenshots. Also explain why you want to add this - what problem does it solve. Do not simply add a text `Implement feature #4345` or link to forum posts, because the information there will most likely be outdated or confusing (multiple discussions and opinions). The pull request needs to be self-contained.
 - Bug fixes are always welcome. Start by reviewing the [list of bugs](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
@@ -38,7 +38,7 @@ If you want to start contributing to the project's code, please follow these gui
 - **Changes that will consist of more than 50 lines of code should be discussed on the [Joplin Forum](https://discourse.joplinapp.org/)**, so that you don't spend too much time implementing something that might not be accepted.
 - All the applications share the same backend (database, synchronisation, settings, models, business logic, etc.) so if you change something in the backend in one app, make sure it still works in the other apps. Usually it does, but keep this in mind.
 - Pull requests that make many changes using an automated tool, like for spell fixing, styling, etc. will not be accepted. An exception would be if the changes have been discussed in the forum and someone has agreed to review **and test** the pull request.
-- Pull requests that address multiple issues will most likely stall and eventually be closed. This is because we might be fine with one of the changes but not with others and untangling that kind of pull request is too much hassle both for maintainers and the person who submitted it. So most of the time someone gives up and the PR gets closed. So please keep the pull request focused on one issue.
+- Pull requests that address multiple issues will most likely stall and eventually be closed. This is because we might be fine with one of the changes but not with others and untangling that kind of pull request is too much hassle for both maintainers and the person who submitted it. So most of the time someone gives up and the PR gets closed. So please keep the pull request focused on one issue.
 - **Do not mark your reviewer's comments as "resolved"**. If you do that, the comments will be hidden and the reviewer will not know what are the pending issues in the pull request. Only the reviewer should resolve the comments.
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/dev/BUILD.md) for more details.
