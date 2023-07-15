@@ -9,15 +9,15 @@ import { setImmediate } from 'timers';
 window.setImmediate = setImmediate;
 
 import { _ } from '@joplin/lib/locale';
-import { act, fireEvent, render, renderHook, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { expect, describe, beforeEach, test, jest } from '@jest/globals';
 import '@testing-library/jest-native/extend-expect';
 import { createNTestNotes, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
-import useStyles from './useStyles';
+import configScreenStyles from '../configScreenStyles';
 import { type ShareOptions } from 'react-native-share';
-import NoteExportComponent from './NoteExportComponent';
 import Setting from '@joplin/lib/models/Setting';
+import NoteExportButton from './NoteExportButton';
 
 jest.mock('react-native-share', () => {
 	const Share = {
@@ -26,12 +26,7 @@ jest.mock('react-native-share', () => {
 	return { default: Share };
 });
 
-const getDefaultStyles = () => {
-	const styles = renderHook(() => useStyles(Setting.THEME_DARK));
-	return styles.result.current;
-};
-
-describe('NoteExportComponent', () => {
+describe('NoteExportButton', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -44,12 +39,12 @@ describe('NoteExportComponent', () => {
 	});
 
 	test('should show "Exported successfully!" after clicking "Export"', async () => {
-		const styles = getDefaultStyles();
-		const view = render(<NoteExportComponent
+		const styles = configScreenStyles(Setting.THEME_DARK);
+		const view = render(<NoteExportButton
 			styles={styles}
 		/>);
 
-		const exportButton = view.getByText(_('Export as JEX'));
+		const exportButton = view.getByText(_('Export all notes as JEX'));
 		await act(() => fireEvent.press(exportButton));
 
 		await waitFor(() =>

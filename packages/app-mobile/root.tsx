@@ -58,7 +58,7 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 import NotesScreen from './components/screens/Notes';
 const { TagsScreen } = require('./components/screens/tags.js');
-import ConfigScreen from './components/screens/ConfigScreen';
+import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
@@ -117,7 +117,6 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
-import ExportScreen from './components/screens/ExportScreen/ExportScreen';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -999,7 +998,6 @@ class AppComponent extends React.Component {
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
 			Config: { screen: ConfigScreen },
-			Export: { screen: ExportScreen },
 		};
 
 

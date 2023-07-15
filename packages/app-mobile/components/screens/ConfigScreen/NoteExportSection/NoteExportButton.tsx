@@ -7,15 +7,14 @@ import { useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
 import Share from 'react-native-share';
-import exportAllFolders, { makeExportCacheDirectory } from './utils/exportAllFolders';
-import { ExportScreenStyles } from './useStyles';
+import exportAllFolders, { makeExportCacheDirectory } from './exportAllFolders';
 import { ExportProgressState } from '@joplin/lib/services/interop/types';
-import SectionHeader from './SectionHeader';
+import { ConfigScreenStyles } from '../configScreenStyles';
 
-const logger = Logger.create('NoteExportComponent');
+const logger = Logger.create('NoteExportButton');
 
 interface Props {
-	styles: ExportScreenStyles;
+	styles: ConfigScreenStyles;
 }
 
 enum ExportStatus {
@@ -24,7 +23,7 @@ enum ExportStatus {
 	Exported,
 }
 
-const NoteExportComponent = (props: Props) => {
+const NoteExportButton = (props: Props) => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
 	const [exportProgress, setExportProgress] = useState<number|undefined>(0);
 	const [warnings, setWarnings] = useState<string>('');
@@ -73,6 +72,12 @@ const NoteExportComponent = (props: Props) => {
 		}
 	}, [exportStatus]);
 
+	const descriptionComponent = (
+		<Text style={props.styles.descriptionText}>
+			{_('Share a copy of all notes in a file format that can be imported by Joplin on a computer.')}
+		</Text>
+	);
+
 	const startOrCancelExportButton = (
 		<>
 			<ProgressBar
@@ -82,20 +87,21 @@ const NoteExportComponent = (props: Props) => {
 			<Button
 				onPress={startExport}
 				disabled={exportStatus === ExportStatus.Exporting}
-				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export as JEX')}
+				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export all notes as JEX')}
 			/>
+			{exportStatus === ExportStatus.NotStarted ? descriptionComponent : null}
 		</>
 	);
 
 	const warningDisplay = (
-		<Text style={props.styles.warningTextStyle}>
+		<Text style={props.styles.warningText}>
 			{_('Warnings:\n%s', warnings)}
 		</Text>
 	);
 
 	const postExportMessage = (
 		<>
-			<Text style={props.styles.statusTextStyle}>{_('Exported successfully!')}</Text>
+			<Text style={props.styles.descriptionText}>{_('Exported successfully!')}</Text>
 			{warnings.length > 0 ? warningDisplay : null}
 		</>
 	);
@@ -108,15 +114,12 @@ const NoteExportComponent = (props: Props) => {
 	}
 
 	return (
-		<View style={props.styles.sectionContainerStyle}>
-			<SectionHeader
-				styles={props.styles}
-				title={_('Export Notes')}
-				description={_('Share a copy of all notes in a file format that can be imported by Joplin on a computer.')}
-			/>
-			{mainContent}
+		<View style={props.styles.settingContainer}>
+			<View style={{ flex: 1, flexDirection: 'column' }}>
+				{mainContent}
+			</View>
 		</View>
 	);
 };
 
-export default NoteExportComponent;
+export default NoteExportButton;
