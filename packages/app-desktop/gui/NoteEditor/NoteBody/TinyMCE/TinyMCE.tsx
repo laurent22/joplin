@@ -551,14 +551,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
-			// Available table toolbar buttons:
-			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
-			const tableToolbar = [
-				'tabledelete',
-				'tableinsertrowbefore tableinsertrowafter tabledeleterow',
-				'tableinsertcolbefore tableinsertcolafter tabledeletecol',
-			];
-
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -578,7 +570,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				table_toolbar: tableToolbar.join(' | '),
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
