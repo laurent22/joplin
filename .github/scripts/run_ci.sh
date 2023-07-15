@@ -213,6 +213,13 @@ else
 	if [ "$IS_MACOS" == "1" ]; then
 		# See above why we need to specify Python
 		alias python=$(which python3)
+
+		# We also want to disable signing the app in this case, because
+		# it randomly fails and we don't even need it
+		# https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+		export CSC_IDENTITY_AUTO_DISCOVERY=false
+		npm pkg set 'build.mac.identity'=null --json
+		
 		USE_HARD_LINKS=false yarn run dist --publish=never
 	else
 		USE_HARD_LINKS=false yarn run dist --publish=never
