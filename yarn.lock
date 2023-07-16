@@ -5021,6 +5021,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/node-fetch": 2.6.3
     execa: 5.1.1
