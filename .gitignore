@@ -467,6 +467,8 @@ packages/lib/JoplinServerApi.js
 packages/lib/Logger.js
 packages/lib/ObjectUtils.js
 packages/lib/PoorManIntervals.js
+packages/lib/RotatingLogs.js
+packages/lib/RotatingLogs.test.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
 packages/lib/SyncTargetNone.js
