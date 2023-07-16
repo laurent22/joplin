@@ -9,7 +9,8 @@ import Note from '@joplin/lib/models/Note';
 import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
 import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
-const styled = require('styled-components').default;
+import styled from 'styled-components';
+import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 
 enum BaseBreakpoint {
 	Sm = 75,
@@ -27,6 +28,8 @@ interface Props {
 	height: number;
 	width: number;
 	onContentHeightChange: (sameRow: boolean)=> void;
+	newNoteButtonEnabled: boolean;
+	newTodoButtonEnabled: boolean;
 }
 
 interface Breakpoints {
@@ -255,6 +258,7 @@ function NoteListControls(props: Props) {
 					level={ButtonLevel.Primary}
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
+					disabled={!props.newNoteButtonEnabled}
 				/>
 				<StyledButton ref={newTodoRef}
 					className="new-todo-button"
@@ -264,6 +268,7 @@ function NoteListControls(props: Props) {
 					level={ButtonLevel.Secondary}
 					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
+					disabled={!props.newTodoButtonEnabled}
 				/>
 			</TopRow>
 		);
@@ -300,9 +305,13 @@ function NoteListControls(props: Props) {
 }
 
 const mapStateToProps = (state: AppState) => {
+	const whenClauseContext = stateToWhenClauseContext(state);
+
 	return {
 		// TODO: showNewNoteButtons and the logic associated is not needed anymore.
 		showNewNoteButtons: true,
+		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
+		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
 		sortOrderField: state.settings['notes.sortOrder.field'],
 		sortOrderReverse: state.settings['notes.sortOrder.reverse'],

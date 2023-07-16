@@ -1,0 +1,14 @@
+.dropdown-control {
+	border: 1px solid var(--joplin-border-color4);
+	border-radius: 3px;
+	font-size: var(--joplin-font-size)px;
+	color: var(--joplin-color);
+	padding: 0 8px;
+	box-sizing: border-box;
+	background-color: var(--joplin-background-color4);
+	min-height: 26px;
+
+	&.-variant2 {
+		border: none;
+	}
+}

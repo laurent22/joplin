@@ -142,6 +142,7 @@ packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
 packages/app-desktop/gui/DropboxLoginScreen.js
+packages/app-desktop/gui/Dropdown/Dropdown.js
 packages/app-desktop/gui/EditFolderDialog/Dialog.js
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EmojiBox.js
@@ -162,6 +163,9 @@ packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
 packages/app-desktop/gui/MainScreen/MainScreen.js
 packages/app-desktop/gui/MainScreen/commands/addProfile.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
+packages/app-desktop/gui/MainScreen/commands/deleteFolder.js
+packages/app-desktop/gui/MainScreen/commands/deleteNote.js
+packages/app-desktop/gui/MainScreen/commands/duplicateNote.js
 packages/app-desktop/gui/MainScreen/commands/editAlarm.js
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js
 packages/app-desktop/gui/MainScreen/commands/gotoAnything.js
@@ -196,6 +200,7 @@ packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.js
 packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js
+packages/app-desktop/gui/MainScreen/commands/toggleNoteType.js
 packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.js
 packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.js
 packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.js
@@ -502,12 +507,14 @@ packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/note-screen-shared.js
+packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
 packages/lib/dom.js
 packages/lib/dummy.test.js
 packages/lib/errorUtils.js
+packages/lib/errors.js
 packages/lib/eventManager.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-memory.js
@@ -562,6 +569,7 @@ packages/lib/models/settings/FileHandler.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
+packages/lib/models/utils/readOnly.js
 packages/lib/models/utils/types.js
 packages/lib/models/utils/userData.js
 packages/lib/models/utils/userData.test.js
@@ -765,7 +773,10 @@ packages/lib/services/synchronizer/syncInfoUtils.test.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
+packages/lib/services/synchronizer/utils/resourceRemotePath.js
+packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim.js
 packages/lib/testing/syncTargetUtils.js

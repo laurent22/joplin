@@ -140,6 +140,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
 	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
 	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
+	- [Read-only items](https://github.com/laurent22/joplin/blob/dev/readme/spec/read_only.md)
 
 - Google Summer of Code 2022
 

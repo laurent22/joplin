@@ -1699,6 +1699,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'sync.shareCache': {
+				value: null,
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			'voiceTypingBaseUrl': {
 				value: '',
 				type: SettingItemType.String,
@@ -1708,7 +1714,6 @@ class Setting extends BaseModel {
 				label: () => _('Voice typing language files (URL)'),
 				section: 'note',
 			},
-
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
