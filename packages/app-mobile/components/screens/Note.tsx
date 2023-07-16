@@ -25,7 +25,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
@@ -960,13 +960,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
+		const readOnly = this.state.readOnly;
 
 		const cacheKey = md5([isTodo, isSaved].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
 
-		const output = [];
+		const output: MenuOptionType[] = [];
 
 		// The file attachement modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
@@ -981,6 +982,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: () => this.showAttachMenu(),
+				disabled: readOnly,
 			});
 		}
 
@@ -990,6 +992,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				onPress: () => {
 					this.setState({ alarmDialogShown: true });
 				},
+				disabled: readOnly,
 			});
 		}
 
@@ -998,6 +1001,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			onPress: () => {
 				void this.share_onPress();
 			},
+			disabled: readOnly,
 		});
 
 		// Voice typing is enabled only for French language and on Android for now
@@ -1008,6 +1012,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					// this.voiceRecording_onPress();
 					this.setState({ voiceTypingDialogShown: true });
 				},
+				disabled: readOnly,
 			});
 		}
 
@@ -1024,6 +1029,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			onPress: () => {
 				this.toggleIsTodo_onPress();
 			},
+			disabled: readOnly,
 		});
 		if (isSaved) {
 			output.push({
@@ -1044,6 +1050,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			onPress: () => {
 				void this.deleteNote_onPress();
 			},
+			disabled: readOnly,
 		});
 
 		this.menuOptionsCache_ = {};
@@ -1106,7 +1113,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public folderPickerOptions() {
 		const options = {
-			enabled: true,
+			enabled: !this.state.readOnly,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
 			onValueChange: this.folderPickerOptions_valueChanged,
 		};
@@ -1244,6 +1251,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
+					readOnly={this.state.readOnly}
 					style={{
 						...editorStyle,
 						paddingLeft: 0,
@@ -1300,6 +1308,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
+					editable={!this.state.readOnly}
 				/>
 			</View>
 		);
@@ -1326,6 +1335,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
+					title={this.state.folder ? this.state.folder.title : ''}
 				/>
 				{titleComp}
 				{bodyComponent}

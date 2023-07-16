@@ -10,6 +10,7 @@ import { isRootSharedFolder } from '../services/share/reducer';
 import Logger from '../Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
+import { LoadOptions } from './utils/types';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -122,6 +123,8 @@ export default class Folder extends BaseItem {
 			title: this.conflictFolderTitle(),
 			updated_time: time.unixMs(),
 			user_updated_time: time.unixMs(),
+			share_id: '',
+			is_shared: 0,
 		};
 	}
 
@@ -671,9 +674,9 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	public static load(id: string, _options: any = null): Promise<FolderEntity> {
+	public static load(id: string, options: LoadOptions = null): Promise<FolderEntity> {
 		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
-		return super.load(id);
+		return super.load(id, options);
 	}
 
 	public static defaultFolder() {
@@ -759,14 +762,14 @@ export default class Folder extends BaseItem {
 
 		syncDebugLog.info('Folder Save:', o);
 
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		return super.save(o, options).then((folder: FolderEntity) => {
-			this.dispatch({
-				type: 'FOLDER_UPDATE_ONE',
-				item: folder,
-			});
-			return folder;
+		const savedFolder: FolderEntity = await super.save(o, options);
+
+		this.dispatch({
+			type: 'FOLDER_UPDATE_ONE',
+			item: savedFolder,
 		});
+
+		return savedFolder;
 	}
 
 	public static serializeIcon(icon: FolderIcon): string {

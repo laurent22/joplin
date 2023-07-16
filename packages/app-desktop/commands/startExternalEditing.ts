@@ -23,6 +23,6 @@ export const runtime = (): CommandRuntime => {
 				bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
 			}
 		},
-		enabledCondition: 'oneNoteSelected',
+		enabledCondition: 'oneNoteSelected && !noteIsReadOnly',
 	};
 };

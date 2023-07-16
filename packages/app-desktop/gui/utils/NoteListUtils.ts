@@ -53,17 +53,7 @@ export default class NoteListUtils {
 			);
 
 			menu.append(
-				new MenuItem({
-					label: _('Duplicate'),
-					click: async () => {
-						for (let i = 0; i < noteIds.length; i++) {
-							const note = await Note.load(noteIds[i]);
-							await Note.duplicate(noteIds[i], {
-								uniqueTitle: _('%s - Copy', note.title),
-							});
-						}
-					},
-				})
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds))
 			);
 
 			if (singleNoteId) {
@@ -73,22 +63,9 @@ export default class NoteListUtils {
 
 			if (noteIds.length <= 1) {
 				menu.append(
-					new MenuItem({
-						label: _('Switch between note and to-do type'),
-						click: async () => {
-							for (let i = 0; i < noteIds.length; i++) {
-								const note = await Note.load(noteIds[i]);
-								const newNote = await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
-								const eventNote = {
-									id: newNote.id,
-									is_todo: newNote.is_todo,
-									todo_due: newNote.todo_due,
-									todo_completed: newNote.todo_completed,
-								};
-								eventManager.emit('noteTypeToggle', { noteId: note.id, note: eventNote });
-							}
-						},
-					})
+					new MenuItem(
+						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds)
+					)
 				);
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
@@ -189,12 +166,9 @@ export default class NoteListUtils {
 		}
 
 		menu.append(
-			new MenuItem({
-				label: _('Delete'),
-				click: async () => {
-					await this.confirmDeleteNotes(noteIds);
-				},
-			})
+			new MenuItem(
+				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds)
+			)
 		);
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
@@ -211,21 +185,6 @@ export default class NoteListUtils {
 		}
 
 		return menu;
-	}
-
-	public static async confirmDeleteNotes(noteIds: string[]) {
-		if (!noteIds.length) return;
-
-		const msg = await Note.deleteMessage(noteIds);
-		if (!msg) return;
-
-		const ok = bridge().showConfirmMessageBox(msg, {
-			buttons: [_('Delete'), _('Cancel')],
-			defaultId: 1,
-		});
-
-		if (!ok) return;
-		await Note.batchDelete(noteIds);
 	}
 
 }

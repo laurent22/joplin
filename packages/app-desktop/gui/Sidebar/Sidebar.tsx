@@ -296,12 +296,9 @@ const SidebarComponent = (props: Props) => {
 		const state: AppState = store().getState();
 
 		let deleteMessage = '';
-		let deleteButtonLabel = _('Remove');
-		if (itemType === BaseModel.TYPE_FOLDER) {
-			const folder = await Folder.load(itemId);
-			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
-			deleteButtonLabel = _('Delete');
-		} else if (itemType === BaseModel.TYPE_TAG) {
+		const deleteButtonLabel = _('Remove');
+
+		if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
 			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
@@ -321,29 +318,33 @@ const SidebarComponent = (props: Props) => {
 			);
 		}
 
-		menu.append(
-			new MenuItem({
-				label: deleteButtonLabel,
-				click: async () => {
-					const ok = bridge().showConfirmMessageBox(deleteMessage, {
-						buttons: [deleteButtonLabel, _('Cancel')],
-						defaultId: 1,
-					});
-					if (!ok) return;
-
-					if (itemType === BaseModel.TYPE_FOLDER) {
-						await Folder.delete(itemId);
-					} else if (itemType === BaseModel.TYPE_TAG) {
-						await Tag.untagAll(itemId);
-					} else if (itemType === BaseModel.TYPE_SEARCH) {
-						props.dispatch({
-							type: 'SEARCH_DELETE',
-							id: itemId,
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			menu.append(
+				new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemId))
+			);
+		} else {
+			menu.append(
+				new MenuItem({
+					label: deleteButtonLabel,
+					click: async () => {
+						const ok = bridge().showConfirmMessageBox(deleteMessage, {
+							buttons: [deleteButtonLabel, _('Cancel')],
+							defaultId: 1,
 						});
-					}
-				},
-			})
-		);
+						if (!ok) return;
+
+						if (itemType === BaseModel.TYPE_TAG) {
+							await Tag.untagAll(itemId);
+						} else if (itemType === BaseModel.TYPE_SEARCH) {
+							props.dispatch({
+								type: 'SEARCH_DELETE',
+								id: itemId,
+							});
+						}
+					},
+				})
+			);
+		}
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));

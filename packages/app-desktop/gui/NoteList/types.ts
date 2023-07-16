@@ -25,4 +25,5 @@ export interface Props {
 	provisionalNoteIds: string[];
 	visible: boolean;
 	focusedField: string;
+	parentFolderIsReadOnly: boolean;
 }
