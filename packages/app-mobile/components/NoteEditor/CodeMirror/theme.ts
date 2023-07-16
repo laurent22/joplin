@@ -101,6 +101,7 @@ const createTheme = (theme: any): Extension[] => {
 			borderStyle: 'solid',
 			borderColor: theme.colorFaded,
 			backgroundColor: 'rgba(155, 155, 155, 0.1)',
+			whiteSpace: 'pre-wrap',
 		},
 
 		// CodeMirror wraps the existing inline span in an additional element.
