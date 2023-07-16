@@ -863,6 +863,7 @@ packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
 packages/tools/bundleDefaultPlugins.test.js
+packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.js
 packages/tools/checkLibPaths.test.js
 packages/tools/convertThemesToCss.js
