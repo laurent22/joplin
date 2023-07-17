@@ -10,7 +10,6 @@ export interface ParseOptions {
 	baseUrl?: string;
 	disableEscapeContent?: boolean;
 	convertEmbeddedPdfsToLinks?: boolean;
-	softBreaksEnabled?: boolean;
 }
 
 export default class HtmlToMd {
@@ -24,7 +23,12 @@ export default class HtmlToMd {
 			bulletListMarker: '-',
 			emDelimiter: '*',
 			strongDelimiter: '**',
-			br: options.softBreaksEnabled ? '<br/>' : '',
+
+			// If soft-breaks are enabled, lines need to end with two or more spaces for
+			// trailing <br/>s to render. See
+			// https://github.com/laurent22/joplin/issues/8430
+			br: '  ',
+
 			disableEscapeContent: 'disableEscapeContent' in options ? options.disableEscapeContent : false,
 		};
 		if (options.convertEmbeddedPdfsToLinks) {
