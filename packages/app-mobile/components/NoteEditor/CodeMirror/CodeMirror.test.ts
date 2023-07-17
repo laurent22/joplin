@@ -17,6 +17,7 @@ const createEditorSettings = (themeId: number) => {
 	const editorSettings: EditorSettings = {
 		katexEnabled: true,
 		spellcheckEnabled: true,
+		readOnly: false,
 		themeId,
 		themeData,
 	};
