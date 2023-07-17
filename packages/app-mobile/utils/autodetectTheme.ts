@@ -7,6 +7,7 @@ const logger = Logger.create('autodetectTheme');
 const autodetectTheme = () => {
 	if (!Setting.value('themeAutoDetect')) {
 		logger.info('Theme autodetect disabled, not switching theme to match system.');
+		return;
 	}
 
 	const colorScheme = Appearance.getColorScheme();
