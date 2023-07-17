@@ -2,6 +2,9 @@ import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
 import { FolderEntity } from '../database/types';
 import { MasterKeyEntity } from '../e2ee/types';
+import Logger from '../../Logger';
+
+const logger = Logger.create('share/reducer');
 
 interface StateShareUserUser {
 	id: string;
@@ -15,10 +18,17 @@ export enum ShareUserStatus {
 	Rejected = 2,
 }
 
+export interface SharePermissions {
+	can_read: number;
+	can_write: number;
+}
+
 export interface StateShareUser {
 	id: string;
 	status: ShareUserStatus;
 	user: StateShareUserUser;
+	can_read: number;
+	can_write: number;
 }
 
 export interface StateShare {
@@ -35,6 +45,8 @@ export interface ShareInvitation {
 	master_key: MasterKeyEntity;
 	share: StateShare;
 	status: ShareUserStatus;
+	can_read: number;
+	can_write: number;
 }
 
 export interface State {
@@ -51,6 +63,27 @@ export const defaultState: State = {
 	shareUsers: {},
 	shareInvitations: [],
 	processingShareInvitationResponse: false,
+};
+
+export const parseShareCache = (serialized: string): State => {
+	let raw: any = {};
+	try {
+		raw = JSON.parse(serialized);
+		if (!raw) raw = {};
+	} catch (error) {
+		logger.info('Could not load share cache from settings - will return a default value. Error was:', error);
+	}
+
+	return {
+		shares: raw.shares || [],
+		shareUsers: raw.shareUsers || {},
+		shareInvitations: raw.shareInvitations || [],
+		processingShareInvitationResponse: false,
+	};
+};
+
+export const readFromSettings = (state: RootState): State => {
+	return parseShareCache(state.settings['sync.shareCache']);
 };
 
 export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
@@ -80,6 +113,18 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 		case 'SHARE_USER_SET':
 
 			draft.shareUsers[action.shareId] = action.shareUsers;
+			break;
+
+		case 'SHARE_USER_UPDATE_ONE':
+
+			{
+				const shareUser = (draft.shareUsers as any)[action.shareId].find((su: StateShareUser) => su.id === action.shareUser.id);
+				if (!shareUser) throw new Error(`No such user: ${JSON.stringify(action)}`);
+
+				for (const [name, value] of Object.entries(action.shareUser)) {
+					shareUser[name] = value;
+				}
+			}
 			break;
 
 		case 'SHARE_INVITATION_SET':

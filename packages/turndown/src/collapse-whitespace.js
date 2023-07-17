@@ -49,7 +49,7 @@ function collapseWhitespace (options) {
   if (!element.firstChild || isPre(element)) return
 
   var prevText = null
-  var prevVoid = false
+  var keepLeadingWs = false
 
   var prev = null
   var node = next(prev, element, isPre)
@@ -58,13 +58,12 @@ function collapseWhitespace (options) {
   // added, which results in multiple spaces. This spaces are then incorrectly interpreted as a code block by renderers.
   // So by keeping track of this, we make sure that only one space at most is added.
   var prevTextIsOnlySpaces = false;
-
   while (node !== element) {
     if (node.nodeType === 3 || node.nodeType === 4) { // Node.TEXT_NODE or Node.CDATA_SECTION_NODE
       var text = node.data.replace(/[ \r\n\t]+/g, ' ')
 
       if ((!prevText || / $/.test(prevText.data)) &&
-          !prevVoid && text[0] === ' ') {
+          !keepLeadingWs && text[0] === ' ') {
         text = text.substr(1)
       }
 
@@ -87,11 +86,14 @@ function collapseWhitespace (options) {
         }
 
         prevText = null
-        prevVoid = false
-      } else if (isVoid(node)) {
-        // Avoid trimming space around non-block, non-BR void elements.
+        keepLeadingWs = false
+      } else if (isVoid(node) || isPre(node)) {
+        // Avoid trimming space around non-block, non-BR void elements and inline PRE.
         prevText = null
-        prevVoid = true
+        keepLeadingWs = true
+      } else if (prevText) {
+        // Drop protection if set previously.
+        keepLeadingWs = false
       }
     } else {
       node = remove(node)

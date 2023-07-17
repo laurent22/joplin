@@ -9,6 +9,7 @@ interface Props {
 	themeId: number;
 	style: any;
 	items: any[];
+	disabled: boolean;
 }
 
 class ToolbarBaseComponent extends React.Component<Props, any> {
@@ -46,6 +47,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 				const props = {
 					key: key,
 					themeId: this.props.themeId,
+					disabled: this.props.disabled,
 					...o,
 				};
 

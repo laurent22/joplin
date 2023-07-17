@@ -271,6 +271,11 @@ export default class Resource extends BaseItem {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
+	public static setLocalStateQueries(resourceOrId: any, state: ResourceLocalStateEntity) {
+		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
+		return ResourceLocalState.saveQueries({ ...state, resource_id: id });
+	}
+
 	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		await ResourceLocalState.save({ ...state, resource_id: id });
@@ -288,17 +293,18 @@ export default class Resource extends BaseItem {
 	}
 
 	public static async batchDelete(ids: string[], options: any = null) {
-		// For resources, there's not really batch deleting since there's the file data to delete
-		// too, so each is processed one by one with the item being deleted last (since the db
-		// call is the less likely to fail).
+		// For resources, there's not really batch deletion since there's the
+		// file data to delete too, so each is processed one by one with the
+		// file data being deleted last since the metadata deletion call may
+		// throw (for example if trying to delete a read-only item).
 		for (let i = 0; i < ids.length; i++) {
 			const id = ids[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 
 			const path = Resource.fullPath(resource);
-			await this.fsDriver().remove(path);
 			await super.batchDelete([id], options);
+			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 		}
 
@@ -362,12 +368,20 @@ export default class Resource extends BaseItem {
 		await this.requireIsReady(resource);
 
 		const fileStat = await this.fsDriver().stat(newBlobFilePath);
-		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
 
-		return await Resource.save({
+		// We first save the resource metadata because this can throw, for
+		// example if modifying a resource that is read-only
+
+		const result = await Resource.save({
 			id: resource.id,
 			size: fileStat.size,
 		});
+
+		// If the above call has succeeded, we save the data blob
+
+		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+
+		return result;
 	}
 
 	public static async resourceBlobContent(resourceId: string, encoding = 'Buffer') {
@@ -383,6 +397,7 @@ export default class Resource extends BaseItem {
 		let newResource: ResourceEntity = { ...resource };
 		delete newResource.id;
 		delete newResource.is_shared;
+		delete newResource.share_id;
 		newResource = await Resource.save(newResource);
 
 		const newLocalState = { ...localState };

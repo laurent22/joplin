@@ -49,7 +49,7 @@ function requestCanBeRepeated(error: any) {
 	if (errorCode === 403 || errorCode === 401) return false;
 
 	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
-	if (errorCode === 'rejectedByTarget') return false;
+	if (errorCode === 'rejectedByTarget' || errorCode === 'isReadOnly') return false;
 
 	// We don't repeat failSafe errors because it's an indication of an issue at the
 	// server-level issue which usually cannot be fixed by repeating the request.
