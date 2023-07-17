@@ -59,6 +59,9 @@
 		},
 		{
 			"name": "fats"
+		},
+		{
+			"name": "dchecks"
 		}
 	],
 	"orgs": [
@@ -87,6 +90,11 @@
 			"url": "https://tranio.com/spain/",
 			"title": "Property for sale in Spain",
 			"imageName": "TranioOverseasProperty.jpg"
+		},
+		{
+			"url": "https://citricsheep.com",
+			"title": "Citric Sheep",
+			"imageName": "CitricSheep.png"
 		}
 	],
 	"orgsOld": [
