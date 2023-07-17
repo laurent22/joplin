@@ -1,11 +1,24 @@
 import COMMONMARK_RULES from './commonmark-rules'
 import Rules from './rules'
-import { extend, isCodeBlock } from './utilities'
+import { extend, isCodeBlock, trimLeadingNewlines, trimTrailingNewlines } from './utilities'
 import RootNode from './root-node'
 import Node from './node'
 var reduce = Array.prototype.reduce
-var leadingNewLinesRegExp = /^\n*/
-var trailingNewLinesRegExp = /\n*$/
+var escapes = [
+  [/\\/g, '\\\\'],
+  [/\*/g, '\\*'],
+  [/^-/g, '\\-'],
+  [/^\+ /g, '\\+ '],
+  [/^(=+)/g, '\\$1'],
+  [/^(#{1,6}) /g, '\\$1 '],
+  [/`/g, '\\`'],
+  [/^~~~/g, '\\~~~'],
+  [/\[/g, '\\['],
+  [/\]/g, '\\]'],
+  [/^>/g, '\\>'],
+  [/_/g, '\\_'],
+  [/^(\d+)\. /g, '$1\\. ']
+]
 
 export default function TurndownService (options) {
   if (!(this instanceof TurndownService)) return new TurndownService(options)
@@ -23,7 +36,9 @@ export default function TurndownService (options) {
     linkReferenceStyle: 'full',
     anchorNames: [],
     br: '  ',
+    nonbreakingSpace: '&nbsp;',
     disableEscapeContent: false,
+    preformattedCode: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
@@ -56,7 +71,7 @@ TurndownService.prototype = {
 
     if (input === '') return ''
 
-    var output = process.call(this, new RootNode(input))
+    var output = process.call(this, new RootNode(input, this.options))
     return postProcess.call(this, output)
   },
 
@@ -128,48 +143,9 @@ TurndownService.prototype = {
    */
 
   escape: function (string) {
-    return (
-      string
-        // Escape backslash escapes!
-        .replace(/\\(\S)/g, '\\\\$1')
-
-        // Escape headings
-        .replace(/^(#{1,6} )/gm, '\\$1')
-
-        // Escape hr
-        .replace(/^([-*_] *){3,}$/gm, function (match, character) {
-          return match.split(character).join('\\' + character)
-        })
-
-        // Escape ol bullet points
-        .replace(/^(\W* {0,3})(\d+)\. /gm, '$1$2\\. ')
-
-        // Escape ul bullet points
-        .replace(/^([^\\\w]*)[*+-] /gm, function (match) {
-          return match.replace(/([*+-])/g, '\\$1')
-        })
-
-        // Escape blockquote indents
-        .replace(/^(\W* {0,3})> /gm, '$1\\> ')
-
-        // Escape em/strong *
-        .replace(/\*+(?![*\s\W]).+?\*+/g, function (match) {
-          return match.replace(/\*/g, '\\*')
-        })
-
-        // Escape em/strong _
-        .replace(/_+(?![_\s\W]).+?_+/g, function (match) {
-          return match.replace(/_/g, '\\_')
-        })
-
-        // Escape code _
-        .replace(/`+(?![`\s\W]).+?`+/g, function (match) {
-          return match.replace(/`/g, '\\`')
-        })
-
-        // Escape link brackets
-        .replace(/[\[\]]/g, '\\$&') // eslint-disable-line no-useless-escape
-    )
+    return escapes.reduce(function (accumulator, escape) {
+      return accumulator.replace(escape[0], escape[1])
+    }, string)
   }
 }
 
@@ -186,7 +162,7 @@ function process (parentNode, escapeContent = 'auto') {
 
   var self = this
   return reduce.call(parentNode.childNodes, function (output, node) {
-    node = new Node(node)
+    node = new Node(node, self.options)
 
     var replacement = ''
     if (node.nodeType === 3) {
@@ -239,39 +215,35 @@ function replacementForNode (node) {
   var content = process.call(this, node, rule.escapeContent ? rule.escapeContent() : 'auto')
   var whitespace = node.flankingWhitespace
   if (whitespace.leading || whitespace.trailing) content = content.trim()
+
+  const replaceNonbreakingSpaces = space => {
+    // \u{00A0} is a nonbreaking space
+    return space.replace(/\u{00A0}/ug, this.options.nonbreakingSpace);
+  };
+
   return (
-    whitespace.leading +
-    rule.replacement(content, node, this.options) +
-    whitespace.trailing
+    replaceNonbreakingSpaces(whitespace.leading) +
+    replaceNonbreakingSpaces(rule.replacement(content, node, this.options)) +
+    replaceNonbreakingSpaces(whitespace.trailing)
   )
 }
 
 /**
- * Determines the new lines between the current output and the replacement
+ * Joins replacement to the current output with appropriate number of new lines
  * @private
  * @param {String} output The current conversion output
  * @param {String} replacement The string to append to the output
- * @returns The whitespace to separate the current output and the replacement
+ * @returns Joined output
  * @type String
  */
 
-function separatingNewlines (output, replacement) {
-  var newlines = [
-    output.match(trailingNewLinesRegExp)[0],
-    replacement.match(leadingNewLinesRegExp)[0]
-  ].sort()
-  var maxNewlines = newlines[newlines.length - 1]
-  return maxNewlines.length < 2 ? maxNewlines : '\n\n'
-}
+function join (output, replacement) {
+  var s1 = trimTrailingNewlines(output)
+  var s2 = trimLeadingNewlines(replacement)
+  var nls = Math.max(output.length - s1.length, replacement.length - s2.length)
+  var separator = '\n\n'.substring(0, nls)
 
-function join (string1, string2) {
-  var separator = separatingNewlines(string1, string2)
-
-  // Remove trailing/leading newlines and replace with separator
-  string1 = string1.replace(trailingNewLinesRegExp, '')
-  string2 = string2.replace(leadingNewLinesRegExp, '')
-
-  return string1 + separator + string2
+  return s1 + separator + s2
 }
 
 /**
