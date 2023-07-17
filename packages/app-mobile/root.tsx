@@ -118,7 +118,7 @@ import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
-import autodetectTheme from './utils/autodetectTheme';
+import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -857,8 +857,12 @@ class AppComponent extends React.Component {
 		});
 
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
-		this.themeChangeListener_ = Appearance.addChangeListener(() => autodetectTheme());
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
+
+		this.themeChangeListener_ = Appearance.addChangeListener(
+			({ colorScheme }) => onSystemColorSchemeChange(colorScheme)
+		);
+		onSystemColorSchemeChange(Appearance.getColorScheme());
 
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
