@@ -4577,7 +4577,7 @@ __metadata:
     react-native-file-viewer: 2.1.5
     react-native-fingerprint-scanner: 6.0.0
     react-native-fs: 2.20.0
-    react-native-gesture-handler: 2.10.2
+    react-native-gesture-handler: 2.11.0
     react-native-get-random-values: 1.9.0
     react-native-image-picker: 5.4.2
     react-native-image-resizer: 1.4.5
@@ -27826,9 +27826,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:2.10.2":
-  version: 2.10.2
-  resolution: "react-native-gesture-handler@npm:2.10.2"
+"react-native-gesture-handler@npm:2.11.0":
+  version: 2.11.0
+  resolution: "react-native-gesture-handler@npm:2.11.0"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -27838,7 +27838,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: e4ae47ef0b6acd30d820021ad70a73f7f0d5e22acd4fd1d6d9da9063e768a1ac11226b7ce518f7a93f2a9cd47de048756c9f0830a86c2784a991d30652a937df
+  checksum: 2f1e5ab3e96473c034f90e7aecce7d66fca992b791317b16a951928a42487598d3d3237e6e711bcf3cdb065f5b37415d3a8f8872f9df17993c614b852e350cd5
   languageName: node
   linkType: hard
 
