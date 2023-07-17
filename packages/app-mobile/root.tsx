@@ -190,7 +190,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (
 		action.type === 'AUTODETECT_THEME'
 		|| action.type === 'SETTING_UPDATE_ALL'
-		|| (action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key))
+		|| (action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key))
 	) {
 		autodetectTheme();
 	}
@@ -686,8 +686,6 @@ async function initialize(dispatch: Function) {
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
 
-	Appearance.addChangeListener(() => autodetectTheme());
-
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native
 	// ----------------------------------------------------------------------------
@@ -723,6 +721,7 @@ class AppComponent extends React.Component {
 
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
+	private themeChangeListener_: NativeEventSubscription|null = null;
 
 	public constructor() {
 		super();
@@ -858,6 +857,7 @@ class AppComponent extends React.Component {
 		});
 
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
+		this.themeChangeListener_ = Appearance.addChangeListener(() => autodetectTheme());
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
@@ -877,6 +877,11 @@ class AppComponent extends React.Component {
 		if (this.urlOpenListener_) {
 			this.urlOpenListener_.remove();
 			this.urlOpenListener_ = null;
+		}
+
+		if (this.themeChangeListener_) {
+			this.themeChangeListener_.remove();
+			this.themeChangeListener_ = null;
 		}
 
 		if (this.unsubscribeScreenWidthChangeHandler_) {
