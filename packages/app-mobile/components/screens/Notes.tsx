@@ -150,16 +150,20 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 	}
 
 	public newNoteNavigate = async (folderId: string, isTodo: boolean) => {
-		const newNote = await Note.save({
-			parent_id: folderId,
-			is_todo: isTodo ? 1 : 0,
-		}, { provisional: true });
+		try {
+			const newNote = await Note.save({
+				parent_id: folderId,
+				is_todo: isTodo ? 1 : 0,
+			}, { provisional: true });
 
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Note',
-			noteId: newNote.id,
-		});
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: newNote.id,
+			});
+		} catch (error) {
+			alert(_('Cannot create a new note: %s', error.message));
+		}
 	};
 
 	public parentItem(props: any = null) {

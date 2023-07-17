@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
-import { themeById } from '@joplin/lib/theme';
+import { addExtraStyles, themeById } from '@joplin/lib/theme';
 
 interface Props {
 	themeId: any;
@@ -21,7 +21,7 @@ export default function(props: Props): any {
 	const [styleSheetContent, setStyleSheetContent] = useState('');
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const theme = themeById(props.themeId);
+		const theme = addExtraStyles(themeById(props.themeId));
 		const themeCss = themeToCss(theme);
 		if (event.cancelled) return;
 		setStyleSheetContent(themeCss);

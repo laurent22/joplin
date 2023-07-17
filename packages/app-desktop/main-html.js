@@ -30,6 +30,13 @@ const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
 
+// Security: If we attempt to navigate away from the root HTML page, it's likely because
+// of an improperly sanitized link. Prevent this by closing the window before we can
+// navigate away.
+window.onbeforeunload = () => {
+	window.close();
+};
+
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
 		const output = {};

@@ -11,6 +11,7 @@ const { buildStyle } = require('@joplin/lib/theme');
 interface ToolbarProps {
 	themeId: number;
 	toolbarButtonInfos: ToolbarButtonInfo[];
+	disabled?: boolean;
 }
 
 function styles_(props: ToolbarProps) {
@@ -28,7 +29,7 @@ const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
 function Toolbar(props: ToolbarProps) {
 	const styles = styles_(props);
-	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} />;
+	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} disabled={!!props.disabled} />;
 }
 
 const mapStateToProps = (state: AppState) => {

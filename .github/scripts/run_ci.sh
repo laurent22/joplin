@@ -154,6 +154,24 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 fi
 
 # =============================================================================
+# Check .gitignore and .eslintignore files - they should be updated when
+# new TypeScript files are added by running `yarn run updateIgnored`.
+# See coding_style.md
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Checking for files that should have been ignored..."
+
+		node packages/tools/checkIgnoredFiles.js 
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
 # building PRs so we disable it in this case. The Linux build should provide
 # enough info if the app builds or not.
@@ -213,6 +231,13 @@ else
 	if [ "$IS_MACOS" == "1" ]; then
 		# See above why we need to specify Python
 		alias python=$(which python3)
+
+		# We also want to disable signing the app in this case, because
+		# it randomly fails and we don't even need it
+		# https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+		export CSC_IDENTITY_AUTO_DISCOVERY=false
+		npm pkg set 'build.mac.identity'=null --json
+		
 		USE_HARD_LINKS=false yarn run dist --publish=never
 	else
 		USE_HARD_LINKS=false yarn run dist --publish=never

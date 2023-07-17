@@ -31,6 +31,7 @@ interface Props {
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
 	toolbarEnabled: boolean;
+	readOnly: boolean;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -226,6 +227,7 @@ function NoteEditor(props: Props, ref: any) {
 		themeData: editorTheme(props.themeId),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
+		readOnly: props.readOnly,
 	};
 
 	const injectedJavaScript = `
@@ -377,6 +379,7 @@ function NoteEditor(props: Props, ref: any) {
 		selectionState={selectionState}
 		searchState={searchState}
 		onAttach={props.onAttach}
+		readOnly={props.readOnly}
 	/>;
 
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)

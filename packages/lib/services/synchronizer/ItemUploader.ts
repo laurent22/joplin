@@ -4,10 +4,9 @@ import JoplinError from '../../JoplinError';
 import Logger from '../../Logger';
 import BaseItem from '../../models/BaseItem';
 import { BaseItemEntity } from '../database/types';
+import { ApiCallFunction } from './utils/types';
 
 const logger = Logger.create('ItemUploader');
-
-export type ApiCallFunction = (fnName: string, ...args: any[])=> Promise<any>;
 
 interface BatchItem extends MultiPutItem {
 	localItemUpdatedTime: number;

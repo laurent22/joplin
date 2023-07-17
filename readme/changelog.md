@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v2.12.7](https://github.com/laurent22/joplin/releases/tag/v2.12.7) (Pre-release) - 2023-07-13T12:55:31Z
+
+- Improved: Updated packages css-loader (v6.8.1)
+- Improved: Upgrade to Electron 25. Note that it means that [Windows 7/8/8.1 are no longer supported](https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice) ([#8451](https://github.com/laurent22/joplin/issues/8451)) ([#8258](https://github.com/laurent22/joplin/issues/8258) by Henry Heino)
+- Fixed: Fix issue with Apple Silicon version ([#8452](https://github.com/laurent22/joplin/issues/8452)) ([#6052](https://github.com/laurent22/joplin/issues/6052) by Noah Nash)
+
 ## [v2.12.5](https://github.com/laurent22/joplin/releases/tag/v2.12.5) (Pre-release) - 2023-07-12T15:03:46Z
 
 - Improved: Allow importing Evernote task lists ([#8440](https://github.com/laurent22/joplin/issues/8440) by Rob Moffat)

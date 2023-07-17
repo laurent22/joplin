@@ -30,6 +30,6 @@ export const runtime = (): CommandRuntime => {
 				id: newNote.id,
 			});
 		},
-		enabledCondition: 'oneFolderSelected && !inConflictFolder',
+		enabledCondition: 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly',
 	};
 };

@@ -31,6 +31,7 @@ interface MarkdownToolbarProps {
 	editorSettings: EditorSettings;
 	onAttach: OnAttachCallback;
 	style?: ViewStyle;
+	readOnly: boolean;
 }
 
 const MarkdownToolbar = (props: MarkdownToolbarProps) => {
@@ -38,6 +39,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	const styles = useStyles(props.style, themeData);
 	const selState = props.selectionState;
 	const editorControl = props.editorControl;
+	const readOnly = props.readOnly;
 
 	const headerButtons: ButtonSpec[] = [];
 	for (let level = 1; level <= 5; level++) {
@@ -58,6 +60,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			// Make it likely for the first three header buttons to show, less likely for
 			// the others.
 			priority: level < 3 ? 2 : 0,
+			disabled: readOnly,
 		});
 	}
 
@@ -73,6 +76,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		}, [editorControl]),
 
 		priority: -2,
+		disabled: readOnly,
 	});
 
 	listButtons.push({
@@ -86,6 +90,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		}, [editorControl]),
 
 		priority: -2,
+		disabled: readOnly,
 	});
 
 	listButtons.push({
@@ -99,6 +104,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		}, [editorControl]),
 
 		priority: -2,
+		disabled: readOnly,
 	});
 
 
@@ -110,6 +116,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.decreaseIndent,
 
 		priority: -1,
+		disabled: readOnly,
 	});
 
 	listButtons.push({
@@ -120,6 +127,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.increaseIndent,
 
 		priority: -1,
+		disabled: readOnly,
 	});
 
 
@@ -134,6 +142,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.toggleBolded,
 
 		priority: 3,
+		disabled: readOnly,
 	});
 
 	inlineFormattingBtns.push({
@@ -145,6 +154,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.toggleItalicized,
 
 		priority: 2,
+		disabled: readOnly,
 	});
 
 	inlineFormattingBtns.push({
@@ -154,6 +164,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.toggleCode,
 
 		priority: 2,
+		disabled: readOnly,
 	});
 
 	if (props.editorSettings.katexEnabled) {
@@ -164,6 +175,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			onPress: editorControl.toggleMath,
 
 			priority: 1,
+			disabled: readOnly,
 		});
 	}
 
@@ -176,6 +188,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.showLinkDialog,
 
 		priority: -3,
+		disabled: readOnly,
 	});
 
 
@@ -189,6 +202,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: useCallback(() => {
 			editorControl.insertText(time.formatDateToLocal(new Date()));
 		}, [editorControl]),
+		disabled: readOnly,
 	});
 
 	const onDismissKeyboard = useCallback(() => {
@@ -208,6 +222,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			onDismissKeyboard();
 			props.onAttach();
 		}, [props.onAttach, onDismissKeyboard]),
+		disabled: readOnly,
 	});
 
 	actionButtons.push({
@@ -227,6 +242,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		}, [editorControl, props.searchState.dialogVisible]),
 
 		priority: -3,
+		disabled: readOnly,
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);

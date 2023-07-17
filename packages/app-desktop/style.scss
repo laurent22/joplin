@@ -2,4 +2,6 @@
 @use 'gui/EditFolderDialog/style.scss' as edit-folder-dialog;
 @use 'gui/EncryptionConfigScreen/style.scss' as encryption-config-screen;
 @use 'gui/PasswordInput/style.scss' as password-input;
+@use 'gui/Dropdown/style.scss' as dropdown-control;
+@use 'gui/ShareFolderDialog/style.scss' as share-folder-dialog;
 @use 'main.scss' as main;

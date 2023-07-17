@@ -26,10 +26,12 @@ export default class ResourceLocalState extends BaseModel {
 		return result;
 	}
 
-	public static async save(o: ResourceLocalStateEntity) {
-		const queries = [{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] }, Database.insertQuery(this.tableName(), o)];
+	public static saveQueries(o: ResourceLocalStateEntity) {
+		return [{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] }, Database.insertQuery(this.tableName(), o)];
+	}
 
-		return this.db().transactionExecBatch(queries);
+	public static async save(o: ResourceLocalStateEntity) {
+		return this.db().transactionExecBatch(this.saveQueries(o));
 	}
 
 	public static batchDelete(ids: string[], options: any = null) {

@@ -62,6 +62,7 @@ const md5 = require('md5');
 const { S3Client } = require('@aws-sdk/client-s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/RSA.node';
+import { State as ShareState } from '../services/share/reducer';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -138,7 +139,7 @@ function setSyncTargetName(name: string) {
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 	sleepTime = syncTargetId_ === SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer'].includes(syncTargetName_);
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer', 'joplinCloud'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
@@ -150,6 +151,7 @@ setSyncTargetName('memory');
 // setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
 // setSyncTargetName('joplinServer');
+// setSyncTargetName('joplinCloud');
 
 // console.info(`Testing with sync target: ${syncTargetName_}`);
 
@@ -632,7 +634,7 @@ async function initFileApi() {
 		if (!amazonS3Creds || !amazonS3Creds.credentials) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "credentials": { "accessKeyId": "", "secretAccessKey": "", } "bucket": "mybucket", region: "", forcePathStyle: ""}`);
 		const api = new S3Client({ region: amazonS3Creds.region, credentials: amazonS3Creds.credentials, s3UseArnRegion: true, forcePathStyle: amazonS3Creds.forcePathStyle, endpoint: amazonS3Creds.endpoint });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
-	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('joplinServer')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('joplinServer') || syncTargetId_ === SyncTargetRegistry.nameToId('joplinCloud')) {
 		mustRunInBand();
 
 		const joplinServerAuth = JSON.parse(await readCredentialFile('joplin-server-test-units-2.json'));
@@ -838,6 +840,12 @@ function tempFilePath(ext: string) {
 	return `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${ext}`;
 }
 
+const createTempFile = async (content = '') => {
+	const path = tempFilePath('txt');
+	await fs.writeFile(path, content, 'utf8');
+	return path;
+};
+
 async function createTempDir() {
 	const tempDirPath = `${baseTempDir}/${uuid.createNano()}`;
 	await fs.mkdirp(tempDirPath);
@@ -957,4 +965,39 @@ class TestApp extends BaseApplication {
 	}
 }
 
-export { supportDir, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+const createTestShareData = (shareId: string): ShareState => {
+	return {
+		processingShareInvitationResponse: false,
+		shares: [],
+		shareInvitations: [
+			{
+				id: '',
+				master_key: {},
+				status: 0,
+				share: {
+					id: shareId,
+					folder_id: '',
+					master_key_id: '',
+					note_id: '',
+					type: 1,
+				},
+				can_read: 1,
+				can_write: 0,
+			},
+		],
+		shareUsers: {},
+	};
+};
+
+const simulateReadOnlyShareEnv = (shareId: string) => {
+	Setting.setValue('sync.target', 10);
+	Setting.setValue('sync.userId', 'abcd');
+	BaseItem.syncShareCache = createTestShareData(shareId);
+
+	return () => {
+		BaseItem.syncShareCache = null;
+		Setting.setValue('sync.userId', '');
+	};
+};
+
+export { supportDir, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

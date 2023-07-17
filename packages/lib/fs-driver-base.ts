@@ -29,6 +29,10 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public async chmod(_source: string, _mode: string | number) {
+		throw new Error('Not implemented');
+	}
+
 	public async mkdir(_path: string) {
 		throw new Error('Not implemented');
 	}

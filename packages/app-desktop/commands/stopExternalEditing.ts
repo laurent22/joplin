@@ -15,6 +15,6 @@ export const runtime = (): CommandRuntime => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 			void ExternalEditWatcher.instance().stopWatching(noteId);
 		},
-		enabledCondition: 'oneNoteSelected',
+		enabledCondition: 'oneNoteSelected && !noteIsReadOnly',
 	};
 };
