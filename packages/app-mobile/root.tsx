@@ -29,7 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -118,6 +118,7 @@ import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
+import autodetectTheme from './utils/autodetectTheme';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -184,6 +185,14 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		// Schedule a sync operation so that items that need to be encrypted
 		// are sent to sync target.
 		void reg.scheduleSync(null, null, true);
+	}
+
+	if (
+		action.type === 'AUTODETECT_THEME'
+		|| action.type === 'SETTING_UPDATE_ALL'
+		|| (action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key))
+	) {
+		autodetectTheme();
 	}
 
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
@@ -676,6 +685,8 @@ async function initialize(dispatch: Function) {
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
+
+	Appearance.addChangeListener(() => autodetectTheme());
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native

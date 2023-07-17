@@ -86,6 +86,7 @@ interface ScreenHeaderProps {
 	shouldUpgradeSyncTarget?: boolean;
 	showShouldUpgradeSyncTargetMessage?: boolean;
 
+	themeId: number;
 }
 
 interface ScreenHeaderState {
@@ -100,7 +101,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	}
 
 	private styles() {
-		const themeId = Setting.value('theme');
+		const themeId = this.props.themeId;
 		if (this.cachedStyles[themeId]) return this.cachedStyles[themeId];
 		this.cachedStyles = {};
 
@@ -297,7 +298,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 	}
 
 	public render() {
-		const themeId = Setting.value('theme');
+		const themeId = this.props.themeId;
 		function sideMenuButton(styles: any, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
