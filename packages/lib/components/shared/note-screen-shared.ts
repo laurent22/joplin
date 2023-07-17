@@ -1,13 +1,16 @@
 import { NoteEntity } from '../../services/database/types';
 import { reg } from '../../registry';
 import Folder from '../../models/Folder';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import DecryptionWorker from '../../services/DecryptionWorker';
 import Setting from '../../models/Setting';
 import { Mutex } from 'async-mutex';
+import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
+import ItemChange from '../../models/ItemChange';
+import BaseItem from '../../models/BaseItem';
 
 interface Shared {
 	noteExists?: (noteId: string)=> Promise<boolean>;
@@ -219,6 +222,7 @@ shared.initState = async function(comp: any) {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
+
 	let mode = 'view';
 
 	if (isProvisionalNote && !comp.props.sharedData) {
@@ -236,6 +240,7 @@ shared.initState = async function(comp: any) {
 		isLoading: false,
 		fromShare: !!comp.props.sharedData,
 		noteResources: await shared.attachedResources(note ? note.body : ''),
+		readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
 	});
 
 

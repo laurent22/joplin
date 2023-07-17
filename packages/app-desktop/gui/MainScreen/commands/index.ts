@@ -1,6 +1,9 @@
 // AUTO-GENERATED using `gulp buildCommandIndex`
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
+import * as deleteFolder from './deleteFolder';
+import * as deleteNote from './deleteNote';
+import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
 import * as exportPdf from './exportPdf';
 import * as gotoAnything from './gotoAnything';
@@ -34,6 +37,7 @@ import * as showSpellCheckerMenu from './showSpellCheckerMenu';
 import * as toggleEditors from './toggleEditors';
 import * as toggleLayoutMoveMode from './toggleLayoutMoveMode';
 import * as toggleNoteList from './toggleNoteList';
+import * as toggleNoteType from './toggleNoteType';
 import * as toggleNotesSortOrderField from './toggleNotesSortOrderField';
 import * as toggleNotesSortOrderReverse from './toggleNotesSortOrderReverse';
 import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
@@ -43,6 +47,9 @@ import * as toggleVisiblePanes from './toggleVisiblePanes';
 const index:any[] = [
 	addProfile,
 	commandPalette,
+	deleteFolder,
+	deleteNote,
+	duplicateNote,
 	editAlarm,
 	exportPdf,
 	gotoAnything,
@@ -76,6 +83,7 @@ const index:any[] = [
 	toggleEditors,
 	toggleLayoutMoveMode,
 	toggleNoteList,
+	toggleNoteType,
 	toggleNotesSortOrderField,
 	toggleNotesSortOrderReverse,
 	togglePerFolderSortOrder,

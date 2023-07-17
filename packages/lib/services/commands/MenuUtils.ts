@@ -96,9 +96,13 @@ export default class MenuUtils {
 	}
 
 	public commandToStatefulMenuItem(commandName: string, ...args: any[]): MenuItem {
-		return this.commandToMenuItem(commandName, () => {
+		const whenClauseContext = this.service.currentWhenClauseContext();
+
+		const menuItem = this.commandToMenuItem(commandName, () => {
 			return this.service.execute(commandName, ...args);
 		});
+		menuItem.enabled = this.service.isEnabled(commandName, whenClauseContext);
+		return menuItem;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

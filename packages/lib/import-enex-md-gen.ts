@@ -39,6 +39,7 @@ enum ListTag {
 	Ul = 'ul',
 	Ol = 'ol',
 	CheckboxList = 'checkboxList',
+	TaskList = 'taskList',
 }
 
 interface ParserStateList {
@@ -56,6 +57,13 @@ interface ParserState {
 	spanAttributes: string[];
 	tags: ParserStateTag[];
 	currentCode?: string;
+}
+
+
+interface ExtractedTask {
+	title: string;
+	completed: boolean;
+	groupId: string;
 }
 
 interface EnexXmlToMdArrayResult {
@@ -554,7 +562,7 @@ function isHighlight(context: any, _nodeName: string, attributes: any) {
 	return false;
 }
 
-function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
+function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: ExtractedTask[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
 
 	const removeRemainingResource = (id: string) => {
@@ -617,6 +625,12 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 
 		saxStream.on('text', (text: string) => {
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
+
+			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
+			if ((currentList) && (currentList.tag === ListTag.TaskList)) {
+				// skip text on task lists
+				return;
+			}
 
 			text = !state.inPre ? unwrapInnerText(text) : text;
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
@@ -741,7 +755,20 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (isBlockTag(n)) {
-				section.lines.push(BLOCK_OPEN);
+				const isTodosList = cssValue(this, nodeAttributes.style, '--en-task-group') === 'true';
+				if (isTodosList) {
+					const todoGroup = cssValue(this, nodeAttributes.style, '--en-id');
+					section.lines.push(BLOCK_OPEN);
+					for (const t of tasks) {
+						if (t.groupId === todoGroup) {
+							section.lines.push(`- [${t.completed ? 'x' : ' '}] ${t.title}\n`);
+						}
+					}
+					tagInfo.name = ListTag.TaskList;
+					state.lists.push({ tag: ListTag.TaskList, counter: 1, startedText: false });
+				} else {
+					section.lines.push(BLOCK_OPEN);
+				}
 			} else if (isListTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 				const isCheckboxList = cssValue(this, nodeAttributes.style, '--en-todo') === 'true';
@@ -957,6 +984,9 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 					if (section && section.parent) section = section.parent;
 				}
 			} else if (isNewLineOnlyEndTag(n)) {
+				if (poppedTag.name === ListTag.TaskList) {
+					state.lists.pop();
+				}
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n === 'td' || n === 'th') {
 				if (section && section.parent) section = section.parent;
@@ -1370,9 +1400,9 @@ function renderLines(lines: any[]) {
 	return mdLines;
 }
 
-async function enexXmlToMd(xmlString: string, resources: ResourceEntity[]) {
+async function enexXmlToMd(xmlString: string, resources: ResourceEntity[], tasks: ExtractedTask[]) {
 	const stream = stringToStream(xmlString);
-	const result = await enexXmlToMdArray(stream, resources);
+	const result = await enexXmlToMdArray(stream, resources, tasks);
 
 	let mdLines = renderLines(result.content.lines);
 

@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.12.0",
+  "version": "2.12.1",
   "private": true,
   "scripts": {
     "start-dev": "yarn run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -45,7 +45,7 @@
     "node-env-file": "0.1.8",
     "nodemailer": "6.9.3",
     "nodemon": "2.0.22",
-    "pg": "8.11.0",
+    "pg": "8.11.1",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
     "query-string": "7.1.3",

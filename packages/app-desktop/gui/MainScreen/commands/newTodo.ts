@@ -12,6 +12,6 @@ export const runtime = (): CommandRuntime => {
 		execute: async (_context: CommandContext, body = '') => {
 			return CommandService.instance().execute('newNote', body, true);
 		},
-		enabledCondition: 'oneFolderSelected && !inConflictFolder',
+		enabledCondition: 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly',
 	};
 };

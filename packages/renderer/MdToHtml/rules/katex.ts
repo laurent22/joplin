@@ -246,9 +246,24 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
 
 	state.line = next + 1;
 
+	const contentLines = [];
+	if (firstLine && firstLine.trim()) {
+		contentLines.push(firstLine);
+	}
+
+	const includeTrailingNewline = false;
+	const interiorLines = state.getLines(start + 1, next, state.tShift[start], includeTrailingNewline);
+	if (interiorLines.length > 0) {
+		contentLines.push(interiorLines);
+	}
+
+	if (lastLine && lastLine.trim()) {
+		contentLines.push(lastLine);
+	}
+
 	const token = state.push('math_block', 'math', 0);
 	token.block = true;
-	token.content = (firstLine && firstLine.trim() ? `${firstLine}\n` : '') + state.getLines(start + 1, next, state.tShift[start], true) + (lastLine && lastLine.trim() ? lastLine : '');
+	token.content = contentLines.join('\n');
 	token.map = [start, state.line];
 	token.markup = '$$';
 	return true;
@@ -312,6 +327,7 @@ export default {
 			} catch (error) {
 				outputHtml = renderKatexError(latex, error);
 			}
+
 			return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${outputHtml}</div>`;
 		};
 

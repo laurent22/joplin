@@ -117,6 +117,7 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
+import { parseShareCache } from '@joplin/lib/services/share/reducer';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -523,6 +524,7 @@ async function initialize(dispatch: Function) {
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
+		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
 
 		if (Setting.value('firstStart')) {
 			const detectedLocale = shim.detectAndSetLocale(Setting);

@@ -361,7 +361,7 @@ PODS:
     - React
   - react-native-saf-x (2.12.0):
     - React-Core
-  - react-native-safe-area-context (4.5.3):
+  - react-native-safe-area-context (4.5.5):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -475,17 +475,18 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.9.0):
+  - RNGestureHandler (2.10.2):
     - React-Core
-  - RNLocalize (3.0.0):
+  - RNLocalize (3.0.1):
     - React-Core
   - RNQuickAction (0.3.13):
     - React
-  - RNReanimated (3.1.0):
+  - RNReanimated (3.3.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
     - glog
+    - hermes-engine
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -495,6 +496,7 @@ PODS:
     - React-Core/RCTWebSocket
     - React-CoreModules
     - React-cxxreact
+    - React-hermes
     - React-jsi
     - React-jsiexecutor
     - React-jsinspector
@@ -780,9 +782,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 57d2868c099736d80fcd648bf211b4431e51a558
+  boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: ddb55c55295ea51ed98aa7e2e08add2f826309d5
   FBReactNativeSpec: 90fc1a90b4b7a171e0a7c20ea426c1bf6ce4399c
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
@@ -795,13 +797,13 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: 5337263514dd6f09803962437687240c5dc39aa4
   hermes-engine: d27603b55a48402501ad1928c05411dae9cd6b85
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
+  RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: 8ef706f91e2b643cd32c26a57700b5f24fab0585
   RCTTypeSafety: 5fbddd8eb9242b91ac0d901c01da3673f358b1b7
   React: e5d2d559e89d256a1d6da64d51adaecda9c8ddae
@@ -826,7 +828,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: ccbe1085dffd16592791d550189772e13bf479e2
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: 129cd2ddf120a1f6164c724b2846d172666b33de
-  react-native-safe-area-context: b8979f5eda6ed5903d4dbc885be3846ea3daa753
+  react-native-safe-area-context: 33e71d7408dffe148b08968d97a524009634ccc8
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
@@ -852,10 +854,10 @@ SPEC CHECKSUMS:
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
-  RNLocalize: 5944c97d2fe8150913a51ddd5eab4e23a82bd80d
+  RNGestureHandler: f75d81410b40aaa99e71ae8f8bb7a88620c95042
+  RNLocalize: 6dd9226886fa61bf0cefc7644e3f9620770b1a31
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
-  RNReanimated: b1220a0e5168745283ff5d53bfc7d2144b2cee1b
+  RNReanimated: 9976fbaaeb8a188c36026154c844bf374b3b7eeb
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8

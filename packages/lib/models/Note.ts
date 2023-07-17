@@ -14,7 +14,7 @@ import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
-import { LoadOptions } from './utils/types';
+import { LoadOptions, SaveOptions } from './utils/types';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -312,7 +312,7 @@ export default class Note extends BaseItem {
 	public static previewFields(options: any = null) {
 		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -667,7 +667,7 @@ export default class Note extends BaseItem {
 		return super.load(id, options);
 	}
 
-	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
+	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
@@ -683,6 +683,8 @@ export default class Note extends BaseItem {
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 		if (isNew && !('order' in o)) o.order = Date.now();
+
+		const changeSource = options && options.changeSource ? options.changeSource : null;
 
 		// We only keep the previous note content for "old notes" (see Revision Service for more info)
 		// In theory, we could simply save all the previous note contents, and let the revision service
@@ -720,7 +722,6 @@ export default class Note extends BaseItem {
 
 		const note = await super.save(o, options);
 
-		const changeSource = options && options.changeSource ? options.changeSource : null;
 		void ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		if (dispatchUpdateAction) {
@@ -1005,10 +1006,11 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
-
 	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
 		const conflictNote = { ...sourceNote };
 		delete conflictNote.id;
+		delete conflictNote.is_shared;
+		delete conflictNote.share_id;
 		conflictNote.is_conflict = 1;
 		conflictNote.conflict_original_id = sourceNote.id;
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });

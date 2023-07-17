@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 08 May 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 08 May 2023 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.10]]></title><description><![CDATA[<p>Great news! Joplin 2.10 is here and we've made some amazing improvements and bug fixes, with a focus on the mobile app.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 08 May 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 08 May 2023 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.11]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
+<h3>Add support for plugin user data<a name="add-support-for-plugin-user-data" href="#add-support-for-plugin-user-data" class="heading-anchor">🔗</a></h3>
+<p>Developers of plugins now have the ability to associate additional information with notes, notebooks, and tags. This data is then synchronized across multiple devices. For instance, it is possible to envision attaching OCR data to an image or incorporating plugin-specific parameters to a note, which can subsequently be synchronized across all devices.</p>
+<h3>Improved end-to-end encryption<a name="improved-end-to-end-encryption" href="#improved-end-to-end-encryption" class="heading-anchor">🔗</a></h3>
+<p>End-to-end encryption (E2EE) plays a vital role in safeguarding your data privacy. Our aim is to make it effortlessly user-friendly, seamlessly integrated, and possibly enabled by default.</p>
+<p>To achieve this objective, we have implemented several enhancements in this version. These improvements encompass more streamlined management of encryption keys and simplified setup processes for both new and existing devices utilising end-to-end encryption.</p>
+<p>Moreover, we have upgraded the encryption algorithm from AES-128 to AES-256, ensuring heightened security for your data in the long run.</p>
+<h3>Export a Mermaid graph<a name="export-a-mermaid-graph" href="#export-a-mermaid-graph" class="heading-anchor">🔗</a></h3>
+<p>There is now a context menu on Mermaid graphs which you can use to export your graph as PNG, SVG, or by copying the vector data to the clipboard.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-mermaid-export.png" alt=""></p>
+<h3>Auto-detect language on startup<a name="auto-detect-language-on-startup" href="#auto-detect-language-on-startup" class="heading-anchor">🔗</a></h3>
+<p>A small but useful change - the application language is now automatically detected startup. Of course, if needed you can later change it in the configuration screen.</p>
+<h2>Android<a name="android" href="#android" class="heading-anchor">🔗</a></h2>
+<p>As always most of these changes also apply to the mobile applications, such as the improved end-to-end encryption support, language auto-detection, and various bug fixes and improvements. But besides those, we also have several mobile-specific updates:</p>
+<h3>Support for offline voice typing<a name="support-for-offline-voice-typing" href="#support-for-offline-voice-typing" class="heading-anchor">🔗</a></h3>
+<p>The Android mobile app now support offline voice typing - it means your voice recording does not need to be uploaded to Google or Samsung server - it all takes place on your device for added security. To make use of it, open any note, tap on the three dots menu, then &quot;Voice typing&quot;.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-voice-typing-1.png" alt=""></p>
+<p>The first time, the app will need to download the language files to your device:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-voice-typing-2.png" alt=""></p>
+<p>Once they are there, simply record your message and it will appear in the note:</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230711-voice-typing-3.png" alt=""></p>
+<h3>Create and move sub-notebooks<a name="create-and-move-sub-notebooks" href="#create-and-move-sub-notebooks" class="heading-anchor">🔗</a></h3>
+<p>@jcgurango implemented support for creating sub-notebooks, and moving notebooks around in the mobile app. To do so, long press on any notebook and press &quot;Edit&quot;. You can now choose to move it under any other notebook using the provided dropdown list.</p>
+<h2>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h2>
+<p>This is just an overview of the main features. The full changelog is available there:</p>
+<ul>
+<li>Desktop: <a href="https://joplinapp.org/changelog">https://joplinapp.org/changelog</a></li>
+<li>Android: <a href="https://joplinapp.org/changelog_android">https://joplinapp.org/changelog_android</a></li>
+<li>iOS: <a href="https://joplinapp.org/changelog_ios">https://joplinapp.org/changelog_ios</a></li>
+</ul>
+]]></description><link>https://joplinapp.org/news/20230508-release-2-11/</link><guid isPermaLink="false">20230508-release-2-11</guid><pubDate>Mon, 08 May 2023 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.11</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.10]]></title><description><![CDATA[<p>Great news! Joplin 2.10 is here and we've made some amazing improvements and bug fixes, with a focus on the mobile app.</p>
 <h1>New design for &quot;New note&quot; and &quot;New to-do&quot; buttons<a name="new-design-for-new-note-and-new-to-do-buttons" href="#new-design-for-new-note-and-new-to-do-buttons" class="heading-anchor">🔗</a></h1>
 <p>We're excited to announce that we've made it even easier to create new notes and to-do lists with new designs for the &quot;New note&quot; and &quot;New to-do&quot; buttons.</p>
 <p>If there is enough space, the button labels will be shown in full:</p>
@@ -304,13 +334,4 @@
 <p>As always the mobile apps (to be released soon) benefit from several of the above changes since they share the same codebase as the desktop app.</p>
 <p>Specific to the mobile version 2.5 are some improvements to the beta editor - in particular the layout has been cleaned up, and the first word of sentences is now automatically capitalised, which makes typing notes easier. If you haven't tried the beta editor yet, you can enable it from the Configuration screen.</p>
 <p>The full changelog is available there: <a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
-]]></description><link>https://joplinapp.org/news/20211031-115215/</link><guid isPermaLink="false">20211031-115215</guid><pubDate>Sun, 31 Oct 2021 11:52:15 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA["Certificate has expired" error with Joplin Cloud, and workaround]]></title><description><![CDATA[<p>Some of you might be experiencing an error &quot;Certificate has expired&quot; when synchronising with Joplin Cloud (and possibly other services) when using the desktop application.</p>
-<p>This is due to Let's Encrypt root certificate that expired on 30 September, and the new method they are using is not compatible with the Joplin desktop application.</p>
-<p>This actually affects thousands of applications, not just Joplin, so various solutions are being considered right now and hopefully a fix will be available relatively soon.</p>
-<p>For now, as a workaround, you can simply check &quot;<strong>Ignore TLS certificate errors</strong>&quot; in <strong>Configuration &gt; Synchronisation &gt; Advanced Options</strong></p>
-<p>I will let you know as soon as a fix is available so that you can clear that option.</p>
-<p>More info:</p>
-<p>- <a href="https://community.letsencrypt.org/t/issues-with-electron-and-expired-root/160991">Issue with Electron and expired root</a> on Let's Encrypt</p>
-<p>- <a href="https://github.com/electron/electron/issues/31212">Let's Encrypt root CA isn't working properly</a> on Electron GitHub repository</p>
-<p><strong>Update:</strong> I have implemented a temporary fix on Joplin Cloud which should solve the issue for now. If you're still having some issues please let me know. An updated desktop app will be available later on with a more permanent fix.</p>
-]]></description><link>https://joplinapp.org/news/20210930-163458/</link><guid isPermaLink="false">20210930-163458</guid><pubDate>Thu, 30 Sep 2021 16:34:58 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20211031-115215/</link><guid isPermaLink="false">20211031-115215</guid><pubDate>Sun, 31 Oct 2021 11:52:15 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>

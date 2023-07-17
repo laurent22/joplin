@@ -14,12 +14,9 @@ jobs:
 
   Main:
     needs: pre_job
-    # We always process server or desktop release tags, because they also publish the release
+    # We always process desktop release tags, because they also publish the release
     if: github.repository == 'laurent22/joplin' && (needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/v'))
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest]
+    runs-on: macos-latest
     steps:
 
       - uses: actions/checkout@v2
@@ -52,6 +49,21 @@ jobs:
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
-          npm pkg set 'build.mac.target.target'='default'
+          npm pkg set 'build.mac.target.target'='dmg'
           npm pkg set 'build.mac.target.arch[0]'='arm64'
-          PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
+
+          if [[ $GIT_TAG_NAME = v* ]]; then
+            echo "Building and publishing desktop application..."
+            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
+          else
+            echo "Building but *not* publishing desktop application..."
+
+            # We also want to disable signing the app in this case, because
+            # it doesn't work and we don't need it.
+            # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+
+            export CSC_IDENTITY_AUTO_DISCOVERY=false
+            npm pkg set 'build.mac.identity'=null --json
+
+            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+          fi

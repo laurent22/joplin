@@ -58,6 +58,9 @@ import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
+import { parseShareCache } from './services/share/reducer';
+
+import RotatingLogs from './RotatingLogs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -84,6 +87,8 @@ export default class BaseApplication {
 	private currentFolder_: any = null;
 
 	protected store_: Store<any> = null;
+
+	private rotatingLogs: RotatingLogs;
 
 	public constructor() {
 		this.eventEmitter_ = new EventEmitter();
@@ -542,7 +547,7 @@ export default class BaseApplication {
 		const newState = store.getState();
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] });
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
@@ -836,6 +841,8 @@ export default class BaseApplication {
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
+		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
+
 		if (initArgs?.isSafeMode) {
 			Setting.setValue('isSafeMode', true);
 		}
@@ -926,6 +933,18 @@ export default class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
+
+		this.rotatingLogs = new RotatingLogs(profileDir);
+		const processLogs = async () => {
+			try {
+				await this.rotatingLogs.cleanActiveLogFile();
+				await this.rotatingLogs.deleteNonActiveLogFiles();
+			} catch (error) {
+				appLogger.error(error);
+			}
+		};
+		shim.setTimeout(() => { void processLogs(); }, 60000);
+		shim.setInterval(() => { void processLogs(); }, 24 * 60 * 60 * 1000);
 
 		return argv;
 	}

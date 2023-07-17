@@ -26,6 +26,10 @@ import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveL
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
+import handleConflictAction, { ConflictAction } from './services/synchronizer/utils/handleConflictAction';
+import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
+import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
+import { ErrorCode } from './errors';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -404,10 +408,6 @@ export default class Synchronizer {
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
 
-		const resourceRemotePath = (resourceId: string) => {
-			return `${Dirnames.Resources}/${resourceId}`;
-		};
-
 		// We index resources before sync mostly to flag any potential orphan
 		// resource before it is being synced. That way, it can potentially be
 		// auto-deleted at a later time. Indexing resources is fast so it's fine
@@ -425,8 +425,20 @@ export default class Synchronizer {
 
 		// Before synchronising make sure all share_id properties are set
 		// correctly so as to share/unshare the right items.
-		await Folder.updateAllShareIds(this.resourceService());
-		if (this.shareService_) await this.shareService_.checkShareConsistency();
+		try {
+			await Folder.updateAllShareIds(this.resourceService());
+			if (this.shareService_) await this.shareService_.checkShareConsistency();
+		} catch (error) {
+			if (error && error.code === ErrorCode.IsReadOnly) {
+				// We ignore it because the functions above tried to modify a
+				// read-only item and failed. Normally it shouldn't happen since
+				// the UI should prevent, but if there's a bug in the UI or some
+				// other issue we don't want sync to fail because of this.
+				logger.error('Could not update share because an item is readonly:', error);
+			} else {
+				throw error;
+			}
+		}
 
 		const itemUploader = new ItemUploader(this.api(), this.apiCall);
 
@@ -515,22 +527,17 @@ export default class Synchronizer {
 			// ========================================================================
 
 			if (syncSteps.indexOf('delete_remote') >= 0) {
-				const deletedItems = await BaseItem.deletedItems(syncTargetId);
-				for (let i = 0; i < deletedItems.length; i++) {
-					if (this.cancelling()) break;
-
-					const item = deletedItems[i];
-					const path = BaseItem.systemPath(item.item_id);
-					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
-					await this.apiCall('delete', path);
-
-					if (item.item_type === BaseModel.TYPE_RESOURCE) {
-						const remoteContentPath = resourceRemotePath(item.item_id);
-						await this.apiCall('delete', remoteContentPath);
-					}
-
-					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
-				}
+				await syncDeleteStep(
+					syncTargetId,
+					this.cancelling(),
+					(action, local, logSyncOperation, message, actionCount) => {
+						this.logSyncOperation(action, local, logSyncOperation, message, actionCount);
+					},
+					(fnName, ...args) => {
+						return this.apiCall(fnName, ...args);
+					},
+					action => { return this.dispatch(action); }
+				);
 			} // DELETE_REMOTE STEP
 
 			// ========================================================================
@@ -573,7 +580,7 @@ export default class Synchronizer {
 
 						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', path);
 						let action = null;
-
+						let itemIsReadOnly = false;
 						let reason = '';
 						let remoteContent = null;
 
@@ -698,6 +705,10 @@ export default class Synchronizer {
 									if (isCannotSyncError(error)) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 										action = null;
+									} else if (error && error.code === ErrorCode.IsReadOnly) {
+										action = getConflictType(local);
+										itemIsReadOnly = true;
+										logger.info('Resource is readonly and cannot be modified - handling it as a conflict:', local);
 									} else {
 										throw error;
 									}
@@ -709,10 +720,15 @@ export default class Synchronizer {
 							let canSync = true;
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
+								if (this.testingHooks_.indexOf('itemIsReadOnly') >= 0) throw new JoplinError('Testing isReadOnly', ErrorCode.IsReadOnly);
 								await itemUploader.serializeAndUploadItem(ItemClass, path, local);
 							} catch (error) {
 								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
+									canSync = false;
+								} else if (error && error.code === ErrorCode.IsReadOnly) {
+									action = getConflictType(local);
+									itemIsReadOnly = true;
 									canSync = false;
 								} else {
 									throw error;
@@ -741,77 +757,18 @@ export default class Synchronizer {
 
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 							}
-						} else if (action === 'itemConflict') {
-							// ------------------------------------------------------------------------------
-							// For non-note conflicts, we take the remote version (i.e. the version that was
-							// synced first) and overwrite the local content.
-							// ------------------------------------------------------------------------------
-
-							if (remote) {
-								local = remoteContent;
-
-								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
-								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
-							} else {
-								await ItemClass.delete(local.id, {
-									changeSource: ItemChange.SOURCE_SYNC,
-									trackDeleted: false,
-								});
-							}
-						} else if (action === 'noteConflict') {
-							// ------------------------------------------------------------------------------
-							// First find out if the conflict matters. For example, if the conflict is on the title or body
-							// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
-							// so in this case we just take the remote content.
-							// ------------------------------------------------------------------------------
-
-							let mustHandleConflict = true;
-							if (remoteContent) {
-								mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
-							}
-
-							// ------------------------------------------------------------------------------
-							// Create a duplicate of local note into Conflicts folder
-							// (to preserve the user's changes)
-							// ------------------------------------------------------------------------------
-
-							if (mustHandleConflict) {
-								await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
-							}
-						} else if (action === 'resourceConflict') {
-							// ------------------------------------------------------------------------------
-							// Unlike notes we always handle the conflict for resources
-							// ------------------------------------------------------------------------------
-
-							await Resource.createConflictResourceNote(local);
-
-							if (remote) {
-								// The local content we have is no longer valid and should be re-downloaded
-								await Resource.setLocalState(local.id, {
-									fetch_status: Resource.FETCH_STATUS_IDLE,
-								});
-							}
 						}
 
-						if (['noteConflict', 'resourceConflict'].includes(action)) {
-							// ------------------------------------------------------------------------------
-							// For note and resource conflicts, the creation of the conflict item is done
-							// differently. However the way the local content is handled is the same.
-							// Either copy the remote content to local or, if the remote content has
-							// been deleted, delete the local content.
-							// ------------------------------------------------------------------------------
-
-							if (remote) {
-								local = remoteContent;
-								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
-								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
-
-								if (local.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
-							} else {
-								// Remote no longer exists (note deleted) so delete local one too
-								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
-							}
-						}
+						await handleConflictAction(
+							action as ConflictAction,
+							ItemClass,
+							!!remote,
+							remoteContent,
+							local,
+							syncTargetId,
+							itemIsReadOnly,
+							(action: any) => this.dispatch(action)
+						);
 
 						completeItemProcessing(path);
 					}

@@ -2,6 +2,7 @@
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { State as ShareState } from '@joplin/lib/services/share/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
@@ -45,6 +46,8 @@ export interface NoteEditorProps {
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
+	shareCache: ShareState;
+	syncUserId: string;
 }
 
 export interface NoteBodyEditorProps {

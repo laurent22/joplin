@@ -1,13 +1,14 @@
-const Setting = require('../../models/Setting').default;
-const Tag = require('../../models/Tag').default;
-const BaseModel = require('../../BaseModel').default;
-const Note = require('../../models/Note').default;
-const { reg } = require('../../registry.js');
-const ResourceFetcher = require('../../services/ResourceFetcher').default;
-const DecryptionWorker = require('../../services/DecryptionWorker').default;
-const eventManager = require('../../eventManager').default;
+import Setting from '../../models/Setting';
+import Tag from '../../models/Tag';
+import BaseModel from '../../BaseModel';
+import Note from '../../models/Note';
+import { reg } from '../../registry.js';
+import ResourceFetcher from '../../services/ResourceFetcher';
+import DecryptionWorker from '../../services/DecryptionWorker';
+import eventManager from '../../eventManager';
+import BaseItem from '../../models/BaseItem';
 
-const reduxSharedMiddleware = async function(store, next, action) {
+const reduxSharedMiddleware = async function(store: any, _next: any, action: any) {
 	const newState = store.getState();
 
 	eventManager.appStateEmit(newState);
@@ -40,7 +41,7 @@ const reduxSharedMiddleware = async function(store, next, action) {
 	// automatically after each full sync (which is triggered when the user presses the sync
 	// button, but not when a note is saved).
 	if (action.type === 'SYNC_COMPLETED' && action.isFullSync) {
-		DecryptionWorker.instance().scheduleStart();
+		void DecryptionWorker.instance().scheduleStart();
 	}
 
 	if (action.type === 'NOTE_DELETE' ||
@@ -87,7 +88,7 @@ const reduxSharedMiddleware = async function(store, next, action) {
 	}
 
 	if (mustAutoAddResources) {
-		ResourceFetcher.instance().autoAddResources();
+		void ResourceFetcher.instance().autoAddResources();
 	}
 
 	if (refreshTags) {
@@ -95,6 +96,12 @@ const reduxSharedMiddleware = async function(store, next, action) {
 			type: 'TAG_UPDATE_ALL',
 			items: await Tag.allWithNotes(),
 		});
+	}
+
+	if (action.type.startsWith('SHARE_')) {
+		const serialized = JSON.stringify(newState.shareService);
+		Setting.setValue('sync.shareCache', serialized);
+		BaseItem.syncShareCache = JSON.parse(serialized);
 	}
 
 	// For debugging purposes: it seems in some case an empty note is saved to

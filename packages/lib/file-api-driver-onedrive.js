@@ -3,6 +3,7 @@ const { basicDelta } = require('./file-api');
 const { dirname, basename } = require('./path-utils');
 const shim = require('./shim').default;
 const Buffer = require('buffer').Buffer;
+const { ltrimSlashes } = require('./path-utils');
 
 class FileApiDriverOneDrive {
 	constructor(api) {
@@ -196,11 +197,12 @@ class FileApiDriverOneDrive {
 
 	async clearRoot() {
 		const recurseItems = async (path) => {
+			path = ltrimSlashes(path);
 			const result = await this.list(this.fileApi_.fullPath(path));
 			const output = [];
 
 			for (const item of result.items) {
-				const fullPath = `${path}/${item.path}`;
+				const fullPath = ltrimSlashes(`${path}/${item.path}`);
 				if (item.isDir) {
 					await recurseItems(fullPath);
 				}

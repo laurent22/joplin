@@ -142,6 +142,7 @@ packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
 packages/app-desktop/gui/DropboxLoginScreen.js
+packages/app-desktop/gui/Dropdown/Dropdown.js
 packages/app-desktop/gui/EditFolderDialog/Dialog.js
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EmojiBox.js
@@ -162,6 +163,9 @@ packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
 packages/app-desktop/gui/MainScreen/MainScreen.js
 packages/app-desktop/gui/MainScreen/commands/addProfile.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
+packages/app-desktop/gui/MainScreen/commands/deleteFolder.js
+packages/app-desktop/gui/MainScreen/commands/deleteNote.js
+packages/app-desktop/gui/MainScreen/commands/duplicateNote.js
 packages/app-desktop/gui/MainScreen/commands/editAlarm.js
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js
 packages/app-desktop/gui/MainScreen/commands/gotoAnything.js
@@ -196,6 +200,7 @@ packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js
 packages/app-desktop/gui/MainScreen/commands/toggleEditors.js
 packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js
+packages/app-desktop/gui/MainScreen/commands/toggleNoteType.js
 packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.js
 packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.js
 packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.js
@@ -358,6 +363,8 @@ packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/notarizeMacApp.js
+packages/app-desktop/utils/checkForUpdatesUtils.js
+packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
@@ -367,6 +374,7 @@ packages/app-mobile/components/CustomButton.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
+packages/app-mobile/components/Modal.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.test.js
@@ -487,6 +495,8 @@ packages/lib/JoplinServerApi.js
 packages/lib/Logger.js
 packages/lib/ObjectUtils.js
 packages/lib/PoorManIntervals.js
+packages/lib/RotatingLogs.js
+packages/lib/RotatingLogs.test.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
 packages/lib/SyncTargetNone.js
@@ -505,12 +515,14 @@ packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/note-screen-shared.js
+packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/database-driver-better-sqlite.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
 packages/lib/dom.js
 packages/lib/dummy.test.js
 packages/lib/errorUtils.js
+packages/lib/errors.js
 packages/lib/eventManager.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-memory.js
@@ -565,6 +577,7 @@ packages/lib/models/settings/FileHandler.js
 packages/lib/models/utils/itemCanBeEncrypted.js
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
+packages/lib/models/utils/readOnly.js
 packages/lib/models/utils/types.js
 packages/lib/models/utils/userData.js
 packages/lib/models/utils/userData.test.js
@@ -645,6 +658,8 @@ packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Raw.js
 packages/lib/services/interop/InteropService_Importer_Raw.test.js
+packages/lib/services/interop/Module.js
+packages/lib/services/interop/Module.test.js
 packages/lib/services/interop/types.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.js
@@ -766,7 +781,10 @@ packages/lib/services/synchronizer/syncInfoUtils.test.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_MigrationHandler.test.js
 packages/lib/services/synchronizer/tools.js
+packages/lib/services/synchronizer/utils/handleConflictAction.js
 packages/lib/services/synchronizer/utils/handleSyncStartupOperation.js
+packages/lib/services/synchronizer/utils/resourceRemotePath.js
+packages/lib/services/synchronizer/utils/syncDeleteStep.js
 packages/lib/services/synchronizer/utils/types.js
 packages/lib/shim.js
 packages/lib/testing/syncTargetUtils.js
@@ -864,6 +882,7 @@ packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
 packages/tools/bundleDefaultPlugins.test.js
+packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.js
 packages/tools/checkLibPaths.test.js
 packages/tools/convertThemesToCss.js
@@ -883,6 +902,7 @@ packages/tools/spellcheck.js
 packages/tools/tagServerLatest.js
 packages/tools/tool-utils.js
 packages/tools/update-readme-download.js
+packages/tools/update-readme-download.test.js
 packages/tools/update-readme-sponsors.js
 packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.js

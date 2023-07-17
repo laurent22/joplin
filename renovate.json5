@@ -112,6 +112,13 @@
 		"org.robolectric:robolectric",
 		"react-native",
 
+		// We currently don't have automated tests that verify that the
+		// sidemenus work correctly in the mobile app.
+		// Because an update to react-native-reanimated has previously broken
+		// the sidemenu (https://github.com/laurent22/joplin/issues/8456), we
+		// disable auto updates for it:
+		"react-native-reanimated",
+
 		// Need special processing when upgrading
 		"katex",
 		"mermaid",

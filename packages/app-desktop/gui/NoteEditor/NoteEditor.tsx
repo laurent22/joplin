@@ -31,7 +31,7 @@ import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
-
+import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 import NoteSearchBar from '../NoteSearchBar';
@@ -40,6 +40,12 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 const bridge = require('@electron/remote').require('./bridge').default;
 import NoteRevisionViewer from '../NoteRevisionViewer';
+import { readFromSettings } from '@joplin/lib/services/share/reducer';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { ModelType } from '@joplin/lib/BaseModel';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ErrorCode } from '@joplin/lib/errors';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -51,6 +57,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
+	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
 	const editorRef = useRef<any>();
 	const titleInputRef = useRef<any>();
@@ -279,6 +286,23 @@ function NoteEditor(props: NoteEditorProps) {
 	// 	}
 	// }, [props.dispatch]);
 
+	useAsyncEffect(async event => {
+		if (!formNote.id) return;
+
+		try {
+			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, props.shareCache);
+			if (event.cancelled) return;
+			setIsReadOnly(result);
+		} catch (error) {
+			if (error.code === ErrorCode.NotFound) {
+				// Can happen if the note has been deleted but a render is
+				// triggered anyway. It can be ignored.
+			} else {
+				throw error;
+			}
+		}
+	}, [formNote.id, props.syncUserId, props.shareCache]);
+
 	const onBodyWillChange = useCallback((event: any) => {
 		handleProvisionalFlag();
 
@@ -406,7 +430,7 @@ function NoteEditor(props: NoteEditorProps) {
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
-		disabled: false,
+		disabled: isReadOnly,
 		themeId: props.themeId,
 		dispatch: props.dispatch,
 		noteToolbar: null,
@@ -570,6 +594,7 @@ function NoteEditor(props: NoteEditorProps) {
 					noteTitle={formNote.title}
 					noteUserUpdatedTime={formNote.user_updated_time}
 					onTitleChange={onTitleChange}
+					disabled={isReadOnly}
 				/>
 				{renderSearchInfo()}
 				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
@@ -629,7 +654,9 @@ const mapStateToProps = (state: AppState) => {
 		], whenClauseContext)[0],
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		isSafeMode: state.settings.isSafeMode,
-		useCustomPdfViewer: false, // state.settings.useCustomPdfViewer,
+		useCustomPdfViewer: false,
+		syncUserId: state.settings['sync.userId'],
+		shareCache: readFromSettings(state),
 	};
 };
 
