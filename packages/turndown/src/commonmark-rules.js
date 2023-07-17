@@ -33,7 +33,10 @@ rules.lineBreak = {
   filter: 'br',
 
   replacement: function (content, node, options) {
-    return options.br + '\n'
+    // Code blocks may include <br/>s -- replacing them should not be necessary
+    // in code blocks.
+    const brReplacement = node.isCode ? '' : options.br;
+    return brReplacement + '\n'
   }
 }
 
