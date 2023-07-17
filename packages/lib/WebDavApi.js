@@ -444,10 +444,11 @@ class WebDavApi {
 
 			let message = 'Unknown error 2';
 			if (response.status === 401 || response.status === 403) {
+				// No auth token means an empty username or password
 				if (!authToken) {
-					message = _('Access denied: Empty password. You may have to re-enter your WebDAV credentials.');
+					message = _('Access denied: Please re-enter your password and/or username');
 				} else {
-					message = _('Access denied: Invalid credentials');
+					message = _('Access denied: Please check your username and password');
 				}
 			}
 
