@@ -26,6 +26,7 @@ import { openDocumentTree } from '@joplin/react-native-saf-x';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles from './configScreenStyles';
 import NoteExportButton from './NoteExportSection/NoteExportButton';
+import ConfigScreenButton from './ConfigScreenButton';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	public static navigationOptions(): any {
@@ -307,28 +308,16 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
-		if (!options) options = {};
-
-		let descriptionComp = null;
-		if (options.description) {
-			descriptionComp = (
-				<View style={{ flex: 1, marginTop: 10 }}>
-					<Text style={this.styles().descriptionText}>{options.description}</Text>
-				</View>
-			);
-		}
-
+	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		return (
-			<View key={key} style={this.styles().settingContainer}>
-				<View style={{ flex: 1, flexDirection: 'column' }}>
-					<View style={{ flex: 1 }}>
-						<Button title={title} onPress={clickHandler} disabled={!!options.disabled} />
-					</View>
-					{options.statusComp}
-					{descriptionComp}
-				</View>
-			</View>
+			<ConfigScreenButton
+				key={key}
+				title={title}
+				clickHandler={clickHandler}
+				description={options?.description}
+				statusComponent={options?.statusComp}
+				styles={this.styles()}
+			/>
 		);
 	}
 

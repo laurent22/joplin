@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { Text, Alert, Button, View } from 'react-native';
+import { Text, Alert, View } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
 import { ProgressBar } from 'react-native-paper';
-import { useCallback, useState } from 'react';
+import { FunctionComponent, useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
 import Share from 'react-native-share';
 import exportAllFolders, { makeExportCacheDirectory } from './exportAllFolders';
 import { ExportProgressState } from '@joplin/lib/services/interop/types';
 import { ConfigScreenStyles } from '../configScreenStyles';
+import ConfigScreenButton from '../ConfigScreenButton';
 
 const logger = Logger.create('NoteExportButton');
 
@@ -23,7 +24,7 @@ enum ExportStatus {
 	Exported,
 }
 
-const NoteExportButton = (props: Props) => {
+const NoteExportButton: FunctionComponent<Props> = props => {
 	const [exportStatus, setExportStatus] = useState<ExportStatus>(ExportStatus.NotStarted);
 	const [exportProgress, setExportProgress] = useState<number|undefined>(0);
 	const [warnings, setWarnings] = useState<string>('');
@@ -72,54 +73,42 @@ const NoteExportButton = (props: Props) => {
 		}
 	}, [exportStatus]);
 
-	const descriptionComponent = (
-		<Text style={props.styles.descriptionText}>
-			{_('Share a copy of all notes in a file format that can be imported by Joplin on a computer.')}
-		</Text>
-	);
-
-	const startOrCancelExportButton = (
-		<>
+	if (exportStatus === ExportStatus.NotStarted || exportStatus === ExportStatus.Exporting) {
+		const progressComponent = (
 			<ProgressBar
 				visible={exportStatus === ExportStatus.Exporting}
 				indeterminate={exportProgress === undefined}
 				progress={exportProgress}/>
-			<Button
-				onPress={startExport}
-				disabled={exportStatus === ExportStatus.Exporting}
+		);
+		const descriptionText = _('Share a copy of all notes in a file format that can be imported by Joplin on a computer.');
+
+		const startOrCancelExportButton = (
+			<ConfigScreenButton
 				title={exportStatus === ExportStatus.Exporting ? _('Exporting...') : _('Export all notes as JEX')}
+				disabled={exportStatus === ExportStatus.Exporting}
+				description={exportStatus === ExportStatus.NotStarted ? descriptionText : null}
+				statusComponent={progressComponent}
+				clickHandler={startExport}
+				styles={props.styles}
 			/>
-			{exportStatus === ExportStatus.NotStarted ? descriptionComponent : null}
-		</>
-	);
+		);
 
-	const warningDisplay = (
-		<Text style={props.styles.warningText}>
-			{_('Warnings:\n%s', warnings)}
-		</Text>
-	);
-
-	const postExportMessage = (
-		<>
-			<Text style={props.styles.descriptionText}>{_('Exported successfully!')}</Text>
-			{warnings.length > 0 ? warningDisplay : null}
-		</>
-	);
-
-	let mainContent = null;
-	if (exportStatus === ExportStatus.NotStarted || exportStatus === ExportStatus.Exporting) {
-		mainContent = startOrCancelExportButton;
+		return startOrCancelExportButton;
 	} else {
-		mainContent = postExportMessage;
-	}
+		const warningComponent = (
+			<Text style={props.styles.warningText}>
+				{_('Warnings:\n%s', warnings)}
+			</Text>
+		);
 
-	return (
-		<View style={props.styles.settingContainer}>
-			<View style={{ flex: 1, flexDirection: 'column' }}>
-				{mainContent}
+		const exportSummary = (
+			<View style={props.styles.settingContainer}>
+				<Text style={props.styles.descriptionText}>{_('Exported successfully!')}</Text>
+				{warnings.length > 0 ? warningComponent : null}
 			</View>
-		</View>
-	);
+		);
+		return exportSummary;
+	}
 };
 
 export default NoteExportButton;

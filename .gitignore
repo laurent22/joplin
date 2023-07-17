@@ -403,6 +403,7 @@ packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen/ConfigScreenButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/exportAllFolders.js
