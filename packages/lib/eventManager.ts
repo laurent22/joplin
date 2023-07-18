@@ -132,6 +132,10 @@ export class EventManager {
 		}
 	}
 
+	public once(eventName: string, callback: any) {
+		return this.emitter_.once(eventName, callback);
+	}
+
 }
 
 const eventManager = new EventManager();

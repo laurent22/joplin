@@ -139,6 +139,7 @@ packages/app-desktop/gui/HelpButton.js
 packages/app-desktop/gui/IconButton.js
 packages/app-desktop/gui/ImportScreen.js
 packages/app-desktop/gui/ItemList.js
+packages/app-desktop/gui/JoplinCloudConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js
@@ -785,6 +786,7 @@ packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/utils/credentialFiles.js
+packages/lib/utils/inboxFetcher.js
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/webDAVUtils.js
 packages/lib/utils/webDAVUtils.test.js
