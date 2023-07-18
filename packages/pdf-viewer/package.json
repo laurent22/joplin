@@ -30,7 +30,7 @@
     "jest-environment-jsdom": "29.5.0",
     "style-loader": "3.3.3",
     "ts-jest": "29.1.0",
-    "ts-loader": "9.4.3",
+    "ts-loader": "9.4.4",
     "typescript": "5.0.2",
     "webpack": "5.74.0",
     "webpack-cli": "4.10.0"
