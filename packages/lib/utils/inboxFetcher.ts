@@ -25,6 +25,6 @@ export const inboxFetcher = async () => {
 };
 
 // Listen to the event only once
-export const initialInboxFetcher = () => {
+export const initializeInboxFetcher = () => {
 	eventManager.once('sessionEstablished', inboxFetcher);
 };

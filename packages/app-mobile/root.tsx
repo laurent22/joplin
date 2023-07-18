@@ -117,7 +117,7 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
-import { initialInboxFetcher, inboxFetcher } from '@joplin/lib/utils/inboxFetcher';
+import { initializeInboxFetcher, inboxFetcher } from '@joplin/lib/utils/inboxFetcher';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 
 type SideMenuPosition = 'left' | 'right';
@@ -641,7 +641,7 @@ async function initialize(dispatch: Function) {
 
 	reg.setupRecurrentSync();
 
-	initialInboxFetcher();
+	initializeInboxFetcher();
 	PoorManIntervals.setInterval(() => { void inboxFetcher(); }, 1000 * 60 * 60);
 
 	PoorManIntervals.setTimeout(() => {
