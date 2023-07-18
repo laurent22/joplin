@@ -11,6 +11,7 @@ interface NoteToolbarProps {
 	themeId: number;
 	style: any;
 	toolbarButtonInfos: ToolbarButtonInfo[];
+	disabled: boolean;
 }
 
 function styles_(props: NoteToolbarProps) {
@@ -27,7 +28,7 @@ function styles_(props: NoteToolbarProps) {
 
 function NoteToolbar(props: NoteToolbarProps) {
 	const styles = styles_(props);
-	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} />;
+	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} disabled={props.disabled}/>;
 }
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());

@@ -19,6 +19,7 @@ export interface EditorSettings {
 
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
+	readOnly: boolean;
 }
 
 export interface ChangeEvent {

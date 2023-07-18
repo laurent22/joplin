@@ -13,7 +13,7 @@ import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
-import { ShareInvitation, State, stateRootKey, StateShare } from './reducer';
+import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
 
@@ -306,7 +306,7 @@ export default class ShareService {
 		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
 	}
 
-	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string) {
+	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string, permissions: SharePermissions) {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
@@ -330,6 +330,7 @@ export default class ShareService {
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
 			master_key: JSON.stringify(recipientMasterKey),
+			...permissions,
 		});
 	}
 
@@ -359,6 +360,25 @@ export default class ShareService {
 			value: v,
 		});
 	}
+
+	public async setPermissions(shareId: string, shareUserId: string, permissions: SharePermissions) {
+		logger.info('setPermissions: ', shareUserId, permissions);
+
+		await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, {
+			can_read: 1,
+			can_write: permissions.can_write,
+		});
+
+		this.store.dispatch({
+			type: 'SHARE_USER_UPDATE_ONE',
+			shareId: shareId,
+			shareUser: {
+				id: shareUserId,
+				...permissions,
+			},
+		});
+	}
+
 
 	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
 		logger.info('respondInvitation: ', shareUserId, accept);

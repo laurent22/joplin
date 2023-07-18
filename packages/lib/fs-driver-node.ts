@@ -162,6 +162,10 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
+	public async chmod(source: string, mode: string | number) {
+		return fs.chmod(source, mode);
+	}
+
 	public async unlink(path: string) {
 		try {
 			await fs.unlink(path);

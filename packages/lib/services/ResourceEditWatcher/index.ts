@@ -5,6 +5,7 @@ import { toSystemSlashes } from '../../path-utils';
 import Logger from '../../Logger';
 import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
+import { ResourceEntity } from '../database/types';
 const EventEmitter = require('events');
 const chokidar = require('chokidar');
 
@@ -213,6 +214,20 @@ export default class ResourceEditWatcher {
 		return this.watcher_;
 	}
 
+	private async makeEditPath(resource: ResourceEntity) {
+		const tempDir = await this.tempDir();
+		return toSystemSlashes(await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`), 'linux');
+	}
+
+	private async copyResourceToEditablePath(resourceId: string) {
+		const resource = await Resource.load(resourceId);
+		if (!(await Resource.isReady(resource))) throw new Error(_('This attachment is not downloaded or not decrypted yet'));
+		const sourceFilePath = Resource.fullPath(resource);
+		const editFilePath = await this.makeEditPath(resource);
+		await shim.fsDriver().copy(sourceFilePath, editFilePath);
+		return { resource, editFilePath };
+	}
+
 	private async watch(resourceId: string): Promise<WatchedItem> {
 		let watchedItem = this.watchedItemByResourceId(resourceId);
 
@@ -229,13 +244,7 @@ export default class ResourceEditWatcher {
 			};
 
 			this.watchedItems_[resourceId] = watchedItem;
-
-			const resource = await Resource.load(resourceId);
-			if (!(await Resource.isReady(resource))) throw new Error(_('This attachment is not downloaded or not decrypted yet'));
-			const sourceFilePath = Resource.fullPath(resource);
-			const tempDir = await this.tempDir();
-			const editFilePath = toSystemSlashes(await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`), 'linux');
-			await shim.fsDriver().copy(sourceFilePath, editFilePath);
+			const { resource, editFilePath } = await this.copyResourceToEditablePath(resourceId);
 			const stat = await shim.fsDriver().stat(editFilePath);
 
 			watchedItem.path = editFilePath;
@@ -259,8 +268,16 @@ export default class ResourceEditWatcher {
 
 	public async openAndWatch(resourceId: string) {
 		const watchedItem = await this.watch(resourceId);
-		// bridge().openItem(watchedItem.path);
 		this.openItem_(watchedItem.path);
+	}
+
+	// This call simply copies the resource file to a separate path and opens it.
+	// That way, even if it is changed, the real resource file on drive won't be
+	// affected.
+	public async openAsReadOnly(resourceId: string) {
+		const { editFilePath } = await this.copyResourceToEditablePath(resourceId);
+		await shim.fsDriver().chmod(editFilePath, 0o0666);
+		this.openItem_(editFilePath);
 	}
 
 	public async stopWatching(resourceId: string) {

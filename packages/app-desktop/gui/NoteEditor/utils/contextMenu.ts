@@ -7,10 +7,13 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
+import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
+import Setting from '@joplin/lib/models/Setting';
+import ItemChange from '@joplin/lib/models/ItemChange';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -50,7 +53,11 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 		}
 
 		try {
-			await ResourceEditWatcher.instance().openAndWatch(resource.id);
+			if (itemIsReadOnlySync(ModelType.Resource, ItemChange.SOURCE_UNSPECIFIED, resource as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) {
+				await ResourceEditWatcher.instance().openAsReadOnly(resource.id);
+			} else {
+				await ResourceEditWatcher.instance().openAndWatch(resource.id);
+			}
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(error.message);

@@ -5,6 +5,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import WelcomeUtils from '../../WelcomeUtils';
+import { NoteEntity } from '../database/types';
 
 describe('Synchronizer.basics', () => {
 
@@ -12,6 +13,7 @@ describe('Synchronizer.basics', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
+		synchronizer().testingHooks_ = [];
 	});
 
 	afterAll(async () => {
@@ -258,6 +260,25 @@ describe('Synchronizer.basics', () => {
 
 		disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
 		expect(disabledItems.length).toBe(1);
+	}));
+
+	it('should handle items that are read-only on the sync target', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'un', is_todo: 1, parent_id: folder.id });
+		const noteId = note.id;
+		await synchronizerStart();
+		await Note.save({ id: noteId, title: 'un mod' });
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+
+		const noteReload = await Note.load(note.id);
+		expect(noteReload.title).toBe(note.title);
+
+		const conflictNote: NoteEntity = (await Note.all()).find((n: NoteEntity) => !!n.is_conflict);
+		expect(conflictNote).toBeTruthy();
+		expect(conflictNote.title).toBe('un mod');
+		expect(conflictNote.id).not.toBe(note.id);
 	}));
 
 	it('should allow duplicate folder titles', (async () => {

@@ -154,6 +154,24 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 fi
 
 # =============================================================================
+# Check .gitignore and .eslintignore files - they should be updated when
+# new TypeScript files are added by running `yarn run updateIgnored`.
+# See coding_style.md
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Checking for files that should have been ignored..."
+
+		node packages/tools/checkIgnoredFiles.js 
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
 # building PRs so we disable it in this case. The Linux build should provide
 # enough info if the app builds or not.

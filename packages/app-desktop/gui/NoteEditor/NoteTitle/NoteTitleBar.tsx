@@ -38,6 +38,7 @@ interface Props {
 	isProvisional: boolean;
 	titleInputRef: any;
 	onTitleChange(event: ChangeEvent<HTMLInputElement>): void;
+	disabled: boolean;
 }
 
 function styles_(props: Props) {
@@ -98,6 +99,7 @@ export default function NoteTitleBar(props: Props) {
 		return <NoteToolbar
 			themeId={props.themeId}
 			style={styles.toolbarStyle}
+			disabled={props.disabled}
 		/>;
 	}
 
@@ -109,6 +111,7 @@ export default function NoteTitleBar(props: Props) {
 				ref={props.titleInputRef}
 				placeholder={props.isProvisional ? _('Creating new %s...', props.noteIsTodo ? _('to-do') : _('note')) : ''}
 				style={styles.titleInput}
+				readOnly={props.disabled}
 				onChange={props.onTitleChange}
 				onKeyDown={onTitleKeydown}
 				value={props.noteTitle}

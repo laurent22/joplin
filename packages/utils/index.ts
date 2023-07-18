@@ -6,6 +6,7 @@ import { pathExists } from 'fs-extra';
 
 let rootDir_ = '';
 
+
 const getRootDir = async () => {
 	if (rootDir_) return rootDir_;
 

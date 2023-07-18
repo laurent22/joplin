@@ -15,4 +15,7 @@ export default {
 	createNano: function(): string {
 		return nanoid();
 	},
+	createNanoForInboxEmail: (): string => {
+		return customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8)();
+	},
 };
