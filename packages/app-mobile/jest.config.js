@@ -14,13 +14,7 @@ module.exports = {
 
 	setupFilesAfterEnv: ['./jest.setup.js'],
 	testMatch: ['**/*.test.(ts|tsx)'],
-
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-	setupFilesAfterEnv: ['./jest.setup.js'],
-
-	// Do transform most packages in node_modules (transformations correct unrecognized
-	// import syntax)
-	transformIgnorePatterns: ['<rootDir>/node_modules/jest'],
 
 	// Do transform most packages in node_modules (transformations correct unrecognized
 	// import syntax)
