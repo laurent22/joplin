@@ -932,8 +932,6 @@ class AppComponent extends React.Component {
 	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
 
-		logger.info('Sharing: handleShareData:', sharedData);
-
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
@@ -942,6 +940,8 @@ class AppComponent extends React.Component {
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
+		} else {
+			logger.info('Sharing: received empty share data.');
 		}
 	}
 
