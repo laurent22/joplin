@@ -51,7 +51,9 @@ class LogScreenComponent extends BaseScreenComponent {
 
 		let fileToShare;
 		try {
-			fileToShare = await writeTextToCacheFile(logData);
+			// Using a .txt file extension causes a "No valid provider found from URL" error
+			// and blank share sheet on iOS for larger log files (around 200 KiB).
+			fileToShare = await writeTextToCacheFile(logData, 'mobile-log.log');
 
 			await Share.open({
 				type: 'text/plain',
