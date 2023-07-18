@@ -840,7 +840,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'appearance',
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				public: true,
 				label: () => _('Automatically switch theme to match system theme'),
 				storage: SettingStorage.File,
@@ -854,7 +854,7 @@ class Setting extends BaseModel {
 				show: (settings) => {
 					return settings['themeAutoDetect'];
 				},
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				isEnum: true,
 				label: () => _('Preferred light theme'),
 				section: 'appearance',
@@ -870,7 +870,7 @@ class Setting extends BaseModel {
 				show: (settings) => {
 					return settings['themeAutoDetect'];
 				},
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				isEnum: true,
 				label: () => _('Preferred dark theme'),
 				section: 'appearance',
