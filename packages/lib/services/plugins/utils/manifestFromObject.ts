@@ -1,4 +1,4 @@
-import { PluginManifest, PluginPermission, Screenshot } from './types';
+import { PluginManifest, PluginPermission, Screenshot, Icons } from './types';
 import validatePluginId from './validatePluginId';
 
 export default function manifestFromObject(o: any): PluginManifest {
@@ -36,6 +36,11 @@ export default function manifestFromObject(o: any): PluginManifest {
 		return o.screenshots;
 	};
 
+	const getIcons = (defaultValue: Icons = null): Icons => {
+		if (!o.icons) return defaultValue;
+		return o.icons;
+	};
+
 	const permissions: PluginPermission[] = [];
 
 	const manifest: PluginManifest = {
@@ -53,6 +58,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 		categories: getStrings('categories', false),
 		screenshots: getScreenshots(),
 		permissions: permissions,
+		icons: getIcons(),
 
 		_recommended: getBoolean('_recommended', false, false),
 		_built_in: getBoolean('_built_in', false, false),

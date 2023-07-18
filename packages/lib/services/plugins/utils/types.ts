@@ -7,6 +7,13 @@ export interface Screenshot {
 	label: string;
 }
 
+export interface Icons {
+	16: string;
+	32: string;
+	48: string;
+	128: string;
+}
+
 export interface PluginManifest {
 	manifest_version: number;
 	id: string;
@@ -21,6 +28,7 @@ export interface PluginManifest {
 	categories?: string[];
 	screenshots?: Screenshot[];
 	permissions?: PluginPermission[];
+	icons?: Icons;
 
 	// Private keys
 	_package_hash?: string;
