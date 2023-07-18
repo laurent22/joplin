@@ -440,6 +440,7 @@ export default class Synchronizer {
 			try {
 				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo);
+				eventManager.emit('sessionEstablished');
 
 				let syncTargetIsNew = false;
 
