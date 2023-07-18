@@ -4983,7 +4983,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.63.2
+    sass: 1.63.6
     sharp: 0.32.1
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -29692,16 +29692,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.63.2":
-  version: 1.63.2
-  resolution: "sass@npm:1.63.2"
+"sass@npm:1.63.6":
+  version: 1.63.6
+  resolution: "sass@npm:1.63.6"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 7ffc2b789aeae4637f09195f7d24e149fc590e2c69cb209c64fdf0ed0d7f09da28097c48fda7f36d257aeb7dd8e16a9ff77b50cf78830afe6f996e6dcd957280
+  checksum: 3372319904658eeafaf78a09a6fcb3368a68e6d76fe3c43c2d009f4f72e475ab22b82ef483ef5c00fcda3ab00066846c0bd88c36b42771b855f6ab80c7eda541
   languageName: node
   linkType: hard
 
