@@ -1,8 +1,9 @@
 import SyncTargetRegistry from '../SyncTargetRegistry';
+import eventManager from '../eventManager';
 import Setting from '../models/Setting';
 import { reg } from '../registry';
 
-const inboxFolderFetcher = async () => {
+export const inboxFetcher = async () => {
 
 	if (Setting.value('sync.target') !== SyncTargetRegistry.nameToId('joplinCloud')) {
 		return;
@@ -23,4 +24,7 @@ const inboxFolderFetcher = async () => {
 	}
 };
 
-export default inboxFolderFetcher;
+// Listen to the event only once
+export const initialInboxFetcher = () => {
+	eventManager.once('sessionEstablished', inboxFetcher);
+};
