@@ -210,7 +210,7 @@ describe('ShareService', () => {
 
 		const { share } = await testShareFolder(service);
 
-		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com');
+		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com', { can_read: 1, can_write: 1 });
 
 		expect(uploadedEmail).toBe('toto@example.com');
 

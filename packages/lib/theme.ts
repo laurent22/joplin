@@ -137,7 +137,7 @@ function addMissingProperties(theme: Theme) {
 	return theme;
 }
 
-function addExtraStyles(style: any) {
+export function addExtraStyles(style: any) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
 

@@ -1,5 +1,6 @@
+import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree } from '../testing/test-utils';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 
@@ -16,7 +17,7 @@ describe('models/Folder', () => {
 		await switchClient(1);
 	});
 
-	it('should tell if a notebook can be nested under another one', (async () => {
+	it('should tell if a folder can be nested under another one', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -32,7 +33,7 @@ describe('models/Folder', () => {
 		expect(await Folder.canNestUnder(f2.id, '')).toBe(true);
 	}));
 
-	it('should recursively delete notes and sub-notebooks', (async () => {
+	it('should recursively delete notes and sub-folders', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
@@ -222,7 +223,7 @@ describe('models/Folder', () => {
 		expect(sortedFolderTree[2].id).toBe(f6.id);
 	}));
 
-	it('should not allow setting a notebook parent as itself', (async () => {
+	it('should not allow setting a folder parent as itself', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));
 		expect(hasThrown).toBe(true);
@@ -284,4 +285,42 @@ describe('models/Folder', () => {
 			expect(children.map(c => c.id).sort()).toEqual([].sort());
 		}
 	}));
+
+	it('should not allow creating a new folder as a child of a read-only folder', async () => {
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const readonlyFolder = await Folder.save({ share_id: '123456789' });
+		await expectThrow(async () => Folder.save({ parent_id: readonlyFolder.id }), ErrorCode.IsReadOnly);
+
+		cleanup();
+	});
+
+	it('should not allow moving a folder as a child of a read-only folder', async () => {
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const readonlyFolder = await Folder.save({ share_id: '123456789' });
+		const folder = await Folder.save({});
+		await expectThrow(async () => Folder.save({ id: folder.id, parent_id: readonlyFolder.id }), ErrorCode.IsReadOnly);
+
+		cleanup();
+	});
+
+	it('should not allow modifying a read-only folder', async () => {
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const readonlyFolder = await Folder.save({ share_id: '123456789' });
+		await expectThrow(async () => Folder.save({ id: readonlyFolder.id, title: 'cannot do that' }), ErrorCode.IsReadOnly);
+
+		cleanup();
+	});
+
+	it('should not allow deleting a read-only folder', async () => {
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const readonlyFolder = await Folder.save({ share_id: '123456789' });
+		await expectThrow(async () => Folder.delete(readonlyFolder.id), ErrorCode.IsReadOnly);
+
+		cleanup();
+	});
+
 });

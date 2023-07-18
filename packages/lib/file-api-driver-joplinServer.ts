@@ -179,6 +179,10 @@ export default class FileApiDriverJoplinServer {
 		return error.code === 413 || error.code === 409 || error.httpCode === 413 || error.httpCode === 409;
 	}
 
+	private isReadyOnlyError(error: any) {
+		return error && error.code === 'isReadOnly';
+	}
+
 	public async put(path: string, content: any, options: any = null) {
 		try {
 			const output = await this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
@@ -189,6 +193,11 @@ export default class FileApiDriverJoplinServer {
 			if (this.isRejectedBySyncTargetError(error)) {
 				throw new JoplinError(error.message, 'rejectedByTarget');
 			}
+
+			if (this.isReadyOnlyError(error)) {
+				throw new JoplinError(error.message, 'isReadOnly');
+			}
+
 			throw error;
 		}
 	}
@@ -199,6 +208,8 @@ export default class FileApiDriverJoplinServer {
 		for (const [, response] of Object.entries<any>(output.items)) {
 			if (response.error && this.isRejectedBySyncTargetError(response.error)) {
 				response.error.code = 'rejectedByTarget';
+			} else if (response.error && this.isReadyOnlyError(response.error)) {
+				response.error.code = 'isReadOnly';
 			}
 		}
 

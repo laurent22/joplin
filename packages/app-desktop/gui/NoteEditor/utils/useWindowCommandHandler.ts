@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
-import editorCommandDeclarations from '../editorCommandDeclarations';
+import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
 import { reg } from '@joplin/lib/registry';
-import { joplinCommandToTinyMceCommands } from '../NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands';
 
 const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
@@ -30,8 +29,6 @@ interface HookDependencies {
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
-	const markdownEditorOnly = !Object.keys(joplinCommandToTinyMceCommands).includes(declaration.name);
-
 	return {
 		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current) {
@@ -73,7 +70,7 @@ function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, s
 		// currently selected text.
 		//
 		// https://github.com/laurent22/joplin/issues/5707
-		enabledCondition: `(!modalDialogVisible || gotoAnythingVisible) ${markdownEditorOnly ? '&& markdownEditorPaneVisible' : ''} && oneNoteSelected && noteIsMarkdown`,
+		enabledCondition: enabledCondition(declaration.name),
 	};
 }
 

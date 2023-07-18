@@ -1699,6 +1699,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'sync.shareCache': {
+				value: null,
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			'voiceTypingBaseUrl': {
 				value: '',
 				type: SettingItemType.String,

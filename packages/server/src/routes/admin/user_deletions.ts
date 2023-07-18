@@ -18,7 +18,7 @@ router.get('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {
 	const user = ctx.joplin.owner;
 	if (!user.is_admin) throw new ErrorForbidden();
 
-	const pagination = makeTablePagination(ctx.query, 'scheduled_time', PaginationOrderDir.ASC);
+	const pagination = makeTablePagination(ctx.query, 'scheduled_time', PaginationOrderDir.DESC);
 	const page = await ctx.joplin.models.userDeletion().allPaginated(pagination);
 	const users = await ctx.joplin.models.user().loadByIds(page.items.map(d => d.user_id), { fields: ['id', 'email'] });
 

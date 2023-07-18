@@ -4,7 +4,7 @@ import Database from './database';
 import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
-import { LoadOptions } from './models/utils/types';
+import { LoadOptions, SaveOptions } from './models/utils/types';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -535,7 +535,7 @@ class BaseModel {
 		}
 	}
 
-	public static async save(o: any, options: any = null) {
+	public static async save(o: any, options: SaveOptions = null) {
 		// When saving, there's a mutex per model ID. This is because the model returned from this function
 		// is basically its input `o` (instead of being read from the database, for performance reasons).
 		// This works well in general except if that model is saved simultaneously in two places. In that
@@ -546,7 +546,8 @@ class BaseModel {
 		const mutexRelease = await this.saveMutex(o).acquire();
 
 		options = this.modOptions(options);
-		options.isNew = this.isNew(o, options);
+		const isNew = this.isNew(o, options);
+		options.isNew = isNew;
 
 		// Diff saving is an optimisation which takes a new version of the item and an old one,
 		// do a diff and save only this diff. IMPORTANT: When using this make sure that both
