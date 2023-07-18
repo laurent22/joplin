@@ -183,7 +183,7 @@ jobs:
           docker run -p 22300:22300 joplin/server:0.0.0-beta node dist/app.js --env dev &
 
           # Wait for server to start
-          sleep 10
+          sleep 30
 
           # Check if status code is correct
           # if the actual_status DOES NOT include the expected_status

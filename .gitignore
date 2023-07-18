@@ -408,7 +408,12 @@ packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/getResponsiveValue.test.js
-packages/app-mobile/components/screens/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen/ConfigScreenButton.js
+packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.js
+packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.js
+packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/exportAllFolders.js
+packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
@@ -429,6 +434,7 @@ packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
+packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
 packages/app-mobile/utils/debounce.js
