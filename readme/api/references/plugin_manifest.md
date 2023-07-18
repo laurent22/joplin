@@ -15,7 +15,7 @@ Name | Type | Required? | Description
 `repository_url` | string | No | Repository URL where the plugin source code is hosted.
 `categories` | string[] | No | [Categories](#categories) that describes the functionality of the plugin. 
 `screenshots` | Screenshot[] | No  | [Screenshots](#Screenshot) are used for listing on Joplin Plugin website.
-`icons` | Icons | No | Icons are mainly used for be displaying on the desktop app plugins page and on Joplin Plugin Website.
+`icons` | Icons | No | [Icons](#Icons) are used for listing on the desktop app plugins page and on the Joplin Plugin website.
 
 ## Categories
 
@@ -41,13 +41,13 @@ Name | Type | Required? | Description
 | label | description of the image. |
 
 ## Icons
+
 | Properties | Description |
 | --- | --- |
 | 16 | a relative path to an image .png |
 | 32 | a relative path to an image .png |
 | 48 | a relative path to an image .png |
 | 128 | a relative path to an image .png |
-You can declare as many key/value pairs icons you wish, as long as, you declare these four sizes defined above. 
 
 ## Manifest example
 
