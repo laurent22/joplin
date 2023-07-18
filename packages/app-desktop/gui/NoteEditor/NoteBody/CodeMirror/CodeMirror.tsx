@@ -893,7 +893,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					mode={props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					codeMirrorTheme={styles.editor.codeMirrorTheme}
 					style={styles.editor}
-					readOnly={props.visiblePanes.indexOf('editor') < 0}
+					readOnly={props.disabled || props.visiblePanes.indexOf('editor') < 0}
 					autoMatchBraces={matchBracesOptions}
 					keyMap={props.keyboardMode}
 					plugins={props.plugins}
@@ -927,7 +927,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={rootRef}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} />
+					<Toolbar themeId={props.themeId}/>
 					{props.noteToolbar}
 				</div>
 				<div style={styles.rowEditorViewer}>

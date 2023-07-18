@@ -33,7 +33,10 @@ rules.lineBreak = {
   filter: 'br',
 
   replacement: function (content, node, options) {
-    return options.br + '\n'
+    // Code blocks may include <br/>s -- replacing them should not be necessary
+    // in code blocks.
+    const brReplacement = node.isCode ? '' : options.br;
+    return brReplacement + '\n'
   }
 }
 
@@ -215,11 +218,25 @@ rules.fencedCodeBlock = {
 
     var className = handledNode.className || ''
     var language = (className.match(/language-(\S+)/) || [null, ''])[1]
+    var code = content
+
+    var fenceChar = options.fence.charAt(0)
+    var fenceSize = 3
+    var fenceInCodeRegex = new RegExp('^' + fenceChar + '{3,}', 'gm')
+
+    var match
+    while ((match = fenceInCodeRegex.exec(code))) {
+      if (match[0].length >= fenceSize) {
+        fenceSize = match[0].length + 1
+      }
+    }
+
+    var fence = repeat(fenceChar, fenceSize)
 
     return (
-      '\n\n' + options.fence + language + '\n' +
-      content + 
-      '\n' + options.fence + '\n\n'
+      '\n\n' + fence + language + '\n' +
+      code.replace(/\n$/, '') +
+      '\n' + fence + '\n\n'
     )
   }
 }
@@ -407,19 +424,15 @@ rules.code = {
   },
 
   replacement: function (content) {
-    if (!content.trim()) return ''
+    if (!content) return ''
+    content = content.replace(/\r?\n|\r/g, ' ')
 
+    var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'
-    var leadingSpace = ''
-    var trailingSpace = ''
-    var matches = content.match(/`+/gm)
-    if (matches) {
-      if (/^`/.test(content)) leadingSpace = ' '
-      if (/`$/.test(content)) trailingSpace = ' '
-      while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`'
-    }
+    var matches = content.match(/`+/gm) || []
+    while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`'
 
-    return delimiter + leadingSpace + content + trailingSpace + delimiter
+    return delimiter + extraSpace + content + extraSpace + delimiter
   }
 }
 

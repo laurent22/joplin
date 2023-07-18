@@ -342,6 +342,8 @@ export function initCodeMirror(
 
 					...defaultKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
 				]),
+
+				EditorState.readOnly.of(settings.readOnly),
 			],
 			doc: initialText,
 		}),

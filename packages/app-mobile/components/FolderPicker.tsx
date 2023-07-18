@@ -15,7 +15,7 @@ interface FolderPickerProps {
 	folders: FolderEntity[];
 	placeholder?: string;
 	darkText?: boolean;
-	themeId?: string;
+	themeId?: number;
 }
 
 

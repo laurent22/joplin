@@ -44,12 +44,12 @@ export interface PaginatedList {
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
-	// Unauthorized error - means username or password is incorrect or other
+	// Unauthorized/forbidden error - means username or password is incorrect or other
 	// permission issue, which won't be fixed by repeating the request.
-	if (errorCode === 403) return false;
+	if (errorCode === 403 || errorCode === 401) return false;
 
 	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
-	if (errorCode === 'rejectedByTarget') return false;
+	if (errorCode === 'rejectedByTarget' || errorCode === 'isReadOnly') return false;
 
 	// We don't repeat failSafe errors because it's an indication of an issue at the
 	// server-level issue which usually cannot be fixed by repeating the request.

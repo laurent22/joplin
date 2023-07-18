@@ -13,5 +13,6 @@ module.exports = {
 	'*.{js,jsx,ts,tsx}': [
 		'yarn run linter-precommit',
 		'yarn run checkLibPaths',
+		'node packages/tools/checkIgnoredFiles.js',
 	],
 };

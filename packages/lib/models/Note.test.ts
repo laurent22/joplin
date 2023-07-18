@@ -2,7 +2,7 @@ import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
-import { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir } from '../testing/test-utils';
+import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
@@ -11,6 +11,7 @@ import Resource from './Resource';
 import { ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
+import { ErrorCode } from '../errors';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -164,6 +165,8 @@ describe('models/Note', () => {
 
 		expect(note.body).toContain(resource.id);
 		expect(duplicatedNote.body).toContain(duplicatedResource.id);
+		expect(duplicatedResource.share_id).toBe('');
+		expect(duplicatedResource.is_shared).toBe(0);
 	}));
 
 	it('should delete a set of notes', (async () => {
@@ -371,12 +374,14 @@ describe('models/Note', () => {
 
 	it('should create a conflict note', async () => {
 		const folder = await Folder.save({ title: 'Source Folder' });
-		const origNote = await Note.save({ title: 'note', parent_id: folder.id });
+		const origNote = await Note.save({ title: 'note', parent_id: folder.id, share_id: 'SHARE', is_shared: 1 });
 		const conflictedNote = await Note.createConflictNote(origNote, ItemChange.SOURCE_SYNC);
 
 		expect(conflictedNote.is_conflict).toBe(1);
 		expect(conflictedNote.conflict_original_id).toBe(origNote.id);
 		expect(conflictedNote.parent_id).toBe(folder.id);
+		expect(conflictedNote.is_shared).toBeUndefined();
+		expect(conflictedNote.share_id).toBeUndefined();
 	});
 
 	it('should copy conflicted note to target folder and cancel conflict', (async () => {
@@ -440,5 +445,56 @@ describe('models/Note', () => {
 		const expected = '![image.png](:/849eae4dade045298c107fc706b6d2bc)';
 		testResourceReplacment(body, pathsToTry, expected);
 	});
+
+	it('should not allow modifying a read-only note', async () => {
+		const folder = await Folder.save({ });
+		const note = await Note.save({ parent_id: folder.id });
+
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		await expectNotThrow(async () => await Note.save({ id: note.id, title: 'can do this' }));
+
+		await Folder.save({ id: folder.id, share_id: '123456789' });
+		await Note.save({ id: note.id, share_id: '123456789' });
+
+		await expectThrow(async () => await Note.save({ id: note.id, title: 'cannot do this!' }), ErrorCode.IsReadOnly);
+
+		await expectNotThrow(async () => await Note.save({ id: note.id, title: 'But it can be updated via sync' }, { changeSource: ItemChange.SOURCE_SYNC }));
+
+		cleanup();
+	});
+
+	it('should not allow deleting a read-only note', async () => {
+		const folder = await Folder.save({ });
+		const note1 = await Note.save({ parent_id: folder.id });
+
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		await Folder.save({ id: folder.id, share_id: '123456789' });
+		await Note.save({ id: note1.id, share_id: '123456789' });
+
+		await expectThrow(async () => await Note.delete(note1.id), ErrorCode.IsReadOnly);
+
+		cleanup();
+	});
+
+	it('should not allow creating a new note as a child of a read-only folder', (async () => {
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const readonlyFolder = await Folder.save({ share_id: '123456789' });
+		await expectThrow(async () => Note.save({ parent_id: readonlyFolder.id }), ErrorCode.IsReadOnly);
+
+		cleanup();
+	}));
+
+	it('should not allow adding an existing note as a child of a read-only folder', (async () => {
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const readonlyFolder = await Folder.save({ share_id: '123456789' });
+		const note = await Note.save({});
+		await expectThrow(async () => Note.save({ id: note.id, parent_id: readonlyFolder.id }), ErrorCode.IsReadOnly);
+
+		cleanup();
+	}));
 
 });

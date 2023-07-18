@@ -840,7 +840,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'appearance',
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				public: true,
 				label: () => _('Automatically switch theme to match system theme'),
 				storage: SettingStorage.File,
@@ -854,7 +854,7 @@ class Setting extends BaseModel {
 				show: (settings) => {
 					return settings['themeAutoDetect'];
 				},
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				isEnum: true,
 				label: () => _('Preferred light theme'),
 				section: 'appearance',
@@ -870,7 +870,7 @@ class Setting extends BaseModel {
 				show: (settings) => {
 					return settings['themeAutoDetect'];
 				},
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				isEnum: true,
 				label: () => _('Preferred dark theme'),
 				section: 'appearance',
@@ -1699,6 +1699,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			'sync.shareCache': {
+				value: null,
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			'voiceTypingBaseUrl': {
 				value: '',
 				type: SettingItemType.String,
@@ -1708,7 +1714,6 @@ class Setting extends BaseModel {
 				label: () => _('Voice typing language files (URL)'),
 				section: 'note',
 			},
-
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };

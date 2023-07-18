@@ -33,5 +33,6 @@ export const runtime = (): CommandRuntime => {
 				},
 			});
 		},
+		enabledCondition: '!folderIsReadOnly',
 	};
 };

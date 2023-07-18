@@ -167,6 +167,7 @@ function Editor(props: EditorProps, ref: any) {
 
 		const safeOptions: Record<string, any> = {
 			value: props.value,
+			readOnly: props.readOnly,
 		};
 
 		const unsafeOptions: Record<string, any> = {

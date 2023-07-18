@@ -1,6 +1,7 @@
 /* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
 
 import Setting from '../../models/Setting';
+import shim from '../../shim';
 
 export default class InteropService_Exporter_Base {
 	private context_: any = {};
@@ -31,7 +32,7 @@ export default class InteropService_Exporter_Base {
 	protected async temporaryDirectory_(createIt: boolean) {
 		const md5 = require('md5');
 		const tempDir = `${Setting.value('tempDir')}/${md5(Math.random() + Date.now())}`;
-		if (createIt) await require('fs-extra').mkdirp(tempDir);
+		if (createIt) await shim.fsDriver().mkdir(tempDir);
 		return tempDir;
 	}
 }

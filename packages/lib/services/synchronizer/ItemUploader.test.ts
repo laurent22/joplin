@@ -3,7 +3,8 @@ import BaseItem from '../../models/BaseItem';
 import Note from '../../models/Note';
 import { expectNotThrow, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import time from '../../time';
-import ItemUploader, { ApiCallFunction } from './ItemUploader';
+import ItemUploader from './ItemUploader';
+import { ApiCallFunction } from './utils/types';
 
 interface ApiCall {
 	name: string;
