@@ -2,6 +2,7 @@ import MdToHtml from './MdToHtml';
 import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
+import { AllHtmlEntities } from 'html-entities';
 const MarkdownIt = require('markdown-it');
 
 export enum MarkupLanguage {
@@ -113,8 +114,9 @@ export default class MarkupToHtml {
 
 	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
 		if (this.options_.isSafeMode) {
+			const htmlentities = new AllHtmlEntities();
 			return {
-				html: `<pre>${markup}</pre>`,
+				html: `<pre>${htmlentities.encode(markup)}</pre>`,
 				cssStrings: [],
 				pluginAssets: [],
 			};

@@ -92,6 +92,7 @@ packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/setupCommand.js
 packages/app-cli/app/utils/testUtils.js
 packages/app-cli/tests/HtmlToMd.js
+packages/app-cli/tests/MarkupToHtml.js
 packages/app-cli/tests/MdToHtml.js
 packages/app-cli/tests/services/keychain/KeychainService.js
 packages/app-cli/tests/services/plugins/PluginService.js
