@@ -58,7 +58,7 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 import NotesScreen from './components/screens/Notes';
 const { TagsScreen } = require('./components/screens/tags.js');
-import ConfigScreen from './components/screens/ConfigScreen';
+import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
@@ -423,6 +423,20 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
+const initializeTempDir = async () => {
+	const tempDir = `${getProfilesRootDir()}/tmp`;
+
+	// Re-create the temporary directory.
+	try {
+		await shim.fsDriver().remove(tempDir);
+	} catch (_error) {
+		// The logger may not exist yet. Do nothing.
+	}
+
+	await shim.fsDriver().mkdir(tempDir);
+	return tempDir;
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -439,6 +453,7 @@ async function initialize(dispatch: Function) {
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
+	Setting.setConstant('tempDir', await initializeTempDir());
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
 
