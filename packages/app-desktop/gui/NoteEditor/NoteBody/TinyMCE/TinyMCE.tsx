@@ -548,15 +548,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'inserttable', `joplinInsertDateTime${toolbarPluginButtons}`,
-			];
-
-			// Available table toolbar buttons:
-			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
-			const tableToolbar = [
-				'tabledelete',
-				'tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
-				'tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			const editors = await (window as any).tinymce.init({
@@ -578,7 +570,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				table_toolbar: tableToolbar.join(' | '),
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
@@ -628,22 +619,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							return function() {
 								if (unbind) unbind();
 							};
-						},
-					});
-
-					editor.ui.registry.addMenuButton('inserttable', {
-						icon: 'table',
-						tooltip: 'Table',
-						fetch: (callback) => {
-							callback([
-								{
-									type: 'fancymenuitem',
-									fancytype: 'inserttable',
-									onAction: (data) => {
-										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
-									},
-								},
-							]);
 						},
 					});
 
