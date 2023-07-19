@@ -176,7 +176,7 @@ export default new HtmlUtils();
 
 export function plainTextToHtml(plainText: string): string {
 	const lines = plainText
-		.replace(/[\n\r]/g, '\n')
+		.replace(/[\n\r]{1,2}/g, '\n')
 		.split('\n');
 
 	const lineOpenTag = lines.length > 1 ? '<p>' : '';
