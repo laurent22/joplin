@@ -56,11 +56,13 @@ fi
 
 COMMANDS=($(echo $2 | tr "," "\n"))
 PROFILE_DIR=~/.config/joplindev-desktop-$USER_PROFILE_NUM
-SYNC_TARGET=9
+SYNC_TARGET=10
 
 CMD_FILE="$SCRIPT_DIR/runForTestingCommands-$USER_PROFILE_NUM.txt"
 rm -f "$CMD_FILE"
 touch "$CMD_FILE"
+
+echo "Using sync target: $SYNC_TARGET"
 
 for CMD in "${COMMANDS[@]}"
 do
