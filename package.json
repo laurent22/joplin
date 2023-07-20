@@ -99,6 +99,8 @@
     "react-native-vosk@0.1.12": "patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch",
     "eslint@8.39.0": "patch:eslint@npm%3A8.39.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch",
     "eslint@^8.13.0": "patch:eslint@npm%3A8.39.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch",
-    "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch"
+    "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
+    "react-native@0.71.10": "patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-npm-0.71.10-f9c32562d8.patch",
+    "react-native-reanimated@3.3.0": "patch:react-native-reanimated@npm%3A3.3.0#./.yarn/patches/react-native-reanimated-npm-3.3.0-fb4272741c.patch"
   }
 }
