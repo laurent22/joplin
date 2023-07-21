@@ -22,8 +22,6 @@ services:
      hostname: joplin-sync
      image: joplin/server:latest
      restart: always
-     user: 65534:65534
-     read_only: true
      security_opt:
          - no-new-privileges:true
      cap_drop:
@@ -40,7 +38,7 @@ services:
          - POSTGRES_DATABASE=joplin-sync
          - POSTGRES_USER=joplin-sync
          - POSTGRES_PORT=5432
-         - POSTGRES_HOST=joplin-sync
+         - POSTGRES_HOST=postgres
          - MAILER_ENABLED=1
          - MAILER_HOST=smtp.gmail.com
          - MAILER_PORT=465
