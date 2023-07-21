@@ -66,7 +66,7 @@
     "terminal-kit": "3.0.0",
     "tkwidgets": "0.5.27",
     "url-parse": "1.5.10",
-    "word-wrap": "1.2.3",
+    "word-wrap": "1.2.4",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
