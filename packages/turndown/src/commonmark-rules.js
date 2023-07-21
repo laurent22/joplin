@@ -1,4 +1,4 @@
-import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
+import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp, htmlEscapeLeadingNonbreakingSpace } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
@@ -32,7 +32,7 @@ rules.paragraph = {
     const leadingNonbreakingSpace = /^\u{00A0}/ug;
     content = content.replace(leadingNonbreakingSpace, '&nbsp;');
 
-    return '\n\n' + htmlEscapeLeadingNonbreakingSpace(content) + '\n\n'
+    return '\n\n' + content + '\n\n'
   }
 }
 
