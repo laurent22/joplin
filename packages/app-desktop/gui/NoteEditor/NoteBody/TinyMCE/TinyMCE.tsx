@@ -485,7 +485,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			   they are overridden by TinyMCE. */
 			.plugin-icon.fa, .plugin-icon.far, .plugin-icon.fas {
 				font-family: "Font Awesome 5 Free";
-				font-size: 20px;
+				font-size: ${theme.toolbarHeight - theme.toolbarPadding}px;
 			}
 			
 			.plugin-icon.fa, .plugin-icon.fas {
