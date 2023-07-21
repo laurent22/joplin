@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+    postgres:
+        container_name: postgres
+        hostname: postgres
+        image: postgres:15
+        restart: always
+        volumes:
+            - ./joplin-sync:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_PASSWORD=changethis
+            - POSTGRES_USER=joplin-sync
+            - POSTGRES_DB=joplin-sync
+    joplin-sync:
+        container_name: joplin-sync
+        hostname: joplin-sync
+        image: joplin/server:latest
+        restart: always
+        depends_on:
+            - postgres
+        ports:
+            - "127.0.0.1:22300:22300"
+        environment:
+            - APP_PORT=22300
+            - APP_BASE_URL=https://changethis
+            - DB_CLIENT=postgres
+            - POSTGRES_PASSWORD=changethis
+            - POSTGRES_DATABASE=joplin-sync
+            - POSTGRES_USER=joplin-sync
+            - POSTGRES_PORT=5432
+            - POSTGRES_HOST=joplin-sync
+            - MAILER_ENABLED=1
+            - MAILER_HOST=changethis
+            - MAILER_PORT=465
+            - MAILER_SECURE=1
+            - MAILER_AUTH_USER=changethis
+            - MAILER_AUTH_PASSWORD=changethis
+            - MAILER_NOREPLY_NAME=Joplin-Sync
+            - MAILER_NOREPLY_EMAIL=changethis
+            
+volumes:
+  joplin-sync:
