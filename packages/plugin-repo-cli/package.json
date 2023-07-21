@@ -34,7 +34,7 @@
     "jest": "29.5.0",
     "source-map-loader": "4.0.1",
     "typescript": "5.0.2",
-    "webpack": "5.65.0",
+    "webpack": "5.76.0",
     "webpack-cli": "4.10.0"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"

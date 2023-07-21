@@ -131,6 +131,6 @@
     "ts-node": "10.9.1",
     "typescript": "5.0.2",
     "uglify-js": "3.17.4",
-    "webpack": "5.74.0"
+    "webpack": "5.76.0"
   }
 }
