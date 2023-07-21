@@ -10,13 +10,13 @@ This feature is available for Pro and Teams members.
 
 ### Desktop
 
-To be able to see the Joplin Cloud tab in the desktop application you need to have the Synchronization set to Joplin Cloud.
+To copy your Inbox Email you will need to navigate to the Options screen and then to the Joplin Cloud tab. You will need to have your synchronization set to Joplin Cloud.
 
 <img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/desktop.png" width="80%"/>
 
 ### Mobile
 
-To be able to see the Joplin Cloud section in the Mobile application you need to have the Synchronization set to Joplin Cloud.
+To copy your Inbox Email you will need to navigate to the Configurations screen and find the Joplin Cloud section. You will need to have your synchronization set to Joplin Cloud.
 
 <img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/mobile.png" width="50%"/>
 
