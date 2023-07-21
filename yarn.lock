@@ -4627,7 +4627,7 @@ __metadata:
     typescript: 5.0.2
     uglify-js: 3.17.4
     url: 0.11.1
-    webpack: 5.74.0
+    webpack: 5.76.0
   languageName: unknown
   linkType: soft
 
@@ -4792,7 +4792,7 @@ __metadata:
     ts-jest: 29.1.0
     ts-loader: 9.4.4
     typescript: 5.0.2
-    webpack: 5.74.0
+    webpack: 5.76.0
     webpack-cli: 4.10.0
   languageName: unknown
   linkType: soft
@@ -4814,7 +4814,7 @@ __metadata:
     source-map-loader: 4.0.1
     source-map-support: 0.5.21
     typescript: 5.0.2
-    webpack: 5.65.0
+    webpack: 5.76.0
     webpack-cli: 4.10.0
     yargs: 17.7.2
   bin:
@@ -7466,16 +7466,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint-scope@npm:^3.7.0":
-  version: 3.7.2
-  resolution: "@types/eslint-scope@npm:3.7.2"
-  dependencies:
-    "@types/eslint": "*"
-    "@types/estree": "*"
-  checksum: 7ce2b4a07c22e7b265d4ee145196fcf00993b8aaeecaf5cecc8231c820a000c00bfaee6c026a2f363c215822c8fbf5dbedb2d3f56621cdda87a6601db2a05319
-  languageName: node
-  linkType: hard
-
 "@types/eslint-scope@npm:^3.7.3":
   version: 3.7.4
   resolution: "@types/eslint-scope@npm:3.7.4"
@@ -7496,7 +7486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:*, @types/estree@npm:^0.0.50":
+"@types/estree@npm:*":
   version: 0.0.50
   resolution: "@types/estree@npm:0.0.50"
   checksum: 9a2b6a4a8c117f34d08fbda5e8f69b1dfb109f7d149b60b00fd7a9fb6ac545c078bc590aa4ec2f0a256d680cf72c88b3b28b60c326ee38a7bc8ee1ee95624922
@@ -15145,7 +15135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.3.2, enhanced-resolve@npm:^5.8.3":
+"enhanced-resolve@npm:^5.3.2":
   version: 5.8.3
   resolution: "enhanced-resolve@npm:5.8.3"
   dependencies:
@@ -21407,7 +21397,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-parse-better-errors@npm:^1.0.0, json-parse-better-errors@npm:^1.0.1, json-parse-better-errors@npm:^1.0.2":
+"json-parse-better-errors@npm:^1.0.0, json-parse-better-errors@npm:^1.0.1":
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
   checksum: ff2b5ba2a70e88fd97a3cb28c1840144c5ce8fae9cbeeddba15afa333a5c407cf0e42300cd0a2885dbb055227fe68d405070faad941beeffbfde9cf3b2c78c5d
@@ -33948,16 +33938,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watchpack@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "watchpack@npm:2.3.1"
-  dependencies:
-    glob-to-regexp: ^0.4.1
-    graceful-fs: ^4.1.2
-  checksum: 70a34f92842d94b5d842980f866d568d7a467de667c96ae5759c759f46587e49265863171f4650bdbafc5f3870a28f2b4453e9e847098ec4b718b38926d47d22
-  languageName: node
-  linkType: hard
-
 "watchpack@npm:^2.4.0":
   version: 2.4.0
   resolution: "watchpack@npm:2.4.0"
@@ -34062,13 +34042,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-sources@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "webpack-sources@npm:3.2.2"
-  checksum: cc81f1f1bfd1c25c7a565598850294b515bcccf7974d0249b4a0c8c607307866ce3f9e8cdef1c74d5facfb0d993944c499cfd4b7c8f52d01359b6671cc5823d4
-  languageName: node
-  linkType: hard
-
 "webpack-sources@npm:^3.2.3":
   version: 3.2.3
   resolution: "webpack-sources@npm:3.2.3"
@@ -34076,46 +34049,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.65.0":
-  version: 5.65.0
-  resolution: "webpack@npm:5.65.0"
-  dependencies:
-    "@types/eslint-scope": ^3.7.0
-    "@types/estree": ^0.0.50
-    "@webassemblyjs/ast": 1.11.1
-    "@webassemblyjs/wasm-edit": 1.11.1
-    "@webassemblyjs/wasm-parser": 1.11.1
-    acorn: ^8.4.1
-    acorn-import-assertions: ^1.7.6
-    browserslist: ^4.14.5
-    chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.8.3
-    es-module-lexer: ^0.9.0
-    eslint-scope: 5.1.1
-    events: ^3.2.0
-    glob-to-regexp: ^0.4.1
-    graceful-fs: ^4.2.4
-    json-parse-better-errors: ^1.0.2
-    loader-runner: ^4.2.0
-    mime-types: ^2.1.27
-    neo-async: ^2.6.2
-    schema-utils: ^3.1.0
-    tapable: ^2.1.1
-    terser-webpack-plugin: ^5.1.3
-    watchpack: ^2.3.1
-    webpack-sources: ^3.2.2
-  peerDependenciesMeta:
-    webpack-cli:
-      optional: true
-  bin:
-    webpack: bin/webpack.js
-  checksum: 221ab8ccd440cb678269e86689704bbef81cf41393eb266625873e30c6980ffaa055bb1a7d14bf9fc0f5a2e6f03d15d068cbb995bc876757c01a4ca27fd2870c
-  languageName: node
-  linkType: hard
-
-"webpack@npm:5.74.0":
-  version: 5.74.0
-  resolution: "webpack@npm:5.74.0"
+"webpack@npm:5.76.0":
+  version: 5.76.0
+  resolution: "webpack@npm:5.76.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -34146,7 +34082,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 320c41369a75051b19e18c63f408b3dcc481852e992f83d311771c5ec0f05f2946385e8ebef62030cf3587f0a3d2f12779ffdb191569a966847289ba7313f946
+  checksum: e897b3b34068222fe910d8894837cbf39f5e66b4772fe8d24dfc0090cd13e19337a3a757a97bc185be6c64d9d5a7b1ae372821b65a6079ce8c7ceba606edb409
   languageName: node
   linkType: hard
 
