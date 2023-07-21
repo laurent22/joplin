@@ -479,6 +479,21 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox-tinymce {
 				border-top: none !important;
 			}
+			
+			/* Re-override Font Awesome styles that are otherwise overridden by TinyMCE: */
+			.plugin-icon.fa, .plugin-icon.far, .plugin-icon.fas {
+				font-family: "Font Awesome 5 Free";
+				font-size: 20px;
+			}
+			
+			.plugin-icon.fa, .plugin-icon.fas {
+				font-weight: 900;
+			}
+
+			.plugin-icon.fab, .plugin-icon.far {
+				font-weight: 400;
+			}
+
 
 			.joplin-tinymce .tox-toolbar__group {
 				background-color: ${theme.backgroundColor3};
@@ -631,9 +646,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					});
 
 					for (const pluginCommandName of pluginCommandNames) {
+						const iconClassName = CommandService.instance().iconName(pluginCommandName);
+
+						// Only allow characters that appear in Font Awesome class names: letters, spaces, and dashes.
+						const safeIconClassName = iconClassName.replace(/[^a-z0-9 -]/g, '');
+
+						editor.ui.registry.addIcon(pluginCommandName, `<i class="plugin-icon ${safeIconClassName}"></i>`);
+
 						editor.ui.registry.addButton(pluginCommandName, {
 							tooltip: CommandService.instance().label(pluginCommandName),
-							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
+							icon: pluginCommandName,
 							onAction: function() {
 								void CommandService.instance().execute(pluginCommandName);
 							},
