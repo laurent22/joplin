@@ -10,12 +10,12 @@ To see your Inbox Email in the desktop and mobile application you need to synchr
  
 ### Desktop
 
-<img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/desktop.jpeg" width="75%"/>
+<img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/desktop.png" width="80%"/>
 
 ### Mobile
 
-<img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/mobile.png" width="75%"/>
+<img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/mobile.png" width="50%"/>
 
 ### Website
 
-<img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/website.png" width="75%"/>
+<img src="https://raw.githubusercontent.com/pedr/joplin/email-to-note-docs/Assets/WebsiteAssets/images/email_to_note/website.png" width="50%"/>
