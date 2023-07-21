@@ -36,7 +36,10 @@ export default function TurndownService (options) {
     linkReferenceStyle: 'full',
     anchorNames: [],
     br: '  ',
-    nonbreakingSpace: '&nbsp;',
+
+    // Unicode representation of &nbsp;
+    nonbreakingSpace: '\u00A0',
+    
     disableEscapeContent: false,
     preformattedCode: false,
     blankReplacement: function (content, node) {
