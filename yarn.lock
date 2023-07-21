@@ -28092,9 +28092,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@patch:react-native-reanimated@npm%3A3.3.0#./.yarn/patches/react-native-reanimated-npm-3.3.0-fb4272741c.patch::locator=root%40workspace%3A.":
+"react-native-reanimated@patch:react-native-reanimated@npm%3A3.3.0#./.yarn/patches/react-native-animation-fix/react-native-reanimated-npm-3.3.0-fb4272741c.patch::locator=root%40workspace%3A.":
   version: 3.3.0
-  resolution: "react-native-reanimated@patch:react-native-reanimated@npm%3A3.3.0#./.yarn/patches/react-native-reanimated-npm-3.3.0-fb4272741c.patch::version=3.3.0&hash=13daee&locator=root%40workspace%3A."
+  resolution: "react-native-reanimated@patch:react-native-reanimated@npm%3A3.3.0#./.yarn/patches/react-native-animation-fix/react-native-reanimated-npm-3.3.0-fb4272741c.patch::version=3.3.0&hash=13daee&locator=root%40workspace%3A."
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -28323,9 +28323,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-npm-0.71.10-f9c32562d8.patch::locator=root%40workspace%3A.":
+"react-native@patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-animation-fix/react-native-npm-0.71.10-f9c32562d8.patch::locator=root%40workspace%3A.":
   version: 0.71.10
-  resolution: "react-native@patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-npm-0.71.10-f9c32562d8.patch::version=0.71.10&hash=d4015e&locator=root%40workspace%3A."
+  resolution: "react-native@patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-animation-fix/react-native-npm-0.71.10-f9c32562d8.patch::version=0.71.10&hash=d4015e&locator=root%40workspace%3A."
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 10.2.2
