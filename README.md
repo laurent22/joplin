@@ -107,7 +107,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 
 	- [Sharing a notebook](https://github.com/laurent22/joplin/blob/dev/readme/share_notebook.md)
 	- [Publishing a note](https://github.com/laurent22/joplin/blob/dev/readme/publish_note.md)
-	- [Email to Note](https://github.com/laurent22/joplin/blob/email-to-note-docs/readme/email_to_note.md)
+	- [Email to Note](https://github.com/pedr/joplin/blob/email-to-note-docs/readme/email_to_note.md)
 
 - Joplin API - Get Started
 
