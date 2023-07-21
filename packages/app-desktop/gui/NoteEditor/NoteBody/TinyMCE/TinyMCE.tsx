@@ -694,17 +694,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	const documentScriptElements: Record<string, HTMLScriptElement> = {};
 
 	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
-		// Note: The way files are cached is not correct because it assumes there's only one version
-		// of each file. However, when the theme change, a new CSS file, specific to the theme, is
-		// created. That file should not be loaded on top of the previous one, but as a replacement.
-		// Otherwise it would do this:
-		// - Try to load CSS for theme 1 => OK
-		// - Try to load CSS for theme 2 => OK
-		// - Try to load CSS for theme 1 => Skip because the file is in cache. As a result, theme 2
-		//                                  incorrectly stay.
-		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
-		// code would check this and either append the CSS or replace.
-
 		const theme = themeStyle(props.themeId);
 
 		let docHead_: any = null;
