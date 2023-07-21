@@ -479,8 +479,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			.tox-tinymce {
 				border-top: none !important;
 			}
-			
-			/* Re-override Font Awesome styles that are otherwise overridden by TinyMCE: */
+
+			/* Override the TinyMCE font styles with more specific CSS selectors.
+			   Without this, the built-in FontAwesome styles are not applied because
+			   they are overridden by TinyMCE. */
 			.plugin-icon.fa, .plugin-icon.far, .plugin-icon.fas {
 				font-family: "Font Awesome 5 Free";
 				font-size: 20px;
