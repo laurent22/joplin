@@ -96,7 +96,7 @@ interface Props {
 	onClose(): void;
 	shares: StateShare[];
 	shareUsers: Record<string, StateShareUser[]>;
-	isJoplinCloud: boolean;
+	canUseSharePermissions: boolean;
 }
 
 interface RecipientDeleteEvent {
@@ -261,7 +261,7 @@ function ShareFolderDialog(props: Props) {
 	function renderAddRecipient() {
 		const disabled = shareState !== ShareState.Idle;
 
-		const dropdown = !props.isJoplinCloud ? null : <Dropdown className="permission-dropdown" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
+		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="permission-dropdown" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
 
 		return (
 			<StyledAddRecipient>
@@ -306,7 +306,7 @@ function ShareFolderDialog(props: Props) {
 
 		const permission = shareUser.can_write ? 'can_read_and_write' : 'can_read';
 		const enabled = !recipientsBeingUpdated[shareUser.id];
-		const dropdown = !props.isJoplinCloud ? null : <Dropdown disabled={!enabled} className="permission-dropdown" value={permission} options={permissionOptions} variant={DropdownVariant.NoBorder} onChange={event => recipient_permissionChange(shareUser.id, event.value)}/>;
+		const dropdown = !props.canUseSharePermissions ? null : <Dropdown disabled={!enabled} className="permission-dropdown" value={permission} options={permissionOptions} variant={DropdownVariant.NoBorder} onChange={event => recipient_permissionChange(shareUser.id, event.value)}/>;
 
 		return (
 			<StyledRecipient key={shareUser.user.email} index={index}>
@@ -407,7 +407,7 @@ const mapStateToProps = (state: State) => {
 	return {
 		shares: state.shareService.shares,
 		shareUsers: state.shareService.shareUsers,
-		isJoplinCloud: state.settings['sync.target'] === 10,
+		canUseSharePermissions: state.settings['sync.target'] === 10 && state.settings['sync.10.canUseSharePermissions'],
 	};
 };
 

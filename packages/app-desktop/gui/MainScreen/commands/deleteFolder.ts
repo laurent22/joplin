@@ -18,7 +18,7 @@ export const runtime = (): CommandRuntime => {
 			if (!folder) throw new Error(`No such folder: ${folderId}`);
 
 			let deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
-			if (folderId === context.state.settings['emailToNote.inboxJopId']) {
+			if (folderId === context.state.settings['sync.10.inboxId']) {
 				deleteMessage = _('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.');
 			}
 

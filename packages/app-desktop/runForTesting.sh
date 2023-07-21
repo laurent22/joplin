@@ -31,6 +31,12 @@
 # ./runForTesting.sh 1 createUsers,createData,reset,sync && ./runForTesting.sh 1a reset,sync && ./runForTesting.sh 1
 # ./runForTesting.sh 1a
 
+# ----------------------------------------------------------------------------------
+# Team accounts:
+# ----------------------------------------------------------------------------------
+
+# ./runForTesting.sh 1 createTeams,createData,resetTeam,createData,sync && ./runForTesting.sh 2 resetTeam,sync && ./runForTesting.sh 1
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -74,6 +80,10 @@ do
 
 		curl --data '{"action": "createUserDeletions"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
 
+	elif [[ $CMD == "createTeams" ]]; then
+
+		curl --data '{"action": "createTeams"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
+
 	elif [[ $CMD == "createData" ]]; then
 		
 		echo 'mkbook "shared"' >> "$CMD_FILE"
@@ -96,6 +106,16 @@ do
 			echo "config sync.$SYNC_TARGET.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
 			echo "config sync.$SYNC_TARGET.userContentPath http://joplinusercontent.local:22300" >> "$CMD_FILE" 
 		fi
+	
+	elif [[ $CMD == "resetTeam" ]]; then
+	
+		USER_EMAIL="teamuser1-$USER_NUM@example.com"
+		rm -rf "$PROFILE_DIR"
+
+		echo "config keychain.supported 0" >> "$CMD_FILE" 
+		echo "config sync.target $SYNC_TARGET" >> "$CMD_FILE" 
+		echo "config sync.$SYNC_TARGET.username $USER_EMAIL" >> "$CMD_FILE" 
+		echo "config sync.$SYNC_TARGET.password 111111" >> "$CMD_FILE"
 
 	elif [[ $CMD == "e2ee" ]]; then
 	
