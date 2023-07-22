@@ -211,7 +211,7 @@ function sleep(n: number) {
 	});
 }
 
-function msleep(ms: number) {
+function msleep(ms: number): Promise<void> {
 	// It seems setTimeout can sometimes last less time than the provided
 	// interval:
 	//
