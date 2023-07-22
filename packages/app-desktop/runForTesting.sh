@@ -35,7 +35,7 @@
 # Team accounts:
 # ----------------------------------------------------------------------------------
 
-# ./runForTesting.sh 1 createTeams,createData,resetTeam,createData,sync && ./runForTesting.sh 2 resetTeam,sync && ./runForTesting.sh 1
+# ./runForTesting.sh 1 createTeams,createData,resetTeam,sync && ./runForTesting.sh 2 resetTeam,sync && ./runForTesting.sh 1
 
 set -e
 

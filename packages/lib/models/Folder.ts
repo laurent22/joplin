@@ -80,6 +80,21 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
+	public static async deleteAllByShareId(shareId: string, deleteOptions: DeleteOptions = null) {
+		const tableNameToClasses: Record<string, any> = {
+			'folders': Folder,
+			'notes': Note,
+			'resources': Resource,
+		};
+
+		for (const tableName of ['folders', 'notes', 'resources']) {
+			const ItemClass = tableNameToClasses[tableName];
+			const rows = await this.db().selectAll(`SELECT id FROM ${tableName} WHERE share_id = ?`, [shareId]);
+			const ids: string[] = rows.map(r => r.id);
+			await ItemClass.batchDelete(ids, deleteOptions);
+		}
+	}
+
 	public static async delete(folderId: string, options: DeleteOptions = null) {
 		options = {
 			deleteChildren: true,
