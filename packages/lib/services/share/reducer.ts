@@ -94,7 +94,11 @@ export function isSharedFolderOwner(state: RootState, folderId: string): boolean
 }
 
 export function isRootSharedFolder(folder: FolderEntity): boolean {
-	if (!('share_id' in folder) || !('parent_id' in folder)) throw new Error('share_id and parent_id must be present');
+	if (!('share_id' in folder) || !('parent_id' in folder)) {
+		logger.warn('Calling isRootSharedFolder without specifying share_id and parent_id:', folder);
+		return false;
+	}
+
 	return !!folder.share_id && !folder.parent_id;
 }
 

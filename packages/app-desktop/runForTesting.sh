@@ -60,6 +60,16 @@ if [ "$USER_NUM" = "1b" ]; then
 	USER_PROFILE_NUM=1b
 fi
 
+if [ "$USER_NUM" = "2a" ]; then
+	USER_NUM=2
+	USER_PROFILE_NUM=2a
+fi
+
+if [ "$USER_NUM" = "2b" ]; then
+	USER_NUM=2
+	USER_PROFILE_NUM=2b
+fi
+
 COMMANDS=($(echo $2 | tr "," "\n"))
 PROFILE_DIR=~/.config/joplindev-desktop-$USER_PROFILE_NUM
 SYNC_TARGET=10
