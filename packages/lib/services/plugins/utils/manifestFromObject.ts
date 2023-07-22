@@ -37,8 +37,12 @@ export default function manifestFromObject(o: any): PluginManifest {
 	};
 
 	const getIcons = (defaultValue: Icons = null): Icons => {
-		if (!o.icons) return defaultValue;
-		return o.icons;
+		if (o.icons) {
+			for (const size of ['16', '32', '48', '128']) {
+				if (size in o.icons) return o.icons;
+			}
+		}
+		return defaultValue;
 	};
 
 	const permissions: PluginPermission[] = [];

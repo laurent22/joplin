@@ -8,10 +8,10 @@ export interface Screenshot {
 }
 
 export interface Icons {
-	16: string;
-	32: string;
-	48: string;
-	128: string;
+	16?: string;
+	32?: string;
+	48?: string;
+	128?: string;
 }
 
 export interface PluginManifest {

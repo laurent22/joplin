@@ -15,7 +15,7 @@ Name | Type | Required? | Description
 `repository_url` | string | No | Repository URL where the plugin source code is hosted.
 `categories` | string[] | No | [Categories](#categories) that describes the functionality of the plugin. 
 `screenshots` | Screenshot[] | No  | [Screenshots](#Screenshot) are used for listing on Joplin Plugin website.
-`icons` | Icons | No | [Icons](#Icons) are used for listing on the desktop app plugins page and on the Joplin Plugin website.
+`icons` | Icons | No | If [Icons](#Icons) is not supplied, a standard extension icon will be used by default. You should supply at least a main icon, ideally 48x48 px in size. This is the icon that will be used in various plugin pages. You may, however, supply icons of any size and Joplin will attempt to find the best icon to display in different components. Icons should generally be in PNG format, because PNG has the best support for transparency. They can, however, be in any raster format supported by Blink, including BMP, GIF, ICO, and JPEG.
 
 ## Categories
 
@@ -44,10 +44,10 @@ Name | Type | Required? | Description
 
 | Properties | Description |
 | --- | --- |
-| 16 | a relative path to an image .png |
-| 32 | a relative path to an image .png |
-| 48 | a relative path to an image .png |
-| 128 | a relative path to an image .png |
+| 16 | a relative path to an PNG icon. |
+| 32 | a relative path to an PNG icon. |
+| 48 | a relative path to an PNG icon. |
+| 128 | a relative path to an PNG icon. |
 
 ## Manifest example
 
@@ -65,10 +65,10 @@ Name | Type | Required? | Description
         "label": "image description"
     }],
     "icons": {
-      "16": "path/to/image.png",
-      "32": "path/to/image.png",
-      "48": "path/to/image.png",
-      "128": "path/to/image.png"
+      "16": "path/to/icon16.png",
+      "32": "path/to/icon32.png",
+      "48": "path/to/icon48.png",
+      "128": "path/to/icon128.png"
     }
 }
 ```
