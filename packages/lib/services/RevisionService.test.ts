@@ -456,7 +456,7 @@ describe('services/RevisionService', () => {
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await msleep(100);
+		await msleep(200);
 
 		const timeRev2 = Date.now();
 		await Note.save({ id: n1_v0.id, title: 'hello 2' });
