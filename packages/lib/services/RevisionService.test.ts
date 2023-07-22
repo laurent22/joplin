@@ -1,5 +1,4 @@
-import time from '../time';
-import { revisionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -39,7 +38,7 @@ describe('services/RevisionService', () => {
 		expect(rev2.author).toBe('');
 
 		const time_rev2 = Date.now();
-		await time.msleep(10);
+		await msleep(10);
 
 		const ttl = Date.now() - time_rev2 - 1;
 		await service.deleteOldRevisions(ttl);
@@ -95,7 +94,7 @@ describe('services/RevisionService', () => {
 		await service.collectRevisions();
 
 		const time_v1 = Date.now();
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await service.collectRevisions();
@@ -117,12 +116,12 @@ describe('services/RevisionService', () => {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'one' });
 		await service.collectRevisions();
 		const time_v1 = Date.now();
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'one two' });
 		await service.collectRevisions();
 		const time_v2 = Date.now();
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'one two three' });
 		await service.collectRevisions();
@@ -160,7 +159,7 @@ describe('services/RevisionService', () => {
 		const n2_v1 = await Note.save({ id: n2_v0.id, title: 'note 2' });
 		await service.collectRevisions();
 		const time_n2_v1 = Date.now();
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
 		await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
@@ -226,7 +225,7 @@ describe('services/RevisionService', () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
-		await time.msleep(100);
+		await msleep(100);
 
 		// Set the interval in such a way that the note is considered an old one.
 		Setting.setValue('revisionService.oldNoteInterval', 50);
@@ -348,10 +347,10 @@ describe('services/RevisionService', () => {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
-		await time.sleep(0.1);
+		await msleep(10);
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
-		await time.sleep(0.1);
+		await msleep(10);
 
 		expect((await Revision.all()).length).toBe(2);
 
@@ -376,7 +375,7 @@ describe('services/RevisionService', () => {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
@@ -400,7 +399,7 @@ describe('services/RevisionService', () => {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
@@ -457,7 +456,7 @@ describe('services/RevisionService', () => {
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await time.sleep(2);
+		await msleep(200);
 
 		const timeRev2 = Date.now();
 		await Note.save({ id: n1_v0.id, title: 'hello 2' });
@@ -477,7 +476,7 @@ describe('services/RevisionService', () => {
 		const n1_v0 = await Note.save({ title: '', is_todo: 1, todo_completed: 0 });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
-		await time.msleep(100);
+		await msleep(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome', todo_completed: 1000 });
 		await revisionService().collectRevisions(); // REV 2
