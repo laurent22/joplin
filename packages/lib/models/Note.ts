@@ -1,4 +1,4 @@
-import BaseModel, { ModelType } from '../BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
@@ -744,7 +744,7 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	public static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		ids = ids.slice();
 
 		while (ids.length) {

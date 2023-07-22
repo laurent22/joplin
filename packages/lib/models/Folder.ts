@@ -90,12 +90,16 @@ export default class Folder extends BaseItem {
 		if (!folder) return; // noop
 
 		if (options.deleteChildren) {
+			const childrenDeleteOptions: DeleteOptions = {
+				disableReadOnlyCheck: options.disableReadOnlyCheck,
+			};
+
 			const noteIds = await Folder.noteIds(folderId);
-			await Note.batchDelete(noteIds);
+			await Note.batchDelete(noteIds, childrenDeleteOptions);
 
 			const subFolderIds = await Folder.subFolderIds(folderId);
 			for (let i = 0; i < subFolderIds.length; i++) {
-				await Folder.delete(subFolderIds[i]);
+				await Folder.delete(subFolderIds[i], childrenDeleteOptions);
 			}
 		}
 

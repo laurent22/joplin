@@ -191,7 +191,7 @@ export default class ShareService {
 			if (folderShareUserId === userId) throw new Error('Cannot leave own notebook');
 		}
 
-		await Folder.delete(folderId, { deleteChildren: false });
+		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true });
 	}
 
 	// Finds any folder that is associated with a share, but the user no longer

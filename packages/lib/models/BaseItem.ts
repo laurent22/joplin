@@ -285,7 +285,7 @@ export default class BaseItem extends BaseModel {
 			});
 		}
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			const previousItems = await this.loadItemsByTypeAndIds(this.modelType(), ids, { fields: ['share_id', 'id'] });
 			checkIfItemsCanBeChanged(this.modelType(), options.changeSource, previousItems, this.syncShareCache);
 		}
