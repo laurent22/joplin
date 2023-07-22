@@ -498,6 +498,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 		`));
 
+		// const iframe = document.getElementsByTagName('iframe')
+		// console.log(iframe)
+
 		return () => {
 			document.head.removeChild(element);
 		};
@@ -551,6 +554,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
+			const contentStyle = `
+				.jop-tinymce p {
+					margin: 0;
+				}
+			`;
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -583,6 +592,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 				},
+				content_style: contentStyle,
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
