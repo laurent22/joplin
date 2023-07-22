@@ -92,6 +92,7 @@ packages\app-cli\app\services\plugins\PluginRunner.js
 packages\app-cli\app\setupCommand.js
 packages\app-cli\app\utils\testUtils.js
 packages\app-cli\tests\HtmlToMd.js
+packages\app-cli\tests\MarkupToHtml.js
 packages\app-cli\tests\MdToHtml.js
 packages\app-cli\tests\services\keychain\KeychainService.js
 packages\app-cli\tests\services\plugins\PluginService.js
@@ -154,6 +155,7 @@ packages\app-desktop\gui\HelpButton.js
 packages\app-desktop\gui\IconButton.js
 packages\app-desktop\gui\ImportScreen.js
 packages\app-desktop\gui\ItemList.js
+packages\app-desktop\gui\JoplinCloudConfigScreen.js
 packages\app-desktop\gui\KeymapConfig\KeymapConfigScreen.js
 packages\app-desktop\gui\KeymapConfig\ShortcutRecorder.js
 packages\app-desktop\gui\KeymapConfig\styles\index.js
@@ -422,7 +424,12 @@ packages\app-mobile\components\biometrics\biometricAuthenticate.js
 packages\app-mobile\components\biometrics\sensorInfo.js
 packages\app-mobile\components\getResponsiveValue.js
 packages\app-mobile\components\getResponsiveValue.test.js
-packages\app-mobile\components\screens\ConfigScreen.js
+packages\app-mobile\components\screens\ConfigScreen\ConfigScreen.js
+packages\app-mobile\components\screens\ConfigScreen\ConfigScreenButton.js
+packages\app-mobile\components\screens\ConfigScreen\NoteExportSection\NoteExportButton.js
+packages\app-mobile\components\screens\ConfigScreen\NoteExportSection\NoteExportButton.test.js
+packages\app-mobile\components\screens\ConfigScreen\NoteExportSection\exportAllFolders.js
+packages\app-mobile\components\screens\ConfigScreen\configScreenStyles.js
 packages\app-mobile\components\screens\Note.js
 packages\app-mobile\components\screens\Notes.js
 packages\app-mobile\components\screens\UpgradeSyncTargetScreen.js
@@ -443,6 +450,7 @@ packages\app-mobile\tools\buildInjectedJs.js
 packages\app-mobile\utils\ShareExtension.js
 packages\app-mobile\utils\ShareUtils.js
 packages\app-mobile\utils\TlsUtils.js
+packages\app-mobile\utils\autodetectTheme.js
 packages\app-mobile\utils\checkPermissions.js
 packages\app-mobile\utils\createRootStyle.js
 packages\app-mobile\utils\debounce.js
@@ -794,6 +802,7 @@ packages\lib\themes\solarizedLight.js
 packages\lib\themes\type.js
 packages\lib\time.js
 packages\lib\utils\credentialFiles.js
+packages\lib\utils\inboxFetcher.js
 packages\lib\utils\joplinCloud.js
 packages\lib\utils\webDAVUtils.js
 packages\lib\utils\webDAVUtils.test.js

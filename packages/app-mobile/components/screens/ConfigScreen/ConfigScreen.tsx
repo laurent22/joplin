@@ -1,29 +1,33 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Slider from '@react-native-community/slider';
 const React = require('react');
-import { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } from 'react-native';
+import { Platform, Linking, View, Switch, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import ReportService from '@joplin/lib/services/ReportService';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
-import checkPermissions from '../../utils/checkPermissions';
+import checkPermissions from '../../../utils/checkPermissions';
 import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
-import setIgnoreTlsErrors from '../../utils/TlsUtils';
+import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
-const { BackButtonService } = require('../../services/back-button.js');
+const { BackButtonService } = require('../../../services/back-button.js');
 const VersionInfo = require('react-native-version-info').default;
 const { connect } = require('react-redux');
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader from '../../ScreenHeader';
 const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen.js');
-const { Dropdown } = require('../Dropdown.js');
-const { themeStyle } = require('../global-style.js');
+const { BaseScreenComponent } = require('../../base-screen.js');
+const { Dropdown } = require('../../Dropdown');
+const { themeStyle } = require('../../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
-import biometricAuthenticate from '../biometrics/biometricAuthenticate';
+import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
+import configScreenStyles from './configScreenStyles';
+import NoteExportButton from './NoteExportSection/NoteExportButton';
+import ConfigScreenButton from './ConfigScreenButton';
+import Clipboard from '@react-native-community/clipboard';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 	public static navigationOptions(): any {
@@ -223,94 +227,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 	public styles() {
 		const themeId = this.props.themeId;
-		const theme = themeStyle(themeId);
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		const styles: any = {
-			body: {
-				flex: 1,
-				justifyContent: 'flex-start',
-				flexDirection: 'column',
-			},
-			settingContainer: {
-				flex: 1,
-				flexDirection: 'row',
-				alignItems: 'center',
-				borderBottomWidth: 1,
-				borderBottomColor: theme.dividerColor,
-				paddingTop: theme.marginTop,
-				paddingBottom: theme.marginBottom,
-				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
-			},
-			settingText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
-				flex: 1,
-				paddingRight: 5,
-			},
-			descriptionText: {
-				color: theme.colorFaded,
-				fontSize: theme.fontSizeSmaller,
-				flex: 1,
-			},
-			sliderUnits: {
-				color: theme.color,
-				fontSize: theme.fontSize,
-				marginRight: 10,
-			},
-			settingDescriptionText: {
-				color: theme.colorFaded,
-				fontSize: theme.fontSizeSmaller,
-				flex: 1,
-				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
-				paddingBottom: theme.marginBottom,
-			},
-			permissionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
-				flex: 1,
-				marginTop: 10,
-			},
-			settingControl: {
-				color: theme.color,
-				flex: 1,
-			},
-			textInput: {
-				color: theme.color,
-			},
-		};
-
-		styles.settingContainerNoBottomBorder = { ...styles.settingContainer, borderBottomWidth: 0,
-			paddingBottom: theme.marginBottom / 2 };
-
-		styles.settingControl.borderBottomWidth = 1;
-		styles.settingControl.borderBottomColor = theme.dividerColor;
-
-		styles.switchSettingText = { ...styles.settingText };
-		styles.switchSettingText.width = '80%';
-
-		styles.switchSettingContainer = { ...styles.settingContainer };
-		styles.switchSettingContainer.flexDirection = 'row';
-		styles.switchSettingContainer.justifyContent = 'space-between';
-
-		styles.linkText = { ...styles.settingText };
-		styles.linkText.borderBottomWidth = 1;
-		styles.linkText.borderBottomColor = theme.color;
-		styles.linkText.flex = 0;
-		styles.linkText.fontWeight = 'normal';
-
-		styles.headerWrapperStyle = { ...styles.settingContainer, ...theme.headerWrapperStyle };
-
-		styles.switchSettingControl = { ...styles.settingControl };
-		delete styles.switchSettingControl.color;
-		// styles.switchSettingControl.width = '20%';
-		styles.switchSettingControl.flex = 0;
-
-		this.styles_[themeId] = StyleSheet.create(styles);
+		this.styles_[themeId] = configScreenStyles(themeId);
 		return this.styles_[themeId];
 	}
 
@@ -388,28 +309,16 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
-		if (!options) options = {};
-
-		let descriptionComp = null;
-		if (options.description) {
-			descriptionComp = (
-				<View style={{ flex: 1, marginTop: 10 }}>
-					<Text style={this.styles().descriptionText}>{options.description}</Text>
-				</View>
-			);
-		}
-
+	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		return (
-			<View key={key} style={this.styles().settingContainer}>
-				<View style={{ flex: 1, flexDirection: 'column' }}>
-					<View style={{ flex: 1 }}>
-						<Button title={title} onPress={clickHandler} disabled={!!options.disabled} />
-					</View>
-					{options.statusComp}
-					{descriptionComp}
-				</View>
-			</View>
+			<ConfigScreenButton
+				key={key}
+				title={title}
+				clickHandler={clickHandler}
+				description={options?.description}
+				statusComponent={options?.statusComp}
+				styles={this.styles()}
+			/>
 		);
 	}
 
@@ -445,6 +354,26 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		if (section.name === 'sync') {
 			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
+		}
+
+		if (section.name === 'joplinCloud') {
+			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
+			settingComps.push(
+				<View key="joplinCloud">
+					<View style={this.styles().settingContainerNoBottomBorder}>
+						<Text style={this.styles().settingText}>{_('Email to note')}</Text>
+						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['emailToNote.inboxEmail']}</Text>
+					</View>
+					{
+						this.renderButton(
+							'emailToNote.inboxEmail',
+							_('Copy to clipboard'),
+							() => Clipboard.setString(this.props.settings['emailToNote.inboxEmail']),
+							{ description }
+						)
+					}
+				</View>
+			);
 		}
 
 		if (!settingComps.length) return null;
@@ -642,12 +571,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
 		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
-		if (Platform.OS === 'android') {
-			settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
-		}
 		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
 
+		settingComps.push(this.renderHeader('export', _('Export')));
+		settingComps.push(<NoteExportButton key={'export_as_jex_button'} styles={this.styles()} />);
+
 		if (shim.mobilePlatform() === 'android') {
+			settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
 			settingComps.push(this.renderButton('export_data', this.state.profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile'), this.exportProfileButtonPress_, { disabled: this.state.profileExportStatus === 'exporting', description: _('For debugging purpose only: export your profile to an external SD card.') }));
 
 			if (this.state.profileExportStatus === 'prompt') {

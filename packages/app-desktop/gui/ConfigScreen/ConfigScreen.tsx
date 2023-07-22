@@ -18,6 +18,7 @@ import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -106,6 +107,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}

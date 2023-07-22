@@ -480,6 +480,23 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				border-top: none !important;
 			}
 
+			/* Override the TinyMCE font styles with more specific CSS selectors.
+			   Without this, the built-in FontAwesome styles are not applied because
+			   they are overridden by TinyMCE. */
+			.plugin-icon.fa, .plugin-icon.far, .plugin-icon.fas {
+				font-family: "Font Awesome 5 Free";
+				font-size: ${theme.toolbarHeight - theme.toolbarPadding}px;
+			}
+			
+			.plugin-icon.fa, .plugin-icon.fas {
+				font-weight: 900;
+			}
+
+			.plugin-icon.fab, .plugin-icon.far {
+				font-weight: 400;
+			}
+
+
 			.joplin-tinymce .tox-toolbar__group {
 				background-color: ${theme.backgroundColor3};
 				padding-top: ${theme.toolbarPadding}px;
@@ -548,15 +565,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'inserttable', `joplinInsertDateTime${toolbarPluginButtons}`,
-			];
-
-			// Available table toolbar buttons:
-			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
-			const tableToolbar = [
-				'tabledelete',
-				'tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
-				'tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			const editors = await (window as any).tinymce.init({
@@ -578,7 +587,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				table_toolbar: tableToolbar.join(' | '),
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
@@ -631,22 +639,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						},
 					});
 
-					editor.ui.registry.addMenuButton('inserttable', {
-						icon: 'table',
-						tooltip: 'Table',
-						fetch: (callback) => {
-							callback([
-								{
-									type: 'fancymenuitem',
-									fancytype: 'inserttable',
-									onAction: (data) => {
-										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
-									},
-								},
-							]);
-						},
-					});
-
 					editor.ui.registry.addButton('joplinInsertDateTime', {
 						tooltip: _('Insert time'),
 						icon: 'insert-time',
@@ -656,9 +648,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					});
 
 					for (const pluginCommandName of pluginCommandNames) {
+						const iconClassName = CommandService.instance().iconName(pluginCommandName);
+
+						// Only allow characters that appear in Font Awesome class names: letters, spaces, and dashes.
+						const safeIconClassName = iconClassName.replace(/[^a-z0-9 -]/g, '');
+
+						editor.ui.registry.addIcon(pluginCommandName, `<i class="plugin-icon ${safeIconClassName}"></i>`);
+
 						editor.ui.registry.addButton(pluginCommandName, {
 							tooltip: CommandService.instance().label(pluginCommandName),
-							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
+							icon: pluginCommandName,
 							onAction: function() {
 								void CommandService.instance().execute(pluginCommandName);
 							},
