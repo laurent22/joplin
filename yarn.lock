@@ -4568,7 +4568,7 @@ __metadata:
     jest-environment-jsdom: 29.5.0
     jetifier: 2.0.0
     jsc-android: 241213.1.0
-    jsdom: 21.1.2
+    jsdom: 22.1.0
     lodash: 4.17.21
     md5: 2.3.0
     md5-file: 5.0.0
@@ -4581,7 +4581,7 @@ __metadata:
     react-native: 0.71.10
     react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
-    react-native-device-info: 10.6.0
+    react-native-device-info: 10.6.1
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 8.2.1
     react-native-drawer-layout: 3.2.1
@@ -4915,7 +4915,7 @@ __metadata:
     bulma: 0.9.4
     bulma-prefers-dark: 0.1.0-beta.1
     compare-versions: 3.6.0
-    dayjs: 1.11.8
+    dayjs: 1.11.9
     formidable: 2.1.2
     fs-extra: 11.1.1
     gulp: 4.0.2
@@ -4923,7 +4923,7 @@ __metadata:
     jest: 29.5.0
     jest-expect-message: 1.1.3
     jquery: 3.7.0
-    jsdom: 21.1.2
+    jsdom: 22.1.0
     knex: 2.4.2
     koa: 2.14.2
     markdown-it: 13.0.1
@@ -4966,7 +4966,7 @@ __metadata:
     "@types/node-fetch": 2.6.3
     "@types/yargs": 17.0.24
     compare-versions: 3.6.0
-    dayjs: 1.11.8
+    dayjs: 1.11.9
     execa: 4.1.0
     fs-extra: 11.1.1
     gettext-extractor: 3.7.2
@@ -5012,7 +5012,7 @@ __metadata:
     browserify: 14.5.0
     css: 3.0.0
     html-entities: 1.4.0
-    jsdom: 21.1.2
+    jsdom: 22.1.0
     rollup: 0.50.1
     rollup-plugin-commonjs: 8.4.1
     rollup-plugin-node-resolve: 3.4.0
@@ -13854,10 +13854,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:1.11.8":
-  version: 1.11.8
-  resolution: "dayjs@npm:1.11.8"
-  checksum: 4fe04b6df98ba6e5f89b49d80bba603cbf01e21a1b4a24ecb163c94c0ba5324a32ac234a139cee654f89d5277a2bcebca5347e6676c28a0a6d1a90f1d34a42b8
+"dayjs@npm:1.11.9":
+  version: 1.11.9
+  resolution: "dayjs@npm:1.11.9"
+  checksum: a4844d83dc87f921348bb9b1b93af851c51e6f71fa259604809cfe1b49d1230e6b0212dab44d1cb01994c096ad3a77ea1cf18fa55154da6efcc9d3610526ac38
   languageName: node
   linkType: hard
 
@@ -21264,18 +21264,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:21.1.2":
-  version: 21.1.2
-  resolution: "jsdom@npm:21.1.2"
+"jsdom@npm:22.1.0":
+  version: 22.1.0
+  resolution: "jsdom@npm:22.1.0"
   dependencies:
     abab: ^2.0.6
-    acorn: ^8.8.2
-    acorn-globals: ^7.0.0
     cssstyle: ^3.0.0
     data-urls: ^4.0.0
     decimal.js: ^10.4.3
     domexception: ^4.0.0
-    escodegen: ^2.0.0
     form-data: ^4.0.0
     html-encoding-sniffer: ^3.0.0
     http-proxy-agent: ^5.0.0
@@ -21299,7 +21296,7 @@ __metadata:
   peerDependenciesMeta:
     canvas:
       optional: true
-  checksum: 6b3cf2d15e5a5712b3db5ff56eba82b97c9a879b52e95063cc8323bdf8837b6ca15cfec85b57ab71c95c6b4a4098bf67f274c6ff4e9ff519aa4811a04f290610
+  checksum: d955ab83a6dad3e6af444098d30647c719bbb4cf97de053aa5751c03c8d6f3283d8c4d7fc2774c181f1d432fb0250e7332bc159e6b466424f4e337d73adcbf30
   languageName: node
   linkType: hard
 
@@ -27854,12 +27851,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-device-info@npm:10.6.0":
-  version: 10.6.0
-  resolution: "react-native-device-info@npm:10.6.0"
+"react-native-device-info@npm:10.6.1":
+  version: 10.6.1
+  resolution: "react-native-device-info@npm:10.6.1"
   peerDependencies:
     react-native: "*"
-  checksum: 7a7cc438844552aef687b4a5b8efd0cd0a2959e0a3b771febfbe0b6a9ca8ff05a563e2912b30b83523bd3d5143d6616ca8fac0476abf01936a726e1578211ebb
+  checksum: aa3e56fad9256994714aa310ef5ab2ef80118ae2af73ac830cda182fa82b72785b03fd0e522b871a59723e6914274dfa203f53e3467feebb9c913df63643a014
   languageName: node
   linkType: hard
 
