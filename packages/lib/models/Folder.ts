@@ -781,7 +781,14 @@ export default class Folder extends BaseItem {
 
 		syncDebugLog.info('Folder Save:', o);
 
-		const savedFolder: FolderEntity = await super.save(o, options);
+		let savedFolder: FolderEntity = await super.save(o, options);
+
+		// Ensures that any folder added to the state has all the required
+		// properties, in particular "share_id" and "parent_id', which are
+		// required in various parts of the code.
+		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder)) {
+			savedFolder = await this.load(savedFolder.id);
+		}
 
 		this.dispatch({
 			type: 'FOLDER_UPDATE_ONE',
