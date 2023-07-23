@@ -4587,7 +4587,7 @@ __metadata:
     react-native-get-random-values: 1.9.0
     react-native-image-picker: 5.4.2
     react-native-image-resizer: 1.4.5
-    react-native-localize: 3.0.1
+    react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 15.0.1
     react-native-paper: 5.8.0
     react-native-popup-menu: 0.16.1
@@ -27886,9 +27886,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.0.1":
-  version: 3.0.1
-  resolution: "react-native-localize@npm:3.0.1"
+"react-native-localize@npm:3.0.2":
+  version: 3.0.2
+  resolution: "react-native-localize@npm:3.0.2"
   peerDependencies:
     react: ">=18.1.0"
     react-native: ">=0.70.0"
@@ -27896,7 +27896,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-macos:
       optional: true
-  checksum: f8703405ea5cf3fcc04fbfb255853832d730e6bedfc4a758254888bd4fb0b5edfa17350dff0b51e5cf804c00819bba1be86c05c496cc2a1d1a1a005a19bb0b9d
+  checksum: 46abd6046dfb1fb5426f9e51971894e893556646206b7fa387c5eb9394a3f3b9ddce190bc94ffc9c51c65326f60bbad57219d8330b4a1dcfaf46dd2eb4ef43ae
   languageName: node
   linkType: hard
 
