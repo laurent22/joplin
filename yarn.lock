@@ -4487,7 +4487,7 @@ __metadata:
     react: 18.2.0
     react-datetime: 3.2.0
     react-dom: 18.2.0
-    react-redux: 8.0.7
+    react-redux: 8.1.0
     react-select: 5.7.3
     react-test-renderer: 18.2.0
     react-toggle-button: 2.2.0
@@ -4611,7 +4611,7 @@ __metadata:
     react-native-vosk: 0.1.12
     react-native-webview: 12.4.0
     react-native-zip-archive: 6.0.9
-    react-redux: 8.0.7
+    react-redux: 8.1.0
     react-test-renderer: 18.2.0
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
@@ -28312,9 +28312,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:8.0.7":
-  version: 8.0.7
-  resolution: "react-redux@npm:8.0.7"
+"react-redux@npm:8.1.0":
+  version: 8.1.0
+  resolution: "react-redux@npm:8.1.0"
   dependencies:
     "@babel/runtime": ^7.12.1
     "@types/hoist-non-react-statics": ^3.3.1
@@ -28343,7 +28343,7 @@ __metadata:
       optional: true
     redux:
       optional: true
-  checksum: d903aa79b12154258fd76b8e61fcf56f72123f69c31033b262805646371e23822cd0cd11d24194cda1e03569a7b1bf86e935cd57a9bab4523186804ed2742fac
+  checksum: a6b9a07b056677b75596f3eeb56816c1cd611fc52e09ff03e9538cd050223c4f0187f9572b703c1b1d648ad115c5753894f8c709d0f58278e5652026963bf9d6
   languageName: node
   linkType: hard
 
