@@ -25,7 +25,7 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		inboxEmail: state.settings['emailToNote.inboxEmail'],
+		inboxEmail: state.settings['sync.10.inboxEmail'],
 	};
 };
 

@@ -787,8 +787,8 @@ packages/lib/themes/solarizedLight.js
 packages/lib/themes/type.js
 packages/lib/time.js
 packages/lib/utils/credentialFiles.js
-packages/lib/utils/inboxFetcher.js
 packages/lib/utils/joplinCloud.js
+packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/uuid.js

@@ -38,6 +38,8 @@ export interface DeleteOptions {
 	// sync, we don't need to track the deletion, because the operation doesn't
 	// need to applied again on next sync.
 	trackDeleted?: boolean;
+
+	disableReadOnlyCheck?: boolean;
 }
 
 class BaseModel {

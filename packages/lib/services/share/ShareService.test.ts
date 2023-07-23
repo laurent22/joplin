@@ -1,5 +1,5 @@
 import Note from '../../models/Note';
-import { encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient } from '../../testing/test-utils';
 import ShareService from './ShareService';
 import reducer, { defaultState } from '../../reducer';
 import { createStore } from 'redux';
@@ -15,6 +15,9 @@ import shim from '../../shim';
 import Resource from '../../models/Resource';
 import { readFile } from 'fs-extra';
 import BaseItem from '../../models/BaseItem';
+import ResourceService from '../ResourceService';
+import Setting from '../../models/Setting';
+import { ModelType } from '../../BaseModel';
 
 interface TestShareFolderServiceOptions {
 	master_key_id?: string;
@@ -239,5 +242,40 @@ describe('ShareService', () => {
 		Logger.globalLogger.setLevel(previousLogLevel);
 	});
 
+	it('should leave a shared folder', async () => {
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'note 1',
+					},
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
+
+		const resourceService = new ResourceService();
+		await Folder.save({ id: folder1.id, share_id: '123456789' });
+		await Folder.updateAllShareIds(resourceService);
+
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const shareService = testShareFolderService();
+		await shareService.leaveSharedFolder(folder1.id, 'somethingrandom');
+
+		expect(await Folder.count()).toBe(0);
+		expect(await Note.count()).toBe(0);
+
+		const deletedItems = await BaseItem.deletedItems(Setting.value('sync.target'));
+
+		expect(deletedItems.length).toBe(1);
+		expect(deletedItems[0].item_type).toBe(ModelType.Folder);
+		expect(deletedItems[0].item_id).toBe(folder1.id);
+
+		cleanup();
+	});
 
 });

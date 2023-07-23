@@ -717,6 +717,12 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
+			'sync.10.inboxEmail': { value: '', type: SettingItemType.String, public: false },
+
+			'sync.10.inboxId': { value: '', type: SettingItemType.String, public: false },
+
+			'sync.10.canUseSharePermissions': { value: false, type: SettingItemType.Bool, public: false },
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -1714,10 +1720,6 @@ class Setting extends BaseModel {
 				label: () => _('Voice typing language files (URL)'),
 				section: 'note',
 			},
-
-			'emailToNote.inboxEmail': { value: '', type: SettingItemType.String, public: false },
-
-			'emailToNote.inboxJopId': { value: '', type: SettingItemType.String, public: false },
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
