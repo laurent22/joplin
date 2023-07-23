@@ -725,18 +725,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
-		// Note: The way files are cached is not correct because it assumes there's only one version
-		// of each file. However, when the theme change, a new CSS file, specific to the theme, is
-		// created. That file should not be loaded on top of the previous one, but as a replacement.
-		// Otherwise it would do this:
-		// - Try to load CSS for theme 1 => OK
-		// - Try to load CSS for theme 2 => OK
-		// - Try to load CSS for theme 1 => Skip because the file is in cache. As a result, theme 2
-		//                                  incorrectly stay.
-		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
-		// code would check this and either append the CSS or replace.
+	const documentCssElements: Record<string, HTMLLinkElement> = {};
+	const documentScriptElements: Record<string, HTMLScriptElement> = {};
 
+	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
 		const theme = themeStyle(props.themeId);
 
 		let docHead_: any = null;
@@ -747,49 +739,72 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			return docHead_;
 		}
 
-		const cssFiles = [
+		const allCssFiles = [
 			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'text/css')
 				.map((a: any) => a.path)
-		).filter((path: string) => !loadedCssFiles_.includes(path));
+		);
 
-		const jsFiles = [].concat(
+		const allJsFiles = [].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'application/javascript')
 				.map((a: any) => a.path)
-		).filter((path: string) => !loadedJsFiles_.includes(path));
+		);
 
-		for (const cssFile of cssFiles) loadedCssFiles_.push(cssFile);
-		for (const jsFile of jsFiles) loadedJsFiles_.push(jsFile);
+
+		// Remove all previously loaded files that aren't in the assets this time.
+		// Note: This is important to ensure that we properly change themes.
+		// See https://github.com/laurent22/joplin/issues/8520
+		for (const cssFile of loadedCssFiles_) {
+			if (!allCssFiles.includes(cssFile)) {
+				documentCssElements[cssFile]?.remove();
+				delete documentCssElements[cssFile];
+			}
+		}
+
+		for (const jsFile of loadedJsFiles_) {
+			if (!allJsFiles.includes(jsFile)) {
+				documentScriptElements[jsFile]?.remove();
+				delete documentScriptElements[jsFile];
+			}
+		}
+
+		const newCssFiles = allCssFiles.filter((path: string) => !loadedCssFiles_.includes(path));
+		const newJsFiles = allJsFiles.filter((path: string) => !loadedJsFiles_.includes(path));
+
+		loadedCssFiles_ = allCssFiles;
+		loadedJsFiles_ = allJsFiles;
 
 		// console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
 
-		if (cssFiles.length) {
-			for (const cssFile of cssFiles) {
-				const script = editor.dom.create('link', {
+		if (newCssFiles.length) {
+			for (const cssFile of newCssFiles) {
+				const style = editor.dom.create('link', {
 					rel: 'stylesheet',
 					type: 'text/css',
 					href: cssFile,
 					class: 'jop-tinymce-css',
 				});
 
-				docHead().appendChild(script);
+				documentCssElements[cssFile] = style;
+				docHead().appendChild(style);
 			}
 		}
 
-		if (jsFiles.length) {
+		if (newJsFiles.length) {
 			const editorElementId = editor.dom.uniqueId();
 
-			for (const jsFile of jsFiles) {
+			for (const jsFile of newJsFiles) {
 				const script = editor.dom.create('script', {
 					id: editorElementId,
 					type: 'text/javascript',
 					src: jsFile,
 				});
 
+				documentScriptElements[jsFile] = script;
 				docHead().appendChild(script);
 			}
 		}
