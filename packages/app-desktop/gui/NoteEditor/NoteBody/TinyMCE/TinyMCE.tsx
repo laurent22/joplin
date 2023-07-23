@@ -599,6 +599,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinInsert: { inline: 'ins', remove: 'all' },
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
+					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
 				},
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
@@ -697,7 +698,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						setEditorReady(true);
 					});
 
+					const preprocessContent = () => {
+						// Disable spellcheck for all inline code blocks.
+						const codeElements = editor.dom.doc.querySelectorAll('code.inline-code');
+						for (const code of codeElements) {
+							code.setAttribute('spellcheck', 'false');
+						}
+					};
+
 					editor.on('SetContent', () => {
+						preprocessContent();
+
 						props_onMessage.current({ channel: 'noteRenderComplete' });
 					});
 				},
