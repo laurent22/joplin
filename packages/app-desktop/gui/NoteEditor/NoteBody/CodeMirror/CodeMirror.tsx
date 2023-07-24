@@ -40,6 +40,7 @@ import ErrorBoundary from '../../../ErrorBoundary';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import eventManager from '@joplin/lib/eventManager';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
+import type { ContextMenuEvent, ContextMenuParams } from 'electron';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -782,19 +783,25 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
-		function pointerInsideEditor(params: any) {
+		function pointerInsideEditor(params: ContextMenuParams) {
 			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 
-			// inputFieldType: The input field type of CodeMirror is "textarea" so the inputFieldType = "none",
-			// and any single-line input above codeMirror has inputFieldType value according to the type of input e.g.(text = plainText, password = password, ...).
-			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
+			// inputFieldType: The input field type of CodeMirror is "textarea" so the
+			// inputFieldType = "plainText".
+			//
+			// This isn't perfect because single-line inputs also have type plainText. It does
+			// filter out other types of input, however (e.g. inputFieldType = password, ...).
+			if (!elements.length || !isEditable || inputFieldType !== 'plainText') return null;
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
-		async function onContextMenu(_event: any, params: any) {
+		async function onContextMenu(event: ContextMenuEvent, params: ContextMenuParams) {
 			if (!pointerInsideEditor(params)) return;
+
+			// Don't show the default menu.
+			event.preventDefault();
 
 			const menu = new Menu();
 
@@ -872,7 +879,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			menu.popup();
 		}
 
-		bridge().window().webContents.on('context-menu', onContextMenu);
+		// Prepend the event listener so that it gets called before
+		// the listener that shows the default menu.
+		bridge().window().webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
