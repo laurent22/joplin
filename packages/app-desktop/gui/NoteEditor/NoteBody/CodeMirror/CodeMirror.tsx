@@ -784,15 +784,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
 		function pointerInsideEditor(params: ContextMenuParams) {
-			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
+			const x = params.x, y = params.y, isEditable = params.isEditable;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 
-			// inputFieldType: The input field type of CodeMirror is "textarea" so the
-			// inputFieldType = "plainText".
-			//
-			// This isn't perfect because single-line inputs also have type plainText. It does
-			// filter out other types of input, however (e.g. inputFieldType = password, ...).
-			if (!elements.length || !isEditable || inputFieldType !== 'plainText') return null;
+			// Note: We can't check inputFieldType here. When spellcheck is enabled,
+			// params.inputFieldType is "none". When spellcheck is disabled,
+			// params.inputFieldType is "plainText". Thus, such a check would be inconsistent.
+			if (!elements.length || !isEditable) return null;
+
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
