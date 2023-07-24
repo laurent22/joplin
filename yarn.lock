@@ -4963,7 +4963,7 @@ __metadata:
     execa: 4.1.0
     fs-extra: 11.1.1
     gettext-extractor: 3.7.2
-    gettext-parser: 6.0.0
+    gettext-parser: 7.0.0
     glob: 10.2.7
     gulp: 4.0.2
     html-entities: 1.4.0
@@ -12387,6 +12387,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"content-type@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "content-type@npm:1.0.5"
+  checksum: 566271e0a251642254cde0f845f9dd4f9856e52d988f4eb0d0dcffbb7a1f8ec98de7a5215fc628f3bce30fe2fb6fd2bc064b562d721658c59b544e2d34ea2766
+  languageName: node
+  linkType: hard
+
 "conventional-changelog-angular@npm:^5.0.3":
   version: 5.0.13
   resolution: "conventional-changelog-angular@npm:5.0.13"
@@ -17654,15 +17661,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-parser@npm:6.0.0":
-  version: 6.0.0
-  resolution: "gettext-parser@npm:6.0.0"
+"gettext-parser@npm:7.0.0":
+  version: 7.0.0
+  resolution: "gettext-parser@npm:7.0.0"
   dependencies:
-    content-type: ^1.0.4
+    content-type: ^1.0.5
     encoding: ^0.1.13
-    readable-stream: ^4.1.0
+    readable-stream: ^4.3.0
     safe-buffer: ^5.2.1
-  checksum: e6938755d914e886c780a71e58390af0a5ea5698aab2777654733da4c4b96e02fcc9d40c50df0987e4d4a12bd6b99291a268805edb8c99a83a639606ab73e40e
+  checksum: fff9dfb982bc456b114eaf80448916d3234c39f4505b505cd2ea507e6ecc3fe50abf046f2af33b7f37c30d54492554faa0d9d49462c2404f3abf3f29ff1ab88a
   languageName: node
   linkType: hard
 
@@ -28583,15 +28590,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^4.1.0":
-  version: 4.2.0
-  resolution: "readable-stream@npm:4.2.0"
+"readable-stream@npm:^4.3.0":
+  version: 4.4.2
+  resolution: "readable-stream@npm:4.4.2"
   dependencies:
     abort-controller: ^3.0.0
     buffer: ^6.0.3
     events: ^3.3.0
     process: ^0.11.10
-  checksum: aa8447f781e6df90af78f6b0b9b9a77da2816dcf6c8220e7021c4de36e04f8129fed7ead81eac0baad2f42098209f9e7d7cd43169e1c156efcd2613828a37439
+    string_decoder: ^1.3.0
+  checksum: 6f4063763dbdb52658d22d3f49ca976420e1fbe16bbd241f744383715845350b196a2f08b8d6330f8e219153dff34b140aeefd6296da828e1041a7eab1f20d5e
   languageName: node
   linkType: hard
 
@@ -31167,7 +31175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.1.1":
+"string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:
