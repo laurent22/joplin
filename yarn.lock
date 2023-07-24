@@ -4963,7 +4963,7 @@ __metadata:
     execa: 4.1.0
     fs-extra: 11.1.1
     gettext-extractor: 3.7.2
-    gettext-parser: 7.0.0
+    gettext-parser: 7.0.1
     glob: 10.2.7
     gulp: 4.0.2
     html-entities: 1.4.0
@@ -17661,15 +17661,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-parser@npm:7.0.0":
-  version: 7.0.0
-  resolution: "gettext-parser@npm:7.0.0"
+"gettext-parser@npm:7.0.1":
+  version: 7.0.1
+  resolution: "gettext-parser@npm:7.0.1"
   dependencies:
     content-type: ^1.0.5
     encoding: ^0.1.13
     readable-stream: ^4.3.0
     safe-buffer: ^5.2.1
-  checksum: fff9dfb982bc456b114eaf80448916d3234c39f4505b505cd2ea507e6ecc3fe50abf046f2af33b7f37c30d54492554faa0d9d49462c2404f3abf3f29ff1ab88a
+  checksum: 251174700e4c7a4b9d868acf3b0e233211724a40f779bd9869357f782b004abd1f0a587f6c9f4219fd24f468bbfc18ca654cdd6e375f19610bd99f1587046ffa
   languageName: node
   linkType: hard
 
