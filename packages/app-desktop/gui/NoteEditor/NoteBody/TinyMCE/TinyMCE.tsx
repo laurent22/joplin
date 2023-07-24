@@ -91,7 +91,7 @@ let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
 const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
-	const [editor, setEditor] = useState(null);
+	const [editor, setEditor] = useState<Editor|null>(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
 	const [draggingStarted, setDraggingStarted] = useState(false);
@@ -578,7 +578,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
-				valid_elements: '*[*]', // We already filter in sanitize_html
+				// Note: Replacing valid_elements breaks empty paragraph elements.
+				extended_valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
 				relative_urls: false,
 				branding: false,

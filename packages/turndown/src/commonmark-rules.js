@@ -32,6 +32,12 @@ rules.paragraph = {
     const leadingNonbreakingSpace = /^\u{00A0}/ug;
     content = content.replace(leadingNonbreakingSpace, '&nbsp;');
 
+    // Paragraphs that are truly empty (not even containing nonbreaking spaces)
+    // take up by default no space. Output nothing.
+    if (content === '') {
+      return '';
+    }
+
     return '\n\n' + content + '\n\n'
   }
 }
