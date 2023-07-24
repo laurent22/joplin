@@ -578,8 +578,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
-				// Note: Replacing valid_elements breaks empty paragraph elements.
-				extended_valid_elements: '*[*]', // We already filter in sanitize_html
+
+				// #p: Pad empty paragraphs with &nbsp; to prevent them from being removed.
+				// *[*]: Allow all elements and attributes -- we already filter in sanitize_html
+				// See https://www.tiny.cloud/docs/configure/content-filtering/#controlcharacters
+				valid_elements: '#p,*[*]',
+
 				menubar: false,
 				relative_urls: false,
 				branding: false,
