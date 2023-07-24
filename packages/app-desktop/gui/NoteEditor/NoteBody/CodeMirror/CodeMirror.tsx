@@ -786,30 +786,15 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 
-			// inputFieldType: The input field type of CodeMirror is "textarea" so the inputFieldType = "plainText",
+			// inputFieldType: The input field type of CodeMirror is "textarea" so the inputFieldType = "none",
 			// and any single-line input above codeMirror has inputFieldType value according to the type of input e.g.(text = plainText, password = password, ...).
-			//
-			// Note: The required value of inputFieldType changed from 'none' to 'plainText' with the
-			// upgrade to Electron 25.
-			if (!elements.length || !isEditable || inputFieldType !== 'plainText') return null;
+			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
-		const closeExistingMenu = () => {
-			const tmpMenu = new Menu();
-			tmpMenu.popup();
-			tmpMenu.closePopup();
-		};
-
 		async function onContextMenu(_event: any, params: any) {
 			if (!pointerInsideEditor(params)) return;
-
-			// Work around a bug in Electron: If an existing context menu already exists,
-			// including the default one created by Electron, then the first menu created
-			// in this event just hides the existing menu.
-			// TODO: Create & link to an upstream bug.
-			closeExistingMenu();
 
 			const menu = new Menu();
 
