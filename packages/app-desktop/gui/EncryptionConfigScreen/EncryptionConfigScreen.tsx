@@ -10,12 +10,13 @@ import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
+import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
 
 interface Props {
 	themeId: any;
@@ -83,9 +84,12 @@ const EncryptionConfigScreen = (props: Props) => {
 		);
 	};
 
-	const renderReencryptData = () => {
+	const renderReencryptData = (isAdvanced: boolean) => {
 		if (!shim.isElectron()) return null;
-		if (!props.shouldReencrypt) return null;
+
+		// If props.shouldReencrypt, show this setting in the main section, rather
+		// than the advanced section.
+		if (isAdvanced === props.shouldReencrypt) return null;
 
 		const theme = themeStyle(props.themeId);
 		const buttonLabel = _('Re-encrypt data');
@@ -239,7 +243,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			/>
 		);
 		const needUpgradeSection = renderNeedUpgradeSection();
-		const reencryptDataSection = renderReencryptData();
+		const reencryptDataSection = renderReencryptData(false);
 
 		return (
 			<div className="section">
@@ -254,7 +258,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					{decryptedItemsInfo}
 					{toggleButton}
 					{needUpgradeSection}
-					{props.shouldReencrypt ? reencryptDataSection : null}
+					{reencryptDataSection}
 				</div>
 			</div>
 		);
@@ -338,6 +342,27 @@ const EncryptionConfigScreen = (props: Props) => {
 		return nonExistingMasterKeySection;
 	};
 
+	const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+	const toggleAdvanced = useCallback(() => {
+		setShowAdvanced(!showAdvanced);
+	}, [showAdvanced]);
+
+	const renderAdvancedSection = () => {
+		const reEncryptSection = renderReencryptData(true);
+
+		if (!reEncryptSection) return null;
+
+
+		return (
+			<div>
+				<ToggleAdvancedSettingsButton
+					onClick={toggleAdvanced}
+					advancedSettingsVisible={showAdvanced}/>
+				{ showAdvanced ? reEncryptSection : null }
+			</div>
+		);
+	};
+
 	return (
 		<div className="config-screen-content">
 			{renderDebugSection()}
@@ -346,6 +371,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
 			{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
 			{renderNonExistingMasterKeysSection()}
+			{renderAdvancedSection()}
 		</div>
 	);
 };
