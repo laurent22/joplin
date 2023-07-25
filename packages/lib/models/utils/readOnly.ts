@@ -13,7 +13,8 @@ export interface ItemSlice {
 // This function can be called to wrap any read-only-related code. It should be
 // fast and allows an early exit for cases that don't apply, for example if not
 // synchronising with Joplin Cloud or if not sharing any notebook.
-export const needsReadOnlyChecks = (itemType: ModelType, changeSource: number, shareState: ShareState) => {
+export const needsReadOnlyChecks = (itemType: ModelType, changeSource: number, shareState: ShareState, disableReadOnlyCheck = false) => {
+	if (disableReadOnlyCheck) return false;
 	if (Setting.value('sync.target') !== 10) return false;
 	if (changeSource === ItemChange.SOURCE_SYNC) return false;
 	if (!Setting.value('sync.userId')) return false;
