@@ -1,6 +1,6 @@
 # Bienvenue dans Joplin !
 
-Joplin est une application gratuite et open source de prise de notes, qui vous aide à rédiger et à organiser vos notes, et à les synchroniser entre vos appareils. Les notes sont consultables, peuvent être copiées, étiquetées et modifiées directement depuis l'application ou depuis votre propre éditeur de texte. Les notes sont au [format Markdown](https://joplinapp.org/help/#markdown). Joplin est disponible en tant qu'application de **burean**, **mobile** et **terminal**.
+Joplin est une application gratuite et open source de prise de notes, qui vous aide à rédiger et à organiser vos notes, et à les synchroniser entre vos appareils. Les notes sont consultables, peuvent être copiées, étiquetées et modifiées directement depuis l'application ou depuis votre propre éditeur de texte. Les notes sont au [format Markdown](https://joplinapp.org/help/#markdown). Joplin est disponible en tant qu'application de **bureau**, **mobile** et **terminal**.
 
 Les notes de ce carnet donnent un aperçu de ce que Joplin peut faire et comment l'utiliser. En général, les trois applications partagent à peu près les mêmes fonctionnalités ; toute différence sera clairement indiquée.
 
