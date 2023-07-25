@@ -37,6 +37,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 	};
 
 	const getIcons = (): Icons => {
+		if (!o.icons) return null;
 		for (const size of [16, 32, 48, 128]) {
 			if (o.icons[size as keyof Icons]) return o.icons;
 		}
