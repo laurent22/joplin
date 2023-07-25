@@ -1,6 +1,5 @@
 const utils = require('../utils');
 const rootDir = utils.rootDir();
-const { globSync } = require('@joplin/utils/fs');
 
 module.exports = {
 	src: '',
@@ -11,7 +10,7 @@ module.exports = {
 		//
 		// https://github.com/isaacs/node-glob/issues/371
 
-		const tsFiles = globSync('{**/*.ts,**/*.tsx}', {
+		const tsFiles = utils.globSync('{**/*.ts,**/*.tsx}', {
 			cwd: rootDir,
 			ignore: [
 				'**/.git/**',
