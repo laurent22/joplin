@@ -13,7 +13,7 @@ describe('htmlUtils', () => {
 				'<p>line 1</p><p>line 2</p>',
 			],
 			[
-				'line 1\n\nline 2',
+				'line 1\n\rline 2',
 				'<p>line 1</p><p>line 2</p>',
 			],
 			[
