@@ -42,6 +42,11 @@ const create = (win, options) => {
 			return;
 		}
 
+		// If another listener has called .preventDefault, don't show the default context menu.
+		if (event.defaultPrevented) {
+			return;
+		}
+
 		const { editFlags } = props;
 		const hasText = props.selectionText.trim().length > 0;
 		const isLink = Boolean(props.linkURL);
