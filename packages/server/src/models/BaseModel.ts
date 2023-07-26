@@ -4,7 +4,6 @@ import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models, NewModelFactoryHandler } from './factory';
-import * as EventEmitter from 'events';
 import { Config, Env } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
 import Logger from '@joplin/lib/Logger';
@@ -63,7 +62,6 @@ export default abstract class BaseModel<T> {
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: NewModelFactoryHandler;
-	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
 	private savePoints_: SavePoint[] = [];
 
@@ -116,13 +114,6 @@ export default abstract class BaseModel<T> {
 			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);
 		}
 		return this.defaultFields_.slice();
-	}
-
-	public static get eventEmitter(): EventEmitter {
-		if (!this.eventEmitter_) {
-			this.eventEmitter_ = new EventEmitter();
-		}
-		return this.eventEmitter_;
 	}
 
 	public async checkIfAllowed(_user: User, _action: AclAction, _resource: T = null): Promise<void> {

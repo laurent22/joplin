@@ -6,6 +6,8 @@ import { Event, EventType, TaskId, TaskState } from './database/types';
 import { Services } from './types';
 import { _ } from '@joplin/lib/locale';
 import { ErrorNotFound } from '../utils/errors';
+import { durationToMilliseconds } from '../utils/time';
+
 const cron = require('node-cron');
 
 const logger = Logger.create('TaskService');
@@ -27,6 +29,8 @@ export const taskIdToLabel = (taskId: TaskId): string => {
 		[TaskId.ProcessUserDeletions]: _('Process user deletions'),
 		[TaskId.AutoAddDisabledAccountsForDeletion]: _('Auto-add disabled accounts for deletion'),
 		[TaskId.ProcessOrphanedItems]: 'Process orphaned items',
+		[TaskId.ProcessShares]: 'Process shared items',
+		[TaskId.ProcessEmails]: 'Process emails',
 	};
 
 	const s = strings[taskId];
@@ -147,9 +151,23 @@ export default class TaskService extends BaseService {
 
 			logger.info(`Scheduling ${this.taskDisplayString(task.id)}: ${task.schedule}`);
 
-			cron.schedule(task.schedule, async () => {
-				await this.runTask(Number(taskId), RunType.Scheduled);
-			});
+			let interval: number|null = null;
+			try {
+				interval = durationToMilliseconds(task.schedule);
+			} catch (error) {
+				// Assume that we have a cron schedule
+				interval = null;
+			}
+
+			if (interval !== null) {
+				setInterval(async () => {
+					await this.runTask(Number(taskId), RunType.Scheduled);
+				}, interval);
+			} else {
+				cron.schedule(task.schedule, async () => {
+					await this.runTask(Number(taskId), RunType.Scheduled);
+				});
+			}
 		}
 	}
 

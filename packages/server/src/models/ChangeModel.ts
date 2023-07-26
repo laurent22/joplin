@@ -391,9 +391,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	}
 
 	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {
-		const savedChange = await super.save(change, options);
-		ChangeModel.eventEmitter.emit('saved');
-		return savedChange;
+		return super.save(change, options);
 	}
 
 	public async deleteByItemIds(itemIds: Uuid[]) {

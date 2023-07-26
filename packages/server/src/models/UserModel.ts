@@ -644,8 +644,6 @@ export default class UserModel extends BaseModel<User> {
 				await this.sendAccountConfirmationEmail(savedUser);
 			}
 
-			if (isNew) UserModel.eventEmitter.emit('created');
-
 			return savedUser;
 		}, 'UserModel::save');
 	}

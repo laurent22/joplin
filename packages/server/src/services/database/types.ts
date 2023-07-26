@@ -115,15 +115,17 @@ export enum TaskId {
 	// Don't re-use any of these numbers, always add to it, as the ID is used in
 	// the database
 	DeleteExpiredTokens = 1,
-	UpdateTotalSizes = 2,
-	HandleOversizedAccounts = 3,
-	HandleBetaUserEmails = 4,
-	HandleFailedPaymentSubscriptions = 5,
-	DeleteExpiredSessions = 6,
-	CompressOldChanges = 7,
-	ProcessUserDeletions = 8,
-	AutoAddDisabledAccountsForDeletion = 9,
-	ProcessOrphanedItems = 10,
+	UpdateTotalSizes,
+	HandleOversizedAccounts,
+	HandleBetaUserEmails,
+	HandleFailedPaymentSubscriptions,
+	DeleteExpiredSessions,
+	CompressOldChanges,
+	ProcessUserDeletions,
+	AutoAddDisabledAccountsForDeletion,
+	ProcessOrphanedItems,
+	ProcessShares,
+	ProcessEmails,
 }
 
 // AUTO-GENERATED-TYPES
