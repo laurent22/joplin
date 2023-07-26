@@ -307,7 +307,7 @@ async function main() {
 		}
 
 		appLogger().info('Starting services...');
-		await startServices(ctx.joplinBase.services);
+		await startServices(config(), ctx.joplinBase.services);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 

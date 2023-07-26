@@ -18,11 +18,12 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 		tasks: null,
 	};
 
-	output.tasks = await setupTaskService(env, models, config, output),
-
 	await output.mustache.loadPartials();
 
-	await output.email.checkConfiguration();
+	if (config.IS_ADMIN_INSTANCE) {
+		await output.email.checkConfiguration();
+		output.tasks = await setupTaskService(env, models, config, output);
+	}
 
 	return output;
 }
