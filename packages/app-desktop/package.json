@@ -115,7 +115,7 @@
     "@types/react": "16.14.41",
     "@types/react-redux": "7.1.25",
     "@types/styled-components": "5.1.26",
-    "electron": "25.2.0",
+    "electron": "25.3.1",
     "electron-builder": "24.4.0",
     "glob": "10.2.7",
     "gulp": "4.0.2",
