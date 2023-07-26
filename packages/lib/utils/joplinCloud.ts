@@ -162,7 +162,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			teams: true,
 		},
 		emailToNote: {
-			title: _('Email to note'),
+			title: _('Email to Note'),
 			basic: false,
 			pro: true,
 			teams: true,
