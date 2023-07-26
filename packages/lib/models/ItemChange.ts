@@ -21,6 +21,7 @@ export default class ItemChange extends BaseModel {
 	public static SOURCE_UNSPECIFIED = 1;
 	public static SOURCE_SYNC = 2;
 	public static SOURCE_DECRYPTION = 2; // CAREFUL - SAME ID AS SOURCE_SYNC!
+	public static SOURCE_SHARE_SERVICE = 4;
 
 	public static tableName() {
 		return 'item_changes';

@@ -33,4 +33,5 @@ export interface SaveOptions {
 	ignoreProvisionalFlag?: boolean;
 	dispatchUpdateAction?: boolean;
 	changeSource?: number;
+	disableReadOnlyCheck?: boolean;
 }

@@ -362,13 +362,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				<View key="joplinCloud">
 					<View style={this.styles().settingContainerNoBottomBorder}>
 						<Text style={this.styles().settingText}>{_('Email to note')}</Text>
-						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['emailToNote.inboxEmail']}</Text>
+						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['sync.10.inboxEmail']}</Text>
 					</View>
 					{
 						this.renderButton(
-							'emailToNote.inboxEmail',
+							'sync.10.inboxEmail',
 							_('Copy to clipboard'),
-							() => Clipboard.setString(this.props.settings['emailToNote.inboxEmail']),
+							() => Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
 							{ description }
 						)
 					}

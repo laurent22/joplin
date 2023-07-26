@@ -1,4 +1,4 @@
-import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
+import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp, htmlEscapeLeadingNonbreakingSpace } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
@@ -25,6 +25,13 @@ rules.paragraph = {
   filter: 'p',
 
   replacement: function (content) {
+    // If the line starts with a nonbreaking space, replace it. By default, the
+    // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
+    // because the space is nonbreaking, we want to keep it.
+    // \u00A0 is a nonbreaking space.
+    const leadingNonbreakingSpace = /^\u{00A0}/ug;
+    content = content.replace(leadingNonbreakingSpace, '&nbsp;');
+
     return '\n\n' + content + '\n\n'
   }
 }

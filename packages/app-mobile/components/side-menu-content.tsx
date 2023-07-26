@@ -528,6 +528,6 @@ export default connect((state: AppState) => {
 		isOnMobileData: state.isOnMobileData,
 		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
 		profileConfig: state.profileConfig,
-		inboxJopId: state.settings['emailToNote.inboxJopId'],
+		inboxJopId: state.settings['sync.10.inboxId'],
 	};
 })(SideMenuContentComponent);

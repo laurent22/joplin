@@ -10,5 +10,6 @@
 	"repository_url": "<%= pluginRepositoryUrl %>",
 	"keywords": [],
 	"categories": [],
-	"screenshots": []
+	"screenshots": [],
+	"icons": {}
 }

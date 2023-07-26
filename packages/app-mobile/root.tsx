@@ -117,7 +117,7 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
-import { initializeInboxFetcher, inboxFetcher } from '@joplin/lib/utils/inboxFetcher';
+import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 
@@ -665,8 +665,8 @@ async function initialize(dispatch: Function) {
 
 	reg.setupRecurrentSync();
 
-	initializeInboxFetcher();
-	PoorManIntervals.setInterval(() => { void inboxFetcher(); }, 1000 * 60 * 60);
+	initializeUserFetcher();
+	PoorManIntervals.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 
 	PoorManIntervals.setTimeout(() => {
 		void AlarmService.garbageCollect();
