@@ -845,6 +845,7 @@ packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
 packages/react-native-saf-x/src/index.js
+packages/renderer/HtmlToHtml.test.js
 packages/renderer/HtmlToHtml.js
 packages/renderer/InMemoryCache.js
 packages/renderer/MarkupToHtml.js
