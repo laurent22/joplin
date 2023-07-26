@@ -27,6 +27,7 @@ const defaultEnvValues: EnvVariables = {
 	// Additionally, processing services (those defined in setupTaskService.ts)
 	// only run on the admin instance.
 	IS_ADMIN_INSTANCE: true,
+	INSTANCE_NAME: '',
 
 	// Maxiumm allowed drift between NTP time and server time. A few
 	// milliseconds is normally not an issue unless many clients are modifying
@@ -116,6 +117,8 @@ export interface EnvVariables {
 	RUNNING_IN_DOCKER: boolean;
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
+	IS_ADMIN_INSTANCE: boolean;
+	INSTANCE_NAME: string;
 
 	APP_BASE_URL: string;
 	USER_CONTENT_BASE_URL: string;
@@ -157,8 +160,6 @@ export interface EnvVariables {
 
 	USER_DATA_AUTO_DELETE_ENABLED: boolean;
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
-
-	IS_ADMIN_INSTANCE: boolean;
 }
 
 const parseBoolean = (s: string): boolean => {

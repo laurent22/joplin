@@ -209,10 +209,10 @@ async function main() {
 
 	Logger.fsDriver_ = new FsDriverNode();
 	const globalLogger = new Logger();
-	// globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });
+	const instancePrefix = config().INSTANCE_NAME ? `${config().INSTANCE_NAME}: ` : '';
 	globalLogger.addTarget(TargetType.Console, {
-		format: '%(date_time)s: [%(level)s] %(prefix)s: %(message)s',
-		formatInfo: '%(date_time)s: %(prefix)s: %(message)s',
+		format: `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`,
+		formatInfo: `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`,
 	});
 	Logger.initializeGlobalLogger(globalLogger);
 
