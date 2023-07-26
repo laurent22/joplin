@@ -10,6 +10,8 @@
 
 - Improved sync performances. Compared to other sync options, Joplin Cloud, being developed specifically for Joplin, is faster and consumes less resources.
 
+- Forward emails to your own Joplin Inbox address to create notes that help you store and find all information that is important to you.
+
 Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support is needed in the long term to provide bug and security fixes, add new features, and provide support.
 
 ## Do you offer discounts?
