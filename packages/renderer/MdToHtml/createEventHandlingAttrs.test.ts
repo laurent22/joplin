@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { createEventHandlingListeners, Options } from './createEventHandlingAttrs';
 import { describe, beforeAll, it, jest, expect } from '@jest/globals';
 

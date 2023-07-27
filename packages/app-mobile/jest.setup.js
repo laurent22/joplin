@@ -8,6 +8,12 @@ const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
 
+import { setImmediate } from 'timers';
+
+// Required by some libraries (setImmediate is not supported in most browsers,
+// so is removed by jsdom).
+window.setImmediate = setImmediate;
+
 shimInit({ nodeSqlite: sqlite3 });
 
 
