@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import * as React from 'react';
-import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid } from 'react-native';
+import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
@@ -411,10 +411,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
 			if (featureFlagKeys.length) {
+				const headerKey = 'featureFlags';
 				settingComps.push(<SectionHeader
-					key='featureFlags'
+					key={headerKey}
 					styles={this.styles().styleSheet}
 					title={_('Feature flags')}
+					onLayout={event => this.onHeaderLayout(headerKey, event)}
 				/>);
 
 				settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
@@ -426,12 +428,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		return (
 			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
-				<SectionHeader
-					key={section.name}
-					styles={this.styles().styleSheet}
-					title={Setting.sectionNameToLabel(section.name)}
-					onLayout={(event: any) => this.onHeaderLayout(key, event)}
-				/>
 				<View>{settingComps}</View>
 			</View>
 		);
@@ -510,11 +506,16 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	public render() {
 		const settings = this.state.settings;
 
+		const windowWidth = Dimensions.get('window').width;
+		const sectionSelectorDesiredWidth = 200;
+
 		const sectionSelector = (
 			<SectionSelector
+				selectedSectionName={this.state.selectedSectionName}
 				styles={this.styles()}
 				settings={settings}
 				openSection={this.switchSectionPress_}
+				minWidth={Math.min(windowWidth, sectionSelectorDesiredWidth)}
 			/>
 		);
 
@@ -532,6 +533,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				{titleParts.join(' > ')}
 			</Text>
 		);
+
 		let settingComps: ReactNode[];
 		if (this.state.selectedSectionName) {
 			settingComps = shared.settingsToComponents2(
@@ -557,6 +559,30 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			];
 		}
 
+		const currentSection = (
+			<ScrollView
+				ref={this.scrollViewRef_}
+				style={{ flexGrow: 1 }}
+			>
+				{settingComps}
+			</ScrollView>
+		);
+
+		let mainComponent;
+		if (windowWidth > sectionSelectorDesiredWidth * 2 && this.state.selectedSectionName) {
+			mainComponent = (
+				<View style={{
+					flexDirection: 'row',
+				}}>
+					{sectionSelector}
+					<View style={{ width: 10 }}/>
+					{currentSection}
+				</View>
+			);
+		} else {
+			mainComponent = currentSection;
+		}
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -567,7 +593,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					saveButtonDisabled={!this.state.changedSettingKeys.length}
 					onSaveButtonPress={this.saveButton_press}
 				/>
-				<ScrollView ref={this.scrollViewRef_}>{settingComps}</ScrollView>
+				{mainComponent}
 			</View>
 		);
 	}
