@@ -154,7 +154,14 @@ module.exports = {
 	// timers: "real",
 
 	// A map from regular expressions to paths to transformers
-	// transform: undefined,
+	transform: {
+		'\\.js$': ['babel-jest', { configFile: './babel.jest-config.js' }],
+	},
+
+	// So that babel converts ES6 import/exports, override the default transformIgnorePatterns
+	// so that most packages in node_modules **are** transformed.
+	transformIgnorePatterns: ['<rootDir>/node_modules/jest'],
+	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
 
 	// An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
 	// unmockedModulePathPatterns: undefined,

@@ -107,6 +107,8 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "7.22.5",
+    "@babel/runtime": "7.22.5",
     "@electron/rebuild": "3.2.13",
     "@joplin/tools": "~2.12",
     "@testing-library/react-hooks": "8.0.1",

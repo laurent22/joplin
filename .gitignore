@@ -238,8 +238,8 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
-packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
+packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/types.js
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js
 packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js

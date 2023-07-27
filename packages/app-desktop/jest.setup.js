@@ -1,16 +1,18 @@
+/* eslint-disable jest/require-top-level-describe */
 
-const { default: Logger, TargetType } = require('@joplin/lib/Logger');
+const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
+const { shimInit } = require('@joplin/lib/shim-init-node.js');
+const sqlite3 = require('sqlite3');
 
-// TODO: Some libraries required by test-utils.js seem to fail to import with the
-// jsdom environment.
-//
-// Thus, require('@joplin/lib/testing/test-utils.js') fails and some setup must be
-// copied.
+shimInit({ nodeSqlite: sqlite3 });
 
-const logger = new Logger();
-logger.addTarget(TargetType.Console);
-logger.setLevel(Logger.LEVEL_WARN);
-Logger.initializeGlobalLogger(logger);
+afterEach(async () => {
+	await afterEachCleanUp();
+});
+
+afterAll(async () => {
+	await afterAllCleanUp();
+});
 
 
 // @electron/remote requires electron to be running. Mock it.
