@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Mr-Kanister <viger_gtrc@simplelogin.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -397,7 +399,7 @@ msgid ""
 "configuration will be lost."
 msgstr ""
 "Sicher, dass du zum Standardlayout zurückkehren möchtest? Das aktuelle "
-"Layout geht dabei verloren"
+"Layout geht dabei verloren."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:501
 msgid "Arguments:"
@@ -519,6 +521,10 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"Biometrisches Entsperren ist auf diesem Gerät nicht eingerichtet. Bitte "
+"richte es ein, um Joplin zu entsperren. Falls das Gerät gesperrt ist, "
+"solltest du es aus- und wieder einschalten, um das biometrische Scannen "
+"zurückzusetzen."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:33
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:132
@@ -901,9 +907,8 @@ msgid "Convert to todo"
 msgstr "In eine Aufgabe umwandeln"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "In eine Notiz umwandeln"
+msgstr "Wandle Sprache in Text um..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:495
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
@@ -1018,9 +1023,8 @@ msgstr ""
 "besteht."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "Konnte deine Identität nicht verifizieren"
+msgstr "Konnte deine Identität nicht verifizieren: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:276
 msgid "Create"
@@ -1453,9 +1457,8 @@ msgid "Downloading"
 msgstr "Wird heruntergeladen"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Anhänge werden heruntergeladen ..."
+msgstr "Lade %s Sprachdateien herunter..."
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -1680,9 +1683,8 @@ msgid "Enable table of contents extension"
 msgstr "Inhaltsverzeichnis-Erweiterung aktivieren"
 
 #: packages/lib/models/Setting.ts:1061
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "Markdown Emoji aktivieren"
+msgstr "Markdown Werkzeugleiste aktivieren"
 
 #: packages/lib/models/Setting.ts:1144
 msgid "Enable typographer support"
@@ -2057,9 +2059,8 @@ msgid "Help"
 msgstr "Hilfe"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:759
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS aktiviert: %d"
+msgstr "Hermes aktiviert: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
@@ -2483,6 +2484,7 @@ msgstr "Layout-Reihenfolge"
 #: packages/lib/models/Setting.ts:1704
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
+"Lasse es leer, um die Sprachdateien von der Standardseite herunterzuladen."
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2541,9 +2543,8 @@ msgid "Loaded"
 msgstr "Geladen"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:86
-#, fuzzy
 msgid "Loading..."
-msgstr "Wird aktualisiert ..."
+msgstr "Lade..."
 
 # Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
@@ -3218,7 +3219,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Bitte nehme deine Stimme auf..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3714,9 +3715,8 @@ msgid "Select file..."
 msgstr "Datei auswählen..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Notizbuch löschen"
+msgstr "Eltern-Notizbuch auswählen"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -5043,12 +5043,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1705
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Sprachdateien für die Spracheingabe (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:994
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr ""
+msgstr "Spracheingabe..."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
@@ -5103,9 +5103,8 @@ msgstr ""
 "erstellen drücke `mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Willkommen"
+msgstr "Willkommen!"
 
 #: packages/lib/models/Setting.ts:1105
 msgid "When creating a new note:"
