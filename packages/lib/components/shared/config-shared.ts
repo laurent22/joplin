@@ -17,6 +17,13 @@ interface ConfigScreenState {
 	showAdvancedSettings: boolean;
 }
 
+export const defaultScreenState: ConfigScreenState = {
+	checkSyncConfigResult: null,
+	settings: {},
+	changedSettingKeys: [],
+	showAdvancedSettings: false,
+};
+
 interface ConfigScreenComponent {
 	settingToComponent(settingId: string, setting: any): ReactNode;
 	sectionToComponent(sectionName: string, section: any, settings: any, isSelected: boolean): ReactNode;
@@ -34,13 +41,7 @@ type OnSettingsSavedCallback = (event: SettingsSavedEvent)=> void;
 
 let onSettingsSaved: OnSettingsSavedCallback = () => {};
 
-export const init = (comp: ConfigScreenComponent, reg: Registry) => {
-	if (!comp.state) comp.state = {};
-	(comp.state as any).checkSyncConfigResult = null;
-	(comp.state as any).settings = {};
-	(comp.state as any).changedSettingKeys = [];
-	(comp.state as any).showAdvancedSettings = false;
-
+export const init = (reg: Registry) => {
 	onSettingsSaved = (event) => {
 		const savedSettingKeys = event.savedSettingKeys;
 

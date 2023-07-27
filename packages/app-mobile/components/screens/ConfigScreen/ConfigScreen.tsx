@@ -37,10 +37,6 @@ interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
 	showAdvancedSettings: boolean;
 
-	creatingReport?: boolean;
-	profileExportPath: string;
-	profileExportStatus: string;
-	fileSystemSyncPath: string;
 }
 
 interface ConfigScreenProps {
@@ -64,15 +60,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		super(props);
 
 		this.state = {
-			creatingReport: false,
-			profileExportStatus: 'idle',
-			profileExportPath: '',
-			fileSystemSyncPath: Setting.value('sync.2.path'),
-		} as any;
+			...shared.defaultScreenState,
+			fixingSearchIndex: false,
+		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
 
-		shared.init(this, reg);
+		shared.init(reg);
 	}
 
 	private checkSyncConfig_ = async () => {

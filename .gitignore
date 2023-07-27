@@ -411,6 +411,7 @@ packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.js

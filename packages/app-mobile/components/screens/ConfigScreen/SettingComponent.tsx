@@ -7,6 +7,8 @@ import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
 import Slider from '@react-native-community/slider';
 import SettingsToggle from './SettingsToggle';
+import FileSystemPathSelector from './FileSystemPathSelector';
+import shim from '@joplin/lib/shim';
 const { themeStyle } = require('../../global-style.js');
 
 interface Props {
@@ -40,7 +42,6 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 
 		const items = Setting.enumOptionsToValueLabels(md.options(), md.optionsOrder ? md.optionsOrder() : []);
 
-		// TODO(personalizedrefrigerator): Remove as any cast?
 		return (
 			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
 				<View style={containerStyle}>
@@ -111,7 +112,16 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 			</View>
 		);
 	} else if (md.type === Setting.TYPE_STRING) {
-		// TODO(personalizedrefrigerator): Override sync.2.path
+		if (md.key === 'sync.2.path' && shim.fsDriver().isUsingAndroidSAF()) {
+			return (
+				<FileSystemPathSelector
+					styles={props.styles}
+					settingMetadata={md}
+					updateSettingValue={props.updateSettingValue}
+				/>
+			);
+		}
+
 		return (
 			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
 				<View key={props.settingId} style={containerStyle}>

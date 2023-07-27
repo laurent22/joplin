@@ -32,9 +32,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	public constructor(props: any) {
 		super(props);
 
-		shared.init(this, reg);
+		shared.init(reg);
 
 		this.state = {
+			...shared.defaultScreenState,
 			selectedSectionName: 'general',
 			screenName: '',
 			changedSettingKeys: [],
