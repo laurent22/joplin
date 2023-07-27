@@ -1,5 +1,5 @@
 import ShareService from '@joplin/lib/services/share/ShareService';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import Folder from '@joplin/lib/models/Folder';
 import { reg } from '@joplin/lib/registry';
 import { _ } from '@joplin/lib/locale';

@@ -475,9 +475,9 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.11.0):
+  - RNGestureHandler (2.12.0):
     - React-Core
-  - RNLocalize (3.0.1):
+  - RNLocalize (3.0.2):
     - React-Core
   - RNQuickAction (0.3.13):
     - React
@@ -854,8 +854,8 @@ SPEC CHECKSUMS:
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 026038a97d4c8649ce397a22e162ca58b4e6c230
-  RNLocalize: 6dd9226886fa61bf0cefc7644e3f9620770b1a31
+  RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
+  RNLocalize: dbea38dcb344bf80ff18a1757b1becf11f70cae4
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNReanimated: 9976fbaaeb8a188c36026154c844bf374b3b7eeb
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef

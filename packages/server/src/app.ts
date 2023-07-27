@@ -3,7 +3,7 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
+import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
 import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';

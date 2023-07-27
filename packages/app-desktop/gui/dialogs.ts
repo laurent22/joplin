@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 
 // Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
 // upgrade again, check that adding a link from the CodeMirror editor works/

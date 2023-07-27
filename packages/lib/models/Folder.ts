@@ -7,7 +7,7 @@ import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
 import { isRootSharedFolder } from '../services/share/reducer';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';

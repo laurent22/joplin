@@ -4,7 +4,7 @@ import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import FakeCookies from './koa/FakeCookies';
 import FakeRequest from './koa/FakeRequest';
 import FakeResponse from './koa/FakeResponse';

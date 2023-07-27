@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from './shim';
 import BaseItem from './models/BaseItem';
 import time from './time';

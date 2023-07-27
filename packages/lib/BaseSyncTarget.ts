@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import Synchronizer from './Synchronizer';
 import EncryptionService from './services/e2ee/EncryptionService';
 import shim from './shim';

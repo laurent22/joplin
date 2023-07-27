@@ -1,4 +1,4 @@
-import { LoggerWrapper } from '@joplin/lib/Logger';
+import { LoggerWrapper } from '@joplin/utils/Logger';
 import config from '../config';
 import { DbConnection } from '../db';
 import newModelFactory, { Models } from '../models/factory';

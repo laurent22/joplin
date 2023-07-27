@@ -6,7 +6,7 @@ import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Stripe } from 'stripe';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';

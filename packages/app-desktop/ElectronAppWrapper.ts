@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';

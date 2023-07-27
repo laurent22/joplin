@@ -2,7 +2,7 @@ import { knex, Knex } from 'knex';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
 
 // Make sure bigInteger values are numbers and not strings

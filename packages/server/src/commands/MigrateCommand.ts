@@ -1,5 +1,5 @@
 import { PositionalOptions, Options } from 'yargs';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { disconnectDb, migrateDown, migrateLatest, migrateList, migrateUnlock, migrateUp } from '../db';
 import BaseCommand, { RunContext } from './BaseCommand';
 

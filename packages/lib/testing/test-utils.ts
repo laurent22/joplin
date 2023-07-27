@@ -1,7 +1,7 @@
 /* eslint-disable require-atomic-updates */
 import BaseApplication from '../BaseApplication';
 import BaseModel from '../BaseModel';
-import Logger, { TargetType, LoggerWrapper, LogLevel } from '../Logger';
+import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/utils/Logger';
 import Setting from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';

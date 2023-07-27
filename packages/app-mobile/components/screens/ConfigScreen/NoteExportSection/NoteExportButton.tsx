@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, Alert, View } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { ProgressBar } from 'react-native-paper';
 import { FunctionComponent, useCallback, useState } from 'react';
 import shim from '@joplin/lib/shim';

@@ -2,7 +2,7 @@ import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
 import { FolderEntity } from '../database/types';
 import { MasterKeyEntity } from '../e2ee/types';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('share/reducer');
 

@@ -3,7 +3,7 @@ import BaseModel from '../BaseModel';
 import MasterKey from '../models/MasterKey';
 import Resource from '../models/Resource';
 import ResourceService from './ResourceService';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import KvStore from './KvStore';
 import EncryptionService from './e2ee/EncryptionService';

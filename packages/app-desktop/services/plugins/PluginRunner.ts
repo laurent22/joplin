@@ -6,7 +6,7 @@ import bridge from '../bridge';
 import Setting from '@joplin/lib/models/Setting';
 import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import shim from '@joplin/lib/shim';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 // import BackOffHandler from './BackOffHandler';
 const ipcRenderer = require('electron').ipcRenderer;
 

@@ -7,7 +7,7 @@ import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
 import time from '@joplin/lib/time';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';

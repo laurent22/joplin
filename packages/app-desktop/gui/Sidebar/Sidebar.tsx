@@ -19,7 +19,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';

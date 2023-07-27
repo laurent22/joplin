@@ -7,7 +7,7 @@ import useSubmitHandler from './hooks/useSubmitHandler';
 import useHtmlLoader from './hooks/useHtmlLoader';
 import useWebviewToPluginMessages from './hooks/useWebviewToPluginMessages';
 import useScriptLoader from './hooks/useScriptLoader';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import styled from 'styled-components';
 
 const logger = Logger.create('UserWebview');

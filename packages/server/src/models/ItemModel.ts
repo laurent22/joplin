@@ -13,7 +13,7 @@ import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
 import { msleep } from '../utils/time';
-import Logger, { LoggerWrapper } from '@joplin/lib/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import prettyBytes = require('pretty-bytes');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;

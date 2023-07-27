@@ -3,7 +3,7 @@ const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
 const { createSelector } = require('reselect');
-const Logger = require('../../Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 
 const logger = Logger.create('config-shared');
 

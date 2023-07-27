@@ -22,6 +22,7 @@
     "@joplin/react-native-alarm-notification": "~2.12",
     "@joplin/react-native-saf-x": "~2.12",
     "@joplin/renderer": "~2.12",
+    "@joplin/utils": "~2.12",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/datetimepicker": "7.1.0",
     "@react-native-community/geolocation": "3.0.6",

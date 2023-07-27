@@ -6,7 +6,7 @@ import Database from '../database';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import time from '../time';
 import FileHandler, { SettingValues } from './settings/FileHandler';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';

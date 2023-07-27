@@ -7,7 +7,7 @@ const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import rendererHtmlUtils from '@joplin/renderer/htmlUtils';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 const { fileUriToPath } = require('@joplin/lib/urlUtils');
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');

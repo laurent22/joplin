@@ -493,7 +493,6 @@ packages/lib/InMemoryCache.js
 packages/lib/JoplinDatabase.js
 packages/lib/JoplinError.js
 packages/lib/JoplinServerApi.js
-packages/lib/Logger.js
 packages/lib/ObjectUtils.js
 packages/lib/PoorManIntervals.js
 packages/lib/RotatingLogs.test.js

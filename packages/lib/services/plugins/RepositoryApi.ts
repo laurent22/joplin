@@ -1,4 +1,4 @@
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 const md5 = require('md5');

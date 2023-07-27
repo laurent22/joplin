@@ -1,4 +1,4 @@
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const { findAvailablePort } = require('@joplin/lib/net-utils');
 
 const http = require('http');

@@ -6,7 +6,7 @@ const { reg } = require('@joplin/lib/registry.js');
 const { ScreenHeader } = require('../ScreenHeader');
 const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('../global-style.js');
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const { BaseScreenComponent } = require('../base-screen.js');
 const { _ } = require('@joplin/lib/locale');
 

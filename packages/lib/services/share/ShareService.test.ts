@@ -10,7 +10,7 @@ import { generateKeyPair } from '../e2ee/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
-import Logger, { LogLevel } from '../../Logger';
+import Logger, { LogLevel } from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Resource from '../../models/Resource';
 import { readFile } from 'fs-extra';

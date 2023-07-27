@@ -1,5 +1,5 @@
 import shim from '@joplin/lib/shim';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { _ } from '@joplin/lib/locale';
 import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';

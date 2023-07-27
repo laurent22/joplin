@@ -1,7 +1,7 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';

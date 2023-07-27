@@ -2,7 +2,7 @@ import AsyncActionQueue from '../../AsyncActionQueue';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import { toSystemSlashes } from '../../path-utils';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
 import { ResourceEntity } from '../database/types';

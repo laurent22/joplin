@@ -8,7 +8,7 @@ import PlatformImplementation from './services/plugins/PlatformImplementation';
 import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
