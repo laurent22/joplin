@@ -1,24 +1,47 @@
-const Setting = require('../../models/Setting').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
+import Setting, { AppType } from '../../models/Setting';
+import SyncTargetRegistry from '../../SyncTargetRegistry';
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
-const { createSelector } = require('reselect');
+import { createSelector } from 'reselect';
 const Logger = require('../../Logger').default;
+
+import { ReactNode } from 'react';
+import { type Registry } from '../../registry';
 
 const logger = Logger.create('config-shared');
 
-const shared = {};
+interface ConfigScreenState {
+	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
+	settings: any;
+	changedSettingKeys: string[];
+	showAdvancedSettings: boolean;
+}
 
-shared.onSettingsSaved = () => {};
+interface ConfigScreenComponent {
+	settingToComponent(settingId: string, setting: any): ReactNode;
+	sectionToComponent(sectionName: string, section: any, settings: any, isSelected: boolean): ReactNode;
 
-shared.init = function(comp, reg) {
+	state: Partial<ConfigScreenState>;
+
+	setState(callbackOrNew: any, callback?: ()=> void): void;
+}
+
+interface SettingsSavedEvent {
+	savedSettingKeys: string[];
+}
+
+type OnSettingsSavedCallback = (event: SettingsSavedEvent)=> void;
+
+let onSettingsSaved: OnSettingsSavedCallback = () => {};
+
+export const init = (comp: ConfigScreenComponent, reg: Registry) => {
 	if (!comp.state) comp.state = {};
-	comp.state.checkSyncConfigResult = null;
-	comp.state.settings = {};
-	comp.state.changedSettingKeys = [];
-	comp.state.showAdvancedSettings = false;
+	(comp.state as any).checkSyncConfigResult = null;
+	(comp.state as any).settings = {};
+	(comp.state as any).changedSettingKeys = [];
+	(comp.state as any).showAdvancedSettings = false;
 
-	shared.onSettingsSaved = (event) => {
+	onSettingsSaved = (event) => {
 		const savedSettingKeys = event.savedSettingKeys;
 
 		// After changing the sync settings we immediately trigger a sync
@@ -34,13 +57,13 @@ shared.init = function(comp, reg) {
 	};
 };
 
-shared.advancedSettingsButton_click = (comp) => {
-	comp.setState(state => {
+export const advancedSettingsButton_click = (comp: ConfigScreenComponent) => {
+	comp.setState((state: ConfigScreenState) => {
 		return { showAdvancedSettings: !state.showAdvancedSettings };
 	});
 };
 
-shared.checkSyncConfig = async function(comp, settings) {
+export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: any) => {
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
@@ -54,12 +77,12 @@ shared.checkSyncConfig = async function(comp, settings) {
 
 	if (result.ok) {
 		// Users often expect config to be auto-saved at this point, if the config check was successful
-		shared.saveSettings(comp);
+		saveSettings(comp);
 	}
 	return result;
 };
 
-shared.checkSyncConfigMessages = function(comp) {
+export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 	const result = comp.state.checkSyncConfigResult;
 	const output = [];
 
@@ -75,10 +98,10 @@ shared.checkSyncConfigMessages = function(comp) {
 	return output;
 };
 
-shared.updateSettingValue = function(comp, key, value, callback = null) {
+export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: any, callback?: ()=> void) => {
 	if (!callback) callback = () => {};
 
-	comp.setState(state => {
+	comp.setState((state: ConfigScreenState) => {
 		// @react-native-community/slider (4.4.0) will emit a valueChanged event
 		// when the component is mounted, even though the value hasn't changed.
 		// We should ignore this, otherwise it will mark the settings as
@@ -104,16 +127,17 @@ shared.updateSettingValue = function(comp, key, value, callback = null) {
 	}, callback);
 };
 
-shared.scheduleSaveSettings = function(comp) {
-	if (shared.scheduleSaveSettingsIID) clearTimeout(shared.scheduleSaveSettingsIID);
+let scheduleSaveSettingsIID: ReturnType<typeof setTimeout>|null = null;
+export const scheduleSaveSettings = (comp: ConfigScreenComponent) => {
+	if (scheduleSaveSettingsIID) clearTimeout(scheduleSaveSettingsIID);
 
-	shared.scheduleSaveSettingsIID = setTimeout(() => {
-		shared.scheduleSaveSettingsIID = null;
-		shared.saveSettings(comp);
+	scheduleSaveSettingsIID = setTimeout(() => {
+		scheduleSaveSettingsIID = null;
+		saveSettings(comp);
 	}, 100);
 };
 
-shared.saveSettings = function(comp) {
+export const saveSettings = (comp: ConfigScreenComponent) => {
 	const savedSettingKeys = comp.state.changedSettingKeys.slice();
 
 	for (const key in comp.state.settings) {
@@ -124,10 +148,10 @@ shared.saveSettings = function(comp) {
 
 	comp.setState({ changedSettingKeys: [] });
 
-	shared.onSettingsSaved({ savedSettingKeys });
+	onSettingsSaved({ savedSettingKeys });
 };
 
-shared.settingsToComponents = function(comp, device, settings) {
+export const settingsToComponents = (comp: ConfigScreenComponent, device: AppType, settings: any) => {
 	const keys = Setting.keys(true, device);
 	const settingComps = [];
 
@@ -146,10 +170,11 @@ shared.settingsToComponents = function(comp, device, settings) {
 	return settingComps;
 };
 
-const deviceSelector = (state) => state.device;
-const settingsSelector = (state) => state.settings;
+type SettingsSelectorState = { device: AppType; settings: any };
+const deviceSelector = (state: SettingsSelectorState) => state.device;
+const settingsSelector = (state: SettingsSelectorState) => state.settings;
 
-shared.settingsSections = createSelector(
+export const settingsSections = createSelector(
 	deviceSelector,
 	settingsSelector,
 	(device, settings) => {
@@ -201,9 +226,11 @@ shared.settingsSections = createSelector(
 	}
 );
 
-shared.settingsToComponents2 = function(comp, device, settings, selectedSectionName = '') {
-	const sectionComps = [];
-	const sections = shared.settingsSections({ device, settings });
+export const settingsToComponents2 = (
+	comp: ConfigScreenComponent, device: AppType, settings: any, selectedSectionName = ''
+) => {
+	const sectionComps: ReactNode[] = [];
+	const sections = settingsSections({ device, settings });
 
 	for (let i = 0; i < sections.length; i++) {
 		const section = sections[i];
@@ -214,5 +241,3 @@ shared.settingsToComponents2 = function(comp, device, settings, selectedSectionN
 
 	return sectionComps;
 };
-
-module.exports = shared;

@@ -12,7 +12,7 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+import * as shared from '@joplin/lib/components/shared/config-shared.js';
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -95,7 +95,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	public sectionByName(name: string) {
-		const sections = shared.settingsSections({ device: 'desktop', settings: this.state.settings });
+		const sections = shared.settingsSections({ device: AppType.Desktop, settings: this.state.settings });
 		for (const section of sections) {
 			if (section.name === name) return section;
 		}
@@ -685,7 +685,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const hasChanges = this.hasChanges();
 
-		const settingComps = shared.settingsToComponents2(this, 'desktop', settings, this.state.selectedSectionName);
+		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
 
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
@@ -694,7 +694,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (screenComp) containerStyle.display = 'none';
 
-		const sections = shared.settingsSections({ device: 'desktop', settings });
+		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
 		const needRestartComp: any = this.state.needRestart ? (
 			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>

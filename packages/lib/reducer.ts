@@ -76,7 +76,7 @@ export interface State {
 	syncStarted: boolean;
 	syncReport: any;
 	searchQuery: string;
-	settings: any;
+	settings: Record<string, any>;
 	sharedData: any;
 	appState: string;
 	biometricsDone: boolean;

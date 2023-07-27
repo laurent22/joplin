@@ -1,12 +1,12 @@
-const React = require('react');
-const { StyleSheet } = require('react-native');
+import * as React from 'react';
+import { StyleSheet } from 'react-native';
 const { themeStyle } = require('./global-style.js');
 
-const rootStyles_ = {};
+const rootStyles_: Record<number, any> = {};
 
-class BaseScreenComponent extends React.Component {
+class BaseScreenComponent<Props, State> extends React.Component<Props, State> {
 
-	rootStyle(themeId) {
+	protected rootStyle(themeId: number) {
 		const theme = themeStyle(themeId);
 		if (rootStyles_[themeId]) return rootStyles_[themeId];
 		rootStyles_[themeId] = StyleSheet.create({
@@ -19,4 +19,5 @@ class BaseScreenComponent extends React.Component {
 	}
 }
 
-module.exports = { BaseScreenComponent };
+export { BaseScreenComponent };
+export default BaseScreenComponent;

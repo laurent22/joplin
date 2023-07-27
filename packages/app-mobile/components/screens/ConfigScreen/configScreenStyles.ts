@@ -1,13 +1,14 @@
 import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
 const { themeStyle } = require('../../global-style.js');
 
-export interface ConfigScreenStyles {
+export interface ConfigScreenStyleSheet {
 	body: ViewStyle;
 
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
 	headerWrapperStyle: ViewStyle;
 
+	headerTextStyle: TextStyle;
 	settingText: TextStyle;
 	linkText: TextStyle;
 	descriptionText: TextStyle;
@@ -23,6 +24,13 @@ export interface ConfigScreenStyles {
 	switchSettingControl: TextStyle;
 
 	settingControl: TextStyle;
+}
+
+export interface ConfigScreenStyles {
+	styleSheet: ConfigScreenStyleSheet;
+
+	keyboardAppearance: 'default'|'light'|'dark';
+	getContainerStyle(hasDescription: boolean): ViewStyle;
 }
 
 const configScreenStyles = (themeId: number): ConfigScreenStyles => {
@@ -54,7 +62,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		borderBottomColor: theme.dividerColor,
 	};
 
-	const styles: ConfigScreenStyles = {
+	const styles: ConfigScreenStyleSheet = {
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
@@ -119,6 +127,8 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			justifyContent: 'space-between',
 		},
 
+		headerTextStyle: theme.headerStyle,
+
 		headerWrapperStyle: {
 			...settingContainerStyle,
 			...theme.headerWrapperStyle,
@@ -131,7 +141,16 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		},
 	};
 
-	return StyleSheet.create(styles);
+	const styleSheet = StyleSheet.create(styles);
+
+	return {
+		styleSheet,
+
+		keyboardAppearance: theme.keyboardAppearance,
+		getContainerStyle: (hasDescription) => {
+			return !hasDescription ? styleSheet.settingContainer : styleSheet.settingContainerNoBottomBorder;
+		},
+	};
 };
 
 export default configScreenStyles;

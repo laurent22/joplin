@@ -260,6 +260,8 @@ class Registry {
 
 }
 
+export type { Registry };
+
 const reg = new Registry();
 
 // eslint-disable-next-line import/prefer-default-export

@@ -90,7 +90,7 @@ export interface SettingItem {
 	isGlobal?: boolean;
 }
 
-interface SettingItems {
+export interface SettingItems {
 	[key: string]: SettingItem;
 }
 
@@ -220,6 +220,8 @@ const userSettingMigration: UserSettingMigration[] = [
 		transformValue: (value: string) => { return [value]; },
 	},
 ];
+
+export type MetadataBySection = { name: string; isScreen?: boolean; metadatas: SettingItem[] }[];
 
 class Setting extends BaseModel {
 
@@ -2487,7 +2489,7 @@ class Setting extends BaseModel {
 		return SettingSectionSource.Default;
 	}
 
-	public static groupMetadatasBySections(metadatas: SettingItem[]) {
+	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
 		const sections = [];
 		const generalSection: any = { name: 'general', metadatas: [] };
 		const nameToSections: any = {};
