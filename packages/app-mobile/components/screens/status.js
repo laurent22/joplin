@@ -6,7 +6,7 @@ const { connect } = require('react-redux');
 const { ScreenHeader } = require('../ScreenHeader');
 const ReportService = require('@joplin/lib/services/ReportService').default;
 const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { themeStyle } = require('../global-style.js');
 
 class StatusScreenComponent extends BaseScreenComponent {

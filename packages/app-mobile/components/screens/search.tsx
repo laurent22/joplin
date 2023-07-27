@@ -8,7 +8,7 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
 const { NoteItem } = require('../note-item.js');
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
 import SearchEngineUtils from '@joplin/lib/services/searchengine/SearchEngineUtils';

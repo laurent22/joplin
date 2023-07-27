@@ -7,7 +7,7 @@ const { ScreenHeader } = require('../ScreenHeader');
 const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('../global-style.js');
 const Logger = require('@joplin/lib/Logger').default;
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { _ } = require('@joplin/lib/locale');
 
 class LogScreenComponent extends BaseScreenComponent {

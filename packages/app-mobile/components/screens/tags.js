@@ -6,7 +6,7 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const { themeStyle } = require('../global-style.js');
 const { ScreenHeader } = require('../ScreenHeader');
 const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 
 class TagsScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {

@@ -13,7 +13,7 @@ import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 
