@@ -1,4 +1,4 @@
-import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp, htmlEscapeLeadingNonbreakingSpace } from './utilities'
+import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
@@ -31,6 +31,12 @@ rules.paragraph = {
     // \u00A0 is a nonbreaking space.
     const leadingNonbreakingSpace = /^\u{00A0}/ug;
     content = content.replace(leadingNonbreakingSpace, '&nbsp;');
+
+    // Paragraphs that are truly empty (not even containing nonbreaking spaces)
+    // take up by default no space. Output nothing.
+    if (content === '') {
+      return '';
+    }
 
     return '\n\n' + content + '\n\n'
   }
