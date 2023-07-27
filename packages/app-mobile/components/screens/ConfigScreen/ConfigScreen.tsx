@@ -252,6 +252,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	public sectionToComponent(key: string, section: any, settings: any) {
 		const settingComps = [];
 
+		const styleSheet = this.styles().styleSheet;
+
 		for (let i = 0; i < section.metadatas.length; i++) {
 			const md = section.metadatas[i];
 
@@ -299,6 +301,118 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							{ description }
 						)
 					}
+				</View>
+			);
+		}
+
+		if (section.name === 'tools') {
+			settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
+			settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
+			settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
+			settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
+		}
+
+		if (section.name === 'export') {
+			settingComps.push(<NoteExportButton key='export_as_jex_button' styles={this.styles()} />);
+			settingComps.push(<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>);
+			settingComps.push(<ExportProfileButton key='export_data' styles={this.styles()}/>);
+		}
+
+		if (section.name === 'featureFlags') {
+			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
+			if (featureFlagKeys.length) {
+				settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
+			}
+		}
+
+		if (section.name === 'moreInfo') {
+			if (Platform.OS === 'android' && Platform.Version >= 23) {
+				// Note: `PermissionsAndroid` doesn't work so we have to ask the user to manually
+				// set these permissions. https://stackoverflow.com/questions/49771084/permission-always-returns-never-ask-again
+
+				settingComps.push(
+					<View key="permission_info" style={styleSheet.settingContainer}>
+						<View key="permission_info_wrapper">
+							<Text key="perm1a" style={styleSheet.settingText}>
+								{_('To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions')}
+							</Text>
+							<Text key="perm2" style={styleSheet.permissionText}>
+								{_('- Storage: to allow attaching files to notes and to enable filesystem synchronisation.')}
+							</Text>
+							<Text key="perm3" style={styleSheet.permissionText}>
+								{_('- Camera: to allow taking a picture and attaching it to a note.')}
+							</Text>
+							<Text key="perm4" style={styleSheet.permissionText}>
+								{_('- Location: to allow attaching geo-location information to a note.')}
+							</Text>
+						</View>
+					</View>
+				);
+			}
+
+			settingComps.push(
+				<View key="donate_link" style={styleSheet.settingContainer}>
+					<TouchableOpacity
+						onPress={() => {
+							void Linking.openURL('https://joplinapp.org/donate/');
+						}}
+					>
+						<Text key="label" style={styleSheet.linkText}>
+							{_('Make a donation')}
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
+
+			settingComps.push(
+				<View key="website_link" style={styleSheet.settingContainer}>
+					<TouchableOpacity
+						onPress={() => {
+							void Linking.openURL('https://joplinapp.org/');
+						}}
+					>
+						<Text key="label" style={styleSheet.linkText}>
+							{_('Joplin website')}
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
+
+			settingComps.push(
+				<View key="privacy_link" style={styleSheet.settingContainer}>
+					<TouchableOpacity
+						onPress={() => {
+							void Linking.openURL('https://joplinapp.org/privacy/');
+						}}
+					>
+						<Text key="label" style={styleSheet.linkText}>
+							{_('Privacy Policy')}
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
+
+			settingComps.push(
+				<View key="version_info_app" style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
+				</View>
+			);
+
+			settingComps.push(
+				<View key="version_info_db" style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{_('Database v%s', reg.db().version())}</Text>
+				</View>
+			);
+
+			settingComps.push(
+				<View key="version_info_fts" style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
+				</View>
+			);
+
+			settingComps.push(
+				<View key="version_info_hermes" style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
 				</View>
 			);
 		}
@@ -385,121 +499,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	public render() {
 		const settings = this.state.settings;
-
-		const styleSheet = this.styles().styleSheet;
-
 		const settingComps = shared.settingsToComponents2(this, AppType.Mobile, settings);
-
-		settingComps.push(this.renderHeader('tools', _('Tools')));
-
-		settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
-		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
-		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
-		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
-
-		settingComps.push(this.renderHeader('export', _('Export')));
-		settingComps.push(<NoteExportButton key='export_as_jex_button' styles={this.styles()} />);
-		settingComps.push(<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>);
-		settingComps.push(<ExportProfileButton key='export_data' styles={this.styles()}/>);
-
-		const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
-		if (featureFlagKeys.length) {
-			settingComps.push(this.renderHeader('featureFlags', _('Feature flags')));
-			settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
-		}
-
-		settingComps.push(this.renderHeader('moreInfo', _('More information')));
-
-		if (Platform.OS === 'android' && Platform.Version >= 23) {
-			// Note: `PermissionsAndroid` doesn't work so we have to ask the user to manually
-			// set these permissions. https://stackoverflow.com/questions/49771084/permission-always-returns-never-ask-again
-
-			settingComps.push(
-				<View key="permission_info" style={styleSheet.settingContainer}>
-					<View key="permission_info_wrapper">
-						<Text key="perm1a" style={styleSheet.settingText}>
-							{_('To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions')}
-						</Text>
-						<Text key="perm2" style={styleSheet.permissionText}>
-							{_('- Storage: to allow attaching files to notes and to enable filesystem synchronisation.')}
-						</Text>
-						<Text key="perm3" style={styleSheet.permissionText}>
-							{_('- Camera: to allow taking a picture and attaching it to a note.')}
-						</Text>
-						<Text key="perm4" style={styleSheet.permissionText}>
-							{_('- Location: to allow attaching geo-location information to a note.')}
-						</Text>
-					</View>
-				</View>
-			);
-		}
-
-
-		settingComps.push(
-			<View key="donate_link" style={styleSheet.settingContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						void Linking.openURL('https://joplinapp.org/donate/');
-					}}
-				>
-					<Text key="label" style={styleSheet.linkText}>
-						{_('Make a donation')}
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="website_link" style={styleSheet.settingContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						void Linking.openURL('https://joplinapp.org/');
-					}}
-				>
-					<Text key="label" style={styleSheet.linkText}>
-						{_('Joplin website')}
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="privacy_link" style={styleSheet.settingContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						void Linking.openURL('https://joplinapp.org/privacy/');
-					}}
-				>
-					<Text key="label" style={styleSheet.linkText}>
-						{_('Privacy Policy')}
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_app" style={styleSheet.settingContainer}>
-				<Text style={styleSheet.settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_db" style={styleSheet.settingContainer}>
-				<Text style={styleSheet.settingText}>{_('Database v%s', reg.db().version())}</Text>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_fts" style={styleSheet.settingContainer}>
-				<Text style={styleSheet.settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_hermes" style={styleSheet.settingContainer}>
-				<Text style={styleSheet.settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
-			</View>
-		);
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>

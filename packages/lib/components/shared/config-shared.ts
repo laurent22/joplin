@@ -193,23 +193,34 @@ export const settingsSections = createSelector(
 
 		const output = Setting.groupMetadatasBySections(metadatas);
 
-		output.push({
-			name: 'encryption',
-			metadatas: [],
-			isScreen: true,
-		});
+		if (device === AppType.Desktop || device === AppType.Cli) {
+			output.push({
+				name: 'encryption',
+				metadatas: [],
+				isScreen: true,
+			});
 
-		output.push({
-			name: 'server',
-			metadatas: [],
-			isScreen: true,
-		});
+			output.push({
+				name: 'server',
+				metadatas: [],
+				isScreen: true,
+			});
 
-		output.push({
-			name: 'keymap',
-			metadatas: [],
-			isScreen: true,
-		});
+			output.push({
+				name: 'keymap',
+				metadatas: [],
+				isScreen: true,
+			});
+		} else {
+			output.push(...([
+				'tools', 'export', 'featureFlags', 'moreInfo',
+			].map(name => {
+				return {
+					name,
+					metadatas: [],
+				};
+			})));
+		}
 
 		// Ideallly we would also check if the user was able to synchronize
 		// but we don't have a way of doing that besides making a request to Joplin Cloud
