@@ -32,12 +32,14 @@ const SectionSelector: FunctionComponent<Props> = props => {
 			<Button
 				key={section.name}
 				onPress={() => props.openSection(section.name)}
-				contentStyle={{ flexDirection: 'row-reverse' }}
+				style={selected ? props.styles.styleSheet.selectedHeaderWrapperStyle : props.styles.styleSheet.headerWrapperStyle}
 				buttonColor={selected ? props.styles.selectedSectionButtonColor : undefined}
 				mode={selected ? 'elevated' : 'text'}
-				icon='chevron-right'
+				icon={'cog'}
 			>
-				<Text numberOfLines={0}>{Setting.sectionNameToLabel(section.name)}</Text>
+				<Text style={props.styles.styleSheet.headerTextStyle}>
+					{Setting.sectionNameToLabel(section.name)}
+				</Text>
 			</Button>
 		);
 	}

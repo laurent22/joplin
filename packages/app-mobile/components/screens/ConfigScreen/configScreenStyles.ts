@@ -7,6 +7,7 @@ export interface ConfigScreenStyleSheet {
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
 	headerWrapperStyle: ViewStyle;
+	selectedHeaderWrapperStyle: ViewStyle;
 
 	headerTextStyle: TextStyle;
 	settingText: TextStyle;
@@ -146,6 +147,11 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		headerWrapperStyle: {
 			...settingContainerStyle,
 			...theme.headerWrapperStyle,
+		},
+		selectedHeaderWrapperStyle: {
+			...settingContainerStyle,
+			...theme.headerWrapperStyle,
+			backgroundColor: theme.backgroundColorActive3,
 		},
 
 		switchSettingControl: {

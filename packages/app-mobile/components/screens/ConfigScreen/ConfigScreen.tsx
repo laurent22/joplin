@@ -572,6 +572,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (windowWidth > sectionSelectorDesiredWidth * 2 && this.state.selectedSectionName) {
 			mainComponent = (
 				<View style={{
+					flex: 1,
 					flexDirection: 'row',
 				}}>
 					{sectionSelector}
