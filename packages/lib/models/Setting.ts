@@ -2539,7 +2539,6 @@ class Setting extends BaseModel {
 		if (name === 'joplinCloud') return _('Joplin Cloud');
 		if (name === 'tools') return _('Tools');
 		if (name === 'export') return _('Export');
-		if (name === 'featureFlags') return _('Feature flags');
 		if (name === 'moreInfo') return _('More information');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;

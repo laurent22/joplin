@@ -214,7 +214,7 @@ export const settingsSections = createSelector(
 			});
 		} else {
 			output.push(...([
-				'tools', 'export', 'featureFlags', 'moreInfo',
+				'tools', 'export', 'moreInfo',
 			].map(name => {
 				return {
 					name,

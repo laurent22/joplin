@@ -1,7 +1,7 @@
 const React = require('react');
 
 import { connect } from 'react-redux';
-import { PureComponent } from 'react';
+import { PureComponent, ReactNode } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../services/back-button.js');
@@ -56,6 +56,7 @@ interface ScreenHeaderProps {
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
 	menuOptions: MenuOptionType[];
+	titleComponent?: ReactNode;
 	title?: string|null;
 	folders: FolderEntity[];
 	folderPickerOptions?: {
@@ -187,16 +188,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				backgroundColor: theme.backgroundColor,
 				fontSize: theme.fontSize,
 			},
-			titleText: {
-				flex: 1,
-				textAlignVertical: 'center',
-				marginLeft: 10,
-				color: theme.colorBright2,
-				fontWeight: 'bold',
-				fontSize: theme.fontSize,
-				paddingTop: 15,
-				paddingBottom: 15,
-			},
+			titleText: theme.titlebarText,
 			warningBox: {
 				backgroundColor: '#ff9900',
 				flexDirection: 'row',
@@ -553,6 +545,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						folders={this.props.folders}
 					/>
 				);
+			} else if (this.props.titleComponent) {
+				return this.props.titleComponent;
 			} else {
 				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
 				return <Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>;

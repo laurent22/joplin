@@ -28,6 +28,8 @@ import SectionHeader from './SectionHeader';
 import ExportProfileButton from './NoteExportSection/ExportProfileButton';
 import SettingComponent from './SettingComponent';
 import ExportDebugReportButton from './NoteExportSection/ExportDebugReportButton';
+import SectionSelector from './SectionSelector';
+import { Button } from 'react-native-paper';
 
 interface ConfigScreenState {
 	settings: any;
@@ -37,6 +39,7 @@ interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
 	showAdvancedSettings: boolean;
 
+	selectedSectionName: string|null;
 }
 
 interface ConfigScreenProps {
@@ -61,6 +64,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		this.state = {
 			...shared.defaultScreenState,
+			selectedSectionName: null,
 			fixingSearchIndex: false,
 		};
 
@@ -127,6 +131,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('Log');
 	};
 
+	private switchSectionPress_ = (section: string) => {
+		this.setState({ selectedSectionName: section });
+	};
+
+	private showOverviewSection_ = () => {
+		this.setState({ selectedSectionName: null });
+	};
 
 	public async checkFilesystemPermission() {
 		if (Platform.OS !== 'android') {
@@ -177,6 +188,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			await BackButtonService.back();
 		};
 
+		if (this.state.selectedSectionName) {
+			this.showOverviewSection_();
+			return true;
+		}
+
 		if (this.state.changedSettingKeys.length > 0) {
 			const dialogTitle: string|null = null;
 			Alert.alert(
@@ -203,6 +219,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	public componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
+			this.setState({ selectedSectionName: this.props.navigation.state.sectionName });
 			setTimeout(() => {
 				this.scrollViewRef_.current.scrollTo({
 					x: 0,
@@ -219,17 +236,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		BackButtonService.removeHandler(this.handleBackButtonPress);
 	}
 
-	public renderHeader(key: string, title: string) {
-		return (
-			<SectionHeader
-				key={key}
-				styles={this.styles().styleSheet}
-				title={title}
-				onLayout={(event: any) => this.onHeaderLayout(key, event)}
-			/>
-		);
-	}
-
 	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		return (
 			<SettingsButton
@@ -243,7 +249,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	public sectionToComponent(key: string, section: any, settings: any) {
+	public sectionToComponent(key: string, section: any, settings: any, isSelected: boolean) {
 		const settingComps = [];
 
 		const styleSheet = this.styles().styleSheet;
@@ -310,13 +316,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			settingComps.push(<NoteExportButton key='export_as_jex_button' styles={this.styles()} />);
 			settingComps.push(<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>);
 			settingComps.push(<ExportProfileButton key='export_data' styles={this.styles()}/>);
-		}
-
-		if (section.name === 'featureFlags') {
-			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
-			if (featureFlagKeys.length) {
-				settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
-			}
 		}
 
 		if (section.name === 'moreInfo') {
@@ -409,13 +408,30 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					<Text style={styleSheet.settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
 				</View>
 			);
+
+			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
+			if (featureFlagKeys.length) {
+				settingComps.push(<SectionHeader
+					key='featureFlags'
+					styles={this.styles().styleSheet}
+					title={_('Feature flags')}
+				/>);
+
+				settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
+			}
 		}
 
 		if (!settingComps.length) return null;
+		if (!isSelected) return null;
 
 		return (
 			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
-				{this.renderHeader(section.name, Setting.sectionNameToLabel(section.name))}
+				<SectionHeader
+					key={section.name}
+					styles={this.styles().styleSheet}
+					title={Setting.sectionNameToLabel(section.name)}
+					onLayout={(event: any) => this.onHeaderLayout(key, event)}
+				/>
 				<View>{settingComps}</View>
 			</View>
 		);
@@ -493,12 +509,65 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	public render() {
 		const settings = this.state.settings;
-		const settingComps = shared.settingsToComponents2(this, AppType.Mobile, settings);
+
+		const sectionSelector = (
+			<SectionSelector
+				styles={this.styles()}
+				settings={settings}
+				openSection={this.switchSectionPress_}
+			/>
+		);
+
+		const styleSheet = this.styles().styleSheet;
+		const titleParts = [_('Configuration')];
+		if (this.state.selectedSectionName) {
+			titleParts.push(Setting.sectionNameToLabel(this.state.selectedSectionName));
+		}
+
+		let titleComponent = (
+			<Text
+				style={styleSheet.titlebarText}
+				ellipsizeMode='head'
+			>
+				{titleParts.join(' > ')}
+			</Text>
+		);
+		let settingComps: ReactNode[];
+		if (this.state.selectedSectionName) {
+			settingComps = shared.settingsToComponents2(
+				this, AppType.Mobile, settings, this.state.selectedSectionName
+
+			// TODO: Remove this cast. Currently necessary because of different versions
+			// of React in lib/ and app-mobile/
+			) as ReactNode[];
+
+			titleComponent = (
+				<View style={{ flexDirection: 'row', flex: 1, flexShrink: 1 }}>
+					<Button
+						style={styleSheet.titlebarHeaderPart}
+						onPress={this.showOverviewSection_}
+					>
+						{titleComponent}
+					</Button>
+				</View>
+			);
+		} else {
+			settingComps = [
+				sectionSelector,
+			];
+		}
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
-				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />
-				<ScrollView ref={this.scrollViewRef_}>{settingComps as ReactNode}</ScrollView>
+				<ScreenHeader
+					titleComponent={titleComponent}
+					showSaveButton={true}
+					showSearchButton={false}
+					showSideMenuButton={false}
+					saveButtonDisabled={!this.state.changedSettingKeys.length}
+					onSaveButtonPress={this.saveButton_press}
+				/>
+				<ScrollView ref={this.scrollViewRef_}>{settingComps}</ScrollView>
 			</View>
 		);
 	}

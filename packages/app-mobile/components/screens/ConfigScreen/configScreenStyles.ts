@@ -19,6 +19,9 @@ export interface ConfigScreenStyleSheet {
 	permissionText: TextStyle;
 	textInput: TextStyle;
 
+	titlebarText: TextStyle;
+	titlebarHeaderPart: ViewStyle;
+
 	switchSettingText: TextStyle;
 	switchSettingContainer: ViewStyle;
 	switchSettingControl: TextStyle;
@@ -91,6 +94,16 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			color: theme.color,
 			backgroundColor: theme.warningBackgroundColor,
 			fontSize: theme.fontSizeSmaller,
+		},
+		titlebarText: theme.titlebarText,
+
+		titlebarHeaderPart: {
+			...theme.titlebarText,
+			flex: 0,
+
+			// TODO(personalizedrefrigerator): Why is division by two needed for consistency?
+			paddingTop: (theme.titlebarText.paddingTop ?? 0) / 2,
+			paddingBottom: (theme.titlebarText.paddingBottom ?? 0) / 2,
 		},
 
 		sliderUnits: {

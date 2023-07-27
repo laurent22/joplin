@@ -67,6 +67,17 @@ function addExtraStyles(style) {
 		backgroundColor: style.headerBackgroundColor,
 	};
 
+	style.titlebarText = {
+		flex: 1,
+		textAlignVertical: 'center',
+		marginLeft: 10,
+		color: style.colorBright2,
+		fontWeight: 'bold',
+		fontSize: style.fontSize,
+		paddingTop: 15,
+		paddingBottom: 15,
+	};
+
 	style.keyboardAppearance = style.appearance;
 
 	style.color5 = style.backgroundColor4;
