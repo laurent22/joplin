@@ -16,11 +16,11 @@ const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
 	'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
 	'@joplin/tools': path.resolve(__dirname, '../tools/'),
+	'@joplin/utils': path.resolve(__dirname, '../utils/'),
 	'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
 	'@joplin/fork-uslug': path.resolve(__dirname, '../fork-uslug/'),
 	'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
 	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
-
 	'@joplin/fork-sax': path.resolve(__dirname, '../fork-sax/'),
 };
 
