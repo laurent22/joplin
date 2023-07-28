@@ -221,7 +221,8 @@ const userSettingMigration: UserSettingMigration[] = [
 	},
 ];
 
-export type MetadataBySection = { name: string; isScreen?: boolean; metadatas: SettingItem[] }[];
+export type SettingMetadataSection = { name: string; isScreen?: boolean; metadatas: SettingItem[] };
+export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
 

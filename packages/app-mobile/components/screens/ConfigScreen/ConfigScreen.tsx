@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import * as React from 'react';
 import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
@@ -534,9 +533,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			</Text>
 		);
 
-		let settingComps: ReactNode[];
+		let currentSection: ReactNode;
 		if (this.state.selectedSectionName) {
-			settingComps = shared.settingsToComponents2(
+			const settingComps = shared.settingsToComponents2(
 				this, AppType.Mobile, settings, this.state.selectedSectionName
 
 			// TODO: Remove this cast. Currently necessary because of different versions
@@ -553,20 +552,18 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					</Button>
 				</View>
 			);
-		} else {
-			settingComps = [
-				sectionSelector,
-			];
-		}
 
-		const currentSection = (
-			<ScrollView
-				ref={this.scrollViewRef_}
-				style={{ flexGrow: 1 }}
-			>
-				{settingComps}
-			</ScrollView>
-		);
+			currentSection = (
+				<ScrollView
+					ref={this.scrollViewRef_}
+					style={{ flexGrow: 1 }}
+				>
+					{settingComps}
+				</ScrollView>
+			);
+		} else {
+			currentSection = sectionSelector;
+		}
 
 		let mainComponent;
 		if (windowWidth > sectionSelectorDesiredWidth * 2 && this.state.selectedSectionName) {
