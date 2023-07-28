@@ -186,36 +186,37 @@ function shimInit(options = null) {
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error(`Image is invalid or does not exist: ${filePath}`);
-
 			const size = image.getSize();
 
-			let mustResize = size.width > maxDim || size.height > maxDim;
+			const canResize = size.width > maxDim || size.height > maxDim;
 
-			if (mustResize && resizeLargeImages === 'ask') {
-				const answer = shim.showMessageBox(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim), {
+			let userAnswer;
+			const YES = 0, NO = 1, CANCEL = 2;
+			if (canResize && resizeLargeImages === 'alwaysAsk') {
+				userAnswer = shim.showMessageBox(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim), {
 					buttons: [_('Yes'), _('No'), _('Cancel')],
 				});
 
-				if (answer === 2) return false;
-
-				mustResize = answer === 0;
+				if (userAnswer === CANCEL) return false;
 			}
 
-			if (!mustResize) {
+			if (!canResize || userAnswer === NO || resizeLargeImages === 'neverResize') {
 				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
 
-			const options = {};
-			if (size.width > size.height) {
-				options.width = maxDim;
-			} else {
-				options.height = maxDim;
+			if (userAnswer === YES || resizeLargeImages === 'alwaysResize') {
+				const options = {};
+				if (size.width > size.height) {
+					options.width = maxDim;
+				} else {
+					options.height = maxDim;
+				}
+
+				image = image.resize(options);
+
+				await shim.writeImageToFile(image, mime, targetPath);
 			}
-
-			image = image.resize(options);
-
-			await shim.writeImageToFile(image, mime, targetPath);
 		} else {
 			// For the CLI tool
 			const image = sharp(filePath);
@@ -250,9 +251,12 @@ function shimInit(options = null) {
 	// destinationResourceId option. This method is indirectly tested in
 	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
-		options = { resizeLargeImages: 'always', // 'always', 'ask' or 'never'
+		options = {
+			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
-			destinationResourceId: '', ...options };
+			destinationResourceId: '',
+			...options,
+		};
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
