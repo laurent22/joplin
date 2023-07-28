@@ -160,8 +160,7 @@ export async function processPastedHtml(html: string) {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 					}
-				} else if (imageSrc.startsWith('data:')) {
-					// Data URLs: Pass through
+				} else if (imageSrc.startsWith('data:')) { // Data URIs
 					mappedResources[imageSrc] = imageSrc;
 				} else {
 					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
