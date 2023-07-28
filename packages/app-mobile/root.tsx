@@ -85,6 +85,7 @@ const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -120,6 +121,7 @@ import { ReactNode } from 'react';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
+import PluginRunner from './services/plugins/PluginRunner';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -438,6 +440,56 @@ const initializeTempDir = async () => {
 	return tempDir;
 };
 
+const simplePlugin1 = require('./plugins/org.joplinapp.plugins.Simple/index.js');
+const simplePluginManifest1 = `{
+    "id": "org.joplinapp.plugins.Simple",
+    "manifest_version": 1,
+	"app_min_version": "1.4",
+    "name": "Joplin Simple Plugin",
+    "version": "1.0.0",
+    "description": "To test loading and running a plugin",
+    "homepage_url": "https://joplinapp.org",
+    "permissions": [
+        "model"
+    ]
+}`;
+
+const simplePlugin2 = require('./plugins/org.joplinapp.plugins.Simple2/index.js');
+const simplePluginManifest2 = `{
+    "id": "org.joplinapp.plugins.Simple2",
+    "manifest_version": 1,
+	"app_min_version": "1.4",
+    "name": "Joplin Simple Plugin",
+    "version": "1.0.0",
+    "description": "To test loading and running a plugin",
+    "homepage_url": "https://joplinapp.org",
+    "permissions": [
+        "model"
+    ]
+}`;
+
+const initPluginService = async () => {
+	const service = PluginService.instance();
+	const runner = new PluginRunner();
+	service.initialize(
+		'2.12.1',
+		{
+			joplin: {},
+		},
+		runner,
+		{
+			dispatch: () => {},
+			getState: () => {},
+		}
+	);
+
+	const plugin1 = await PluginService.instance().loadPluginFromModule(simplePlugin1, simplePluginManifest1);
+	await PluginService.instance().runPlugin(plugin1);
+
+	const plugin2 = await PluginService.instance().loadPluginFromModule(simplePlugin2, simplePluginManifest2);
+	await PluginService.instance().runPlugin(plugin2);
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -704,6 +756,8 @@ async function initialize(dispatch: Function) {
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
+
+	await initPluginService();
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native

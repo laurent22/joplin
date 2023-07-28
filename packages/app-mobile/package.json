@@ -35,6 +35,7 @@
     "crypto-browserify": "3.12.0",
     "deprecated-react-native-prop-types": "4.0.0",
     "events": "3.3.0",
+    "events-browserify": "0.0.1",
     "jsc-android": "241213.1.0",
     "lodash": "4.17.21",
     "md5": "2.3.0",

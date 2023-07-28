@@ -1,0 +1,12 @@
+{
+    "id": "org.joplinapp.plugins.Simple2",
+    "manifest_version": 1,
+	"app_min_version": "1.4",
+    "name": "Joplin Simple Plugin",
+    "version": "1.0.0",
+    "description": "To test loading and running a plugin",
+    "homepage_url": "https://joplinapp.org",
+    "permissions": [
+        "model"
+    ]
+}

@@ -51,18 +51,18 @@ async function requestNoteToNote(requestNote: any) {
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
 			const style = await buildNoteStyleSheet(requestNote.stylesheets);
-			const minify = require('html-minifier').minify;
+			// const minify = require('html-minifier').minify;
 
-			const minifyOptions = {
-				// Remove all spaces and, especially, newlines from tag attributes, as that would
-				// break the rendering.
-				customAttrCollapse: /.*/,
-				// Need to remove all whitespaces because whitespace at a beginning of a line
-				// means a code block in Markdown.
-				collapseWhitespace: true,
-				minifyCSS: true,
-				maxLineLength: 300,
-			};
+			// const minifyOptions = {
+			// 	// Remove all spaces and, especially, newlines from tag attributes, as that would
+			// 	// break the rendering.
+			// 	customAttrCollapse: /.*/,
+			// 	// Need to remove all whitespaces because whitespace at a beginning of a line
+			// 	// means a code block in Markdown.
+			// 	collapseWhitespace: true,
+			// 	minifyCSS: true,
+			// 	maxLineLength: 300,
+			// };
 
 			const uglifycss = require('uglifycss');
 			const styleString = uglifycss.processString(style.join('\n'), {
@@ -74,7 +74,7 @@ async function requestNoteToNote(requestNote: any) {
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
 			try {
-				minifiedHtml = minify(requestNote.body_html, minifyOptions);
+				minifiedHtml = requestNote.body_html; // minify(requestNote.body_html, minifyOptions);
 			} catch (error) {
 				console.warn('Could not minify HTML - using non-minified HTML instead', error);
 				minifiedHtml = requestNote.body_html;

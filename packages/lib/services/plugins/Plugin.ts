@@ -38,14 +38,16 @@ export default class Plugin {
 	private contentScriptMessageListeners_: Record<string, Function> = {};
 	private dataDir_: string;
 	private dataDirCreated_ = false;
+	private module_: any|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
-		this.baseDir_ = shim.fsDriver().resolve(baseDir);
+	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string, module: any|null = null) {
+		this.baseDir_ = baseDir ? shim.fsDriver().resolve(baseDir) : '';
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
 		this.dispatch_ = dispatch;
 		this.dataDir_ = dataDir;
+		this.module_ = module;
 		this.eventEmitter_ = new EventEmitter();
 	}
 
@@ -71,6 +73,10 @@ export default class Plugin {
 
 	public get baseDir(): string {
 		return this.baseDir_;
+	}
+
+	public get module(): any|null {
+		return this.module_;
 	}
 
 	public async dataDir(): Promise<string> {

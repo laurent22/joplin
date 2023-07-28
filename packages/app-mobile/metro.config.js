@@ -22,6 +22,8 @@ const localPackages = {
 	'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
 	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
 	'@joplin/fork-sax': path.resolve(__dirname, '../fork-sax/'),
+	'@joplin/turndown': path.resolve(__dirname, '../turndown/'),
+	'@joplin/turndown-plugin-gfm': path.resolve(__dirname, '../turndown-plugin-gfm/'),
 };
 
 const remappedPackages = {
@@ -74,6 +76,30 @@ module.exports = {
 				},
 			}
 		),
+
+		// Documentation at https://facebook.github.io/metro/docs/configuration/
+		resolveRequest: (context, moduleName, platform) => {
+			// console.info('Module: ' + moduleName + ' / ' + context.originModulePath);
+
+			// This can be used to allow importing a module that requires `fs`
+			// somewhere. For example, the `css` package which is used to parse
+			// CSS strings has a `loadFile()` function that we don't need, but
+			// that makes it import the `fs` package.
+			//
+			// So by having this here, we can use those packages as long as we
+			// don't use the specific methods that require `fs`. It's something
+			// to keep in mind if we get weird-related fs errors - it may be
+			// because the package is trying to access the mocked `fs` package.
+			if (moduleName === 'fs') {
+				return {
+					filePath: path.resolve(__dirname, 'mock-fs.js'),
+					type: 'sourceFile',
+				};
+			}
+
+			// Default resolver
+			return context.resolveRequest(context, moduleName, platform);
+		},
 	},
 	projectRoot: path.resolve(__dirname),
 	watchFolders: watchedFolders,

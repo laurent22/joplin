@@ -1,7 +1,7 @@
 /* eslint-disable multiline-comment-style */
 
 import Plugin from '../Plugin';
-import * as fs from 'fs-extra';
+// import * as fs from 'fs-extra';
 
 export interface Implementation {
 	injectCustomStyles(elementId: string, cssFilePath: string): Promise<void>;
@@ -10,13 +10,13 @@ export interface Implementation {
 export default class JoplinWindow {
 
 	private plugin_: Plugin;
-	private store_: any;
+	// private store_: any;
 	private implementation_: Implementation;
 
-	public constructor(implementation: Implementation, plugin: Plugin, store: any) {
+	public constructor(implementation: Implementation, plugin: Plugin, _store: any) {
 		this.implementation_ = implementation;
 		this.plugin_ = plugin;
-		this.store_ = store;
+		// this.store_ = store;
 	}
 
 	/**
@@ -35,13 +35,13 @@ export default class JoplinWindow {
 	 * rendered Markdown" setting. See the [Load CSS Demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/load_css)
 	 * for an example.
 	 */
-	public async loadNoteCssFile(filePath: string) {
-		const cssString = await fs.readFile(filePath, 'utf8');
+	public async loadNoteCssFile(_filePath: string) {
+		// const cssString = await fs.readFile(filePath, 'utf8');
 
-		this.store_.dispatch({
-			type: 'CUSTOM_CSS_APPEND',
-			css: cssString,
-		});
+		// this.store_.dispatch({
+		// 	type: 'CUSTOM_CSS_APPEND',
+		// 	css: cssString,
+		// });
 	}
 
 }

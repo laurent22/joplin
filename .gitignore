@@ -428,6 +428,7 @@ packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
+packages/app-mobile/services/plugins/PluginRunner.js
 packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
 packages/app-mobile/services/voiceTyping/vosk.ios.js

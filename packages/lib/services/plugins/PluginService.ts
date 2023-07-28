@@ -28,6 +28,10 @@ export interface Plugins {
 	[key: string]: Plugin;
 }
 
+export interface PluginModule {
+
+}
+
 export interface SettingAndValue {
 	[settingName: string]: string;
 }
@@ -283,7 +287,17 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	private async loadPlugin(baseDir: string, manifestText: string, scriptText: string, pluginIdIfNotSpecified: string): Promise<Plugin> {
+	public async loadPluginFromModule(module: any, manifestText: string): Promise<Plugin> {
+		return this.loadPlugin(
+			'',
+			manifestText,
+			'',
+			'',
+			module
+		);
+	}
+
+	private async loadPlugin(baseDir: string, manifestText: string, scriptText: string, pluginIdIfNotSpecified: string, module: any|null = null): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const manifestObj = JSON.parse(manifestText);
@@ -318,7 +332,7 @@ export default class PluginService extends BaseService {
 
 		const dataDir = `${Setting.value('pluginDataDir')}/${manifest.id}`;
 
-		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
+		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir, module);
 
 		for (const notice of deprecationNotices) {
 			plugin.deprecationNotice(notice.goneInVersion, notice.message, notice.isError);

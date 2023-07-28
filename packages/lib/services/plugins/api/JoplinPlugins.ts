@@ -71,6 +71,10 @@ export default class JoplinPlugins {
 		return this.plugin.dataDir();
 	}
 
+	public async id(): Promise<string> {
+		return this.plugin.id;
+	}
+
 	/**
 	 * Gets the plugin installation directory. This can be used to access any
 	 * asset that was packaged with the plugin. This directory should be

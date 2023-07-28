@@ -257,7 +257,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public resolve(path: string) {
-		throw new Error(`Not implemented: resolve(): ${path}`);
+		return resolve(path);
 	}
 
 	public resolveRelativePathWithinDir(_baseDir: string, relativePath: string) {
