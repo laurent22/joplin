@@ -7,7 +7,7 @@ import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseMode
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('ShareModel');
 

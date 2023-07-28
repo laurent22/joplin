@@ -238,6 +238,7 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
+packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.js
 packages/app-desktop/gui/NoteEditor/utils/types.js
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js
@@ -489,7 +490,6 @@ packages/lib/InMemoryCache.js
 packages/lib/JoplinDatabase.js
 packages/lib/JoplinError.js
 packages/lib/JoplinServerApi.js
-packages/lib/Logger.js
 packages/lib/ObjectUtils.js
 packages/lib/PoorManIntervals.js
 packages/lib/RotatingLogs.test.js

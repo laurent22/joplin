@@ -2,7 +2,7 @@
 
 import SpellCheckerServiceDriverBase from '@joplin/lib/services/spellChecker/SpellCheckerServiceDriverBase';
 import bridge from '../bridge';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { languageCodeOnly, localesFromLanguageCode } from '@joplin/lib/locale';
 
 const logger = Logger.create('SpellCheckerServiceDriverNative');

@@ -5,7 +5,6 @@
 - New: Add support for Joplin Cloud email to note functionality ([#8460](https://github.com/laurent22/joplin/issues/8460) by [@pedr](https://github.com/pedr))
 - New: Enable share permission handling for Joplin Cloud ([c88b6b6](https://github.com/laurent22/joplin/commit/c88b6b6))
 - Improved: Rich text editor: Disable spellcheck in inline code blocks ([#8532](https://github.com/laurent22/joplin/issues/8532) by Henry Heino)
-- Improved: Sanitize rendered output in safe mode ([#8507](https://github.com/laurent22/joplin/issues/8507) by Henry Heino)
 - Improved: Updated packages dayjs (v1.11.9), jsdom (v22.1.0), react-redux (v8.1.0), sass (v1.63.6), ts-loader (v9.4.4)
 - Improved: WebDAV: Show a more descriptive error message when the password is empty ([#8477](https://github.com/laurent22/joplin/issues/8477)) ([#8466](https://github.com/laurent22/joplin/issues/8466) by Henry Heino)
 - Fixed: Add "insert*before" buttons for tables in the rich text editor ([#8393](https://github.com/laurent22/joplin/issues/8393)) ([#8382](https://github.com/laurent22/joplin/issues/8382) by [@Marph](https://github.com/Marph))
@@ -14,6 +13,7 @@
 - Fixed: Merge changes from upstream turndown project ([#8468](https://github.com/laurent22/joplin/issues/8468)) ([#8448](https://github.com/laurent22/joplin/issues/8448) by Henry Heino)
 - Fixed: Rich text editor: Use fewer `&nbsp;`s in markdown while still preserving initial paragraph indentation ([#8529](https://github.com/laurent22/joplin/issues/8529)) ([#8530](https://github.com/laurent22/joplin/issues/8530) by Henry Heino)
 - Fixed: Support plugin toolbar icons in the Rich Text editor toolbar ([#8519](https://github.com/laurent22/joplin/issues/8519)) ([#8504](https://github.com/laurent22/joplin/issues/8504) by Henry Heino)
+- Security: Fix XSS: Sanitize rendered output in safe mode ([#8507](https://github.com/laurent22/joplin/issues/8507) by Henry Heino)
 - Security: Close root electron window before unload: Prevent top-level redirection ([#8478](https://github.com/laurent22/joplin/issues/8478) by Henry Heino)
 
 ## [v2.12.7](https://github.com/laurent22/joplin/releases/tag/v2.12.7) (Pre-release) - 2023-07-13T12:55:31Z

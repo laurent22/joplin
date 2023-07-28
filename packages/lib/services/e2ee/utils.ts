@@ -1,4 +1,4 @@
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';

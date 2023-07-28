@@ -1,5 +1,5 @@
 import { useState, useCallback, MutableRefObject, useEffect } from 'react';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { SearchMarkers } from './useSearchMarkers';
 const CommandService = require('@joplin/lib/services/CommandService').default;
 

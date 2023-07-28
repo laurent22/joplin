@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('useEditorSearch');
 

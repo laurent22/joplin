@@ -3,7 +3,7 @@ import ViewController from './ViewController';
 import shim from '../../shim';
 import { ViewHandle } from './utils/createViewHandle';
 import { ContentScriptType } from './api/types';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 const EventEmitter = require('events');
 
 const logger = Logger.create('Plugin');

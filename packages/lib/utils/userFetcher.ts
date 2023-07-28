@@ -2,7 +2,7 @@ import SyncTargetRegistry from '../SyncTargetRegistry';
 import eventManager from '../eventManager';
 import Setting from '../models/Setting';
 import { reg } from '../registry';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('userFetcher');
 

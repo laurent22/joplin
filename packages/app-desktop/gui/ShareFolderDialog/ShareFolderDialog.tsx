@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
 import StyledInput from '../style/StyledInput';
 import Button, { ButtonSize } from '../Button/Button';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../style/StyledMessage';
 import { SharePermissions, ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
 import { State } from '@joplin/lib/reducer';

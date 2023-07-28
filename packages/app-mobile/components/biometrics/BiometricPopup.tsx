@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { View, Dimensions, Alert, Button } from 'react-native';
 import { SensorInfo } from './sensorInfo';
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import biometricAuthenticate from './biometricAuthenticate';
 
 const logger = Logger.create('BiometricPopup');

@@ -1,5 +1,5 @@
 import { PositionalOptions, Options } from 'yargs';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import BaseCommand, { RunContext } from './BaseCommand';
 import parseStorageConnectionString from '../models/items/storage/parseStorageConnectionString';
 import storageConnectionCheck from '../utils/storageConnectionCheck';

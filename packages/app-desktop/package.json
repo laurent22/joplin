@@ -138,6 +138,7 @@
     "@joeattardi/emoji-button": "4.6.4",
     "@joplin/lib": "~2.12",
     "@joplin/renderer": "~2.12",
+    "@joplin/utils": "~2.12",
     "async-mutex": "0.4.0",
     "codemirror": "5.65.9",
     "color": "3.2.1",

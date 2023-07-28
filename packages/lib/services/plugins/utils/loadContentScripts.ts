@@ -2,7 +2,7 @@ import { PluginStates } from '../reducer';
 import { ContentScriptType, ContentScriptContext, PostMessageHandler } from '../api/types';
 import { dirname } from '@joplin/renderer/pathUtils';
 import shim from '../../../shim';
-import Logger from '../../../Logger';
+import Logger from '@joplin/utils/Logger';
 import PluginService from '../PluginService';
 
 const logger = Logger.create('loadContentScripts');

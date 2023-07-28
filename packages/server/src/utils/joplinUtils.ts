@@ -23,7 +23,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import config from '../config';
 import { TreeItem } from '../models/ItemResourceModel';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');

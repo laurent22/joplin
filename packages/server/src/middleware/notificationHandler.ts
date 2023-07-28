@@ -3,7 +3,7 @@ import { isApiRequest } from '../utils/requestUtils';
 import { NotificationLevel } from '../services/database/types';
 import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { NotificationKey } from '../models/NotificationModel';
 import { helpUrl, profileUrl } from '../utils/urlUtils';
 import { userFlagToString } from '../models/UserFlagModel';

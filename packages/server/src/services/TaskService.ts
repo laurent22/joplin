@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { Models } from '../models/factory';
 import { Config, Env } from '../utils/types';
 import BaseService from './BaseService';

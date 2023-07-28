@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
@@ -15,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1428,9 +1430,8 @@ msgid "Downloading"
 msgstr "Загрузка"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Загрузка ресурсов..."
+msgstr "Загрузка %s языковые файлы.."
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -2027,9 +2028,8 @@ msgid "Help"
 msgstr "Помощь"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:759
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS включен: %d"
+msgstr "Hermes включен: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
@@ -3670,9 +3670,8 @@ msgid "Select file..."
 msgstr "Выбрать файл..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Удалить блокнот"
+msgstr "Выбрать родительский блокнот"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4968,7 +4967,7 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1705
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Языковые файлы голосового набора (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:994
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
@@ -5027,9 +5026,8 @@ msgstr ""
 "Например, для создания блокнота введите `mb`, для создания заметки - `mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Добро пожаловать"
+msgstr "Добро пожаловать!"
 
 #: packages/lib/models/Setting.ts:1105
 msgid "When creating a new note:"

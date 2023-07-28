@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { isUniqueConstraintError } from '../db';
 import { User, UserFlag, UserFlagType, userFlagTypeToLabel, Uuid } from '../services/database/types';
 import { formatDateTime } from '../utils/time';

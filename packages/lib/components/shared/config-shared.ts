@@ -3,7 +3,7 @@ import SyncTargetRegistry from '../../SyncTargetRegistry';
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
 import { createSelector } from 'reselect';
-const Logger = require('../../Logger').default;
+import Logger from '@joplin/utils/Logger';
 
 import { ReactNode } from 'react';
 import { type Registry } from '../../registry';

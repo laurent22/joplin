@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import Logger from '../../../Logger';
+import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../../models/BaseItem';
 import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
