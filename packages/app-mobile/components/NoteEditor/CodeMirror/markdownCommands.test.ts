@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { EditorSelection } from '@codemirror/state';
 import {
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
