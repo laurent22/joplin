@@ -246,6 +246,10 @@ const NoteListComponent = (props: Props) => {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
+		// While setting
+		//   event.dataTransfer.effectAllowed = 'move';
+		// causes the drag cursor to have a "move", rather than an "add", icon,
+		// this breaks note drag and drop into the markdown editor.
 		return true;
 	}, [props.parentFolderIsReadOnly, props.selectedNoteIds]);
 
