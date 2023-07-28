@@ -1,9 +1,4 @@
 import * as React from 'react';
-import { setImmediate } from 'timers';
-
-// Required by some libraries (setImmediate is not supported in most browsers,
-// so is removed by jsdom).
-window.setImmediate = setImmediate;
 
 import { _ } from '@joplin/lib/locale';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
