@@ -1,5 +1,5 @@
 
-const { default: Logger, TargetType } = require('@joplin/lib/Logger');
+const { default: Logger, TargetType } = require('@joplin/utils/Logger');
 
 // TODO: Some libraries required by test-utils.js seem to fail to import with the
 // jsdom environment.
