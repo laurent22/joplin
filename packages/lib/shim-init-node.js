@@ -251,12 +251,9 @@ function shimInit(options = null) {
 	// destinationResourceId option. This method is indirectly tested in
 	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
-		options = {
-			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
+		options = { resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
-			destinationResourceId: '',
-			...options,
-		};
+			destinationResourceId: '', ...options };
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
