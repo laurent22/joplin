@@ -193,8 +193,17 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				:root > body {
 					padding: 0;
 				}
+
+				code {
+					white-space: pre-wrap;
+				}
 			`;
 
+			const defaultCss = `
+				code {
+					white-space: pre-wrap;
+				}
+			`;
 			html =
 				`
 				<!DOCTYPE html>
@@ -203,7 +212,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
 						<style>
-							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : defaultCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 					</head>
