@@ -5,6 +5,8 @@ import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
+import { Dispatch } from 'redux';
+import { readFile } from 'fs-extra';
 const { clipboard, nativeImage } = require('electron');
 const packageInfo = require('../../packageInfo');
 
@@ -20,10 +22,15 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 	private static instance_: PlatformImplementation;
 	private joplin_: Joplin;
 	private components_: Components;
+	private dispatch_: Dispatch|null = null;
 
 	public static instance(): PlatformImplementation {
 		if (!this.instance_) this.instance_ = new PlatformImplementation();
 		return this.instance_;
+	}
+
+	public initialize(dispatch: Dispatch) {
+		this.dispatch_ = dispatch;
 	}
 
 	public get versionInfo(): VersionInfo {
@@ -45,6 +52,14 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 	public get window(): WindowImplementation {
 		return {
 			injectCustomStyles: injectCustomStyles,
+			loadNoteCssFile: async (filePath) => {
+				const cssString = await readFile(filePath, 'utf8');
+
+				this.dispatch_({
+					type: 'CUSTOM_CSS_APPEND',
+					css: cssString,
+				});
+			},
 		};
 	}
 

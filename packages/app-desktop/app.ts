@@ -262,6 +262,8 @@ class Application extends BaseApplication {
 		if (this.initPluginServiceDone_) return;
 		this.initPluginServiceDone_ = true;
 
+		PlatformImplementation.instance().initialize((action: any) => this.dispatch(action));
+
 		const service = PluginService.instance();
 
 		const pluginRunner = new PluginRunner();
