@@ -4556,10 +4556,11 @@ __metadata:
     crypto-browserify: 3.12.0
     deprecated-react-native-prop-types: 4.0.0
     events: 3.3.0
-    events-browserify: 0.0.1
     execa: 4.1.0
     fs-extra: 11.1.1
     gulp: 4.0.2
+    http-browserify: 1.7.0
+    https-browserify: 1.0.0
     jest: 29.5.0
     jest-environment-jsdom: 29.5.0
     jetifier: 2.0.0
@@ -4570,6 +4571,7 @@ __metadata:
     md5-file: 5.0.0
     metro-react-native-babel-preset: 0.73.9
     nodemon: 2.0.22
+    os-browserify: 0.3.0
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.0
@@ -8822,6 +8824,13 @@ __metadata:
     mkdirp-promise: ^5.0.1
     mz: ^2.5.0
   checksum: 0ff2786669d9792b5b910de35a512a3d6ee06820b1ea2bf8f36609fbb2cbd0d53ce52a143c619a432e744847175c5bc2a012d50cd409938ae6f7dafce48d05e8
+  languageName: node
+  linkType: hard
+
+"Base64@npm:~0.2.0":
+  version: 0.2.1
+  resolution: "Base64@npm:0.2.1"
+  checksum: 7c47e801b52cb9c963ee2cfb9284fbef8a6a34d3bbc5f7503b186ab5fb3a77e3f4a321f14ef20a6b2270d6cc3c89a2a349a538c4690abd2077bbe7caef10272d
   languageName: node
   linkType: hard
 
@@ -16136,13 +16145,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events-browserify@npm:0.0.1":
-  version: 0.0.1
-  resolution: "events-browserify@npm:0.0.1"
-  checksum: 66330e6ed645f3c904298b9002bc43d04b8486cda9e1410325c8bb6c3ae7f67d0fa53942e959f3fa94a90c9e7c2ef685ef5b245825fb51148f6cf993829a9a8d
-  languageName: node
-  linkType: hard
-
 "events-to-array@npm:^1.0.1":
   version: 1.1.2
   resolution: "events-to-array@npm:1.1.2"
@@ -18642,6 +18644,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"http-browserify@npm:1.7.0":
+  version: 1.7.0
+  resolution: "http-browserify@npm:1.7.0"
+  dependencies:
+    Base64: ~0.2.0
+    inherits: ~2.0.1
+  checksum: 7891aee4a55a0182bcdd8cd59f1d154a8f9b284e006bced7fbf5e9ae2e6762ec6c7ade7742952c509503f23b2b9b94c791a14a77fc85881aa2c51b3b010d029b
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^3.8.1":
   version: 3.8.1
   resolution: "http-cache-semantics@npm:3.8.1"
@@ -18789,7 +18801,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"https-browserify@npm:^1.0.0":
+"https-browserify@npm:1.0.0, https-browserify@npm:^1.0.0":
   version: 1.0.0
   resolution: "https-browserify@npm:1.0.0"
   checksum: 09b35353e42069fde2435760d13f8a3fb7dd9105e358270e2e225b8a94f811b461edd17cb57594e5f36ec1218f121c160ddceeec6e8be2d55e01dcbbbed8cbae
@@ -25688,7 +25700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"os-browserify@npm:~0.3.0":
+"os-browserify@npm:0.3.0, os-browserify@npm:~0.3.0":
   version: 0.3.0
   resolution: "os-browserify@npm:0.3.0"
   checksum: 16e37ba3c0e6a4c63443c7b55799ce4066d59104143cb637ecb9fce586d5da319cdca786ba1c867abbe3890d2cbf37953f2d51eea85e20dd6c4570d6c54bfebf
