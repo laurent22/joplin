@@ -65,7 +65,7 @@
     "react-native-quick-actions": "0.3.13",
     "react-native-reanimated": "3.3.0",
     "react-native-rsa-native": "2.0.5",
-    "react-native-safe-area-context": "4.6.0",
+    "react-native-safe-area-context": "4.6.4",
     "react-native-securerandom": "1.0.1",
     "react-native-share": "8.2.2",
     "react-native-sqlite-storage": "6.0.1",
