@@ -6,7 +6,8 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
-import Logger from '@joplin/lib/Logger';
+import rendererHtmlUtils from '@joplin/renderer/htmlUtils';
+import Logger from '@joplin/utils/Logger';
 const { fileUriToPath } = require('@joplin/lib/urlUtils');
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
@@ -159,6 +160,8 @@ export async function processPastedHtml(html: string) {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 					}
+				} else if (imageSrc.startsWith('data:')) { // Data URIs
+					mappedResources[imageSrc] = imageSrc;
 				} else {
 					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
 					await shim.fetchBlob(imageSrc, { path: filePath });
@@ -173,7 +176,9 @@ export async function processPastedHtml(html: string) {
 		}
 	}
 
-	return htmlUtils.replaceImageUrls(html, (src: string) => {
-		return mappedResources[src];
-	});
+	return rendererHtmlUtils.sanitizeHtml(
+		htmlUtils.replaceImageUrls(html, (src: string) => {
+			return mappedResources[src];
+		})
+	);
 }

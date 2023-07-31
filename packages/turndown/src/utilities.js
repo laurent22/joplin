@@ -53,7 +53,7 @@ export function hasVoid (node) {
 
 var meaningfulWhenBlankElements = [
   'A', 'TABLE', 'THEAD', 'TBODY', 'TFOOT', 'TH', 'TD', 'IFRAME', 'SCRIPT',
-  'AUDIO', 'VIDEO'
+  'AUDIO', 'VIDEO', 'P'
 ]
 
 export function isMeaningfulWhenBlank (node) {

@@ -6,7 +6,7 @@ import { reg } from '@joplin/lib/registry.js';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
 const { themeStyle } = require('../global-style.js');
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 const { BaseScreenComponent } = require('../base-screen.js');
 import { _ } from '@joplin/lib/locale';
 import { MenuOptionType } from '../ScreenHeader';

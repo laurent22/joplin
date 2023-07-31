@@ -12,9 +12,11 @@ module.exports = {
 		'\\.(ts|tsx)$': 'ts-jest',
 	},
 
-	setupFilesAfterEnv: ['./jest.setup.js'],
+	testEnvironment: 'jsdom',
 	testMatch: ['**/*.test.(ts|tsx)'],
+
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+	setupFilesAfterEnv: ['./jest.setup.js'],
 
 	// Do transform most packages in node_modules (transformations correct unrecognized
 	// import syntax)

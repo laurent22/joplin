@@ -1,6 +1,4 @@
 const moment = require('moment');
-import time from './time';
-const { FsDriverDummy } = require('./fs-driver-dummy.js');
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -50,6 +48,14 @@ export interface LoggerWrapper {
 	error: Function;
 }
 
+interface FsDriver {
+	appendFile: (path: string, content: string, encoding: string)=> Promise<void>;
+}
+
+const dummyFsDriver: FsDriver = {
+	appendFile: async (_path: string, _content: string, _encoding: string) => {},
+};
+
 class Logger {
 
 	// For backward compatibility
@@ -59,16 +65,16 @@ class Logger {
 	public static LEVEL_INFO = LogLevel.Info;
 	public static LEVEL_DEBUG = LogLevel.Debug;
 
-	public static fsDriver_: any = null;
-	private static globalLogger_: Logger = null;
+	public static fsDriver_: FsDriver|null = null;
+	private static globalLogger_: Logger|null = null;
 
 	private targets_: Target[] = [];
 	private level_: LogLevel = LogLevel.Info;
-	private lastDbCleanup_: number = time.unixMs();
+	private lastDbCleanup_: number = Date.now();
 	private enabled_ = true;
 
 	public static fsDriver() {
-		if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
+		if (!Logger.fsDriver_) Logger.fsDriver_ = dummyFsDriver;
 		return Logger.fsDriver_;
 	}
 
@@ -130,7 +136,7 @@ class Logger {
 		return this.targets_;
 	}
 
-	public addTarget(type: TargetType, options: TargetOptions = null) {
+	public addTarget(type: TargetType, options: TargetOptions|null = null) {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
@@ -199,12 +205,12 @@ class Logger {
 		return [];
 	}
 
-	public targetLevel(target: Target) {
-		if ('level' in target) return target.level;
+	public targetLevel(target: Target): LogLevel {
+		if ('level' in target) return target.level as LogLevel;
 		return this.level();
 	}
 
-	public log(level: LogLevel, prefix: string, ...object: any[]) {
+	public log(level: LogLevel, prefix: string | null, ...object: any[]) {
 		if (!this.targets_.length || !this.enabled) return;
 
 		for (let i = 0; i < this.targets_.length; i++) {
@@ -253,11 +259,11 @@ class Logger {
 				// when many log operations are being done (eg. during sync in
 				// dev mode).
 				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-				let release: Function = null;
+				let release: Function|null = null;
 				/* eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied */
 				writeToFileMutex_.acquire().then((r: Function) => {
 					release = r;
-					return Logger.fsDriver().appendFile(target.path, `${line.join(': ')}\n`, 'utf8');
+					return Logger.fsDriver().appendFile(target.path as string, `${line.join(': ')}\n`, 'utf8');
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				}).catch((error: any) => {
 					console.error('Cannot write to log file:', error);
@@ -273,11 +279,11 @@ class Logger {
 				const queries = [
 					{
 						sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
-						params: [target.source, level, msg.join(': '), time.unixMs()],
+						params: [target.source, level, msg.join(': '), Date.now()],
 					},
 				];
 
-				const now = time.unixMs();
+				const now = Date.now();
 				if (now - this.lastDbCleanup_ > 1000 * 60 * 60) {
 					this.lastDbCleanup_ = now;
 					const dayKeep = 14;

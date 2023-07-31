@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const execa = require('execa');
+const glob = require('glob');
 
 const utils = {};
 
@@ -215,6 +216,13 @@ utils.msleep = (ms) => {
 			resolve();
 		}, ms);
 	});
+};
+
+utils.globSync = (pattern, options = {}) => {
+	let output = glob.sync(pattern, options);
+	output = output.map(f => f.replace(/\\/g, '/'));
+	output.sort();
+	return output;
 };
 
 module.exports = utils;

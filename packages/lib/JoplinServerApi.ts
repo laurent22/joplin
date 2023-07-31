@@ -3,7 +3,7 @@ import { _ } from './locale';
 const { rtrimSlashes } = require('./path-utils.js');
 import JoplinError from './JoplinError';
 import { Env } from './models/Setting';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
 const { stringify } = require('query-string');

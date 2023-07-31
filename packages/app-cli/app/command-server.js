@@ -1,7 +1,7 @@
 const BaseCommand = require('./base-command').default;
 const { _ } = require('@joplin/lib/locale');
 const Setting = require('@joplin/lib/models/Setting').default;
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const shim = require('@joplin/lib/shim').default;
 
 class Command extends BaseCommand {

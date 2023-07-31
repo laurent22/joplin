@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { Pagination } from '../models/utils/pagination';
 import { Day, msleep } from '../utils/time';
 import BaseService from './BaseService';

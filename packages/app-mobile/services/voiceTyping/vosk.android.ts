@@ -1,5 +1,5 @@
 import { languageCodeOnly } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import shim from '@joplin/lib/shim';

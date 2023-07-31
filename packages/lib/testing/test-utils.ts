@@ -1,7 +1,7 @@
 /* eslint-disable require-atomic-updates */
 import BaseApplication from '../BaseApplication';
 import BaseModel from '../BaseModel';
-import Logger, { TargetType, LoggerWrapper, LogLevel } from '../Logger';
+import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/utils/Logger';
 import Setting from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';
@@ -211,7 +211,7 @@ function sleep(n: number) {
 	});
 }
 
-function msleep(ms: number) {
+function msleep(ms: number): Promise<void> {
 	// It seems setTimeout can sometimes last less time than the provided
 	// interval:
 	//

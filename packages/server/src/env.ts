@@ -23,6 +23,12 @@ const defaultEnvValues: EnvVariables = {
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
 
+	// The admin panel is accessible only if this is an admin instance.
+	// Additionally, processing services (those defined in setupTaskService.ts)
+	// only run on the admin instance.
+	IS_ADMIN_INSTANCE: true,
+	INSTANCE_NAME: '',
+
 	// Maxiumm allowed drift between NTP time and server time. A few
 	// milliseconds is normally not an issue unless many clients are modifying
 	// the same note at the exact same time. But past a certain limit, it might
@@ -111,6 +117,8 @@ export interface EnvVariables {
 	RUNNING_IN_DOCKER: boolean;
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
+	IS_ADMIN_INSTANCE: boolean;
+	INSTANCE_NAME: string;
 
 	APP_BASE_URL: string;
 	USER_CONTENT_BASE_URL: string;

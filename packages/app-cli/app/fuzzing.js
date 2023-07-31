@@ -1,7 +1,7 @@
 'use strict';
 
 const time = require('@joplin/lib/time').default;
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const Resource = require('@joplin/lib/models/Resource').default;
 const { dirname } = require('@joplin/lib/path-utils');
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;

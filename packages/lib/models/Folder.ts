@@ -7,7 +7,7 @@ import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
 import { isRootSharedFolder } from '../services/share/reducer';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
@@ -80,6 +80,21 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
+	public static async deleteAllByShareId(shareId: string, deleteOptions: DeleteOptions = null) {
+		const tableNameToClasses: Record<string, any> = {
+			'folders': Folder,
+			'notes': Note,
+			'resources': Resource,
+		};
+
+		for (const tableName of ['folders', 'notes', 'resources']) {
+			const ItemClass = tableNameToClasses[tableName];
+			const rows = await this.db().selectAll(`SELECT id FROM ${tableName} WHERE share_id = ?`, [shareId]);
+			const ids: string[] = rows.map(r => r.id);
+			await ItemClass.batchDelete(ids, deleteOptions);
+		}
+	}
+
 	public static async delete(folderId: string, options: DeleteOptions = null) {
 		options = {
 			deleteChildren: true,
@@ -90,12 +105,16 @@ export default class Folder extends BaseItem {
 		if (!folder) return; // noop
 
 		if (options.deleteChildren) {
+			const childrenDeleteOptions: DeleteOptions = {
+				disableReadOnlyCheck: options.disableReadOnlyCheck,
+			};
+
 			const noteIds = await Folder.noteIds(folderId);
-			await Note.batchDelete(noteIds);
+			await Note.batchDelete(noteIds, childrenDeleteOptions);
 
 			const subFolderIds = await Folder.subFolderIds(folderId);
 			for (let i = 0; i < subFolderIds.length; i++) {
-				await Folder.delete(subFolderIds[i]);
+				await Folder.delete(subFolderIds[i], childrenDeleteOptions);
 			}
 		}
 
@@ -762,7 +781,14 @@ export default class Folder extends BaseItem {
 
 		syncDebugLog.info('Folder Save:', o);
 
-		const savedFolder: FolderEntity = await super.save(o, options);
+		let savedFolder: FolderEntity = await super.save(o, options);
+
+		// Ensures that any folder added to the state has all the required
+		// properties, in particular "share_id" and "parent_id', which are
+		// required in various parts of the code.
+		if (!('share_id' in savedFolder) || !('parent_id' in savedFolder)) {
+			savedFolder = await this.load(savedFolder.id);
+		}
 
 		this.dispatch({
 			type: 'FOLDER_UPDATE_ONE',

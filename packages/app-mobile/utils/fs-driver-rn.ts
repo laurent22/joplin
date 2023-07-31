@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 import * as tar from 'tar-stream';
 import { resolve } from 'path';
 import { Buffer } from 'buffer';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('fs-driver-rn');
 

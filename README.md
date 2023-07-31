@@ -107,6 +107,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 
 	- [Sharing a notebook](https://github.com/laurent22/joplin/blob/dev/readme/share_notebook.md)
 	- [Publishing a note](https://github.com/laurent22/joplin/blob/dev/readme/publish_note.md)
+	- [Email to Note](https://github.com/laurent22/joplin/blob/dev/readme/email_to_note.md)
 
 - Joplin API - Get Started
 
@@ -511,7 +512,7 @@ Name | Description
 [Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
 [Discord server](https://discord.gg/VSj7AFHvpq) | Our chat server
 [LinkedIn](https://www.linkedin.com/company/joplin) | Our LinkedIn page
-[Sub-reddit](https://www.reddit.com/r/joplinapp/) | Also a good place to get help
+[Lemmy Community](https://sopuli.xyz/c/joplinapp) | Also a good place to get help
 
 # Contributing
 

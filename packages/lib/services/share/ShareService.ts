@@ -1,7 +1,7 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
@@ -173,14 +173,21 @@ export default class ShareService {
 
 	// This is when a share recipient decides to leave the shared folder.
 	//
-	// In that case, we should only delete the folder but none of its children.
-	// Deleting the folder tells the server that we want to leave the share. The
-	// server will then proceed to delete all associated user_items. So
-	// eventually all the notebook content will also be deleted for the current
-	// user.
+	// In that case we delete the root folder. Deleting the folder tells the
+	// server that we want to leave the share.
 	//
-	// We don't delete the children here because that would delete them for the
-	// other share participants too.
+	// We also immediately delete the children, but we do not sync the changes
+	// otherwise it would delete the items for other users too.
+	//
+	// If we do not delete them now it would also cause all kind of issues with
+	// read-only shares, because the read-only status will be lost after the
+	// deletion of the root folder, which means various services may modify the
+	// data. The changes will then be rejected by the sync target and cause
+	// conflicts.
+	//
+	// We do not need to sync the children deletion, because the server will
+	// take care of deleting all associated user_items. So eventually all the
+	// notebook content will also be deleted for the current user.
 	//
 	// If `folderShareUserId` is provided, the function will check that the user
 	// does not own the share. It would be an error to leave such a folder
@@ -191,7 +198,14 @@ export default class ShareService {
 			if (folderShareUserId === userId) throw new Error('Cannot leave own notebook');
 		}
 
-		await Folder.delete(folderId, { deleteChildren: false });
+		const folder = await Folder.load(folderId);
+
+		// We call this to make sure all items are correctly linked before we
+		// call deleteAllByShareId()
+		await Folder.updateAllShareIds(ResourceService.instance());
+
+		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true });
+		await Folder.deleteAllByShareId(folder.share_id, { disableReadOnlyCheck: true, trackDeleted: false });
 	}
 
 	// Finds any folder that is associated with a share, but the user no longer

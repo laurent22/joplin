@@ -1,5 +1,5 @@
 import Resource from '@joplin/lib/models/Resource';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 const logger = Logger.create('contextMenuUtils');
 export enum ContextMenuItemType {
 	None = '',

@@ -1,5 +1,5 @@
 import { MasterKeyEntity } from './types';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';

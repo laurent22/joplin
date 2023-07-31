@@ -6,7 +6,7 @@ import BaseService from '../BaseService';
 import shim from '../../shim';
 import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
 const compareVersions = require('compare-versions');

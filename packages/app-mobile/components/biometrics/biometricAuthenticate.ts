@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import FingerprintScanner, { Errors } from 'react-native-fingerprint-scanner';
 import { _ } from '@joplin/lib/locale';
 

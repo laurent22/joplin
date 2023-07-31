@@ -7,7 +7,7 @@ import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
 import time from '@joplin/lib/time';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -117,6 +117,7 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
+import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 
@@ -663,6 +664,9 @@ async function initialize(dispatch: Function) {
 	}
 
 	reg.setupRecurrentSync();
+
+	initializeUserFetcher();
+	PoorManIntervals.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 
 	PoorManIntervals.setTimeout(() => {
 		void AlarmService.garbageCollect();

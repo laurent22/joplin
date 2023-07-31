@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import FingerprintScanner from 'react-native-fingerprint-scanner';
 const logger = Logger.create('sensorInfo');

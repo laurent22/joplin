@@ -25,6 +25,19 @@ rules.paragraph = {
   filter: 'p',
 
   replacement: function (content) {
+    // If the line starts with a nonbreaking space, replace it. By default, the
+    // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
+    // because the space is nonbreaking, we want to keep it.
+    // \u00A0 is a nonbreaking space.
+    const leadingNonbreakingSpace = /^\u{00A0}/ug;
+    content = content.replace(leadingNonbreakingSpace, '&nbsp;');
+
+    // Paragraphs that are truly empty (not even containing nonbreaking spaces)
+    // take up by default no space. Output nothing.
+    if (content === '') {
+      return '';
+    }
+
     return '\n\n' + content + '\n\n'
   }
 }

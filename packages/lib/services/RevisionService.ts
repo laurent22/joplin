@@ -9,7 +9,7 @@ import shim from '../shim';
 import BaseService from './BaseService';
 import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage } from '../../renderer';
 const { substrWithEllipsis } = require('../string-utils');
 const { sprintf } = require('sprintf-js');

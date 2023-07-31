@@ -1,5 +1,5 @@
 import Setting, { Env } from './models/Setting';
-import Logger, { TargetType, LoggerWrapper } from './Logger';
+import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';

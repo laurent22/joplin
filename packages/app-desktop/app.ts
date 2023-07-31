@@ -8,7 +8,7 @@ import PlatformImplementation from './services/plugins/PlatformImplementation';
 import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
@@ -66,7 +66,7 @@ import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
-// import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -486,6 +486,9 @@ class Application extends BaseApplication {
 			// Then every x hours
 			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
 		}
+
+		initializeUserFetcher();
+		shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 
 		this.updateTray();
 

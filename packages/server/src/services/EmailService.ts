@@ -1,11 +1,10 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import BaseService from './BaseService';
 import Mail = require('nodemailer/lib/mailer');
 import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import { createTransport } from 'nodemailer';
 import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
-import EmailModel from '../models/EmailModel';
 import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';
 import { MailerSecurity } from '../env';
 import { senderInfo } from '../models/utils/email';
@@ -110,19 +109,12 @@ export default class EmailService extends BaseService {
 		logger.info(`Maintenance completed in ${Date.now() - startTime}ms`);
 	}
 
-	public async runInBackground() {
+	public checkConfiguration() {
 		if (!this.config.mailer.host || !this.config.mailer.enabled) {
 			this.enabled_ = false;
 			logger.info('Service will be disabled because mailer config is not set or is explicitly disabled');
 			return;
 		}
-
-		EmailModel.eventEmitter.on('queued', () => {
-			logger.info('Email was queued - scheduling maintenance');
-			void this.scheduleMaintenance();
-		});
-
-		await super.runInBackground();
 	}
 
 }

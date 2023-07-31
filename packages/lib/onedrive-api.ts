@@ -1,6 +1,6 @@
 import shim from './shim';
 import time from './time';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import { _ } from './locale';
 
 const { stringify } = require('query-string');

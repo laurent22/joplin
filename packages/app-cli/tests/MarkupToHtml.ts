@@ -1,5 +1,5 @@
 
-const MarkupToHtml = require('@joplin/renderer/MarkupToHtml').default;
+import MarkupToHtml, { MarkupLanguage, RenderResult } from '@joplin/renderer/MarkupToHtml';
 
 describe('MarkupToHtml', () => {
 
@@ -31,7 +31,7 @@ describe('MarkupToHtml', () => {
 				const input = t[0];
 				const expected = t[1];
 				const actual = service.stripMarkup(Number(markup), input);
-				expect(actual).toBe(expected, `Markup: ${markup}`);
+				expect(actual).toBe(expected);
 			}
 		}
 
@@ -40,4 +40,18 @@ describe('MarkupToHtml', () => {
 		expect(service.stripMarkup(1, 'one line\n    two line', { collapseWhiteSpaces: true })).toBe('one line two line');
 	}));
 
+
+	test('should escape HTML in safe mode', async () => {
+		const service = new MarkupToHtml({ isSafeMode: true });
+
+		const testString = '</pre>.<b>Test</b>';
+		const expectedOutput: RenderResult = {
+			html: '<pre>&lt;/pre&gt;.&lt;b&gt;Test&lt;/b&gt;</pre>',
+			cssStrings: [],
+			pluginAssets: [],
+		};
+
+		expect(await service.render(MarkupLanguage.Html, testString, {}, {})).toMatchObject(expectedOutput);
+		expect(await service.render(MarkupLanguage.Markdown, testString, {}, {})).toMatchObject(expectedOutput);
+	});
 });

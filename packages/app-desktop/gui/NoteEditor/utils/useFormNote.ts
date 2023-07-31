@@ -3,7 +3,7 @@ import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { handleResourceDownloadMode } from './resourceHandling';
-import HtmlToHtml from '@joplin/renderer/HtmlToHtml';
+import { splitHtml } from '@joplin/renderer/HtmlToHtml';
 import Setting from '@joplin/lib/models/Setting';
 import usePrevious from '../../hooks/usePrevious';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
@@ -73,8 +73,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		let originalCss = '';
 
 		if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
-			const htmlToHtml = new HtmlToHtml();
-			const splitted = htmlToHtml.splitHtml(n.body);
+			const splitted = splitHtml(n.body);
 			originalCss = splitted.css;
 		}
 

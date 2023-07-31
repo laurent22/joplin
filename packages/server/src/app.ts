@@ -3,7 +3,7 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
+import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
 import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
@@ -209,10 +209,10 @@ async function main() {
 
 	Logger.fsDriver_ = new FsDriverNode();
 	const globalLogger = new Logger();
-	// globalLogger.addTarget(TargetType.File, { path: `${config().logDir}/app.txt` });
+	const instancePrefix = config().INSTANCE_NAME ? `${config().INSTANCE_NAME}: ` : '';
 	globalLogger.addTarget(TargetType.Console, {
-		format: '%(date_time)s: [%(level)s] %(prefix)s: %(message)s',
-		formatInfo: '%(date_time)s: %(prefix)s: %(message)s',
+		format: `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`,
+		formatInfo: `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`,
 	});
 	Logger.initializeGlobalLogger(globalLogger);
 
@@ -307,7 +307,7 @@ async function main() {
 		}
 
 		appLogger().info('Starting services...');
-		await startServices(ctx.joplinBase.services);
+		await startServices(config(), ctx.joplinBase.services);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 
