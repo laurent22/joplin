@@ -1,5 +1,17 @@
 # Joplin changelog
 
+## [v2.12.10](https://github.com/laurent22/joplin/releases/tag/v2.12.10) (Pre-release) - 2023-07-30T18:25:58Z
+
+- Improved: Adding support for plugin icons ([#8499](https://github.com/laurent22/joplin/issues/8499)) ([#8408](https://github.com/laurent22/joplin/issues/8408) by [@hubert](https://github.com/hubert))
+- Improved: Updated packages gettext-parser (v7.0.1), react-redux (v8.1.1)
+- Fixed: [#8370](https://github.com/laurent22/joplin/issues/8370): Fix note drag-drop into markdown editor ([#8571](https://github.com/laurent22/joplin/issues/8571)) ([#8370](https://github.com/laurent22/joplin/issues/8370) by Henry Heino)
+- Fixed: Fix CodeMirror context menu not containing correct items ([#8543](https://github.com/laurent22/joplin/issues/8543)) ([#8535](https://github.com/laurent22/joplin/issues/8535) by Henry Heino)
+- Fixed: Note imported from Web Clipper is broken after being saved from the Rich Text editor ([#8485](https://github.com/laurent22/joplin/issues/8485))
+- Fixed: Preserve empty newlines created by pressing Enter repeatedly in the rich text editor ([#8549](https://github.com/laurent22/joplin/issues/8549)) ([#6055](https://github.com/laurent22/joplin/issues/6055) by Henry Heino)
+- Fixed: Text that is pasted in Rich Text editor had extra new lines ([#8476](https://github.com/laurent22/joplin/issues/8476))
+- Fixed: Upgrade to electron 25.3.1 ([#8550](https://github.com/laurent22/joplin/issues/8550)) ([#8535](https://github.com/laurent22/joplin/issues/8535) by Henry Heino)
+- Security: Fix XSS: Sanitize HTML pasted into the rich text editor.
+
 ## [v2.12.9](https://github.com/laurent22/joplin/releases/tag/v2.12.9) (Pre-release) - 2023-07-25T16:06:08Z
 
 - New: Add support for Joplin Cloud email to note functionality ([#8460](https://github.com/laurent22/joplin/issues/8460) by [@pedr](https://github.com/pedr))
