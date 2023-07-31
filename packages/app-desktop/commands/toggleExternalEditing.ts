@@ -2,7 +2,6 @@ import CommandService, { CommandRuntime, CommandDeclaration } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import { DesktopCommandContext } from '../services/commands/types';
-import { enabledCondition } from '../gui/NoteEditor/editorCommandDeclarations';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleExternalEditing',
@@ -23,7 +22,7 @@ export const runtime = (): CommandRuntime => {
 				void CommandService.instance().execute('startExternalEditing', noteId);
 			}
 		},
-		enabledCondition: enabledCondition(declaration.name),
+		enabledCondition: 'oneNoteSelected && !noteIsReadOnly',
 		mapStateToTitle: (state: any) => {
 			const noteId = stateUtils.selectedNoteId(state);
 			return state.watchedNoteFiles.includes(noteId) ? _('Stop') : '';
