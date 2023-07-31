@@ -572,29 +572,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
-
 		const dimensions: any = await this.imageDimensions(localFilePath);
-
 		reg.logger().info('Original dimensions ', dimensions);
 
-		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
-
-		if (mustResize) {
-			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
-				{ text: _('Yes'), id: 'yes' },
-				{ text: _('No'), id: 'no' },
-				{ text: _('Cancel'), id: 'cancel' },
-			]);
-
-			if (buttonId === 'cancel') return false;
-
-			mustResize = buttonId === 'yes';
-		}
-
-		if (mustResize) {
+		const saveOriginalImage = async () => {
+			await shim.fsDriver().copy(localFilePath, targetPath);
+			return true;
+		};
+		const saveResizedImage = async () => {
 			dimensions.width = maxSize;
 			dimensions.height = maxSize;
-
 			reg.logger().info('New dimensions ', dimensions);
 
 			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
@@ -612,11 +599,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 			} catch (error) {
 				reg.logger().warn('Error when unlinking cached file: ', error);
 			}
-		} else {
-			await shim.fsDriver().copy(localFilePath, targetPath);
+			return true;
+		};
+
+		const canResize = dimensions.width > maxSize || dimensions.height > maxSize;
+		if (canResize) {
+			const resizeLargeImages = Setting.value('imageResizing');
+			if (resizeLargeImages === 'alwaysAsk') {
+				const userAnswer = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it? (You may change this default behaviour in the options)', dimensions.width, dimensions.height, maxSize), [
+					{ text: _('Yes'), id: 'yes' },
+					{ text: _('No'), id: 'no' },
+					{ text: _('Cancel'), id: 'cancel' },
+				]);
+				if (userAnswer === 'yes') return await saveResizedImage();
+				if (userAnswer === 'no') return await saveOriginalImage();
+				if (userAnswer === 'cancel') return false;
+			} else if (resizeLargeImages === 'alwaysResize') {
+				return await saveResizedImage();
+			}
 		}
 
-		return true;
+		return await saveOriginalImage();
 	}
 
 	public async attachFile(pickerResponse: any, fileType: string) {
