@@ -1,14 +1,4 @@
-let script = null;
-
-let joplin = {
-	plugins: {
-		register: s => {
-			script = s;
-		},
-	},
-};
-
-const setJoplin = v => joplin = v;
+const initPlugin = joplin => {
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -19,4 +9,6 @@ joplin.plugins.register({
 	},
 });
 
-module.exports = { script, setJoplin };
+}
+
+module.exports = { initPlugin };

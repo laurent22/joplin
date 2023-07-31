@@ -1,0 +1,163 @@
+ul.todotxt {
+	--color-default: #999;
+	--color-faded: #999;
+	--color-A: rgb(247, 210, 110); /* yellow* */
+	--color-B: rgb(152, 104, 1);   /* red */
+	--color-C: rgb(80, 161, 79);   /* green */
+	--color-D: rgb(21, 91, 218);   /* blue */
+	--project-background-color: rgb(247, 210, 110);
+	--project-color: black;
+	--context-color: rgb(152, 104, 1);
+	--transition-duration: 0.15s;
+}
+
+ul.todotxt { list-style:none; }
+ul.todotxt li { 
+	list-style-type:none;
+	border-bottom: dashed 1px;
+	margin-bottom: 4px;
+	line-height: 1.2em;
+}
+ul.todotxt li.todotxt-header {
+	font-size: 10px;
+}
+
+.todo-priority { 
+	display: inline-block;
+	width: 1.2em;
+	overflow: hidden;
+	color: var(--color-default);
+	vertical-align: text-bottom;
+}
+.todo-priority select {
+	appearance: none;
+	background-color: transparent;
+	border-color: transparent;
+	color: inherit;
+	font-size: inherit;
+	font-weight: 700;
+	cursor: pointer;
+}
+.todo-priority select:focus-visible {
+	outline: none;
+}
+.todo-priority select:hover {
+	text-decoration: underline;
+}
+
+.todo-panel { 
+	display: block;
+	font-size: 12px;
+	line-height: 1em;
+	text-align: right;
+	margin: 2px 0 4px 0;
+	color: var(--color-faded);
+}
+.todo-completion, .todo-creation {
+	display: inline-block;
+	min-width: 6em;
+}
+.todo-project {
+	background-color: var(--project-background-color);
+	color: var(--project-color);
+	border-radius: 2px;
+}
+.todo-context {
+	color: var(--context-color);
+}
+.todo-count {
+	color: var(--color-faded);
+}
+.todo-count::before{
+	content: '/';
+}
+.todo-meta {
+	color: var(--color-faded);
+}
+.todo-select { 
+	display: inline-block;
+	min-width: 3em;
+	text-decoration: none;
+}
+.todo-checkbox { 
+	margin-left: -1.9em;
+	margin-right: 0.5em;
+	display: inline-block;
+	vertical-align: text-top;
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+}
+
+.todo-checkbox input {
+	position: absolute;
+	display: none;
+}
+
+.todo-checkbox .todo-checkmark {
+	width : 1.2em;
+	height: 1.2em;
+	position: relative;
+	display : inline-block;
+	overflow: hidden;
+	text-align: center;
+	color: white;
+	border: solid 1px var(--color-default);
+	border-radius: 100%;
+	transition: background-color var(--transition-duration) ease-in;
+}
+.todo-checkbox input:checked ~ .todo-checkmark {
+	background-color: var(--color-default);
+}
+.todo-checkbox .todo-checkmark:after {
+	content: '×';
+	position: relative;
+	display: inline-block;
+	transition: opacity var(--transition-duration);
+	opacity: 0;
+}
+.todo-checkbox input:checked ~ .todo-checkmark:after {
+	opacity: 1.0;
+}
+
+/* Color scheme */
+.prior-A .todo-priority { 
+	color: var(--color-A);
+}
+.prior-A .todo-checkbox .todo-checkmark {
+	border-color: var(--color-A);
+	color: black;
+}
+.prior-A .todo-checkbox input:checked ~ .todo-checkmark {
+	background-color: var(--color-A);
+}
+
+.prior-B .todo-priority { 
+	color: var(--color-B);
+}
+.prior-B .todo-checkbox .todo-checkmark {
+	border-color:  var(--color-B);
+}
+.prior-B .todo-checkbox input:checked ~ .todo-checkmark {
+	background-color:  var(--color-B);
+}
+
+.prior-C .todo-priority { 
+	color:  var(--color-C);
+}
+.prior-C .todo-checkbox .todo-checkmark {
+	border-color: var(--color-C);
+}
+.prior-C .todo-checkbox input:checked ~ .todo-checkmark {
+	background-color: var(--color-C);
+}
+
+.prior-D .todo-priority { 
+	color: var(--color-D);
+}
+.prior-D .todo-checkbox .todo-checkmark {
+	border-color: var(--color-D);
+}
+.prior-D .todo-checkbox input:checked ~ .todo-checkmark {
+	background-color: var(--color-D);
+}

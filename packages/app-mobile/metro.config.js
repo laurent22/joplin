@@ -13,17 +13,17 @@
 const path = require('path');
 
 const localPackages = {
+	'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
+	'@joplin/fork-sax': path.resolve(__dirname, '../fork-sax/'),
+	'@joplin/fork-uslug': path.resolve(__dirname, '../fork-uslug/'),
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
+	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
+	'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
 	'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
 	'@joplin/tools': path.resolve(__dirname, '../tools/'),
-	'@joplin/utils': path.resolve(__dirname, '../utils/'),
-	'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
-	'@joplin/fork-uslug': path.resolve(__dirname, '../fork-uslug/'),
-	'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
-	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
-	'@joplin/fork-sax': path.resolve(__dirname, '../fork-sax/'),
-	'@joplin/turndown': path.resolve(__dirname, '../turndown/'),
 	'@joplin/turndown-plugin-gfm': path.resolve(__dirname, '../turndown-plugin-gfm/'),
+	'@joplin/turndown': path.resolve(__dirname, '../turndown/'),
+	'@joplin/utils': path.resolve(__dirname, '../utils/'),
 };
 
 const remappedPackages = {

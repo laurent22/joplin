@@ -468,6 +468,41 @@ const simplePluginManifest2 = `{
     ]
 }`;
 
+// const abcPlugin = require('./plugins/org.joplinapp.plugins.AbcSheetMusic/index.js');
+// const abcPluginManifest = `{
+// 	"manifest_version": 1,
+// 	"id": "org.joplinapp.plugins.AbcSheetMusic",
+// 	"app_min_version": "2.2",
+// 	"version": "1.0.2",
+// 	"name": "ABC Sheet Music Plugin",
+// 	"description": "Turns ABC text notation into sheet music",
+// 	"author": "Laurent Cozic",
+// 	"homepage_url": "https://github.com/joplin/plugin-abc-sheet-music",
+// 	"repository_url": "https://github.com/joplin/plugin-abc-sheet-music",
+// 	"keywords": [
+// 		"sheet music",
+// 		"abc",
+// 		"notation"
+// 	]
+// }`;
+
+// const abcPluginContentScript = require('./plugins/org.joplinapp.plugins.AbcSheetMusic/markdownItPlugin.js');
+
+const metisPlugin = require('./plugins/com.hieuthi.joplin.metis/index.js');
+const metisManifest = `{
+	"manifest_version": 1,
+	"id": "com.hieuthi.joplin.metis",
+	"app_min_version": "2.2",
+	"version": "0.1.5",
+	"name": "Metis",
+	"description": "A Simple Task Manager Plugin for Joplin based on Todo.txt Specification",
+	"author": "Hieu-Thi Luong",
+	"homepage_url": "https://github.com/hieuthi/joplin-plugin-metis",
+	"repository_url": "https://github.com/hieuthi/joplin-plugin-metis",
+	"keywords": ["joplin-plugin","todo","todotxt","task management"]
+}`;
+const metisContentScript = require('./plugins/com.hieuthi.joplin.metis/todoTxtMdRule.js');
+
 const initPluginService = async () => {
 	const service = PluginService.instance();
 	const runner = new PluginRunner();
@@ -483,11 +518,17 @@ const initPluginService = async () => {
 		}
 	);
 
-	const plugin1 = await PluginService.instance().loadPluginFromModule(simplePlugin1, simplePluginManifest1);
+	const plugin1 = await PluginService.instance().loadPluginFromModule({ main: simplePlugin1 }, simplePluginManifest1);
 	await PluginService.instance().runPlugin(plugin1);
 
-	const plugin2 = await PluginService.instance().loadPluginFromModule(simplePlugin2, simplePluginManifest2);
+	const plugin2 = await PluginService.instance().loadPluginFromModule({ main: simplePlugin2 }, simplePluginManifest2);
 	await PluginService.instance().runPlugin(plugin2);
+
+	// const plugin3 = await PluginService.instance().loadPluginFromModule({ main: abcPlugin, contentScripts: { ['markdownItPlugin.js']: abcPluginContentScript } }, abcPluginManifest);
+	// await PluginService.instance().runPlugin(plugin3);
+
+	const plugin4 = await PluginService.instance().loadPluginFromModule({ main: metisPlugin, contentScripts: { ['todoTxtMdView.js']: metisContentScript } }, metisManifest);
+	await PluginService.instance().runPlugin(plugin4);
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

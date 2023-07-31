@@ -1,0 +1,12 @@
+{
+	"manifest_version": 1,
+	"id": "com.hieuthi.joplin.metis",
+	"app_min_version": "2.2",
+	"version": "0.1.5",
+	"name": "Metis",
+	"description": "A Simple Task Manager Plugin for Joplin based on Todo.txt Specification",
+	"author": "Hieu-Thi Luong",
+	"homepage_url": "https://github.com/hieuthi/joplin-plugin-metis",
+	"repository_url": "https://github.com/hieuthi/joplin-plugin-metis",
+	"keywords": ["joplin-plugin","todo","todotxt","task management"]
+}

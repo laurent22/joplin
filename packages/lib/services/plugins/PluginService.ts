@@ -1,4 +1,4 @@
-import Plugin from './Plugin';
+import Plugin, { Module } from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
@@ -287,7 +287,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public async loadPluginFromModule(module: any, manifestText: string): Promise<Plugin> {
+	public async loadPluginFromModule(module: Module, manifestText: string): Promise<Plugin> {
 		return this.loadPlugin(
 			'',
 			manifestText,
@@ -297,7 +297,7 @@ export default class PluginService extends BaseService {
 		);
 	}
 
-	private async loadPlugin(baseDir: string, manifestText: string, scriptText: string, pluginIdIfNotSpecified: string, module: any|null = null): Promise<Plugin> {
+	private async loadPlugin(baseDir: string, manifestText: string, scriptText: string, pluginIdIfNotSpecified: string, module: Module|null = null): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const manifestObj = JSON.parse(manifestText);

@@ -4,6 +4,7 @@ import shim from '../../shim';
 import { ViewHandle } from './utils/createViewHandle';
 import { ContentScriptType } from './api/types';
 import Logger from '@joplin/utils/Logger';
+import Joplin from './api/Joplin';
 const EventEmitter = require('events');
 
 const logger = Logger.create('Plugin');
@@ -15,10 +16,18 @@ interface ViewControllers {
 export interface ContentScript {
 	id: string;
 	path: string;
+	module?: any;
 }
 
 interface ContentScripts {
 	[type: string]: ContentScript[];
+}
+
+export interface Module {
+	main: {
+		initPlugin: (joplin: Joplin)=> void;
+	};
+	contentScripts?: Record<string, any>;
 }
 
 export default class Plugin {
@@ -38,10 +47,10 @@ export default class Plugin {
 	private contentScriptMessageListeners_: Record<string, Function> = {};
 	private dataDir_: string;
 	private dataDirCreated_ = false;
-	private module_: any|null = null;
+	private module_: Module|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string, module: any|null = null) {
+	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string, module: Module|null = null) {
 		this.baseDir_ = baseDir ? shim.fsDriver().resolve(baseDir) : '';
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
@@ -75,7 +84,7 @@ export default class Plugin {
 		return this.baseDir_;
 	}
 
-	public get module(): any|null {
+	public get module(): Module|null {
 		return this.module_;
 	}
 
@@ -111,13 +120,25 @@ export default class Plugin {
 	public async registerContentScript(type: ContentScriptType, id: string, path: string) {
 		if (!this.contentScripts_[type]) this.contentScripts_[type] = [];
 
-		const absolutePath = shim.fsDriver().resolveRelativePathWithinDir(this.baseDir, path);
+		let absolutePath = '';
+		let scriptModule: any = null;
 
-		if (!(await shim.fsDriver().exists(absolutePath))) throw new Error(`Could not find content script at path ${absolutePath}`);
+		if (this.module) {
+			const normalizePath = (p: string) => {
+				if (p.startsWith('./')) return p.substring(2);
+				return p;
+			};
 
-		this.contentScripts_[type].push({ id, path: absolutePath });
+			const moduleKey = normalizePath(path);
+			scriptModule = this.module.contentScripts[moduleKey];
+			logger.debug(`"${this.id}": Registered content script: ${type}: ${id}: ${moduleKey}`);
+		} else {
+			absolutePath = shim.fsDriver().resolveRelativePathWithinDir(this.baseDir, path);
+			if (!(await shim.fsDriver().exists(absolutePath))) throw new Error(`Could not find content script at path ${absolutePath}`);
+			logger.debug(`"${this.id}": Registered content script: ${type}: ${id}: ${absolutePath}`);
+		}
 
-		logger.debug(`"${this.id}": Registered content script: ${type}: ${id}: ${absolutePath}`);
+		this.contentScripts_[type].push({ id, path: absolutePath, module: scriptModule });
 
 		this.dispatch_({
 			type: 'PLUGIN_CONTENT_SCRIPTS_ADD',
@@ -126,6 +147,7 @@ export default class Plugin {
 				type: type,
 				id: id,
 				path: absolutePath,
+				module: scriptModule,
 			},
 		});
 	}

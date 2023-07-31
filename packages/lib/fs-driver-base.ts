@@ -158,6 +158,20 @@ export default class FsDriverBase {
 		};
 	}
 
+	public resolve(..._pathSegments: string[]): string {
+		throw new Error('Not implemented');
+	}
+
+	// Resolves the provided relative path to an absolute path within baseDir. The function
+	// also checks that the absolute path is within baseDir, to avoid security issues.
+	// It is expected that baseDir is a safe path (not user-provided).
+	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
+		const resolvedBaseDir = this.resolve(baseDir);
+		const resolvedPath = this.resolve(baseDir, relativePath);
+		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
+		return resolvedPath;
+	}
+
 	public async tarExtract(_options: any) {
 		throw new Error('Not implemented');
 	}

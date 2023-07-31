@@ -256,12 +256,8 @@ export default class FsDriverRN extends FsDriverBase {
 		return output ? output : null;
 	}
 
-	public resolve(path: string) {
-		return resolve(path);
-	}
-
-	public resolveRelativePathWithinDir(_baseDir: string, relativePath: string) {
-		throw new Error(`Not implemented: resolveRelativePathWithinDir(): ${relativePath}`);
+	public resolve(...pathSegments: string[]) {
+		return resolve(...pathSegments);
 	}
 
 	public async md5File(path: string): Promise<string> {

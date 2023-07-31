@@ -17,6 +17,7 @@ interface PluginViewStates {
 interface PluginContentScriptState {
 	id: string;
 	path: string;
+	module?: any;
 }
 
 interface PluginContentScriptStates {
@@ -170,6 +171,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 			draft.plugins[action.pluginId].contentScripts[type].push({
 				id: action.contentScript.id,
 				path: action.contentScript.path,
+				module: action.contentScript.module,
 			});
 			break;
 		}

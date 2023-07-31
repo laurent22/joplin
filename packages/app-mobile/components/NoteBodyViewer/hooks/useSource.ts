@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
-import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
+import markupLanguageUtils from '../../../utils/markupLanguageUtils';
 import Logger from '@joplin/utils/Logger';
 const { assetsToHeaders } = require('@joplin/renderer');
 
