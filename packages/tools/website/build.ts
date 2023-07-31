@@ -249,6 +249,9 @@ async function main() {
 		},
 	};
 
+	// delete supportedLocales['zh_CN'];
+	// delete supportedLocales['fr_FR'];
+
 	setLocale('en_GB');
 
 	await remove(`${docDir}`);

@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { EditorSelection, EditorState } from '@codemirror/state';
 import {
 	increaseIndent, toggleList,
