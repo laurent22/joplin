@@ -38,6 +38,7 @@ export const runtime = (): CommandRuntime => {
 					menuItem.click();
 				});
 			}
+			return null;
 		},
 	};
 };
