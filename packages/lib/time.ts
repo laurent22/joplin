@@ -156,7 +156,7 @@ class Time {
 	}
 
 	public async waitTillCondition(condition: ConditionHandler) {
-		if (condition()) return;
+		if (condition()) return null;
 
 		return new Promise(resolve => {
 			const iid = setInterval(() => {
