@@ -16,10 +16,14 @@ Moreover, by getting a subscription you are supporting the development of the pr
 
 ## Do you offer discounts?
 
-We offer a 50% Education Discount for students and teachers. To claim it, please [contact us](mailto:support@joplincloud.com) from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
+We offer a 50% Education Discount for students and teachers. To claim it, please contact us from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
 
 We may also offer bulk discounts for companies, associations and nonprofit organisations. Please [contact us](mailto:support@joplincloud.com) for more details.
 
-## All our services are carbon neutral
+## Where is Joplin Cloud data located?
 
-<img style="max-width: 100%; float:right;" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/plans/CarbonNeutral.png" /> Because the protection of the environment is as important as the protection of your data, we made our services carbon neutral. We believe that technology should not come at the expense of the planet, and we are committed to reducing our carbon footprint.<br/><br/>To do this, we invest in various ecological projects such as planting trees, cleaning up polluted areas, cleaning the oceans, and more, through organizations, associations, or companies. We constantly monitor our emissions and offset them through these projects to ensure that we are doing our part in the fight against climate change.<br/><br/>For example, we have teamed up with the non-profit organisation carbone.eco and invested in the reforestation of four hectares of forest in France.
+Joplin Cloud data and servers are all located in France (Paris), thus your data benefits from strong data protection regulations including GDPR.
+
+## Joplin Cloud is carbon neutral
+
+We believe that technology should not come at the expense of the planet, and we are committed to reducing our carbon footprint. For example, we have teamed up with the non-profit organisation carbone.eco and invested in the reforestation of four hectares of forest in France.

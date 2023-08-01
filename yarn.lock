@@ -4587,7 +4587,7 @@ __metadata:
     react-native-fs: 2.20.0
     react-native-gesture-handler: 2.12.0
     react-native-get-random-values: 1.9.0
-    react-native-image-picker: 5.4.2
+    react-native-image-picker: 5.6.0
     react-native-image-resizer: 1.4.5
     react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 15.0.1
@@ -4596,7 +4596,7 @@ __metadata:
     react-native-quick-actions: 0.3.13
     react-native-reanimated: 3.3.0
     react-native-rsa-native: 2.0.5
-    react-native-safe-area-context: 4.5.5
+    react-native-safe-area-context: 4.6.4
     react-native-securerandom: 1.0.1
     react-native-share: 8.2.2
     react-native-sqlite-storage: 6.0.1
@@ -4745,7 +4745,7 @@ __metadata:
     relative: 3.0.2
     reselect: 4.1.8
     server-destroy: 1.0.1
-    sharp: 0.32.1
+    sharp: 0.32.2
     sprintf-js: 1.1.2
     sqlite3: 5.1.6
     string-padding: 1.0.2
@@ -4980,7 +4980,7 @@ __metadata:
     request: 2.88.2
     rss: 1.2.2
     sass: 1.63.6
-    sharp: 0.32.1
+    sharp: 0.32.2
     source-map-support: 0.5.21
     sqlite3: 5.1.6
     typescript: 5.0.2
@@ -21069,7 +21069,7 @@ __metadata:
     proper-lockfile: 4.1.2
     read-chunk: 2.1.0
     server-destroy: 1.0.1
-    sharp: 0.32.1
+    sharp: 0.32.2
     sprintf-js: 1.1.2
     sqlite3: 5.1.6
     string-padding: 1.0.2
@@ -27881,13 +27881,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:5.4.2":
-  version: 5.4.2
-  resolution: "react-native-image-picker@npm:5.4.2"
+"react-native-image-picker@npm:5.6.0":
+  version: 5.6.0
+  resolution: "react-native-image-picker@npm:5.6.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: a858cb8777c99a8ce9e338c9fb4dc3ab09bef5b23f0751dd9dec7da630cc299d3afdcb479a76db2aa473e9132ad7fb6ae75ef12cf32a12f48684461a0b351212
+  checksum: 3797ec006c2d1f7b96c088c25d972113ef61f42e499f1bdbc553630acecab613d671a2c7d050029a7b01df144e83992ea2639b33255cfa487bf422943ded419b
   languageName: node
   linkType: hard
 
@@ -28005,13 +28005,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:4.5.5":
-  version: 4.5.5
-  resolution: "react-native-safe-area-context@npm:4.5.5"
+"react-native-safe-area-context@npm:4.6.4":
+  version: 4.6.4
+  resolution: "react-native-safe-area-context@npm:4.6.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 27c7881fd219cdadf7f05160782e1d6a4d65d2c2fc7bc8a5fc9274d09a12cd5ceae8cc42894284d0741faeaae20bab3b695b5bc77d1f54ec28fb7652f9170e0c
+  checksum: c6905193528dda61268565799d81817b1e436c32c120480084e48c955075e1017b399f763368ef39c4049d6eb0e2c05c3496390857d836b47ddcf861ab60871e
   languageName: node
   linkType: hard
 
@@ -29820,14 +29820,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.5.0":
-  version: 7.5.1
-  resolution: "semver@npm:7.5.1"
+"semver@npm:^7.5.4":
+  version: 7.5.4
+  resolution: "semver@npm:7.5.4"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: d16dbedad53c65b086f79524b9ef766bf38670b2395bdad5c957f824dcc566b624988013564f4812bcace3f9d405355c3635e2007396a39d1bffc71cfec4a2fc
+  checksum: 12d8ad952fa353b0995bf180cdac205a4068b759a140e5d3c608317098b3575ac2f1e09182206bf2eb26120e1c0ed8fb92c48c592f6099680de56bb071423ca3
   languageName: node
   linkType: hard
 
@@ -29993,20 +29993,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.32.1":
-  version: 0.32.1
-  resolution: "sharp@npm:0.32.1"
+"sharp@npm:0.32.2":
+  version: 0.32.2
+  resolution: "sharp@npm:0.32.2"
   dependencies:
     color: ^4.2.3
     detect-libc: ^2.0.1
     node-addon-api: ^6.1.0
     node-gyp: latest
     prebuild-install: ^7.1.1
-    semver: ^7.5.0
+    semver: ^7.5.4
     simple-get: ^4.0.1
-    tar-fs: ^2.1.1
+    tar-fs: ^3.0.4
     tunnel-agent: ^0.6.0
-  checksum: 99f50df380442aa8f3f952dd6f2e27634f9cab249cce47aa7f1a97c468334979ea94d71555f782aae5f5016e44b7832799f1c5ea1cb3ca975c089acd00e62e2e
+  checksum: 2d6b9bcada4c4cc6f606003213d866f975254da011a30972d422086e69ae280973dbedbdb91aa636d98de874fd0eb7af42f0aaff044c22e7e65da28e25c7d63a
   languageName: node
   linkType: hard
 
@@ -31758,7 +31758,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar-fs@npm:^2.0.0, tar-fs@npm:^2.1.1":
+"tar-fs@npm:^2.0.0":
   version: 2.1.1
   resolution: "tar-fs@npm:2.1.1"
   dependencies:
@@ -31770,7 +31770,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar-stream@npm:3.1.6":
+"tar-fs@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "tar-fs@npm:3.0.4"
+  dependencies:
+    mkdirp-classic: ^0.5.2
+    pump: ^3.0.0
+    tar-stream: ^3.1.5
+  checksum: dcf4054f9e92ca0efe61c2b3f612914fb259a47900aa908a63106513a6d006c899b426ada53eb88d9dbbf089b5724c8e90b96a2c4ca6171845fa14203d734e30
+  languageName: node
+  linkType: hard
+
+"tar-stream@npm:3.1.6, tar-stream@npm:^3.1.5":
   version: 3.1.6
   resolution: "tar-stream@npm:3.1.6"
   dependencies:

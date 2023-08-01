@@ -8,6 +8,29 @@ const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
 
+import { setImmediate } from 'timers';
+
+// Required by some libraries (setImmediate is not supported in most browsers,
+// so is removed by jsdom).
+window.setImmediate = setImmediate;
+
+// Prevents the CodeMirror error "getClientRects is undefined".
+// See https://github.com/jsdom/jsdom/issues/3002#issue-652790925
+document.createRange = () => {
+	const range = new Range();
+	range.getBoundingClientRect = jest.fn();
+	range.getClientRects = () => {
+		return {
+			length: 0,
+			item: () => null,
+			[Symbol.iterator]: jest.fn(),
+		};
+	};
+
+	return range;
+};
+
+
 shimInit({ nodeSqlite: sqlite3 });
 
 
