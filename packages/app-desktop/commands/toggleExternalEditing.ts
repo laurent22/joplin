@@ -22,7 +22,7 @@ export const runtime = (): CommandRuntime => {
 				void CommandService.instance().execute('startExternalEditing', noteId);
 			}
 		},
-		enabledCondition: 'oneNoteSelected && !noteIsReadOnly',
+		enabledCondition: 'oneNoteSelected && !noteIsReadOnly && (!modalDialogVisible || gotoAnythingVisible)',
 		mapStateToTitle: (state: any) => {
 			const noteId = stateUtils.selectedNoteId(state);
 			return state.watchedNoteFiles.includes(noteId) ? _('Stop') : '';
