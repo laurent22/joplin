@@ -18,6 +18,7 @@ export default class RotatingLogs {
 		if (stats.size >= this.maxFileSize) {
 			const newLogFile: string = this.logFileFullpath(this.getNameToNonActiveLogFile());
 			await this.fsDriver().move(this.logFileFullpath(), newLogFile);
+			await this.fsDriver().writeFile(this.logFileFullpath(), '', 'utf-8');
 		}
 	}
 
