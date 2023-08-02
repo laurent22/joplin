@@ -141,7 +141,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
-	const editor_resize = useCallback((cm) => {
+	const editor_resize = useCallback((cm: any) => {
 		if (isCodeMirrorReady(cm)) {
 			// This handler is called when resized and refreshed.
 			// Only when resized, the scroll position is restored.
