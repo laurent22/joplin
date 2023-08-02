@@ -27,7 +27,7 @@
     "@joplin/renderer": "~2.12",
     "@joplin/utils": "~2.12",
     "@koa/cors": "3.4.3",
-    "@types/uuid": "9.0.1",
+    "@types/uuid": "9.0.2",
     "bcryptjs": "2.4.3",
     "bulma": "0.9.4",
     "bulma-prefers-dark": "0.1.0-beta.1",
@@ -63,13 +63,13 @@
     "@rmp135/sql-ts": "1.17.0",
     "@types/formidable": "2.0.6",
     "@types/fs-extra": "11.0.1",
-    "@types/jest": "29.5.1",
+    "@types/jest": "29.5.3",
     "@types/jest-expect-message": "1.0.4",
-    "@types/jsdom": "21.1.0",
+    "@types/jsdom": "21.1.1",
     "@types/koa": "2.13.6",
     "@types/markdown-it": "12.2.3",
     "@types/mustache": "4.2.2",
-    "@types/nodemailer": "6.4.7",
+    "@types/nodemailer": "6.4.8",
     "@types/yargs": "17.0.24",
     "@types/zxcvbn": "4.4.1",
     "gulp": "4.0.2",
@@ -78,6 +78,6 @@
     "jsdom": "22.1.0",
     "node-mocks-http": "1.12.2",
     "source-map-support": "0.5.21",
-    "typescript": "5.0.2"
+    "typescript": "5.1.3"
   }
 }

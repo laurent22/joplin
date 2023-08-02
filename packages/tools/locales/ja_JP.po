@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -91,7 +93,7 @@ msgstr "%d 日"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
@@ -109,7 +111,7 @@ msgstr "%d 時間"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
@@ -322,7 +324,7 @@ msgstr "高度なツール"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
-msgstr ""
+msgstr "ノート、ノートブック、タグを含むすべてのデータが完全に削除されます。"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:495
 #: packages/app-mobile/components/screens/Notes.tsx:174
@@ -394,9 +396,8 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:206
-#, fuzzy
 msgid "Attach"
-msgstr "添付..."
+msgstr "添付"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:594
@@ -1243,9 +1244,8 @@ msgstr ""
 "できなくなります。"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:97
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "これら %d のノートを削除しますか？"
+msgstr "このプロファイルを削除しますか？"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1482,9 +1482,8 @@ msgid "Edit in external editor"
 msgstr "外部エディターで編集"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
-#, fuzzy
 msgid "Edit link"
-msgstr "ノートブックの編集"
+msgstr "リンクの編集"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -1496,9 +1495,8 @@ msgid "Edit notebook"
 msgstr "ノートブックの編集"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:87
-#, fuzzy
 msgid "Edit profile"
-msgstr "プロファイルをエクスポート"
+msgstr "プロファイルを編集"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
@@ -1643,7 +1641,7 @@ msgstr "ソフトブレークを有効にする"
 
 #: packages/lib/models/Setting.ts:1050
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "テキストエディタでスペルチェックを有効にする"
 
 #: packages/lib/models/Setting.ts:1156
 msgid "Enable table of contents extension"
@@ -2052,9 +2050,8 @@ msgid "Hide Joplin"
 msgstr "Joplinを隠す"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:253
-#, fuzzy
 msgid "Hide keyboard"
-msgstr "メタデータを隠す"
+msgstr "キーボードを隠す"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
 #, fuzzy
@@ -2245,9 +2242,8 @@ msgstr "ハイパーリンクの挿入"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:628
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:188
-#, fuzzy
 msgid "Insert time"
-msgstr "日付の入力"
+msgstr "日時の挿入"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 msgid "Install"
@@ -2397,7 +2393,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:162
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1543
 msgid "Keep note history for"
@@ -2576,9 +2572,8 @@ msgid "Manage multiple users"
 msgstr "マスターパスワードの管理"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:641
-#, fuzzy
 msgid "Manage profiles"
-msgstr "プロファイルの更新"
+msgstr "プロファイルの管理"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:320
 msgid "Manage your plugins"
@@ -3039,9 +3034,8 @@ msgid "Open %s"
 msgstr "%s を開く"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
-msgstr "PDFビューアーを有効にする"
+msgstr "PDFビューアーを開く"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3120,7 +3114,7 @@ msgstr "貼り付け"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:181
 msgid "Paste as text"
-msgstr ""
+msgstr "テキストとして貼り付け"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:525
 msgid "Path:"
@@ -3325,9 +3319,8 @@ msgid "Profile"
 msgstr "プロファイル"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:95
-#, fuzzy
 msgid "Profile name"
-msgstr "プロファイル名:"
+msgstr "プロファイル名"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
 msgid "Profile name:"
@@ -3338,7 +3331,6 @@ msgid "Profile Version: %s"
 msgstr "プロファイルバージョン: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:155
-#, fuzzy
 msgid "Profiles"
 msgstr "プロファイル"
 
@@ -3431,9 +3423,8 @@ msgid "Refresh"
 msgstr "更新"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:313
-#, fuzzy
 msgid "Regular expression"
-msgstr "数式表現を有効にする"
+msgstr "正規表現"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
 #: packages/app-desktop/gui/Root.tsx:179
@@ -3491,9 +3482,8 @@ msgid "Replace: "
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
-#, fuzzy
 msgid "Reset application layout"
-msgstr "画面レイアウトをカスタマイズ"
+msgstr "画面レイアウトをリセット"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:219
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
@@ -4398,7 +4388,7 @@ msgstr "ノートがありません。(+)ボタンを押して新しいノート
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:344
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "保存されていない変更があります。"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:512
 msgid ""
@@ -4959,12 +4949,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1705
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "音声入力言語ファイル (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:994
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr ""
+msgstr "音声入力…"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
