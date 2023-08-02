@@ -114,7 +114,7 @@ export default class ClipperServer {
 		} catch (error) {
 			this.setStartState(StartState.Idle);
 			this.logger().error(error);
-			return;
+			return null;
 		}
 
 		this.server_ = require('http').createServer();

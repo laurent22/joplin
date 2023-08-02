@@ -210,7 +210,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async saveProperty() {
-		if (!this.state.editedKey) return;
+		if (!this.state.editedKey) return null;
 
 		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
