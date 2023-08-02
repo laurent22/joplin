@@ -1128,7 +1128,7 @@ class Setting extends BaseModel {
 				isEnum: true,
 				public: true,
 				appTypes: [AppType.Mobile, AppType.Desktop],
-				label: () => _('Image resizing:'),
+				label: () => _('Resize large images:'),
 				description: () => _('Shrink large images before adding them to notes to save storage space.'),
 				options: () => {
 					return {
