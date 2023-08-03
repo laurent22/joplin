@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/jest": "29.5.3",
     "@types/pdfjs-dist": "2.10.378",
-    "@types/react": "16.14.43",
+    "@types/react": "18.2.6",
     "@types/react-dom": "18.2.6",
     "@types/styled-components": "5.1.26",
     "babel-jest": "29.5.0",

@@ -324,7 +324,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
 
-	const externalEditWatcher_noteChange = useCallback((event) => {
+	const externalEditWatcher_noteChange = useCallback((event: any) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
 				...formNote,
@@ -337,7 +337,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote]);
 
-	const onNotePropertyChange = useCallback((event) => {
+	const onNotePropertyChange = useCallback((event: any) => {
 		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
 
