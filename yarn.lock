@@ -5007,17 +5007,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/utils@npm:~2.11":
-  version: 2.11.2
-  resolution: "@joplin/utils@npm:2.11.2"
-  dependencies:
-    execa: 5.1.1
-    fs-extra: 11.1.1
-    node-fetch: 2.6.7
-  checksum: 95ba577e6e5f7fb2c10e6bdb2694fdaaef31d6f650b5917b70ec35cb720b1357e182458cce894395f7109298847c21ad78932df6d3394fdbc315ecb5fde28630
-  languageName: node
-  linkType: hard
-
 "@joplin/utils@workspace:packages/utils, @joplin/utils@~2.12":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
@@ -29473,7 +29462,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@joplin/utils": ~2.11
+    "@joplin/utils": ~2.12
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
     "@types/fs-extra": 11.0.1
     "@typescript-eslint/eslint-plugin": 5.60.0

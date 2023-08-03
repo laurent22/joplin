@@ -25,6 +25,7 @@ import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import { parseEnv } from '../../env';
 import { URL } from 'url';
+import initLib from '@joplin/lib/initLib';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -64,6 +65,7 @@ export async function makeTempFileWithContent(content: string | Buffer): Promise
 function initGlobalLogger() {
 	const globalLogger = new Logger();
 	Logger.initializeGlobalLogger(globalLogger);
+	initLib(globalLogger);
 }
 
 let createdDbPath_: string = null;
