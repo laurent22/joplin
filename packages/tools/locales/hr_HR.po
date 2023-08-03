@@ -2,7 +2,7 @@
 # Copyright (C) 2001 Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # Hrvoje Mandić <trbuhom@net.hr>
-# Milo Ivir <mail@milotype.de>, 2021., 2022.
+# Milo Ivir <mail@milotype.de>, 2021., 2022., 2023.
 #
 msgid ""
 msgstr ""
@@ -15,8 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:687
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -359,8 +361,8 @@ msgstr ""
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Nejednoznačna bilježnica „%s”. Umjesto toga koristi kratki ID bilježnice – "
 "pritisni „ti” za prikaz kratkog ID-a bilježnice"
@@ -1424,9 +1426,8 @@ msgid "Downloading"
 msgstr "Preuzimanje"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Preuzimanje resursa …"
+msgstr "Preuzimanje jezičnih datoteka za %s …"
 
 #: packages/app-cli/app/command-sync.ts:218
 msgid "Downloading resources..."
@@ -2021,9 +2022,8 @@ msgid "Help"
 msgstr "Pomoć"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:759
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "Pretraživanje cijelog teksta je aktivirano: %d"
+msgstr "Hermes aktiviran: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:567
 msgid "Hide %s"
@@ -2445,6 +2445,7 @@ msgstr "Slijed gumbova rasporeda"
 #: packages/lib/models/Setting.ts:1704
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
+"Ostavi prazno za preuzimanje jezičnih datoteka sa standardne web stranice"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3460,7 +3461,7 @@ msgstr "Zamijeni sa …"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr "Zamijeni:"
+msgstr "Zamijeni: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -3649,9 +3650,8 @@ msgid "Select file..."
 msgstr "Odaberi datoteku …"
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Obriši bilježnicu"
+msgstr "Obriši nadređenu bilježnicu"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4940,12 +4940,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1705
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Jezične datoteke za tipkanje glasom (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:994
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:119
 msgid "Voice typing..."
-msgstr "Tipkanje glasa …"
+msgstr "Tipkanje glasom …"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:83
 msgid "Warning"
@@ -4999,9 +4999,8 @@ msgstr ""
 "pritisni `mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Dobro došli"
+msgstr "Dobro došao, dobro došla!"
 
 #: packages/lib/models/Setting.ts:1105
 msgid "When creating a new note:"
