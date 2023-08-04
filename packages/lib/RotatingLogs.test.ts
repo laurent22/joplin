@@ -48,8 +48,8 @@ describe('RotatingLogs', () => {
 		try {
 			dir = await createTempDir();
 			await createTestLogFile(dir);
-			await msleep(1000);
-			const rotatingLogs: RotatingLogs = new RotatingLogs(dir, 1, 1000);
+			await msleep(100);
+			const rotatingLogs: RotatingLogs = new RotatingLogs(dir, 1, 100);
 			await rotatingLogs.cleanActiveLogFile();
 			await rotatingLogs.deleteNonActiveLogFiles();
 			const files: string[] = await readdir(dir);
