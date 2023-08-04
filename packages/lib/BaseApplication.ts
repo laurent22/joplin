@@ -59,7 +59,6 @@ import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
 import { parseShareCache } from './services/share/reducer';
-
 import RotatingLogs from './RotatingLogs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -69,6 +68,7 @@ const appLogger: LoggerWrapper = Logger.create('App');
 
 interface StartOptions {
 	keychainEnabled?: boolean;
+	setupGlobalLogger?: boolean;
 }
 
 export default class BaseApplication {
@@ -738,6 +738,7 @@ export default class BaseApplication {
 	public async start(argv: string[], options: StartOptions = null): Promise<any> {
 		options = {
 			keychainEnabled: true,
+			setupGlobalLogger: true,
 			...options,
 		};
 
@@ -800,18 +801,15 @@ export default class BaseApplication {
 		const extraFlags = await this.readFlagsFromFile(`${profileDir}/flags.txt`);
 		initArgs = { ...initArgs, ...extraFlags };
 
+		const globalLogger = Logger.globalLogger;
 
-
-
-		const globalLogger = new Logger();
-		globalLogger.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
-		if (Setting.value('appType') === 'desktop') {
-			globalLogger.addTarget(TargetType.Console);
+		if (options.setupGlobalLogger) {
+			globalLogger.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
+			if (Setting.value('appType') === 'desktop') {
+				globalLogger.addTarget(TargetType.Console);
+			}
+			globalLogger.setLevel(initArgs.logLevel);
 		}
-		globalLogger.setLevel(initArgs.logLevel);
-		Logger.initializeGlobalLogger(globalLogger);
-
-
 
 		reg.setLogger(Logger.create('') as Logger);
 		// reg.dispatch = () => {};

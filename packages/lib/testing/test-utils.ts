@@ -63,6 +63,7 @@ const { S3Client } = require('@aws-sdk/client-s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
+import initLib from '../initLib';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -173,6 +174,7 @@ logger.addTarget(TargetType.Console);
 logger.setLevel(LogLevel.Warn); // Set to DEBUG to display sync process in console
 
 Logger.initializeGlobalLogger(logger);
+initLib(logger);
 
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);
@@ -916,7 +918,7 @@ class TestApp extends BaseApplication {
 		if (!argv.includes('--profile')) {
 			argv = argv.concat(['--profile', `tests-build/profile/${uuid.create()}`]);
 		}
-		argv = await super.start(['', ''].concat(argv));
+		argv = await super.start(['', ''].concat(argv), { setupGlobalLogger: false });
 
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.

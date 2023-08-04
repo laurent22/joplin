@@ -24,6 +24,7 @@ import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
 import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
+import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
 
 interface Argv {
@@ -215,6 +216,7 @@ async function main() {
 		formatInfo: `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`,
 	});
 	Logger.initializeGlobalLogger(globalLogger);
+	initLib(globalLogger);
 
 	if (envFilePath) appLogger().info(`Env variables were loaded from: ${envFilePath}`);
 
