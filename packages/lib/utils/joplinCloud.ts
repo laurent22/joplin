@@ -156,7 +156,13 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			teams: true,
 		},
 		collaborate: {
-			title: _('Share and collaborate on a notebook'),
+			title: _('Collaborate on a notebook with others'),
+			basic: true,
+			pro: true,
+			teams: true,
+		},
+		share: {
+			title: _('Share a notebook with others'),
 			basic: false,
 			pro: true,
 			teams: true,
