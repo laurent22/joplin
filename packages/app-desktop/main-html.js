@@ -29,6 +29,7 @@ const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService')
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
+const initLib = require('@joplin/lib/initLib').default;
 
 // Security: If we attempt to navigate away from the root HTML page, it's likely because
 // of an improperly sanitized link. Prevent this by closing the window before we can
@@ -131,6 +132,10 @@ document.addEventListener('click', (event) => {
 
 	event.preventDefault();
 });
+
+const logger = new Logger();
+Logger.initializeGlobalLogger(logger);
+initLib(logger);
 
 app().start(bridge().processArgv()).then((result) => {
 	if (!result || !result.action) {

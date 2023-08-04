@@ -99,7 +99,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, []);
 
-	const addListItem = useCallback((string1, defaultText = '') => {
+	const addListItem = useCallback((string1: string, defaultText = '') => {
 		if (editorRef.current) {
 			if (editorRef.current.somethingSelected()) {
 				editorRef.current.wrapSelectionsByLine(string1);

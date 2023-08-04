@@ -541,6 +541,7 @@ packages/lib/htmlUtils2.test.js
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex-md-gen.js
 packages/lib/import-enex.js
+packages/lib/initLib.js
 packages/lib/locale.test.js
 packages/lib/locale.js
 packages/lib/markdownUtils.test.js
