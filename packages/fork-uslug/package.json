@@ -7,7 +7,7 @@
     "access": "public"
   },
   "dependencies": {
-    "node-emoji": "1.11.0",
+    "node-emoji": "2.0.2",
     "unorm": "1.6.0"
   },
   "devDependencies": {
