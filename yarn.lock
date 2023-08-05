@@ -4915,7 +4915,6 @@ __metadata:
     mustache: 4.2.0
     nanoid: 2.1.11
     node-cron: 3.0.2
-    node-env-file: 0.1.8
     node-mocks-http: 1.12.2
     nodemailer: 6.9.3
     nodemon: 2.0.22
@@ -24582,13 +24581,6 @@ __metadata:
   dependencies:
     lodash: ^4.17.21
   checksum: e8c856c04a1645062112a72e59a98b203505ed5111ff84a3a5f40611afa229b578c7d50f1e6a7f17aa62baeea4a640d2e2f61f63afc05423aa267af10977fb2b
-  languageName: node
-  linkType: hard
-
-"node-env-file@npm:0.1.8":
-  version: 0.1.8
-  resolution: "node-env-file@npm:0.1.8"
-  checksum: 5346ea202075a3f9cda508d5abba450b60996625d53c40890a4a6d87919cca6ef47230af8d71899dbad0ae1c024a7a65f4ceacf2a300f70eb1d37f92366176e2
   languageName: node
   linkType: hard
 
