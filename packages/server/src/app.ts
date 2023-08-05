@@ -99,7 +99,14 @@ async function main() {
 
 	const envFilePath = await getEnvFilePath(env, argv);
 
-	const envFromFile = envFilePath ? parseEnvFile(envFilePath) : {};
+	let envFromFile: Record<string, string> = {};
+
+	try {
+		if (envFilePath) envFromFile = parseEnvFile(envFilePath);
+	} catch (error) {
+		error.message = `Could not parse env file at ${envFilePath}: ${error.message}`;
+		throw error;
+	}
 
 	const fullEnv = {
 		...envFromFile,

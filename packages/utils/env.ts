@@ -9,6 +9,7 @@ export interface Options {
 	overwrite?: boolean;
 	raise?: boolean;
 	logger?: typeof console;
+	allowDuplicateKeys?: boolean;
 }
 
 export const parseEnvFile = (env_file: string, options: Options = {}) => {
@@ -17,6 +18,7 @@ export const parseEnvFile = (env_file: string, options: Options = {}) => {
 		overwrite: false,
 		raise: true,
 		verbose: false,
+		allowDuplicateKeys: false,
 		...options,
 	};
 
@@ -100,6 +102,8 @@ export const parseEnvFile = (env_file: string, options: Options = {}) => {
 
 				// remove ' and " characters if right side of = is quoted
 				const env_value = key_value[2].match(/^(['"]?)([^\n]*)\1$/m)[2];
+
+				if ((env_key in data[env_file]) && !options.allowDuplicateKeys) throw new Error(`Found duplicate key: ${env_key}`);
 
 				if (options.overwrite) {
 					data[env_file][env_key] = env_value;
