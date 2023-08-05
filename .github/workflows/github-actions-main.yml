@@ -75,6 +75,7 @@ jobs:
           # We need to pin the version to 18.15, because 18.16+ fails with this error:
           # https://github.com/facebook/react-native/issues/36440
           node-version: '18.15.0'
+          cache: 'yarn'
 
       - name: Install Yarn
         run: |
@@ -160,6 +161,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
+          cache: 'yarn'
 
       - name: Install Yarn
         run: |
