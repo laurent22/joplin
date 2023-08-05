@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { getDeviceTimeDrift } from '@joplin/lib/ntp';
@@ -293,6 +293,10 @@ async function main() {
 			await migrateLatest(connectionCheck.connection);
 			appLogger().info('Latest migration:', await latestMigration(connectionCheck.connection));
 		} else {
+			if (!config().DB_ALLOW_INCOMPLETE_MIGRATIONS && (await needsMigration(connectionCheck.connection))) {
+				const list = await migrateList(connectionCheck.connection, true);
+				throw new Error(`One or more migrations need to be applied:\n\n${list}`);
+			}
 			appLogger().info('Skipped database auto-migration.');
 		}
 
