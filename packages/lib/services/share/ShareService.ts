@@ -500,14 +500,22 @@ export default class ShareService {
 	public async maintenance() {
 		if (this.enabled) {
 			let hasError = false;
+
 			try {
 				await this.refreshShareInvitations();
-				await this.refreshShares();
-				Setting.setValue('sync.userId', this.api().userId);
 			} catch (error) {
 				hasError = true;
-				logger.error('Failed to run maintenance:', error);
+				logger.error('Maintenance: Failed to update share invitations:', error);
 			}
+
+			try {
+				await this.refreshShares();
+			} catch (error) {
+				hasError = true;
+				logger.error('Maintenance: Failed to refresh shares:', error);
+			}
+
+			Setting.setValue('sync.userId', this.api().userId);
 
 			// If there was no errors, it means we have all the share objects,
 			// so we can run the clean up function.
