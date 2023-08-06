@@ -12,7 +12,7 @@ describe('RotatingLogs', () => {
 		try {
 			dir = await createTempDir();
 			await createTestLogFile(dir);
-			let files: string[] = await readdir(dir);
+			let files = await readdir(dir);
 			expect(files.find(file => file.match(/^log.txt$/gi))).toBeTruthy();
 			expect(files.length).toBe(1);
 			const rotatingLogs: RotatingLogs = new RotatingLogs(dir, 1, 1);
@@ -35,7 +35,7 @@ describe('RotatingLogs', () => {
 			await rotatingLogs.cleanActiveLogFile();
 			await msleep(1);
 			await rotatingLogs.deleteNonActiveLogFiles();
-			const files: string[] = await readdir(dir);
+			const files = await readdir(dir);
 			expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeFalsy();
 			expect(files.length).toBe(0);
 		} finally {
@@ -52,7 +52,7 @@ describe('RotatingLogs', () => {
 			const rotatingLogs: RotatingLogs = new RotatingLogs(dir, 1, 100);
 			await rotatingLogs.cleanActiveLogFile();
 			await rotatingLogs.deleteNonActiveLogFiles();
-			const files: string[] = await readdir(dir);
+			const files = await readdir(dir);
 			expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeTruthy();
 			expect(files.length).toBe(1);
 		} finally {
