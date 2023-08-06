@@ -1,5 +1,3 @@
-import { Theme } from './themes/type';
-
 import theme_light from './themes/light';
 import theme_dark from './themes/dark';
 import theme_dracula from './themes/dracula';
@@ -113,31 +111,20 @@ globalStyle.buttonStyle = {
 	borderRadius: 4,
 };
 
-function addMissingProperties(theme: Theme) {
-	// if (!('backgroundColor3' in theme)) theme.backgroundColor3 = theme.backgroundColor;
-	// if (!('color3' in theme)) theme.color3 = theme.color;
-	// if (!('selectionBackgroundColor3' in theme)) {
-	// 	if (theme.appearance === 'dark') {
-	// 		theme.selectionBackgroundColor3 = '#ffffff77';
-	// 	} else {
-	// 		theme.selectionBackgroundColor3 = '#00000077';
-	// 	}
-	// }
-	// if (!('backgroundColorHover3' in theme)) theme.backgroundColorHover3 = Color(theme.selectionBackgroundColor3).alpha(0.5).rgb();
-	// if (!('selectionBorderColor3' in theme)) theme.selectionBorderColor3 = theme.backgroundColor3;
-
-	// TODO: pick base theme based on appearence
-
-	// const lightTheme = themes[Setting.THEME_LIGHT];
-
-	// for (const n in lightTheme) {
-	// 	if (!(n in theme)) theme[n] = lightTheme[n];
-	// }
-
-	return theme;
-}
-
 export function addExtraStyles(style: any) {
+	const zoomRatio = 1;
+
+	const fontSizes: any = {
+		fontSize: Math.round(12 * zoomRatio),
+		toolbarIconSize: 18,
+	};
+
+	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
+
+	style.zoomRatio = zoomRatio;
+
+	style = { ...fontSizes, ...style };
+
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
 
@@ -350,28 +337,14 @@ const themeCache_: any = {};
 export function themeStyle(themeId: number) {
 	if (!themeId) throw new Error('Theme must be specified');
 
-	const zoomRatio = 1;
-
 	const cacheKey = themeId;
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
-	// Font size are not theme specific, but they must be referenced
-	// and computed here to allow them to respond to settings changes
-	// without the need to restart
-	const fontSizes: any = {
-		fontSize: Math.round(12 * zoomRatio),
-		toolbarIconSize: 18,
-	};
-
-	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
-
 	let output: any = {};
-	output.zoomRatio = zoomRatio;
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
-	output = { ...globalStyle, ...fontSizes, ...themes[themeId] };
-	output = addMissingProperties(output);
+	output = { ...globalStyle, ...themes[themeId] };
 	output = addExtraStyles(output);
 	output.cacheKey = cacheKey;
 
