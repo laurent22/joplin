@@ -50,6 +50,7 @@ packages/tools/github_oauth_token.txt
 lerna-debug.log
 .env
 docs/**/*.mustache
+.idea
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
