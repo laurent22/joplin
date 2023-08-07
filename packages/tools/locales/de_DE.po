@@ -559,15 +559,15 @@ msgstr "Aufzählung"
 
 #: packages/server/src/routes/admin/users.ts:154
 msgid "Can Share"
-msgstr "Teilen möglich"
+msgstr "Teilen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Sehen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Sehen und bearbeiten"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -1743,7 +1743,7 @@ msgstr "Inhaltsverzeichnis-Erweiterung aktivieren"
 
 #: packages/lib/models/Setting.ts:1070
 msgid "Enable the Markdown toolbar"
-msgstr "Markdown Werkzeugleiste aktivieren"
+msgstr "Markdown-Werkzeugleiste aktivieren"
 
 #: packages/lib/models/Setting.ts:1153
 msgid "Enable typographer support"
