@@ -121,6 +121,12 @@ const EncryptionConfigScreen = (props: Props) => {
 			borderColor: theme.dividerColor,
 		};
 
+		const missingPasswordCellStyle = {
+			...theme.textStyle,
+			border: '3px solid',
+			borderColor: theme.colorError,
+		};
+
 		const password = inputPasswords[mk.id] ? inputPasswords[mk.id] : '';
 		const isActive = props.activeMasterKeyId === mk.id;
 		const activeIcon = isActive ? '✔' : '';
@@ -135,8 +141,15 @@ const EncryptionConfigScreen = (props: Props) => {
 				);
 			} else {
 				return (
-					<td style={theme.textStyle}>
-						<input type="password" style={passwordStyle} value={password} onChange={event => onInputPasswordChange(mk, event.target.value)} />{' '}
+					<td style={missingPasswordCellStyle}>
+						<input
+							type="password"
+							placeholder={_('Enter password')}
+							style={passwordStyle}
+							value={password}
+							onChange={event => onInputPasswordChange(mk, event.target.value)}
+						/>
+						{' '}
 						<button style={theme.buttonStyle} onClick={() => onSavePasswordClick(mk, { ...props.passwords, ...inputPasswords })}>
 							{_('Save')}
 						</button>
@@ -268,7 +281,11 @@ const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">{_('Your password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}</p>
+			<p className="needpassword">
+				{_('Your password is needed to decrypt some of your data.')}
+				<br/>
+				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
+			</p>
 		);
 
 		return (
