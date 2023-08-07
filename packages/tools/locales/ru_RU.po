@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
@@ -257,12 +259,17 @@ msgid "Accept"
 msgstr "Принять"
 
 #: packages/lib/WebDavApi.js:451
+#, fuzzy
 msgid "Access denied: Please check your username and password"
 msgstr ""
+"Отказано в доступе: Пожалуйста, проверьте ваши имя пользователя и пароль"
 
 #: packages/lib/WebDavApi.js:449
+#, fuzzy
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
+"Отказано в доступе: Пожалуйста, повторно введите свой пароль и/или имя "
+"пользователя."
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -384,6 +391,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Любое письмо, отправленное на этот адрес, будет преобразовано в заметку и "
+"добавлено в вашу коллекцию. Заметка будет сохранена в блокноте \"Входящие\"."
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -548,11 +557,11 @@ msgstr "Можно поделиться"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Можно просматривать"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Можно просматривать и редактировать"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -606,9 +615,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Не удалось скопировать заметку в блокнот \"%s\""
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Создает новую заметку."
+msgstr "Невозможно создать новую заметку: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -960,9 +968,8 @@ msgstr[2] "Скопировать общедоступные ссылки"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Скопировать путь в буфер обмена"
+msgstr "Скопировать в буфер обмена"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1229,9 +1236,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Удалить локальные данные и перегрузить данные с цели синхронизации"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Удалить заметку?"
+msgstr "Удалить заметку"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1243,9 +1249,8 @@ msgid "Delete note?"
 msgstr "Удалить заметку?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Удалить заметку?"
+msgstr "Удалить блокнот"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1286,6 +1291,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Удалить блокнот \"Входящие\"?\n"
+"\n"
+"Если вы удалите блокнот \"Входящие\", то все электронные письма, которые "
+"были недавно отправлены в этот блокнот, могут быть потеряны."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1604,9 +1613,8 @@ msgstr "Email"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "Редактировать заметку."
+msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
@@ -1850,12 +1858,11 @@ msgstr "Экспорт"
 #: packages/app-desktop/gui/MenuBar.tsx:552
 #: packages/app-desktop/gui/MenuBar.tsx:608
 msgid "Export all"
-msgstr "Экспорт"
+msgstr "Экспортировать все"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "Экспорт"
+msgstr "Экспортировать все заметки в формате JEX."
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1882,9 +1889,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "Экспортирование профиля..."
+msgstr "Экспортирование..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -2527,6 +2533,7 @@ msgstr "Порядок переключения вида"
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
+"Оставьте поле пустым, чтобы скачать языковые файлы с сайта по умолчанию."
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3806,6 +3813,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Поделиться копией всех заметок в формате файла, который можно импортировать "
+"в Joplin на компьютере."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -4572,28 +4581,25 @@ msgstr ""
 "восстановлены."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Этот файл не может быть открыт: %s"
-msgstr[1] "Этот файл не может быть открыт: %s"
-msgstr[2] "Этот файл не может быть открыт: %s"
+msgstr[0] "Эта заметка не может быть удалена: %s"
+msgstr[1] "Эти заметки не могут быть удалены: %s"
+msgstr[2] "Эти заметки не могут быть удалены: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Блокнот не может быть сохранен: %s"
-msgstr[1] "Блокнот не может быть сохранен: %s"
-msgstr[2] "Блокнот не может быть сохранен: %s"
+msgstr[0] "Эта заметка не может быть продублирована: %s"
+msgstr[1] "Эти заметки не могут быть продублированы: %s"
+msgstr[2] "Эти заметки не могут быть продублированы: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Блокнот не может быть сохранен: %s"
-msgstr[1] "Блокнот не может быть сохранен: %s"
-msgstr[2] "Блокнот не может быть сохранен: %s"
+msgstr[0] "Эта заметка не может быть перемещена: %s"
+msgstr[1] "Эти заметки не могут быть перемещены: %s"
+msgstr[2] "Эти заметки не могут быть перемещены: %s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4666,7 +4672,7 @@ msgstr "заголовок"
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:135
 #: packages/app-desktop/gui/ResourceScreen.tsx:93
 msgid "Title"
-msgstr "Заглавие"
+msgstr "Заголовок"
 
 #: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
@@ -4743,8 +4749,9 @@ msgid "to-do"
 msgstr "задача"
 
 #: packages/app-mobile/components/note-item.js:143
+#, fuzzy
 msgid "to-do: %s"
-msgstr "задание: %s"
+msgstr "задачи: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 msgid "Toggle comment"
@@ -4843,7 +4850,7 @@ msgstr "Тип: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Невозможно экспортировать или поделиться данными. Причина: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -5095,11 +5102,12 @@ msgstr ""
 "(ограничение:%s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Предупреждение"
+msgstr ""
+"Предупреждения:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
