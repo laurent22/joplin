@@ -281,11 +281,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">
-				{_('Your password is needed to decrypt some of your data.')}
-				<br/>
-				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
-			</p>
+			<p className="needpassword">{_('Your password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}</p>
 		);
 
 		return (
