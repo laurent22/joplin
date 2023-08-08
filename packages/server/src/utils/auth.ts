@@ -8,3 +8,7 @@ export function hashPassword(password: string): string {
 export function checkPassword(password: string, hash: string): boolean {
 	return bcrypt.compareSync(password, hash);
 }
+
+export const isHashedPassword = (password: string) => {
+	return password.startsWith('$2a$10');
+};

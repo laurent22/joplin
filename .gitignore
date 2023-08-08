@@ -50,6 +50,7 @@ packages/tools/github_oauth_token.txt
 lerna-debug.log
 .env
 docs/**/*.mustache
+.idea
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
@@ -353,6 +354,7 @@ packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
+packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
