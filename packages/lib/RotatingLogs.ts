@@ -29,7 +29,8 @@ export default class RotatingLogs {
 		const files: Stat[] = await this.fsDriver().readDirStats(this.logFilesDir);
 		for (const file of files) {
 			if (!file.path.match(/^log-[0-9]+.txt$/gi)) continue;
-			const ageOfTheFile: number = Date.now() - file.birthtime;
+			const timestamp: number = parseInt(file.path.match(/[0-9]+/g)[0], 10);
+			const ageOfTheFile: number = Date.now() - timestamp;
 			if (ageOfTheFile >= this.inactiveMaxAge) {
 				await this.fsDriver().remove(this.logFileFullpath(file.path));
 			}
