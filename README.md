@@ -158,6 +158,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 	- [Guiding principles](https://github.com/laurent22/joplin/blob/dev/readme/principles.md)
 	- [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
 	- [Brand guidelines](https://joplinapp.org/brand)
+	- [Release cycle](https://github.com/laurent22/joplin/blob/dev/readme/release_cycle.md)
 	- [Donate](https://github.com/laurent22/joplin/blob/dev/readme/donate.md)
 <!-- TOC -->
 
