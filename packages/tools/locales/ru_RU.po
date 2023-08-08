@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
+"Last-Translator: Титан <fignin@ya.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -392,7 +392,7 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 "Любое письмо, отправленное на этот адрес, будет преобразовано в заметку и "
-"добавлено в вашу коллекцию. Заметка будет сохранена в блокноте \"Входящие\"."
+"добавлено в вашу коллекцию. Заметка будет сохранена в блокноте \"Входящие\""
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -1862,7 +1862,7 @@ msgstr "Экспортировать все"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
 msgid "Export all notes as JEX"
-msgstr "Экспортировать все заметки в формате JEX."
+msgstr "Экспортировать все заметки в формате JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -2533,7 +2533,7 @@ msgstr "Порядок переключения вида"
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
-"Оставьте поле пустым, чтобы скачать языковые файлы с сайта по умолчанию."
+"Оставьте поле пустым, чтобы скачать языковые файлы с сайта по умолчанию"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -4585,21 +4585,21 @@ msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
 msgstr[0] "Эта заметка не может быть удалена: %s"
 msgstr[1] "Эти заметки не могут быть удалены: %s"
-msgstr[2] "Эти заметки не могут быть удалены: %s"
+msgstr[2] ""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
 msgstr[0] "Эта заметка не может быть продублирована: %s"
 msgstr[1] "Эти заметки не могут быть продублированы: %s"
-msgstr[2] "Эти заметки не могут быть продублированы: %s"
+msgstr[2] ""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
 msgstr[0] "Эта заметка не может быть перемещена: %s"
 msgstr[1] "Эти заметки не могут быть перемещены: %s"
-msgstr[2] "Эти заметки не могут быть перемещены: %s"
+msgstr[2] ""
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
