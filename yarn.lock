@@ -4525,7 +4525,7 @@ __metadata:
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.3.0
     "@react-native-community/geolocation": 3.0.6
-    "@react-native-community/netinfo": 9.4.0
+    "@react-native-community/netinfo": 9.4.1
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.4.2
     "@testing-library/jest-native": 5.4.2
@@ -6874,12 +6874,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:9.4.0":
-  version: 9.4.0
-  resolution: "@react-native-community/netinfo@npm:9.4.0"
+"@react-native-community/netinfo@npm:9.4.1":
+  version: 9.4.1
+  resolution: "@react-native-community/netinfo@npm:9.4.1"
   peerDependencies:
     react-native: ">=0.59"
-  checksum: 32c264a08417a0527a714830ad364e3b20f174f691b5b7bb85c53c9af0f7596ecdc209e86711789ae0d7504b05e1f82c7861da117b5898ddc18b832fa0f12ffd
+  checksum: cf6471a50a5282f858797cda7531c61ac3d94de2e1c379b14a11f6b049f582606dae55a041dd900c56b01faf69eb5cfef9b4e84b0ea7f02de52804aa5a6e22df
   languageName: node
   linkType: hard
 
