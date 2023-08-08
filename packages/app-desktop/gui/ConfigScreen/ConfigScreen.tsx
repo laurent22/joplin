@@ -19,6 +19,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
+import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -208,17 +209,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const advancedSettingsSectionStyle = { display: 'none' };
 
 		if (advancedSettingComps.length) {
-			const iconName = this.state.showAdvancedSettings ? 'fa fa-angle-down' : 'fa fa-angle-right';
-			// const advancedSettingsButtonStyle = { ...theme.buttonStyle,  marginBottom: 10  };
 			advancedSettingsButton = (
-				<div style={{ marginBottom: 10 }}>
-					<Button
-						level={ButtonLevel.Secondary}
-						onClick={() => shared.advancedSettingsButton_click(this)}
-						iconName={iconName}
-						title={_('Show Advanced Settings')}
-					/>
-				</div>
+				<ToggleAdvancedSettingsButton
+					onClick={() => shared.advancedSettingsButton_click(this)}
+					advancedSettingsVisible={this.state.showAdvancedSettings}
+				/>
 			);
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
