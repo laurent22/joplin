@@ -208,7 +208,7 @@ function shimInit(options = null) {
 			if (canResize) {
 				if (resizeLargeImages === 'alwaysAsk') {
 					const Yes = 0, No = 1, Cancel = 2;
-					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim)}\n\n${_('(You may change this default behaviour in the options)')}`, {
+					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim)}\n\n${_('(You may this disable this prompt in the options)')}`, {
 						buttons: [_('Yes'), _('No'), _('Cancel')],
 					});
 					if (userAnswer === Yes) return await saveResizedImage();
