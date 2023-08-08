@@ -606,7 +606,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (canResize) {
 			const resizeLargeImages = Setting.value('imageResizing');
 			if (resizeLargeImages === 'alwaysAsk') {
-				const userAnswer = await dialogs.pop(this, `${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize)}\n\n${_('(You may this disable this prompt in the options)')}`, [
+				const userAnswer = await dialogs.pop(this, `${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize)}\n\n${_('(You may disable this prompt in the options)')}`, [
 					{ text: _('Yes'), id: 'yes' },
 					{ text: _('No'), id: 'no' },
 					{ text: _('Cancel'), id: 'cancel' },
