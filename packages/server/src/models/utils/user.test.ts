@@ -1,4 +1,4 @@
-import { isHashedPassword } from './user';
+import { isHashedPassword } from '../../utils/auth';
 
 describe('isHashedPassword', () => {
 

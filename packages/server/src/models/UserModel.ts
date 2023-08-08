@@ -1,12 +1,12 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
-import * as auth from '../utils/auth';
+import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
-import { getMaxItemSize, getMaxTotalItemSize, isHashedPassword } from './utils/user';
+import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
 import * as zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
@@ -125,7 +125,7 @@ export default class UserModel extends BaseModel<User> {
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
 		if (!user) return null;
-		if (!auth.checkPassword(password, user.password)) return null;
+		if (!checkPassword(password, user.password)) return null;
 		return user;
 	}
 
@@ -640,7 +640,7 @@ export default class UserModel extends BaseModel<User> {
 				throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
 			}
 			if (!options.skipValidation) this.validatePassword(user.password);
-			user.password = auth.hashPassword(user.password);
+			user.password = hashPassword(user.password);
 		}
 
 		const isNew = await this.isNew(object, options);
