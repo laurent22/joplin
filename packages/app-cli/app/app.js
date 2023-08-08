@@ -452,6 +452,8 @@ class Application extends BaseApplication {
 				type: 'FOLDER_SELECT',
 				id: Setting.value('activeFolderId'),
 			});
+
+			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		}
 	}
 }
