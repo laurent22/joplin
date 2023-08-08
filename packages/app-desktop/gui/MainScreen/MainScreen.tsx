@@ -563,6 +563,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onViewSyncSettingsScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'sync',
+				},
+			});
+		};
+
 		const onViewPluginScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -599,6 +609,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
 				onDisableSafeModeAndRestart
+			);
+		} else if (this.props.hasMissingSyncCredentials) {
+			msg = this.renderNotificationMessage(
+				_('The synchronisation password is missing.'),
+				_('Set the password'),
+				onViewSyncSettingsScreen
 			);
 		} else if (this.props.shouldUpgradeSyncTarget) {
 			msg = this.renderNotificationMessage(
@@ -647,12 +663,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Set the password'),
 				onViewEncryptionConfigScreen
 			);
-		} else if (this.props.hasMissingSyncCredentials) {
-			msg = this.renderNotificationMessage(
-				_('The synchronisation password is missing.'),
-				_('Set the password'),
-				onViewEncryptionConfigScreen
-			);
 		} else if (this.props.showInstallTemplatesPlugin) {
 			msg = this.renderNotificationMessage(
 				'The template feature has been moved to a plugin called "Templates".',
@@ -670,7 +680,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.hasMissingSyncCredentials || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
 	}
 
 	public registerCommands() {

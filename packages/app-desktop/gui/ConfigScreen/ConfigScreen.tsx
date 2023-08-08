@@ -22,6 +22,7 @@ import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import shim from '@joplin/lib/shim';
+import StyledLink from '../style/StyledLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -185,16 +186,30 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			const statusStyle = { ...theme.textStyle, marginTop: 10 };
 			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
 
-			if (shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+			// Don't show the missing password warning if the user just changed the sync target (but hasn't
+			// saved yet).
+			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+				const openMissingPasswordFAQ = () =>
+					bridge().openExternal('https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
+
 				const macInfoLink = (
-					<a href="https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin">
+					<StyledLink href="#"
+						onClick={openMissingPasswordFAQ}
+						style={theme.linkStyle}
+					>
 						{_('Why is my password missing?')}
-					</a>
+					</StyledLink>
 				);
+
+				// The FAQ section related to missing passwords is specific to MacOS/ARM -- only show it
+				// in that case.
+				const showMacInfoLink = shim.isMac();
+
 				settingComps.push(
-					<p style={warningStyle}>
+					<p key='missing-password-warning' style={warningStyle}>
 						{_('Warning: Missing password.')}
-						{shim.isMac() ? macInfoLink : null}
+						{showMacInfoLink ? macInfoLink : null}
 					</p>
 				);
 			}
