@@ -12,7 +12,7 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@joplin/lib/components/shared/config/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -20,6 +20,8 @@ import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from 
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import shim from '@joplin/lib/shim';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -181,6 +183,21 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 			const statusStyle = { ...theme.textStyle, marginTop: 10 };
+			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
+
+			if (shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+				const macInfoLink = (
+					<a href="https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin">
+						{_('Why is my password missing?')}
+					</a>
+				);
+				settingComps.push(
+					<p style={warningStyle}>
+						{_('Warning: Missing password.')}
+						{shim.isMac() ? macInfoLink : null}
+					</p>
+				);
+			}
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
