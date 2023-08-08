@@ -37,3 +37,7 @@ export function totalSizeClass(user: User) {
 	if (d >= .7) return 'is-warning';
 	return '';
 }
+
+export const isHashedPassword = (password: string) => {
+	return password.startsWith('$2a$10');
+};

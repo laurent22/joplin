@@ -6,7 +6,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
-import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
+import { getMaxItemSize, getMaxTotalItemSize, isHashedPassword } from './utils/user';
 import * as zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
@@ -636,6 +636,9 @@ export default class UserModel extends BaseModel<User> {
 		const user = this.formatValues(object);
 
 		if (user.password) {
+			if (isHashedPassword(user.password)) {
+				throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
+			}
 			if (!options.skipValidation) this.validatePassword(user.password);
 			user.password = auth.hashPassword(user.password);
 		}
