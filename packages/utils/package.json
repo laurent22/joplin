@@ -7,6 +7,7 @@
     ".": "./dist/index.js",
     "./net": "./dist/net.js",
     "./fs": "./dist/fs.js",
+    "./env": "./dist/env.js",
     "./Logger": "./dist/Logger.js"
   },
   "publishConfig": {

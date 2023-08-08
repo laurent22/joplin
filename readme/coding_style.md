@@ -52,6 +52,28 @@ const config: Config = {
 }	
 ```
 
+### Don't set the type when it can be inferred
+
+TypeScript can automatically detect the type so setting it explicitely in many cases is not needed, and makes the code unecessary verbose. We already have enabled the eslint rule `no-inferrable-types`, however it only applies to simple types such as string, number, etc. but not to function calls.
+
+**BAD:**
+```ts
+const getSomething():string => {
+	return 'something';
+}
+
+const timestamp:number = Date.now();
+```
+
+**Good:**
+```ts
+const getSomething() => {
+	return 'something';
+}
+
+const timestamp = Date.now();
+```
+
 ## Filenames
 
  * `camelCase.ts`: Files that export multiple things.

@@ -12,7 +12,7 @@ describe('RotatingLogs', () => {
 		try {
 			dir = await createTempDir();
 			await createTestLogFile(dir);
-			let files: string[] = await readdir(dir);
+			let files = await readdir(dir);
 			expect(files.find(file => file.match(/^log.txt$/gi))).toBeTruthy();
 			expect(files.length).toBe(1);
 			const rotatingLogs: RotatingLogs = new RotatingLogs(dir, 1, 1);
@@ -26,7 +26,7 @@ describe('RotatingLogs', () => {
 		}
 	});
 
-	test('should delete inative log file after 1ms', async () => {
+	test('should delete inactive log file after 1ms', async () => {
 		let dir: string;
 		try {
 			dir = await createTempDir();
@@ -38,6 +38,23 @@ describe('RotatingLogs', () => {
 			const files = await readdir(dir);
 			expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeFalsy();
 			expect(files.length).toBe(0);
+		} finally {
+			await remove(dir);
+		}
+	});
+
+	test('should not delete the log-timestamp.txt right after its be created', async () => {
+		let dir: string;
+		try {
+			dir = await createTempDir();
+			await createTestLogFile(dir);
+			await msleep(100);
+			const rotatingLogs: RotatingLogs = new RotatingLogs(dir, 1, 100);
+			await rotatingLogs.cleanActiveLogFile();
+			await rotatingLogs.deleteNonActiveLogFiles();
+			const files = await readdir(dir);
+			expect(files.find(file => file.match(/^log-[0-9]+.txt$/gi))).toBeTruthy();
+			expect(files.length).toBe(1);
 		} finally {
 			await remove(dir);
 		}

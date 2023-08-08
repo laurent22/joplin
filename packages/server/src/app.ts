@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { getDeviceTimeDrift } from '@joplin/lib/ntp';
@@ -22,8 +22,10 @@ import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
+import { parseEnvFile } from '@joplin/utils/env';
 import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
+import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
 
 interface Argv {
@@ -34,7 +36,6 @@ interface Argv {
 
 const nodeSqlite = require('sqlite3');
 const cors = require('@koa/cors');
-const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
@@ -98,11 +99,23 @@ async function main() {
 
 	const envFilePath = await getEnvFilePath(env, argv);
 
-	if (envFilePath) nodeEnvFile(envFilePath);
+	let envFromFile: Record<string, string> = {};
+
+	try {
+		if (envFilePath) envFromFile = parseEnvFile(envFilePath);
+	} catch (error) {
+		error.message = `Could not parse env file at ${envFilePath}: ${error.message}`;
+		throw error;
+	}
+
+	const fullEnv = {
+		...envFromFile,
+		...process.env,
+	};
 
 	if (!defaultEnvVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	const envVariables = parseEnv(process.env, defaultEnvVariables[env]);
+	const envVariables = parseEnv(fullEnv, defaultEnvVariables[env]);
 
 	const app = new Koa();
 
@@ -215,6 +228,7 @@ async function main() {
 		formatInfo: `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`,
 	});
 	Logger.initializeGlobalLogger(globalLogger);
+	initLib(globalLogger);
 
 	if (envFilePath) appLogger().info(`Env variables were loaded from: ${envFilePath}`);
 
@@ -291,6 +305,10 @@ async function main() {
 			await migrateLatest(connectionCheck.connection);
 			appLogger().info('Latest migration:', await latestMigration(connectionCheck.connection));
 		} else {
+			if (!config().DB_ALLOW_INCOMPLETE_MIGRATIONS && (await needsMigration(connectionCheck.connection))) {
+				const list = await migrateList(connectionCheck.connection, true);
+				throw new Error(`One or more migrations need to be applied:\n\n${list}`);
+			}
 			appLogger().info('Skipped database auto-migration.');
 		}
 

@@ -125,7 +125,6 @@ async function main() {
 	serverProcess = spawn('node', serverCommandParams, {
 		detached: true,
 		stdio: 'inherit',
-		// env: { ...process.env,  NODE_ENV: 'testing'  },
 	});
 
 	const cleanUp = () => {

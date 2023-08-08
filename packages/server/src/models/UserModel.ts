@@ -1,6 +1,6 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
-import * as auth from '../utils/auth';
+import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
@@ -47,6 +47,7 @@ export enum AccountType {
 export interface Account {
 	account_type: number;
 	can_share_folder: number;
+	can_receive_folder: number;
 	max_item_size: number;
 	max_total_item_size: number;
 }
@@ -61,18 +62,21 @@ export function accountByType(accountType: AccountType): Account {
 		{
 			account_type: AccountType.Default,
 			can_share_folder: 1,
+			can_receive_folder: 1,
 			max_item_size: 0,
 			max_total_item_size: 0,
 		},
 		{
 			account_type: AccountType.Basic,
 			can_share_folder: 0,
+			can_receive_folder: 1,
 			max_item_size: 10 * MB,
 			max_total_item_size: 1 * GB,
 		},
 		{
 			account_type: AccountType.Pro,
 			can_share_folder: 1,
+			can_receive_folder: 1,
 			max_item_size: 200 * MB,
 			max_total_item_size: 10 * GB,
 		},
@@ -121,7 +125,7 @@ export default class UserModel extends BaseModel<User> {
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
 		if (!user) return null;
-		if (!auth.checkPassword(password, user.password)) return null;
+		if (!checkPassword(password, user.password)) return null;
 		return user;
 	}
 
@@ -136,6 +140,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
 		if ('max_total_item_size' in object) user.max_total_item_size = object.max_total_item_size;
 		if ('can_share_folder' in object) user.can_share_folder = object.can_share_folder;
+		if ('can_receive_folder' in object) user.can_receive_folder = object.can_receive_folder;
 		if ('can_upload' in object) user.can_upload = object.can_upload;
 		if ('account_type' in object) user.account_type = object.account_type;
 		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
@@ -631,8 +636,11 @@ export default class UserModel extends BaseModel<User> {
 		const user = this.formatValues(object);
 
 		if (user.password) {
+			if (isHashedPassword(user.password)) {
+				throw new ErrorBadRequest(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
+			}
 			if (!options.skipValidation) this.validatePassword(user.password);
-			user.password = auth.hashPassword(user.password);
+			user.password = hashPassword(user.password);
 		}
 
 		const isNew = await this.isNew(object, options);
