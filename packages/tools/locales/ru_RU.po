@@ -15,8 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
@@ -964,7 +963,6 @@ msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Скопировать общедоступную ссылку"
 msgstr[1] "Скопировать общедоступные ссылки"
-msgstr[2] "Скопировать общедоступные ссылки"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
@@ -2059,7 +2057,6 @@ msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Создание ссылки..."
 msgstr[1] "Создание ссылок..."
-msgstr[2] "Создание ссылок..."
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2568,7 +2565,6 @@ msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Ссылка скопирована в буфер обмена!"
 msgstr[1] "Ссылки скопированы в буфер обмена!"
-msgstr[2] "Ссылки скопированы в буфер обмена!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link text"
@@ -4585,21 +4581,18 @@ msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
 msgstr[0] "Эта заметка не может быть удалена: %s"
 msgstr[1] "Эти заметки не могут быть удалены: %s"
-msgstr[2] ""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
 msgstr[0] "Эта заметка не может быть продублирована: %s"
 msgstr[1] "Эти заметки не могут быть продублированы: %s"
-msgstr[2] ""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
 msgstr[0] "Эта заметка не может быть перемещена: %s"
 msgstr[1] "Эти заметки не могут быть перемещены: %s"
-msgstr[2] ""
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
