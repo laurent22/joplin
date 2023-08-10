@@ -94,6 +94,12 @@ const EncryptionConfigScreen = (props: Props) => {
 			borderColor: theme.dividerColor,
 		};
 
+		const missingPasswordCellStyle = {
+			...theme.textStyle,
+			border: '3px solid',
+			borderColor: theme.colorError,
+		};
+
 		const password = inputPasswords[mk.id] ? inputPasswords[mk.id] : '';
 		const isActive = props.activeMasterKeyId === mk.id;
 		const activeIcon = isActive ? '✔' : '';
@@ -108,8 +114,15 @@ const EncryptionConfigScreen = (props: Props) => {
 				);
 			} else {
 				return (
-					<td style={theme.textStyle}>
-						<input type="password" style={passwordStyle} value={password} onChange={event => onInputPasswordChange(mk, event.target.value)} />{' '}
+					<td style={missingPasswordCellStyle}>
+						<input
+							type="password"
+							placeholder={_('Enter password')}
+							style={passwordStyle}
+							value={password}
+							onChange={event => onInputPasswordChange(mk, event.target.value)}
+						/>
+						{' '}
 						<button style={theme.buttonStyle} onClick={() => onSavePasswordClick(mk, { ...props.passwords, ...inputPasswords })}>
 							{_('Save')}
 						</button>
