@@ -343,7 +343,7 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-document-picker (8.2.1):
+  - react-native-document-picker (9.0.1):
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
@@ -355,7 +355,7 @@ PODS:
     - React-Core
   - react-native-image-resizer (1.4.5):
     - React-Core
-  - react-native-netinfo (9.3.11):
+  - react-native-netinfo (9.4.1):
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
@@ -467,7 +467,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.3.0):
     - React-Core
-  - RNDeviceInfo (10.6.1):
+  - RNDeviceInfo (10.7.0):
     - React-Core
   - RNExitApp (1.1.0):
     - React
@@ -819,13 +819,13 @@ SPEC CHECKSUMS:
   React-logger: ef2269b3afa6ba868da90496c3e17a4ec4f4cee0
   react-native-alarm-notification: 0732f97be04975a23ba60e675bdb961a0aaf6aa6
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
+  react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
-  react-native-netinfo: 3a48f51c18dbd9253440621955e11de71bc51b32
+  react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: 129cd2ddf120a1f6164c724b2846d172666b33de
   react-native-safe-area-context: 68b07eabfb0d14547d36f6929c0e98d818064f02
@@ -850,7 +850,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 01e6d27ba2e0931cd05049c5bff6171c3c027ea8
-  RNDeviceInfo: ab292735ad4fccc5f2aec0c773f7a7f03c7073ae
+  RNDeviceInfo: 25d818c85db769cc0e7083d39efaa01a6f450df3
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
