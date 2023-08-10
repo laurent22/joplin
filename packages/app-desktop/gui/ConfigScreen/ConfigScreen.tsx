@@ -198,17 +198,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						onClick={openMissingPasswordFAQ}
 						style={theme.linkStyle}
 					>
-						{_('Why is my password missing?')}
+						{_('Help')}
 					</StyledLink>
 				);
 
 				// The FAQ section related to missing passwords is specific to MacOS/ARM -- only show it
 				// in that case.
-				const showMacInfoLink = shim.isMac();
+				const showMacInfoLink = shim.isMac() && process.arch === 'arm64';
 
 				settingComps.push(
 					<p key='missing-password-warning' style={warningStyle}>
-						{_('Warning: Missing password.')} {showMacInfoLink ? macInfoLink : null}
+						{_('Warning: Missing password.')}{' '}{showMacInfoLink ? macInfoLink : null}
 					</p>
 				);
 			}
