@@ -4567,7 +4567,7 @@ __metadata:
     react-native-camera: 4.2.1
     react-native-device-info: 10.7.0
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 8.2.1
+    react-native-document-picker: 9.0.1
     react-native-drawer-layout: 3.2.1
     react-native-dropdownalert: 4.5.1
     react-native-exit-app: 1.1.0
@@ -27786,9 +27786,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:8.2.1":
-  version: 8.2.1
-  resolution: "react-native-document-picker@npm:8.2.1"
+"react-native-document-picker@npm:9.0.1":
+  version: 9.0.1
+  resolution: "react-native-document-picker@npm:9.0.1"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -27798,7 +27798,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: 575d3bec391044fdaf8d4d740a115a0b3e5cbafdb893ce19157b0c5fefb052c208b9db6d352e171d358c723612e47fe67cda4634a60d3a245a30ff103b1cb84c
+  checksum: a8ad0bc2ed13290e8d7ff5f77aa7e35ffda9fa380a7d01d1286111e92656415985d61469a50567b8bcb67e42c41a36b89e879d0d08b40d3fdda171eaa08721e4
   languageName: node
   linkType: hard
 

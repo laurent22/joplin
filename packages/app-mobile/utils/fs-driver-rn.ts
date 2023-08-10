@@ -351,7 +351,7 @@ export default class FsDriverRN extends FsDriverBase {
 			} else {
 				// the result is an array
 				if (multiple) {
-					result = await DocumentPicker.pickMultiple();
+					result = await DocumentPicker.pick({ allowMultiSelection: true });
 				} else {
 					result = [await DocumentPicker.pick()];
 				}
