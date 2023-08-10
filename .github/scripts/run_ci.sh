@@ -179,7 +179,7 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	echo "Step: Check that the website still builds..."
 
 	mkdir -p ../joplin-website/docs
-	yarn run buildWebsite
+	SKIP_SPONSOR_PROCESSING=1 yarn run buildWebsite
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
