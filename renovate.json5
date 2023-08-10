@@ -26,8 +26,8 @@
 		"packages/app-cli/tests/**",
 		"packages/app-clipper/popup",
 		"packages/app-mobile/android/app/build.gradle",
+		"packages/generate-plugin-doc/**",
 		"packages/plugins/**",
-		"packages/react-native-vosk",
 	],
 	"ignoreDeps": [
 		"@babel/core",
