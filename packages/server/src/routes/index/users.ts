@@ -213,6 +213,7 @@ interface FormFields {
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	stop_impersonate_button: string;
+	send_account_confirmation_email: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -246,6 +247,9 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			// that user, except the current one (otherwise they would be
 			// logged out).
 			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+		} else if (fields.send_account_confirmation_email) {
+			await models.user().save({ id: user.id, must_set_password: 1 });
+			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
