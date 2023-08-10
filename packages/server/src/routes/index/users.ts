@@ -90,6 +90,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.csrfTag = await createCsrfTag(ctx);
+	view.content.showSendAccountConfirmationEmailButton = !user.email_confirmed;
 
 	if (subscription) {
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);

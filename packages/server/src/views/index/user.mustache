@@ -37,7 +37,9 @@
 
 		<div class="control block">
 			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
-            <input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
+            {{#showSendAccountConfirmationEmailButton}}
+                <input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
+            {{/showSendAccountConfirmationEmailButton}}
 		</div>
 	</div>
 
