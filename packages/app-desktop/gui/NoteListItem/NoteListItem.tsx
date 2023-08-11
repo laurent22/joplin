@@ -14,6 +14,7 @@ interface NoteItemProps {
 	noteHtml: string;
 	style: React.CSSProperties;
 	itemSize: Size;
+	onContextMenu: React.MouseEventHandler;
 }
 
 const NoteListItem = (props: NoteItemProps) => {
@@ -39,7 +40,11 @@ const NoteListItem = (props: NoteItemProps) => {
 
 	useItemEventHandlers(rootElement, itemElement, idPrefix, onCheckboxChange);
 
-	return <div id={elementId}></div>;
+	return <div
+		id={elementId}
+		data-note-id={props.noteId}
+		onContextMenu={props.onContextMenu}
+	></div>;
 };
 
 export default NoteListItem;

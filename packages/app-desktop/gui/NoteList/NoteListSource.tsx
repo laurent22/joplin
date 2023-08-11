@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
 import eventManager from '@joplin/lib/eventManager';
-import NoteListUtils from '../utils/NoteListUtils';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
@@ -16,7 +15,6 @@ import { themeStyle } from '@joplin/lib/theme';
 import ItemList from '../ItemList';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
-import Folder from '@joplin/lib/models/Folder';
 import { Props } from './utils/types';
 import usePrevious from '../hooks/usePrevious';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
@@ -66,31 +64,6 @@ const NoteListComponent = (props: Props) => {
 	const style = useMemo(() => {
 		return {};
 	}, []);
-
-	const itemContextMenu = useCallback((event: any) => {
-		const currentItemId = event.currentTarget.getAttribute('data-id');
-		if (!currentItemId) return;
-
-		let noteIds = [];
-		if (props.selectedNoteIds.indexOf(currentItemId) < 0) {
-			noteIds = [currentItemId];
-		} else {
-			noteIds = props.selectedNoteIds;
-		}
-
-		if (!noteIds.length) return;
-
-		const menu = NoteListUtils.makeContextMenu(noteIds, {
-			notes: props.notes,
-			dispatch: props.dispatch,
-			watchedNoteFiles: props.watchedNoteFiles,
-			plugins: props.plugins,
-			inConflictFolder: props.selectedFolderId === Folder.conflictFolderId(),
-			customCss: props.customCss,
-		});
-
-		menu.popup({ window: bridge().window() });
-	}, [props.selectedNoteIds, props.notes, props.dispatch, props.watchedNoteFiles, props.plugins, props.selectedFolderId, props.customCss]);
 
 	const onGlobalDrop_ = () => {
 		unregisterGlobalDragEndEvent_();
@@ -228,7 +201,7 @@ const NoteListComponent = (props: Props) => {
 			onDragStart={noteItem_dragStart}
 			onNoteDragOver={noteItem_noteDragOver}
 			onTitleClick={() => {}}
-			onContextMenu={itemContextMenu}
+			onContextMenu={() => {}}
 			draggable={!props.parentFolderIsReadOnly}
 		/>;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied

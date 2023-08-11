@@ -270,6 +270,7 @@ packages/app-desktop/gui/NoteListItem/NoteListItem.js
 packages/app-desktop/gui/NoteListItem/utils/types.js
 packages/app-desktop/gui/NoteListItem/utils/useItemElement.js
 packages/app-desktop/gui/NoteListItem/utils/useItemEventHandlers.js
+packages/app-desktop/gui/NoteListItem/utils/useOnContextMenu.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
 packages/app-desktop/gui/NotePropertiesDialog.js

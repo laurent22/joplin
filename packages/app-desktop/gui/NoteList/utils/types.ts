@@ -1,13 +1,13 @@
 import { FolderEntity, ItemRendererDatabaseDependency, NoteEntity } from '@joplin/lib/services/database/types';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { Size } from '@joplin/utils/types';
+import { Dispatch } from 'redux';
 
 export interface Props {
 	themeId: any;
 	selectedNoteIds: string[];
 	notes: NoteEntity[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	watchedNoteFiles: any[];
 	plugins: PluginStates;
 	selectedFolderId: string;

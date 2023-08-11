@@ -12,6 +12,7 @@ import defaultListRenderer from './utils/defaultListRenderer';
 import NoteListItem from '../NoteListItem/NoteListItem';
 import useRenderedNotes from './utils/useRenderedNote';
 import useItemCss from './utils/useItemCss';
+import useOnContextMenu from '../NoteListItem/utils/useOnContextMenu';
 
 const NoteList = (props: Props) => {
 	const listRenderer = defaultListRenderer;
@@ -63,6 +64,16 @@ const NoteList = (props: Props) => {
 
 	useItemCss(listRenderer.itemCss);
 
+	const onItemContextMenu = useOnContextMenu(
+		props.selectedNoteIds,
+		props.selectedFolderId,
+		props.notes,
+		props.dispatch,
+		props.watchedNoteFiles,
+		props.plugins,
+		props.customCss
+	);
+
 	const renderNotes = () => {
 		const output: JSX.Element[] = [];
 
@@ -76,6 +87,7 @@ const NoteList = (props: Props) => {
 					noteHtml={renderedNote.html}
 					itemSize={itemSize}
 					style={noteItemStyle}
+					onContextMenu={onItemContextMenu}
 				/>
 			);
 		}
