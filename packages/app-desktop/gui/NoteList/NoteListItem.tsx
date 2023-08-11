@@ -4,6 +4,7 @@ import { OnChangeHandler } from './utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { waitForElement } from '@joplin/lib/dom';
 import { msleep } from '@joplin/utils/time';
+import { Size } from '@joplin/utils/types';
 
 interface NoteItemProps {
 	onClick: React.MouseEventHandler<HTMLDivElement>;
@@ -11,9 +12,10 @@ interface NoteItemProps {
 	noteId: string;
 	noteHtml: string;
 	style: React.CSSProperties;
+	itemSize: Size;
 }
 
-const NoteItem = (props: NoteItemProps) => {
+const NoteListItem = (props: NoteItemProps) => {
 	const [rootElement, setRootElement] = useState<HTMLDivElement>(null);
 	const [itemElement, setItemElement] = useState<HTMLDivElement>(null);
 
@@ -41,6 +43,7 @@ const NoteItem = (props: NoteItemProps) => {
 		for (const [n, v] of Object.entries(props.style)) {
 			(element.style as any)[n] = v;
 		}
+		element.style.height = `${props.itemSize.height}px`;
 		element.innerHTML = props.noteHtml;
 		element.addEventListener('click', props.onClick as any);
 
@@ -53,7 +56,7 @@ const NoteItem = (props: NoteItemProps) => {
 			// element.removeEventListener('click', props.onClick as any);
 			element.remove();
 		};
-	}, [rootElement, props.noteHtml, props.noteId, props.style, props.onClick, onCheckboxChange]);
+	}, [rootElement, props.itemSize, props.noteHtml, props.noteId, props.style, props.onClick, onCheckboxChange]);
 
 	useAsyncEffect(async (event) => {
 		if (!itemElement) return;
@@ -82,4 +85,4 @@ const NoteItem = (props: NoteItemProps) => {
 	return <div id={elementId}></div>;
 };
 
-export default NoteItem;
+export default NoteListItem;

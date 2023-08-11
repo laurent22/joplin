@@ -57,14 +57,17 @@ const defaultItemRenderer: ListRenderer = {
 		> .content.-default {
 			display: flex;
 			box-sizing: border-box;
-			align-items: stretch;
 			position: relative;
 			width: 100%;
+			padding-left: 16px;
 	
 			> .checkbox {
 				display: flex;
 				align-items: center;
-				padding-left: 16px;
+
+				> input {
+					margin: 0px 10px 1px 0px;
+				}
 			}
 	
 			> .title {
@@ -78,20 +81,18 @@ const defaultItemRenderer: ListRenderer = {
 				display: flex;
 				align-items: center;
 				overflow: hidden;
-				padding-left: 4px;
 			}
 		}
 	`,
 
-	// TODO: apply width/height to outter container
 	itemTemplate: `
 		<div class="content -default {{#item.selected}}-selected{{/item.selected}}">
 			{{#note.is_todo}}
-				<div class="checkbox" style="height: {{item.size.height}}px;">
-					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}} style="margin: 0px 5px 1px 0px;">
+				<div class="checkbox">
+					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}	
-			<a href="#" class="title" draggable="true" data-id="{{note.id}}" style="height: {{item.size.height}}px;">
+			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
 				<span>{{note.title}}</span
 			</a>
 		</div>

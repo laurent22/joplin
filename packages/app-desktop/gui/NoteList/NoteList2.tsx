@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 const { connect } = require('react-redux');
@@ -9,8 +9,9 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
 import defaultListRenderer from './utils/defaultListRenderer';
-import NoteItem from './NoteItem';
+import NoteListItem from './NoteListItem';
 import useRenderedNotes from './utils/useRenderedNote';
+import useItemCss from './utils/useItemCss';
 
 const NoteList = (props: Props) => {
 	const listRenderer = defaultListRenderer;
@@ -60,31 +61,20 @@ const NoteList = (props: Props) => {
 		}
 	}, [props.dispatch]);
 
-	useEffect(() => {
-		const element = document.createElement('style');
-		element.setAttribute('type', 'text/css');
-		element.appendChild(document.createTextNode(`
-			.note-list-item {
-				${listRenderer.itemCss};
-			}
-		`));
-		document.head.appendChild(element);
-		return () => {
-			element.remove();
-		};
-	}, [listRenderer.itemCss]);
+	useItemCss(listRenderer.itemCss);
 
 	const renderNotes = () => {
 		const output: JSX.Element[] = [];
 
 		for (const renderedNote of renderedNotes) {
 			output.push(
-				<NoteItem
+				<NoteListItem
 					key={renderedNote.id}
 					onClick={onNoteClick}
 					onChange={listRenderer.onChange}
 					noteId={renderedNote.id}
 					noteHtml={renderedNote.html}
+					itemSize={itemSize}
 					style={noteItemStyle}
 				/>
 			);

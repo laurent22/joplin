@@ -4,3 +4,7 @@
 	background-color: var(--joplin-background-color3);
 	border-right: 1px solid var(--joplin-divider-color);
 }
+
+.note-list-item {
+	display: flex;
+}
