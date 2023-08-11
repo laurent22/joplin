@@ -9,7 +9,7 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
 import defaultListRenderer from './utils/defaultListRenderer';
-import NoteListItem from './NoteListItem';
+import NoteListItem from '../NoteListItem/NoteListItem';
 import useRenderedNotes from './utils/useRenderedNote';
 import useItemCss from './utils/useItemCss';
 

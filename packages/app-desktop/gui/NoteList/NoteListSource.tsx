@@ -64,42 +64,8 @@ const NoteListComponent = (props: Props) => {
 	let globalDragEndEventRegistered_ = false;
 
 	const style = useMemo(() => {
-		const theme = themeStyle(props.themeId);
-
-		return {
-			root: {
-				backgroundColor: theme.backgroundColor,
-			},
-			listItem: {
-				maxWidth: '100%',
-				height: itemHeight,
-				boxSizing: 'border-box',
-				display: 'flex',
-				alignItems: 'stretch',
-				backgroundColor: theme.backgroundColor,
-				borderBottom: `1px solid ${theme.dividerColor}`,
-			},
-			listItemSelected: {
-				backgroundColor: theme.selectedColor,
-			},
-			listItemTitle: {
-				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize,
-				textDecoration: 'none',
-				color: theme.color,
-				cursor: 'default',
-				whiteSpace: 'nowrap',
-				flex: 1,
-				display: 'flex',
-				alignItems: 'center',
-				overflow: 'hidden',
-			},
-			listItemTitleCompleted: {
-				opacity: 0.5,
-				textDecoration: 'line-through',
-			},
-		};
-	}, [props.themeId, itemHeight]);
+		return {};
+	}, []);
 
 	const itemContextMenu = useCallback((event: any) => {
 		const currentItemId = event.currentTarget.getAttribute('data-id');
@@ -507,7 +473,7 @@ const NoteListComponent = (props: Props) => {
 			<ItemList
 				ref={itemListRef}
 				disabled={props.isInsertingNotes}
-				itemHeight={style.listItem.height}
+				itemHeight={32}
 				className={'note-list'}
 				items={props.notes}
 				style={props.size}
