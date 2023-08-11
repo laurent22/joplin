@@ -64,6 +64,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	const { syncStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
+	const [formNoteRefeshScheduled, setFormNoteRefreshScheduled] = useState<boolean>(false);
 	const [isNewNote, setIsNewNote] = useState(false);
 	const prevSyncStarted = usePrevious(syncStarted);
 	const previousNoteId = usePrevious(formNote.id);
@@ -106,14 +107,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}
 
 	useEffect(() => {
-		// Check that synchronisation has just finished - and
-		// if the note has never been changed, we reload it.
-		// If the note has already been changed, it's a conflict
-		// that's already been handled by the synchronizer.
-
-		if (!prevSyncStarted) return () => {};
-		if (syncStarted) return () => {};
-		if (formNote.hasChanged) return () => {};
+		if (!formNoteRefeshScheduled) return () => {};
 
 		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
@@ -132,6 +126,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			}
 
 			await initNoteState(n);
+			setFormNoteRefreshScheduled(false);
 		};
 
 		void loadNote();
@@ -139,8 +134,23 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [prevSyncStarted, syncStarted, formNote]);
+	}, [formNoteRefeshScheduled, noteId]);
+
+	useEffect(() => {
+		// Check that synchronisation has just finished - and
+		// if the note has never been changed, we reload it.
+		// If the note has already been changed, it's a conflict
+		// that's already been handled by the synchronizer.
+
+		if (!prevSyncStarted) return;
+		if (syncStarted) return;
+		if (formNote.hasChanged) return;
+
+		// Refresh the form note.
+		// This is kept separate from the above logic so that when prevSyncStarted is changed
+		// from true to false, it doesn't cancel the note from loading.
+		setFormNoteRefreshScheduled(true);
+	}, [prevSyncStarted, syncStarted, formNote.hasChanged]);
 
 	useEffect(() => {
 		if (!noteId) {
