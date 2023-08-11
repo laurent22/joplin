@@ -4745,7 +4745,7 @@ __metadata:
     uglifycss: 0.0.29
     url-parse: 1.5.10
     uuid: 9.0.0
-    word-wrap: 1.2.4
+    word-wrap: 1.2.5
     xml2js: 0.4.23
   languageName: unknown
   linkType: soft
@@ -21060,7 +21060,7 @@ __metadata:
     tkwidgets: 0.5.27
     typescript: 5.1.3
     url-parse: 1.5.10
-    word-wrap: 1.2.4
+    word-wrap: 1.2.5
     yargs-parser: 21.1.1
   bin:
     joplin: ./main.js
@@ -34337,10 +34337,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"word-wrap@npm:1.2.4":
-  version: 1.2.4
-  resolution: "word-wrap@npm:1.2.4"
-  checksum: 8f1f2e0a397c0e074ca225ba9f67baa23f99293bc064e31355d426ae91b8b3f6b5f6c1fc9ae5e9141178bb362d563f55e62fd8d5c31f2a77e3ade56cb3e35bd1
+"word-wrap@npm:1.2.5":
+  version: 1.2.5
+  resolution: "word-wrap@npm:1.2.5"
+  checksum: f93ba3586fc181f94afdaff3a6fef27920b4b6d9eaefed0f428f8e07adea2a7f54a5f2830ce59406c8416f033f86902b91eb824072354645eea687dff3691ccb
   languageName: node
   linkType: hard
 
