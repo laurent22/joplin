@@ -64,6 +64,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('max_item_size' in fields) user.max_item_size = intOrDefaultToValue(fields, 'max_item_size');
 	if ('max_total_item_size' in fields) user.max_total_item_size = intOrDefaultToValue(fields, 'max_total_item_size');
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
+	if ('can_receive_folder' in fields) user.can_receive_folder = boolOrDefaultToValue(fields, 'can_receive_folder');
 	if ('can_upload' in fields) user.can_upload = intOrDefaultToValue(fields, 'can_upload');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 

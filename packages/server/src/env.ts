@@ -56,6 +56,7 @@ const defaultEnvValues: EnvVariables = {
 	DB_SLOW_QUERY_LOG_ENABLED: false,
 	DB_SLOW_QUERY_LOG_MIN_DURATION: 1000,
 	DB_AUTO_MIGRATION: true,
+	DB_ALLOW_INCOMPLETE_MIGRATIONS: false,
 
 	POSTGRES_PASSWORD: 'joplin',
 	POSTGRES_DATABASE: 'joplin',
@@ -129,6 +130,7 @@ export interface EnvVariables {
 	DB_SLOW_QUERY_LOG_ENABLED: boolean;
 	DB_SLOW_QUERY_LOG_MIN_DURATION: number;
 	DB_AUTO_MIGRATION: boolean;
+	DB_ALLOW_INCOMPLETE_MIGRATIONS: boolean;
 
 	POSTGRES_PASSWORD: string;
 	POSTGRES_DATABASE: string;

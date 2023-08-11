@@ -26,6 +26,7 @@ interface State {
 
 interface Props {
 	message?: string;
+	children: any;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {

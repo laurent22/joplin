@@ -133,6 +133,7 @@ packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/Sidebar.js
+packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
@@ -368,6 +369,7 @@ packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
+packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/components/ActionButton.js
@@ -543,6 +545,7 @@ packages/lib/htmlUtils2.test.js
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex-md-gen.js
 packages/lib/import-enex.js
+packages/lib/initLib.js
 packages/lib/locale.test.js
 packages/lib/locale.js
 packages/lib/markdownUtils.test.js

@@ -84,11 +84,11 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		dragItemPosition = 'bottom';
 	}
 
-	const onTitleClick = useCallback((event) => {
+	const onTitleClick = useCallback((event: any) => {
 		props.onTitleClick(event, props.item);
 	}, [props.onTitleClick, props.item]);
 
-	const onCheckboxClick = useCallback((event) => {
+	const onCheckboxClick = useCallback((event: any) => {
 		props.onCheckboxClick(event, props.item);
 	}, [props.onCheckboxClick, props.item]);
 

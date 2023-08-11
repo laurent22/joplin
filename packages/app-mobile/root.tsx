@@ -85,6 +85,7 @@ const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
+import initLib from '@joplin/lib/initLib';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -474,6 +475,7 @@ async function initialize(dispatch: Function) {
 	}
 
 	Logger.initializeGlobalLogger(mainLogger);
+	initLib(mainLogger);
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });

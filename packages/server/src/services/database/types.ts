@@ -246,6 +246,7 @@ export interface User extends WithDates, WithUuid {
 	total_item_size?: number;
 	enabled?: number;
 	disabled_time?: number;
+	can_receive_folder?: number;
 }
 
 export interface UserFlag extends WithDates {
@@ -454,6 +455,7 @@ export const databaseSchema: DatabaseTables = {
 		total_item_size: { type: 'string' },
 		enabled: { type: 'number' },
 		disabled_time: { type: 'string' },
+		can_receive_folder: { type: 'number' },
 	},
 	user_flags: {
 		id: { type: 'number' },

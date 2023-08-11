@@ -272,7 +272,7 @@ export default class Synchronizer {
 	}
 
 	public async cancel() {
-		if (this.cancelling_ || this.state() === 'idle') return;
+		if (this.cancelling_ || this.state() === 'idle') return null;
 
 		// Stop queue but don't set it to null as it may be used to
 		// retrieve the last few downloads.

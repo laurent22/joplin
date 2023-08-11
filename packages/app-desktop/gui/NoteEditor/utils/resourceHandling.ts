@@ -78,7 +78,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 			logger.info(`Attaching ${filePath}`);
 			const newBody = await shim.attachFileToNoteBody(body, filePath, options.position, {
 				createFileURL: options.createFileURL,
-				resizeLargeImages: 'ask',
+				resizeLargeImages: Setting.value('imageResizing'),
 			});
 
 			if (!newBody) {

@@ -1,22 +1,23 @@
 import { fileExtension } from '@joplin/lib/path-utils';
-import shim from '@joplin/lib/shim';
 
 export interface CheckForUpdateOptions {
 	includePreReleases?: boolean;
+}
+
+interface GitHubReleaseAsset {
+	name: string;
+	browser_download_url: string;
 }
 
 export interface GitHubRelease {
 	tag_name: string;
 	prerelease: boolean;
 	body: string;
-	assets: {
-		name: string;
-		browser_download_url: string;
-	}[];
+	assets: GitHubReleaseAsset[];
 	html_url: string;
 }
 
-interface Release {
+export interface Release {
 	version: string;
 	prerelease: boolean;
 	downloadUrl: string;
@@ -24,13 +25,17 @@ interface Release {
 	pageUrl: string;
 }
 
+export type Platform = typeof process.platform;
+
+export type Architecture = typeof process.arch;
+
 function getMajorMinorTagName(tagName: string) {
 	const s = tagName.split('.');
 	s.pop();
 	return s.join('.');
 }
 
-export const extractVersionInfo = (releases: GitHubRelease[], platform: typeof process.platform, options: CheckForUpdateOptions) => {
+export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform, arch: Architecture, portable: boolean, options: CheckForUpdateOptions) => {
 	options = { includePreReleases: false, ...options };
 
 	if (!releases.length) throw new Error('Cannot get latest release info (JSON)');
@@ -67,28 +72,43 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: typeof p
 		}
 	}
 
-	let downloadUrl = null;
-	for (let i = 0; i < release.assets.length; i++) {
-		const asset = release.assets[i];
-		let found = false;
-		const ext = fileExtension(asset.name);
-		if (platform === 'win32' && ext === 'exe') {
-			if (shim.isPortable()) {
-				found = asset.name === 'JoplinPortable.exe';
-			} else {
-				found = !!asset.name.match(/^Joplin-Setup-[\d.]+\.exe$/);
-			}
-		} else if (platform === 'darwin' && ext === 'dmg' && !asset.name.endsWith('arm64.dmg')) { // We don't return the arm64 version for now
-			found = true;
-		} else if (platform === 'linux' && ext === '.AppImage') {
-			found = true;
-		}
+	let foundAsset: GitHubReleaseAsset = null;
 
-		if (found) {
-			downloadUrl = asset.browser_download_url.replace('github.com/laurent22/joplin/releases/download', 'objects.joplinusercontent.com');
-			downloadUrl.concat('?source=DesktopApp&type=Update');
-			break;
-		}
+	if (platform === 'win32' && portable) {
+		foundAsset = release.assets.find(asset => {
+			return asset.name === 'JoplinPortable.exe';
+		});
+	}
+
+	if (!foundAsset && platform === 'win32') {
+		foundAsset = release.assets.find(asset => {
+			return !!asset.name.match(/^Joplin-Setup-[\d.]+\.exe$/);
+		});
+	}
+
+	if (platform === 'darwin' && arch === 'arm64') {
+		foundAsset = release.assets.find(asset => {
+			return asset.name.endsWith('arm64.dmg');
+		});
+	}
+
+	if (!foundAsset && platform === 'darwin') {
+		foundAsset = release.assets.find(asset => {
+			return fileExtension(asset.name) === 'dmg' && !asset.name.endsWith('arm64.dmg');
+		});
+	}
+
+	if (platform === 'linux') {
+		foundAsset = release.assets.find(asset => {
+			return fileExtension(asset.name) === 'AppImage';
+		});
+	}
+
+	let downloadUrl: string = null;
+
+	if (foundAsset) {
+		downloadUrl = foundAsset.browser_download_url.replace('github.com/laurent22/joplin/releases/download', 'objects.joplinusercontent.com');
+		downloadUrl.concat('?source=DesktopApp&type=Update');
 	}
 
 	function cleanUpReleaseNotes(releaseNotes: string[]) {

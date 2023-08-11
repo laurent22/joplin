@@ -77,7 +77,7 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 
 	try {
 		const releases = await fetchLatestRelease();
-		const release = extractVersionInfo(releases, process.platform, options);
+		const release = extractVersionInfo(releases, process.platform, process.arch, shim.isPortable(), options);
 
 		logger.info(`Current version: ${packageInfo.version}`);
 		logger.info(`Latest version: ${release.version}`);
