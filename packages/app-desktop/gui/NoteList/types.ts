@@ -38,12 +38,12 @@ export type RenderNoteView = Record<string, any>;
 
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
 
-export type ItemRendererDepependency = ItemRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected';
+export type ListRendererDepependency = ItemRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected';
 
-export interface ItemRenderer {
+export interface ListRenderer {
 	flow: ItemFlow;
 	itemSize: Size;
-	dependencies: ItemRendererDepependency[];
+	dependencies: ListRendererDepependency[];
 	itemTemplate: string;
 	onRenderNote: OnRenderNoteHandler;
 }

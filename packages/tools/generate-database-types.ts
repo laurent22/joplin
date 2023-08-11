@@ -20,7 +20,7 @@ const stringToSingular = (word: string) => {
 	return word;
 };
 
-const generateItemRenderDependencyType = (tables: any[]) => {
+const generateListRenderDependencyType = (tables: any[]) => {
 	const output: string[] = [];
 
 	for (const table of tables) {
@@ -103,9 +103,9 @@ async function main() {
 
 	const runtimeContent = `export const databaseSchema: DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 
-	const itemRendererDependency = `export type ItemRendererDatabaseDependency = ${generateItemRenderDependencyType(definitions.tables)};`;
+	const listRendererDependency = `export type ListRendererDatabaseDependency = ${generateListRenderDependencyType(definitions.tables)};`;
 
-	await fs.writeFile(targetFile, `${staticContent}\n\n${header}\n\n${tsString}\n\n${runtimeContent}\n\n${itemRendererDependency}`, 'utf8');
+	await fs.writeFile(targetFile, `${staticContent}\n\n${header}\n\n${tsString}\n\n${runtimeContent}\n\n${listRendererDependency}`, 'utf8');
 }
 
 main().catch((error) => {

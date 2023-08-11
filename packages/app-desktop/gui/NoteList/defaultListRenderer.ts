@@ -1,4 +1,4 @@
-import { ItemFlow, ItemRenderer } from './types';
+import { ItemFlow, ListRenderer } from './types';
 
 interface Props {
 	note: {
@@ -15,7 +15,7 @@ interface Props {
 	};
 }
 
-const defaultItemRenderer: ItemRenderer = {
+const defaultItemRenderer: ListRenderer = {
 	flow: ItemFlow.TopToBottom,
 
 	itemSize: {

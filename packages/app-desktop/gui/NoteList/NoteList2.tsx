@@ -3,13 +3,13 @@ import { useMemo, useState, useCallback, memo } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 const { connect } = require('react-redux');
-import { ItemFlow, ItemRendererDepependency, Props } from './types';
+import { ItemFlow, ListRendererDepependency, Props } from './types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import defaultItemRenderer from './defaultItemRenderer';
+import defaultListRenderer from './defaultListRenderer';
 import * as Mustache from 'mustache';
 
 interface RenderedNote {
@@ -27,7 +27,7 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 
 	const [renderedNotes, setRenderedNotes] = useState<RenderedNote[]>(initialValue);
 
-	const prepareViewProps = async (dependencies: ItemRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean) => {
+	const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean) => {
 		const output: any = {};
 		for (const dep of dependencies) {
 
@@ -63,8 +63,8 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 		const newRenderedNotes: RenderedNote[] = [];
 
 		for (const note of notes) {
-			const view = await defaultItemRenderer.onRenderNote(await prepareViewProps(
-				defaultItemRenderer.dependencies,
+			const view = await defaultListRenderer.onRenderNote(await prepareViewProps(
+				defaultListRenderer.dependencies,
 				note,
 				itemSize,
 				selectedNoteIds.includes(note.id)
@@ -72,7 +72,7 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 
 			newRenderedNotes.push({
 				id: note.id,
-				html: Mustache.render(defaultItemRenderer.itemTemplate, view),
+				html: Mustache.render(defaultListRenderer.itemTemplate, view),
 			});
 		}
 
@@ -102,15 +102,10 @@ const NoteItem = memo((props: NoteItemProps) => {
 });
 
 const NoteList = (props: Props) => {
-	const itemFlow = ItemFlow.TopToBottom;
-
-	if (itemFlow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
+	if (defaultListRenderer.flow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
 
 	const itemSize: Size = useMemo(() => {
-		return {
-			width: 0,
-			height: 34,
-		};
+		return defaultListRenderer.itemSize;
 	}, []);
 
 	const renderedNotes = useRenderedNotes(props.notes, props.selectedNoteIds, itemSize);
