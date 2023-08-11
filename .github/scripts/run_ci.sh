@@ -172,6 +172,21 @@ if [ "$IS_PULL_REQUEST" == "1" ]; then
 fi
 
 # =============================================================================
+# Check that the website still builds
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+	echo "Step: Check that the website still builds..."
+
+	mkdir -p ../joplin-website/docs
+	SKIP_SPONSOR_PROCESSING=1 yarn run buildWebsite
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
+fi
+
+# =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
 # building PRs so we disable it in this case. The Linux build should provide
 # enough info if the app builds or not.
