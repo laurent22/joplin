@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useMemo, useState, useCallback, memo } from 'react';
+import { useMemo, useState, useCallback, memo, useEffect } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 const { connect } = require('react-redux');
-import { ItemFlow, ListRendererDepependency, Props } from './types';
+import { ItemFlow, ListRenderer, ListRendererDepependency, OnChangeHandler, Props } from './types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
@@ -11,13 +11,15 @@ import { Size } from '@joplin/utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import defaultListRenderer from './defaultListRenderer';
 import * as Mustache from 'mustache';
+import { waitForElement } from '@joplin/lib/dom';
+import { msleep } from '@joplin/utils/time';
 
 interface RenderedNote {
 	id: string;
 	html: string;
 }
 
-const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSize: Size) => {
+const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSize: Size, listRenderer: ListRenderer) => {
 	const initialValue = notes.map(n => {
 		return {
 			id: n.id,
@@ -63,8 +65,8 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 		const newRenderedNotes: RenderedNote[] = [];
 
 		for (const note of notes) {
-			const view = await defaultListRenderer.onRenderNote(await prepareViewProps(
-				defaultListRenderer.dependencies,
+			const view = await listRenderer.onRenderNote(await prepareViewProps(
+				listRenderer.dependencies,
 				note,
 				itemSize,
 				selectedNoteIds.includes(note.id)
@@ -72,7 +74,7 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 
 			newRenderedNotes.push({
 				id: note.id,
-				html: Mustache.render(defaultListRenderer.itemTemplate, view),
+				html: Mustache.render(listRenderer.itemTemplate, view),
 			});
 		}
 
@@ -86,29 +88,91 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 
 interface NoteItemProps {
 	onClick: React.MouseEventHandler<HTMLDivElement>;
+	onChange: OnChangeHandler;
 	noteId: string;
 	noteHtml: string;
 	style: React.CSSProperties;
 }
 
 const NoteItem = memo((props: NoteItemProps) => {
-	return <div
-		onClick={props.onClick}
-		data-note-id={props.noteId}
-		className="note-list-item"
-		style={props.style}
-		dangerouslySetInnerHTML={{ __html: props.noteHtml }}
-	></div>;
+	const [rootElement, setRootElement] = useState<HTMLDivElement>(null);
+	const [itemElement, setItemElement] = useState<HTMLDivElement>(null);
+
+	const elementId = `list-note-${props.noteId}`;
+	const idPrefix = 'user-note-list-item-';
+
+	const onCheckboxChange = useCallback((event: any) => {
+		const internalId: string = event.currentTarget.getAttribute('id');
+		const userId = internalId.substring(idPrefix.length);
+		void props.onChange({ noteId: props.noteId }, userId, { value: event.currentTarget.checked });
+	}, [props.onChange, props.noteId]);
+
+	useAsyncEffect(async (event) => {
+		const element = await waitForElement(document, elementId);
+		if (event.cancelled) return;
+		setRootElement(element);
+	}, [document, elementId]);
+
+	useEffect(() => {
+		if (!rootElement) return () => {};
+
+		const element = document.createElement('div');
+		element.setAttribute('data-note-id', props.noteId);
+		element.className = 'note-list-item';
+		for (const [n, v] of Object.entries(props.style)) {
+			(element.style as any)[n] = v;
+		}
+		element.innerHTML = props.noteHtml;
+		element.addEventListener('click', props.onClick as any);
+
+		rootElement.appendChild(element);
+
+		setItemElement(element);
+
+		return () => {
+			// TODO: do event handlers need to be removed if the element is removed?
+			// element.removeEventListener('click', props.onClick as any);
+			element.remove();
+		};
+	}, [rootElement, props.noteHtml, props.noteId, props.style, props.onClick, onCheckboxChange]);
+
+	useAsyncEffect(async (event) => {
+		if (!itemElement) return;
+
+		await msleep(1);
+		if (event.cancelled) return;
+
+		const inputs = itemElement.getElementsByTagName('input');
+
+		const all = rootElement.getElementsByTagName('*');
+
+		for (let i = 0; i < all.length; i++) {
+			const e = all[i];
+			if (e.getAttribute('id')) {
+				e.setAttribute('id', idPrefix + e.getAttribute('id'));
+			}
+		}
+
+		for (const input of inputs) {
+			if (input.type === 'checkbox') {
+				input.addEventListener('change', onCheckboxChange);
+			}
+		}
+	}, [itemElement]);
+
+	return <div id={elementId}></div>;
 });
 
 const NoteList = (props: Props) => {
-	if (defaultListRenderer.flow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
+	const listRenderer = defaultListRenderer;
+
+	if (listRenderer.flow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
 
 	const itemSize: Size = useMemo(() => {
-		return defaultListRenderer.itemSize;
-	}, []);
+		return listRenderer.itemSize;
+	}, [listRenderer.itemSize]);
 
-	const renderedNotes = useRenderedNotes(props.notes, props.selectedNoteIds, itemSize);
+	const renderedNotes = useRenderedNotes(props.notes, props.selectedNoteIds, itemSize, listRenderer);
 
 	const noteItemStyle = useMemo(() => {
 		return {
@@ -147,6 +211,20 @@ const NoteList = (props: Props) => {
 		}
 	}, [props.dispatch]);
 
+	useEffect(() => {
+		const element = document.createElement('style');
+		element.setAttribute('type', 'text/css');
+		element.appendChild(document.createTextNode(`
+			.note-list-item {
+				${listRenderer.itemCss};
+			}
+		`));
+		document.head.appendChild(element);
+		return () => {
+			element.remove();
+		};
+	}, [listRenderer.itemCss]);
+
 	const renderNotes = () => {
 		const output: JSX.Element[] = [];
 
@@ -155,6 +233,7 @@ const NoteList = (props: Props) => {
 				<NoteItem
 					key={renderedNote.id}
 					onClick={onNoteClick}
+					onChange={listRenderer.onChange}
 					noteId={renderedNote.id}
 					noteHtml={renderedNote.html}
 					style={noteItemStyle}

@@ -7,3 +7,20 @@ export const isInsideContainer = (node: any, className: string): boolean => {
 	}
 	return false;
 };
+
+export const waitForElement = async (parent: any, id: string): Promise<any> => {
+	return new Promise((resolve, reject) => {
+		const iid = setInterval(() => {
+			try {
+				const element = parent.getElementById(id);
+				if (element) {
+					clearInterval(iid);
+					resolve(element);
+				}
+			} catch (error) {
+				clearInterval(iid);
+				reject(error);
+			}
+		}, 10);
+	});
+};
