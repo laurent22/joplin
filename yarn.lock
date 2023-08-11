@@ -4435,6 +4435,7 @@ __metadata:
     "@joplin/utils": ~2.12
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.3
+    "@types/mustache": 4.2.2
     "@types/node": 18.16.18
     "@types/react": 18.0.24
     "@types/react-redux": 7.1.25
@@ -4461,6 +4462,7 @@ __metadata:
     mark.js: 8.11.1
     md5: 2.3.0
     moment: 2.29.4
+    mustache: 4.2.0
     nan: 2.17.0
     node-fetch: 2.6.7
     node-notifier: 10.0.1

@@ -1,5 +1,6 @@
-import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, ItemRendererDatabaseDependency, NoteEntity } from '@joplin/lib/services/database/types';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { Size } from '@joplin/utils/types';
 
 export interface Props {
 	themeId: any;
@@ -26,4 +27,23 @@ export interface Props {
 	visible: boolean;
 	focusedField: string;
 	parentFolderIsReadOnly: boolean;
+}
+
+export enum ItemFlow {
+	TopToBottom = 'topToBottom',
+	LeftToRight = 'leftToRight',
+}
+
+export type RenderNoteView = Record<string, any>;
+
+export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
+
+export type ItemRendererDepependency = ItemRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected';
+
+export interface ItemRenderer {
+	flow: ItemFlow;
+	itemSize: Size;
+	dependencies: ItemRendererDepependency[];
+	itemTemplate: string;
+	onRenderNote: OnRenderNoteHandler;
 }

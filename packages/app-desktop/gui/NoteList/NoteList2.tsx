@@ -1,21 +1,16 @@
 import * as React from 'react';
 import { useMemo, useState, useCallback, memo } from 'react';
 import { AppState } from '../../app.reducer';
-// import { _ } from '@joplin/lib/locale';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 const { connect } = require('react-redux');
-import { Props } from './types';
+import { ItemFlow, ItemRendererDepependency, Props } from './types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
-import { htmlentities } from '@joplin/utils/html';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-
-// enum ItemFlow {
-// 	TopToBottom = 'topToBottom',
-// 	LeftToRight = 'leftToRight',
-// }
+import defaultItemRenderer from './defaultItemRenderer';
+import * as Mustache from 'mustache';
 
 interface RenderedNote {
 	id: string;
@@ -32,36 +27,52 @@ const useRenderedNotes = (notes: NoteEntity[], selectedNoteIds: string[], itemSi
 
 	const [renderedNotes, setRenderedNotes] = useState<RenderedNote[]>(initialValue);
 
+	const prepareViewProps = async (dependencies: ItemRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean) => {
+		const output: any = {};
+		for (const dep of dependencies) {
+
+			if (dep.startsWith('note.')) {
+				const splitted = dep.split('.');
+				if (splitted.length !== 2) throw new Error(`Invalid dependency name: ${dep}`);
+				const propName = splitted.pop();
+				if (!output.note) output.note = {};
+				if (!(propName in note)) throw new Error(`Invalid dependency name: ${dep}`);
+				output.note[propName] = (note as any)[propName];
+			}
+
+			if (dep.startsWith('item.size.')) {
+				const splitted = dep.split('.');
+				if (splitted.length !== 3) throw new Error(`Invalid dependency name: ${dep}`);
+				const propName = splitted.pop();
+				if (!output.item) output.item = {};
+				if (!output.item.size) output.item.size = {};
+				if (!(propName in itemSize)) throw new Error(`Invalid dependency name: ${dep}`);
+				output.item.size[propName] = (itemSize as any)[propName];
+			}
+
+			if (dep === 'item.selected') {
+				if (!output.item) output.item = {};
+				output.item.selected = selected;
+			}
+		}
+
+		return output;
+	};
+
 	useAsyncEffect(async (event) => {
 		const newRenderedNotes: RenderedNote[] = [];
 
-		const renderCheckbox = (itemHeight: number) => {
-			return `
-				<div class="checkbox" style="height: ${itemHeight}px;">
-					<input type="checkbox" style="margin: 0px 5px 1px 0px;">
-				</div>
-			`;
-		};
-
-		const renderTitle = (noteId: string, title: string) => {
-			return `
-				<a href="#" class="title" draggable="true" data-id="${noteId}" style="">
-					<span>${htmlentities(title)}</span
-				</a>
-			`;
-		};
-
 		for (const note of notes) {
-			const selected = selectedNoteIds.includes(note.id);
+			const view = await defaultItemRenderer.onRenderNote(await prepareViewProps(
+				defaultItemRenderer.dependencies,
+				note,
+				itemSize,
+				selectedNoteIds.includes(note.id)
+			));
 
 			newRenderedNotes.push({
 				id: note.id,
-				html: `
-					<div class="content -default ${selected ? '-selected' : ''}">
-						${renderCheckbox(itemSize.height)}
-						${renderTitle(note.id, note.title)}
-					</div>
-				`,
+				html: Mustache.render(defaultItemRenderer.itemTemplate, view),
 			});
 		}
 
@@ -90,8 +101,10 @@ const NoteItem = memo((props: NoteItemProps) => {
 	></div>;
 });
 
-const NoteListComponent = (props: Props) => {
-	// const itemDirection:ItemFlow = ItemFlow.TopToBottom;
+const NoteList = (props: Props) => {
+	const itemFlow = ItemFlow.TopToBottom;
+
+	if (itemFlow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
 
 	const itemSize: Size = useMemo(() => {
 		return {
@@ -191,4 +204,4 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-export default connect(mapStateToProps)(NoteListComponent);
+export default connect(mapStateToProps)(NoteList);
