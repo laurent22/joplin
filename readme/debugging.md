@@ -32,7 +32,7 @@ There's two ways to start in safe mode:
 
 ## Mobile application
 
-- In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md), press on the **Log button** and post a screenshot of any error/warning.
+- In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md), press on the **Log button**, and from the options menu, press "share". Attach the shared log (or just relevant portions) to the GitHub issue.
 
 # Creating a low-level bug report on Android
 
