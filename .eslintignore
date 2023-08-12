@@ -276,6 +276,7 @@ packages/app-desktop/gui/NoteList/utils/defaultListRenderer.js
 packages/app-desktop/gui/NoteList/utils/types.js
 packages/app-desktop/gui/NoteList/utils/useItemCss.js
 packages/app-desktop/gui/NoteList/utils/useRenderedNote.js
+packages/app-desktop/gui/NoteList/utils/useVisibleRange.js
 packages/app-desktop/gui/NoteListControls/NoteListControls.js
 packages/app-desktop/gui/NoteListControls/commands/focusSearch.js
 packages/app-desktop/gui/NoteListControls/commands/index.js

@@ -19,7 +19,7 @@ export interface Props {
 	resizableLayoutEventEmitter: any;
 	isInsertingNotes: boolean;
 	folders: FolderEntity[];
-	size: any;
+	size: Size;
 	searches: any[];
 	selectedSearchId: string;
 	highlightedWords: string[];

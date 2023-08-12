@@ -11,7 +11,6 @@ import NoteListItem from '../NoteListItem';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import styled from 'styled-components';
-import { themeStyle } from '@joplin/lib/theme';
 import ItemList from '../ItemList';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
@@ -53,7 +52,7 @@ const NoteListComponent = (props: Props) => {
 		};
 	}, []);
 
-	const [itemHeight, setItemHeight] = useState(34);
+	const itemHeight = 34;
 
 	const focusItemIID_ = useRef<any>(null);
 	const noteListRef = useRef(null);
@@ -408,37 +407,6 @@ const NoteListComponent = (props: Props) => {
 		};
 	}, []);
 
-	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	useEffect(() => {
-		// When a note list item is styled by userchrome.css, its height is reflected.
-		// Ref. https://github.com/laurent22/joplin/pull/6542
-		if (dragOverTargetNoteIndex !== null) {
-			// When dragged, its height should not be considered.
-			// Ref. https://github.com/laurent22/joplin/issues/6639
-			return;
-		}
-		const noteItem = Object.values<any>(itemAnchorRefs_.current)[0]?.current;
-		const actualItemHeight = noteItem?.getHeight() ?? 0;
-		if (actualItemHeight >= 8) { // To avoid generating too many narrow items
-			setItemHeight(actualItemHeight);
-		}
-	});
-
-	const renderEmptyList = () => {
-		if (props.notes.length) return null;
-
-		const theme = themeStyle(props.themeId);
-		const padding = 10;
-		const emptyDivStyle = {
-			padding: `${padding}px`,
-			fontSize: theme.fontSize,
-			color: theme.color,
-			backgroundColor: theme.backgroundColor,
-			fontFamily: theme.fontFamily,
-		};
-		return <div style={emptyDivStyle}>{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
-	};
-
 	const renderItemList = () => {
 		if (!props.notes.length) return null;
 
@@ -461,7 +429,6 @@ const NoteListComponent = (props: Props) => {
 
 	return (
 		<StyledRoot ref={noteListRef}>
-			{renderEmptyList()}
 			{renderItemList()}
 		</StyledRoot>
 	);

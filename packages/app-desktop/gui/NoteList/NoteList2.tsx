@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useMemo, useCallback } from 'react';
+import { _ } from '@joplin/lib/locale';
+import { useMemo, useCallback, useState } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 const { connect } = require('react-redux');
@@ -13,8 +14,11 @@ import NoteListItem from '../NoteListItem/NoteListItem';
 import useRenderedNotes from './utils/useRenderedNote';
 import useItemCss from './utils/useItemCss';
 import useOnContextMenu from '../NoteListItem/utils/useOnContextMenu';
+import useVisibleRange from './utils/useVisibleRange';
 
 const NoteList = (props: Props) => {
+	const [scrollTop, setScrollTop] = useState(0);
+
 	const listRenderer = defaultListRenderer;
 
 	if (listRenderer.flow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
@@ -23,7 +27,9 @@ const NoteList = (props: Props) => {
 		return listRenderer.itemSize;
 	}, [listRenderer.itemSize]);
 
-	const renderedNotes = useRenderedNotes(props.notes, props.selectedNoteIds, itemSize, listRenderer);
+	const [startNoteIndex, endNoteIndex] = useVisibleRange(scrollTop, props.size, itemSize, props.notes.length);
+
+	const renderedNotes = useRenderedNotes(startNoteIndex, endNoteIndex, props.notes, props.selectedNoteIds, itemSize, listRenderer);
 
 	const noteItemStyle = useMemo(() => {
 		return {
@@ -74,17 +80,37 @@ const NoteList = (props: Props) => {
 		props.customCss
 	);
 
+	const onScroll = useCallback((event: any) => {
+		setScrollTop(event.target.scrollTop);
+	}, []);
+
+	const renderFiller = (key: string, height: number) => {
+		return <div key={key} style={{ height: height }}></div>;
+	};
+
+	const renderEmptyList = () => {
+		if (props.notes.length) return null;
+		return <div className="emptylist">{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+	};
+
 	const renderNotes = () => {
+		if (!props.notes.length) return null;
+
 		const output: JSX.Element[] = [];
 
-		for (const renderedNote of renderedNotes) {
+		output.push(renderFiller('top', startNoteIndex * itemSize.height));
+
+		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
+			const note = props.notes[i];
+			const renderedNote = renderedNotes[note.id];
+
 			output.push(
 				<NoteListItem
-					key={renderedNote.id}
+					key={note.id}
 					onClick={onNoteClick}
 					onChange={listRenderer.onChange}
-					noteId={renderedNote.id}
-					noteHtml={renderedNote.html}
+					noteId={note.id}
+					noteHtml={renderedNote ? renderedNote.html : ''}
 					itemSize={itemSize}
 					style={noteItemStyle}
 					onContextMenu={onItemContextMenu}
@@ -92,11 +118,14 @@ const NoteList = (props: Props) => {
 			);
 		}
 
+		output.push(renderFiller('bottom', (props.notes.length - endNoteIndex - 1) * itemSize.height));
+
 		return output;
 	};
 
 	return (
-		<div className="note-list" style={noteListStyle}>
+		<div className="note-list" style={noteListStyle} onScroll={onScroll}>
+			{renderEmptyList()}
 			{renderNotes()}
 		</div>
 	);

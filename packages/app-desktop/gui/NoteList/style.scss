@@ -3,6 +3,15 @@
 	height: 100%;
 	background-color: var(--joplin-background-color3);
 	border-right: 1px solid var(--joplin-divider-color);
+	overflow-y: scroll;
+
+	> .emptylist {
+		padding: 10px;
+		font-size: var(--joplin-font-size);
+		color: var(--joplin-color);
+		background-color: var(--joplin-background-color);
+		font-family: var(--joplin-font-family);
+	}
 }
 
 .note-list-item {
