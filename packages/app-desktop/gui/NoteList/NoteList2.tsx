@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect, useImperativeHandle } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { ItemFlow, Props } from './utils/types';
@@ -19,7 +19,13 @@ import useFocusNote from './utils/useFocusNote';
 import useOnNoteClick from './utils/useOnNoteClick';
 import useMoveNote from './utils/useMoveNote';
 import useOnKeyDown from './utils/useOnKeyDown';
+import * as focusElementNoteList from './commands/focusElementNoteList';
+import CommandService from '@joplin/lib/services/CommandService';
 const { connect } = require('react-redux');
+
+const commands = {
+	focusElementNoteList,
+};
 
 const NoteList = (props: Props) => {
 	const listRef = useRef(null);
@@ -75,6 +81,14 @@ const NoteList = (props: Props) => {
 		};
 	}, [props.size]);
 
+	useImperativeHandle(listRef, () => {
+		return {
+			focusNote: (noteId: string) => {
+				focusNote(noteId);
+			},
+		};
+	}, [focusNote]);
+
 	const onNoteClick = useOnNoteClick(props.dispatch, focusNote);
 
 	const onKeyDown = useOnKeyDown(
@@ -89,6 +103,13 @@ const NoteList = (props: Props) => {
 	);
 
 	useItemCss(listRenderer.itemCss);
+
+	useEffect(() => {
+		CommandService.instance().registerRuntime(commands.focusElementNoteList.declaration.name, commands.focusElementNoteList.runtime(listRef));
+		return () => {
+			CommandService.instance().unregisterRuntime(commands.focusElementNoteList.declaration.name);
+		};
+	}, []);
 
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,

@@ -6,8 +6,6 @@ import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import NoteListItem from '../NoteListItem';
-import CommandService from '@joplin/lib/services/CommandService';
-import shim from '@joplin/lib/shim';
 import styled from 'styled-components';
 import ItemList from '../ItemList';
 const { connect } = require('react-redux');
@@ -17,10 +15,6 @@ import usePrevious from '../hooks/usePrevious';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
-
-const commands = [
-	require('./commands/focusElementNoteList'),
-];
 
 const StyledRoot = styled.div`
 
@@ -40,19 +34,8 @@ const NoteListComponent = (props: Props) => {
 	const [width, setWidth] = useState(0);
 	const [, setHeight] = useState(0);
 
-	useEffect(() => {
-		itemAnchorRefs_.current = {};
-		CommandService.instance().registerCommands(commands);
-
-		return () => {
-			itemAnchorRefs_.current = {};
-			CommandService.instance().unregisterCommands(commands);
-		};
-	}, []);
-
 	const itemHeight = 34;
 
-	const focusItemIID_ = useRef<any>(null);
 	const noteListRef = useRef(null);
 	const itemListRef = useRef(null);
 
@@ -245,14 +228,6 @@ const NoteListComponent = (props: Props) => {
 
 	useEffect(() => {
 		updateSizeState();
-
-		return () => {
-			if (focusItemIID_.current) {
-				shim.clearInterval(focusItemIID_.current);
-				focusItemIID_.current = null;
-			}
-			CommandService.instance().componentUnregisterCommands(commands);
-		};
 	}, []);
 
 	const renderItemList = () => {
