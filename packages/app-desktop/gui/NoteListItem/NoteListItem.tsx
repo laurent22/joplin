@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, forwardRef } from 'react';
+import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler } from 'react';
 import { OnChangeHandler } from '../NoteList/utils/types';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
@@ -8,20 +8,22 @@ import useItemEventHandlers from './utils/useItemEventHandlers';
 import { OnCheckboxChange } from './utils/types';
 
 interface NoteItemProps {
-	onClick: React.MouseEventHandler<HTMLDivElement>;
-	onChange: OnChangeHandler;
-	noteId: string;
-	noteHtml: string;
-	style: React.CSSProperties;
 	itemSize: Size;
-	onContextMenu: React.MouseEventHandler;
+	noteHtml: string;
+	noteId: string;
+	onChange: OnChangeHandler;
+	onClick: MouseEventHandler<HTMLDivElement>;
+	onContextMenu: MouseEventHandler;
+	onDragStart: DragEventHandler;
+	onDragOver: DragEventHandler;
+	style: CSSProperties;
 }
 
-const NoteListItem = (props: NoteItemProps, ref: React.LegacyRef<HTMLDivElement>) => {
+const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	const elementId = `list-note-${props.noteId}`;
 	const idPrefix = 'user-note-list-item-';
 
-	const onCheckboxChange: OnCheckboxChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+	const onCheckboxChange: OnCheckboxChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		const internalId: string = event.currentTarget.getAttribute('id');
 		const userId = internalId.substring(idPrefix.length);
 		void props.onChange({ noteId: props.noteId }, userId, { value: event.currentTarget.checked });
@@ -44,8 +46,10 @@ const NoteListItem = (props: NoteItemProps, ref: React.LegacyRef<HTMLDivElement>
 		id={elementId}
 		ref={ref}
 		tabIndex={0}
-		data-note-id={props.noteId}
+		data-id={props.noteId}
 		onContextMenu={props.onContextMenu}
+		onDragStart={props.onDragStart}
+		onDragOver={props.onDragOver}
 	></div>;
 };
 

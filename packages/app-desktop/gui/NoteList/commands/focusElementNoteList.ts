@@ -1,6 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
+import { FocusNote } from '../utils/useFocusNote';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementNoteList',
@@ -8,11 +9,11 @@ export const declaration: CommandDeclaration = {
 	parentLabel: () => _('Focus'),
 };
 
-export const runtime = (noteListRef: any): CommandRuntime => {
+export const runtime = (focusNote: FocusNote): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
-			if (noteId && noteListRef.current) noteListRef.current.focusNote(noteId);
+			focusNote(noteId);
 		},
 		enabledCondition: 'noteListHasNotes',
 	};

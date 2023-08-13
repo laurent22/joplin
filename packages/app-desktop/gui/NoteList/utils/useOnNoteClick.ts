@@ -5,7 +5,7 @@ import { FocusNote } from './useFocusNote';
 
 const useOnNoteClick = (dispatch: Dispatch, focusNote: FocusNote) => {
 	const onNoteClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-		const noteId = event.currentTarget.getAttribute('data-note-id');
+		const noteId = event.currentTarget.getAttribute('data-id');
 
 		focusNote(noteId);
 

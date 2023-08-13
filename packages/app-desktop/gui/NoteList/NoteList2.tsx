@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
-import { useMemo, useRef, useEffect, useImperativeHandle } from 'react';
+import { useMemo, useRef, useEffect, useCallback, DragEventHandler } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { ItemFlow, Props } from './utils/types';
@@ -21,6 +21,8 @@ import useMoveNote from './utils/useMoveNote';
 import useOnKeyDown from './utils/useOnKeyDown';
 import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
+import Note from '@joplin/lib/models/Note';
+import canManuallySortNotes from './utils/canManuallySortNotes';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -81,14 +83,6 @@ const NoteList = (props: Props) => {
 		};
 	}, [props.size]);
 
-	useImperativeHandle(listRef, () => {
-		return {
-			focusNote: (noteId: string) => {
-				focusNote(noteId);
-			},
-		};
-	}, [focusNote]);
-
 	const onNoteClick = useOnNoteClick(props.dispatch, focusNote);
 
 	const onKeyDown = useOnKeyDown(
@@ -105,11 +99,11 @@ const NoteList = (props: Props) => {
 	useItemCss(listRenderer.itemCss);
 
 	useEffect(() => {
-		CommandService.instance().registerRuntime(commands.focusElementNoteList.declaration.name, commands.focusElementNoteList.runtime(listRef));
+		CommandService.instance().registerRuntime(commands.focusElementNoteList.declaration.name, commands.focusElementNoteList.runtime(focusNote));
 		return () => {
 			CommandService.instance().unregisterRuntime(commands.focusElementNoteList.declaration.name);
 		};
-	}, []);
+	}, [focusNote]);
 
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,
@@ -120,6 +114,72 @@ const NoteList = (props: Props) => {
 		props.plugins,
 		props.customCss
 	);
+
+
+
+
+
+
+
+
+
+	const onDragStart: DragEventHandler = useCallback(event => {
+		if (props.parentFolderIsReadOnly) return false;
+
+		let noteIds = [];
+
+		// Here there is two cases:
+		// - If multiple notes are selected, we drag the group
+		// - If only one note is selected, we drag the note that was clicked on
+		//   (which might be different from the currently selected note)
+		if (props.selectedNoteIds.length >= 2) {
+			noteIds = props.selectedNoteIds;
+		} else {
+			const clickedNoteId = event.currentTarget.getAttribute('data-id');
+			if (clickedNoteId) noteIds.push(clickedNoteId);
+		}
+
+		if (!noteIds.length) return false;
+
+		event.dataTransfer.setDragImage(new Image(), 1, 1);
+		event.dataTransfer.clearData();
+		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
+		return true;
+	}, [props.parentFolderIsReadOnly, props.selectedNoteIds]);
+
+
+	const dragTargetNoteIndex_ = useCallback((event: React.DragEvent) => {
+		return Math.abs(Math.round((event.clientY - listRef.current.offsetTop + scrollTop) / itemSize.height));
+	}, [listRef, itemSize.height, scrollTop]);
+
+	const onDragOver: DragEventHandler = useCallback(event => {
+		if (props.notesParentType !== 'Folder') return;
+
+		const dt = event.dataTransfer;
+
+		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+			event.preventDefault();
+		}
+	}, [props.notesParentType]);
+
+	const onDrop: DragEventHandler = useCallback(async (event: any) => {
+		// TODO: check that parent type is folder
+		if (!canManuallySortNotes(props.notesParentType, props.noteSortOrder)) {
+			return;
+		}
+		const dt = event.dataTransfer;
+		const targetNoteIndex = dragTargetNoteIndex_(event);
+		const noteIds: string[] = JSON.parse(dt.getData('text/x-jop-note-ids'));
+
+		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
+	}, [props.notesParentType, dragTargetNoteIndex_, props.noteSortOrder, props.selectedFolderId, props.uncompletedTodosOnTop, props.showCompletedTodos]);
+
+
+
+
+
+
+
 
 	const renderFiller = (key: string, height: number) => {
 		return <div key={key} style={{ height: height }}></div>;
@@ -145,13 +205,15 @@ const NoteList = (props: Props) => {
 				<NoteListItem
 					key={note.id}
 					ref={el => itemRefs.current[note.id] = el}
-					onClick={onNoteClick}
-					onChange={listRenderer.onChange}
-					noteId={note.id}
-					noteHtml={renderedNote ? renderedNote.html : ''}
 					itemSize={itemSize}
-					style={noteItemStyle}
+					noteHtml={renderedNote ? renderedNote.html : ''}
+					noteId={note.id}
+					onChange={listRenderer.onChange}
+					onClick={onNoteClick}
 					onContextMenu={onItemContextMenu}
+					onDragStart={onDragStart}
+					onDragOver={onDragOver}
+					style={noteItemStyle}
 				/>
 			);
 		}
@@ -168,6 +230,7 @@ const NoteList = (props: Props) => {
 			ref={listRef}
 			onScroll={onScroll}
 			onKeyDown={onKeyDown}
+			onDrop={onDrop}
 		>
 			{renderEmptyList()}
 			{renderNotes()}

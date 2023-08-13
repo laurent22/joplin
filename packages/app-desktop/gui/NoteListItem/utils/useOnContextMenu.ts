@@ -16,7 +16,7 @@ const useOnContextMenu = (
 	customCss: string
 ) => {
 	return useCallback((event: any) => {
-		const currentNoteId = event.currentTarget.getAttribute('data-note-id');
+		const currentNoteId = event.currentTarget.getAttribute('data-id');
 		if (!currentNoteId) return;
 
 		let noteIds = [];

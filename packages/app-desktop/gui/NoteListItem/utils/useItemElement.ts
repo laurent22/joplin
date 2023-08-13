@@ -9,7 +9,7 @@ const useItemElement = (rootElement: HTMLDivElement, noteId: string, noteHtml: s
 		if (!rootElement) return () => {};
 
 		const element = document.createElement('div');
-		element.setAttribute('data-note-id', noteId);
+		element.setAttribute('data-id', noteId);
 		element.className = 'note-list-item';
 		for (const [n, v] of Object.entries(style)) {
 			(element.style as any)[n] = v;
