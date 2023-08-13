@@ -274,8 +274,13 @@ packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/defaultListRenderer.js
 packages/app-desktop/gui/NoteList/utils/types.js
+packages/app-desktop/gui/NoteList/utils/useFocusNote.js
 packages/app-desktop/gui/NoteList/utils/useItemCss.js
-packages/app-desktop/gui/NoteList/utils/useRenderedNote.js
+packages/app-desktop/gui/NoteList/utils/useMoveNote.js
+packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
+packages/app-desktop/gui/NoteList/utils/useOnNoteClick.js
+packages/app-desktop/gui/NoteList/utils/useRenderedNotes.js
+packages/app-desktop/gui/NoteList/utils/useScroll.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.js
 packages/app-desktop/gui/NoteListControls/NoteListControls.js
 packages/app-desktop/gui/NoteListControls/commands/focusSearch.js

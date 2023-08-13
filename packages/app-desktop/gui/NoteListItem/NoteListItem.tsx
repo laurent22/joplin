@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, forwardRef } from 'react';
 import { OnChangeHandler } from '../NoteList/utils/types';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
@@ -17,7 +17,7 @@ interface NoteItemProps {
 	onContextMenu: React.MouseEventHandler;
 }
 
-const NoteListItem = (props: NoteItemProps) => {
+const NoteListItem = (props: NoteItemProps, ref: React.LegacyRef<HTMLDivElement>) => {
 	const elementId = `list-note-${props.noteId}`;
 	const idPrefix = 'user-note-list-item-';
 
@@ -42,9 +42,11 @@ const NoteListItem = (props: NoteItemProps) => {
 
 	return <div
 		id={elementId}
+		ref={ref}
+		tabIndex={0}
 		data-note-id={props.noteId}
 		onContextMenu={props.onContextMenu}
 	></div>;
 };
 
-export default NoteListItem;
+export default forwardRef(NoteListItem);

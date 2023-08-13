@@ -34,6 +34,7 @@ const defaultItemRenderer: ListRenderer = {
 		'note.todo_completed',
 		'item.size.height',
 		'item.selected',
+		'item.index',
 	],
 
 	itemCss: `			
@@ -93,7 +94,7 @@ const defaultItemRenderer: ListRenderer = {
 				</div>
 			{{/note.is_todo}}	
 			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
-				<span>{{note.title}}</span
+				<span>{{item.index}} {{note.title}}</span>
 			</a>
 		</div>
 	`,

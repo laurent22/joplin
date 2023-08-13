@@ -16,7 +16,7 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean) => {
+const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, itemIndex: number) => {
 	const output: any = {};
 
 	for (const dep of dependencies) {
@@ -44,6 +44,11 @@ const prepareViewProps = async (dependencies: ListRendererDepependency[], note: 
 			if (!output.item) output.item = {};
 			output.item.selected = selected;
 		}
+
+		if (dep === 'item.index') {
+			if (!output.item) output.item = {};
+			output.item.index = itemIndex;
+		}
 	}
 
 	return output;
@@ -53,12 +58,13 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 	const [renderedNotes, setRenderedNotes] = useState<Record<string, RenderedNote>>({});
 
 	useAsyncEffect(async (event) => {
-		const renderNote = async (note: NoteEntity): Promise<void> => {
+		const renderNote = async (note: NoteEntity, noteIndex: number): Promise<void> => {
 			const view = await listRenderer.onRenderNote(await prepareViewProps(
 				listRenderer.dependencies,
 				note,
 				itemSize,
-				selectedNoteIds.includes(note.id)
+				selectedNoteIds.includes(note.id),
+				noteIndex
 			));
 
 			if (event.cancelled) return null;
@@ -83,7 +89,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = notes[i];
-			promises.push(renderNote(note));
+			promises.push(renderNote(note, i));
 		}
 
 		await Promise.all(promises);

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-const { connect } = require('react-redux');
 import { ItemFlow, Props } from './utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
@@ -11,13 +10,20 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
 import defaultListRenderer from './utils/defaultListRenderer';
 import NoteListItem from '../NoteListItem/NoteListItem';
-import useRenderedNotes from './utils/useRenderedNote';
+import useRenderedNotes from './utils/useRenderedNotes';
 import useItemCss from './utils/useItemCss';
 import useOnContextMenu from '../NoteListItem/utils/useOnContextMenu';
 import useVisibleRange from './utils/useVisibleRange';
+import useScroll from './utils/useScroll';
+import useFocusNote from './utils/useFocusNote';
+import useOnNoteClick from './utils/useOnNoteClick';
+import useMoveNote from './utils/useMoveNote';
+import useOnKeyDown from './utils/useOnKeyDown';
+const { connect } = require('react-redux');
 
 const NoteList = (props: Props) => {
-	const [scrollTop, setScrollTop] = useState(0);
+	const listRef = useRef(null);
+	const itemRefs = useRef<Record<string, any>>({});
 
 	const listRenderer = defaultListRenderer;
 
@@ -27,7 +33,31 @@ const NoteList = (props: Props) => {
 		return listRenderer.itemSize;
 	}, [listRenderer.itemSize]);
 
-	const [startNoteIndex, endNoteIndex] = useVisibleRange(scrollTop, props.size, itemSize, props.notes.length);
+	const { scrollTop, onScroll, scrollNoteIndex, makeItemIndexVisible } = useScroll(
+		props.notes.length,
+		itemSize,
+		props.size,
+		listRef
+	);
+
+	const [startNoteIndex, endNoteIndex, visibleItemCount] = useVisibleRange(
+		scrollTop,
+		props.size,
+		itemSize,
+		props.notes.length
+	);
+
+	const focusNote = useFocusNote(itemRefs);
+
+	const moveNote = useMoveNote(
+		props.notesParentType,
+		props.noteSortOrder,
+		props.selectedNoteIds,
+		props.selectedFolderId,
+		props.uncompletedTodosOnTop,
+		props.showCompletedTodos,
+		props.notes
+	);
 
 	const renderedNotes = useRenderedNotes(startNoteIndex, endNoteIndex, props.notes, props.selectedNoteIds, itemSize, listRenderer);
 
@@ -45,28 +75,18 @@ const NoteList = (props: Props) => {
 		};
 	}, [props.size]);
 
-	const onNoteClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-		const noteId = event.currentTarget.getAttribute('data-note-id');
+	const onNoteClick = useOnNoteClick(props.dispatch);
 
-		if (event.ctrlKey || event.metaKey) {
-			event.preventDefault();
-			props.dispatch({
-				type: 'NOTE_SELECT_TOGGLE',
-				id: noteId,
-			});
-		} else if (event.shiftKey) {
-			event.preventDefault();
-			props.dispatch({
-				type: 'NOTE_SELECT_EXTEND',
-				id: noteId,
-			});
-		} else {
-			props.dispatch({
-				type: 'NOTE_SELECT',
-				id: noteId,
-			});
-		}
-	}, [props.dispatch]);
+	const onKeyDown = useOnKeyDown(
+		props.selectedNoteIds,
+		moveNote,
+		scrollNoteIndex,
+		makeItemIndexVisible,
+		focusNote,
+		props.notes,
+		props.dispatch,
+		visibleItemCount
+	);
 
 	useItemCss(listRenderer.itemCss);
 
@@ -79,10 +99,6 @@ const NoteList = (props: Props) => {
 		props.plugins,
 		props.customCss
 	);
-
-	const onScroll = useCallback((event: any) => {
-		setScrollTop(event.target.scrollTop);
-	}, []);
 
 	const renderFiller = (key: string, height: number) => {
 		return <div key={key} style={{ height: height }}></div>;
@@ -107,6 +123,7 @@ const NoteList = (props: Props) => {
 			output.push(
 				<NoteListItem
 					key={note.id}
+					ref={(el: any) => itemRefs.current[note.id] = el}
 					onClick={onNoteClick}
 					onChange={listRenderer.onChange}
 					noteId={note.id}
@@ -124,7 +141,13 @@ const NoteList = (props: Props) => {
 	};
 
 	return (
-		<div className="note-list" style={noteListStyle} onScroll={onScroll}>
+		<div
+			className="note-list"
+			style={noteListStyle}
+			ref={listRef}
+			onScroll={onScroll}
+			onKeyDown={onKeyDown}
+		>
 			{renderEmptyList()}
 			{renderNotes()}
 		</div>

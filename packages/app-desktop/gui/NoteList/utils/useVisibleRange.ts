@@ -16,7 +16,7 @@ const useVisibleRange = (scrollTop: number, listSize: Size, itemSize: Size, note
 		return output;
 	}, [visibleItemCount, startNoteIndex, noteCount]);
 
-	return [startNoteIndex, endNoteIndex];
+	return [startNoteIndex, endNoteIndex, visibleItemCount];
 };
 
 export default useVisibleRange;
