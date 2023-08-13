@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
-import eventManager from '@joplin/lib/eventManager';
 import { _ } from '@joplin/lib/locale';
-import time from '@joplin/lib/time';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
@@ -129,17 +127,6 @@ const NoteListComponent = (props: Props) => {
 		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
 	};
 
-
-	const noteItem_checkboxClick = async (event: any, item: any) => {
-		const checked = event.target.checked;
-		const newNote = {
-			id: item.id,
-			todo_completed: checked ? time.unixMs() : 0,
-		};
-		await Note.save(newNote, { userSideValidation: true });
-		eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
-	};
-
 	const noteItem_dragStart = useCallback((event: any) => {
 		if (props.parentFolderIsReadOnly) return false;
 
@@ -196,7 +183,7 @@ const NoteListComponent = (props: Props) => {
 			isSelected={props.selectedNoteIds.indexOf(item.id) >= 0}
 			isWatched={props.watchedNoteFiles.indexOf(item.id) < 0}
 			itemCount={props.notes.length}
-			onCheckboxClick={noteItem_checkboxClick}
+			onCheckboxClick={() => {}}
 			onDragStart={noteItem_dragStart}
 			onNoteDragOver={noteItem_noteDragOver}
 			onTitleClick={() => {}}
@@ -239,145 +226,6 @@ const NoteListComponent = (props: Props) => {
 		}
 	}, [previousSelectedNoteIds, previousNotes, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
-	const scrollNoteIndex_ = (keyCode: any, ctrlKey: any, metaKey: any, noteIndex: any) => {
-
-		if (keyCode === 33) {
-			// Page Up
-			noteIndex -= (itemListRef.current.visibleItemCount() - 1);
-
-		} else if (keyCode === 34) {
-			// Page Down
-			noteIndex += (itemListRef.current.visibleItemCount() - 1);
-
-		} else if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
-			// CTRL+End, CMD+Down
-			noteIndex = props.notes.length - 1;
-
-		} else if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
-			// CTRL+Home, CMD+Up
-			noteIndex = 0;
-
-		} else if (keyCode === 38 && !metaKey) {
-			// Up
-			noteIndex -= 1;
-
-		} else if (keyCode === 40 && !metaKey) {
-			// Down
-			noteIndex += 1;
-		}
-		if (noteIndex < 0) noteIndex = 0;
-		if (noteIndex > props.notes.length - 1) noteIndex = props.notes.length - 1;
-		return noteIndex;
-	};
-
-	const noteItem_noteMove = async (direction: number) => {
-		if (!canManuallySortNotes()) {
-			return;
-		}
-		const noteIds = props.selectedNoteIds;
-		const noteId = noteIds[0];
-		let targetNoteIndex = BaseModel.modelIndexById(props.notes, noteId);
-		if ((direction === 1)) {
-			targetNoteIndex += 2;
-		}
-		if ((direction === -1)) {
-			targetNoteIndex -= 1;
-		}
-		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
-	};
-
-	const onKeyDown = async (event: any) => {
-		const keyCode = event.keyCode;
-		const noteIds = props.selectedNoteIds;
-
-		if ((keyCode === 40 || keyCode === 38) && event.altKey) {
-			// (DOWN / UP) & ALT
-			await noteItem_noteMove(keyCode === 40 ? 1 : -1);
-			event.preventDefault();
-		} else if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
-			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
-			const noteId = noteIds[0];
-			let noteIndex = BaseModel.modelIndexById(props.notes, noteId);
-
-			noteIndex = scrollNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
-
-			const newSelectedNote = props.notes[noteIndex];
-
-			props.dispatch({
-				type: 'NOTE_SELECT',
-				id: newSelectedNote.id,
-			});
-
-			itemListRef.current.makeItemIndexVisible(noteIndex);
-
-			focusNoteId_(newSelectedNote.id);
-
-			event.preventDefault();
-		}
-
-		if (noteIds.length && (keyCode === 46 || (keyCode === 8 && event.metaKey))) {
-			// DELETE / CMD+Backspace
-			event.preventDefault();
-			void CommandService.instance().execute('deleteNote', noteIds);
-			// await NoteListUtils.confirmDeleteNotes(noteIds);
-		}
-
-		if (noteIds.length && keyCode === 32) {
-			// SPACE
-			event.preventDefault();
-
-			const notes = BaseModel.modelsByIds(props.notes, noteIds);
-			const todos = notes.filter((n: any) => !!n.is_todo);
-			if (!todos.length) return;
-
-			for (let i = 0; i < todos.length; i++) {
-				const toggledTodo = Note.toggleTodoCompleted(todos[i]);
-				await Note.save(toggledTodo);
-			}
-
-			focusNoteId_(todos[0].id);
-		}
-
-		if (keyCode === 9) {
-			// TAB
-			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'sideBar');
-			} else {
-				void CommandService.instance().execute('focusElement', 'noteTitle');
-			}
-		}
-
-		if (event.keyCode === 65 && (event.ctrlKey || event.metaKey)) {
-			// Ctrl+A key
-			event.preventDefault();
-
-			props.dispatch({
-				type: 'NOTE_SELECT_ALL',
-			});
-		}
-	};
-
-	const focusNoteId_ = (noteId: string) => {
-		// - We need to focus the item manually otherwise focus might be lost when the
-		//   list is scrolled and items within it are being rebuilt.
-		// - We need to use an interval because when leaving the arrow pressed, the rendering
-		//   of items might lag behind and so the ref is not yet available at this point.
-		if (!itemAnchorRef(noteId)) {
-			if (focusItemIID_.current) shim.clearInterval(focusItemIID_.current);
-			focusItemIID_.current = shim.setInterval(() => {
-				if (itemAnchorRef(noteId)) {
-					itemAnchorRef(noteId).focus();
-					shim.clearInterval(focusItemIID_.current);
-					focusItemIID_.current = null;
-				}
-			}, 10);
-		} else {
-			itemAnchorRef(noteId).focus();
-		}
-	};
-
 	const updateSizeState = () => {
 		setWidth(noteListRef.current.clientWidth);
 		setHeight(noteListRef.current.clientHeight);
@@ -419,7 +267,7 @@ const NoteListComponent = (props: Props) => {
 				items={props.notes}
 				style={props.size}
 				itemRenderer={renderItem}
-				onKeyDown={onKeyDown}
+				onKeyDown={() => {}}
 				onNoteDrop={noteItem_noteDrop}
 			/>
 		);

@@ -5,13 +5,14 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
+import { FocusNote } from './useFocusNote';
 
 const useOnKeyDown = (
 	selectedNoteIds: string[],
 	moveNote: (direction: number)=> void,
 	scrollNoteIndex: (visibleItemCount: number, keyCode: number, ctrlKey: boolean, metaKey: boolean, noteIndex: number)=> number,
 	makeItemIndexVisible: (itemIndex: number)=> void,
-	focusNote: any,
+	focusNote: FocusNote,
 	notes: NoteEntity[],
 	dispatch: Dispatch,
 	visibleItemCount: number

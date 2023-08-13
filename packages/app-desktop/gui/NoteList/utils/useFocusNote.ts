@@ -1,10 +1,12 @@
 import shim from '@joplin/lib/shim';
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, MutableRefObject } from 'react';
 
-const useFocusNote = (itemRefs: Record<string, any>) => {
+export type FocusNote = (noteId: string)=> void;
+
+const useFocusNote = (itemRefs: MutableRefObject<Record<string, HTMLDivElement>>) => {
 	const focusItemIID = useRef(null);
 
-	const focusNoteId = useCallback((noteId: string) => {
+	const focusNote: FocusNote = useCallback((noteId: string) => {
 		// - We need to focus the item manually otherwise focus might be lost when the
 		//   list is scrolled and items within it are being rebuilt.
 		// - We need to use an interval because when leaving the arrow pressed, the rendering
@@ -25,7 +27,7 @@ const useFocusNote = (itemRefs: Record<string, any>) => {
 		}
 	}, [itemRefs]);
 
-	return focusNoteId;
+	return focusNote;
 };
 
 export default useFocusNote;

@@ -23,7 +23,7 @@ const { connect } = require('react-redux');
 
 const NoteList = (props: Props) => {
 	const listRef = useRef(null);
-	const itemRefs = useRef<Record<string, any>>({});
+	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
 
 	const listRenderer = defaultListRenderer;
 
@@ -75,7 +75,7 @@ const NoteList = (props: Props) => {
 		};
 	}, [props.size]);
 
-	const onNoteClick = useOnNoteClick(props.dispatch);
+	const onNoteClick = useOnNoteClick(props.dispatch, focusNote);
 
 	const onKeyDown = useOnKeyDown(
 		props.selectedNoteIds,
@@ -123,7 +123,7 @@ const NoteList = (props: Props) => {
 			output.push(
 				<NoteListItem
 					key={note.id}
-					ref={(el: any) => itemRefs.current[note.id] = el}
+					ref={el => itemRefs.current[note.id] = el}
 					onClick={onNoteClick}
 					onChange={listRenderer.onChange}
 					noteId={note.id}
