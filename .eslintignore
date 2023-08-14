@@ -260,7 +260,6 @@ packages/app-desktop/gui/NoteEditor/utils/types.js
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js
 packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js
 packages/app-desktop/gui/NoteEditor/utils/useFolder.js
-packages/app-desktop/gui/NoteEditor/utils/useFormNote.test.js
 packages/app-desktop/gui/NoteEditor/utils/useFormNote.js
 packages/app-desktop/gui/NoteEditor/utils/useMarkupToHtml.js
 packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js

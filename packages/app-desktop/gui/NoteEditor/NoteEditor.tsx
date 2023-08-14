@@ -78,7 +78,6 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
-		decryptionStarted: props.decryptionStarted,
 		noteId: effectiveNoteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
@@ -630,7 +629,6 @@ const mapStateToProps = (state: AppState) => {
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,
-		decryptionStarted: state.decryptionWorker?.state !== 'idle',
 		themeId: state.settings.theme,
 		richTextBannerDismissed: state.settings.richTextBannerDismissed,
 		watchedNoteFiles: state.watchedNoteFiles,
