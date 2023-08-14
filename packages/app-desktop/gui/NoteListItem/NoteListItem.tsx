@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler } from 'react';
+import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo } from 'react';
 import { OnChangeHandler } from '../NoteList/utils/types';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
@@ -17,6 +17,9 @@ interface NoteItemProps {
 	onDragStart: DragEventHandler;
 	onDragOver: DragEventHandler;
 	style: CSSProperties;
+	index: number;
+	dragIndex: number;
+	noteCount: number;
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
@@ -42,10 +45,26 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	useItemEventHandlers(rootElement, itemElement, idPrefix, onCheckboxChange);
 
+	const style = useMemo(() => {
+		let dragItemPosition = '';
+		if (props.dragIndex === props.index) {
+			dragItemPosition = 'top';
+		} else if (props.index === props.noteCount - 1 && props.dragIndex >= props.noteCount) {
+			dragItemPosition = 'bottom';
+		}
+
+		return {
+			borderTopWidth: dragItemPosition === 'top' ? '2px' : 0,
+			borderBottomWidth: dragItemPosition === 'bottom' ? '2px' : 0,
+		};
+	}, [props.dragIndex, props.index, props.noteCount]);
+
 	return <div
 		id={elementId}
 		ref={ref}
 		tabIndex={0}
+		style={style}
+		className="note-list-item-wrapper"
 		data-id={props.noteId}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}

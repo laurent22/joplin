@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { useMemo, useEffect, useState, useRef, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
-import { _ } from '@joplin/lib/locale';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import bridge from '../../services/bridge';
-import Setting from '@joplin/lib/models/Setting';
 import NoteListItem from '../NoteListItem';
 import styled from 'styled-components';
 import ItemList from '../ItemList';
 const { connect } = require('react-redux');
-import Note from '@joplin/lib/models/Note';
 import { Props } from './utils/types';
 import usePrevious from '../hooks/usePrevious';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
@@ -30,7 +26,6 @@ export const itemAnchorRef = (itemId: string) => {
 };
 
 const NoteListComponent = (props: Props) => {
-	const [dragOverTargetNoteIndex, setDragOverTargetNoteIndex] = useState(null);
 	const [width, setWidth] = useState(0);
 	const [, setHeight] = useState(0);
 
@@ -39,103 +34,10 @@ const NoteListComponent = (props: Props) => {
 	const noteListRef = useRef(null);
 	const itemListRef = useRef(null);
 
-	let globalDragEndEventRegistered_ = false;
 
 	const style = useMemo(() => {
 		return {};
 	}, []);
-
-	const onGlobalDrop_ = () => {
-		unregisterGlobalDragEndEvent_();
-		setDragOverTargetNoteIndex(null);
-	};
-
-	const registerGlobalDragEndEvent_ = () => {
-		if (globalDragEndEventRegistered_) return;
-		globalDragEndEventRegistered_ = true;
-		document.addEventListener('dragend', onGlobalDrop_);
-	};
-
-	const unregisterGlobalDragEndEvent_ = () => {
-		globalDragEndEventRegistered_ = false;
-		document.removeEventListener('dragend', onGlobalDrop_);
-	};
-
-	const dragTargetNoteIndex_ = (event: any) => {
-		return Math.abs(Math.round((event.clientY - itemListRef.current.offsetTop() + itemListRef.current.offsetScroll()) / itemHeight));
-	};
-
-	const noteItem_noteDragOver = (event: any) => {
-		if (props.notesParentType !== 'Folder') return;
-
-		const dt = event.dataTransfer;
-
-		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
-			event.preventDefault();
-			const newIndex = dragTargetNoteIndex_(event);
-			if (dragOverTargetNoteIndex === newIndex) return;
-			registerGlobalDragEndEvent_();
-			setDragOverTargetNoteIndex(newIndex);
-		}
-	};
-
-	const canManuallySortNotes = async () => {
-		if (props.notesParentType !== 'Folder') return false;
-
-		if (props.noteSortOrder !== 'order') {
-			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
-				buttons: [_('Do it now'), _('Cancel')],
-			});
-			if (!doIt) return false;
-
-			Setting.setValue('notes.sortOrder.field', 'order');
-			return false;
-		}
-		return true;
-	};
-
-	const noteItem_noteDrop = async (event: any) => {
-
-		// TODO: check that parent type is folder
-		if (!canManuallySortNotes()) {
-			return;
-		}
-		const dt = event.dataTransfer;
-		unregisterGlobalDragEndEvent_();
-		setDragOverTargetNoteIndex(null);
-
-		const targetNoteIndex = dragTargetNoteIndex_(event);
-		const noteIds: string[] = JSON.parse(dt.getData('text/x-jop-note-ids'));
-
-		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
-	};
-
-	const noteItem_dragStart = useCallback((event: any) => {
-		if (props.parentFolderIsReadOnly) return false;
-
-		let noteIds = [];
-
-		// Here there is two cases:
-		// - If multiple notes are selected, we drag the group
-		// - If only one note is selected, we drag the note that was clicked on (which might be different from the currently selected note)
-		if (props.selectedNoteIds.length >= 2) {
-			noteIds = props.selectedNoteIds;
-		} else {
-			const clickedNoteId = event.currentTarget.getAttribute('data-id');
-			if (clickedNoteId) noteIds.push(clickedNoteId);
-		}
-
-		if (!noteIds.length) return false;
-
-		event.dataTransfer.setDragImage(new Image(), 1, 1);
-		event.dataTransfer.clearData();
-		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
-		// While setting
-		//   event.dataTransfer.effectAllowed = 'move';
-		// causes the drag cursor to have a "move", rather than an "add", icon,
-		// this breaks note drag and drop into the markdown editor.
-		return true;
-	}, [props.parentFolderIsReadOnly, props.selectedNoteIds]);
 
 	const renderItem = useCallback((item: any, index: number) => {
 		const highlightedWords = () => {
@@ -160,21 +62,21 @@ const NoteListComponent = (props: Props) => {
 			themeId={props.themeId}
 			width={width}
 			height={itemHeight}
-			dragItemIndex={dragOverTargetNoteIndex}
+			dragItemIndex={0}
 			highlightedWords={highlightedWords()}
 			isProvisional={props.provisionalNoteIds.includes(item.id)}
 			isSelected={props.selectedNoteIds.indexOf(item.id) >= 0}
 			isWatched={props.watchedNoteFiles.indexOf(item.id) < 0}
 			itemCount={props.notes.length}
 			onCheckboxClick={() => {}}
-			onDragStart={noteItem_dragStart}
-			onNoteDragOver={noteItem_noteDragOver}
+			onDragStart={()=>{}}
+			onNoteDragOver={()=>{}}
 			onTitleClick={() => {}}
 			onContextMenu={() => {}}
 			draggable={!props.parentFolderIsReadOnly}
 		/>;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [style, props.themeId, width, itemHeight, dragOverTargetNoteIndex, props.provisionalNoteIds, props.selectedNoteIds, props.watchedNoteFiles,
+	}, [style, props.themeId, width, itemHeight, props.provisionalNoteIds, props.selectedNoteIds, props.watchedNoteFiles,
 		props.notes,
 		props.notesParentType,
 		props.searches,
@@ -243,7 +145,7 @@ const NoteListComponent = (props: Props) => {
 				style={props.size}
 				itemRenderer={renderItem}
 				onKeyDown={() => {}}
-				onNoteDrop={noteItem_noteDrop}
+				onNoteDrop={()=>{}}
 			/>
 		);
 	};
