@@ -20,6 +20,7 @@ import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
 import { AppState } from '../../app.reducer';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import produce from 'immer';
 import shim from '@joplin/lib/shim';
 import bridge from '../../services/bridge';
@@ -67,6 +68,7 @@ interface Props {
 	shouldUpgradeSyncTarget: boolean;
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
+	hasMissingSyncCredentials: boolean;
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
@@ -561,6 +563,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onViewSyncSettingsScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'sync',
+				},
+			});
+		};
+
 		const onViewPluginScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -597,6 +609,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
 				onDisableSafeModeAndRestart
+			);
+		} else if (this.props.hasMissingSyncCredentials) {
+			msg = this.renderNotificationMessage(
+				_('The synchronisation password is missing.'),
+				_('Set the password'),
+				onViewSyncSettingsScreen
 			);
 		} else if (this.props.shouldUpgradeSyncTarget) {
 			msg = this.renderNotificationMessage(
@@ -662,7 +680,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.hasMissingSyncCredentials || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
 	}
 
 	public registerCommands() {
@@ -875,6 +893,7 @@ const mapStateToProps = (state: AppState) => {
 		showNeedUpgradingMasterKeyMessage: showNeedUpgradingEnabledMasterKeyMessage,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
+		hasMissingSyncCredentials: shouldShowMissingPasswordWarning(state.settings['sync.target'], state.settings),
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,

@@ -41,6 +41,7 @@ const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('../SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
+const SyncTargetWebDAV = require('../SyncTargetWebDAV.js');
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
 import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
@@ -122,6 +123,7 @@ SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
