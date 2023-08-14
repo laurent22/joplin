@@ -21,8 +21,7 @@
 .note-list-item-wrapper {
 	border-style: solid;
 	border-color: var(--joplin-color);
-	// border-top-width: ${(props: any) => props.dragItemPosition === 'top' ? 2 : 0}px;
-	// border-bottom-width: ${(props: any) => props.dragItemPosition === 'bottom' ? 2 : 0}px;
 	border-right: none;
 	border-left: none;
+	position: relative;
 }

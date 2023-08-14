@@ -20,6 +20,7 @@ interface NoteItemProps {
 	index: number;
 	dragIndex: number;
 	noteCount: number;
+	highlightedWords: string[];
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {

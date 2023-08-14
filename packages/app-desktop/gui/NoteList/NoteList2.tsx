@@ -22,6 +22,7 @@ import useOnKeyDown from './utils/useOnKeyDown';
 import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
+import usePrevious from '../hooks/usePrevious';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -72,7 +73,8 @@ const NoteList = (props: Props) => {
 		props.notes,
 		props.selectedNoteIds,
 		itemSize,
-		listRenderer
+		listRenderer,
+		props.highlightedWords
 	);
 
 	const noteItemStyle = useMemo(() => {
@@ -133,6 +135,36 @@ const NoteList = (props: Props) => {
 		props.showCompletedTodos
 	);
 
+	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
+	const previousNoteCount = usePrevious(props.notes.length, 0);
+	const previousVisible = usePrevious(props.visible, false);
+
+	useEffect(() => {
+		if (previousSelectedNoteIds !== props.selectedNoteIds && props.selectedNoteIds.length === 1) {
+			const id = props.selectedNoteIds[0];
+			const doRefocus = props.notes.length < previousNoteCount && !props.focusedField;
+
+			for (let i = 0; i < props.notes.length; i++) {
+				if (props.notes[i].id === id) {
+					makeItemIndexVisible(i);
+					if (doRefocus) {
+						const ref = itemRefs.current[id];
+						if (ref) ref.focus();
+					}
+					break;
+				}
+			}
+		}
+	}, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
+
+	const highlightedWords = useMemo(() => {
+		if (props.notesParentType === 'Search') {
+			const query = BaseModel.byId(props.searches, props.selectedSearchId);
+			if (query) return props.highlightedWords;
+		}
+		return [];
+	}, [props.notesParentType, props.searches, props.selectedSearchId, props.highlightedWords]);
+
 	const renderFiller = (key: string, height: number) => {
 		return <div key={key} style={{ height: height }}></div>;
 	};
@@ -169,6 +201,7 @@ const NoteList = (props: Props) => {
 					onDragStart={onDragStart}
 					onDragOver={onDragOver}
 					style={noteItemStyle}
+					highlightedWords={highlightedWords}
 				/>
 			);
 		}

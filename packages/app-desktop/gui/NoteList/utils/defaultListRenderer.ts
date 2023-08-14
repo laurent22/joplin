@@ -28,13 +28,13 @@ const defaultItemRenderer: ListRenderer = {
 	},
 
 	dependencies: [
-		'note.id',
-		'note.title',
-		'note.is_todo',
-		'note.todo_completed',
-		'item.size.height',
-		'item.selected',
 		'item.index',
+		'item.selected',
+		'item.size.height',
+		'note.id',
+		'note.is_todo',
+		'note.titleHtml',
+		'note.todo_completed',
 	],
 
 	itemCss: `			
@@ -94,7 +94,7 @@ const defaultItemRenderer: ListRenderer = {
 				</div>
 			{{/note.is_todo}}	
 			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
-				<span>{{item.index}} {{note.title}}</span>
+				<span>{{item.index}} {{{note.titleHtml}}}</span>
 			</a>
 		</div>
 	`,

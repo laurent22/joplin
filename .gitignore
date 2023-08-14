@@ -260,6 +260,8 @@ packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
 packages/app-desktop/gui/NoteList/utils/defaultListRenderer.js
+packages/app-desktop/gui/NoteList/utils/getNoteTitleHtml.js
+packages/app-desktop/gui/NoteList/utils/prepareViewProps.js
 packages/app-desktop/gui/NoteList/utils/types.js
 packages/app-desktop/gui/NoteList/utils/useDragAndDrop.js
 packages/app-desktop/gui/NoteList/utils/useFocusNote.js
