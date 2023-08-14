@@ -8,19 +8,20 @@ import useItemEventHandlers from './utils/useItemEventHandlers';
 import { OnCheckboxChange } from './utils/types';
 
 interface NoteItemProps {
+	dragIndex: number;
+	highlightedWords: string[];
+	index: number;
+	isProvisional: boolean;
 	itemSize: Size;
+	noteCount: number;
 	noteHtml: string;
 	noteId: string;
 	onChange: OnChangeHandler;
 	onClick: MouseEventHandler<HTMLDivElement>;
 	onContextMenu: MouseEventHandler;
-	onDragStart: DragEventHandler;
 	onDragOver: DragEventHandler;
+	onDragStart: DragEventHandler;
 	style: CSSProperties;
-	index: number;
-	dragIndex: number;
-	noteCount: number;
-	highlightedWords: string[];
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
@@ -60,12 +61,24 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		};
 	}, [props.dragIndex, props.index, props.noteCount]);
 
+	const className = useMemo(() => {
+		return [
+			'note-list-item-wrapper',
+
+			// This is not used by the app, but kept here because it may be used
+			// by users for custom CSS.
+			(props.index + 1) % 2 === 0 ? 'even' : 'odd',
+
+			props.isProvisional && '-provisional',
+		].filter(e => !!e).join(' ');
+	}, [props.index, props.isProvisional]);
+
 	return <div
 		id={elementId}
 		ref={ref}
 		tabIndex={0}
 		style={style}
-		className="note-list-item-wrapper"
+		className={className}
 		data-id={props.noteId}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}

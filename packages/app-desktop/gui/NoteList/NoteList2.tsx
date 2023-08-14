@@ -74,7 +74,8 @@ const NoteList = (props: Props) => {
 		props.selectedNoteIds,
 		itemSize,
 		listRenderer,
-		props.highlightedWords
+		props.highlightedWords,
+		props.watchedNoteFiles
 	);
 
 	const noteItemStyle = useMemo(() => {
@@ -202,6 +203,7 @@ const NoteList = (props: Props) => {
 					onDragOver={onDragOver}
 					style={noteItemStyle}
 					highlightedWords={highlightedWords}
+					isProvisional={props.provisionalNoteIds.includes(note.id)}
 				/>
 			);
 		}

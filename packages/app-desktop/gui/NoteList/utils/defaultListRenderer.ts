@@ -32,7 +32,9 @@ const defaultItemRenderer: ListRenderer = {
 		'item.selected',
 		'item.size.height',
 		'note.id',
+		'note.is_shared',
 		'note.is_todo',
+		'note.isWatched',
 		'note.titleHtml',
 		'note.todo_completed',
 	],
@@ -82,19 +84,47 @@ const defaultItemRenderer: ListRenderer = {
 				display: flex;
 				align-items: center;
 				overflow: hidden;
+
+				> .watchedicon {
+					display: none;
+					padding-right: 4px;
+					color: var(--joplin-color);
+				}
+			}
+		}
+
+		> .content.-shared {
+			> .title {
+				color: var(--joplin-color-warn3);
+			}
+		}
+
+		> .content.-completed {
+			> .title {
+				opacity: 0.5;
+				text-decoration: line-through;
+			}
+		}
+
+		> .content.-watched {
+			> .title {
+				> .watchedicon {
+					display: inline;
+				}
 			}
 		}
 	`,
 
 	itemTemplate: `
-		<div class="content -default {{#item.selected}}-selected{{/item.selected}}">
+		<div class="content -default {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
 					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}	
 			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
-				<span>{{item.index}} {{{note.titleHtml}}}</span>
+				<i class="watchedicon fa fa-share-square"></i>
+				<span>{{{note.titleHtml}}}</span>
 			</a>
 		</div>
 	`,

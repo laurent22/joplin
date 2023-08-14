@@ -8,7 +8,7 @@ export interface Props {
 	selectedNoteIds: string[];
 	notes: NoteEntity[];
 	dispatch: Dispatch;
-	watchedNoteFiles: any[];
+	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	selectedFolderId: string;
 	customCss: string;
@@ -47,7 +47,14 @@ export interface OnChangeEvent {
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
 export type OnChangeHandler = (context: Context, elementId: string, event: OnChangeEvent)=> Promise<void>;
 
-export type ListRendererDepependency = ItemRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected' | 'item.index' | 'note.titleHtml';
+export type ListRendererDepependency =
+	ItemRendererDatabaseDependency |
+	'item.size.width' |
+	'item.size.height' |
+	'item.selected' |
+	'item.index' |
+	'note.titleHtml' |
+	'note.isWatched';
 
 export interface ListRenderer {
 	flow: ItemFlow;

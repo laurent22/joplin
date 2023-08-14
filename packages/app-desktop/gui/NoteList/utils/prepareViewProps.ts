@@ -2,7 +2,7 @@ import { ListRendererDepependency } from './types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 
-const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, itemIndex: number, noteTitleHtml: string) => {
+const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, itemIndex: number, noteTitleHtml: string, noteIsWatched: boolean) => {
 	const output: any = {};
 
 	for (const dep of dependencies) {
@@ -14,6 +14,8 @@ const prepareViewProps = async (dependencies: ListRendererDepependency[], note: 
 			if (!output.note) output.note = {};
 			if (dep === 'note.titleHtml') {
 				output.note.titleHtml = noteTitleHtml;
+			} else if (dep === 'note.isWatched') {
+				output.note.isWatched = noteIsWatched;
 			} else {
 				if (!(propName in note)) throw new Error(`Invalid dependency name: ${dep}`);
 				output.note[propName] = (note as any)[propName];

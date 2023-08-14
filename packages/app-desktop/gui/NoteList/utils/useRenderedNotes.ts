@@ -19,7 +19,7 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: NoteEntity[], selectedNoteIds: string[], itemSize: Size, listRenderer: ListRenderer, highlightedWords: string[]) => {
+const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: NoteEntity[], selectedNoteIds: string[], itemSize: Size, listRenderer: ListRenderer, highlightedWords: string[], watchedNoteFiles: string[]) => {
 	const [renderedNotes, setRenderedNotes] = useState<Record<string, RenderedNote>>({});
 
 	useAsyncEffect(async (event) => {
@@ -31,7 +31,8 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 				itemSize,
 				selectedNoteIds.includes(note.id),
 				noteIndex,
-				titleHtml
+				titleHtml,
+				watchedNoteFiles.includes(note.id)
 			);
 			const view = await listRenderer.onRenderNote(viewProps);
 
@@ -61,7 +62,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 		}
 
 		await Promise.all(promises);
-	}, [startNoteIndex, endNoteIndex, notes, selectedNoteIds, itemSize, listRenderer]);
+	}, [startNoteIndex, endNoteIndex, notes, selectedNoteIds, itemSize, listRenderer, watchedNoteFiles]);
 
 	return renderedNotes;
 };
