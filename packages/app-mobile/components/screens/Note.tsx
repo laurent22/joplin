@@ -36,7 +36,7 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const ImageResizer = require('react-native-image-resizer');
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
