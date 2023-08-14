@@ -70,7 +70,7 @@ export default class EncryptionService {
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
-	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1b; // public because used in tests
+	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
 	private headerTemplates_ = {
