@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import shim from '@joplin/lib/shim';
-import bridge from '../../../bridge';
+import bridge from '../../../services/bridge';
 import StyledLink from '../../style/StyledLink';
 import { _ } from '@joplin/lib/locale';
 
@@ -9,10 +9,12 @@ interface Props {
 	theme: any;
 }
 
-const MissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
-	const openMissingPasswordFAQ = () =>
-		bridge().openExternal('https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
+const openMissingPasswordFAQ = () =>
+	bridge().openExternal('https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
 
+// A link to a specific part of the FAQ related to passwords being cleared when upgrading
+// to a MacOS/ARM release.
+const MissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
 	const macInfoLink = (
 		<StyledLink href="#"
 			onClick={openMissingPasswordFAQ}
