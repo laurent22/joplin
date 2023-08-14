@@ -18,7 +18,7 @@ export interface OnLoadEvent {
 	formNote: FormNote;
 }
 
-interface HookDependencies {
+export interface HookDependencies {
 	syncStarted: boolean;
 	decryptionStarted: boolean;
 	noteId: string;
