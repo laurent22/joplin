@@ -20,6 +20,7 @@ export interface OnLoadEvent {
 
 interface HookDependencies {
 	syncStarted: boolean;
+	decryptionStarted: boolean;
 	noteId: string;
 	isProvisional: boolean;
 	titleInputRef: any;
@@ -61,14 +62,20 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 }
 
 export default function useFormNote(dependencies: HookDependencies) {
-	const { syncStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
+	const {
+		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad,
+	} = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
-	const [formNoteRefeshScheduled, setFormNoteRefreshScheduled] = useState<boolean>(false);
 	const [isNewNote, setIsNewNote] = useState(false);
 	const prevSyncStarted = usePrevious(syncStarted);
+	const prevDecryptionStarted = usePrevious(decryptionStarted);
 	const previousNoteId = usePrevious(formNote.id);
 	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
+
+	// Increasing the value of this counter cancels any ongoing note refreshes and starts
+	// a new refresh.
+	const [formNoteRefeshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
 
 	async function initNoteState(n: any) {
 		let originalCss = '';
@@ -107,7 +114,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}
 
 	useEffect(() => {
-		if (!formNoteRefeshScheduled) return () => {};
+		if (formNoteRefeshScheduled <= 0) return () => {};
 
 		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
@@ -126,7 +133,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			}
 
 			await initNoteState(n);
-			setFormNoteRefreshScheduled(false);
+			setFormNoteRefreshScheduled(0);
 		};
 
 		void loadNote();
@@ -136,21 +143,32 @@ export default function useFormNote(dependencies: HookDependencies) {
 		};
 	}, [formNoteRefeshScheduled, noteId]);
 
+	const refreshFormNote = useCallback(() => {
+		// Increase the counter to cancel any ongoing refresh attempts
+		// and start a new one.
+		setFormNoteRefreshScheduled(formNoteRefeshScheduled + 1);
+	}, [formNoteRefeshScheduled]);
+
 	useEffect(() => {
 		// Check that synchronisation has just finished - and
 		// if the note has never been changed, we reload it.
 		// If the note has already been changed, it's a conflict
 		// that's already been handled by the synchronizer.
+		const decryptionJustEnded = prevDecryptionStarted && !decryptionStarted;
+		const syncJustEnded = prevSyncStarted && !syncStarted;
 
-		if (!prevSyncStarted) return;
-		if (syncStarted) return;
+		if (!decryptionJustEnded && !syncJustEnded) return;
 		if (formNote.hasChanged) return;
 
 		// Refresh the form note.
 		// This is kept separate from the above logic so that when prevSyncStarted is changed
 		// from true to false, it doesn't cancel the note from loading.
-		setFormNoteRefreshScheduled(true);
-	}, [prevSyncStarted, syncStarted, formNote.hasChanged]);
+		refreshFormNote();
+	}, [
+		prevSyncStarted, syncStarted,
+		prevDecryptionStarted, decryptionStarted,
+		formNote.hasChanged, refreshFormNote,
+	]);
 
 	useEffect(() => {
 		if (!noteId) {
