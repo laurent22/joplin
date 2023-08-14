@@ -82,10 +82,6 @@ export const parseShareCache = (serialized: string): State => {
 	};
 };
 
-export const readFromSettings = (state: RootState): State => {
-	return parseShareCache(state.settings['sync.shareCache']);
-};
-
 export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
 	const userId = state.settings['sync.userId'];
 	const share = state[stateRootKey].shares.find(s => s.folder_id === folderId);

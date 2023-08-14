@@ -5,7 +5,7 @@ import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
 import Logger from '@joplin/utils/Logger';
 import * as React from 'react';
-const shared = require('../../../components/shared/config-shared.js');
+const shared = require('../../../components/shared/config/config-shared.js');
 
 const logger = Logger.create('defaultPluginsUtils');
 

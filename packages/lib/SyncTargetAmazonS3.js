@@ -36,6 +36,10 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 		return true;
 	}
 
+	static requiresPassword() {
+		return true;
+	}
+
 	static s3BucketName() {
 		return Setting.value('sync.8.path');
 	}
