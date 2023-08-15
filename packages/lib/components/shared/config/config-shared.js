@@ -1,7 +1,7 @@
-const Setting = require('../../models/Setting').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
-const ObjectUtils = require('../../ObjectUtils');
-const { _ } = require('../../locale');
+const Setting = require('../../../models/Setting').default;
+const SyncTargetRegistry = require('../../../SyncTargetRegistry').default;
+const ObjectUtils = require('../../../ObjectUtils');
+const { _ } = require('../../../locale');
 const { createSelector } = require('reselect');
 const Logger = require('@joplin/utils/Logger').default;
 
