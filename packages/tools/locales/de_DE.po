@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mr-Kanister <viger_gtrc@simplelogin.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -258,11 +260,12 @@ msgstr "Akzeptieren"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Zugriff verweigert: Bitte überprüfe Nutzername und Passwort"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
+"Zugriff verweigert: Bitte trage dein Passwort und/oder Nutzername erneut ein"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -387,6 +390,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Jede an diese Adresse gerichtete E-Mail wird zu einer Notiz konvertiert und "
+"deiner Kollektion hinzugefügt. Die Notiz wird im Inbox-Notizbuch gespeichert"
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -559,15 +564,15 @@ msgstr "Aufzählung"
 
 #: packages/server/src/routes/admin/users.ts:154
 msgid "Can Share"
-msgstr "Teilen"
+msgstr "Teilen möglich"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr "Sehen"
+msgstr "Lesen möglich"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr "Sehen und bearbeiten"
+msgstr "Lesen und bearbeiten möglich"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -621,9 +626,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Kann Notiz nicht in das Notizbuch „%s“ kopieren"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Erstellt eine neue Notiz."
+msgstr "Konnte neue Notiz nicht erstellen: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -978,9 +982,8 @@ msgstr[1] "Teilbare Links kopieren"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Pfad in Zwischenablage kopieren"
+msgstr "In Zwischenablage kopieren"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1251,9 +1254,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisierungsziel"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Notiz löschen?"
+msgstr "Notiz löschen"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1265,9 +1267,8 @@ msgid "Delete note?"
 msgstr "Notiz löschen?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Notizbuch löschen?"
+msgstr "Notizbuch löschen"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1309,6 +1310,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Das Inbox-Notizbuch löschen?\n"
+"\n"
+"Wenn du das Inbox-Notizbuch löschst, gehen in ihm gespeicherte E-Mails "
+"möglicherweise verloren."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1633,13 +1638,12 @@ msgstr "E-Mail"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "Notiz bearbeiten."
+msgstr "E-Mail zu Notiz"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "E-Mail zu Notiz"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1881,9 +1885,8 @@ msgid "Export all"
 msgstr "Alles exportieren"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "Alles exportieren"
+msgstr "Alle Notizen als JEX exportieren"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1899,7 +1902,7 @@ msgstr "Profil exportieren"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "Exportieren erfolgreich!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1910,9 +1913,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Es wird nach „%s“ im Format „%s“ exportiert. Bitte warten ..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "Profil wird exportiert ..."
+msgstr "Exportiere..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -2559,7 +2561,7 @@ msgstr "Layout-Reihenfolge"
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
-"Lasse es leer, um die Sprachdateien von der Standardseite herunterzuladen."
+"Lasse es leer, um die Sprachdateien von der Standardseite herunterzuladen"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3851,6 +3853,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Teile eine Kopie aller Notizen in einem Dateiformat, welches von Joplin auf "
+"einem anderen Computer importiert werden kann."
 
 # Plural klingt subjektiv besser als Singular.
 #: packages/lib/utils/joplinCloud.ts:159
@@ -4642,25 +4646,22 @@ msgstr ""
 "löschst, da sie danach nicht wiederhergestellt werden können."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Dieses Notizbuch konnte nicht geöffnet werden: %s"
-msgstr[1] "Dieses Notizbuch konnte nicht geöffnet werden: %s"
+msgstr[0] "Diese Notiz konnte nicht gelöscht werden: %s"
+msgstr[1] "Diese Notizen konnten nicht gelöscht werden: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Dieses Notizbuch konnte nicht gespeichert werden: %s"
-msgstr[1] "Dieses Notizbuch konnte nicht gespeichert werden: %s"
+msgstr[0] "Diese Notiz konnte nicht dupliziert werden: %s"
+msgstr[1] "Diese Notizen konnten nicht dupliziert werden: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Dieses Notizbuch konnte nicht gespeichert werden: %s"
-msgstr[1] "Dieses Notizbuch konnte nicht gespeichert werden: %s"
+msgstr[0] "Diese Notiz konnte nicht verschoben werden: %s"
+msgstr[1] "Diese Notizen konnten nicht verschoben werden: %s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4918,7 +4919,7 @@ msgstr "Typ: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Exportieren oder Teilen der Daten nicht möglich. Grund: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -5168,11 +5169,12 @@ msgstr ""
 "(Obergrenze: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Warnung"
+msgstr ""
+"Warnungen: \n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
