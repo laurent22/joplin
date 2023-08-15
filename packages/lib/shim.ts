@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { NoteEntity, ResourceEntity } from './services/database/types';
+import type * as Sodium from 'libsodium-wrappers';
 
 let isTestingEnv_ = false;
 
@@ -219,6 +220,8 @@ const shim = {
 
 	sjclModule: null as any,
 
+	libSodiumModule: async (): Promise<typeof Sodium> => null,
+
 	randomBytes: async (_count: number) => {
 		throw new Error('Not implemented');
 	},
@@ -387,6 +390,19 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+};
+
+// TODO(required): Move (above, where libSodiumModule is defined).
+//                 Or even into EncryptionWorker -- there doesn't seem to
+//                 be a need to include this in shim (unless it breaks the CLI app).
+let sodiumReady = false;
+const sodium = require('libsodium-wrappers');
+shim.libSodiumModule = async () => {
+	if (!sodiumReady) {
+		await sodium.ready;
+		sodiumReady = true;
+	}
+	return sodium;
 };
 
 export default shim;

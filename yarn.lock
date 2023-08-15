@@ -4685,6 +4685,7 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.3
     "@types/js-yaml": 4.0.5
+    "@types/libsodium-wrappers": 0.7.10
     "@types/nanoid": 3.0.0
     "@types/node": 18.16.18
     "@types/node-rsa": 1.1.1
@@ -4715,6 +4716,7 @@ __metadata:
     jest: 29.5.0
     js-yaml: 4.1.0
     levenshtein: 1.0.5
+    libsodium-wrappers: 0.7.11
     markdown-it: 13.0.1
     md5: 2.3.0
     md5-file: 5.0.0
@@ -7742,6 +7744,13 @@ __metadata:
     "@types/koa-compose": "*"
     "@types/node": "*"
   checksum: a4061c2e29cd4ccb65a704fe3ef6868eac82558856c7c00a5bcc0f9fdf18c595e0156c52508eb8ba926a9108d9cf5c9a1a1b73cccf50e29b37ea1154323d0b26
+  languageName: node
+  linkType: hard
+
+"@types/libsodium-wrappers@npm:0.7.10":
+  version: 0.7.10
+  resolution: "@types/libsodium-wrappers@npm:0.7.10"
+  checksum: 717054ebcb5fa553e378144b8d564bed8b691905c0d4e90b95c64d77ba24ec9fe798cb2c58cd61dad545ceacb1f05ab69b5597217f9829f2da7a23f0688d11d0
   languageName: node
   linkType: hard
 
@@ -21903,6 +21912,22 @@ __metadata:
     prelude-ls: ~1.1.2
     type-check: ~0.3.2
   checksum: 0d084a524231a8246bb10fec48cdbb35282099f6954838604f3c7fc66f2e16fa66fd9cc2f3f20a541a113c4dafdf181e822c887c8a319c9195444e6c64ac395e
+  languageName: node
+  linkType: hard
+
+"libsodium-wrappers@npm:0.7.11":
+  version: 0.7.11
+  resolution: "libsodium-wrappers@npm:0.7.11"
+  dependencies:
+    libsodium: ^0.7.11
+  checksum: 6a6ef47b2213e3fb4687196c28fee4c9885f70d89547d845e62d96014d3d5ad9f59cb05fadc601debc0031a3cfd0b9b416d7efbeb5bf66db6aa0ed69f55a6293
+  languageName: node
+  linkType: hard
+
+"libsodium@npm:^0.7.11":
+  version: 0.7.11
+  resolution: "libsodium@npm:0.7.11"
+  checksum: 0a3493ac1829d1e346178b6984c4eb449dc77157c906876441386c0c653142e3fa56f623ce980bb50e580196578689298c9cd406ce6d514904090e370c6bc0f7
   languageName: node
   linkType: hard
 

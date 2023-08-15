@@ -39,6 +39,7 @@ export enum EncryptionMethod {
 	SJCL1a = 5,
 	Custom = 6,
 	SJCL1b = 7,
+	Sodium1 = 8,
 }
 
 export interface EncryptOptions {
@@ -70,7 +71,7 @@ export default class EncryptionService {
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
-	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
+	public defaultEncryptionMethod_ = EncryptionMethod.Sodium1; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
 	private headerTemplates_ = {
@@ -264,15 +265,35 @@ export default class EncryptionService {
 		return error;
 	}
 
+	private async deriveSodiumKey(key: string): Promise<Uint8Array> {
+		const sodium = await shim.libSodiumModule();
+		const binaryMasterKey = sodium.from_base64(key);
+
+		// TODO(REQUIRED): Switch to the streams API: https://doc.libsodium.org/secret-key_cryptography/secretstream
+		// TODO(REQUIRED): Is this really okay to do??? Our master keys are *much* longer (384 bytes) than
+		//                 the 32 bytes required by libsodium.
+		//                 Key derivation by generichash is suggested by
+		//                 https://github.com/jedisct1/libsodium/issues/347#issuecomment-372721843
+		//                 but the post is quite old.
+		//                 ...is this really okay?
+		const subkey = sodium.crypto_generichash(
+			sodium.crypto_aead_chacha20poly1305_IETF_KEYBYTES,
+			binaryMasterKey
+		);
+
+		return subkey;
+	}
+
 	public async encrypt(method: EncryptionMethod, key: string, plainText: string): Promise<string> {
 		if (!method) throw new Error('Encryption method is required');
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
+		const sodium = await shim.libSodiumModule();
 
-		const handlers: Record<EncryptionMethod, ()=> string> = {
+		const handlers: Record<EncryptionMethod, ()=> Promise<string>> = {
 			// 2020-01-23: Deprecated and no longer secure due to the use og OCB2 mode - do not use.
-			[EncryptionMethod.SJCL]: () => {
+			[EncryptionMethod.SJCL]: async () => {
 				try {
 					// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
 					return sjcl.json.encrypt(key, plainText, {
@@ -292,7 +313,7 @@ export default class EncryptionService {
 			// 2020-03-06: Added method to fix https://github.com/laurent22/joplin/issues/2591
 			//             Also took the opportunity to change number of key derivations, per Isaac Potoczny's suggestion
 			// 2023-06-10: Deprecated in favour of SJCL1b
-			[EncryptionMethod.SJCL1a]: () => {
+			[EncryptionMethod.SJCL1a]: async () => {
 				try {
 					// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
 					// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
@@ -313,7 +334,7 @@ export default class EncryptionService {
 
 			// 2023-06-10: Changed AES-128 to AES-256 per TheQuantumPhysicist's suggestions
 			// https://github.com/laurent22/joplin/issues/7686
-			[EncryptionMethod.SJCL1b]: () => {
+			[EncryptionMethod.SJCL1b]: async () => {
 				try {
 					// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
 					// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
@@ -334,7 +355,7 @@ export default class EncryptionService {
 
 			// 2020-01-23: Deprecated - see above.
 			// Was used to encrypt master keys
-			[EncryptionMethod.SJCL2]: () => {
+			[EncryptionMethod.SJCL2]: async () => {
 				try {
 					return sjcl.json.encrypt(key, plainText, {
 						v: 1,
@@ -352,7 +373,7 @@ export default class EncryptionService {
 			// Don't know why we have this - it's not used anywhere. It must be
 			// kept however, in case some note somewhere is encrypted using this
 			// method.
-			[EncryptionMethod.SJCL3]: () => {
+			[EncryptionMethod.SJCL3]: async () => {
 				try {
 					// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
 					return sjcl.json.encrypt(key, plainText, {
@@ -370,7 +391,7 @@ export default class EncryptionService {
 			},
 
 			// Same as above but more secure (but slower) to encrypt master keys
-			[EncryptionMethod.SJCL4]: () => {
+			[EncryptionMethod.SJCL4]: async () => {
 				try {
 					return sjcl.json.encrypt(key, plainText, {
 						v: 1,
@@ -385,13 +406,32 @@ export default class EncryptionService {
 				}
 			},
 
-			[EncryptionMethod.Custom]: () => {
+			[EncryptionMethod.Sodium1]: async () => {
+				const subkey = await this.deriveSodiumKey(key);
+				const publicNonce = sodium.randombytes_buf(sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES);
+
+				// Doc: https://doc.libsodium.org/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#combined-mode
+				const cipherText = sodium.crypto_secretbox_easy(
+					plainText,
+					publicNonce,
+					subkey
+				);
+				return JSON.stringify({
+					nonce: sodium.to_base64(publicNonce),
+
+					// TODO(OPTIONAL): More efficient encoding (base64 is equivalent to what we had
+					//                 before, but better would be ideal.)
+					cipherText: sodium.to_base64(cipherText),
+				});
+			},
+
+			[EncryptionMethod.Custom]: async () => {
 				// This is handled elsewhere but as a sanity check, throw an exception
 				throw new Error('Custom encryption method is not supported here');
 			},
 		};
 
-		return handlers[method]();
+		return await handlers[method]();
 	}
 
 	public async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
@@ -401,17 +441,35 @@ export default class EncryptionService {
 		const sjcl = shim.sjclModule;
 		if (!this.isValidEncryptionMethod(method)) throw new Error(`Unknown decryption method: ${method}`);
 
-		try {
-			const output = sjcl.json.decrypt(key, cipherText);
+		// If libsodium
+		if (method === EncryptionMethod.Sodium1) {
+			const sodium = await shim.libSodiumModule();
+			const data = JSON.parse(cipherText);
 
-			if (method === EncryptionMethod.SJCL1a || method === EncryptionMethod.SJCL1b) {
-				return unescape(output);
-			} else {
-				return output;
+			// TODO(required): is from_base64 safe when given untrusted data?
+			const ct = sodium.from_base64(data.cipherText);
+			const nonce = sodium.from_base64(data.nonce);
+
+			const subkey = await this.deriveSodiumKey(key);
+
+			// TODO(required): does this work with invalid utf-8?
+			const result = sodium.crypto_secretbox_open_easy(
+				ct, nonce, subkey, 'text'
+			);
+			return result;
+		} else {
+			try {
+				const output = sjcl.json.decrypt(key, cipherText);
+
+				if (method === EncryptionMethod.SJCL1a || method === EncryptionMethod.SJCL1b) {
+					return unescape(output);
+				} else {
+					return output;
+				}
+			} catch (error) {
+				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
+				throw new Error(error.message);
 			}
-		} catch (error) {
-			// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-			throw new Error(error.message);
 		}
 	}
 
@@ -655,7 +713,7 @@ export default class EncryptionService {
 	}
 
 	public isValidEncryptionMethod(method: EncryptionMethod) {
-		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
+		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4, EncryptionMethod.Sodium1].indexOf(method) >= 0;
 	}
 
 	public async itemIsEncrypted(item: any) {
