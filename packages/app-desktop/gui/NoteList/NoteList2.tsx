@@ -3,12 +3,12 @@ import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef, useEffect } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import { ItemFlow, Props } from './utils/types';
+import { Props } from './utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
-import defaultListRenderer from './utils/defaultListRenderer';
+// import defaultListRenderer from './utils/defaultListRenderer';
 import NoteListItem from '../NoteListItem/NoteListItem';
 import useRenderedNotes from './utils/useRenderedNotes';
 import useItemCss from './utils/useItemCss';
@@ -23,6 +23,7 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
+import defaultLeftToRightItemRenderer from './utils/defaultLeftToRightListRenderer';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -33,9 +34,7 @@ const NoteList = (props: Props) => {
 	const listRef = useRef(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
 
-	const listRenderer = defaultListRenderer;
-
-	if (listRenderer.flow !== ItemFlow.TopToBottom) throw new Error('Not implemented');
+	const listRenderer = defaultLeftToRightItemRenderer;
 
 	const itemSize: Size = useMemo(() => {
 		return listRenderer.itemSize;
@@ -48,11 +47,12 @@ const NoteList = (props: Props) => {
 		listRef
 	);
 
-	const [startNoteIndex, endNoteIndex, visibleItemCount] = useVisibleRange(
+	const [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
 		scrollTop,
 		props.size,
 		itemSize,
-		props.notes.length
+		props.notes.length,
+		listRenderer.flow
 	);
 
 	const focusNote = useFocusNote(itemRefs);
@@ -180,7 +180,7 @@ const NoteList = (props: Props) => {
 
 		const output: JSX.Element[] = [];
 
-		output.push(renderFiller('top', startNoteIndex * itemSize.height));
+		output.push(renderFiller('top', startLineIndex * itemSize.height));
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
@@ -204,11 +204,12 @@ const NoteList = (props: Props) => {
 					style={noteItemStyle}
 					highlightedWords={highlightedWords}
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
+					flow={listRenderer.flow}
 				/>
 			);
 		}
 
-		output.push(renderFiller('bottom', (props.notes.length - endNoteIndex - 1) * itemSize.height));
+		output.push(renderFiller('bottom', (totalLineCount - endLineIndex - 1) * itemSize.height));
 
 		return output;
 	};

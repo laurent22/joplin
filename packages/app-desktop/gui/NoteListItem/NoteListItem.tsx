@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo } from 'react';
-import { OnChangeHandler } from '../NoteList/utils/types';
+import { ItemFlow, OnChangeHandler } from '../NoteList/utils/types';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
@@ -9,6 +9,7 @@ import { OnCheckboxChange } from './utils/types';
 
 interface NoteItemProps {
 	dragIndex: number;
+	flow: ItemFlow;
 	highlightedWords: string[];
 	index: number;
 	isProvisional: boolean;
@@ -42,7 +43,8 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.noteHtml,
 		props.style,
 		props.itemSize,
-		props.onClick
+		props.onClick,
+		props.flow
 	);
 
 	useItemEventHandlers(rootElement, itemElement, idPrefix, onCheckboxChange);
