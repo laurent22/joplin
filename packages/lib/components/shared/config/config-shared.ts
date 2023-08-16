@@ -1,12 +1,12 @@
-import Setting, { AppType } from '../../models/Setting';
-import SyncTargetRegistry from '../../SyncTargetRegistry';
-const ObjectUtils = require('../../ObjectUtils');
-const { _ } = require('../../locale');
+import Setting, { AppType } from '../../../models/Setting';
+import SyncTargetRegistry from '../../../SyncTargetRegistry';
+const ObjectUtils = require('../../../ObjectUtils');
+const { _ } = require('../../../locale');
 import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
 
-import { ReactNode } from 'react';
-import { type Registry } from '../../registry';
+import { type ReactNode } from 'react';
+import { type Registry } from '../../../registry';
 
 const logger = Logger.create('config-shared');
 

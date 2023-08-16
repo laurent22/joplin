@@ -1124,7 +1124,25 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
-
+			imageResizing: {
+				value: 'alwaysAsk',
+				type: SettingItemType.String,
+				section: 'note',
+				isEnum: true,
+				public: true,
+				appTypes: [AppType.Mobile, AppType.Desktop],
+				label: () => _('Resize large images:'),
+				description: () => _('Shrink large images before adding them to notes to save storage space.'),
+				options: () => {
+					return {
+						alwaysAsk: _('Always ask'),
+						alwaysResize: _('Always resize'),
+						neverResize: _('Never resize'),
+					};
+				},
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
 			'plugins.states': {
 				value: '',
 				type: SettingItemType.Object,

@@ -896,7 +896,7 @@ describe('shares.folder', () => {
 	test('should check permissions - cannot share if share feature not enabled for recipient', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
-		await models().user().save({ id: user2.id, can_share_folder: 0 });
+		await models().user().save({ id: user2.id, can_receive_folder: 0 });
 
 		await expectHttpError(async () =>
 			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [

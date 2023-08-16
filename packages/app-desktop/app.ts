@@ -566,6 +566,8 @@ class Application extends BaseApplication {
 
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 
+		this.startRotatingLogMaintenance(Setting.value('profileDir'));
+
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,
 		// 	folderCount: 1000,

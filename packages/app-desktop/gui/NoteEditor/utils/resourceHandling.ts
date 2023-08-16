@@ -78,7 +78,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 			logger.info(`Attaching ${filePath}`);
 			const newBody = await shim.attachFileToNoteBody(body, filePath, options.position, {
 				createFileURL: options.createFileURL,
-				resizeLargeImages: 'ask',
+				resizeLargeImages: Setting.value('imageResizing'),
 			});
 
 			if (!newBody) {
@@ -160,6 +160,8 @@ export async function processPastedHtml(html: string) {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 					}
+				} else if (imageSrc.startsWith('data:')) { // Data URIs
+					mappedResources[imageSrc] = imageSrc;
 				} else {
 					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
 					await shim.fetchBlob(imageSrc, { path: filePath });

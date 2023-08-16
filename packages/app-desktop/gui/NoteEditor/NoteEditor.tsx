@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
 import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
@@ -40,7 +40,7 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 const bridge = require('@electron/remote').require('./bridge').default;
 import NoteRevisionViewer from '../NoteRevisionViewer';
-import { readFromSettings } from '@joplin/lib/services/share/reducer';
+import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
@@ -286,11 +286,15 @@ function NoteEditor(props: NoteEditorProps) {
 	// 	}
 	// }, [props.dispatch]);
 
+	const shareCache = useMemo(() => {
+		return parseShareCache(props.shareCacheSetting);
+	}, [props.shareCacheSetting]);
+
 	useAsyncEffect(async event => {
 		if (!formNote.id) return;
 
 		try {
-			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, props.shareCache);
+			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, shareCache);
 			if (event.cancelled) return;
 			setIsReadOnly(result);
 		} catch (error) {
@@ -301,7 +305,7 @@ function NoteEditor(props: NoteEditorProps) {
 				throw error;
 			}
 		}
-	}, [formNote.id, props.syncUserId, props.shareCache]);
+	}, [formNote.id, props.syncUserId, shareCache]);
 
 	const onBodyWillChange = useCallback((event: any) => {
 		handleProvisionalFlag();
@@ -324,7 +328,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
 
-	const externalEditWatcher_noteChange = useCallback((event) => {
+	const externalEditWatcher_noteChange = useCallback((event: any) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
 				...formNote,
@@ -337,7 +341,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote]);
 
-	const onNotePropertyChange = useCallback((event) => {
+	const onNotePropertyChange = useCallback((event: any) => {
 		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
 
@@ -656,7 +660,7 @@ const mapStateToProps = (state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,
 		syncUserId: state.settings['sync.userId'],
-		shareCache: readFromSettings(state),
+		shareCacheSetting: state.settings['sync.shareCache'],
 	};
 };
 

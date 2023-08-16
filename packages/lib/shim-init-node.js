@@ -184,38 +184,42 @@ function shimInit(options = null) {
 		if (shim.isElectron()) {
 			// For Electron
 			const nativeImage = require('electron').nativeImage;
-			let image = nativeImage.createFromPath(filePath);
+			const image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error(`Image is invalid or does not exist: ${filePath}`);
-
 			const size = image.getSize();
 
-			let mustResize = size.width > maxDim || size.height > maxDim;
-
-			if (mustResize && resizeLargeImages === 'ask') {
-				const answer = shim.showMessageBox(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim), {
-					buttons: [_('Yes'), _('No'), _('Cancel')],
-				});
-
-				if (answer === 2) return false;
-
-				mustResize = answer === 0;
-			}
-
-			if (!mustResize) {
+			const saveOriginalImage = async () => {
 				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
+			};
+			const saveResizedImage = async () => {
+				const options = {};
+				if (size.width > size.height) {
+					options.width = maxDim;
+				} else {
+					options.height = maxDim;
+				}
+				const resizedImage = image.resize(options);
+				await shim.writeImageToFile(resizedImage, mime, targetPath);
+				return true;
+			};
+
+			const canResize = size.width > maxDim || size.height > maxDim;
+			if (canResize) {
+				if (resizeLargeImages === 'alwaysAsk') {
+					const Yes = 0, No = 1, Cancel = 2;
+					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim)}\n\n${_('(You may disable this prompt in the options)')}`, {
+						buttons: [_('Yes'), _('No'), _('Cancel')],
+					});
+					if (userAnswer === Yes) return await saveResizedImage();
+					if (userAnswer === No) return await saveOriginalImage();
+					if (userAnswer === Cancel) return false;
+				} else if (resizeLargeImages === 'alwaysResize') {
+					return await saveResizedImage();
+				}
 			}
 
-			const options = {};
-			if (size.width > size.height) {
-				options.width = maxDim;
-			} else {
-				options.height = maxDim;
-			}
-
-			image = image.resize(options);
-
-			await shim.writeImageToFile(image, mime, targetPath);
+			return await saveOriginalImage();
 		} else {
 			// For the CLI tool
 			const image = sharp(filePath);
@@ -241,8 +245,6 @@ function shimInit(options = null) {
 					});
 			});
 		}
-
-		return true;
 	};
 
 	// This is a bit of an ugly method that's used to both create a new resource

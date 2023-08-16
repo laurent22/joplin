@@ -14,7 +14,7 @@ import ScreenHeader from '../../ScreenHeader';
 const { _ } = require('@joplin/lib/locale');
 import BaseScreenComponent from '../../base-screen';
 const { themeStyle } = require('../../global-style.js');
-import * as shared from '@joplin/lib/components/shared/config-shared.js';
+import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';

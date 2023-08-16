@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import sqlts from '@rmp135/sql-ts';
+import sqlts, { Config } from '@rmp135/sql-ts';
 
 require('source-map-support').install();
 
@@ -8,7 +8,7 @@ const dbFilePath = `${__dirname}/../../src/services/database/types.ts`;
 
 const fileReplaceWithinMarker = '// AUTO-GENERATED-TYPES';
 
-const config = {
+const config: Config = {
 	'client': 'sqlite3',
 	'connection': {
 		'filename': './db-buildTypes.sqlite',
@@ -23,6 +23,7 @@ const config = {
 	'singularTableNames': true,
 	'tableNameCasing': 'pascal' as any,
 	'filename': './db',
+	'columnSortOrder': 'source',
 	'extends': {
 		'main.api_clients': 'WithDates, WithUuid',
 		'main.backup_items': 'WithCreatedDate',
