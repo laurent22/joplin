@@ -7,7 +7,7 @@ const useVisibleRange = (scrollTop: number, listSize: Size, itemSize: Size, note
 		if (flow === ItemFlow.TopToBottom) {
 			return 1;
 		} else {
-			return Math.floor(listSize.width / itemSize.width);
+			return Math.max(1, Math.floor(listSize.width / itemSize.width));
 		}
 	}, [flow, listSize.width, itemSize.width]);
 

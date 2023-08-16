@@ -1,4 +1,5 @@
 import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
+import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { Context } from 'vm';
 import { ItemFlow, ListRenderer, OnChangeEvent } from './types';
 
@@ -10,6 +11,7 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
+		body: string;
 	};
 	item: {
 		size: {
@@ -23,14 +25,15 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 	flow: ItemFlow.LeftToRight,
 
 	itemSize: {
-		width: 100,
-		height: 100,
+		width: 150,
+		height: 150,
 	},
 
 	dependencies: [
 		'item.index',
 		'item.selected',
 		'item.size.height',
+		'note.body',
 		'note.id',
 		'note.is_shared',
 		'note.is_todo',
@@ -62,7 +65,9 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			box-sizing: border-box;
 			position: relative;
 			width: 100%;
-			padding-left: 16px;
+			padding: 16px;
+			align-items: flex-start;
+			overflow-y: hidden;
 	
 			> .checkbox {
 				display: flex;
@@ -79,11 +84,9 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 				text-decoration: none;
 				color: var(--joplin-color);
 				cursor: default;
-				white-space: nowrap;
 				flex: 1 1 0%;
 				display: flex;
 				align-items: center;
-				overflow: hidden;
 
 				> .watchedicon {
 					display: none;
@@ -124,7 +127,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			{{/note.is_todo}}	
 			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{item.index}} {{{note.titleHtml}}}</span>
+				<span>{{item.index}} {{{note.titleHtml}}}<br/><br/>{{notePreview}}</span>
 			</a>
 		</div>
 	`,
@@ -140,7 +143,12 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 	},
 
 	onRenderNote: async (props: Props) => {
-		return props;
+		const markupToHtml_ = new MarkupToHtml();
+
+		return {
+			...props,
+			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body),
+		};
 	},
 };
 

@@ -23,6 +23,13 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 	const [renderedNotes, setRenderedNotes] = useState<Record<string, RenderedNote>>({});
 
 	useAsyncEffect(async (event) => {
+		const noteIds = notes.filter((_value, index) => {
+			return index >= startNoteIndex && index <= endNoteIndex;
+		}).map(note => note.id);
+
+		const fullNotes = await Note.loadItemsByIds(noteIds);
+		if (event.cancelled) return;
+
 		const renderNote = async (note: NoteEntity, noteIndex: number): Promise<void> => {
 			const titleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
 			const viewProps = await prepareViewProps(
@@ -56,9 +63,8 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 
 		const promises: Promise<void>[] = [];
 
-		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
-			const note = notes[i];
-			promises.push(renderNote(note, i));
+		for (let i = 0; i < fullNotes.length; i++) {
+			promises.push(renderNote(fullNotes[i], i));
 		}
 
 		await Promise.all(promises);

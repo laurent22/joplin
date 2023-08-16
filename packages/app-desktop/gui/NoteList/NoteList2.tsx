@@ -3,7 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef, useEffect } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import { Props } from './utils/types';
+import { ItemFlow, Props } from './utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
@@ -228,6 +228,16 @@ const NoteList = (props: Props) => {
 		return { ...fillerBaseStyle, height: bottomFillerHeight };
 	}, [fillerBaseStyle, bottomFillerHeight]);
 
+	const notesStyle = useMemo(() => {
+		const output: React.CSSProperties = {};
+
+		if (listRenderer.flow === ItemFlow.LeftToRight) {
+			output.flexFlow = 'row wrap';
+		}
+
+		return output;
+	}, [listRenderer.flow]);
+
 	return (
 		<div>
 			<div
@@ -240,7 +250,7 @@ const NoteList = (props: Props) => {
 			>
 				{renderEmptyList()}
 				{renderFiller('top', topFillerStyle)}
-				<div className="notes">
+				<div className="notes" style={notesStyle}>
 					{renderNotes()}
 				</div>
 				{renderFiller('bottom', bottomFillerStyle)}
