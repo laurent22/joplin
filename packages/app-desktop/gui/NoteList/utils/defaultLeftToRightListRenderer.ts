@@ -124,7 +124,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			{{/note.is_todo}}	
 			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{{note.titleHtml}}}</span>
+				<span>{{item.index}} {{{note.titleHtml}}}</span>
 			</a>
 		</div>
 	`,

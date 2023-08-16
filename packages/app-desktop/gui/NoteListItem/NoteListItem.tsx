@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo } from 'react';
+import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
 import { ItemFlow, OnChangeHandler } from '../NoteList/utils/types';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
@@ -88,4 +88,4 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	></div>;
 };
 
-export default forwardRef(NoteListItem);
+export default memo(forwardRef(NoteListItem));

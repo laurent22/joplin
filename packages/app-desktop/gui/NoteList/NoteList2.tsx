@@ -47,7 +47,7 @@ const NoteList = (props: Props) => {
 		listRef
 	);
 
-	const [itemsPerLine, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
+	const [, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
 		scrollTop,
 		props.size,
 		itemSize,
@@ -166,23 +166,21 @@ const NoteList = (props: Props) => {
 		return [];
 	}, [props.notesParentType, props.searches, props.selectedSearchId, props.highlightedWords]);
 
-	const renderFiller = (elements: JSX.Element[], keyPrefix: string, width: number, height: number) => {
-		for (let i = 0; i < itemsPerLine; i++) {
-			elements.push(<div key={keyPrefix + i} style={{ width, height }}></div>);
-		}
-	};
-
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;
 		return <div className="emptylist">{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+	};
+
+	const renderFiller = (key: string, style: React.CSSProperties) => {
+		if (!props.notes.length) return null;
+		if (style.height <= 0) return null;
+		return <div key={key} style={style}></div>;
 	};
 
 	const renderNotes = () => {
 		if (!props.notes.length) return null;
 
 		const output: JSX.Element[] = [];
-
-		renderFiller(output, 'top', itemSize.width, startLineIndex * itemSize.height);
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
@@ -211,22 +209,42 @@ const NoteList = (props: Props) => {
 			);
 		}
 
-		renderFiller(output, 'bottom', itemSize.width, (totalLineCount - endLineIndex - 1) * itemSize.height);
-
 		return output;
 	};
 
+	const topFillerHeight = startLineIndex * itemSize.height;
+	const bottomFillerHeight = (totalLineCount - endLineIndex - 1) * itemSize.height;
+
+	const fillerBaseStyle = useMemo(() => {
+		// return { width: 'auto', border: '1px solid red', backgroundColor: 'green' };
+		return { width: 'auto' };
+	}, []);
+
+	const topFillerStyle = useMemo(() => {
+		return { ...fillerBaseStyle, height: topFillerHeight };
+	}, [fillerBaseStyle, topFillerHeight]);
+
+	const bottomFillerStyle = useMemo(() => {
+		return { ...fillerBaseStyle, height: bottomFillerHeight };
+	}, [fillerBaseStyle, bottomFillerHeight]);
+
 	return (
-		<div
-			className="note-list"
-			style={noteListStyle}
-			ref={listRef}
-			onScroll={onScroll}
-			onKeyDown={onKeyDown}
-			onDrop={onDrop}
-		>
-			{renderEmptyList()}
-			{renderNotes()}
+		<div>
+			<div
+				className="note-list"
+				style={noteListStyle}
+				ref={listRef}
+				onScroll={onScroll}
+				onKeyDown={onKeyDown}
+				onDrop={onDrop}
+			>
+				{renderEmptyList()}
+				{renderFiller('top', topFillerStyle)}
+				<div className="notes">
+					{renderNotes()}
+				</div>
+				{renderFiller('bottom', bottomFillerStyle)}
+			</div>
 		</div>
 	);
 };
