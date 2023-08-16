@@ -47,7 +47,7 @@ const NoteList = (props: Props) => {
 		listRef
 	);
 
-	const [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
+	const [itemsPerLine, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
 		scrollTop,
 		props.size,
 		itemSize,
@@ -166,8 +166,10 @@ const NoteList = (props: Props) => {
 		return [];
 	}, [props.notesParentType, props.searches, props.selectedSearchId, props.highlightedWords]);
 
-	const renderFiller = (key: string, height: number) => {
-		return <div key={key} style={{ height: height }}></div>;
+	const renderFiller = (elements: JSX.Element[], keyPrefix: string, width: number, height: number) => {
+		for (let i = 0; i < itemsPerLine; i++) {
+			elements.push(<div key={keyPrefix + i} style={{ width, height }}></div>);
+		}
 	};
 
 	const renderEmptyList = () => {
@@ -180,7 +182,7 @@ const NoteList = (props: Props) => {
 
 		const output: JSX.Element[] = [];
 
-		output.push(renderFiller('top', startLineIndex * itemSize.height));
+		renderFiller(output, 'top', itemSize.width, startLineIndex * itemSize.height);
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
@@ -209,7 +211,7 @@ const NoteList = (props: Props) => {
 			);
 		}
 
-		output.push(renderFiller('bottom', (totalLineCount - endLineIndex - 1) * itemSize.height));
+		renderFiller(output, 'bottom', itemSize.width, (totalLineCount - endLineIndex - 1) * itemSize.height);
 
 		return output;
 	};

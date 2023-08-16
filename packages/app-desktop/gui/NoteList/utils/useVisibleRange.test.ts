@@ -7,7 +7,9 @@ describe('useVisibleRange', () => {
 
 	test('should calculate indexes', () => {
 
-		// [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount]
+		// IN: scrollTop, listSize, itemSize, noteCount, flow
+		//
+		// OUT: [itemsPerLine, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount]
 
 		const testCases: [number, Size, Size, number, ItemFlow, ReturnType<typeof useVisibleRange>][] = [
 			[
@@ -16,7 +18,15 @@ describe('useVisibleRange', () => {
 				{ width: 100, height: 100 },
 				8,
 				ItemFlow.TopToBottom,
-				[1, 5, 1, 5, 8, 5],
+				[1, 1, 5, 1, 5, 8, 5],
+			],
+			[
+				100,
+				{ width: 220, height: 380 },
+				{ width: 100, height: 100 },
+				12,
+				ItemFlow.LeftToRight,
+				[2, 2, 9, 1, 4, 6, 8],
 			],
 			[
 				50,
@@ -24,7 +34,7 @@ describe('useVisibleRange', () => {
 				{ width: 100, height: 100 },
 				9,
 				ItemFlow.LeftToRight,
-				[0, 7, 0, 3, 5, 8],
+				[2, 0, 7, 0, 3, 5, 8],
 			],
 			[
 				0,
@@ -32,7 +42,7 @@ describe('useVisibleRange', () => {
 				{ width: 100, height: 100 },
 				30,
 				ItemFlow.LeftToRight,
-				[0, 19, 0, 4, 8, 20],
+				[4, 0, 19, 0, 4, 8, 20],
 			],
 		];
 

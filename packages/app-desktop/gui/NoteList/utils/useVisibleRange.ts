@@ -60,7 +60,7 @@ const useVisibleRange = (scrollTop: number, listSize: Size, itemSize: Size, note
 	// console.info('totalLineCount', totalLineCount);
 	// console.info('visibleItemCount', visibleItemCount);
 
-	return [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount];
+	return [itemsPerLine, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount];
 };
 
 export default useVisibleRange;

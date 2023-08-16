@@ -113,6 +113,7 @@ const useScroll = (noteCount: number, itemSize: Size, listSize: Size, listRef: R
 		// Ignore the scroll event if it has just been set programmatically.
 		if (Date.now() - lastScrollSetTime.current < 100) return;
 		setScrollTop(event.target.scrollTop);
+		lastScrollSetTime.current = Date.now();
 	}, []);
 
 	return {
