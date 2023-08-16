@@ -5,7 +5,7 @@ import { FunctionComponent, ReactNode, useCallback, useMemo, useRef, useState } 
 import { ConfigScreenStyles } from './configScreenStyles';
 import { Button } from 'react-native-paper';
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Text, View } from 'react-native';
-import { settingsSections } from '@joplin/lib/components/shared/config-shared';
+import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
 
 interface Props {
 	styles: ConfigScreenStyles;
