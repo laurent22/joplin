@@ -100,7 +100,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
 	const showDisabled = ctx.query.show_disabled === '1';
-	const searchQuery = (ctx.query.query && ctx.query.query.trim()) || '';
+	const searchQuery = ctx.query.query || '';
 
 	const pagination = makeTablePagination(ctx.query, 'full_name', PaginationOrderDir.ASC);
 	pagination.limit = 1000;
