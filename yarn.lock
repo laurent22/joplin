@@ -4563,7 +4563,6 @@ __metadata:
     punycode: 2.3.0
     react: 18.2.0
     react-native: 0.71.10
-    react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
     react-native-device-info: 10.7.0
     react-native-dialogbox: 0.6.10
@@ -27239,7 +27238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
   dependencies:
@@ -27716,17 +27715,6 @@ __metadata:
   peerDependencies:
     react: ^0.14.9 || ^15.3.0 || ^16.0.0
   checksum: b1b2ab15d0e7492be827576fa7238c11679b52495a640b1234400771fdeac9ded8909532135b4a84be28e21e63dc97d54758d08ba280f90409b54104730b29c0
-  languageName: node
-  linkType: hard
-
-"react-native-action-button@npm:2.8.5":
-  version: 2.8.5
-  resolution: "react-native-action-button@npm:2.8.5"
-  dependencies:
-    prop-types: ^15.5.10
-  peerDependencies:
-    react-native: ">=0.11"
-  checksum: e5f8236c9980e491daff3707648ab3a0f4c79c3c4c102ec340d376e204a740b87486f8d4b5e2336e2ab29e5dcd4990693778513cb76e7cc5ddd00ac1c2166977
   languageName: node
   linkType: hard
 
