@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import Setting, { AppType } from '@joplin/lib/models/Setting';
-import { FunctionComponent, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
 import { Button } from 'react-native-paper';
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	styles: ConfigScreenStyles;
@@ -22,69 +23,65 @@ const SectionSelector: FunctionComponent<Props> = props => {
 		return settingsSections({ device: AppType.Mobile, settings: props.settings });
 	}, [props.settings]);
 
-	const [visibleRegion, setVisibleRegion] = useState<{ y: number; height: number }|null>(null);
+	const itemHeight = 50;
 
-	const scrollViewRef = useRef<ScrollView>();
-	const onSelectedSectionLayout = React.useCallback((event: LayoutChangeEvent) => {
-		const y = event.nativeEvent.layout.y;
-		const buttonHeight = event.nativeEvent.layout.height;
-
-		const scrollView = scrollViewRef.current;
-		if (scrollView && visibleRegion) {
-			const withinViewport = y >= visibleRegion.y && y + buttonHeight < visibleRegion.y + visibleRegion.height;
-
-			if (!withinViewport) {
-				scrollView.scrollTo({ y });
-			}
-		}
-	}, [visibleRegion]);
-
-	const sectionButtons: ReactNode[] = [];
-
-	for (const section of sections) {
+	const onRenderButton = ({ item }: { item: SettingMetadataSection }) => {
+		const section = item;
 		const selected = props.selectedSectionName === section.name;
 		const icon = Setting.sectionNameToIcon(section.name, AppType.Mobile);
+		const label = Setting.sectionNameToLabel(section.name);
 
-		// TODO(personalizedrefrigerator): Accessibility: Mark which button is selected
-		sectionButtons.push(
+		return (
 			<Button
 				key={section.name}
+				accessibilityLabel={_('Selected: %s', label)}
 				onPress={() => props.openSection(section.name)}
 				contentStyle={{
 					justifyContent: 'flex-start',
+					alignItems: 'center',
+					height: 50,
 				}}
-				// style={selected ? props.styles.styleSheet.selectedHeaderWrapperStyle : props.styles.styleSheet.headerWrapperStyle}
 				buttonColor={selected ? props.styles.selectedSectionButtonColor : undefined}
 				mode={selected ? 'contained-tonal' : 'text'}
 				icon={icon}
-				onLayout={selected ? onSelectedSectionLayout : undefined}
 			>
 				<Text style={props.styles.styleSheet.headerTextStyle}>
-					{Setting.sectionNameToLabel(section.name)}
+					{label}
 				</Text>
 			</Button>
 		);
-	}
+	};
 
-	// Add an additional spacer at the end to ensure that the last item is visible
-	sectionButtons.push(<View key='end-spacer' style={{ height: 15 }}></View>);
+	const [flatListRef, setFlatListRef] = useState<FlatList|null>(null);
 
-	type ScrollEvent = NativeSyntheticEvent<NativeScrollEvent>;
-	const updateScrollViewVisibileRegion = useCallback((event: ScrollEvent) => {
-		setVisibleRegion({
-			y: event.nativeEvent.contentOffset.y,
-			height: event.nativeEvent.layoutMeasurement.height,
-		});
-	}, []);
+	useEffect(() => {
+		if (flatListRef && props.selectedSectionName) {
+			let selectedIndex = 0;
+			for (const section of sections) {
+				if (section.name === props.selectedSectionName) {
+					break;
+				}
+				selectedIndex ++;
+			}
+
+			flatListRef.scrollToIndex({
+				index: selectedIndex,
+				viewPosition: 0.5,
+			});
+		}
+	}, [props.selectedSectionName, flatListRef, sections]);
 
 	return (
-		<View style={{ minWidth: props.minWidth }}>
-			<ScrollView
-				ref={scrollViewRef}
-				onScroll={updateScrollViewVisibileRegion}
-			>
-				{sectionButtons}
-			</ScrollView>
+		<View style={{ minWidth: props.minWidth, flexShrink: 1, flexDirection: 'column' }}>
+			<FlatList
+				ref={setFlatListRef}
+				data={sections}
+				renderItem={onRenderButton}
+				keyExtractor={item => item.name}
+				getItemLayout={(_data, index) => ({
+					length: itemHeight, offset: itemHeight * index, index,
+				})}
+			/>
 		</View>
 	);
 };

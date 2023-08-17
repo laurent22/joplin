@@ -28,7 +28,6 @@ import ExportProfileButton from './NoteExportSection/ExportProfileButton';
 import SettingComponent from './SettingComponent';
 import ExportDebugReportButton from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
-import { Button } from 'react-native-paper';
 
 interface ConfigScreenState {
 	settings: any;
@@ -518,21 +517,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			/>
 		);
 
-		const styleSheet = this.styles().styleSheet;
-		const titleParts = [_('Configuration')];
-		if (this.state.selectedSectionName) {
-			titleParts.push(Setting.sectionNameToLabel(this.state.selectedSectionName));
-		}
-
-		let titleComponent = (
-			<Text
-				style={styleSheet.titlebarText}
-				ellipsizeMode='head'
-			>
-				{titleParts.join(' > ')}
-			</Text>
-		);
-
 		let currentSection: ReactNode;
 		if (this.state.selectedSectionName) {
 			const settingComps = shared.settingsToComponents2(
@@ -541,17 +525,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			// TODO: Remove this cast. Currently necessary because of different versions
 			// of React in lib/ and app-mobile/
 			) as ReactNode[];
-
-			titleComponent = (
-				<View style={{ flexDirection: 'row', flex: 1, flexShrink: 1 }}>
-					<Button
-						style={styleSheet.titlebarHeaderPart}
-						onPress={this.showOverviewSection_}
-					>
-						{titleComponent}
-					</Button>
-				</View>
-			);
 
 			currentSection = (
 				<ScrollView
@@ -581,10 +554,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			mainComponent = currentSection;
 		}
 
+		let screenHeadingText = _('Configuration');
+		if (this.state.selectedSectionName) {
+			screenHeadingText = Setting.sectionNameToLabel(this.state.selectedSectionName);
+		}
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
-					titleComponent={titleComponent}
+					title={screenHeadingText}
 					showSaveButton={true}
 					showSearchButton={false}
 					showSideMenuButton={false}
