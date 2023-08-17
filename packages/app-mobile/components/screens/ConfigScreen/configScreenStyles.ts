@@ -27,6 +27,11 @@ export interface ConfigScreenStyleSheet {
 	switchSettingContainer: ViewStyle;
 	switchSettingControl: TextStyle;
 
+	// height is required to allow pre-computing the positions
+	// of the buttons.
+	sidebarButtonContent: TextStyle & { height: number };
+	selectedSidebarButtonContainer: ViewStyle;
+
 	settingControl: TextStyle;
 }
 
@@ -159,6 +164,17 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			color: undefined,
 			flex: 0,
 		},
+
+		sidebarButtonContent: {
+			justifyContent: 'flex-start',
+			alignItems: 'center',
+			height: 48,
+			color: theme.color,
+		},
+
+		selectedSidebarButtonContainer: {
+			backgroundColor: theme.selectedColor,
+		},
 	};
 
 	const styleSheet = StyleSheet.create(styles);
@@ -166,7 +182,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 	return {
 		styleSheet,
 
-		selectedSectionButtonColor: theme.backgroundColorActive3,
+		selectedSectionButtonColor: theme.selectedColor,
 		keyboardAppearance: theme.keyboardAppearance,
 		getContainerStyle: (hasDescription) => {
 			return !hasDescription ? styleSheet.settingContainer : styleSheet.settingContainerNoBottomBorder;

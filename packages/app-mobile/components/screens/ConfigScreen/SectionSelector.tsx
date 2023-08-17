@@ -22,8 +22,9 @@ const SectionSelector: FunctionComponent<Props> = props => {
 	const sections = useMemo(() => {
 		return settingsSections({ device: AppType.Mobile, settings: props.settings });
 	}, [props.settings]);
+	const styles = props.styles.styleSheet;
 
-	const itemHeight = 50;
+	const itemHeight = styles.sidebarButtonContent.height;
 
 	const onRenderButton = ({ item }: { item: SettingMetadataSection }) => {
 		const section = item;
@@ -36,11 +37,8 @@ const SectionSelector: FunctionComponent<Props> = props => {
 				key={section.name}
 				accessibilityLabel={_('Selected: %s', label)}
 				onPress={() => props.openSection(section.name)}
-				contentStyle={{
-					justifyContent: 'flex-start',
-					alignItems: 'center',
-					height: 50,
-				}}
+				contentStyle={props.styles.styleSheet.sidebarButtonContent}
+				style={selected ? props.styles.styleSheet.selectedSidebarButtonContainer : undefined}
 				buttonColor={selected ? props.styles.selectedSectionButtonColor : undefined}
 				mode={selected ? 'contained-tonal' : 'text'}
 				icon={icon}
