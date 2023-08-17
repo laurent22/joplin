@@ -18,7 +18,6 @@ import {
 } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
-import { buttonSize } from './MarkdownToolbar/ToolbarButton';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -372,18 +371,15 @@ const NoteEditor = (props: Props, ref: any) => {
 	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
 	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
 
-	// Listens for changes to the container's height, not the editor's height, because
-	// this callback changes the height of the editor.
 	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
-		const toolbarHeight = toolbarEnabled ? buttonSize : 0;
-		const editorHeight = event.nativeEvent.layout.height - toolbarHeight;
+		const containerHeight = event.nativeEvent.layout.height;
 
-		if (editorHeight < 140) {
+		if (containerHeight < 140) {
 			setHasSpaceForToolbar(false);
 		} else {
 			setHasSpaceForToolbar(true);
 		}
-	}, [toolbarEnabled]);
+	}, []);
 
 	const toolbar = <MarkdownToolbar
 		style={{
@@ -416,14 +412,12 @@ const NoteEditor = (props: Props, ref: any) => {
 				editorControl={editorControl}
 				selectionState={selectionState}
 			/>
-			<View
-				style={{
-					flexGrow: 1,
-					flexShrink: 0,
-					minHeight: '30%',
-					...props.contentStyle,
-				}}
-			>
+			<View style={{
+				flexGrow: 1,
+				flexShrink: 0,
+				minHeight: '30%',
+				...props.contentStyle,
+			}}>
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
 					themeId={props.themeId}
