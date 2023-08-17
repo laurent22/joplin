@@ -410,6 +410,7 @@ packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/types.js
+packages/app-mobile/components/NoteEditor/NoteEditor.test.js
 packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js

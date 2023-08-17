@@ -8,7 +8,7 @@ import ExtendedWebView from '../ExtendedWebView';
 const React = require('react');
 import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import { View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
 import SelectionFormatting from './SelectionFormatting';
@@ -18,6 +18,7 @@ import {
 } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
+import { buttonSize } from './MarkdownToolbar/ToolbarButton';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -215,7 +216,7 @@ const useEditorControl = (
 	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
 };
 
-function NoteEditor(props: Props, ref: any) {
+const NoteEditor = (props: Props, ref: any) => {
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
@@ -368,6 +369,22 @@ function NoteEditor(props: Props, ref: any) {
 		console.error('NoteEditor: webview error');
 	}, []);
 
+	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
+	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
+
+	// Listens for changes to the container's height, not the editor's height, because
+	// this callback changes the height of the editor.
+	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
+		const toolbarHeight = toolbarEnabled ? buttonSize : 0;
+		const editorHeight = event.nativeEvent.layout.height - toolbarHeight;
+
+		if (editorHeight < 140) {
+			setHasSpaceForToolbar(false);
+		} else {
+			setHasSpaceForToolbar(true);
+		}
+	}, [toolbarEnabled]);
+
 	const toolbar = <MarkdownToolbar
 		style={{
 			// Don't show the markdown toolbar if there isn't enough space
@@ -385,22 +402,28 @@ function NoteEditor(props: Props, ref: any) {
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
 	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
-		<View style={{
-			...props.style,
-			flexDirection: 'column',
-		}}>
+		<View
+			testID='note-editor-root'
+			onLayout={onContainerLayout}
+			style={{
+				...props.style,
+				flexDirection: 'column',
+			}}
+		>
 			<EditLinkDialog
 				visible={linkDialogVisible}
 				themeId={props.themeId}
 				editorControl={editorControl}
 				selectionState={selectionState}
 			/>
-			<View style={{
-				flexGrow: 1,
-				flexShrink: 0,
-				minHeight: '30%',
-				...props.contentStyle,
-			}}>
+			<View
+				style={{
+					flexGrow: 1,
+					flexShrink: 0,
+					minHeight: '30%',
+					...props.contentStyle,
+				}}
+			>
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
 					themeId={props.themeId}
@@ -419,9 +442,9 @@ function NoteEditor(props: Props, ref: any) {
 				searchState={searchState}
 			/>
 
-			{props.toolbarEnabled ? toolbar : null}
+			{toolbarEnabled ? toolbar : null}
 		</View>
 	);
-}
+};
 
 export default forwardRef(NoteEditor);

@@ -33,6 +33,21 @@ document.createRange = () => {
 
 shimInit({ nodeSqlite: sqlite3 });
 
+// This library has the following error when running within Jest:
+//   Invariant Violation: `new NativeEventEmitter()` requires a non-null argument.
+jest.mock('react-native-device-info', () => {
+	return {
+		hasNotch: () => false,
+	};
+});
+
+// react-native-webview expects native iOS/Android code so needs to be mocked.
+jest.mock('react-native-webview', () => {
+	const { View } = require('react-native');
+	return {
+		WebView: View,
+	};
+});
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
 // Use a temporary folder instead.
