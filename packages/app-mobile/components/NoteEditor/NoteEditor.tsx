@@ -215,7 +215,7 @@ const useEditorControl = (
 	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
 };
 
-const NoteEditor = (props: Props, ref: any) => {
+function NoteEditor(props: Props, ref: any) {
 	const webviewRef = useRef(null);
 
 	const setInitialSelectionJS = props.initialSelection ? `
@@ -439,6 +439,6 @@ const NoteEditor = (props: Props, ref: any) => {
 			{toolbarEnabled ? toolbar : null}
 		</View>
 	);
-};
+}
 
 export default forwardRef(NoteEditor);
