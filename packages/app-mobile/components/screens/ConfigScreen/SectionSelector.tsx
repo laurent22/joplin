@@ -43,16 +43,20 @@ const SectionSelector: FunctionComponent<Props> = props => {
 
 	for (const section of sections) {
 		const selected = props.selectedSectionName === section.name;
+		const icon = Setting.sectionNameToIcon(section.name, AppType.Mobile);
 
 		// TODO(personalizedrefrigerator): Accessibility: Mark which button is selected
 		sectionButtons.push(
 			<Button
 				key={section.name}
 				onPress={() => props.openSection(section.name)}
+				contentStyle={{
+					justifyContent: 'flex-start',
+				}}
 				// style={selected ? props.styles.styleSheet.selectedHeaderWrapperStyle : props.styles.styleSheet.headerWrapperStyle}
 				buttonColor={selected ? props.styles.selectedSectionButtonColor : undefined}
-				mode={selected ? 'elevated' : 'text'}
-				icon={'cog'}
+				mode={selected ? 'contained-tonal' : 'text'}
+				icon={icon}
 				onLayout={selected ? onSelectedSectionLayout : undefined}
 			>
 				<Text style={props.styles.styleSheet.headerTextStyle}>

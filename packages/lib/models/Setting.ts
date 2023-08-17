@@ -2574,24 +2574,58 @@ class Setting extends BaseModel {
 		return '';
 	}
 
-	public static sectionNameToIcon(name: string) {
-		if (name === 'general') return 'icon-general';
-		if (name === 'sync') return 'icon-sync';
-		if (name === 'appearance') return 'icon-appearance';
-		if (name === 'note') return 'icon-note';
-		if (name === 'folder') return 'icon-notebooks';
-		if (name === 'plugins') return 'icon-plugins';
-		if (name === 'markdownPlugins') return 'fab fa-markdown';
-		if (name === 'application') return 'icon-application';
-		if (name === 'revisionService') return 'icon-note-history';
-		if (name === 'encryption') return 'icon-encryption';
-		if (name === 'server') return 'far fa-hand-scissors';
-		if (name === 'keymap') return 'fa fa-keyboard';
-		if (name === 'joplinCloud') return 'fa fa-cloud';
+	public static sectionNameToIcon(name: string, appType: AppType) {
+		const desktopNameToIconMap: Record<string, string> = {
+			'general': 'icon-general',
+			'sync': 'icon-sync',
+			'appearance': 'icon-appearance',
+			'note': 'icon-note',
+			'folder': 'icon-notebooks',
+			'plugins': 'icon-plugins',
+			'markdownPlugins': 'fab fa-markdown',
+			'application': 'icon-application',
+			'revisionService': 'icon-note-history',
+			'encryption': 'icon-encryption',
+			'server': 'far fa-hand-scissors',
+			'keymap': 'fa fa-keyboard',
+			'joplinCloud': 'fa fa-cloud',
+		};
+
+		// Mobile icons are selected from the FontAwesome5 section of
+		// react-native-vector-icons: https://oblador.github.io/react-native-vector-icons/
+		const mobileNameToIconMap: Record<string, string> = {
+			'general': 'tune',
+			'sync': 'sync',
+			'appearance': 'ruler',
+			'note': 'note',
+			'plugins': 'puzzle',
+			'markdownPlugins': 'marker',
+			'application': 'cog',
+			'revisionService': 'history',
+			'encryption': 'key',
+			'server': 'hand-scissors',
+			'keymap': 'keyboard',
+			'tools': 'toolbox',
+			'export': 'export',
+			'moreInfo': 'information-outline',
+			'joplinCloud': 'cloud',
+		};
+
+		if (appType === AppType.Desktop && name in desktopNameToIconMap) {
+			return desktopNameToIconMap[name];
+		}
+
+		if (appType === AppType.Mobile && name in mobileNameToIconMap) {
+			return mobileNameToIconMap[name];
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].iconName) return this.customSections_[name].iconName;
 
-		return 'fas fa-cog';
+		if (appType === AppType.Desktop) {
+			return 'fas fa-cog';
+		} else {
+			return 'cog';
+		}
 	}
 
 	public static appTypeToLabel(name: string) {

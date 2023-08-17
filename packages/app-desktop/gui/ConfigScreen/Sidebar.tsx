@@ -1,4 +1,4 @@
-import { SettingSectionSource } from '@joplin/lib/models/Setting';
+import { AppType, SettingSectionSource } from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import { useMemo } from 'react';
 import Setting from '@joplin/lib/models/Setting';
@@ -92,7 +92,7 @@ export default function Sidebar(props: Props) {
 		const selected = props.selection === section.name;
 		return (
 			<StyledListItem key={section.name} selected={selected} onClick={() => { props.onSelectionChange({ section: section }); }}>
-				<StyledListItemIcon className={Setting.sectionNameToIcon(section.name)} />
+				<StyledListItemIcon className={Setting.sectionNameToIcon(section.name, AppType.Desktop)} />
 				<StyledListItemLabel>
 					{Setting.sectionNameToLabel(section.name)}
 				</StyledListItemLabel>
