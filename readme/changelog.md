@@ -249,32 +249,6 @@
 - Fixed: Switching a note using Sidebar is slow and grayed out ([#6430](https://github.com/laurent22/joplin/issues/6430)) ([#6416](https://github.com/laurent22/joplin/issues/6416) by Kenichi Kobayashi)
 - Security: Fix XSS when a specially crafted string is passed to the renderer ([762b4e8](https://github.com/laurent22/joplin/commit/762b4e8)) (PoC by [@Alise](https://github.com/a1ise))
 
-## [v2.9.12](https://github.com/laurent22/joplin/releases/tag/v2.9.12) (Pre-release) - 2022-11-01T17:06:05Z
-
-- Improved: Display the plugin name in dialog boxes created by plugins ([#6979](https://github.com/laurent22/joplin/issues/6979))
-- Improved: Regression: Plugin CSS files were no longer being loaded correctly ([99a61f1](https://github.com/laurent22/joplin/commit/99a61f1))
-- Improved: Remove unnecessary PDF viewer messages ([db4c6ea](https://github.com/laurent22/joplin/commit/db4c6ea))
-- Fixed: Fix exporting resources to md and md + frontmatter ([#6768](https://github.com/laurent22/joplin/issues/6768)) ([#6721](https://github.com/laurent22/joplin/issues/6721) by [@SFulpius](https://github.com/SFulpius))
-- Fixed: Fixed crash when setting spellchecker language to en-IN ([ae17801](https://github.com/laurent22/joplin/commit/ae17801))
-- Fixed: Fixed sidebar tag header click ([5b80fbc](https://github.com/laurent22/joplin/commit/5b80fbc))
-- Fixed: Fixes an error when importing a shortcut map and canceling the dialog ([#6975](https://github.com/laurent22/joplin/issues/6975) by Ahmed Azzam)
-
-## [v2.9.11](https://github.com/laurent22/joplin/releases/tag/v2.9.11) (Pre-release) - 2022-10-23T16:09:58Z
-
-- New: Add PDF full screen viewer ([#6821](https://github.com/laurent22/joplin/issues/6821) by [@asrient](https://github.com/asrient))
-- New: Add support for multi-language spell check ([#6617](https://github.com/laurent22/joplin/issues/6617))
-- New: Add zoom feature on PDF viewer ([#6748](https://github.com/laurent22/joplin/issues/6748) by [@asrient](https://github.com/asrient))
-- New: Added PDF viewer options ([#6800](https://github.com/laurent22/joplin/issues/6800) by [@asrient](https://github.com/asrient))
-- New: Plugins: Add support for media links in plugin manifest.json ([#6672](https://github.com/laurent22/joplin/issues/6672) by [@Retrove](https://github.com/Retrove))
-- Improved: Bundle default plugins with desktop application ([#6679](https://github.com/laurent22/joplin/issues/6679) by Mayank Bondre)
-- Improved: Display default notebook icons when at least one notebook has an icon ([7974df9](https://github.com/laurent22/joplin/commit/7974df9))
-- Improved: Install default plugins on first app start ([#6585](https://github.com/laurent22/joplin/issues/6585) by Mayank Bondre)
-- Improved: PDF scroll persistence ([#6747](https://github.com/laurent22/joplin/issues/6747) by [@asrient](https://github.com/asrient))
-- Fixed: Avoid reloading loaded plugin scripts ([#6742](https://github.com/laurent22/joplin/issues/6742)) ([#6719](https://github.com/laurent22/joplin/issues/6719) by [@SeptemberHX](https://github.com/SeptemberHX))
-- Fixed: Fix resources sync when proxy is set ([#6817](https://github.com/laurent22/joplin/issues/6817)) ([#6688](https://github.com/laurent22/joplin/issues/6688) by Self Not Found)
-- Fixed: Fixed file and directory paths in plugin setting dialogs ([#6692](https://github.com/laurent22/joplin/issues/6692))
-- Fixed: Fixed names of imported duplicate notebooks ([#6704](https://github.com/laurent22/joplin/issues/6704))
-
 ## [v2.9.4](https://github.com/laurent22/joplin/releases/tag/v2.9.4) (Pre-release) - 2022-08-18T16:52:26Z
 
 - Fixed macOS release
@@ -386,21 +360,6 @@
 
 - Improved: Resize custom icon down to 256px when it is too large ([064891d](https://github.com/laurent22/joplin/commit/064891d))
 - Updated translations
-
-## [v2.7.10](https://github.com/laurent22/joplin/releases/tag/v2.7.10) (Pre-release) - 2022-02-11T18:19:09Z
-
-Important: If you use custom notebook icons and sync with the mobile app, make sure also install the latest 2.7 mobile app.
-
-- New: Add additional time format HH.mm ([#6086](https://github.com/laurent22/joplin/issues/6086) by [@vincentjocodes](https://github.com/vincentjocodes))
-- New: Add support for custom notebook icons ([#6110](https://github.com/laurent22/joplin/issues/6110))
-- Improved: Fixed sync scroll issue ([#6059](https://github.com/laurent22/joplin/issues/6059)) ([#5808](https://github.com/laurent22/joplin/issues/5808) by Caleb John)
-- Improved: Make heading 4, 5 and 6 styling more consistent ([fca5875](https://github.com/laurent22/joplin/commit/fca5875))
-- Improved: Update Mermaid 8.13.5 -&gt; 8.13.9 and Katex dependencies ([#6039](https://github.com/laurent22/joplin/issues/6039) by Helmut K. C. Tessarek)
-- Fixed: Add "Other applications" import menu item ([#6118](https://github.com/laurent22/joplin/issues/6118)) ([#6108](https://github.com/laurent22/joplin/issues/6108) by Helmut K. C. Tessarek)
-- Fixed: Global search focuses text in notes so that edits overwrite highlighted text ([#6040](https://github.com/laurent22/joplin/issues/6040)) ([#6035](https://github.com/laurent22/joplin/issues/6035) by Caleb John)
-- Fixed: Login field was sometimes disabled on Sync Wizard dialog ([#6075](https://github.com/laurent22/joplin/issues/6075))
-- Fixed: Scroll position is not remembered (regression) ([#6043](https://github.com/laurent22/joplin/issues/6043)) ([#6042](https://github.com/laurent22/joplin/issues/6042) by Kenichi Kobayashi)
-- Fixed: Shared resource was not encrypted with correct encryption key ([#6092](https://github.com/laurent22/joplin/issues/6092))
 
 ## [v2.7.8](https://github.com/laurent22/joplin/releases/tag/v2.7.8) (Pre-release) - 2022-01-19T09:35:27Z
 
@@ -521,6 +480,23 @@ Important: If you use custom notebook icons and sync with the mobile app, make s
 
 - Fixed: Fixed crash on certain Linux distributions when importing or exporting a file ([6012783](https://github.com/laurent22/joplin/commit/6012783))
 - Fixed: Fixed potential infinite loop when Joplin Server session is invalid ([c5569ef](https://github.com/laurent22/joplin/commit/c5569ef))
+
+## [v2.5.8](https://github.com/laurent22/joplin/releases/tag/v2.5.8) - 2021-10-31T11:38:03Z
+
+- Improved: Enable safe mode for Markdown editor too ([#5593](https://github.com/laurent22/joplin/issues/5593))
+- Fixed: Do not render very large code blocks to prevent app from freezing ([#5593](https://github.com/laurent22/joplin/issues/5593))
+
+## [v2.5.7](https://github.com/laurent22/joplin/releases/tag/v2.5.7) (Pre-release) - 2021-10-29T14:47:33Z
+
+- Improved: Upgrade to Electron 15.1.3 ([9704b29](https://github.com/laurent22/joplin/commit/9704b29))
+
+## [v2.5.6](https://github.com/laurent22/joplin/releases/tag/v2.5.6) (Pre-release) - 2021-10-28T22:03:09Z
+
+- New: Added mechanism to migrate default settings to new values ([72db8e4](https://github.com/laurent22/joplin/commit/72db8e4))
+- Improved: Improved Joplin Server configuration check to better handle disabled accounts ([72c1235](https://github.com/laurent22/joplin/commit/72c1235))
+- Improved: Improved handling of expired sessions when using Joplin Server ([ace1118](https://github.com/laurent22/joplin/commit/ace1118))
+- Improved: Improved master password state handling in Encryption screen ([7d62df8](https://github.com/laurent22/joplin/commit/7d62df8))
+- Fixed: Fixed Goto Anything scrolling for long lists ([22e5c3a](https://github.com/laurent22/joplin/commit/22e5c3a))
 
 ## [v2.5.8](https://github.com/laurent22/joplin/releases/tag/v2.5.8) - 2021-10-31T11:38:03Z
 
