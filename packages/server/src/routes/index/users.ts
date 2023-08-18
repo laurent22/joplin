@@ -249,7 +249,6 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			// logged out).
 			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
 		} else if (fields.send_account_confirmation_email) {
-			await models.user().save({ id: user.id });
 			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
