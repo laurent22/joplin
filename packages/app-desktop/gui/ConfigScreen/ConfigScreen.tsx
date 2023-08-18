@@ -193,10 +193,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					<p key='missing-password-warning' style={warningStyle}>
 						{_('Warning: Missing password.')}
 						{' '}
-						<MacOSMissingPasswordHelpLink
-							theme={theme}
-							text={_('Help')}
-						/>
+						<MacOSMissingPasswordHelpLink theme={theme} />
 					</p>
 				);
 			}

@@ -3,10 +3,10 @@ import * as React from 'react';
 import shim from '@joplin/lib/shim';
 import bridge from '../../../services/bridge';
 import StyledLink from '../../style/StyledLink';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	theme: any;
-	text: string;
 }
 
 const openMissingPasswordFAQ = () =>
@@ -20,7 +20,7 @@ const MacOSMissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
 			onClick={openMissingPasswordFAQ}
 			style={props.theme.linkStyle}
 		>
-			{props.text}
+			{_('Help')}
 		</StyledLink>
 	);
 
