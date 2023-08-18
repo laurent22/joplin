@@ -2,85 +2,85 @@
 
 <form id="user_form" action="{{{postUrl}}}" method="POST" class="block">
 
-	<div class="block">
-		{{> errorBanner}}
-		{{{csrfTag}}}
-		<input type="hidden" name="id" value="{{user.id}}"/>
-		<input type="hidden" name="is_new" value="{{isNew}}"/>
-		<div class="field">
-			<label class="label">Full name</label>
-			<div class="control">
-				<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
-			</div>
-		</div>
-		<div class="field">
-			<label class="label">Email</label>
-			<div class="control">
-				<input class="input" type="email" name="email" value="{{user.email}}"/>
-			</div>
-		</div>
+    <div class="block">
+        {{> errorBanner}}
+        {{{csrfTag}}}
+        <input type="hidden" name="id" value="{{user.id}}"/>
+        <input type="hidden" name="is_new" value="{{isNew}}"/>
+        <div class="field">
+            <label class="label">Full name</label>
+            <div class="control">
+                <input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+                <input class="input" type="email" name="email" value="{{user.email}}"/>
+            </div>
+        </div>
 
-		<div class="field">
-			<label class="label">Password</label>
-			<div class="control">
-				<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
-			</div>
-			<p id="password_strength" class="help"></p>
-		</div>
+        <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+                <input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
+            </div>
+            <p id="password_strength" class="help"></p>
+        </div>
 
-		<div class="field">
-			<label class="label">Repeat password</label>
-			<div class="control">
-				<input class="input" type="password" name="password2" autocomplete="new-password"/>
-			</div>
-		</div>
+        <div class="field">
+            <label class="label">Repeat password</label>
+            <div class="control">
+                <input class="input" type="password" name="password2" autocomplete="new-password"/>
+            </div>
+        </div>
 
-		<div class="control block">
-			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
+        <div class="control block">
+            <input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
             {{#showSendAccountConfirmationEmailButton}}
                 <input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
             {{/showSendAccountConfirmationEmailButton}}
-		</div>
-	</div>
+        </div>
+    </div>
 
-	{{#subscription}}
-		<h1 class="title">Your subscription</h1>
+    {{#subscription}}
+        <h1 class="title">Your subscription</h1>
 
-		<div class="block">
-			{{#showUpdateSubscriptionPro}}
-				<div class="control block">
-					<p><a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a></p>
-					<p class="help">Click for more info about the Pro plan and to upgrade your account.</p>
-				</div>
-			{{/showUpdateSubscriptionPro}}
+        <div class="block">
+            {{#showUpdateSubscriptionPro}}
+                <div class="control block">
+                    <p><a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a></p>
+                    <p class="help">Click for more info about the Pro plan and to upgrade your account.</p>
+                </div>
+            {{/showUpdateSubscriptionPro}}
 
-			<div class="control block">
-				<p><a class="button is-link" target="_blank" href="{{stripePortalUrl}}">Manage subscription</a></p>
-				<p class="help">Click to update your payment details, switch to a different billing cycle or plan, or to cancel your subscription.</p>
-			</div>
-		</div>
-	{{/subscription}}
+            <div class="control block">
+                <p><a class="button is-link" target="_blank" href="{{stripePortalUrl}}">Manage subscription</a></p>
+                <p class="help">Click to update your payment details, switch to a different billing cycle or plan, or to cancel your subscription.</p>
+            </div>
+        </div>
+    {{/subscription}}
 
 </form>
 
 {{#hasFlags}}
-	<div class="content user-flags block">
-		<h1 class="title">Flags</h1>
-		<form action="{{{postUrl}}}" method="POST">
-			{{{csrfTag}}}
-			{{#userFlagViews}}
-				<ul>
-					<li><label class="checkbox"><input type="checkbox" name="user_flag_{{type}}"> {{message}}</label></li>
-				</ul>
-			{{/userFlagViews}}
-			<input type="submit" name="delete_user_flags" class="button is-warning" value="Delete selected flags" />
-			<p class="help">Note: normally it should not be needed to manually delete a flag because that's automatically handled by the system. So if it's necessary it means there's a bug that should be fixed.</p>
-		</form>
-	</div>
+    <div class="content user-flags block">
+        <h1 class="title">Flags</h1>
+        <form action="{{{postUrl}}}" method="POST">
+            {{{csrfTag}}}
+            {{#userFlagViews}}
+                <ul>
+                    <li><label class="checkbox"><input type="checkbox" name="user_flag_{{type}}"> {{message}}</label></li>
+                </ul>
+            {{/userFlagViews}}
+            <input type="submit" name="delete_user_flags" class="button is-warning" value="Delete selected flags" />
+            <p class="help">Note: normally it should not be needed to manually delete a flag because that's automatically handled by the system. So if it's necessary it means there's a bug that should be fixed.</p>
+        </form>
+    </div>
 {{/hasFlags}}
 
 <script>
-	$(() => {
-		setupPasswordStrengthHandler();
-	});
+    $(() => {
+        setupPasswordStrengthHandler();
+    });
 </script>
