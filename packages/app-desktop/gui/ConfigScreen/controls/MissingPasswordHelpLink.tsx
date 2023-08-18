@@ -26,7 +26,8 @@ const MissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
 
 	// The FAQ section related to missing passwords is specific to MacOS/ARM -- only show it
 	// in that case.
-	const showMacInfoLink = shim.isMac() && process.arch === 'arm64';
+	const newArchitectureReleasedRecently = Date.now() <= Date.UTC(2023, 10); // 10 = November
+	const showMacInfoLink = shim.isMac() && process.arch === 'arm64' && newArchitectureReleasedRecently;
 
 	return showMacInfoLink ? macInfoLink : null;
 };

@@ -260,7 +260,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<br/>
 				<MissingPasswordHelpLink
 					theme={theme}
-					text={_('Help: Missing password')}
+					text={_('Help')}
 				/>
 			</p>
 		);
