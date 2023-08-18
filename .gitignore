@@ -246,6 +246,7 @@ packages/app-desktop/gui/NoteEditor/utils/types.js
 packages/app-desktop/gui/NoteEditor/utils/useDropHandler.js
 packages/app-desktop/gui/NoteEditor/utils/useEffectiveNoteId.js
 packages/app-desktop/gui/NoteEditor/utils/useFolder.js
+packages/app-desktop/gui/NoteEditor/utils/useFormNote.test.js
 packages/app-desktop/gui/NoteEditor/utils/useFormNote.js
 packages/app-desktop/gui/NoteEditor/utils/useMarkupToHtml.js
 packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js
@@ -396,6 +397,7 @@ packages/app-mobile/components/NoteEditor/MarkdownToolbar/Toolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToolbarOverflowRows.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/types.js
+packages/app-mobile/components/NoteEditor/NoteEditor.test.js
 packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js

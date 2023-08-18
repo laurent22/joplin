@@ -2840,6 +2840,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bam.tech/react-native-image-resizer@npm:3.0.5":
+  version: 3.0.5
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.5"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: f555bd10aafab1a797b6f5142e59b1bb11f229b61d35c3e6c9d734bbd4999f97bcc86853f69965d758ca872aad024add7a852041da498b177eee923ef82e506d
+  languageName: node
+  linkType: hard
+
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
   resolution: "@bcoe/v8-coverage@npm:0.2.3"
@@ -4502,6 +4512,7 @@ __metadata:
     "@babel/core": 7.20.2
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.0
+    "@bam.tech/react-native-image-resizer": 3.0.5
     "@codemirror/commands": 6.2.2
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.3
@@ -4523,7 +4534,7 @@ __metadata:
     "@joplin/utils": ~2.12
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
-    "@react-native-community/datetimepicker": 7.4.0
+    "@react-native-community/datetimepicker": 7.4.1
     "@react-native-community/geolocation": 3.0.6
     "@react-native-community/netinfo": 9.4.1
     "@react-native-community/push-notification-ios": 1.11.0
@@ -4563,7 +4574,6 @@ __metadata:
     punycode: 2.3.0
     react: 18.2.0
     react-native: 0.71.10
-    react-native-action-button: 2.8.5
     react-native-camera: 4.2.1
     react-native-device-info: 10.7.0
     react-native-dialogbox: 0.6.10
@@ -4577,7 +4587,6 @@ __metadata:
     react-native-gesture-handler: 2.12.0
     react-native-get-random-values: 1.9.0
     react-native-image-picker: 5.6.0
-    react-native-image-resizer: 1.4.5
     react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 15.0.1
     react-native-paper: 5.9.1
@@ -4909,7 +4918,7 @@ __metadata:
     jest-expect-message: 1.1.3
     jquery: 3.7.0
     jsdom: 22.1.0
-    knex: 2.4.2
+    knex: 2.5.0
     koa: 2.14.2
     markdown-it: 13.0.1
     mustache: 4.2.0
@@ -4922,7 +4931,7 @@ __metadata:
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
     query-string: 7.1.3
-    rate-limiter-flexible: 2.4.1
+    rate-limiter-flexible: 2.4.2
     raw-body: 2.5.2
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -6855,12 +6864,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:7.4.0":
-  version: 7.4.0
-  resolution: "@react-native-community/datetimepicker@npm:7.4.0"
+"@react-native-community/datetimepicker@npm:7.4.1":
+  version: 7.4.1
+  resolution: "@react-native-community/datetimepicker@npm:7.4.1"
   dependencies:
     invariant: ^2.2.4
-  checksum: 284446dc3b19fa066f3ad5337e8a756a7dfda33a4af8c10b91d58b9e6933bd1159a5e04119e0085176f32a34e04bf8c9e42f558df7c2aa020ac49fdd68becc75
+  checksum: bf1b2591ca4413a6ca1e074150940578b8d6d6c6063a740895e359088fe31cbf0cefb65f829a3d29e2f861b72d9d8fdf4f835942566f8953e7410068dfe37ea1
   languageName: node
   linkType: hard
 
@@ -21664,7 +21673,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:2.4.2, knex@npm:^2.4.2":
+"knex@npm:2.5.0":
+  version: 2.5.0
+  resolution: "knex@npm:2.5.0"
+  dependencies:
+    colorette: 2.0.19
+    commander: ^10.0.0
+    debug: 4.3.4
+    escalade: ^3.1.1
+    esm: ^3.2.25
+    get-package-type: ^0.1.0
+    getopts: 2.3.0
+    interpret: ^2.2.0
+    lodash: ^4.17.21
+    pg-connection-string: 2.6.1
+    rechoir: ^0.8.0
+    resolve-from: ^5.0.0
+    tarn: ^3.0.2
+    tildify: 2.0.0
+  peerDependenciesMeta:
+    better-sqlite3:
+      optional: true
+    mysql:
+      optional: true
+    mysql2:
+      optional: true
+    pg:
+      optional: true
+    pg-native:
+      optional: true
+    sqlite3:
+      optional: true
+    tedious:
+      optional: true
+  bin:
+    knex: bin/cli.js
+  checksum: 83c9fa20423546cbfcfedd28095645ad22c4a3529c02a94cbfe970800c0542c0dde502245237666f52da7edfe4b404b4acd3d5179fc37008ddaa6025b1fcfb9d
+  languageName: node
+  linkType: hard
+
+"knex@npm:^2.4.2":
   version: 2.4.2
   resolution: "knex@npm:2.4.2"
   dependencies:
@@ -26485,7 +26533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.6.1":
+"pg-connection-string@npm:2.6.1, pg-connection-string@npm:^2.6.1":
   version: 2.6.1
   resolution: "pg-connection-string@npm:2.6.1"
   checksum: 882344a47e1ecf3a91383e0809bf2ac48facea97fcec0358d6e060e1cbcb8737acde419b4c86f05da4ce4a16634ee50fff1d2bb787d73b52ccbfde697243ad8a
@@ -27239,7 +27287,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
   dependencies:
@@ -27568,10 +27616,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rate-limiter-flexible@npm:2.4.1":
-  version: 2.4.1
-  resolution: "rate-limiter-flexible@npm:2.4.1"
-  checksum: 5eea3ffbb6a11f634edd8b9575815c2bf239a8becdfdc82c4183cad92025e853913972a2b2f2d45c16e81aea1a3451fbad8da76dee1ba0e4549c22a0ba58c50f
+"rate-limiter-flexible@npm:2.4.2":
+  version: 2.4.2
+  resolution: "rate-limiter-flexible@npm:2.4.2"
+  checksum: 039e58b664991963ba2668a83d0406a72e5822683103acbe416854deb92ed834b840ce6e0acfea35917d9b49685bd53946ae47435a9f5916c2e7550395dec9dc
   languageName: node
   linkType: hard
 
@@ -27716,17 +27764,6 @@ __metadata:
   peerDependencies:
     react: ^0.14.9 || ^15.3.0 || ^16.0.0
   checksum: b1b2ab15d0e7492be827576fa7238c11679b52495a640b1234400771fdeac9ded8909532135b4a84be28e21e63dc97d54758d08ba280f90409b54104730b29c0
-  languageName: node
-  linkType: hard
-
-"react-native-action-button@npm:2.8.5":
-  version: 2.8.5
-  resolution: "react-native-action-button@npm:2.8.5"
-  dependencies:
-    prop-types: ^15.5.10
-  peerDependencies:
-    react-native: ">=0.11"
-  checksum: e5f8236c9980e491daff3707648ab3a0f4c79c3c4c102ec340d376e204a740b87486f8d4b5e2336e2ab29e5dcd4990693778513cb76e7cc5ddd00ac1c2166977
   languageName: node
   linkType: hard
 
@@ -27921,15 +27958,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 3797ec006c2d1f7b96c088c25d972113ef61f42e499f1bdbc553630acecab613d671a2c7d050029a7b01df144e83992ea2639b33255cfa487bf422943ded419b
-  languageName: node
-  linkType: hard
-
-"react-native-image-resizer@npm:1.4.5":
-  version: 1.4.5
-  resolution: "react-native-image-resizer@npm:1.4.5"
-  peerDependencies:
-    react-native: ">=v0.40.0"
-  checksum: c530b119f25c27b669148461554440acd05fb37f0a24a1afc3d58c861e426551c70c679983c0399034fd54ca3575c89d0863778c49295721cb33b65bbf3f0f37
   languageName: node
   linkType: hard
 
