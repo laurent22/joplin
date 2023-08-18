@@ -27,6 +27,7 @@ export interface NoteEditorProps {
 	isProvisional: boolean;
 	editorNoteStatuses: any;
 	syncStarted: boolean;
+	decryptionStarted: boolean;
 	bodyEditor: string;
 	notesParentType: string;
 	selectedNoteTags: any[];
