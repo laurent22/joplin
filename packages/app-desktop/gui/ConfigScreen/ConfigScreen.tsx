@@ -191,7 +191,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
 				settingComps.push(
 					<p key='missing-password-warning' style={warningStyle}>
-						{_('Warning: Missing password.')}
+						{_('%s: Missing password.', _('Warning'))}
 						{' '}
 						<MacOSMissingPasswordHelpLink
 							theme={theme}

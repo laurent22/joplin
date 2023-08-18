@@ -260,7 +260,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<br/>
 				<MacOSMissingPasswordHelpLink
 					theme={theme}
-					text={_('Help')}
+					text={_('%s: Missing password', _('Help'))}
 				/>
 			</p>
 		);
