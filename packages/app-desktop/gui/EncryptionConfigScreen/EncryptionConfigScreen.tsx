@@ -258,7 +258,10 @@ const EncryptionConfigScreen = (props: Props) => {
 				<br/>
 				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
 				<br/>
-				<MacOSMissingPasswordHelpLink theme={theme} />
+				<MacOSMissingPasswordHelpLink
+					theme={theme}
+					text={_('Help')}
+				/>
 			</p>
 		);
 
