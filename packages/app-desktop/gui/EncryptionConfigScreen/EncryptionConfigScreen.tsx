@@ -17,7 +17,7 @@ import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
 import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
-import MissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
+import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
 
 interface Props {
 	themeId: any;
@@ -258,7 +258,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<br/>
 				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
 				<br/>
-				<MissingPasswordHelpLink
+				<MacOSMissingPasswordHelpLink
 					theme={theme}
 					text={_('Help')}
 				/>

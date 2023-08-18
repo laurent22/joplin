@@ -14,7 +14,7 @@ const openMissingPasswordFAQ = () =>
 
 // A link to a specific part of the FAQ related to passwords being cleared when upgrading
 // to a MacOS/ARM release.
-const MissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
+const MacOSMissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
 	const macInfoLink = (
 		<StyledLink href="#"
 			onClick={openMissingPasswordFAQ}
@@ -32,4 +32,4 @@ const MissingPasswordHelpLink: React.FunctionComponent<Props> = props => {
 	return showMacInfoLink ? macInfoLink : null;
 };
 
-export default MissingPasswordHelpLink;
+export default MacOSMissingPasswordHelpLink;

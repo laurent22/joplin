@@ -21,7 +21,7 @@ import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/d
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
-import MissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
+import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -193,7 +193,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					<p key='missing-password-warning' style={warningStyle}>
 						{_('Warning: Missing password.')}
 						{' '}
-						<MissingPasswordHelpLink
+						<MacOSMissingPasswordHelpLink
 							theme={theme}
 							text={_('Help')}
 						/>
