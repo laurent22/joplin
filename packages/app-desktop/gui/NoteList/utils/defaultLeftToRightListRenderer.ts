@@ -15,6 +15,7 @@ interface Props {
 	};
 	item: {
 		size: {
+			width: number;
 			height: number;
 		};
 		selected: boolean;
@@ -32,6 +33,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 	dependencies: [
 		'item.index',
 		'item.selected',
+		'item.size.width',
 		'item.size.height',
 		'note.body',
 		'note.id',
@@ -93,6 +95,11 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					padding-right: 4px;
 					color: var(--joplin-color);
 				}
+
+				> .titlecontent {
+					word-break: break-all;
+					overflow: hidden;
+				}
 			}
 		}
 
@@ -127,7 +134,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			{{/note.is_todo}}	
 			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{item.index}} {{{note.titleHtml}}}<br/><br/>{{notePreview}}</span>
+				<div class="titlecontent" style="width: {{contentWidth}}px; height: {{contentHeight}}px">{{item.index}} {{{note.titleHtml}}}<br/><br/>{{notePreview}}</div>
 			</a>
 		</div>
 	`,
@@ -147,7 +154,9 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 
 		return {
 			...props,
-			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body),
+			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
+			contentWidth: props.item.size.width - 32,
+			contentHeight: props.item.size.height - 32,
 		};
 	},
 };
