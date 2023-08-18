@@ -135,7 +135,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 				label: _('Email'),
 			},
 			{
-				name: 'account',
+				name: 'account_type',
 				label: _('Account'),
 			},
 			{
@@ -143,15 +143,15 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 				label: _('Max Item Size'),
 			},
 			{
-				name: 'total_size',
+				name: 'total_item_size',
 				label: _('Total Size'),
 			},
 			{
-				name: 'max_total_size',
+				name: 'max_total_item_size',
 				label: _('Max Total Size'),
 			},
 			{
-				name: 'can_share',
+				name: 'can_share_folder',
 				label: _('Can Share'),
 			},
 		],
