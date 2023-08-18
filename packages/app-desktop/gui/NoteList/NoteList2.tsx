@@ -173,7 +173,7 @@ const NoteList = (props: Props) => {
 
 	const renderFiller = (key: string, style: React.CSSProperties) => {
 		if (!props.notes.length) return null;
-		if (style.height <= 0) return null;
+		if (style.height as number <= 0) return null;
 		return <div key={key} style={style}></div>;
 	};
 
