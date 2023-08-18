@@ -2840,6 +2840,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bam.tech/react-native-image-resizer@npm:3.0.5":
+  version: 3.0.5
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.5"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: f555bd10aafab1a797b6f5142e59b1bb11f229b61d35c3e6c9d734bbd4999f97bcc86853f69965d758ca872aad024add7a852041da498b177eee923ef82e506d
+  languageName: node
+  linkType: hard
+
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
   resolution: "@bcoe/v8-coverage@npm:0.2.3"
@@ -4502,6 +4512,7 @@ __metadata:
     "@babel/core": 7.20.2
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.0
+    "@bam.tech/react-native-image-resizer": 3.0.5
     "@codemirror/commands": 6.2.2
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.3
@@ -4576,7 +4587,6 @@ __metadata:
     react-native-gesture-handler: 2.12.0
     react-native-get-random-values: 1.9.0
     react-native-image-picker: 5.6.0
-    react-native-image-resizer: 1.4.5
     react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 15.0.1
     react-native-paper: 5.9.1
@@ -27909,15 +27919,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 3797ec006c2d1f7b96c088c25d972113ef61f42e499f1bdbc553630acecab613d671a2c7d050029a7b01df144e83992ea2639b33255cfa487bf422943ded419b
-  languageName: node
-  linkType: hard
-
-"react-native-image-resizer@npm:1.4.5":
-  version: 1.4.5
-  resolution: "react-native-image-resizer@npm:1.4.5"
-  peerDependencies:
-    react-native: ">=v0.40.0"
-  checksum: c530b119f25c27b669148461554440acd05fb37f0a24a1afc3d58c861e426551c70c679983c0399034fd54ca3575c89d0863778c49295721cb33b65bbf3f0f37
   languageName: node
   linkType: hard
 

@@ -36,7 +36,7 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const ImageResizer = require('react-native-image-resizer').default;
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
@@ -586,7 +586,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info(`Resizing image ${localFilePath}`);
-			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
+			const resizedImage = await ImageResizer.createResizedImage(
+				localFilePath,
+				dimensions.width,
+				dimensions.height,
+				format,
+				85, // quality
+				undefined, // rotation
+				undefined, // outputPath
+				true // keep metadata
+			);
 
 			const resizedImagePath = resizedImage.uri;
 			reg.logger().info('Resized image ', resizedImagePath);
