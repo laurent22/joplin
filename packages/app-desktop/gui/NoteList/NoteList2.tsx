@@ -40,19 +40,28 @@ const NoteList = (props: Props) => {
 		return listRenderer.itemSize;
 	}, [listRenderer.itemSize]);
 
+	const itemsPerLine = useMemo(() => {
+		if (listRenderer.flow === ItemFlow.TopToBottom) {
+			return 1;
+		} else {
+			return Math.max(1, Math.floor(props.size.width / itemSize.width));
+		}
+	}, [listRenderer.flow, props.size.width, itemSize.width]);
+
 	const { scrollTop, onScroll, scrollNoteIndex, makeItemIndexVisible } = useScroll(
+		itemsPerLine,
 		props.notes.length,
 		itemSize,
 		props.size,
 		listRef
 	);
 
-	const [, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
+	const [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
+		itemsPerLine,
 		scrollTop,
 		props.size,
 		itemSize,
-		props.notes.length,
-		listRenderer.flow
+		props.notes.length
 	);
 
 	const focusNote = useFocusNote(itemRefs);

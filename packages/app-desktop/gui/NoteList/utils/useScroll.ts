@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import { Size } from '@joplin/utils/types';
 import { useCallback, useState, useRef, useEffect, useMemo } from 'react';
 
-const useScroll = (noteCount: number, itemSize: Size, listSize: Size, listRef: React.MutableRefObject<HTMLDivElement>) => {
+const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, listSize: Size, listRef: React.MutableRefObject<HTMLDivElement>) => {
 	const [scrollTop, setScrollTop] = useState(0);
 	const lastScrollSetTime = useRef(0);
 
@@ -88,18 +88,22 @@ const useScroll = (noteCount: number, itemSize: Size, listSize: Size, listRef: R
 	}, [noteCount]);
 
 	const makeItemIndexVisible = useCallback((itemIndex: number) => {
-		const topFloat = scrollTop / itemSize.height;
-		const bottomFloat = (scrollTop + listSize.height - itemSize.height) / itemSize.height;
+		const lineTopFloat = scrollTop / itemSize.height;
+		const topFloat = lineTopFloat * itemsPerLine; // scrollTop / itemSize.height;
+		const lineBottomFloat = (scrollTop + listSize.height - itemSize.height) / itemSize.height;
+		const bottomFloat = lineBottomFloat * itemsPerLine; // (scrollTop + listSize.height - itemSize.height) / itemSize.height;
 		const top = Math.min(noteCount - 1, Math.floor(topFloat) + 1);
 		const bottom = Math.max(0, Math.floor(bottomFloat));
 
 		if (itemIndex >= top && itemIndex <= bottom) return;
 
+		const lineIndex = Math.floor(itemIndex / itemsPerLine);
+
 		let newScrollTop = 0;
 		if (itemIndex < top) {
-			newScrollTop = itemSize.height * itemIndex;
+			newScrollTop = itemSize.height * lineIndex;
 		} else {
-			newScrollTop = itemSize.height * (itemIndex + 1) - listSize.height;
+			newScrollTop = itemSize.height * (lineIndex + 1) - listSize.height;
 		}
 
 		if (newScrollTop < 0) newScrollTop = 0;
@@ -107,7 +111,7 @@ const useScroll = (noteCount: number, itemSize: Size, listSize: Size, listRef: R
 
 		setScrollTop(newScrollTop);
 		setScrollTopLikeYouMeanIt(newScrollTop);
-	}, [noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, setScrollTopLikeYouMeanIt]);
+	}, [itemsPerLine, noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, setScrollTopLikeYouMeanIt]);
 
 	const onScroll = useCallback((event: any) => {
 		// Ignore the scroll event if it has just been set programmatically.

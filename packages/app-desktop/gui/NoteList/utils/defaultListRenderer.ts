@@ -39,7 +39,8 @@ const defaultItemRenderer: ListRenderer = {
 		'note.todo_completed',
 	],
 
-	itemCss: `			
+	itemCss: // css
+		`	
 		&:before {
 			content: '';
 			border-bottom: 1px solid var(--joplin-divider-color);
@@ -115,7 +116,8 @@ const defaultItemRenderer: ListRenderer = {
 		}
 	`,
 
-	itemTemplate: `
+	itemTemplate: // html
+		`
 		<div class="content -default {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">

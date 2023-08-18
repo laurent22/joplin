@@ -1,16 +1,7 @@
 import { Size } from '@joplin/utils/types';
 import { useMemo } from 'react';
-import { ItemFlow } from './types';
 
-const useVisibleRange = (scrollTop: number, listSize: Size, itemSize: Size, noteCount: number, flow: ItemFlow) => {
-	const itemsPerLine = useMemo(() => {
-		if (flow === ItemFlow.TopToBottom) {
-			return 1;
-		} else {
-			return Math.max(1, Math.floor(listSize.width / itemSize.width));
-		}
-	}, [flow, listSize.width, itemSize.width]);
-
+const useVisibleRange = (itemsPerLine: number, scrollTop: number, listSize: Size, itemSize: Size, noteCount: number) => {
 	const startLineIndexFloat = useMemo(() => {
 		return scrollTop / itemSize.height;
 	}, [scrollTop, itemSize.height]);
@@ -60,7 +51,7 @@ const useVisibleRange = (scrollTop: number, listSize: Size, itemSize: Size, note
 	// console.info('totalLineCount', totalLineCount);
 	// console.info('visibleItemCount', visibleItemCount);
 
-	return [itemsPerLine, startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount];
+	return [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount];
 };
 
 export default useVisibleRange;
