@@ -63,7 +63,7 @@ async function handleConfirmEmailNotification(ctx: AppContext): Promise<Notifica
 	if (!ctx.joplin.owner.email_confirmed) {
 		return {
 			id: 'confirmEmail',
-			messageHtml: renderMarkdown('An email has been sent to you containing an activation link to complete your registration.\n\nMake sure you click it to secure your account and keep access to it.'),
+			messageHtml: renderMarkdown(`An email has been sent to you containing an activation link to complete your registration. If you did not receive it, you may send it again from [your profile page](${profileUrl()}).\n\nMake sure you click it to secure your account and keep access to it.`),
 			levelClassName: levelClassName(NotificationLevel.Important),
 			closeUrl: '',
 		};
