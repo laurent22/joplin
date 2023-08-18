@@ -100,7 +100,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
 	const showDisabled = ctx.query.show_disabled === '1';
-	const searchQuery = ctx.query.query || '';
+	const searchQuery = (ctx.query.query && ctx.query.query.toString().toLowerCase()) || '';
 
 	const pagination = makeTablePagination(ctx.query, 'full_name', PaginationOrderDir.ASC);
 	pagination.limit = 1000;
@@ -112,7 +112,9 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 
 			if (searchQuery) {
 				void query.where(qb => {
-					void qb.whereRaw('full_name like ?', [`%${searchQuery}%`]).orWhereRaw('email like ?', [`%${searchQuery}%`]);
+					void qb
+						.whereRaw('lower(full_name) like ?', [`%${searchQuery}%`])
+						.orWhereRaw('lower(email) like ?', [`%${searchQuery}%`]);
 				});
 			}
 
