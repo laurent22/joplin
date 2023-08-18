@@ -90,6 +90,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.csrfTag = await createCsrfTag(ctx);
+	view.content.showSendAccountConfirmationEmailButton = !user.email_confirmed;
 
 	if (subscription) {
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
@@ -213,6 +214,7 @@ interface FormFields {
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	stop_impersonate_button: string;
+	send_account_confirmation_email: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -246,6 +248,8 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			// that user, except the current one (otherwise they would be
 			// logged out).
 			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+		} else if (fields.send_account_confirmation_email) {
+			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
