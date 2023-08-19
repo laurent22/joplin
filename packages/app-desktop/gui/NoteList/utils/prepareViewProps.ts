@@ -3,7 +3,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 
-const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, itemIndex: number, noteTitleHtml: string, noteIsWatched: boolean) => {
+const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, noteTitleHtml: string, noteIsWatched: boolean) => {
 	const output: any = {};
 
 	for (const dep of dependencies) {
@@ -42,11 +42,6 @@ const prepareViewProps = async (dependencies: ListRendererDepependency[], note: 
 		if (dep === 'item.selected') {
 			if (!output.item) output.item = {};
 			output.item.selected = selected;
-		}
-
-		if (dep === 'item.index') {
-			if (!output.item) output.item = {};
-			output.item.index = itemIndex;
 		}
 	}
 

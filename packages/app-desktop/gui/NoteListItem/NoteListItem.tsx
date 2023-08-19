@@ -11,7 +11,6 @@ interface NoteItemProps {
 	dragIndex: number;
 	flow: ItemFlow;
 	highlightedWords: string[];
-	idPrefix: string;
 	index: number;
 	isProvisional: boolean;
 	itemSize: Size;
@@ -30,10 +29,12 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	const elementId = `list-note-${props.noteId}`;
 
 	const onCheckboxChange: OnCheckboxChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		const internalId: string = event.currentTarget.getAttribute('id');
-		const userId = internalId.substring(props.idPrefix.length);
-		void props.onChange({ noteId: props.noteId }, userId, { value: event.currentTarget.checked });
-	}, [props.onChange, props.noteId, props.idPrefix]);
+		void props.onChange(
+			{ noteId: props.noteId },
+			event.currentTarget.getAttribute('data-id'),
+			{ value: event.currentTarget.checked }
+		);
+	}, [props.onChange, props.noteId]);
 
 	const rootElement = useRootElement(elementId);
 
@@ -47,7 +48,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.flow
 	);
 
-	useItemEventHandlers(rootElement, itemElement, props.idPrefix, onCheckboxChange);
+	useItemEventHandlers(rootElement, itemElement, onCheckboxChange);
 
 	const style = useMemo(() => {
 		let dragItemPosition = '';

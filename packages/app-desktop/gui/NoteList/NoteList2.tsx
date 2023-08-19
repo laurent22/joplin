@@ -8,7 +8,6 @@ import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
-// import defaultListRenderer from './utils/defaultListRenderer';
 import NoteListItem from '../NoteListItem/NoteListItem';
 import useRenderedNotes from './utils/useRenderedNotes';
 import useItemCss from './utils/useItemCss';
@@ -24,24 +23,18 @@ import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
 import defaultLeftToRightItemRenderer from './utils/defaultLeftToRightListRenderer';
+// import defaultListRenderer from './utils/defaultListRenderer';
 const { connect } = require('react-redux');
 
 const commands = {
 	focusElementNoteList,
 };
 
-const replaceElementIds = (css: string, idPrefix: string) => {
-	return css.replace(/#([a-zA-Z0-9\-_]+)/g, `#${idPrefix}$1`);
-};
-
 const NoteList = (props: Props) => {
-	const idPrefix = 'user-note-list-item-';
 	const listRef = useRef(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
-	const listRenderer = {
-		...defaultLeftToRightItemRenderer,
-		itemCss: replaceElementIds(defaultLeftToRightItemRenderer.itemCss, idPrefix),
-	};
+	const listRenderer = defaultLeftToRightItemRenderer;
+	// const listRenderer = defaultListRenderer;
 
 	const itemSize: Size = useMemo(() => {
 		return listRenderer.itemSize;
@@ -208,7 +201,6 @@ const NoteList = (props: Props) => {
 					index={i}
 					dragIndex={dragOverTargetNoteIndex}
 					noteCount={props.notes.length}
-					idPrefix={idPrefix}
 					itemSize={itemSize}
 					noteHtml={renderedNote ? renderedNote.html : ''}
 					noteId={note.id}
@@ -249,28 +241,28 @@ const NoteList = (props: Props) => {
 
 		if (listRenderer.flow === ItemFlow.LeftToRight) {
 			output.flexFlow = 'row wrap';
+		} else {
+			output.flexDirection = 'column';
 		}
 
 		return output;
 	}, [listRenderer.flow]);
 
 	return (
-		<div>
-			<div
-				className="note-list"
-				style={noteListStyle}
-				ref={listRef}
-				onScroll={onScroll}
-				onKeyDown={onKeyDown}
-				onDrop={onDrop}
-			>
-				{renderEmptyList()}
-				{renderFiller('top', topFillerStyle)}
-				<div className="notes" style={notesStyle}>
-					{renderNotes()}
-				</div>
-				{renderFiller('bottom', bottomFillerStyle)}
+		<div
+			className="note-list"
+			style={noteListStyle}
+			ref={listRef}
+			onScroll={onScroll}
+			onKeyDown={onKeyDown}
+			onDrop={onDrop}
+		>
+			{renderEmptyList()}
+			{renderFiller('top', topFillerStyle)}
+			<div className="notes" style={notesStyle}>
+				{renderNotes()}
 			</div>
+			{renderFiller('bottom', bottomFillerStyle)}
 		</div>
 	);
 };

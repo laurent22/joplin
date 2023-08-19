@@ -52,7 +52,6 @@ export type ListRendererDepependency =
 	'item.size.width' |
 	'item.size.height' |
 	'item.selected' |
-	'item.index' |
 	'note.titleHtml' |
 	'note.isWatched';
 

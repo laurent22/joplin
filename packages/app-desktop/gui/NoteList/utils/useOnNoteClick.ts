@@ -7,6 +7,12 @@ const useOnNoteClick = (dispatch: Dispatch, focusNote: FocusNote) => {
 	const onNoteClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
 		const noteId = event.currentTarget.getAttribute('data-id');
 
+		const targetTagName = event.target ? (event.target as any).tagName : '';
+
+		// If we are for example on a checkbox, don't process the click since it
+		// should be handled by the checkbox onChange handler.
+		if (['INPUT'].includes(targetTagName)) return;
+
 		focusNote(noteId);
 
 		if (event.ctrlKey || event.metaKey) {

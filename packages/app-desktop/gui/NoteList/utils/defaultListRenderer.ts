@@ -28,7 +28,6 @@ const defaultItemRenderer: ListRenderer = {
 	},
 
 	dependencies: [
-		'item.index',
 		'item.selected',
 		'item.size.height',
 		'note.id',
@@ -58,7 +57,7 @@ const defaultItemRenderer: ListRenderer = {
 			background-color: var(--joplin-background-color-hover3);
 		}
 	
-		> .content.-default {
+		> .content {
 			display: flex;
 			box-sizing: border-box;
 			position: relative;
@@ -118,10 +117,10 @@ const defaultItemRenderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="content -default {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
-					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}	
 			<div class="title" draggable="true" data-id="{{note.id}}">

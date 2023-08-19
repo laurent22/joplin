@@ -24,7 +24,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 	useAsyncEffect(async (event) => {
 		if (event.cancelled) return;
 
-		const renderNote = async (note: NoteEntity, noteIndex: number): Promise<void> => {
+		const renderNote = async (note: NoteEntity): Promise<void> => {
 			const isSelected = selectedNoteIds.includes(note.id);
 			const isWatched = watchedNoteFiles.includes(note.id);
 
@@ -46,7 +46,6 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 				note,
 				listRenderer.itemSize,
 				isSelected,
-				noteIndex,
 				titleHtml,
 				isWatched
 			);
@@ -71,7 +70,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 		const promises: Promise<void>[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
-			promises.push(renderNote(notes[i], i));
+			promises.push(renderNote(notes[i]));
 		}
 
 		await Promise.all(promises);

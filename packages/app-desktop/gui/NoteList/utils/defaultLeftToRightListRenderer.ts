@@ -31,7 +31,6 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 	},
 
 	dependencies: [
-		'item.index',
 		'item.selected',
 		'item.size.width',
 		'item.size.height',
@@ -63,7 +62,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			background-color: var(--joplin-background-color-hover3);
 		}
 	
-		> .content.-default {
+		> .content {
 			display: flex;
 			box-sizing: border-box;
 			position: relative;
@@ -72,6 +71,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			align-items: flex-start;
 			overflow-y: hidden;
 			flex-direction: column;
+			user-select: none;
 	
 			> .checkbox {
 				display: flex;
@@ -85,7 +85,6 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			> .title {
 				font-family: var(--joplin-font-family);
 				font-size: var(--joplin-font-size);
-				text-decoration: none;
 				color: var(--joplin-color);
 				cursor: default;
 				flex: 0;
@@ -93,7 +92,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 				align-items: flex-start;
 				margin-bottom: 8px;
 
-				> #todo-checkbox {
+				> .checkbox {
 					margin: 0 6px 0 0;
 				}
 
@@ -109,6 +108,14 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					text-overflow: ellipsis;
 					text-wrap: nowrap;
 				}
+			}
+
+			> .preview {
+				overflow-y: hidden;
+				font-family: var(--joplin-font-family);
+				font-size: var(--joplin-font-size);
+				color: var(--joplin-color);
+				cursor: default;
 			}
 		}
 
@@ -136,13 +143,13 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="content -default {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-			<div style="width: {{contentWidth}}px;" class="title" draggable="true" data-id="{{note.id}}">
+		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+			<div style="width: {{titleWidth}}px;" class="title" draggable="true" data-id="{{note.id}}">
 				{{#note.is_todo}}
-					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
-				<div class="titlecontent">{{item.index}} {{{note.titleHtml}}}</div>
+				<div class="titlecontent">{{{note.titleHtml}}}</div>
 			</div>
 			<div class="preview">{{notePreview}}</div>
 		</div>
@@ -164,8 +171,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		return {
 			...props,
 			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
-			contentWidth: props.item.size.width - 32,
-			contentHeight: props.item.size.height - 32,
+			titleWidth: props.item.size.width - 32,
 		};
 	},
 };
