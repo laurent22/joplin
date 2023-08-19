@@ -517,8 +517,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			/>
 		);
 
+		const showAsSidebar = windowWidth > sectionSelectorDesiredWidth * 2.5;
+		let currentSectionName = this.state.selectedSectionName;
+		if (showAsSidebar && !currentSectionName) {
+			currentSectionName = 'general';
+		}
+
 		let currentSection: ReactNode;
-		if (this.state.selectedSectionName) {
+		if (currentSectionName) {
 			const settingComps = shared.settingsToComponents2(
 				this, AppType.Mobile, settings, this.state.selectedSectionName
 
@@ -539,7 +545,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		let mainComponent;
-		if (windowWidth > sectionSelectorDesiredWidth * 2 && this.state.selectedSectionName) {
+		if (showAsSidebar && currentSectionName) {
 			mainComponent = (
 				<View style={{
 					flex: 1,
