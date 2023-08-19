@@ -133,6 +133,7 @@ packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/Sidebar.js
+packages/app-desktop/gui/ConfigScreen/controls/MissingPasswordHelpLink.js
 packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
