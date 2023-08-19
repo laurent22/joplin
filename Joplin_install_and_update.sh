@@ -25,6 +25,7 @@ SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
 INCLUDE_PRE_RELEASE=false
+INSTALL_DIR='~/.joplin'
 
 print() {
     if [[ "${SILENT}" == false ]] ; then
@@ -54,6 +55,7 @@ showHelp() {
     print "\t" "--force" "\t" "Always download the latest version"
     print "\t" "--silent" "\t" "Don't print any output"
     print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases" 
+    print "\t" "--install-dir" "\t" "Directory to install Joplin"
 
     if [[ ! -z $1 ]]; then
         print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -82,6 +84,7 @@ while getopts "${optspec}" OPT; do
     force )        FORCE=true ;;
     changelog )    SHOW_CHANGELOG=true ;;
     prerelease )   INCLUDE_PRE_RELEASE=true ;;
+    install-dir )  INSTALL_DIR=${OPTARG} ;;
     [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
     \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
   esac
@@ -140,17 +143,17 @@ else
 fi
 
 # Check if it's in the latest version
-if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
+if [[ -e ${INSTALL_DIR}/joplin/VERSION ]] && [[ $(< ${INSTALL_DIR}/joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
     print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
     ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
 else
-    [[ -e ~/.joplin/VERSION ]] && CURRENT_VERSION=$(< ~/.joplin/VERSION)
+    [[ -e ${INSTALL_DIR}/joplin/VERSION ]] && CURRENT_VERSION=$(< ${INSTALL_DIR}/joplin/VERSION)
     print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
 fi
 
 # Check if it's an update or a new install
 DOWNLOAD_TYPE="New"
-if [[ -f ~/.joplin/Joplin.AppImage ]]; then
+if [[ -f ${INSTALL_DIR}/joplin/Joplin.AppImage ]]; then
     DOWNLOAD_TYPE="Update"
 fi
 
@@ -163,16 +166,16 @@ wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 #-----------------------------------------------------
 print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
-rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
+rm -f ${INSTALL_DIR}/joplin/*.AppImage ~/.local/share/applications/joplin.desktop ${INSTALL_DIR}/joplin/VERSION
 
 # Creates the folder where the binary will be stored
-mkdir -p ~/.joplin/
+mkdir -p ${INSTALL_DIR}/joplin/
 
 # Download the latest version
-mv "${TEMP_DIR}/Joplin.AppImage" ~/.joplin/Joplin.AppImage
+mv "${TEMP_DIR}/Joplin.AppImage" ${INSTALL_DIR}/joplin/Joplin.AppImage
 
 # Gives execution privileges
-chmod +x ~/.joplin/Joplin.AppImage
+chmod +x ${INSTALL_DIR}/joplin/Joplin.AppImage
 
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
@@ -260,7 +263,7 @@ fi
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo "$RELEASE_VERSION" > ~/.joplin/VERSION
+echo "$RELEASE_VERSION" > ${INSTALL_DIR}/joplin/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
