@@ -1,4 +1,5 @@
 import { TaskId, TaskState } from '../services/database/types';
+import { ErrorBadRequest, ErrorCode } from '../utils/errors';
 import BaseModel from './BaseModel';
 
 export default class TaskStateModel extends BaseModel<TaskState> {
@@ -32,13 +33,13 @@ export default class TaskStateModel extends BaseModel<TaskState> {
 
 	public async start(taskId: TaskId) {
 		const state = await this.loadByTaskId(taskId);
-		if (state.running) throw new Error(`Task is already running: ${taskId}`);
+		if (state.running) throw new ErrorBadRequest(`Task is already running: ${taskId}`, { code: ErrorCode.TaskAlreadyRunning });
 		await this.save({ id: state.id, running: 1 });
 	}
 
 	public async stop(taskId: TaskId) {
 		const state = await this.loadByTaskId(taskId);
-		if (!state.running) throw new Error(`Task is not running: ${taskId}`);
+		if (!state.running) throw new ErrorBadRequest(`Task is not running: ${taskId}`, { code: ErrorCode.TaskAlreadyRunning });
 		await this.save({ id: state.id, running: 0 });
 	}
 

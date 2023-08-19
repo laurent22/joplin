@@ -5,7 +5,7 @@ import BaseService from './BaseService';
 import { Event, EventType, TaskId, TaskState } from './database/types';
 import { Services } from './types';
 import { _ } from '@joplin/lib/locale';
-import { ErrorNotFound } from '../utils/errors';
+import { ErrorCode, ErrorNotFound } from '../utils/errors';
 import { durationToMilliseconds } from '../utils/time';
 
 const cron = require('node-cron');
@@ -104,6 +104,16 @@ export default class TaskService extends BaseService {
 		};
 	}
 
+	public async resetInterruptedTasks() {
+		const taskStates = await this.models.taskState().all();
+		for (const taskState of taskStates) {
+			if (taskState.running) {
+				logger.warn(`Found a task that was in running state: ${this.taskDisplayString(taskState.task_id)} - resetting it.`);
+				await this.models.taskState().stop(taskState.task_id);
+			}
+		}
+	}
+
 	private taskById(id: TaskId): Task {
 		if (!this.tasks_[id]) throw new Error(`No such task: ${id}`);
 		return this.tasks_[id];
@@ -159,13 +169,28 @@ export default class TaskService extends BaseService {
 				interval = null;
 			}
 
+			const runTaskWithErrorChecking = async (taskId: TaskId) => {
+				try {
+					await this.runTask(taskId, RunType.Scheduled);
+				} catch (error) {
+					if (error.code === ErrorCode.TaskAlreadyRunning) {
+						// This is not critical but we should log a warning
+						// because it may mean that the interval is too tight,
+						// or the task is taking too long.
+						logger.warn(`Tried to start ${this.taskDisplayString(taskId)} but it was already running`);
+					} else {
+						logger.error(`Failed running task ${this.taskDisplayString(taskId)}`, error);
+					}
+				}
+			};
+
 			if (interval !== null) {
 				setInterval(async () => {
-					await this.runTask(Number(taskId), RunType.Scheduled);
+					await runTaskWithErrorChecking(Number(taskId));
 				}, interval);
 			} else {
 				cron.schedule(task.schedule, async () => {
-					await this.runTask(Number(taskId), RunType.Scheduled);
+					await runTaskWithErrorChecking(Number(taskId));
 				});
 			}
 		}

@@ -49,6 +49,10 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return true;
 	}
 
+	public static requiresPassword() {
+		return true;
+	}
+
 	public async fileApi(): Promise<FileApi> {
 		return super.fileApi();
 	}

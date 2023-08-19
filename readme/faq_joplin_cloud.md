@@ -18,7 +18,7 @@ Moreover, by getting a subscription you are supporting the development of the pr
 
 We offer a 50% Education Discount for students and teachers. To claim it, please contact us from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
 
-We may also offer bulk discounts for companies, associations and nonprofit organisations. Please [contact us](mailto:support@joplincloud.com) for more details.
+We may also offer bulk discounts for companies, associations and nonprofit organisations. Please [contact us](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/Aide.png) for more details.
 
 ## Where is Joplin Cloud data located?
 

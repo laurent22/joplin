@@ -20,7 +20,7 @@ const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../../base-screen.js');
 const { Dropdown } = require('../../Dropdown');
 const { themeStyle } = require('../../global-style.js');
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@joplin/lib/components/shared/config/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';

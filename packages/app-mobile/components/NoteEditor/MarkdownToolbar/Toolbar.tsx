@@ -1,6 +1,6 @@
 const React = require('react');
 
-import { ReactElement, useCallback, useState } from 'react';
+import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, ScrollView, View, ViewStyle } from 'react-native';
 import ToggleOverflowButton from './ToggleOverflowButton';
 import ToolbarButton, { buttonSize } from './ToolbarButton';
@@ -18,19 +18,22 @@ const Toolbar = (props: ToolbarProps) => {
 	const [overflowButtonsVisible, setOverflowPopupVisible] = useState(false);
 	const [maxButtonsEachSide, setMaxButtonsEachSide] = useState(0);
 
-	const allButtonSpecs = props.buttons.reduce((accumulator: ButtonSpec[], current: ButtonGroup) => {
-		const newItems: ButtonSpec[] = [];
-		for (const item of current.items) {
-			if (item.visible ?? true) {
-				newItems.push(item);
+	const allButtonSpecs = useMemo(() => {
+		const buttons = props.buttons.reduce((accumulator: ButtonSpec[], current: ButtonGroup) => {
+			const newItems: ButtonSpec[] = [];
+			for (const item of current.items) {
+				if (item.visible ?? true) {
+					newItems.push(item);
+				}
 			}
-		}
 
-		return accumulator.concat(...newItems);
-	}, []);
+			return accumulator.concat(...newItems);
+		}, []);
 
-	// Sort from highest priority to lowest
-	allButtonSpecs.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+		// Sort from highest priority to lowest
+		buttons.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+		return buttons;
+	}, [props.buttons]);
 
 	const allButtonComponents: ReactElement[] = [];
 	let key = 0;
@@ -67,7 +70,9 @@ const Toolbar = (props: ToolbarProps) => {
 	);
 
 	const mainButtons: ReactElement[] = [];
-	if (maxButtonsEachSide < allButtonComponents.length) {
+	if (maxButtonsEachSide >= allButtonComponents.length) {
+		mainButtons.push(...allButtonComponents);
+	} else if (maxButtonsEachSide > 0) {
 		// We want the menu to look something like this:
 		// 			B I (…) 🔍 ⌨
 		// where (…) shows/hides overflow.
@@ -77,7 +82,7 @@ const Toolbar = (props: ToolbarProps) => {
 		mainButtons.push(toggleOverflowButton);
 		mainButtons.push(...allButtonComponents.slice(-maxButtonsEachSide));
 	} else {
-		mainButtons.push(...allButtonComponents);
+		mainButtons.push(toggleOverflowButton);
 	}
 
 	const styles = props.styleSheet.styles;
