@@ -134,116 +134,19 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		}
 	`,
 
-	// itemCss: // css
-	// 	`
-	// 	&:before {
-	// 		content: '';
-	// 		border-bottom: 1px solid var(--joplin-divider-color);
-	// 		width: 90%;
-	// 		position: absolute;
-	// 		bottom: 0;
-	// 		left: 5%;
-	// 	}
-
-	// 	> .content.-selected {
-	// 		background-color: var(--joplin-selected-color);
-	// 	}
-
-	// 	&:hover {
-	// 		background-color: var(--joplin-background-color-hover3);
-	// 	}
-
-	// 	> .content.-default {
-	// 		display: flex;
-	// 		box-sizing: border-box;
-	// 		position: relative;
-	// 		width: 100%;
-	// 		padding: 16px;
-	// 		align-items: flex-start;
-	// 		overflow-y: hidden;
-
-	// 		> .checkbox {
-	// 			display: flex;
-	// 			align-items: center;
-
-	// 			> input {
-	// 				margin: 0px 10px 1px 0px;
-	// 			}
-	// 		}
-
-	// 		> .title {
-	// 			font-family: var(--joplin-font-family);
-	// 			font-size: var(--joplin-font-size);
-	// 			text-decoration: none;
-	// 			color: var(--joplin-color);
-	// 			cursor: default;
-	// 			flex: 1 1 0%;
-	// 			display: flex;
-	// 			align-items: center;
-
-	// 			> .watchedicon {
-	// 				display: none;
-	// 				padding-right: 4px;
-	// 				color: var(--joplin-color);
-	// 			}
-
-	// 			> .titlecontent {
-	// 				word-break: break-all;
-	// 				overflow: hidden;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	> .content.-shared {
-	// 		> .title {
-	// 			color: var(--joplin-color-warn3);
-	// 		}
-	// 	}
-
-	// 	> .content.-completed {
-	// 		> .title {
-	// 			opacity: 0.5;
-	// 			text-decoration: line-through;
-	// 		}
-	// 	}
-
-	// 	> .content.-watched {
-	// 		> .title {
-	// 			> .watchedicon {
-	// 				display: inline;
-	// 			}
-	// 		}
-	// 	}
-	// `,
-
 	itemTemplate: // html
 		`
 		<div class="content -default {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-			<a href="#" style="width: {{contentWidth}}px;" class="title" draggable="true" data-id="{{note.id}}">
+			<div style="width: {{contentWidth}}px;" class="title" draggable="true" data-id="{{note.id}}">
 				{{#note.is_todo}}
-				<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
 				<div class="titlecontent">{{item.index}} {{{note.titleHtml}}}</div>
-			</a>
+			</div>
 			<div class="preview">{{notePreview}}</div>
 		</div>
 	`,
-
-	// itemTemplate: // html
-	// 	`
-	// 	<div class="content -default {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-	// 		{{#note.is_todo}}
-	// 			<div class="checkbox">
-	// 				<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
-	// 			</div>
-	// 		{{/note.is_todo}}
-	// 		<a href="#" class="title" draggable="true" data-id="{{note.id}}">
-	// 			<i class="watchedicon fa fa-share-square"></i>
-	// 			<div class="titlecontent" style="width: {{contentWidth}}px; height: {{contentHeight}}px">{{item.index}} {{{note.titleHtml}}}<br/><br/>{{notePreview}}</div>
-	// 		</a>
-	// 	</div>
-	// `,
 
 	onChange: async (context: Context, elementId: string, event: OnChangeEvent) => {
 		if (elementId === 'todo-checkbox') {

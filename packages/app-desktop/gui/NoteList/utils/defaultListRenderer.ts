@@ -124,10 +124,10 @@ const defaultItemRenderer: ListRenderer = {
 					<input id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}	
-			<a href="#" class="title" draggable="true" data-id="{{note.id}}">
+			<div class="title" draggable="true" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
 				<span>{{{note.titleHtml}}}</span>
-			</a>
+			</div>
 		</div>
 	`,
 
