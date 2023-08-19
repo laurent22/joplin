@@ -4650,7 +4650,7 @@ __metadata:
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
     standard: 17.1.0
-    tap: 16.3.7
+    tap: 16.3.8
   languageName: unknown
   linkType: soft
 
@@ -31738,9 +31738,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tap@npm:16.3.7":
-  version: 16.3.7
-  resolution: "tap@npm:16.3.7"
+"tap@npm:16.3.8":
+  version: 16.3.8
+  resolution: "tap@npm:16.3.8"
   dependencies:
     "@isaacs/import-jsx": ^4.0.1
     "@types/react": ^17.0.52
@@ -31784,7 +31784,7 @@ __metadata:
       optional: true
   bin:
     tap: bin/run.js
-  checksum: aed5f74698a0d90c5c7e12f07f2b543aa517c4e4f0c54fdbe7a19397448a18bb2ac8a879be923f72ee36aea7fb324c578ed90005ad10cd5aa794018cd002c3f3
+  checksum: b63e064f1ea20aa4cbe8cd40fbe780def9757b637caaae8ee24d96b184d8627421045dd56168b21715f6ebff77e88db774cda0b80af113ae33432641aefcbb58
   languageName: node
   linkType: hard
 
