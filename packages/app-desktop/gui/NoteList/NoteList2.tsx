@@ -30,11 +30,18 @@ const commands = {
 	focusElementNoteList,
 };
 
+const replaceElementIds = (css: string, idPrefix: string) => {
+	return css.replace(/#([a-zA-Z0-9\-_]+)/g, `#${idPrefix}$1`);
+};
+
 const NoteList = (props: Props) => {
+	const idPrefix = 'user-note-list-item-';
 	const listRef = useRef(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
-
-	const listRenderer = defaultLeftToRightItemRenderer;
+	const listRenderer = {
+		...defaultLeftToRightItemRenderer,
+		itemCss: replaceElementIds(defaultLeftToRightItemRenderer.itemCss, idPrefix),
+	};
 
 	const itemSize: Size = useMemo(() => {
 		return listRenderer.itemSize;
@@ -201,6 +208,7 @@ const NoteList = (props: Props) => {
 					index={i}
 					dragIndex={dragOverTargetNoteIndex}
 					noteCount={props.notes.length}
+					idPrefix={idPrefix}
 					itemSize={itemSize}
 					noteHtml={renderedNote ? renderedNote.html : ''}
 					noteId={note.id}
