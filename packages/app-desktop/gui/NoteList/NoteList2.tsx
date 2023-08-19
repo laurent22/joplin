@@ -81,7 +81,6 @@ const NoteList = (props: Props) => {
 		endNoteIndex,
 		props.notes,
 		props.selectedNoteIds,
-		itemSize,
 		listRenderer,
 		props.highlightedWords,
 		props.watchedNoteFiles

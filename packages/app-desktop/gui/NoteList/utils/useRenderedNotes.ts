@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ListRenderer } from './types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import { Size } from '@joplin/utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import * as Mustache from 'mustache';
 import { createHash } from 'crypto';
@@ -19,17 +18,25 @@ const hashContent = (content: any) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: NoteEntity[], selectedNoteIds: string[], itemSize: Size, listRenderer: ListRenderer, highlightedWords: string[], watchedNoteFiles: string[]) => {
+const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: NoteEntity[], selectedNoteIds: string[], listRenderer: ListRenderer, highlightedWords: string[], watchedNoteFiles: string[]) => {
 	const [renderedNotes, setRenderedNotes] = useState<Record<string, RenderedNote>>({});
 
 	useAsyncEffect(async (event) => {
 		if (event.cancelled) return;
 
 		const renderNote = async (note: NoteEntity, noteIndex: number): Promise<void> => {
-			const viewHash = hashContent({
-				...listRenderer.dependencies,
-				updated_time: note.updated_time,
-			});
+			const isSelected = selectedNoteIds.includes(note.id);
+			const isWatched = watchedNoteFiles.includes(note.id);
+
+			// Note: with this hash we're assuming that the list renderer
+			// properties never changes. It means that later if we support
+			// dynamic list renderers, we should include these into the hash.
+			const viewHash = hashContent([
+				note.updated_time,
+				isSelected,
+				isWatched,
+				highlightedWords,
+			]);
 
 			if (renderedNotes[note.id] && renderedNotes[note.id].hash === viewHash) return null;
 
@@ -37,11 +44,11 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 			const viewProps = await prepareViewProps(
 				listRenderer.dependencies,
 				note,
-				itemSize,
-				selectedNoteIds.includes(note.id),
+				listRenderer.itemSize,
+				isSelected,
 				noteIndex,
 				titleHtml,
-				watchedNoteFiles.includes(note.id)
+				isWatched
 			);
 			const view = await listRenderer.onRenderNote(viewProps);
 
@@ -68,7 +75,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 		}
 
 		await Promise.all(promises);
-	}, [startNoteIndex, endNoteIndex, notes, selectedNoteIds, itemSize, listRenderer, renderedNotes, watchedNoteFiles]);
+	}, [startNoteIndex, endNoteIndex, notes, selectedNoteIds, listRenderer, renderedNotes, watchedNoteFiles]);
 
 	return renderedNotes;
 };
