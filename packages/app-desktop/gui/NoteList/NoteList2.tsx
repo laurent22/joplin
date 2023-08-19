@@ -48,7 +48,7 @@ const NoteList = (props: Props) => {
 		}
 	}, [listRenderer.flow, props.size.width, itemSize.width]);
 
-	const { scrollTop, onScroll, scrollNoteIndex, makeItemIndexVisible } = useScroll(
+	const { scrollTop, onScroll, makeItemIndexVisible } = useScroll(
 		itemsPerLine,
 		props.notes.length,
 		itemSize,
@@ -105,12 +105,14 @@ const NoteList = (props: Props) => {
 	const onKeyDown = useOnKeyDown(
 		props.selectedNoteIds,
 		moveNote,
-		scrollNoteIndex,
 		makeItemIndexVisible,
 		focusNote,
 		props.notes,
 		props.dispatch,
-		visibleItemCount
+		visibleItemCount,
+		props.notes.length,
+		listRenderer.flow,
+		itemsPerLine
 	);
 
 	useItemCss(listRenderer.itemCss);

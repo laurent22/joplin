@@ -57,36 +57,6 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		setScrollTopLikeYouMeanItTimer.current = null;
 	}, []);
 
-	const scrollNoteIndex = useCallback((visibleItemCount: number, keyCode: number, ctrlKey: boolean, metaKey: boolean, noteIndex: number) => {
-		if (keyCode === 33) {
-			// Page Up
-			noteIndex -= (visibleItemCount - 1);
-
-		} else if (keyCode === 34) {
-			// Page Down
-			noteIndex += (visibleItemCount - 1);
-
-		} else if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
-			// CTRL+End, CMD+Down
-			noteIndex = noteCount - 1;
-
-		} else if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
-			// CTRL+Home, CMD+Up
-			noteIndex = 0;
-
-		} else if (keyCode === 38 && !metaKey) {
-			// Up
-			noteIndex -= 1;
-
-		} else if (keyCode === 40 && !metaKey) {
-			// Down
-			noteIndex += 1;
-		}
-		if (noteIndex < 0) noteIndex = 0;
-		if (noteIndex > noteCount - 1) noteIndex = noteCount - 1;
-		return noteIndex;
-	}, [noteCount]);
-
 	const makeItemIndexVisible = useCallback((itemIndex: number) => {
 		const lineTopFloat = scrollTop / itemSize.height;
 		const topFloat = lineTopFloat * itemsPerLine; // scrollTop / itemSize.height;
@@ -122,7 +92,6 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 	return {
 		scrollTop,
 		onScroll,
-		scrollNoteIndex,
 		makeItemIndexVisible,
 	};
 };
