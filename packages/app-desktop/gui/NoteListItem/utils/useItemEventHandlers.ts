@@ -1,16 +1,9 @@
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import { msleep } from '@joplin/utils/time';
 import { OnCheckboxChange } from './types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const useItemEventHandlers = (rootElement: HTMLDivElement, itemElement: HTMLDivElement, idPrefix: string, onCheckboxChange: OnCheckboxChange) => {
-	const [modifiedInputs, setModifiedInputs] = useState<HTMLInputElement[]>([]);
-
-	useAsyncEffect(async (event) => {
-		if (!itemElement) return;
-
-		await msleep(1);
-		if (event.cancelled) return;
+	useEffect(() => {
+		if (!itemElement) return () => {};
 
 		const inputs = itemElement.getElementsByTagName('input');
 
@@ -28,24 +21,17 @@ const useItemEventHandlers = (rootElement: HTMLDivElement, itemElement: HTMLDivE
 
 		for (const input of inputs) {
 			if (input.type === 'checkbox') {
+				input.addEventListener('change', onCheckboxChange as any);
 				mods.push(input);
 			}
 		}
 
-		setModifiedInputs(mods);
-	}, [itemElement, idPrefix, rootElement]);
-
-	useEffect(() => {
-		for (const input of modifiedInputs) {
-			input.addEventListener('change', onCheckboxChange as any);
-		}
-
 		return () => {
-			for (const input of modifiedInputs) {
+			for (const input of mods) {
 				input.removeEventListener('change', onCheckboxChange as any);
 			}
 		};
-	}, [modifiedInputs, onCheckboxChange]);
+	}, [itemElement, idPrefix, rootElement, onCheckboxChange]);
 };
 
 export default useItemEventHandlers;
