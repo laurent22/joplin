@@ -213,7 +213,7 @@ const Dropdown: React.FunctionComponent<DropdownProps> = props => {
 	const screenReaderCloseMenuButton = (
 		<TouchableWithoutFeedback
 			accessibilityRole='button'
-			onPress={()=> closeList()}
+			onPress={closeList}
 		>
 			<Text style={{
 				opacity: 0,

@@ -5,6 +5,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react-nativ
 import '@testing-library/jest-native';
 
 import Dropdown, { DropdownListItem } from './Dropdown';
+import { _ } from '@joplin/lib/locale';
 
 describe('Dropdown', () => {
 	it('should open the dropdown on click', async () => {
@@ -51,6 +52,41 @@ describe('Dropdown', () => {
 
 		await waitFor(() => {
 			expect(screen.queryByText('Item 301')).not.toBeNull();
+		});
+	});
+
+	it('should have a screen-reader-accessible close button', async () => {
+		const items: DropdownListItem[] = [
+			{ label: 'Test', value: '1' },
+			{ label: 'Test', value: '2' },
+			{ label: 'Test 3', value: '3' },
+		];
+
+		render(
+			<Dropdown
+				items={items}
+				selectedValue={null}
+			/>
+		);
+
+		// When no item is selected, should have the "..." label.
+		// Open the dropdown
+		fireEvent.press(screen.getByText('...'));
+
+		// Should be open
+		await waitFor(() => {
+			expect(screen.queryAllByText('Test')).toHaveLength(2);
+			expect(screen.queryAllByText('Test 3')).toHaveLength(1);
+		});
+
+		// Find the close button
+		const closeButton = screen.getByText(_('Close dropdown'));
+		fireEvent.press(closeButton);
+
+		// Should now be closed
+		await waitFor(() => {
+			expect(screen.queryByText('Test')).toBeNull();
+			expect(screen.queryByText('Test 3')).toBeNull();
 		});
 	});
 });
