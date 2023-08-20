@@ -11,14 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Douglas Leão <djlsplays@gmail.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Fernando Nagase <nagase.fernando@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -322,7 +324,7 @@ msgstr "Admin"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr "Dashboard de Admin "
+msgstr "Dashboard de Admin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:135
 msgid "Advanced options"
@@ -417,9 +419,8 @@ msgid "Aritim Dark"
 msgstr "Aritim Escuro"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:220
-#, fuzzy
 msgid "Attach"
-msgstr "Anexar..."
+msgstr "Anexar"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:59
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:615
@@ -1093,7 +1094,7 @@ msgstr "Itens remotos criados: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Created: "
-msgstr "Criado:"
+msgstr "Criado: "
 
 #: packages/app-cli/app/command-import.js:48
 #: packages/app-desktop/gui/ImportScreen.tsx:89
@@ -1238,9 +1239,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Deletar dados locais e reenviar do alvo de sincronização"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Excluir nota?"
+msgstr "Excluir nota"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1252,9 +1252,8 @@ msgid "Delete note?"
 msgstr "Excluir nota?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Excluir caderno?"
+msgstr "Excluir caderno"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1285,9 +1284,8 @@ msgid "Delete profile \"%s\""
 msgstr "Excluir a nota \"%s\"?"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "Excluir estas notas?"
+msgstr "Excluir as notas selecionadas"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:22
 #: packages/app-mobile/components/side-menu-content.tsx:159
@@ -1787,7 +1785,7 @@ msgstr "Chaves de criptografia"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 msgid "Encryption:"
-msgstr "Criptografia"
+msgstr "Criptografia:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
 msgid "End-to-end encryption"
@@ -1957,18 +1955,16 @@ msgid "File system"
 msgstr "Sistema de arquivos"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
-#, fuzzy
 msgid "Filter tags"
-msgstr "Novas tags:"
+msgstr "Filtrar tags"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:233
 msgid "Find and replace"
 msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "Encontrado: %d."
+msgstr "Buscar: "
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
@@ -3154,7 +3150,7 @@ msgstr "Abrir diretório de perfis"
 
 #: packages/lib/models/Setting.ts:434
 msgid "Open Sync Wizard..."
-msgstr "Abrir o assistente de sincronização"
+msgstr "Abrir o assistente de sincronização..."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:83
 msgid "Open..."
@@ -3439,9 +3435,8 @@ msgid "Profile name"
 msgstr "Perfil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Perfil"
+msgstr "Nome do perfil:"
 
 #: packages/lib/versionInfo.ts:64
 msgid "Profile Version: %s"
@@ -3714,9 +3709,8 @@ msgstr "Salvar alarme"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:103
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:110
-#, fuzzy
 msgid "Save as %s"
-msgstr "Salvar como..."
+msgstr "Salvar como %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:90
 msgid "Save as..."
@@ -3787,7 +3781,7 @@ msgstr "Selecionar emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:148
 msgid "Select file..."
-msgstr "Selecionar arquivo"
+msgstr "Selecionar arquivo..."
 
 #: packages/app-mobile/components/screens/folder.js:109
 #, fuzzy
@@ -3995,7 +3989,7 @@ msgstr "Formato da origem: \"%s\""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:151
 msgid "Source: "
-msgstr "Origem:"
+msgstr "Origem: "
 
 #: packages/lib/models/Setting.ts:1532
 msgid ""
@@ -4978,7 +4972,7 @@ msgstr "Itens remotos atualizados: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Updated: "
-msgstr "Atualizado:"
+msgstr "Atualizado: "
 
 #: packages/app-cli/app/command-import.js:49
 #: packages/app-desktop/gui/ImportScreen.tsx:90
@@ -5184,9 +5178,8 @@ msgstr ""
 "`mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Bem-vindo"
+msgstr "Bem-vindo!"
 
 #: packages/lib/models/Setting.ts:1114
 msgid "When creating a new note:"
