@@ -11,7 +11,7 @@ import { KeyboardEventKey } from '@joplin/lib/dom';
 
 const useOnKeyDown = (
 	selectedNoteIds: string[],
-	moveNote: (direction: number)=> void,
+	moveNote: (direction: number, inc: number)=> void,
 	makeItemIndexVisible: (itemIndex: number)=> void,
 	focusNote: FocusNote,
 	notes: NoteEntity[],
@@ -69,8 +69,20 @@ const useOnKeyDown = (
 		const noteIds = selectedNoteIds;
 		const key = event.key as KeyboardEventKey;
 
-		if ((key === 'ArrowDown' || key === 'ArrowUp') && event.altKey) {
-			await moveNote(key === 'ArrowDown' ? 1 : -1);
+		if (['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(key) && event.altKey) {
+			if (flow === ItemFlow.TopToBottom) {
+				await moveNote(key === 'ArrowDown' ? 1 : -1, 1);
+			} else {
+				if (key === 'ArrowRight') {
+					await moveNote(1, 1);
+				} else if (key === 'ArrowLeft') {
+					await moveNote(-1, 1);
+				} else if (key === 'ArrowUp') {
+					await moveNote(-1, itemsPerLine);
+				} else if (key === 'ArrowDown') {
+					await moveNote(1, itemsPerLine);
+				}
+			}
 			event.preventDefault();
 		} else if (noteIds.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
 			const noteId = noteIds[0];
@@ -129,7 +141,7 @@ const useOnKeyDown = (
 				type: 'NOTE_SELECT_ALL',
 			});
 		}
-	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, dispatch]);
+	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, dispatch, flow, itemsPerLine]);
 
 
 	return onKeyDown;
