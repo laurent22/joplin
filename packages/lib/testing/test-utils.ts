@@ -1,7 +1,7 @@
 /* eslint-disable require-atomic-updates */
 import BaseApplication from '../BaseApplication';
 import BaseModel from '../BaseModel';
-import Logger, { TargetType, LoggerWrapper, LogLevel } from '../Logger';
+import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/utils/Logger';
 import Setting from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';
@@ -34,13 +34,13 @@ const { FileApiDriverLocal } = require('../file-api-driver-local');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
 const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
-const { FileApiDriverAmazonS3 } = require('../file-api-driver-amazon-s3.js');
 import SyncTargetRegistry from '../SyncTargetRegistry';
 const SyncTargetMemory = require('../SyncTargetMemory.js');
 const SyncTargetFilesystem = require('../SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('../SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
+const SyncTargetWebDAV = require('../SyncTargetWebDAV.js');
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
 import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
@@ -59,10 +59,10 @@ import Synchronizer from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
 import { setRSA } from '../services/e2ee/ppk';
 const md5 = require('md5');
-const { S3Client } = require('@aws-sdk/client-s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
+import initLib from '../initLib';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -121,6 +121,7 @@ SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
@@ -173,6 +174,7 @@ logger.addTarget(TargetType.Console);
 logger.setLevel(LogLevel.Warn); // Set to DEBUG to display sync process in console
 
 Logger.initializeGlobalLogger(logger);
+initLib(logger);
 
 BaseItem.loadClass('Note', Note);
 BaseItem.loadClass('Folder', Folder);
@@ -211,7 +213,7 @@ function sleep(n: number) {
 	});
 }
 
-function msleep(ms: number) {
+function msleep(ms: number): Promise<void> {
 	// It seems setTimeout can sometimes last less time than the provided
 	// interval:
 	//
@@ -623,6 +625,13 @@ async function initFileApi() {
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('amazon_s3')) {
+		// (Most of?) the @aws-sdk libraries depend on an old version of uuid
+		// that doesn't work with jest (without converting ES6 exports to CommonJS).
+		//
+		// Require it dynamically so that this doesn't break test environments that
+		// aren't configured to do this conversion.
+		const { FileApiDriverAmazonS3 } = require('../file-api-driver-amazon-s3.js');
+		const { S3Client } = require('@aws-sdk/client-s3');
 
 		// We make sure for S3 tests run in band because tests
 		// share the same directory which will cause locking errors.
@@ -916,7 +925,7 @@ class TestApp extends BaseApplication {
 		if (!argv.includes('--profile')) {
 			argv = argv.concat(['--profile', `tests-build/profile/${uuid.create()}`]);
 		}
-		argv = await super.start(['', ''].concat(argv));
+		argv = await super.start(['', ''].concat(argv), { setupGlobalLogger: false });
 
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.

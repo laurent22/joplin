@@ -7,19 +7,19 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
-
+import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
-const bridge = require('@electron/remote').require('./bridge').default;
-const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
+import { Dispatch } from 'redux';
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 interface ContextMenuProps {
 	notes: any[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	inConflictFolder: boolean;
@@ -45,26 +45,26 @@ export default class NoteListUtils {
 
 		if (!hasEncrypted) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any)
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any)
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any)
 			);
 
 			if (singleNoteId) {
 				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId)));
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
 			}
 
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds)
+						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds) as any
 					)
 				);
 			} else {
@@ -125,7 +125,7 @@ export default class NoteListUtils {
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
+						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice()) as any
 					)
 				);
 			}
@@ -156,7 +156,7 @@ export default class NoteListUtils {
 
 			exportMenu.append(
 				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds)
+					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds) as any
 				)
 			);
 
@@ -167,7 +167,7 @@ export default class NoteListUtils {
 
 		menu.append(
 			new MenuItem(
-				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds)
+				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any
 			)
 		);
 
@@ -179,7 +179,7 @@ export default class NoteListUtils {
 
 			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
+					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds) as any)
 				);
 			}
 		}

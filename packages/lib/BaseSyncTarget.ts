@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import Synchronizer from './Synchronizer';
 import EncryptionService from './services/e2ee/EncryptionService';
 import shim from './shim';
@@ -23,6 +23,12 @@ export default class BaseSyncTarget {
 	}
 
 	public static supportsConfigCheck() {
+		return false;
+	}
+
+	// Returns true if the sync target expects a non-empty sync.{id}.password
+	// setting.
+	public static requiresPassword() {
 		return false;
 	}
 

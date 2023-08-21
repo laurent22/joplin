@@ -43,11 +43,6 @@ export interface CommandDeclaration {
 	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
 	iconName?: string;
 
-	// Will be used by TinyMCE (which doesn't support Font Awesome icons).
-	// Defaults to the "preferences" icon (a cog) if not specified.
-	// https://www.tiny.cloud/docs/advanced/editor-icon-identifiers/
-	tinymceIconName?: string;
-
 	// Same as `role` key in Electron MenuItem:
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
 	// Note that due to a bug in Electron, menu items with a role cannot
@@ -296,10 +291,10 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	public iconName(commandName: string, variant: string = null): string {
+	public iconName(commandName: string): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`No such command: ${commandName}`);
-		if (variant === 'tinymce') return command.declaration.tinymceIconName ? command.declaration.tinymceIconName : 'preferences';
+
 		return command.declaration.iconName;
 	}
 

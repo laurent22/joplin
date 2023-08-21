@@ -73,7 +73,7 @@ export default async (params: Params) => {
 			teamId: process.env.APPLE_ASC_PROVIDER,
 
 			tool: 'notarytool',
-		});
+		} as any);
 	} catch (error) {
 		console.error(error);
 		process.exit(1);

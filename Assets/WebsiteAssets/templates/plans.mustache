@@ -112,7 +112,7 @@
 			}).then(async function(result) {
 				if (!result.ok) {
 					console.error('Could not create Stripe checkout session', await result.text());
-					alert('The checkout session could not be created. Please contact support@joplincloud.com for support.');
+					alert('The checkout session could not be created. Please contact us on the forum for support.');
 				} else {
 					return result.json();
 				}

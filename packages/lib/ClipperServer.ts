@@ -1,5 +1,5 @@
 import Setting from './models/Setting';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import Api, { RequestFile } from './services/rest/Api';
 import ApiResponse from './services/rest/ApiResponse';
 const urlParser = require('url');
@@ -114,7 +114,7 @@ export default class ClipperServer {
 		} catch (error) {
 			this.setStartState(StartState.Idle);
 			this.logger().error(error);
-			return;
+			return null;
 		}
 
 		this.server_ = require('http').createServer();

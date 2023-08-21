@@ -115,15 +115,17 @@ export enum TaskId {
 	// Don't re-use any of these numbers, always add to it, as the ID is used in
 	// the database
 	DeleteExpiredTokens = 1,
-	UpdateTotalSizes = 2,
-	HandleOversizedAccounts = 3,
-	HandleBetaUserEmails = 4,
-	HandleFailedPaymentSubscriptions = 5,
-	DeleteExpiredSessions = 6,
-	CompressOldChanges = 7,
-	ProcessUserDeletions = 8,
-	AutoAddDisabledAccountsForDeletion = 9,
-	ProcessOrphanedItems = 10,
+	UpdateTotalSizes,
+	HandleOversizedAccounts,
+	HandleBetaUserEmails,
+	HandleFailedPaymentSubscriptions,
+	DeleteExpiredSessions,
+	CompressOldChanges,
+	ProcessUserDeletions,
+	AutoAddDisabledAccountsForDeletion,
+	ProcessOrphanedItems,
+	ProcessShares,
+	ProcessEmails,
 }
 
 // AUTO-GENERATED-TYPES
@@ -244,6 +246,7 @@ export interface User extends WithDates, WithUuid {
 	total_item_size?: number;
 	enabled?: number;
 	disabled_time?: number;
+	can_receive_folder?: number;
 }
 
 export interface UserFlag extends WithDates {
@@ -452,6 +455,7 @@ export const databaseSchema: DatabaseTables = {
 		total_item_size: { type: 'string' },
 		enabled: { type: 'number' },
 		disabled_time: { type: 'string' },
+		can_receive_folder: { type: 'number' },
 	},
 	user_flags: {
 		id: { type: 'number' },

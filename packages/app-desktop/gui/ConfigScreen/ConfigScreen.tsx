@@ -12,12 +12,17 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@joplin/lib/components/shared/config/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
+import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import shim from '@joplin/lib/shim';
+import StyledLink from '../style/StyledLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -106,6 +111,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
@@ -178,6 +184,34 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 			const statusStyle = { ...theme.textStyle, marginTop: 10 };
+			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
+
+			// Don't show the missing password warning if the user just changed the sync target (but hasn't
+			// saved yet).
+			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+				const openMissingPasswordFAQ = () =>
+					bridge().openExternal('https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
+
+				const macInfoLink = (
+					<StyledLink href="#"
+						onClick={openMissingPasswordFAQ}
+						style={theme.linkStyle}
+					>
+						{_('Help')}
+					</StyledLink>
+				);
+
+				// The FAQ section related to missing passwords is specific to MacOS/ARM -- only show it
+				// in that case.
+				const showMacInfoLink = shim.isMac() && process.arch === 'arm64';
+
+				settingComps.push(
+					<p key='missing-password-warning' style={warningStyle}>
+						{_('Warning: Missing password.')}{' '}{showMacInfoLink ? macInfoLink : null}
+					</p>
+				);
+			}
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
@@ -206,17 +240,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const advancedSettingsSectionStyle = { display: 'none' };
 
 		if (advancedSettingComps.length) {
-			const iconName = this.state.showAdvancedSettings ? 'fa fa-angle-down' : 'fa fa-angle-right';
-			// const advancedSettingsButtonStyle = { ...theme.buttonStyle,  marginBottom: 10  };
 			advancedSettingsButton = (
-				<div style={{ marginBottom: 10 }}>
-					<Button
-						level={ButtonLevel.Secondary}
-						onClick={() => shared.advancedSettingsButton_click(this)}
-						iconName={iconName}
-						title={_('Show Advanced Settings')}
-					/>
-				</div>
+				<ToggleAdvancedSettingsButton
+					onClick={() => shared.advancedSettingsButton_click(this)}
+					advancedSettingsVisible={this.state.showAdvancedSettings}
+				/>
 			);
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}

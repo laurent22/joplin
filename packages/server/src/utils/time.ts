@@ -1,14 +1,16 @@
 import dayjs = require('dayjs');
-import utc = require('dayjs/plugin/utc');
-import timezone = require('dayjs/plugin/timezone');
+import dayJsUtc = require('dayjs/plugin/utc');
+import dayJsDuration = require('dayjs/plugin/duration');
+import dayJsTimezone = require('dayjs/plugin/timezone');
 
 function defaultTimezone() {
 	return dayjs.tz.guess();
 }
 
 function initDayJs() {
-	dayjs.extend(utc);
-	dayjs.extend(timezone);
+	dayjs.extend(dayJsDuration);
+	dayjs.extend(dayJsUtc);
+	dayjs.extend(dayJsTimezone);
 	dayjs.tz.setDefault(defaultTimezone());
 }
 
@@ -22,8 +24,7 @@ export const Week = 7 * Day;
 export const Month = 30 * Day;
 
 export function msleep(ms: number) {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function) => {
+	return new Promise(resolve => {
 		setTimeout(() => {
 			resolve(null);
 		}, ms);
@@ -35,6 +36,16 @@ export function formatDateTime(ms: number | Date): string {
 	ms = ms instanceof Date ? ms.getTime() : ms;
 	return `${dayjs(ms).format('D MMM YY HH:mm:ss')} (${defaultTimezone()})`;
 }
+
+export const durationToMilliseconds = (durationIso8601: string) => {
+	const d = dayjs.duration(durationIso8601).asMilliseconds();
+	if (isNaN(d)) throw new Error(`Invalid ISO 8601 duration: ${durationIso8601}`);
+	return d;
+};
+
+export const isIso8601Duration = (s: string) => {
+	return s.startsWith('P');
+};
 
 // Use the utility functions below to easily measure performance of a block or
 // line of code.

@@ -1,7 +1,7 @@
 import { ModelType } from '../../BaseModel';
 import { FileApi, MultiPutItem } from '../../file-api';
 import JoplinError from '../../JoplinError';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../models/BaseItem';
 import { BaseItemEntity } from '../database/types';
 import { ApiCallFunction } from './utils/types';

@@ -2,7 +2,7 @@ import { knex, Knex } from 'knex';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
 
 // Make sure bigInteger values are numbers and not strings
@@ -336,6 +336,11 @@ export async function migrateList(db: DbConnection, asString = true) {
 
 	return output.map(l => `${l.done ? '✓' : '✗'} ${l.name}`).join('\n');
 }
+
+export const needsMigration = async (db: DbConnection) => {
+	const list = await migrateList(db, false) as Migration[];
+	return !!list.find(m => !m.done);
+};
 
 export async function nextMigration(db: DbConnection): Promise<string> {
 	const list = await migrateList(db, false) as Migration[];

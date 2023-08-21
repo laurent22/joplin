@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import LockHandler, { appTypeToLockType, hasActiveLock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import Setting, { AppType } from './models/Setting';
 import shim from './shim';
@@ -272,7 +272,7 @@ export default class Synchronizer {
 	}
 
 	public async cancel() {
-		if (this.cancelling_ || this.state() === 'idle') return;
+		if (this.cancelling_ || this.state() === 'idle') return null;
 
 		// Stop queue but don't set it to null as it may be used to
 		// retrieve the last few downloads.
@@ -452,6 +452,7 @@ export default class Synchronizer {
 			try {
 				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo);
+				eventManager.emit('sessionEstablished');
 
 				let syncTargetIsNew = false;
 

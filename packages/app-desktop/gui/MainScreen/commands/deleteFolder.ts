@@ -17,10 +17,12 @@ export const runtime = (): CommandRuntime => {
 			const folder = await Folder.load(folderId);
 			if (!folder) throw new Error(`No such folder: ${folderId}`);
 
-			const ok = bridge().showConfirmMessageBox(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32)), {
-				buttons: [_('Delete'), _('Cancel')],
-				defaultId: 1,
-			});
+			let deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
+			if (folderId === context.state.settings['sync.10.inboxId']) {
+				deleteMessage = _('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.');
+			}
+
+			const ok = bridge().showConfirmMessageBox(deleteMessage);
 			if (!ok) return;
 
 			await Folder.delete(folderId);

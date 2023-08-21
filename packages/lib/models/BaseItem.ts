@@ -1,5 +1,5 @@
 import { ModelType, DeleteOptions } from '../BaseModel';
-import { BaseItemEntity, NoteEntity } from '../services/database/types';
+import { BaseItemEntity, DeletedItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
@@ -285,7 +285,7 @@ export default class BaseItem extends BaseModel {
 			});
 		}
 
-		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			const previousItems = await this.loadItemsByTypeAndIds(this.modelType(), ids, { fields: ['share_id', 'id'] });
 			checkIfItemsCanBeChanged(this.modelType(), options.changeSource, previousItems, this.syncShareCache);
 		}
@@ -321,7 +321,7 @@ export default class BaseItem extends BaseModel {
 	// - Client 1 syncs with target 2 only => the note is *not* deleted from target 2 because no information
 	//   that it was previously deleted exist (deleted_items entry has been deleted).
 	// The solution would be to permanently store the list of deleted items on each client.
-	public static deletedItems(syncTarget: number) {
+	public static deletedItems(syncTarget: number): Promise<DeletedItemEntity[]> {
 		return this.db().selectAll('SELECT * FROM deleted_items WHERE sync_target = ?', [syncTarget]);
 	}
 

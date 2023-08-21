@@ -1,11 +1,10 @@
-// eslint-disable-next-line no-unused-vars
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { State as ShareState } from '@joplin/lib/services/share/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
+import { Dispatch } from 'redux';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -16,11 +15,9 @@ export interface ToolbarButtonInfos {
 }
 
 export interface NoteEditorProps {
-	// style: any;
 	noteId: string;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	selectedNoteIds: string[];
 	selectedFolderId: string;
 	notes: any[];
@@ -28,6 +25,7 @@ export interface NoteEditorProps {
 	isProvisional: boolean;
 	editorNoteStatuses: any;
 	syncStarted: boolean;
+	decryptionStarted: boolean;
 	bodyEditor: string;
 	notesParentType: string;
 	selectedNoteTags: any[];
@@ -46,7 +44,7 @@ export interface NoteEditorProps {
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
-	shareCache: ShareState;
+	shareCacheSetting: string;
 	syncUserId: string;
 }
 

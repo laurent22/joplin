@@ -91,7 +91,7 @@ let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
 const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
-	const [editor, setEditor] = useState(null);
+	const [editor, setEditor] = useState<Editor|null>(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
 	const [draggingStarted, setDraggingStarted] = useState(false);
@@ -480,6 +480,23 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				border-top: none !important;
 			}
 
+			/* Override the TinyMCE font styles with more specific CSS selectors.
+			   Without this, the built-in FontAwesome styles are not applied because
+			   they are overridden by TinyMCE. */
+			.plugin-icon.fa, .plugin-icon.far, .plugin-icon.fas {
+				font-family: "Font Awesome 5 Free";
+				font-size: ${theme.toolbarHeight - theme.toolbarPadding}px;
+			}
+			
+			.plugin-icon.fa, .plugin-icon.fas {
+				font-weight: 900;
+			}
+
+			.plugin-icon.fab, .plugin-icon.far {
+				font-weight: 400;
+			}
+
+
 			.joplin-tinymce .tox-toolbar__group {
 				background-color: ${theme.backgroundColor3};
 				padding-top: ${theme.toolbarPadding}px;
@@ -548,15 +565,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
-				'h1', 'h2', 'h3', 'hr', 'blockquote', 'inserttable', `joplinInsertDateTime${toolbarPluginButtons}`,
-			];
-
-			// Available table toolbar buttons:
-			// https://www.tiny.cloud/docs/advanced/available-toolbar-buttons/#tableplugin
-			const tableToolbar = [
-				'tabledelete',
-				'tableinsertrowafter tablecopyrow tablepasterowafter tabledeleterow',
-				'tableinsertcolafter tablecopycol tablepastecolafter tabledeletecol',
+				'h1', 'h2', 'h3', 'hr', 'blockquote', 'table', `joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
 			const editors = await (window as any).tinymce.init({
@@ -569,7 +578,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
-				valid_elements: '*[*]', // We already filter in sanitize_html
+
+				// #p: Pad empty paragraphs with &nbsp; to prevent them from being removed.
+				// *[*]: Allow all elements and attributes -- we already filter in sanitize_html
+				// See https://www.tiny.cloud/docs/configure/content-filtering/#controlcharacters
+				valid_elements: '#p,*[*]',
+
 				menubar: false,
 				relative_urls: false,
 				branding: false,
@@ -578,7 +592,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				table_toolbar: tableToolbar.join(' | '),
 				table_resize_bars: false,
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
@@ -591,6 +604,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinInsert: { inline: 'ins', remove: 'all' },
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
+					code: { inline: 'code', remove: 'all', attributes: { spellcheck: false } },
 				},
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
@@ -631,22 +645,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						},
 					});
 
-					editor.ui.registry.addMenuButton('inserttable', {
-						icon: 'table',
-						tooltip: 'Table',
-						fetch: (callback) => {
-							callback([
-								{
-									type: 'fancymenuitem',
-									fancytype: 'inserttable',
-									onAction: (data) => {
-										editor.execCommand('mceInsertTable', false, { rows: data.numRows, columns: data.numColumns, options: { headerRows: 1 } });
-									},
-								},
-							]);
-						},
-					});
-
 					editor.ui.registry.addButton('joplinInsertDateTime', {
 						tooltip: _('Insert time'),
 						icon: 'insert-time',
@@ -656,9 +654,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					});
 
 					for (const pluginCommandName of pluginCommandNames) {
+						const iconClassName = CommandService.instance().iconName(pluginCommandName);
+
+						// Only allow characters that appear in Font Awesome class names: letters, spaces, and dashes.
+						const safeIconClassName = iconClassName.replace(/[^a-z0-9 -]/g, '');
+
+						editor.ui.registry.addIcon(pluginCommandName, `<i class="plugin-icon ${safeIconClassName}"></i>`);
+
 						editor.ui.registry.addButton(pluginCommandName, {
 							tooltip: CommandService.instance().label(pluginCommandName),
-							icon: CommandService.instance().iconName(pluginCommandName, 'tinymce'),
+							icon: pluginCommandName,
 							onAction: function() {
 								void CommandService.instance().execute(pluginCommandName);
 							},
@@ -698,7 +703,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						setEditorReady(true);
 					});
 
+					const preprocessContent = () => {
+						// Disable spellcheck for all inline code blocks.
+						const codeElements = editor.dom.doc.querySelectorAll('code.inline-code');
+						for (const code of codeElements) {
+							code.setAttribute('spellcheck', 'false');
+						}
+					};
+
 					editor.on('SetContent', () => {
+						preprocessContent();
+
 						props_onMessage.current({ channel: 'noteRenderComplete' });
 					});
 				},
@@ -715,18 +730,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
-		// Note: The way files are cached is not correct because it assumes there's only one version
-		// of each file. However, when the theme change, a new CSS file, specific to the theme, is
-		// created. That file should not be loaded on top of the previous one, but as a replacement.
-		// Otherwise it would do this:
-		// - Try to load CSS for theme 1 => OK
-		// - Try to load CSS for theme 2 => OK
-		// - Try to load CSS for theme 1 => Skip because the file is in cache. As a result, theme 2
-		//                                  incorrectly stay.
-		// The fix would be to make allAssets() return a name and a version for each asset. Then the loading
-		// code would check this and either append the CSS or replace.
+	const documentCssElements: Record<string, HTMLLinkElement> = {};
+	const documentScriptElements: Record<string, HTMLScriptElement> = {};
 
+	const loadDocumentAssets = (editor: any, pluginAssets: any[]) => {
 		const theme = themeStyle(props.themeId);
 
 		let docHead_: any = null;
@@ -737,49 +744,72 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			return docHead_;
 		}
 
-		const cssFiles = [
+		const allCssFiles = [
 			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'text/css')
 				.map((a: any) => a.path)
-		).filter((path: string) => !loadedCssFiles_.includes(path));
+		);
 
-		const jsFiles = [].concat(
+		const allJsFiles = [].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'application/javascript')
 				.map((a: any) => a.path)
-		).filter((path: string) => !loadedJsFiles_.includes(path));
+		);
 
-		for (const cssFile of cssFiles) loadedCssFiles_.push(cssFile);
-		for (const jsFile of jsFiles) loadedJsFiles_.push(jsFile);
+
+		// Remove all previously loaded files that aren't in the assets this time.
+		// Note: This is important to ensure that we properly change themes.
+		// See https://github.com/laurent22/joplin/issues/8520
+		for (const cssFile of loadedCssFiles_) {
+			if (!allCssFiles.includes(cssFile)) {
+				documentCssElements[cssFile]?.remove();
+				delete documentCssElements[cssFile];
+			}
+		}
+
+		for (const jsFile of loadedJsFiles_) {
+			if (!allJsFiles.includes(jsFile)) {
+				documentScriptElements[jsFile]?.remove();
+				delete documentScriptElements[jsFile];
+			}
+		}
+
+		const newCssFiles = allCssFiles.filter((path: string) => !loadedCssFiles_.includes(path));
+		const newJsFiles = allJsFiles.filter((path: string) => !loadedJsFiles_.includes(path));
+
+		loadedCssFiles_ = allCssFiles;
+		loadedJsFiles_ = allJsFiles;
 
 		// console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
 
-		if (cssFiles.length) {
-			for (const cssFile of cssFiles) {
-				const script = editor.dom.create('link', {
+		if (newCssFiles.length) {
+			for (const cssFile of newCssFiles) {
+				const style = editor.dom.create('link', {
 					rel: 'stylesheet',
 					type: 'text/css',
 					href: cssFile,
 					class: 'jop-tinymce-css',
 				});
 
-				docHead().appendChild(script);
+				documentCssElements[cssFile] = style;
+				docHead().appendChild(style);
 			}
 		}
 
-		if (jsFiles.length) {
+		if (newJsFiles.length) {
 			const editorElementId = editor.dom.uniqueId();
 
-			for (const jsFile of jsFiles) {
+			for (const jsFile of newJsFiles) {
 				const script = editor.dom.create('script', {
 					id: editorElementId,
 					type: 'text/javascript',
 					src: jsFile,
 				});
 
+				documentScriptElements[jsFile] = script;
 				docHead().appendChild(script);
 			}
 		}

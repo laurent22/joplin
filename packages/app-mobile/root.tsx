@@ -7,7 +7,7 @@ import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
 import time from '@joplin/lib/time';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -29,7 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -58,7 +58,7 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 import NotesScreen from './components/screens/Notes';
 const { TagsScreen } = require('./components/screens/tags.js');
-import ConfigScreen from './components/screens/ConfigScreen';
+import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
@@ -85,6 +85,7 @@ const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
+import initLib from '@joplin/lib/initLib';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -117,7 +118,9 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
+import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
+import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -184,6 +187,14 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		// Schedule a sync operation so that items that need to be encrypted
 		// are sent to sync target.
 		void reg.scheduleSync(null, null, true);
+	}
+
+	if (
+		action.type === 'AUTODETECT_THEME'
+		|| action.type === 'SETTING_UPDATE_ALL'
+		|| (action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key))
+	) {
+		autodetectTheme();
 	}
 
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
@@ -421,6 +432,20 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
+const initializeTempDir = async () => {
+	const tempDir = `${getProfilesRootDir()}/tmp`;
+
+	// Re-create the temporary directory.
+	try {
+		await shim.fsDriver().remove(tempDir);
+	} catch (_error) {
+		// The logger may not exist yet. Do nothing.
+	}
+
+	await shim.fsDriver().mkdir(tempDir);
+	return tempDir;
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -437,6 +462,7 @@ async function initialize(dispatch: Function) {
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
+	Setting.setConstant('tempDir', await initializeTempDir());
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
 
@@ -456,6 +482,7 @@ async function initialize(dispatch: Function) {
 	}
 
 	Logger.initializeGlobalLogger(mainLogger);
+	initLib(mainLogger);
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
@@ -647,6 +674,9 @@ async function initialize(dispatch: Function) {
 
 	reg.setupRecurrentSync();
 
+	initializeUserFetcher();
+	PoorManIntervals.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
+
 	PoorManIntervals.setTimeout(() => {
 		void AlarmService.garbageCollect();
 	}, 1000 * 60 * 60);
@@ -719,6 +749,7 @@ class AppComponent extends React.Component {
 
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
+	private themeChangeListener_: NativeEventSubscription|null = null;
 
 	public constructor() {
 		super();
@@ -856,6 +887,11 @@ class AppComponent extends React.Component {
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
+		this.themeChangeListener_ = Appearance.addChangeListener(
+			({ colorScheme }) => onSystemColorSchemeChange(colorScheme)
+		);
+		onSystemColorSchemeChange(Appearance.getColorScheme());
+
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
@@ -873,6 +909,11 @@ class AppComponent extends React.Component {
 		if (this.urlOpenListener_) {
 			this.urlOpenListener_.remove();
 			this.urlOpenListener_ = null;
+		}
+
+		if (this.themeChangeListener_) {
+			this.themeChangeListener_.remove();
+			this.themeChangeListener_ = null;
 		}
 
 		if (this.unsubscribeScreenWidthChangeHandler_) {
@@ -919,8 +960,6 @@ class AppComponent extends React.Component {
 	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
 
-		logger.info('Sharing: handleShareData:', sharedData);
-
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
@@ -929,6 +968,8 @@ class AppComponent extends React.Component {
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
+		} else {
+			logger.info('Sharing: received empty share data.');
 		}
 	}
 

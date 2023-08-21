@@ -17,7 +17,7 @@ import ItemList from '../ItemList';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { Props } from './types';
+import { Props } from './utils/types';
 import usePrevious from '../hooks/usePrevious';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
@@ -246,7 +246,10 @@ const NoteListComponent = (props: Props) => {
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
-		event.dataTransfer.effectAllowed = 'move';
+		// While setting
+		//   event.dataTransfer.effectAllowed = 'move';
+		// causes the drag cursor to have a "move", rather than an "add", icon,
+		// this breaks note drag and drop into the markdown editor.
 		return true;
 	}, [props.parentFolderIsReadOnly, props.selectedNoteIds]);
 

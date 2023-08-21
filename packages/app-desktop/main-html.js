@@ -20,7 +20,7 @@ const NoteTag = require('@joplin/lib/models/NoteTag').default;
 const MasterKey = require('@joplin/lib/models/MasterKey').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const Revision = require('@joplin/lib/models/Revision').default;
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -29,6 +29,7 @@ const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService')
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
+const initLib = require('@joplin/lib/initLib').default;
 
 // Security: If we attempt to navigate away from the root HTML page, it's likely because
 // of an improperly sanitized link. Prevent this by closing the window before we can
@@ -131,6 +132,10 @@ document.addEventListener('click', (event) => {
 
 	event.preventDefault();
 });
+
+const logger = new Logger();
+Logger.initializeGlobalLogger(logger);
+initLib(logger);
 
 app().start(bridge().processArgv()).then((result) => {
 	if (!result || !result.action) {

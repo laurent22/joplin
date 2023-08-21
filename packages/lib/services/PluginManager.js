@@ -1,4 +1,4 @@
-const Logger = require('../Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 
 class PluginManager {
 	constructor() {

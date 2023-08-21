@@ -1,6 +1,6 @@
 import time from './time';
 import Setting from './models/Setting';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 
 interface Task {
 	id: string;

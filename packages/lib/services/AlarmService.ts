@@ -1,4 +1,4 @@
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import Alarm from '../models/Alarm';
 
 import Note from '../models/Note';

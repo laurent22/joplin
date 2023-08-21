@@ -5,7 +5,7 @@ import { _ } from './locale.js';
 import JoplinServerApi from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 
 const staticLogger = Logger.create('SyncTargetJoplinServer');
 
@@ -62,6 +62,10 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	public async isAuthenticated() {
+		return true;
+	}
+
+	public static requiresPassword() {
 		return true;
 	}
 

@@ -1,6 +1,6 @@
 const React = require('react');
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';

@@ -2,7 +2,7 @@ import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
 import { FolderEntity } from '../database/types';
 import { MasterKeyEntity } from '../e2ee/types';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('share/reducer');
 
@@ -82,10 +82,6 @@ export const parseShareCache = (serialized: string): State => {
 	};
 };
 
-export const readFromSettings = (state: RootState): State => {
-	return parseShareCache(state.settings['sync.shareCache']);
-};
-
 export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
 	const userId = state.settings['sync.userId'];
 	const share = state[stateRootKey].shares.find(s => s.folder_id === folderId);
@@ -94,6 +90,11 @@ export function isSharedFolderOwner(state: RootState, folderId: string): boolean
 }
 
 export function isRootSharedFolder(folder: FolderEntity): boolean {
+	if (!('share_id' in folder) || !('parent_id' in folder)) {
+		logger.warn('Calling isRootSharedFolder without specifying share_id and parent_id:', folder);
+		return false;
+	}
+
 	return !!folder.share_id && !folder.parent_id;
 }
 

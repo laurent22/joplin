@@ -26,8 +26,8 @@
 		"packages/app-cli/tests/**",
 		"packages/app-clipper/popup",
 		"packages/app-mobile/android/app/build.gradle",
+		"packages/generate-plugin-doc/**",
 		"packages/plugins/**",
-		"packages/react-native-vosk",
 	],
 	"ignoreDeps": [
 		"@babel/core",
@@ -130,6 +130,7 @@
 		"pretty-bytes",
 		"strip-ansi",
 		"formidable",
+		"node-emoji",
 
 		// @koa/cors has undocumented breaking changes, and the package is not
 		// well supported so we're stuck with latest v3 for now

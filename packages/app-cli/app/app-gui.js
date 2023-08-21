@@ -1,4 +1,4 @@
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const Folder = require('@joplin/lib/models/Folder').default;
 const BaseItem = require('@joplin/lib/models/BaseItem').default;
 const Tag = require('@joplin/lib/models/Tag').default;

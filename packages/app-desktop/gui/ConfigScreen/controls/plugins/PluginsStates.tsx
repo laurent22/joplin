@@ -13,7 +13,7 @@ import { PluginItem } from './PluginBox';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
 import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
 const { space } = require('styled-system');

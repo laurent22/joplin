@@ -491,6 +491,7 @@ function changeSelectedNotes(draft: Draft<State>, action: any, options: any = nu
 	if (action.id) noteIds = [action.id];
 	if (action.ids) noteIds = action.ids;
 	if (action.noteId) noteIds = [action.noteId];
+	if (action.index) noteIds = [draft.notes[action.index].id];
 
 	if (action.type === 'NOTE_SELECT') {
 		if (JSON.stringify(draft.selectedNoteIds) === JSON.stringify(noteIds)) return;

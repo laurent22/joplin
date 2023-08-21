@@ -1,4 +1,4 @@
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 
 export default class BaseService {
 

@@ -1,9 +1,9 @@
-const Setting = require('../../models/Setting').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
-const ObjectUtils = require('../../ObjectUtils');
-const { _ } = require('../../locale');
+const Setting = require('../../../models/Setting').default;
+const SyncTargetRegistry = require('../../../SyncTargetRegistry').default;
+const ObjectUtils = require('../../../ObjectUtils');
+const { _ } = require('../../../locale');
 const { createSelector } = require('reselect');
-const Logger = require('../../Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 
 const logger = Logger.create('config-shared');
 
@@ -185,6 +185,17 @@ shared.settingsSections = createSelector(
 			metadatas: [],
 			isScreen: true,
 		});
+
+		// Ideallly we would also check if the user was able to synchronize
+		// but we don't have a way of doing that besides making a request to Joplin Cloud
+		const syncTargetIsJoplinCloud = settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
+		if (syncTargetIsJoplinCloud) {
+			output.push({
+				name: 'joplinCloud',
+				metadatas: [],
+				isScreen: true,
+			});
+		}
 
 		return output;
 	}

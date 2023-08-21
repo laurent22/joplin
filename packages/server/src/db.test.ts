@@ -1,6 +1,6 @@
 import { afterAllTests, beforeAllDb, beforeEachDb, db } from './utils/testing/testUtils';
 import sqlts from '@rmp135/sql-ts';
-import { DbConnection, migrateDown, migrateUp, nextMigration } from './db';
+import { DbConnection, migrateDown, migrateLatest, migrateUp, needsMigration, nextMigration } from './db';
 
 async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
 	return sqlts.toTypeScript({}, db as any);
@@ -8,16 +8,13 @@ async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
 
 describe('db', () => {
 
-	beforeAll(async () => {
-		await beforeAllDb('db', { autoMigrate: false });
-	});
-
-	afterAll(async () => {
-		await afterAllTests();
-	});
-
 	beforeEach(async () => {
+		await beforeAllDb('db', { autoMigrate: false });
 		await beforeEachDb();
+	});
+
+	afterEach(async () => {
+		await afterAllTests();
 	});
 
 	it('should allow upgrading and downgrading schema', async () => {
@@ -68,6 +65,14 @@ describe('db', () => {
 
 			expect(initialSchema, `Schema rollback did not produce previous schema. In migration: ${next}`).toEqual(afterRollbackSchema);
 		}
+	});
+
+	it('should tell if a migration is required', async () => {
+		expect(await needsMigration(db())).toBe(true);
+
+		await migrateLatest(db());
+
+		expect(await needsMigration(db())).toBe(false);
 	});
 
 });

@@ -249,12 +249,15 @@ async function main() {
 		},
 	};
 
+	// delete supportedLocales['zh_CN'];
+	// delete supportedLocales['fr_FR'];
+
 	setLocale('en_GB');
 
 	await remove(`${docDir}`);
 	await copy(websiteAssetDir, `${docDir}`);
 
-	const sponsors = await loadSponsors();
+	const sponsors = process.env.SKIP_SPONSOR_PROCESSING ? { github: [], orgs: [] } : await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
 	const assetUrls = await getAssetUrls();
 

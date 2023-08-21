@@ -1,6 +1,7 @@
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
+import { Dispatch } from 'redux';
 
 const { buildStyle } = require('@joplin/lib/theme');
 const bridge = require('@electron/remote').require('./bridge').default;
@@ -9,8 +10,7 @@ interface MultiNoteActionsProps {
 	themeId: number;
 	selectedNoteIds: string[];
 	notes: any[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	inConflictFolder: boolean;

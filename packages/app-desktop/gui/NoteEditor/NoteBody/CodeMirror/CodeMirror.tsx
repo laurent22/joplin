@@ -40,6 +40,7 @@ import ErrorBoundary from '../../../ErrorBoundary';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import eventManager from '@joplin/lib/eventManager';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
+import type { ContextMenuEvent, ContextMenuParams } from 'electron';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -98,7 +99,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 	}, []);
 
-	const addListItem = useCallback((string1, defaultText = '') => {
+	const addListItem = useCallback((string1: string, defaultText = '') => {
 		if (editorRef.current) {
 			if (editorRef.current.somethingSelected()) {
 				editorRef.current.wrapSelectionsByLine(string1);
@@ -782,19 +783,49 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
-		function pointerInsideEditor(params: any) {
-			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
+		const isAncestorOfCodeMirrorEditor = (elem: HTMLElement) => {
+			for (; elem.parentElement; elem = elem.parentElement) {
+				if (elem.classList.contains('codeMirrorEditor')) {
+					return true;
+				}
+			}
+
+			return false;
+		};
+
+		let lastInCodeMirrorContextMenuTimestamp = 0;
+
+		// The browser's contextmenu event provides additional information about the
+		// target of the event, not provided by the Electron context-menu event.
+		const onBrowserContextMenu = (event: Event) => {
+			if (isAncestorOfCodeMirrorEditor(event.target as HTMLElement)) {
+				lastInCodeMirrorContextMenuTimestamp = Date.now();
+			}
+		};
+
+		function pointerInsideEditor(params: ContextMenuParams) {
+			const x = params.x, y = params.y, isEditable = params.isEditable;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 
-			// inputFieldType: The input field type of CodeMirror is "textarea" so the inputFieldType = "none",
-			// and any single-line input above codeMirror has inputFieldType value according to the type of input e.g.(text = plainText, password = password, ...).
-			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
+			// Note: We can't check inputFieldType here. When spellcheck is enabled,
+			// params.inputFieldType is "none". When spellcheck is disabled,
+			// params.inputFieldType is "plainText". Thus, such a check would be inconsistent.
+			if (!elements.length || !isEditable) return false;
+
+			const maximumMsSinceBrowserEvent = 100;
+			if (Date.now() - lastInCodeMirrorContextMenuTimestamp > maximumMsSinceBrowserEvent) {
+				return false;
+			}
+
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
-		async function onContextMenu(_event: any, params: any) {
+		async function onContextMenu(event: ContextMenuEvent, params: ContextMenuParams) {
 			if (!pointerInsideEditor(params)) return;
+
+			// Don't show the default menu.
+			event.preventDefault();
 
 			const menu = new Menu();
 
@@ -872,10 +903,15 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			menu.popup();
 		}
 
-		bridge().window().webContents.on('context-menu', onContextMenu);
+		// Prepend the event listener so that it gets called before
+		// the listener that shows the default menu.
+		bridge().window().webContents.prependListener('context-menu', onContextMenu);
+
+		window.addEventListener('contextmenu', onBrowserContextMenu);
 
 		return () => {
 			bridge().window().webContents.off('context-menu', onContextMenu);
+			window.removeEventListener('contextmenu', onBrowserContextMenu);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.plugins]);

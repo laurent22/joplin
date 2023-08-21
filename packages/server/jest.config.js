@@ -16,6 +16,4 @@ module.exports = {
 		'jest-expect-message',
 		`${__dirname}/jest.setup.js`,
 	],
-
-	bail: true,
 };

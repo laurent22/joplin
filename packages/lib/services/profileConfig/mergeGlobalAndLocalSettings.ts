@@ -1,4 +1,4 @@
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 
 const logger = Logger.create('mergeGlobalAndLocalSettings');

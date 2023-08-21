@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -174,7 +174,7 @@ export default class ElectronAppWrapper {
 					// so that it can tell us if we can really close the app or not.
 					// Search for "appClose" event for closing logic on renderer side.
 					event.preventDefault();
-					this.win_.webContents.send('appClose');
+					if (this.win_) this.win_.webContents.send('appClose');
 				} else {
 					// If the renderer process has responded, check if we can close or not
 					if (this.rendererProcessQuitReply_.canClose) {

@@ -1,4 +1,4 @@
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '../models/Setting';
 import shim from '../shim';
 import { basename, toSystemSlashes } from '../path-utils';

@@ -2,7 +2,7 @@ import Resource from '../models/Resource';
 import Setting from '../models/Setting';
 import BaseService from './BaseService';
 import ResourceService from './ResourceService';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 const { Dirnames } = require('./synchronizer/utils/types');
 const EventEmitter = require('events');

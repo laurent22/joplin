@@ -3,7 +3,7 @@ import { isApiRequest } from '../utils/requestUtils';
 import { NotificationLevel } from '../services/database/types';
 import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { NotificationKey } from '../models/NotificationModel';
 import { helpUrl, profileUrl } from '../utils/urlUtils';
 import { userFlagToString } from '../models/UserFlagModel';
@@ -63,7 +63,7 @@ async function handleConfirmEmailNotification(ctx: AppContext): Promise<Notifica
 	if (!ctx.joplin.owner.email_confirmed) {
 		return {
 			id: 'confirmEmail',
-			messageHtml: renderMarkdown('An email has been sent to you containing an activation link to complete your registration.\n\nMake sure you click it to secure your account and keep access to it.'),
+			messageHtml: renderMarkdown(`An email has been sent to you containing an activation link to complete your registration. If you did not receive it, you may send it again from [your profile page](${profileUrl()}).\n\nMake sure you click it to secure your account and keep access to it.`),
 			levelClassName: levelClassName(NotificationLevel.Important),
 			closeUrl: '',
 		};

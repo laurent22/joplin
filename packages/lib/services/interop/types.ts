@@ -35,6 +35,14 @@ export interface ImportOptions {
 	outputFormat?: ImportModuleOutputFormat;
 }
 
+export enum ExportProgressState {
+	QueuingItems,
+	Exporting,
+	Closing,
+}
+
+export type OnExportProgressCallback = (status: ExportProgressState, progress: number)=> void;
+
 export interface ExportOptions {
 	format?: string;
 	path?: string;
@@ -46,6 +54,8 @@ export interface ExportOptions {
 	plugins?: PluginStates;
 	customCss?: string;
 	packIntoSingleFile?: boolean;
+
+	onProgress?: OnExportProgressCallback;
 }
 
 export interface ImportExportResult {
