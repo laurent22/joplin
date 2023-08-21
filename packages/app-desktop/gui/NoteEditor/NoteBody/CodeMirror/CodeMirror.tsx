@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 
 // eslint-disable-next-line no-unused-vars
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
+import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
 import { usePrevious, cursorPositionToTextOffset } from './utils';
@@ -268,7 +268,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
-		const resourceMds = await handlePasteEvent(event);
+		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
 			editorRef.current.replaceSelection(resourceMds.join('\n'));

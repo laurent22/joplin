@@ -34,23 +34,27 @@ interface SanitizeHtmlOptions {
 	addNoMdConvClass: boolean;
 }
 
-class HtmlUtils {
+export const attributesHtml = (attr: Record<string, string>) => {
+	const output = [];
 
-	public attributesHtml(attr: Record<string, string>) {
-		const output = [];
+	for (const n in attr) {
+		if (!attr.hasOwnProperty(n)) continue;
 
-		for (const n in attr) {
-			if (!attr.hasOwnProperty(n)) continue;
-
-			if (!attr[n]) {
-				output.push(n);
-			} else {
-				output.push(`${n}="${htmlentities(attr[n])}"`);
-			}
+		if (!attr[n]) {
+			output.push(n);
+		} else {
+			output.push(`${n}="${htmlentities(attr[n])}"`);
 		}
-
-		return output.join(' ');
 	}
+
+	return output.join(' ');
+};
+
+export const isSelfClosingTag = (tagName: string) => {
+	return selfClosingElements.includes(tagName.toLowerCase());
+};
+
+class HtmlUtils {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: Function) {
@@ -70,7 +74,7 @@ class HtmlUtils {
 			}
 
 			if (action.type === 'setAttributes') {
-				const attrHtml = this.attributesHtml(action.attrs);
+				const attrHtml = attributesHtml(action.attrs);
 				return `<img${before}${attrHtml}${after}>`;
 			}
 
@@ -103,16 +107,12 @@ class HtmlUtils {
 			}
 
 			if (action.type === 'setAttributes') {
-				const attrHtml = this.attributesHtml(action.attrs);
+				const attrHtml = attributesHtml(action.attrs);
 				return `<img${before}${attrHtml}${after}>`;
 			}
 
 			throw new Error(`Invalid action: ${action.type}`);
 		});
-	}
-
-	public isSelfClosingTag(tagName: string) {
-		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
 	public stripHtml(html: string) {
@@ -274,9 +274,9 @@ class HtmlUtils {
 					attrs['href'] = '#';
 				}
 
-				let attrHtml = this.attributesHtml(attrs);
+				let attrHtml = attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
-				const closingSign = this.isSelfClosingTag(name) ? '/>' : '>';
+				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 				output.push(`<${name}${attrHtml}${closingSign}`);
 			},
 
@@ -319,7 +319,7 @@ class HtmlUtils {
 
 				if (disallowedTagDepth) return;
 
-				if (this.isSelfClosingTag(name)) return;
+				if (isSelfClosingTag(name)) return;
 				output.push(`</${name}>`);
 			},
 
@@ -333,5 +333,54 @@ class HtmlUtils {
 
 
 }
+
+const makeHtmlTag = (name: string, attrs: Record<string, string>) => {
+	let attrHtml = attributesHtml(attrs);
+	if (attrHtml) attrHtml = ` ${attrHtml}`;
+	const closingSign = isSelfClosingTag(name) ? '/>' : '>';
+	return `<${name}${attrHtml}${closingSign}`;
+};
+
+// Will return either the content of the <BODY> tag if it exists, or the whole
+// HTML (which would be a fragment of HTML)
+export const extractHtmlBody = (html: string) => {
+	let inBody = false;
+	let bodyFound = false;
+	const output: string[] = [];
+
+	const parser = new htmlparser2.Parser({
+
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			if (name === 'body') {
+				inBody = true;
+				bodyFound = true;
+				return;
+			}
+
+			if (inBody) {
+				output.push(makeHtmlTag(name, attrs));
+			}
+		},
+
+		ontext: (encodedText: string) => {
+			if (inBody) output.push(encodedText);
+		},
+
+		onclosetag: (name: string) => {
+			if (inBody && name === 'body') inBody = false;
+
+			if (inBody) {
+				if (isSelfClosingTag(name)) return;
+				output.push(`</${name}>`);
+			}
+		},
+
+	}, { decodeEntities: false });
+
+	parser.write(html);
+	parser.end();
+
+	return bodyFound ? output.join('') : html;
+};
 
 export default new HtmlUtils();

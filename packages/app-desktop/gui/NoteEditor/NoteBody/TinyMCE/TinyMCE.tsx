@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos } from '../../utils/types';
-import { resourcesStatus, commandAttachFileToBody, handlePasteEvent, processPastedHtml, attachedResources } from '../../utils/resourceHandling';
+import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml, attachedResources } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import styles_ from './styles';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -1064,38 +1064,43 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// to be processed in various ways.
 			event.preventDefault();
 
-			const resourceMds = await handlePasteEvent(event);
-			if (resourceMds.length) {
-				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
-				editor.insertContent(result.html);
-			} else {
-				const pastedText = event.clipboardData.getData('text/plain');
+			const pastedText = event.clipboardData.getData('text/plain');
 
+			// event.clipboardData.getData('text/html') wraps the
+			// content with <html><body></body></html>, which seems to
+			// be not supported in editor.insertContent().
+			//
+			// when pasting text with Ctrl+Shift+V, the format should be
+			// ignored. In this case,
+			// event.clopboardData.getData('text/html') returns an empty
+			// string, but the clipboard.readHTML() still returns the
+			// formatted text.
+			const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
+
+			// We should only process the images if there is no plain text or
+			// HTML text in the clipboard. This is because certain applications,
+			// such as Word, are going to add multiple versions of the copied
+			// data to the clipboard - one with the text formatted as HTML, and
+			// one with the text as an image. In that case, we need to ignore
+			// the image and only process the HTML.
+
+			if (!pastedText && !pastedHtml) {
+				const resourceMds = await getResourcesFromPasteEvent(event);
+				if (resourceMds.length) {
+					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
+					editor.insertContent(result.html);
+				}
+			} else {
 				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text
-					// event.clipboardData.getData('text/html') wraps the content with <html><body></body></html>,
-					// which seems to be not supported in editor.insertContent().
-					//
-					// when pasting text with Ctrl+Shift+V, the format should be ignored.
-					// In this case, event.clopboardData.getData('text/html') returns an empty string, but the clipboard.readHTML() still returns the formatted text.
-					const pastedHtml = event.clipboardData.getData('text/html') ? clipboard.readHTML() : '';
 					if (pastedHtml) { // Handles HTML
 						const modifiedHtml = await processPastedHtml(pastedHtml);
 						editor.insertContent(modifiedHtml);
 					} else { // Handles plain text
 						pasteAsPlainText(pastedText);
 					}
-
-					// This code before was necessary to get undo working after
-					// pasting but it seems it's no longer necessary, so
-					// removing it for now. We also couldn't do it immediately
-					// it seems, or else nothing is added to the stack, so do it
-					// on the next frame.
-					//
-					// window.requestAnimationFrame(() =>
-					// editor.undoManager.add()); onChangeHandler();
 				}
 			}
 		}
