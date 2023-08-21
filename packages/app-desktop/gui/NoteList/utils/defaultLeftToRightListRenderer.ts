@@ -144,7 +144,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 	itemTemplate: // html
 		`
 		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-			<div style="width: {{titleWidth}}px;" class="title" draggable="true" data-id="{{note.id}}">
+			<div style="width: {{titleWidth}}px;" class="title" data-id="{{note.id}}">
 				{{#note.is_todo}}
 					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}

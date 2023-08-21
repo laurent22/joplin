@@ -42,9 +42,9 @@ const useOnKeyDown = (
 
 		if (flow === ItemFlow.LeftToRight) {
 			if (key === 'PageUp') {
-				noteIndex -= (visibleItemCount - 1);
+				noteIndex -= (visibleItemCount - itemsPerLine);
 			} else if (key === 'PageDown') {
-				noteIndex += (visibleItemCount - 1);
+				noteIndex += (visibleItemCount - itemsPerLine);
 			} else if ((key === 'End' && ctrlKey) || (key === 'ArrowDown' && metaKey)) {
 				noteIndex = noteCount - 1;
 			} else if ((key === 'Home' && ctrlKey) || (key === 'ArrowUp' && metaKey)) {

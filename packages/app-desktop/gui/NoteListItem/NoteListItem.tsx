@@ -79,6 +79,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	return <div
 		id={elementId}
 		ref={ref}
+		draggable={true}
 		tabIndex={0}
 		style={style}
 		className={className}
