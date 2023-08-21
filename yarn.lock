@@ -4594,7 +4594,7 @@ __metadata:
     react-native-quick-actions: 0.3.13
     react-native-reanimated: 3.3.0
     react-native-rsa-native: 2.0.5
-    react-native-safe-area-context: 4.6.4
+    react-native-safe-area-context: 4.7.1
     react-native-securerandom: 1.0.1
     react-native-share: 8.2.2
     react-native-sqlite-storage: 6.0.1
@@ -28074,13 +28074,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:4.6.4":
-  version: 4.6.4
-  resolution: "react-native-safe-area-context@npm:4.6.4"
+"react-native-safe-area-context@npm:4.7.1":
+  version: 4.7.1
+  resolution: "react-native-safe-area-context@npm:4.7.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: c6905193528dda61268565799d81817b1e436c32c120480084e48c955075e1017b399f763368ef39c4049d6eb0e2c05c3496390857d836b47ddcf861ab60871e
+  checksum: 2a07c0b0751c9ceb435c7b107a881080d7b4142fca597ea4701894aeb7c2fec02eeaef094bc28f3d2eaed39f4fc8ef26764c156bf17af93407d723db5608e1e5
   languageName: node
   linkType: hard
 
