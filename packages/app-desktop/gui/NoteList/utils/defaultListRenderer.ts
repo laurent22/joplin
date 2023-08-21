@@ -1,8 +1,4 @@
-import Api, { RequestMethod } from '@joplin/lib/services/rest/Api';
-import { Context } from 'vm';
-import { ItemFlow, ListRenderer, OnChangeEvent } from './types';
-
-const api = new Api();
+import { ItemFlow, ListRenderer } from './types';
 
 interface Props {
 	note: {
@@ -129,16 +125,6 @@ const defaultItemRenderer: ListRenderer = {
 			</div>
 		</div>
 	`,
-
-	onChange: async (context: Context, elementId: string, event: OnChangeEvent) => {
-		if (elementId === 'todo-checkbox') {
-			await api.route(RequestMethod.PUT, `notes/${context.noteId}`, null, JSON.stringify({
-				todo_completed: event.value ? Date.now() : 0,
-			}));
-		} else {
-			throw new Error(`Unknown element ID: ${elementId}`);
-		}
-	},
 
 	onRenderNote: async (props: Props) => {
 		return props;

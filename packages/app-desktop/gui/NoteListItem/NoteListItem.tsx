@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
-import { ItemFlow, OnChangeHandler } from '../NoteList/utils/types';
+import { ItemFlow, OnChangeEvent, OnChangeHandler } from '../NoteList/utils/types';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
 import useItemEventHandlers from './utils/useItemEventHandlers';
 import { OnCheckboxChange } from './utils/types';
+import Note from '@joplin/lib/models/Note';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -28,12 +29,21 @@ interface NoteItemProps {
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	const elementId = `list-note-${props.noteId}`;
 
-	const onCheckboxChange: OnCheckboxChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		void props.onChange(
-			{ noteId: props.noteId },
-			event.currentTarget.getAttribute('data-id'),
-			{ value: event.currentTarget.checked }
-		);
+	const onCheckboxChange: OnCheckboxChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+		const changeEvent: OnChangeEvent = {
+			noteId: props.noteId,
+			elementId: event.currentTarget.getAttribute('data-id'),
+			value: event.currentTarget.checked,
+		};
+
+		if (changeEvent.elementId === 'todo-checkbox') {
+			await Note.save({
+				id: changeEvent.noteId,
+				todo_completed: changeEvent.value ? Date.now() : 0,
+			}, { userSideValidation: true });
+		} else {
+			if (props.onChange) await props.onChange(changeEvent);
+		}
 	}, [props.onChange, props.noteId]);
 
 	const rootElement = useRootElement(elementId);

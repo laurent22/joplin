@@ -29,10 +29,6 @@ export interface Props {
 	parentFolderIsReadOnly: boolean;
 }
 
-export interface Context {
-	noteId: string;
-}
-
 export enum ItemFlow {
 	TopToBottom = 'topToBottom',
 	LeftToRight = 'leftToRight',
@@ -41,11 +37,13 @@ export enum ItemFlow {
 export type RenderNoteView = Record<string, any>;
 
 export interface OnChangeEvent {
+	elementId: string;
 	value: any;
+	noteId: string;
 }
 
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
-export type OnChangeHandler = (context: Context, elementId: string, event: OnChangeEvent)=> Promise<void>;
+export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
 
 export type ListRendererDepependency =
 	ItemRendererDatabaseDependency |
@@ -58,9 +56,9 @@ export type ListRendererDepependency =
 export interface ListRenderer {
 	flow: ItemFlow;
 	itemSize: Size;
-	itemCss: string;
+	itemCss?: string;
 	dependencies: ListRendererDepependency[];
 	itemTemplate: string;
 	onRenderNote: OnRenderNoteHandler;
-	onChange: OnChangeHandler;
+	onChange?: OnChangeHandler;
 }
