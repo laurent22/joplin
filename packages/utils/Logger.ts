@@ -1,5 +1,4 @@
 const moment = require('moment');
-const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
 const writeToFileMutex_ = new Mutex();
@@ -26,11 +25,7 @@ interface TargetOptions {
 	path?: string;
 	source?: string;
 
-	// Default message format
-	format?: string;
-
-	// If specified, will use this as format if it's an info message
-	formatInfo?: string;
+	formatter?: (level: LogLevel, targetPrefix?: string)=> string;
 }
 
 interface Target extends TargetOptions {
@@ -227,15 +222,8 @@ class Logger {
 				const consoleObj = target.console ? target.console : console;
 				let items: any[] = [];
 
-				if (target.format) {
-					const format = level === LogLevel.Info && target.formatInfo ? target.formatInfo : target.format;
-
-					const s = sprintf(format, {
-						date_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-						level: Logger.levelIdToString(level),
-						prefix: targetPrefix || '',
-						message: '',
-					});
+				if (target.formatter) {
+					const s = target.formatter(level, targetPrefix);
 
 					items = [s.trim()].concat(...object);
 				} else {

@@ -27,6 +27,7 @@ import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
 import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
+import loggerFormatter from './utils/loggerFormatter';
 
 interface Argv {
 	env?: Env;
@@ -223,10 +224,7 @@ async function main() {
 	Logger.fsDriver_ = new FsDriverNode();
 	const globalLogger = new Logger();
 	const instancePrefix = config().INSTANCE_NAME ? `${config().INSTANCE_NAME}: ` : '';
-	globalLogger.addTarget(TargetType.Console, {
-		format: `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`,
-		formatInfo: `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`,
-	});
+	globalLogger.addTarget(TargetType.Console, { formatter: loggerFormatter(instancePrefix) });
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
 
