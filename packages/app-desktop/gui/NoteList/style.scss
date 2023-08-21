@@ -3,10 +3,12 @@
 	height: 100%;
 	background-color: var(--joplin-background-color3);
 	border-right: 1px solid var(--joplin-divider-color);
+	overflow-x: hidden;
 	overflow-y: scroll;
 
 	> .notes {
 		display: flex;
+		overflow-x: hidden;
 	}
 
 	> .emptylist {
@@ -23,11 +25,17 @@
 }
 
 .note-list-item-wrapper {
-	border-style: solid;
 	border-color: var(--joplin-color);
-	border-right: none;
-	border-left: none;
 	position: relative;
+	box-sizing: border-box;
+
+	> .dragcursor {
+		background-color: var(--joplin-color);
+		position: absolute;
+		z-index: 1000;
+		width: 2px;
+		height: 2px;
+	}
 }
 
 .note-list-item-wrapper.-provisional {

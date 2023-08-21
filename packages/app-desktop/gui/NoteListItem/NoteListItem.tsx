@@ -50,20 +50,6 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	useItemEventHandlers(rootElement, itemElement, onCheckboxChange);
 
-	const style = useMemo(() => {
-		let dragItemPosition = '';
-		if (props.dragIndex === props.index) {
-			dragItemPosition = 'top';
-		} else if (props.index === props.noteCount - 1 && props.dragIndex >= props.noteCount) {
-			dragItemPosition = 'bottom';
-		}
-
-		return {
-			borderTopWidth: dragItemPosition === 'top' ? '2px' : 0,
-			borderBottomWidth: dragItemPosition === 'bottom' ? '2px' : 0,
-		};
-	}, [props.dragIndex, props.index, props.noteCount]);
-
 	const className = useMemo(() => {
 		return [
 			'note-list-item-wrapper',
@@ -76,18 +62,72 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		].filter(e => !!e).join(' ');
 	}, [props.index, props.isProvisional]);
 
+	const isActiveDragItem = props.dragIndex === props.index;
+	const isLastActiveDragItem = props.index === props.noteCount - 1 && props.dragIndex >= props.noteCount;
+
+	const dragCursorStyle = useMemo(() => {
+		if (props.flow === ItemFlow.TopToBottom) {
+			let dragItemPosition = '';
+			if (isActiveDragItem) {
+				dragItemPosition = 'top';
+			} else if (isLastActiveDragItem) {
+				dragItemPosition = 'bottom';
+			}
+
+			const output: React.CSSProperties = {
+				width: props.itemSize.width,
+				display: dragItemPosition ? 'block' : 'none',
+				left: 0,
+			};
+
+			if (dragItemPosition === 'top') {
+				output.top = 0;
+			} else {
+				output.bottom = 0;
+			}
+
+			return output;
+		}
+
+		if (props.flow === ItemFlow.LeftToRight) {
+			let dragItemPosition = '';
+			if (isActiveDragItem) {
+				dragItemPosition = 'left';
+			} else if (isLastActiveDragItem) {
+				dragItemPosition = 'right';
+			}
+
+			const output: React.CSSProperties = {
+				height: props.itemSize.height,
+				display: dragItemPosition ? 'block' : 'none',
+				top: 0,
+			};
+
+			if (dragItemPosition === 'left') {
+				output.left = 0;
+			} else {
+				output.right = 0;
+			}
+
+			return output;
+		}
+
+		throw new Error('Unreachable');
+	}, [isActiveDragItem, isLastActiveDragItem, props.flow, props.itemSize]);
+
 	return <div
 		id={elementId}
 		ref={ref}
 		draggable={true}
 		tabIndex={0}
-		style={style}
 		className={className}
 		data-id={props.noteId}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}
 		onDragOver={props.onDragOver}
-	></div>;
+	>
+		<div className="dragcursor" style={dragCursorStyle}></div>
+	</div>;
 };
 
 export default memo(forwardRef(NoteListItem));

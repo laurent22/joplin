@@ -37,8 +37,11 @@ const NoteList = (props: Props) => {
 	const listRenderer = defaultListRenderer;
 
 	const itemSize: Size = useMemo(() => {
-		return listRenderer.itemSize;
-	}, [listRenderer.itemSize]);
+		return {
+			width: listRenderer.itemSize.width ? listRenderer.itemSize.width : props.size.width,
+			height: listRenderer.itemSize.height,
+		};
+	}, [listRenderer.itemSize, props.size.width]);
 
 	const itemsPerLine = useMemo(() => {
 		if (listRenderer.flow === ItemFlow.TopToBottom) {
@@ -143,7 +146,9 @@ const NoteList = (props: Props) => {
 		props.notesParentType,
 		props.noteSortOrder,
 		props.uncompletedTodosOnTop,
-		props.showCompletedTodos
+		props.showCompletedTodos,
+		listRenderer.flow,
+		itemsPerLine
 	);
 
 	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);

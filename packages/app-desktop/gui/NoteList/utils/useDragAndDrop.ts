@@ -3,8 +3,22 @@ import { useCallback, DragEventHandler, MutableRefObject, useState, useEffect } 
 import Note from '@joplin/lib/models/Note';
 import canManuallySortNotes from './canManuallySortNotes';
 import { Size } from '@joplin/utils/types';
+import { ItemFlow } from './types';
 
-const useDragAndDrop = (parentFolderIsReadOnly: boolean, selectedNoteIds: string[], selectedFolderId: string, listRef: MutableRefObject<HTMLDivElement>, scrollTop: number, itemSize: Size, notesParentType: string, noteSortOrder: string, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean) => {
+const useDragAndDrop = (
+	parentFolderIsReadOnly: boolean,
+	selectedNoteIds: string[],
+	selectedFolderId: string,
+	listRef: MutableRefObject<HTMLDivElement>,
+	scrollTop: number,
+	itemSize: Size,
+	notesParentType: string,
+	noteSortOrder: string,
+	uncompletedTodosOnTop: boolean,
+	showCompletedTodos: boolean,
+	flow: ItemFlow,
+	itemsPerLine: number
+) => {
 	const [dragOverTargetNoteIndex, setDragOverTargetNoteIndex] = useState(null);
 
 	const onGlobalDrop = useCallback(() => {
@@ -44,8 +58,17 @@ const useDragAndDrop = (parentFolderIsReadOnly: boolean, selectedNoteIds: string
 
 
 	const dragTargetNoteIndex = useCallback((event: React.DragEvent) => {
-		return Math.abs(Math.round((event.clientY - listRef.current.offsetTop + scrollTop) / itemSize.height));
-	}, [listRef, itemSize.height, scrollTop]);
+		const rect = listRef.current.getBoundingClientRect();
+		const lineIndexFloat = (event.clientY - rect.top + scrollTop) / itemSize.height;
+		if (flow === ItemFlow.TopToBottom) {
+			return Math.abs(Math.round(lineIndexFloat));
+		} else {
+			const lineIndex = Math.floor(lineIndexFloat);
+			const rowIndexFloat = (event.clientX - rect.left) / itemSize.width;
+			const rowIndex = Math.round(rowIndexFloat);
+			return lineIndex * itemsPerLine + rowIndex;
+		}
+	}, [listRef, itemSize, scrollTop, flow, itemsPerLine]);
 
 	const onDragOver: DragEventHandler = useCallback(event => {
 		if (notesParentType !== 'Folder') return;
