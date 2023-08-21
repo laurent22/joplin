@@ -1,14 +1,10 @@
 
-import Editor, { AbstractComponent, BackgroundComponent, EditorEventType, EditorSettings, Erase, getLocalizationTable, HTMLToolbar, Rect2, Vec2 } from 'js-draw';
+import Editor, { AbstractComponent, AbstractToolbar, BackgroundComponent, EditorEventType, EditorSettings, Erase, getLocalizationTable, Rect2, Vec2 } from 'js-draw';
+import { MaterialIconProvider } from '@js-draw/material-icons';
 import 'js-draw/bundledStyles';
 
 declare namespace ReactNativeWebView {
 	const postMessage: (data: any)=> void;
-}
-
-interface ImageEditorStrings {
-	close: string;
-	save: string;
 }
 
 export interface ImageEditorCallbacks {
@@ -20,7 +16,6 @@ export interface ImageEditorCallbacks {
 }
 
 export const createJsDrawEditor = (
-	strings: ImageEditorStrings,
 	callbacks: ImageEditorCallbacks,
 	initialToolbarState: string,
 	locale: string,
@@ -33,6 +28,7 @@ export const createJsDrawEditor = (
 		// Try to use the Joplin locale, but fall back to the system locale if
 		// js-draw doesn't support it.
 		localization: getLocalizationTable([locale, ...navigator.languages]),
+		iconProvider: new MaterialIconProvider(),
 		...editorSettings,
 	});
 
@@ -44,20 +40,14 @@ export const createJsDrawEditor = (
 		maxSize: maxSpacerSize,
 	});
 
-	toolbar.addActionButton({
-		label: strings.close,
-		icon: makeCloseIcon(),
-	}, () => callbacks.closeEditor());
+	toolbar.addExitButton(() => callbacks.closeEditor());
 
 	toolbar.addSpacer({
 		grow: 1,
 		maxSize: maxSpacerSize,
 	});
 
-	toolbar.addActionButton({
-		label: strings.save,
-		icon: editor.icons.makeSaveIcon(),
-	}, () => callbacks.saveDrawing());
+	toolbar.addSaveButton(() => callbacks.saveDrawing());
 
 	restoreToolbarState(toolbar, initialToolbarState);
 	listenToolbarState(editor, toolbar);
@@ -77,31 +67,7 @@ export const createJsDrawEditor = (
 	return editor;
 };
 
-const makeCloseIcon = () => {
-	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	svg.innerHTML = `
-		<style>
-			.toolbar-close-icon {
-				stroke: var(--icon-color);
-				stroke-width: 10;
-				stroke-linejoin: round;
-				stroke-linecap: round;
-				fill: none;
-			}
-		</style>
-		<path
-			d='
-				M 15,15 85,85
-				M 15,85 85,15
-			'
-			class='toolbar-close-icon'
-		/>
-	`;
-	svg.setAttribute('viewBox', '0 0 100 100');
-	return svg;
-};
-
-const restoreToolbarState = (toolbar: HTMLToolbar, state: string) => {
+const restoreToolbarState = (toolbar: AbstractToolbar, state: string) => {
 	if (state) {
 		// deserializeState throws on invalid argument.
 		try {
@@ -112,7 +78,7 @@ const restoreToolbarState = (toolbar: HTMLToolbar, state: string) => {
 	}
 };
 
-const listenToolbarState = (editor: Editor, toolbar: HTMLToolbar) => {
+const listenToolbarState = (editor: Editor, toolbar: AbstractToolbar) => {
 	editor.notifier.on(EditorEventType.ToolUpdated, () => {
 		const state = toolbar.serializeState();
 		ReactNativeWebView.postMessage(

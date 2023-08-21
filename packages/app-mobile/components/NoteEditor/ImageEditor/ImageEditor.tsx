@@ -34,12 +34,24 @@ const useCss = (editorTheme: Theme) => {
 		}
 
 		return `
+			:root {
+				/* color-mix is a newer CSS feature -- use it separately in case the webview
+				   doesn't have support yet. */
+				--calculated-foreground-color-2: color-mix(in srgb, ${editorTheme.color3} 30%, ${editorTheme.color});
+			}
+
 			:root .imageEditorContainer {
-				--primary-background-color: ${editorTheme.backgroundColor};
-				--primary-background-color-transparent: ${editorTheme.backgroundColorTransparent};
-				--secondary-background-color: ${selectionBackgroundColor};
-				--primary-foreground-color: ${editorTheme.color};
-				--secondary-foreground-color: ${editorTheme.color2};
+				--background-color-1: ${editorTheme.backgroundColor};
+				--foreground-color-1: ${editorTheme.color};
+				--background-color-2: ${editorTheme.backgroundColor3};
+				--foreground-color-2: var(--calculated-foreground-color-2, ${editorTheme.backgroundColor3});
+				--background-color-3: ${editorTheme.raisedBackgroundColor};
+				--foreground-color-3: ${editorTheme.raisedColor};
+			
+				--selection-background-color: ${editorTheme.backgroundColorHover3};
+				--selection-foreground-color: ${editorTheme.color3};
+				--primary-action-foreground-color: ${editorTheme.color4};
+
 				--primary-shadow-color: ${editorTheme.colorFaded};
 
 				width: 100vw;
@@ -168,10 +180,6 @@ const ImageEditor = (props: Props) => {
 				${shim.injectedJs('svgEditorBundle')}
 
 				window.editor = svgEditorBundle.createJsDrawEditor(
-					{
-						close: ${JSON.stringify(_('Close'))},
-						save: ${JSON.stringify(_('Done'))},
-					},
 					{
 						saveDrawing: () => saveDrawing(false),
 						autosaveDrawing: () => saveDrawing(true),
