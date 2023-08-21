@@ -22,8 +22,8 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
-import defaultLeftToRightItemRenderer from './utils/defaultLeftToRightListRenderer';
-// import defaultListRenderer from './utils/defaultListRenderer';
+// import defaultLeftToRightItemRenderer from './utils/defaultLeftToRightListRenderer';
+import defaultListRenderer from './utils/defaultListRenderer';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -33,8 +33,8 @@ const commands = {
 const NoteList = (props: Props) => {
 	const listRef = useRef(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
-	const listRenderer = defaultLeftToRightItemRenderer;
-	// const listRenderer = defaultListRenderer;
+	// const listRenderer = defaultLeftToRightItemRenderer;
+	const listRenderer = defaultListRenderer;
 
 	const itemSize: Size = useMemo(() => {
 		return {

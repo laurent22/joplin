@@ -109,7 +109,7 @@ const useOnKeyDown = (
 			void CommandService.instance().execute('deleteNote', noteIds);
 		}
 
-		if (noteIds.length && key === 'Spacebar') {
+		if (noteIds.length && key === ' ') {
 			event.preventDefault();
 
 			const selectedNotes = BaseModel.modelsByIds(notes, noteIds);
@@ -134,7 +134,7 @@ const useOnKeyDown = (
 			}
 		}
 
-		if (key === 'A' && (event.ctrlKey || event.metaKey)) {
+		if (key.toUpperCase() === 'A' && (event.ctrlKey || event.metaKey)) {
 			event.preventDefault();
 
 			dispatch({
