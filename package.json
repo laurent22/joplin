@@ -24,6 +24,7 @@
     "buildWebsiteTranslations": "node packages/tools/website/buildTranslations.js",
     "buildWebsite": "node ./packages/tools/website/build.js && yarn run buildPluginDoc && yarn run buildSettingJsonSchema",
     "checkLibPaths": "node ./packages/tools/checkLibPaths.js",
+    "checkIgnoredFiles": "node ./packages/tools/checkIgnoredFiles.js",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "npm run clean --workspaces --if-present && node packages/tools/clean && yarn cache clean",
     "dependencyTree": "madge",
@@ -33,7 +34,7 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-interactive": "eslint-interactive --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "packageJsonLint": "npmPkgJsonLint --configFile .npmpackagejsonlintrc.json --quiet .",
+    "packageJsonLint": "node ./packages/tools/packageJsonLint.js",
     "postinstall": "gulp build",
     "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
@@ -60,7 +61,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn run packageJsonLint"
+      "pre-commit": "lint-staged"
     }
   },
   "devDependencies": {

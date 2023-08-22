@@ -923,6 +923,7 @@ packages/tools/generate-images.js
 packages/tools/git-changelog.test.js
 packages/tools/git-changelog.js
 packages/tools/licenseChecker.js
+packages/tools/packageJsonLint.js
 packages/tools/release-android.js
 packages/tools/release-cli.js
 packages/tools/release-electron.js
