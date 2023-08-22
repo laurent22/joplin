@@ -42,14 +42,14 @@ const createShallowObjectEqualSelector = createSelectorCreator(
 			if (prev[n] !== next[n]) return false;
 		}
 		return true;
-	}
+	},
 );
 
 // This selector ensures that for the given command names, the same toolbar
 // button array is returned if the underlying toolbar buttons have not changed.
 const selectObjectByCommands = createCachedSelector(
 	(state: any) => state.array,
-	(array: any[]) => array
+	(array: any[]) => array,
 )({
 	keySelector: (_state: any, commandNames: string[]) => {
 		return commandNames.join('_');

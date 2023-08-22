@@ -143,7 +143,7 @@ const BlockMathConfig: MarkdownConfig = {
 				let stop;
 
 				let endMatch = mathBlockEndRegex.exec(
-					line.text.substring(mathStartMatch[0].length)
+					line.text.substring(mathStartMatch[0].length),
 				);
 
 				// If the math region ends immediately (on the same line),
@@ -183,7 +183,7 @@ const BlockMathConfig: MarkdownConfig = {
 					Math.min(lineEnd, stop + delimLen),
 
 					// The child of the container element should be the content element
-					[contentElem]
+					[contentElem],
 				);
 				cx.addElement(containerElement);
 

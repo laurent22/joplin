@@ -482,7 +482,7 @@ class AppGui {
 			if (this.linkSelector_.link) {
 				this.term_.moveTo(
 					this.linkSelector_.noteX + cursorOffsetX,
-					this.linkSelector_.noteY + cursorOffsetY
+					this.linkSelector_.noteY + cursorOffsetY,
 				);
 				shim.setTimeout(() => this.term_.term().inverse(this.linkSelector_.link), 50);
 			}

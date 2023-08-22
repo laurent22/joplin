@@ -82,7 +82,7 @@ const computeDecorations = (view: EditorView) => {
 	for (const { from, to } of view.visibleRanges) {
 		ensureSyntaxTree(
 			view.state,
-			to
+			to,
 		)?.iterate({
 			from, to,
 			enter: node => {

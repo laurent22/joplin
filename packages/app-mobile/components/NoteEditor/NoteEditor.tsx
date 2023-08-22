@@ -120,7 +120,7 @@ type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
 	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
-	setSearchState: OnSearchStateChangeCallback, searchStateRef: RefObject<SearchState>
+	setSearchState: OnSearchStateChangeCallback, searchStateRef: RefObject<SearchState>,
 ): EditorControl => {
 	return useMemo(() => {
 		return {
@@ -132,7 +132,7 @@ const useEditorControl = (
 			},
 			select(anchor: number, head: number) {
 				injectJS(
-					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
+					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`,
 				);
 			},
 			insertText(text: string) {
@@ -299,7 +299,7 @@ function NoteEditor(props: Props, ref: any) {
 	};
 
 	const editorControl = useEditorControl(
-		injectJS, setLinkDialogVisible, setSearchState, searchStateRef
+		injectJS, setLinkDialogVisible, setSearchState, searchStateRef,
 	);
 
 	useImperativeHandle(ref, () => {

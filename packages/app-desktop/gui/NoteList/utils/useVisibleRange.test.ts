@@ -51,7 +51,7 @@ describe('useVisibleRange', () => {
 				listSize,
 				itemSize,
 				noteCount,
-				flow
+				flow,
 			));
 
 			expect(result.current).toEqual(expected);

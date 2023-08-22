@@ -231,7 +231,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				},
 				() => {
 					resolve();
-				}
+				},
 			);
 		});
 	}

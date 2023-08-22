@@ -198,7 +198,7 @@ shared.settingsSections = createSelector(
 		}
 
 		return output;
-	}
+	},
 );
 
 shared.settingsToComponents2 = function(comp, device, settings, selectedSectionName = '') {

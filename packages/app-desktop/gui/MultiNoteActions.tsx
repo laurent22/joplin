@@ -68,7 +68,7 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 		itemComps.push(
 			<button key={item.label} style={styles.button} onClick={() => multiNotesButton_click(item)}>
 				{item.label}
-			</button>
+			</button>,
 		);
 	}
 

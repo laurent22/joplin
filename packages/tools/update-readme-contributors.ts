@@ -98,7 +98,7 @@ async function main() {
 		readmePath,
 		'<!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->\n',
 		'\n<!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->',
-		tableHtml
+		tableHtml,
 	);
 }
 

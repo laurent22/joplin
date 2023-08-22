@@ -63,7 +63,7 @@ const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: 
 };
 
 export const makeImportModule = (
-	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base
+	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base,
 ): ImportModule => {
 	const importerDefaults: ImportMetadata = {
 		...defaultBaseMetadata,
@@ -93,7 +93,7 @@ export const makeImportModule = (
 };
 
 export const makeExportModule = (
-	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base
+	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base,
 ): ExportModule => {
 	const exporterDefaults: ExportMetadata = {
 		...defaultBaseMetadata,

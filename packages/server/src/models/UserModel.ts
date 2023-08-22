@@ -219,7 +219,7 @@ export default class UserModel extends BaseModel<User> {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : item.name,
-				formatBytes(maxItemSize)
+				formatBytes(maxItemSize),
 			));
 		}
 
@@ -236,7 +236,7 @@ export default class UserModel extends BaseModel<User> {
 				throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
 					isNote ? _('note') : _('attachment'),
 					itemTitle ? itemTitle : item.name,
-					formatBytes(maxTotalItemSize)
+					formatBytes(maxTotalItemSize),
 				));
 			}
 		}

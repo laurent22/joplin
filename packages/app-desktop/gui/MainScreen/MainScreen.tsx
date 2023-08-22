@@ -608,37 +608,37 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
-				onDisableSafeModeAndRestart
+				onDisableSafeModeAndRestart,
 			);
 		} else if (this.props.hasMissingSyncCredentials) {
 			msg = this.renderNotificationMessage(
 				_('The synchronisation password is missing.'),
 				_('Set the password'),
-				onViewSyncSettingsScreen
+				onViewSyncSettingsScreen,
 			);
 		} else if (this.props.shouldUpgradeSyncTarget) {
 			msg = this.renderNotificationMessage(
 				_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.'),
 				_('Restart and upgrade'),
-				onRestartAndUpgrade
+				onRestartAndUpgrade,
 			);
 		} else if (this.props.hasDisabledEncryptionItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be decrypted.'),
 				_('View them now'),
-				onViewStatusScreen
+				onViewStatusScreen,
 			);
 		} else if (this.props.showNeedUpgradingMasterKeyMessage) {
 			msg = this.renderNotificationMessage(
 				_('One of your master keys use an obsolete encryption method.'),
 				_('View them now'),
-				onViewEncryptionConfigScreen
+				onViewEncryptionConfigScreen,
 			);
 		} else if (this.props.showShouldReencryptMessage) {
 			msg = this.renderNotificationMessage(
 				_('The default encryption method has been changed, you should re-encrypt your data.'),
 				_('More info'),
-				onViewEncryptionConfigScreen
+				onViewEncryptionConfigScreen,
 			);
 		} else if (this.showShareInvitationNotification(this.props)) {
 			const invitation = this.props.shareInvitations.find(inv => inv.status === 0);
@@ -649,25 +649,25 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Accept'),
 				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
 				_('Reject'),
-				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false)
+				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false),
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
 				_('Some items cannot be synchronised.'),
 				_('View them now'),
-				onViewStatusScreen
+				onViewStatusScreen,
 			);
 		} else if (this.props.showMissingMasterKeyMessage) {
 			msg = this.renderNotificationMessage(
 				_('One or more master keys need a password.'),
 				_('Set the password'),
-				onViewEncryptionConfigScreen
+				onViewEncryptionConfigScreen,
 			);
 		} else if (this.props.showInstallTemplatesPlugin) {
 			msg = this.renderNotificationMessage(
 				'The template feature has been moved to a plugin called "Templates".',
 				'Install plugin',
-				onViewPluginScreen
+				onViewPluginScreen,
 			);
 		}
 

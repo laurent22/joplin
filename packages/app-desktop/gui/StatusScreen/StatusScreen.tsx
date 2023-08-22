@@ -133,14 +133,14 @@ function StatusScreen(props: Props) {
 					<li style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
-					</li>
+					</li>,
 				);
 			} else {
 				itemsHtml.push(
 					<div style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
-					</div>
+					</div>,
 				);
 			}
 		}

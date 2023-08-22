@@ -55,7 +55,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.style,
 		props.itemSize,
 		props.onClick,
-		props.flow
+		props.flow,
 	);
 
 	useItemEventHandlers(rootElement, itemElement, onCheckboxChange);

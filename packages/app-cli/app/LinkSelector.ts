@@ -50,7 +50,7 @@ class LinkSelector {
 						link: matches[n][0],
 						noteX: matches[n].index,
 						noteY: i,
-					}
+					},
 				);
 			});
 		}

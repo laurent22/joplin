@@ -179,6 +179,6 @@ export async function processPastedHtml(html: string) {
 	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(
 		htmlUtils.replaceImageUrls(html, (src: string) => {
 			return mappedResources[src];
-		})
+		}),
 	));
 }

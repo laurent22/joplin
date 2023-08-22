@@ -123,7 +123,7 @@ function fileUriToPath_(uri, platform) {
 		uri.substring(0, 7) !== 'file://'
 	) {
 		throw new TypeError(
-			'must pass in a file:// URI to convert to a file path'
+			'must pass in a file:// URI to convert to a file path',
 		);
 	}
 

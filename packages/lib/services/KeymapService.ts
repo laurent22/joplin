@@ -350,7 +350,7 @@ export default class KeymapService extends BaseService {
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
 					itemAccelerator,
 					originalItem.command,
-					itemCommand
+					itemCommand,
 				));
 			} else if (itemAccelerator) {
 				usedAccelerators.add(itemAccelerator);

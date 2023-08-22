@@ -750,13 +750,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'text/css')
-				.map((a: any) => a.path)
+				.map((a: any) => a.path),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
 				.filter((a: any) => a.mime === 'application/javascript')
-				.map((a: any) => a.path)
+				.map((a: any) => a.path),
 		);
 
 

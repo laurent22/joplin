@@ -46,7 +46,7 @@ const style = createSelector(
 		output.buttonLabelSelected = { ...output.buttonLabel, color: theme.color };
 
 		return output;
-	}
+	},
 );
 
 module.exports = style;
