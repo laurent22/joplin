@@ -162,6 +162,7 @@ class HtmlUtils {
 		return url.startsWith('https://') ||
 			url.startsWith('http://') ||
 			url.startsWith('mailto://') ||
+			url.startsWith('file://') ||
 			// We also allow anchors but only with a specific set of a characters.
 			// Fixes https://github.com/laurent22/joplin/issues/8286
 			!!url.match(/^#[a-zA-Z0-9-]+$/);
