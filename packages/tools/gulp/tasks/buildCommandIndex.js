@@ -39,7 +39,7 @@ async function processDirectory(dir) {
 		destFile,
 		'// AUTO-GENERATED using `gulp buildCommandIndex`',
 		fileContent.join('\n'),
-		true
+		true,
 	);
 }
 

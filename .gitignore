@@ -917,6 +917,7 @@ packages/tools/generate-images.js
 packages/tools/git-changelog.test.js
 packages/tools/git-changelog.js
 packages/tools/licenseChecker.js
+packages/tools/packageJsonLint.js
 packages/tools/release-android.js
 packages/tools/release-cli.js
 packages/tools/release-electron.js
@@ -927,6 +928,7 @@ packages/tools/setupNewRelease.js
 packages/tools/spellcheck.js
 packages/tools/tagServerLatest.js
 packages/tools/tool-utils.js
+packages/tools/update-readme-contributors.js
 packages/tools/update-readme-download.test.js
 packages/tools/update-readme-download.js
 packages/tools/update-readme-sponsors.js

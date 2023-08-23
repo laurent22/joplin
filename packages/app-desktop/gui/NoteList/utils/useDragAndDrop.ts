@@ -17,7 +17,7 @@ const useDragAndDrop = (
 	uncompletedTodosOnTop: boolean,
 	showCompletedTodos: boolean,
 	flow: ItemFlow,
-	itemsPerLine: number
+	itemsPerLine: number,
 ) => {
 	const [dragOverTargetNoteIndex, setDragOverTargetNoteIndex] = useState(null);
 

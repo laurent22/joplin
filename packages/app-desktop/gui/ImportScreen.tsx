@@ -42,7 +42,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 				},
 				() => {
 					void this.doImport();
-				}
+				},
 			);
 		}
 	}

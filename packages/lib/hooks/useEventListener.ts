@@ -4,7 +4,7 @@ const { useEffect, useRef } = shim.react();
 function useEventListener(
 	eventName: any,
 	handler: any,
-	element?: any
+	element?: any,
 ) {
 	// Create a ref that stores handler
 	const savedHandler = useRef<any>();

@@ -547,7 +547,7 @@ export default class JoplinDatabase extends Database {
 						encryption_cipher_text: 'TEXT NOT NULL DEFAULT ""',
 						encryption_applied: 'INT NOT NULL DEFAULT 0',
 						encryption_blob_encrypted: 'INT NOT NULL DEFAULT 0',
-					})
+					}),
 				);
 			}
 
@@ -761,7 +761,7 @@ export default class JoplinDatabase extends Database {
 						encryption_applied: 'INT NOT NULL DEFAULT 0',
 						markup_language: 'INT NOT NULL DEFAULT 1',
 						is_shared: 'INT NOT NULL DEFAULT 0',
-					})
+					}),
 				);
 			}
 

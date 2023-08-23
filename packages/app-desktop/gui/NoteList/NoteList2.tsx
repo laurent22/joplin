@@ -56,7 +56,7 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 		itemSize,
 		props.size,
-		listRef
+		listRef,
 	);
 
 	const [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount] = useVisibleRange(
@@ -64,7 +64,7 @@ const NoteList = (props: Props) => {
 		scrollTop,
 		props.size,
 		itemSize,
-		props.notes.length
+		props.notes.length,
 	);
 
 	const focusNote = useFocusNote(itemRefs);
@@ -76,7 +76,7 @@ const NoteList = (props: Props) => {
 		props.selectedFolderId,
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
-		props.notes
+		props.notes,
 	);
 
 	const renderedNotes = useRenderedNotes(
@@ -86,7 +86,7 @@ const NoteList = (props: Props) => {
 		props.selectedNoteIds,
 		listRenderer,
 		props.highlightedWords,
-		props.watchedNoteFiles
+		props.watchedNoteFiles,
 	);
 
 	const noteItemStyle = useMemo(() => {
@@ -115,7 +115,7 @@ const NoteList = (props: Props) => {
 		visibleItemCount,
 		props.notes.length,
 		listRenderer.flow,
-		itemsPerLine
+		itemsPerLine,
 	);
 
 	useItemCss(listRenderer.itemCss);
@@ -134,7 +134,7 @@ const NoteList = (props: Props) => {
 		props.dispatch,
 		props.watchedNoteFiles,
 		props.plugins,
-		props.customCss
+		props.customCss,
 	);
 
 	const { onDragStart, onDragOver, onDrop, dragOverTargetNoteIndex } = useDragAndDrop(props.parentFolderIsReadOnly,
@@ -148,7 +148,7 @@ const NoteList = (props: Props) => {
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
 		listRenderer.flow,
-		itemsPerLine
+		itemsPerLine,
 	);
 
 	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
@@ -220,7 +220,7 @@ const NoteList = (props: Props) => {
 					highlightedWords={highlightedWords}
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
 					flow={listRenderer.flow}
-				/>
+				/>,
 			);
 		}
 

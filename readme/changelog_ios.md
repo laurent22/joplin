@@ -1,5 +1,25 @@
 # Joplin iOS app changelog
 
+## [ios-v12.12.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.12.1) - 2023-08-22T10:06:43Z
+
+- New: Add JEX export (#8428 by Henry Heino)
+- New: Add support for Joplin Cloud email to note functionality (#8460 by [@pedr](https://github.com/pedr))
+- New: Add support for share permissions (#8491)
+- Improved: Add an option to disable the image resizing prompt (#8575) (#8566 by [@hubert](https://github.com/hubert))
+- Improved: Add option to autodetect theme (#8498) (#8490 by Henry Heino)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.4.1), @react-native-community/geolocation (v3.0.6), @react-native-community/netinfo (v9.4.1), @rmp135/sql-ts (v1.18.0), @testing-library/react-native (v12.1.3), buildTools, clean-html (v2), dayjs (v1.11.9), domhandler (v5), gettext-parser (v7.0.1), glob (v10.3.3), highlight.js (v11.8.0), jsdom (v22.1.0), react-native-device-info (v10.7.0), react-native-document-picker (v9), react-native-drawer-layout (v3.2.1), react-native-gesture-handler (v2.12.0), react-native-get-random-values (v1.9.0), react-native-image-picker (v5.6.0), react-native-localize (v3.0.2), react-native-modal-datetime-picker (v15.0.1), react-native-paper (v5.9.1), react-native-reanimated (v3.2.0), react-native-safe-area-context (v4.6.4), react-redux (v8.1.2), sass (v1.63.6), sharp (v0.32.4), standard (v17.1.0), ts-loader (v9.4.4), url (v0.11.1), word-wrap (v1.2.5)
+- Improved: Upgrade react-native-webview to v12 (9ceb7b9)
+- Improved: Upgrade to React Native 0.71 (e740914)
+- Improved: WebDAV: Show a more descriptive error message when the password is empty (#8477) (#8466 by Henry Heino)
+- Fixed: Do not log data shared with the app (#8495) (#8211 by Henry Heino)
+- Fixed: Fixed link modal position on devices with notch (#8029) (#8027 by [@Letty](https://github.com/Letty))
+- Fixed: Fixed text update issue when attaching a file to an empty note (78f3f1c)
+- Fixed: Hide markdown toolbar completely when low on vertical space (#8688) (#8687 by Henry Heino)
+- Fixed: Preserve image rotation (and other metadata) when resizing (#8669) (#8310 by Henry Heino)
+- Fixed: Show warning if some items could not be decrypted (#8481) (#8381 by Henry Heino)
+- Fixed: Unrevert #7953: Migrate to react-native-drawer-layout (#8379) (#7918 by Henry Heino)
+- Security: Prevent XSS when passing specially encoded string to a link (57b4198)
+
 ## [ios-v12.11.5](https://github.com/laurent22/joplin/releases/tag/ios-v12.11.5) - 2023-06-25T14:05:43Z
 
 - Improved: Auto-detect language on start (e48d55c)

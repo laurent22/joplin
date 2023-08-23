@@ -209,7 +209,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				settingComps.push(
 					<p key='missing-password-warning' style={warningStyle}>
 						{_('Warning: Missing password.')}{' '}{showMacInfoLink ? macInfoLink : null}
-					</p>
+					</p>,
 				);
 			}
 
@@ -231,7 +231,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onClick={this.checkSyncConfig_}
 						/>
 						{statusComp}
-					</div>
+					</div>,
 				);
 			}
 		}
@@ -393,7 +393,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				items.push(
 					<option value={e.key.toString()} key={e.key}>
 						{settingOptions[e.key]}
-					</option>
+					</option>,
 				);
 			}
 

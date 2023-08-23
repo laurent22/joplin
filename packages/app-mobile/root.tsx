@@ -888,7 +888,7 @@ class AppComponent extends React.Component {
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		this.themeChangeListener_ = Appearance.addChangeListener(
-			({ colorScheme }) => onSystemColorSchemeChange(colorScheme)
+			({ colorScheme }) => onSystemColorSchemeChange(colorScheme),
 		);
 		onSystemColorSchemeChange(Appearance.getColorScheme());
 

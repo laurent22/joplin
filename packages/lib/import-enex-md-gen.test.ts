@@ -4,7 +4,7 @@ import shim from './shim';
 const fs = require('fs-extra');
 const os = require('os');
 const { filename } = require('./path-utils');
-import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } from './testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir, expectThrow } from './testing/test-utils';
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 import importEnex from './import-enex';
 import Note from './models/Note';
@@ -151,6 +151,11 @@ describe('import-enex-md-gen', () => {
 		// of the note, so that it can be found back by the user
 		expect(errors.length).toBe(1);
 		expect(errors[0].message.includes('Note 2')).toBe(true);
+	});
+
+	it('should throw an error and stop if the outer XML is invalid', async () => {
+		const filePath = `${enexSampleBaseDir}/invalid_html.enex`;
+		await expectThrow(async () => importEnex('', filePath));
 	});
 
 });

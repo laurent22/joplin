@@ -1,17 +1,21 @@
-'use strict';
-
 const request = require('request');
+
+interface Contributor {
+	avatar_url: string;
+	login: string;
+	html_url: string;
+}
 
 const readmePath = `${__dirname}/../../README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 
-async function gitHubContributors(page) {
+async function gitHubContributors(page: number): Promise<Contributor[]> {
 	return new Promise((resolve, reject) => {
 		request.get({
 			url: `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`,
 			json: true,
 			headers: { 'User-Agent': 'Joplin Readme Updater' },
-		}, (error, response, data) => {
+		}, (error: any, response: any, data: any) => {
 			if (error) {
 				reject(error);
 			} else if (response.statusCode !== 200) {
@@ -23,10 +27,10 @@ async function gitHubContributors(page) {
 	});
 }
 
-function contributorTable(contributors) {
+function contributorTable(contributors: Contributor[]) {
 	const rows = [];
 
-	let row = [];
+	let row: string[] = [];
 	rows.push(row);
 	const rowLength = 5;
 	let contributorIndex = 0;
@@ -65,7 +69,7 @@ function contributorTable(contributors) {
 }
 
 async function main() {
-	let contributors = [];
+	let contributors: Contributor[] = [];
 	let pageIndex = 0;
 	const doneNames = [];
 	while (true) {
@@ -84,17 +88,21 @@ async function main() {
 		contributors = contributors.concat(temp);
 	}
 
+	contributors = contributors.filter(c => {
+		return !['joplinbot', 'renovate[bot]', 'github-actions[bot]'].includes(c.login);
+	});
+
 	const tableHtml = contributorTable(contributors);
 
 	await insertContentIntoFile(
 		readmePath,
 		'<!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->\n',
 		'\n<!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->',
-		tableHtml
+		tableHtml,
 	);
 }
 
-main(process.argv).catch((error) => {
+main().catch((error) => {
 	console.error('Fatal error', error);
 	process.exit(1);
 });

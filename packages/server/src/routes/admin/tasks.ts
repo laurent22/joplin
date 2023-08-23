@@ -64,7 +64,7 @@ router.post('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 			user.id,
 			NotificationKey.Any,
 			NotificationLevel.Error,
-			`Some operations could not be performed: ${errors.join('. ')}`
+			`Some operations could not be performed: ${errors.join('. ')}`,
 		);
 	}
 

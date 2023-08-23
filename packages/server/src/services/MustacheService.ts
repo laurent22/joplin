@@ -234,7 +234,7 @@ export default class MustacheService {
 					...view.content,
 					global: globalParams,
 				},
-				this.partials_
+				this.partials_,
 			);
 		} else if (ext === '.md') {
 			const markdownIt = new MarkdownIt({

@@ -587,7 +587,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 				(error: any) => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
@@ -616,7 +616,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				85, // quality
 				undefined, // rotation
 				undefined, // outputPath
-				true // keep metadata
+				true, // keep metadata
 			);
 
 			const resizedImagePath = resizedImage.uri;
@@ -787,7 +787,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				uri: data.uri,
 				type: 'image/jpg',
 			},
-			'image'
+			'image',
 		);
 
 		this.setState({ showCamera: false });

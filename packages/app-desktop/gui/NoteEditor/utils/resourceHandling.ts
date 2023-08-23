@@ -6,7 +6,7 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
-import rendererHtmlUtils from '@joplin/renderer/htmlUtils';
+import rendererHtmlUtils, { extractHtmlBody } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
 const { fileUriToPath } = require('@joplin/lib/urlUtils');
 const joplinRendererUtils = require('@joplin/renderer').utils;
@@ -107,7 +107,7 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
-export async function handlePasteEvent(event: any) {
+export async function getResourcesFromPasteEvent(event: any) {
 	const output = [];
 	const formats = clipboard.availableFormats();
 	for (let i = 0; i < formats.length; i++) {
@@ -176,9 +176,9 @@ export async function processPastedHtml(html: string) {
 		}
 	}
 
-	return rendererHtmlUtils.sanitizeHtml(
+	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(
 		htmlUtils.replaceImageUrls(html, (src: string) => {
 			return mappedResources[src];
-		})
-	);
+		}),
+	));
 }

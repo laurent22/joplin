@@ -47,7 +47,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 				listRenderer.itemSize,
 				isSelected,
 				titleHtml,
-				isWatched
+				isWatched,
 			);
 			const view = await listRenderer.onRenderNote(viewProps);
 

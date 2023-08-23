@@ -456,7 +456,7 @@ function cssValue(context: any, style: string, propName: string | string[]): str
 
 		return null;
 	} catch (error) {
-		displaySaxWarning(context, error.message);
+		displaySaxWarning(context, `Invalid CSS value: ${error.message}`);
 		return null;
 	}
 }

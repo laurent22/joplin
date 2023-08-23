@@ -13,7 +13,7 @@ const useOnContextMenu = (
 	dispatch: Dispatch,
 	watchedNoteFiles: string[],
 	plugins: PluginStates,
-	customCss: string
+	customCss: string,
 ) => {
 	return useCallback((event: any) => {
 		const currentNoteId = event.currentTarget.getAttribute('data-id');

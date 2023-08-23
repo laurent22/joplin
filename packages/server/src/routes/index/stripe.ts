@@ -30,7 +30,7 @@ async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 	return stripe.webhooks.constructEvent(
 		body,
 		req.headers['stripe-signature'],
-		stripeConfig().webhookSecret
+		stripeConfig().webhookSecret,
 	);
 }
 
@@ -115,7 +115,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			customerName,
 			accountType,
 			stripeUserId,
-			stripeSubscriptionId
+			stripeSubscriptionId,
 		);
 	}
 };
@@ -330,7 +330,7 @@ export const postHandlers: PostHandlers = {
 					customer.email,
 					accountType,
 					stripeUserId,
-					stripeSubscriptionId
+					stripeSubscriptionId,
 				);
 			},
 

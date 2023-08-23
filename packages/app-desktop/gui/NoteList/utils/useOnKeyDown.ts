@@ -19,7 +19,7 @@ const useOnKeyDown = (
 	visibleItemCount: number,
 	noteCount: number,
 	flow: ItemFlow,
-	itemsPerLine: number
+	itemsPerLine: number,
 ) => {
 	const scrollNoteIndex = useCallback((visibleItemCount: number, key: KeyboardEventKey, ctrlKey: boolean, metaKey: boolean, noteIndex: number) => {
 		if (flow === ItemFlow.TopToBottom) {

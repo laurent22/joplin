@@ -43,7 +43,7 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 		// This allows any iterators over this.listeners to continue iterating
 		// without skipping elements.
 		this.listeners[eventName] = this.listeners[eventName].filter(
-			otherCallback => otherCallback !== callback
+			otherCallback => otherCallback !== callback,
 		);
 	}
 }
