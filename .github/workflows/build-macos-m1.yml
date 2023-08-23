@@ -49,7 +49,7 @@ jobs:
           export npm_config_target_arch=arm64
           yarn install
           cd packages/app-desktop
-          npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
+          npm pkg set 'build.mac.artifactName'='${productName}-${version}.${arch}.${ext}'
           npm pkg set 'build.mac.target.target'='dmg'
           npm pkg set 'build.mac.target.arch[0]'='arm64'
 

@@ -90,7 +90,8 @@
             "CFBundleURLName": "org.joplinapp.x-callback-url"
           }
         ]
-      }
+      },
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
