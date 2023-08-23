@@ -20,7 +20,7 @@ describe('Dropdown', () => {
 				items={items}
 				selectedValue={'1'}
 				onValueChange={onValueChange}
-			/>
+			/>,
 		);
 
 		// Should initially not show any other items
