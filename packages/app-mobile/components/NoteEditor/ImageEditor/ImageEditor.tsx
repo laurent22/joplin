@@ -92,7 +92,7 @@ const ImageEditor = (props: Props) => {
 						webviewRef.current.injectJS('saveDrawing();');
 					},
 				},
-			]
+			],
 		);
 		return true;
 	}, [webviewRef, props.onCancel, imageChanged]);

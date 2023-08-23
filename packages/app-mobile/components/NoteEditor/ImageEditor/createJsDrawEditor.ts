@@ -27,7 +27,7 @@ export const createJsDrawEditor = (
 	locale: string,
 
 	// Intended for automated tests.
-	editorSettings: Partial<EditorSettings> = {}
+	editorSettings: Partial<EditorSettings> = {},
 ): Editor => {
 	const parentElement = document.body;
 	const editor = new Editor(parentElement, {
@@ -93,7 +93,7 @@ const listenToolbarState = (editor: Editor, toolbar: AbstractToolbar) => {
 			JSON.stringify({
 				action: 'save-toolbar',
 				data: state,
-			})
+			}),
 		);
 	});
 };
@@ -123,7 +123,7 @@ export const applyTemplateToEditor = async (editor: Editor, templateData: string
 
 		if ('backgroundData' in templateJSON) {
 			backgroundComponent = AbstractComponent.deserialize(
-				templateJSON['backgroundData']
+				templateJSON['backgroundData'],
 			);
 		}
 
@@ -156,7 +156,7 @@ export const applyTemplateToEditor = async (editor: Editor, templateData: string
 };
 
 export const watchTemplateChanges = (
-	editor: Editor, initialTemplate: string, updateTemplate: (templateData: string)=> void
+	editor: Editor, initialTemplate: string, updateTemplate: (templateData: string)=> void,
 ) => {
 	const computeTemplate = (): string => {
 		let imageSize = editor.getImportExportRect().size;

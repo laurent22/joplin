@@ -59,7 +59,7 @@ export default function NoteBodyViewer(props: Props) {
 			onJoplinLinkClick: props.onJoplinLinkClick,
 			onRequestEditResource: props.onRequestEditResource,
 			onResourceLongPress,
-		}
+		},
 	);
 
 	const onLoadEnd = useCallback(() => {
