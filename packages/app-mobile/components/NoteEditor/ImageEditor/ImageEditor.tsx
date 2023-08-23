@@ -34,17 +34,11 @@ const useCss = (editorTheme: Theme) => {
 		}
 
 		return `
-			:root {
-				/* color-mix is a newer CSS feature -- use it separately in case the webview
-				   doesn't have support yet. */
-				--calculated-foreground-color-2: color-mix(in srgb, ${editorTheme.color3} 30%, ${editorTheme.color});
-			}
-
 			:root .imageEditorContainer {
 				--background-color-1: ${editorTheme.backgroundColor};
 				--foreground-color-1: ${editorTheme.color};
 				--background-color-2: ${editorTheme.backgroundColor3};
-				--foreground-color-2: var(--calculated-foreground-color-2, ${editorTheme.backgroundColor3});
+				--foreground-color-2: ${editorTheme.color3};
 				--background-color-3: ${editorTheme.raisedBackgroundColor};
 				--foreground-color-3: ${editorTheme.raisedColor};
 			
