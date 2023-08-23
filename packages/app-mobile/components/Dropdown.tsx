@@ -1,8 +1,7 @@
 const React = require('react');
-import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
 import { Component } from 'react';
 import { _ } from '@joplin/lib/locale';
-const { ItemList } = require('./ItemList.js');
 
 type ValueType = string;
 export interface DropdownListItem {
@@ -122,7 +121,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			this.setState({ listVisible: false });
 		};
 
-		const itemRenderer = (item: DropdownListItem) => {
+		const itemRenderer = ({ item }: { item: DropdownListItem }) => {
 			const key = item.value ? item.value.toString() : '__null'; // The top item ("Move item to notebook...") has a null value.
 			return (
 				<TouchableOpacity
@@ -194,11 +193,15 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					<View
 						accessibilityRole='menu'
 						style={wrapperStyle}>
-						<ItemList
+						<FlatList
 							style={itemListStyle}
-							items={this.props.items}
-							itemHeight={itemHeight}
-							itemRenderer={itemRenderer}
+							data={this.props.items}
+							renderItem={itemRenderer}
+							getItemLayout={(_data, index) => ({
+								length: itemHeight,
+								offset: itemHeight * index,
+								index,
+							})}
 						/>
 					</View>
 

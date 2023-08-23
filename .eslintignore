@@ -401,6 +401,7 @@ packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/CustomButton.js
+packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
