@@ -22,7 +22,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 			ctx.joplin.owner.id,
 			NotificationKey.ChangeAdminPassword,
 			NotificationLevel.Important,
-			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl())
+			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl()),
 		);
 	} else {
 		await notificationModel.setRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);

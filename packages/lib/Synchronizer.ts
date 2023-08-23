@@ -537,7 +537,7 @@ export default class Synchronizer {
 					(fnName, ...args) => {
 						return this.apiCall(fnName, ...args);
 					},
-					action => { return this.dispatch(action); }
+					action => { return this.dispatch(action); },
 				);
 			} // DELETE_REMOTE STEP
 
@@ -768,7 +768,7 @@ export default class Synchronizer {
 							local,
 							syncTargetId,
 							itemIsReadOnly,
-							(action: any) => this.dispatch(action)
+							(action: any) => this.dispatch(action),
 						);
 
 						completeItemProcessing(path);

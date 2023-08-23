@@ -838,7 +838,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					click: async () => {
 						editorCutText();
 					},
-				})
+				}),
 			);
 
 			menu.append(
@@ -848,7 +848,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					click: async () => {
 						editorCopyText();
 					},
-				})
+				}),
 			);
 
 			menu.append(
@@ -858,7 +858,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					click: async () => {
 						editorPaste();
 					},
-				})
+				}),
 			);
 
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);

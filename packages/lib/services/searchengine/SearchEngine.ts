@@ -109,7 +109,7 @@ export default class SearchEngine {
 				queries.push({ sql: `
 				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] }
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] },
 				);
 			}
 
@@ -174,7 +174,7 @@ export default class SearchEngine {
 					ORDER BY id ASC
 					LIMIT 10
 				`,
-					[BaseModel.TYPE_NOTE, lastChangeId]
+					[BaseModel.TYPE_NOTE, lastChangeId],
 				);
 
 				if (!changes.length) break;
@@ -184,7 +184,7 @@ export default class SearchEngine {
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
 					SELECT ${SearchEngine.relevantFields}
-					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`
+					FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`,
 				);
 
 				for (let i = 0; i < changes.length; i++) {

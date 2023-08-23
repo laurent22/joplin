@@ -41,7 +41,7 @@ const Toolbar = (props: ToolbarProps) => {
 				key={key.toString()}
 				styleSheet={props.styleSheet}
 				spec={spec}
-			/>
+			/>,
 		);
 	}
 
@@ -49,7 +49,7 @@ const Toolbar = (props: ToolbarProps) => {
 		const containerWidth = event.nativeEvent.layout.width;
 		const maxButtonsTotal = Math.floor(containerWidth / buttonSize);
 		setMaxButtonsEachSide(Math.floor(
-			Math.min((maxButtonsTotal - 1) / 2, allButtonSpecs.length / 2)
+			Math.min((maxButtonsTotal - 1) / 2, allButtonSpecs.length / 2),
 		));
 	}, [allButtonSpecs.length]);
 

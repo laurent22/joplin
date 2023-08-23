@@ -280,7 +280,7 @@ const SidebarComponent = (props: Props) => {
 		const menu = new Menu();
 
 		menu.append(
-			new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder'))
+			new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder')),
 		);
 
 		menu.popup({ window: bridge().window() });
@@ -314,13 +314,13 @@ const SidebarComponent = (props: Props) => {
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId)),
 			);
 		}
 
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemId))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemId)),
 			);
 		} else {
 			menu.append(
@@ -342,7 +342,7 @@ const SidebarComponent = (props: Props) => {
 							});
 						}
 					},
-				})
+				}),
 			);
 		}
 
@@ -364,7 +364,7 @@ const SidebarComponent = (props: Props) => {
 						click: async () => {
 							await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: [itemId], plugins: pluginsRef.current });
 						},
-					})
+					}),
 				);
 			}
 
@@ -386,7 +386,7 @@ const SidebarComponent = (props: Props) => {
 				new MenuItem({
 					label: _('Export'),
 					submenu: exportMenu,
-				})
+				}),
 			);
 			if (Setting.value('notes.perFolderSortOrderEnabled')) {
 				menu.append(new MenuItem({
@@ -404,13 +404,13 @@ const SidebarComponent = (props: Props) => {
 					click: () => {
 						clipboard.writeText(getFolderCallbackUrl(itemId));
 					},
-				})
+				}),
 			);
 		}
 
 		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(new MenuItem(
-				menuUtils.commandToStatefulMenuItem('renameTag', itemId)
+				menuUtils.commandToStatefulMenuItem('renameTag', itemId),
 			));
 			menu.append(
 				new MenuItem({
@@ -418,7 +418,7 @@ const SidebarComponent = (props: Props) => {
 					click: () => {
 						clipboard.writeText(getTagCallbackUrl(itemId));
 					},
-				})
+				}),
 			);
 		}
 
@@ -431,7 +431,7 @@ const SidebarComponent = (props: Props) => {
 				itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
 			) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId))
+					new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId)),
 				);
 			}
 		}
@@ -705,7 +705,7 @@ const SidebarComponent = (props: Props) => {
 			onDrop: onFolderDrop_,
 			['data-folder-id']: '',
 			toggleblock: 1,
-		})
+		}),
 	);
 
 	const foldersStyle = useMemo(() => {
@@ -725,14 +725,14 @@ const SidebarComponent = (props: Props) => {
 				style={foldersStyle}
 			>
 				{folderItems}
-			</div>
+			</div>,
 		);
 	}
 
 	items.push(
 		renderHeader('tagHeader', _('Tags'), 'icon-tags', null, null, {
 			toggleblock: 1,
-		})
+		}),
 	);
 
 	if (props.tags.length) {
@@ -743,7 +743,7 @@ const SidebarComponent = (props: Props) => {
 		items.push(
 			<div className="tags" key="tag_items" style={{ display: props.tagHeaderIsExpanded ? 'block' : 'none' }}>
 				{tagItems}
-			</div>
+			</div>,
 		);
 	}
 
@@ -765,7 +765,7 @@ const SidebarComponent = (props: Props) => {
 		syncReportText.push(
 			<StyledSyncReportText key={i}>
 				{lines[i]}
-			</StyledSyncReportText>
+			</StyledSyncReportText>,
 		);
 	}
 

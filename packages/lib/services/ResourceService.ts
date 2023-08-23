@@ -44,7 +44,7 @@ export default class ResourceService extends BaseService {
 					AND id > ?
 					ORDER BY id ASC
 					LIMIT 10
-					`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]
+					`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')],
 				);
 
 				if (!changes.length) break;

@@ -125,7 +125,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				noteMarkupLanguage,
 				bodyToRender,
 				rendererTheme,
-				mdOptions
+				mdOptions,
 			);
 
 			if (cancelled) return;

@@ -10,7 +10,7 @@ import loadLangauges from './loadLanguages';
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
 const createEditor = async (
-	initialText: string, initialSelection: SelectionRange, expectedSyntaxTreeTags: string[]
+	initialText: string, initialSelection: SelectionRange, expectedSyntaxTreeTags: string[],
 ): Promise<EditorView> => {
 	await loadLangauges();
 

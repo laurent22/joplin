@@ -92,7 +92,7 @@ export default (props: Props) => {
 					onPress: () => complete(false),
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, [initialPromptDone, display, props.dispatch]);
 

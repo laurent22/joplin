@@ -173,7 +173,7 @@ class Command extends BaseCommand {
 						reg.db(),
 						sync.lockHandler(),
 						appTypeToLockType(Setting.value('appType')),
-						Setting.value('clientId')
+						Setting.value('clientId'),
 					);
 
 					migrationHandler.setLogger(cliUtils.stdoutLogger(this.stdout.bind(this)));

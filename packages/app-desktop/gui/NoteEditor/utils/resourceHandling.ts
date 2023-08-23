@@ -181,6 +181,6 @@ export async function processPastedHtml(html: string) {
 			return mappedResources[src];
 		}), {
 			allowedFilePrefixes: [Setting.value('resourceDir')],
-		}
+		},
 	);
 }

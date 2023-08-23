@@ -23,7 +23,7 @@ describe('SubscriptionModel', () => {
 			'Toto',
 			AccountType.Pro,
 			'STRIPE_USER_ID',
-			'STRIPE_SUB_ID'
+			'STRIPE_SUB_ID',
 		);
 
 		const user = await models().user().loadByEmail('toto@example.com');
@@ -46,7 +46,7 @@ describe('SubscriptionModel', () => {
 			'Toto',
 			AccountType.Pro,
 			'STRIPE_USER_ID',
-			'STRIPE_SUB_ID'
+			'STRIPE_SUB_ID',
 		);
 
 		await models().user().save({

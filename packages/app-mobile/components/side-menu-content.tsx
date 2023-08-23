@@ -112,7 +112,7 @@ const SideMenuContentComponent = (props: Props) => {
 					toValue: 1,
 					duration: 3000,
 					easing: Easing.linear,
-				})
+				}),
 			);
 
 			syncIconAnimation.start();
@@ -156,7 +156,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 			if (folder.id === props.inboxJopId) {
 				return folderDeletion(
-					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.')
+					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
 				);
 			}
 			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
@@ -191,7 +191,7 @@ const SideMenuContentComponent = (props: Props) => {
 			],
 			{
 				cancelable: false,
-			}
+			},
 		);
 	};
 
@@ -456,7 +456,7 @@ const SideMenuContentComponent = (props: Props) => {
 			items.push(
 				<Text key="sync_report" style={styles_.syncStatus}>
 					{fullReport.join('\n')}
-				</Text>
+				</Text>,
 			);
 		}
 
@@ -464,7 +464,7 @@ const SideMenuContentComponent = (props: Props) => {
 			items.push(
 				<Text key="net_info" style={styles_.syncStatus}>
 					{ _('Mobile data - auto-sync disabled') }
-				</Text>
+				</Text>,
 			);
 		}
 

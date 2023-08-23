@@ -32,7 +32,7 @@ export default class Tag extends BaseItem {
 
 		return Note.previews(
 			null,
-			{ ...options, conditions: [`id IN ("${noteIds.join('","')}")`] }
+			{ ...options, conditions: [`id IN ("${noteIds.join('","')}")`] },
 		);
 	}
 

@@ -12,12 +12,12 @@ describe('markdownCommands.toggleList', () => {
 		const editor = await createEditor(
 			initialDocText,
 			EditorSelection.cursor(5),
-			['BulletList', 'InlineCode']
+			['BulletList', 'InlineCode'],
 		);
 
 		toggleList(ListType.UnorderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'testing\nthis is a `test`\n'
+			'testing\nthis is a `test`\n',
 		);
 	});
 
@@ -26,12 +26,12 @@ describe('markdownCommands.toggleList', () => {
 		const editor = await createEditor(
 			initialDocText,
 			EditorSelection.cursor('Testing...\nThis is a'.length),
-			[]
+			[],
 		);
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'Testing...\n1. This is a test\nof list toggling...'
+			'Testing...\n1. This is a test\nof list toggling...',
 		);
 
 		editor.setState(EditorState.create({
@@ -41,7 +41,7 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'1. Testing...\n2. This is a test\n3. of list toggling...'
+			'1. Testing...\n2. This is a test\n3. of list toggling...',
 		);
 	});
 
@@ -51,12 +51,12 @@ describe('markdownCommands.toggleList', () => {
 		const editor = await createEditor(
 			unorderedListText,
 			EditorSelection.cursor(unorderedListText.length),
-			['BulletList']
+			['BulletList'],
 		);
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'1. 1\n2. 2\n3. 3\n4. 4\n5. 5\n6. 6\n7. 7'
+			'1. 1\n2. 2\n3. 3\n4. 4\n5. 5\n6. 6\n7. 7',
 		);
 	});
 
@@ -154,12 +154,12 @@ describe('markdownCommands.toggleList', () => {
 		const editor = await createEditor(
 			initialDocText,
 			EditorSelection.cursor(0),
-			['OrderedList', 'BulletList']
+			['OrderedList', 'BulletList'],
 		);
 
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'- [ ] Foo\n- [ ] Bar\n- [ ] Baz\n\t- Test\n\t- of\n\t- sublists\n- [ ] Foo'
+			'- [ ] Foo\n- [ ] Bar\n- [ ] Baz\n\t- Test\n\t- of\n\t- sublists\n- [ ] Foo',
 		);
 	});
 
@@ -169,7 +169,7 @@ describe('markdownCommands.toggleList', () => {
 		const editor = await createEditor(
 			initialDocText,
 			EditorSelection.cursor(initialDocText.length),
-			['OrderedList']
+			['OrderedList'],
 		);
 
 		increaseIndent(editor);
@@ -177,12 +177,12 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'1. This\n2. is\n\t- [ ] '
+			'1. This\n2. is\n\t- [ ] ',
 		);
 
 		editor.dispatch(editor.state.replaceSelection('a test.'));
 		expect(editor.state.doc.toString()).toBe(
-			'1. This\n2. is\n\t- [ ] a test.'
+			'1. This\n2. is\n\t- [ ] a test.',
 		);
 	});
 
@@ -191,12 +191,12 @@ describe('markdownCommands.toggleList', () => {
 		const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
 		const editor = await createEditor(
 			initialDocText, EditorSelection.cursor(preSubListText.length + 3),
-			['BlockQuote', 'BulletList']
+			['BlockQuote', 'BulletList'],
 		);
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling'
+			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling',
 		);
 		expect(editor.state.selection.main.from).toBe(preSubListText.length);
 	});

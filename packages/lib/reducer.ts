@@ -211,12 +211,12 @@ const createShallowArrayEqualSelector = createSelectorCreator(
 			if (prev[i] !== next[i]) return false;
 		}
 		return true;
-	}
+	},
 );
 
 const selectArrayShallow = createCachedSelector(
 	(state: any) => state.array,
-	(array: any[]) => array
+	(array: any[]) => array,
 )({
 	keySelector: (_state: any, cacheKey: any) => {
 		return cacheKey;

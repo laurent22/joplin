@@ -45,15 +45,15 @@ export default class NoteListUtils {
 
 		if (!hasEncrypted) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds)),
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds)),
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds)),
 			);
 
 			if (singleNoteId) {
@@ -64,8 +64,8 @@ export default class NoteListUtils {
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds)
-					)
+						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds),
+					),
 				);
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
@@ -84,7 +84,7 @@ export default class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'note');
 						},
-					})
+					}),
 				);
 
 				menu.append(
@@ -93,7 +93,7 @@ export default class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'todo');
 						},
-					})
+					}),
 				);
 			}
 
@@ -108,7 +108,7 @@ export default class NoteListUtils {
 						}
 						clipboard.writeText(links.join(' '));
 					},
-				})
+				}),
 			);
 
 			if (noteIds.length === 1) {
@@ -118,15 +118,15 @@ export default class NoteListUtils {
 						click: () => {
 							clipboard.writeText(getNoteCallbackUrl(noteIds[0]));
 						},
-					})
+					}),
 				);
 			}
 
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
-					)
+						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice()),
+					),
 				);
 			}
 
@@ -150,14 +150,14 @@ export default class NoteListUtils {
 								customCss: props.customCss,
 							});
 						},
-					})
+					}),
 				);
 			}
 
 			exportMenu.append(
 				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds)
-				)
+					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds),
+				),
 			);
 
 			const exportMenuItem = new MenuItem({ label: _('Export'), submenu: exportMenu });
@@ -167,8 +167,8 @@ export default class NoteListUtils {
 
 		menu.append(
 			new MenuItem(
-				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds)
-			)
+				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds),
+			),
 		);
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
@@ -179,7 +179,7 @@ export default class NoteListUtils {
 
 			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
+					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds)),
 				);
 			}
 		}

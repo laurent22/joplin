@@ -565,7 +565,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 				(error: any) => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
@@ -756,7 +756,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				uri: data.uri,
 				type: 'image/jpg',
 			},
-			'image'
+			'image',
 		);
 
 		this.setState({ showCamera: false });

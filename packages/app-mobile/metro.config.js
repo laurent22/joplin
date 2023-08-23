@@ -72,7 +72,7 @@ module.exports = {
 					}
 					return path.join(process.cwd(), `node_modules/${name}`);
 				},
-			}
+			},
 		),
 	},
 	projectRoot: path.resolve(__dirname),

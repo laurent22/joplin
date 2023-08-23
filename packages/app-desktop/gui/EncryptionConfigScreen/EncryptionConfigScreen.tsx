@@ -64,7 +64,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<tr key={mk.id}>
 					<td style={theme.textStyle}>{mk.id}</td>
 					<td><button onClick={() => onUpgradeMasterKey(mk)} style={theme.buttonStyle}>Upgrade</button></td>
-				</tr>
+				</tr>,
 			);
 		}
 
@@ -309,7 +309,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				rows.push(
 					<tr key={id}>
 						<td style={theme.textStyle}>{id}</td>
-					</tr>
+					</tr>,
 				);
 			}
 

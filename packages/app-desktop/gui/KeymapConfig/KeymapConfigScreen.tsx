@@ -88,7 +88,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 			<div>
 				{accelerator.split('+').map(part => <kbd style={styles.kbd} key={part}>{part}</kbd>).reduce(
 					(accumulator, part) => (accumulator.length ? [...accumulator, ' + ', part] : [part]),
-					[]
+					[],
 				)}
 			</div>
 		);

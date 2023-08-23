@@ -103,7 +103,7 @@ describe('markdownReformatter', () => {
 		});
 
 		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
+			initialState, inlineCodeRegionSpec, blockCodeRegionSpec,
 		);
 
 		const newState = initialState.update(changes).state;
@@ -117,7 +117,7 @@ describe('markdownReformatter', () => {
 		});
 
 		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
+			initialState, inlineCodeRegionSpec, blockCodeRegionSpec,
 		);
 
 		const newState = initialState.update(changes).state;

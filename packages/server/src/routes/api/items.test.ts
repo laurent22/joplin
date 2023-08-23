@@ -300,7 +300,7 @@ describe('api/items', () => {
 
 		await expectHttpError(
 			async () => putApi(session3.id, 'items/root:/.resource/000000000000000000000000000000E1:/content', {}, { query: { share_id: share.id } }),
-			ErrorForbidden.httpCode
+			ErrorForbidden.httpCode,
 		);
 	});
 
@@ -325,7 +325,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000002',
 					body: '12345',
-				})
+				}),
 			);
 		}
 
@@ -336,7 +336,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000003',
 					body: '12345',
-				})
+				}),
 			);
 		}
 	});
@@ -352,7 +352,7 @@ describe('api/items', () => {
 					id: '00000000000000000000000000000001',
 					body: '12345',
 				}),
-				ErrorPayloadTooLarge.httpCode
+				ErrorPayloadTooLarge.httpCode,
 			);
 		}
 
@@ -363,7 +363,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000002',
 					body: '12345',
-				})
+				}),
 			);
 		}
 
@@ -374,7 +374,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000003',
 					body: '12345',
-				})
+				}),
 			);
 		}
 	});
@@ -389,7 +389,7 @@ describe('api/items', () => {
 				id: '00000000000000000000000000000001',
 				body: '12345',
 			}),
-			ErrorForbidden.httpCode
+			ErrorForbidden.httpCode,
 		);
 	});
 
