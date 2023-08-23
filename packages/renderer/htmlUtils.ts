@@ -1,5 +1,5 @@
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = new Entities().encode;
+import { htmlentities } from '@joplin/utils/html';
+import { fileUriToPath } from '@joplin/utils/url';
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 
 // [\s\S] instead of . for multiline matching
@@ -31,7 +31,8 @@ const selfClosingElements = [
 ];
 
 interface SanitizeHtmlOptions {
-	addNoMdConvClass: boolean;
+	addNoMdConvClass?: boolean;
+	allowedFilePrefixes?: string[];
 }
 
 class HtmlUtils {
@@ -157,20 +158,36 @@ class HtmlUtils {
 			.replace(/</g, '&lt;');
 	}
 
-	private isAcceptedUrl(url: string): boolean {
+	private isAcceptedUrl(url: string, allowedFilePrefixes: string[]): boolean {
 		url = url.toLowerCase();
-		return url.startsWith('https://') ||
+		if (url.startsWith('https://') ||
 			url.startsWith('http://') ||
 			url.startsWith('mailto://') ||
 			// We also allow anchors but only with a specific set of a characters.
 			// Fixes https://github.com/laurent22/joplin/issues/8286
-			!!url.match(/^#[a-zA-Z0-9-]+$/);
+			!!url.match(/^#[a-zA-Z0-9-]+$/)) return true;
+
+		if (url.startsWith('file://')) {
+			// We need to do a case insensitive comparison because the URL we
+			// get appears to be converted to lowercase somewhere. To be
+			// completely sure, we make it lowercase explicitely.
+			const filePath = fileUriToPath(url).toLowerCase();
+			for (const filePrefix of allowedFilePrefixes) {
+				if (filePath.startsWith(filePrefix.toLowerCase())) return true;
+			}
+		}
+
+		return false;
 	}
 
 	public sanitizeHtml(html: string, options: SanitizeHtmlOptions = null) {
-		options = { // If true, adds a "jop-noMdConv" class to all the tags.
+		options = {
+			// If true, adds a "jop-noMdConv" class to all the tags.
 			// It can be used afterwards to restore HTML tags in Markdown.
-			addNoMdConvClass: false, ...options };
+			addNoMdConvClass: false,
+			allowedFilePrefixes: [],
+			...options,
+		};
 
 		const output: string[] = [];
 
@@ -247,7 +264,7 @@ class HtmlUtils {
 				// particular we want to exclude `javascript:` URLs. This
 				// applies to A tags, and also AREA ones but to be safe we don't
 				// filter on the tag name and process all HREF attributes.
-				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'])) {
+				if ('href' in attrs && !this.isAcceptedUrl(attrs['href'], options.allowedFilePrefixes)) {
 					attrs['href'] = '#';
 				}
 

@@ -4842,6 +4842,7 @@ __metadata:
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.46
     "@joplin/fork-uslug": ^1.0.11
+    "@joplin/utils": ~2.12
     "@types/jest": 29.5.3
     "@types/node": 18.16.18
     font-awesome-filetypes: 2.1.0
