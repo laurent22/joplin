@@ -6,9 +6,11 @@ HTMLCanvasElement.prototype.getContext = () => null;
 window.ResizeObserver = class { public observe() { } } as any;
 
 import { describe, it, expect, jest } from '@jest/globals';
-import { Color4, EditorImage, EditorSettings, Path, StrokeComponent } from 'js-draw';
+import { Color4, EditorImage, EditorSettings, Path, pathToRenderable, StrokeComponent } from 'js-draw';
 import { RenderingMode } from 'js-draw';
-import createJsDrawEditor, { ImageEditorCallbacks } from './createJsDrawEditor';
+import createJsDrawEditor, { ImageEditorCallbacks, applyTemplateToEditor } from './createJsDrawEditor';
+import { BackgroundComponent } from 'js-draw';
+import { BackgroundComponentBackgroundType } from 'js-draw';
 
 
 const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => {
@@ -29,10 +31,7 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 		renderingMode: RenderingMode.DummyRenderer,
 	};
 
-	return createJsDrawEditor({
-		close: 'Close',
-		save: 'Save',
-	}, allCallbacks, toolbarState, locale, editorOptions);
+	return createJsDrawEditor(allCallbacks, toolbarState, locale, editorOptions);
 };
 
 describe('createJsDrawEditor', () => {
@@ -73,10 +72,23 @@ describe('createJsDrawEditor', () => {
 
 		const stroke = new StrokeComponent([
 			// A filled shape
-			Path.fromString('m0,0 l10,0 l0,10').toRenderable({ fill: Color4.red }),
+			pathToRenderable(Path.fromString('m0,0 l10,0 l0,10'), { fill: Color4.red }),
 		]);
 		void editor.dispatch(EditorImage.addElement(stroke));
 
 		expect(hasChanges).toBe(true);
+	});
+
+	it('default template should be a white grid background', async () => {
+		const editor = createEditorWithCallbacks({});
+
+		await applyTemplateToEditor(editor, '{}');
+
+		expect(editor.image.getBackgroundComponents()).toHaveLength(1);
+
+		// Should have a white, grid background
+		const background = editor.image.getBackgroundComponents()[0] as BackgroundComponent;
+		expect(editor.estimateBackgroundColor().eq(Color4.white)).toBe(true);
+		expect(background.getBackgroundType()).toBe(BackgroundComponentBackgroundType.Grid);
 	});
 });

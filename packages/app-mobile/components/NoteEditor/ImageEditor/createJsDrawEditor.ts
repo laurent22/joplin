@@ -1,5 +1,5 @@
 
-import Editor, { AbstractComponent, AbstractToolbar, BackgroundComponent, EditorEventType, EditorSettings, Erase, getLocalizationTable, Rect2, Vec2 } from 'js-draw';
+import { Editor, BackgroundComponentBackgroundType, AbstractComponent, AbstractToolbar, BackgroundComponent, EditorEventType, EditorSettings, Erase, getLocalizationTable, Rect2, Vec2, adjustEditorThemeForContrast } from 'js-draw';
 import { MaterialIconProvider } from '@js-draw/material-icons';
 import 'js-draw/bundledStyles';
 
@@ -14,6 +14,12 @@ export interface ImageEditorCallbacks {
 
 	setImageHasChanges: (hasChanges: boolean)=> void;
 }
+
+// Slightly adjusts the given editor's theme colors. This ensures that the colors chosen for
+// the editor have proper contrast.
+export const onEditorThemeUpdate = (editor: Editor) => {
+	adjustEditorThemeForContrast(editor);
+};
 
 export const createJsDrawEditor = (
 	callbacks: ImageEditorCallbacks,
@@ -31,6 +37,7 @@ export const createJsDrawEditor = (
 		iconProvider: new MaterialIconProvider(),
 		...editorSettings,
 	});
+	onEditorThemeUpdate(editor);
 
 	const toolbar = editor.addToolbar();
 
@@ -67,6 +74,7 @@ export const createJsDrawEditor = (
 	return editor;
 };
 
+
 const restoreToolbarState = (toolbar: AbstractToolbar, state: string) => {
 	if (state) {
 		// deserializeState throws on invalid argument.
@@ -90,12 +98,28 @@ const listenToolbarState = (editor: Editor, toolbar: AbstractToolbar) => {
 	});
 };
 
-export const applyTemplateToEditor = (editor: Editor, templateData: string) => {
+export const applyTemplateToEditor = async (editor: Editor, templateData: string) => {
 	let backgroundComponent: AbstractComponent|null = null;
 	let imageSize = editor.getImportExportRect().size;
 
 	try {
 		const templateJSON = JSON.parse(templateData);
+
+		const isEmptyTemplate = !('imageSize' in templateJSON) && !('backgroundData' in templateJSON);
+
+		// If the template is empty, add a default background
+		if (isEmptyTemplate) {
+			templateJSON.backgroundData = {
+				'name': 'image-background',
+				'zIndex': 0,
+				'data': {
+					'mainColor': '#ffffff',
+					'backgroundType': BackgroundComponentBackgroundType.Grid,
+					'gridSize': 25,
+					'gridStrokeWidth': 0.7,
+				},
+			};
+		}
 
 		if ('backgroundData' in templateJSON) {
 			backgroundComponent = AbstractComponent.deserialize(
@@ -125,7 +149,10 @@ export const applyTemplateToEditor = (editor: Editor, templateData: string) => {
 
 	// Set the image size
 	const imageSizeCommand = editor.setImportExportRect(new Rect2(0, 0, imageSize.x, imageSize.y));
-	void editor.dispatchNoAnnounce(imageSizeCommand, false);
+	await editor.dispatchNoAnnounce(imageSizeCommand, false);
+
+	// And zoom to the template (false = don't make undoable)
+	await editor.dispatchNoAnnounce(editor.viewport.zoomTo(editor.getImportExportRect()), false);
 };
 
 export const watchTemplateChanges = (

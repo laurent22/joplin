@@ -206,6 +206,14 @@ const ImageEditor = (props: Props) => {
 		true;
 	`, []);
 
+	useEffect(() => {
+		webviewRef.current?.injectJS(`
+			if (window.editor) {
+				svgEditorBundle.onEditorThemeUpdate(window.editor);
+			}
+		`);
+	}, [editorTheme]);
+
 	const onReadyToLoadData = useCallback(async () => {
 		const initialSVGData = await props.loadInitialSVGData?.() ?? '';
 
