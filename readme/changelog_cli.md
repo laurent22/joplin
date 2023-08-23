@@ -1,5 +1,14 @@
 # Joplin terminal app changelog
 
+## [cli-v2.12.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.12.1) - 2023-08-23T12:53:19Z
+
+- New: Add support for share permissions (#8491)
+- Improved: Allow importing Evernote task lists (#8440 by Rob Moffat)
+- Improved: Rotating log files (#8376) (#5521 by [@hubert](https://github.com/hubert))
+- Improved: Updated packages @rmp135/sql-ts (v1.18.0), buildTools, clean-html (v2), dayjs (v1.11.9), domhandler (v5), gettext-parser (v7.0.1), glob (v10.3.3), highlight.js (v11.8.0), jsdom (v22.1.0), sass (v1.63.6), sharp (v0.32.3), standard (v17.1.0), word-wrap (v1.2.4)
+- Improved: WebDAV: Show a more descriptive error message when the password is empty (#8477) (#8466 by Henry Heino)
+- Security: Prevent XSS when passing specially encoded string to a link (57b4198)
+
 ## [cli-v2.11.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.11.1) - 2023-06-27T09:28:01Z
 
 - Improved: Updated packages aws, buildTools, domutils (v3.1.0), fs-extra (v11.1.1), jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), nanoid (v3.3.6), node-persist (v3.1.3), open (v8.4.2), reselect (v4.1.8), sass (v1.62.1), sharp (v0.32.1), sqlite3 (v5.1.6), tar (v6.1.15), turndown (v7.1.2), yargs (v17.7.2)

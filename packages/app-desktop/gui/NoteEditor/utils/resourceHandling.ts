@@ -8,7 +8,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import rendererHtmlUtils, { extractHtmlBody } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
-const { fileUriToPath } = require('@joplin/lib/urlUtils');
+import { fileUriToPath } from '@joplin/utils/url';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -179,6 +179,8 @@ export async function processPastedHtml(html: string) {
 	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(
 		htmlUtils.replaceImageUrls(html, (src: string) => {
 			return mappedResources[src];
-		}),
+		}), {
+			allowedFilePrefixes: [Setting.value('resourceDir')],
+		},
 	));
 }
