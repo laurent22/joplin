@@ -1,4 +1,5 @@
-import { htmlentities } from '@joplin/utils/html';
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = new Entities().encode;
 import { fileUriToPath } from '@joplin/utils/url';
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 
