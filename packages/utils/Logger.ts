@@ -1,5 +1,6 @@
 const moment = require('moment');
 const Mutex = require('async-mutex').Mutex;
+const { sprintf } = require('sprintf-js');
 
 const writeToFileMutex_ = new Mutex();
 
@@ -17,6 +18,8 @@ export enum LogLevel {
 	Debug = 40,
 }
 
+type FormatFunction = (level: LogLevel, targetPrefix?: string)=> string;
+
 interface TargetOptions {
 	level?: LogLevel;
 	database?: any;
@@ -25,7 +28,7 @@ interface TargetOptions {
 	path?: string;
 	source?: string;
 
-	formatter?: (level: LogLevel, targetPrefix?: string)=> string;
+	format?: string | FormatFunction;
 }
 
 interface Target extends TargetOptions {
@@ -222,8 +225,15 @@ class Logger {
 				const consoleObj = target.console ? target.console : console;
 				let items: any[] = [];
 
-				if (target.formatter) {
-					const s = target.formatter(level, targetPrefix);
+				if (target.format) {
+					const format = typeof target.format === 'string' ? target.format : target.format(level, targetPrefix);
+
+					const s = sprintf(format, {
+						date_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+						level: Logger.levelIdToString(level),
+						prefix: targetPrefix || '',
+						message: '',
+					});
 
 					items = [s.trim()].concat(...object);
 				} else {

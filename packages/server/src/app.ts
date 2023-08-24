@@ -3,7 +3,7 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import config, { fullVersionString, initConfig, runningInDocker } from './config';
 import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, needsMigration, migrateList } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
@@ -27,7 +27,6 @@ import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
 import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
-import loggerFormatter from './utils/loggerFormatter';
 
 interface Argv {
 	env?: Env;
@@ -224,7 +223,12 @@ async function main() {
 	Logger.fsDriver_ = new FsDriverNode();
 	const globalLogger = new Logger();
 	const instancePrefix = config().INSTANCE_NAME ? `${config().INSTANCE_NAME}: ` : '';
-	globalLogger.addTarget(TargetType.Console, { formatter: loggerFormatter(instancePrefix) });
+	globalLogger.addTarget(TargetType.Console, {
+		format: (level: LogLevel, _prefix: string) => {
+			if (level === LogLevel.Info) return `%(date_time)s: ${instancePrefix}%(prefix)s: %(message)s`;
+			return `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`;
+		},
+	});
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
 
