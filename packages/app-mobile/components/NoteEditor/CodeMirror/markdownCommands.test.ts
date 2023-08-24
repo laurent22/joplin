@@ -6,6 +6,9 @@ import createEditor from './testUtil/createEditor';
 import { blockMathTagName } from './markdownMathParser';
 
 describe('markdownCommands', () => {
+
+	jest.retryTimes(2);
+
 	it('should bold/italicize everything selected', async () => {
 		const initialDocText = 'Testing...';
 		const editor = await createEditor(

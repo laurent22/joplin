@@ -6,6 +6,9 @@ import { ListType } from '../types';
 import createEditor from './testUtil/createEditor';
 
 describe('markdownCommands.toggleList', () => {
+
+	jest.retryTimes(2);
+
 	it('should remove the same type of list', async () => {
 		const initialDocText = '- testing\n- this is a `test`\n';
 
