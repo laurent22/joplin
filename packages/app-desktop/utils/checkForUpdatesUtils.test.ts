@@ -128,7 +128,7 @@ describe('checkForUpdates', () => {
 		const releaseData = releaseDataWithExtension('-arm64.DMG');
 		const releaseInfo = extractVersionInfo([releaseData], 'darwin', 'arm64', false, { });
 
-		// Should match, even with uppercase .DMG.
+		// Should match, with uppercase .DMG
 		expect(releaseInfo).toMatchObject({
 			version: '2.12.4',
 			downloadUrl: 'https://objects.joplinusercontent.com/v2.12.4/Joplin-2.12.4-arm64.DMG',
