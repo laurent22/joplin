@@ -1,6 +1,6 @@
 const moment = require('moment');
-const Mutex = require('async-mutex').Mutex;
 const { sprintf } = require('sprintf-js');
+const Mutex = require('async-mutex').Mutex;
 
 const writeToFileMutex_ = new Mutex();
 
@@ -28,6 +28,7 @@ interface TargetOptions {
 	path?: string;
 	source?: string;
 
+	// Default message format
 	format?: string | FormatFunction;
 }
 
