@@ -76,6 +76,22 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md_frontmatter()),
 
 				makeImportModule({
+					format: 'txt',
+					fileExtensions: ['txt'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('TXT'),
+				}, () => new InteropService_Importer_Md()),
+
+				makeImportModule({
+					format: 'html',
+					fileExtensions: ['html'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('HTML'),
+				}, () => new InteropService_Importer_Md()),
+
+				makeImportModule({
 					format: 'raw',
 					sources: [FileSystemItem.Directory],
 					description: _('Joplin Export Directory'),
