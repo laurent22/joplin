@@ -37,6 +37,7 @@
       "build/defaultPlugins/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
+    "artifactBuildCompleted": "./tools/artifactBuildCompleted.js",
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
