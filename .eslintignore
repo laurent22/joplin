@@ -381,6 +381,7 @@ packages/app-desktop/services/plugins/hooks/useContentSize.js
 packages/app-desktop/services/plugins/hooks/useHtmlLoader.js
 packages/app-desktop/services/plugins/hooks/useScriptLoader.js
 packages/app-desktop/services/plugins/hooks/useSubmitHandler.js
+packages/app-desktop/services/plugins/hooks/useThemeCss.test.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
