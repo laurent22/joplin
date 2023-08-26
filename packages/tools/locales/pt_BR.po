@@ -50,7 +50,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:73
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(No plugin: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -98,12 +98,12 @@ msgstr "%d dias"
 #: packages/lib/utils/joplinCloud.ts:136 packages/lib/utils/joplinCloud.ts:137
 #: packages/lib/utils/joplinCloud.ts:138
 msgid "%d GB"
-msgstr ""
+msgstr "%d GB"
 
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "%d GB para armazenamento"
 
 #: packages/lib/models/Setting.ts:1367
 msgid "%d hour"
@@ -116,7 +116,7 @@ msgstr "%d horas"
 #: packages/lib/utils/joplinCloud.ts:124 packages/lib/utils/joplinCloud.ts:125
 #: packages/lib/utils/joplinCloud.ts:126
 msgid "%d MB"
-msgstr ""
+msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
@@ -262,15 +262,16 @@ msgstr "Aceitar"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Acesso negado: Por favor, verifique seu nome de usuário e senha"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
+"Acesso negado: Por favor, informe novamente sua senha e/ou nome de usuário"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "Conta"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Action"
@@ -335,6 +336,8 @@ msgstr "Ferramentas avançadas"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Todos os seus dados, incluindo notas, cadernos e tags serão apagados "
+"permanentemente."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:497
 #: packages/app-mobile/components/screens/Notes.tsx:178
@@ -365,6 +368,9 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"O título do caderno é ambíguo: \"%s\". Por favor, utilize o identificador do "
+"caderno em vez disso - pressione \"ti\" para consultar os identificadores ou "
+"utilize $b para o caderno atualmente selecionado"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
@@ -372,6 +378,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
+"O título do caderno é ambíguo: \"%s\". Por favor, utilize o identificador do "
+"caderno em vez disso - pressione \"ti\" para consultar os identificadores"
 
 #: packages/app-desktop/checkForUpdates.ts:105
 msgid "An update is available, do you want to download it now?"
@@ -383,6 +391,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Todos os e-mails enviados a esse endereço serão convertidos em notas e "
+"adicionados a sua coleção. Essas notas serão armazenadas no caderno \"Inbox\""
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -405,6 +415,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"Você realmente deseja retornar ao layout original? A configuração de layout "
+"atual será perdida."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:503
 msgid "Arguments:"
@@ -509,7 +521,7 @@ msgstr "Voltar"
 
 #: packages/lib/utils/joplinCloud.ts:300
 msgid "Basic"
-msgstr ""
+msgstr "Básico"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -517,6 +529,10 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"O desbloqueio por biometria não está configurado no dispositivo. Por favor, "
+"configure-o para desbloquear o Joplin. Se o dispositivo estiver bloqueado "
+"(lockout), considere desligá-lo e ligá-lo novamente para reiniciar a "
+"verificação biométrica."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:140
@@ -542,11 +558,11 @@ msgstr "Pode compartilhar"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Apenas leitura"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Leitura e edição"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -692,7 +708,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "Distinguir maiúsculas e minúsculas"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -805,7 +821,7 @@ msgstr "Edite cadernos de forma colaborativa"
 
 #: packages/app-mobile/components/side-menu-content.tsx:355
 msgid "Collapse"
-msgstr ""
+msgstr "Recolher"
 
 #: packages/lib/services/ReportService.ts:308
 msgid "Coming alarms"
@@ -890,7 +906,7 @@ msgstr "Conflitos (anexos)"
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Consolidated billing"
-msgstr ""
+msgstr "Faturamento consolidado"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:111
 msgid "Content provided by %s"
@@ -898,7 +914,7 @@ msgstr "Conteúdo fornecido por %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #: packages/app-mobile/components/screens/Note.tsx:1028
 msgid "Convert to note"
@@ -1167,7 +1183,7 @@ msgstr "dias"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:115
 msgid "Decrease indent level"
-msgstr ""
+msgstr "Reduzir nível de indentação"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1279,6 +1295,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Excluir o caderno \"Inbox\"?\n"
+"\n"
+"Ao excluir o caderno \"Inbox\", e-mails recentemente enviados a ele podem "
+"ser perdidos."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1443,7 +1463,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:116
 msgid "Done"
-msgstr ""
+msgstr "Concluído"
 
 #: packages/app-desktop/checkForUpdates.ts:107
 msgid "Download"
@@ -1546,7 +1566,7 @@ msgstr "Editar perfil"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Editar a configuração dos perfis..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:141
 #: packages/lib/models/Setting.ts:903 packages/lib/models/Setting.ts:904
@@ -1600,7 +1620,7 @@ msgstr "Notas por e-mail"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "Notas por e-mail"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1643,7 +1663,7 @@ msgstr "Habilitar áudio player"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "Habilitar a autenticação por biometria?"
 
 #: packages/lib/models/Setting.ts:1168
 msgid "Enable deflist syntax"
@@ -1696,7 +1716,7 @@ msgstr "Habilitar soft breaks"
 
 #: packages/lib/models/Setting.ts:1059
 msgid "Enable spellcheck in the text editor"
-msgstr ""
+msgstr "Habilitar correção ortográfica no editor de texto"
 
 #: packages/lib/models/Setting.ts:1165
 msgid "Enable table of contents extension"
@@ -1828,7 +1848,7 @@ msgstr "Sai da aplicação."
 
 #: packages/app-mobile/components/side-menu-content.tsx:355
 msgid "Expand"
-msgstr ""
+msgstr "Expandir"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:387
@@ -1860,7 +1880,7 @@ msgstr "Exportar perfil"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "Exportado com sucesso!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1934,7 +1954,7 @@ msgstr "Filtrar tags"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:233
 msgid "Find and replace"
-msgstr ""
+msgstr "Localizar e substituir"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 msgid "Find: "
@@ -1979,7 +1999,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1506
 msgid "For example \"%s\""
-msgstr ""
+msgstr "Por exemplo \"%s\""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -2077,11 +2097,11 @@ msgstr "Conceder autorização"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:50
 msgid "Header %d"
-msgstr ""
+msgstr "Cabeçalho %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:296
 msgid "Headers"
-msgstr ""
+msgstr "Cabeçalhos"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:79
 msgid "Heading"
@@ -2281,7 +2301,7 @@ msgstr "Em: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:126
 msgid "Increase indent level"
-msgstr ""
+msgstr "Aumentar o nível de indentação"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 msgid "Indent less"
@@ -2377,7 +2397,7 @@ msgstr "Os itens não podem ser sincronizados"
 
 #: packages/app-desktop/gui/MenuBar.tsx:794
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "Junte-se a nós no Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:332
 msgid ""
@@ -2463,7 +2483,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:173
 msgid "KaTeX"
-msgstr ""
+msgstr "KaTeX"
 
 #: packages/lib/models/Setting.ts:1552
 msgid "Keep note history for"
@@ -2515,7 +2535,7 @@ msgstr "Sequência de botão de leiaute"
 
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "Mantenha em branco para baixar os arquivos de idioma do site padrão"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2567,7 +2587,7 @@ msgstr "Listar item"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:300
 msgid "Lists"
-msgstr ""
+msgstr "Listas"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
@@ -2703,7 +2723,7 @@ msgstr "Máximo de conexões simultâneas"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "Tamanho máximo de item"
 
 #: packages/lib/utils/joplinCloud.ts:117
 msgid "Max note or attachment size"
@@ -2818,7 +2838,7 @@ msgstr "Nova versão: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "Próxima correspondência"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3173,7 +3193,7 @@ msgstr "Colar"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:190
 msgid "Paste as text"
-msgstr ""
+msgstr "Colar como texto"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:527
 msgid "Path:"
@@ -3186,7 +3206,7 @@ msgstr "Arquivo PDF"
 
 #: packages/lib/utils/joplinCloud.ts:361
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "Por usuário. Mínimo de %d usuários."
 
 #: packages/app-mobile/components/screens/Note.tsx:414
 msgid "Permission needed"
@@ -3201,6 +3221,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"Por favor, pressione \"%s\" para prosseguir ou defina as senhas na lista "
+"\"%s\" abaixo."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
 msgid ""
@@ -3240,7 +3262,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Por favor, grave sua voz..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3342,7 +3364,7 @@ msgstr "Pressione para configurar a senha de decriptação."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "Correspondência anterior"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:333
 msgid "Previous versions of this note"
@@ -3354,7 +3376,7 @@ msgstr "Imprimir"
 
 #: packages/lib/utils/joplinCloud.ts:189
 msgid "Priority support"
-msgstr ""
+msgstr "Suporte prioritário"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:664
 msgid "Privacy Policy"
@@ -3406,11 +3428,11 @@ msgstr "Proxy habilitado"
 
 #: packages/lib/models/Setting.ts:1517
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "Tempo limite (timeout) do proxy (em segundos)"
 
 #: packages/lib/models/Setting.ts:1505
 msgid "Proxy URL"
-msgstr ""
+msgstr "URL do proxy"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
@@ -3527,7 +3549,7 @@ msgstr "Renovar token"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "Substituir"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
 msgid "Replace all"
@@ -3535,11 +3557,11 @@ msgstr "Substituir tudo"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "Substituir por..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "Substituir: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -3789,6 +3811,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Compartilhar uma cópia de todas as suas notas em um formato de arquivo que "
+"pode ser importado pelo Joplin em um computador."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -3802,9 +3826,11 @@ msgstr "Compartilhar Caderno"
 msgid "Share notebook..."
 msgstr "Compartilhar caderno..."
 
+# Ver https://discourse.joplinapp.org/t/joplin-cloud-question-access-control/27723/3 (discussão retirada de comentário na tradução para o alemão desse mesmo texto fonte).
+# Também tentei me basear na tradução em francês.
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Sharing access control"
-msgstr ""
+msgstr "Controle de acesso sobre o compartilhamento"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -3856,7 +3882,7 @@ msgstr "Exibir ícone na área de notificação"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:308
 msgid "Show/hide the sidebar"
-msgstr ""
+msgstr "Mostrar/esconder a barra lateral"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:307
@@ -4028,7 +4054,7 @@ msgstr "Encerrar edição externa"
 
 #: packages/lib/utils/joplinCloud.ts:129
 msgid "Storage space"
-msgstr ""
+msgstr "Espaço de armazenamento"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4096,7 +4122,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "Sincronize quantos dispositivos desejar"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:572
 msgid "Sync Status"
@@ -4182,7 +4208,7 @@ msgstr "Tabloide"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:182
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "tag1, tag2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.tsx:93
@@ -4212,7 +4238,7 @@ msgstr "Tarefas"
 
 #: packages/lib/utils/joplinCloud.ts:344
 msgid "Teams"
-msgstr ""
+msgstr "Equipes"
 
 #: packages/lib/models/Setting.ts:1388
 msgid "Text editor command"
@@ -4227,6 +4253,8 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"Não é possível excluir o perfil atualmente ativo. Troque-o por um perfil "
+"diferente e tente novamente."
 
 #: packages/app-desktop/bridge.ts:276
 msgid ""
@@ -4238,6 +4266,8 @@ msgstr ""
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
+"A aplicação não foi encerrada de forma adequada. Você gostaria de iniciá-la "
+"no modo de segurança?"
 
 #: packages/lib/onedrive-api-node-utils.js:87
 msgid ""
@@ -4294,7 +4324,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "O perfil padrão não pode ser excluído"
 
 #: packages/lib/models/Setting.ts:1388
 msgid ""
@@ -4441,6 +4471,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"A implementação WebDAV de %s é incompatível com o Joplin e não é mais "
+"suportada. Por favor, utilize um outro método de sincronização."
 
 #: packages/lib/models/Setting.ts:838
 msgid "Theme"
@@ -4452,7 +4484,7 @@ msgstr "Atualmente, não há notas. Crie uma clicando no botão (+)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:265
 msgid "There are unsaved changes."
-msgstr ""
+msgstr "Há alterações não salvas."
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:524
 msgid ""
@@ -4692,6 +4724,8 @@ msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
 msgstr ""
+"Para trocar o perfil, a aplicação será encerrada e você precisará reiniciá-"
+"la."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:612
 msgid ""
@@ -4810,7 +4844,7 @@ msgstr "Tipo: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Não foi possível exportar ou compartilhar os dados. Motivo: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -4937,7 +4971,7 @@ msgstr "Uso: %s"
 
 #: packages/lib/models/Setting.ts:1668
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "Usar biometria para proteger o acesso à aplicação"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4977,6 +5011,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"Utilize seus dados biométricos para proteger o acesso à aplicação. Sempre "
+"que desejar, você pode configurá-los no menu \"Configuração\"."
 
 #: packages/lib/models/Setting.ts:1266
 msgid ""
@@ -5012,7 +5048,7 @@ msgstr "Válido"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr ""
+msgstr "Verifique sua identidade"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 msgid "View"
@@ -5040,12 +5076,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1720
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Arquivos de idioma para a digitação por voz (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1010
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:120
 msgid "Voice typing..."
-msgstr ""
+msgstr "Digitação por voz..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:87
 msgid "Warning"
