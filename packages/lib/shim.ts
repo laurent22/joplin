@@ -219,11 +219,11 @@ const shim = {
 
 	sjclModule: null as any,
 
-	randomBytes: async (_count: number) => {
+	randomBytes: async (_count: number): Promise<number[]> => {
 		throw new Error('Not implemented');
 	},
 
-	stringByteLength: (_s: string) => {
+	stringByteLength: (_s: string): number => {
 		throw new Error('Not implemented');
 	},
 
@@ -252,11 +252,11 @@ const shim = {
 
 	Buffer: null as any,
 
-	openUrl: () => {
+	openUrl: (url: string): void => {
 		throw new Error('Not implemented');
 	},
 
-	httpAgent: () => {
+	httpAgent: (): any => {
 		throw new Error('Not implemented');
 	},
 
@@ -264,11 +264,11 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	waitForFrame: () => {
+	waitForFrame: (): Promise<void> => {
 		throw new Error('Not implemented');
 	},
 
-	appVersion: () => {
+	appVersion: (): string => {
 		throw new Error('Not implemented');
 	},
 

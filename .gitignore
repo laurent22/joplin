@@ -430,10 +430,12 @@ packages/app-mobile/gulpfile.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
+packages/app-mobile/services/AlarmServiceDriver.web.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
 packages/app-mobile/services/voiceTyping/vosk.ios.js
+packages/app-mobile/services/voiceTyping/vosk.web.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
@@ -446,6 +448,7 @@ packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
+packages/app-mobile/utils/shim-init-react.web.js
 packages/app-mobile/utils/types.js
 packages/fork-htmlparser2/src/CollectingHandler.js
 packages/fork-htmlparser2/src/FeedHandler.spec.js

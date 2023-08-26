@@ -14,6 +14,12 @@ type TData = {
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
+
+	if (!QuickActions.setShortcutItems) {
+		console.warn('QuickActions unsupported');
+		return;
+	}
+
 	QuickActions.setShortcutItems([
 		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
 		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
