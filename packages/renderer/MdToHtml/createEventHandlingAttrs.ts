@@ -1,6 +1,6 @@
 
 
-import utils from '../utils';
+import { longPressDelay } from '../utils';
 
 
 export interface Options {
@@ -46,7 +46,7 @@ export const createEventHandlingListeners = (resourceId: string, options: Option
 
 	if (options.enableLongPress) {
 		const longPressHandler = `(() => ${options.postMessageSyntax}('longclick:${resourceId}'))`;
-		const touchStart = `(${longPressTouchStartFnString})(${longPressHandler}, ${utils.longPressDelay}); `;
+		const touchStart = `(${longPressTouchStartFnString})(${longPressHandler}, ${longPressDelay}); `;
 
 		const callClearLongPressTimeout = `(${clearLongPressTimeoutFnString})(); `;
 		const touchCancel = callClearLongPressTimeout;

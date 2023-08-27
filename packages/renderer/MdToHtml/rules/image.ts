@@ -1,6 +1,6 @@
 import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
-import utils from '../../utils';
+import { imageReplacement, getAttr } from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
@@ -10,12 +10,21 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		const Resource = ruleOptions.ResourceModel;
 
 		const token = tokens[idx];
-		const src = utils.getAttr(token.attrs, 'src');
-		const title = utils.getAttr(token.attrs, 'title');
+		const src = getAttr(token.attrs, 'src');
+		const title = getAttr(token.attrs, 'title');
 
 		if (!Resource.isResourceUrl(src) || ruleOptions.plainResourceRendering) return defaultRender(tokens, idx, options, env, self);
 
-		const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
+		const content = token.content;
+
+		const r = imageReplacement(
+			ruleOptions.ResourceModel,
+			src,
+			ruleOptions.resources,
+			ruleOptions.resourceBaseUrl,
+			ruleOptions.itemIdToUrl,
+			{ content },
+		);
 		if (typeof r === 'string') return r;
 		if (r) {
 			const id = r['data-resource-id'];
@@ -25,7 +34,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 				postMessageSyntax: ruleOptions.postMessageSyntax ?? 'void',
 			}, null);
 
-			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
+			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt: content })} ${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

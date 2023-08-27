@@ -520,6 +520,32 @@ rules.picture = {
   }
 }
 
+rules.joplinNotLoadedResource = {
+  filter: (node) => {
+
+    // TODO: Check that the node has exactly one IMG tag child.
+    // This depends on https://github.com/laurent22/joplin/issues/8736.
+
+    return node.nodeName === 'DIV'
+      && node.classList.contains('not-loaded-resource')
+      && node.getAttribute('data-resource-id')
+      && node.getAttribute('contenteditable') === 'false';
+  },
+
+  replacement: function (content, node, options) {
+    const label = node.getAttribute('data-content');
+    const before = node.getAttribute('data-before-html-src');
+    const after = node.getAttribute('data-after-html-src');
+    const resourceId = node.getAttribute('data-resource-id');
+
+    if (label) {
+      return `![${label}](:/${resourceId})`;
+    } else {
+      return `<img ${before} src=":/${resourceId}" ${after}/>`;
+    }
+  }
+}
+
 function findFirstDescendant(node, byType, name) {
   for (const childNode of node.childNodes) {
     if (byType === 'class' && childNode.classList.contains(name)) return childNode;

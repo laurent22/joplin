@@ -1,4 +1,4 @@
-import utils, { ItemIdToUrlHandler } from '../utils';
+import { ItemIdToUrlHandler, resourceStatus, resourceStatusFile } from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -49,7 +49,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 		resourceId = resourceHrefInfo.itemId;
 
 		const result = options.resources[resourceId];
-		const resourceStatus = utils.resourceStatus(options.ResourceModel, result);
+		const status = resourceStatus(options.ResourceModel, result);
 
 		if (result && result.item) {
 			if (!title) title = result.item.title;
@@ -57,12 +57,16 @@ export default function(href: string, options: Options = null): LinkReplacementR
 			resource = result.item;
 		}
 
-		if (result && resourceStatus !== 'ready' && !options.plainResourceRendering) {
-			const icon = utils.resourceStatusFile(resourceStatus);
+		if (result && status !== 'ready' && !options.plainResourceRendering) {
+			const icon = resourceStatusFile(status);
 
 			return {
 				resourceReady: false,
-				html: `<a class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`,
+				html: `<a
+					class="not-loaded-resource resource-status-${status}"
+					contenteditable="false"
+					data-resource-type="resource"
+					data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`,
 				resource,
 				resourceFullPath: null,
 			};

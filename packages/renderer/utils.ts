@@ -9,16 +9,14 @@ const FetchStatuses = {
 	FETCH_STATUS_ERROR: 3,
 };
 
-const utils: any = {};
-
-utils.getAttr = function(attrs: string[], name: string, defaultValue: string = null) {
+export const getAttr = function(attrs: string[], name: string, defaultValue: string = null) {
 	for (let i = 0; i < attrs.length; i++) {
 		if (attrs[i][0] === name) return attrs[i].length > 1 ? attrs[i][1] : null;
 	}
 	return defaultValue;
 };
 
-utils.notDownloadedResource = function() {
+export const notDownloadedResource = function() {
 	return `
 		<svg width="1700" height="1536" xmlns="http://www.w3.org/2000/svg">
 		    <path d="M1280 1344c0-35-29-64-64-64s-64 29-64 64 29 64 64 64 64-29 64-64zm256 0c0-35-29-64-64-64s-64 29-64 64 29 64 64 64 64-29 64-64zm128-224v320c0 53-43 96-96 96H96c-53 0-96-43-96-96v-320c0-53 43-96 96-96h465l135 136c37 36 85 56 136 56s99-20 136-56l136-136h464c53 0 96 43 96 96zm-325-569c10 24 5 52-14 70l-448 448c-12 13-29 19-45 19s-33-6-45-19L339 621c-19-18-24-46-14-70 10-23 33-39 59-39h256V64c0-35 29-64 64-64h256c35 0 64 29 64 64v448h256c26 0 49 16 59 39z"/>
@@ -26,7 +24,7 @@ utils.notDownloadedResource = function() {
 	`;
 };
 
-utils.notDownloadedImage = function() {
+export const notDownloadedImage = function() {
 	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/file-image-o.svg
 	// Height changed to 1795
 	return `
@@ -36,7 +34,7 @@ utils.notDownloadedImage = function() {
 	`;
 };
 
-utils.notDownloadedFile = function() {
+export const notDownloadedFile = function() {
 	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/file-o.svg
 	return `
 		<svg width="1925" height="1792" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +43,7 @@ utils.notDownloadedFile = function() {
 	`;
 };
 
-utils.errorImage = function() {
+export const errorImage = function() {
 	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/times-circle.svg
 	return `
 		<svg width="1795" height="1795" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +52,7 @@ utils.errorImage = function() {
 	`;
 };
 
-utils.loaderImage = function() {
+export const loaderImage = function() {
 	// https://github.com/ForkAwesome/Fork-Awesome/blob/master/src/icons/svg/hourglass-half.svg
 	return `
 		<svg width="1536" height="1790" xmlns="http://www.w3.org/2000/svg">
@@ -63,21 +61,21 @@ utils.loaderImage = function() {
 	`;
 };
 
-utils.resourceStatusImage = function(status: string) {
-	if (status === 'notDownloaded') return utils.notDownloadedResource();
-	return utils.resourceStatusFile(status);
+export const resourceStatusImage = function(status: string) {
+	if (status === 'notDownloaded') return notDownloadedResource();
+	return resourceStatusFile(status);
 };
 
-utils.resourceStatusFile = function(status: string) {
-	if (status === 'notDownloaded') return utils.notDownloadedResource();
-	if (status === 'downloading') return utils.loaderImage();
-	if (status === 'encrypted') return utils.loaderImage();
-	if (status === 'error') return utils.errorImage();
+export const resourceStatusFile = function(status: string) {
+	if (status === 'notDownloaded') return notDownloadedResource();
+	if (status === 'downloading') return loaderImage();
+	if (status === 'encrypted') return loaderImage();
+	if (status === 'error') return errorImage();
 
 	throw new Error(`Unknown status: ${status}`);
 };
 
-utils.resourceStatusIndex = function(status: string) {
+export const resourceStatusIndex = function(status: string) {
 	if (status === 'error') return -1;
 	if (status === 'notDownloaded') return 0;
 	if (status === 'downloading') return 1;
@@ -87,7 +85,7 @@ utils.resourceStatusIndex = function(status: string) {
 	throw new Error(`Unknown status: ${status}`);
 };
 
-utils.resourceStatusName = function(index: number) {
+export const resourceStatusName = function(index: number) {
 	if (index === -1) return 'error';
 	if (index === 0) return 'notDownloaded';
 	if (index === 1) return 'downloading';
@@ -97,7 +95,7 @@ utils.resourceStatusName = function(index: number) {
 	throw new Error(`Unknown index: ${index}`);
 };
 
-utils.resourceStatus = function(ResourceModel: any, resourceInfo: any) {
+export const resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 	if (!ResourceModel) return 'ready';
 
 	let resourceStatus = 'ready';
@@ -124,7 +122,14 @@ utils.resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 
 export type ItemIdToUrlHandler = (resource: any)=> string;
 
-utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
+export const imageReplacement = (
+	ResourceModel: any,
+	src: string,
+	resources: any,
+	resourceBaseUrl: string,
+	itemIdToUrl: ItemIdToUrlHandler = null,
+	context: { content: string } | { htmlBefore: string; htmlAfter: string },
+) => {
 	if (!ResourceModel || !resources) return null;
 
 	if (!ResourceModel.isResourceUrl(src)) return null;
@@ -132,11 +137,29 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 	const resourceId = ResourceModel.urlToId(src);
 	const result = resources[resourceId];
 	const resource = result ? result.item : null;
-	const resourceStatus = utils.resourceStatus(ResourceModel, result);
+	const status = resourceStatus(ResourceModel, result);
 
-	if (resourceStatus !== 'ready') {
-		const icon = utils.resourceStatusImage(resourceStatus);
-		return `<div class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>` + '</div>';
+	if (status !== 'ready') {
+		const icon = resourceStatusImage(status).replace(/\s+/g, ' ');
+
+		// contenteditable=false prevents users from editing the status image when
+		// displayed in TinyMCE.
+		return `
+			<div
+				contenteditable="false"
+				class="not-loaded-resource resource-status-${status}"
+				data-resource-id="${resourceId}"
+				${
+	'content' in context
+		? `data-content="${htmlentities(context.content)}"`
+		: `
+							data-before-html-src="${htmlentities(context.htmlBefore)}"
+							data-after-html-src="${htmlentities(context.htmlAfter)}"`
+}
+			>
+				<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>
+			</div>
+		`.replace(/[\n]\s+/g, '\n');
 	}
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
@@ -172,6 +195,5 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 
 // Used in mobile app when enableLongPress = true. Tells for how long
 // the resource should be pressed before the menu is shown.
-utils.longPressDelay = 500;
+export const longPressDelay = 500;
 
-export default utils;

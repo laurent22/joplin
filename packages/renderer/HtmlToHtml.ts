@@ -1,6 +1,6 @@
 import htmlUtils from './htmlUtils';
 import linkReplacement from './MdToHtml/linkReplacement';
-import utils, { ItemIdToUrlHandler } from './utils';
+import { imageReplacement, ItemIdToUrlHandler } from './utils';
 import InMemoryCache from './InMemoryCache';
 import { RenderResult } from './MarkupToHtml';
 const md5 = require('md5');
@@ -104,7 +104,14 @@ export default class HtmlToHtml {
 			html = htmlUtils.processImageTags(html, (data: any) => {
 				if (!data.src) return null;
 
-				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_, options.itemIdToUrl);
+				const r = imageReplacement(
+					this.ResourceModel_,
+					data.src,
+					options.resources,
+					this.resourceBaseUrl_,
+					options.itemIdToUrl,
+					{ htmlBefore: '', htmlAfter: '' },
+				);
 				if (!r) return null;
 
 				if (typeof r === 'string') {
