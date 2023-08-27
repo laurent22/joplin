@@ -32,6 +32,7 @@ export interface RenderOptions {
 	useCustomPdfViewer?: boolean;
 	noteId?: string;
 	vendorDir?: string;
+	resources?: Record<string, any>;
 }
 
 interface RendererRule {

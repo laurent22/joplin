@@ -541,7 +541,8 @@ rules.joplinNotLoadedResource = {
     if (label) {
       return `![${label}](:/${resourceId})`;
     } else {
-      return `<img ${before} src=":/${resourceId}" ${after}/>`;
+      // after already contains the "/"
+      return `<img ${before} src=":/${resourceId}" ${after}>`;
     }
   }
 }

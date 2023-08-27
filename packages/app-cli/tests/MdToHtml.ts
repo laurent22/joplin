@@ -289,4 +289,46 @@ describe('MdToHtml', () => {
 			expect(html.html).toContain(opening + trimmedTex + closing);
 		}
 	});
+
+	it('should render not-yet-loaded image resources correctly', async () => {
+		const mdToHtml = newTestMdToHtml({
+			ResourceModel: {
+				isResourceUrl: (url: string) => url.startsWith(':/'),
+				urlToId: (url: string) => url.substring(2),
+			},
+		});
+
+		const rendererOptions = {
+			bodyOnly: true,
+			resources: {},
+		};
+
+		const resourceId = '198e23d8cf834bb7b65fb2987f2378e3';
+		const mdRenderResult = await mdToHtml.render(
+			`![Test image](:/${resourceId})`,
+			null,
+			rendererOptions,
+		);
+
+		// Should wrap in a div that contains enough information to reconstruct the
+		// original markdown
+		let html = mdRenderResult.html;
+		expect(html).toContain('<div');
+		expect(html).toContain('contenteditable="false"');
+		expect(html).toContain('class="not-loaded-resource');
+		expect(html).toContain('data-label="Test image"');
+		expect(html).toContain(`data-resource-id="${resourceId}`);
+
+		// Using HTML-style markup should produce similar results
+		const htmlRenderResult = await mdToHtml.render(
+			`<img alt="Test image" src=":/${resourceId}"/>`,
+			null,
+			rendererOptions,
+		);
+
+		html = htmlRenderResult.html;
+		expect(html).toMatch(/^\s*<div\s*contenteditable="false"\s*/);
+		expect(html).toContain('data-before-html-src=" alt=&quot;Test image&quot; "');
+		expect(html).toContain(`data-resource-id="${resourceId}"`);
+	});
 });
