@@ -368,6 +368,7 @@ packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/notarizeMacApp.js
+packages/app-desktop/tools/renameReleaseAssets.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
