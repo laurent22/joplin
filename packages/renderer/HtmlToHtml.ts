@@ -106,11 +106,10 @@ export default class HtmlToHtml {
 
 				const r = imageReplacement(
 					this.ResourceModel_,
-					data.src,
+					{ src: data.src, beforeSrc: '', afterSrc: '' },
 					options.resources,
 					this.resourceBaseUrl_,
 					options.itemIdToUrl,
-					{ htmlBefore: '', htmlAfter: '' },
 				);
 				if (!r) return null;
 

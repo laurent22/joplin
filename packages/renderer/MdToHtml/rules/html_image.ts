@@ -5,11 +5,10 @@ import { imageReplacement } from '../../utils';
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = imageReplacement(
 		ruleOptions.ResourceModel,
-		src,
+		{ src, beforeSrc: before, afterSrc: after },
 		ruleOptions.resources,
 		ruleOptions.resourceBaseUrl,
 		ruleOptions.itemIdToUrl,
-		{ htmlBefore: before, htmlAfter: after },
 	);
 	if (typeof r === 'string') return r;
 	if (r) return `<img ${before} ${attributesHtml(r)} ${after}/>`;
@@ -31,7 +30,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 			return self.renderToken(tokens, idx, options);
 		};
 
-	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)>/gi;
+	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)[/]?>/gi;
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const handleImageTags = function(defaultRender: Function) {

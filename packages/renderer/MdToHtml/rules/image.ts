@@ -19,11 +19,10 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 		const r = imageReplacement(
 			ruleOptions.ResourceModel,
-			src,
+			{ src, label: content },
 			ruleOptions.resources,
 			ruleOptions.resourceBaseUrl,
 			ruleOptions.itemIdToUrl,
-			{ content },
 		);
 		if (typeof r === 'string') return r;
 		if (r) {

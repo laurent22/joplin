@@ -533,7 +533,7 @@ rules.joplinNotLoadedResource = {
   },
 
   replacement: function (content, node, options) {
-    const label = node.getAttribute('data-content');
+    const label = node.getAttribute('data-label');
     const before = node.getAttribute('data-before-html-src');
     const after = node.getAttribute('data-after-html-src');
     const resourceId = node.getAttribute('data-resource-id');

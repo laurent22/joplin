@@ -122,16 +122,27 @@ export const resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 
 export type ItemIdToUrlHandler = (resource: any)=> string;
 
+interface MarkdownImageAttrs {
+	src: string;
+	label: string;
+}
+
+interface HtmlImageAttrs {
+	src: string;
+	beforeSrc: string;
+	afterSrc: string;
+}
+
 export const imageReplacement = (
 	ResourceModel: any,
-	src: string,
+	image: MarkdownImageAttrs|HtmlImageAttrs,
 	resources: any,
 	resourceBaseUrl: string,
 	itemIdToUrl: ItemIdToUrlHandler = null,
-	context: { content: string } | { htmlBefore: string; htmlAfter: string },
 ) => {
 	if (!ResourceModel || !resources) return null;
 
+	const src = image.src;
 	if (!ResourceModel.isResourceUrl(src)) return null;
 
 	const resourceId = ResourceModel.urlToId(src);
@@ -142,6 +153,16 @@ export const imageReplacement = (
 	if (status !== 'ready') {
 		const icon = resourceStatusImage(status).replace(/\s+/g, ' ');
 
+		// Store information that will allow the original markup to be reconstructed.
+		let originalMarkupAttrs;
+		if ('label' in image) {
+			originalMarkupAttrs = `data-label="${htmlentities(image.label)}"`;
+		} else {
+			originalMarkupAttrs = `
+				data-before-html-src="${htmlentities(image.beforeSrc)}"
+				data-after-html-src="${htmlentities(image.afterSrc)}"`;
+		}
+
 		// contenteditable=false prevents users from editing the status image when
 		// displayed in TinyMCE.
 		return `
@@ -149,13 +170,7 @@ export const imageReplacement = (
 				contenteditable="false"
 				class="not-loaded-resource resource-status-${status}"
 				data-resource-id="${resourceId}"
-				${
-	'content' in context
-		? `data-content="${htmlentities(context.content)}"`
-		: `
-							data-before-html-src="${htmlentities(context.htmlBefore)}"
-							data-after-html-src="${htmlentities(context.htmlAfter)}"`
-}
+				${originalMarkupAttrs}
 			>
 				<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>
 			</div>
