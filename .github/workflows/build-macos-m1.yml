@@ -58,7 +58,7 @@ jobs:
             echo "Building and publishing desktop application..."
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
 
-            yarn rename-release-assets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
+            yarn renameReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
           else
             echo "Building but *not* publishing desktop application..."
 
