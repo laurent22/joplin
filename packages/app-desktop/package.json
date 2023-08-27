@@ -15,7 +15,7 @@
     "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
     "test-ci": "yarn test",
-    "rename-release-assets": "node tools/renameReleaseAssets.js"
+    "renameReleaseAssets": "node tools/renameReleaseAssets.js"
   },
   "repository": {
     "type": "git",
