@@ -62,11 +62,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 
 			return {
 				resourceReady: false,
-				html: `<a
-					class="not-loaded-resource resource-status-${status}"
-					contenteditable="false"
-					data-resource-type="resource"
-					data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`,
+				html: `<a class="not-loaded-resource resource-status-${status}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`,
 				resource,
 				resourceFullPath: null,
 			};
