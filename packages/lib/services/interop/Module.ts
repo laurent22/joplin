@@ -10,6 +10,7 @@ interface BaseMetadata {
 	fileExtensions: string[];
 	description: string;
 	isDefault: boolean;
+	separator: boolean;
 
 	supportsMobile: boolean;
 
@@ -51,6 +52,7 @@ const defaultBaseMetadata = {
 	isNoteArchive: true,
 	supportsMobile: true,
 	isDefault: false,
+	separator: false,
 };
 
 const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: FileSystemItem = null) => {

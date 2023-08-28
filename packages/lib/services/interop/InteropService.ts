@@ -53,6 +53,20 @@ export default class InteropService {
 		if (!this.defaultModules_) {
 			const importModules = [
 				makeImportModule({
+					format: 'jex',
+					fileExtensions: ['jex'],
+					sources: [FileSystemItem.File],
+					description: _('Joplin Export File'),
+				}, () => new InteropService_Importer_Jex()),
+
+				makeImportModule({
+					format: 'raw',
+					sources: [FileSystemItem.Directory],
+					description: _('Joplin Export Directory'),
+					separator: true,
+				}, () => new InteropService_Importer_Raw()),
+
+				makeImportModule({
 					format: 'enex',
 					fileExtensions: ['enex'],
 					sources: [FileSystemItem.File],
@@ -79,13 +93,6 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md()),
 
 				makeImportModule({
-					format: 'jex',
-					fileExtensions: ['jex'],
-					sources: [FileSystemItem.File],
-					description: _('Joplin Export File'),
-				}, () => new InteropService_Importer_Jex()),
-
-				makeImportModule({
 					format: 'md',
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
@@ -100,12 +107,6 @@ export default class InteropService {
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('Markdown + Front Matter'),
 				}, () => new InteropService_Importer_Md_frontmatter()),
-
-				makeImportModule({
-					format: 'raw',
-					sources: [FileSystemItem.Directory],
-					description: _('Joplin Export Directory'),
-				}, () => new InteropService_Importer_Raw()),
 
 				makeImportModule({
 					format: 'txt',
