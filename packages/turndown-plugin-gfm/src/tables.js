@@ -3,6 +3,8 @@ var every = Array.prototype.every
 var rules = {}
 var alignMap = { left: ':---', right: '---:', center: ':---:' };
 
+let isCodeBlock_ = null;
+
 function getAlignment(node) {
   return node ? (node.getAttribute('align') || node.style.textAlign || '').toLowerCase() : '';
 }
@@ -65,10 +67,10 @@ rules.tableRow = {
 }
 
 rules.table = {
-  // Only convert tables with a heading row.
-  // Tables with no heading row are kept using `keep` (see below).
+  // Only convert tables that can result in valid Markdown
+  // Other tables are kept as HTML using `keep` (see below).
   filter: function (node) {
-    return node.nodeName === 'TABLE'
+    return node.nodeName === 'TABLE' && !tableShouldBeHtml(node);
   },
 
   replacement: function (content, node) {
@@ -154,6 +156,35 @@ function nodeContainsTable(node) {
   return false;
 }
 
+const nodeContains = (node, types) => {
+  if (!node.childNodes) return false;
+
+  for (let i = 0; i < node.childNodes.length; i++) {
+    const child = node.childNodes[i];
+    if (types === 'code' && isCodeBlock_(child)) return true;
+    if (types.includes(child.nodeName)) return true;
+    if (nodeContains(child, types)) return true;
+  }
+
+  return false;
+}
+
+const tableShouldBeHtml = (tableNode) => {
+  return nodeContains(tableNode, 'code') ||
+    nodeContains(tableNode, [
+      'UL',
+      'OL',
+      'H1',
+      'H2',
+      'H3',
+      'H4',
+      'H5',
+      'H6',
+      'HR',
+      'BLOCKQUOTE',
+    ]);
+}
+
 // Various conditions under which a table should be skipped - i.e. each cell
 // will be rendered one after the other as if they were paragraphs.
 function tableShouldBeSkipped(tableNode) {
@@ -192,8 +223,11 @@ function tableColCount(node) {
 }
 
 export default function tables (turndownService) {
+  isCodeBlock_ = turndownService.isCodeBlock;
+
   turndownService.keep(function (node) {
-    return node.nodeName === 'TABLE'
-  })
+    if (node.nodeName === 'TABLE' && tableShouldBeHtml(node)) return true;
+    return false;
+  });
   for (var key in rules) turndownService.addRule(key, rules[key])
 }

@@ -1,0 +1,1 @@
+<table border="1" style="border-collapse: collapse; width: 100%;" data-mce-selected="1"><tbody><tr><td style="width: 50.0518%;">Header 1</td><td style="width: 50.0518%;">Header 2</td></tr><tr><td style="width: 50.0518%;"><br></td><td style="width: 50.0518%;"><ul><li>Check 1</li><li>Check 2</li></ul></td></tr></tbody></table>

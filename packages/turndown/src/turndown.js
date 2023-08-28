@@ -145,7 +145,12 @@ TurndownService.prototype = {
     return escapes.reduce(function (accumulator, escape) {
       return accumulator.replace(escape[0], escape[1])
     }, string)
-  }
+  },
+
+  isCodeBlock: function(node) {
+    return isCodeBlock(node);
+  },
+
 }
 
 /**
