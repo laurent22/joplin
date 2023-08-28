@@ -99,7 +99,7 @@ export default class Tag extends BaseItem {
 		});
 	}
 
-	public static async tagsWithCount(count: number=0)
+	public static async tagsWithCount(count: number)
 	{		
 		return await this.modelSelectAll(`SELECT tags.id, tags.title, COUNT(nt.tag_id) as note_count FROM tags LEFT JOIN note_tags nt on nt.tag_id = tags.id GROUP BY tags.id HAVING note_count = ?`, [count] );
 	}
