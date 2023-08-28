@@ -53,6 +53,32 @@ export default class InteropService {
 		if (!this.defaultModules_) {
 			const importModules = [
 				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.File],
+					description: _('Evernote Export File (as HTML)'),
+					supportsMobile: false,
+					outputFormat: ImportModuleOutputFormat.Html,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+
+				makeImportModule({
+					format: 'enex',
+					fileExtensions: ['enex'],
+					sources: [FileSystemItem.File],
+					description: _('Evernote Export File (as Markdown)'),
+					supportsMobile: false,
+					isDefault: true,
+				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+
+				makeImportModule({
+					format: 'html',
+					fileExtensions: ['html'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('HTML document'),
+				}, () => new InteropService_Importer_Md()),
+
+				makeImportModule({
 					format: 'jex',
 					fileExtensions: ['jex'],
 					sources: [FileSystemItem.File],
@@ -64,7 +90,7 @@ export default class InteropService {
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
-					description: _('Markdown/HTML/TXT'),
+					description: _('Markdown'),
 				}, () => new InteropService_Importer_Md()),
 
 				makeImportModule({
@@ -82,22 +108,12 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Raw()),
 
 				makeImportModule({
-					format: 'enex',
-					fileExtensions: ['enex'],
-					sources: [FileSystemItem.File],
-					description: _('Evernote Export File (as Markdown)'),
-					supportsMobile: false,
-					isDefault: true,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
-
-				makeImportModule({
-					format: 'enex',
-					fileExtensions: ['enex'],
-					sources: [FileSystemItem.File],
-					description: _('Evernote Export File (as HTML)'),
-					supportsMobile: false,
-					outputFormat: ImportModuleOutputFormat.Html,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+					format: 'txt',
+					fileExtensions: ['txt'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('Text document'),
+				}, () => new InteropService_Importer_Md()),
 			];
 
 			const exportModules = [
