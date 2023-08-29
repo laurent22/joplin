@@ -4556,7 +4556,7 @@ __metadata:
     buffer: 6.0.3
     constants-browserify: 1.0.0
     crypto-browserify: 3.12.0
-    deprecated-react-native-prop-types: 4.2.0
+    deprecated-react-native-prop-types: 4.2.1
     events: 3.3.0
     execa: 4.1.0
     fs-extra: 11.1.1
@@ -4979,7 +4979,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.63.6
+    sass: 1.64.2
     sharp: 0.32.4
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -14169,14 +14169,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deprecated-react-native-prop-types@npm:4.2.0":
-  version: 4.2.0
-  resolution: "deprecated-react-native-prop-types@npm:4.2.0"
+"deprecated-react-native-prop-types@npm:4.2.1":
+  version: 4.2.1
+  resolution: "deprecated-react-native-prop-types@npm:4.2.1"
   dependencies:
     "@react-native/normalize-colors": "*"
     invariant: "*"
     prop-types: "*"
-  checksum: c47004069592a90f89f062f56f11a62fb41df7dad1a3915c26391034a32f6cef6d3d10a2b0c4e28c40b1eab460dfdccb040c691fa36b24137432359451b41cb2
+  checksum: fcbe632e4edc367df7997b63fc6fea8e7f4b222b47ec6b016d1da5869f19710280630cbdff5fec1a4c729c629c35f0d03828f06f7d3db4b00bb415fbd63650f0
   languageName: node
   linkType: hard
 
@@ -29715,16 +29715,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.63.6":
-  version: 1.63.6
-  resolution: "sass@npm:1.63.6"
+"sass@npm:1.64.2":
+  version: 1.64.2
+  resolution: "sass@npm:1.64.2"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 3372319904658eeafaf78a09a6fcb3368a68e6d76fe3c43c2d009f4f72e475ab22b82ef483ef5c00fcda3ab00066846c0bd88c36b42771b855f6ab80c7eda541
+  checksum: 43a5c9b9b3b6ba27feb5c45eba90edc437b15a30fd443f5d2623bbd59fe4a922f2a6a9990296c6a6c2b5bce7f401922c5049357415f50b745952c2d478bc5526
   languageName: node
   linkType: hard
 
