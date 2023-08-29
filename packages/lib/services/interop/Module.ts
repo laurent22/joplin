@@ -10,7 +10,7 @@ interface BaseMetadata {
 	fileExtensions: string[];
 	description: string;
 	isDefault: boolean;
-	separator: boolean;
+	separatorAfter: boolean; // this isn't a property of the importer, but of how it should be displayed in the GUI
 
 	supportsMobile: boolean;
 
@@ -52,7 +52,7 @@ const defaultBaseMetadata = {
 	isNoteArchive: true,
 	supportsMobile: true,
 	isDefault: false,
-	separator: false,
+	separatorAfter: false,
 };
 
 const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: FileSystemItem = null) => {

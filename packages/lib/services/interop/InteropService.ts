@@ -63,7 +63,7 @@ export default class InteropService {
 					format: 'raw',
 					sources: [FileSystemItem.Directory],
 					description: _('Joplin Export Directory'),
-					separator: true,
+					separatorAfter: true,
 				}, () => new InteropService_Importer_Raw()),
 
 				makeImportModule({
