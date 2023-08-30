@@ -15,7 +15,7 @@ import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions, NoteBodyEditorRef } from './utils/types';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
@@ -46,6 +46,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
+import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -59,7 +60,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
-	const editorRef = useRef<any>();
+	const editorRef = useRef<NoteBodyEditorRef>();
 	const titleInputRef = useRef<any>();
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
@@ -463,6 +464,8 @@ function NoteEditor(props: NoteEditorProps) {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror') {
 		editor = <CodeMirror {...editorProps}/>;
+	} else if (props.bodyEditor === 'PlainText') {
+		editor = <PlainEditor {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}

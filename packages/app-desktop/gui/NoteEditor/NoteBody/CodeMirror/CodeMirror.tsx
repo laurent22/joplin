@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
+import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
 import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
@@ -48,7 +48,7 @@ function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtml
 	return { ...override };
 }
 
-function CodeMirror(props: NoteBodyEditorProps, ref: any) {
+function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content

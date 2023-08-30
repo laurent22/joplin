@@ -12,8 +12,9 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 		...libStateToWhenClauseContext(state, options),
 
 		// UI elements
-		markdownEditorVisible: !!state.settings['editor.codeView'],
-		richTextEditorVisible: !state.settings['editor.codeView'],
+		markdownEditorVisible: !!state.settings['editor.codeView'] && !state.settings['isSafeMode'],
+		richTextEditorVisible: !state.settings['editor.codeView'] && !state.settings['isSafeMode'],
+
 		markdownEditorPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('editor'),
 		markdownViewerPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('viewer'),
 		modalDialogVisible: !!Object.keys(state.visibleDialogs).length,
