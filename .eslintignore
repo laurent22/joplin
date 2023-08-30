@@ -232,6 +232,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useLineSorting.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useListIdent.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.js
+packages/app-desktop/gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
