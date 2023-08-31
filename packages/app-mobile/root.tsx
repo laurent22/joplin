@@ -236,7 +236,7 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
-	isOnMobileData: false };
+	isOnMobileData: false, isSyncViewFolded: true };
 
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -403,6 +403,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
+
+		case 'TOGGLE_SYNC_FOLDING_VIEW':
+
+			newState = { ...state };
+			newState.isSyncViewFolded = !state.isSyncViewFolded;
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

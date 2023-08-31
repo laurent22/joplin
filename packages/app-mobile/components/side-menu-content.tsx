@@ -36,6 +36,7 @@ interface Props {
 	opacity: number;
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
+	isSyncViewFolded: boolean;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -401,6 +402,8 @@ const SideMenuContentComponent = (props: Props) => {
 
 		if (!onPressHandler) return content;
 
+		if (key === 'synchronize_button' && props.isSyncViewFolded) return <View key={key} style={{ marginBottom: -30 }}/>;
+
 		return (
 			<TouchableOpacity key={key} onPress={onPressHandler}>
 				{content}
@@ -411,6 +414,10 @@ const SideMenuContentComponent = (props: Props) => {
 	const makeDivider = (key: string) => {
 		const theme = themeStyle(props.themeId);
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
+	};
+
+	const makeFoldingView = (key: string) => {
+		return <TouchableOpacity onPress={() => { props.dispatch({ type: 'TOGGLE_SYNC_FOLDING_VIEW' }); }} key={key} style={{ marginTop: 15, alignItems: 'center', marginBottom: -15 }} ><Icon name={`caret-${props.isSyncViewFolded ? 'up' : 'down'}`} size={22} color={theme.color} /></TouchableOpacity>;
 	};
 
 	const renderBottomPanel = () => {
@@ -429,6 +436,8 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		items.push(renderSidebarButton('config_button', _('Configuration'), 'md-settings', configButton_press));
+
+		items.push(makeFoldingView('syncFoldingView'));
 
 		items.push(makeDivider('divider_2'));
 
@@ -529,5 +538,6 @@ export default connect((state: AppState) => {
 		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
 		profileConfig: state.profileConfig,
 		inboxJopId: state.settings['sync.10.inboxId'],
+		isSyncViewFolded: state.isSyncViewFolded,
 	};
 })(SideMenuContentComponent);

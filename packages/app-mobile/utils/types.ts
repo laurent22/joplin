@@ -7,4 +7,5 @@ export interface AppState extends State {
 	smartFilterId: string;
 	noteSideMenuOptions: any;
 	themeId: number;
+	isSyncViewFolded: boolean;
 }
