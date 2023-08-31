@@ -15,6 +15,7 @@ const path = require('path');
 const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
 	'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
+	'@joplin/editor': path.resolve(__dirname, '../editor/'),
 	'@joplin/tools': path.resolve(__dirname, '../tools/'),
 	'@joplin/utils': path.resolve(__dirname, '../utils/'),
 	'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),

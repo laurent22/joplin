@@ -14,13 +14,14 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import { useEffect } from 'react';
 import { Keyboard, ViewStyle } from 'react-native';
-import { EditorControl, EditorSettings, ListType, SearchState } from '../types';
-import SelectionFormatting from '../SelectionFormatting';
+import { EditorControl, EditorSettings } from '../types';
 import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
 import ToggleSpaceButton from './ToggleSpaceButton';
+import { ListType, SearchState } from '@joplin/editor/types';
+import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 
 type OnAttachCallback = ()=> void;
 

@@ -3,7 +3,7 @@
  */
 
 import { EditorSettings } from '../types';
-import { initCodeMirror } from './CodeMirror';
+import createEditor from './createEditor';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
@@ -18,14 +18,13 @@ const createEditorSettings = (themeId: number) => {
 		katexEnabled: true,
 		spellcheckEnabled: true,
 		readOnly: false,
-		themeId,
 		themeData,
 	};
 
 	return editorSettings;
 };
 
-describe('CodeMirror', () => {
+describe('createEditor', () => {
 	// This checks for a regression -- occasionally, when updating packages,
 	// syntax highlighting in the CodeMirror editor stops working. This is usually
 	// fixed by
@@ -40,7 +39,12 @@ describe('CodeMirror', () => {
 		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
 
 		await loadLangauges();
-		const editor = initCodeMirror(document.body, initialText, editorSettings);
+		const editor = createEditor(document.body, {
+			initialText,
+			settings: editorSettings,
+			onEvent: _event => {},
+			onLogMessage: _message => {},
+		});
 
 		// Force the generation of the syntax tree now.
 		forceParsing(editor.editor);
@@ -48,7 +52,6 @@ describe('CodeMirror', () => {
 		// CodeMirror nests the tag that styles the header within .cm-headerLine:
 		//  <div class='cm-headerLine'><span class='someclass'>Testing...</span></div>
 		const headerLineContent = document.body.querySelector('.cm-headerLine > span')!;
-
 
 		expect(headerLineContent.textContent).toBe(headerLineText);
 

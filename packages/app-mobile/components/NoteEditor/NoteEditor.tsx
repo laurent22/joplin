@@ -5,29 +5,28 @@ import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView from '../ExtendedWebView';
 
-const React = require('react');
+import * as React from 'react';
 import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
-import SelectionFormatting from './SelectionFormatting';
-import {
-	EditorSettings, EditorControl,
-	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent, ListType, SearchState,
-} from './types';
+import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
+import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { ListType, SearchState } from '@joplin/editor/types';
+import { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
-type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
+type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
 type OnAttachCallback = ()=> void;
 
 interface Props {
 	themeId: number;
 	initialText: string;
-	initialSelection?: Selection;
+	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
 	toolbarEnabled: boolean;
@@ -280,7 +279,7 @@ function NoteEditor(props: Props, ref: any) {
 
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
-	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
+	const [selectionState, setSelectionState] = useState(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
@@ -323,36 +322,38 @@ function NoteEditor(props: Props, ref: any) {
 				console.info('CodeMirror:', ...event.value);
 			},
 
-			onChange: (event: ChangeEvent) => {
-				props.onChange(event);
-			},
+			onEditorEvent: (event: EditorEvent) => {
+				let exhaustivenessCheck: never;
+				switch (event.kind) {
+				case EditorEventType.Change:
+					props.onChange(event);
+					break;
+				case EditorEventType.UndoRedoDepthChange:
+					props.onUndoRedoDepthChange(event);
+					break;
+				case EditorEventType.SelectionRangeChange:
+					props.onSelectionChange(event);
+					break;
+				case EditorEventType.SelectionFormattingChange:
+					setSelectionState(event.formatting);
+					break;
+				case EditorEventType.EditLink:
+					editorControl.showLinkDialog();
+					break;
+				case EditorEventType.UpdateSearchDialog:
+					setSearchState(event.searchState);
 
-			onUndoRedoDepthChange: (event: UndoRedoDepthChangeEvent) => {
-				props.onUndoRedoDepthChange(event);
-			},
-
-			onSelectionChange: (event: SelectionChangeEvent) => {
-				props.onSelectionChange(event);
-			},
-
-			onSelectionFormattingChange(data: string) {
-				// We want a SelectionFormatting object, so are
-				// instantiating it from JSON.
-				const formatting = SelectionFormatting.fromJSON(data);
-				setSelectionState(formatting);
-			},
-
-			onRequestLinkEdit() {
-				editorControl.showLinkDialog();
-			},
-
-			onRequestShowSearch(data: SearchState) {
-				setSearchState(data);
-				editorControl.searchControl.showSearch();
-			},
-
-			onRequestHideSearch() {
-				editorControl.searchControl.hideSearch();
+					if (event.searchState.dialogVisible) {
+						editorControl.searchControl.showSearch();
+					} else {
+						editorControl.searchControl.hideSearch();
+					}
+					break;
+				default:
+					exhaustivenessCheck = event;
+					return exhaustivenessCheck;
+				}
+				return;
 			},
 		};
 
