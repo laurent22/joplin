@@ -4478,7 +4478,7 @@ __metadata:
     node-notifier: 10.0.1
     node-rsa: 1.1.1
     pretty-bytes: 5.6.0
-    re-resizable: 6.9.9
+    re-resizable: 6.9.11
     react: 18.2.0
     react-datetime: 3.2.0
     react-dom: 18.2.0
@@ -27669,13 +27669,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-resizable@npm:6.9.9":
-  version: 6.9.9
-  resolution: "re-resizable@npm:6.9.9"
+"re-resizable@npm:6.9.11":
+  version: 6.9.11
+  resolution: "re-resizable@npm:6.9.11"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: a2c8bfe86646fb02d5c9c624b1da26f9e6a5e2f552cd96ce4db690588bee6b21177065ce8e98646c6ca0b1a9c4ce233824b75eb346800d8248ac8a87b40f1b28
+  checksum: 04be62e2985caff8ff082664b9b66d7c49df383a9560e691f32f583cba75ce51077be8b718c5cda5a1fa07e701337102cbd9ff5b03a58541d9092f25753f47f7
   languageName: node
   linkType: hard
 
