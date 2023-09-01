@@ -8,6 +8,7 @@ export enum EditorEventType {
 	SelectionFormattingChange,
 	UpdateSearchDialog,
 	EditLink,
+	Scroll,
 }
 
 export interface ChangeEvent {
@@ -27,8 +28,11 @@ export interface UndoRedoDepthChangeEvent {
 export interface SelectionRangeChangeEvent {
 	kind: EditorEventType.SelectionRangeChange;
 
-	start: number;
-	end: number;
+	anchor: number;
+	head: number;
+
+	from: number;
+	to: number;
 }
 
 export interface SelectionFormattingChangeEvent {
@@ -36,18 +40,26 @@ export interface SelectionFormattingChangeEvent {
 	formatting: SelectionFormatting;
 }
 
+export interface EditorScrolledEvent {
+	kind: EditorEventType.Scroll;
+
+	// A fraction from 0 to 1, where 1 corresponds to the end of the document
+	fraction: number;
+}
+
 export interface UpdateSearchDialogEvent {
 	kind: EditorEventType.UpdateSearchDialog;
 	searchState: SearchState;
 }
 
-export interface EditLinkEvent {
+export interface RequestEditLinkEvent {
 	kind: EditorEventType.EditLink;
 }
 
 
 export type EditorEvent =
 		ChangeEvent|UndoRedoDepthChangeEvent|SelectionRangeChangeEvent|
+			EditorScrolledEvent|
 			SelectionFormattingChangeEvent|UpdateSearchDialogEvent|
-			EditLinkEvent;
+			RequestEditLinkEvent;
 

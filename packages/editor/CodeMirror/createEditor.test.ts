@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { EditorSettings } from '../types';
+import { EditorLanguageType, EditorSettings } from '../types';
 import createEditor from './createEditor';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
@@ -17,7 +17,9 @@ const createEditorSettings = (themeId: number) => {
 	const editorSettings: EditorSettings = {
 		katexEnabled: true,
 		spellcheckEnabled: true,
+		useExternalSearch: true,
 		readOnly: false,
+		language: EditorLanguageType.Markdown,
 		themeData,
 	};
 
@@ -42,6 +44,7 @@ describe('createEditor', () => {
 		const editor = createEditor(document.body, {
 			initialText,
 			settings: editorSettings,
+			plugins: {},
 			onEvent: _event => {},
 			onLogMessage: _message => {},
 		});

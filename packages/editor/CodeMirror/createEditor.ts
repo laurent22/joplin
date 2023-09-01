@@ -4,7 +4,7 @@ import decoratorExtension from './decoratorExtension';
 
 import syntaxHighlightingLanguages from './syntaxHighlightingLanguages';
 
-import { EditorState } from '@codemirror/state';
+import { EditorState, StateEffect } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { indentOnInput, indentUnit } from '@codemirror/language';
@@ -22,7 +22,7 @@ import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 
-import { ListType, SearchState, EditorControl, EditorProps } from '../types';
+import { ListType, SearchState, EditorControl, EditorProps, EditorLanguageType } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
 import {
 	decreaseIndent, increaseIndent,
@@ -32,17 +32,33 @@ import {
 } from './markdownCommands';
 import computeSelectionFormatting from './computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
+import { html } from '@codemirror/lang-html';
 
+interface ScrollInfo {
+	height: number;
+	clientHeight: number;
+}
 
-export interface CodeMirrorResult extends EditorControl {
+export interface CodeMirrorControl extends EditorControl {
 	editor: EditorView;
+	addStyles(...style: Parameters<typeof EditorView.theme>): void;
+
+	// Getters to emulate CodeMirror 5
+	getSelection(): string;
+	getScrollInfo(): ScrollInfo;
+	getScrollPercent(): number;
+	lineCount(): number;
+	lineAtHeight(height: number, mode?: 'local'): number;
+	heightAtLine(lineNumber: number, mode?: 'local'): number;
 }
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
-): CodeMirrorResult => {
+): CodeMirrorControl => {
 	const { initialText, settings } = props;
 	const theme = settings.themeData;
+
+	// TODO: Use props.plugins
 
 	props.onLogMessage('Initializing CodeMirror...');
 
@@ -69,11 +85,13 @@ const createEditor = (
 		}, doItNow ? 0 : 1000);
 	};
 
+	let currentDocText = props.initialText;
 	const notifyDocChanged = (viewUpdate: ViewUpdate) => {
 		if (viewUpdate.docChanged) {
+			currentDocText = editor.state.doc.toString();
 			props.onEvent({
 				kind: EditorEventType.Change,
-				value: editor.state.doc.toString(),
+				value: currentDocText,
 			});
 
 			schedulePostUndoRedoDepthChange(editor);
@@ -102,13 +120,30 @@ const createEditor = (
 	};
 
 	const showSearchDialog = () => {
+		if (!searchVisible) {
+			openSearchPanel(editor);
+		}
 		searchVisible = true;
 		onSearchDialogUpdate();
 	};
 
 	const hideSearchDialog = () => {
+		if (searchVisible) {
+			closeSearchPanel(editor);
+		}
 		searchVisible = false;
 		onSearchDialogUpdate();
+	};
+
+	const globalSpellcheckEnabled = () => {
+		return editor.contentDOM.spellcheck;
+	};
+
+	const getScrollFraction = (view: EditorView) => {
+		const maxScroll = view.scrollDOM.scrollHeight - view.scrollDOM.clientHeight;
+
+		// Prevent division by zero
+		return maxScroll > 0 ? view.scrollDOM.scrollTop / maxScroll : 0;
 	};
 
 	const notifySelectionChange = (viewUpdate: ViewUpdate) => {
@@ -116,15 +151,18 @@ const createEditor = (
 			const mainRange = viewUpdate.state.selection.main;
 			const event: SelectionRangeChangeEvent = {
 				kind: EditorEventType.SelectionRangeChange,
-				start: mainRange.from,
-				end: mainRange.to,
+
+				anchor: mainRange.anchor,
+				head: mainRange.head,
+				from: mainRange.from,
+				to: mainRange.to,
 			};
 			props.onEvent(event);
 		}
 	};
 
 	const notifySelectionFormattingChange = (viewUpdate?: ViewUpdate) => {
-		const spellcheck = editor.contentDOM.spellcheck;
+		const spellcheck = globalSpellcheckEnabled();
 
 		// If we can't determine the previous formatting, post the update regardless
 		if (!viewUpdate) {
@@ -157,23 +195,35 @@ const createEditor = (
 		};
 	};
 
+	const languageExtension = (() => {
+		const language = settings.language;
+		if (language === EditorLanguageType.Markdown) {
+			return markdown({
+				extensions: [
+					GitHubFlavoredMarkdownExtension,
+
+					// Don't highlight KaTeX if the user disabled it
+					settings.katexEnabled ? MarkdownMathExtension : [],
+				],
+				codeLanguages: syntaxHighlightingLanguages,
+			});
+		} else if (language === EditorLanguageType.Html) {
+			return html();
+		} else {
+			const exhaustivenessCheck: never = language;
+			return exhaustivenessCheck;
+		}
+	})();
+
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
-				markdown({
-					extensions: [
-						GitHubFlavoredMarkdownExtension,
-
-						// Don't highlight KaTeX if the user disabled it
-						settings.katexEnabled ? MarkdownMathExtension : [],
-					],
-					codeLanguages: syntaxHighlightingLanguages,
-				}),
+				languageExtension,
 				...createTheme(theme),
 				history(),
-				search({
+				search(settings.useExternalSearch ? {
 					createPanel(_: EditorView) {
 						return {
 							// The actual search dialog is implemented with react native,
@@ -187,15 +237,26 @@ const createEditor = (
 							},
 						};
 					},
-				}),
+				} : undefined),
 				drawSelection(),
 				highlightSpecialChars(),
 				highlightSelectionMatches(),
 				indentOnInput(),
 
-				// By default, indent with tabs to match other
+				EditorView.domEventHandlers({
+					scroll: (_event, view) => {
+						props.onEvent({
+							kind: EditorEventType.Scroll,
+							fraction: getScrollFraction(view),
+						});
+					},
+				}),
+
+				// TODO: indent with tabs to match other
 				// editors.
-				indentUnit.of('\t'),
+				// Tab indentation has list-related bugs. See
+				// https://github.com/codemirror/dev/issues/1243
+				indentUnit.of('    '),
 				EditorState.tabSize.of(4),
 
 				// Apply styles to entire lines (block-display decorations)
@@ -245,27 +306,6 @@ const createEditor = (
 		parent: parentElement,
 	});
 
-	// HACK: 09/02/22: Work around https://github.com/laurent22/joplin/issues/6802 by creating a copy mousedown
-	//  event to prevent the Editor's .preventDefault from making the context menu not appear.
-	// TODO: Track the upstream issue at https://github.com/codemirror/dev/issues/935 and remove this workaround
-	//  when the upstream bug is fixed.
-	document.body.addEventListener('mousedown', (evt) => {
-		if (!evt.isTrusted) {
-			return;
-		}
-
-		// Walk up the tree -- is evt.target or any of its parent nodes the editor's input region?
-		for (let current: Record<string, any> = evt.target; current; current = current.parentElement) {
-			if (current === editor.contentDOM) {
-				evt.stopPropagation();
-
-				const copyEvent = new Event('mousedown', evt);
-				editor.contentDOM.dispatchEvent(copyEvent);
-				return;
-			}
-		}
-	}, true);
-
 	const updateSearchQuery = (newState: SearchState) => {
 		const query = new SearchQuery({
 			search: newState.searchText,
@@ -278,8 +318,7 @@ const createEditor = (
 		});
 	};
 
-	const editorControls = {
-		editor,
+	const editorControls: CodeMirrorControl = {
 		undo: () => {
 			undo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
@@ -287,6 +326,15 @@ const createEditor = (
 		redo: () => {
 			redo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
+		},
+		focus: () => {
+			editor.focus();
+		},
+		selectAll: () => {
+			editor.dispatch(editor.state.update({
+				selection: { anchor: 0, head: editor.state.doc.length },
+				scrollIntoView: true,
+			}));
 		},
 		select: (anchor: number, head: number) => {
 			editor.dispatch(editor.state.update({
@@ -299,13 +347,22 @@ const createEditor = (
 				scrollIntoView: true,
 			}));
 		},
+		setScrollPercent: (fraction: number) => {
+			const maxScroll = editor.scrollDOM.scrollHeight - editor.scrollDOM.clientHeight;
+			editor.scrollDOM.scrollTop = fraction * maxScroll;
+		},
 		insertText: (text: string) => {
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
-		toggleFindDialog: () => {
-			const opened = openSearchPanel(editor);
-			if (!opened) {
-				closeSearchPanel(editor);
+		updateBody: (newBody: string) => {
+			if (newBody !== currentDocText) {
+				editor.dispatch(editor.state.update({
+					changes: {
+						from: 0,
+						to: editor.state.doc.length,
+						insert: newBody,
+					},
+				}));
 			}
 		},
 
@@ -319,6 +376,11 @@ const createEditor = (
 		toggleList: (kind: ListType) => { toggleList(kind)(editor); },
 		toggleHeaderLevel: (level: number) => { toggleHeaderLevel(level)(editor); },
 		updateLink: (label: string, url: string) => { updateLink(label, url)(editor); },
+
+		getSelection: (): string => {
+			const mainRange = editor.state.selection.main;
+			return editor.state.sliceDoc(mainRange.from, mainRange.to);
+		},
 
 		// Search
 		searchControl: {
@@ -343,6 +405,51 @@ const createEditor = (
 			hideSearch: () => {
 				hideSearchDialog();
 			},
+		},
+
+
+		// CodeMirror-specific options
+		editor,
+		addStyles: styles => {
+			editor.dispatch({
+				effects: StateEffect.appendConfig.of(EditorView.theme(styles)),
+			});
+		},
+
+		// CM5 emulation
+		lineCount: () => {
+			return editor.state.doc.lines;
+		},
+		lineAtHeight: (height, _mode) => {
+			const lineInfo = editor.lineBlockAtHeight(height);
+
+			// - 1: Convert to zero-based.
+			const lineNumber = editor.state.doc.lineAt(lineInfo.to).number - 1;
+			return lineNumber;
+		},
+		heightAtLine: (lineNumber, mode) => {
+			// CodeMirror 5 uses 0-based line numbers. CM6 uses 1-based
+			// line numbers.
+			const doc = editor.state.doc;
+			const lineInfo = doc.line(Math.min(lineNumber + 1, doc.lines));
+			const lineBlock = editor.lineBlockAt(lineInfo.from);
+
+			const height = lineBlock.top;
+			if (mode === 'local') {
+				const editorTop = editor.lineBlockAt(0).top;
+				return height - editorTop;
+			} else {
+				return height;
+			}
+		},
+		getScrollInfo: () => {
+			return {
+				height: editor.scrollDOM.scrollHeight,
+				clientHeight: editor.scrollDOM.clientHeight,
+			};
+		},
+		getScrollPercent: () => {
+			return getScrollFraction(editor);
 		},
 	};
 

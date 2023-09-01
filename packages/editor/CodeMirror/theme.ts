@@ -38,11 +38,7 @@ const createTheme = (theme: any): Extension[] => {
 	const baseCursorStyle: Record<string, string> = { };
 	const baseContentStyle: Record<string, string> = {
 		fontFamily: theme.fontFamily,
-
-		// To allow accessibility font scaling, we also need to set the
-		// fontSize to a value in `em`s (relative scaling relative to
-		// parent font size).
-		fontSize: `${theme.fontSize}em`,
+		fontSize: `${theme.fontSize}${theme.fontSizeUnits ?? 'px'}`,
 	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };

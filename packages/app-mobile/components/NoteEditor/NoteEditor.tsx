@@ -15,8 +15,8 @@ import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
-import { ListType, SearchState } from '@joplin/editor/types';
-import { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
+import { EditorLanguageType, ListType, SearchState } from '@joplin/editor/types';
+import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -109,6 +109,11 @@ function editorTheme(themeId: number) {
 
 	return {
 		...themeStyle(themeId),
+
+		// To allow accessibility font scaling, we also need to set the
+		// fontSize to a value in `em`s (relative scaling relative to
+		// parent font size).
+		fontSizeUnits: 'em',
 		fontSize: estimatedFontSizeInEm,
 		fontFamily: fontFamilyFromSettings(),
 	};
@@ -119,7 +124,8 @@ type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
 	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
-	setSearchState: OnSearchStateChangeCallback, searchStateRef: RefObject<SearchState>,
+	setSearchState: OnSearchStateChangeCallback,
+	searchStateRef: RefObject<SearchState>,
 ): EditorControl => {
 	return useMemo(() => {
 		return {
@@ -134,8 +140,20 @@ const useEditorControl = (
 					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`,
 				);
 			},
+			selectAll() {
+				injectJS('cm.selectAll();');
+			},
+			focus() {
+				injectJS('cm.focus();');
+			},
+			setScrollPercent(fraction: number) {
+				injectJS(`cm.setScrollFraction(${JSON.stringify(fraction)})`);
+			},
 			insertText(text: string) {
 				injectJS(`cm.insertText(${JSON.stringify(text)});`);
+			},
+			updateBody(newBody: string) {
+				injectJS(`cm.setBody(${JSON.stringify(newBody)});`);
 			},
 
 			toggleBolded() {
@@ -154,7 +172,7 @@ const useEditorControl = (
 				injectJS('cm.toggleMath();');
 			},
 			toggleHeaderLevel(level: number) {
-				injectJS(`cm.toggleHeaderLevel(${level});`);
+				injectJS(`cm.toggleHeaderLevel(${JSON.stringify(level)});`);
 			},
 			increaseIndent() {
 				injectJS('cm.increaseIndent();');
@@ -226,6 +244,8 @@ function NoteEditor(props: Props, ref: any) {
 		themeData: editorTheme(props.themeId),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
+		language: EditorLanguageType.Markdown,
+		useExternalSearch: true,
 		readOnly: props.readOnly,
 	};
 
@@ -279,7 +299,7 @@ function NoteEditor(props: Props, ref: any) {
 
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
-	const [selectionState, setSelectionState] = useState(defaultSelectionFormatting);
+	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
@@ -348,6 +368,9 @@ function NoteEditor(props: Props, ref: any) {
 					} else {
 						editorControl.searchControl.hideSearch();
 					}
+					break;
+				case EditorEventType.Scroll:
+					// Not handled
 					break;
 				default:
 					exhaustivenessCheck = event;
