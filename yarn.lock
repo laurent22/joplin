@@ -4905,7 +4905,7 @@ __metadata:
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
-    markdown-it-multimd-table: 4.2.2
+    markdown-it-multimd-table: 4.2.3
     markdown-it-sub: 1.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
@@ -23018,10 +23018,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:4.2.2":
-  version: 4.2.2
-  resolution: "markdown-it-multimd-table@npm:4.2.2"
-  checksum: 2f7e0c68979a0a23a0722d6ead5838050532b3e5dba714a0a17ba5277a21f7fde5a4f7449a6d031e5541abc0ef1356d7f77b4e6137a73749a95b8fdce90b94ab
+"markdown-it-multimd-table@npm:4.2.3":
+  version: 4.2.3
+  resolution: "markdown-it-multimd-table@npm:4.2.3"
+  checksum: 68ec1e639b2fe2c261ed860f74984b641b8f2287fd5cec8f4bf0fca0da849bacaa308317b2bc00a16bccd71d9d38aded740d3b3a69d37315f923b4167bd79267
   languageName: node
   linkType: hard
 
