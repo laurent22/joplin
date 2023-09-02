@@ -71,36 +71,36 @@ class ClipperConfigScreenComponent extends React.Component {
 			webClipperStatusComps.push(
 				<p key="text_1" style={theme.textStyle}>
 					<b>{_('The web clipper service is enabled and set to auto-start.')}</b>
-				</p>
+				</p>,
 			);
 			if (this.props.clipperServer.startState === 'started') {
 				webClipperStatusComps.push(
 					<p key="text_2" style={theme.textStyle}>
 						{_('Status: Started on port %d', this.props.clipperServer.port)}
-					</p>
+					</p>,
 				);
 			} else {
 				webClipperStatusComps.push(
 					<p key="text_3" style={theme.textStyle}>
 						{_('Status: %s', this.props.clipperServer.startState)}
-					</p>
+					</p>,
 				);
 			}
 			webClipperStatusComps.push(
 				<button key="disable_button" style={buttonStyle} onClick={this.disableClipperServer_click}>
 					{_('Disable Web Clipper Service')}
-				</button>
+				</button>,
 			);
 		} else {
 			webClipperStatusComps.push(
 				<p key="text_4" style={theme.textStyle}>
 					{_('The web clipper service is not enabled.')}
-				</p>
+				</p>,
 			);
 			webClipperStatusComps.push(
 				<button key="enable_button" style={buttonStyle} onClick={this.enableClipperServer_click}>
 					{_('Enable Web Clipper Service')}
-				</button>
+				</button>,
 			);
 		}
 

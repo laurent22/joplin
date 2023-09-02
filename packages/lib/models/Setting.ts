@@ -1315,7 +1315,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN),
-						'/* For styling the rendered Markdown */'
+						'/* For styling the rendered Markdown */',
 					);
 				},
 				type: SettingItemType.Button,
@@ -1332,7 +1332,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP),
-						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`
+						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`,
 					);
 				},
 				type: SettingItemType.Button,

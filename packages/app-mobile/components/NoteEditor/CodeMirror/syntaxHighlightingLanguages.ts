@@ -229,7 +229,7 @@ for (const language of supportedLanguages) {
 			name: language.name,
 			alias: language.aliases,
 			support,
-		})
+		}),
 	);
 }
 

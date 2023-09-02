@@ -250,7 +250,7 @@ export const toggleList = (listType: ListType): Command => {
 
 				sel = EditorSelection.range(
 					doc.line(newFromLineNo).from,
-					doc.line(newToLineNo).to
+					doc.line(newToLineNo).to,
 				);
 				computeSelectionProps();
 			}
@@ -299,7 +299,7 @@ export const toggleList = (listType: ListType): Command => {
 					const containerMatch = lineContent.match(containerRegex);
 					if (!containerMatch) {
 						throw new Error(
-							'Assertion failed: container regex does not match line content.'
+							'Assertion failed: container regex does not match line content.',
 						);
 					}
 
@@ -336,7 +336,7 @@ export const toggleList = (listType: ListType): Command => {
 			} else {
 				sel = EditorSelection.range(
 					sel.from,
-					sel.to + charsAdded
+					sel.to + charsAdded,
 				);
 			}
 
@@ -374,10 +374,10 @@ export const toggleHeaderLevel = (level: number): Command => {
 				`${level - 1 >= 1 ? `(?:^[#]{1,${level - 1}}\\s)|` : ''
 
 				// Check all number of #s higher than [level]
-				}(?:^[#]{${level + 1},}\\s)`
+				}(?:^[#]{${level + 1},}\\s)`,
 			),
 			'',
-			matchEmpty
+			matchEmpty,
 		);
 		view.dispatch(changes);
 
@@ -387,7 +387,7 @@ export const toggleHeaderLevel = (level: number): Command => {
 			// We want exactly [level] '#' characters.
 			new RegExp(`^[#]{${level}} `),
 			`${headerStr} `,
-			matchEmpty
+			matchEmpty,
 		);
 		view.dispatch(changes);
 
@@ -408,7 +408,7 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 		matchNothing,
 		// ...and thus always add indentUnit.
 		indentUnit,
-		matchEmpty
+		matchEmpty,
 	);
 	view.dispatch(changes);
 
@@ -429,7 +429,7 @@ export const decreaseIndent: Command = (view: EditorView): boolean => {
 		new RegExp(`^(?:[\\t]|[ ]{1,${getIndentUnit(view.state)}})`),
 		// Don't add new text
 		'',
-		matchEmpty
+		matchEmpty,
 	);
 
 	view.dispatch(changes);

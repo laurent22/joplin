@@ -211,12 +211,12 @@ const createShallowArrayEqualSelector = createSelectorCreator(
 			if (prev[i] !== next[i]) return false;
 		}
 		return true;
-	}
+	},
 );
 
 const selectArrayShallow = createCachedSelector(
 	(state: any) => state.array,
-	(array: any[]) => array
+	(array: any[]) => array,
 )({
 	keySelector: (_state: any, cacheKey: any) => {
 		return cacheKey;
@@ -491,6 +491,7 @@ function changeSelectedNotes(draft: Draft<State>, action: any, options: any = nu
 	if (action.id) noteIds = [action.id];
 	if (action.ids) noteIds = action.ids;
 	if (action.noteId) noteIds = [action.noteId];
+	if (action.index) noteIds = [draft.notes[action.index].id];
 
 	if (action.type === 'NOTE_SELECT') {
 		if (JSON.stringify(draft.selectedNoteIds) === JSON.stringify(noteIds)) return;

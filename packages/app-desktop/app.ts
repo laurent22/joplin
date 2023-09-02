@@ -74,7 +74,7 @@ const pluginClasses = [
 
 const appDefaultState = createAppDefaultState(
 	bridge().windowContentSize(),
-	resourceEditWatcherDefaultState
+	resourceEditWatcherDefaultState,
 );
 
 class Application extends BaseApplication {

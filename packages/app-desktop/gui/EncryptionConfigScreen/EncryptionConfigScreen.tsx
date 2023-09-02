@@ -17,6 +17,7 @@ import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
 import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
+import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
 
 interface Props {
 	themeId: any;
@@ -63,7 +64,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<tr key={mk.id}>
 					<td style={theme.textStyle}>{mk.id}</td>
 					<td><button onClick={() => onUpgradeMasterKey(mk)} style={theme.buttonStyle}>Upgrade</button></td>
-				</tr>
+				</tr>,
 			);
 		}
 
@@ -252,7 +253,16 @@ const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">{_('Your password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}</p>
+			<p className="needpassword">
+				{_('Your password is needed to decrypt some of your data.')}
+				<br/>
+				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
+				<br/>
+				<MacOSMissingPasswordHelpLink
+					theme={theme}
+					text={_('%s: Missing password', _('Help'))}
+				/>
+			</p>
 		);
 
 		return (
@@ -299,7 +309,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				rows.push(
 					<tr key={id}>
 						<td style={theme.textStyle}>{id}</td>
-					</tr>
+					</tr>,
 				);
 			}
 

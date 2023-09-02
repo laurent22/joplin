@@ -235,11 +235,11 @@ export const settingsSections = createSelector(
 		}
 
 		return output;
-	}
+	},
 );
 
 export const settingsToComponents2 = (
-	comp: ConfigScreenComponent, device: AppType, settings: any, selectedSectionName = ''
+	comp: ConfigScreenComponent, device: AppType, settings: any, selectedSectionName = '',
 ) => {
 	const sectionComps: ReactNode[] = [];
 	const sections = settingsSections({ device, settings });

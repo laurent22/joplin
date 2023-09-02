@@ -22,7 +22,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 			ctx.joplin.owner.id,
 			NotificationKey.ChangeAdminPassword,
 			NotificationLevel.Important,
-			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl())
+			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl()),
 		);
 	} else {
 		await notificationModel.setRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);
@@ -63,7 +63,7 @@ async function handleConfirmEmailNotification(ctx: AppContext): Promise<Notifica
 	if (!ctx.joplin.owner.email_confirmed) {
 		return {
 			id: 'confirmEmail',
-			messageHtml: renderMarkdown('An email has been sent to you containing an activation link to complete your registration.\n\nMake sure you click it to secure your account and keep access to it.'),
+			messageHtml: renderMarkdown(`An email has been sent to you containing an activation link to complete your registration. If you did not receive it, you may send it again from [your profile page](${profileUrl()}).\n\nMake sure you click it to secure your account and keep access to it.`),
 			levelClassName: levelClassName(NotificationLevel.Important),
 			closeUrl: '',
 		};

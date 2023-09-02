@@ -10,7 +10,7 @@ const forceFullParse = (editorState: EditorState) => {
 
 	if (!syntaxTreeAvailable(editorState)) {
 		throw new Error(
-			`Unable to generate a syntax tree in ${timeout}. Is the editor configured to parse a language?`
+			`Unable to generate a syntax tree in ${timeout}. Is the editor configured to parse a language?`,
 		);
 	}
 };

@@ -108,7 +108,7 @@ function UserWebview(props: Props, ref: any) {
 		frameWindow(),
 		isReady,
 		postMessage,
-		props.html
+		props.html,
 	);
 
 	const contentSize = useContentSize(
@@ -117,14 +117,14 @@ function UserWebview(props: Props, ref: any) {
 		minWidth,
 		minHeight,
 		props.fitToContent,
-		isReady
+		isReady,
 	);
 
 	useSubmitHandler(
 		frameWindow(),
 		props.onSubmit,
 		props.onDismiss,
-		htmlHash
+		htmlHash,
 	);
 
 	useWebviewToPluginMessages(
@@ -132,14 +132,14 @@ function UserWebview(props: Props, ref: any) {
 		isReady,
 		props.pluginId,
 		props.viewId,
-		postMessage
+		postMessage,
 	);
 
 	useScriptLoader(
 		postMessage,
 		isReady,
 		props.scripts,
-		cssFilePath
+		cssFilePath,
 	);
 
 	return <StyledFrame

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { Banner, ActivityIndicator, Modal } from 'react-native-paper';
+import { Banner, ActivityIndicator } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
@@ -107,18 +107,16 @@ export default (props: Props) => {
 	};
 
 	return (
-		<Modal visible={true} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-			<Banner
-				visible={true}
-				icon={renderIcon()}
-				actions={[
-					{
-						label: _('Done'),
-						onPress: onDismiss,
-					},
-				]}>
-				{`${_('Voice typing...')}\n${renderContent()}`}
-			</Banner>
-		</Modal>
+		<Banner
+			visible={true}
+			icon={renderIcon()}
+			actions={[
+				{
+					label: _('Done'),
+					onPress: onDismiss,
+				},
+			]}>
+			{`${_('Voice typing...')}\n${renderContent()}`}
+		</Banner>
 	);
 };

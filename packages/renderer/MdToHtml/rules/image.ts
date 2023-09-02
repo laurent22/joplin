@@ -1,5 +1,5 @@
 import { RuleOptions } from '../../MdToHtml';
-import htmlUtils from '../../htmlUtils';
+import { attributesHtml } from '../../htmlUtils';
 import utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 
@@ -25,7 +25,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 				postMessageSyntax: ruleOptions.postMessageSyntax ?? 'void',
 			}, null);
 
-			return `<img data-from-md ${htmlUtils.attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
+			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

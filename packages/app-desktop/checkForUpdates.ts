@@ -23,8 +23,8 @@ function onCheckEnded() {
 	isCheckingForUpdate_ = false;
 }
 
-async function fetchLatestRelease() {
-	const response = await shim.fetch('https://api.github.com/repos/laurent22/joplin/releases');
+async function fetchLatestReleases() {
+	const response = await shim.fetch('https://objects.joplinusercontent.com/r/releases');
 
 	if (!response.ok) {
 		const responseText = await response.text();
@@ -76,7 +76,7 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 	logger.info(`Checking with options ${JSON.stringify(options)}`);
 
 	try {
-		const releases = await fetchLatestRelease();
+		const releases = await fetchLatestReleases();
 		const release = extractVersionInfo(releases, process.platform, process.arch, shim.isPortable(), options);
 
 		logger.info(`Current version: ${packageInfo.version}`);

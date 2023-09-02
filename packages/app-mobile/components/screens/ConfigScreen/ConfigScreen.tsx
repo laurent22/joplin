@@ -206,7 +206,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				{
 					text: _('Discard changes'),
 					onPress: goBack,
-				}]
+				}],
 			);
 
 			return true;
@@ -296,10 +296,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							'sync.10.inboxEmail',
 							_('Copy to clipboard'),
 							() => Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
-							{ description }
+							{ description },
 						)
 					}
-				</View>
+				</View>,
 			);
 		}
 
@@ -337,7 +337,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 								{_('- Location: to allow attaching geo-location information to a note.')}
 							</Text>
 						</View>
-					</View>
+					</View>,
 				);
 			}
 
@@ -352,7 +352,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							{_('Make a donation')}
 						</Text>
 					</TouchableOpacity>
-				</View>
+				</View>,
 			);
 
 			settingComps.push(
@@ -366,7 +366,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							{_('Joplin website')}
 						</Text>
 					</TouchableOpacity>
-				</View>
+				</View>,
 			);
 
 			settingComps.push(
@@ -380,31 +380,31 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							{_('Privacy Policy')}
 						</Text>
 					</TouchableOpacity>
-				</View>
+				</View>,
 			);
 
 			settingComps.push(
 				<View key="version_info_app" style={styleSheet.settingContainer}>
 					<Text style={styleSheet.settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-				</View>
+				</View>,
 			);
 
 			settingComps.push(
 				<View key="version_info_db" style={styleSheet.settingContainer}>
 					<Text style={styleSheet.settingText}>{_('Database v%s', reg.db().version())}</Text>
-				</View>
+				</View>,
 			);
 
 			settingComps.push(
 				<View key="version_info_fts" style={styleSheet.settingContainer}>
 					<Text style={styleSheet.settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-				</View>
+				</View>,
 			);
 
 			settingComps.push(
 				<View key="version_info_hermes" style={styleSheet.settingContainer}>
 					<Text style={styleSheet.settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
-				</View>
+				</View>,
 			);
 
 			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
@@ -526,7 +526,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		let currentSection: ReactNode;
 		if (currentSectionName) {
 			const settingComps = shared.settingsToComponents2(
-				this, AppType.Mobile, settings, this.state.selectedSectionName
+				this, AppType.Mobile, settings, this.state.selectedSectionName,
 
 			// TODO: Remove this cast. Currently necessary because of different versions
 			// of React in lib/ and app-mobile/

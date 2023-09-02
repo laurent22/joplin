@@ -889,7 +889,7 @@ describe('shares.folder', () => {
 					children: [],
 				},
 			]),
-		ErrorForbidden.httpCode
+		ErrorForbidden.httpCode,
 		);
 	});
 
@@ -905,7 +905,7 @@ describe('shares.folder', () => {
 					children: [],
 				},
 			]),
-		ErrorForbidden.httpCode
+		ErrorForbidden.httpCode,
 		);
 	});
 
@@ -940,7 +940,7 @@ describe('shares.folder', () => {
 					children: [],
 				},
 			]),
-		ErrorForbidden.httpCode
+		ErrorForbidden.httpCode,
 		);
 	});
 

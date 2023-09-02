@@ -42,7 +42,7 @@ describe('loadStorageDriver', () => {
 				connection_string: 'Type=Database',
 				updated_time: Date.now(),
 				created_time: Date.now(),
-			})
+			}),
 		);
 	});
 

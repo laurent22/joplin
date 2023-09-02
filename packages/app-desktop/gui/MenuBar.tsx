@@ -301,7 +301,7 @@ function useMenu(props: Props) {
 		return menuUtils.commandsToMenuItems(
 			commandNames.concat(pluginCommandNames),
 			(commandName: string) => onMenuItemClickRef.current(commandName),
-			props.locale
+			props.locale,
 		);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [commandNames, pluginCommandNames, props.locale]);
@@ -347,7 +347,7 @@ function useMenu(props: Props) {
 				if (type === 'notes') {
 					sortItems.push(
 						{ ...menuItemDic.toggleNotesSortOrderReverse, type: 'checkbox' },
-						{ ...menuItemDic.toggleNotesSortOrderField, visible: false }
+						{ ...menuItemDic.toggleNotesSortOrderField, visible: false },
 					);
 				} else {
 					sortItems.push({
@@ -391,7 +391,7 @@ function useMenu(props: Props) {
 									{
 										plugins: pluginsRef.current,
 										customCss: props.customCss,
-									}
+									},
 								);
 							},
 						});
@@ -414,7 +414,7 @@ function useMenu(props: Props) {
 			});
 
 			exportItems.push(
-				menuItemDic.exportPdf
+				menuItemDic.exportPdf,
 			);
 
 			// We need a dummy entry, otherwise the ternary operator to show a

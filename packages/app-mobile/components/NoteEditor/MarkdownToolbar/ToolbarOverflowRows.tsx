@@ -41,7 +41,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 
 					// After invoking this button's action, hide the overflow menu
 					onActionComplete={props.onToggleOverflow}
-				/>
+				/>,
 			);
 
 			// Show the "hide overflow" button if in the center of the last row
@@ -54,7 +54,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 						styleSheet={props.styleSheet}
 						overflowVisible={true}
 						onToggleOverflowVisible={props.onToggleOverflow}
-					/>
+					/>,
 				);
 			}
 		}
@@ -69,7 +69,7 @@ const ToolbarOverflowRows = (props: OverflowPopupProps) => {
 				>
 					{row}
 				</ScrollView>
-			</View>
+			</View>,
 		);
 	}
 

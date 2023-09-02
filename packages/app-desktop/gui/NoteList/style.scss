@@ -1,0 +1,43 @@
+.note-list {
+	width: 100%;
+	height: 100%;
+	background-color: var(--joplin-background-color3);
+	border-right: 1px solid var(--joplin-divider-color);
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+	> .notes {
+		display: flex;
+		overflow-x: hidden;
+	}
+
+	> .emptylist {
+		padding: 10px;
+		font-size: var(--joplin-font-size);
+		color: var(--joplin-color);
+		background-color: var(--joplin-background-color);
+		font-family: var(--joplin-font-family);
+	}
+}
+
+.note-list-item {
+	display: flex;
+}
+
+.note-list-item-wrapper {
+	border-color: var(--joplin-color);
+	position: relative;
+	box-sizing: border-box;
+
+	> .dragcursor {
+		background-color: var(--joplin-color);
+		position: absolute;
+		z-index: 1000;
+		width: 2px;
+		height: 2px;
+	}
+}
+
+.note-list-item-wrapper.-provisional {
+	opacity: 0.5;
+}

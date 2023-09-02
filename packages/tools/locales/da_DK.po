@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -258,11 +260,12 @@ msgstr "Acceptér"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Adgang nægtet: Tjek venligst dit brugernavn og din adgangskode"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
+"Adgang nægtet: Indtast venligst din adgangskode og/eller dit brugernavn igen"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -383,6 +386,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Enhver e-mail, der sendes til denne adresse, bliver konverteret til en note "
+"og føjet til din samling. Noten gemmes i indbakkens notesbog."
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -518,6 +523,9 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"Biometrisk oplåsning er ikke konfigureret på enheden. Du skal sætte det op "
+"for at låse Joplin op. Hvis enheden er nedlåst, kan du overveje at slukke og "
+"tænde den for at nulstille biometrisk scanning."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:140
@@ -543,11 +551,11 @@ msgstr "Kan dele"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Kan se"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Kan se og redigere"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -601,9 +609,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Kan ikke kopiere note til \"%s\" notesbog"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Opretter en ny note."
+msgstr "Kan ikke oprette en ny note: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -634,9 +641,8 @@ msgid "Cannot find \"%s\"."
 msgstr "Kan ikke finde \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "Kan ikke finde \"%s\"."
+msgstr "Kan ikke finde \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:165
 msgid "Cannot initialise synchroniser."
@@ -909,9 +915,8 @@ msgid "Convert to todo"
 msgstr "Konverter til opgave"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "Konverter til note"
+msgstr "Konverterer stemme til tekst..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:497
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:19
@@ -956,9 +961,8 @@ msgstr[1] "Kopier links til deling"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Kopier sti til udklipsholder"
+msgstr "Kopiér til udklipsholder"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1031,18 +1035,16 @@ msgstr ""
 "venligst igen, når du har forbindelse til internettet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "Kunne ikke bekræfte din identitet"
+msgstr "Kunne ikke bekræfte din identitet: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:277
 msgid "Create"
 msgstr "Opret"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "Opretter en ny notesbog."
+msgstr "Opret en ny notesbog under en overordnet notesbog."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1228,9 +1230,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Slet lokal data og download igen fra synkroniseringsmål"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Slet note?"
+msgstr "Slet note"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1242,9 +1243,8 @@ msgid "Delete note?"
 msgstr "Slet note?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Slet note?"
+msgstr "Slet notesbog"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1285,6 +1285,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Slet indbakke notesbogen?\n"
+"\n"
+"Hvis du sletter indbakke-notesbogen, kan e-mails, der for nylig er blevet "
+"sendt til den, gå tabt."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1477,9 +1481,8 @@ msgid "Downloading"
 msgstr "Downloader"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Downloader ressource..."
+msgstr "Downloader %s sprogfiler..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1603,13 +1606,12 @@ msgstr "E-mail"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "Rediger note."
+msgstr "E-mail til note"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "E-mail til note"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1712,9 +1714,8 @@ msgid "Enable table of contents extension"
 msgstr "Aktivér indholdsfortegnelsesudvidelsen"
 
 #: packages/lib/models/Setting.ts:1070
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "Aktivér markdown emojies"
+msgstr "Aktivér Markdown-værktøjslinjen"
 
 #: packages/lib/models/Setting.ts:1153
 msgid "Enable typographer support"
@@ -1852,9 +1853,8 @@ msgid "Export all"
 msgstr "Eksporter alle"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "Eksporter alle"
+msgstr "Eksportér alle noter som JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1870,7 +1870,7 @@ msgstr "Eksporter profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "Eksporteret med succes!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1881,9 +1881,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "Eksporterer profil..."
+msgstr "Eksporterer..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -2102,9 +2101,8 @@ msgid "Help"
 msgstr "Hjælp"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:690
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "Fuld-tekst søgning slået til: %d"
+msgstr "Hermes aktiveret: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:569
 msgid "Hide %s"
@@ -2523,7 +2521,7 @@ msgstr "Indstil knap-rækkefølge"
 
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "Lad den være tom for at downloade sprogfilerne fra standardwebstedet."
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2582,9 +2580,8 @@ msgid "Loaded"
 msgstr "Indlæst"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
-#, fuzzy
 msgid "Loading..."
-msgstr "Opdaterer..."
+msgstr "Indlæser..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
 msgid "Location"
@@ -3248,7 +3245,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
-msgstr ""
+msgstr "Optag venligst din stemme..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3731,9 +3728,8 @@ msgid "Select file..."
 msgstr "Vælg fil..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Slet notesbog"
+msgstr "Vælg overordnet notesbog"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3793,6 +3789,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Del en kopi af alle noter i et filformat, der kan importeres af Joplin på en "
+"computer."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -4549,25 +4547,22 @@ msgstr ""
 "bagefter."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Denne fil kunne ikke åbnes: %s"
-msgstr[1] "Denne fil kunne ikke åbnes: %s"
+msgstr[0] "Denne note kunne ikke slettes: %s"
+msgstr[1] "Disse noter kunne ikke slettes: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Notesbogen kan ikke gemmes: %s"
-msgstr[1] "Notesbogen kan ikke gemmes: %s"
+msgstr[0] "Denne note kunne ikke duplikeres: %s"
+msgstr[1] "Disse noter kunne ikke duplikeres: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Notesbogen kan ikke gemmes: %s"
-msgstr[1] "Notesbogen kan ikke gemmes: %s"
+msgstr[0] "Denne note kunne ikke flyttes: %s"
+msgstr[1] "Disse noter kunne ikke flyttes: %s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4815,7 +4810,7 @@ msgstr "Tast: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Kan ikke eksportere eller dele data. Årsag: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -5048,12 +5043,12 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1720
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Sprogfiler til stemmeindtastning (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1010
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:120
 msgid "Voice typing..."
-msgstr ""
+msgstr "Stemmeindtastning..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:87
 msgid "Warning"
@@ -5066,11 +5061,12 @@ msgstr ""
 "(Begrænsning: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Advarsel"
+msgstr ""
+"Advarsler:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
@@ -5115,9 +5111,8 @@ msgstr ""
 "oprette en note."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Velkommen"
+msgstr "Velkommen!"
 
 #: packages/lib/models/Setting.ts:1114
 msgid "When creating a new note:"

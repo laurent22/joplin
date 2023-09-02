@@ -617,7 +617,9 @@ rules.mathjaxScriptBlock = {
 
 rules.joplinHtmlInMarkdown = {
   filter: function (node) {
-    return node && node.classList && node.classList.contains('jop-noMdConv');
+    // Tables are special because they may be entirely kept as HTML depending on
+    // the logic in table.js, for example if they contain code.
+    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
   },
 
   replacement: function (content, node) {

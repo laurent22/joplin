@@ -24,9 +24,9 @@ import * as ArrayUtils from '../../../ArrayUtils';
 import Logger from '@joplin/utils/Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
+import { fileUriToPath } from '@joplin/utils/url';
 
 const logger = Logger.create('routes/notes');
 

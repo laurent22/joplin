@@ -1,5 +1,6 @@
 import markdownUtils from './markdownUtils';
 import { ResourceEntity } from './services/database/types';
+import { htmlentities } from '@joplin/utils/html';
 const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const resourceUtils = require('./resourceUtils.js');
@@ -368,26 +369,49 @@ function tagAttributeToMdText(attr: string): string {
 	return attr;
 }
 
-function addResourceTag(lines: string[], resource: ResourceEntity, alt = ''): string[] {
-	// Note: refactor to use Resource.markdownTag
 
-	if (!alt) alt = resource.title;
-	if (!alt) alt = resource.filename;
-	if (!alt) alt = '';
+interface AddResourceOptions {
+	alt?: string;
+	width?: number;
+	height?: number;
+}
 
-	alt = tagAttributeToMdText(alt);
-	if (resourceUtils.isImageMimeType(resource.mime)) {
-		lines.push('![');
-		lines.push(alt);
-		lines.push(`](:/${resource.id})`);
+const addResourceTag = (lines: string[], src: string, mime: string, options: AddResourceOptions): string[] => {
+	const alt = options.alt ? tagAttributeToMdText(options.alt) : '';
+
+	if (resourceUtils.isImageMimeType(mime)) {
+		if (!!options.width || !!options.height) {
+			const attrs: Record<string, string> = { src };
+			if (options.width) attrs.width = options.width.toString();
+			if (options.height) attrs.height = options.height.toString();
+			if (alt) attrs.alt = alt;
+
+			const attrsHtml: string[] = [];
+			for (const [key, value] of Object.entries(attrs)) {
+				attrsHtml.push(`${key}="${htmlentities(value)}"`);
+			}
+
+			lines.push(`<img ${attrsHtml.join(' ')}/>`);
+		} else {
+			lines.push('![');
+			lines.push(alt);
+			lines.push(`](${markdownUtils.escapeLinkUrl(src)})`);
+		}
 	} else {
 		lines.push('[');
 		lines.push(alt);
-		lines.push(`](:/${resource.id})`);
+		lines.push(`](${markdownUtils.escapeLinkUrl(src)})`);
 	}
 
 	return lines;
-}
+};
+
+const altFromResource = (resource: ResourceEntity): string => {
+	let alt = '';
+	if (!alt) alt = resource.title;
+	if (!alt) alt = resource.filename;
+	return alt;
+};
 
 function isBlockTag(n: string) {
 	return ['div', 'p', 'dl', 'dd', 'dt', 'center', 'address'].indexOf(n) >= 0;
@@ -456,7 +480,7 @@ function cssValue(context: any, style: string, propName: string | string[]): str
 
 		return null;
 	} catch (error) {
-		displaySaxWarning(context, error.message);
+		displaySaxWarning(context, `Invalid CSS value: ${error.message}`);
 		return null;
 	}
 }
@@ -806,12 +830,14 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			} else if (n === 'q') {
 				section.lines.push('"');
 			} else if (n === 'img') {
+				// Many (most?) img tags don't have no source associated,
+				// especially when they were imported from HTML
 				if (nodeAttributes.src) {
-					// Many (most?) img tags don't have no source associated, especially when they were imported from HTML
-					let s = '![';
-					if (nodeAttributes.alt) s += tagAttributeToMdText(nodeAttributes.alt);
-					s += `](${markdownUtils.escapeLinkUrl(nodeAttributes.src)})`;
-					section.lines.push(s);
+					section.lines = addResourceTag(section.lines, nodeAttributes.src, 'image/png', {
+						width: nodeAttributes.width ? Number(nodeAttributes.width) : 0,
+						height: nodeAttributes.height ? Number(nodeAttributes.height) : 0,
+						alt: nodeAttributes.alt ? nodeAttributes.alt : '',
+					});
 				}
 			} else if (isAnchor(n)) {
 				state.anchorAttributes.push(nodeAttributes);
@@ -928,7 +954,11 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 				// means it's an attachement. It will be appended along with the
 				// other remaining resources at the bottom of the markdown text.
 				if (resource && !!resource.id) {
-					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
+					section.lines = addResourceTag(section.lines, `:/${resource.id}`, resource.mime, {
+						alt: nodeAttributes.alt ? nodeAttributes.alt : altFromResource(resource),
+						width: nodeAttributes.width ? Number(nodeAttributes.width) : 0,
+						height: nodeAttributes.height ? Number(nodeAttributes.height) : 0,
+					});
 				}
 			} else if (n === 'span') {
 				if (isSpanWithStyle(nodeAttributes)) {
@@ -1411,7 +1441,9 @@ async function enexXmlToMd(xmlString: string, resources: ResourceEntity[], tasks
 		const r = result.resources[i];
 		if (firstAttachment) mdLines.push(NEWLINE);
 		mdLines.push(NEWLINE);
-		mdLines = addResourceTag(mdLines, r, r.filename);
+		mdLines = addResourceTag(mdLines, `:/${r.id}`, r.mime, {
+			alt: altFromResource(r),
+		});
 		firstAttachment = false;
 	}
 
@@ -1422,4 +1454,4 @@ async function enexXmlToMd(xmlString: string, resources: ResourceEntity[], tasks
 	return output.join('\n');
 }
 
-export { enexXmlToMd, processMdArrayNewLines, NEWLINE, addResourceTag, cssValue };
+export { enexXmlToMd, processMdArrayNewLines, NEWLINE, cssValue };

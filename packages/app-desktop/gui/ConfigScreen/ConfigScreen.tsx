@@ -21,8 +21,7 @@ import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/d
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
-import shim from '@joplin/lib/shim';
-import StyledLink from '../style/StyledLink';
+import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -191,26 +190,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			// saved yet).
 			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
 			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
-				const openMissingPasswordFAQ = () =>
-					bridge().openExternal('https://joplinapp.org/faq#why-did-my-sync-and-encryption-passwords-disappear-after-updating-joplin');
-
-				const macInfoLink = (
-					<StyledLink href="#"
-						onClick={openMissingPasswordFAQ}
-						style={theme.linkStyle}
-					>
-						{_('Help')}
-					</StyledLink>
-				);
-
-				// The FAQ section related to missing passwords is specific to MacOS/ARM -- only show it
-				// in that case.
-				const showMacInfoLink = shim.isMac() && process.arch === 'arm64';
-
 				settingComps.push(
 					<p key='missing-password-warning' style={warningStyle}>
-						{_('Warning: Missing password.')}{' '}{showMacInfoLink ? macInfoLink : null}
-					</p>
+						{_('%s: Missing password.', _('Warning'))}
+						{' '}
+						<MacOSMissingPasswordHelpLink
+							theme={theme}
+							text={_('Help')}
+						/>
+					</p>,
 				);
 			}
 
@@ -232,7 +220,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onClick={this.checkSyncConfig_}
 						/>
 						{statusComp}
-					</div>
+					</div>,
 				);
 			}
 		}
@@ -394,7 +382,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				items.push(
 					<option value={e.key.toString()} key={e.key}>
 						{settingOptions[e.key]}
-					</option>
+					</option>,
 				);
 			}
 

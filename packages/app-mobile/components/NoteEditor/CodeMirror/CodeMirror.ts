@@ -51,7 +51,7 @@ interface CodeMirrorResult extends CodeMirrorControl {
 }
 
 export function initCodeMirror(
-	parentElement: any, initialText: string, settings: EditorSettings
+	parentElement: any, initialText: string, settings: EditorSettings,
 ): CodeMirrorResult {
 	logMessage('Initializing CodeMirror...');
 	const theme = settings.themeData;
