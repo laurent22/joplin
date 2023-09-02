@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.12.14",
+  "version": "2.12.15",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -14,7 +14,8 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
-    "test-ci": "yarn test"
+    "test-ci": "yarn test",
+    "renameReleaseAssets": "node tools/renameReleaseAssets.js"
   },
   "repository": {
     "type": "git",
