@@ -1,4 +1,4 @@
-import { EditorView } from '@codemirror/view';
+import { EditorView, keymap } from '@codemirror/view';
 import { closeBrackets } from '@codemirror/autocomplete';
 import { EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
@@ -8,6 +8,7 @@ import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { MarkdownMathExtension } from './markdown/markdownMathParser';
 import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages';
 import { html } from '@codemirror/lang-html';
+import { defaultKeymap } from '@codemirror/commands';
 
 const configFromSettings = (settings: EditorSettings) => {
 	const languageExtension = (() => {
@@ -35,7 +36,7 @@ const configFromSettings = (settings: EditorSettings) => {
 		}
 	})();
 
-	return [
+	const extensions = [
 		languageExtension,
 		createTheme(settings.themeData),
 		EditorView.contentAttributes.of({
@@ -44,9 +45,17 @@ const configFromSettings = (settings: EditorSettings) => {
 			spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
 		}),
 		EditorState.readOnly.of(settings.readOnly),
-
-		...(settings.automatchBraces ? [closeBrackets()] : []),
 	];
+
+	if (settings.automatchBraces) {
+		extensions.push(closeBrackets());
+	}
+
+	if (!settings.ignoreModifiers) {
+		extensions.push(keymap.of(defaultKeymap));
+	}
+
+	return extensions;
 };
 
 export default configFromSettings;

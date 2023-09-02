@@ -12,7 +12,7 @@ import { undo, redo, history, undoDepth, redoDepth, indentWithTab } from '@codem
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
-import { historyKeymap, defaultKeymap } from '@codemirror/commands';
+import { historyKeymap } from '@codemirror/commands';
 
 import { ListType, SearchState, EditorControl, EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
@@ -253,7 +253,7 @@ const createEditor = (
 						return true;
 					}),
 
-					...defaultKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
+					...historyKeymap, indentWithTab, ...searchKeymap,
 				]),
 			],
 			doc: initialText,
