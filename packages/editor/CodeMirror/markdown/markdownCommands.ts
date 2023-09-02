@@ -2,7 +2,7 @@
 
 import { EditorView, Command } from '@codemirror/view';
 
-import { ListType } from '../types';
+import { ListType } from '../../types';
 import {
 	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec,
 } from '@codemirror/state';

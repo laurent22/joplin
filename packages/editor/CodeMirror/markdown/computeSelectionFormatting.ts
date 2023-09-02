@@ -1,4 +1,4 @@
-import SelectionFormatting, { MutableSelectionFormatting, defaultSelectionFormatting } from '../SelectionFormatting';
+import SelectionFormatting, { MutableSelectionFormatting, defaultSelectionFormatting } from '../../SelectionFormatting';
 import { syntaxTree } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
 

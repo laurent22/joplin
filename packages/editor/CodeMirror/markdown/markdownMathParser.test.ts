@@ -3,7 +3,7 @@ import { SyntaxNode } from '@lezer/common';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './markdownMathParser';
 
-import createEditor from './testUtil/createEditor';
+import createEditor from '../testUtil/createEditor';
 
 // Creates an EditorState with math and markdown extensions
 const createEditorState = async (initialText: string, expectedTags: string[]): Promise<EditorState> => {

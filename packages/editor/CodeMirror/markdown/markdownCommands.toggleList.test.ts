@@ -2,8 +2,8 @@ import { EditorSelection, EditorState } from '@codemirror/state';
 import {
 	increaseIndent, toggleList,
 } from './markdownCommands';
-import { ListType } from '../types';
-import createEditor from './testUtil/createEditor';
+import { ListType } from '../../types';
+import createEditor from '../testUtil/createEditor';
 
 describe('markdownCommands.toggleList', () => {
 

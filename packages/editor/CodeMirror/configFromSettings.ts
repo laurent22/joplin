@@ -4,8 +4,8 @@ import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
-import { MarkdownMathExtension } from './markdownMathParser';
-import syntaxHighlightingLanguages from './syntaxHighlightingLanguages';
+import { MarkdownMathExtension } from './markdown/markdownMathParser';
+import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages';
 import { html } from '@codemirror/lang-html';
 
 const configFromSettings = (settings: EditorSettings) => {

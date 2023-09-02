@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
-import { ListType } from '../types';
-import createEditor from './testUtil/createEditor';
+import { ListType } from '../../types';
+import createEditor from '../testUtil/createEditor';
 import { toggleList } from './markdownCommands';
 
 describe('markdownCommands.bulletedVsChecklist', () => {

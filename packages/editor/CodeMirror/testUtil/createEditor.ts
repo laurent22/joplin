@@ -3,7 +3,7 @@ import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { indentUnit, syntaxTree } from '@codemirror/language';
 import { SelectionRange, EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { MarkdownMathExtension } from '../markdownMathParser';
+import { MarkdownMathExtension } from '../markdown/markdownMathParser';
 import forceFullParse from './forceFullParse';
 import loadLangauges from './loadLanguages';
 

@@ -2,7 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import {
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from './markdownCommands';
-import createEditor from './testUtil/createEditor';
+import createEditor from '../testUtil/createEditor';
 import { blockMathTagName } from './markdownMathParser';
 
 describe('markdownCommands', () => {

@@ -1,5 +1,3 @@
-import decoratorExtension from './decoratorExtension';
-
 import { Compartment, EditorSelection, EditorState, StateEffect } from '@codemirror/state';
 import { indentOnInput, indentUnit } from '@codemirror/language';
 import {
@@ -23,8 +21,9 @@ import {
 	toggleBolded, toggleCode,
 	toggleHeaderLevel, toggleItalicized,
 	toggleList, toggleMath, updateLink,
-} from './markdownCommands';
-import computeSelectionFormatting from './computeSelectionFormatting';
+} from './markdown/markdownCommands';
+import decoratorExtension from './markdown/decoratorExtension';
+import computeSelectionFormatting from './markdown/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
 
