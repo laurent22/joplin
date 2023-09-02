@@ -36,12 +36,10 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 	}, [props.settings, editor]);
 
 	return (
-		<>
-			<div
-				style={props.style}
-				ref={editorContainerRef}
-			></div>
-		</>
+		<div
+			style={props.style}
+			ref={editorContainerRef}
+		></div>
 	);
 };
 

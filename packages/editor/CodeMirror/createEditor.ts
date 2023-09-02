@@ -26,27 +26,13 @@ import decoratorExtension from './markdown/decoratorExtension';
 import computeSelectionFormatting from './markdown/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
+import codeMirror5Emulation, { CodeMirror5Emulation } from './codeMirror5Emulation';
+import getScrollFraction from './getScrollFraction';
 
-interface ScrollInfo {
-	height: number;
-	clientHeight: number;
-}
 
-export interface CodeMirrorControl extends EditorControl {
+export interface CodeMirrorControl extends EditorControl, CodeMirror5Emulation {
 	editor: EditorView;
 	addStyles(...style: Parameters<typeof EditorView.theme>): void;
-
-	// Getters to emulate CodeMirror 5
-	somethingSelected(): boolean;
-	getSelection(): string;
-	listSelections(): readonly { anchor: number; head: number }[];
-
-	getScrollInfo(): ScrollInfo;
-	getScrollPercent(): number;
-	lineCount(): number;
-	lineAtHeight(height: number, mode?: 'local'): number;
-	heightAtLine(lineNumber: number, mode?: 'local'): number;
-
 }
 
 const createEditor = (
@@ -136,13 +122,6 @@ const createEditor = (
 		return editor.contentDOM.spellcheck;
 	};
 
-	const getScrollFraction = (view: EditorView) => {
-		const maxScroll = view.scrollDOM.scrollHeight - view.scrollDOM.clientHeight;
-
-		// Prevent division by zero
-		return maxScroll > 0 ? view.scrollDOM.scrollTop / maxScroll : 0;
-	};
-
 	const notifySelectionChange = (viewUpdate: ViewUpdate) => {
 		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
 			const mainRange = viewUpdate.state.selection.main;
@@ -187,8 +166,11 @@ const createEditor = (
 	const keyCommand = (key: string, run: Command): KeyBinding => {
 		return {
 			key,
-			run,
-			preventDefault: true,
+			run: editor => {
+				if (settings.ignoreModifiers) return false;
+
+				return run(editor);
+			},
 		};
 	};
 
@@ -292,6 +274,8 @@ const createEditor = (
 	};
 
 	const editorControls: CodeMirrorControl = {
+		...codeMirror5Emulation(editor),
+
 		undo: () => {
 			undo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
@@ -399,53 +383,6 @@ const createEditor = (
 			editor.dispatch({
 				effects: StateEffect.appendConfig.of(EditorView.theme(styles)),
 			});
-		},
-
-		// CM5 emulation
-		lineCount: () => {
-			return editor.state.doc.lines;
-		},
-		lineAtHeight: (height, _mode) => {
-			const lineInfo = editor.lineBlockAtHeight(height);
-
-			// - 1: Convert to zero-based.
-			const lineNumber = editor.state.doc.lineAt(lineInfo.to).number - 1;
-			return lineNumber;
-		},
-		heightAtLine: (lineNumber, mode) => {
-			// CodeMirror 5 uses 0-based line numbers. CM6 uses 1-based
-			// line numbers.
-			const doc = editor.state.doc;
-			const lineInfo = doc.line(Math.min(lineNumber + 1, doc.lines));
-			const lineBlock = editor.lineBlockAt(lineInfo.from);
-
-			const height = lineBlock.top;
-			if (mode === 'local') {
-				const editorTop = editor.lineBlockAt(0).top;
-				return height - editorTop;
-			} else {
-				return height;
-			}
-		},
-		getScrollInfo: () => {
-			return {
-				height: editor.scrollDOM.scrollHeight,
-				clientHeight: editor.scrollDOM.clientHeight,
-			};
-		},
-		getScrollPercent: () => {
-			return getScrollFraction(editor);
-		},
-
-		getSelection: (): string => {
-			const mainRange = editor.state.selection.main;
-			return editor.state.sliceDoc(mainRange.from, mainRange.to);
-		},
-		somethingSelected: () => {
-			return !editor.state.selection.main.empty;
-		},
-		listSelections: () => {
-			return editor.state.selection.ranges;
 		},
 	};
 

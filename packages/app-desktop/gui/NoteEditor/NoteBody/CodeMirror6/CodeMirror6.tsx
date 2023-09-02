@@ -105,42 +105,41 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorCutText = useCallback(() => {
 		if (editorRef.current) {
-			// const selections = editorRef.current.getSelections();
-			// if (selections.length > 0 && selections[0]) {
-			// 	clipboard.writeText(selections[0]);
-			// 	// Easy way to wipe out just the first selection
-			// 	selections[0] = '';
-			// 	editorRef.current.replaceSelections(selections);
-			// } else {
-			// 	const cursor = editorRef.current.getCursor();
-			// 	const line = editorRef.current.getLine(cursor.line);
-			// 	clipboard.writeText(`${line}\n`);
-			// 	const startLine = editorRef.current.getCursor('head');
-			// 	startLine.ch = 0;
-			// 	const endLine = {
-			// 		line: startLine.line + 1,
-			// 		ch: 0,
-			// 	};
-			// 	editorRef.current.replaceRange('', startLine, endLine);
-			// }
+			const selections = editorRef.current.getSelections();
+			if (selections.length > 0 && selections[0]) {
+				clipboard.writeText(selections[0]);
+				// Easy way to wipe out just the first selection
+				selections[0] = '';
+				editorRef.current.replaceSelections(selections);
+			} else {
+				const cursor = editorRef.current.getCursor();
+				const line = editorRef.current.getLine(cursor.line);
+				clipboard.writeText(`${line}\n`);
+				const startLine = editorRef.current.getCursor('head');
+				startLine.ch = 0;
+				const endLine = {
+					line: startLine.line + 1,
+					ch: 0,
+				};
+				editorRef.current.replaceRange('', startLine, endLine);
+			}
 		}
 	}, []);
 
 	const editorCopyText = useCallback(() => {
 		if (editorRef.current) {
-			// const selections = editorRef.current.getSelections();
+			const selections = editorRef.current.getSelections();
 
-
-			// // Handle the case when there is a selection - copy the selection to the clipboard
-			// // When there is no selection, the selection array contains an empty string.
-			// if (selections.length > 0 && selections[0]) {
-			// 	clipboard.writeText(selections[0]);
-			// } else {
-			// 	// This is the case when there is no selection - copy the current line to the clipboard
-			// 	const cursor = editorRef.current.getCursor();
-			// 	const line = editorRef.current.getLine(cursor.line);
-			// 	clipboard.writeText(line);
-			// }
+			// Handle the case when there is a selection - copy the selection to the clipboard
+			// When there is no selection, the selection array contains an empty string.
+			if (selections.length > 0 && selections[0]) {
+				clipboard.writeText(selections[0]);
+			} else {
+				// This is the case when there is no selection - copy the current line to the clipboard
+				const cursor = editorRef.current.getCursor();
+				const line = editorRef.current.getLine(cursor.line);
+				clipboard.writeText(line);
+			}
 		}
 	}, []);
 
@@ -395,7 +394,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	useEffect(() => {
 		const isAncestorOfCodeMirrorEditor = (elem: HTMLElement) => {
 			for (; elem.parentElement; elem = elem.parentElement) {
-				if (elem.classList.contains('codeMirrorEditor')) {
+				if (elem.classList.contains('cm-editor')) {
 					return true;
 				}
 			}
@@ -415,7 +414,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 		function pointerInsideEditor(params: ContextMenuParams) {
 			const x = params.x, y = params.y, isEditable = params.isEditable;
-			const elements = document.getElementsByClassName('codeMirrorEditor');
+			const elements = document.getElementsByClassName('cm-editor');
 
 			// Note: We can't check inputFieldType here. When spellcheck is enabled,
 			// params.inputFieldType is "none". When spellcheck is disabled,
@@ -527,20 +526,20 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorSettings = useMemo((): EditorSettings => {
 		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
+
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled || props.visiblePanes.indexOf('editor') < 0,
 			katexEnabled: Setting.value('markdown.plugin.katex'),
 			themeData: styles.globalTheme,
+			automatchBraces: Setting.value('editor.autoMatchingBraces'),
 			useExternalSearch: false,
+			ignoreModifiers: true,
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
 		};
 	}, [props.contentMarkupLanguage, props.disabled, props.visiblePanes, styles.globalTheme]);
 
 	function renderEditor() {
-
-		// const matchBracesOptions = Setting.value('editor.autoMatchingBraces') ? { override: true, pairs: '``()[]{}\'\'""‘’“”（）《》「」『』【】〔〕〖〗〘〙〚〛' } : false;
-
 		return (
 			<div style={cellEditorStyle}>
 				<Editor

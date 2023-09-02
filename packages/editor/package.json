@@ -28,6 +28,7 @@
 		"typescript": "5.1.3"
 	},
 	"dependencies": {
+		"@codemirror/autocomplete": "6.9.0",
 		"@codemirror/commands": "6.2.5",
 		"@codemirror/lang-cpp": "6.0.2",
 		"@codemirror/lang-html": "6.4.6",
@@ -41,6 +42,7 @@
 		"@codemirror/search": "6.5.2",
 		"@codemirror/state": "6.2.1",
 		"@codemirror/view": "6.17.1",
-		"@lezer/markdown": "1.1.0"
+		"@lezer/markdown": "1.1.0",
+		"@replit/codemirror-vim": "6.0.14"
 	}
 }

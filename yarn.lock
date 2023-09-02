@@ -2814,7 +2814,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
+"@codemirror/autocomplete@npm:6.9.0, @codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
   version: 6.9.0
   resolution: "@codemirror/autocomplete@npm:6.9.0"
   dependencies:
@@ -4810,6 +4810,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
+    "@codemirror/autocomplete": 6.9.0
     "@codemirror/commands": 6.2.5
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.6
@@ -4826,6 +4827,7 @@ __metadata:
     "@joplin/lib": ~2.13
     "@joplin/tools": ~2.13
     "@lezer/markdown": 1.1.0
+    "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.3
     "@types/react": 18.0.24
@@ -7209,6 +7211,19 @@ __metadata:
   version: 2.0.0
   resolution: "@react-native/polyfills@npm:2.0.0"
   checksum: 6f2a0d1c8c4df4f20e8adac92fcfaec0fb536d097f96fbfd56bdb21b0a3afc4157f82d084b6851093255f58d350818f7ad28098818d584f654533eeb9cba2656
+  languageName: node
+  linkType: hard
+
+"@replit/codemirror-vim@npm:6.0.14":
+  version: 6.0.14
+  resolution: "@replit/codemirror-vim@npm:6.0.14"
+  peerDependencies:
+    "@codemirror/commands": ^6.0.0
+    "@codemirror/language": ^6.1.0
+    "@codemirror/search": ^6.2.0
+    "@codemirror/state": ^6.0.1
+    "@codemirror/view": ^6.0.3
+  checksum: 43d14512172df23a47818a8f19ead1733cc1dc7c77cf27d6fd3bc75d645b0400affd96c15e32d2985404b603a09b9296dab9173c501096b42e5e8e8092dbfe0f
   languageName: node
   linkType: hard
 

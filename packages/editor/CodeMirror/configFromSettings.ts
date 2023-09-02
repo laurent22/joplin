@@ -1,8 +1,9 @@
 import { EditorView } from '@codemirror/view';
+import { closeBrackets } from '@codemirror/autocomplete';
 import { EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
-import { markdown } from '@codemirror/lang-markdown';
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { MarkdownMathExtension } from './markdown/markdownMathParser';
 import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages';
@@ -10,17 +11,22 @@ import { html } from '@codemirror/lang-html';
 
 const configFromSettings = (settings: EditorSettings) => {
 	const languageExtension = (() => {
+		const openingBrackets = '`([{\'"‘“（《「『【〔〖〘〚'.split('');
+
 		const language = settings.language;
 		if (language === EditorLanguageType.Markdown) {
-			return markdown({
-				extensions: [
-					GitHubFlavoredMarkdownExtension,
+			return [
+				markdown({
+					extensions: [
+						GitHubFlavoredMarkdownExtension,
 
-					// Don't highlight KaTeX if the user disabled it
-					settings.katexEnabled ? MarkdownMathExtension : [],
-				],
-				codeLanguages: syntaxHighlightingLanguages,
-			});
+						// Don't highlight KaTeX if the user disabled it
+						settings.katexEnabled ? MarkdownMathExtension : [],
+					],
+					codeLanguages: syntaxHighlightingLanguages,
+				}),
+				markdownLanguage.data.of({ closeBrackets: openingBrackets }),
+			];
 		} else if (language === EditorLanguageType.Html) {
 			return html();
 		} else {
@@ -38,6 +44,8 @@ const configFromSettings = (settings: EditorSettings) => {
 			spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
 		}),
 		EditorState.readOnly.of(settings.readOnly),
+
+		...(settings.automatchBraces ? [closeBrackets()] : []),
 	];
 };
 

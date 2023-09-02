@@ -10,23 +10,23 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
-const wrapSelectionWithStrings = (_editor: CodeMirrorControl, _string1: string, _string2 = '', _defaultText = '') => {
-	// if (editor.somethingSelected()) {
-	// 	editor.wrapSelections(string1, string2);
-	// } else {
-	// 	editor.wrapSelections(string1 + defaultText, string2);
+const wrapSelectionWithStrings = (editor: CodeMirrorControl, string1: string, string2 = '', defaultText = '') => {
+	if (editor.somethingSelected()) {
+		editor.wrapSelections(string1, string2);
+	} else {
+		editor.wrapSelections(string1 + defaultText, string2);
 
-	// 	// Now select the default text so the user can replace it
-	// 	const selections = editor.listSelections();
-	// 	const newSelections = [];
-	// 	for (let i = 0; i < selections.length; i++) {
-	// 		const s = selections[i];
-	// 		const anchor = { line: s.anchor.line, ch: s.anchor.ch + string1.length };
-	// 		const head = { line: s.head.line, ch: s.head.ch - string2.length };
-	// 		newSelections.push({ anchor: anchor, head: head });
-	// 	}
-	// 	editor.setSelections(newSelections);
-	// }
+		// Now select the default text so the user can replace it
+		const selections = editor.listSelections();
+		const newSelections = [];
+		for (let i = 0; i < selections.length; i++) {
+			const s = selections[i];
+			const anchor = { line: s.anchor.line, ch: s.anchor.ch + string1.length };
+			const head = { line: s.head.line, ch: s.head.ch - string2.length };
+			newSelections.push({ anchor: anchor, head: head });
+		}
+		editor.setSelections(newSelections);
+	}
 };
 
 interface Props {

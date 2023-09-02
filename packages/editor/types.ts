@@ -53,6 +53,12 @@ export interface EditorSettings {
 	// React Native).
 	useExternalSearch: boolean;
 
+	automatchBraces: boolean;
+
+	// True if internal command keyboard shortcuts should be ignored (thus
+	// allowing Joplin shortcuts to run).
+	ignoreModifiers: boolean;
+
 	language: EditorLanguageType;
 
 	katexEnabled: boolean;

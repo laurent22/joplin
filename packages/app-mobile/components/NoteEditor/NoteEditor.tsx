@@ -153,7 +153,10 @@ const useEditorControl = (
 				injectJS(`cm.insertText(${JSON.stringify(text)});`);
 			},
 			updateBody(newBody: string) {
-				injectJS(`cm.setBody(${JSON.stringify(newBody)});`);
+				injectJS(`cm.updateBody(${JSON.stringify(newBody)});`);
+			},
+			updateSettings(newSettings: EditorSettings) {
+				injectJS(`cm.updateSettings(${JSON.stringify(newSettings)})`);
 			},
 
 			toggleBolded() {
@@ -247,6 +250,9 @@ function NoteEditor(props: Props, ref: any) {
 		language: EditorLanguageType.Markdown,
 		useExternalSearch: true,
 		readOnly: props.readOnly,
+
+		automatchBraces: false,
+		ignoreModifiers: false,
 	};
 
 	const injectedJavaScript = `

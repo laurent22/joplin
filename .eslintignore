@@ -481,9 +481,11 @@ packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js
+packages/editor/CodeMirror/codeMirror5Emulation.js
 packages/editor/CodeMirror/configFromSettings.js
 packages/editor/CodeMirror/createEditor.test.js
 packages/editor/CodeMirror/createEditor.js
+packages/editor/CodeMirror/getScrollFraction.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.js
 packages/editor/CodeMirror/markdown/decoratorExtension.js
 packages/editor/CodeMirror/markdown/markdownCommands.bulletedVsChecklist.test.js

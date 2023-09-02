@@ -19,6 +19,9 @@ const createEditorSettings = (themeId: number) => {
 		spellcheckEnabled: true,
 		useExternalSearch: true,
 		readOnly: false,
+		automatchBraces: false,
+		ignoreModifiers: false,
+
 		language: EditorLanguageType.Markdown,
 		themeData,
 	};
