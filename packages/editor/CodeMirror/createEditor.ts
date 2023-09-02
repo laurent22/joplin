@@ -1,12 +1,6 @@
-import { MarkdownMathExtension } from './markdownMathParser';
-import createTheme from './theme';
 import decoratorExtension from './decoratorExtension';
 
-import syntaxHighlightingLanguages from './syntaxHighlightingLanguages';
-
-import { EditorState, StateEffect } from '@codemirror/state';
-import { markdown } from '@codemirror/lang-markdown';
-import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
+import { Compartment, EditorSelection, EditorState, StateEffect } from '@codemirror/state';
 import { indentOnInput, indentUnit } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,
@@ -22,7 +16,7 @@ import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 
-import { ListType, SearchState, EditorControl, EditorProps, EditorLanguageType } from '../types';
+import { ListType, SearchState, EditorControl, EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
 import {
 	decreaseIndent, increaseIndent,
@@ -32,7 +26,7 @@ import {
 } from './markdownCommands';
 import computeSelectionFormatting from './computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
-import { html } from '@codemirror/lang-html';
+import configFromSettings from './configFromSettings';
 
 interface ScrollInfo {
 	height: number;
@@ -44,19 +38,23 @@ export interface CodeMirrorControl extends EditorControl {
 	addStyles(...style: Parameters<typeof EditorView.theme>): void;
 
 	// Getters to emulate CodeMirror 5
+	somethingSelected(): boolean;
 	getSelection(): string;
+	listSelections(): readonly { anchor: number; head: number }[];
+
 	getScrollInfo(): ScrollInfo;
 	getScrollPercent(): number;
 	lineCount(): number;
 	lineAtHeight(height: number, mode?: 'local'): number;
 	heightAtLine(lineNumber: number, mode?: 'local'): number;
+
 }
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
 ): CodeMirrorControl => {
-	const { initialText, settings } = props;
-	const theme = settings.themeData;
+	const initialText = props.initialText;
+	let settings = props.settings;
 
 	// TODO: Use props.plugins
 
@@ -195,33 +193,16 @@ const createEditor = (
 		};
 	};
 
-	const languageExtension = (() => {
-		const language = settings.language;
-		if (language === EditorLanguageType.Markdown) {
-			return markdown({
-				extensions: [
-					GitHubFlavoredMarkdownExtension,
-
-					// Don't highlight KaTeX if the user disabled it
-					settings.katexEnabled ? MarkdownMathExtension : [],
-				],
-				codeLanguages: syntaxHighlightingLanguages,
-			});
-		} else if (language === EditorLanguageType.Html) {
-			return html();
-		} else {
-			const exhaustivenessCheck: never = language;
-			return exhaustivenessCheck;
-		}
-	})();
+	const dynamicConfig = new Compartment();
 
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
-				languageExtension,
-				...createTheme(theme),
+				dynamicConfig.of([
+					configFromSettings(props.settings),
+				]),
 				history(),
 				search(settings.useExternalSearch ? {
 					createPanel(_: EditorView) {
@@ -263,11 +244,6 @@ const createEditor = (
 				decoratorExtension,
 
 				EditorView.lineWrapping,
-				EditorView.contentAttributes.of({
-					autocapitalize: 'sentence',
-					autocorrect: settings.spellcheckEnabled ? 'true' : 'false',
-					spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
-				}),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
 					notifyDocChanged(viewUpdate);
 					notifySelectionChange(viewUpdate);
@@ -298,8 +274,6 @@ const createEditor = (
 
 					...defaultKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
 				]),
-
-				EditorState.readOnly.of(settings.readOnly),
 			],
 			doc: initialText,
 		}),
@@ -356,14 +330,31 @@ const createEditor = (
 		},
 		updateBody: (newBody: string) => {
 			if (newBody !== currentDocText) {
+				// For now, collapse the selection to a single cursor
+				// to ensure that the selection stays within the document
+				// (and thus avoids an exception).
+				const mainCursorPosition = editor.state.selection.main.anchor;
+				const newCursorPosition = Math.min(mainCursorPosition, newBody.length);
+
 				editor.dispatch(editor.state.update({
 					changes: {
 						from: 0,
 						to: editor.state.doc.length,
 						insert: newBody,
 					},
+					selection: EditorSelection.cursor(newCursorPosition),
+					scrollIntoView: true,
 				}));
 			}
+		},
+
+		updateSettings: (newSettings: EditorSettings) => {
+			settings = newSettings;
+			editor.dispatch({
+				effects: dynamicConfig.reconfigure(
+					configFromSettings(newSettings),
+				),
+			});
 		},
 
 		// Formatting
@@ -376,11 +367,6 @@ const createEditor = (
 		toggleList: (kind: ListType) => { toggleList(kind)(editor); },
 		toggleHeaderLevel: (level: number) => { toggleHeaderLevel(level)(editor); },
 		updateLink: (label: string, url: string) => { updateLink(label, url)(editor); },
-
-		getSelection: (): string => {
-			const mainRange = editor.state.selection.main;
-			return editor.state.sliceDoc(mainRange.from, mainRange.to);
-		},
 
 		// Search
 		searchControl: {
@@ -450,6 +436,17 @@ const createEditor = (
 		},
 		getScrollPercent: () => {
 			return getScrollFraction(editor);
+		},
+
+		getSelection: (): string => {
+			const mainRange = editor.state.selection.main;
+			return editor.state.sliceDoc(mainRange.from, mainRange.to);
+		},
+		somethingSelected: () => {
+			return !editor.state.selection.main.empty;
+		},
+		listSelections: () => {
+			return editor.state.selection.ranges;
 		},
 	};
 

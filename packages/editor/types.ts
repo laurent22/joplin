@@ -17,6 +17,7 @@ export interface EditorControl {
 	insertText(text: string): void;
 	updateBody(newBody: string): void;
 
+	updateSettings(newSettings: EditorSettings): void;
 
 	// Toggle whether we're in a type of region.
 	toggleBolded(): void;

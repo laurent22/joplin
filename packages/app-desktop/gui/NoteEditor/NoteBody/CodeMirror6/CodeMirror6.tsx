@@ -3,9 +3,8 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 
 // eslint-disable-next-line no-unused-vars
 import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
-import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../utils/resourceHandling';
+import { getResourcesFromPasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { CommandValue } from '../../utils/types';
 import Toolbar from './Toolbar';
 // import styles_ from './styles';
 // import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -22,7 +21,6 @@ import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
-import dialogs from '../../../dialogs';
 import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
@@ -38,11 +36,12 @@ import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/Jo
 import type { ContextMenuEvent, ContextMenuParams } from 'electron';
 import usePrevious from '../../../hooks/usePrevious';
 import { CodeMirrorControl } from '@joplin/editor/CodeMirror/createEditor';
-import { EditorLanguageType, EditorSettings, ListType } from '@joplin/editor/types';
+import { EditorLanguageType, EditorSettings } from '@joplin/editor/types';
 import useStyles from './useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from './useScrollHandler';
 import Logger from '@joplin/utils/Logger';
+import useEditorCommands from './useEditorCommands';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -95,156 +94,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
 	}, []);
-
-	const wrapSelectionWithStrings = useCallback((_string1: string, _string2 = '', _defaultText = '') => {
-		if (!editorRef.current) return;
-
-		// if (editorRef.current.somethingSelected()) {
-		// 	editorRef.current.wrapSelections(string1, string2);
-		// } else {
-		// 	editorRef.current.wrapSelections(string1 + defaultText, string2);
-
-		// 	// Now select the default text so the user can replace it
-		// 	const selections = editorRef.current.listSelections();
-		// 	const newSelections = [];
-		// 	for (let i = 0; i < selections.length; i++) {
-		// 		const s = selections[i];
-		// 		const anchor = { line: s.anchor.line, ch: s.anchor.ch + string1.length };
-		// 		const head = { line: s.head.line, ch: s.head.ch - string2.length };
-		// 		newSelections.push({ anchor: anchor, head: head });
-		// 	}
-		// 	editorRef.current.setSelections(newSelections);
-		// }
-	}, []);
-
-	useImperativeHandle(ref, () => {
-		return {
-			content: () => props.content,
-			resetScroll: () => {
-				resetScroll();
-			},
-			scrollTo: (options: ScrollOptions) => {
-				if (options.type === ScrollOptionTypes.Hash) {
-					if (!webviewRef.current) return;
-					webviewRef.current.send('scrollToHash', options.value as string);
-				} else if (options.type === ScrollOptionTypes.Percent) {
-					const percent = options.value as number;
-					setEditorPercentScroll(percent);
-					setViewerPercentScroll(percent);
-
-				} else {
-					throw new Error(`Unsupported scroll options: ${options.type}`);
-				}
-			},
-			supportsCommand: (/* name:string*/) => {
-				// TODO: not implemented, currently only used for "search" command
-				// which is not directly supported by this Editor.
-				return false;
-			},
-			execCommand: async (cmd: EditorCommand) => {
-				if (!editorRef.current) return false;
-
-				reg.logger().debug('CodeMirror: execCommand', cmd);
-
-				let commandProcessed = true;
-
-				if (cmd.name === 'dropItems') {
-					if (cmd.value.type === 'notes') {
-						editorRef.current.insertText(cmd.value.markdownTags.join('\n'));
-					} else if (cmd.value.type === 'files') {
-						const pos = selectionRange.from;
-						const newBody = await commandAttachFileToBody(props.content, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL, position: pos });
-						editorRef.current.updateBody(newBody);
-					} else {
-						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
-					}
-				} else if (cmd.name === 'editor.focus') {
-					if (props.visiblePanes.indexOf('editor') >= 0) {
-						editorRef.current.editor.focus();
-					} else {
-						// If we just call focus() then the iframe is focused,
-						// but not its content, such that scrolling up / down
-						// with arrow keys fails
-						webviewRef.current.send('focus');
-					}
-				} else {
-					commandProcessed = false;
-				}
-
-				let commandOutput = null;
-
-				if (!commandProcessed) {
-					const selectedText = () => {
-						if (!editorRef.current) return '';
-						return editorRef.current.getSelection();
-					};
-
-					const commands: any = {
-						selectedText: () => {
-							return selectedText();
-						},
-						selectedHtml: () => {
-							return selectedText();
-						},
-						replaceSelection: (value: any) => {
-							return editorRef.current.insertText(value);
-						},
-						textCopy: () => {
-							editorCopyText();
-						},
-						textCut: () => {
-							editorCutText();
-						},
-						textPaste: () => {
-							editorPaste();
-						},
-						textSelectAll: () => {
-							return editorRef.current.selectAll();
-						},
-						textBold: () => editorRef.current.toggleBolded(),
-						textItalic: () => editorRef.current.toggleItalicized(),
-						textLink: async () => {
-							const url = await dialogs.prompt(_('Insert Hyperlink'));
-							editorRef.current.focus();
-							if (url) wrapSelectionWithStrings('[', `](${url})`);
-						},
-						textCode: () => editorRef.current.toggleCode(),
-						insertText: (value: any) => editorRef.current.insertText(value),
-						attachFile: async () => {
-							const newBody = await commandAttachFileToBody(props.content, null, { position: selectionRange.from });
-							if (newBody) {
-								editorRef.current.updateBody(newBody);
-							}
-						},
-						textNumberedList: () => editorRef.current.toggleList(ListType.UnorderedList),
-						textBulletedList: () => editorRef.current.toggleList(ListType.UnorderedList),
-						textCheckbox: () => editorRef.current.toggleList(ListType.CheckList),
-						textHeading: () => editorRef.current.toggleHeaderLevel(2),
-						textHorizontalRule: () => editorRef.current.insertText('* * *'),
-						'editor.execCommand': (value: CommandValue) => {
-							if (!('args' in value)) value.args = [];
-
-							if ((editorRef.current as any)[value.name]) {
-								const result = (editorRef.current as any)[value.name](...value.args);
-								return result;
-							} else {
-								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
-							}
-						},
-					};
-
-					if (commands[cmd.name]) {
-						commandOutput = commands[cmd.name](cmd.value);
-					} else {
-						reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
-					}
-				}
-
-				return commandOutput;
-			},
-		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, props.visiblePanes, wrapSelectionWithStrings]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
@@ -312,6 +161,56 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			void onEditorPaste();
 		}
 	}, [editorPasteText, onEditorPaste]);
+
+	const commands = useEditorCommands({
+		webviewRef,
+		editorRef,
+		selectionRange,
+
+		editorCopyText, editorCutText, editorPaste,
+		editorContent: props.content,
+		visiblePanes: props.visiblePanes,
+	});
+
+	useImperativeHandle(ref, () => {
+		return {
+			content: () => props.content,
+			resetScroll: () => {
+				resetScroll();
+			},
+			scrollTo: (options: ScrollOptions) => {
+				if (options.type === ScrollOptionTypes.Hash) {
+					if (!webviewRef.current) return;
+					webviewRef.current.send('scrollToHash', options.value as string);
+				} else if (options.type === ScrollOptionTypes.Percent) {
+					const percent = options.value as number;
+					setEditorPercentScroll(percent);
+					setViewerPercentScroll(percent);
+
+				} else {
+					throw new Error(`Unsupported scroll options: ${options.type}`);
+				}
+			},
+			supportsCommand: (name: string) => {
+				return name in commands;
+			},
+			execCommand: async (cmd: EditorCommand) => {
+				if (!editorRef.current) return false;
+
+				logger.debug('execCommand', cmd);
+
+				let commandOutput = null;
+				if (cmd.name in commands) {
+					commandOutput = (commands as any)[cmd.name](cmd.value);
+				} else {
+					reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
+				}
+
+				return commandOutput;
+			},
+		};
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
+	}, [props.content, commands]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);

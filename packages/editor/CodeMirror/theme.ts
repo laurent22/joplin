@@ -56,7 +56,11 @@ const createTheme = (theme: any): Extension[] => {
 		blurredSelectionStyle.backgroundColor = '#444';
 	}
 
-	const baseTheme = EditorView.baseTheme({
+	// This is equivalent to the default selection style -- our styling must
+	// be at least this specific.
+	const selectionBackgroundSelector = '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground';
+
+	const codeMirrorTheme = EditorView.theme({
 		'&': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
@@ -65,8 +69,13 @@ const createTheme = (theme: any): Extension[] => {
 			...baseContentStyle,
 		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
-		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
-		'.cm-selectionBackground': blurredSelectionStyle,
+
+		// &.cm-focused is used to give these styles higher specificity
+		// than the defaults.
+		[selectionBackgroundSelector]: baseSelectionStyle,
+		'&.cm-focused ::selection': baseSelectionStyle,
+		'& ::selection': blurredSelectionStyle,
+		'& .cm-selectionLayer .cm-selectionBackground': blurredSelectionStyle,
 
 		'&.cm-editor.cm-focused': {
 			outline: 'none !important',
@@ -124,9 +133,7 @@ const createTheme = (theme: any): Extension[] => {
 				color: isDarkTheme ? 'white' : 'black',
 			},
 		},
-	});
-
-	const appearanceTheme = EditorView.theme({}, { dark: isDarkTheme });
+	}, { dark: isDarkTheme });
 
 	const baseHeadingStyle = {
 		fontWeight: 'bold',
@@ -216,8 +223,7 @@ const createTheme = (theme: any): Extension[] => {
 	]);
 
 	return [
-		baseTheme,
-		appearanceTheme,
+		codeMirrorTheme,
 		syntaxHighlighting(highlightingStyle),
 
 		// If we haven't defined highlighting for tags, fall back

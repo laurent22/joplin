@@ -28,8 +28,12 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		return () => {
 			editor.editor.contentDOM.remove();
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- TODO: Refactor to re-apply settings on change
+	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Should run just once
 	}, []);
+
+	useEffect(() => {
+		editor?.updateSettings(props.settings);
+	}, [props.settings, editor]);
 
 	return (
 		<>
