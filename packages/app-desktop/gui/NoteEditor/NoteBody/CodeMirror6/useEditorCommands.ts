@@ -1,7 +1,7 @@
 
 import { CodeMirrorControl } from '@joplin/editor/CodeMirror/createEditor';
 import { RefObject, useMemo } from 'react';
-import { CommandValue, EditorCommand } from '../../utils/types';
+import { CommandValue } from '../../utils/types';
 import { commandAttachFileToBody } from '../../utils/resourceHandling';
 import { _ } from '@joplin/lib/locale';
 import dialogs from '../../../dialogs';
@@ -52,12 +52,12 @@ const useEditorCommands = (props: Props) => {
 		};
 
 		return {
-			dropItems: async (cmd: EditorCommand) => {
-				if (cmd.value.type === 'notes') {
-					editorRef.current.insertText(cmd.value.markdownTags.join('\n'));
-				} else if (cmd.value.type === 'files') {
+			dropItems: async (cmd: any) => {
+				if (cmd.type === 'notes') {
+					editorRef.current.insertText(cmd.markdownTags.join('\n'));
+				} else if (cmd.type === 'files') {
 					const pos = props.selectionRange.from;
-					const newBody = await commandAttachFileToBody(props.editorContent, cmd.value.paths, { createFileURL: !!cmd.value.createFileURL, position: pos });
+					const newBody = await commandAttachFileToBody(props.editorContent, cmd.paths, { createFileURL: !!cmd.createFileURL, position: pos });
 					editorRef.current.updateBody(newBody);
 				} else {
 					logger.warn('CodeMirror: unsupported drop item: ', cmd);
