@@ -4496,7 +4496,7 @@ __metadata:
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
-    typescript: 5.1.3
+    typescript: 5.1.6
   dependenciesMeta:
     7zip-bin-linux:
       optional: true
@@ -4619,7 +4619,7 @@ __metadata:
     ts-jest: 29.1.1
     ts-loader: 9.4.4
     ts-node: 10.9.1
-    typescript: 5.1.3
+    typescript: 5.1.6
     uglify-js: 3.17.4
     url: 0.11.1
     webpack: 5.74.0
@@ -4643,7 +4643,7 @@ __metadata:
     jest: 29.5.0
     prettier: 2.8.8
     ts-jest: 29.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -4752,7 +4752,7 @@ __metadata:
     string-to-stream: 3.0.1
     tar: 6.1.15
     tcp-port-used: 1.0.2
-    typescript: 5.1.3
+    typescript: 5.1.6
     uglifycss: 0.0.29
     url-parse: 1.5.10
     uuid: 9.0.0
@@ -4786,7 +4786,7 @@ __metadata:
     styled-components: 5.3.11
     ts-jest: 29.1.1
     ts-loader: 9.4.4
-    typescript: 5.1.3
+    typescript: 5.1.6
     webpack: 5.74.0
     webpack-cli: 4.10.0
   languageName: unknown
@@ -4808,7 +4808,7 @@ __metadata:
     node-fetch: 2.6.7
     source-map-loader: 4.0.1
     source-map-support: 0.5.21
-    typescript: 5.1.3
+    typescript: 5.1.6
     webpack: 5.65.0
     webpack-cli: 4.10.0
     yargs: 17.7.2
@@ -4840,7 +4840,7 @@ __metadata:
     "@types/react-native": 0.64.19
     react: 18.2.0
     react-native: 0.70.6
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -4880,7 +4880,7 @@ __metadata:
     md5: 2.3.0
     mermaid: 9.2.2
     ts-jest: 29.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -4939,7 +4939,7 @@ __metadata:
     source-map-support: 0.5.21
     sqlite3: 5.1.6
     stripe: 8.222.0
-    typescript: 5.1.3
+    typescript: 5.1.6
     uuid: 9.0.0
     yargs: 17.7.2
     zxcvbn: 4.4.2
@@ -4983,7 +4983,7 @@ __metadata:
     sharp: 0.32.4
     source-map-support: 0.5.21
     sqlite3: 5.1.6
-    typescript: 5.1.3
+    typescript: 5.1.6
     uri-template: 2.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -21071,7 +21071,7 @@ __metadata:
     temp: 0.9.4
     terminal-kit: 3.0.0
     tkwidgets: 0.5.27
-    typescript: 5.1.3
+    typescript: 5.1.6
     url-parse: 1.5.10
     word-wrap: 1.2.5
     yargs-parser: 21.1.1
@@ -29574,7 +29574,7 @@ __metadata:
     node-gyp: 9.4.0
     nodemon: 2.0.22
     npm-package-json-lint: 6.4.0
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -32965,13 +32965,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.1.3":
-  version: 5.1.3
-  resolution: "typescript@npm:5.1.3"
+"typescript@npm:5.1.6":
+  version: 5.1.6
+  resolution: "typescript@npm:5.1.6"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: d9d51862d98efa46534f2800a1071a613751b1585dc78884807d0c179bcd93d6e9d4012a508e276742f5f33c480adefc52ffcafaf9e0e00ab641a14cde9a31c7
+  checksum: b2f2c35096035fe1f5facd1e38922ccb8558996331405eb00a5111cc948b2e733163cc22fab5db46992aba7dd520fff637f2c1df4996ff0e134e77d3249a7350
   languageName: node
   linkType: hard
 
@@ -33015,13 +33015,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.1.3#~builtin<compat/typescript>":
-  version: 5.1.3
-  resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=5da071"
+"typescript@patch:typescript@5.1.6#~builtin<compat/typescript>":
+  version: 5.1.6
+  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6f0a9dca6bf4ce9dcaf4e282aade55ef4c56ecb5fb98d0a4a5c0113398815aea66d871b5611e83353e5953a19ed9ef103cf5a76ac0f276d550d1e7cd5344f61e
+  checksum: f53bfe97f7c8b2b6d23cf572750d4e7d1e0c5fff1c36d859d0ec84556a827b8785077bc27676bf7e71fae538e517c3ecc0f37e7f593be913d884805d931bc8be
   languageName: node
   linkType: hard
 
