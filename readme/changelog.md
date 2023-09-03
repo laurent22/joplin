@@ -1,6 +1,6 @@
 # Joplin changelog
 
-## [v2.12.15](https://github.com/laurent22/joplin/releases/tag/v2.12.15) (Pre-release) - 2023-08-27T11:35:39Z
+## [v2.12.15](https://github.com/laurent22/joplin/releases/tag/v2.12.15) - 2023-08-27T11:35:39Z
 
 - Fixed: Pasting a resource in Rich Text editor breaks the resource link ([#8706](https://github.com/laurent22/joplin/issues/8706))
 - Fixed: Handling of macOS ARM-64 version
