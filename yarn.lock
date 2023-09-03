@@ -4904,7 +4904,7 @@ __metadata:
     "@types/koa": 2.13.8
     "@types/markdown-it": 12.2.3
     "@types/mustache": 4.2.2
-    "@types/nodemailer": 6.4.8
+    "@types/nodemailer": 6.4.9
     "@types/uuid": 9.0.2
     "@types/yargs": 17.0.24
     "@types/zxcvbn": 4.4.1
@@ -7866,12 +7866,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.8":
-  version: 6.4.8
-  resolution: "@types/nodemailer@npm:6.4.8"
+"@types/nodemailer@npm:6.4.9":
+  version: 6.4.9
+  resolution: "@types/nodemailer@npm:6.4.9"
   dependencies:
     "@types/node": "*"
-  checksum: 3cc9b6a0e54f25a1b36124df413964ff5a69e8dc4558c5dfc06818917313a50f4dbfe31fc9190e4270d07a0f8678474da24a2eae42f907933ea81d983b4772d4
+  checksum: fd903f38af782c4d3ac0aedc7e6b26bd91bf38183da0027559dfd269e956401114d977a903c69a90897c5b773e76fd9c8f261e787643ca4231edba91f209fa8d
   languageName: node
   linkType: hard
 
