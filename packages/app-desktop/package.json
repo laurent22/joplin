@@ -108,7 +108,7 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@electron/rebuild": "3.2.13",
+    "@electron/rebuild": "3.3.0",
     "@joplin/tools": "~2.12",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.3",
