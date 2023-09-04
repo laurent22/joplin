@@ -4478,7 +4478,7 @@ __metadata:
     node-notifier: 10.0.1
     node-rsa: 1.1.1
     pretty-bytes: 5.6.0
-    re-resizable: 6.9.9
+    re-resizable: 6.9.11
     react: 18.2.0
     react-datetime: 3.2.0
     react-dom: 18.2.0
@@ -4496,7 +4496,7 @@ __metadata:
     styled-system: 5.1.5
     taboverride: 4.0.3
     tinymce: 5.10.6
-    typescript: 5.1.3
+    typescript: 5.1.6
   dependenciesMeta:
     7zip-bin-linux:
       optional: true
@@ -4619,7 +4619,7 @@ __metadata:
     ts-jest: 29.1.1
     ts-loader: 9.4.4
     ts-node: 10.9.1
-    typescript: 5.1.3
+    typescript: 5.1.6
     uglify-js: 3.17.4
     url: 0.11.1
     webpack: 5.74.0
@@ -4643,7 +4643,7 @@ __metadata:
     jest: 29.5.0
     prettier: 2.8.8
     ts-jest: 29.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -4752,7 +4752,7 @@ __metadata:
     string-to-stream: 3.0.1
     tar: 6.1.15
     tcp-port-used: 1.0.2
-    typescript: 5.1.3
+    typescript: 5.1.6
     uglifycss: 0.0.29
     url-parse: 1.5.10
     uuid: 9.0.0
@@ -4786,7 +4786,7 @@ __metadata:
     styled-components: 5.3.11
     ts-jest: 29.1.1
     ts-loader: 9.4.4
-    typescript: 5.1.3
+    typescript: 5.1.6
     webpack: 5.74.0
     webpack-cli: 4.10.0
   languageName: unknown
@@ -4808,7 +4808,7 @@ __metadata:
     node-fetch: 2.6.7
     source-map-loader: 4.0.1
     source-map-support: 0.5.21
-    typescript: 5.1.3
+    typescript: 5.1.6
     webpack: 5.65.0
     webpack-cli: 4.10.0
     yargs: 17.7.2
@@ -4840,7 +4840,7 @@ __metadata:
     "@types/react-native": 0.64.19
     react: 18.2.0
     react-native: 0.70.6
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -4873,14 +4873,14 @@ __metadata:
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
-    markdown-it-multimd-table: 4.2.2
+    markdown-it-multimd-table: 4.2.3
     markdown-it-sub: 1.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
     md5: 2.3.0
     mermaid: 9.2.2
     ts-jest: 29.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -4901,10 +4901,10 @@ __metadata:
     "@types/jest": 29.5.3
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.1
-    "@types/koa": 2.13.6
+    "@types/koa": 2.13.8
     "@types/markdown-it": 12.2.3
     "@types/mustache": 4.2.2
-    "@types/nodemailer": 6.4.8
+    "@types/nodemailer": 6.4.9
     "@types/uuid": 9.0.2
     "@types/yargs": 17.0.24
     "@types/zxcvbn": 4.4.1
@@ -4939,7 +4939,7 @@ __metadata:
     source-map-support: 0.5.21
     sqlite3: 5.1.6
     stripe: 8.222.0
-    typescript: 5.1.3
+    typescript: 5.1.6
     uuid: 9.0.0
     yargs: 17.7.2
     zxcvbn: 4.4.2
@@ -4979,11 +4979,11 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.64.0
+    sass: 1.64.2
     sharp: 0.32.4
     source-map-support: 0.5.21
     sqlite3: 5.1.6
-    typescript: 5.1.3
+    typescript: 5.1.6
     uri-template: 2.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -7742,9 +7742,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.13.6":
-  version: 2.13.6
-  resolution: "@types/koa@npm:2.13.6"
+"@types/koa@npm:2.13.8":
+  version: 2.13.8
+  resolution: "@types/koa@npm:2.13.8"
   dependencies:
     "@types/accepts": "*"
     "@types/content-disposition": "*"
@@ -7754,7 +7754,7 @@ __metadata:
     "@types/keygrip": "*"
     "@types/koa-compose": "*"
     "@types/node": "*"
-  checksum: a4061c2e29cd4ccb65a704fe3ef6868eac82558856c7c00a5bcc0f9fdf18c595e0156c52508eb8ba926a9108d9cf5c9a1a1b73cccf50e29b37ea1154323d0b26
+  checksum: 76a2a6d219c65f242a43efca42970d864701c58319c346a91dd8c3b4df2021786fd0d600a88dfb098358c9085f9f4a2dfe62563641441cf21e11e2bfe04f4fdf
   languageName: node
   linkType: hard
 
@@ -7866,12 +7866,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.8":
-  version: 6.4.8
-  resolution: "@types/nodemailer@npm:6.4.8"
+"@types/nodemailer@npm:6.4.9":
+  version: 6.4.9
+  resolution: "@types/nodemailer@npm:6.4.9"
   dependencies:
     "@types/node": "*"
-  checksum: 3cc9b6a0e54f25a1b36124df413964ff5a69e8dc4558c5dfc06818917313a50f4dbfe31fc9190e4270d07a0f8678474da24a2eae42f907933ea81d983b4772d4
+  checksum: fd903f38af782c4d3ac0aedc7e6b26bd91bf38183da0027559dfd269e956401114d977a903c69a90897c5b773e76fd9c8f261e787643ca4231edba91f209fa8d
   languageName: node
   linkType: hard
 
@@ -15650,13 +15650,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:27.2.2":
-  version: 27.2.2
-  resolution: "eslint-plugin-jest@npm:27.2.2"
+"eslint-plugin-jest@npm:27.2.3":
+  version: 27.2.3
+  resolution: "eslint-plugin-jest@npm:27.2.3"
   dependencies:
     "@typescript-eslint/utils": ^5.10.0
   peerDependencies:
-    "@typescript-eslint/eslint-plugin": ^5.0.0
+    "@typescript-eslint/eslint-plugin": ^5.0.0 || ^6.0.0
     eslint: ^7.0.0 || ^8.0.0
     jest: "*"
   peerDependenciesMeta:
@@ -15664,7 +15664,7 @@ __metadata:
       optional: true
     jest:
       optional: true
-  checksum: 98b63252d985f5dedf36ce9587dd4a0d24daf71ca8a997258343402c0d33ddd5070502378dafd9ac7fc0ef2e0d557b5c77f18e09ad73c71a52de8061db88293f
+  checksum: 4c7e07f52f17749ac6fd0ff5fcd5ce30b88983ba31eeee322e4d48859f55eaa112f06172e586ad2031c00ff28bb2dfdc3d35c83895251b9c0e860fa47dfc5ff4
   languageName: node
   linkType: hard
 
@@ -21071,7 +21071,7 @@ __metadata:
     temp: 0.9.4
     terminal-kit: 3.0.0
     tkwidgets: 0.5.27
-    typescript: 5.1.3
+    typescript: 5.1.6
     url-parse: 1.5.10
     word-wrap: 1.2.5
     yargs-parser: 21.1.1
@@ -22781,10 +22781,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:4.2.2":
-  version: 4.2.2
-  resolution: "markdown-it-multimd-table@npm:4.2.2"
-  checksum: 2f7e0c68979a0a23a0722d6ead5838050532b3e5dba714a0a17ba5277a21f7fde5a4f7449a6d031e5541abc0ef1356d7f77b4e6137a73749a95b8fdce90b94ab
+"markdown-it-multimd-table@npm:4.2.3":
+  version: 4.2.3
+  resolution: "markdown-it-multimd-table@npm:4.2.3"
+  checksum: 68ec1e639b2fe2c261ed860f74984b641b8f2287fd5cec8f4bf0fca0da849bacaa308317b2bc00a16bccd71d9d38aded740d3b3a69d37315f923b4167bd79267
   languageName: node
   linkType: hard
 
@@ -27669,13 +27669,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-resizable@npm:6.9.9":
-  version: 6.9.9
-  resolution: "re-resizable@npm:6.9.9"
+"re-resizable@npm:6.9.11":
+  version: 6.9.11
+  resolution: "re-resizable@npm:6.9.11"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: a2c8bfe86646fb02d5c9c624b1da26f9e6a5e2f552cd96ce4db690588bee6b21177065ce8e98646c6ca0b1a9c4ce233824b75eb346800d8248ac8a87b40f1b28
+  checksum: 04be62e2985caff8ff082664b9b66d7c49df383a9560e691f32f583cba75ce51077be8b718c5cda5a1fa07e701337102cbd9ff5b03a58541d9092f25753f47f7
   languageName: node
   linkType: hard
 
@@ -29559,7 +29559,7 @@ __metadata:
     eslint-interactive: 10.8.0
     eslint-plugin-github: 4.8.0
     eslint-plugin-import: 2.27.5
-    eslint-plugin-jest: 27.2.2
+    eslint-plugin-jest: 27.2.3
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.32.2
     execa: 5.1.1
@@ -29574,7 +29574,7 @@ __metadata:
     node-gyp: 9.4.0
     nodemon: 2.0.22
     npm-package-json-lint: 6.4.0
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -29715,16 +29715,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.64.0":
-  version: 1.64.0
-  resolution: "sass@npm:1.64.0"
+"sass@npm:1.64.2":
+  version: 1.64.2
+  resolution: "sass@npm:1.64.2"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: b4eb9b1bdeb1c00e76427d7fe3e5f80d831327178cdee657aa4e014edfc64ebbfe43177147403da1e04d76a24f4093f5a9b1c8d9d80c94579937d8adc5a6ef66
+  checksum: 43a5c9b9b3b6ba27feb5c45eba90edc437b15a30fd443f5d2623bbd59fe4a922f2a6a9990296c6a6c2b5bce7f401922c5049357415f50b745952c2d478bc5526
   languageName: node
   linkType: hard
 
@@ -32965,13 +32965,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.1.3":
-  version: 5.1.3
-  resolution: "typescript@npm:5.1.3"
+"typescript@npm:5.1.6":
+  version: 5.1.6
+  resolution: "typescript@npm:5.1.6"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: d9d51862d98efa46534f2800a1071a613751b1585dc78884807d0c179bcd93d6e9d4012a508e276742f5f33c480adefc52ffcafaf9e0e00ab641a14cde9a31c7
+  checksum: b2f2c35096035fe1f5facd1e38922ccb8558996331405eb00a5111cc948b2e733163cc22fab5db46992aba7dd520fff637f2c1df4996ff0e134e77d3249a7350
   languageName: node
   linkType: hard
 
@@ -32997,11 +32997,11 @@ __metadata:
 
 "typescript@patch:typescript@4 - 5#~builtin<compat/typescript>":
   version: 5.0.4
-  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=ad5954"
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6a1fe9a77bb9c5176ead919cc4a1499ee63e46b4e05bf667079f11bf3a8f7887f135aa72460a4c3b016e6e6bb65a822cb8689a6d86cbfe92d22cc9f501f09213
+  checksum: d26b6ba97b6d163c55dbdffd9bbb4c211667ebebc743accfeb2c8c0154aace7afd097b51165a72a5bad2cf65a4612259344ff60f8e642362aa1695c760d303ac
   languageName: node
   linkType: hard
 
@@ -33015,13 +33015,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.1.3#~builtin<compat/typescript>":
-  version: 5.1.3
-  resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=ad5954"
+"typescript@patch:typescript@5.1.6#~builtin<compat/typescript>":
+  version: 5.1.6
+  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 32a25b2e128a4616f999d4ee502aabb1525d5647bc8955e6edf05d7fbc53af8aa98252e2f6ba80bcedfc0260c982b885f3c09cfac8bb65d2924f3133ad1e1e62
+  checksum: f53bfe97f7c8b2b6d23cf572750d4e7d1e0c5fff1c36d859d0ec84556a827b8785077bc27676bf7e71fae538e517c3ecc0f37e7f593be913d884805d931bc8be
   languageName: node
   linkType: hard
 
@@ -33037,11 +33037,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.0.0#~builtin<compat/typescript>, typescript@patch:typescript@^4.0.2#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
   version: 4.9.5
-  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8f6260acc86b56bfdda6004bc53f32ea548f543e8baef7071c8e34d29d292f3e375c8416556c8de10b24deef6933cd1c16a8233dc84a3dd43a13a13265d0faab
+  checksum: 1f8f3b6aaea19f0f67cba79057674ba580438a7db55057eb89cc06950483c5d632115c14077f6663ea76fd09fce3c190e6414bb98582ec80aa5a4eaf345d5b68
   languageName: node
   linkType: hard
 

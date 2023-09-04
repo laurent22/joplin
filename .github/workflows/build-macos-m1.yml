@@ -41,7 +41,8 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
         run: |
@@ -56,6 +57,8 @@ jobs:
           if [[ $GIT_TAG_NAME = v* ]]; then
             echo "Building and publishing desktop application..."
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --mac --arm64
+
+            yarn renameReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
           else
             echo "Building but *not* publishing desktop application..."
 

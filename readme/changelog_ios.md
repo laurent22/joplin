@@ -1,6 +1,6 @@
 # Joplin iOS app changelog
 
-## [ios-v12.12.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.12.1) - 2023-08-22T10:06:43Z
+## [ios-v12.12.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.12.2) - 2023-09-01T22:13:36Z
 
 - New: Add JEX export (#8428 by Henry Heino)
 - New: Add support for Joplin Cloud email to note functionality (#8460 by [@pedr](https://github.com/pedr))
