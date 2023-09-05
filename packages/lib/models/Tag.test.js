@@ -160,7 +160,7 @@ describe('models/Tag', () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
-		const tag1 = await Tag.save({title: "tag1"});
+		const tag1 = await Tag.save({ title: 'tag1' });
 
 		await Tag.addNote(tag1.id, note1.id);
 		await Tag.addNote(tag1.id, note2.id);

@@ -99,13 +99,11 @@ export default class Tag extends BaseItem {
 		});
 	}
 
-	public static async tagsWithCount(count: number)
-	{		
-		return await this.modelSelectAll(`SELECT tags.id, tags.title, COUNT(nt.tag_id) as note_count FROM tags LEFT JOIN note_tags nt on nt.tag_id = tags.id GROUP BY tags.id HAVING note_count = ?`, [count] );
+	public static async tagsWithCount(count: number) {
+		return await this.modelSelectAll('SELECT tags.id, tags.title, COUNT(nt.tag_id) as note_count FROM tags LEFT JOIN note_tags nt on nt.tag_id = tags.id GROUP BY tags.id HAVING note_count = ?', [count]);
 	}
 
-	public static async removeTagsWithoutNotes()
-	{
+	public static async removeTagsWithoutNotes() {
 		const emptyTags = await Tag.tagsWithCount(0);
 		for (let i = 0; i < emptyTags.length; i++) {
 			const tag = emptyTags[i];
