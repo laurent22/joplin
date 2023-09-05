@@ -67,15 +67,15 @@
   "devDependencies": {
     "@joplin/utils": "~2.12",
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
-    "@typescript-eslint/eslint-plugin": "5.62.0",
-    "@typescript-eslint/parser": "5.62.0",
+    "@typescript-eslint/eslint-plugin": "5.60.0",
+    "@typescript-eslint/parser": "5.60.0",
     "cspell": "5.21.2",
-    "eslint": "8.45.0",
+    "eslint": "8.43.0",
     "eslint-interactive": "10.8.0",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-jest": "27.2.3",
     "eslint-plugin-promise": "6.1.1",
-    "eslint-plugin-react": "7.33.0",
+    "eslint-plugin-react": "7.32.2",
     "execa": "5.1.1",
     "fs-extra": "11.1.1",
     "glob": "10.3.3",
@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@types/fs-extra": "11.0.1",
-    "eslint-plugin-github": "4.9.2",
+    "eslint-plugin-github": "4.8.0",
     "http-server": "14.1.1",
     "node-gyp": "9.4.0",
     "nodemon": "2.0.22"
