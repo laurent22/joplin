@@ -60,7 +60,6 @@ export const runtime = (comp: any): CommandRuntime => {
 									await Tag.setNoteTagsByTitles(noteIds[i], tagTitles);
 								}
 							}
-							Tag.removeTagsWithoutNotes();
 						}
 						comp.setState({ promptOptions: null });
 					},

@@ -607,6 +607,7 @@ export default class BaseApplication {
 		}
 
 		if (action.type === 'NOTE_TAG_REMOVE') {
+			await Tag.removeTagsWithoutNotes();
 			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
 				if (newState.notes.length === newState.selectedNoteIds.length) {
 					await this.refreshCurrentFolder();
