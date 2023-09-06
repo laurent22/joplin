@@ -5,7 +5,7 @@ import { EditorControl as EditorBodyControl, EditorSettings as EditorBodySetting
 export interface SearchControl {
 	findNext(): void;
 	findPrevious(): void;
-	replaceCurrent(): void;
+	replaceNext(): void;
 	replaceAll(): void;
 	showSearch(): void;
 	hideSearch(): void;

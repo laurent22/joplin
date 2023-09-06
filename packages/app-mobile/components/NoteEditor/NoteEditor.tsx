@@ -134,7 +134,7 @@ const useEditorControl = (
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
-			injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
+			injectJS(`cm.setSearchState(${JSON.stringify(state)})`);
 			setSearchState(state);
 		};
 
@@ -145,10 +145,10 @@ const useEditorControl = (
 			execCommand,
 
 			undo() {
-				execCommand(EditorCommandType.Undo);
+				injectJS('cm.undo()');
 			},
 			redo() {
-				execCommand(EditorCommandType.Redo);
+				injectJS('cm.redo()');
 			},
 			select(anchor: number, head: number) {
 				injectJS(
@@ -239,16 +239,16 @@ const useEditorControl = (
 
 			searchControl: {
 				findNext() {
-					injectJS('cm.searchControl.findNext();');
+					execCommand(EditorCommandType.FindNext);
 				},
 				findPrevious() {
-					injectJS('cm.searchControl.findPrevious();');
+					execCommand(EditorCommandType.FindPrevious);
 				},
-				replaceCurrent() {
-					injectJS('cm.searchControl.replaceCurrent();');
+				replaceNext() {
+					execCommand(EditorCommandType.ReplaceNext);
 				},
 				replaceAll() {
-					injectJS('cm.searchControl.replaceAll();');
+					execCommand(EditorCommandType.ReplaceAll);
 				},
 
 				showSearch() {
@@ -314,6 +314,12 @@ function NoteEditor(props: Props, ref: any) {
 			);
 		};
 
+		window.onunhandledrejection = (event) => {
+			window.ReactNativeWebView.postMessage(
+				"error: Unhandled promise rejection: " + event
+			);
+		};
+
 		if (!window.cm) {
 			// This variable is not used within this script
 			// but is called using "injectJavaScript" from
@@ -331,7 +337,7 @@ function NoteEditor(props: Props, ref: any) {
 				${setInitialSelectionJS}
 
 				window.onresize = () => {
-					cm.scrollSelectionIntoView();
+					cm.execCommand('scrollSelectionIntoView');
 				};
 			} catch (e) {
 				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
@@ -355,7 +361,7 @@ function NoteEditor(props: Props, ref: any) {
 		searchStateRef.current = searchState;
 	}, [searchState]);
 
-	// / Runs [js] in the context of the CodeMirror frame.
+	// Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
 		webviewRef.current.injectJS(js);
 	};

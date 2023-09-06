@@ -286,7 +286,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 			themeId={themeId}
 			styles={styles}
 			iconName="swap-horizontal"
-			onPress={control.replaceCurrent}
+			onPress={control.replaceNext}
 			title={_('Replace')}
 		/>
 	);
