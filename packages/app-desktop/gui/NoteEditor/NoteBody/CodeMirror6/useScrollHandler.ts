@@ -1,6 +1,6 @@
 import { useCallback, useRef, RefObject } from 'react';
 import shim from '@joplin/lib/shim';
-import { CodeMirrorControl } from '@joplin/editor/CodeMirror/createEditor';
+import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 
 type OnScrollCallback = (event: { percent: number })=> void;
 

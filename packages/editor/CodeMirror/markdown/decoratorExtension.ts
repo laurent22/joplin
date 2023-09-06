@@ -40,6 +40,10 @@ const urlDecoration = Decoration.mark({
 	attributes: { class: 'cm-url', ...noSpellCheckAttrs },
 });
 
+const htmlTagNameDecoration = Decoration.mark({
+	attributes: { class: 'cm-htmlTag', ...noSpellCheckAttrs },
+});
+
 const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
@@ -124,6 +128,10 @@ const computeDecorations = (view: EditorView) => {
 				case 'ATXHeading5':
 				case 'ATXHeading6':
 					addDecorationToLines(viewFrom, viewTo, headerLineDecoration);
+					break;
+				case 'HTMLTag':
+				case 'TagName':
+					addDecorationToRange(viewFrom, viewTo, htmlTagNameDecoration);
 					break;
 				}
 

@@ -35,13 +35,13 @@ import eventManager from '@joplin/lib/eventManager';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
 import type { ContextMenuEvent, ContextMenuParams } from 'electron';
 import usePrevious from '../../../hooks/usePrevious';
-import { CodeMirrorControl } from '@joplin/editor/CodeMirror/createEditor';
 import { EditorLanguageType, EditorSettings } from '@joplin/editor/types';
 import useStyles from './useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from './useScrollHandler';
 import Logger from '@joplin/utils/Logger';
 import useEditorCommands from './useEditorCommands';
+import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -191,7 +191,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				}
 			},
 			supportsCommand: (name: string) => {
-				return name in commands;
+				return name in commands || editorRef.current.supportsCommand(name);
 			},
 			execCommand: async (cmd: EditorCommand) => {
 				if (!editorRef.current) return false;
@@ -201,6 +201,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				let commandOutput = null;
 				if (cmd.name in commands) {
 					commandOutput = (commands as any)[cmd.name](cmd.value);
+				} else if (editorRef.current.supportsCommand(cmd.name)) {
+					commandOutput = editorRef.current.execCommand(cmd.name);
+				} else if (editorRef.current.supportsJoplinCommand(cmd.name)) {
+					commandOutput = editorRef.current.execJoplinCommand(cmd.name);
 				} else {
 					reg.logger().warn('CodeMirror: unsupported Joplin command: ', cmd);
 				}
@@ -547,7 +551,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					initialText={props.content}
 					ref={editorRef}
 					settings={editorSettings}
-					plugins={props.plugins}
+					pluginStates={props.plugins}
 					onEvent={onEditorEvent}
 					onLogMessage={logDebug}
 				/>

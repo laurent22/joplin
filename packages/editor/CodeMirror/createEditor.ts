@@ -1,39 +1,32 @@
-import { Compartment, EditorSelection, EditorState, StateEffect } from '@codemirror/state';
+import { Compartment, EditorState } from '@codemirror/state';
 import { indentOnInput, indentUnit } from '@codemirror/language';
 import {
-	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,
-	highlightSelectionMatches, search, findNext, findPrevious, replaceAll, replaceNext,
+	openSearchPanel, closeSearchPanel, getSearchQuery,
+	highlightSelectionMatches, search,
 } from '@codemirror/search';
 
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
 } from '@codemirror/view';
-import { undo, redo, history, undoDepth, redoDepth, indentWithTab } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, indentWithTab } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap } from '@codemirror/commands';
 
-import { ListType, SearchState, EditorControl, EditorProps, EditorSettings } from '../types';
+import { SearchState, EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
 import {
 	decreaseIndent, increaseIndent,
 	toggleBolded, toggleCode,
-	toggleHeaderLevel, toggleItalicized,
-	toggleList, toggleMath, updateLink,
+	toggleItalicized, toggleMath,
 } from './markdown/markdownCommands';
 import decoratorExtension from './markdown/decoratorExtension';
 import computeSelectionFormatting from './markdown/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
-import codeMirror5Emulation, { CodeMirror5Emulation } from './codeMirror5Emulation';
 import getScrollFraction from './getScrollFraction';
-
-
-export interface CodeMirrorControl extends EditorControl, CodeMirror5Emulation {
-	editor: EditorView;
-	addStyles(...style: Parameters<typeof EditorView.theme>): void;
-}
+import CodeMirrorControl from './CodeMirrorControl';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -41,14 +34,14 @@ const createEditor = (
 	const initialText = props.initialText;
 	let settings = props.settings;
 
-	// TODO: Use props.plugins
-
 	props.onLogMessage('Initializing CodeMirror...');
 
 	let searchVisible = false;
 
 	// Handles firing an event when the undo/redo stack changes
 	let schedulePostUndoRedoDepthChangeId_: ReturnType<typeof setTimeout>|null = null;
+	let lastUndoDepth = 0;
+	let lastRedoDepth = 0;
 	const schedulePostUndoRedoDepthChange = (editor: EditorView, doItNow = false) => {
 		if (schedulePostUndoRedoDepthChangeId_ !== null) {
 			if (doItNow) {
@@ -60,11 +53,18 @@ const createEditor = (
 
 		schedulePostUndoRedoDepthChangeId_ = setTimeout(() => {
 			schedulePostUndoRedoDepthChangeId_ = null;
-			props.onEvent({
-				kind: EditorEventType.UndoRedoDepthChange,
-				undoDepth: undoDepth(editor.state),
-				redoDepth: redoDepth(editor.state),
-			});
+			const newUndoDepth = undoDepth(editor.state);
+			const newRedoDepth = redoDepth(editor.state);
+
+			if (newUndoDepth !== lastUndoDepth || newRedoDepth !== lastRedoDepth) {
+				props.onEvent({
+					kind: EditorEventType.UndoRedoDepthChange,
+					undoDepth: newUndoDepth,
+					redoDepth: newRedoDepth,
+				});
+				lastUndoDepth = newUndoDepth;
+				lastRedoDepth = newRedoDepth;
+			}
 		}, doItNow ? 0 : 1000);
 	};
 
@@ -176,6 +176,7 @@ const createEditor = (
 
 	const dynamicConfig = new Compartment();
 
+
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
@@ -261,77 +262,8 @@ const createEditor = (
 		parent: parentElement,
 	});
 
-	const updateSearchQuery = (newState: SearchState) => {
-		const query = new SearchQuery({
-			search: newState.searchText,
-			caseSensitive: newState.caseSensitive,
-			regexp: newState.useRegex,
-			replace: newState.replaceText,
-		});
-		editor.dispatch({
-			effects: setSearchQuery.of(query),
-		});
-	};
-
-	const editorControls: CodeMirrorControl = {
-		...codeMirror5Emulation(editor),
-
-		undo: () => {
-			undo(editor);
-			schedulePostUndoRedoDepthChange(editor, true);
-		},
-		redo: () => {
-			redo(editor);
-			schedulePostUndoRedoDepthChange(editor, true);
-		},
-		focus: () => {
-			editor.focus();
-		},
-		selectAll: () => {
-			editor.dispatch(editor.state.update({
-				selection: { anchor: 0, head: editor.state.doc.length },
-				scrollIntoView: true,
-			}));
-		},
-		select: (anchor: number, head: number) => {
-			editor.dispatch(editor.state.update({
-				selection: { anchor, head },
-				scrollIntoView: true,
-			}));
-		},
-		scrollSelectionIntoView: () => {
-			editor.dispatch(editor.state.update({
-				scrollIntoView: true,
-			}));
-		},
-		setScrollPercent: (fraction: number) => {
-			const maxScroll = editor.scrollDOM.scrollHeight - editor.scrollDOM.clientHeight;
-			editor.scrollDOM.scrollTop = fraction * maxScroll;
-		},
-		insertText: (text: string) => {
-			editor.dispatch(editor.state.replaceSelection(text));
-		},
-		updateBody: (newBody: string) => {
-			if (newBody !== currentDocText) {
-				// For now, collapse the selection to a single cursor
-				// to ensure that the selection stays within the document
-				// (and thus avoids an exception).
-				const mainCursorPosition = editor.state.selection.main.anchor;
-				const newCursorPosition = Math.min(mainCursorPosition, newBody.length);
-
-				editor.dispatch(editor.state.update({
-					changes: {
-						from: 0,
-						to: editor.state.doc.length,
-						insert: newBody,
-					},
-					selection: EditorSelection.cursor(newCursorPosition),
-					scrollIntoView: true,
-				}));
-			}
-		},
-
-		updateSettings: (newSettings: EditorSettings) => {
+	const editorControls = new CodeMirrorControl(editor, {
+		onSettingsChange: (newSettings: EditorSettings) => {
 			settings = newSettings;
 			editor.dispatch({
 				effects: dynamicConfig.reconfigure(
@@ -339,52 +271,16 @@ const createEditor = (
 				),
 			});
 		},
-
-		// Formatting
-		toggleBolded: () => { toggleBolded(editor); },
-		toggleItalicized: () => { toggleItalicized(editor); },
-		toggleCode: () => { toggleCode(editor); },
-		toggleMath: () => { toggleMath(editor); },
-		increaseIndent: () => { increaseIndent(editor); },
-		decreaseIndent: () => { decreaseIndent(editor); },
-		toggleList: (kind: ListType) => { toggleList(kind)(editor); },
-		toggleHeaderLevel: (level: number) => { toggleHeaderLevel(level)(editor); },
-		updateLink: (label: string, url: string) => { updateLink(label, url)(editor); },
-
-		// Search
-		searchControl: {
-			findNext: () => {
-				findNext(editor);
-			},
-			findPrevious: () => {
-				findPrevious(editor);
-			},
-			replaceCurrent: () => {
-				replaceNext(editor);
-			},
-			replaceAll: () => {
-				replaceAll(editor);
-			},
-			setSearchState: (state: SearchState) => {
-				updateSearchQuery(state);
-			},
-			showSearch: () => {
-				showSearchDialog();
-			},
-			hideSearch: () => {
-				hideSearchDialog();
-			},
+		onUndoRedo: () => {
+			// This callback is triggered when undo/redo is called
+			// directly. Show visual feedback immediately.
+			schedulePostUndoRedoDepthChange(editor, true);
 		},
-
-
-		// CodeMirror-specific options
-		editor,
-		addStyles: styles => {
-			editor.dispatch({
-				effects: StateEffect.appendConfig.of(EditorView.theme(styles)),
-			});
+		onLogMessage: props.onLogMessage,
+		onRemove: () => {
+			editor.destroy();
 		},
-	};
+	});
 
 	return editorControls;
 };

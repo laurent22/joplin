@@ -15,7 +15,8 @@ import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
-import { EditorLanguageType, ListType, SearchState } from '@joplin/editor/types';
+import { EditorCommandType, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
+import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
@@ -128,23 +129,31 @@ const useEditorControl = (
 	searchStateRef: RefObject<SearchState>,
 ): EditorControl => {
 	return useMemo(() => {
-		return {
+		const execCommand = (command: EditorCommandType) => {
+			injectJS(`cm.execCommand(${JSON.stringify(command)})`);
+		};
+
+		const setSearchStateCallback = (state: SearchState) => {
+			injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
+			setSearchState(state);
+		};
+
+		const control: EditorControl = {
+			supportsCommand(command: EditorCommandType) {
+				return supportsCommand(command);
+			},
+			execCommand,
+
 			undo() {
-				injectJS('cm.undo();');
+				execCommand(EditorCommandType.Undo);
 			},
 			redo() {
-				injectJS('cm.redo();');
+				execCommand(EditorCommandType.Redo);
 			},
 			select(anchor: number, head: number) {
 				injectJS(
 					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`,
 				);
-			},
-			selectAll() {
-				injectJS('cm.selectAll();');
-			},
-			focus() {
-				injectJS('cm.focus();');
 			},
 			setScrollPercent(fraction: number) {
 				injectJS(`cm.setScrollFraction(${JSON.stringify(fraction)})`);
@@ -160,28 +169,48 @@ const useEditorControl = (
 			},
 
 			toggleBolded() {
-				injectJS('cm.toggleBolded();');
+				execCommand(EditorCommandType.ToggleBolded);
 			},
 			toggleItalicized() {
-				injectJS('cm.toggleItalicized();');
+				execCommand(EditorCommandType.ToggleItalicized);
 			},
-			toggleList(listType: ListType) {
-				injectJS(`cm.toggleList(${JSON.stringify(listType)});`);
+			toggleOrderedList() {
+				execCommand(EditorCommandType.ToggleNumberedList);
+			},
+			toggleUnorderedList() {
+				execCommand(EditorCommandType.ToggleCheckList);
+			},
+			toggleTaskList() {
+				execCommand(EditorCommandType.ToggleCheckList);
 			},
 			toggleCode() {
-				injectJS('cm.toggleCode();');
+				execCommand(EditorCommandType.ToggleCode);
 			},
 			toggleMath() {
-				injectJS('cm.toggleMath();');
+				execCommand(EditorCommandType.ToggleMath);
 			},
 			toggleHeaderLevel(level: number) {
-				injectJS(`cm.toggleHeaderLevel(${JSON.stringify(level)});`);
+				const levelToCommand = [
+					EditorCommandType.ToggleHeading1,
+					EditorCommandType.ToggleHeading2,
+					EditorCommandType.ToggleHeading3,
+					EditorCommandType.ToggleHeading4,
+					EditorCommandType.ToggleHeading5,
+				];
+
+				const index = level - 1;
+
+				if (index < 0 || index >= levelToCommand.length) {
+					throw new Error(`Unsupported header level ${level}`);
+				}
+
+				execCommand(levelToCommand[index]);
 			},
 			increaseIndent() {
-				injectJS('cm.increaseIndent();');
+				execCommand(EditorCommandType.IndentMore);
 			},
 			decreaseIndent() {
-				injectJS('cm.decreaseIndent();');
+				execCommand(EditorCommandType.IndentLess);
 			},
 			updateLink(label: string, url: string) {
 				injectJS(`cm.updateLink(
@@ -190,7 +219,7 @@ const useEditorControl = (
 				);`);
 			},
 			scrollSelectionIntoView() {
-				injectJS('cm.scrollSelectionIntoView();');
+				execCommand(EditorCommandType.ScrollSelectionIntoView);
 			},
 			showLinkDialog() {
 				setLinkDialogVisible(true);
@@ -201,6 +230,13 @@ const useEditorControl = (
 			hideKeyboard() {
 				injectJS('document.activeElement?.blur();');
 			},
+
+			setPlugins: async (plugins: PluginData[]) => {
+				injectJS(`cm.setPlugins(${JSON.stringify(plugins)});`);
+			},
+
+			setSearchState: setSearchStateCallback,
+
 			searchControl: {
 				findNext() {
 					injectJS('cm.searchControl.findNext();');
@@ -214,10 +250,7 @@ const useEditorControl = (
 				replaceAll() {
 					injectJS('cm.searchControl.replaceAll();');
 				},
-				setSearchState(state: SearchState) {
-					injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
-					setSearchState(state);
-				},
+
 				showSearch() {
 					setSearchState({
 						...searchStateRef.current,
@@ -230,8 +263,12 @@ const useEditorControl = (
 						dialogVisible: false,
 					});
 				},
+
+				setSearchState: setSearchStateCallback,
 			},
 		};
+
+		return control;
 	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
 };
 

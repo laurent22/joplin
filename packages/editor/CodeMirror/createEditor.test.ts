@@ -47,7 +47,6 @@ describe('createEditor', () => {
 		const editor = createEditor(document.body, {
 			initialText,
 			settings: editorSettings,
-			plugins: {},
 			onEvent: _event => {},
 			onLogMessage: _message => {},
 		});

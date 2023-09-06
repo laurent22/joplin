@@ -20,7 +20,7 @@ import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
 import ToggleSpaceButton from './ToggleSpaceButton';
-import { ListType, SearchState } from '@joplin/editor/types';
+import { SearchState } from '@joplin/editor/types';
 import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 
 type OnAttachCallback = ()=> void;
@@ -72,9 +72,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Unordered list'),
 		active: selState.inUnorderedList,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.UnorderedList);
-		}, [editorControl]),
+		onPress: editorControl.toggleUnorderedList,
 
 		priority: -2,
 		disabled: readOnly,
@@ -86,9 +84,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Ordered list'),
 		active: selState.inOrderedList,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.OrderedList);
-		}, [editorControl]),
+		onPress: editorControl.toggleOrderedList,
 
 		priority: -2,
 		disabled: readOnly,
@@ -100,9 +96,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Task list'),
 		active: selState.inChecklist,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.CheckList);
-		}, [editorControl]),
+		onPress: editorControl.toggleTaskList,
 
 		priority: -2,
 		disabled: readOnly,

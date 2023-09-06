@@ -1,12 +1,12 @@
 
-import { CodeMirrorControl } from '@joplin/editor/CodeMirror/createEditor';
 import { RefObject, useMemo } from 'react';
 import { CommandValue } from '../../utils/types';
 import { commandAttachFileToBody } from '../../utils/resourceHandling';
 import { _ } from '@joplin/lib/locale';
 import dialogs from '../../../dialogs';
-import { ListType } from '@joplin/editor/types';
+import { EditorCommandType } from '@joplin/editor/types';
 import Logger from '@joplin/utils/Logger';
+import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
@@ -82,16 +82,13 @@ const useEditorCommands = (props: Props) => {
 				props.editorPaste();
 			},
 			textSelectAll: () => {
-				return editorRef.current.selectAll();
+				return editorRef.current.execCommand(EditorCommandType.SelectAll);
 			},
-			textBold: () => editorRef.current.toggleBolded(),
-			textItalic: () => editorRef.current.toggleItalicized(),
 			textLink: async () => {
 				const url = await dialogs.prompt(_('Insert Hyperlink'));
 				editorRef.current.focus();
 				if (url) wrapSelectionWithStrings(editorRef.current, '[', `](${url})`);
 			},
-			textCode: () => editorRef.current.toggleCode(),
 			insertText: (value: any) => editorRef.current.insertText(value),
 			attachFile: async () => {
 				const newBody = await commandAttachFileToBody(
@@ -101,16 +98,15 @@ const useEditorCommands = (props: Props) => {
 					editorRef.current.updateBody(newBody);
 				}
 			},
-			textNumberedList: () => editorRef.current.toggleList(ListType.UnorderedList),
-			textBulletedList: () => editorRef.current.toggleList(ListType.UnorderedList),
-			textCheckbox: () => editorRef.current.toggleList(ListType.CheckList),
-			textHeading: () => editorRef.current.toggleHeaderLevel(2),
 			textHorizontalRule: () => editorRef.current.insertText('* * *'),
 			'editor.execCommand': (value: CommandValue) => {
 				if (!('args' in value)) value.args = [];
 
 				if ((editorRef.current as any)[value.name]) {
 					const result = (editorRef.current as any)[value.name](...value.args);
+					return result;
+				} else if (editorRef.current.commandExists(value.name)) {
+					const result = editorRef.current.execCommand(value.name);
 					return result;
 				} else {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);
@@ -127,7 +123,7 @@ const useEditorCommands = (props: Props) => {
 				}
 			},
 			search: () => {
-				editorRef.current.searchControl.showSearch();
+				editorRef.current.execCommand(EditorCommandType.ShowSearch);
 			},
 		};
 	}, [

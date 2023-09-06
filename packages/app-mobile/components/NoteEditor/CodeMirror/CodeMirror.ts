@@ -10,8 +10,9 @@
 // from NoteEditor.tsx.
 
 import { EditorSettings } from '@joplin/editor/types';
-import createEditor, { CodeMirrorControl } from '@joplin/editor/CodeMirror/createEditor';
+import createEditor from '@joplin/editor/CodeMirror/createEditor';
 import { logMessage, postMessage } from './webviewLogger';
+import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 
 export function initCodeMirror(
 	parentElement: HTMLElement, initialText: string, settings: EditorSettings,
@@ -19,7 +20,6 @@ export function initCodeMirror(
 	return createEditor(parentElement, {
 		initialText,
 		settings,
-		plugins: {},
 
 		onLogMessage: message => {
 			logMessage(message);

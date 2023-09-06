@@ -9,7 +9,8 @@ import { _ } from '@joplin/lib/locale';
 import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
 import CustomButton from '../CustomButton';
-import { SearchControl, SearchState } from '@joplin/editor/types';
+import { SearchState } from '@joplin/editor/types';
+import { SearchControl } from './types';
 
 const buttonSize = 48;
 
