@@ -41,7 +41,7 @@
 		"@codemirror/legacy-modes": "6.3.3",
 		"@codemirror/search": "6.5.2",
 		"@codemirror/state": "6.2.1",
-		"@codemirror/view": "6.17.1",
+		"@codemirror/view": "6.18.0",
 		"@lezer/markdown": "1.1.0",
 		"@replit/codemirror-vim": "6.0.14"
 	}
