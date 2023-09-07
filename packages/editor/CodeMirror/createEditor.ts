@@ -176,7 +176,6 @@ const createEditor = (
 
 	const dynamicConfig = new Compartment();
 
-
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts

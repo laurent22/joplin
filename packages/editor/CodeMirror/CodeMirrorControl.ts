@@ -23,7 +23,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	) {
 		super(editor, _callbacks.onLogMessage);
 
-		this._pluginControl = new PluginLoader(this);
+		this._pluginControl = new PluginLoader(this, _callbacks.onLogMessage);
 	}
 
 	public supportsCommand(name: string) {

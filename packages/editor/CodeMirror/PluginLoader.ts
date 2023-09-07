@@ -1,17 +1,17 @@
-import { PluginData } from '../types';
+import { LogMessageCallback, PluginData } from '../types';
 import CodeMirrorControl from './CodeMirrorControl';
 
 let pluginScriptIdCounter = 0;
 
 type OnScriptLoadCallback = (exports: any)=> void;
-
+type OnPluginRemovedCallback = ()=> void;
 
 export default class PluginLoader {
 	private pluginScriptsContainer: HTMLElement;
 	private loadedPluginIds: string[] = [];
-	private pluginRemovalCallbacks: Record<string, ()=> void> = {};
+	private pluginRemovalCallbacks: Record<string, OnPluginRemovedCallback> = {};
 
-	public constructor(private editor: CodeMirrorControl) {
+	public constructor(private editor: CodeMirrorControl, private logMessage: LogMessageCallback) {
 		this.pluginScriptsContainer = document.createElement('div');
 		this.pluginScriptsContainer.style.display = 'none';
 		document.body.appendChild(this.pluginScriptsContainer);
@@ -39,15 +39,16 @@ export default class PluginLoader {
 	}
 
 	private addPlugin(plugin: PluginData) {
+		const onRemoveCallbacks: OnPluginRemovedCallback[] = [];
+
+		this.logMessage(`Loading plugin ${plugin.pluginId}`);
+
 		const addScript = (onLoad: OnScriptLoadCallback) => {
 			const scriptElement = document.createElement('script');
 
-			this.pluginRemovalCallbacks[plugin.pluginId] = () => {
+			onRemoveCallbacks.push(() => {
 				scriptElement.remove();
-				this.loadedPluginIds = this.loadedPluginIds.filter(id => {
-					return id !== plugin.pluginId;
-				});
-			};
+			});
 
 			void (async () => {
 				const scriptId = pluginScriptIdCounter++;
@@ -74,6 +75,33 @@ export default class PluginLoader {
 			})();
 		};
 
+		const addStyles = (cssStrings: string[]) => {
+			// A container for style elements
+			const styleContainer = document.createElement('div');
+
+			onRemoveCallbacks.push(() => {
+				styleContainer.remove();
+			});
+
+			for (const cssText of cssStrings) {
+				const style = document.createElement('style');
+				style.innerText = cssText;
+				styleContainer.appendChild(style);
+			}
+
+			this.pluginScriptsContainer.appendChild(styleContainer);
+		};
+
+		this.pluginRemovalCallbacks[plugin.pluginId] = () => {
+			for (const callback of onRemoveCallbacks) {
+				callback();
+			}
+
+			this.loadedPluginIds = this.loadedPluginIds.filter(id => {
+				return id !== plugin.pluginId;
+			});
+		};
+
 		addScript(exports => {
 			if (!exports?.default || !(typeof exports.default === 'function')) {
 				throw new Error('All plugins must have a function default export');
@@ -93,6 +121,25 @@ export default class PluginLoader {
 					this.editor.setOption(key, loadedPlugin.codeMirrorOptions[key]);
 				}
 			}
+
+			if (loadedPlugin.assets) {
+				const cssStrings = [];
+
+				for (const asset of loadedPlugin.assets()) {
+					if (!asset.inline) {
+						this.logMessage('Warning: The CM6 plugin API currently only supports inline CSS.');
+						continue;
+					}
+
+					if (asset.mime !== 'text/css') {
+						throw new Error('Inline assets must have property "mime" set to "text/css"');
+					}
+
+					cssStrings.push(asset.text);
+				}
+
+				addStyles(cssStrings);
+			}
 		});
 
 		this.loadedPluginIds.push(plugin.pluginId);
@@ -102,3 +149,4 @@ export default class PluginLoader {
 		this.pluginScriptsContainer.remove();
 	}
 }
+
