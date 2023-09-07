@@ -40,6 +40,10 @@ const createTheme = (theme: any): Extension[] => {
 		// On iOS, apply system font scaling (e.g. font scaling
 		// set in accessibility settings).
 		font: '-apple-system-body',
+
+		// Fill container horizontally
+		width: '100%',
+		boxSizing: 'border-box',
 	};
 	const baseCursorStyle: Record<string, string> = { };
 	const baseContentStyle: Record<string, string> = {
