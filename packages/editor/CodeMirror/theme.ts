@@ -25,6 +25,12 @@ import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
 const createTheme = (theme: any): Extension[] => {
+	// If the theme hasn't loaded yet, return nothing.
+	// (createTheme should be called again after the theme has loaded).
+	if (!theme) {
+		return [];
+	}
+
 	const isDarkTheme = theme.appearance === 'dark';
 
 	const baseGlobalStyle: Record<string, string> = {
