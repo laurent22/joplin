@@ -99,16 +99,14 @@ export default class Tag extends BaseItem {
 		});
 	}
 
-	public static async tagsWithCount(count: number) {
-		return await this.modelSelectAll('SELECT tags.id, tags.title, COUNT(nt.tag_id) as note_count FROM tags LEFT JOIN note_tags nt on nt.tag_id = tags.id GROUP BY tags.id HAVING note_count = ?', [count]);
+	public static async isOrphan(tagId: string) {
+		const result = !(await this.modelSelectOne('SELECT tag_id FROM note_tags WHERE tag_id = ?', [tagId]));
+		return result;
 	}
 
-	public static async removeTagsWithoutNotes() {
-		const emptyTags = await Tag.tagsWithCount(0);
-		for (let i = 0; i < emptyTags.length; i++) {
-			const tag = emptyTags[i];
-			await Tag.delete(tag.id);
-		}
+	public static async removeIfOrphan(tagId: string) {
+		const isOrphan = await Tag.isOrphan(tagId);
+		if (isOrphan) { await Tag.delete(tagId); }
 	}
 
 	public static loadWithCount(tagId: string) {

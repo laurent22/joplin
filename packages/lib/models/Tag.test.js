@@ -155,17 +155,17 @@ describe('models/Tag', () => {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	}));
 
-	it('should remove tags without notes', (async () => {
+	it('should remove only tags without notes', (async () => {
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
 		const tag1 = await Tag.save({ title: 'tag1' });
+		const tag2 = await Tag.save({ title: 'tag2' });
 
 		await Tag.addNote(tag1.id, note1.id);
-		await Tag.addNote(tag1.id, note2.id);
 
-		await Tag.removeTagsWithoutNotes();
+		await Tag.removeIfOrphan(tag1.id);
+		await Tag.removeIfOrphan(tag2.id);
 
 		const tags = await Tag.modelSelectAll('SELECT * FROM tags');
 		expect(tags.length).toBe(1);
