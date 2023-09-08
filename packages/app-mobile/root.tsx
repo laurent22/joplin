@@ -118,8 +118,11 @@ import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
+import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
+
+type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
@@ -999,8 +1002,8 @@ class AppComponent extends React.Component {
 		if (this.props.appState !== 'ready') return null;
 		const theme: Theme = themeStyle(this.props.themeId);
 
-		let sideMenuContent = null;
-		let menuPosition = 'left';
+		let sideMenuContent: ReactNode = null;
+		let menuPosition: SideMenuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
