@@ -113,7 +113,7 @@
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.3",
     "@types/node": "18.16.18",
-    "@types/react": "18.0.24",
+    "@types/react": "18.2.18",
     "@types/react-redux": "7.1.25",
     "@types/styled-components": "5.1.26",
     "electron": "25.3.1",
