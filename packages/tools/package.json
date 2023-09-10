@@ -47,7 +47,7 @@
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.3",
     "@types/mustache": "4.2.2",
-    "@types/node": "18.16.18",
+    "@types/node": "18.17.1",
     "@types/node-fetch": "2.6.4",
     "@types/yargs": "17.0.24",
     "gettext-extractor": "3.8.0",
