@@ -70,7 +70,7 @@
     "@typescript-eslint/eslint-plugin": "5.60.0",
     "@typescript-eslint/parser": "5.60.0",
     "cspell": "5.21.2",
-    "eslint": "8.43.0",
+    "eslint": "8.46.0",
     "eslint-interactive": "10.8.0",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-jest": "27.2.3",
