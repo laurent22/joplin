@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@types/fs-extra": "11.0.1",
-    "eslint-plugin-github": "4.8.0",
+    "eslint-plugin-github": "4.9.2",
     "http-server": "14.1.1",
     "node-gyp": "9.4.0",
     "nodemon": "2.0.22"
