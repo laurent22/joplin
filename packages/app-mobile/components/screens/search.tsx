@@ -193,7 +193,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 						/>
 						<TouchableHighlight
 							onPress={() => this.clearButton_press()}
-							accessibilityLabel={_('Reset search input')}
+							accessibilityLabel={_('Clear')}
 						>
 							<Icon name="md-close-circle" style={this.styles().clearIcon} />
 						</TouchableHighlight>
