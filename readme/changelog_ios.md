@@ -1,5 +1,11 @@
 # Joplin iOS app changelog
 
+## [ios-v12.12.3](https://github.com/laurent22/joplin/releases/tag/ios-v12.12.3) - 2023-09-11T20:05:19Z
+
+- Improved: Add screen reader labels to search/note actions buttons (#8797) (#8796 by Henry Heino)
+- Improved: Improve accessibility of side menu (#8839 by Henry Heino)
+- Fixed: Revert to `react-native-sidemenu-updated` for navigation drawers (#8820) (#8791 by Henry Heino)
+
 ## [ios-v12.12.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.12.2) - 2023-09-01T22:13:36Z
 
 - New: Add JEX export (#8428 by Henry Heino)

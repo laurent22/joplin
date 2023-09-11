@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.12.3](https://github.com/laurent22/joplin/releases/tag/android-v2.12.3) (Pre-release) - 2023-09-11T20:01:44Z
+
+- Improved: Add screen reader labels to search/note actions buttons (#8797) (#8796 by Henry Heino)
+- Improved: Improve accessibility of side menu (#8839 by Henry Heino)
+- Fixed: Fix older Android versions unable to set alarms (#8837) (#8789 by Henry Heino)
+- Fixed: Revert to `react-native-sidemenu-updated` for navigation drawers (#8820) (#8791 by Henry Heino)
+
 ## [android-v2.12.2](https://github.com/laurent22/joplin/releases/tag/android-v2.12.2) (Pre-release) - 2023-08-22T13:15:18Z
 
 - Improved: Only include "armeabi-v7a", "x86", "arm64-v8a", "x86_64" in APK (4e2d366)
