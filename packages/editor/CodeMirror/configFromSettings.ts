@@ -1,6 +1,6 @@
 import { EditorView, keymap } from '@codemirror/view';
 import { closeBrackets } from '@codemirror/autocomplete';
-import { EditorLanguageType, EditorSettings } from '../types';
+import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
@@ -9,6 +9,7 @@ import { MarkdownMathExtension } from './markdown/markdownMathParser';
 import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap } from '@codemirror/commands';
+import { vim } from '@replit/codemirror-vim';
 
 const configFromSettings = (settings: EditorSettings) => {
 	const languageExtension = (() => {
@@ -49,6 +50,10 @@ const configFromSettings = (settings: EditorSettings) => {
 
 	if (settings.automatchBraces) {
 		extensions.push(closeBrackets());
+	}
+
+	if (settings.keymap === EditorKeymap.Vim) {
+		extensions.push(vim());
 	}
 
 	if (!settings.ignoreModifiers) {

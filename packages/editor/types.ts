@@ -102,6 +102,11 @@ export enum EditorLanguageType {
 	Html,
 }
 
+export enum EditorKeymap {
+	Default = 'default',
+	Vim = 'vim',
+}
+
 export interface EditorSettings {
 	// EditorSettings objects are deserialized within WebViews, where
 	// [themeStyle(themeId: number)] doesn't work. As such, we need both
@@ -119,6 +124,8 @@ export interface EditorSettings {
 	ignoreModifiers: boolean;
 
 	language: EditorLanguageType;
+
+	keymap: EditorKeymap;
 
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;

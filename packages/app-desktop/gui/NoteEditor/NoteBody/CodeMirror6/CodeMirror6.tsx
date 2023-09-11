@@ -35,7 +35,7 @@ import eventManager from '@joplin/lib/eventManager';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
 import type { ContextMenuEvent, ContextMenuParams } from 'electron';
 import usePrevious from '../../../hooks/usePrevious';
-import { EditorLanguageType, EditorSettings } from '@joplin/editor/types';
+import { EditorKeymap, EditorLanguageType, EditorSettings } from '@joplin/editor/types';
 import useStyles from './useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from './useScrollHandler';
@@ -540,8 +540,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			useExternalSearch: false,
 			ignoreModifiers: true,
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
+			keymap: props.keyboardMode === 'vim' ? EditorKeymap.Vim : EditorKeymap.Default,
 		};
-	}, [props.contentMarkupLanguage, props.disabled, props.visiblePanes, styles.globalTheme]);
+	}, [
+		props.contentMarkupLanguage, props.disabled, props.visiblePanes,
+		props.keyboardMode, styles.globalTheme,
+	]);
 
 	function renderEditor() {
 		return (

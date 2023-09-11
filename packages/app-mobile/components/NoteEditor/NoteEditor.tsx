@@ -15,7 +15,7 @@ import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
-import { EditorCommandType, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
+import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
 import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 
@@ -287,6 +287,8 @@ function NoteEditor(props: Props, ref: any) {
 		language: EditorLanguageType.Markdown,
 		useExternalSearch: true,
 		readOnly: props.readOnly,
+
+		keymap: EditorKeymap.Default,
 
 		automatchBraces: false,
 		ignoreModifiers: false,

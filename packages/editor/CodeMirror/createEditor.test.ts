@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { EditorLanguageType, EditorSettings } from '../types';
+import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createEditor from './createEditor';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
@@ -22,6 +22,7 @@ const createEditorSettings = (themeId: number) => {
 		automatchBraces: false,
 		ignoreModifiers: false,
 
+		keymap: EditorKeymap.Default,
 		language: EditorLanguageType.Markdown,
 		themeData,
 	};
