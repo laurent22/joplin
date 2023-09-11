@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
-import { Platform, PermissionsAndroid } from 'react-native';
+import { Platform, PermissionsAndroid, ToastAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
@@ -48,7 +48,6 @@ import Logger from '@joplin/utils/Logger';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
-import getAndroidAPILevel from '../../utils/getAndroidAPILevel';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -811,10 +810,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+		// (If unsupported, returns NEVER_ASK_AGAIN).
 		// On earlier releases, notifications should work without this permission.
-		if (response !== PermissionsAndroid.RESULTS.GRANTED && getAndroidAPILevel() >= 33) {
-			logger.warn('POST_NOTIFICATIONS permission was not granted');
-			return;
+		if (response === PermissionsAndroid.RESULTS.DENIED) {
+			ToastAndroid.show(
+				_('Joplin is missing permission to show notifications. Alarms will not be triggered.'),
+				ToastAndroid.SHORT
+			);
 		}
 
 		const newNote = { ...this.state.note };
