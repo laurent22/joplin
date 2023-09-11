@@ -11,7 +11,7 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
-import { Platform, PermissionsAndroid, ToastAndroid } from 'react-native';
+import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
@@ -814,10 +814,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// On earlier releases, notifications should work without this permission.
 		if (response === PermissionsAndroid.RESULTS.DENIED) {
 			logger.warn('POST_NOTIFICATIONS permission was not granted');
-			ToastAndroid.show(
-				_('Joplin is missing permission to show notifications. Alarms will not be triggered.'),
-				ToastAndroid.SHORT
-			);
+			return;
 		}
 
 		const newNote = { ...this.state.note };
