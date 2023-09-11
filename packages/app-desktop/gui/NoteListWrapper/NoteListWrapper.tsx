@@ -30,7 +30,7 @@ export default function NoteListWrapper(props: Props) {
 			width: props.size.width,
 			height: props.size.height,
 		};
-	}, [props.size, controlHeight]);
+	}, [props.size]);
 
 	// <NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 
