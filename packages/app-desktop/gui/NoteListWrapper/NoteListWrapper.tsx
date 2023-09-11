@@ -36,7 +36,7 @@ export default function NoteListWrapper(props: Props) {
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - controlHeight,
+			height: props.size.height,
 		};
 	}, [props.size, controlHeight]);
 
