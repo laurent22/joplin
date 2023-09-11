@@ -134,6 +134,9 @@ const createTheme = (theme: any): Extension[] => {
 			color: isDarkTheme ? '#9fa' : '#276',
 		},
 
+		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': {
+			fontFamily: theme.monospaceFont || 'monospace',
+		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence
 		// (override the existing preset styles).

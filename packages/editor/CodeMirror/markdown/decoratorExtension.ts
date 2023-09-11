@@ -52,6 +52,18 @@ const headerLineDecoration = Decoration.line({
 	attributes: { class: 'cm-headerLine' },
 });
 
+const tableHeaderDecoration = Decoration.line({
+	attributes: { class: 'cm-tableHeader' },
+});
+
+const tableBodyDecoration = Decoration.line({
+	attributes: { class: 'cm-tableRow' },
+});
+
+const tableDelimiterDecoration = Decoration.line({
+	attributes: { class: 'cm-tableDelimiter' },
+});
+
 type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
@@ -132,6 +144,15 @@ const computeDecorations = (view: EditorView) => {
 				case 'HTMLTag':
 				case 'TagName':
 					addDecorationToRange(viewFrom, viewTo, htmlTagNameDecoration);
+					break;
+				case 'TableHeader':
+					addDecorationToLines(viewFrom, viewTo, tableHeaderDecoration);
+					break;
+				case 'TableDelimiter':
+					addDecorationToLines(viewFrom, viewTo, tableDelimiterDecoration);
+					break;
+				case 'TableRow':
+					addDecorationToLines(viewFrom, viewTo, tableBodyDecoration);
 					break;
 				}
 

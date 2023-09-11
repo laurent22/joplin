@@ -535,7 +535,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled || props.visiblePanes.indexOf('editor') < 0,
 			katexEnabled: Setting.value('markdown.plugin.katex'),
-			themeData: styles.globalTheme,
+			themeData: {
+				...styles.globalTheme,
+				monospaceFont: Setting.value('style.editor.monospaceFontFamily'),
+			},
 			automatchBraces: Setting.value('editor.autoMatchingBraces'),
 			useExternalSearch: false,
 			ignoreModifiers: true,
