@@ -24,7 +24,7 @@
     "@types/react": "18.2.20",
     "@types/uuid": "9.0.2",
     "clean-html": "1.5.0",
-    "jest": "29.5.0",
+    "jest": "29.6.2",
     "sharp": "0.32.5",
     "typescript": "5.1.6"
   },
