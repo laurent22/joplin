@@ -46,8 +46,8 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
-import CodeMirror6 from './NoteBody/CodeMirror6/CodeMirror6';
-import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
+import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
+import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -464,7 +464,7 @@ function NoteEditor(props: NoteEditorProps) {
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror') {
-		editor = <CodeMirror {...editorProps}/>;
+		editor = <CodeMirror5 {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror6') {
 		editor = <CodeMirror6 {...editorProps}/>;
 	} else if (props.bodyEditor === 'PlainText') {

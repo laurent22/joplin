@@ -1,9 +1,9 @@
 
 import { RefObject, useMemo } from 'react';
-import { CommandValue } from '../../utils/types';
-import { commandAttachFileToBody } from '../../utils/resourceHandling';
+import { CommandValue } from '../../../utils/types';
+import { commandAttachFileToBody } from '../../../utils/resourceHandling';
 import { _ } from '@joplin/lib/locale';
-import dialogs from '../../../dialogs';
+import dialogs from '../../../../dialogs';
 import { EditorCommandType } from '@joplin/editor/types';
 import Logger from '@joplin/utils/Logger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';

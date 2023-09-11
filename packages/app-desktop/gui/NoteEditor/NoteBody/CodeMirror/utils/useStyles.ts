@@ -1,5 +1,5 @@
 import { Theme } from '@joplin/lib/themes/type';
-import { NoteBodyEditorProps } from '../../utils/types';
+import { NoteBodyEditorProps } from '../../../utils/types';
 import { buildStyle } from '@joplin/lib/theme';
 import { useMemo } from 'react';
 
@@ -62,7 +62,12 @@ const useStyles = (props: NoteBodyEditorProps) => {
 					fontSize: `${props.fontSize}px`,
 					color: theme.color,
 					backgroundColor: theme.backgroundColor,
+
+					// CM5 only
+					codeMirrorTheme: theme.codeMirrorTheme, // Defined in theme.js
 				},
+
+				// CM6 only
 				globalTheme: {
 					...theme,
 					fontSize: props.fontSize,

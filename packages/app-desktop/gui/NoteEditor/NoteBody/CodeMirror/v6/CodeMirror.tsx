@@ -2,48 +2,35 @@ import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
-import { getResourcesFromPasteEvent } from '../../utils/resourceHandling';
-import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import Toolbar from './Toolbar';
+import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
+import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
+import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
+import Toolbar from '../Toolbar';
 // import styles_ from './styles';
 // import { RenderedBody, defaultRenderedBody } from './utils/types';
-import NoteTextViewer from '../../../NoteTextViewer';
+import NoteTextViewer from '../../../../NoteTextViewer';
 import Editor from './Editor';
-import usePluginServiceRegistration from '../../utils/usePluginServiceRegistration';
+import usePluginServiceRegistration from '../../../utils/usePluginServiceRegistration';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
-import bridge from '../../../../services/bridge';
+import bridge from '../../../../../services/bridge';
 // import markdownUtils from '@joplin/lib/markdownUtils';
 import shim from '@joplin/lib/shim';
-import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
-import CommandService from '@joplin/lib/services/CommandService';
-import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
-import convertToScreenCoordinates from '../../../utils/convertToScreenCoordinates';
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
-const debounce = require('debounce');
-import shared from '@joplin/lib/components/shared/note-screen-shared';
-const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';
-import ErrorBoundary from '../../../ErrorBoundary';
-import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
-import eventManager from '@joplin/lib/eventManager';
-import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
-import type { ContextMenuEvent, ContextMenuParams } from 'electron';
-import usePrevious from '../../../hooks/usePrevious';
+import ErrorBoundary from '../../../../ErrorBoundary';
+import { MarkupToHtmlOptions } from '../../../utils/useMarkupToHtml';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '@joplin/editor/types';
-import useStyles from './useStyles';
+import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
-import useScrollHandler from './useScrollHandler';
+import useScrollHandler from '../utils/useScrollHandler';
 import Logger from '@joplin/utils/Logger';
 import useEditorCommands from './useEditorCommands';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
-
-const menuUtils = new MenuUtils(CommandService.instance());
+import useContextMenu from '../utils/useContextMenu';
+import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -71,10 +58,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const [renderedBodyContentKey, setRenderedBodyContentKey] = useState<string>(null);
 
 	const [webviewReady, setWebviewReady] = useState(false);
-
-	const previousContent = usePrevious(props.content);
-	const previousRenderedBody = usePrevious(renderedBody);
-	const previousSearchMarkers = usePrevious(props.searchMarkers);
 
 	const editorRef = useRef<CodeMirrorControl>(null);
 	const rootRef = useRef(null);
@@ -219,30 +202,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		setWebviewReady(true);
 	}, []);
 
-	const webview_ipcMessage = useCallback((event: any) => {
-		const msg = event.channel ? event.channel : '';
-		const args = event.args;
-		const arg0 = args && args.length >= 1 ? args[0] : null;
-
-		if (msg.indexOf('checkboxclick:') === 0) {
-			const { line, from, to } = shared.toggleCheckboxRange(msg, props.content);
-			if (editorRef.current) {
-				// To cancel CodeMirror's layout drift, the scroll position
-				// is recorded before updated, and then it is restored.
-				// Ref. https://github.com/laurent22/joplin/issues/5890
-				const fraction = getLineScrollPercent();
-				editorRef.current.editor.dispatch({
-					changes: { from, to, insert: line },
-				});
-				setEditorPercentScroll(fraction);
-			}
-		} else if (msg === 'percentScroll') {
-			const percent = arg0;
-			setEditorPercentScroll(percent);
-		} else {
-			props.onMessage(event);
-		}
-	}, [props.onMessage, props.content, getLineScrollPercent, setEditorPercentScroll]);
+	const webview_ipcMessage = useWebviewIpcMessage({
+		editorRef,
+		setEditorPercentScroll,
+		getLineScrollPercent,
+		content: props.content,
+		onMessage: props.onMessage,
+	});
 
 	useEffect(() => {
 		let cancelled = false;
@@ -323,38 +289,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
 
-	useEffect(() => {
-		if (!props.searchMarkers) return () => {};
-
-		// If there is a currently active search, it's important to re-search the text as the user
-		// types. However this is slow for performance so we ONLY want it to happen when there is
-		// a search
-
-		// Note that since the CodeMirror component also needs to handle the viewer pane, we need
-		// to check if the rendered body has changed too (it will be changed with a delay after
-		// props.content has been updated).
-		const textChanged = props.searchMarkers.keywords.length > 0 && (props.content !== previousContent || renderedBody !== previousRenderedBody);
-
-		if (webviewRef.current && (props.searchMarkers !== previousSearchMarkers || textChanged)) {
-			webviewRef.current.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
-
-			if (editorRef.current) {
-				// Fixes https://github.com/laurent22/joplin/issues/7565
-				const debouncedMarkers = debounce(() => {
-				//	const matches = editorRef.current.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options);
-
-				//	props.setLocalSearchResultCount(matches);
-				}, 50);
-				debouncedMarkers();
-				return () => {
-					debouncedMarkers.clear();
-				};
-			}
-		}
-		return () => {};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.searchMarkers, previousSearchMarkers, props.setLocalSearchResultCount, props.content, previousContent, renderedBody, previousRenderedBody, renderedBody]);
-
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
 		if (!props.visiblePanes.includes('editor')) {
@@ -392,131 +326,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [editorPaneVisible]);
 
-	// The below code adds support for spellchecking when it is enabled
-	// It might be buggy, refer to the below issue
-	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
-	useEffect(() => {
-		const isAncestorOfCodeMirrorEditor = (elem: HTMLElement) => {
-			for (; elem.parentElement; elem = elem.parentElement) {
-				if (elem.classList.contains('cm-editor')) {
-					return true;
-				}
-			}
-
-			return false;
-		};
-
-		let lastInCodeMirrorContextMenuTimestamp = 0;
-
-		// The browser's contextmenu event provides additional information about the
-		// target of the event, not provided by the Electron context-menu event.
-		const onBrowserContextMenu = (event: Event) => {
-			if (isAncestorOfCodeMirrorEditor(event.target as HTMLElement)) {
-				lastInCodeMirrorContextMenuTimestamp = Date.now();
-			}
-		};
-
-		function pointerInsideEditor(params: ContextMenuParams) {
-			const x = params.x, y = params.y, isEditable = params.isEditable;
-			const elements = document.getElementsByClassName('cm-editor');
-
-			// Note: We can't check inputFieldType here. When spellcheck is enabled,
-			// params.inputFieldType is "none". When spellcheck is disabled,
-			// params.inputFieldType is "plainText". Thus, such a check would be inconsistent.
-			if (!elements.length || !isEditable) return false;
-
-			const maximumMsSinceBrowserEvent = 100;
-			if (Date.now() - lastInCodeMirrorContextMenuTimestamp > maximumMsSinceBrowserEvent) {
-				return false;
-			}
-
-			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
-			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
-		}
-
-		async function onContextMenu(event: ContextMenuEvent, params: ContextMenuParams) {
-			if (!pointerInsideEditor(params)) return;
-
-			// Don't show the default menu.
-			event.preventDefault();
-
-			const menu = new Menu();
-
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
-
-			menu.append(
-				new MenuItem({
-					label: _('Cut'),
-					enabled: hasSelectedText,
-					click: async () => {
-						editorCutText();
-					},
-				}),
-			);
-
-			menu.append(
-				new MenuItem({
-					label: _('Copy'),
-					enabled: hasSelectedText,
-					click: async () => {
-						editorCopyText();
-					},
-				}),
-			);
-
-			menu.append(
-				new MenuItem({
-					label: _('Paste'),
-					enabled: true,
-					click: async () => {
-						editorPaste();
-					},
-				}),
-			);
-
-			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
-
-			for (const item of spellCheckerMenuItems) {
-				menu.append(new MenuItem(item));
-			}
-
-			let filterObject: EditContextMenuFilterObject = {
-				items: [],
-			};
-
-			filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
-
-			for (const item of filterObject.items) {
-				menu.append(new MenuItem({
-					label: item.label,
-					click: async () => {
-						const args = item.commandArgs || [];
-						void CommandService.instance().execute(item.commandName, ...args);
-					},
-					type: item.type,
-				}));
-			}
-
-			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
-				menu.append(new MenuItem(item));
-			});
-
-			menu.popup();
-		}
-
-		// Prepend the event listener so that it gets called before
-		// the listener that shows the default menu.
-		bridge().window().webContents.prependListener('context-menu', onContextMenu);
-
-		window.addEventListener('contextmenu', onBrowserContextMenu);
-
-		return () => {
-			bridge().window().webContents.off('context-menu', onContextMenu);
-			window.removeEventListener('contextmenu', onBrowserContextMenu);
-		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.plugins]);
+	useContextMenu({
+		plugins: props.plugins,
+		editorCutText, editorCopyText, editorPaste,
+		editorRef,
+		editorClassName: 'cm-editor',
+	});
 
 	const onEditorEvent = useCallback((event: EditorEvent) => {
 		if (event.kind === EditorEventType.Scroll) {
@@ -557,7 +372,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		props.keyboardMode, styles.globalTheme,
 	]);
 
-	function renderEditor() {
+	const renderEditor = () => {
 		return (
 			<div style={cellEditorStyle}>
 				<Editor
@@ -571,9 +386,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				/>
 			</div>
 		);
-	}
+	};
 
-	function renderViewer() {
+	const renderViewer = () => {
 		return (
 			<div style={cellViewerStyle}>
 				<NoteTextViewer
@@ -586,7 +401,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				/>
 			</div>
 		);
-	}
+	};
 
 	return (
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
