@@ -4430,7 +4430,7 @@ __metadata:
     "@types/jest": 29.5.3
     "@types/mustache": 4.2.2
     "@types/node": 18.17.6
-    "@types/react": 18.2.18
+    "@types/react": 18.2.20
     "@types/react-redux": 7.1.25
     "@types/styled-components": 5.1.26
     async-mutex: 0.4.0
@@ -4529,7 +4529,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.3
-    "@types/react": 18.2.18
+    "@types/react": 18.2.20
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.25
     "@types/tar-stream": 2.2.2
@@ -4682,7 +4682,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.17.6
     "@types/node-rsa": 1.1.1
-    "@types/react": 18.2.18
+    "@types/react": 18.2.20
     "@types/uuid": 9.0.2
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -8012,17 +8012,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: e68b0d59aa69577fc6a6d654b25d5d8408625498f4c483f160b557fac21e840f6e8807cbde93e9f039949b6d624a019b1990d18499c1d65aecf3605c25e30242
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.2.18":
-  version: 18.2.18
-  resolution: "@types/react@npm:18.2.18"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 2e0d75de2b618e76780019e52478b1bec2b015a9187aea30f84518c0c3ddc639055bdfea50864aece937bad0cb0544d0100b80d30f5461e72fbc1c3c0be8b140
   languageName: node
   linkType: hard
 
