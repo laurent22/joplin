@@ -18,7 +18,7 @@
     "postinstall": "jetify && yarn run build"
   },
   "dependencies": {
-    "@bam.tech/react-native-image-resizer": "3.0.5",
+    "@bam.tech/react-native-image-resizer": "3.0.6",
     "@joplin/lib": "~2.12",
     "@joplin/react-native-alarm-notification": "~2.12",
     "@joplin/react-native-saf-x": "~2.12",

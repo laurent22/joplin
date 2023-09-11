@@ -2840,13 +2840,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/react-native-image-resizer@npm:3.0.5":
-  version: 3.0.5
-  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.5"
+"@bam.tech/react-native-image-resizer@npm:3.0.6":
+  version: 3.0.6
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.6"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: f555bd10aafab1a797b6f5142e59b1bb11f229b61d35c3e6c9d734bbd4999f97bcc86853f69965d758ca872aad024add7a852041da498b177eee923ef82e506d
+  checksum: bf7eee2f9b699b36d126cd0e81f484a0026f5b07cd6f2cffe208fc24a9547db1632e8d34a836913067d7beb330d28f83cb9715c5dddfcfa2d169373dbf6a33cc
   languageName: node
   linkType: hard
 
@@ -4497,7 +4497,7 @@ __metadata:
     "@babel/core": 7.20.2
     "@babel/preset-env": 7.20.2
     "@babel/runtime": 7.20.0
-    "@bam.tech/react-native-image-resizer": 3.0.5
+    "@bam.tech/react-native-image-resizer": 3.0.6
     "@codemirror/commands": 6.2.2
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.3
