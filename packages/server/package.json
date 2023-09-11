@@ -45,7 +45,7 @@
     "node-cron": "3.0.2",
     "nodemailer": "6.9.4",
     "nodemon": "2.0.22",
-    "pg": "8.11.2",
+    "pg": "8.11.3",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
     "query-string": "7.1.3",
