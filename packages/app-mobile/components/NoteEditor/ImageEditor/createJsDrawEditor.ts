@@ -190,6 +190,7 @@ export const watchTemplateChanges = (
 		const templateData = {
 			imageSize: imageSize.xy,
 			backgroundData: backgroundComponent?.serialize(),
+			autoresize: editor.image.getAutoresizeEnabled(),
 		};
 		return JSON.stringify(templateData);
 	};
