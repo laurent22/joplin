@@ -5,6 +5,9 @@ import { Text as DocumentText, EditorSelection, EditorState } from '@codemirror/
 import { indentUnit } from '@codemirror/language';
 
 describe('markdownReformatter', () => {
+
+	jest.retryTimes(2);
+
 	const boldSpec: RegionSpec = RegionSpec.of({
 		template: '**',
 	});

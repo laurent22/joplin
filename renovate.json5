@@ -186,29 +186,31 @@
 			"automerge": true,
 			"labels": ["automerge"],
 		},
-		{
-			"matchUpdateTypes": ["major", "minor", "patch"],
-			"automerge": true,
-			"groupName": "buildTools",
-			"labels": ["automerge"],
-			"extends": ["schedule:monthly"],
-			"matchPackagePatterns": [
-				// If the apps build and all tests pass, we can assume that Yarn
-				// and TypeScript are safe to upgrade. They are frequently
-				// updated so having them here reduces noise.
-				"eslint",
-				"eslint-*",
-				"jest",
-				"jest-*",
-				"@typescript-eslint/*",
-				"yarn",
-				"typescript",
-				"prettier",
+		
+		// {
+		// 	"matchUpdateTypes": ["major", "minor", "patch"],
+		// 	"automerge": true,
+		// 	"groupName": "buildTools",
+		// 	"labels": ["automerge"],
+		// 	"extends": ["schedule:monthly"],
+		// 	"matchPackagePatterns": [
+		// 		// If the apps build and all tests pass, we can assume that Yarn
+		// 		// and TypeScript are safe to upgrade. They are frequently
+		// 		// updated so having them here reduces noise.
+		// 		"eslint",
+		// 		"eslint-*",
+		// 		"jest",
+		// 		"jest-*",
+		// 		"@typescript-eslint/*",
+		// 		"yarn",
+		// 		"typescript",
+		// 		"prettier",
 				
-				// If it builds, it should be safe to merge @types/* packages
-				"@types/*",
-			],
-		},
+		// 		// If it builds, it should be safe to merge @types/* packages
+		// 		"@types/*",
+		// 	],
+		// },
+
 		// {
 		// 	"matchUpdateTypes": ["minor", "patch"],
 		// 	"automerge": true,

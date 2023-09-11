@@ -2,7 +2,7 @@
   "name": "@joplin/fork-sax",
   "description": "An evented streaming XML parser in JavaScript",
   "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
-  "version": "1.2.49",
+  "version": "1.2.50",
   "main": "lib/sax.js",
   "publishConfig": {
     "access": "public"

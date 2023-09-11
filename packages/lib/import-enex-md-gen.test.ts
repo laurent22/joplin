@@ -1,7 +1,7 @@
 import { NoteEntity, ResourceEntity, TagEntity } from './services/database/types';
 import shim from './shim';
 
-const fs = require('fs-extra');
+import { readFile, stat } from 'fs/promises';
 const os = require('os');
 const { filename } = require('./path-utils');
 import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir, expectThrow } from './testing/test-utils';
@@ -12,6 +12,16 @@ import Tag from './models/Tag';
 import Resource from './models/Resource';
 
 const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
+
+const importEnexFile = async (filename: string) => {
+	const filePath = `${enexSampleBaseDir}/${filename}`;
+	await importEnex('', filePath);
+};
+
+const readExpectedFile = async (filename: string) => {
+	const filePath = `${enexSampleBaseDir}/${filename}`;
+	return readFile(filePath, 'utf8');
+};
 
 describe('import-enex-md-gen', () => {
 
@@ -65,8 +75,7 @@ describe('import-enex-md-gen', () => {
 	});
 
 	it('should import ENEX metadata', async () => {
-		const filePath = `${enexSampleBaseDir}/sample-enex.xml`;
-		await importEnex('', filePath);
+		await importEnexFile('sample-enex.xml');
 
 		const note: NoteEntity = (await Note.all())[0];
 		expect(note.title).toBe('Test Note for Export');
@@ -87,37 +96,33 @@ describe('import-enex-md-gen', () => {
 
 		const resource: ResourceEntity = (await Resource.all())[0];
 		expect(resource.id).toBe('3d0f4d01abc02cf8c4dc1c796df8c4b2');
-		const stat = await fs.stat(Resource.fullPath(resource));
-		expect(stat.size).toBe(277);
+		const s = await stat(Resource.fullPath(resource));
+		expect(s.size).toBe(277);
 	});
 
 	it('should handle invalid dates', async () => {
-		const filePath = `${enexSampleBaseDir}/invalid_date.enex`;
-		await importEnex('', filePath);
+		await importEnexFile('invalid_date.enex');
 		const note: NoteEntity = (await Note.all())[0];
 		expect(note.created_time).toBe(1521822724000); // 20180323T163204Z
 		expect(note.updated_time).toBe(1521822724000); // Because this date was invalid, it is set to the created time instead
 	});
 
 	it('should handle empty resources', async () => {
-		const filePath = `${enexSampleBaseDir}/empty_resource.enex`;
-		await expectNotThrow(() => importEnex('', filePath));
+		await expectNotThrow(() => importEnexFile('empty_resource.enex'));
 		const all = await Resource.all();
 		expect(all.length).toBe(1);
 		expect(all[0].size).toBe(0);
 	});
 
 	it('should handle tasks', async () => {
-		const filePath = `${enexSampleBaseDir}/tasks.enex`;
-		await importEnex('', filePath);
+		await importEnexFile('tasks.enex');
 		const expectedMd = await shim.fsDriver().readFile(`${enexSampleBaseDir}/tasks.md`);
 		const note: NoteEntity = (await Note.all())[0];
 		expect(note.body).toEqual(expectedMd);
 	});
 
 	it('should handle empty note content', async () => {
-		const filePath = `${enexSampleBaseDir}/empty_content.enex`;
-		await expectNotThrow(() => importEnex('', filePath));
+		await importEnexFile('empty_content.enex');
 		const all = await Note.all();
 		expect(all.length).toBe(1);
 		expect(all[0].title).toBe('China and the case for stimulus.');
@@ -131,8 +136,7 @@ describe('import-enex-md-gen', () => {
 		// type "application/octet-stream", which can later cause problems to
 		// open the file.
 		// https://discourse.joplinapp.org/t/importing-a-note-with-a-zip-file/12123?u=laurent
-		const filePath = `${enexSampleBaseDir}/WithInvalidMime.enex`;
-		await importEnex('', filePath);
+		await importEnexFile('WithInvalidMime.enex');
 		const all = await Resource.all();
 		expect(all.length).toBe(1);
 		expect(all[0].mime).toBe('application/zip');
@@ -154,8 +158,26 @@ describe('import-enex-md-gen', () => {
 	});
 
 	it('should throw an error and stop if the outer XML is invalid', async () => {
-		const filePath = `${enexSampleBaseDir}/invalid_html.enex`;
-		await expectThrow(async () => importEnex('', filePath));
+		await expectThrow(async () => importEnexFile('invalid_html.enex'));
+	});
+
+	it('should import images with sizes', async () => {
+		await importEnexFile('images_with_and_without_size.enex');
+		let expected = await readExpectedFile('images_with_and_without_size.md');
+
+		const note: NoteEntity = (await Note.all())[0];
+
+		const all: ResourceEntity[] = await Resource.all();
+
+		expect(all.length).toBe(2);
+
+		const svgResource = all.find(r => r.mime === 'image/svg+xml');
+		const pngResource = all.find(r => r.mime === 'image/png');
+
+		expected = expected.replace(/RESOURCE_ID_1/, pngResource.id);
+		expected = expected.replace(/RESOURCE_ID_2/, svgResource.id);
+
+		expect(note.body).toBe(expected);
 	});
 
 });

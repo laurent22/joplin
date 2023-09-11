@@ -202,6 +202,12 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					padding: 0;
 				}
 			`;
+			const defaultCss = `
+				code {
+					white-space: pre-wrap;
+					overflow-x: hidden;
+				}
+			`;
 
 			html =
 				`
@@ -211,6 +217,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
 						<style>
+							${defaultCss}
 							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
 							${editPopupCss}
 						</style>

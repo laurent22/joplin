@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -257,11 +259,12 @@ msgstr "Kabul Et"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Erişim reddedildi: Lütfen kullanıcı adınızı ve parolanızı kontrol edin"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
+"Erişim reddedildi: Lütfen parolanızı ve/veya kullanıcı adınızı yeniden girin"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -385,6 +388,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Bu adrese gönderilen her e-posta bir nota dönüştürülecek ve koleksiyonunuza "
+"eklenecektir. Not Gelen Kutusu not defterine kaydedilecektir"
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -548,11 +553,11 @@ msgstr "Paylaşılabilir"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Görüntüleyebilir"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Görüntüleyebilir ve düzenleyebilir"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -606,9 +611,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Not, \"%s\" not defterine kopyalanamadı"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Yeni bir not oluşturur."
+msgstr "Yeni bir not oluşturulamadı: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -957,9 +961,8 @@ msgstr[1] "Paylaşılabilir Bağlantıları Kopyala"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Yolu panoya kopyala"
+msgstr "Panoya kopyala"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1227,9 +1230,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Yerel veriyi silip senkronizasyon sunucusundan yeniden indir"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Notu sil?"
+msgstr "Notu sil"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1241,9 +1243,8 @@ msgid "Delete note?"
 msgstr "Notu sil?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Notu sil?"
+msgstr "Not defterini sil"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1284,6 +1285,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Gelen Kutusu not defteri silinsin mi?\n"
+"\n"
+"Gelen kutusu not defterini silerseniz, yakın zamanda gönderilen tüm e-"
+"postalar kaybolabilir."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1476,9 +1481,8 @@ msgid "Downloading"
 msgstr "İndiriliyor"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Kaynaklar indiriliyor..."
+msgstr "%s dil dosyaları indiriliyor..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1602,13 +1606,12 @@ msgstr "E-posta"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "Notu düzenle."
+msgstr "E-posta'dan not'a"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "E-postadan Nota"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1851,9 +1854,8 @@ msgid "Export all"
 msgstr "Tümünü dışa aktar"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "Tümünü dışa aktar"
+msgstr "Tüm notları JEX biçiminde dışarı aktar"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1869,7 +1871,7 @@ msgstr "Profili dışarı aktar"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "Başarıyla dışa aktarıldı!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1880,9 +1882,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\" den \"%s\" biçiminde dışa aktarılıyor. Lütfen bekleyin..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "Profil dışa aktarılıyor..."
+msgstr "Dışa aktarılıyor..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -2527,7 +2528,7 @@ msgstr "Düzen butonu sıralaması"
 
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "Dil dosyalarını varsayılan web sitesinden indirmek için boş bırakın"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3794,6 +3795,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Tüm notların bir kopyasını Joplin tarafından bir bilgisayara aktarılabilecek "
+"bir dosya biçiminde paylaşın."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -4561,25 +4564,22 @@ msgstr ""
 "sonrasında geri döndürülemez."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Bu dosya açılamadı: %s"
-msgstr[1] "Bu dosya açılamadı: %s"
+msgstr[0] "Bu dosya silinemedi: %s"
+msgstr[1] "Bu dosyalar silinemedi: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Not defteri kaydedilemedi: %s"
-msgstr[1] "Not defteri kaydedilemedi: %s"
+msgstr[0] "Bu not klonlanamadı: %s"
+msgstr[1] "Bu notlar klonlanamadı: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Not defteri kaydedilemedi: %s"
-msgstr[1] "Not defteri kaydedilemedi: %s"
+msgstr[0] "Not taşınamadı: %s"
+msgstr[1] "Notlar taşınamadı: %s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4831,7 +4831,7 @@ msgstr "Tip: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Veri dışarı akataılamadı veya paylaşılamadı. Sebep: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -5064,7 +5064,7 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1720
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Sesle yazım dil dosyaları (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1010
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:120
@@ -5080,11 +5080,12 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "Uyarı: performans sebebi ile tüm kaynaklar görüntülenmedi (limit: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Uyarı"
+msgstr ""
+"Uyarı:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"

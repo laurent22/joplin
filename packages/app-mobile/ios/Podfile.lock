@@ -296,7 +296,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (2.12.0):
+  - react-native-saf-x (2.12.1):
     - React-Core
   - react-native-safe-area-context (4.7.1):
     - React-Core
@@ -306,7 +306,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (12.4.0):
+  - react-native-webview (13.2.2):
     - React-Core
   - React-perflogger (0.71.10)
   - React-RCTActionSheet (0.71.10):
@@ -400,7 +400,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.4.1):
     - React-Core
-  - RNDeviceInfo (10.7.0):
+  - RNDeviceInfo (10.8.0):
     - React-Core
   - RNExitApp (1.1.0):
     - React
@@ -710,12 +710,12 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: 129cd2ddf120a1f6164c724b2846d172666b33de
+  react-native-saf-x: 9b16ad19c22cc6bba0fa63ce83e4b7d24bce5a01
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-webview: 65f1143983cfeaedf02fd25b2621d3f4a37075de
+  react-native-webview: b8ec89966713985111a14d6e4bf98d8b54bced0d
   React-perflogger: 217095464d5c4bb70df0742fa86bf2a363693468
   React-RCTActionSheet: 8deae9b85a4cbc6a2243618ea62a374880a2c614
   React-RCTAnimation: 59c62353a8b59ce206044786c5d30e4754bffa64
@@ -733,7 +733,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 9b4091348e53f540180abdc54984d839a556f593
-  RNDeviceInfo: 25d818c85db769cc0e7083d39efaa01a6f450df3
+  RNDeviceInfo: 5795b418ed3451ebcaf39384e6cf51f60cb931c9
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688

@@ -1,16 +1,17 @@
 {
   "name": "@joplin/utils",
-  "version": "2.12.0",
+  "version": "2.12.1",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
     ".": "./dist/index.js",
-    "./net": "./dist/net.js",
-    "./fs": "./dist/fs.js",
     "./env": "./dist/env.js",
-    "./types": "./dist/types.js",
-    "./time": "./dist/time.js",
+    "./fs": "./dist/fs.js",
     "./html": "./dist/html.js",
+    "./net": "./dist/net.js",
+    "./time": "./dist/time.js",
+    "./types": "./dist/types.js",
+    "./url": "./dist/url.js",
     "./Logger": "./dist/Logger.js"
   },
   "publishConfig": {

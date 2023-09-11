@@ -1,4 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 08 May 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 08 May 2023 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.11]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 08 May 2023 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 08 May 2023 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 2.12]]></title><description><![CDATA[<h1>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h1>
+<h2>Support for Apple Silicon<a name="support-for-apple-silicon" href="#support-for-apple-silicon" class="heading-anchor">🔗</a></h2>
+<p>A new release is now available for Apple Silicon, which provides improve performances on this architecture.</p>
+<h2>Rich Text editor<a name="rich-text-editor" href="#rich-text-editor" class="heading-anchor">🔗</a></h2>
+<p>In this release, we've undertaken numerous enhancements and addressed various bugs in the Rich Text editor. Notably, we've introduced support for plugin toolbar icons. Additionally, we've refined the editor's ability to manage text that's copied from applications like Word, Office, and LibreOffice, thereby enhancing cross-application compatibility. Among the minor yet impactful improvements, we've fine-tuned the handling of newlines and paragraphs—a highly requested feature. Another notable update is the improved automatic switching between light and dark modes.</p>
+<p>Altogether, this release encompasses around 12 significant changes for the Rich Text editor, and rest assured, there's more to come in the future!</p>
+<h2>Share permissions<a name="share-permissions" href="#share-permissions" class="heading-anchor">🔗</a></h2>
+<p>Using Joplin Cloud Pro and Teams, you now have the ability to customize the read and write permissions for the notebooks you share. You have the option to grant other users permission to edit the notes or share them as read-only. This ensures that you can confidently share a notebook without worrying about unintentional modifications by your friends or colleagues.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230825-share-permissions.png" alt=""></p>
+<h2>Email to Note<a name="email-to-note" href="#email-to-note" class="heading-anchor">🔗</a></h2>
+<p>Joplin Cloud Pro and Teams also now include the Email to Note feature, allowing you to conveniently store your emails within Joplin Cloud. By simply forwarding your emails to your Joplin Cloud address, you can transform them into notes. The email's subject will serve as the note title, while the body of the email will be the note's content. These notes will be organized within a notebook named &quot;Inbox.&quot;</p>
+<p>More information in the <a href="https://joplinapp.org/email%5C_to%5C_note/">Email to Note documentation</a>.</p>
+<h2>Choose to resize an image or not<a name="choose-to-resize-an-image-or-not" href="#choose-to-resize-an-image-or-not" class="heading-anchor">🔗</a></h2>
+<p>By default, when you add a large image, Joplin will ask you if you would like to shrink it down or not. With this new release, you now have the option to always ask, to always resize, or to never resize the image, giving you more flexibility and reducing the number of prompts in the app.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230825-resize-note.png" alt=""></p>
+<h2>Rotating log<a name="rotating-log" href="#rotating-log" class="heading-anchor">🔗</a></h2>
+<p>Up until now, the logs could grow to become very large, and if you wanted to shrink them down you would have to manually delete them. With this new release, we now automatically handle logs by rotating them - once the log becomes large enough it is moved to an archive. And once the archive is older than a number of days, it is deleted.</p>
+<h2>Mobile<a name="mobile" href="#mobile" class="heading-anchor">🔗</a></h2>
+<p>Like the desktop app, the mobile apps benefits from the Share Permissions update, as well as the Email to Note feature for Joplin Cloud. There are also plenty of other improvements - all in all there's 23 bug fixes, enhancements and security fixes in this release.</p>
+<h1>Full changelog<a name="full-changelog" href="#full-changelog" class="heading-anchor">🔗</a></h1>
+<p>This is just an overview of the main features. The full changelog is available there:</p>
+<ul>
+<li>Desktop: <a href="https://joplinapp.org/changelog">https://joplinapp.org/changelog</a></li>
+<li>Android: <a href="https://joplinapp.org/changelog_android">https://joplinapp.org/changelog_android</a></li>
+<li>iOS: <a href="https://joplinapp.org/changelog_ios">https://joplinapp.org/changelog_ios</a></li>
+</ul>
+]]></description><link>https://joplinapp.org/news/20230508-release-2-12/</link><guid isPermaLink="false">20230508-release-2-12</guid><pubDate>Mon, 08 May 2023 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.12</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.11]]></title><description><![CDATA[<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
 <h3>Add support for plugin user data<a name="add-support-for-plugin-user-data" href="#add-support-for-plugin-user-data" class="heading-anchor">🔗</a></h3>
 <p>Developers of plugins now have the ability to associate additional information with notes, notebooks, and tags. This data is then synchronized across multiple devices. For instance, it is possible to envision attaching OCR data to an image or incorporating plugin-specific parameters to a note, which can subsequently be synchronized across all devices.</p>
 <h3>Improved end-to-end encryption<a name="improved-end-to-end-encryption" href="#improved-end-to-end-encryption" class="heading-anchor">🔗</a></h3>
@@ -306,32 +332,4 @@
 <li>Or, just delete the data directly in the database. You'll want to delete the corresponding item_id from the user_items table too.</li>
 </ul>
 <p>But really in most cases you should be fine. Especially if you don't have that many notes it's unlikely you have duplicates.</p>
-]]></description><link>https://joplinapp.org/news/20211102-150403/</link><guid isPermaLink="false">20211102-150403</guid><pubDate>Tue, 02 Nov 2021 15:04:03 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin v2.5 is available for desktop and mobile!]]></title><description><![CDATA[<p><a href="https://joplinapp.org/download/">Joplin v2.5</a> is now available for desktop, mobile and CLI! Here's an overview of the changes:</p>
-<h3>Support for Markdown + Front Matter<a name="support-for-markdown-front-matter" href="#support-for-markdown-front-matter" class="heading-anchor">🔗</a></h3>
-<p>Markdown + Front Matter is a format that allows attaching metadata, such as tags, creation date, or geolocation to a Markdown file. This is done by adding a block of YAML code (a &quot;front matter&quot;) at the top of the file.</p>
-<p>Thansk to Caleb John's efforts the Joplin desktop and CLI applications now support importing and exporting these files. When exporting, we try to preserve as much metadata as possible, while still keeping it the formatting user friendly.</p>
-<p>Here's an example, with the Front Matter at the top, delimited by &quot;---&quot;, and the text below.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211031-115215_0.png" alt=""></p>
-<p>Markdown + Front Matter is an excellent way to share notes with someone who doesn't have Joplin, to backup notes in a durable format (since no third-party application is needed to read it), and also to export notes to other applications, or to import them.</p>
-<p>As with the regular Markdown exporter, the images and attachments are also exported.</p>
-<h3>Add support for callback URLs<a name="add-support-for-callback-urls" href="#add-support-for-callback-urls" class="heading-anchor">🔗</a></h3>
-<p>Callback URLs is a semi-standard that defines how certain resources in an application can be accessed via URLs. Either to view the resource, or to perform certain actions, such as deletion, creation, etc.</p>
-<p>Joplin now support callback URLs to open notes, notebooks and folders. To do so, right click on a note and select &quot;Copy external link&quot;:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20211031-115215_1.png" alt=""></p>
-<p>That would give you a URL such as this:</p>
-<blockquote>
-<p>joplin://x-callback-url/openNote?id=b7a7b93281f54d928612eea550f33a7f</p>
-</blockquote>
-<p>Then if you click it from outside the app, the app will open and select this particular note. In practice such a feature allows third-party application to interact with Joplin by creating links that can be opened from outside. For example, you may use a different application for project planning, then link to the individual notes for more details about each task.</p>
-<p>Many thanks to Roman Musin for adding the feature!</p>
-<h3>Improved end-to-end encryption support<a name="improved-end-to-end-encryption-support" href="#improved-end-to-end-encryption-support" class="heading-anchor">🔗</a></h3>
-<p>The series of quiet but major changes to the end-to-end encryption support continue in this new verison. One goal is still to allow sharing notebooks while encryption is enabled.</p>
-<p>To that end, v2.5 includes support for RSA public-private key pairs. If you have encryption enabled, they will be automatically generated when you synchronise by the mobile, desktop or CLI applications. Later on, these keys will be used to allow sharing encrypted notebooks.</p>
-<p>The second goal of these E2EE changes is to simplify the system enough that it can be enabled by default. To that end, the master password dialog and encryption screen have been improved. An option to reset the master password is now also available.</p>
-<h3>Various other improvements and bug fixes<a name="various-other-improvements-and-bug-fixes" href="#various-other-improvements-and-bug-fixes" class="heading-anchor">🔗</a></h3>
-<p>In total this release includes about 11 other bug fixes and improvements. There was in particular several improvements to the share features. It is now also possible for a share recipient to leave the shared notebook.</p>
-<h3>Mobile app update<a name="mobile-app-update" href="#mobile-app-update" class="heading-anchor">🔗</a></h3>
-<p>As always the mobile apps (to be released soon) benefit from several of the above changes since they share the same codebase as the desktop app.</p>
-<p>Specific to the mobile version 2.5 are some improvements to the beta editor - in particular the layout has been cleaned up, and the first word of sentences is now automatically capitalised, which makes typing notes easier. If you haven't tried the beta editor yet, you can enable it from the Configuration screen.</p>
-<p>The full changelog is available there: <a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
-]]></description><link>https://joplinapp.org/news/20211031-115215/</link><guid isPermaLink="false">20211031-115215</guid><pubDate>Sun, 31 Oct 2021 11:52:15 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20211102-150403/</link><guid isPermaLink="false">20211102-150403</guid><pubDate>Tue, 02 Nov 2021 15:04:03 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>

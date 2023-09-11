@@ -1,5 +1,12 @@
 # Joplin changelog
 
+## [v2.12.15](https://github.com/laurent22/joplin/releases/tag/v2.12.15) - 2023-08-27T11:35:39Z
+
+- Fixed: Pasting a resource in Rich Text editor breaks the resource link ([#8706](https://github.com/laurent22/joplin/issues/8706))
+- Fixed: Handling of macOS ARM-64 version
+
+**Note:** This release does **not** support Windows 7, 8, or 8.1. See [the release notes for version 2.12.7](https://github.com/laurent22/joplin/releases/tag/v2.12.7).
+
 ## [v2.12.12](https://github.com/laurent22/joplin/releases/tag/v2.12.12) (Pre-release) - 2023-08-19T22:44:56Z
 
 - Improved: Draw red border around missing encryption key passwords ([#8636](https://github.com/laurent22/joplin/issues/8636)) ([#8493](https://github.com/laurent22/joplin/issues/8493) by Henry Heino)
