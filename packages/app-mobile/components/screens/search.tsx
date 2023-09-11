@@ -189,7 +189,10 @@ class SearchScreenComponent extends BaseScreenComponent {
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 						/>
-						<TouchableHighlight onPress={() => this.clearButton_press()}>
+						<TouchableHighlight
+							onPress={() => this.clearButton_press()}
+							accessibilityLabel={_('Clear')}
+						>
 							<Icon name="md-close-circle" style={this.styles().clearIcon} />
 						</TouchableHighlight>
 					</View>

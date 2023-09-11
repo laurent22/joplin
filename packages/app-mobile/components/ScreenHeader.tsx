@@ -601,7 +601,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={contextMenuStyle}>
-						<Icon name="md-ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+						<View accessibilityLabel={_('Actions')}>
+							<Icon name="md-ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+						</View>
 					</MenuTrigger>
 					<MenuOptions>
 						<ScrollView style={{ maxHeight: windowHeight }}>{menuOptionComponents}</ScrollView>
