@@ -4571,7 +4571,7 @@ __metadata:
     react-native-fs: 2.20.0
     react-native-gesture-handler: 2.12.1
     react-native-get-random-values: 1.9.0
-    react-native-image-picker: 5.6.0
+    react-native-image-picker: 5.6.1
     react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 15.0.1
     react-native-paper: 5.9.1
@@ -28029,13 +28029,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:5.6.0":
-  version: 5.6.0
-  resolution: "react-native-image-picker@npm:5.6.0"
+"react-native-image-picker@npm:5.6.1":
+  version: 5.6.1
+  resolution: "react-native-image-picker@npm:5.6.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 3797ec006c2d1f7b96c088c25d972113ef61f42e499f1bdbc553630acecab613d671a2c7d050029a7b01df144e83992ea2639b33255cfa487bf422943ded419b
+  checksum: ec8c54e7277cf366e12a7121e2291ee4d9a9ca3875468ddc19facb2e367ba7bb2d564ab8696cb8480178466b3b416a9ba0a88d2cebc89df9e50fcc5d7c2933fa
   languageName: node
   linkType: hard
 
