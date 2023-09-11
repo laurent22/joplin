@@ -105,6 +105,7 @@ export enum EditorLanguageType {
 export enum EditorKeymap {
 	Default = 'default',
 	Vim = 'vim',
+	Emacs = 'emacs',
 }
 
 export interface EditorSettings {

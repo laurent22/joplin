@@ -531,6 +531,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const editorSettings = useMemo((): EditorSettings => {
 		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
 
+		let keyboardMode = EditorKeymap.Default;
+		if (props.keyboardMode === 'vim') {
+			keyboardMode = EditorKeymap.Vim;
+		} else if (props.keyboardMode === 'emacs') {
+			keyboardMode = EditorKeymap.Emacs;
+		}
+
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled || props.visiblePanes.indexOf('editor') < 0,
@@ -543,7 +550,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			useExternalSearch: false,
 			ignoreModifiers: true,
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
-			keymap: props.keyboardMode === 'vim' ? EditorKeymap.Vim : EditorKeymap.Default,
+			keymap: keyboardMode,
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.visiblePanes,

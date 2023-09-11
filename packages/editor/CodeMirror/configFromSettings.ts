@@ -8,7 +8,7 @@ import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { MarkdownMathExtension } from './markdown/markdownMathParser';
 import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages';
 import { html } from '@codemirror/lang-html';
-import { defaultKeymap } from '@codemirror/commands';
+import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 
 const configFromSettings = (settings: EditorSettings) => {
@@ -54,6 +54,8 @@ const configFromSettings = (settings: EditorSettings) => {
 
 	if (settings.keymap === EditorKeymap.Vim) {
 		extensions.push(vim());
+	} else if (settings.keymap === EditorKeymap.Emacs) {
+		extensions.push(keymap.of(emacsStyleKeymap));
 	}
 
 	if (!settings.ignoreModifiers) {
