@@ -8,7 +8,7 @@ import {
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, indentWithTab } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, indentWithTab, standardKeymap } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -253,7 +253,7 @@ const createEditor = (
 						return true;
 					}),
 
-					...historyKeymap, indentWithTab, ...searchKeymap,
+					...standardKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
 				]),
 			],
 			doc: initialText,
