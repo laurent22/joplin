@@ -7,34 +7,34 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jonatan Nyberg <jonatan@autistici.org>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
-"- Kamera: för att tillåta att du tar en bild och bifogar den till en "
-"anteckning."
+"- Kamera: gör det möjligt att ta en bild och bifoga den till en anteckning."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Plats: för att tillåta att information om geografisk plats läggs till i en "
-"anteckning."
+"- Plats: gör det möjligt att bifoga geo-platsinformation till en anteckning."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:615
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Lagring: för att tillåta att du bifogar filer till anteckningar och för "
-"att aktivera filsystemsynkronisering."
+"- Lagring: gör det möjligt att bifoga filer till anteckningar och för att "
+"möjliggöra filsystemsynkronisering."
 
 #: packages/lib/services/KeymapService.ts:317
 #: packages/lib/services/KeymapService.ts:323
@@ -260,11 +260,11 @@ msgstr "Acceptera"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Åtkomst nekad: Kontrollera ditt användarnamn och lösenord"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "Åtkomst nekad: Ange ditt lösenord och/eller användarnamn igen"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -386,6 +386,9 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Alla e-postmeddelanden som skickas till den här adressen kommer att "
+"omvandlas till en anteckning och läggas till i din samling. Anteckningen "
+"kommer att sparas i Inkorgens anteckningsbok"
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -549,11 +552,11 @@ msgstr "Kan dela"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Kan visa"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Kan visa och redigera"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -607,9 +610,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Det går inte att kopiera anteckningen till \"%s\" anteckningsbok"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Skapar en ny anteckning."
+msgstr "Kan inte skapa en ny anteckning: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -964,9 +966,8 @@ msgstr[1] "Kopiera delbara länkar"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Kopiera sökväg till urklipp"
+msgstr "Kopiera till urklipp"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1234,9 +1235,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Ta bort lokala data och hämta igen från synkroniseringsmålet"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Ta bort anteckning?"
+msgstr "Ta bort anteckning"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1248,9 +1248,8 @@ msgid "Delete note?"
 msgstr "Ta bort anteckning?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Ta bort anteckning?"
+msgstr "Ta bort anteckningsbok"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1292,6 +1291,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Ta bort Inbox-anteckningsboken?\n"
+"\n"
+"Om du tar bort inkorgens anteckningsbok kan alla e-postmeddelanden som "
+"nyligen har skickats till den gå förlorade."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1486,9 +1489,8 @@ msgid "Downloading"
 msgstr "Hämtar"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "Hämtar resurser..."
+msgstr "Hämtar %s språkfiler..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1613,13 +1615,12 @@ msgstr "E-postmeddelande"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "Redigera anteckning."
+msgstr "E-posta för att notera"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "E-posta för att notera"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1861,9 +1862,8 @@ msgid "Export all"
 msgstr "Exportera alla"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "Exportera alla"
+msgstr "Exportera alla anteckningar som JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1879,7 +1879,7 @@ msgstr "Exportera profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "Exporten lyckades!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1890,9 +1890,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportera till \"%s\" som \"%s\" format. Vänta..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "Exporterar profil..."
+msgstr "Exporterar..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -2111,9 +2110,8 @@ msgid "Help"
 msgstr "Hjälp"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:690
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS aktiverat: %d"
+msgstr "Hermes aktiverad: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:569
 msgid "Hide %s"
@@ -2535,7 +2533,7 @@ msgstr "Knappordning"
 
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
-msgstr ""
+msgstr "Lämna det tomt för att hämta språkfilerna från standardwebbplatsen"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3742,9 +3740,8 @@ msgid "Select file..."
 msgstr "Välj fil..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Ta bort anteckningsbok"
+msgstr "Välj överordnad anteckningsbok"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3804,6 +3801,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Dela en kopia av alla anteckningar i ett filformat som kan importeras av "
+"Joplin på en dator."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -4569,25 +4568,22 @@ msgstr ""
 "kan återställas efteråt."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Den här filen kunde inte öppnas: %s"
-msgstr[1] "Den här filen kunde inte öppnas: %s"
+msgstr[0] "Denna anteckning kunde inte tas bort: %s"
+msgstr[1] "Dessa anteckningar kunde inte tas bort: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Anteckningsboken kunde inte sparas: %s"
-msgstr[1] "Anteckningsboken kunde inte sparas: %s"
+msgstr[0] "Denna anteckning kunde inte dupliceras: %s"
+msgstr[1] "Dessa anteckningar kunde inte dupliceras: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Anteckningsboken kunde inte sparas: %s"
-msgstr[1] "Anteckningsboken kunde inte sparas: %s"
+msgstr[0] "Denna anteckning kunde inte flyttas: %s"
+msgstr[1] "Dessa anteckningar kunde inte flyttas: %s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4838,7 +4834,7 @@ msgstr "Typ: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Det går inte att exportera eller dela data. Orsak: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -5069,7 +5065,7 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.ts:1720
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Språkfiler för röstinmatning (URL)"
 
 #: packages/app-mobile/components/screens/Note.tsx:1010
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:120
@@ -5086,11 +5082,12 @@ msgstr ""
 "Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Varning"
+msgstr ""
+"Varningar:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
@@ -5135,9 +5132,8 @@ msgstr ""
 "en anteckning, tryck på `mn`."
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "Välkommen"
+msgstr "Välkommen!"
 
 #: packages/lib/models/Setting.ts:1114
 msgid "When creating a new note:"
@@ -5236,370 +5232,3 @@ msgstr "Zooma in"
 #: packages/app-desktop/gui/MenuBar.tsx:744
 msgid "Zoom Out"
 msgstr "Zooma ut"
-
-#~ msgid "Voice typing"
-#~ msgstr "Röstskrivning"
-
-#~ msgid "Encrypted notebooks cannot be renamed"
-#~ msgstr "Krypterade anteckningsböcker kan inte byta namn"
-
-#, fuzzy
-#~ msgid "Changes have been saved"
-#~ msgstr "Anteckning har sparats."
-
-#, fuzzy
-#~ msgid "Create KaTeX region"
-#~ msgstr "Skapa användare"
-
-#, fuzzy
-#~ msgid "Create link"
-#~ msgstr "Skapa"
-
-#, fuzzy
-#~ msgid "Create task list"
-#~ msgstr "Skapar en anteckningsbok"
-
-#, fuzzy
-#~ msgid "Remove KaTeX region"
-#~ msgstr "Skapa användare"
-
-#, fuzzy
-#~ msgid "Unitalic"
-#~ msgstr "Kursiv"
-
-#, fuzzy
-#~ msgid "Bold text"
-#~ msgstr "Fet"
-
-#, fuzzy
-#~ msgid "Edit Link"
-#~ msgstr "Redigera anteckningsbok"
-
-#~ msgid "Insert Date Time"
-#~ msgstr "Infoga datumtid"
-
-#, fuzzy
-#~ msgid "Italicize"
-#~ msgstr "Kursiv"
-
-#, fuzzy
-#~ msgid "Save as SVG"
-#~ msgstr "Spara som..."
-
-#~ msgid "Please click on \"%s\" to proceed"
-#~ msgstr "Klicka på \"%s\" för att fortsätta"
-
-#~ msgid "Automatically update the application"
-#~ msgstr "Uppdatera programmet automatiskt"
-
-#~ msgid "Notebook title:"
-#~ msgstr "Titel på anteckningsbok:"
-
-#~ msgid "Master keys that need upgrading"
-#~ msgstr "Huvudnycklar behöver upgraderas"
-
-#~ msgid ""
-#~ "The following master keys use an out-dated encryption algorithm and it is "
-#~ "recommended to upgrade them. The upgraded master key will still be able "
-#~ "to decrypt and encrypt your data as usual."
-#~ msgstr ""
-#~ "Följande huvudnycklar använder en föråldrad krypteringsalgoritm och det "
-#~ "rekommenderas att uppgradera dem. Den uppgraderade huvudnyckeln kommer "
-#~ "fortfarande att kunna dekryptera och kryptera dina data som vanligt."
-
-#~ msgid ""
-#~ "Enabling encryption means *all* your notes and attachments are going to "
-#~ "be re-synchronised and sent encrypted to the sync target. Do not lose the "
-#~ "password as, for security purposes, this will be the *only* way to "
-#~ "decrypt the data! To enable encryption, please enter your password below."
-#~ msgstr ""
-#~ "Aktivera kryptering betyder att *alla* dina anteckningar och bilagor "
-#~ "kommer att synkroniseras och skickas krypterade till "
-#~ "synkroniseringsmålet. Förlora inte lösenordet eftersom det i "
-#~ "säkerhetssyfte är det *enda* sättet att dekryptera data! För att aktivera "
-#~ "kryptering, ange ditt lösenord nedan."
-
-#~ msgid "Master Keys"
-#~ msgstr "Huvudnycklar"
-
-#~ msgid "Source"
-#~ msgstr "Källa"
-
-#~ msgid "Password OK"
-#~ msgstr "Lösenord OK"
-
-#~ msgid ""
-#~ "Note: Only one master key is going to be used for encryption (the one "
-#~ "marked as \"active\"). Any of the keys might be used for decryption, "
-#~ "depending on how the notes or notebooks were originally encrypted."
-#~ msgstr ""
-#~ "Notera: Endast en huvudnyckel kommer att användas för kryptering (den som "
-#~ "är markerad som \"aktiv\"). Några av nycklarna kan användas för "
-#~ "dekryptering, beroende på hur anteckningarna eller anteckningsböckerna "
-#~ "ursprungligen krypterades."
-
-#~ msgid "Encryption is:"
-#~ msgstr "Kryptering är:"
-
-#, javascript-format
-#~ msgid "Encryption will be enabled using the master key created on %s"
-#~ msgstr "Kryptering aktiveras med hjälp av huvudnyckeln som skapades på %s"
-
-#~ msgid "Do not resize images"
-#~ msgstr "Ändra inte storlek på bilder"
-
-#, javascript-format
-#~ msgid "%s %s (%s)"
-#~ msgstr "%s %s (%s)"
-
-#~ msgid "Insert template"
-#~ msgstr "Infoga mall"
-
-#~ msgid "Template file:"
-#~ msgstr "Fil för mall:"
-
-#~ msgid "Create note from template"
-#~ msgstr "Skapa anteckning från mall"
-
-#~ msgid "Create to-do from template"
-#~ msgstr "Skapa att göra-lista från mall"
-
-#~ msgid "Open template directory"
-#~ msgstr "Öppna mallmappen"
-
-#~ msgid "Refresh templates"
-#~ msgstr "Uppdatera mallar"
-
-#~ msgid "Templates"
-#~ msgstr "Mallar"
-
-#~ msgid "Share Notes"
-#~ msgstr "Dela anteckningar"
-
-#, fuzzy
-#~ msgid "Joplin Server Directory"
-#~ msgstr "Joplin-exporteringskatalog"
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "betonad text"
-
-#, fuzzy
-#~ msgid "Mark"
-#~ msgstr "Markdown"
-
-#~ msgid "Full Release Notes"
-#~ msgstr "Fullständig information om denna version"
-
-#, fuzzy
-#~ msgid ""
-#~ "If the font is incorrect or empty, it will default to a generic monospace "
-#~ "font."
-#~ msgstr ""
-#~ "Detta måste vara *monospace*-typsnitt eller så kommer det inte att "
-#~ "fungera korrekt. Om typsnittet är felaktigt eller tomt, kommer ett "
-#~ "standard generisk monospace-typsnitt användas."
-
-#, fuzzy
-#~ msgid ""
-#~ "This should be a *monospace* font or some elements will render "
-#~ "incorrectly. If the font is incorrect or empty, it will default to a "
-#~ "generic monospace font."
-#~ msgstr ""
-#~ "Detta måste vara *monospace*-typsnitt eller så kommer det inte att "
-#~ "fungera korrekt. Om typsnittet är felaktigt eller tomt, kommer ett "
-#~ "standard generisk monospace-typsnitt användas."
-
-#, fuzzy
-#~ msgid "Unknown"
-#~ msgstr "Okänd flagga: %s"
-
-#, fuzzy
-#~ msgid "Checking..."
-#~ msgstr "Avbryter..."
-
-#~ msgid ""
-#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
-#~ "see the full error message below:"
-#~ msgstr ""
-#~ "Joplin Nextcloud App finns antingen inte installerat eller är "
-#~ "felinställd. Vänligen se hela felmeddelandet nedan:"
-
-#, fuzzy
-#~ msgid "Show Log"
-#~ msgstr "Visa alla"
-
-#, fuzzy
-#~ msgid "Check Status"
-#~ msgstr "Tillstånd"
-
-#~ msgid "OneDrive Dev (For testing only)"
-#~ msgstr "OneDrive Dev (Endast för testning)"
-
-#, fuzzy
-#~ msgid ""
-#~ "Type a note title or part of its content to jump to it. Or type # "
-#~ "followed by a tag name, or @ followed by a notebook name."
-#~ msgstr ""
-#~ "Skriv titeln på en anteckning för att hoppa till den. Skriv # följt av "
-#~ "namnet på en tagg, @ följt av namnet på en anteckningsbok eller / följt "
-#~ "av innehåll från en anteckning."
-
-#~ msgid "Name"
-#~ msgstr "Namn"
-
-#, fuzzy
-#~ msgid "Notebook properties"
-#~ msgstr "Anteckningens egenskaper"
-
-#~ msgid "emphasized text"
-#~ msgstr "betonad text"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "Klicka för att stoppa extern redigering"
-
-#, fuzzy
-#~ msgid "Content Properties"
-#~ msgstr "Anteckningens egenskaper"
-
-#~ msgid "Please create a notebook first."
-#~ msgstr "Skapa en anteckningsbok först."
-
-#~ msgid "Usage"
-#~ msgstr "Användning"
-
-#~ msgid "Exit"
-#~ msgstr "Avsluta"
-
-#~ msgid "Confirm"
-#~ msgstr "Bekräfta"
-
-#~ msgid "Attach any file"
-#~ msgstr "Bifoga en fil"
-
-#~ msgid "Unknown log level: %s"
-#~ msgstr "Okänd loggnivå: %s"
-
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "Okänt nivå-ID: %s"
-
-#, fuzzy
-#~ msgid "Synchronize"
-#~ msgstr "Synkronisera"
-
-#~ msgid "Json Export Directory"
-#~ msgstr "Joplin-exportkatalog"
-
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "Detta objekt är för närvarande krypterat: %s \"%s\". Vänta tills alla "
-#~ "objekt dekrypteras och försök igen."
-
-#, fuzzy
-#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-#~ msgstr "Ta bort den här taggen från alla anteckningar?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not synchronise with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "Det gick inte att synkronisera med OneDrive.\n"
-#~ "\n"
-#~ "Det här felet händer ofta när du använder OneDrive for Business, vilket "
-#~ "tyvärr inte kan stödjas.\n"
-#~ "\n"
-#~ "Tänk på att använda ett vanligt OneDrive-konto."
-
-#, fuzzy
-#~ msgid "Cannot move tag to this location."
-#~ msgstr "Kan inte flytta anteckningsbok till den här platsen"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "Lägg till eller ta bort taggar"
-
-#~ msgid "Split"
-#~ msgstr "Delad"
-
-#, fuzzy
-#~ msgid "Resources"
-#~ msgstr "Resurser: %d."
-
-#~ msgid "Global zoom percentage"
-#~ msgstr "Global zoomprocent"
-
-#~ msgid "Synchronisation is already in progress. State: %s"
-#~ msgstr "Synkronisering pågår redan. Tillstånd: %s"
-
-#, fuzzy
-#~ msgid "Confirm master password:"
-#~ msgstr "Ange huvudlösenord:"
-
-#, fuzzy
-#~ msgid "Confirm password"
-#~ msgstr "Ange huvudlösenord:"
-
-#, fuzzy
-#~ msgid "Missing required argument: note"
-#~ msgstr "Saknade obligatoriskt argument: %s"
-
-#~ msgid "Synchronisation status"
-#~ msgstr "Synkroniseringstillstånd"
-
-#~ msgid "General Options"
-#~ msgstr "Allmänna inställningar"
-
-#~ msgid "Encryption options"
-#~ msgstr "Krypteringsinställningar"
-
-#~ msgid "Encryption Options"
-#~ msgstr "Krypteringsinställningar"
-
-#~ msgid "Clipper Options"
-#~ msgstr "Clipper-inställningar"
-
-#, fuzzy
-#~ msgid "Permission to write to external storage"
-#~ msgstr "Tillåtelse att använda kameran"
-
-#~ msgid "Cancel synchronisation"
-#~ msgstr "Avbryt synkronisering"
-
-#~ msgid "Show metadata"
-#~ msgstr "Visa metadata"
-
-#~ msgid ""
-#~ "Click on the (+) button to create a new note or notebook. Click on the "
-#~ "side menu to access your existing notebooks."
-#~ msgstr ""
-#~ "Klicka på (+)-knappen för att skapa en ny anteckning eller "
-#~ "anteckningsbok. Klicka på sidomenyn för att få tillgång till dina "
-#~ "befintliga anteckningsböcker."
-
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr ""
-#~ "Du har för närvarande ingen anteckningsbok. Skapa en genom att klicka på "
-#~ "(+)-knappen."
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separera varje tagg med ett komma."
-
-#~ msgid ""
-#~ "The path to synchronise with when file system synchronisation is enabled. "
-#~ "See `sync.target`."
-#~ msgstr ""
-#~ "Sökvägen att synkronisera med när synkronisering av filsystem är "
-#~ "aktiverat. Se `sync.target`."
-
-#~ msgid "State: %s."
-#~ msgstr "Tillstånd: %s."
-
-#~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "En anteckningsbok med denna titel finns redan: \"%s\""
