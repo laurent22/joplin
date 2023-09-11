@@ -4728,7 +4728,7 @@ __metadata:
     relative: 3.0.2
     reselect: 4.1.8
     server-destroy: 1.0.1
-    sharp: 0.32.4
+    sharp: 0.32.5
     sprintf-js: 1.1.2
     sqlite3: 5.1.6
     string-padding: 1.0.2
@@ -4963,7 +4963,7 @@ __metadata:
     request: 2.88.2
     rss: 1.2.2
     sass: 1.64.2
-    sharp: 0.32.4
+    sharp: 0.32.5
     source-map-support: 0.5.21
     sqlite3: 5.1.6
     typescript: 5.1.6
@@ -21122,7 +21122,7 @@ __metadata:
     proper-lockfile: 4.1.2
     read-chunk: 2.1.0
     server-destroy: 1.0.1
-    sharp: 0.32.4
+    sharp: 0.32.5
     sprintf-js: 1.1.2
     sqlite3: 5.1.6
     string-padding: 1.0.2
@@ -30142,9 +30142,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.32.4":
-  version: 0.32.4
-  resolution: "sharp@npm:0.32.4"
+"sharp@npm:0.32.5":
+  version: 0.32.5
+  resolution: "sharp@npm:0.32.5"
   dependencies:
     color: ^4.2.3
     detect-libc: ^2.0.2
@@ -30155,7 +30155,7 @@ __metadata:
     simple-get: ^4.0.1
     tar-fs: ^3.0.4
     tunnel-agent: ^0.6.0
-  checksum: 52e3cfe8fbba2623a9b935be8a3d00d6993a2c56c775ac5cc89b273826db95f029f68a0029a37f96dcb6790aa2e3c05a02599035535b319f50ab31f5d86a13f0
+  checksum: 3cd6dc037c9ba126a30af90ac94043c4418bbb4228e15fd446638ff43fc9b14eabb553037988e484162c318f7baff21d896a5bef7dcc453f608e247d468f41e0
   languageName: node
   linkType: hard
 
