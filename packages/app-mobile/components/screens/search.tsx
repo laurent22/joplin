@@ -188,8 +188,6 @@ class SearchScreenComponent extends BaseScreenComponent {
 							value={this.state.query}
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
-							accessibilityHint={_('Search for...')}
-							returnKeyType='search'
 						/>
 						<TouchableHighlight
 							onPress={() => this.clearButton_press()}
