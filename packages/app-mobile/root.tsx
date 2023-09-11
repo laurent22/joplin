@@ -22,14 +22,14 @@ import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
-import { setLocale } from '@joplin/lib/locale';
+import { _, setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -984,6 +984,9 @@ class AppComponent extends React.Component {
 		this.props.dispatch({
 			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
 		});
+		AccessibilityInfo.announceForAccessibility(
+			isOpen ? _('Side menu opened') : _('Side menu closed')
+		);
 	}
 
 	private getSideMenuWidth = () => {
