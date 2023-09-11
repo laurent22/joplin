@@ -813,6 +813,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// (If unsupported, returns NEVER_ASK_AGAIN).
 		// On earlier releases, notifications should work without this permission.
 		if (response === PermissionsAndroid.RESULTS.DENIED) {
+			logger.warn('POST_NOTIFICATIONS permission was not granted');
 			ToastAndroid.show(
 				_('Joplin is missing permission to show notifications. Alarms will not be triggered.'),
 				ToastAndroid.SHORT
