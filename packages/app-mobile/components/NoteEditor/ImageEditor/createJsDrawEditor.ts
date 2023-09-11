@@ -101,11 +101,13 @@ const listenToolbarState = (editor: Editor, toolbar: AbstractToolbar) => {
 export const applyTemplateToEditor = async (editor: Editor, templateData: string) => {
 	let backgroundComponent: AbstractComponent|null = null;
 	let imageSize = editor.getImportExportRect().size;
+	let autoresize = true;
 
 	try {
 		const templateJSON = JSON.parse(templateData);
 
-		const isEmptyTemplate = !('imageSize' in templateJSON) && !('backgroundData' in templateJSON);
+		const isEmptyTemplate =
+			!('imageSize' in templateJSON) && !('backgroundData' in templateJSON);
 
 		// If the template is empty, add a default background
 		if (isEmptyTemplate) {
@@ -130,6 +132,10 @@ export const applyTemplateToEditor = async (editor: Editor, templateData: string
 		if ('imageSize' in templateJSON) {
 			imageSize = Vec2.ofXY(templateJSON.imageSize);
 		}
+
+		if ('autoresize' in templateJSON) {
+			autoresize = !!templateJSON.autoresize;
+		}
 	} catch (e) {
 		console.error('Warning: Invalid image template data: ', e);
 	}
@@ -150,6 +156,9 @@ export const applyTemplateToEditor = async (editor: Editor, templateData: string
 	// Set the image size
 	const imageSizeCommand = editor.setImportExportRect(new Rect2(0, 0, imageSize.x, imageSize.y));
 	await editor.dispatchNoAnnounce(imageSizeCommand, false);
+
+	// Enable/disable autoresize
+	await editor.dispatchNoAnnounce(editor.image.setAutoresizeEnabled(autoresize), false);
 
 	// And zoom to the template (false = don't make undoable)
 	await editor.dispatchNoAnnounce(editor.viewport.zoomTo(editor.getImportExportRect()), false);

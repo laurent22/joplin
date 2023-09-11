@@ -4517,7 +4517,7 @@ __metadata:
     "@joplin/renderer": ~2.12
     "@joplin/tools": ~2.12
     "@joplin/utils": ~2.12
-    "@js-draw/material-icons": 1.1.0
+    "@js-draw/material-icons": 1.3.0
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.4.1
@@ -4548,7 +4548,7 @@ __metadata:
     jest: 29.5.0
     jest-environment-jsdom: 29.5.0
     jetifier: 2.0.0
-    js-draw: 1.2.2
+    js-draw: 1.3.0
     jsc-android: 241213.1.0
     jsdom: 22.1.0
     lodash: 4.17.21
@@ -5126,21 +5126,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@js-draw/material-icons@npm:1.1.0"
+"@js-draw/material-icons@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@js-draw/material-icons@npm:1.3.0"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: ee9759f77741779a33359c45cf830ea3d57466c9231bd4fc81ef5f78f01bab42247b124b7638ddfd1d04aad2cc65f15344dc885ad4606efd5e2d76edb11c13e7
+  checksum: 22a52e7bbf809d5d3951b1c14a1a0c5f2e293f8ccf6998284b2086fef3b0d883968bc791284f7c9808262d181c640fb6e26344bf717fc53485671f3a52e632b1
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "@js-draw/math@npm:1.2.2"
+"@js-draw/math@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@js-draw/math@npm:1.3.0"
   dependencies:
     bezier-js: 6.1.3
-  checksum: d96297059c5d50faf4e8c74f41a1f5ef88b3b5a1561ba3d254b1aefe376a92af35c512296464fbf91b25132b8f86a2f87b482a3f3bcc78a15f9c46bf05de75b3
+  checksum: 3b192092076cc6dab9f93244093e2783d04adcb708c1f17f8252e8ba0823347946b95bbf381cb3b9e5e973c6cc5b8e60722527ad1093ffba2d873c8ef12044f0
   languageName: node
   linkType: hard
 
@@ -10413,6 +10413,13 @@ __metadata:
   version: 6.1.3
   resolution: "bezier-js@npm:6.1.3"
   checksum: 5ca3317b00c844c15b4b179f1b54638bc943d393d17dd1551777c7178017663f3d61e469e56c2c2cc5b28459380706ccc12e46d80677b9375970ca55f48b5338
+  languageName: node
+  linkType: hard
+
+"big-integer@npm:^1.6.44":
+  version: 1.6.51
+  resolution: "big-integer@npm:1.6.51"
+  checksum: 3d444173d1b2e20747e2c175568bedeebd8315b0637ea95d75fd27830d3b8e8ba36c6af40374f36bdaea7b5de376dcada1b07587cb2a79a928fccdb6e6e3c518
   languageName: node
   linkType: hard
 
@@ -21188,13 +21195,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.2.2":
-  version: 1.2.2
-  resolution: "js-draw@npm:1.2.2"
+"js-draw@npm:1.3.0":
+  version: 1.3.0
+  resolution: "js-draw@npm:1.3.0"
   dependencies:
-    "@js-draw/math": ^1.2.2
+    "@js-draw/math": ^1.3.0
     "@melloware/coloris": 0.21.0
-  checksum: aa8fe4fded5b4272cddef4e67abd1e42acae56c96649c3e1469974bdf7fae2172ae9a0f059e59e2b5be3b7744e884729fe4a3f1da2aac89ec3074a2dd078123e
+  checksum: 4656a9f9294a75813591550975ca88d48157f55b11540592e906f43dc7746c04bb3c4d96db755e7ba04d79085c49dc77fcd44a30aaead01b6be954165690a5d6
   languageName: node
   linkType: hard
 
