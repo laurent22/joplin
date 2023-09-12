@@ -15857,9 +15857,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:2.28.0":
-  version: 2.28.0
-  resolution: "eslint-plugin-import@npm:2.28.0"
+"eslint-plugin-import@npm:2.28.1":
+  version: 2.28.1
+  resolution: "eslint-plugin-import@npm:2.28.1"
   dependencies:
     array-includes: ^3.1.6
     array.prototype.findlastindex: ^1.2.2
@@ -15870,18 +15870,17 @@ __metadata:
     eslint-import-resolver-node: ^0.3.7
     eslint-module-utils: ^2.8.0
     has: ^1.0.3
-    is-core-module: ^2.12.1
+    is-core-module: ^2.13.0
     is-glob: ^4.0.3
     minimatch: ^3.1.2
     object.fromentries: ^2.0.6
     object.groupby: ^1.0.0
     object.values: ^1.1.6
-    resolve: ^1.22.3
     semver: ^6.3.1
     tsconfig-paths: ^3.14.2
   peerDependencies:
     eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-  checksum: f9eba311b93ca1bb89311856b1f7285bd79e0181d7eb70fe115053ff77e2235fea749b30f538b78927dc65769340b5be61f4c9581d1c82bcdcccb2061f440ad1
+  checksum: e8ae6dd8f06d8adf685f9c1cfd46ac9e053e344a05c4090767e83b63a85c8421ada389807a39e73c643b9bff156715c122e89778169110ed68d6428e12607edf
   languageName: node
   linkType: hard
 
@@ -19905,7 +19904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.12.1, is-core-module@npm:^2.13.0":
+"is-core-module@npm:^2.13.0":
   version: 2.13.0
   resolution: "is-core-module@npm:2.13.0"
   dependencies:
@@ -29697,19 +29696,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.22.3":
-  version: 1.22.4
-  resolution: "resolve@npm:1.22.4"
-  dependencies:
-    is-core-module: ^2.13.0
-    path-parse: ^1.0.7
-    supports-preserve-symlinks-flag: ^1.0.0
-  bin:
-    resolve: bin/resolve
-  checksum: 23f25174c2736ce24c6d918910e0d1f89b6b38fefa07a995dff864acd7863d59a7f049e691f93b4b2ee29696303390d921552b6d1b841ed4a8101f517e1d0124
-  languageName: node
-  linkType: hard
-
 "resolve@npm:^2.0.0-next.4":
   version: 2.0.0-next.4
   resolution: "resolve@npm:2.0.0-next.4"
@@ -29750,19 +29736,6 @@ __metadata:
   bin:
     resolve: bin/resolve
   checksum: 5656f4d0bedcf8eb52685c1abdf8fbe73a1603bb1160a24d716e27a57f6cecbe2432ff9c89c2bd57542c3a7b9d14b1882b73bfe2e9d7849c9a4c0b8b39f02b8b
-  languageName: node
-  linkType: hard
-
-"resolve@patch:resolve@^1.22.3#~builtin<compat/resolve>":
-  version: 1.22.4
-  resolution: "resolve@patch:resolve@npm%3A1.22.4#~builtin<compat/resolve>::version=1.22.4&hash=c3c19d"
-  dependencies:
-    is-core-module: ^2.13.0
-    path-parse: ^1.0.7
-    supports-preserve-symlinks-flag: ^1.0.0
-  bin:
-    resolve: bin/resolve
-  checksum: c45f2545fdc4d21883861b032789e20aa67a2f2692f68da320cc84d5724cd02f2923766c5354b3210897e88f1a7b3d6d2c7c22faeead8eed7078e4c783a444bc
   languageName: node
   linkType: hard
 
@@ -30017,7 +29990,7 @@ __metadata:
     eslint: 8.46.0
     eslint-interactive: 10.8.0
     eslint-plugin-github: 4.9.2
-    eslint-plugin-import: 2.28.0
+    eslint-plugin-import: 2.28.1
     eslint-plugin-jest: 27.2.3
     eslint-plugin-promise: 6.1.1
     eslint-plugin-react: 7.33.1
