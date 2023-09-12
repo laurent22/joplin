@@ -114,7 +114,7 @@
     "@types/jest": "29.5.3",
     "@types/node": "18.17.8",
     "@types/react": "18.2.21",
-    "@types/react-redux": "7.1.25",
+    "@types/react-redux": "7.1.26",
     "@types/styled-components": "5.1.26",
     "electron": "25.3.1",
     "electron-builder": "24.4.0",
