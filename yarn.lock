@@ -4431,7 +4431,7 @@ __metadata:
     "@types/jest": 29.5.3
     "@types/mustache": 4.2.2
     "@types/node": 18.17.8
-    "@types/react": 18.2.20
+    "@types/react": 18.2.21
     "@types/react-redux": 7.1.25
     "@types/styled-components": 5.1.26
     async-mutex: 0.4.0
@@ -4530,7 +4530,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.3
-    "@types/react": 18.2.20
+    "@types/react": 18.2.21
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.25
     "@types/tar-stream": 2.2.2
@@ -4681,7 +4681,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.17.8
     "@types/node-rsa": 1.1.1
-    "@types/react": 18.2.20
+    "@types/react": 18.2.21
     "@types/uuid": 9.0.2
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -4753,7 +4753,7 @@ __metadata:
     "@joplin/lib": ~2.12
     "@types/jest": 29.5.3
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.20
+    "@types/react": 18.2.21
     "@types/react-dom": 18.2.7
     "@types/styled-components": 5.1.26
     async-mutex: 0.4.0
@@ -8014,14 +8014,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.20":
-  version: 18.2.20
-  resolution: "@types/react@npm:18.2.20"
+"@types/react@npm:18.2.21":
+  version: 18.2.21
+  resolution: "@types/react@npm:18.2.21"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 30f699c60e5e4bfef273ce64d320651cdd60f5c6a08361c6c7eca8cebcccda1ac953d2ee57c9f321b5ae87f8a62c72b6d35ca42df0e261d337849952daab2141
+  checksum: ffed203bfe7aad772b8286f7953305c9181ac3a8f27d3f5400fbbc2a8e27ca8e5bbff818ee014f39ca0d19d2b3bb154e5bdbec7e232c6f80b59069375aa78349
   languageName: node
   linkType: hard
 

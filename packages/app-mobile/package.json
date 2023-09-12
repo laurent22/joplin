@@ -106,7 +106,7 @@
     "@tsconfig/react-native": "2.0.2",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.5.3",
-    "@types/react": "18.2.20",
+    "@types/react": "18.2.21",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.25",
     "@types/tar-stream": "2.2.2",
