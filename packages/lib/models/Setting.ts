@@ -723,6 +723,8 @@ class Setting extends BaseModel {
 
 			'sync.10.canUseSharePermissions': { value: false, type: SettingItemType.Bool, public: false },
 
+			'sync.10.accountType': { value: 0, type: SettingItemType.Int, public: false },
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
