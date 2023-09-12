@@ -1,9 +1,10 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import RevisionService from '@joplin/lib/services/RevisionService';
+import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
 	name: 'restoreNoteRevision',
-	label: 'Restore a note from history',
+	label: () => _('Restore a note from history'),
 };
 
 export const runtime = (): CommandRuntime => {
