@@ -109,7 +109,7 @@ export default function NoteTitleBar(props: Props) {
 				className="title-input"
 				type="text"
 				ref={props.titleInputRef}
-				placeholder={props.isProvisional ? _('Creating new %s...', props.noteIsTodo ? _('to-do') : _('note')) : ''}
+				placeholder={props.isProvisional ? (props.noteIsTodo ? _('Creating new to-do...') : _('Creating new note...')) : ''}
 				style={styles.titleInput}
 				readOnly={props.disabled}
 				onChange={props.onTitleChange}
