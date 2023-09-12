@@ -22,11 +22,11 @@ Three types of applications are available: for **desktop** (Windows, macOS and L
 
 Operating System | Download
 ---|---
-Windows (32 and 64-bit) | <a href='https://objects.joplinusercontent.com/v2.12.15/Joplin-Setup-2.12.15.exe?source=JoplinWebsite&type=New'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
-macOS | <a href='https://objects.joplinusercontent.com/v2.12.15/Joplin-2.12.15.dmg?source=JoplinWebsite&type=New'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
-Linux | <a href='https://objects.joplinusercontent.com/v2.12.15/Joplin-2.12.15.AppImage?source=JoplinWebsite&type=New'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
+Windows (32 and 64-bit) | <a href='https://objects.joplinusercontent.com/v2.12.16/Joplin-Setup-2.12.16.exe?source=JoplinWebsite&type=New'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
+macOS | <a href='https://objects.joplinusercontent.com/v2.12.16/Joplin-2.12.16.dmg?source=JoplinWebsite&type=New'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
+Linux | <a href='https://objects.joplinusercontent.com/v2.12.16/Joplin-2.12.16.AppImage?source=JoplinWebsite&type=New'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
 
-**On Windows**, you may also use the <a href='https://objects.joplinusercontent.com/v2.12.15/JoplinPortable.exe?source=JoplinWebsite&type=New'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+**On Windows**, you may also use the <a href='https://objects.joplinusercontent.com/v2.12.16/JoplinPortable.exe?source=JoplinWebsite&type=New'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
 **On Linux**, the recommended way is to use the following installation script as it will handle the desktop icon too:
 
@@ -38,7 +38,7 @@ The install and update script supports the [following flags](https://github.com/
 
 Operating System | Download | Alt. Download
 ---|---|---
-Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the [APK file](https://objects.joplinusercontent.com/v2.11.31/joplin-v2.11.31.apk?source=JoplinWebsite&type=New)
+Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the [APK file](https://objects.joplinusercontent.com/v2.12.3/joplin-v2.12.3.apk?source=JoplinWebsite&type=New)
 iOS | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
