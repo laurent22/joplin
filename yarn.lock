@@ -3436,7 +3436,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/notarize@npm:1.2.4, @electron/notarize@npm:^1.2.3":
+"@electron/notarize@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@electron/notarize@npm:2.0.0"
+  dependencies:
+    debug: ^4.1.1
+    fs-extra: ^9.0.1
+  checksum: e6a144b8cb1c355bce7515876da559c9f607b45eaa88e9f268887295243ea1ede3efbf572efa7af8abf734d30fc7cb1a5b88c14de4187ebc4cfa62d8bfc1bb70
+  languageName: node
+  linkType: hard
+
+"@electron/notarize@npm:^1.2.3":
   version: 1.2.4
   resolution: "@electron/notarize@npm:1.2.4"
   dependencies:
@@ -4418,7 +4428,7 @@ __metadata:
     7zip-bin-linux: ^1.0.1
     7zip-bin-mac: ^1.0.1
     7zip-bin-win: ^2.1.1
-    "@electron/notarize": 1.2.4
+    "@electron/notarize": 2.0.0
     "@electron/rebuild": 3.3.0
     "@electron/remote": 2.0.10
     "@fortawesome/fontawesome-free": 5.15.4
