@@ -313,6 +313,13 @@ rules.inlineLink = {
     )
   },
 
+  escapeContent: function (node, _options) {
+    // Disable escaping content (including '_'s) when the link has the same URL and href.
+    // This prevents links from being broken by added escapes.
+    const doEscape = node.getAttribute('href') !== node.textContent;
+    return doEscape ? 'auto' : false;
+  },
+
   replacement: function (content, node, options) {
     var href = filterLinkHref(node.getAttribute('href'))
 
