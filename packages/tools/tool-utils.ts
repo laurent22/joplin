@@ -18,6 +18,7 @@ export interface GitHubRelease {
 	html_url: string;
 	prerelease: boolean;
 	draft: boolean;
+	body: string;
 }
 
 async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl = '') {
@@ -374,6 +375,22 @@ export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(r
 		pageNum++;
 	}
 }
+
+export const gitHubLatestReleases = async (page: number, perPage: number) => {
+	const response = await fetch(`https://api.github.com/repos/laurent22/joplin/releases?page=${page}&per_page=${perPage}`, {
+		headers: {
+			'Content-Type': 'application/json',
+			'User-Agent': 'Joplin Forum Updater',
+		},
+	});
+
+	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+	const releases: GitHubRelease[] = await response.json();
+	if (!releases.length) throw new Error('Cannot find latest release');
+
+	return releases;
+};
 
 export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
 	options = { isDraft: false,

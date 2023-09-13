@@ -19,6 +19,7 @@
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn run buildPluginDoc_",
     "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "updateNews": "node ./packages/tools/website/updateNews",
+    "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
     "buildWebsiteTranslations": "node packages/tools/website/buildTranslations.js",
