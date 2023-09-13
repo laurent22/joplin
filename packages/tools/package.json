@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "2.12.1",
+  "version": "2.13.0",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
@@ -20,9 +20,9 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/lib": "^2.12.1",
-    "@joplin/renderer": "^2.12.1",
-    "@joplin/utils": "^2.12.1",
+    "@joplin/lib": "~2.13",
+    "@joplin/renderer": "~2.13",
+    "@joplin/utils": "~2.13",
     "compare-versions": "3.6.0",
     "dayjs": "1.11.9",
     "execa": "4.1.0",
