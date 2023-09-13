@@ -1,6 +1,6 @@
 import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
-import { gitHubLatestReleases } from './tool-utils';
+import { gitHubLatestReleases, gitHubLinkify } from './tool-utils';
 import { config, createPost, createTopic, getForumTopPostByExternalId, getTopicByExternalId, updatePost } from './utils/discourse';
 import * as compareVersions from 'compare-versions';
 import dayjs = require('dayjs');
@@ -55,7 +55,7 @@ const main = async () => {
 
 			const externalId = `prerelease-${minorVersion.replace(/\./g, '-')}`;
 
-			const postBody = `## [${release.tag_name}](${release.html_url})\n\n${release.body}`;
+			const postBody = `## [${release.tag_name}](${release.html_url})\n\n${gitHubLinkify(release.body)}`;
 
 			let topic = await getTopicByExternalId(externalId);
 

@@ -422,6 +422,12 @@ export async function githubRelease(project: string, tagName: string, options: a
 	return responseJson;
 }
 
+export const gitHubLinkify = (markdown: string) => {
+	markdown = markdown.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
+	markdown = markdown.replace(/\(([a-f0-9]+)\)/g, '([$1](https://github.com/laurent22/joplin/commit/$1))');
+	return markdown;
+};
+
 export function readline(question: string) {
 	return new Promise((resolve) => {
 		const readline = require('readline');
