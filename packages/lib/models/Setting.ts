@@ -2502,9 +2502,30 @@ class Setting extends BaseModel {
 		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
+	public static sectionOrder() {
+		return [
+			'general',
+			'application',
+			'appearance',
+			'sync',
+			'encryption',
+			'joplinCloud',
+			'plugins',
+			'markdownPlugins',
+			'note',
+			'revisionService',
+			'server',
+			'keymap',
+		];
+	}
+
 	private static sectionSource(sectionName: string): SettingSectionSource {
 		if (this.customSections_[sectionName]) return this.customSections_[sectionName].source || SettingSectionSource.Default;
 		return SettingSectionSource.Default;
+	}
+
+	public static isSubSection(sectionName: string) {
+		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]) {
