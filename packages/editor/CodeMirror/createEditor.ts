@@ -8,7 +8,7 @@ import {
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, indentWithTab, standardKeymap } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, standardKeymap } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -163,11 +163,12 @@ const createEditor = (
 	};
 
 	// Returns a keyboard command that returns true (so accepts the keybind)
-	const keyCommand = (key: string, run: Command): KeyBinding => {
+	// alwaysActive: true if this command should be registered even if ignoreModifiers is given.
+	const keyCommand = (key: string, run: Command, alwaysActive?: boolean): KeyBinding => {
 		return {
 			key,
 			run: editor => {
-				if (settings.ignoreModifiers) return false;
+				if (settings.ignoreModifiers && !alwaysActive) return false;
 
 				return run(editor);
 			},
@@ -252,8 +253,10 @@ const createEditor = (
 						notifyLinkEditRequest();
 						return true;
 					}),
+					keyCommand('Tab', increaseIndent, true),
+					keyCommand('Shift-Tab', decreaseIndent, true),
 
-					...standardKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
+					...standardKeymap, ...historyKeymap, ...searchKeymap,
 				]),
 			],
 			doc: initialText,
