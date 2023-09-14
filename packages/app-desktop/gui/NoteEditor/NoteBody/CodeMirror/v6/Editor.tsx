@@ -8,6 +8,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import setupVim from '../utils/setupVim';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -66,6 +67,14 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 	useEffect(() => {
 		editor?.updateSettings(props.settings);
 	}, [props.settings, editor]);
+
+	useEffect(() => {
+		if (!editor) {
+			return;
+		}
+
+		setupVim(editor);
+	}, [editor]);
 
 	return (
 		<div

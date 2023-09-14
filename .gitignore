@@ -203,6 +203,7 @@ packages/app-desktop/gui/Navigator.js
 packages/app-desktop/gui/NoteContentPropertiesDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/setupVim.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useCursorUtils.test.js

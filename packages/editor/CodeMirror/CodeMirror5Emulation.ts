@@ -1,7 +1,7 @@
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, showPanel } from '@codemirror/view';
 import { Range, RangeSetBuilder } from '@codemirror/state';
 import getScrollFraction from './getScrollFraction';
-import { CodeMirror as BaseCodeMirror5Emulation } from '@replit/codemirror-vim';
+import { CodeMirror as BaseCodeMirror5Emulation, Vim } from '@replit/codemirror-vim';
 import { LogMessageCallback } from '../types';
 import editorCommands from './editorCommands/editorCommands';
 import { StateEffect } from '@codemirror/state';
@@ -31,6 +31,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 
 	// Used by some plugins to store state.
 	public state: Record<string, any> = Object.create(null);
+
+	public Vim = Vim;
 
 	public constructor(
 		public editor: EditorView,
