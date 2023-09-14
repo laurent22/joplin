@@ -36,6 +36,7 @@ const addMarkDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRan
 
 export interface LineWidgetOptions {
 	className?: string;
+	above?: boolean;
 }
 
 interface LineWidgetDecorationSpec extends DecorationRange {
@@ -179,13 +180,13 @@ export default class Decorator {
 						},
 					});
 				} else if (effect.is(addLineWidgetEffect)) {
+					const options = effect.value.options;
 					const decoration = Decoration.widget({
-						widget: new WidgetDecorationWrapper(effect.value.element, effect.value.options),
-						block: false,
+						widget: new WidgetDecorationWrapper(effect.value.element, options),
 					});
 
 					decorations = decorations.update({
-						add: [decoration.range(effect.value.from)],
+						add: [decoration.range(options.above ? effect.value.from : effect.value.to)],
 					});
 				} else if (effect.is(removeLineWidgetEffect)) {
 					decorations = decorations.update({
