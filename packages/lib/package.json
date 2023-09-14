@@ -17,14 +17,14 @@
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.1",
-    "@types/jest": "29.5.3",
+    "@types/jest": "29.5.4",
     "@types/js-yaml": "4.0.5",
     "@types/node": "18.17.11",
     "@types/node-rsa": "1.1.1",
     "@types/react": "18.2.21",
     "@types/uuid": "9.0.2",
     "clean-html": "1.5.0",
-    "jest": "29.6.2",
+    "jest": "29.6.4",
     "sharp": "0.32.5",
     "typescript": "5.1.6"
   },
