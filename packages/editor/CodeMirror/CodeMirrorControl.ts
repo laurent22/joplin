@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, PluginData, SearchState } from '../types';
-import CodeMirror5Emulation from './CodeMirror5Emulation';
+import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
 import { EditorSelection, StateEffect } from '@codemirror/state';
 import { updateLink } from './markdown/markdownCommands';

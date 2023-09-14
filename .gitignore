@@ -467,7 +467,8 @@ packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/types.js
-packages/editor/CodeMirror/CodeMirror5Emulation.js
+packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
+packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js
 packages/editor/CodeMirror/CodeMirrorControl.js
 packages/editor/CodeMirror/PluginLoader.js
 packages/editor/CodeMirror/configFromSettings.js

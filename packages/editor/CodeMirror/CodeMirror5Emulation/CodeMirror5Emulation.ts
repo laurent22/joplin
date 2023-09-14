@@ -1,11 +1,12 @@
-import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, showPanel } from '@codemirror/view';
-import { Range, RangeSetBuilder } from '@codemirror/state';
-import getScrollFraction from './getScrollFraction';
+import { EditorView, ViewPlugin, ViewUpdate, showPanel } from '@codemirror/view';
+import { Extension, Text } from '@codemirror/state';
+import getScrollFraction from '../getScrollFraction';
 import { CodeMirror as BaseCodeMirror5Emulation, Vim } from '@replit/codemirror-vim';
-import { LogMessageCallback } from '../types';
-import editorCommands from './editorCommands/editorCommands';
+import { LogMessageCallback } from '../../types';
+import editorCommands from '../editorCommands/editorCommands';
 import { StateEffect } from '@codemirror/state';
-import { StreamParser, StringStream, indentUnit } from '@codemirror/language';
+import { StreamParser } from '@codemirror/language';
+import Decorator, { LineWidgetOptions } from './Decorator';
 const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 
@@ -24,21 +25,36 @@ interface DocumentPosition {
 	ch: number;
 }
 
+const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
+	const line = doc.lineAt(pos);
+	return {
+		// CM 5 uses 0-based line numbering
+		line: line.number - 1,
+		ch: pos - line.from,
+	};
+};
+
 export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	private _events: Record<string, EditorEventCallback[]> = {};
 	private _options: Record<string, CodeMirror5OptionRecord> = Object.create(null);
-	private _overlays: (StreamParser<any>)[] = [];
+	private _decorator: Decorator;
+	private _decoratorExtension: Extension;
 
 	// Used by some plugins to store state.
 	public state: Record<string, any> = Object.create(null);
 
 	public Vim = Vim;
+	public Init = 'CodeMirror.Init';
 
 	public constructor(
 		public editor: EditorView,
 		private logMessage: LogMessageCallback,
 	) {
 		super(editor);
+
+		const { decorator, extension: decoratorExtension } = Decorator.create(editor);
+		this._decorator = decorator;
+		this._decoratorExtension = decoratorExtension;
 
 		editor.dispatch({
 			effects: StateEffect.appendConfig.of(this.makeCM6Extensions()),
@@ -56,45 +72,39 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 				scroll: () => CodeMirror5Emulation.signal(this, 'scroll'),
 				focus: () => CodeMirror5Emulation.signal(this, 'focus'),
 				blur: () => CodeMirror5Emulation.signal(this, 'blur'),
-				mousedown: event => CodeMirror5Emulation.signal(this, 'mousedown', this, event),
+				mousedown: event => CodeMirror5Emulation.signal(this, 'mousedown', event),
 			}),
 			ViewPlugin.fromClass(class {
 				public update(update: ViewUpdate) {
-					if (update.viewportChanged) {
-						CodeMirror5Emulation.signal(
-							cm5,
-							'viewportChange',
-							editor.viewport.from,
-							editor.viewport.to,
-						);
-					}
+					try {
+						if (update.viewportChanged) {
+							CodeMirror5Emulation.signal(
+								cm5,
+								'viewportChange',
+								editor.viewport.from,
+								editor.viewport.to,
+							);
+						}
 
-					if (update.docChanged) {
-						cm5.onChange(update);
-					}
+						if (update.docChanged) {
+							cm5.fireChangeEvents(update);
+							cm5.onChange(update);
+						}
 
-					if (update.selectionSet) {
-						cm5.onSelectionChange();
+						if (update.selectionSet) {
+							cm5.onSelectionChange();
+						}
+
+						CodeMirror5Emulation.signal(cm5, 'update');
+					// Catch the error -- otherwise, CodeMirror will de-register the update listener.
+					} catch (error) {
+						cm5.logMessage(`Error dispatching update: ${error}`);
 					}
 				}
 			}),
 
 			// Decorations
-			ViewPlugin.fromClass(class {
-				public decorations: DecorationSet;
-
-				public constructor(view: EditorView) {
-					this.decorations = cm5.createDecorations(view);
-				}
-
-				public update(update: ViewUpdate) {
-					if (update.viewportChanged || update.docChanged) {
-						this.decorations = cm5.createDecorations(update.view);
-					}
-				}
-			}, {
-				decorations: v => v.decorations,
-			}),
+			this._decoratorExtension,
 
 			// Some plugins rely on a CodeMirror-measure element
 			// to store temporary content.
@@ -106,109 +116,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		];
 	}
 
-	private _decorationCache: Record<string, Decoration> = Object.create(null);
-
-	private createDecorations(view: EditorView): DecorationSet {
-		const makeDecoration = (
-			tokenName: string, start: number, stop: number,
-		) => {
-			const isLineDecoration = tokenName.startsWith('line-');
-
-			// CM5 prefixes class names with cm-
-			tokenName = `cm-${tokenName}`;
-
-			let decoration;
-			if (tokenName in this._decorationCache) {
-				decoration = this._decorationCache[tokenName];
-			} else {
-				const attributes = { class: tokenName };
-
-				if (isLineDecoration) {
-					decoration = Decoration.line({ attributes });
-				} else {
-					decoration = Decoration.mark({ attributes });
-				}
-
-				this._decorationCache[tokenName] = decoration;
-			}
-
-			return decoration.range(start, stop);
-		};
-
-		const indentSize = view.state.facet(indentUnit).length;
-		const newDecorations: Range<Decoration>[] = [];
-
-		for (const overlay of this._overlays) {
-			const state = overlay.startState?.(indentSize) ?? {};
-
-			for (const { from, to } of view.visibleRanges) {
-				const fromLine = view.state.doc.lineAt(from);
-				const toLine = view.state.doc.lineAt(to);
-
-				const fromLineNumber = fromLine.number;
-				const toLineNumber = toLine.number;
-
-				for (let i = fromLineNumber; i <= toLineNumber; i++) {
-					const line = view.state.doc.line(i);
-
-					const reader = new StringStream(
-						line.text,
-						view.state.tabSize,
-						indentSize,
-					);
-					let lastPos = 0;
-
-					(reader as any).baseToken ??= (): null => null;
-
-					while (!reader.eol()) {
-						const token = overlay.token(reader, state);
-
-						if (token) {
-							for (const className of token.split(/\s+/)) {
-								if (className.startsWith('line-')) {
-									newDecorations.push(makeDecoration(className, line.from, line.from));
-								} else {
-									const from = lastPos + line.from;
-									const to = reader.pos + line.from;
-									newDecorations.push(makeDecoration(className, from, to));
-								}
-							}
-						}
-
-						if (reader.pos === lastPos) {
-							this.logMessage('Warning: Mark decoration position did not increase. Exiting early.');
-							break;
-						}
-
-						lastPos = reader.pos;
-					}
-				}
-			}
-		}
-
-		// Required by CodeMirror:
-		// Should be sorted by from position, then by length.
-		newDecorations.sort((a, b) => {
-			if (a.from !== b.from) {
-				return a.from - b.from;
-			}
-
-			return a.to - b.to;
-		});
-
-		// Per the documentation, new tokens should be added in
-		// increasing order.
-		const decorations = new RangeSetBuilder<Decoration>();
-
-		for (const decoration of newDecorations) {
-			decorations.add(decoration.from, decoration.to, decoration.value);
-		}
-
-		return decorations.finish();
-	}
-
 	private isEventHandledBySubclass(eventName: string) {
-		return ['mousedown', 'scroll', 'focus', 'blur', 'viewportChange'].includes(eventName);
+		return ['mousedown', 'scroll', 'focus', 'blur', 'update', 'change', 'changes', 'viewportChange'].includes(eventName);
 	}
 
 	public on(eventName: string, callback: EditorEventCallback) {
@@ -237,6 +146,44 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		}
 
 		super.signal(target, eventName, ...args);
+	}
+
+	private fireChangeEvents(update: ViewUpdate) {
+		type ChangeRecord = {
+			from: DocumentPosition;
+			to: DocumentPosition;
+			text: string[];
+			removed: string[];
+		};
+		const changes: ChangeRecord[] = [];
+		const origDoc = update.startState.doc;
+
+		for (const transaction of update.transactions) {
+			transaction.changes.iterChanges((fromA, toA, _fromB, _toB, inserted: Text) => {
+				changes.push({
+					from: documentPositionFromPos(origDoc, fromA),
+					to: documentPositionFromPos(origDoc, toA),
+					text: inserted.sliceString(0).split('\n'),
+					removed: origDoc.sliceString(fromA, toA).split('\n'),
+				});
+			});
+		}
+
+		// Delay firing events -- event listeners may try to create transactions.
+		// (this is done by the rich markdown plugin).
+		setTimeout(() => {
+			try {
+				for (const change of changes) {
+					CodeMirror5Emulation.signal(this, 'change', change);
+				}
+
+				CodeMirror5Emulation.signal(this, 'changes', changes);
+			} catch (e) {
+				this.logMessage(`Error in 'change' signal handler: ${e}`);
+				console.error(e);
+			}
+		}, 0);
+
 	}
 
 	// codemirror-vim's adapter doesn't match the CM5 docs -- wrap it.
@@ -285,7 +232,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	public lineInfo(lineNumber: number) {
 		const line = this.editor.state.doc.line(lineNumber + 1);
 
-		return {
+		const result = {
 			line: lineNumber,
 
 			// TODO: In CM5, a line handle is not a line number
@@ -293,11 +240,18 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 
 			text: line.text,
 			gutterMarkers: [] as any[],
-			textClass: 'cm-line',
+			textClass: ['cm-line', ...this._decorator.getLineClasses(lineNumber)],
 			bgClass: '',
 			wrapClass: '',
-			widgets: [] as any,
+			widgets: this._decorator.getLineWidgets(lineNumber),
 		};
+
+		return result;
+	}
+
+	public getStateAfter(_line: number) {
+		// TODO:
+		return {};
 	}
 
 	public getScrollPercent() {
@@ -313,7 +267,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			value: defaultValue,
 			onUpdate,
 		};
-		onUpdate(this, defaultValue, 'CodeMirror.Init');
+		onUpdate(this, defaultValue, this.Init);
 	}
 
 	public override setOption(name: string, value: any) {
@@ -334,8 +288,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		}
 	}
 
-
-
 	// codemirror-vim's API doesn't match the API docs here -- it expects addOverlay
 	// to return a SearchQuery. As such, this override returns "any".
 	public override addOverlay<State>(modeObject: StreamParser<State>|{ query: RegExp }): any {
@@ -343,7 +295,19 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			return super.addOverlay(modeObject);
 		}
 
-		this._overlays.push(modeObject);
+		this._decorator.addOverlay(modeObject);
+	}
+
+	public addLineClass(lineNumber: number, where: string, className: string) {
+		this._decorator.addLineClass(lineNumber, where, className);
+	}
+
+	public removeLineClass(lineNumber: number, where: string, className: string) {
+		this._decorator.removeLineClass(lineNumber, where, className);
+	}
+
+	public addLineWidget(lineNumber: number, node: HTMLElement, options: LineWidgetOptions) {
+		this._decorator.addLineWidget(lineNumber, node, options);
 	}
 
 	// TODO: Currently copied from useCursorUtils.ts.
