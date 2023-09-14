@@ -24,6 +24,10 @@ export default function useKeymap(CodeMirror: any) {
 		CodeMirror.Vim.mapCommand('<A-k>', 'action', 'swapLineUp', {}, { context: 'normal', isEdit: true });
 		CodeMirror.Vim.defineAction('insertListElement', CodeMirror.commands.vimInsertListElement);
 		CodeMirror.Vim.mapCommand('o', 'action', 'insertListElement', { after: true }, { context: 'normal', isEdit: true, interlaceInsertRepeat: true });
+
+		// Allow copy-paste in insert mode
+		CodeMirror.Vim.unmap('<C-c>', 'insert');
+		CodeMirror.Vim.unmap('<C-v>', 'insert');
 	}
 	function isEditorCommand(command: string) {
 		return command.startsWith('editor.');
