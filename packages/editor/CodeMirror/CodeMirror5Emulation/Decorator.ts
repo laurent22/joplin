@@ -3,7 +3,7 @@
 // to input accepted by CodeMirror 6
 
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
-import { ChangeDesc, Extension, Range, RangeSetBuilder, StateEffect } from '@codemirror/state';
+import { ChangeDesc, Extension, Range, RangeSetBuilder, StateEffect, StateField, Transaction } from '@codemirror/state';
 import { StreamParser, StringStream, indentUnit } from '@codemirror/language';
 
 interface DecorationRange {
@@ -101,14 +101,12 @@ export default class Decorator {
 				decorations: v => v.decorations,
 			}),
 
-			// Other decorations based on effects. See the
-			// decoration examples: https://codemirror.net/examples/decoration/
-			ViewPlugin.fromClass(class {
-				public update(update: ViewUpdate) {
-					decorator.updateEffectDecorations(update);
-				}
-			}, {
-				decorations: _ => decorator._effectDecorations,
+			// Other decorations based on effects. See the decoration examples: https://codemirror.net/examples/decoration/
+			// Note that EditorView.decorations.from is required for block widgets.
+			StateField.define<DecorationSet>({
+				create: () => Decoration.none,
+				update: (_, viewUpdate) => decorator.updateEffectDecorations([viewUpdate]),
+				provide: field => EditorView.decorations.from(field),
 			}),
 		];
 	}
@@ -142,8 +140,7 @@ export default class Decorator {
 		return decoration;
 	}
 
-	private updateEffectDecorations(update: ViewUpdate) {
-		const transactions = update.transactions;
+	private updateEffectDecorations(transactions: Transaction[]) {
 		let decorations = this._effectDecorations;
 
 		// Update decoration positions
@@ -159,8 +156,14 @@ export default class Decorator {
 						effect.value.cssClass, isLineDecoration,
 					);
 
+					const value = effect.value;
+					const from = effect.value.from;
+
+					// Line decorations are specified to have a size-zero range.
+					const to = isLineDecoration ? from : value.to;
+
 					decorations = decorations.update({
-						add: [decoration.range(effect.value.from, effect.value.to)],
+						add: [decoration.range(from, to)],
 					});
 				} else if (effect.is(removeLineDecorationEffect)) {
 					const doc = transaction.state.doc;
@@ -183,6 +186,8 @@ export default class Decorator {
 					const options = effect.value.options;
 					const decoration = Decoration.widget({
 						widget: new WidgetDecorationWrapper(effect.value.element, options),
+						side: options.above ? -1 : 1,
+						block: true,
 					});
 
 					decorations = decorations.update({
@@ -192,7 +197,7 @@ export default class Decorator {
 					decorations = decorations.update({
 						// Returns true only for decorations that should be kept.
 						filter: (_from, _to, value) => {
-							return value.spec.widget.element !== effect.value.element;
+							return value.spec.widget?.element !== effect.value.element;
 						},
 					});
 				}
@@ -200,6 +205,7 @@ export default class Decorator {
 		}
 
 		this._effectDecorations = decorations;
+		return decorations;
 	}
 
 	private createOverlayDecorations(view: EditorView): DecorationSet {
