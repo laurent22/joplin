@@ -336,16 +336,17 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
-	public crashDetectionHandler() {
-		// This handler conflicts with the single instance behaviour, so it's
-		// not used for now.
-		// https://discourse.joplinapp.org/t/pre-release-v2-8-is-now-available-updated-27-april/25158/56?u=laurent
+	public async crashDetectionHandler() {
 		if (!Setting.value('wasClosedSuccessfully')) {
 			const answer = confirm(_('The application did not close properly. Would you like to start in safe mode?'));
 			Setting.setValue('isSafeMode', !!answer);
 		}
 
 		Setting.setValue('wasClosedSuccessfully', false);
+
+		// Save changes to settings now, so that the safe mode popup appears
+		// even if the crash happens immediately after startup.
+		await Setting.saveAll();
 	}
 
 	public async start(argv: string[]): Promise<any> {
@@ -355,7 +356,7 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
-		// this.crashDetectionHandler();
+		await this.crashDetectionHandler();
 
 		await this.applySettingsSideEffects();
 

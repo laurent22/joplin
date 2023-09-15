@@ -61,9 +61,13 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
 	public componentDidMount() {
 		const onAppClose = () => {
-			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
-				canClose: true,
-			});
+			// Replies to the appClose event are generally handled elsewhere. However,
+			// if we're in an error state, these handlers aren't guranteed to work.
+			if (this.state.error) {
+				ipcRenderer.send('asynchronous-message', 'appCloseReply', {
+					canClose: true,
+				});
+			}
 		};
 
 		ipcRenderer.on('appClose', onAppClose);
