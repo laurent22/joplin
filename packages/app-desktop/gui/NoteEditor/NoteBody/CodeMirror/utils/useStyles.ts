@@ -70,6 +70,7 @@ const useStyles = (props: NoteBodyEditorProps) => {
 				// CM6 only
 				globalTheme: {
 					...theme,
+					fontFamily: 'inherit',
 					fontSize: props.fontSize,
 					fontSizeUnits: 'px',
 				},

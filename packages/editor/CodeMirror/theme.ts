@@ -80,6 +80,12 @@ const createTheme = (theme: any): Extension[] => {
 		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
+		// The desktop app sets the font for these elements to a specific font.
+		// Override this.
+		'& div, & span, & a': {
+			fontFamily: 'inherit',
+		},
+
 		// &.cm-focused is used to give these styles higher specificity
 		// than the defaults.
 		[selectionBackgroundSelector]: baseSelectionStyle,
