@@ -64,6 +64,10 @@ const tableDelimiterDecoration = Decoration.line({
 	attributes: { class: 'cm-tableDelimiter' },
 });
 
+const horizontalRuleDecoration = Decoration.mark({
+	attributes: { class: 'cm-hr' },
+});
+
 type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
@@ -153,6 +157,9 @@ const computeDecorations = (view: EditorView) => {
 					break;
 				case 'TableRow':
 					addDecorationToLines(viewFrom, viewTo, tableBodyDecoration);
+					break;
+				case 'HorizontalRule':
+					addDecorationToRange(viewFrom, viewTo, horizontalRuleDecoration);
 					break;
 				}
 

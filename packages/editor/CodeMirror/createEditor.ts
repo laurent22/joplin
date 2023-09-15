@@ -1,9 +1,11 @@
 import { Compartment, EditorState } from '@codemirror/state';
-import { indentOnInput, indentUnit } from '@codemirror/language';
+import { indentOnInput, indentUnit, syntaxHighlighting } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, getSearchQuery,
 	highlightSelectionMatches, search,
 } from '@codemirror/search';
+
+import { classHighlighter } from '@lezer/highlight';
 
 import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
@@ -224,6 +226,10 @@ const createEditor = (
 
 				// Apply styles to entire lines (block-display decorations)
 				decoratorExtension,
+
+				// Adds additional CSS classes to tokens (the default CSS classes are
+				// auto-generated and thus unstable).
+				syntaxHighlighting(classHighlighter),
 
 				EditorView.lineWrapping,
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
