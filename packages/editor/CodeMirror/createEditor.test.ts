@@ -55,14 +55,17 @@ describe('createEditor', () => {
 		// Force the generation of the syntax tree now.
 		forceParsing(editor.editor);
 
+		const headerLine = document.body.querySelector('.cm-headerLine')!;
+		expect(headerLine.textContent).toBe(headerLineText);
+
 		// CodeMirror nests the tag that styles the header within .cm-headerLine:
 		//  <div class='cm-headerLine'><span class='someclass'>Testing...</span></div>
-		const headerLineContent = document.body.querySelector('.cm-headerLine > span')!;
-
-		expect(headerLineContent.textContent).toBe(headerLineText);
-
-		const style = getComputedStyle(headerLineContent);
-		expect(style.borderBottom).not.toBe('');
-		expect(style.fontSize).toBe('1.6em');
+		const headerLineContent = document.body.querySelectorAll('.cm-headerLine > span');
+		expect(headerLineContent.length).toBeGreaterThanOrEqual(1);
+		for (const part of headerLineContent) {
+			const style = getComputedStyle(part);
+			expect(style.borderBottom).not.toBe('');
+			expect(style.fontSize).toBe('1.6em');
+		}
 	});
 });
