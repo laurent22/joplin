@@ -84,7 +84,7 @@ describe('CodeMirror5Emulation', () => {
 		// onUpdate should be called once initially
 		expect(onOtherOptionUpdate).toHaveBeenCalledTimes(1);
 		expect(onOptionUpdate).toHaveBeenCalledTimes(1);
-		expect(onOptionUpdate).toHaveBeenLastCalledWith([
+		expect(onOptionUpdate).toHaveBeenLastCalledWith(
 			codeMirror,
 
 			// default value -- the new value
@@ -92,14 +92,14 @@ describe('CodeMirror5Emulation', () => {
 
 			// the original value (none, so given CodeMirror.Init)
 			codeMirror.Init,
-		]);
+		);
 
 		// onUpdate should be called each time the option changes
 		codeMirror.setOption('an-option!', 'test 2');
 		expect(onOptionUpdate).toHaveBeenCalledTimes(2);
-		expect(onOptionUpdate).toHaveBeenLastCalledWith([
+		expect(onOptionUpdate).toHaveBeenLastCalledWith(
 			codeMirror, 'test 2', 'test',
-		]);
+		);
 
 		codeMirror.setOption('an-option!', 'test...');
 		expect(onOptionUpdate).toHaveBeenCalledTimes(3);
