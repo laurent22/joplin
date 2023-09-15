@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v2.12.17](https://github.com/laurent22/joplin/releases/tag/v2.12.17) - 2023-09-14T21:54:52Z
+
+- Fixed: Prevent application from being stuck when importing an invalid ENEX file ([#8699](https://github.com/laurent22/joplin/issues/8699))
+
 ## [v2.13.1](https://github.com/laurent22/joplin/releases/tag/v2.13.1) (Pre-release) - 2023-09-13T09:31:50Z
 
 - Improved: Add option to import HTML and TXT file ([#8729](https://github.com/laurent22/joplin/issues/8729)) ([#8722](https://github.com/laurent22/joplin/issues/8722) by [@hubert](https://github.com/hubert))
