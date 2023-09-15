@@ -31,6 +31,10 @@ const createEditorSettings = (themeId: number) => {
 };
 
 describe('createEditor', () => {
+	beforeAll(() => {
+		jest.useFakeTimers();
+	});
+
 	// This checks for a regression -- occasionally, when updating packages,
 	// syntax highlighting in the CodeMirror editor stops working. This is usually
 	// fixed by
@@ -67,5 +71,72 @@ describe('createEditor', () => {
 			expect(style.borderBottom).not.toBe('');
 			expect(style.fontSize).toBe('1.6em');
 		}
+
+		// Cleanup
+		editor.remove();
+	});
+
+	it('should support loading plugins', async () => {
+		const initialText = '# Test\nThis is a test.';
+		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
+
+		const editor = createEditor(document.body, {
+			initialText,
+			settings: editorSettings,
+			onEvent: _event => {},
+			onLogMessage: _message => {},
+		});
+
+		const getContentScriptJs = jest.fn(async () => {
+			return `
+				exports.default = context => {
+					context.postMessage(context.pluginId);
+				};
+			`;
+		});
+		const postMessageHandler = jest.fn();
+
+		const testPlugin1 = {
+			pluginId: 'a.plugin.id',
+			contentScriptId: 'a.plugin.id.contentScript',
+			contentScriptJs: getContentScriptJs,
+			postMessageHandler,
+		};
+		const testPlugin2 = {
+			pluginId: 'another.plugin.id',
+			contentScriptId: 'another.plugin.id.contentScript',
+			contentScriptJs: getContentScriptJs,
+			postMessageHandler,
+		};
+
+		// Should be able to load a plugin
+		await editor.setPlugins([
+			testPlugin1,
+		]);
+
+		// Allow plugins to load
+		await jest.runAllTimersAsync();
+
+		// Because plugin loading is done by adding script elements to the document,
+		// we test for the presence of these script elements, rather than waiting for
+		// them to run.
+		expect(document.querySelectorAll('#joplin-plugin-scripts-container')).toHaveLength(1);
+
+		// Only one script should be present.
+		const scriptContainer = document.querySelector('#joplin-plugin-scripts-container');
+		expect(scriptContainer.querySelectorAll('script')).toHaveLength(1);
+
+		// Adding another plugin should add another script element
+		await editor.setPlugins([
+			testPlugin2, testPlugin1,
+		]);
+		await jest.runAllTimersAsync();
+
+		// There should now be script elements for each plugin
+		expect(scriptContainer.querySelectorAll('script')).toHaveLength(2);
+
+		// Removing the editor should remove the script container
+		editor.remove();
+		expect(document.querySelectorAll('#joplin-plugin-scripts-container')).toHaveLength(0);
 	});
 });

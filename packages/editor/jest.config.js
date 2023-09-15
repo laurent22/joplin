@@ -12,6 +12,7 @@ module.exports = {
 
 	testEnvironment: 'jsdom',
 	testMatch: ['**/*.test.(ts|tsx)'],
+	setupFilesAfterEnv: ['./jest.setup.js'],
 
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
 	slowTestThreshold: 40,

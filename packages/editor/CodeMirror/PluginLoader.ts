@@ -14,6 +14,10 @@ export default class PluginLoader {
 	public constructor(private editor: CodeMirrorControl, private logMessage: LogMessageCallback) {
 		this.pluginScriptsContainer = document.createElement('div');
 		this.pluginScriptsContainer.style.display = 'none';
+
+		// For testing
+		this.pluginScriptsContainer.id = 'joplin-plugin-scripts-container';
+
 		document.body.appendChild(this.pluginScriptsContainer);
 
 		(window as any).scriptLoadCallbacks ??= Object.create(null);

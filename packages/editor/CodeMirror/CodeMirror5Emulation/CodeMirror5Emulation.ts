@@ -1,5 +1,5 @@
 import { EditorView, ViewPlugin, ViewUpdate, showPanel } from '@codemirror/view';
-import { Extension, Text } from '@codemirror/state';
+import { Extension, Text, Transaction } from '@codemirror/state';
 import getScrollFraction from '../getScrollFraction';
 import { CodeMirror as BaseCodeMirror5Emulation, Vim } from '@replit/codemirror-vim';
 import { LogMessageCallback } from '../../types';
@@ -44,7 +44,9 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	public state: Record<string, any> = Object.create(null);
 
 	public Vim = Vim;
-	public Init = 'CodeMirror.Init';
+
+	// Passed as initial state to plugins
+	public Init = { toString: () => 'CodeMirror.Init' };
 
 	public constructor(
 		public editor: EditorView,
@@ -59,7 +61,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		editor.dispatch({
 			effects: StateEffect.appendConfig.of(this.makeCM6Extensions()),
 		});
-		this.getWrapperElement().classList.add('CodeMirror');
 	}
 
 	private makeCM6Extensions() {
@@ -113,15 +114,20 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 				dom.classList.add('CodeMirror-measure');
 				return { dom };
 			}),
+
+			// Note: We can allow legacy CM5 CSS to apply to the editor
+			// with a line similar to the following:
+			//    EditorView.editorAttributes.of({ class: 'CodeMirror' }),
+			// Many of these styles, however, don't work well with CodeMirror 6.
 		];
 	}
 
-	private isEventHandledBySubclass(eventName: string) {
-		return ['mousedown', 'scroll', 'focus', 'blur', 'update', 'change', 'changes', 'viewportChange'].includes(eventName);
+	private isEventHandledBySuperclass(eventName: string) {
+		return ['beforeSelectionChange'].includes(eventName);
 	}
 
 	public on(eventName: string, callback: EditorEventCallback) {
-		if (!this.isEventHandledBySubclass(eventName)) {
+		if (this.isEventHandledBySuperclass(eventName)) {
 			return super.on(eventName, callback);
 		}
 		this._events[eventName] ??= [];
@@ -154,6 +160,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			to: DocumentPosition;
 			text: string[];
 			removed: string[];
+			transaction: Transaction;
 		};
 		const changes: ChangeRecord[] = [];
 		const origDoc = update.startState.doc;
@@ -165,6 +172,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 					to: documentPositionFromPos(origDoc, toA),
 					text: inserted.sliceString(0).split('\n'),
 					removed: origDoc.sliceString(fromA, toA).split('\n'),
+					transaction,
 				});
 			});
 		}
@@ -172,16 +180,16 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		// Delay firing events -- event listeners may try to create transactions.
 		// (this is done by the rich markdown plugin).
 		setTimeout(() => {
-			try {
-				for (const change of changes) {
-					CodeMirror5Emulation.signal(this, 'change', change);
-				}
+			for (const change of changes) {
+				CodeMirror5Emulation.signal(this, 'change', change);
 
-				CodeMirror5Emulation.signal(this, 'changes', changes);
-			} catch (e) {
-				this.logMessage(`Error in 'change' signal handler: ${e}`);
-				console.error(e);
+				// If triggered by a user, also send the inputRead event
+				if (change.transaction.isUserEvent('input')) {
+					CodeMirror5Emulation.signal(this, 'inputRead', change);
+				}
 			}
+
+			CodeMirror5Emulation.signal(this, 'changes', changes);
 		}, 0);
 
 	}
@@ -198,7 +206,9 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		return super.getCursor(mode);
 	}
 
-	public override getSearchCursor(query: RegExp|string, pos: DocumentPosition|null|0) {
+	public override getSearchCursor(query: RegExp|string, pos?: DocumentPosition|null|0) {
+		// The superclass CodeMirror adapter only supports regular expression
+		// arguments.
 		if (typeof query === 'string') {
 			query = new RegExp(pregQuote(query));
 		}
@@ -235,7 +245,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const result = {
 			line: lineNumber,
 
-			// TODO: In CM5, a line handle is not a line number
+			// Note: In CM5, a line handle is not just a line number
 			handle: lineNumber,
 
 			text: line.text,
@@ -250,7 +260,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	public getStateAfter(_line: number) {
-		// TODO:
+		// TODO: Should return parser state. Returning an empty object
+		//       allows some plugins to run without crashing, however.
 		return {};
 	}
 
@@ -270,6 +281,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		onUpdate(this, defaultValue, this.Init);
 	}
 
+	// Override codemirror-vim's setOption to allow user-defined options
 	public override setOption(name: string, value: any) {
 		if (name in this._options) {
 			const oldValue = this._options[name].value;
