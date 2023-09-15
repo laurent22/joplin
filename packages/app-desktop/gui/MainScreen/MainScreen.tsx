@@ -275,7 +275,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			const sendCanClose = async (canClose: boolean) => {
 				if (canClose) {
 					Setting.setValue('wasClosedSuccessfully', true);
-					await Setting.saveAll();
+
+					// We need to force-save all settings -- saveAll does nothing if
+					// a save is scheduled and this save needs to happen before the app
+					// exits.
+					const force = true;
+					await Setting.saveAll(force);
 				}
 				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
 			};

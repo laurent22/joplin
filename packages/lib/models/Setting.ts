@@ -2345,8 +2345,8 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	public static async saveAll() {
-		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
+	public static async saveAll(forceSaveNow = false) {
+		if (Setting.autoSaveEnabled && !this.saveTimeoutId_ && !forceSaveNow) return Promise.resolve();
 
 		logger.debug('Saving settings...');
 		shim.clearTimeout(this.saveTimeoutId_);
