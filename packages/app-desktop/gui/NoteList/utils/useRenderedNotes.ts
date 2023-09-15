@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ListRenderer } from './types';
+import { ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import * as Mustache from 'mustache';

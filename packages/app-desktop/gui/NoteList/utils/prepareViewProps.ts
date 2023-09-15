@@ -1,4 +1,4 @@
-import { ListRendererDepependency } from './types';
+import { ListRendererDepependency } from '@joplin/lib/services/plugins/api/noteListType';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';

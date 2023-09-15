@@ -1,4 +1,4 @@
-import { ItemFlow, ListRenderer } from './types';
+import { ItemFlow, ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
 
 interface Props {
 	note: {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
-import { ItemFlow, OnChangeEvent, OnChangeHandler } from '../NoteList/utils/types';
+import { ItemFlow, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';

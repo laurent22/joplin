@@ -725,10 +725,12 @@ packages/lib/services/plugins/api/JoplinViews.js
 packages/lib/services/plugins/api/JoplinViewsDialogs.js
 packages/lib/services/plugins/api/JoplinViewsMenuItems.js
 packages/lib/services/plugins/api/JoplinViewsMenus.js
+packages/lib/services/plugins/api/JoplinViewsNoteList.js
 packages/lib/services/plugins/api/JoplinViewsPanels.js
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 packages/lib/services/plugins/api/JoplinWindow.js
 packages/lib/services/plugins/api/JoplinWorkspace.js
+packages/lib/services/plugins/api/noteListType.js
 packages/lib/services/plugins/api/types.js
 packages/lib/services/plugins/defaultPlugins/defaultPluginsUtils.js
 packages/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo.js
