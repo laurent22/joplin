@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 // =================================================================
 // Command API types
 // =================================================================
@@ -219,6 +221,12 @@ export enum ModelType {
 	Migration = 14,
 	SmartFilter = 15,
 	Command = 16,
+}
+
+export interface VersionInfo {
+	version: string;
+	profileVersion: number;
+	syncVersion: number;
 }
 
 // =================================================================
