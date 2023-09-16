@@ -261,11 +261,8 @@ packages/app-desktop/gui/NoteList/NoteListSource.js
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
-packages/app-desktop/gui/NoteList/utils/defaultLeftToRightListRenderer.js
-packages/app-desktop/gui/NoteList/utils/defaultListRenderer.js
 packages/app-desktop/gui/NoteList/utils/getNoteTitleHtml.js
 packages/app-desktop/gui/NoteList/utils/prepareViewProps.js
-packages/app-desktop/gui/NoteList/utils/renderers.js
 packages/app-desktop/gui/NoteList/utils/types.js
 packages/app-desktop/gui/NoteList/utils/useDragAndDrop.js
 packages/app-desktop/gui/NoteList/utils/useFocusNote.js
@@ -688,6 +685,10 @@ packages/lib/services/keychain/KeychainServiceDriver.dummy.js
 packages/lib/services/keychain/KeychainServiceDriver.mobile.js
 packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js
+packages/lib/services/noteList.js
+packages/lib/services/noteList/defaultLeftToRightListRenderer.js
+packages/lib/services/noteList/defaultListRenderer.js
+packages/lib/services/noteList/renderers.js
 packages/lib/services/plugins/BasePlatformImplementation.js
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/MenuController.js

@@ -23,7 +23,7 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
-import { getListRendererById } from './utils/renderers';
+import { getListRendererById } from '@joplin/lib/services/noteList/renderers';
 const { connect } = require('react-redux');
 
 const commands = {

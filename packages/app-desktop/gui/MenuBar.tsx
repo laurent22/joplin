@@ -22,7 +22,7 @@ const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import { getListRendererById, getListRendererIds } from './NoteList/utils/renderers';
+import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;

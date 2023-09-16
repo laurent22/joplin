@@ -1,5 +1,5 @@
-import { _ } from '@joplin/lib/locale';
-import { ItemFlow, ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
+import { _ } from '../../locale';
+import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
 
 interface Props {
 	note: {

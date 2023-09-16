@@ -1,22 +1,25 @@
 /* eslint-disable multiline-comment-style */
 
-// import Plugin from '../Plugin';
+import { Store } from 'redux';
+import { registerRenderer } from '../../noteList/renderers';
+import Plugin from '../Plugin';
 import { ListRenderer } from './noteListType';
 
 export default class JoplinViewsNoteList {
 
-	// private store: any;
-	// private plugin: Plugin;
-	// private implementation_: any;
+	private plugin_: Plugin;
+	private store_:Store;
 
-	// public constructor(implementation: any, plugin: Plugin, store: any) {
-	// 	this.store = store;
-	// 	this.plugin = plugin;
-	// 	this.implementation_ = implementation;
-	// }
+	public constructor(plugin: Plugin, store:Store) {
+		this.plugin_ = plugin;
+		this.store_ = store;
+	}
 
-	public registerRenderer(_renderer: ListRenderer) {
-
+	public registerRenderer(renderer: ListRenderer) {
+		registerRenderer(this.store_, {
+			...renderer,
+			id: this.plugin_.id,
+		});
 	}
 
 }

@@ -1,6 +1,6 @@
-import { _ } from '@joplin/lib/locale';
+import { _ } from '../../locale';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
-import { ItemFlow, ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
+import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
 
 interface Props {
 	note: {
