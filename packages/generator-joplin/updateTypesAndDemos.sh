@@ -23,7 +23,6 @@ for DIR in $TEST_PLUGINS_DIR/*/ ; do
 		echo "Updating $DIR/api/..."
 		rsync -a "$API_SOURCE_DIR/" "$DIR/api/"
 	fi
-	exit
 done
 
 
