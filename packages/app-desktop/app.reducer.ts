@@ -5,6 +5,7 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
+import { getListRendererIds } from './gui/NoteList/utils/renderers';
 
 const logger = Logger.create('app.reducer');
 
@@ -42,6 +43,7 @@ export interface AppState extends State {
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
+	noteListRendererIds: string[];
 }
 
 export function createAppDefaultState(windowContentSize: any, resourceEditWatcherDefaultState: any): AppState {
@@ -65,6 +67,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		startupPluginsLoaded: false,
 		dialogs: [],
 		isResettingLayout: false,
+		noteListRendererIds: getListRendererIds(),
 		...resourceEditWatcherDefaultState,
 	};
 }

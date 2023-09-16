@@ -1,3 +1,4 @@
+import { _ } from '@joplin/lib/locale';
 import { ItemFlow, ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
 
 interface Props {
@@ -15,7 +16,11 @@ interface Props {
 	};
 }
 
-const defaultItemRenderer: ListRenderer = {
+const defaultListRenderer: ListRenderer = {
+	id: 'compact',
+
+	label: () => _('Compact'),
+
 	flow: ItemFlow.TopToBottom,
 
 	itemSize: {
@@ -131,4 +136,4 @@ const defaultItemRenderer: ListRenderer = {
 	},
 };
 
-export default defaultItemRenderer;
+export default defaultListRenderer;

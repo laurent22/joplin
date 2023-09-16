@@ -22,6 +22,7 @@ const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { getListRendererById, getListRendererIds } from './NoteList/utils/renderers';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -131,6 +132,8 @@ interface Props {
 	locale: string;
 	profileConfig: ProfileConfig;
 	pluginSettings: PluginSettings;
+	noteListRendererIds: string[];
+	noteListRendererId: string;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -171,6 +174,11 @@ function useMenuStates(menu: any, props: Props) {
 				menuItemSetChecked(`layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
 			}
 
+			const listRendererIds = getListRendererIds();
+			for (const id of listRendererIds) {
+				menuItemSetChecked(`noteListRenderer_${id}`, props.noteListRendererId === id);
+			}
+
 			function applySortItemCheckState(type: string) {
 				const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 				for (const field in sortOptions) {
@@ -208,6 +216,7 @@ function useMenuStates(menu: any, props: Props) {
 		props['notes.sortOrder.reverse'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
+		props.noteListRendererId,
 		props.showNoteCounts,
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
@@ -630,6 +639,18 @@ function useMenu(props: Props) {
 				});
 			}
 
+			const noteListStyleMenuItems: MenuItem[] = props.noteListRendererIds.map(id => {
+				const renderer = getListRendererById(id);
+				return {
+					id: `noteListRenderer_${id}`,
+					label: renderer.label(),
+					type: 'checkbox',
+					click: () => {
+						Setting.setValue('notes.listRendererId', id);
+					},
+				};
+			});
+
 			const rootMenus: any = {
 				edit: {
 					id: 'edit',
@@ -686,6 +707,10 @@ function useMenu(props: Props) {
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,
+						},
+						{
+							label: _('Note list style'),
+							submenu: noteListStyleMenuItems,
 						},
 						separator(),
 						{
@@ -1001,6 +1026,8 @@ const mapStateToProps = (state: AppState) => {
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
 		profileConfig: state.profileConfig,
+		noteListRendererIds: state.noteListRendererIds,
+		noteListRendererId: state.settings['notes.listRendererId'],
 	};
 };
 

@@ -1,3 +1,4 @@
+import { _ } from '@joplin/lib/locale';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { ItemFlow, ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
 
@@ -19,6 +20,10 @@ interface Props {
 }
 
 const defaultLeftToRightItemRenderer: ListRenderer = {
+	id: 'detailed',
+
+	label: () => _('Detailed'),
+
 	flow: ItemFlow.LeftToRight,
 
 	itemSize: {

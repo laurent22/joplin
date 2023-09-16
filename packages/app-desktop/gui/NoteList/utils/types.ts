@@ -27,4 +27,5 @@ export interface Props {
 	visible: boolean;
 	focusedField: string;
 	parentFolderIsReadOnly: boolean;
+	listRendererId: string;
 }

@@ -1142,6 +1142,16 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+
+			'notes.listRendererId': {
+				value: 'compact',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'plugins.states': {
 				value: '',
 				type: SettingItemType.Object,

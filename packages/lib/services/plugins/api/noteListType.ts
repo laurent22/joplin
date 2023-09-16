@@ -26,11 +26,13 @@ export type ListRendererDepependency =
 	'note.isWatched';
 
 export interface ListRenderer {
+	id: string;
 	flow: ItemFlow;
 	itemSize: Size;
 	itemCss?: string;
 	dependencies: ListRendererDepependency[];
 	itemTemplate: string;
+	label: ()=> string;
 	onRenderNote: OnRenderNoteHandler;
 	onChange?: OnChangeHandler;
 }
