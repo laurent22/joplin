@@ -23,7 +23,6 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
-import { getListRendererById } from '@joplin/lib/services/noteList/renderers';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -33,7 +32,7 @@ const commands = {
 const NoteList = (props: Props) => {
 	const listRef = useRef(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
-	const listRenderer = getListRendererById(props.listRendererId);
+	const listRenderer = props.listRenderer;
 
 	const itemSize: Size = useMemo(() => {
 		return {
@@ -297,7 +296,6 @@ const mapStateToProps = (state: AppState) => {
 		customCss: state.customCss,
 		focusedField: state.focusedField,
 		parentFolderIsReadOnly: state.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
-		listRendererId: state.settings['notes.listRendererId'],
 	};
 };
 

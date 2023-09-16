@@ -8,15 +8,15 @@ import { ListRenderer } from './noteListType';
 export default class JoplinViewsNoteList {
 
 	private plugin_: Plugin;
-	private store_:Store;
+	private store_: Store;
 
-	public constructor(plugin: Plugin, store:Store) {
+	public constructor(plugin: Plugin, store: Store) {
 		this.plugin_ = plugin;
 		this.store_ = store;
 	}
 
-	public registerRenderer(renderer: ListRenderer) {
-		registerRenderer(this.store_, {
+	public async registerRenderer(renderer: ListRenderer) {
+		await registerRenderer(this.store_, {
 			...renderer,
 			id: this.plugin_.id,
 		});

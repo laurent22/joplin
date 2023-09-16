@@ -19,7 +19,7 @@ interface Props {
 const defaultListRenderer: ListRenderer = {
 	id: 'compact',
 
-	label: () => _('Compact'),
+	label: async () => _('Compact'),
 
 	flow: ItemFlow.TopToBottom,
 

@@ -11,6 +11,9 @@ mkdir -p "$TEMP_PATH"
 PLUGIN_NAME=$(echo "$PLUGIN_PATH" | awk -F/ '{print $NF}')
 TEMP_PLUGIN_PATH="$TEMP_PATH/$PLUGIN_NAME" 
 
+echo "Copying from: $PLUGIN_PATH"
+echo "To: $TEMP_PLUGIN_PATH"
+
 rsync -a --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
 
 npm install --prefix="$TEMP_PLUGIN_PATH" && yarn start --dev-plugins "$TEMP_PLUGIN_PATH"

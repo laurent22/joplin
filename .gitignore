@@ -490,6 +490,7 @@ packages/fork-htmlparser2/src/__tests__/stream.js
 packages/fork-htmlparser2/src/index.spec.js
 packages/fork-htmlparser2/src/index.js
 packages/generator-joplin/generators/app/templates/api/index.js
+packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
 packages/generator-joplin/generators/app/templates/src/index.js
@@ -685,7 +686,6 @@ packages/lib/services/keychain/KeychainServiceDriver.dummy.js
 packages/lib/services/keychain/KeychainServiceDriver.mobile.js
 packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js
-packages/lib/services/noteList.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
 packages/lib/services/noteList/renderers.js

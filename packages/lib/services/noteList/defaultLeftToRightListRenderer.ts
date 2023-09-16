@@ -22,7 +22,7 @@ interface Props {
 const defaultLeftToRightItemRenderer: ListRenderer = {
 	id: 'detailed',
 
-	label: () => _('Detailed'),
+	label: async () => _('Detailed'),
 
 	flow: ItemFlow.LeftToRight,
 
