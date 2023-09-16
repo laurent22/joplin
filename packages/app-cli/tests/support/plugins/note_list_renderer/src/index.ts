@@ -1,8 +1,32 @@
 import joplin from 'api';
+import { ItemFlow } from 'api/noteListType';
 
 joplin.plugins.register({
 	onStart: async function() {
-		// eslint-disable-next-line no-console
-		console.info('Hello world. Test plugin started!');
+		await joplin.views.noteList.registerRenderer({
+			label: () => 'Plugin test',
+
+			flow: ItemFlow.TopToBottom,
+		
+			itemSize: {
+				width: 0,
+				height: 34,
+			},
+		
+			dependencies: [
+				'note.titleHtml',
+			],
+		
+			itemTemplate: // html
+				`
+				<div>
+					xxxx {{{note.titleHtml}}}
+				</div>
+			`,
+		
+			onRenderNote: async (props: any) => {
+				return props;
+			},
+		});
 	},
 });
