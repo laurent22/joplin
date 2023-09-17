@@ -42,6 +42,8 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 
 			if (renderedNotes[note.id] && renderedNotes[note.id].hash === viewHash) return null;
 
+			// console.info('RENDER', note.id, renderedNotes[note.id] ? renderedNotes[note.id].hash : 'NULL', viewHash);
+
 			const titleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
 			const viewProps = await prepareViewProps(
 				listRenderer.dependencies,
