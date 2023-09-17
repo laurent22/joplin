@@ -18,7 +18,7 @@ export default class JoplinViewsNoteList {
 	public async registerRenderer(renderer: ListRenderer) {
 		await registerRenderer(this.store_, {
 			...renderer,
-			id: this.plugin_.id,
+			id: `${this.plugin_.id}:${renderer.id}`,
 		});
 	}
 

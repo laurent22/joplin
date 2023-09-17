@@ -29,7 +29,7 @@ export type ListRendererDepependency =
 	'note.isWatched';
 
 export interface ListRenderer {
-	id?: string;
+	id: string;
 	flow: ItemFlow;
 	itemSize: Size;
 	itemCss?: string;

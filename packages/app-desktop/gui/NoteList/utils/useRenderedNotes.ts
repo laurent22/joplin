@@ -32,6 +32,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 			// properties never changes. It means that later if we support
 			// dynamic list renderers, we should include these into the hash.
 			const viewHash = hashContent([
+				listRenderer.id,
 				note.updated_time,
 				isSelected,
 				isWatched,
