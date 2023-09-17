@@ -5,7 +5,7 @@ import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
 import useItemEventHandlers from './utils/useItemEventHandlers';
-import { OnCheckboxChange } from './utils/types';
+import { OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
@@ -34,11 +34,17 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	const noteId = props.note.id;
 	const elementId = `list-note-${noteId}`;
 
-	const onCheckboxChange: OnCheckboxChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+	const onInputChange: OnInputChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+		const getValue = (element: HTMLInputElement) => {
+			if (element.type === 'checkbox') return element.checked;
+			if (element.type === 'text') return element.value;
+			throw new Error(`Unsupported element: ${element.type}`);
+		};
+
 		const changeEvent: OnChangeEvent = {
 			noteId: noteId,
 			elementId: event.currentTarget.getAttribute('data-id'),
-			value: event.currentTarget.checked,
+			value: getValue(event.currentTarget),
 		};
 
 		if (changeEvent.elementId === 'todo-checkbox') {
@@ -65,7 +71,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.flow,
 	);
 
-	useItemEventHandlers(rootElement, itemElement, onCheckboxChange);
+	useItemEventHandlers(rootElement, itemElement, onInputChange);
 
 	const className = useMemo(() => {
 		return [

@@ -1,5 +1,5 @@
 import joplin from 'api';
-import { ItemFlow } from 'api/noteListType';
+import { ItemFlow, OnChangeEvent, OnChangeHandler } from 'api/noteListType';
 
 const thumbnailCache_:Record<string, string> = {};
 
@@ -74,7 +74,6 @@ const registerSimpleLeftToRightRenderer = async() => {
 			'item.selected',
 			'note.titleHtml',
 			'note.body',
-			'note.tags',
 		],
 
 		itemCss: // css
@@ -109,7 +108,6 @@ const registerSimpleLeftToRightRenderer = async() => {
 				{{^thumbnailFilePath}}
 					{{{note.titleHtml}}}
 				{{/thumbnailFilePath}}
-				{{tagTitles}}
 			</div>
 		`,
 	
@@ -135,7 +133,6 @@ const registerSimpleLeftToRightRenderer = async() => {
 			
 			return {
 				thumbnailFilePath,
-				tagTitles: props.note.tags.map(t => t.title).join(', '),
 				...props
 			};
 		},
@@ -145,6 +142,56 @@ const registerSimpleLeftToRightRenderer = async() => {
 joplin.plugins.register({
 	onStart: async function() {
 		await registerSimpleTopToBottomRenderer();
-		await registerSimpleLeftToRightRenderer();		
+		await registerSimpleLeftToRightRenderer();	
+		
+		await joplin.views.noteList.registerRenderer({
+			id: 'buildInEditor',
+	
+			label: async () => 'Viewer with editor',
+	
+			flow: ItemFlow.TopToBottom,
+		
+			itemSize: {
+				width: 0,
+				height: 34,
+			},
+		
+			dependencies: [
+				'item.selected',
+				'note.title',
+			],
+	
+			itemCss: // css
+				`
+				> .content {
+					display: flex;
+					align-items: center;
+					width: 100%;
+					box-sizing: border-box;
+					padding-left: 10px;
+				}
+	
+				> .content.-selected {
+					border: 1px solid var(--joplin-color);
+				}
+				`,
+		
+			itemTemplate: // html
+				`
+				<div class="content {{#item.selected}}-selected{{/item.selected}}">
+					<input data-id="noteTitleInput" type="text" value="{{note.title}}" />
+				</div>
+			`,
+		
+			onRenderNote: async (props: any) => {
+				return props;
+			},
+
+			onChange: async (event: OnChangeEvent): Promise<void> => {
+				if (event.elementId === 'noteTitleInput') {
+					await joplin.data.put(['notes', event.noteId], null, { title: event.value });	
+				}
+			},
+		});
 	},
 });
