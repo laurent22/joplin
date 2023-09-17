@@ -8,7 +8,7 @@ import useItemEventHandlers from './utils/useItemEventHandlers';
 import { OnCheckboxChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import { useRenderedNote } from './utils/useRenderedNote';
+import useRenderedNote from './utils/useRenderedNote';
 
 interface NoteItemProps {
 	dragIndex: number;
