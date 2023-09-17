@@ -139,59 +139,64 @@ const registerSimpleLeftToRightRenderer = async() => {
 	});
 }
 
+// This renderer displays an editable text input to change the note title
+// directly from the note list.
+const registerBuildInEditorRenderer = async () => {
+	await joplin.views.noteList.registerRenderer({
+		id: 'buildInEditor',
+
+		label: async () => 'Viewer with editor',
+
+		flow: ItemFlow.TopToBottom,
+	
+		itemSize: {
+			width: 0,
+			height: 34,
+		},
+	
+		dependencies: [
+			'item.selected',
+			'note.title',
+		],
+
+		itemCss: // css
+			`
+			> .content {
+				display: flex;
+				align-items: center;
+				width: 100%;
+				box-sizing: border-box;
+				padding-left: 10px;
+			}
+
+			> .content.-selected {
+				border: 1px solid var(--joplin-color);
+			}
+			`,
+	
+		itemTemplate: // html
+			`
+			<div class="content {{#item.selected}}-selected{{/item.selected}}">
+				<input data-id="noteTitleInput" type="text" value="{{note.title}}" />
+			</div>
+		`,
+	
+		onRenderNote: async (props: any) => {
+			return props;
+		},
+
+		onChange: async (event: OnChangeEvent): Promise<void> => {
+			if (event.elementId === 'noteTitleInput') {
+				await joplin.data.put(['notes', event.noteId], null, { title: event.value });	
+			}
+		},
+	});
+}
+
 joplin.plugins.register({
 	onStart: async function() {
 		await registerSimpleTopToBottomRenderer();
 		await registerSimpleLeftToRightRenderer();	
-		
-		await joplin.views.noteList.registerRenderer({
-			id: 'buildInEditor',
-	
-			label: async () => 'Viewer with editor',
-	
-			flow: ItemFlow.TopToBottom,
-		
-			itemSize: {
-				width: 0,
-				height: 34,
-			},
-		
-			dependencies: [
-				'item.selected',
-				'note.title',
-			],
-	
-			itemCss: // css
-				`
-				> .content {
-					display: flex;
-					align-items: center;
-					width: 100%;
-					box-sizing: border-box;
-					padding-left: 10px;
-				}
-	
-				> .content.-selected {
-					border: 1px solid var(--joplin-color);
-				}
-				`,
-		
-			itemTemplate: // html
-				`
-				<div class="content {{#item.selected}}-selected{{/item.selected}}">
-					<input data-id="noteTitleInput" type="text" value="{{note.title}}" />
-				</div>
-			`,
-		
-			onRenderNote: async (props: any) => {
-				return props;
-			},
-
-			onChange: async (event: OnChangeEvent): Promise<void> => {
-				if (event.elementId === 'noteTitleInput') {
-					await joplin.data.put(['notes', event.noteId], null, { title: event.value });	
-				}
-			},
-		});
+		await registerBuildInEditorRenderer();		
 	},
 });
