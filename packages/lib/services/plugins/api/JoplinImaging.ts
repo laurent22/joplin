@@ -68,16 +68,15 @@ export default class JoplinImaging {
 		return handle;
 	}
 
-	/**
-	 * Create an image from a buffer - however only use this for very small
-	 * images. It requires transferring the full image data from the plugin to
-	 * the app, which is extremely slow and will freeze the app. Instead, use
-	 * `createFromPath` or `createFromResource`, which will manipulate the image
-	 * data directly from the main process.
-	 */
-	public async createFromBuffer(buffer: any, options: CreateFromBufferOptions = null): Promise<Handle> {
-		return this.cacheImage(this.implementation_.nativeImage.createFromBuffer(buffer, options));
-	}
+	// Create an image from a buffer - however only use this for very small
+	// images. It requires transferring the full image data from the plugin to
+	// the app, which is extremely slow and will freeze the app. Instead, use
+	// `createFromPath` or `createFromResource`, which will manipulate the image
+	// data directly from the main process.
+	//
+	// public async createFromBuffer(buffer: any, options: CreateFromBufferOptions = null): Promise<Handle> {
+	// 	return this.cacheImage(this.implementation_.nativeImage.createFromBuffer(buffer, options));
+	// }
 
 	public async createFromPath(filePath: string): Promise<Handle> {
 		return this.cacheImage(this.implementation_.nativeImage.createFromPath(filePath));
@@ -108,27 +107,25 @@ export default class JoplinImaging {
 		return this.cacheImage(croppedImage);
 	}
 
-	/**
-	 * Warnings: requires transferring the complete image from the app to the
-	 * plugin which may freeze the app. Consider using one of the `toXxxFile()`
-	 * or `toXxxResource()` methods instead.
-	 */
-	public async toDataUrl(handle: Handle): Promise<string> {
-		const image = this.imageByHandle(handle);
-		return image.data.toDataURL();
-	}
+	// Warning: requires transferring the complete image from the app to the
+	// plugin which may freeze the app. Consider using one of the `toXxxFile()`
+	// or `toXxxResource()` methods instead.
+	//
+	// public async toDataUrl(handle: Handle): Promise<string> {
+	// 	const image = this.imageByHandle(handle);
+	// 	return image.data.toDataURL();
+	// }
 
-	/**
-	 * Warnings: requires transferring the complete image from the app to the
-	 * plugin which may freeze the app. Consider using one of the `toXxxFile()`
-	 * or `toXxxResource()` methods instead.
-	 */
-	public async toBase64(handle: Handle) {
-		const dataUrl = await this.toDataUrl(handle);
-		const s = dataUrl.split('base64,');
-		if (s.length !== 2) throw new Error('Could not convert to base64');
-		return s[1];
-	}
+	// Warnings: requires transferring the complete image from the app to the
+	// plugin which may freeze the app. Consider using one of the `toXxxFile()`
+	// or `toXxxResource()` methods instead.
+	//
+	// public async toBase64(handle: Handle) {
+	// 	const dataUrl = await this.toDataUrl(handle);
+	// 	const s = dataUrl.split('base64,');
+	// 	if (s.length !== 2) throw new Error('Could not convert to base64');
+	// 	return s[1];
+	// }
 
 	public async toPngFile(handle: Handle, filePath: string) {
 		const image = this.imageByHandle(handle);
