@@ -32,31 +32,11 @@ export default class JoplinImaging {
     private createImageHandle;
     private imageByHandle;
     private cacheImage;
-    /**
-     * Create an image from a buffer - however only use this for very small
-     * images. It requires transferring the full image data from the plugin to
-     * the app, which is extremely slow and will freeze the app. Instead, use
-     * `createFromPath` or `createFromResource`, which will manipulate the image
-     * data directly from the main process.
-     */
-    createFromBuffer(buffer: any, options?: CreateFromBufferOptions): Promise<Handle>;
     createFromPath(filePath: string): Promise<Handle>;
     createFromResource(resourceId: string): Promise<Handle>;
     getSize(handle: Handle): Promise<any>;
     resize(handle: Handle, options?: ResizeOptions): Promise<string>;
     crop(handle: Handle, rectange: Rectangle): Promise<string>;
-    /**
-     * Warnings: requires transferring the complete image from the app to the
-     * plugin which may freeze the app. Consider using one of the `toXxxFile()`
-     * or `toXxxResource()` methods instead.
-     */
-    toDataUrl(handle: Handle): Promise<string>;
-    /**
-     * Warnings: requires transferring the complete image from the app to the
-     * plugin which may freeze the app. Consider using one of the `toXxxFile()`
-     * or `toXxxResource()` methods instead.
-     */
-    toBase64(handle: Handle): Promise<string>;
     toPngFile(handle: Handle, filePath: string): Promise<void>;
     /**
      * Quality is between 0 and 100
