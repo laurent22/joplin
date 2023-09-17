@@ -74,6 +74,7 @@ const registerSimpleLeftToRightRenderer = async() => {
 			'item.selected',
 			'note.titleHtml',
 			'note.body',
+			'note.tags',
 		],
 
 		itemCss: // css
@@ -103,11 +104,12 @@ const registerSimpleLeftToRightRenderer = async() => {
 			`
 			<div class="content {{#item.selected}}-selected{{/item.selected}}">
 				{{#thumbnailFilePath}}
-				<img class="thumbnail" src="file://{{thumbnailFilePath}}"/>
+					<img class="thumbnail" src="file://{{thumbnailFilePath}}"/>
 				{{/thumbnailFilePath}}
 				{{^thumbnailFilePath}}
 					{{{note.titleHtml}}}
 				{{/thumbnailFilePath}}
+				{{tagTitles}}
 			</div>
 		`,
 	
@@ -133,6 +135,7 @@ const registerSimpleLeftToRightRenderer = async() => {
 			
 			return {
 				thumbnailFilePath,
+				tagTitles: props.note.tags.map(t => t.title).join(', '),
 				...props
 			};
 		},

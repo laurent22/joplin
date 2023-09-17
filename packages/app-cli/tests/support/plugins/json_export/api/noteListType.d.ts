@@ -12,7 +12,7 @@ export interface OnChangeEvent {
 }
 export type OnRenderNoteHandler = (props: any) => Promise<RenderNoteView>;
 export type OnChangeHandler = (event: OnChangeEvent) => Promise<void>;
-export type ListRendererDepependency = ListRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected' | 'note.titleHtml' | 'note.isWatched';
+export type ListRendererDepependency = ListRendererDatabaseDependency | 'item.size.width' | 'item.size.height' | 'item.selected' | 'note.titleHtml' | 'note.isWatched' | 'note.tags';
 export interface ListRenderer {
     id: string;
     flow: ItemFlow;

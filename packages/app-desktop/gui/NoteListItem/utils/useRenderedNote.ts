@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { ListRenderer } from '@joplin/lib/services/plugins/api/noteListType';
 import Note from '@joplin/lib/models/Note';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { createHash } from 'crypto';
 import getNoteTitleHtml from './getNoteTitleHtml';
 import prepareViewProps from './prepareViewProps';
 import * as Mustache from 'mustache';
+import Tag from '@joplin/lib/models/Tag';
 
 interface RenderedNote {
 	id: string;
@@ -23,6 +24,12 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 	useAsyncEffect(async (event) => {
 		const renderNote = async (): Promise<void> => {
+			let noteTags: TagEntity[] = [];
+
+			if (listRenderer.dependencies.includes('note.tags')) {
+				noteTags = await Tag.tagsByNoteId(note.id, { fields: ['id', 'title'] });
+			}
+
 			// Note: with this hash we're assuming that the list renderer
 			// properties never changes. It means that later if we support
 			// dynamic list renderers, we should include these into the hash.
@@ -33,6 +40,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				isWatched,
 				highlightedWords,
 				note.encryption_applied,
+				noteTags.map(t => t.title).sort().join(','),
 			]);
 
 			if (renderedNote && renderedNote.hash === viewHash) return null;
@@ -47,6 +55,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				isSelected,
 				titleHtml,
 				isWatched,
+				noteTags,
 			);
 
 			if (event.cancelled) return null;

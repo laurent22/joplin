@@ -26,7 +26,8 @@ export type ListRendererDepependency =
 	'item.size.height' |
 	'item.selected' |
 	'note.titleHtml' |
-	'note.isWatched';
+	'note.isWatched' |
+	'note.tags';
 
 export interface ListRenderer {
 	id: string;
