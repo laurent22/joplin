@@ -23,28 +23,20 @@ const StyledRoot = styled.div`
 
 export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
-	const [controlHeight, setControlHeight] = useState(theme.topRowHeight);
-
-	const onContentHeightChange = (sameRow: boolean) => {
-		if (sameRow) {
-			setControlHeight(theme.topRowHeight);
-		} else {
-			setControlHeight(theme.topRowHeight * 2);
-		}
-	};
+	const [controlHeight] = useState(theme.topRowHeight);
 
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - controlHeight,
+			height: props.size.height,
 		};
-	}, [props.size, controlHeight]);
+	}, [props.size]);
 
 	// <NoteList resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 
 	return (
 		<StyledRoot>
-			<NoteListControls height={controlHeight} width={noteListSize.width} onContentHeightChange={onContentHeightChange}/>
+			<NoteListControls height={controlHeight} width={noteListSize.width}/>
 			<NoteList2 resizableLayoutEventEmitter={props.resizableLayoutEventEmitter} size={noteListSize} visible={props.visible}/>
 		</StyledRoot>
 	);

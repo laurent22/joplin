@@ -69,5 +69,5 @@ jobs:
             export CSC_IDENTITY_AUTO_DISCOVERY=false
             npm pkg set 'build.mac.identity'=null --json
 
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist  --mac --arm64 --publish=never
           fi

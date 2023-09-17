@@ -403,6 +403,7 @@ function useMenu(props: Props) {
 							label: module.fullLabel(moduleSource),
 							click: () => onImportModuleClickRef.current(module, moduleSource),
 						});
+						if (module.separatorAfter) importItems.push({ type: 'separator' });
 					}
 				}
 			}

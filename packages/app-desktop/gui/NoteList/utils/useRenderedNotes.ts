@@ -36,6 +36,7 @@ const useRenderedNotes = (startNoteIndex: number, endNoteIndex: number, notes: N
 				isSelected,
 				isWatched,
 				highlightedWords,
+				note.encryption_applied,
 			]);
 
 			if (renderedNotes[note.id] && renderedNotes[note.id].hash === viewHash) return null;

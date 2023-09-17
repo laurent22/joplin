@@ -21,6 +21,11 @@ interface ForumTopPost {
 	title: string;
 }
 
+interface ForumTopic {
+	id: number;
+	topic_id: string;
+}
+
 export const config: ApiConfig = {
 	baseUrl: 'https://discourse.joplinapp.org',
 	key: '',
@@ -61,6 +66,7 @@ export const execApi = async (method: HttpMethod, path: string, body: Record<str
 			// Ignore - it just means that the error object is a plain string
 		}
 		(error as any).apiObject = apiObject;
+		(error as any).status = response.status;
 		throw error;
 	}
 
@@ -77,7 +83,34 @@ export const getForumTopPostByExternalId = async (externalId: string): Promise<F
 			raw: existingForumPost.raw,
 		};
 	} catch (error) {
+		if (error.status === 404) return null;
 		if (error.apiObject && error.apiObject.error_type === 'not_found') return null;
 		throw error;
 	}
+};
+
+export const getTopicByExternalId = async (externalId: string): Promise<ForumTopic> => {
+	try {
+		const existingForumTopic = await execApi(HttpMethod.GET, `t/external_id/${externalId}.json`);
+		return existingForumTopic;
+	} catch (error) {
+		if (error.status === 404) return null;
+		if (error.apiObject && error.apiObject.error_type === 'not_found') return null;
+		throw error;
+	}
+};
+
+export const createTopic = async (topic: any): Promise<ForumTopic> => {
+	return execApi(HttpMethod.POST, 'posts', topic);
+};
+
+export const createPost = async (topicId: number, post: any): Promise<ForumTopic> => {
+	return execApi(HttpMethod.POST, 'posts', {
+		topic_id: topicId,
+		...post,
+	});
+};
+
+export const updatePost = async (postId: number, content: any): Promise<void> => {
+	await execApi(HttpMethod.PUT, `posts/${postId}.json`, content);
 };

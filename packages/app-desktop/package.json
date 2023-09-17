@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.12.15",
+  "version": "2.13.1",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -79,6 +79,12 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
+      "target": {
+        "target": "dmg",
+        "arch": [
+          "x64"
+        ]
+      },
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
@@ -108,20 +114,20 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@electron/rebuild": "3.2.13",
-    "@joplin/tools": "~2.12",
+    "@electron/rebuild": "3.3.0",
+    "@joplin/tools": "~2.13",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.5.3",
-    "@types/node": "18.17.6",
-    "@types/react": "18.2.20",
-    "@types/react-redux": "7.1.25",
+    "@types/jest": "29.5.4",
+    "@types/node": "18.17.12",
+    "@types/react": "18.2.21",
+    "@types/react-redux": "7.1.26",
     "@types/styled-components": "5.1.26",
     "electron": "25.3.1",
     "electron-builder": "24.4.0",
     "glob": "10.3.3",
     "gulp": "4.0.2",
-    "jest": "29.5.0",
-    "jest-environment-jsdom": "29.5.0",
+    "jest": "29.6.4",
+    "jest-environment-jsdom": "29.6.4",
     "js-sha512": "0.8.0",
     "nan": "2.17.0",
     "react-test-renderer": "18.2.0",
@@ -133,13 +139,13 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
-    "@electron/notarize": "1.2.4",
+    "@electron/notarize": "2.1.0",
     "@electron/remote": "2.0.10",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
-    "@joplin/lib": "~2.12",
-    "@joplin/renderer": "~2.12",
-    "@joplin/utils": "~2.12",
+    "@joplin/lib": "~2.13",
+    "@joplin/renderer": "~2.13",
+    "@joplin/utils": "~2.13",
     "@types/mustache": "4.2.2",
     "async-mutex": "0.4.0",
     "codemirror": "5.65.9",

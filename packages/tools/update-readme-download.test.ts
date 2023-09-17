@@ -17,6 +17,7 @@ describe('update-readme-download', () => {
 				html_url: '',
 				prerelease: false,
 				draft: false,
+				body: '',
 			};
 			return r;
 		};

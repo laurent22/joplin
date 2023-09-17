@@ -443,6 +443,7 @@ packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
 packages/app-mobile/components/ScreenHeader.js
 packages/app-mobile/components/SelectDateTimeDialog.js
+packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
@@ -711,6 +712,7 @@ packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinContentScripts.js
 packages/lib/services/plugins/api/JoplinData.js
 packages/lib/services/plugins/api/JoplinFilters.js
+packages/lib/services/plugins/api/JoplinImaging.js
 packages/lib/services/plugins/api/JoplinInterop.js
 packages/lib/services/plugins/api/JoplinPlugins.js
 packages/lib/services/plugins/api/JoplinSettings.js
@@ -921,6 +923,7 @@ packages/tools/git-changelog.test.js
 packages/tools/git-changelog.js
 packages/tools/licenseChecker.js
 packages/tools/packageJsonLint.js
+packages/tools/postPreReleasesToForum.js
 packages/tools/release-android.js
 packages/tools/release-cli.js
 packages/tools/release-electron.js

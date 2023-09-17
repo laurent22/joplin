@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -17,7 +19,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- 相机：允许拍照并将照片添加到一条笔记中。"
+msgstr "- 照相机：允许拍照并将照片附加到一条笔记中。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Location: to allow attaching geo-location information to a note."
@@ -93,7 +95,7 @@ msgstr "%d GB"
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr "%dGB存储空间"
+msgstr "%d GB存储空间"
 
 #: packages/lib/models/Setting.ts:1367
 msgid "%d hour"
@@ -111,7 +113,7 @@ msgstr "%d MB"
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
 msgid "%d MB per note or attachment"
-msgstr "每个笔记或附件%dMB"
+msgstr "每个笔记或附件%d MB"
 
 #: packages/lib/models/Setting.ts:1364 packages/lib/models/Setting.ts:1365
 #: packages/lib/models/Setting.ts:1366
@@ -248,11 +250,11 @@ msgstr "接受"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "访问被拒绝：请检查您的用户名和密码"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "访问被拒绝：请重新输入您的密码和/或用户名"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -349,7 +351,7 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"不明确的笔记本“%s”。请改用短笔记本id - 按\"ti\"查看短笔记本id,或使用 $b 选择"
+"不明确的笔记本“%s”。请改用短笔记本id - 按\"ti\"查看短笔记本id，或使用 $b 选择"
 "当前笔记本"
 
 #: packages/app-cli/app/command-mkbook.ts:33
@@ -369,6 +371,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"任何发送到此地址的电子邮件都将被转换为笔记并添加到您的收藏中。 该笔记将保存到"
+"收件箱笔记本中"
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -528,11 +532,11 @@ msgstr "分享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "可以查看"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "可以查看和编辑"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -586,9 +590,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "无法复制笔记到笔记本 “%s”"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "新建笔记。"
+msgstr "无法创建新笔记：%s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -797,8 +800,8 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "以逗号分隔的路径列表，可以是包含证书的目录，也可以直接指向单独的证书路径。例"
-"如：/my/cert_dir,/other/custom.pem。请注意，如果更改 TLS 设置，则必须先保存更"
-"改，之后再点击 “检查同步配置”。"
+"如：/my/cert_dir，/other/custom.pem。请注意，如果更改 TLS 设置，则必须先保存"
+"更改，之后再点击 “检查同步配置”。"
 
 #: packages/lib/services/KeymapService.ts:317
 msgid "command"
@@ -929,9 +932,8 @@ msgstr[0] "复制分享链接"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "复制路径到剪贴板"
+msgstr "复制到剪贴板"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1195,9 +1197,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "删除本地数据并从同步目标导入数据"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "是否删除笔记？"
+msgstr "删除笔记"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1209,9 +1210,8 @@ msgid "Delete note?"
 msgstr "是否删除笔记？"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "是否删除笔记？"
+msgstr "删除笔记本"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1250,6 +1250,9 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"是否删除收件箱笔记本？\n"
+"\n"
+"如果删除收件箱笔记本，最近发送到其中的所有电子邮件都可能会丢失。"
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1562,13 +1565,12 @@ msgstr "邮箱"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "编辑笔记。"
+msgstr "将电子邮件转存为笔记"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "将电子邮件转存为笔记"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1809,9 +1811,8 @@ msgid "Export all"
 msgstr "全部导出"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "全部导出"
+msgstr "将所有笔记导出为 JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1827,7 +1828,7 @@ msgstr "导出配置文件"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "导出成功！"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1838,9 +1839,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "导出到 “%s”，格式为 “%s”。请稍等..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "正在导出配置文件..."
+msgstr "正在导出..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -1880,7 +1880,7 @@ msgstr "特性标志"
 
 #: packages/lib/Synchronizer.ts:194
 msgid "Fetched items: %d/%d."
-msgstr "已获取条目：%d/%d."
+msgstr "已获取条目：%d/%d。"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:757
 #: packages/app-mobile/components/side-menu-content.tsx:445
@@ -3170,7 +3170,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
-msgstr "请录下你的声音..."
+msgstr "请录下您的声音..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3703,7 +3703,7 @@ msgstr "分享"
 msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
-msgstr ""
+msgstr "以 Joplin 可在计算机上导入的文件格式共享所有笔记的副本。"
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -4237,7 +4237,7 @@ msgid ""
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些ID的密钥用于加密某些项目，但应用程序当前无法访问这些密钥。它们很可能"
+"具有这些ID的密钥用于加密某些条目，但应用程序当前无法访问这些密钥。它们很可能"
 "最终会通过同步获取。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
@@ -4250,8 +4250,8 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥(Master Key)正被用于加密某些项，但应用程序目前无法访问它"
-"们。项目最终会通过同步获取，但目前可能仍未被同步。"
+"具有这些 ID 的主密钥(Master Key)正被用于加密某些条目，但应用程序目前无法访问"
+"它们。这些条目最终会通过同步获取，但目前可能仍未被同步。"
 
 #: packages/lib/services/RevisionService.ts:265
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -4418,22 +4418,19 @@ msgid ""
 msgstr "这是用于展示与笔记相关联的附件的高级工具。需要小心，删除后无法恢复。"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "无法保存笔记本：%s"
+msgstr[0] "无法删除此笔记：%s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "无法保存笔记本：%s"
+msgstr[0] "无法复制此笔记：%s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "无法保存笔记本：%s"
+msgstr[0] "无法移动此笔记：%s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4667,7 +4664,7 @@ msgstr "类型：%s。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "无法导出或共享数据。 原因：%s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -4746,11 +4743,11 @@ msgstr "更新日期"
 
 #: packages/lib/Synchronizer.ts:189
 msgid "Updated local items: %d."
-msgstr "已更新本地项目：%d。"
+msgstr "已更新本地条目：%d。"
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Updated remote items: %d."
-msgstr "已更新远程项目：%d。"
+msgstr "已更新远程条目：%d。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Updated: "
@@ -4904,11 +4901,12 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "警告：由于性能原因无法显示所有资源（最多：%s）。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "警告"
+msgstr ""
+"警告:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"

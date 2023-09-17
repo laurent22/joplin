@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 // =================================================================
 // Command API types
 // =================================================================
@@ -355,6 +357,13 @@ export interface EditorCommand {
 export interface DialogResult {
 	id: ButtonId;
 	formData?: any;
+}
+
+export interface Rectangle {
+	x?: number;
+	y?: number;
+	width?: number;
+	height?: number;
 }
 
 // =================================================================

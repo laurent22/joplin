@@ -1,5 +1,5 @@
 import time from '@joplin/lib/time';
-import { DbConnection, dropTables, migrateLatest } from '../db';
+import { DbConnection, dropTables, migrateLatest, truncateTables } from '../db';
 import newModelFactory from '../models/factory';
 import { AccountType } from '../models/UserModel';
 import { User, UserFlagType } from '../services/database/types';
@@ -26,6 +26,25 @@ export async function clearDatabase(db: DbConnection) {
 	await migrateLatest(db);
 }
 
+const includedTables = [
+	'changes',
+	'emails',
+	'events',
+	'item_resources',
+	'items',
+	'notifications',
+	'sessions',
+	'share_users',
+	'shares',
+	'subscriptions',
+	'teams',
+	'team_users',
+	'user_deletions',
+	'user_flags',
+	'user_items',
+	'users',
+];
+
 export async function createTestUsers(db: DbConnection, config: Config, options: CreateTestUsersOptions = null) {
 	options = {
 		count: 0,
@@ -34,8 +53,15 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 	};
 
 	const password = '111111';
-
 	const models = newModelFactory(db, config);
+
+	await truncateTables(db, includedTables);
+
+	await models.user().save({
+		email: 'admin@localhost',
+		password: 'admin',
+		is_admin: 1,
+	});
 
 	if (options.count) {
 		const users: User[] = [];
@@ -46,14 +72,12 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 				email: `user${userNum}@example.com`,
 				password,
 				full_name: `User ${userNum}`,
+				account_type: userNum % 2 === 0 ? AccountType.Pro : AccountType.Basic,
 			});
 		}
 
 		await models.user().saveMulti(users);
 	} else {
-		await dropTables(db);
-		await migrateLatest(db);
-
 		for (let userNum = 1; userNum <= 3; userNum++) {
 			await models.user().save({
 				email: `user${userNum}@example.com`,
@@ -112,3 +136,4 @@ export async function createUserDeletions(db: DbConnection, config: Config) {
 		await models.userDeletion().add(users[i].id, Date.now() + 60 * Second + (i * 10 * Minute));
 	}
 }
+
