@@ -94,37 +94,38 @@ joplin.plugins.register({
 			itemTemplate: // html
 				`
 				<div class="content {{#item.selected}}-selected{{/item.selected}}">
-					{{#thumbnailDataUrl}}
-						<img class="thumbnail" src="{{thumbnailDataUrl}}"/>
-					{{/thumbnailDataUrl}}
-					{{^thumbnailDataUrl}}
+					{{#thumbnailFilePath}}
+					<img class="thumbnail" src="file://{{thumbnailFilePath}}"/>
+					{{/thumbnailFilePath}}
+					{{^thumbnailFilePath}}
 						{{{note.titleHtml}}}
-					{{/thumbnailDataUrl}}
+					{{/thumbnailFilePath}}
 				</div>
 			`,
 		
 			onRenderNote: async (props: any) => {
 				const resources = await joplin.data.get(['notes', props.note.id, 'resources']);
 				const resource = resources.items.length ? resources.items[0] : null;
-				let thumbnailDataUrl = '';
+				let thumbnailFilePath = '';
 
 				if (resource) {
-					const existingDataUrl = thumbnailCache_[resource.id];
-					if (existingDataUrl) {
-						thumbnailDataUrl = existingDataUrl;
+					const existingFilePath = thumbnailCache_[resource.id];
+					if (existingFilePath) {
+						thumbnailFilePath = existingFilePath;
 					} else {
 						const file = await joplin.data.get(['resources', resource.id, 'file']);
 						const imageHandle = await joplin.imaging.createFromBuffer(file.body);
 						const resizedImageHandle =  await joplin.imaging.resize(imageHandle, { width: 80 });
-						thumbnailDataUrl = await joplin.imaging.toDataUrl(resizedImageHandle);
+						thumbnailFilePath = (await joplin.plugins.dataDir()) + '/thumb_' + resource.id + '.jpg';
+						await joplin.imaging.toJpgFile(resizedImageHandle, thumbnailFilePath, 70);
 						await joplin.imaging.free(imageHandle);
 						await joplin.imaging.free(resizedImageHandle);
-						thumbnailCache_[resource.id] = thumbnailDataUrl;
+						thumbnailCache_[resource.id] = thumbnailFilePath;
 					}
 				}
 				
 				return {
-					thumbnailDataUrl,
+					thumbnailFilePath,
 					...props
 				};
 			},
