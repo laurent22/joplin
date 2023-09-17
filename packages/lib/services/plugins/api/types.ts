@@ -359,6 +359,13 @@ export interface DialogResult {
 	formData?: any;
 }
 
+export interface Rectangle {
+	x?: number;
+	y?: number;
+	width?: number;
+	height?: number;
+}
+
 // =================================================================
 // Settings types
 // =================================================================
