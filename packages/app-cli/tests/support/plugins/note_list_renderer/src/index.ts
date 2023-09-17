@@ -121,8 +121,7 @@ const registerSimpleLeftToRightRenderer = async() => {
 				if (existingFilePath) {
 					thumbnailFilePath = existingFilePath;
 				} else {
-					const file = await joplin.data.get(['resources', resource.id, 'file']);
-					const imageHandle = await joplin.imaging.createFromBuffer(file.body);
+					const imageHandle = await joplin.imaging.createFromResource(resource.id);
 					const resizedImageHandle =  await joplin.imaging.resize(imageHandle, { width: 80 });
 					thumbnailFilePath = (await joplin.plugins.dataDir()) + '/thumb_' + resource.id + '.jpg';
 					await joplin.imaging.toJpgFile(resizedImageHandle, thumbnailFilePath, 70);
