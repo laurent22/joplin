@@ -11,9 +11,9 @@ export interface CreateFromBufferOptions {
 }
 
 export interface ResizeOptions {
-	width: number;
-	height: number;
-	quality: 'good' | 'better' | 'best';
+	width?: number;
+	height?: number;
+	quality?: 'good' | 'better' | 'best';
 }
 
 export type Handle = string;
@@ -51,11 +51,11 @@ export default class JoplinImaging {
 		return handle;
 	}
 
-	public async createFromBuffer(buffer: any, options: CreateFromBufferOptions): Promise<Handle> {
+	public async createFromBuffer(buffer: any, options: CreateFromBufferOptions = null): Promise<Handle> {
 		return this.cacheImage(this.implementation_.nativeImage.createFromBuffer(buffer, options));
 	}
 
-	public async resize(handle: Handle, options: ResizeOptions) {
+	public async resize(handle: Handle, options: ResizeOptions = null) {
 		const image = this.imageByHandle(handle);
 		const resizedImage = image.data.resize(options);
 		return this.cacheImage(resizedImage);
