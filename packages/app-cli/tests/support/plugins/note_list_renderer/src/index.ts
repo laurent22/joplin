@@ -3,6 +3,10 @@ import { ItemFlow } from 'api/noteListType';
 
 const thumbnailCache_:Record<string, string> = {};
 
+// This renderer displays the notes top to bottom. It's a minimal example that
+// only displays the note title. For a full renderer, it's recommended to also
+// handle whether the notes is a regular note or to-do (in which case a checkbox
+// should be displayed).
 const registerSimpleTopToBottomRenderer = async () => {
 	await joplin.views.noteList.registerRenderer({
 		id: 'simpleTopToBottom',
@@ -49,6 +53,9 @@ const registerSimpleTopToBottomRenderer = async () => {
 	});
 }
 
+// This renderer displays the notes from left to right - it takes the first
+// resource in the note, if any, and displays it as a thumbnail for the note. If
+// no thumbnail is available, it displays the note title.
 const registerSimpleLeftToRightRenderer = async() => {
 	await joplin.views.noteList.registerRenderer({
 		id: 'simpleLeftToRight',
