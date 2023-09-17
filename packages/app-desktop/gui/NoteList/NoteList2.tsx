@@ -10,7 +10,6 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
 import NoteListItem from '../NoteListItem/NoteListItem';
-import useRenderedNotes from './utils/useRenderedNotes';
 import useItemCss from './utils/useItemCss';
 import useOnContextMenu from '../NoteListItem/utils/useOnContextMenu';
 import useVisibleRange from './utils/useVisibleRange';
@@ -77,15 +76,15 @@ const NoteList = (props: Props) => {
 		props.notes,
 	);
 
-	const renderedNotes = useRenderedNotes(
-		startNoteIndex,
-		endNoteIndex,
-		props.notes,
-		props.selectedNoteIds,
-		listRenderer,
-		props.highlightedWords,
-		props.watchedNoteFiles,
-	);
+	// const renderedNotes = useRenderedNotes(
+	// 	startNoteIndex,
+	// 	endNoteIndex,
+	// 	props.notes,
+	// 	props.selectedNoteIds,
+	// 	listRenderer,
+	// 	props.highlightedWords,
+	// 	props.watchedNoteFiles,
+	// );
 
 	const noteItemStyle = useMemo(() => {
 		return {
@@ -197,7 +196,6 @@ const NoteList = (props: Props) => {
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
-			const renderedNote = renderedNotes[note.id];
 
 			output.push(
 				<NoteListItem
@@ -207,8 +205,6 @@ const NoteList = (props: Props) => {
 					dragIndex={dragOverTargetNoteIndex}
 					noteCount={props.notes.length}
 					itemSize={itemSize}
-					noteHtml={renderedNote ? renderedNote.html : ''}
-					noteId={note.id}
 					onChange={listRenderer.onChange}
 					onClick={onNoteClick}
 					onContextMenu={onItemContextMenu}
@@ -218,6 +214,10 @@ const NoteList = (props: Props) => {
 					highlightedWords={highlightedWords}
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
 					flow={listRenderer.flow}
+					note={note}
+					isSelected={props.selectedNoteIds.includes(note.id)}
+					isWatched={props.watchedNoteFiles.includes(note.id)}
+					listRenderer={listRenderer}
 				/>,
 			);
 		}
