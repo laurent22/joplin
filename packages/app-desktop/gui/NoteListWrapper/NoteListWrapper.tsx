@@ -42,23 +42,15 @@ const useListRenderer = (listRendererId: string, startupPluginsLoaded: boolean) 
 
 export default function NoteListWrapper(props: Props) {
 	const theme = themeStyle(props.themeId);
-	const [controlHeight, setControlHeight] = useState(theme.topRowHeight);
+	const [controlHeight] = useState(theme.topRowHeight);
 	const listRenderer = useListRenderer(props.listRendererId, props.startupPluginsLoaded);
-
-	const onContentHeightChange = (sameRow: boolean) => {
-		if (sameRow) {
-			setControlHeight(theme.topRowHeight);
-		} else {
-			setControlHeight(theme.topRowHeight * 2);
-		}
-	};
 
 	const noteListSize = useMemo(() => {
 		return {
 			width: props.size.width,
-			height: props.size.height - controlHeight,
+			height: props.size.height,
 		};
-	}, [props.size, controlHeight]);
+	}, [props.size]);
 
 	const renderNoteList = () => {
 		if (!listRenderer) return null;
@@ -72,7 +64,7 @@ export default function NoteListWrapper(props: Props) {
 
 	return (
 		<StyledRoot>
-			<NoteListControls height={controlHeight} width={noteListSize.width} onContentHeightChange={onContentHeightChange}/>
+			<NoteListControls height={controlHeight} width={noteListSize.width}/>
 			{renderNoteList()}
 		</StyledRoot>
 	);

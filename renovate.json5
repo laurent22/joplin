@@ -179,6 +179,11 @@
 
 		// We are too many versions behind so it needs to be manually upgraded.
 		"immer",
+
+		// We don't really use styled-components anymore and v6 introduces
+		// breaking changes. Ideally we should just update existing components
+		// to rscss.
+		"styled-components",
 	],
 	"packageRules": [
 		{
