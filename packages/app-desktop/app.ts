@@ -67,6 +67,8 @@ import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
+import { ipcRenderer } from 'electron';
+import { stateUtils } from '@joplin/lib/reducer';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -349,6 +351,55 @@ class Application extends BaseApplication {
 		await Setting.saveAll();
 	}
 
+	private appCloseHandler() {
+		let waitForNotesSavedIID_: ReturnType<typeof setInterval>|null = null;
+		let sendingCanCloseReply_ = false;
+
+		// This event is dispached from the main process when the app is about
+		// to close. The renderer process must respond with the "appCloseReply"
+		// and tell the main process whether the app can really be closed or not.
+		// For example, it cannot be closed right away if a note is being saved.
+		// If a note is being saved, we wait till it is saved and then call
+		// "appCloseReply" again.
+		ipcRenderer.on('appClose', async () => {
+			if (waitForNotesSavedIID_) shim.clearInterval(waitForNotesSavedIID_);
+			waitForNotesSavedIID_ = null;
+
+			const sendCanClose = async (canClose: boolean) => {
+				// Don't run multiple copies of sendCanClose at the same time (appClose
+				// can be fired from multiple places).
+				if (sendingCanCloseReply_) return;
+
+				sendingCanCloseReply_ = true;
+				if (canClose) {
+					Setting.setValue('wasClosedSuccessfully', true);
+
+					await Setting.saveAll();
+				}
+				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
+				sendingCanCloseReply_ = false;
+			};
+
+			const getHasNotesBeingSaved = () => {
+				const state = this.store().getState();
+				return stateUtils.hasNotesBeingSaved(state);
+			};
+
+			const hasNotesBeingSaved = getHasNotesBeingSaved();
+			await sendCanClose(!hasNotesBeingSaved);
+
+			if (hasNotesBeingSaved) {
+				waitForNotesSavedIID_ = shim.setInterval(() => {
+					if (!getHasNotesBeingSaved()) {
+						shim.clearInterval(waitForNotesSavedIID_);
+						waitForNotesSavedIID_ = null;
+						void sendCanClose(true);
+					}
+				}, 50);
+			}
+		});
+	}
+
 	public async start(argv: string[]): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
@@ -431,6 +482,8 @@ class Application extends BaseApplication {
 		// which mean state.settings will not be initialised. So we
 		// manually call dispatchUpdateAll() to force an update.
 		Setting.dispatchUpdateAll();
+
+		this.appCloseHandler();
 
 		await FoldersScreenUtils.refreshFolders();
 
