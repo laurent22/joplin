@@ -261,6 +261,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public setupAppCloseHandling() {
 		this.waitForNotesSavedIID_ = null;
+		let sendingCanCloseReply = false;
 
 		// This event is dispached from the main process when the app is about
 		// to close. The renderer process must respond with the "appCloseReply"
@@ -273,16 +274,18 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.waitForNotesSavedIID_ = null;
 
 			const sendCanClose = async (canClose: boolean) => {
+				// Don't run multiple copies of sendCanClose at the same time (appClose
+				// can be fired from multiple places).
+				if (sendingCanCloseReply) return;
+
+				sendingCanCloseReply = true;
 				if (canClose) {
 					Setting.setValue('wasClosedSuccessfully', true);
 
-					// We need to force-save all settings -- saveAll does nothing if
-					// a save is scheduled and this save needs to happen before the app
-					// exits.
-					const force = true;
-					await Setting.saveAll(force);
+					await Setting.saveAll();
 				}
 				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
+				sendingCanCloseReply = false;
 			};
 
 			await sendCanClose(!this.props.hasNotesBeingSaved);
