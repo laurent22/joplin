@@ -1,13 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
 
-// eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
+import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
 import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
-import Toolbar from '../Toolbar';
-// import styles_ from './styles';
-// import { RenderedBody, defaultRenderedBody } from './utils/types';
 import NoteTextViewer from '../../../../NoteTextViewer';
 import Editor from './Editor';
 import usePluginServiceRegistration from '../../../utils/usePluginServiceRegistration';
@@ -15,7 +11,6 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../../services/bridge';
-// import markdownUtils from '@joplin/lib/markdownUtils';
 import shim from '@joplin/lib/shim';
 import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
@@ -31,6 +26,7 @@ import useEditorCommands from './useEditorCommands';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
+import Toolbar from '../Toolbar';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -51,7 +47,7 @@ function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtml
 	return { ...override };
 }
 
-function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) {
+const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) => {
 	const styles = useStyles(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
@@ -62,13 +58,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const editorRef = useRef<CodeMirrorControl>(null);
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>(null);
+
+	type OnChangeCallback = (event: OnChangeEvent)=> void;
+	const props_onChangeRef = useRef<OnChangeCallback>(null);
 	props_onChangeRef.current = props.onChange;
 
 	const [selectionRange, setSelectionRange] = useState({ from: 0, to: 0 });
 
-	const { // editor_resize, editor_update,
+	const {
 		resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll, getLineScrollPercent,
 	} = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
@@ -195,8 +192,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				return commandOutput;
 			},
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, commands]);
+	}, [props.content, commands, resetScroll, setEditorPercentScroll, setViewerPercentScroll]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -255,8 +251,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			cancelled = true;
 			shim.clearTimeout(timeoutId);
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+	}, [
+		props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage,
+		props.visiblePanes, props.resourceInfos, props.markupToHtml, props.contentMaxWidth,
+		props.noteId, props.useCustomPdfViewer,
+	]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
@@ -286,8 +285,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');
 		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [renderedBody, webviewReady]);
+	}, [renderedBody, webviewReady, getLineScrollPercent, setEditorPercentScroll]);
 
 	const cellEditorStyle = useMemo(() => {
 		const output = { ...styles.cellEditor };
@@ -417,6 +415,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			</div>
 		</ErrorBoundary>
 	);
-}
+};
 
 export default forwardRef(CodeMirror);
