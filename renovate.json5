@@ -130,6 +130,7 @@
 		"pretty-bytes",
 		"strip-ansi",
 		"formidable",
+		"@types/formidable",
 		"node-emoji",
 
 		// @koa/cors has undocumented breaking changes, and the package is not
