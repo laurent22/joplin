@@ -36,6 +36,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		} else if (super.commandExists(name)) {
 			super.execCommand(name);
 		}
+
+		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {
+			this._callbacks.onUndoRedo();
+		}
 	}
 
 	public undo() {

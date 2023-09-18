@@ -217,8 +217,7 @@ const createEditor = (
 					},
 				}),
 
-				// TODO: indent with tabs to match other
-				// editors.
+				// TODO: indent with tabs to match other editors.
 				// Tab indentation has list-related bugs. See
 				// https://github.com/codemirror/dev/issues/1243
 				indentUnit.of('    '),
