@@ -45,7 +45,9 @@ window.addEventListener('beforeunload', event => {
 		canCloseWindow = newCanClose;
 
 		// Trigger the beforeunload handler again.
-		window.close();
+		if (canCloseWindow) {
+			window.close();
+		}
 	})();
 
 	if (canCloseWindow) {
