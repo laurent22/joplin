@@ -5085,7 +5085,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.0
-    "@types/formidable": 2.0.6
+    "@types/formidable": 3.4.0
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
     "@types/jest-expect-message": 1.0.4
@@ -7735,12 +7735,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/formidable@npm:2.0.6":
-  version: 2.0.6
-  resolution: "@types/formidable@npm:2.0.6"
+"@types/formidable@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@types/formidable@npm:3.4.0"
   dependencies:
     "@types/node": "*"
-  checksum: d6be0ac12bf8dd2e4f8a022271ee6e501c7f6d7dd58d71c68497ca7da84bee1538d1a2a64a90b56dad557ddb291d48c5731206269e9ab53ed91264e68a4d1476
+  checksum: 8136835e4964015a389595bea39a271e65fa8dce2590770b0e69cb8f29cbd2cd2f7376a8714766fda5796838c426929a3f575cdd565ecf0f19b048f40e0d456f
   languageName: node
   linkType: hard
 
