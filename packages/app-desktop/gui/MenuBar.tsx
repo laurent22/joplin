@@ -728,6 +728,7 @@ function useMenu(props: Props) {
 						{
 							label: _('Note list style'),
 							submenu: noteListMenuItems,
+							visible: noteListMenuItems.length > 1,
 						},
 						separator(),
 						{
