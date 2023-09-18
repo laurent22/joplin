@@ -126,6 +126,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private styles_: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private promptOnClose_: Function;
+	private sendingCanCloseReply_ = false;
 
 	public constructor(props: Props) {
 		super(props);
@@ -261,7 +262,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public setupAppCloseHandling() {
 		this.waitForNotesSavedIID_ = null;
-		let sendingCanCloseReply = false;
+		this.sendingCanCloseReply_ = false;
 
 		// This event is dispached from the main process when the app is about
 		// to close. The renderer process must respond with the "appCloseReply"
@@ -276,16 +277,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			const sendCanClose = async (canClose: boolean) => {
 				// Don't run multiple copies of sendCanClose at the same time (appClose
 				// can be fired from multiple places).
-				if (sendingCanCloseReply) return;
+				if (this.sendingCanCloseReply_) return;
 
-				sendingCanCloseReply = true;
+				this.sendingCanCloseReply_ = true;
 				if (canClose) {
 					Setting.setValue('wasClosedSuccessfully', true);
 
 					await Setting.saveAll();
 				}
 				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
-				sendingCanCloseReply = false;
+				this.sendingCanCloseReply_ = false;
 			};
 
 			await sendCanClose(!this.props.hasNotesBeingSaved);
