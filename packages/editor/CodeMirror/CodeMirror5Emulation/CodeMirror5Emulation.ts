@@ -323,7 +323,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	// TODO: Currently copied from useCursorUtils.ts.
-	// TODO: Reduce code duplication.
+	// TODO: Remove the duplicate code when CodeMirror 5 is eventually removed.
 	public wrapSelections(string1: string, string2: string) {
 		const selectedStrings = this.getSelections();
 

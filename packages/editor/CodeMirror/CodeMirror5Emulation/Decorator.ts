@@ -31,8 +31,8 @@ interface LineCssDecorationSpec extends DecorationRange {
 const addLineDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRangeConfig);
 const removeLineDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRangeConfig);
 const addMarkDecorationEffect = StateEffect.define<LineCssDecorationSpec>(mapRangeConfig);
-// TODO:
-// const removeMarkDecorationEffect = StateEffect.define<LineDecorationSpec>(mapRangeConfig);
+// TODO: Support removing mark decorations
+//     const removeMarkDecorationEffect = StateEffect.define<LineDecorationSpec>(mapRangeConfig);
 
 export interface LineWidgetOptions {
 	className?: string;
