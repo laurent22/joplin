@@ -736,12 +736,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 			editor: () => {
 				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
-				if (this.props.isSafeMode) {
-					bodyEditor = 'PlainText';
-				} else if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
+
+				if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
 					bodyEditor = 'CodeMirror6';
 				}
-
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
 		};

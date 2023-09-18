@@ -1,5 +1,5 @@
-import { RefObject, useEffect } from 'react';
-import { FormNote, NoteBodyEditorRef, ScrollOptionTypes } from './types';
+import { useEffect } from 'react';
+import { FormNote, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
@@ -12,8 +12,6 @@ const commandsWithDependencies = [
 	require('../commands/pasteAsText'),
 ];
 
-type SetFormNoteCallback = (callback: (prev: FormNote)=> FormNote)=> void;
-
 interface HookDependencies {
 	formNote: FormNote;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -21,18 +19,16 @@ interface HookDependencies {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	noteSearchBarRef: any;
-	editorRef: RefObject<NoteBodyEditorRef>;
+	editorRef: any;
 	titleInputRef: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	saveNoteAndWait: Function;
-	setFormNote: SetFormNoteCallback;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	setFormNote: Function;
 }
 
-function editorCommandRuntime(
-	declaration: CommandDeclaration,
-	editorRef: RefObject<NoteBodyEditorRef>,
-	setFormNote: SetFormNoteCallback,
-): CommandRuntime {
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
 	return {
 		execute: async (_context: CommandContext, ...args: any[]) => {
 			if (!editorRef.current) {

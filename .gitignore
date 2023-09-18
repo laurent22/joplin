@@ -224,7 +224,6 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/Editor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/Editor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.js
-packages/app-desktop/gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.js
