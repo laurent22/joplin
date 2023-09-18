@@ -260,9 +260,47 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateRootLayoutSize();
 	}
 
+	private appCloseListener_ = async () => {
+		if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
+		this.waitForNotesSavedIID_ = null;
+
+		const sendCanClose = async (canClose: boolean) => {
+			// Don't run multiple copies of sendCanClose at the same time (appClose
+			// can be fired from multiple places).
+			if (this.sendingCanCloseReply_) return;
+
+			this.sendingCanCloseReply_ = true;
+			if (canClose) {
+				Setting.setValue('wasClosedSuccessfully', true);
+
+				await Setting.saveAll();
+			}
+			ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
+			this.sendingCanCloseReply_ = false;
+		};
+
+		await sendCanClose(!this.props.hasNotesBeingSaved);
+
+		if (this.props.hasNotesBeingSaved) {
+			this.waitForNotesSavedIID_ = shim.setInterval(() => {
+				if (!this.props.hasNotesBeingSaved) {
+					shim.clearInterval(this.waitForNotesSavedIID_);
+					this.waitForNotesSavedIID_ = null;
+					void sendCanClose(true);
+				}
+			}, 50);
+		}
+	};
+
+	private clearAppCloseListener() {
+		ipcRenderer.removeListener('appClose', this.appCloseListener_);
+	}
+
 	public setupAppCloseHandling() {
 		this.waitForNotesSavedIID_ = null;
 		this.sendingCanCloseReply_ = false;
+
+		this.clearAppCloseListener();
 
 		// This event is dispached from the main process when the app is about
 		// to close. The renderer process must respond with the "appCloseReply"
@@ -270,37 +308,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		// For example, it cannot be closed right away if a note is being saved.
 		// If a note is being saved, we wait till it is saved and then call
 		// "appCloseReply" again.
-		ipcRenderer.on('appClose', async () => {
-			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
-			this.waitForNotesSavedIID_ = null;
-
-			const sendCanClose = async (canClose: boolean) => {
-				// Don't run multiple copies of sendCanClose at the same time (appClose
-				// can be fired from multiple places).
-				if (this.sendingCanCloseReply_) return;
-
-				this.sendingCanCloseReply_ = true;
-				if (canClose) {
-					Setting.setValue('wasClosedSuccessfully', true);
-
-					await Setting.saveAll();
-				}
-				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
-				this.sendingCanCloseReply_ = false;
-			};
-
-			await sendCanClose(!this.props.hasNotesBeingSaved);
-
-			if (this.props.hasNotesBeingSaved) {
-				this.waitForNotesSavedIID_ = shim.setInterval(() => {
-					if (!this.props.hasNotesBeingSaved) {
-						shim.clearInterval(this.waitForNotesSavedIID_);
-						this.waitForNotesSavedIID_ = null;
-						void sendCanClose(true);
-					}
-				}, 50);
-			}
-		});
+		ipcRenderer.on('appClose', this.appCloseListener_);
 	}
 
 	private notePropertiesDialog_close() {
@@ -409,6 +417,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public componentWillUnmount() {
 		this.unregisterCommands();
+		this.clearAppCloseListener();
 
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
