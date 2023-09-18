@@ -142,7 +142,7 @@ export default class ElectronAppWrapper {
 			}, 3000);
 		}
 
-		this.win_.on('close', (event: any) => {
+		const onWindowClose = () => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
 			// otherwise the window is simply hidden, and will be re-open once the app is "activated" (which happens when the
 			// user clicks on the icon in the task bar).
@@ -156,24 +156,22 @@ export default class ElectronAppWrapper {
 				if (this.willQuitApp_) {
 					isGoingToExit = true;
 				} else {
-					event.preventDefault();
 					this.hide();
 				}
 			} else {
 				if (this.trayShown() && !this.willQuitApp_) {
-					event.preventDefault();
 					this.win_.hide();
 				} else {
 					isGoingToExit = true;
 				}
 			}
 
+			let quitNow = false;
 			if (isGoingToExit) {
 				if (!this.rendererProcessQuitReply_) {
 					// If we haven't notified the renderer process yet, do it now
 					// so that it can tell us if we can really close the app or not.
 					// Search for "appClose" event for closing logic on renderer side.
-					event.preventDefault();
 					if (this.win_) this.win_.webContents.send('appClose');
 				} else {
 					// If the renderer process has responded, check if we can close or not
@@ -181,14 +179,18 @@ export default class ElectronAppWrapper {
 						// Really quit the app
 						this.rendererProcessQuitReply_ = null;
 						this.win_ = null;
+						quitNow = true;
 					} else {
 						// Wait for renderer to finish task
-						event.preventDefault();
 						this.rendererProcessQuitReply_ = null;
 					}
 				}
 			}
-		});
+
+			return quitNow;
+		};
+
+		ipcMain.handle('window:onBeforeUnload', onWindowClose);
 
 		ipcMain.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'appCloseReply') {
@@ -196,6 +198,8 @@ export default class ElectronAppWrapper {
 				// save the response and try quit again.
 				this.rendererProcessQuitReply_ = args;
 				this.quit();
+			} else {
+				console.warn('unknown message', message);
 			}
 		});
 

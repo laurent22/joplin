@@ -26,17 +26,41 @@ const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const bridge = require('@electron/remote').require('./bridge').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
+const { ipcRenderer } = require('electron');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
 const initLib = require('@joplin/lib/initLib').default;
 
-// Security: If we attempt to navigate away from the root HTML page, it's likely because
-// of an improperly sanitized link. Prevent this by closing the window before we can
-// navigate away.
-window.onbeforeunload = () => {
-	window.close();
-};
+// This beforeunload listener has two purposes:
+// 1. The 'close' event in the main process is not fired on system shutdown/reboot on Windows, but the beforeunload
+//    event is.
+// 2. Security: If we attempt to navigate away from the root HTML page, it's likely because
+//    of an improperly sanitized link. Prevent this by closing the window before we can
+//    navigate away.
+let canCloseWindow = false;
+window.addEventListener('beforeunload', event => {
+	void (async () => {
+		const newCanClose = await ipcRenderer.invoke('window:onBeforeUnload');
+		canCloseWindow = newCanClose;
+
+		// Trigger the beforeunload handler again.
+		window.close();
+	})();
+
+	if (canCloseWindow) {
+		// Security: This handler can also be triggered by clicking on unsanitized links.
+		//           Close the window manually to prevent navigation to a different origin.
+		window.close();
+
+		return undefined;
+	} else {
+		// Prevent the default action (by returning any value that is not
+		// null or undefined).
+		event.preventDefault();
+		return false;
+	}
+});
 
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
