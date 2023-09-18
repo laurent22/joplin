@@ -5085,7 +5085,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.0
-    "@types/formidable": 2.0.6
+    "@types/formidable": 3.4.3
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
     "@types/jest-expect-message": 1.0.4
@@ -5102,7 +5102,7 @@ __metadata:
     bulma-prefers-dark: 0.1.0-beta.1
     compare-versions: 3.6.0
     dayjs: 1.11.9
-    formidable: 2.1.2
+    formidable: 3.5.1
     fs-extra: 11.1.1
     gulp: 4.0.2
     html-entities: 1.4.0
@@ -7735,12 +7735,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/formidable@npm:2.0.6":
-  version: 2.0.6
-  resolution: "@types/formidable@npm:2.0.6"
+"@types/formidable@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@types/formidable@npm:3.4.3"
   dependencies:
     "@types/node": "*"
-  checksum: d6be0ac12bf8dd2e4f8a022271ee6e501c7f6d7dd58d71c68497ca7da84bee1538d1a2a64a90b56dad557ddb291d48c5731206269e9ab53ed91264e68a4d1476
+  checksum: 6246a51e8b9c7f7f1bec85ccc8c6019f2fe8d46cecc0bf03a8bae68b6c0406bca97a67d71159a18b1f38db5a544c0dfd5c3272acf47877ca163e7e4cc1b414f4
   languageName: node
   linkType: hard
 
@@ -17620,15 +17620,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:2.1.2":
-  version: 2.1.2
-  resolution: "formidable@npm:2.1.2"
+"formidable@npm:3.5.1":
+  version: 3.5.1
+  resolution: "formidable@npm:3.5.1"
   dependencies:
     dezalgo: ^1.0.4
     hexoid: ^1.0.0
     once: ^1.4.0
-    qs: ^6.11.0
-  checksum: 81c8e5d89f5eb873e992893468f0de22c01678ca3d315db62be0560f9de1c77d4faefc9b1f4575098eb2263b3c81ba1024833a9fc3206297ddbac88a4f69b7a8
+  checksum: 46b21496f9f985161cf7636163147b6728f9997c7e1d59433680d92619758bf6862330e6d105b5816bafcd1ab32f27ef183455991f93ef836ea731c68db62af9
   languageName: node
   linkType: hard
 
