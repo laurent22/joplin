@@ -27,7 +27,7 @@
     "@joplin/renderer": "~2.13",
     "@joplin/utils": "~2.13",
     "@koa/cors": "3.4.3",
-    "@types/uuid": "9.0.2",
+    "@types/uuid": "9.0.3",
     "bcryptjs": "2.4.3",
     "bulma": "0.9.4",
     "bulma-prefers-dark": "0.1.0-beta.1",
