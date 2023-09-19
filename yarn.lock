@@ -2802,15 +2802,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@callstack/react-theme-provider@npm:^3.0.8":
-  version: 3.0.8
-  resolution: "@callstack/react-theme-provider@npm:3.0.8"
+"@callstack/react-theme-provider@npm:^3.0.9":
+  version: 3.0.9
+  resolution: "@callstack/react-theme-provider@npm:3.0.9"
   dependencies:
     deepmerge: ^3.2.0
     hoist-non-react-statics: ^3.3.0
   peerDependencies:
     react: ">=16.3.0"
-  checksum: 6077a4795aea4eb06a2a2ffe5cf299c3fdcba56530aa68eba5c3ac0728ce02be2f6e9e71278be303065cb7fbe252c35639538477d5d05ee14f6325d550c8c696
+  checksum: f888ef0b8f993d393a9d49864f75b04b5cf7259e72f290ec570fc5e314315f75c979b03b391243a72578ab55db4ffcdd4dc9dc1a2f8ec2b516cabb958971a85e
   languageName: node
   linkType: hard
 
@@ -4780,7 +4780,7 @@ __metadata:
     react-native-image-picker: 5.6.1
     react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 17.0.0
-    react-native-paper: 5.9.1
+    react-native-paper: 5.10.1
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -9007,13 +9007,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/lockfile@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@yarnpkg/lockfile@npm:1.1.0"
-  checksum: 05b881b4866a3546861fee756e6d3812776ea47fa6eb7098f983d6d0eefa02e12b66c3fff931574120f196286a7ad4879ce02743c8bb2be36c6a576c7852083a
-  languageName: node
-  linkType: hard
-
 "@zkochan/cmd-shim@npm:^3.1.0":
   version: 3.1.0
   resolution: "@zkochan/cmd-shim@npm:3.1.0"
@@ -11880,13 +11873,6 @@ __metadata:
   version: 3.3.0
   resolution: "ci-info@npm:3.3.0"
   checksum: c3d86fe374938ecda5093b1ba39acb535d8309185ba3f23587747c6a057e63f45419b406d880304dbc0e1d72392c9a33e42fe9a1e299209bc0ded5efaa232b66
-  languageName: node
-  linkType: hard
-
-"ci-info@npm:^3.7.0":
-  version: 3.8.0
-  resolution: "ci-info@npm:3.8.0"
-  checksum: d0a4d3160497cae54294974a7246202244fff031b0a6ea20dd57b10ec510aa17399c41a1b0982142c105f3255aff2173e5c0dd7302ee1b2f28ba3debda375098
   languageName: node
   linkType: hard
 
@@ -17344,15 +17330,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-yarn-workspace-root@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "find-yarn-workspace-root@npm:2.0.0"
-  dependencies:
-    micromatch: ^4.0.2
-  checksum: fa5ca8f9d08fe7a54ce7c0a5931ff9b7e36f9ee7b9475fb13752bcea80ec6b5f180fa5102d60b376d5526ce924ea3fc6b19301262efa0a5d248dd710f3644242
-  languageName: node
-  linkType: hard
-
 "findit@npm:^2.0.0":
   version: 2.0.0
   resolution: "findit@npm:2.0.0"
@@ -20802,7 +20779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-wsl@npm:^2.1.1, is-wsl@npm:^2.2.0":
+"is-wsl@npm:^2.2.0":
   version: 2.2.0
   resolution: "is-wsl@npm:2.2.0"
   dependencies:
@@ -22778,15 +22755,6 @@ __metadata:
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
   checksum: 3ab01e7b1d440b22fe4c31f23d8d38b4d9b91d9f291df683476576493d5dfd2e03848a8b05813dd0c3f0e835bc63f433007ddeceb71f05cb25c45ae1b19c6d3b
-  languageName: node
-  linkType: hard
-
-"klaw-sync@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "klaw-sync@npm:6.0.0"
-  dependencies:
-    graceful-fs: ^4.1.11
-  checksum: 0da397f8961313c3ef8f79fb63af9002cde5a8fb2aeb1a37351feff0dd6006129c790400c3f5c3b4e757bedcabb13d21ec0a5eaef5a593d59515d4f2c291e475
   languageName: node
   linkType: hard
 
@@ -24857,7 +24825,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2, micromatch@npm:^4.0.5":
+"micromatch@npm:^4.0.0, micromatch@npm:^4.0.5":
   version: 4.0.5
   resolution: "micromatch@npm:4.0.5"
   dependencies:
@@ -26771,16 +26739,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"open@npm:^7.4.2":
-  version: 7.4.2
-  resolution: "open@npm:7.4.2"
-  dependencies:
-    is-docker: ^2.0.0
-    is-wsl: ^2.1.1
-  checksum: 3333900ec0e420d64c23b831bc3467e57031461d843c801f569b2204a1acc3cd7b3ec3c7897afc9dde86491dfa289708eb92bba164093d8bd88fb2c231843c91
-  languageName: node
-  linkType: hard
-
 "open@npm:^9.1.0":
   version: 9.1.0
   resolution: "open@npm:9.1.0"
@@ -27410,30 +27368,6 @@ __metadata:
   version: 1.0.0
   resolution: "patch-console@npm:1.0.0"
   checksum: 8cd738aa470f2e9463fca35da6a19403384ac555004f698ddd3dfdb69135ab60fe9bd2edd1dbdd8c09d92c0a2190fd0f7337fe48123013baf8ffec8532885a3a
-  languageName: node
-  linkType: hard
-
-"patch-package@npm:^7.0.0":
-  version: 7.0.2
-  resolution: "patch-package@npm:7.0.2"
-  dependencies:
-    "@yarnpkg/lockfile": ^1.1.0
-    chalk: ^4.1.2
-    ci-info: ^3.7.0
-    cross-spawn: ^7.0.3
-    find-yarn-workspace-root: ^2.0.0
-    fs-extra: ^9.0.0
-    klaw-sync: ^6.0.0
-    minimist: ^1.2.6
-    open: ^7.4.2
-    rimraf: ^2.6.3
-    semver: ^7.5.3
-    slash: ^2.0.0
-    tmp: ^0.0.33
-    yaml: ^2.2.2
-  bin:
-    patch-package: index.js
-  checksum: de2cf60effc8b59ee15d4930f84eea63c217525f0133c926850ee3a2437651d8aabbd0fec4ddee1b8b8da4fd380bcea90ef3c4acd69026057fa80cdc823b59a4
   languageName: node
   linkType: hard
 
@@ -29150,20 +29084,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.9.1":
-  version: 5.9.1
-  resolution: "react-native-paper@npm:5.9.1"
+"react-native-paper@npm:5.10.1":
+  version: 5.10.1
+  resolution: "react-native-paper@npm:5.10.1"
   dependencies:
-    "@callstack/react-theme-provider": ^3.0.8
+    "@callstack/react-theme-provider": ^3.0.9
     color: ^3.1.2
-    patch-package: ^7.0.0
     use-latest-callback: ^0.1.5
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 47b23f827d3d5d296dc888d8c10c689465ccf2b8d815b2ecea8c5a41b2244776d153a6ffeaf14df61a231cd9542cc26199e85dd94687acec6b6adeb3f0ea271d
+  checksum: fe7e71977e8568963f43dbd0d33c0cd27295f59d67f6e0482a89448844c865552d4fc75c371bba977817d593a458c47303828d5624c632786a6b141d8efae1a4
   languageName: node
   linkType: hard
 
