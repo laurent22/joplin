@@ -255,8 +255,18 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
+		// Ensure that screen readers can't focus the notes list when it isn't visible.
+		// accessibilityElementsHidden is used on iOS and importantForAccessibility is used
+		// on Android.
+		const accessibilityHidden = !this.props.visible;
+
 		return (
-			<View style={rootStyle}>
+			<View
+				style={rootStyle}
+
+				accessibilityElementsHidden={accessibilityHidden}
+				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+			>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />
 				{actionButtonComp}
