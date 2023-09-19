@@ -3520,12 +3520,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/remote@npm:2.0.10":
-  version: 2.0.10
-  resolution: "@electron/remote@npm:2.0.10"
+"@electron/remote@npm:2.0.11":
+  version: 2.0.11
+  resolution: "@electron/remote@npm:2.0.11"
   peerDependencies:
     electron: ">= 13.0.0"
-  checksum: 74ab6fca7973f43d45e3372dc3bbd35552f63ba10f5673d08ec9d9fd06e74d5b2da696a9b297dae5baeaf5cd991fc65c4ee25582991f8c18316bd18ae1bed6a9
+  checksum: 5ba6ddce183fdb6afc3c83b4d15433a5506fcd69b969b76c4a2fae69a1e9493a41494332d325209cbf934aa870e20417f54723c26c3969eea6e19558b96089b0
   languageName: node
   linkType: hard
 
@@ -4627,7 +4627,7 @@ __metadata:
     7zip-bin-win: ^2.1.1
     "@electron/notarize": 2.1.0
     "@electron/rebuild": 3.3.0
-    "@electron/remote": 2.0.10
+    "@electron/remote": 2.0.11
     "@fortawesome/fontawesome-free": 5.15.4
     "@joeattardi/emoji-button": 4.6.4
     "@joplin/lib": ~2.13
