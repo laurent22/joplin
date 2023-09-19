@@ -890,6 +890,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async showAttachMenu() {
+		// If the keyboard is editing a WebView, the standard Keyboard.dismiss()
+		// may not work. As such, we also need to call hideKeyboard on the editorRef
+		this.editorRef.current?.hideKeyboard();
+
 		const buttons = [];
 
 		// On iOS, it will show "local files", which means certain files saved from the browser
