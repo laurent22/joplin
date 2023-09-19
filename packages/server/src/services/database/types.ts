@@ -75,6 +75,14 @@ export function changeTypeToString(t: ChangeType): string {
 	throw new Error(`Unkown type: ${t}`);
 }
 
+export const getDefaultValue = (tableName: string, colName: string): string|number|null => {
+	const table = databaseSchema[tableName];
+	if (!table) throw new Error(`Invalid table name: ${tableName}`);
+	const col = table[colName];
+	if (!col) throw new Error(`Invalid column name: ${tableName}.${colName}`);
+	return col.defaultValue;
+};
+
 export enum ShareType {
 	Note = 1, // When a note is shared via a public link
 	Folder = 3, // When a complete folder is shared with another Joplin Server user
