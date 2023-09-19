@@ -1163,10 +1163,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':
-			const noteListRendererIds = draft.noteListRendererIds.slice();
-			if (noteListRendererIds.includes(action.value)) throw new Error('Note list renderer is already registered: ' + action.value);
-			noteListRendererIds.push(action.value);
-			draft.noteListRendererIds = noteListRendererIds;
+			{
+				const noteListRendererIds = draft.noteListRendererIds.slice();
+				if (noteListRendererIds.includes(action.value)) throw new Error(`Note list renderer is already registered: ${action.value}`);
+				noteListRendererIds.push(action.value);
+				draft.noteListRendererIds = noteListRendererIds;
+			}
 			break;
 
 		}
