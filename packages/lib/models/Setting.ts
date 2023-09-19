@@ -1022,21 +1022,6 @@ class Setting extends BaseModel {
 			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
 
-			// 2023-09-07: This setting is now used to track the desktop beta editor. It
-			// was used to track the mobile beta editor previously.
-			'editor.beta': {
-				value: false,
-				type: SettingItemType.Bool,
-				section: 'general',
-				advanced: true,
-				public: true,
-				appTypes: [AppType.Desktop],
-				label: () => 'Opt-in to the editor beta',
-				description: () => 'This beta adds improved accessibility and plugin API compatibility with the mobile editor. If you find bugs, please report them in the Discourse forum.',
-				storage: SettingStorage.File,
-				isGlobal: true,
-			},
-
 			'editor.usePlainText': {
 				value: false,
 				type: SettingItemType.Bool,
@@ -1459,6 +1444,20 @@ class Setting extends BaseModel {
 				appTypes: [AppType.Desktop],
 				label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
 				description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
+			// 2023-09-07: This setting is now used to track the desktop beta editor. It
+			// was used to track the mobile beta editor previously.
+			'editor.beta': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'general',
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Opt-in to the editor beta',
+				description: () => 'This beta adds improved accessibility and plugin API compatibility with the mobile editor. If you find bugs, please report them in the Discourse forum.',
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
