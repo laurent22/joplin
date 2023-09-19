@@ -66,6 +66,10 @@ const createTheme = (theme: any): Extension[] => {
 		blurredSelectionStyle.backgroundColor = '#444';
 	}
 
+	const monospaceStyle = {
+		fontFamily: theme.monospaceFont || 'monospace',
+	};
+
 	// This is equivalent to the default selection style -- our styling must
 	// be at least this specific.
 	const selectionBackgroundSelector = '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground';
@@ -140,8 +144,12 @@ const createTheme = (theme: any): Extension[] => {
 			color: isDarkTheme ? '#9fa' : '#276',
 		},
 
-		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': {
-			fontFamily: theme.monospaceFont || 'monospace',
+		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
+		'& .cm-taskMarker': monospaceStyle,
+
+		// Override the default URL style when the URL is within a link
+		'& .tok-url.tok-link, & .tok-link.tok-meta': {
+			opacity: 0.5,
 		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence
@@ -172,7 +180,6 @@ const createTheme = (theme: any): Extension[] => {
 			...baseHeadingStyle,
 			tag: tags.heading1,
 			fontSize: '1.6em',
-			borderBottom: `1px solid ${theme.dividerColor}`,
 		},
 		{
 			...baseHeadingStyle,
@@ -211,7 +218,6 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.link,
 			color: theme.urlColor,
-			textDecoration: 'underline',
 		},
 		{
 			tag: [mathTag, inlineMathTag],

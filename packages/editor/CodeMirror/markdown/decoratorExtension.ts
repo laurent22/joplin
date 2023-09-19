@@ -68,6 +68,10 @@ const horizontalRuleDecoration = Decoration.mark({
 	attributes: { class: 'cm-hr' },
 });
 
+const taskMarkerDecoration = Decoration.mark({
+	attributes: { class: 'cm-taskMarker' },
+});
+
 type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
@@ -160,6 +164,9 @@ const computeDecorations = (view: EditorView) => {
 					break;
 				case 'HorizontalRule':
 					addDecorationToRange(viewFrom, viewTo, horizontalRuleDecoration);
+					break;
+				case 'TaskMarker':
+					addDecorationToRange(viewFrom, viewTo, taskMarkerDecoration);
 					break;
 				}
 
