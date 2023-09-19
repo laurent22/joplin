@@ -1,0 +1,10 @@
+{
+	"id": "org.joplinapp.plugins.ImagingDemo",
+	"manifest_version": 1,
+	"app_min_version": "1.4",
+	"name": "Imaging demo",
+	"description": "Demonstrate how to use the imaging API",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

@@ -8,24 +8,26 @@ import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
 import JoplinContentScripts from './JoplinContentScripts';
+import JoplinClipboard from './JoplinClipboard';
+import JoplinWindow from './JoplinWindow';
+import BasePlatformImplementation from '../BasePlatformImplementation';
+import JoplinImaging from './JoplinImaging';
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
  *
- * **This is a beta API**
+ * The API is now relatively stable and in general maintaining backward compatibility is a top priority, so you shouldn't except much breakages.
  *
- * Please note that the plugin API is relatively new and should be considered Beta state. Besides possible bugs, what it means is that there might be necessary breaking changes from one version to the next. Whenever such change is needed, best effort will be done to:
+ * If a breaking change ever becomes needed, best effort will be done to:
  *
- * - Maintain backward compatibility;
- * - When possible, deprecate features instead of removing them;
+ * - Deprecate features instead of removing them, so as to give you time to fix the issue;
  * - Document breaking changes in the changelog;
  *
- * So if you are developing a plugin, please keep an eye on the changelog as everything will be in there with information about how to update your code. There won't be any major API rewrite or architecture changes, but possibly small tweaks like function signature change, type change, etc.
- *
- * Eventually, the plugin API will be versioned to make this process smoother.
+ * So if you are developing a plugin, please keep an eye on the changelog as everything will be in there with information about how to update your code.
  */
 export default class Joplin {
     private data_;
     private plugins_;
+    private imaging_;
     private workspace_;
     private filters_;
     private commands_;
@@ -33,8 +35,14 @@ export default class Joplin {
     private interop_;
     private settings_;
     private contentScripts_;
-    constructor(implementation: any, plugin: Plugin, store: any);
+    private clipboard_;
+    private window_;
+    private implementation_;
+    constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any);
     get data(): JoplinData;
+    get clipboard(): JoplinClipboard;
+    get imaging(): JoplinImaging;
+    get window(): JoplinWindow;
     get plugins(): JoplinPlugins;
     get workspace(): JoplinWorkspace;
     get contentScripts(): JoplinContentScripts;
@@ -62,4 +70,5 @@ export default class Joplin {
      * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/nativeModule)
      */
     require(_path: string): any;
+    versionInfo(): Promise<import("./types").VersionInfo>;
 }

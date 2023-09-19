@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
-import { ItemFlow, OnChangeEvent, OnChangeHandler } from '../NoteList/utils/types';
+import { ItemFlow, ListRenderer, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
 import useItemEventHandlers from './utils/useItemEventHandlers';
-import { OnCheckboxChange } from './utils/types';
+import { OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import useRenderedNote from './utils/useRenderedNote';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -16,24 +18,33 @@ interface NoteItemProps {
 	isProvisional: boolean;
 	itemSize: Size;
 	noteCount: number;
-	noteHtml: string;
-	noteId: string;
 	onChange: OnChangeHandler;
 	onClick: MouseEventHandler<HTMLDivElement>;
 	onContextMenu: MouseEventHandler;
 	onDragOver: DragEventHandler;
 	onDragStart: DragEventHandler;
 	style: CSSProperties;
+	note: NoteEntity;
+	isSelected: boolean;
+	isWatched: boolean;
+	listRenderer: ListRenderer;
 }
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
-	const elementId = `list-note-${props.noteId}`;
+	const noteId = props.note.id;
+	const elementId = `list-note-${noteId}`;
 
-	const onCheckboxChange: OnCheckboxChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+	const onInputChange: OnInputChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+		const getValue = (element: HTMLInputElement) => {
+			if (element.type === 'checkbox') return element.checked;
+			if (element.type === 'text') return element.value;
+			throw new Error(`Unsupported element: ${element.type}`);
+		};
+
 		const changeEvent: OnChangeEvent = {
-			noteId: props.noteId,
+			noteId: noteId,
 			elementId: event.currentTarget.getAttribute('data-id'),
-			value: event.currentTarget.checked,
+			value: getValue(event.currentTarget),
 		};
 
 		if (changeEvent.elementId === 'todo-checkbox') {
@@ -44,21 +55,23 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		} else {
 			if (props.onChange) await props.onChange(changeEvent);
 		}
-	}, [props.onChange, props.noteId]);
+	}, [props.onChange, noteId]);
 
 	const rootElement = useRootElement(elementId);
 
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords);
+
 	const itemElement = useItemElement(
 		rootElement,
-		props.noteId,
-		props.noteHtml,
+		noteId,
+		renderedNote ? renderedNote.html : '',
 		props.style,
 		props.itemSize,
 		props.onClick,
 		props.flow,
 	);
 
-	useItemEventHandlers(rootElement, itemElement, onCheckboxChange);
+	useItemEventHandlers(rootElement, itemElement, onInputChange);
 
 	const className = useMemo(() => {
 		return [
@@ -131,7 +144,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		draggable={true}
 		tabIndex={0}
 		className={className}
-		data-id={props.noteId}
+		data-id={noteId}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}
 		onDragOver={props.onDragOver}

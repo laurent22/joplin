@@ -5,7 +5,7 @@ import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'revealResourceFile',
-	label: _('Reveal file in folder'),
+	label: () =>_('Reveal file in folder'),
 };
 
 export const runtime = (): CommandRuntime => {

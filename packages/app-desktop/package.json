@@ -79,6 +79,12 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
+      "target": {
+        "target": "dmg",
+        "arch": [
+          "x64"
+        ]
+      },
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
       "extendInfo": {
@@ -111,8 +117,8 @@
     "@electron/rebuild": "3.3.0",
     "@joplin/tools": "~2.13",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.5.3",
-    "@types/node": "18.17.8",
+    "@types/jest": "29.5.4",
+    "@types/node": "18.17.12",
     "@types/react": "18.2.21",
     "@types/react-redux": "7.1.26",
     "@types/styled-components": "5.1.26",
@@ -120,8 +126,8 @@
     "electron-builder": "24.4.0",
     "glob": "10.3.3",
     "gulp": "4.0.2",
-    "jest": "29.6.2",
-    "jest-environment-jsdom": "29.6.2",
+    "jest": "29.6.4",
+    "jest-environment-jsdom": "29.6.4",
     "js-sha512": "0.8.0",
     "nan": "2.17.0",
     "react-test-renderer": "18.2.0",

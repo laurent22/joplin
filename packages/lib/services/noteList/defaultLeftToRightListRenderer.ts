@@ -1,4 +1,6 @@
-import { ItemFlow, ListRenderer } from './types';
+import { _ } from '../../locale';
+import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
+import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
 
 interface Props {
 	note: {
@@ -6,26 +8,34 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
+		body: string;
 	};
 	item: {
 		size: {
+			width: number;
 			height: number;
 		};
 		selected: boolean;
 	};
 }
 
-const defaultItemRenderer: ListRenderer = {
-	flow: ItemFlow.TopToBottom,
+const defaultLeftToRightItemRenderer: ListRenderer = {
+	id: 'detailed',
+
+	label: async () => _('Detailed'),
+
+	flow: ItemFlow.LeftToRight,
 
 	itemSize: {
-		width: 0,
-		height: 34,
+		width: 150,
+		height: 150,
 	},
 
 	dependencies: [
 		'item.selected',
+		'item.size.width',
 		'item.size.height',
+		'note.body',
 		'note.id',
 		'note.is_shared',
 		'note.is_todo',
@@ -35,7 +45,7 @@ const defaultItemRenderer: ListRenderer = {
 	],
 
 	itemCss: // css
-		`	
+		`			
 		&:before {
 			content: '';
 			border-bottom: 1px solid var(--joplin-divider-color);
@@ -58,7 +68,11 @@ const defaultItemRenderer: ListRenderer = {
 			box-sizing: border-box;
 			position: relative;
 			width: 100%;
-			padding-left: 16px;
+			padding: 16px;
+			align-items: flex-start;
+			overflow-y: hidden;
+			flex-direction: column;
+			user-select: none;
 	
 			> .checkbox {
 				display: flex;
@@ -72,20 +86,37 @@ const defaultItemRenderer: ListRenderer = {
 			> .title {
 				font-family: var(--joplin-font-family);
 				font-size: var(--joplin-font-size);
-				text-decoration: none;
 				color: var(--joplin-color);
 				cursor: default;
-				white-space: nowrap;
-				flex: 1 1 0%;
+				flex: 0;
 				display: flex;
-				align-items: center;
-				overflow: hidden;
+				align-items: flex-start;
+				margin-bottom: 8px;
+
+				> .checkbox {
+					margin: 0 6px 0 0;
+				}
 
 				> .watchedicon {
 					display: none;
 					padding-right: 4px;
 					color: var(--joplin-color);
 				}
+
+				> .titlecontent {
+					word-break: break-all;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					text-wrap: nowrap;
+				}
+			}
+
+			> .preview {
+				overflow-y: hidden;
+				font-family: var(--joplin-font-family);
+				font-size: var(--joplin-font-size);
+				color: var(--joplin-color);
+				cursor: default;
 			}
 		}
 
@@ -114,21 +145,26 @@ const defaultItemRenderer: ListRenderer = {
 	itemTemplate: // html
 		`
 		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
-			{{#note.is_todo}}
-				<div class="checkbox">
-					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
-				</div>
-			{{/note.is_todo}}	
-			<div class="title" data-id="{{note.id}}">
+			<div style="width: {{titleWidth}}px;" class="title" data-id="{{note.id}}">
+				{{#note.is_todo}}
+					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
-				<span>{{{note.titleHtml}}}</span>
+				<div class="titlecontent">{{{note.titleHtml}}}</div>
 			</div>
+			<div class="preview">{{notePreview}}</div>
 		</div>
 	`,
 
 	onRenderNote: async (props: Props) => {
-		return props;
+		const markupToHtml_ = new MarkupToHtml();
+
+		return {
+			...props,
+			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
+			titleWidth: props.item.size.width - 32,
+		};
 	},
 };
 
-export default defaultItemRenderer;
+export default defaultLeftToRightItemRenderer;
