@@ -140,7 +140,7 @@
   },
   "dependencies": {
     "@electron/notarize": "2.1.0",
-    "@electron/remote": "2.0.10",
+    "@electron/remote": "2.0.11",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
     "@joplin/lib": "~2.13",
