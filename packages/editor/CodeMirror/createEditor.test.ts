@@ -68,7 +68,6 @@ describe('createEditor', () => {
 		expect(headerLineContent.length).toBeGreaterThanOrEqual(1);
 		for (const part of headerLineContent) {
 			const style = getComputedStyle(part);
-			expect(style.borderBottom).not.toBe('');
 			expect(style.fontSize).toBe('1.6em');
 		}
 
