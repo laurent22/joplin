@@ -177,6 +177,7 @@ const createEditor = (
 		};
 	};
 
+	const historyCompartment = new Compartment();
 	const dynamicConfig = new Compartment();
 
 	const editor = new EditorView({
@@ -184,10 +185,9 @@ const createEditor = (
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
-				dynamicConfig.of([
-					configFromSettings(props.settings),
-				]),
-				history(),
+				dynamicConfig.of(configFromSettings(props.settings)),
+				historyCompartment.of(history()),
+
 				search(settings.useExternalSearch ? {
 					createPanel(_: EditorView) {
 						return {
@@ -270,6 +270,16 @@ const createEditor = (
 	});
 
 	const editorControls = new CodeMirrorControl(editor, {
+		onClearHistory: () => {
+			// Clear history by removing then re-add the history extension.
+			// Just re-adding the history extension isn't enough.
+			editor.dispatch({
+				effects: historyCompartment.reconfigure([]),
+			});
+			editor.dispatch({
+				effects: historyCompartment.reconfigure(history()),
+			});
+		},
 		onSettingsChange: (newSettings: EditorSettings) => {
 			settings = newSettings;
 			editor.dispatch({

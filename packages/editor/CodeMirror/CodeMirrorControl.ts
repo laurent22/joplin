@@ -10,6 +10,7 @@ import PluginLoader from './PluginLoader';
 interface Callbacks {
 	onUndoRedo(): void;
 	onSettingsChange(newSettings: EditorSettings): void;
+	onClearHistory(): void;
 	onRemove(): void;
 	onLogMessage: LogMessageCallback;
 }
@@ -59,6 +60,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		}));
 	}
 
+	public clearHistory() {
+		this._callbacks.onClearHistory();
+	}
+
 	public setScrollPercent(fraction: number) {
 		const maxScroll = this.editor.scrollDOM.scrollHeight - this.editor.scrollDOM.clientHeight;
 		this.editor.scrollDOM.scrollTop = fraction * maxScroll;
@@ -88,7 +93,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 				selection: EditorSelection.cursor(newCursorPosition),
 				scrollIntoView: true,
 			}));
+
+			return true;
 		}
+
+		return false;
 	}
 
 	public updateLink(newLabel: string, newUrl: string) {

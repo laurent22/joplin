@@ -483,6 +483,7 @@ packages/app-mobile/utils/types.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.js
 packages/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.js
 packages/editor/CodeMirror/CodeMirror5Emulation/Decorator.js
+packages/editor/CodeMirror/CodeMirrorControl.test.js
 packages/editor/CodeMirror/CodeMirrorControl.js
 packages/editor/CodeMirror/PluginLoader.js
 packages/editor/CodeMirror/configFromSettings.js
@@ -503,6 +504,7 @@ packages/editor/CodeMirror/markdown/markdownMathParser.js
 packages/editor/CodeMirror/markdown/markdownReformatter.test.js
 packages/editor/CodeMirror/markdown/markdownReformatter.js
 packages/editor/CodeMirror/markdown/syntaxHighlightingLanguages.js
+packages/editor/CodeMirror/testUtil/createEditorSettings.js
 packages/editor/CodeMirror/testUtil/createTestEditor.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js

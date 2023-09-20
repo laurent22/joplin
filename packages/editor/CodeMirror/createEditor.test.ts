@@ -2,33 +2,14 @@
  * @jest-environment jsdom
  */
 
-import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createEditor from './createEditor';
-import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
 import loadLangauges from './testUtil/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
+import createEditorSettings from './testUtil/createEditorSettings';
 
-
-const createEditorSettings = (themeId: number) => {
-	const themeData = themeStyle(themeId);
-	const editorSettings: EditorSettings = {
-		katexEnabled: true,
-		spellcheckEnabled: true,
-		useExternalSearch: true,
-		readOnly: false,
-		automatchBraces: false,
-		ignoreModifiers: false,
-
-		keymap: EditorKeymap.Default,
-		language: EditorLanguageType.Markdown,
-		themeData,
-	};
-
-	return editorSettings;
-};
 
 describe('createEditor', () => {
 	beforeAll(() => {

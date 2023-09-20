@@ -372,7 +372,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	// Update the editor's value
 	useEffect(() => {
-		editorRef.current?.updateBody(props.content);
+		if (editorRef.current?.updateBody(props.content)) {
+			editorRef.current?.clearHistory();
+		}
 	}, [props.content]);
 
 	const renderEditor = () => {
