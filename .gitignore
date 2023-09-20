@@ -489,7 +489,7 @@ packages/editor/CodeMirror/markdown/markdownMathParser.js
 packages/editor/CodeMirror/markdown/markdownReformatter.test.js
 packages/editor/CodeMirror/markdown/markdownReformatter.js
 packages/editor/CodeMirror/markdown/syntaxHighlightingLanguages.js
-packages/editor/CodeMirror/testUtil/createEditor.js
+packages/editor/CodeMirror/testUtil/createTestEditor.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/theme.js

@@ -2,7 +2,7 @@ import { EditorSelection } from '@codemirror/state';
 import {
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from './markdownCommands';
-import createEditor from '../testUtil/createEditor';
+import createTestEditor from '../testUtil/createTestEditor';
 import { blockMathTagName } from './markdownMathParser';
 
 describe('markdownCommands', () => {
@@ -11,7 +11,7 @@ describe('markdownCommands', () => {
 
 	it('should bold/italicize everything selected', async () => {
 		const initialDocText = 'Testing...';
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText, EditorSelection.range(0, initialDocText.length), [],
 		);
 
@@ -38,7 +38,7 @@ describe('markdownCommands', () => {
 
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText, EditorSelection.cursor(0), [],
 		);
 
@@ -56,7 +56,7 @@ describe('markdownCommands', () => {
 
 	it('toggling math should both create and navigate out of math regions', async () => {
 		const initialDocText = 'Testing... ';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
 
 		toggleMath(editor);
 		expect(editor.state.doc.toString()).toBe('Testing... $$');
@@ -72,7 +72,7 @@ describe('markdownCommands', () => {
 
 	it('toggling inline code should both create and navigate out of an inline code region', async () => {
 		const initialDocText = 'Testing...\n\n';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
 
 		toggleCode(editor);
 		editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
@@ -84,7 +84,7 @@ describe('markdownCommands', () => {
 
 	it('should set headers to the proper levels (when toggling)', async () => {
 		const initialDocText = 'Testing...\nThis is a test.';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(3), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(3), []);
 
 		toggleHeaderLevel(1)(editor);
 
@@ -110,7 +110,7 @@ describe('markdownCommands', () => {
 
 	it('headers should toggle properly within block quotes', async () => {
 		const initialDocText = 'Testing...\n\n> This is a test.\n> ...a test';
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText,
 			EditorSelection.cursor('Testing...\n\n> This'.length),
 			['Blockquote'],
@@ -134,7 +134,7 @@ describe('markdownCommands', () => {
 
 	it('block math should be created correctly within block quotes', async () => {
 		const initialDocText = 'Testing...\n\n> This is a test.\n> y = mx + b\n> ...a test';
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText,
 			EditorSelection.range(
 				'Testing...\n\n> This'.length,
@@ -157,7 +157,7 @@ describe('markdownCommands', () => {
 	it('block math should be correctly removed within block quotes', async () => {
 		const initialDocText = 'Testing...\n\n> $$\n> This is a test.\n> y = mx + b\n> $$\n> ...a test';
 
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText,
 			EditorSelection.cursor('Testing...\n\n> $$\n> This is'.length),
 			['Blockquote', blockMathTagName],
@@ -173,7 +173,7 @@ describe('markdownCommands', () => {
 
 	it('updateLink should replace link titles and isolate URLs if no title is given', async () => {
 		const initialDocText = '[foo](http://example.com/)';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor('[f'.length), ['Link']);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor('[f'.length), ['Link']);
 
 		updateLink('bar', 'https://example.com/')(editor);
 		expect(editor.state.doc.toString()).toBe(
@@ -188,7 +188,7 @@ describe('markdownCommands', () => {
 
 	it('toggling math twice, starting on a line with content, should a math block', async () => {
 		const initialDocText = 'Testing... ';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
 
 		toggleMath(editor);
 		toggleMath(editor);
@@ -198,7 +198,7 @@ describe('markdownCommands', () => {
 
 	it('toggling math twice on an empty line should create an empty math block', async () => {
 		const initialDocText = 'Testing...\n\n';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
 
 		toggleMath(editor);
 		toggleMath(editor);
@@ -208,7 +208,7 @@ describe('markdownCommands', () => {
 
 	it('toggling code twice on an empty line should create an empty code block', async () => {
 		const initialDocText = 'Testing...\n\n';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(initialDocText.length), []);
 
 		// Toggling code twice should create a block code region
 		toggleCode(editor);
@@ -222,7 +222,7 @@ describe('markdownCommands', () => {
 
 	it('toggling math twice inside a block quote should produce an empty math block', async () => {
 		const initialDocText = '> Testing...> \n> ';
-		const editor = await createEditor(initialDocText, EditorSelection.cursor(initialDocText.length), ['Blockquote']);
+		const editor = await createTestEditor(initialDocText, EditorSelection.cursor(initialDocText.length), ['Blockquote']);
 
 		toggleMath(editor);
 		toggleMath(editor);

@@ -3,11 +3,11 @@ import { SyntaxNode } from '@lezer/common';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './markdownMathParser';
 
-import createEditor from '../testUtil/createEditor';
+import createTestEditor from '../testUtil/createTestEditor';
 
 // Creates an EditorState with math and markdown extensions
 const createEditorState = async (initialText: string, expectedTags: string[]): Promise<EditorState> => {
-	return (await createEditor(initialText, EditorSelection.cursor(0), expectedTags)).state;
+	return (await createTestEditor(initialText, EditorSelection.cursor(0), expectedTags)).state;
 };
 
 // Returns a list of all nodes with the given name in the given editor's syntax tree.
