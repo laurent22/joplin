@@ -49,6 +49,10 @@ const createTheme = (theme: any): Extension[] => {
 	const baseContentStyle: Record<string, string> = {
 		fontFamily: theme.fontFamily,
 		fontSize: `${theme.fontSize}${theme.fontSizeUnits ?? 'px'}`,
+
+		// Avoid using units here -- 1.6em, for example, can cause lines to overlap
+		// if some lines contain text with a large enough font size.
+		lineHeight: '1.6',
 	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };
