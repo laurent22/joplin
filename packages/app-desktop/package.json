@@ -124,7 +124,7 @@
     "@types/styled-components": "5.1.26",
     "electron": "25.3.1",
     "electron-builder": "24.4.0",
-    "glob": "10.3.3",
+    "glob": "10.3.4",
     "gulp": "4.0.2",
     "jest": "29.6.4",
     "jest-environment-jsdom": "29.6.4",
