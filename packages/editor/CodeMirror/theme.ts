@@ -50,9 +50,9 @@ const createTheme = (theme: any): Extension[] => {
 		fontFamily: theme.fontFamily,
 		fontSize: `${theme.fontSize}${theme.fontSizeUnits ?? 'px'}`,
 
-		// Avoid using units here -- 1.5em, for example, can cause lines to overlap
+		// Avoid using units here -- 1.55em, for example, can cause lines to overlap
 		// if some lines contain text with a large enough font size.
-		lineHeight: theme.isDesktop ? '1.5' : undefined,
+		lineHeight: theme.isDesktop ? '1.55' : undefined,
 	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };
@@ -85,6 +85,7 @@ const createTheme = (theme: any): Extension[] => {
 		'.cm-content': {
 			fontFamily: theme.fontFamily,
 			...baseContentStyle,
+			paddingBottom: theme.isDesktop ? '400px' : undefined,
 		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
@@ -156,8 +157,8 @@ const createTheme = (theme: any): Extension[] => {
 		'& .cm-taskMarker': monospaceStyle,
 
 		// Override the default URL style when the URL is within a link
-		'& .tok-url.tok-link, & .tok-link.tok-meta': {
-			opacity: theme.isDesktop ? 0.5 : 1,
+		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
+			opacity: theme.isDesktop ? 0.6 : 1,
 		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence
