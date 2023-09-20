@@ -5096,7 +5096,7 @@ __metadata:
     "@types/nodemailer": 6.4.9
     "@types/uuid": 9.0.3
     "@types/yargs": 17.0.24
-    "@types/zxcvbn": 4.4.1
+    "@types/zxcvbn": 4.4.2
     bcryptjs: 2.4.3
     bulma: 0.9.4
     bulma-prefers-dark: 0.1.0-beta.1
@@ -8458,10 +8458,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zxcvbn@npm:4.4.1":
-  version: 4.4.1
-  resolution: "@types/zxcvbn@npm:4.4.1"
-  checksum: 71c484f1aa049921997ee6471604725a7fb00b9899e7753c6e94275a2b135e1088ed3f2f2ba77d189715d1ec61bed65b06899ba03e061b07ffc32c2a9296501b
+"@types/zxcvbn@npm:4.4.2":
+  version: 4.4.2
+  resolution: "@types/zxcvbn@npm:4.4.2"
+  checksum: 8b1dc561970a3c69d13b03a83ea4b3bd1ef9d6ea46e85454b1260eb5219262abd6ae36970e1fe3389f2d0341108cdde8cee470f85e5c6b5cd6bef165f10ec076
   languageName: node
   linkType: hard
 
