@@ -601,6 +601,16 @@ const SidebarComponent = (props: Props) => {
 		);
 	};
 
+	useEffect(() => {
+		const selectedItem = getSelectedItem();
+		if (!selectedItem) { return; }
+
+		const ref = anchorItemRefs.current[selectedItem.type][selectedItem.id];
+
+		if (ref && ref.current) { ref.current.focus(); }
+
+	}, [getSelectedItem, props.collapsedFolderIds]);
+
 	const onKeyDown = useCallback((event: any) => {
 		const keyCode = event.keyCode;
 		const selectedItem = getSelectedItem();
