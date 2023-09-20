@@ -50,9 +50,9 @@ const createTheme = (theme: any): Extension[] => {
 		fontFamily: theme.fontFamily,
 		fontSize: `${theme.fontSize}${theme.fontSizeUnits ?? 'px'}`,
 
-		// Avoid using units here -- 1.6em, for example, can cause lines to overlap
+		// Avoid using units here -- 1.5em, for example, can cause lines to overlap
 		// if some lines contain text with a large enough font size.
-		lineHeight: theme.isDesktop ? '1.6' : undefined,
+		lineHeight: theme.isDesktop ? '1.5' : undefined,
 	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };
@@ -144,6 +144,8 @@ const createTheme = (theme: any): Extension[] => {
 			borderStyle: 'solid',
 			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
 			borderRadius: '4px',
+
+			...(theme.isDesktop ? monospaceStyle : {}),
 		},
 
 		'& .cm-mathBlock, & .cm-inlineMath': {
