@@ -95,6 +95,11 @@ const createTheme = (theme: any): Extension[] => {
 			fontFamily: 'inherit',
 		},
 
+		// Override the default border around CodeMirror panels
+		'& > .cm-panels': {
+			border: 'none',
+		},
+
 		// &.cm-focused is used to give these styles higher specificity
 		// than the defaults.
 		[selectionBackgroundSelector]: baseSelectionStyle,
