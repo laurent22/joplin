@@ -23,6 +23,7 @@ Icon.loadFont().catch((error: any) => { console.info(error); });
 interface Props {
 	syncStarted: boolean;
 	themeId: number;
+	sideMenuVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
@@ -112,7 +113,7 @@ const SideMenuContentComponent = (props: Props) => {
 					toValue: 1,
 					duration: 3000,
 					easing: Easing.linear,
-				})
+				}),
 			);
 
 			syncIconAnimation.start();
@@ -156,7 +157,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 			if (folder.id === props.inboxJopId) {
 				return folderDeletion(
-					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.')
+					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
 				);
 			}
 			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
@@ -191,7 +192,7 @@ const SideMenuContentComponent = (props: Props) => {
 			],
 			{
 				cancelable: false,
-			}
+			},
 		);
 	};
 
@@ -456,7 +457,7 @@ const SideMenuContentComponent = (props: Props) => {
 			items.push(
 				<Text key="sync_report" style={styles_.syncStatus}>
 					{fullReport.join('\n')}
-				</Text>
+				</Text>,
 			);
 		}
 
@@ -464,7 +465,7 @@ const SideMenuContentComponent = (props: Props) => {
 			items.push(
 				<Text key="net_info" style={styles_.syncStatus}>
 					{ _('Mobile data - auto-sync disabled') }
-				</Text>
+				</Text>,
 			);
 		}
 
@@ -491,15 +492,29 @@ const SideMenuContentComponent = (props: Props) => {
 		items = items.concat(folderItems);
 	}
 
+	const isHidden = !props.sideMenuVisible;
+
 	const style = {
 		flex: 1,
 		borderRightWidth: 1,
 		borderRightColor: theme.dividerColor,
 		backgroundColor: theme.backgroundColor,
+
+		// Have the UI reflect whether the View is hidden to the screen reader.
+		// This way, there will be visual feedback if isHidden is incorrect.
+		opacity: isHidden ? 0.5 : undefined,
 	};
 
+	// Note: iOS uses accessibilityElementsHidden and Android uses importantForAccessibility
+	//       to hide elements from the screenreader.
+
 	return (
-		<View style={style}>
+		<View
+			style={style}
+
+			accessibilityElementsHidden={isHidden}
+			importantForAccessibility={isHidden ? 'no-hide-descendants' : undefined}
+		>
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
 					{items}
@@ -520,6 +535,7 @@ export default connect((state: AppState) => {
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,
+		sideMenuVisible: state.showSideMenu,
 		// Don't do the opacity animation as it means re-rendering the list multiple times
 		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,

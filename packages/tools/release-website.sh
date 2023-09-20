@@ -41,7 +41,10 @@ yarn install
 git reset --hard
 
 JOPLIN_GITHUB_OAUTH_TOKEN=$JOPLIN_GITHUB_OAUTH_TOKEN yarn run updateMarkdownDoc
+
+# Automatically update certain forum posts
 yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
+yarn run postPreReleasesToForum $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 # We commit and push the change. It will be a noop if nothing was actually
 # changed

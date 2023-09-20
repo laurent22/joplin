@@ -1,6 +1,6 @@
 {
   "name": "@joplin/react-native-saf-x",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "description": "a module to help work with scoped storages on android easily",
   "main": "src/index",
   "react-native": "src/index",
@@ -47,7 +47,7 @@
     "@types/react-native": "0.64.19",
     "react": "18.2.0",
     "react-native": "0.70.6",
-    "typescript": "5.1.3"
+    "typescript": "5.1.6"
   },
   "peerDependencies": {
     "react": "*",

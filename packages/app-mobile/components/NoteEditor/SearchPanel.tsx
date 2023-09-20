@@ -39,7 +39,7 @@ interface ActionButtonProps {
 }
 
 const ActionButton = (
-	props: ActionButtonProps
+	props: ActionButtonProps,
 ) => {
 	return (
 		<CustomButton
@@ -154,7 +154,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	// Creates a TextInut with the given parameters
 	const createInput = (
-		placeholder: string, value: string, onChange: OnChangeCallback, autoFocus: boolean
+		placeholder: string, value: string, onChange: OnChangeCallback, autoFocus: boolean,
 	) => {
 		return (
 			<TextInput
@@ -229,7 +229,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		},
 
 		// Autofocus
-		true
+		true,
 	);
 
 	const replaceTextInput = createInput(
@@ -242,7 +242,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		},
 
 		// Don't autofocus
-		false
+		false,
 	);
 
 	const labeledSearchInput = (

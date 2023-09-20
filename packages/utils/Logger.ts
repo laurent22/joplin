@@ -18,6 +18,8 @@ export enum LogLevel {
 	Debug = 40,
 }
 
+type FormatFunction = (level: LogLevel, targetPrefix?: string)=> string;
+
 interface TargetOptions {
 	level?: LogLevel;
 	database?: any;
@@ -27,10 +29,7 @@ interface TargetOptions {
 	source?: string;
 
 	// Default message format
-	format?: string;
-
-	// If specified, will use this as format if it's an info message
-	formatInfo?: string;
+	format?: string | FormatFunction;
 }
 
 interface Target extends TargetOptions {
@@ -228,7 +227,7 @@ class Logger {
 				let items: any[] = [];
 
 				if (target.format) {
-					const format = level === LogLevel.Info && target.formatInfo ? target.formatInfo : target.format;
+					const format = typeof target.format === 'string' ? target.format : target.format(level, targetPrefix);
 
 					const s = sprintf(format, {
 						date_time: moment().format('YYYY-MM-DD HH:mm:ss'),

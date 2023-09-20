@@ -1,5 +1,6 @@
 import shim from '@joplin/lib/shim';
 const os = require('os');
+import { readFile } from 'fs/promises';
 const { filename } = require('@joplin/lib/path-utils');
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 
@@ -35,8 +36,8 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
 
-			const html = await shim.fsDriver().readFile(htmlPath);
-			let expectedMd = await shim.fsDriver().readFile(mdPath);
+			const html = await readFile(htmlPath, 'utf8');
+			let expectedMd = await readFile(mdPath, 'utf8');
 
 			let actualMd = await htmlToMd.parse(`<div>${html}</div>`, htmlToMdOptions);
 
@@ -47,11 +48,12 @@ describe('HtmlToMd', () => {
 
 			if (actualMd !== expectedMd) {
 				const result = [];
-
 				result.push('');
 				result.push(`Error converting file: ${htmlFilename}`);
 				result.push('--------------------------------- Got:');
 				result.push(actualMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
+				// result.push('--------------------------------- Raw:');
+				// result.push(actualMd.split('\n'));
 				result.push('--------------------------------- Expected:');
 				result.push(expectedMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
 				result.push('--------------------------------------------');

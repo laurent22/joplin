@@ -145,7 +145,12 @@ TurndownService.prototype = {
     return escapes.reduce(function (accumulator, escape) {
       return accumulator.replace(escape[0], escape[1])
     }, string)
-  }
+  },
+
+  isCodeBlock: function(node) {
+    return isCodeBlock(node);
+  },
+
 }
 
 /**
@@ -211,7 +216,7 @@ function postProcess (output) {
 
 function replacementForNode (node) {
   var rule = this.rules.forNode(node)
-  var content = process.call(this, node, rule.escapeContent ? rule.escapeContent() : 'auto')
+  var content = process.call(this, node, rule.escapeContent ? rule.escapeContent(node) : 'auto')
   var whitespace = node.flankingWhitespace
   if (whitespace.leading || whitespace.trailing) content = content.trim()
 

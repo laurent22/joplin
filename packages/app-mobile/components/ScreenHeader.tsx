@@ -333,7 +333,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		function saveButton(
-			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean
+			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean,
 		) {
 			if (!show) return null;
 
@@ -489,7 +489,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					menuOptionComponents.push(
 						<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem} disabled={!!o.disabled}>
 							<Text style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}>{o.title}</Text>
-						</MenuOption>
+						</MenuOption>,
 					);
 				}
 			}
@@ -501,13 +501,13 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			menuOptionComponents.push(
 				<MenuOption value={() => this.deleteButton_press()} key={'menuOption_delete'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Delete')}</Text>
-				</MenuOption>
+				</MenuOption>,
 			);
 
 			menuOptionComponents.push(
 				<MenuOption value={() => this.duplicateButton_press()} key={'menuOption_duplicate'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Duplicate')}</Text>
-				</MenuOption>
+				</MenuOption>,
 			);
 		}
 
@@ -601,7 +601,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={contextMenuStyle}>
-						<Icon name="md-ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+						<View accessibilityLabel={_('Actions')}>
+							<Icon name="md-ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+						</View>
 					</MenuTrigger>
 					<MenuOptions>
 						<ScrollView style={{ maxHeight: windowHeight }}>{menuOptionComponents}</ScrollView>
@@ -622,7 +624,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 							if (this.props.onSaveButtonPress) this.props.onSaveButtonPress();
 						},
 						this.props.saveButtonDisabled === true,
-						this.props.showSaveButton === true
+						this.props.showSaveButton === true,
 					)}
 					{titleComp}
 					{selectAllButtonComp}

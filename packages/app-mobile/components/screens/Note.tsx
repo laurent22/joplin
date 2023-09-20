@@ -10,7 +10,8 @@ import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
@@ -36,7 +37,7 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const ImageResizer = require('react-native-image-resizer').default;
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
@@ -565,7 +566,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 				(error: any) => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
@@ -586,7 +587,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info(`Resizing image ${localFilePath}`);
-			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
+			const resizedImage = await ImageResizer.createResizedImage(
+				localFilePath,
+				dimensions.width,
+				dimensions.height,
+				format,
+				85, // quality
+				undefined, // rotation
+				undefined, // outputPath
+				true, // keep metadata
+			);
 
 			const resizedImagePath = resizedImage.uri;
 			reg.logger().info('Resized image ', resizedImagePath);
@@ -756,7 +766,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				uri: data.uri,
 				type: 'image/jpg',
 			},
-			'image'
+			'image',
 		);
 
 		this.setState({ showCamera: false });
@@ -798,8 +808,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public async onAlarmDialogAccept(date: Date) {
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
-			logger.warn('POST_NOTIFICATION permission was not granted');
+
+		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+		// (If unsupported, returns NEVER_ASK_AGAIN).
+		// On earlier releases, notifications should work without this permission.
+		if (response === PermissionsAndroid.RESULTS.DENIED) {
+			logger.warn('POST_NOTIFICATIONS permission was not granted');
 			return;
 		}
 
@@ -876,6 +890,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async showAttachMenu() {
+		// If the keyboard is editing a WebView, the standard Keyboard.dismiss()
+		// may not work. As such, we also need to call hideKeyboard on the editorRef
+		this.editorRef.current?.hideKeyboard();
+
 		const buttons = [];
 
 		// On iOS, it will show "local files", which means certain files saved from the browser

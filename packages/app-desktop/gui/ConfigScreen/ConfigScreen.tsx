@@ -12,7 +12,7 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@joplin/lib/components/shared/config/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -20,6 +20,8 @@ import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from 
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -181,6 +183,23 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
 			const statusStyle = { ...theme.textStyle, marginTop: 10 };
+			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
+
+			// Don't show the missing password warning if the user just changed the sync target (but hasn't
+			// saved yet).
+			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+				settingComps.push(
+					<p key='missing-password-warning' style={warningStyle}>
+						{_('%s: Missing password.', _('Warning'))}
+						{' '}
+						<MacOSMissingPasswordHelpLink
+							theme={theme}
+							text={_('Help')}
+						/>
+					</p>,
+				);
+			}
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
@@ -200,7 +219,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onClick={this.checkSyncConfig_}
 						/>
 						{statusComp}
-					</div>
+					</div>,
 				);
 			}
 		}
@@ -362,7 +381,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				items.push(
 					<option value={e.key.toString()} key={e.key}>
 						{settingOptions[e.key]}
-					</option>
+					</option>,
 				);
 			}
 

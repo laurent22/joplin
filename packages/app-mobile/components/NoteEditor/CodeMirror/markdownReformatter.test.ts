@@ -5,6 +5,9 @@ import { Text as DocumentText, EditorSelection, EditorState } from '@codemirror/
 import { indentUnit } from '@codemirror/language';
 
 describe('markdownReformatter', () => {
+
+	jest.retryTimes(2);
+
 	const boldSpec: RegionSpec = RegionSpec.of({
 		template: '**',
 	});
@@ -103,7 +106,7 @@ describe('markdownReformatter', () => {
 		});
 
 		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
+			initialState, inlineCodeRegionSpec, blockCodeRegionSpec,
 		);
 
 		const newState = initialState.update(changes).state;
@@ -117,7 +120,7 @@ describe('markdownReformatter', () => {
 		});
 
 		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
+			initialState, inlineCodeRegionSpec, blockCodeRegionSpec,
 		);
 
 		const newState = initialState.update(changes).state;

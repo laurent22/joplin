@@ -12,7 +12,7 @@ const useCommandStatus = (): [CommandStatus, (commandName: string)=> void, (comm
 		keymapService.getCommandNames().reduce((accumulator: CommandStatus, command: string) => {
 			accumulator[command] = false;
 			return accumulator;
-		}, {})
+		}, {}),
 	);
 
 	const disableStatus = (commandName: string) => setStatus(prevStatus => ({ ...prevStatus, [commandName]: false }));

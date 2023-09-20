@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -399,6 +401,7 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"画面レイアウトをデフォルトに戻しますか? 現在のレイアウト設定は失われます。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:503
 msgid "Arguments:"
@@ -502,7 +505,7 @@ msgstr "戻る"
 
 #: packages/lib/utils/joplinCloud.ts:300
 msgid "Basic"
-msgstr ""
+msgstr "Basic"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -594,9 +597,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" にコピーできません"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "あたらしいノートを作成します。"
+msgstr "新しいノートを作成できませんでした: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -627,7 +629,6 @@ msgid "Cannot find \"%s\"."
 msgstr "\"%s\" は見つかりませんでした。"
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
 msgstr "\"%s\" は見つかりませんでした。"
 
@@ -771,9 +772,8 @@ msgid "Close"
 msgstr "閉じる"
 
 #: packages/app-mobile/components/Dropdown.tsx:156
-#, fuzzy
 msgid "Close dropdown"
-msgstr "ウィンドウを閉じる"
+msgstr "ドロップダウンを閉じる"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:598
@@ -891,7 +891,7 @@ msgstr "%s によって提供されたコンテンツ"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
-msgstr ""
+msgstr "続行"
 
 #: packages/app-mobile/components/screens/Note.tsx:1028
 msgid "Convert to note"
@@ -947,9 +947,8 @@ msgstr[0] "共有可能なリンクをコピー"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "クリップボードにパスを保存"
+msgstr "クリップボードにコピー"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1043,7 +1042,7 @@ msgstr "ノートブックを作成します"
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
 msgid "Create new profile..."
-msgstr "あたらしいプロファイルを作成..."
+msgstr "新しいプロファイルを作成..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:165
 msgid "Create notebook"
@@ -1085,15 +1084,15 @@ msgstr "新規作成: %d."
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
 #: packages/app-mobile/components/screens/Note.tsx:853
 msgid "Created: %s"
-msgstr "作成しました：%s"
+msgstr "作成日時：%s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
-msgstr "あたらしいノートを作成します。"
+msgstr "新しいノートを作成します。"
 
 #: packages/app-cli/app/command-mkbook.ts:14
 msgid "Creates a new notebook."
-msgstr "あたらしいノートブックを作成します。"
+msgstr "新しいノートブックを作成します。"
 
 #: packages/app-cli/app/command-mktodo.js:12
 msgid "Creates a new to-do."
@@ -1220,9 +1219,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "ローカルデータを削除して同期先から再ダウンロードする"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "ノートを削除しますか？"
+msgstr "ノートを削除"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1234,9 +1232,8 @@ msgid "Delete note?"
 msgstr "ノートを削除しますか？"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "ノートを削除しますか？"
+msgstr "ノートブックを削除"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1262,14 +1259,12 @@ msgid "Delete plugin \"%s\"?"
 msgstr "プラグイン \"%s\" を削除しますか？"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "ノート \"%s\" を削除しますか？"
+msgstr "プロファイル \"%s\" を削除"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "ノートを削除しますか？"
+msgstr "選択したノートを削除"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:22
 #: packages/app-mobile/components/side-menu-content.tsx:159
@@ -1471,9 +1466,8 @@ msgid "Downloading"
 msgstr "ダウンロード中"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "リソースをダウンロード中..."
+msgstr "%s の言語ファイルをダウンロード中..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1506,9 +1500,8 @@ msgid "Duplicate line"
 msgstr "行を複製"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:456
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "行を複製"
+msgstr "選択したノートを複製"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -1985,7 +1978,7 @@ msgstr "デバッグ専用: プロファイルを外部SDカードにエクス�
 
 #: packages/lib/models/Setting.ts:1506
 msgid "For example \"%s\""
-msgstr ""
+msgstr "例 \"%s\""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -2543,7 +2536,6 @@ msgid "Lines"
 msgstr "行数"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:186
-#, fuzzy
 msgid "Link"
 msgstr "リンク"
 
@@ -2581,9 +2573,8 @@ msgid "Loaded"
 msgstr "読み込み済み"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
-#, fuzzy
 msgid "Loading..."
-msgstr "アップデート中..."
+msgstr "読み込み中..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
 msgid "Location"
@@ -2920,9 +2911,8 @@ msgid "Not generated"
 msgstr "生成されていません"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:91
-#, fuzzy
 msgid "Not now"
-msgstr "今すぐ実行"
+msgstr "あとで"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:122
@@ -3141,9 +3131,8 @@ msgid "Or create an account."
 msgstr "またはアカウントを作成。"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:86
-#, fuzzy
 msgid "Ordered list"
-msgstr "ユーザーを作成"
+msgstr "番号付きリスト"
 
 #: packages/app-desktop/gui/MenuBar.tsx:412
 msgid "Other applications..."
@@ -3373,9 +3362,8 @@ msgid "Privacy Policy"
 msgstr "プライバシーポリシー"
 
 #: packages/lib/utils/joplinCloud.ts:322
-#, fuzzy
 msgid "Pro"
-msgstr "プロファイル"
+msgstr "Pro"
 
 #: packages/server/src/services/TaskService.ts:26
 msgid "Process failed payment subscriptions"
@@ -3414,17 +3402,16 @@ msgid "Properties"
 msgstr "プロパティ"
 
 #: packages/lib/models/Setting.ts:1495
-#, fuzzy
 msgid "Proxy enabled"
-msgstr "有効"
+msgstr "プロキシの有効化"
 
 #: packages/lib/models/Setting.ts:1517
 msgid "Proxy timeout (seconds)"
-msgstr ""
+msgstr "プロキシのタイムアウト (秒)"
 
 #: packages/lib/models/Setting.ts:1505
 msgid "Proxy URL"
-msgstr ""
+msgstr "プロキシURL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
@@ -4220,9 +4207,8 @@ msgid "Take photo"
 msgstr "写真を撮影する"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:100
-#, fuzzy
 msgid "Task list"
-msgstr "タスク"
+msgstr "タスクリスト"
 
 #: packages/server/src/services/MustacheService.ts:124
 #: packages/server/src/services/MustacheService.ts:277
@@ -4231,7 +4217,7 @@ msgstr "タスク"
 
 #: packages/lib/utils/joplinCloud.ts:344
 msgid "Teams"
-msgstr ""
+msgstr "Teams"
 
 #: packages/lib/models/Setting.ts:1388
 msgid "Text editor command"
@@ -4561,22 +4547,19 @@ msgstr ""
 "ルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "次のファイルは開くことができません：%s"
+msgstr[0] "ノートは削除できませんでした：%s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "ノートブックは保存できませんでした：%s"
+msgstr[0] "ノートは複製できませんでした：%s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "ノートブックは保存できませんでした：%s"
+msgstr[0] "ノートは移動できませんでした：%s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4704,7 +4687,7 @@ msgstr ""
 msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
-msgstr ""
+msgstr "プロファイルを切り替えるためアプリを終了します。再度起動してください。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:612
 msgid ""
@@ -4789,9 +4772,8 @@ msgstr "再試行"
 
 #: packages/lib/utils/joplinCloud.ts:315 packages/lib/utils/joplinCloud.ts:337
 #: packages/lib/utils/joplinCloud.ts:359
-#, fuzzy
 msgid "Try it now"
-msgstr "今すぐ実行"
+msgstr "今すぐ試す"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4849,9 +4831,8 @@ msgstr ""
 "ださい"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:72
-#, fuzzy
 msgid "Unordered list"
-msgstr "ユーザーを作成"
+msgstr "箇条書きリスト"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:163
 msgid "Unpublish note"
@@ -4901,11 +4882,11 @@ msgstr "総容量を更新する"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:52
 msgid "Updated"
-msgstr "アップデート日時"
+msgstr "更新日時"
 
 #: packages/lib/models/Folder.ts:41 packages/lib/models/Note.ts:37
 msgid "updated date"
-msgstr "アップデート日"
+msgstr "更新日"
 
 #: packages/lib/Synchronizer.ts:189
 msgid "Updated local items: %d."
@@ -4926,7 +4907,7 @@ msgstr "アップデート: %d."
 
 #: packages/app-mobile/components/screens/Note.tsx:854
 msgid "Updated: %s"
-msgstr "アップデート: %s"
+msgstr "更新日時: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:207
 msgid "Updating..."
@@ -5117,9 +5098,8 @@ msgstr ""
 "例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"
 
 #: packages/lib/WelcomeUtils.ts:63
-#, fuzzy
 msgid "Welcome!"
-msgstr "ようこそ"
+msgstr "ようこそ!"
 
 #: packages/lib/models/Setting.ts:1114
 msgid "When creating a new note:"

@@ -6,6 +6,7 @@ export enum ErrorCode {
 	NoSub = 'no_sub',
 	NoStripeSub = 'no_stripe_sub',
 	InvalidOrigin = 'invalidOrigin',
+	TaskAlreadyRunning = 'taskAlreadyRunning',
 }
 
 export interface ErrorOptions {

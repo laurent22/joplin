@@ -84,7 +84,7 @@ export enum MatchSide {
 // Returns the length of a match for this in the given selection,
 // -1 if no match is found.
 export const findInlineMatch = (
-	doc: DocumentText, spec: RegionSpec, sel: SelectionRange, side: MatchSide
+	doc: DocumentText, spec: RegionSpec, sel: SelectionRange, side: MatchSide,
 ): number => {
 	const [regex, template] = (() => {
 		if (side === MatchSide.Start) {
@@ -182,7 +182,7 @@ export const isIndentationEquivalent = (state: EditorState, a: string, b: string
 
 // Expands and returns a copy of [sel] to the smallest container node with name in [nodeNames].
 export const growSelectionToNode = (
-	state: EditorState, sel: SelectionRange, nodeNames: string|string[]|null
+	state: EditorState, sel: SelectionRange, nodeNames: string|string[]|null,
 ): SelectionRange => {
 	if (!nodeNames) {
 		return sel;
@@ -235,7 +235,7 @@ export const growSelectionToNode = (
 // If the selection is already surrounded by these characters, they are
 // removed.
 const toggleInlineRegionSurrounded = (
-	doc: DocumentText, sel: SelectionRange, spec: RegionSpec
+	doc: DocumentText, sel: SelectionRange, spec: RegionSpec,
 ): SelectionUpdate => {
 	let content = doc.sliceString(sel.from, sel.to);
 	const startMatchLen = findInlineMatch(doc, spec, sel, MatchSide.Start);
@@ -291,7 +291,7 @@ const toggleInlineRegionSurrounded = (
 // Returns updated selections: For all selections in the given `EditorState`, toggles
 // whether each is contained in an inline region of type [spec].
 export const toggleInlineSelectionFormat = (
-	state: EditorState, spec: RegionSpec, sel: SelectionRange
+	state: EditorState, spec: RegionSpec, sel: SelectionRange,
 ): SelectionUpdate => {
 	const endMatchLen = findInlineMatch(state.doc, spec, sel, MatchSide.End);
 
@@ -315,7 +315,7 @@ export const toggleInlineSelectionFormat = (
 
 // Like toggleInlineSelectionFormat, but for all selections in [state].
 export const toggleInlineFormatGlobally = (
-	state: EditorState, spec: RegionSpec
+	state: EditorState, spec: RegionSpec,
 ): TransactionSpec => {
 	const changes = state.changeByRange((sel: SelectionRange) => {
 		return toggleInlineSelectionFormat(state, spec, sel);
@@ -328,13 +328,13 @@ export const toggleRegionFormatGlobally = (
 	state: EditorState,
 
 	inlineSpec: RegionSpec,
-	blockSpec: RegionSpec
+	blockSpec: RegionSpec,
 ): TransactionSpec => {
 	const doc = state.doc;
 	const preserveBlockQuotes = true;
 
 	const getMatchEndPoints = (
-		match: RegExpMatchArray, line: Line, inBlockQuote: boolean
+		match: RegExpMatchArray, line: Line, inBlockQuote: boolean,
 	): [startIdx: number, stopIdx: number] => {
 		const startIdx = line.from + match.index;
 		let stopIdx;
@@ -499,7 +499,7 @@ export const toggleRegionFormatGlobally = (
 
 			// Selection should now encompass all lines that were changed.
 			range: EditorSelection.range(
-				fromLine.from, toLine.to + charsAdded
+				fromLine.from, toLine.to + charsAdded,
 			),
 		};
 	});
@@ -515,7 +515,7 @@ export const toggleSelectedLinesStartWith = (
 	matchEmpty: boolean,
 
 	// Name associated with what [regex] matches (e.g. FencedCode)
-	nodeName?: string
+	nodeName?: string,
 ): TransactionSpec => {
 	const ignoreBlockQuotes = true;
 	const getLineContentStart = (line: Line): number => {
@@ -701,7 +701,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 	} else {
 		sel = EditorSelection.range(
 			fromLine.from,
-			toLine.to + charsAdded
+			toLine.to + charsAdded,
 		);
 	}
 

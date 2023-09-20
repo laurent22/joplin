@@ -26,6 +26,12 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	// Returns true if the sync target expects a non-empty sync.{id}.password
+	// setting.
+	public static requiresPassword() {
+		return false;
+	}
+
 	public static description(): string {
 		return '';
 	}

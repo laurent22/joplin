@@ -1,5 +1,42 @@
 # Joplin Android app changelog
 
+## [android-v2.12.3](https://github.com/laurent22/joplin/releases/tag/android-v2.12.3) (Pre-release) - 2023-09-11T20:01:44Z
+
+- Improved: Add screen reader labels to search/note actions buttons (#8797) (#8796 by Henry Heino)
+- Improved: Improve accessibility of side menu (#8839 by Henry Heino)
+- Fixed: Fix older Android versions unable to set alarms (#8837) (#8789 by Henry Heino)
+- Fixed: Revert to `react-native-sidemenu-updated` for navigation drawers (#8820) (#8791 by Henry Heino)
+
+## [android-v2.12.2](https://github.com/laurent22/joplin/releases/tag/android-v2.12.2) (Pre-release) - 2023-08-22T13:15:18Z
+
+- Improved: Only include "armeabi-v7a", "x86", "arm64-v8a", "x86_64" in APK (4e2d366)
+
+## [android-v2.12.1](https://github.com/laurent22/joplin/releases/tag/android-v2.12.1) (Pre-release) - 2023-08-19T22:32:39Z
+
+- New: Add JEX export (#8428 by Henry Heino)
+- New: Add support for Joplin Cloud email to note functionality (#8460 by [@pedr](https://github.com/pedr))
+- New: Add support for Voice Typing for most languages (#8309)
+- New: Add support for share permissions (#8491)
+- Improved: Add an option to disable the image resizing prompt (#8575) (#8566 by [@hubert](https://github.com/hubert))
+- Improved: Add option to autodetect theme (#8498) (#8490 by Henry Heino)
+- Improved: Improved Vosk error handling (1eeb5ab)
+- Improved: Temporarily revert to AES-128 as encryption method due to severe performance issues (#8657)
+- Improved: Updated packages @react-native-community/datetimepicker (v7.4.1), @react-native-community/geolocation (v3.0.6), @react-native-community/netinfo (v9.4.1), @rmp135/sql-ts (v1.18.0), @testing-library/react-native (v12.1.3), buildTools, clean-html (v2), dayjs (v1.11.9), domhandler (v5), gettext-parser (v7.0.1), glob (v10.3.3), highlight.js (v11.8.0), jsdom (v22.1.0), react-native-device-info (v10.7.0), react-native-document-picker (v9), react-native-drawer-layout (v3.2.1), react-native-gesture-handler (v2.12.0), react-native-get-random-values (v1.9.0), react-native-image-picker (v5.6.0), react-native-localize (v3.0.2), react-native-modal-datetime-picker (v15.0.1), react-native-paper (v5.9.1), react-native-reanimated (v3.2.0), react-native-safe-area-context (v4.6.4), react-redux (v8.1.2), sass (v1.63.6), sharp (v0.32.4), standard (v17.1.0), ts-loader (v9.4.4), url (v0.11.1), word-wrap (v1.2.5)
+- Improved: Upgrade react-native-webview to v12 (9ceb7b9)
+- Improved: Upgrade to React Native 0.71 (e740914)
+- Improved: WebDAV: Show a more descriptive error message when the password is empty (#8477) (#8466 by Henry Heino)
+- Fixed: Do not log data shared with the app (#8495) (#8211 by Henry Heino)
+- Fixed: Fix frequent crashing on Android 12 ARM (#8516) (#8425 by Henry Heino)
+- Fixed: Fixed link modal position on devices with notch (#8029) (#8027 by [@Letty](https://github.com/Letty))
+- Fixed: Fixed text update issue when attaching a file to an empty note (78f3f1c)
+- Fixed: Hide markdown toolbar completely when low on vertical space (#8688) (#8687 by Henry Heino)
+- Fixed: Preserve image rotation (and other metadata) when resizing (#8669) (#8310 by Henry Heino)
+- Fixed: Show warning if some items could not be decrypted (#8481) (#8381 by Henry Heino)
+- Fixed: The voice typing box covers the texts in the editor (#8685) (#8510 by [@hubert](https://github.com/hubert))
+- Fixed: Trying to fix sharing issues (#8533)
+- Fixed: Unrevert #7953: Migrate to react-native-drawer-layout (#8379) (#7918 by Henry Heino)
+- Security: Prevent XSS when passing specially encoded string to a link (57b4198)
+
 ## [android-v2.11.32](https://github.com/laurent22/joplin/releases/tag/android-v2.11.32) (Pre-release) - 2023-07-03T11:33:54Z
 
 - Improved: Allow configuring voice typing model URL (2aab85f)

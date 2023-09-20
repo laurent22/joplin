@@ -88,7 +88,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 			},
 			() => {
 				void this.reloadNote();
-			}
+			},
 		);
 	}
 
@@ -116,7 +116,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 				},
 				() => {
 					void this.reloadNote();
-				}
+				},
 			);
 		}
 	}
@@ -198,7 +198,7 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 			revisionListItems.push(
 				<option key={rev.id} value={rev.id}>
 					{`${time.formatMsToLocal(rev.item_updated_time)} (${stats})`}
-				</option>
+				</option>,
 			);
 		}
 

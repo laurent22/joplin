@@ -1,19 +1,14 @@
+/* eslint-disable jest/require-top-level-describe */
 
-const { default: Logger, TargetType } = require('@joplin/utils/Logger');
-const initLib = require('@joplin/lib/initLib').default;
+const { shimInit } = require('@joplin/lib/shim-init-node');
+const sqlite3 = require('sqlite3');
+const SyncTargetNone = require('@joplin/lib/SyncTargetNone').default;
 
-// TODO: Some libraries required by test-utils.js seem to fail to import with the
-// jsdom environment.
-//
-// Thus, require('@joplin/lib/testing/test-utils.js') fails and some setup must be
-// copied.
-
-const logger = new Logger();
-logger.addTarget(TargetType.Console);
-logger.setLevel(Logger.LEVEL_WARN);
-Logger.initializeGlobalLogger(logger);
-initLib(logger);
-
+// Mock the S3 sync target -- the @aws-s3 libraries depend on an old version
+// of uuid that doesn't work with jest without additional configuration.
+jest.doMock('@joplin/lib/SyncTargetAmazonS3', () => {
+	return SyncTargetNone;
+});
 
 // @electron/remote requires electron to be running. Mock it.
 jest.mock('@electron/remote', () => {
@@ -25,3 +20,18 @@ jest.mock('@electron/remote', () => {
 		},
 	};
 });
+
+// Import after mocking problematic libraries
+const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
+
+
+shimInit({ nodeSqlite: sqlite3 });
+
+afterEach(async () => {
+	await afterEachCleanUp();
+});
+
+afterAll(async () => {
+	await afterAllCleanUp();
+});
+

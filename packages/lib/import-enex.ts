@@ -356,7 +356,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	const fileToProcess = await preProcessFile(filePath);
 	const needToDeleteFileToProcess = fileToProcess !== filePath;
 
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		const progressState = {
 			loaded: 0,
 			created: 0,
@@ -491,6 +491,11 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 
 		saxStream.on('error', function(error: any) {
 			importOptions.onError(createErrorWithNoteTitle(this, error));
+
+			// We need to reject the promise here, or parsing will get stuck
+			// ("end" handler will never be called).
+			// https://github.com/laurent22/joplin/issues/8699
+			reject(error);
 		});
 
 		saxStream.on('text', handleSaxStreamEvent(function(text: string) {

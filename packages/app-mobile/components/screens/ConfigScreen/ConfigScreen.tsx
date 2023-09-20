@@ -20,7 +20,7 @@ const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../../base-screen.js');
 const { Dropdown } = require('../../Dropdown');
 const { themeStyle } = require('../../global-style.js');
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@joplin/lib/components/shared/config/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import { openDocumentTree } from '@joplin/react-native-saf-x';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
@@ -273,7 +273,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				{
 					text: _('Discard changes'),
 					onPress: goBack,
-				}]
+				}],
 			);
 
 			return true;
@@ -369,10 +369,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 							'sync.10.inboxEmail',
 							_('Copy to clipboard'),
 							() => Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
-							{ description }
+							{ description },
 						)
 					}
-				</View>
+				</View>,
 			);
 		}
 
@@ -621,7 +621,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 							{_('- Location: to allow attaching geo-location information to a note.')}
 						</Text>
 					</View>
-				</View>
+				</View>,
 			);
 		}
 
@@ -636,7 +636,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						{_('Make a donation')}
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
@@ -650,7 +650,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						{_('Joplin website')}
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
@@ -664,31 +664,31 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						{_('Privacy Policy')}
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_app" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_db" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('Database v%s', reg.db().version())}</Text>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_fts" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_hermes" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
-			</View>
+			</View>,
 		);
 
 		return (

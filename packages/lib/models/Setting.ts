@@ -723,6 +723,8 @@ class Setting extends BaseModel {
 
 			'sync.10.canUseSharePermissions': { value: false, type: SettingItemType.Bool, public: false },
 
+			'sync.10.accountType': { value: 0, type: SettingItemType.Int, public: false },
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -1140,6 +1142,16 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+
+			'notes.listRendererId': {
+				value: 'compact',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'plugins.states': {
 				value: '',
 				type: SettingItemType.Object,
@@ -1312,7 +1324,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN),
-						'/* For styling the rendered Markdown */'
+						'/* For styling the rendered Markdown */',
 					);
 				},
 				type: SettingItemType.Button,
@@ -1329,7 +1341,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP),
-						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`
+						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`,
 					);
 				},
 				type: SettingItemType.Button,
@@ -2500,9 +2512,30 @@ class Setting extends BaseModel {
 		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
+	public static sectionOrder() {
+		return [
+			'general',
+			'application',
+			'appearance',
+			'sync',
+			'encryption',
+			'joplinCloud',
+			'plugins',
+			'markdownPlugins',
+			'note',
+			'revisionService',
+			'server',
+			'keymap',
+		];
+	}
+
 	private static sectionSource(sectionName: string): SettingSectionSource {
 		if (this.customSections_[sectionName]) return this.customSections_[sectionName].source || SettingSectionSource.Default;
 		return SettingSectionSource.Default;
+	}
+
+	public static isSubSection(sectionName: string) {
+		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]) {

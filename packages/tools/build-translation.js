@@ -313,7 +313,7 @@ async function updateReadmeWithStats(stats) {
 		`${rootDir}/README.md`,
 		'<!-- LOCALE-TABLE-AUTO-GENERATED -->\n',
 		'\n<!-- LOCALE-TABLE-AUTO-GENERATED -->',
-		translationStatusToMdTable(stats)
+		translationStatusToMdTable(stats),
 	);
 }
 

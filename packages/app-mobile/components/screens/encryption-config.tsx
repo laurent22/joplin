@@ -262,7 +262,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			rows.push(
 				<Text style={styles.normalText} key={id}>
 					{id}
-				</Text>
+				</Text>,
 			);
 		}
 

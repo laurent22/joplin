@@ -46,6 +46,42 @@ export interface UserDataValue {
 
 export type UserData = Record<string, Record<string, UserDataValue>>;
 
+interface DatabaseTableColumn {
+	type: string;
+}
+
+interface DatabaseTable {
+	[key: string]: DatabaseTableColumn;
+}
+
+interface DatabaseTables {
+	[key: string]: DatabaseTable;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -300,3 +336,231 @@ export interface VersionEntity {
   'version'?: number;
   'type_'?: number;
 }
+
+
+export const databaseSchema: DatabaseTables = {
+	folders: {
+		created_time: { type: 'number' },
+		encryption_applied: { type: 'number' },
+		encryption_cipher_text: { type: 'string' },
+		icon: { type: 'string' },
+		id: { type: 'string' },
+		is_shared: { type: 'number' },
+		master_key_id: { type: 'string' },
+		parent_id: { type: 'string' },
+		share_id: { type: 'string' },
+		title: { type: 'string' },
+		updated_time: { type: 'number' },
+		user_created_time: { type: 'number' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	tags: {
+		created_time: { type: 'number' },
+		encryption_applied: { type: 'number' },
+		encryption_cipher_text: { type: 'string' },
+		id: { type: 'string' },
+		is_shared: { type: 'number' },
+		parent_id: { type: 'string' },
+		title: { type: 'string' },
+		updated_time: { type: 'number' },
+		user_created_time: { type: 'number' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	note_tags: {
+		created_time: { type: 'number' },
+		encryption_applied: { type: 'number' },
+		encryption_cipher_text: { type: 'string' },
+		id: { type: 'string' },
+		is_shared: { type: 'number' },
+		note_id: { type: 'string' },
+		tag_id: { type: 'string' },
+		updated_time: { type: 'number' },
+		user_created_time: { type: 'number' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	table_fields: {
+		field_default: { type: 'string' },
+		field_name: { type: 'string' },
+		field_type: { type: 'number' },
+		id: { type: 'number' },
+		table_name: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	sync_items: {
+		force_sync: { type: 'number' },
+		id: { type: 'number' },
+		item_id: { type: 'string' },
+		item_location: { type: 'number' },
+		item_type: { type: 'number' },
+		sync_disabled: { type: 'number' },
+		sync_disabled_reason: { type: 'string' },
+		sync_target: { type: 'number' },
+		sync_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	version: {
+		table_fields_version: { type: 'number' },
+		version: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	deleted_items: {
+		deleted_time: { type: 'number' },
+		id: { type: 'number' },
+		item_id: { type: 'string' },
+		item_type: { type: 'number' },
+		sync_target: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	settings: {
+		key: { type: 'string' },
+		value: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	alarms: {
+		id: { type: 'number' },
+		note_id: { type: 'string' },
+		trigger_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	item_changes: {
+		before_change_item: { type: 'string' },
+		created_time: { type: 'number' },
+		id: { type: 'number' },
+		item_id: { type: 'string' },
+		item_type: { type: 'number' },
+		source: { type: 'number' },
+		type: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	note_resources: {
+		id: { type: 'number' },
+		is_associated: { type: 'number' },
+		last_seen_time: { type: 'number' },
+		note_id: { type: 'string' },
+		resource_id: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	resource_local_states: {
+		fetch_error: { type: 'string' },
+		fetch_status: { type: 'number' },
+		id: { type: 'number' },
+		resource_id: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	resources: {
+		created_time: { type: 'number' },
+		encryption_applied: { type: 'number' },
+		encryption_blob_encrypted: { type: 'number' },
+		encryption_cipher_text: { type: 'string' },
+		file_extension: { type: 'string' },
+		filename: { type: 'string' },
+		id: { type: 'string' },
+		is_shared: { type: 'number' },
+		master_key_id: { type: 'string' },
+		mime: { type: 'string' },
+		share_id: { type: 'string' },
+		size: { type: 'number' },
+		title: { type: 'string' },
+		updated_time: { type: 'number' },
+		user_created_time: { type: 'number' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	revisions: {
+		body_diff: { type: 'string' },
+		created_time: { type: 'number' },
+		encryption_applied: { type: 'number' },
+		encryption_cipher_text: { type: 'string' },
+		id: { type: 'string' },
+		item_id: { type: 'string' },
+		item_type: { type: 'number' },
+		item_updated_time: { type: 'number' },
+		metadata_diff: { type: 'string' },
+		parent_id: { type: 'string' },
+		title_diff: { type: 'string' },
+		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	migrations: {
+		created_time: { type: 'number' },
+		id: { type: 'number' },
+		number: { type: 'number' },
+		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	resources_to_download: {
+		created_time: { type: 'number' },
+		id: { type: 'number' },
+		resource_id: { type: 'string' },
+		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	key_values: {
+		id: { type: 'number' },
+		key: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'number' },
+		value: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	notes: {
+		altitude: { type: 'number' },
+		application_data: { type: 'string' },
+		author: { type: 'string' },
+		body: { type: 'string' },
+		conflict_original_id: { type: 'string' },
+		created_time: { type: 'number' },
+		encryption_applied: { type: 'number' },
+		encryption_cipher_text: { type: 'string' },
+		id: { type: 'string' },
+		is_conflict: { type: 'number' },
+		is_shared: { type: 'number' },
+		is_todo: { type: 'number' },
+		latitude: { type: 'number' },
+		longitude: { type: 'number' },
+		markup_language: { type: 'number' },
+		master_key_id: { type: 'string' },
+		order: { type: 'number' },
+		parent_id: { type: 'string' },
+		share_id: { type: 'string' },
+		source: { type: 'string' },
+		source_application: { type: 'string' },
+		source_url: { type: 'string' },
+		title: { type: 'string' },
+		todo_completed: { type: 'number' },
+		todo_due: { type: 'number' },
+		updated_time: { type: 'number' },
+		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	notes_normalized: {
+		altitude: { type: 'number' },
+		body: { type: 'string' },
+		id: { type: 'string' },
+		is_todo: { type: 'number' },
+		latitude: { type: 'number' },
+		longitude: { type: 'number' },
+		parent_id: { type: 'string' },
+		source_url: { type: 'string' },
+		title: { type: 'string' },
+		todo_completed: { type: 'number' },
+		todo_due: { type: 'number' },
+		user_created_time: { type: 'number' },
+		user_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	tags_with_note_count: {
+		created_time: { type: 'number' },
+		id: { type: 'string' },
+		note_count: { type: 'any' },
+		title: { type: 'string' },
+		todo_completed_count: { type: 'any' },
+		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+};

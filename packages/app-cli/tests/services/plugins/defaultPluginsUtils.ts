@@ -19,7 +19,7 @@ function newPluginService(appVersion = '1.4') {
 		{
 			dispatch: () => {},
 			getState: () => {},
-		}
+		},
 	);
 	return service;
 }

@@ -56,6 +56,7 @@ interface GlobalParams {
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
 	currentPath?: SubPath;
+	appShortName?: string;
 }
 
 export function isView(o: any): boolean {
@@ -179,6 +180,7 @@ export default class MustacheService {
 			showErrorStackTraces: config().showErrorStackTraces,
 			isJoplinCloud: config().isJoplinCloud,
 			fullYear: (new Date()).getFullYear(),
+			appShortName: config().isJoplinCloud ? 'cloud' : 'server',
 		};
 	}
 
@@ -234,7 +236,7 @@ export default class MustacheService {
 					...view.content,
 					global: globalParams,
 				},
-				this.partials_
+				this.partials_,
 			);
 		} else if (ext === '.md') {
 			const markdownIt = new MarkdownIt({

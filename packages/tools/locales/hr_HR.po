@@ -15,8 +15,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -258,11 +260,11 @@ msgstr "Prihvati"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "Pristup odbijen: Provjeri svoje korisničko ime i lozinku"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "Pristup odbijen: Ponovo upiši svoju lozinku i/ili korisničko ime"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
@@ -367,8 +369,8 @@ msgstr ""
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
 "Nejednoznačna bilježnica „%s”. Umjesto toga koristi kratki ID bilježnice – "
 "pritisni „ti” za prikaz kratkog ID-a bilježnice"
@@ -383,6 +385,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"Svaki e-mail poslan na ovu adresu će se pretvoriti u bilješku i dodati u "
+"tvoju zbirku. Bilješka će se spremiti u bilježnicu „Dolazna pošta”"
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -542,15 +546,15 @@ msgstr "Popis s predznakom"
 
 #: packages/server/src/routes/admin/users.ts:154
 msgid "Can Share"
-msgstr "Može se dijeliti"
+msgstr "Može dijeliti"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "Može pogledati"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "Može pogledati i urediti"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -604,9 +608,8 @@ msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nije moguće kopirati bilješku u bilježnicu „%s”"
 
 #: packages/app-mobile/components/screens/Notes.tsx:165
-#, fuzzy
 msgid "Cannot create a new note: %s"
-msgstr "Stvara novu bilješku."
+msgstr "Nije moguće stvoriti novu bilješku: %s"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -955,9 +958,8 @@ msgstr[2] "Kopiraj dijeljive poveznice"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "Kopiraj putanju u međuspremnik"
+msgstr "Kopiraj u međuspremnik"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -1076,7 +1078,7 @@ msgstr "Stvoreno lokalno"
 
 #: packages/lib/Synchronizer.ts:190
 msgid "Created remote items: %d."
-msgstr "Stvoreni udaljeni elementi: %d."
+msgstr "Stvoreni eksterni elementi: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Created: "
@@ -1225,9 +1227,8 @@ msgid "Delete local data and re-download from sync target"
 msgstr "Izbriši lokalne podatke i ponovo preuzmi iz izvora sinronizacije"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "Izbrisati bilješku?"
+msgstr "Izbriši bilješku"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1239,9 +1240,8 @@ msgid "Delete note?"
 msgstr "Izbrisati bilješku?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "Izbrisati bilješku?"
+msgstr "Izbriši bilježnicu"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1282,6 +1282,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Izbrisati bilježnicu „Dolazna pošta”?\n"
+"\n"
+"Ako izbrišeš bilježnicu dolazne pošte, sva e-pošta koja je nedavno poslana "
+"na nju će se možda izgubiti."
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1305,7 +1309,7 @@ msgstr "Izbrisani lokalni elementi: %d."
 
 #: packages/lib/Synchronizer.ts:193
 msgid "Deleted remote items: %d."
-msgstr "Izbrisani udaljeni elementi: %d."
+msgstr "Izbrisani eksterni elementi: %d."
 
 #: packages/app-cli/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
@@ -1601,13 +1605,12 @@ msgstr "E-mail"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "Uredi bilješku."
+msgstr "E-mail u bilješku"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "E-mail u bilješku"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1691,11 +1694,11 @@ msgstr "Aktiviraj multimarkdown proširenje za tablice"
 
 #: packages/lib/models/Setting.ts:1540
 msgid "Enable note history"
-msgstr "Aktiviraj povijest bilješke"
+msgstr "Aktiviraj povijest bilježaka"
 
 #: packages/lib/models/Setting.ts:1162
 msgid "Enable PDF viewer"
-msgstr "Aktiviraj PDF-preglednik"
+msgstr "Aktiviraj prikazivač PDF datoteka"
 
 #: packages/lib/models/Setting.ts:1152
 msgid "Enable soft breaks"
@@ -1849,9 +1852,8 @@ msgid "Export all"
 msgstr "Izvezi sve"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "Izvezi sve"
+msgstr "Izvezi sve biljepke kao JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1867,7 +1869,7 @@ msgstr "Izvezi profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "Uspješno izvezeno!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1878,9 +1880,8 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Izvoz u „%s” kao „%s” format. Pričekaj …"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "Izvoz profila …"
+msgstr "Izvoz …"
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -3098,7 +3099,7 @@ msgstr "Otvori %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
-msgstr "Otvori PDF preglednik"
+msgstr "Otvori prikazivač PDF datoteka"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3786,6 +3787,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"Dijeli kopiju svih bilježaka u formatu datoteke koji Joplin može uvesti na "
+"računalo."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -3945,7 +3948,7 @@ msgstr "Provjera pravopisa"
 #: packages/lib/models/Setting.ts:903 packages/lib/models/Setting.ts:905
 #: packages/lib/models/Setting.ts:906
 msgid "Split View"
-msgstr "Razdvojeni prikaz"
+msgstr "Podijeljeni prikaz"
 
 #: packages/lib/models/Setting.ts:1192
 msgid "Start application minimised in the tray icon"
@@ -4164,7 +4167,7 @@ msgstr "Sinkroniziraj samo putem WiFi veze"
 
 #: packages/app-cli/app/command-sync.ts:30
 msgid "Synchronises with remote storage."
-msgstr "Sinkronizira s udaljenim spremištem podataka."
+msgstr "Sinkronizira s eksternim spremištem."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:182
 msgid "Synchronising..."
@@ -4549,28 +4552,25 @@ msgstr ""
 "bilješkama. Pazi što brišeš, jer se nakon brisanja ne mogu obnoviti."
 
 #: packages/app-mobile/components/ScreenHeader.tsx:278
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Bilježnicu nije moguće snimiti: %s"
-msgstr[1] "Bilježnicu nije moguće snimiti: %s"
-msgstr[2] "Bilježnicu nije moguće snimiti: %s"
+msgstr[0] "Nije bilo moguće izbrisati ovu bilješku: %s"
+msgstr[1] "Nije bilo moguće izbrisati ove bilješke: %s"
+msgstr[2] "Nije bilo moguće izbrisati ove bilješke: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:258
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Bilježnica se ne može spremiti: %s"
-msgstr[1] "Bilježnica se ne može spremiti: %s"
-msgstr[2] "Bilježnica se ne može spremiti: %s"
+msgstr[0] "Nije bilo moguće duplicirati ovu bilješku: %s"
+msgstr[1] "Nije bilo moguće duplicirati ove bilješke: %s"
+msgstr[2] "Nije bilo moguće duplicirati ove bilješke: %s"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:549
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Bilježnica se ne može spremiti: %s"
-msgstr[1] "Bilježnica se ne može spremiti: %s"
-msgstr[2] "Bilježnica se ne može spremiti: %s"
+msgstr[0] "Nije bilo moguće premjestiti ovu bilješku: %s"
+msgstr[1] "Nije bilo moguće premjestiti ove bilješke: %s"
+msgstr[2] "Nije bilo moguće premjestiti ove bilješke: %s"
 
 #: packages/lib/models/Note.ts:103
 msgid "This note does not have geolocation information."
@@ -4820,7 +4820,7 @@ msgstr "Vrsta: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "Nije moguće izvesti ili dijeliti podatke. Razlog: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -4906,7 +4906,7 @@ msgstr "Aktualizirani lokalni elementi: %d."
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Updated remote items: %d."
-msgstr "Aktualizirani udaljeni elementi: %d."
+msgstr "Aktualizirani eksterni elementi: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Updated: "
@@ -5042,7 +5042,7 @@ msgstr "Pogledaj ih sada"
 #: packages/lib/models/Setting.ts:903 packages/lib/models/Setting.ts:904
 #: packages/lib/models/Setting.ts:906
 msgid "Viewer"
-msgstr "Preglednik"
+msgstr "Prikazivač"
 
 #: packages/lib/models/Setting.ts:1430
 msgid "Vim"
@@ -5067,11 +5067,12 @@ msgstr ""
 "Upozorenje: za brže izvođenje, ne prikazuju se svi resursi (ograničenje: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "Upozorenje"
+msgstr ""
+"Upozorenja:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"
