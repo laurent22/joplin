@@ -34,7 +34,7 @@
 		"@codemirror/lang-html": "6.4.6",
 		"@codemirror/lang-java": "6.0.1",
 		"@codemirror/lang-javascript": "6.2.1",
-		"@codemirror/lang-markdown": "6.2.0",
+		"@codemirror/lang-markdown": "6.2.1",
 		"@codemirror/lang-php": "6.0.1",
 		"@codemirror/lang-rust": "6.0.1",
 		"@codemirror/language": "6.9.0",

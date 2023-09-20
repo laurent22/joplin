@@ -131,6 +131,8 @@ export interface EditorSettings {
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 	readOnly: boolean;
+
+	indentWithTabs: boolean;
 }
 
 export type LogMessageCallback = (message: string)=> void;

@@ -1,5 +1,5 @@
 import { Compartment, EditorState } from '@codemirror/state';
-import { indentOnInput, indentUnit, syntaxHighlighting } from '@codemirror/language';
+import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, getSearchQuery,
 	highlightSelectionMatches, search,
@@ -217,10 +217,6 @@ const createEditor = (
 					},
 				}),
 
-				// TODO: indent with tabs to match other editors.
-				// Tab indentation has list-related bugs. See
-				// https://github.com/codemirror/dev/issues/1243
-				indentUnit.of('    '),
 				EditorState.tabSize.of(4),
 
 				// Apply styles to entire lines (block-display decorations)

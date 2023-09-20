@@ -292,6 +292,8 @@ function NoteEditor(props: Props, ref: any) {
 
 		automatchBraces: false,
 		ignoreModifiers: false,
+
+		indentWithTabs: false,
 	};
 
 	const injectedJavaScript = `

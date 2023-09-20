@@ -14,6 +14,8 @@ const createEditorSettings = (themeId: number) => {
 		keymap: EditorKeymap.Default,
 		language: EditorLanguageType.Markdown,
 		themeData,
+
+		indentWithTabs: true,
 	};
 
 	return editorSettings;

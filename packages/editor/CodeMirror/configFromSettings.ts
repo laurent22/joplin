@@ -10,6 +10,7 @@ import syntaxHighlightingLanguages from './markdown/syntaxHighlightingLanguages'
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
+import { indentUnit } from '@codemirror/language';
 
 const configFromSettings = (settings: EditorSettings) => {
 	const languageExtension = (() => {
@@ -46,6 +47,7 @@ const configFromSettings = (settings: EditorSettings) => {
 			spellcheck: settings.spellcheckEnabled ? 'true' : 'false',
 		}),
 		EditorState.readOnly.of(settings.readOnly),
+		indentUnit.of(settings.indentWithTabs ? '\t' : '    '),
 	];
 
 	if (settings.automatchBraces) {
