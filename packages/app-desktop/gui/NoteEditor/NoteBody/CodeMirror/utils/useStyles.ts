@@ -73,6 +73,7 @@ const useStyles = (props: NoteBodyEditorProps) => {
 					fontFamily: 'inherit',
 					fontSize: props.fontSize,
 					fontSizeUnits: 'px',
+					isDesktop: true,
 				},
 			};
 		});

@@ -52,7 +52,7 @@ const createTheme = (theme: any): Extension[] => {
 
 		// Avoid using units here -- 1.6em, for example, can cause lines to overlap
 		// if some lines contain text with a large enough font size.
-		lineHeight: '1.6',
+		lineHeight: theme.isDesktop ? '1.6' : undefined,
 	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };
@@ -130,6 +130,8 @@ const createTheme = (theme: any): Extension[] => {
 			borderStyle: 'solid',
 			borderColor: theme.colorFaded,
 			backgroundColor: 'rgba(155, 155, 155, 0.1)',
+
+			...(theme.isDesktop ? monospaceStyle : {}),
 		},
 
 		// CodeMirror wraps the existing inline span in an additional element.
@@ -153,7 +155,7 @@ const createTheme = (theme: any): Extension[] => {
 
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta': {
-			opacity: 0.5,
+			opacity: theme.isDesktop ? 0.5 : 1,
 		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence
@@ -222,6 +224,7 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.link,
 			color: theme.urlColor,
+			textDecoration: theme.isDesktop ? undefined : 'underline',
 		},
 		{
 			tag: [mathTag, inlineMathTag],
