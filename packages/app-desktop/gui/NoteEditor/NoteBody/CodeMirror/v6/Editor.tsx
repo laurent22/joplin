@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ForwardedRef } from 'react';
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { EditorProps, PluginData } from '@joplin/editor/types';
+import { EditorProps, LogMessageCallback, OnEventCallback, PluginData } from '@joplin/editor/types';
 import createEditor from '@joplin/editor/CodeMirror/createEditor';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -18,6 +18,16 @@ interface Props extends EditorProps {
 const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 	const editorContainerRef = useRef<HTMLDivElement>();
 	const [editor, setEditor] = useState<CodeMirrorControl|null>(null);
+
+	// The editor will only be created once, so callbacks that could
+	// change need to be stored as references.
+	const onEventRef = useRef<OnEventCallback>(props.onEvent);
+	const onLogMessageRef = useRef<LogMessageCallback>(props.onLogMessage);
+
+	useEffect(() => {
+		onEventRef.current = props.onEvent;
+		onLogMessageRef.current = props.onLogMessage;
+	}, [props.onEvent, props.onLogMessage]);
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -52,7 +62,13 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 	useEffect(() => {
 		if (!editorContainerRef.current) return () => {};
 
-		const editor = createEditor(editorContainerRef.current, props);
+		const editorProps: EditorProps = {
+			...props,
+			onEvent: event => onEventRef.current(event),
+			onLogMessage: message => onLogMessageRef.current(message),
+		};
+
+		const editor = createEditor(editorContainerRef.current, editorProps);
 		editor.addStyles({
 			'.cm-scroller': { overflow: 'auto' },
 		});

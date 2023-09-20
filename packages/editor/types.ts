@@ -134,12 +134,13 @@ export interface EditorSettings {
 }
 
 export type LogMessageCallback = (message: string)=> void;
+export type OnEventCallback = (event: EditorEvent)=> void;
 
 export interface EditorProps {
 	settings: EditorSettings;
 	initialText: string;
 
-	onEvent(event: EditorEvent): void;
+	onEvent: OnEventCallback;
 	onLogMessage: LogMessageCallback;
 }
 

@@ -72,8 +72,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	usePluginServiceRegistration(ref);
 
 	const codeMirror_change = useCallback((newBody: string) => {
-		props_onChangeRef.current({ changeId: null, content: newBody });
-	}, []);
+		if (newBody !== props.content) {
+			props_onChangeRef.current({ changeId: null, content: newBody });
+		}
+	}, [props.content]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
@@ -245,8 +247,6 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			setRenderedBodyContentKey(props.contentKey);
 		}, interval);
 
-		editorRef.current?.updateBody(props.content);
-
 		return () => {
 			cancelled = true;
 			shim.clearTimeout(timeoutId);
@@ -369,6 +369,11 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		props.contentMarkupLanguage, props.disabled, props.visiblePanes,
 		props.keyboardMode, styles.globalTheme,
 	]);
+
+	// Update the editor's value
+	useEffect(() => {
+		editorRef.current?.updateBody(props.content);
+	}, [props.content]);
 
 	const renderEditor = () => {
 		return (
