@@ -1,9 +1,9 @@
-import { ListRendererDepependency } from './types';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { ListRendererDepependency } from '@joplin/lib/services/plugins/api/noteListType';
+import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 
-const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, noteTitleHtml: string, noteIsWatched: boolean) => {
+const prepareViewProps = async (dependencies: ListRendererDepependency[], note: NoteEntity, itemSize: Size, selected: boolean, noteTitleHtml: string, noteIsWatched: boolean, noteTags: TagEntity[]) => {
 	const output: any = {};
 
 	for (const dep of dependencies) {
@@ -17,6 +17,8 @@ const prepareViewProps = async (dependencies: ListRendererDepependency[], note: 
 				output.note.titleHtml = noteTitleHtml;
 			} else if (dep === 'note.isWatched') {
 				output.note.isWatched = noteIsWatched;
+			} else if (dep === 'note.tags') {
+				output.note.tags = noteTags;
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a

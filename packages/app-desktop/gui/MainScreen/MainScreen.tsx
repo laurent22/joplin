@@ -82,6 +82,7 @@ interface Props {
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
+	listRendererId: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -730,6 +731,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 					visible={event.visible}
 					size={event.size}
 					themeId={this.props.themeId}
+					listRendererId={this.props.listRendererId}
+					startupPluginsLoaded={this.props.startupPluginsLoaded}
 				/>;
 			},
 
@@ -909,6 +912,7 @@ const mapStateToProps = (state: AppState) => {
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
+		listRendererId: state.settings['notes.listRendererId'],
 	};
 };
 

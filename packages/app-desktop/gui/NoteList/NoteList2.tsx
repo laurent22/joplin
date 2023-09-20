@@ -3,13 +3,13 @@ import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef, useEffect } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import { ItemFlow, Props } from './utils/types';
+import { Props } from './utils/types';
+import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { Size } from '@joplin/utils/types';
 import NoteListItem from '../NoteListItem/NoteListItem';
-import useRenderedNotes from './utils/useRenderedNotes';
 import useItemCss from './utils/useItemCss';
 import useOnContextMenu from '../NoteListItem/utils/useOnContextMenu';
 import useVisibleRange from './utils/useVisibleRange';
@@ -22,8 +22,6 @@ import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
 import usePrevious from '../hooks/usePrevious';
-// import defaultLeftToRightItemRenderer from './utils/defaultLeftToRightListRenderer';
-import defaultListRenderer from './utils/defaultListRenderer';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -33,8 +31,7 @@ const commands = {
 const NoteList = (props: Props) => {
 	const listRef = useRef(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
-	// const listRenderer = defaultLeftToRightItemRenderer;
-	const listRenderer = defaultListRenderer;
+	const listRenderer = props.listRenderer;
 
 	const itemSize: Size = useMemo(() => {
 		return {
@@ -79,15 +76,15 @@ const NoteList = (props: Props) => {
 		props.notes,
 	);
 
-	const renderedNotes = useRenderedNotes(
-		startNoteIndex,
-		endNoteIndex,
-		props.notes,
-		props.selectedNoteIds,
-		listRenderer,
-		props.highlightedWords,
-		props.watchedNoteFiles,
-	);
+	// const renderedNotes = useRenderedNotes(
+	// 	startNoteIndex,
+	// 	endNoteIndex,
+	// 	props.notes,
+	// 	props.selectedNoteIds,
+	// 	listRenderer,
+	// 	props.highlightedWords,
+	// 	props.watchedNoteFiles,
+	// );
 
 	const noteItemStyle = useMemo(() => {
 		return {
@@ -199,7 +196,6 @@ const NoteList = (props: Props) => {
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
-			const renderedNote = renderedNotes[note.id];
 
 			output.push(
 				<NoteListItem
@@ -209,8 +205,6 @@ const NoteList = (props: Props) => {
 					dragIndex={dragOverTargetNoteIndex}
 					noteCount={props.notes.length}
 					itemSize={itemSize}
-					noteHtml={renderedNote ? renderedNote.html : ''}
-					noteId={note.id}
 					onChange={listRenderer.onChange}
 					onClick={onNoteClick}
 					onContextMenu={onItemContextMenu}
@@ -220,6 +214,10 @@ const NoteList = (props: Props) => {
 					highlightedWords={highlightedWords}
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
 					flow={listRenderer.flow}
+					note={note}
+					isSelected={props.selectedNoteIds.includes(note.id)}
+					isWatched={props.watchedNoteFiles.includes(note.id)}
+					listRenderer={listRenderer}
 				/>,
 			);
 		}
