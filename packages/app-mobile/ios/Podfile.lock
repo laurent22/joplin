@@ -290,7 +290,7 @@ PODS:
     - React-Core
   - react-native-image-picker (5.6.1):
     - React-Core
-  - react-native-image-resizer (3.0.7):
+  - react-native-image-resizer (3.0.5):
     - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
@@ -670,7 +670,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
-  react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
+  react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: b758d1b38a96a96b8179a16e96ed966a507ca5c2
