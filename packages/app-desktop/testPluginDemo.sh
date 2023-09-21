@@ -5,11 +5,14 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEMP_PATH=~/src/plugin-tests
-PLUGIN_PATH=~/src/joplin/packages/app-cli/tests/support/plugins/imaging
+PLUGIN_PATH=~/src/joplin/packages/app-cli/tests/support/plugins/note_list_renderer
 
 mkdir -p "$TEMP_PATH"
 PLUGIN_NAME=$(echo "$PLUGIN_PATH" | awk -F/ '{print $NF}')
 TEMP_PLUGIN_PATH="$TEMP_PATH/$PLUGIN_NAME" 
+
+echo "Copying from: $PLUGIN_PATH"
+echo "To: $TEMP_PLUGIN_PATH"
 
 rsync -a --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
 

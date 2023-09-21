@@ -290,7 +290,7 @@ PODS:
     - React-Core
   - react-native-image-picker (5.6.1):
     - React-Core
-  - react-native-image-resizer (3.0.7):
+  - react-native-image-resizer (3.0.5):
     - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
@@ -402,8 +402,8 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.8.0):
     - React-Core
-  - RNExitApp (1.1.0):
-    - React
+  - RNExitApp (2.0.0):
+    - React-Core
   - RNFileViewer (2.1.5):
     - React-Core
   - RNFS (2.20.0):
@@ -414,7 +414,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (9.2.3):
+  - RNShare (9.2.4):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -670,7 +670,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
-  react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
+  react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: b758d1b38a96a96b8179a16e96ed966a507ca5c2
@@ -697,13 +697,13 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: a21bfcc694e3190f8ddb5aacb0dd16f97b6be79f
   RNDeviceInfo: 5795b418ed3451ebcaf39384e6cf51f60cb931c9
-  RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
+  RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNLocalize: dbea38dcb344bf80ff18a1757b1becf11f70cae4
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
-  RNShare: da6d90b6dc332f51f86498041d6e34211f96b630
+  RNShare: 255701a138fcdef6c27dc93724548fd122e91f9e
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   RNZipArchive: 68a0c6db4b1c103f846f1559622050df254a3ade
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef

@@ -329,6 +329,7 @@ export default function(state: AppState, action: any) {
 				isResettingLayout: action.value,
 			};
 			break;
+
 		}
 
 	} catch (error) {
