@@ -1,5 +1,26 @@
 # Joplin Server Changelog
 
+## [server-v2.13.1](https://github.com/laurent22/joplin/releases/tag/server-v2.13.1) - 2023-09-20T15:15:32Z
+
+- New: Add Joplin Server and Joplin Cloud favicons (1b00445)
+- New: Add function to get db default value (6962ba1)
+- New: Add support for separate admin instance (d78ab16)
+- Improved: Add a link to resend email verification email (#8650) (#7808 by [@hubert](https://github.com/hubert))
+- Improved: Allow any account to share with any other account (13c4eba)
+- Improved: By default, sort user deletion in descending order (68ffdc5)
+- Improved: Disallow loading env file that contains duplicate keys (9d16dd2)
+- Improved: Do not allow the server to start if a migration needs to be applied (1acbb5d)
+- Improved: Ensure that server does not crash when trying to start a task that is already running (5ed3d94)
+- Improved: Remove event-based services (c718706)
+- Improved: Removed obsolete node-env-file dependency (c0501fc)
+- Improved: Set db default value in exported schema (6cdb1a7)
+- Improved: Support setting an instance name (36e9e0a)
+- Improved: Throwing an error if the password being saved already seems to be hashed (#8637 by [@pedr](https://github.com/pedr))
+- Improved: Updated packages @rmp135/sql-ts (v1.18.0), buildTools, dayjs (v1.11.9), gettext-parser (v7.0.1), glob (v10.3.4), jquery (v3.7.1), jsdom (v22.1.0), knex (v2.5.1), markdown-it-multimd-table (v4.2.3), nodemailer (v6.9.4), pg (v8.11.3), rate-limiter-flexible (v2.4.2), react, sass (v1.65.1), sharp (v0.32.5), word-wrap (v1.2.5)
+- Improved: Upgraded Formidable parsing library (a04654a)
+- Fixed: Searching for user should be case insensitive (#8682) (#8307 by [@hubert](https://github.com/hubert))
+- Fixed: Sorting users by "total size" leads to a crash (#8680) (#8308 by [@hubert](https://github.com/hubert))
+
 ## [server-v2.12.1](https://github.com/laurent22/joplin/releases/tag/server-v2.12.1) - 2023-07-13T10:23:24Z
 
 - New: Add yarn patches to Docker image (e91e38c)
