@@ -4838,7 +4838,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.3
     "@types/react": 18.0.24
-    "@types/react-redux": 7.1.25
+    "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.26
     jest: 29.5.0
     jest-environment-jsdom: 29.5.0
@@ -8297,18 +8297,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 1b620095ddf2fe85157df9d57435edc619587eacb1a4fadd91c977c200cef8008e7fec4d8c5429ce373e1a2158199f1162f9c84e8e5a7d0b71a2224f31b64dfd
-  languageName: node
-  linkType: hard
-
-"@types/react-redux@npm:7.1.25":
-  version: 7.1.25
-  resolution: "@types/react-redux@npm:7.1.25"
-  dependencies:
-    "@types/hoist-non-react-statics": ^3.3.0
-    "@types/react": "*"
-    hoist-non-react-statics: ^3.3.0
-    redux: ^4.0.0
-  checksum: a61ec25cbf8bb3720850402d3c49493fcff4afb73ad447d161460b5d4c600c984ad48708e8564d2fd32052eaa3c3b3f655c5b300ce813429637cce9e5958329f
   languageName: node
   linkType: hard
 
