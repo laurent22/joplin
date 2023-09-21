@@ -6,7 +6,6 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
@@ -48,6 +47,7 @@ import Logger from '@joplin/utils/Logger';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -255,7 +255,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: ChangeEvent) {
+	private onBodyChange(event: EditorChangeEvent) {
 		shared.noteComponent_change(this, 'body', event.value);
 		this.scheduleSave();
 	}

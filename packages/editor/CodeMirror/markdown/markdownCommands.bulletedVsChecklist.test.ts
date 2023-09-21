@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
-import { ListType } from '../types';
-import createEditor from './testUtil/createEditor';
+import { ListType } from '../../types';
+import createTestEditor from '../testUtil/createTestEditor';
 import { toggleList } from './markdownCommands';
 
 describe('markdownCommands.bulletedVsChecklist', () => {
@@ -13,7 +13,7 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 	const expectedTags = ['BulletList', 'Task'];
 
 	it('should remove a checklist following a bulleted list without modifying the bulleted list', async () => {
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText, EditorSelection.cursor(bulletedListPart.length + 5), expectedTags,
 		);
 
@@ -24,7 +24,7 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 	});
 
 	it('should remove an unordered list following a checklist without modifying the checklist', async () => {
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText, EditorSelection.cursor(bulletedListPart.length - 5), expectedTags,
 		);
 
@@ -35,7 +35,7 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 	});
 
 	it('should replace a selection of unordered and task lists with a correctly-numbered list', async () => {
-		const editor = await createEditor(
+		const editor = await createTestEditor(
 			initialDocText, EditorSelection.range(0, initialDocText.length), expectedTags,
 		);
 

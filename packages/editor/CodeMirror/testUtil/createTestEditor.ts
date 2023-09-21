@@ -3,13 +3,13 @@ import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { indentUnit, syntaxTree } from '@codemirror/language';
 import { SelectionRange, EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { MarkdownMathExtension } from '../markdownMathParser';
+import { MarkdownMathExtension } from '../markdown/markdownMathParser';
 import forceFullParse from './forceFullParse';
 import loadLangauges from './loadLanguages';
 
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
-const createEditor = async (
+const createTestEditor = async (
 	initialText: string, initialSelection: SelectionRange, expectedSyntaxTreeTags: string[],
 ): Promise<EditorView> => {
 	await loadLangauges();
@@ -62,4 +62,4 @@ const createEditor = async (
 	return editor;
 };
 
-export default createEditor;
+export default createTestEditor;

@@ -143,6 +143,7 @@
     "@electron/remote": "2.0.11",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
+    "@joplin/editor": "~2.13",
     "@joplin/lib": "~2.13",
     "@joplin/renderer": "~2.13",
     "@joplin/utils": "~2.13",

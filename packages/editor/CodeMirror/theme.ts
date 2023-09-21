@@ -8,7 +8,7 @@ import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
-import { inlineMathTag, mathTag } from './markdownMathParser';
+import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
 
 // For an example on how to customize the theme, see:
 //
@@ -25,6 +25,12 @@ import { inlineMathTag, mathTag } from './markdownMathParser';
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
 const createTheme = (theme: any): Extension[] => {
+	// If the theme hasn't loaded yet, return nothing.
+	// (createTheme should be called again after the theme has loaded).
+	if (!theme) {
+		return [];
+	}
+
 	const isDarkTheme = theme.appearance === 'dark';
 
 	const baseGlobalStyle: Record<string, string> = {
@@ -34,15 +40,19 @@ const createTheme = (theme: any): Extension[] => {
 		// On iOS, apply system font scaling (e.g. font scaling
 		// set in accessibility settings).
 		font: '-apple-system-body',
+
+		// Fill container horizontally
+		width: '100%',
+		boxSizing: 'border-box',
 	};
 	const baseCursorStyle: Record<string, string> = { };
 	const baseContentStyle: Record<string, string> = {
 		fontFamily: theme.fontFamily,
+		fontSize: `${theme.fontSize}${theme.fontSizeUnits ?? 'px'}`,
 
-		// To allow accessibility font scaling, we also need to set the
-		// fontSize to a value in `em`s (relative scaling relative to
-		// parent font size).
-		fontSize: `${theme.fontSize}em`,
+		// Avoid using units here -- 1.55em, for example, can cause lines to overlap
+		// if some lines contain text with a large enough font size.
+		lineHeight: theme.isDesktop ? '1.55' : undefined,
 	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };
@@ -60,17 +70,42 @@ const createTheme = (theme: any): Extension[] => {
 		blurredSelectionStyle.backgroundColor = '#444';
 	}
 
-	const baseTheme = EditorView.baseTheme({
+	const monospaceStyle = {
+		fontFamily: theme.monospaceFont || 'monospace',
+	};
+
+	// This is equivalent to the default selection style -- our styling must
+	// be at least this specific.
+	const selectionBackgroundSelector = '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground';
+
+	const codeMirrorTheme = EditorView.theme({
 		'&': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
 		'.cm-content': {
 			fontFamily: theme.fontFamily,
 			...baseContentStyle,
+			paddingBottom: theme.isDesktop ? '400px' : undefined,
 		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
-		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
-		'.cm-selectionBackground': blurredSelectionStyle,
+
+		// The desktop app sets the font for these elements to a specific font.
+		// Override this.
+		'& div, & span, & a': {
+			fontFamily: 'inherit',
+		},
+
+		// Override the default border around CodeMirror panels
+		'& > .cm-panels': {
+			border: 'none',
+		},
+
+		// &.cm-focused is used to give these styles higher specificity
+		// than the defaults.
+		[selectionBackgroundSelector]: baseSelectionStyle,
+		'&.cm-focused ::selection': baseSelectionStyle,
+		'& ::selection': blurredSelectionStyle,
+		'& .cm-selectionLayer .cm-selectionBackground': blurredSelectionStyle,
 
 		'&.cm-editor.cm-focused': {
 			outline: 'none !important',
@@ -101,6 +136,8 @@ const createTheme = (theme: any): Extension[] => {
 			borderStyle: 'solid',
 			borderColor: theme.colorFaded,
 			backgroundColor: 'rgba(155, 155, 155, 0.1)',
+
+			...(theme.isDesktop ? monospaceStyle : {}),
 		},
 
 		// CodeMirror wraps the existing inline span in an additional element.
@@ -113,12 +150,21 @@ const createTheme = (theme: any): Extension[] => {
 			borderStyle: 'solid',
 			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
 			borderRadius: '4px',
+
+			...(theme.isDesktop ? monospaceStyle : {}),
 		},
 
 		'& .cm-mathBlock, & .cm-inlineMath': {
 			color: isDarkTheme ? '#9fa' : '#276',
 		},
 
+		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
+		'& .cm-taskMarker': monospaceStyle,
+
+		// Override the default URL style when the URL is within a link
+		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
+			opacity: theme.isDesktop ? 0.6 : 1,
+		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence
 		// (override the existing preset styles).
@@ -128,9 +174,7 @@ const createTheme = (theme: any): Extension[] => {
 				color: isDarkTheme ? 'white' : 'black',
 			},
 		},
-	});
-
-	const appearanceTheme = EditorView.theme({}, { dark: isDarkTheme });
+	}, { dark: isDarkTheme });
 
 	const baseHeadingStyle = {
 		fontWeight: 'bold',
@@ -150,7 +194,6 @@ const createTheme = (theme: any): Extension[] => {
 			...baseHeadingStyle,
 			tag: tags.heading1,
 			fontSize: '1.6em',
-			borderBottom: `1px solid ${theme.dividerColor}`,
 		},
 		{
 			...baseHeadingStyle,
@@ -189,7 +232,7 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.link,
 			color: theme.urlColor,
-			textDecoration: 'underline',
+			textDecoration: theme.isDesktop ? undefined : 'underline',
 		},
 		{
 			tag: [mathTag, inlineMathTag],
@@ -220,8 +263,7 @@ const createTheme = (theme: any): Extension[] => {
 	]);
 
 	return [
-		baseTheme,
-		appearanceTheme,
+		codeMirrorTheme,
 		syntaxHighlighting(highlightingStyle),
 
 		// If we haven't defined highlighting for tags, fall back

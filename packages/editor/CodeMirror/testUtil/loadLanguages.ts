@@ -1,4 +1,4 @@
-import syntaxHighlightingLanguages from '../syntaxHighlightingLanguages';
+import syntaxHighlightingLanguages from '../markdown/syntaxHighlightingLanguages';
 
 // Ensure languages we use are loaded. Without this, tests may randomly fail (LanguageDescriptions
 // are loaded asyncronously, in the background).

@@ -40,12 +40,36 @@ const urlDecoration = Decoration.mark({
 	attributes: { class: 'cm-url', ...noSpellCheckAttrs },
 });
 
+const htmlTagNameDecoration = Decoration.mark({
+	attributes: { class: 'cm-htmlTag', ...noSpellCheckAttrs },
+});
+
 const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
 
 const headerLineDecoration = Decoration.line({
 	attributes: { class: 'cm-headerLine' },
+});
+
+const tableHeaderDecoration = Decoration.line({
+	attributes: { class: 'cm-tableHeader' },
+});
+
+const tableBodyDecoration = Decoration.line({
+	attributes: { class: 'cm-tableRow' },
+});
+
+const tableDelimiterDecoration = Decoration.line({
+	attributes: { class: 'cm-tableDelimiter' },
+});
+
+const horizontalRuleDecoration = Decoration.mark({
+	attributes: { class: 'cm-hr' },
+});
+
+const taskMarkerDecoration = Decoration.mark({
+	attributes: { class: 'cm-taskMarker' },
 });
 
 type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
@@ -124,6 +148,25 @@ const computeDecorations = (view: EditorView) => {
 				case 'ATXHeading5':
 				case 'ATXHeading6':
 					addDecorationToLines(viewFrom, viewTo, headerLineDecoration);
+					break;
+				case 'HTMLTag':
+				case 'TagName':
+					addDecorationToRange(viewFrom, viewTo, htmlTagNameDecoration);
+					break;
+				case 'TableHeader':
+					addDecorationToLines(viewFrom, viewTo, tableHeaderDecoration);
+					break;
+				case 'TableDelimiter':
+					addDecorationToLines(viewFrom, viewTo, tableDelimiterDecoration);
+					break;
+				case 'TableRow':
+					addDecorationToLines(viewFrom, viewTo, tableBodyDecoration);
+					break;
+				case 'HorizontalRule':
+					addDecorationToRange(viewFrom, viewTo, horizontalRuleDecoration);
+					break;
+				case 'TaskMarker':
+					addDecorationToRange(viewFrom, viewTo, taskMarkerDecoration);
 					break;
 				}
 

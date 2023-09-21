@@ -79,6 +79,7 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
+	enableBetaMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
@@ -737,7 +738,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+
+				if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
+					bodyEditor = 'CodeMirror6';
+				}
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
 		};
@@ -909,6 +914,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
+		enableBetaMarkdownEditor: state.settings['editor.beta'],
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
