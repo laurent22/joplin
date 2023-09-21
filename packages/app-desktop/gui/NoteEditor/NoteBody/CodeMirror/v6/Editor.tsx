@@ -13,6 +13,8 @@ import setupVim from '../utils/setupVim';
 interface Props extends EditorProps {
 	style: React.CSSProperties;
 	pluginStates: PluginStates;
+
+	onEditorPaste: ()=> void;
 }
 
 const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
@@ -28,6 +30,23 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		onEventRef.current = props.onEvent;
 		onLogMessageRef.current = props.onLogMessage;
 	}, [props.onEvent, props.onLogMessage]);
+
+	useEffect(() => {
+		if (!editor) {
+			return () => {};
+		}
+
+		const pasteEventHandler = (_editor: any, event: Event) => {
+			event.preventDefault();
+			props.onEditorPaste();
+		};
+
+		editor.on('paste', pasteEventHandler);
+
+		return () => {
+			editor.off('paste', pasteEventHandler);
+		};
+	}, [editor, props.onEditorPaste]);
 
 	useImperativeHandle(ref, () => {
 		return editor;
