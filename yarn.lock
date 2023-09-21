@@ -3739,7 +3739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:^8.47.0":
+"@eslint/js@npm:8.49.0":
   version: 8.49.0
   resolution: "@eslint/js@npm:8.49.0"
   checksum: a6601807c8aeeefe866926ad92ed98007c034a735af20ff709009e39ad1337474243d47908500a3bde04e37bfba16bcf1d3452417f962e1345bc8756edd6b830
@@ -3952,7 +3952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@humanwhocodes/config-array@npm:^0.11.10":
+"@humanwhocodes/config-array@npm:^0.11.11":
   version: 0.11.11
   resolution: "@humanwhocodes/config-array@npm:0.11.11"
   dependencies:
@@ -4835,7 +4835,7 @@ __metadata:
     domhandler: 5.0.3
     domutils: 3.1.0
     entities: 2.2.0
-    eslint: 8.47.0
+    eslint: 8.49.0
     jest: 29.6.4
     prettier: 2.8.8
     ts-jest: 29.1.1
@@ -16207,15 +16207,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.47.0":
-  version: 8.47.0
-  resolution: "eslint@npm:8.47.0"
+"eslint@npm:8.49.0":
+  version: 8.49.0
+  resolution: "eslint@npm:8.49.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.6.1
     "@eslint/eslintrc": ^2.1.2
-    "@eslint/js": ^8.47.0
-    "@humanwhocodes/config-array": ^0.11.10
+    "@eslint/js": 8.49.0
+    "@humanwhocodes/config-array": ^0.11.11
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
     ajv: ^6.12.4
@@ -16250,19 +16250,19 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 1988617f703eadc5c7540468d54dc8e5171cf2bb9483f6172799cd1ff54a9a5e4470f003784e8cef92687eaa14de37172732787040e67817581a20bcb9c15970
+  checksum: 4dfe257e1e42da2f9da872b05aaaf99b0f5aa022c1a91eee8f2af1ab72651b596366320c575ccd4e0469f7b4c97aff5bb85ae3323ebd6a293c3faef4028b0d81
   languageName: node
   linkType: hard
 
-"eslint@patch:eslint@8.47.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch::locator=root%40workspace%3A.":
-  version: 8.47.0
-  resolution: "eslint@patch:eslint@npm%3A8.47.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch::version=8.47.0&hash=a7bcf0&locator=root%40workspace%3A."
+"eslint@patch:eslint@8.49.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch::locator=root%40workspace%3A.":
+  version: 8.49.0
+  resolution: "eslint@patch:eslint@npm%3A8.49.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch::version=8.49.0&hash=a7bcf0&locator=root%40workspace%3A."
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.6.1
     "@eslint/eslintrc": ^2.1.2
-    "@eslint/js": ^8.47.0
-    "@humanwhocodes/config-array": ^0.11.10
+    "@eslint/js": 8.49.0
+    "@humanwhocodes/config-array": ^0.11.11
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
     ajv: ^6.12.4
@@ -16297,7 +16297,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: f12c4a29d02e3055d69d95470513747523fe84ceb9aa819a505c8ff47f7ec3ddf443430a1c9776ce043fa5da55d89be27a5d1e768ccbd6e91d9ff1b6b30ea762
+  checksum: 21d5daeac692c7f9afb0156d9ebb44dfad94551b267596942e186a27cfb782245bbed1824408c496d3531a3a3a64dc790323b8bb0c45fc44dac9fcee43984377
   languageName: node
   linkType: hard
 
@@ -30761,7 +30761,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
     cspell: 5.21.2
-    eslint: 8.47.0
+    eslint: 8.49.0
     eslint-interactive: 10.8.0
     eslint-plugin-github: 4.9.2
     eslint-plugin-import: 2.28.1
