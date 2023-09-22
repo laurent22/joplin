@@ -667,6 +667,30 @@ footer .bottom-links-row p {
 	color: #0557ba;
 }
 
+.joplin-cloud-feature-list .feature-description {
+	max-width: 600px;
+    font-size: .8em;
+    color: #555555;
+	margin-top: 5px;
+}
+
+.joplin-cloud-feature-list .feature-title {
+	text-decoration: none;
+	color: #000000;
+	margin-left: 10px;
+    border: 2px solid black;
+    display: inline-block;
+    width: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    height: 20px;
+    font-weight: bold;
+    font-size: 0.8em;
+    opacity: 0.5;
+}
+
 /*****************************************************************
  WHAT'S NEW PAGE
 *****************************************************************/
