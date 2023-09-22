@@ -13076,15 +13076,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "cosmiconfig@npm:8.0.0"
+"cosmiconfig@npm:^8.2.0":
+  version: 8.3.6
+  resolution: "cosmiconfig@npm:8.3.6"
   dependencies:
-    import-fresh: ^3.2.1
+    import-fresh: ^3.3.0
     js-yaml: ^4.1.0
-    parse-json: ^5.0.0
+    parse-json: ^5.2.0
     path-type: ^4.0.0
-  checksum: ff4cdf89ac1ae52e7520816622c21a9e04380d04b82d653f5139ec581aa4f7f29e096d46770bc76c4a63c225367e88a1dfa233ea791669a35101f5f9b972c7d1
+  peerDependencies:
+    typescript: ">=4.9.5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: dc339ebea427898c9e03bf01b56ba7afbac07fc7d2a2d5a15d6e9c14de98275a9565da949375aee1809591c152c0a3877bb86dbeaf74d5bd5aaa79955ad9e7a0
   languageName: node
   linkType: hard
 
@@ -26443,30 +26448,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-package-json-lint@npm:6.4.0":
-  version: 6.4.0
-  resolution: "npm-package-json-lint@npm:6.4.0"
+"npm-package-json-lint@npm:7.0.0":
+  version: 7.0.0
+  resolution: "npm-package-json-lint@npm:7.0.0"
   dependencies:
     ajv: ^6.12.6
     ajv-errors: ^1.0.1
     chalk: ^4.1.2
-    cosmiconfig: ^8.0.0
+    cosmiconfig: ^8.2.0
     debug: ^4.3.4
     globby: ^11.1.0
-    ignore: ^5.2.0
+    ignore: ^5.2.4
     is-plain-obj: ^3.0.0
     jsonc-parser: ^3.2.0
     log-symbols: ^4.1.0
     meow: ^9.0.0
     plur: ^4.0.0
-    semver: ^7.3.8
+    semver: ^7.5.3
     slash: ^3.0.0
     strip-json-comments: ^3.1.1
-    type-fest: ^3.2.0
+    type-fest: ^3.12.0
     validate-npm-package-name: ^5.0.0
   bin:
     npmPkgJsonLint: dist/cli.js
-  checksum: 75cca8bfffd40cd848778f27cd2800515137a8747098d86c3cfc0f5c43073daeb4baf9be4771f06ef47659ec7b77ec5afab6024530329a9eafea2b0f3e102f55
+  checksum: 81074023ad52aa1c7102d9608484427fb83d4b3492736ec11488885c114d0e450ac4c4c290bc28795c04d1b785cfff9b34ce25d16a6491144205750e0cf3129f
   languageName: node
   linkType: hard
 
@@ -30899,7 +30904,7 @@ __metadata:
     madge: 6.1.0
     node-gyp: 9.4.0
     nodemon: 2.0.22
-    npm-package-json-lint: 6.4.0
+    npm-package-json-lint: 7.0.0
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -34331,10 +34336,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^3.2.0":
-  version: 3.5.0
-  resolution: "type-fest@npm:3.5.0"
-  checksum: 9b82958ded0aedeb38fe6b172645a319522d11904b58e422dbab9ba40f85d48e749ff8fb7047cd72f4a2923c63927b741e2efc97ce7b0662b7e042923510132f
+"type-fest@npm:^3.12.0":
+  version: 3.13.1
+  resolution: "type-fest@npm:3.13.1"
+  checksum: c06b0901d54391dc46de3802375f5579868949d71f93b425ce564e19a428a0d411ae8d8cb0e300d330071d86152c3ea86e744c3f2860a42a79585b6ec2fdae8e
   languageName: node
   linkType: hard
 
