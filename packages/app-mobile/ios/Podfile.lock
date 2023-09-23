@@ -290,7 +290,7 @@ PODS:
     - React-Core
   - react-native-image-picker (5.6.1):
     - React-Core
-  - react-native-image-resizer (3.0.5):
+  - react-native-image-resizer (3.0.7):
     - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
@@ -298,7 +298,7 @@ PODS:
     - React
   - react-native-saf-x (2.13.0):
     - React-Core
-  - react-native-safe-area-context (4.7.1):
+  - react-native-safe-area-context (4.7.2):
     - React-Core
   - react-native-slider (4.4.3):
     - React-Core
@@ -670,11 +670,11 @@ SPEC CHECKSUMS:
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
-  react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
+  react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: b758d1b38a96a96b8179a16e96ed966a507ca5c2
-  react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
+  react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
