@@ -42,7 +42,7 @@ import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-pick
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
 import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosave';
@@ -654,10 +654,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return await saveOriginalImage();
 	}
 
-	public async attachFile(pickerResponse: any, fileType: string) {
+	public async attachFile(pickerResponse: any, fileType: string): Promise<ResourceEntity|null> {
 		if (!pickerResponse) {
 			// User has cancelled
-			return;
+			return null;
 		}
 
 		const localFilePath = Platform.select({
@@ -684,7 +684,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		reg.logger().info(`Got file: ${localFilePath}`);
 		reg.logger().info(`Got type: ${mimeType}`);
 
-		let resource = Resource.new();
+		let resource: ResourceEntity = Resource.new();
 		resource.id = uuid.create();
 		resource.mime = mimeType;
 		resource.title = pickerResponse.name ? pickerResponse.name : '';
@@ -697,11 +697,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		try {
 			if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
 				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
-				if (!done) return;
+				if (!done) return null;
 			} else {
 				if (fileType === 'image' && mimeType !== 'image/svg+xml') {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));
-					return;
+					return null;
 				} else {
 					await shim.fsDriver().copy(localFilePath, targetPath);
 					const stat = await shim.fsDriver().stat(targetPath);
@@ -715,7 +715,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} catch (error) {
 			reg.logger().warn('Could not attach file:', error);
 			await dialogs.error(this, error.message);
-			return;
+			return null;
 		}
 
 		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
@@ -757,6 +757,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.refreshResource(resource, newNote.body);
 
 		this.scheduleSave();
+
+		return resource;
 	}
 
 	private async attachPhoto_onPress() {
@@ -798,44 +800,46 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	private drawPicture_onPress = () => {
+	private drawPicture_onPress = async () => {
+		// Create a new drawing and show the image editor
+		const filePath = `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
+		await shim.fsDriver().writeFile(filePath, '', 'utf8');
+		logger.info('Saved empty drawing to', filePath);
+
+		const resource = await this.attachFile({
+			uri: filePath,
+			name: _('Drawing'),
+		}, 'image');
+
 		this.setState({
 			showImageEditor: true,
 			loadImageEditorData: null,
-			imageEditorResource: null,
+			imageEditorResource: resource,
 		});
 	};
 
-	private async attachDrawing(svgData: string) {
-		this.setState({ showImageEditor: false });
+	private async updateDrawing(svgData: string) {
+		let resource: ResourceEntity|null = this.state.imageEditorResource;
 
-		let resource = this.state.imageEditorResource;
-		const resourcePath = resource ? Resource.fullPath(resource) : null;
+		if (!resource) {
+			throw new Error('No resource is loaded in the editor');
+		}
 
-		const filePath = resourcePath ?? `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
+		const resourcePath = Resource.fullPath(resource);
+
+		const filePath = resourcePath;
 		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
 		logger.info('Saved drawing to', filePath);
 
-		if (resource) {
-			resource = await Resource.save(resource, { isNew: false });
-			await this.refreshResource(resource);
-			this.setState({
-				imageEditorResource: null,
-			});
-		} else {
-			// Otherwise, we're creating a new file
-			await this.attachFile({
-				uri: filePath,
-				name: _('Drawing'),
-			}, 'image');
-		}
+		resource = await Resource.save(resource, { isNew: false });
+		await this.refreshResource(resource);
 	}
 
 	private onSaveDrawing = async (svgData: string) => {
-		await this.attachDrawing(svgData);
+		await this.updateDrawing(svgData);
 	};
 
-	private onCancelDrawing = () => {
+	private onCloseDrawing = () => {
 		this.setState({ showImageEditor: false });
 	};
 
@@ -1293,7 +1297,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				loadInitialSVGData={this.state.loadImageEditorData}
 				themeId={this.props.themeId}
 				onSave={this.onSaveDrawing}
-				onCancel={this.onCancelDrawing}
+				onExit={this.onCloseDrawing}
 			/>;
 		}
 

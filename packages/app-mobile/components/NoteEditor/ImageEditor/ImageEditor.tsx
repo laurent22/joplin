@@ -22,7 +22,7 @@ interface Props {
 	themeId: number;
 	loadInitialSVGData: LoadInitialSVGCallback|null;
 	onSave: OnSaveCallback;
-	onCancel: OnCancelCallback;
+	onExit: OnCancelCallback;
 }
 
 const useCss = (editorTheme: Theme) => {
@@ -67,13 +67,13 @@ const ImageEditor = (props: Props) => {
 	const webviewRef: MutableRefObject<WebViewControl>|null = useRef(null);
 	const [imageChanged, setImageChanged] = useState(false);
 
-	const onRequestCloseEditor = useCallback(() => {
+	const onRequestCloseEditor = useCallback((promptIfUnsaved: boolean) => {
 		const discardChangesAndClose = async () => {
 			await clearAutosave();
-			props.onCancel();
+			props.onExit();
 		};
 
-		if (!imageChanged) {
+		if (!imageChanged || !promptIfUnsaved) {
 			void discardChangesAndClose();
 			return true;
 		}
@@ -90,19 +90,23 @@ const ImageEditor = (props: Props) => {
 					onPress: () => {
 						// saveDrawing calls props.onSave(...) which may close the
 						// editor.
-						webviewRef.current.injectJS('window.editorControl?.saveNow()');
+						webviewRef.current.injectJS('window.editorControl.saveThenExit()');
 					},
 				},
 			],
 		);
 		return true;
-	}, [webviewRef, props.onCancel, imageChanged]);
+	}, [webviewRef, props.onExit, imageChanged]);
 
 	useEffect(() => {
-		BackHandler.addEventListener('hardwareBackPress', onRequestCloseEditor);
+		const hardwareBackPressListener = () => {
+			onRequestCloseEditor(true);
+			return true;
+		};
+		BackHandler.addEventListener('hardwareBackPress', hardwareBackPressListener);
 
 		return () => {
-			BackHandler.removeEventListener('hardwareBackPress', onRequestCloseEditor);
+			BackHandler.removeEventListener('hardwareBackPress', hardwareBackPressListener);
 		};
 	}, [onRequestCloseEditor]);
 
@@ -168,8 +172,11 @@ const ImageEditor = (props: Props) => {
 			);
 		};
 
-		const closeEditor = () => {
-			window.ReactNativeWebView.postMessage('{ "action": "close" }');
+		const closeEditor = (promptIfUnsaved) => {
+			window.ReactNativeWebView.postMessage(JSON.stringify({
+				action: 'close',
+				promptIfUnsaved,
+			}));
 		};
 
 		try {
@@ -240,7 +247,7 @@ const ImageEditor = (props: Props) => {
 		} else if (json.action === 'save-toolbar') {
 			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
 		} else if (json.action === 'close') {
-			onRequestCloseEditor();
+			onRequestCloseEditor(json.promptIfUnsaved);
 		} else if (json.action === 'ready-to-load-data') {
 			void onReadyToLoadData();
 		} else if (json.action === 'set-image-has-changes') {

@@ -1,5 +1,5 @@
 
-import { Editor, AbstractToolbar, EditorEventType, EditorSettings, getLocalizationTable, adjustEditorThemeForContrast } from 'js-draw';
+import { Editor, AbstractToolbar, EditorEventType, EditorSettings, getLocalizationTable, adjustEditorThemeForContrast, BaseWidget } from 'js-draw';
 import { MaterialIconProvider } from '@js-draw/material-icons';
 import 'js-draw/bundledStyles';
 import applyTemplateToEditor from './applyTemplateToEditor';
@@ -62,43 +62,56 @@ export const createJsDrawEditor = (
 		maxSize: maxSpacerSize,
 	});
 
-	toolbar.addExitButton(() => callbacks.closeEditor());
+	toolbar.addExitButton(() => callbacks.closeEditor(true));
 
 	toolbar.addSpacer({
 		grow: 1,
 		maxSize: maxSpacerSize,
 	});
 
+	// saveButton needs to be defined after the following callbacks.
+	// As such, this variable can't be made const.
+	// eslint-disable-next-line prefer-const
+	let saveButton: BaseWidget;
+
+	let lastHadChanges: boolean|null = null;
+	const setImageHasChanges = (hasChanges: boolean) => {
+		if (lastHadChanges !== hasChanges) {
+			saveButton.setDisabled(!hasChanges);
+			callbacks.setImageHasChanges(hasChanges);
+			lastHadChanges = hasChanges;
+		}
+	};
+
 	const saveNow = () => {
-		return callbacks.saveDrawing(editor.toSVG({
+		callbacks.saveDrawing(editor.toSVG({
 			// Grow small images to this minimum size
 			minDimension: 50,
 		}), false);
+
+		// The image is now up-to-date with the resource
+		setImageHasChanges(false);
 	};
 
-	const saveButton = toolbar.addSaveButton(saveNow);
+	saveButton = toolbar.addSaveButton(saveNow);
 
+	// Load and save toolbar-realated state (e.g. pen sizes/colors).
 	restoreToolbarState(toolbar, initialToolbarState);
 	listenToolbarState(editor, toolbar);
 
-	const imageChangeListener = editor.notifier.on(EditorEventType.UndoRedoStackUpdated, () => {
-		if (editor.history.undoStackSize > 0) {
-			callbacks.setImageHasChanges(true);
+	setImageHasChanges(false);
 
-			// Don't listen for the undoStackSize to go back to zero -- the editor
-			// has a maximum undo stack size, so it's possible, after pressing 'undo' many times,
-			// to have an undo stack size of zero and changes to the document.
-			imageChangeListener.remove();
-		}
+	editor.notifier.on(EditorEventType.UndoRedoStackUpdated, () => {
+		setImageHasChanges(true);
 	});
+
+	// Disable save (a full save can't be done until the entire image
+	// has been loaded).
+	saveButton.setDisabled(true);
 
 	// Show a loading message until the template is loaded.
 	editor.showLoadingWarning(0);
 	editor.setReadOnly(true);
-
-	// Also disable save (a full save can't be done until the entire image
-	// has been loaded).
-	saveButton.setDisabled(true);
 
 	const editorControl = {
 		editor,
@@ -112,8 +125,7 @@ export const createJsDrawEditor = (
 				await applyTemplateToEditor(editor, templateData);
 			}
 
-			// We can now save safely (without data loss).
-			saveButton.setDisabled(false);
+			// We can now edit and save safely (without data loss).
 			editor.setReadOnly(false);
 
 			void startAutosaveLoop(editor, callbacks.saveDrawing, additionalLocalizationStrings);
@@ -125,6 +137,15 @@ export const createJsDrawEditor = (
 			adjustEditorThemeForContrast(editor);
 		},
 		saveNow,
+		saveThenExit: async () => {
+			saveNow();
+
+			// Don't show a confirmation dialog -- it's possible that
+			// the code outside of the WebView still thinks changes haven't
+			// been saved:
+			const showConfirmation = false;
+			callbacks.closeEditor(showConfirmation);
+		},
 	};
 
 	editorControl.onThemeUpdate();

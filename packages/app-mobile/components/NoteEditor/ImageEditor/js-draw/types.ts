@@ -6,7 +6,7 @@ export interface ImageEditorCallbacks {
 	saveDrawing: SaveDrawingCallback;
 	updateEditorTemplate: UpdateEditorTemplateCallback;
 
-	closeEditor: ()=> void;
+	closeEditor: (promptIfUnsaved: boolean)=> void;
 	setImageHasChanges: (hasChanges: boolean)=> void;
 }
 
