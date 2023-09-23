@@ -127,7 +127,7 @@ const ImageEditor = (props: Props) => {
 	`, [css]);
 
 	const additionalLocalizations: LocalizableStrings = useMemo(() => ({
-		autosaving: _('Autosaving... ({{percent}}%)'),
+		autosaving: _('Autosaving... ({{percent}}%%)'),
 	}), []);
 
 	const injectedJavaScript = useMemo(() => `
