@@ -9,8 +9,3 @@ export interface ImageEditorCallbacks {
 	closeEditor: (promptIfUnsaved: boolean)=> void;
 	setImageHasChanges: (hasChanges: boolean)=> void;
 }
-
-export interface LocalizableStrings {
-	autosaving: string;
-}
-

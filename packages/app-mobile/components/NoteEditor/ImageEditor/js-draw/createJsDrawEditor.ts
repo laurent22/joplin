@@ -4,7 +4,7 @@ import { MaterialIconProvider } from '@js-draw/material-icons';
 import 'js-draw/bundledStyles';
 import applyTemplateToEditor from './applyTemplateToEditor';
 import watchEditorForTemplateChanges from './watchEditorForTemplateChanges';
-import { ImageEditorCallbacks, LocalizableStrings } from './types';
+import { ImageEditorCallbacks } from './types';
 import startAutosaveLoop from './startAutosaveLoop';
 
 declare namespace ReactNativeWebView {
@@ -39,8 +39,6 @@ export const createJsDrawEditor = (
 	callbacks: ImageEditorCallbacks,
 	initialToolbarState: string,
 	locale: string,
-
-	additionalLocalizationStrings: LocalizableStrings,
 
 	// Intended for automated tests.
 	editorSettings: Partial<EditorSettings> = {},
@@ -132,7 +130,7 @@ export const createJsDrawEditor = (
 			// We can now edit and save safely (without data loss).
 			editor.setReadOnly(false);
 
-			void startAutosaveLoop(editor, callbacks.saveDrawing, additionalLocalizationStrings);
+			void startAutosaveLoop(editor, callbacks.saveDrawing);
 			watchEditorForTemplateChanges(editor, templateData, callbacks.updateEditorTemplate);
 		},
 		onThemeUpdate: () => {

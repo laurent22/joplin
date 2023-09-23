@@ -11,7 +11,7 @@ import { RenderingMode } from 'js-draw';
 import createJsDrawEditor from './createJsDrawEditor';
 import { BackgroundComponent } from 'js-draw';
 import { BackgroundComponentBackgroundType } from 'js-draw';
-import { ImageEditorCallbacks, LocalizableStrings } from './types';
+import { ImageEditorCallbacks } from './types';
 import applyTemplateToEditor from './applyTemplateToEditor';
 
 
@@ -33,11 +33,7 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 		renderingMode: RenderingMode.DummyRenderer,
 	};
 
-	const localization: LocalizableStrings = {
-		autosaving: 'Autosaving...',
-	};
-
-	return createJsDrawEditor(allCallbacks, toolbarState, locale, localization, editorOptions);
+	return createJsDrawEditor(allCallbacks, toolbarState, locale, editorOptions);
 };
 
 describe('createJsDrawEditor', () => {
