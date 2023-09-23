@@ -1,19 +1,26 @@
-import { Editor, BackgroundComponent, EditorEventType } from 'js-draw';
+import { Editor, BackgroundComponent, EditorEventType, Vec2 } from 'js-draw';
 
 const watchEditorForTemplateChanges = (
 	editor: Editor, initialTemplate: string, updateTemplate: (templateData: string)=> void,
 ) => {
 	const computeTemplate = (): string => {
-		let imageSize = editor.getImportExportRect().size;
+		let backgroundSize: Vec2|null = null;
 
-		// Constrain the size: Don't allow an extremely small or extremely large tempalte.
-		// Map components to constrained components.
-		imageSize = imageSize.map(component => {
-			const minDimen = 45;
-			const maxDimen = 5000;
+		// Only store the background size if the size isn't determined
+		// by the editor content. In this case, the background always
+		// appears to be full screen.
+		if (!editor.image.getAutoresizeEnabled()) {
+			backgroundSize = editor.getImportExportRect().size;
 
-			return Math.max(Math.min(component, maxDimen), minDimen);
-		});
+			// Constrain the size: Don't allow an extremely small or extremely large tempalte.
+			// Map components to constrained components.
+			backgroundSize = backgroundSize.map(component => {
+				const minDimen = 45;
+				const maxDimen = 5000;
+
+				return Math.max(Math.min(component, maxDimen), minDimen);
+			});
+		}
 
 		// Find the topmost background component (if any)
 		let backgroundComponent: BackgroundComponent|null = null;
@@ -24,7 +31,7 @@ const watchEditorForTemplateChanges = (
 		}
 
 		const templateData = {
-			imageSize: imageSize.xy,
+			imageSize: backgroundSize?.xy,
 			backgroundData: backgroundComponent?.serialize(),
 			autoresize: editor.image.getAutoresizeEnabled(),
 		};
