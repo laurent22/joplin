@@ -8,20 +8,22 @@ window.ResizeObserver = class { public observe() { } } as any;
 import { describe, it, expect, jest } from '@jest/globals';
 import { Color4, EditorImage, EditorSettings, Path, pathToRenderable, StrokeComponent } from 'js-draw';
 import { RenderingMode } from 'js-draw';
-import createJsDrawEditor, { ImageEditorCallbacks, applyTemplateToEditor } from './createJsDrawEditor';
+import createJsDrawEditor from './createJsDrawEditor';
 import { BackgroundComponent } from 'js-draw';
 import { BackgroundComponentBackgroundType } from 'js-draw';
+import { ImageEditorCallbacks, LocalizableStrings } from './types';
+import applyTemplateToEditor from './applyTemplateToEditor';
 
 
 const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => {
 	const toolbarState = '';
 	const locale = 'en';
 
-	const allCallbacks = {
+	const allCallbacks: ImageEditorCallbacks = {
 		saveDrawing: () => {},
-		autosaveDrawing: ()=> {},
 		closeEditor: ()=> {},
 		setImageHasChanges: ()=> {},
+		updateEditorTemplate: ()=> {},
 
 		...callbacks,
 	};
@@ -31,7 +33,11 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 		renderingMode: RenderingMode.DummyRenderer,
 	};
 
-	return createJsDrawEditor(allCallbacks, toolbarState, locale, editorOptions);
+	const localization: LocalizableStrings = {
+		autosaving: 'Autosaving...',
+	};
+
+	return createJsDrawEditor(allCallbacks, toolbarState, locale, localization, editorOptions);
 };
 
 describe('createJsDrawEditor', () => {
@@ -39,11 +45,16 @@ describe('createJsDrawEditor', () => {
 		let calledAutosaveCount = 0;
 
 		jest.useFakeTimers();
-		createEditorWithCallbacks({
-			autosaveDrawing: () => {
-				calledAutosaveCount ++;
+		const editorControl = createEditorWithCallbacks({
+			saveDrawing: (_drawing: SVGElement, isAutosave: boolean) => {
+				if (isAutosave) {
+					calledAutosaveCount ++;
+				}
 			},
 		});
+
+		// Load no image and an empty template so that autosave can start
+		await editorControl.loadImageOrTemplate(undefined, '{}');
 
 		expect(calledAutosaveCount).toBe(0);
 
@@ -62,7 +73,7 @@ describe('createJsDrawEditor', () => {
 
 	it('should fire has changes callback on first change', () => {
 		let hasChanges = false;
-		const editor = createEditorWithCallbacks({
+		const editorControl = createEditorWithCallbacks({
 			setImageHasChanges: (newHasChanges: boolean) => {
 				hasChanges = newHasChanges;
 			},
@@ -74,13 +85,14 @@ describe('createJsDrawEditor', () => {
 			// A filled shape
 			pathToRenderable(Path.fromString('m0,0 l10,0 l0,10'), { fill: Color4.red }),
 		]);
-		void editor.dispatch(EditorImage.addElement(stroke));
+		void editorControl.editor.dispatch(EditorImage.addElement(stroke));
 
 		expect(hasChanges).toBe(true);
 	});
 
 	it('default template should be a white grid background', async () => {
-		const editor = createEditorWithCallbacks({});
+		const editorControl = createEditorWithCallbacks({});
+		const editor = editorControl.editor;
 
 		await applyTemplateToEditor(editor, '{}');
 

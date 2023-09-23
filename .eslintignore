@@ -423,9 +423,13 @@ packages/app-mobile/components/NoteEditor/CodeMirror/webviewLogger.js
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js
 packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js
-packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.test.js
-packages/app-mobile/components/NoteEditor/ImageEditor/createJsDrawEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/isEditableResource.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/applyTemplateToEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.test.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/startAutosaveLoop.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/types.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/watchEditorForTemplateChanges.js
 packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.js

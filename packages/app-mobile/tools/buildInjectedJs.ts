@@ -204,7 +204,7 @@ const bundledFiles: BundledFile[] = [
 	),
 	new BundledFile(
 		'svgEditorBundle',
-		`${mobileDir}/components/NoteEditor/ImageEditor/createJsDrawEditor.ts`,
+		`${mobileDir}/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.ts`,
 	),
 ];
 

@@ -12,7 +12,7 @@ export const getAutosaveFilepath = () => {
 
 export const writeAutosave = async (data: string) => {
 	const filePath = getAutosaveFilepath();
-	logger.info('Auto-saving drawing to %s', filePath);
+	logger.info(`Auto-saving drawing to ${JSON.stringify(filePath)}`);
 
 	await shim.fsDriver().writeFile(filePath, data, 'utf8');
 };

@@ -10,6 +10,7 @@ import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
+import { LocalizableStrings } from './js-draw/types';
 
 const logger = Logger.create('ImageEditor');
 
@@ -89,7 +90,7 @@ const ImageEditor = (props: Props) => {
 					onPress: () => {
 						// saveDrawing calls props.onSave(...) which may close the
 						// editor.
-						webviewRef.current.injectJS('saveDrawing();');
+						webviewRef.current.injectJS('window.editorControl?.saveNow()');
 					},
 				},
 			],
@@ -120,6 +121,10 @@ const ImageEditor = (props: Props) => {
 			<body></body>
 		</html>
 	`, [css]);
+
+	const additionalLocalizations: LocalizableStrings = useMemo(() => ({
+		autosaving: _('Autosaving... ({{percent}}%)'),
+	}), []);
 
 	const injectedJavaScript = useMemo(() => `
 		window.onerror = (message, source, lineno) => {
@@ -154,38 +159,34 @@ const ImageEditor = (props: Props) => {
 			);
 		};
 
-		const saveDrawing = (isAutosave) => {
-			const img = window.editor.toSVG();
+		const saveDrawing = async (drawing, isAutosave) => {
 			window.ReactNativeWebView.postMessage(
 				JSON.stringify({
 					action: isAutosave ? 'autosave' : 'save',
-					data: img.outerHTML,
+					data: drawing.outerHTML,
 				}),
 			);
 		};
-		window.saveDrawing = saveDrawing;
 
 		const closeEditor = () => {
 			window.ReactNativeWebView.postMessage('{ "action": "close" }');
 		};
 
 		try {
-			if (window.editor === undefined) {
+			if (window.editorControl === undefined) {
 				${shim.injectedJs('svgEditorBundle')}
 
-				window.editor = svgEditorBundle.createJsDrawEditor(
+				window.editorControl = svgEditorBundle.createJsDrawEditor(
 					{
-						saveDrawing: () => saveDrawing(false),
-						autosaveDrawing: () => saveDrawing(true),
+						saveDrawing,
 						closeEditor,
 						updateEditorTemplate,
 						setImageHasChanges,
 					},
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 					${JSON.stringify(Setting.value('locale'))},
+					${JSON.stringify(additionalLocalizations)}
 				);
-
-				editor.showLoadingWarning(0);
 
 				// Start loading the SVG file (if present) after loading the editor.
 				// This shows the user that progress is being made (loading large SVGs
@@ -198,12 +199,12 @@ const ImageEditor = (props: Props) => {
 			);
 		}
 		true;
-	`, []);
+	`, [additionalLocalizations]);
 
 	useEffect(() => {
 		webviewRef.current?.injectJS(`
-			if (window.editor) {
-				svgEditorBundle.onEditorThemeUpdate(window.editor);
+			if (window.editorControl) {
+				window.editorControl.onThemeUpdate();
 			}
 		`);
 	}, [editorTheme]);
@@ -214,21 +215,11 @@ const ImageEditor = (props: Props) => {
 		// It can take some time for initialSVGData to be transferred to the WebView.
 		// Thus, do so after the main content has been loaded.
 		webviewRef.current.injectJS(`(async () => {
-			if (window.editor) {
-				// loadFromSVG shows its own loading message. Hide the original.
-				editor.hideLoadingWarning();
-
+			if (window.editorControl) {
 				const initialSVGData = ${JSON.stringify(initialSVGData)};
 				const initialTemplateData = ${JSON.stringify(Setting.value('imageeditor.imageTemplate'))};
 
-				if (initialSVGData && initialSVGData.length > 0) {
-					await editor.loadFromSVG(initialSVGData);
-				} else {
-					svgEditorBundle.applyTemplateToEditor(editor, initialTemplateData);
-				}
-
-				// Only watch for changes to the image size, etc after we've loaded an image.
-				svgEditorBundle.watchTemplateChanges(editor, initialTemplateData, window.updateEditorTemplate);
+				editorControl.loadImageOrTemplate(initialSVGData, initialTemplateData);
 			}
 		})();`);
 	}, [webviewRef, props.loadInitialSVGData]);

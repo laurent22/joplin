@@ -20,7 +20,7 @@ module.exports = {
 
 	// Do transform most packages in node_modules (transformations correct unrecognized
 	// import syntax)
-	transformIgnorePatterns: ['<rootDir>/node_modules/jest'],
+	transformIgnorePatterns: ['<rootDir>/node_modules/jest', '<rootDir>/node_modules/js-draw'],
 
 	slowTestThreshold: 40,
 };

@@ -4754,7 +4754,7 @@ __metadata:
     jest: 29.6.4
     jest-environment-jsdom: 29.6.4
     jetifier: 2.0.0
-    js-draw: 1.3.1
+    js-draw: 1.4.0
     jsc-android: 241213.1.0
     jsdom: 22.1.0
     lodash: 4.17.21
@@ -5402,12 +5402,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@js-draw/math@npm:1.3.1"
+"@js-draw/math@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@js-draw/math@npm:1.4.0"
   dependencies:
     bezier-js: 6.1.3
-  checksum: c3f7ad0f9fb4139e7c5f727ba268dd532e498ed3021d56d7712330c302eed49b08288a1ecf456ef2eceae266e3b3cd65585f2fa3266f11aea0ca8a1a6245e7ed
+  checksum: b56ee2e3b4fd415a7f27a9d175a37db2a24b59cbd6aeb296fe4bac6f40db8eaf34c4674a21958233bdde2739309a8af644ee7feb107a62304314394080851b4b
   languageName: node
   linkType: hard
 
@@ -22189,20 +22189,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.3.1":
-  version: 1.3.1
-  resolution: "js-draw@npm:1.3.1"
+"js-draw@npm:1.4.0":
+  version: 1.4.0
+  resolution: "js-draw@npm:1.4.0"
   dependencies:
-    "@js-draw/math": ^1.3.1
+    "@js-draw/math": ^1.4.0
     "@melloware/coloris": 0.21.0
-  checksum: 4294abfc73d40121e6ae0f582600a0365834ec0be385638c8fe2dd33663c3331bf9e1f4ae76c1d97b84ad0e124fcdf875008b6efceada3798ce8ae0d6c45d312
-  languageName: node
-  linkType: hard
-
-"js-sdsl@npm:^4.1.4":
-  version: 4.4.2
-  resolution: "js-sdsl@npm:4.4.2"
-  checksum: ba705adc1788bf3c6f6c8e5077824f2bb4f0acab5a984420ce5cc492c7fff3daddc26335ad2c9a67d4f5e3241ec790f9e5b72a625adcf20cf321d2fd85e62b8b
+  checksum: 863ed2b9b393307c3c70f469c87c4d288aea991f7ed1c675dd6fe4d9a37174fa409802238a240868fe1959ff058a8ebc900902a7335e999e6f95714a92987b8d
   languageName: node
   linkType: hard
 
