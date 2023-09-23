@@ -123,6 +123,10 @@ export const createJsDrawEditor = (
 				await editor.loadFromSVG(svgData);
 			} else {
 				await applyTemplateToEditor(editor, templateData);
+
+				// The editor expects to be saved initially (without
+				// unsaved changes). Save now.
+				saveNow();
 			}
 
 			// We can now edit and save safely (without data loss).

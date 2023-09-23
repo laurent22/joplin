@@ -473,7 +473,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (prevState.isLoading !== this.state.isLoading && !this.state.isLoading) {
 			// If there's autosave data, prompt the user to restore it.
 			void promptRestoreAutosave((drawingData: string) => {
-				void this.onSaveDrawing(drawingData);
+				void this.attachNewDrawing(drawingData);
 			});
 		}
 
@@ -800,16 +800,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: false });
 	}
 
-	private drawPicture_onPress = async () => {
-		// Create a new drawing and show the image editor
+	private async attachNewDrawing(svgData: string) {
 		const filePath = `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
-		await shim.fsDriver().writeFile(filePath, '', 'utf8');
-		logger.info('Saved empty drawing to', filePath);
+		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
+		logger.info('Saved new drawing to', filePath);
 
-		const resource = await this.attachFile({
+		return await this.attachFile({
 			uri: filePath,
 			name: _('Drawing'),
 		}, 'image');
+	}
+
+	private drawPicture_onPress = async () => {
+		// Create a new empty drawing and attach it now.
+		const resource = await this.attachNewDrawing('');
 
 		this.setState({
 			showImageEditor: true,
