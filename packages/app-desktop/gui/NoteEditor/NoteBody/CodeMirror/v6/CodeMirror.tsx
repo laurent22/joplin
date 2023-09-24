@@ -310,19 +310,29 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
-	const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
+	// Disable this effect to fix this:
+	//
+	// https://github.com/laurent22/joplin/issues/6514 It doesn't seem essential
+	// to automatically focus the editor when the layout changes. The workaround
+	// is to toggle the layout Cmd+L, then manually focus the editor Cmd+Shift+B.
+	//
+	// On the other hand, if we automatically focus the editor, and the user
+	// does not want this, there's no workaround, so it's better to have this
+	// disabled.
 
-	useEffect(() => {
-		if (!editorRef.current) return;
+	// const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
 
-		// Anytime the user toggles the visible panes AND the editor is visible as a result
-		// we should focus the editor
-		// The intuition is that a panel toggle (with editor in view) is the equivalent of
-		// an editor interaction so users should expect the editor to be focused
-		if (editorPaneVisible) {
-			editorRef.current.focus();
-		}
-	}, [editorPaneVisible]);
+	// useEffect(() => {
+	// 	if (!editorRef.current) return;
+
+	// 	// Anytime the user toggles the visible panes AND the editor is visible as a result
+	// 	// we should focus the editor
+	// 	// The intuition is that a panel toggle (with editor in view) is the equivalent of
+	// 	// an editor interaction so users should expect the editor to be focused
+	// 	if (editorPaneVisible) {
+	// 		editorRef.current.focus();
+	// 	}
+	// }, [editorPaneVisible]);
 
 	useContextMenu({
 		plugins: props.plugins,
