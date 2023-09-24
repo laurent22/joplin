@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   pre_job:
     if: github.repository == 'laurent22/joplin'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
