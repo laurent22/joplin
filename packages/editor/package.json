@@ -16,7 +16,6 @@
 	},
 	"devDependencies": {
 		"@joplin/lib": "~2.13",
-		"@joplin/tools": "~2.13",
 		"@testing-library/react-hooks": "8.0.1",
 		"@types/jest": "29.5.3",
 		"@types/react": "18.0.24",
