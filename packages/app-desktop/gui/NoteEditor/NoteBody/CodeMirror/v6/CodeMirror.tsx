@@ -389,6 +389,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					pluginStates={props.plugins}
 					onEvent={onEditorEvent}
 					onLogMessage={logDebug}
+					onEditorPaste={onEditorPaste}
 				/>
 			</div>
 		);
