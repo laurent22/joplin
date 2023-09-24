@@ -16,7 +16,7 @@ import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
-import reducer from '@joplin/lib/reducer';
+import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
@@ -199,6 +199,11 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
 		Setting.setValue('activeFolderId', newState.selectedFolderId);
+		const notesParent: NotesParent = {
+			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
+			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
+		};
+		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 
 	if (action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
@@ -649,7 +654,11 @@ async function initialize(dispatch: Function) {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		if (!folder) {
+		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+
+		if (notesParent && notesParent.type === 'SmartFilter') {
+			dispatch(DEFAULT_ROUTE);
+		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
 			dispatch({
