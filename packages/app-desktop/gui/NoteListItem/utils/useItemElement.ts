@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Size } from '@joplin/utils/types';
 import { useEffect, useState } from 'react';
-import { ItemFlow } from '../../NoteList/utils/types';
+import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 
 const useItemElement = (rootElement: HTMLDivElement, noteId: string, noteHtml: string, style: any, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow) => {
 	const [itemElement, setItemElement] = useState<HTMLDivElement>(null);

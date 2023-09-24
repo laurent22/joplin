@@ -262,5 +262,39 @@ describe('services_CommandService', () => {
 		await expectNotThrow(async () => service.isEnabled('test1', { cond1: true, cond2: false }));
 	}));
 
+	it('commands should allow specifying an icon', () => {
+		const service = newService();
 
+		const iconName = 'fas fa-check';
+		registerCommand(service, {
+			declaration: {
+				name: 'test-command-with-icon',
+				label: 'Adding icons to commands',
+				iconName,
+			},
+			runtime: {
+				execute: async () => {},
+			},
+		});
+
+		const command = service.commandByName('test-command-with-icon');
+		expect(command.declaration.iconName).toBe(iconName);
+	});
+
+	it('commands should have a non-empty default icon', () => {
+		const service = newService();
+
+		registerCommand(service, {
+			declaration: {
+				name: 'test1',
+				label: 'Test toolbar icon',
+			},
+			runtime: {
+				execute: async () => {},
+			},
+		});
+
+		const command = service.commandByName('test1');
+		expect(command.declaration.iconName).toBe('fas fa-cog');
+	});
 });

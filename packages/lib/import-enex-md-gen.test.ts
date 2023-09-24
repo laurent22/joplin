@@ -178,6 +178,8 @@ describe('import-enex-md-gen', () => {
 		expected = expected.replace(/RESOURCE_ID_2/, svgResource.id);
 
 		expect(note.body).toBe(expected);
+		const filePath = `${enexSampleBaseDir}/invalid_html.enex`;
+		await expectThrow(async () => importEnex('', filePath));
 	});
 
 });

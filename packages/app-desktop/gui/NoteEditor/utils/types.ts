@@ -5,6 +5,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
 import { Dispatch } from 'redux';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -20,7 +21,7 @@ export interface NoteEditorProps {
 	dispatch: Dispatch;
 	selectedNoteIds: string[];
 	selectedFolderId: string;
-	notes: any[];
+	notes: NoteEntity[];
 	watchedNoteFiles: string[];
 	isProvisional: boolean;
 	editorNoteStatuses: any;
@@ -48,6 +49,15 @@ export interface NoteEditorProps {
 	syncUserId: string;
 }
 
+export interface NoteBodyEditorRef {
+	content(): string|Promise<string>;
+	resetScroll(): void;
+	scrollTo(options: ScrollOptions): void;
+
+	supportsCommand(name: string): boolean;
+	execCommand(command: CommandValue): Promise<void>;
+}
+
 export interface NoteBodyEditorProps {
 	style: any;
 	ref: any;
@@ -59,7 +69,7 @@ export interface NoteBodyEditorProps {
 	onChange(event: OnChangeEvent): void;
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
-	onScroll(event: any): void;
+	onScroll(event: { percent: number }): void;
 	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	htmlToMarkdown: Function;
@@ -95,6 +105,7 @@ export interface FormNote {
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	updated_time: number;
 
 	hasChanged: boolean;
 
@@ -145,6 +156,7 @@ export function defaultFormNote(): FormNote {
 		hasChanged: false,
 		user_updated_time: 0,
 		encryption_applied: 0,
+		updated_time: 0,
 	};
 }
 

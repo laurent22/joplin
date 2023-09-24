@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../markdownUtils';
 import { _ } from '../locale';
+import { htmlentities } from '@joplin/utils/html';
 
 type FeatureId = string;
 
@@ -12,6 +13,7 @@ export enum PlanName {
 
 interface PlanFeature {
 	title: string;
+	description?: string;
 	basic: boolean;
 	pro: boolean;
 	teams: boolean;
@@ -32,7 +34,7 @@ export interface Plan {
 	iconName: string;
 	featuresOn: FeatureId[];
 	featuresOff: FeatureId[];
-	featureLabelsOn: string[];
+	featureLabelsOn: any[];
 	featureLabelsOff: string[];
 	cfaLabel: string;
 	cfaUrl: string;
@@ -112,6 +114,8 @@ export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQue
 }
 
 const features = (): Record<FeatureId, PlanFeature> => {
+	const shareNotebookTitle = _('Share a notebook with others');
+
 	return {
 		maxItemSize: {
 			title: _('Max note or attachment size'),
@@ -139,6 +143,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 		},
 		publishNote: {
 			title: _('Publish notes to the internet'),
+			description: 'You can publish a note from the Joplin app. You will get a link that you can share with other users, who can then view the note in their browser.',
 			basic: true,
 			pro: true,
 			teams: true,
@@ -157,18 +162,21 @@ const features = (): Record<FeatureId, PlanFeature> => {
 		},
 		collaborate: {
 			title: _('Collaborate on a notebook with others'),
+			description: _('This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature "%s".', shareNotebookTitle),
 			basic: true,
 			pro: true,
 			teams: true,
 		},
 		share: {
-			title: _('Share a notebook with others'),
+			title: shareNotebookTitle,
+			description: 'You can share a notebook with other Joplin Cloud users, who can then view the notes and edit them.',
 			basic: false,
 			pro: true,
 			teams: true,
 		},
 		emailToNote: {
 			title: _('Email to Note'),
+			description: 'You can save your emails in Joplin Cloud by forwarding your emails to a special email address. The subject of the email will become the note title, and the email body will become the note content.',
 			basic: false,
 			pro: true,
 			teams: true,
@@ -185,8 +193,15 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			pro: false,
 			teams: true,
 		},
-		sharingAccessControl: {
-			title: _('Sharing access control'),
+		// sharingAccessControl: {
+		// 	title: _('Sharing access control'),
+		// 	basic: false,
+		// 	pro: false,
+		// 	teams: true,
+		// },
+		sharePermissions: {
+			title: _('Share permissions'),
+			description: 'With this feature you can define whether a notebook you share with someone can be edited or is read-only. It can be useful for example to share documentation that you do not want to be modified.',
 			basic: false,
 			pro: false,
 			teams: true,
@@ -235,7 +250,7 @@ export const getFeatureById = (featureId: FeatureId): PlanFeature => {
 export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanFeature[] => {
 	const output: PlanFeature[] = [];
 
-	for (const [, v] of Object.entries(features)) {
+	for (const [, v] of Object.entries(features())) {
 		if (v[planName] === featureOn) {
 			output.push(v);
 		}
@@ -261,6 +276,7 @@ export const createFeatureTableMd = () => {
 		{
 			name: 'featureLabel',
 			label: 'Feature',
+			disableHtmlEscape: true,
 		},
 		{
 			name: 'basic',
@@ -285,9 +301,20 @@ export const createFeatureTableMd = () => {
 		return '✔️';
 	};
 
-	for (const [, feature] of Object.entries(features())) {
+	const makeFeatureLabel = (featureId: string, feature: PlanFeature) => {
+		const output: string[] = [
+			`${htmlentities(feature.title)}`,
+		];
+		if (feature.description) {
+			output.push(`<a data-id=${htmlentities(featureId)} class="feature-title" name="feature-${htmlentities(featureId)}" href="#feature-${htmlentities(featureId)}">i</a>`);
+			output.push(`<div class="feature-description feature-description-${htmlentities(featureId)}">${htmlentities(feature.description)}</div>`);
+		}
+		return output.join('');
+	};
+
+	for (const [id, feature] of Object.entries(features())) {
 		const row: MarkdownTableRow = {
-			featureLabel: feature.title,
+			featureLabel: makeFeatureLabel(id, feature),
 			basic: getCellInfo(PlanName.Basic, feature),
 			pro: getCellInfo(PlanName.Pro, feature),
 			teams: getCellInfo(PlanName.Teams, feature),
@@ -316,7 +343,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			iconName: 'basic-icon',
 			featuresOn: getFeatureIdsByPlan(PlanName.Basic, true),
 			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
-			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
+			featureLabelsOn: getFeaturesByPlan(PlanName.Basic, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
@@ -338,7 +365,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			iconName: 'pro-icon',
 			featuresOn: getFeatureIdsByPlan(PlanName.Pro, true),
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
-			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
+			featureLabelsOn: getFeaturesByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
@@ -360,7 +387,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			iconName: 'business-icon',
 			featuresOn: getFeatureIdsByPlan(PlanName.Teams, true),
 			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
-			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
+			featureLabelsOn: getFeaturesByPlan(PlanName.Teams, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',

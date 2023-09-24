@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
-import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import { htmlToMarkdown, formNoteToNote } from './utils';
@@ -46,6 +45,8 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
+import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
+import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -75,11 +76,18 @@ function NoteEditor(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
+	const effectiveNote = props.notes.find(n => n.id === effectiveNoteId);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
 		decryptionStarted: props.decryptionStarted,
 		noteId: effectiveNoteId,
+
+		// The effective updated_time property of the note. It may be different
+		// from the last time the note was saved, if it was modified outside the
+		// editor (eg. via API).
+		dbNote: effectiveNote ? { id: effectiveNote.id, updated_time: effectiveNote.updated_time } : { id: '', updated_time: 0 },
+
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
 		editorRef: editorRef,
@@ -119,11 +127,31 @@ function NoteEditor(props: NoteEditorProps) {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);
-				const savedNote: any = await Note.save(note);
+				const noteUpdatedTime = Date.now();
+
+				// First we set the formNote object, then we save the note. We
+				// do it in that order, otherwise `useFormNote` will be rendered
+				// with the newly saved note and the timestamp of that note will
+				// be more recent that the one in the editor, which will trigger
+				// an update. We do not want this since we already have the
+				// latest changes.
+				//
+				// It also means that we manually set the timestamp, so that we
+				// have it before the note is saved.
 
 				setFormNote((prev: FormNote) => {
-					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
+					return {
+						...prev,
+						user_updated_time: noteUpdatedTime,
+						updated_time: noteUpdatedTime,
+						hasChanged: false,
+					};
 				});
+
+				const savedNote = await Note.save({
+					...note,
+					updated_time: noteUpdatedTime,
+				}, { autoTimestamp: false });
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
 
@@ -380,7 +408,7 @@ function NoteEditor(props: NoteEditorProps) {
 		};
 	}, [setShowRevisions]);
 
-	const onScroll = useCallback((event: any) => {
+	const onScroll = useCallback((event: { percent: number }) => {
 		props.dispatch({
 			type: 'EDITOR_SCROLL_PERCENT_SET',
 			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
@@ -462,7 +490,9 @@ function NoteEditor(props: NoteEditorProps) {
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror') {
-		editor = <CodeMirror {...editorProps}/>;
+		editor = <CodeMirror5 {...editorProps}/>;
+	} else if (props.bodyEditor === 'CodeMirror6') {
+		editor = <CodeMirror6 {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}
@@ -602,7 +632,7 @@ function NoteEditor(props: NoteEditorProps) {
 					disabled={isReadOnly}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
