@@ -34,7 +34,7 @@ export interface Plan {
 	iconName: string;
 	featuresOn: FeatureId[];
 	featuresOff: FeatureId[];
-	featureLabelsOn: any[];
+	featureLabelsOn: string[];
 	featureLabelsOff: string[];
 	cfaLabel: string;
 	cfaUrl: string;
@@ -343,7 +343,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			iconName: 'basic-icon',
 			featuresOn: getFeatureIdsByPlan(PlanName.Basic, true),
 			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
-			featureLabelsOn: getFeaturesByPlan(PlanName.Basic, true),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
@@ -365,7 +365,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			iconName: 'pro-icon',
 			featuresOn: getFeatureIdsByPlan(PlanName.Pro, true),
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
-			featureLabelsOn: getFeaturesByPlan(PlanName.Pro, true),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
@@ -387,7 +387,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			iconName: 'business-icon',
 			featuresOn: getFeatureIdsByPlan(PlanName.Teams, true),
 			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
-			featureLabelsOn: getFeaturesByPlan(PlanName.Teams, true),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
