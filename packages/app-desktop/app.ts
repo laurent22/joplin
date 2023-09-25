@@ -67,6 +67,7 @@ import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
+import { parseNotesParent } from '@joplin/lib/reducer';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -447,10 +448,35 @@ class Application extends BaseApplication {
 		// 	items: masterKeys,
 		// });
 
-		this.store().dispatch({
-			type: 'FOLDER_SELECT',
-			id: Setting.value('activeFolderId'),
-		});
+		const getNotesParent = async () => {
+			let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				notesParent = {
+					type: 'Folder',
+					selectedItemId: Setting.value('activeFolderId'),
+				};
+			}
+			return notesParent;
+		};
+
+		const notesParent = await getNotesParent();
+
+		if (notesParent.type === 'SmartFilter') {
+			this.store().dispatch({
+				type: 'SMART_FILTER_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		} else if (notesParent.type === 'Tag') {
+			this.store().dispatch({
+				type: 'TAG_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		} else {
+			this.store().dispatch({
+				type: 'FOLDER_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		}
 
 		this.store().dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',

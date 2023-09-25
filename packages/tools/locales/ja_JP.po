@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -45,7 +45,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:73
 msgid "(In plugin: %s)"
-msgstr ""
+msgstr "(プラグイン: %s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -98,7 +98,7 @@ msgstr "%d GB"
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "ストレージ容量 %d GB"
 
 #: packages/lib/models/Setting.ts:1367
 msgid "%d hour"
@@ -115,9 +115,8 @@ msgstr "%d MB"
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "添付ファイル一覧"
+msgstr "ノート/添付ファイルあたり %d MB"
 
 #: packages/lib/models/Setting.ts:1364 packages/lib/models/Setting.ts:1365
 #: packages/lib/models/Setting.ts:1366
@@ -130,9 +129,8 @@ msgstr "%d 個のノートが一致しました。削除しますか？"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:257
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:267
-#, fuzzy
 msgid "%s"
-msgstr "(%s)"
+msgstr "%s"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:18
 msgid "%s - Copy"
@@ -259,15 +257,15 @@ msgstr "承諾"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "アクセスが拒否されました: ユーザー名とパスワードを確認してください"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "アクセスが拒否されました: パスワード、ユーザー名を再入力してください"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "アカウント"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Action"
@@ -292,9 +290,8 @@ msgid "Add body"
 msgstr "本文を追加"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
-#, fuzzy
 msgid "Add new"
-msgstr "題名を追加"
+msgstr "新規追加"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -361,6 +358,9 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
+"ノートブック \"%s\" を特定できません。名前ではなくノートブックIDをご使用くだ"
+"さい。短いノートブックIDは \"ti\" で確認できます。また、現在選択しているノー"
+"トブックは $b で表せます"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.js:29
@@ -368,6 +368,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
+"ノートブック \"%s\" を特定できません。名前ではなくノートブックIDをご使用くだ"
+"さい。短いノートブックIDは \"ti\" で確認できます"
 
 #: packages/app-desktop/checkForUpdates.ts:105
 msgid "An update is available, do you want to download it now?"
@@ -379,6 +381,7 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
+"このアドレスに送ったメールはノートに変換され、Inboxノートブックに保存されます"
 
 #: packages/lib/models/Setting.ts:2527
 msgid "Appearance"
@@ -513,6 +516,9 @@ msgid ""
 "unlock Joplin. If the device is on lockout, consider switching it off and on "
 "to reset biometrics scanning."
 msgstr ""
+"ご使用のデバイスでは生体認証が未設定です。Joplinのロックを解除するには生体認"
+"証の設定を行ってください。デバイスがロックされている場合は、電源を入れ直して"
+"生体認証の設定をリセットしてみてください。"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:39
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:140
@@ -533,17 +539,16 @@ msgid "Bulleted List"
 msgstr "箇条書きリスト"
 
 #: packages/server/src/routes/admin/users.ts:154
-#, fuzzy
 msgid "Can Share"
-msgstr "共有"
+msgstr "共有可能"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "閲覧可能"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "閲覧・編集可能"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -630,7 +635,7 @@ msgstr "\"%s\" は見つかりませんでした。"
 
 #: packages/app-cli/app/command-mkbook.ts:28
 msgid "Cannot find: \"%s\""
-msgstr "\"%s\" は見つかりませんでした。"
+msgstr "\"%s\" は見つかりませんでした"
 
 #: packages/app-cli/app/command-sync.ts:165
 msgid "Cannot initialise synchroniser."
@@ -686,7 +691,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:328
 msgid "Case sensitive"
-msgstr ""
+msgstr "大文字小文字を区別"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -799,7 +804,7 @@ msgstr "ノートブック上で共同作業を行う"
 
 #: packages/app-mobile/components/side-menu-content.tsx:355
 msgid "Collapse"
-msgstr ""
+msgstr "折りたたむ"
 
 #: packages/lib/services/ReportService.ts:308
 msgid "Coming alarms"
@@ -883,7 +888,7 @@ msgstr "衝突 (添付ファイル)"
 
 #: packages/lib/utils/joplinCloud.ts:177
 msgid "Consolidated billing"
-msgstr ""
+msgstr "一括請求"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:111
 msgid "Content provided by %s"
@@ -902,9 +907,8 @@ msgid "Convert to todo"
 msgstr "ToDoに変換"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "ノートに変換"
+msgstr "音声をテキストに変換中..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:497
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:19
@@ -1005,9 +1009,8 @@ msgstr ""
 "エラーの内容: \"%s\""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:56
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "プラグインをインストールできませんでした: %s"
+msgstr "プロファイルを切り替えられませんでした: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -1022,18 +1025,16 @@ msgstr ""
 "ネット接続を確認してから再度お試しください。"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
-msgstr "ノートをエクスポートできませんでした: %s"
+msgstr "IDを確認できませんでした: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:277
 msgid "Create"
 msgstr "作成"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "あたらしいノートブックを作成します。"
+msgstr "親ノートブックの下に新しいノートブックを作成します。"
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1162,7 +1163,7 @@ msgstr "日"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:115
 msgid "Decrease indent level"
-msgstr ""
+msgstr "インデントを減らす"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
@@ -1274,6 +1275,10 @@ msgid ""
 "If you delete the inbox notebook, any email that's recently been sent to it "
 "may be lost."
 msgstr ""
+"Inboxノートブックを削除しますか?\n"
+"\n"
+"Inboxノートブックを削除すると、最近メール送信によって作成したノートが失われる"
+"可能性があります。"
 
 #: packages/lib/models/Note.ts:780
 msgid "Delete these %d notes?"
@@ -1439,7 +1444,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:116
 msgid "Done"
-msgstr ""
+msgstr "完了"
 
 #: packages/app-desktop/checkForUpdates.ts:107
 msgid "Download"
@@ -1591,13 +1596,12 @@ msgstr "Eメール"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "ノートを編集する。"
+msgstr "メールによるノート作成"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "メールによるノート作成"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
@@ -1640,7 +1644,7 @@ msgstr "オーディオプレーヤーを有効にする"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid "Enable biometrics authentication?"
-msgstr ""
+msgstr "生体認証を有効にしますか?"
 
 #: packages/lib/models/Setting.ts:1168
 msgid "Enable deflist syntax"
@@ -1700,9 +1704,8 @@ msgid "Enable table of contents extension"
 msgstr "目次拡張を有効にする"
 
 #: packages/lib/models/Setting.ts:1070
-#, fuzzy
 msgid "Enable the Markdown toolbar"
-msgstr "マークダウン絵文字を有効にする"
+msgstr "Markdownツールバーを有効にする"
 
 #: packages/lib/models/Setting.ts:1153
 msgid "Enable typographer support"
@@ -1825,7 +1828,7 @@ msgstr "アプリケーションの終了。"
 
 #: packages/app-mobile/components/side-menu-content.tsx:355
 msgid "Expand"
-msgstr ""
+msgstr "展開する"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:387
@@ -1840,9 +1843,8 @@ msgid "Export all"
 msgstr "すべてをエクスポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Export all notes as JEX"
-msgstr "すべてをエクスポート"
+msgstr "すべてのノートをJEX形式でエクスポート"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:177
 msgid "Export debug report"
@@ -1858,7 +1860,7 @@ msgstr "プロファイルをエクスポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "エクスポート成功!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1870,9 +1872,8 @@ msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
-#, fuzzy
 msgid "Exporting..."
-msgstr "プロファイルのエクスポート中..."
+msgstr "エクスポート中..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -1933,12 +1934,11 @@ msgstr "フィルタータグ"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:233
 msgid "Find and replace"
-msgstr ""
+msgstr "検索と置換"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "総数: %d."
+msgstr "検索文字列: "
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
@@ -2004,9 +2004,8 @@ msgid "Force path style"
 msgstr "パス形式を強制する"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:292
-#, fuzzy
 msgid "Formatting"
-msgstr "情報"
+msgstr "フォーマッティング"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -2026,9 +2025,8 @@ msgid "Full changelog"
 msgstr "全変更点一覧"
 
 #: packages/server/src/routes/admin/users.ts:130
-#, fuzzy
 msgid "Full name"
-msgstr "全変更点一覧"
+msgstr "氏名"
 
 #: packages/lib/models/Setting.ts:2525
 #: packages/server/src/services/MustacheService.ts:109
@@ -2076,11 +2074,11 @@ msgstr "許可する"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:50
 msgid "Header %d"
-msgstr ""
+msgstr "見出し %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:296
 msgid "Headers"
-msgstr ""
+msgstr "見出し"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:79
 msgid "Heading"
@@ -2091,23 +2089,20 @@ msgid "Help"
 msgstr "ヘルプ"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:690
-#, fuzzy
 msgid "Hermes enabled: %d"
-msgstr "FTS有効:  %d"
+msgstr "Hermes有効: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:569
 msgid "Hide %s"
 msgstr "%s を隠す"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:218
-#, fuzzy
 msgid "Hide advanced"
-msgstr "メタデータを隠す"
+msgstr "詳細設定を非表示にする"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Hide disabled"
-msgstr "無効化したキーを表示しない"
+msgstr "無効な設定を非表示にする"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
@@ -2122,9 +2117,8 @@ msgid "Hide keyboard"
 msgstr "キーボードを隠す"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Hide more actions"
-msgstr "メタデータを隠す"
+msgstr "より多くのアクションを非表示にする"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2281,7 +2275,7 @@ msgstr "内: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:126
 msgid "Increase indent level"
-msgstr ""
+msgstr "インデントを増やす"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 msgid "Indent less"
@@ -2377,7 +2371,7 @@ msgstr "同期ができなかったアイテム"
 
 #: packages/app-desktop/gui/MenuBar.tsx:794
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "X (Twitter)"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:332
 msgid ""
@@ -2514,6 +2508,8 @@ msgstr "レイアウトボタンによる切り替え順"
 #: packages/lib/models/Setting.ts:1719
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
+"デフォルトのWebサイトから言語ファイルをダウンロードする場合は空欄のままにして"
+"ください"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2540,9 +2536,8 @@ msgid "Link"
 msgstr "リンク"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "暗号化"
+msgstr "リンクの説明"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Link has been copied to clipboard!"
@@ -2550,9 +2545,8 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "リンクをクリップボードにコピーしました！"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "リンク"
+msgstr "リンクテキスト"
 
 #: packages/app-mobile/components/screens/Note.tsx:206
 msgid "Links with protocol \"%s\" are not supported"
@@ -2566,7 +2560,7 @@ msgstr "リストアイテム"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:300
 msgid "Lists"
-msgstr ""
+msgstr "リスト"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 msgid "Loaded"
@@ -2633,9 +2627,8 @@ msgid "Manage master password..."
 msgstr "マスターパスワードの管理..."
 
 #: packages/lib/utils/joplinCloud.ts:171
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "マスターパスワードの管理"
+msgstr "複数ユーザーの管理"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:571
 msgid "Manage profiles"
@@ -2702,17 +2695,15 @@ msgstr "最大同時接続数"
 
 #: packages/server/src/routes/admin/users.ts:142
 msgid "Max Item Size"
-msgstr ""
+msgstr "最大アイテムサイズ"
 
 #: packages/lib/utils/joplinCloud.ts:117
-#, fuzzy
 msgid "Max note or attachment size"
-msgstr "添付ファイル一覧"
+msgstr "ノート/添付ファイルの最大サイズ"
 
 #: packages/server/src/routes/admin/users.ts:150
-#, fuzzy
 msgid "Max Total Size"
-msgstr "100%%表示"
+msgstr "最大合計サイズ"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 msgid "Missing keys"
@@ -2727,9 +2718,8 @@ msgid "Missing required argument: %s"
 msgstr "引数が足りません: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
-#, fuzzy
 msgid "Missing required flag value: %s"
-msgstr "引数が足りません: %s"
+msgstr "必要なフラグ値がありません: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:466
 msgid "Mobile data - auto-sync disabled"
@@ -2765,9 +2755,8 @@ msgid "Move to notebook..."
 msgstr "ノートブックへ移動..."
 
 #: packages/app-cli/app/command-mv.js:14
-#, fuzzy
 msgid "Moves the given <item> to [notebook]"
-msgstr "<note>に一致するノートを、[notebook]に移動します。"
+msgstr "指定された <item> を [notebook] に移動します"
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:21
@@ -2823,7 +2812,7 @@ msgstr "新バージョン: %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:268
 msgid "Next match"
-msgstr ""
+msgstr "次を検索"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -2947,9 +2936,8 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" というノートはありません。作成しますか？"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:84
-#, fuzzy
 msgid "Note editor"
-msgstr "ノートの履歴"
+msgstr "ノートエディター"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3191,7 +3179,7 @@ msgstr "PDF ファイル"
 
 #: packages/lib/utils/joplinCloud.ts:361
 msgid "Per user. Minimum of %d users."
-msgstr ""
+msgstr "ユーザーごと。%d ユーザーから。"
 
 #: packages/app-mobile/components/screens/Note.tsx:414
 msgid "Permission needed"
@@ -3245,7 +3233,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:88
 msgid "Please record your voice..."
-msgstr ""
+msgstr "お話しください..."
 
 #: packages/app-cli/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -3343,7 +3331,7 @@ msgstr "復号するパスワードを入力してください。"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:278
 msgid "Previous match"
-msgstr ""
+msgstr "前を検索"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:333
 msgid "Previous versions of this note"
@@ -3355,7 +3343,7 @@ msgstr "印刷"
 
 #: packages/lib/utils/joplinCloud.ts:189
 msgid "Priority support"
-msgstr ""
+msgstr "優先サポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:664
 msgid "Privacy Policy"
@@ -3528,20 +3516,19 @@ msgstr "トークンを更新する"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:288
 msgid "Replace"
-msgstr ""
+msgstr "置換"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:298
-#, fuzzy
 msgid "Replace all"
-msgstr "すべて選択"
+msgstr "すべて置換"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Replace with..."
-msgstr ""
+msgstr "...と置換"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:257
 msgid "Replace: "
-msgstr ""
+msgstr "置換文字列: "
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -3683,9 +3670,8 @@ msgid "Search for plugins..."
 msgstr "プラグインを検索..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:223
-#, fuzzy
 msgid "Search for..."
-msgstr "検索..."
+msgstr "...を検索"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -3731,9 +3717,8 @@ msgid "Select file..."
 msgstr "ファイルの選択..."
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "ノートブックを削除"
+msgstr "親ノートブックを選択"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3792,11 +3777,12 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
+"PC版Joplinにインポート可能な形式ですべてのノートをエクスポートして共有しま"
+"す。"
 
 #: packages/lib/utils/joplinCloud.ts:159
-#, fuzzy
 msgid "Share and collaborate on a notebook"
-msgstr "ノートをノートブックに移動"
+msgstr "ノートブックを共有して共同作業"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:383
 msgid "Share Notebook"
@@ -3808,7 +3794,7 @@ msgstr "ノートブックを共有..."
 
 #: packages/lib/utils/joplinCloud.ts:183
 msgid "Sharing access control"
-msgstr ""
+msgstr "共有アクセス制御"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 msgid "Sharing notebook..."
@@ -3819,9 +3805,8 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "CLIモードではショートカットは使用できません。"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:208
-#, fuzzy
 msgid "Show advanced"
-msgstr "詳細設定を表示"
+msgstr "詳細設定を表示する"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:219
 msgid "Show Advanced Settings"
@@ -3836,18 +3821,16 @@ msgid "Show completed to-dos"
 msgstr "完了したToDoを表示"
 
 #: packages/server/src/routes/admin/users.ts:200
-#, fuzzy
 msgid "Show disabled"
-msgstr "無効化したキーを表示する"
+msgstr "無効な設定を表示する"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Show disabled keys"
 msgstr "無効化したキーを表示する"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:22
-#, fuzzy
 msgid "Show more actions"
-msgstr "ノートの数を表示"
+msgstr "より多くのアクションを表示する"
 
 #: packages/lib/models/Setting.ts:894
 msgid "Show note counts"
@@ -3863,7 +3846,7 @@ msgstr "トレイアイコンの表示"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:308
 msgid "Show/hide the sidebar"
-msgstr ""
+msgstr "サイドバーの表示切り替え"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 #: packages/app-mobile/components/ScreenHeader.tsx:307
@@ -4035,7 +4018,7 @@ msgstr "外部エディターでの編集を終了"
 
 #: packages/lib/utils/joplinCloud.ts:129
 msgid "Storage space"
-msgstr ""
+msgstr "ストレージ容量"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
@@ -4103,7 +4086,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:147
 msgid "Sync as many devices as you want"
-msgstr ""
+msgstr "同期対象デバイス数無制限"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:572
 msgid "Sync Status"
@@ -4234,6 +4217,8 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
+"使用中のプロファイルは削除できません。他のプロファイルに切り替えてから削除し"
+"てください。"
 
 #: packages/app-desktop/bridge.ts:276
 msgid ""
@@ -4300,7 +4285,7 @@ msgstr ""
 
 #: packages/lib/services/profileConfig/index.ts:104
 msgid "The default profile cannot be deleted"
-msgstr ""
+msgstr "Defaultプロファイルは削除できません"
 
 #: packages/lib/models/Setting.ts:1388
 msgid ""
@@ -4445,6 +4430,8 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
+"%sのWebDAV実装はJoplinとの互換性がとれないためサポートできなくなりました。恐"
+"れ入りますが他の同期方法をご使用ください。"
 
 #: packages/lib/models/Setting.ts:838
 msgid "Theme"
@@ -4704,9 +4691,8 @@ msgid "to-do"
 msgstr "to-do"
 
 #: packages/app-mobile/components/note-item.js:143
-#, fuzzy
 msgid "to-do: %s"
-msgstr "to-do"
+msgstr "ToDo: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 msgid "Toggle comment"
@@ -4757,9 +4743,8 @@ msgid "Tools"
 msgstr "ツール"
 
 #: packages/server/src/routes/admin/users.ts:146
-#, fuzzy
 msgid "Total Size"
-msgstr "100%%表示"
+msgstr "合計サイズ"
 
 #: packages/lib/services/ReportService.ts:285
 msgid "Total: %d/%d"
@@ -4807,7 +4792,7 @@ msgstr "種類: %s."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:69
 msgid "Unable to export or share data. Reason: %s"
-msgstr ""
+msgstr "データをエクスポートまたは共有できません。理由: %s"
 
 #: packages/lib/models/Setting.ts:911
 msgid "Uncompleted to-dos on top"
@@ -4934,7 +4919,7 @@ msgstr "使用方法: %s"
 
 #: packages/lib/models/Setting.ts:1668
 msgid "Use biometrics to secure access to the app"
-msgstr ""
+msgstr "アプリで生体認証を使う"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -4972,6 +4957,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
+"生体認証を使ってアプリへのアクセスを保護します。この設定はあとで行うこともで"
+"きます。"
 
 #: packages/lib/models/Setting.ts:1266
 msgid ""
@@ -5006,7 +4993,7 @@ msgstr "正当性"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr ""
+msgstr "IDを確認してください"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:170
 msgid "View"
@@ -5050,11 +5037,12 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:100
-#, fuzzy
 msgid ""
 "Warnings:\n"
 "%s"
-msgstr "警告"
+msgstr ""
+"警告:\n"
+"%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
 msgid "Web Clipper"

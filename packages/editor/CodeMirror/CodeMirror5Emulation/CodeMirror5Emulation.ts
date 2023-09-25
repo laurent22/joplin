@@ -72,6 +72,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			EditorView.domEventHandlers({
 				scroll: () => CodeMirror5Emulation.signal(this, 'scroll'),
 				focus: () => CodeMirror5Emulation.signal(this, 'focus'),
+				paste: event => CodeMirror5Emulation.signal(this, 'paste', event),
 				blur: () => CodeMirror5Emulation.signal(this, 'blur'),
 				mousedown: event => CodeMirror5Emulation.signal(this, 'mousedown', event),
 			}),

@@ -16,11 +16,10 @@
 	},
 	"devDependencies": {
 		"@joplin/lib": "~2.13",
-		"@joplin/tools": "~2.13",
 		"@testing-library/react-hooks": "8.0.1",
 		"@types/jest": "29.5.3",
 		"@types/react": "18.0.24",
-		"@types/react-redux": "7.1.25",
+		"@types/react-redux": "7.1.26",
 		"@types/styled-components": "5.1.26",
 		"jest": "29.5.0",
 		"jest-environment-jsdom": "29.5.0",

@@ -20,6 +20,12 @@ enum SearchType {
 
 interface SearchOptions {
 	searchType: SearchType;
+
+	// When this is on, the search engine automatically appends "*" to each word
+	// of the query. So "hello world" is turned into "hello* world*". This
+	// allows returning results quickly, in particular on mobile, and it seems
+	// to be what users generally expect.
+	appendWildCards?: boolean;
 }
 
 export interface ComplexTerm {
@@ -598,6 +604,7 @@ export default class SearchEngine {
 
 		options = {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
+			appendWildCards: false,
 			...options,
 		};
 
@@ -617,6 +624,19 @@ export default class SearchEngine {
 			// see "this phrase" in the index. Because of this, we remove the dashes
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+
+			if (options.appendWildCards) {
+				parsedQuery.allTerms = parsedQuery.allTerms.map(t => {
+					if (t.name === 'text' && !t.wildcard) {
+						t = {
+							...t,
+							wildcard: true,
+							value: t.value.endsWith('"') ? `${t.value.substring(0, t.value.length - 1)}*"` : `${t.value}*`,
+						};
+					}
+					return t;
+				});
+			}
 
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
