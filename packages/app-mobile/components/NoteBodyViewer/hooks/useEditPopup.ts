@@ -24,14 +24,27 @@ export const getEditPopupSource = (theme: Theme) => {
 		}
 
 		.${editPopupClass} {
-			position: absolute;
+			display: inline-block;
+			position: relative;
+
+			/* Don't take up any space in the line, overlay the button */
+			width: 0;
+			height: 0;
+			overflow: visible;
 
 			--edit-popup-width: 40px;
 			--edit-popup-padding: 10px;
 
 			/* Shift the popup such that it overlaps with the previous element. */
-			margin-left: calc(0px - var(--edit-popup-width));
+			left: calc(0px - var(--edit-popup-width));
+
+			/* Match the top of the image */
+			vertical-align: top;
+		}
+
+		.${editPopupClass} > button {
 			padding: var(--edit-popup-padding);
+			width: var(--edit-popup-width);
 
 			animation: fade-in 0.4s ease;
 
@@ -82,17 +95,19 @@ export const getEditPopupSource = (theme: Theme) => {
 			return;
 		}
 
-		window.editPopup = document.createElement('button');
+		window.editPopup = document.createElement('div');
+		const popupButton = document.createElement('button');
 
 		const popupIcon = new Image();
 		popupIcon.alt = ${JSON.stringify(_('Edit'))};
 		popupIcon.title = popupIcon.alt;
 		popupIcon.src = ${JSON.stringify(editIcon.uri)};
-		editPopup.appendChild(popupIcon);
+		popupButton.appendChild(popupIcon);
+
+		popupButton.onclick = onclick;
+		editPopup.appendChild(popupButton);
 
 		editPopup.classList.add(${JSON.stringify(editPopupClass)});
-		editPopup.onclick = onclick;
-
 		parent.insertAdjacentElement('afterEnd', editPopup);
 
 		// Ensure that the edit popup is focused immediately by screen
