@@ -201,7 +201,7 @@ async function saveNoteResources(note: ExtractedNote) {
 		delete (toSave as any).dataFilePath;
 		delete (toSave as any).dataEncoding;
 		delete (toSave as any).hasData;
-		toSave.file_extension = fileExtension(resource.filename);
+		toSave.file_extension = resource.filename ? fileExtension(resource.filename) : '';
 
 		// ENEX resource filenames can contain slashes, which may confuse other
 		// parts of the app, which expect this `filename` field to be safe.
