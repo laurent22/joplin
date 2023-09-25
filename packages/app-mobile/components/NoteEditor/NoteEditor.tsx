@@ -178,7 +178,7 @@ const useEditorControl = (
 				execCommand(EditorCommandType.ToggleNumberedList);
 			},
 			toggleUnorderedList() {
-				execCommand(EditorCommandType.ToggleCheckList);
+				execCommand(EditorCommandType.ToggleBulletedList);
 			},
 			toggleTaskList() {
 				execCommand(EditorCommandType.ToggleCheckList);
