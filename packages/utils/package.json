@@ -1,6 +1,6 @@
 {
   "name": "@joplin/utils",
-  "version": "2.12.1",
+  "version": "2.13.0",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
@@ -29,7 +29,7 @@
     "async-mutex": "0.4.0",
     "execa": "5.1.1",
     "fs-extra": "11.1.1",
-    "glob": "10.3.3",
+    "glob": "10.3.4",
     "html-entities": "1.4.0",
     "moment": "2.29.4",
     "node-fetch": "2.6.7",
@@ -37,9 +37,9 @@
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.1",
-    "@types/jest": "29.5.3",
+    "@types/jest": "29.5.4",
     "@types/node-fetch": "2.6.4",
-    "jest": "29.5.0",
+    "jest": "29.6.4",
     "ts-jest": "29.1.1"
   }
 }

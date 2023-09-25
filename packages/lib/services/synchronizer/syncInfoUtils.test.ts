@@ -1,6 +1,6 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, msleep } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { masterKeyEnabled, mergeSyncInfos, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
+import { localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
 
 describe('syncInfoUtils', () => {
 
@@ -152,6 +152,27 @@ describe('syncInfoUtils', () => {
 		// select the key that's been used.
 		syncInfo2.masterKeys[0].enabled = 0;
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
+	});
+
+	it('should fix the sync info if it contains invalid data', async () => {
+		logger.enabled = false;
+
+		const syncInfo = new SyncInfo();
+		syncInfo.masterKeys = [{
+			id: '1',
+			content: 'content1',
+			hasBeenUsed: true,
+			enabled: 0,
+		}];
+		syncInfo.activeMasterKeyId = '2';
+
+		saveLocalSyncInfo(syncInfo);
+
+		const loaded = localSyncInfo();
+		expect(loaded.activeMasterKeyId).toBe('');
+		expect(loaded.masterKeys.length).toBe(1);
+
+		logger.enabled = true;
 	});
 
 });

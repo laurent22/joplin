@@ -6,11 +6,11 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
@@ -47,6 +47,7 @@ import Logger from '@joplin/utils/Logger';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
 import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -254,7 +255,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: ChangeEvent) {
+	private onBodyChange(event: EditorChangeEvent) {
 		shared.noteComponent_change(this, 'body', event.value);
 		this.scheduleSave();
 	}
@@ -807,8 +808,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public async onAlarmDialogAccept(date: Date) {
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
-			logger.warn('POST_NOTIFICATION permission was not granted');
+
+		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+		// (If unsupported, returns NEVER_ASK_AGAIN).
+		// On earlier releases, notifications should work without this permission.
+		if (response === PermissionsAndroid.RESULTS.DENIED) {
+			logger.warn('POST_NOTIFICATIONS permission was not granted');
 			return;
 		}
 
@@ -885,6 +890,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async showAttachMenu() {
+		// If the keyboard is editing a WebView, the standard Keyboard.dismiss()
+		// may not work. As such, we also need to call hideKeyboard on the editorRef
+		this.editorRef.current?.hideKeyboard();
+
 		const buttons = [];
 
 		// On iOS, it will show "local files", which means certain files saved from the browser

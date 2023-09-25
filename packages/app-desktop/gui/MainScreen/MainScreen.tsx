@@ -79,9 +79,11 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
+	enableBetaMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
+	listRendererId: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -730,15 +732,19 @@ class MainScreenComponent extends React.Component<Props, State> {
 					visible={event.visible}
 					size={event.size}
 					themeId={this.props.themeId}
+					listRendererId={this.props.listRendererId}
+					startupPluginsLoaded={this.props.startupPluginsLoaded}
 				/>;
 			},
 
 			editor: () => {
 				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+
 				if (this.props.isSafeMode) {
 					bodyEditor = 'PlainText';
+				} else if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
+					bodyEditor = 'CodeMirror6';
 				}
-
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
 		};
@@ -910,9 +916,11 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
+		enableBetaMarkdownEditor: state.settings['editor.beta'],
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 		isResettingLayout: state.isResettingLayout,
+		listRendererId: state.settings['notes.listRendererId'],
 	};
 };
 

@@ -6,7 +6,6 @@ import ScreenHeader from '../ScreenHeader';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import gotoAnythingStyleQuery from '@joplin/lib/services/searchengine/gotoAnythingStyleQuery';
 const { NoteItem } = require('../note-item.js');
 const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
@@ -94,8 +93,6 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 	public async refreshSearch(query: string = null) {
 		if (!this.props.visible) return;
-
-		query = gotoAnythingStyleQuery(query);
 
 		let notes = [];
 
@@ -189,7 +186,10 @@ class SearchScreenComponent extends BaseScreenComponent {
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 						/>
-						<TouchableHighlight onPress={() => this.clearButton_press()}>
+						<TouchableHighlight
+							onPress={() => this.clearButton_press()}
+							accessibilityLabel={_('Clear')}
+						>
 							<Icon name="md-close-circle" style={this.styles().clearIcon} />
 						</TouchableHighlight>
 					</View>

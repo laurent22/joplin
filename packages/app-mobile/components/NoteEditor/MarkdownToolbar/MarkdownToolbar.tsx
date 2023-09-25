@@ -14,13 +14,14 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import { useEffect } from 'react';
 import { Keyboard, ViewStyle } from 'react-native';
-import { EditorControl, EditorSettings, ListType, SearchState } from '../types';
-import SelectionFormatting from '../SelectionFormatting';
+import { EditorControl, EditorSettings } from '../types';
 import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
 import ToggleSpaceButton from './ToggleSpaceButton';
+import { SearchState } from '@joplin/editor/types';
+import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 
 type OnAttachCallback = ()=> void;
 
@@ -71,9 +72,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Unordered list'),
 		active: selState.inUnorderedList,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.UnorderedList);
-		}, [editorControl]),
+		onPress: editorControl.toggleUnorderedList,
 
 		priority: -2,
 		disabled: readOnly,
@@ -85,9 +84,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Ordered list'),
 		active: selState.inOrderedList,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.OrderedList);
-		}, [editorControl]),
+		onPress: editorControl.toggleOrderedList,
 
 		priority: -2,
 		disabled: readOnly,
@@ -99,9 +96,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Task list'),
 		active: selState.inChecklist,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.CheckList);
-		}, [editorControl]),
+		onPress: editorControl.toggleTaskList,
 
 		priority: -2,
 		disabled: readOnly,

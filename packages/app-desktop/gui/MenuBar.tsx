@@ -22,6 +22,8 @@ const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -108,6 +110,32 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 	}, [profileConfig, menuItemDic]);
 };
 
+const useNoteListMenuItems = (noteListRendererIds: string[]) => {
+	const [menuItems, setMenuItems] = useState<any[]>([]);
+
+	useAsyncEffect(async (event) => {
+		const output: any[] = [];
+		for (const id of noteListRendererIds) {
+			const renderer = getListRendererById(id);
+
+			output.push({
+				id: `noteListRenderer_${id}`,
+				label: await renderer.label(),
+				type: 'checkbox',
+				click: () => {
+					Setting.setValue('notes.listRendererId', id);
+				},
+			});
+
+			if (event.cancelled) return;
+		}
+
+		setMenuItems(output);
+	}, [noteListRendererIds]);
+
+	return menuItems;
+};
+
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
@@ -131,6 +159,8 @@ interface Props {
 	locale: string;
 	profileConfig: ProfileConfig;
 	pluginSettings: PluginSettings;
+	noteListRendererIds: string[];
+	noteListRendererId: string;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -171,6 +201,11 @@ function useMenuStates(menu: any, props: Props) {
 				menuItemSetChecked(`layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
 			}
 
+			const listRendererIds = getListRendererIds();
+			for (const id of listRendererIds) {
+				menuItemSetChecked(`noteListRenderer_${id}`, props.noteListRendererId === id);
+			}
+
 			function applySortItemCheckState(type: string) {
 				const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 				for (const field in sortOptions) {
@@ -208,6 +243,7 @@ function useMenuStates(menu: any, props: Props) {
 		props['notes.sortOrder.reverse'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
+		props.noteListRendererId,
 		props.showNoteCounts,
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
@@ -308,6 +344,8 @@ function useMenu(props: Props) {
 
 	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
 
+	const noteListMenuItems = useNoteListMenuItems(props.noteListRendererIds);
+
 	useEffect(() => {
 		let timeoutId: any = null;
 
@@ -403,6 +441,7 @@ function useMenu(props: Props) {
 							label: module.fullLabel(moduleSource),
 							click: () => onImportModuleClickRef.current(module, moduleSource),
 						});
+						if (module.separatorAfter) importItems.push({ type: 'separator' });
 					}
 				}
 			}
@@ -686,6 +725,11 @@ function useMenu(props: Props) {
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,
 						},
+						{
+							label: _('Note list style'),
+							submenu: noteListMenuItems,
+							visible: noteListMenuItems.length > 1,
+						},
 						separator(),
 						{
 							label: Setting.settingMetadata('notes.sortOrder.field').label(),
@@ -933,6 +977,7 @@ function useMenu(props: Props) {
 		props['spellChecker.languages'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['spellChecker.enabled'],
+		noteListMenuItems,
 		props.pluginSettings,
 		props.customCss,
 		props.locale,
@@ -1000,6 +1045,8 @@ const mapStateToProps = (state: AppState) => {
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
 		profileConfig: state.profileConfig,
+		noteListRendererIds: state.noteListRendererIds,
+		noteListRendererId: state.settings['notes.listRendererId'],
 	};
 };
 

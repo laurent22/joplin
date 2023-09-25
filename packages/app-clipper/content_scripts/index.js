@@ -422,6 +422,27 @@
 			cleanUpElement(convertToMarkup, cleanDocument, imageSizes, imageIndexes);
 
 			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : null;
+
+			// The <BODY> tag may have a style in the CSS stylesheets. This
+			// style can be overriden by setting the `style` attribute on the
+			// BODY tag. Since we don't keep the body tag, it means we may be
+			// missing some styling, which may break the page.
+			//
+			// For example, on this page:
+			// https://devblogs.microsoft.com/oldnewthing/20180529-00/?p=98855
+			// The BODY tag has visibility set to hidden in the stylesheet, and
+			// made visible by setting the style attribute. Because of that,
+			// previously that imported note would show blank content, while now
+			// it will be visible.
+			//
+			// Fixes https://github.com/laurent22/joplin/issues/7925
+			if (document.body.getAttribute('style')) {
+				stylesheets.push({
+					type: 'text',
+					value: `body { ${document.body.getAttribute('style')} }`,
+				});
+			}
+
 			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document), stylesheets);
 
 		} else if (command.name === 'selectedHtml') {

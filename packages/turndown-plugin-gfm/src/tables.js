@@ -5,6 +5,11 @@ var alignMap = { left: ':---', right: '---:', center: ':---:' };
 
 let isCodeBlock_ = null;
 
+// We need to cache the result of tableShouldBeSkipped() as it is expensive.
+// Caching it means we went from about 9000 ms for rendering down to 90 ms.
+// Fixes https://github.com/laurent22/joplin/issues/6736 
+const tableShouldBeSkippedCache_ = new Map();
+
 function getAlignment(node) {
   return node ? (node.getAttribute('align') || node.style.textAlign || '').toLowerCase() : '';
 }
@@ -188,11 +193,20 @@ const tableShouldBeHtml = (tableNode) => {
 // Various conditions under which a table should be skipped - i.e. each cell
 // will be rendered one after the other as if they were paragraphs.
 function tableShouldBeSkipped(tableNode) {
-  if (!tableNode) return true;
-  if (!tableNode.rows) return true;
-  if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
-  if (nodeContainsTable(tableNode)) return true;
-  return false;
+  const cached = tableShouldBeSkippedCache_.get(tableNode);
+  if (cached !== undefined) return cached;
+
+  const process = () => {
+    if (!tableNode) return true;
+    if (!tableNode.rows) return true;
+    if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
+    if (nodeContainsTable(tableNode)) return true;
+    return false;
+  }
+
+  const result = process();
+  tableShouldBeSkippedCache_.set(tableNode, result);
+  return result;
 }
 
 function nodeParentTable(node) {

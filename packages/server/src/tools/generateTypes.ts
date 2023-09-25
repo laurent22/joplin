@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import sqlts, { Config } from '@rmp135/sql-ts';
+import sqlts, { Config, Table } from '@rmp135/sql-ts';
 
 require('source-map-support').install();
 
@@ -90,7 +90,7 @@ function insertContentIntoFile(filePath: string, markerOpen: string, markerClose
 // 	password?: string
 // 	is_admin?: number
 // }
-function createTypeString(table: any) {
+function createTypeString(table: Table) {
 	const colStrings = [];
 	for (const col of table.columns) {
 		const name = col.propertyName as string;
@@ -117,10 +117,62 @@ function createTypeString(table: any) {
 
 	const header = ['export interface'];
 	header.push(table.interfaceName);
+
 	if (table.extends) header.push(`extends ${table.extends}`);
 
 	return `${header.join(' ')} {\n${colStrings.join('\n')}\n}`;
 }
+
+// SQLite default values are always strings regardless of the column types. So
+// here we convert it to the correct type.
+const formatDefaultValue = (value: string | null, type: string): null | number | string => {
+	if (value === null) return value;
+
+	// From https://www.sqlite.org/datatype3.html
+	//
+	// Note that DECIMAL(10,5) is also a valid type - this is checked in the
+	// conditional below
+	const numericTypes = [
+		'INT',
+		'INTEGER',
+		'TINYINT',
+		'SMALLINT',
+		'MEDIUMINT',
+		'BIGINT',
+		'UNSIGNED BIG INT',
+		'INT2',
+		'INT8',
+		'REAL',
+		'DOUBLE',
+		'DOUBLE PRECISION',
+		'FLOAT',
+		'NUMERIC',
+		'BOOLEAN',
+		'DATE',
+		'DATETIME',
+	];
+
+	// SQLite default values are always surrounded by double quotes or single
+	// quotes - eg `"3"` (for numeric value 3) or `"example"` (for string
+	// `example`). So here we remove the quotes, but to safe we check that they
+	// are actually present.
+	if (value.length && value[0] === '"' && value[value.length - 1] === '"') {
+		value = value.substring(1, value.length - 1);
+	} else if (value.length && value[0] === '\'' && value[value.length - 1] === '\'') {
+		value = value.substring(1, value.length - 1);
+	}
+
+	type = type.toUpperCase();
+
+	if (numericTypes.includes(type) || type.startsWith('DECIMAL')) {
+		if (value.toLowerCase() === 'null') return null;
+		const output = Number(value);
+		if (isNaN(output)) throw new Error(`Could not convert default value: ${value}`);
+		return output;
+	} else {
+		return value;
+	}
+};
 
 // To output:
 //
@@ -134,12 +186,14 @@ function createTypeString(table: any) {
 // 		created_time: { type: "number" },
 // 	},
 // }
-function createRuntimeObject(table: any) {
+function createRuntimeObject(table: Table) {
 	const colStrings = [];
 	for (const col of table.columns) {
 		const name = col.propertyName;
 		const type = col.propertyType;
-		colStrings.push(`\t\t${name}: { type: '${type}' },`);
+		let defaultValue = formatDefaultValue(col.defaultValue, col.type);
+		if (typeof defaultValue === 'string') defaultValue = `'${defaultValue}'`;
+		colStrings.push(`\t\t${name}: { type: '${type}', defaultValue: ${defaultValue} },`);
 	}
 
 	return `\t${table.name}: {\n${colStrings.join('\n')}\n\t},`;

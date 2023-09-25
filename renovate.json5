@@ -113,10 +113,10 @@
 		"react-native",
 
 		// We currently don't have automated tests that verify that the
-		// sidemenus work correctly in the mobile app.
-		// Because an update to react-native-reanimated has previously broken
-		// the sidemenu (https://github.com/laurent22/joplin/issues/8456), we
-		// disable auto updates for it:
+		// sidemenus work correctly in the mobile app. Because an update to
+		// react-native-reanimated has previously broken the sidemenu
+		// (https://github.com/laurent22/joplin/issues/8456), we disable auto
+		// updates for it:
 		"react-native-reanimated",
 
 		// Need special processing when upgrading
@@ -129,16 +129,15 @@
 		"open",
 		"pretty-bytes",
 		"strip-ansi",
-		"formidable",
 		"node-emoji",
 
 		// @koa/cors has undocumented breaking changes, and the package is not
 		// well supported so we're stuck with latest v3 for now
 		"@koa/cors",
 
-		// Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
-		// upgrade again, check that adding a link from the CodeMirror editor works.
-		// See /packages/app-desktop/gui/dialogs.ts
+		// Can't upgrade beyond 2.x because it doesn't work with Electron. If
+		// trying to upgrade again, check that adding a link from the CodeMirror
+		// editor works. See /packages/app-desktop/gui/dialogs.ts
 		"smalltalk",
 
 		// Don't think we can trust this lib because they don't release a
@@ -179,6 +178,11 @@
 
 		// We are too many versions behind so it needs to be manually upgraded.
 		"immer",
+
+		// We don't really use styled-components anymore and v6 introduces
+		// breaking changes. Ideally we should just update existing components
+		// to rscss.
+		"styled-components",
 	],
 	"packageRules": [
 		{
@@ -186,10 +190,11 @@
 			"automerge": true,
 			"labels": ["automerge"],
 		},
+		
 		{
 			"matchUpdateTypes": ["major", "minor", "patch"],
 			"automerge": true,
-			"groupName": "buildTools",
+			"groupName": "eslint",
 			"labels": ["automerge"],
 			"extends": ["schedule:monthly"],
 			"matchPackagePatterns": [
@@ -206,9 +211,10 @@
 				"prettier",
 				
 				// If it builds, it should be safe to merge @types/* packages
-				"@types/*",
+				// "@types/*",
 			],
 		},
+
 		// {
 		// 	"matchUpdateTypes": ["minor", "patch"],
 		// 	"automerge": true,
