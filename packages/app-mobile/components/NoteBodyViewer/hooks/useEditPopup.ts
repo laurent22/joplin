@@ -14,7 +14,7 @@ const getEditIconSrc = (theme: Theme) => {
 
 	// Copy to a location that can be read within a WebView
 	// (necessary on iOS)
-	const destPath = `${Setting.value('resourceDir')}/edit-icon.${extname(iconUri)}`;
+	const destPath = `${Setting.value('resourceDir')}/edit-icon${extname(iconUri)}`;
 
 	// Copy in the background -- the edit icon popover script doesn't need the
 	// icon immediately.
