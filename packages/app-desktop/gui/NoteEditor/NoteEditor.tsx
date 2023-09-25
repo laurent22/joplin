@@ -76,18 +76,11 @@ function NoteEditor(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
-	const effectiveNote = props.notes.find(n => n.id === effectiveNoteId);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
 		decryptionStarted: props.decryptionStarted,
 		noteId: effectiveNoteId,
-
-		// The effective updated_time property of the note. It may be different
-		// from the last time the note was saved, if it was modified outside the
-		// editor (eg. via API).
-		dbNote: effectiveNote ? { id: effectiveNote.id, updated_time: effectiveNote.updated_time } : { id: '', updated_time: 0 },
-
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
 		editorRef: editorRef,
@@ -127,31 +120,11 @@ function NoteEditor(props: NoteEditorProps) {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);
-				const noteUpdatedTime = Date.now();
-
-				// First we set the formNote object, then we save the note. We
-				// do it in that order, otherwise `useFormNote` will be rendered
-				// with the newly saved note and the timestamp of that note will
-				// be more recent that the one in the editor, which will trigger
-				// an update. We do not want this since we already have the
-				// latest changes.
-				//
-				// It also means that we manually set the timestamp, so that we
-				// have it before the note is saved.
+				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
-					return {
-						...prev,
-						user_updated_time: noteUpdatedTime,
-						updated_time: noteUpdatedTime,
-						hasChanged: false,
-					};
+					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
 				});
-
-				const savedNote = await Note.save({
-					...note,
-					updated_time: noteUpdatedTime,
-				}, { autoTimestamp: false });
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
 
