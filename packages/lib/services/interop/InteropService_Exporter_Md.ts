@@ -5,7 +5,7 @@ import markdownUtils from '../../markdownUtils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity, ResourceEntity } from '../database/types';
-import { basename, dirname, friendlySafeFilename } from '../../path-utils';
+import { basename, dirname, friendlySafeFilename, safeFilename } from '../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
@@ -142,7 +142,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		let fileName = basename(filePath);
 
 		if (resource.filename) {
-			fileName = resource.filename;
+			fileName = safeFilename(resource.filename);
 		} else if (resource.title) {
 			fileName = friendlySafeFilename(resource.title, null, true);
 		}

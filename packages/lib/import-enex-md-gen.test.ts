@@ -194,4 +194,14 @@ describe('import-enex-md-gen', () => {
 		expect(Resource.fullPath(resource).endsWith('.mscz')).toBe(true);
 	});
 
+	it('should sanitize resource filenames with slashes', async () => {
+		await importEnexFile('resource_filename_with_slashes.enex');
+		const resource: ResourceEntity = (await Resource.all())[0];
+		expect(resource.filename).toBe('house_500.jpg.png');
+		expect(resource.file_extension).toBe('png');
+
+		// However we keep the title as it is
+		expect(resource.title).toBe('app_images/resizable/961b875f-24ac-402f-9b76-37e2d4f03a6c/house_500.jpg.png');
+	});
+
 });

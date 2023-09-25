@@ -9,7 +9,7 @@ import shim from './shim';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import { enexXmlToMd } from './import-enex-md-gen';
 import { MarkupToHtml } from '@joplin/renderer';
-import { fileExtension } from './path-utils';
+import { fileExtension, friendlySafeFilename } from './path-utils';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
@@ -202,6 +202,11 @@ async function saveNoteResources(note: ExtractedNote) {
 		delete (toSave as any).dataEncoding;
 		delete (toSave as any).hasData;
 		toSave.file_extension = fileExtension(resource.filename);
+
+		// ENEX resource filenames can contain slashes, which may confuse other
+		// parts of the app, which expect this `filename` field to be safe.
+		// Fixes https://github.com/laurent22/joplin/issues/8823
+		toSave.filename = toSave.filename ? friendlySafeFilename(toSave.filename, 255, true) : '';
 
 		// The same resource sometimes appear twice in the same enex (exact same ID and file).
 		// In that case, just skip it - it means two different notes might be linked to the
