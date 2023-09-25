@@ -4780,7 +4780,7 @@ __metadata:
     react-native-image-picker: 5.6.1
     react-native-localize: 3.0.2
     react-native-modal-datetime-picker: 17.1.0
-    react-native-paper: 5.10.3
+    react-native-paper: 5.10.4
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-rsa-native: 2.0.5
@@ -4834,7 +4834,6 @@ __metadata:
     "@codemirror/state": 6.2.1
     "@codemirror/view": 6.18.0
     "@joplin/lib": ~2.13
-    "@joplin/tools": ~2.13
     "@lezer/markdown": 1.1.0
     "@replit/codemirror-vim": 6.0.14
     "@testing-library/react-hooks": 8.0.1
@@ -29388,9 +29387,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.10.3":
-  version: 5.10.3
-  resolution: "react-native-paper@npm:5.10.3"
+"react-native-paper@npm:5.10.4":
+  version: 5.10.4
+  resolution: "react-native-paper@npm:5.10.4"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.9
     color: ^3.1.2
@@ -29400,7 +29399,7 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 446146283194b9997551a87863fdeed7b92ec42f74777380446a4e39baadc48072b7b3cb1a4b26289f74dad01301c843aa89ea6a68c931e13c2a08705253cccd
+  checksum: 28662d669b728601e7998be3a9488e3b8cf81b0a8cbe4cdc499bb88eac3de872ed5f05f94b14c905d56f3db3e9316eee696b317860e168cd0a52b90f38025cb2
   languageName: node
   linkType: hard
 

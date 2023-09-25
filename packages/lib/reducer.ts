@@ -464,6 +464,51 @@ function defaultNotesParentType(draft: Draft<State>, exclusion: string) {
 	return newNotesParentType;
 }
 
+export type NotesParentType = 'Folder' | 'Tag' | 'SmartFilter';
+
+export interface NotesParent {
+	type: NotesParentType;
+	selectedItemId: string;
+}
+
+export const serializeNotesParent = (n: NotesParent) => {
+	return JSON.stringify(n);
+};
+
+export const parseNotesParent = (s: string, activeFolderId: string): NotesParent => {
+	const defaultValue: NotesParent = {
+		type: 'Folder',
+		selectedItemId: activeFolderId,
+	};
+
+	if (!s) return defaultValue;
+
+	try {
+		const parsed = JSON.parse(s);
+		return parsed;
+	} catch (error) {
+		return defaultValue;
+	}
+};
+
+export const getNotesParent = (state: State): NotesParent => {
+	let type = state.notesParentType as NotesParentType;
+	let selectedItemId = '';
+
+	if (type === 'Folder') {
+		selectedItemId = state.selectedFolderId;
+	} else if (type === 'Tag') {
+		selectedItemId = state.selectedTagId;
+	} else if (type === 'SmartFilter') {
+		selectedItemId = state.selectedSmartFilterId;
+	} else {
+		type = 'Folder';
+		selectedItemId = state.selectedFolderId;
+	}
+
+	return { type, selectedItemId };
+};
+
 function changeSelectedFolder(draft: Draft<State>, action: any, options: any = null) {
 	if (!options) options = {};
 	draft.selectedFolderId = 'folderId' in action ? action.folderId : action.id;

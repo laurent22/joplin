@@ -129,7 +129,6 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		> .content.-completed {
 			> .title {
 				opacity: 0.5;
-				text-decoration: line-through;
 			}
 		}
 
