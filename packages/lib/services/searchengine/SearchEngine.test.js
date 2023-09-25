@@ -501,4 +501,14 @@ describe('services_SearchEngine', () => {
 		expect((await engine.search('л')).length).toBe(1);
 		expect((await engine.search('л'))[0].id).toBe(n2.id);
 	}));
+
+	it('should automatically add wildcards', (async () => {
+		const n1 = await Note.save({ title: 'hello1' });
+		const n2 = await Note.save({ title: 'hello2' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('hello')).length).toBe(0);
+		expect((await engine.search('hello', { appendWildCards: true })).length).toBe(2);
+	}));
 });

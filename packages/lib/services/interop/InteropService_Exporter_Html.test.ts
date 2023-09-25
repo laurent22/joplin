@@ -7,6 +7,7 @@ import * as fs from 'fs-extra';
 import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
 import { FileSystemItem } from './types';
+import { readFile } from 'fs/promises';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -118,6 +119,24 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		const readFenceContent = await fs.readFile(`${exportDir()}/${fenceRelativePath}`, 'utf8');
 		expect(readFenceContent).toBe(fenceContent);
+	}));
+
+	test('should not throw an error on invalid resource paths', (async () => {
+		const service = InteropService.instance();
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: 'note1', parent_id: folder1.id, body: '[a link starts with slash](/)' });
+
+		const filePath = `${exportDir()}/test.html`;
+
+		await service.export({
+			path: filePath,
+			format: 'html',
+			packIntoSingleFile: true,
+			target: FileSystemItem.File,
+		});
+
+		const content = await readFile(filePath, 'utf-8');
+		expect(content).toContain('<a data-from-md="" title="/" href="" download="">a link starts with slash</a>');
 	}));
 
 });
