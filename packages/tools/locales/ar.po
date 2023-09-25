@@ -29,8 +29,7 @@ msgstr "- المكان: للسماح بإرفاق معلومات الموقع ا
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr ""
-"- التخزين: للسماح بإرفاق ملفات للملاحظات و لتمكين المزامنة من نظام الملفات."
+msgstr "- التخزين: للسماح بإرفاق ملفات للملاحظات و لتمكين المزامنة من نظام الملفات."
 
 #: packages/lib/services/KeymapService.ts:317
 #: packages/lib/services/KeymapService.ts:323
@@ -96,7 +95,7 @@ msgstr ""
 #: packages/lib/utils/joplinCloud.ts:133 packages/lib/utils/joplinCloud.ts:134
 #: packages/lib/utils/joplinCloud.ts:135
 msgid "%d GB storage space"
-msgstr ""
+msgstr "GB %d مساحة التخزين"
 
 #: packages/lib/models/Setting.ts:1367
 msgid "%d hour"
@@ -113,9 +112,8 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud.ts:121 packages/lib/utils/joplinCloud.ts:122
 #: packages/lib/utils/joplinCloud.ts:123
-#, fuzzy
 msgid "%d MB per note or attachment"
-msgstr "مرفقات الملاحظات"
+msgstr "MB %d لكل ملاحظة او مرفق"
 
 #: packages/lib/models/Setting.ts:1364 packages/lib/models/Setting.ts:1365
 #: packages/lib/models/Setting.ts:1366
@@ -248,8 +246,7 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
-"يتم استخدام المسرّع \"%s\" للأوامر \"%s\" و \"%s\". قد يؤدي هذا إلى سلوك غير "
-"متوقع."
+"يتم استخدام المسرّع \"%s\" للأوامر \"%s\" و \"%s\". قد يؤدي هذا إلى سلوك غير متوقع."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:631
 msgid "Accept"
@@ -257,15 +254,15 @@ msgstr "قبول"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr ""
+msgstr "تم رفض الدخول: المرجو التأكد من اسم المستخدم و كلمة السر"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr ""
+msgstr "تم رفض الدخول: المرجو إعادة إدخال كلمة السر و/أو اسم المستخدم"
 
 #: packages/server/src/routes/admin/users.ts:138
 msgid "Account"
-msgstr ""
+msgstr "حساب"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:96
 msgid "Action"
@@ -290,9 +287,8 @@ msgid "Add body"
 msgstr "أضف الجسم"
 
 #: packages/app-mobile/components/ActionButton.tsx:59
-#, fuzzy
 msgid "Add new"
-msgstr "أضف العنوان"
+msgstr "إضافة جديدة"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:38
 msgid "Add or remove tags:"
@@ -313,11 +309,11 @@ msgstr "أضف إلى القاموس"
 #: packages/server/src/services/MustacheService.ts:157
 #: packages/server/src/services/MustacheService.ts:280
 msgid "Admin"
-msgstr ""
+msgstr "المشرف"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "وحدة تحكم المشرف"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:135
 msgid "Advanced options"
@@ -328,9 +324,9 @@ msgid "Advanced tools"
 msgstr "أدوات متقدمة"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:99
-msgid ""
-"All data, including notes, notebooks and tags will be permanently deleted."
+msgid "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"جميع البيانات، بما فيها الملاحظات، ملفات الملاحظات و العلامات ستحذف بشكل دائم."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:497
 #: packages/app-mobile/components/screens/Notes.tsx:178
@@ -347,9 +343,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "يظهر أيضاً متغيرات الإعداد غير المضبوطة أو تلك المخفية."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:202
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "إلغاء نشر الملاحظة"
+msgstr "و كذلك نشر الملاحظات المربطة"
 
 #: packages/lib/models/Setting.ts:740
 msgid "Always"
@@ -400,6 +395,7 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
+"هل أنت متأكد أنك تريد العودة للتصميم الافتراضي ؟ سيتم حذف إعدادات التصميم الحالي."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:503
 msgid "Arguments:"
@@ -410,9 +406,8 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:220
-#, fuzzy
 msgid "Attach"
-msgstr "إرفاق..."
+msgstr "إرفاق"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:59
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:615
@@ -486,9 +481,8 @@ msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "ادراج النصف الآخر للأقواس و علامات الإقتباس."
 
 #: packages/lib/models/Setting.ts:1351
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "البحث جارٍ عن تحديثات..."
+msgstr "البحت عن التحديثات بشكل تلقائي"
 
 #: packages/lib/models/Setting.ts:851
 msgid "Automatically switch theme to match system theme"
@@ -532,17 +526,16 @@ msgid "Bulleted List"
 msgstr "قائمة تعداد نقطي"
 
 #: packages/server/src/routes/admin/users.ts:154
-#, fuzzy
 msgid "Can Share"
-msgstr "مشاركة"
+msgstr "يمكن المشاركة"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:114
 msgid "Can view"
-msgstr ""
+msgstr "يمكن العرض"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:115
 msgid "Can view and edit"
-msgstr ""
+msgstr "يمكن العرض و التعديل"
 
 #: packages/app-desktop/bridge.ts:197 packages/app-desktop/bridge.ts:215
 #: packages/app-desktop/checkForUpdates.ts:107
@@ -585,7 +578,7 @@ msgstr "الإلغاء جارٍ... فضلاً انتظر."
 
 #: packages/lib/shim-init-node.js:264
 msgid "Cannot access %s"
-msgstr "لا يمكن الوصول إلى %s"
+msgstr "لا يمكن الوصول إلى"
 
 #: packages/app-cli/app/base-command.ts:15
 msgid "Cannot change encrypted item"
@@ -629,9 +622,8 @@ msgid "Cannot find \"%s\"."
 msgstr "لا يمكن العثور على \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
-#, fuzzy
 msgid "Cannot find: \"%s\""
-msgstr "لا يمكن العثور على \"%s\"."
+msgstr "لا يمكن العثور على \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:165
 msgid "Cannot initialise synchroniser."
@@ -741,11 +733,11 @@ msgstr "مسح المنبّه"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:206
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". "
+"The current version of the note will not be replaced or modified."
 msgstr ""
-"انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن "
-"يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
+"انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن يتم "
+"استبدال أو تعديل الإصدار الحالي من الملاحظة."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:409
 msgid "Click to add tags..."
@@ -768,9 +760,8 @@ msgid "Close"
 msgstr "إغلاق"
 
 #: packages/app-mobile/components/Dropdown.tsx:156
-#, fuzzy
 msgid "Close dropdown"
-msgstr "إغلاق النافذة"
+msgstr "إغلاق القائمة المنسدلة"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 #: packages/app-desktop/gui/MenuBar.tsx:598
@@ -796,7 +787,7 @@ msgstr "تعاون مع الآخرين على دفاتر الملاحظات"
 
 #: packages/app-mobile/components/side-menu-content.tsx:355
 msgid "Collapse"
-msgstr ""
+msgstr "طي"
 
 #: packages/lib/services/ReportService.ts:308
 msgid "Coming alarms"
@@ -844,7 +835,7 @@ msgstr "مكتملة: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
-msgstr ""
+msgstr "كثف التعديلات الماضية"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:129
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:696
@@ -883,13 +874,12 @@ msgid "Consolidated billing"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:111
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "خصائص الملاحظة"
+msgstr "محتوى مقدم من طرف %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:65
 msgid "Continue"
-msgstr ""
+msgstr "واصل"
 
 #: packages/app-mobile/components/screens/Note.tsx:1028
 msgid "Convert to note"
@@ -900,9 +890,8 @@ msgid "Convert to todo"
 msgstr "تحويل إلى قائمة مهام"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:89
-#, fuzzy
 msgid "Converting speech to text..."
-msgstr "تحويل إلى ملاحظة"
+msgstr "تحويل الصوت إلى ملاحظة..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:497
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:19
@@ -918,14 +907,12 @@ msgstr "نسخ أمر وضع المبرمج إلى الحافظة"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:403
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:417
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:117
-#, fuzzy
 msgid "Copy external link"
-msgstr "إيقاف التحرير خارج التطبيق"
+msgstr "إيقاف الرابط الخارجي"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:152
-#, fuzzy
 msgid "Copy image"
-msgstr "نسخ الرمز المميز"
+msgstr "نسخ الصورة"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:197
 msgid "Copy Link Address"
@@ -952,9 +939,8 @@ msgstr[5] "نسخ روابط قابلة للمشاركة"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "نسخ المسار إلى الحافظة"
+msgstr "نسخ الحافظة"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:140
 msgid "Copy token"
@@ -974,20 +960,19 @@ msgstr ""
 
 #: packages/lib/JoplinServerApi.ts:93
 msgid ""
-"Could not connect to Joplin Server. Please check the Synchronisation options "
-"in the config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options in the "
+"config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"لا يمكن الاتصال بخادم Joplin. يرجى التحقق من الإعدادات في شاشة تكوين "
-"التزامن. الخطأ الكامل كان:\n"
+"لا يمكن الاتصال بخادم Joplin. يرجى التحقق من الإعدادات في شاشة تكوين التزامن. الخطأ "
+"الكامل كان:\n"
 "\n"
 "%sس"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:313
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "تعذر الاتصال بمستودع المكونات الإضافية"
+msgstr "تعذر الاتصال بمستودع المكونات الإضافية."
 
 #: packages/app-desktop/InteropServiceHelper.ts:198
 msgid "Could not export notes: %s"
@@ -999,16 +984,15 @@ msgstr "تعذّر تثبيت المكوّن الإضافي : %s"
 
 #: packages/app-desktop/services/share/invitationRespond.ts:20
 msgid ""
-"Could not respond to the invitation. Please try again, or check with the "
-"notebook owner if they are still sharing it.\n"
+"Could not respond to the invitation. Please try again, or check with the notebook "
+"owner if they are still sharing it.\n"
 "\n"
 "The error was: \"%s\""
 msgstr ""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:56
-#, fuzzy
 msgid "Could not switch profile: %s"
-msgstr "تعذّر تثبيت المكوّن الإضافي : %s"
+msgstr "تعذر تحويل التعريف: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -1016,24 +1000,22 @@ msgstr "تعذرت ترقية المفتاح الرئيسي: %s\\"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
-"Could not verify the share status of this notebook - aborting. Please try "
-"again when you are connected to the internet."
+"Could not verify the share status of this notebook - aborting. Please try again "
+"when you are connected to the internet."
 msgstr ""
+"لم يتمكن التحقق من حالة النشر الخاصة بهذه الملاحظة. المرجو العودة عند توفر الإنترنت."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
-#, fuzzy
 msgid "Could not verify your identify: %s"
 msgstr "تعذر تصدير الملاحظات: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:277
-#, fuzzy
 msgid "Create"
-msgstr "الإنشاء"
+msgstr "إنشاء"
 
 #: packages/app-cli/app/command-mkbook.ts:19
-#, fuzzy
 msgid "Create a new notebook under a parent notebook."
-msgstr "ينشئ دفتر ملاحظات جديد."
+msgstr "إنشاء دفتر جديد داخل الفتر الأب."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "Create a notebook"
@@ -1041,9 +1023,8 @@ msgstr "إنشاء دفتر ملاحظات"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
-#, fuzzy
 msgid "Create new profile..."
-msgstr "ينشئ ملاحظة جديدة."
+msgstr "إنشاء تعريف جديد..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:165
 #, fuzzy
@@ -1051,13 +1032,12 @@ msgid "Create notebook"
 msgstr "إنشاء دفتر ملاحظات"
 
 #: packages/server/src/routes/admin/users.ts:250
-#, fuzzy
 msgid "Create user"
-msgstr "الإنشاء في: %s"
+msgstr "إنشاء مستخدم"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:51
 msgid "Created"
-msgstr "الإنشاء"
+msgstr "أنشأ"
 
 #: packages/lib/models/Note.ts:38
 msgid "created date"
@@ -1145,7 +1125,7 @@ msgstr "غامقة"
 
 #: packages/server/src/services/MustacheService.ts:112
 msgid "Dashboard"
-msgstr ""
+msgstr "لوحة التحكم"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:678
 msgid "Database v%s"
@@ -1206,14 +1186,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "هل تريد حذف المرفقات \"%s\"؟"
 
 #: packages/server/src/services/TaskService.ts:27
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "تمكين العبارات الرياضية"
+msgstr "حذف الجلسات المنتهية الصلاحية"
 
 #: packages/server/src/services/TaskService.ts:22
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "حذف ملاحظات %d هذه ؟"
+msgstr "حذف الرموز المنتهية الصلاحية"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:94
 msgid "Delete line"
@@ -1221,12 +1199,11 @@ msgstr "حذف الخط"
 
 #: packages/lib/models/Setting.ts:1344
 msgid "Delete local data and re-download from sync target"
-msgstr "حذف البيانات المحليّة وإعادة تنزيل "
+msgstr "حذف البيانات المحليّة وإعادة تنزيل"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
-#, fuzzy
 msgid "Delete note"
-msgstr "حذف الملاحظة؟"
+msgstr "حذف الملاحظة"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1238,9 +1215,8 @@ msgid "Delete note?"
 msgstr "حذف الملاحظة؟"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
-#, fuzzy
 msgid "Delete notebook"
-msgstr "حذف الملاحظة؟"
+msgstr "حذف الملاحظة"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1255,33 +1231,31 @@ msgstr ""
 
 #: packages/app-cli/app/command-rmbook.js:26
 msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
+"Delete notebook? All notes and sub-notebooks within this notebook will also be "
+"deleted."
 msgstr ""
-"حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا "
-"الدفتر أيضاً."
+"حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر "
+"أيضاً."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:167
 msgid "Delete plugin \"%s\"?"
 msgstr "حذف المكون الإضافي \"%s\"؟"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:102
-#, fuzzy
 msgid "Delete profile \"%s\""
-msgstr "حذف الملاحظة \"%s\" ؟"
+msgstr "حذف التعريف \"%s\""
 
 #: packages/app-mobile/components/ScreenHeader.tsx:438
-#, fuzzy
 msgid "Delete selected notes"
-msgstr "حذف هذه الملاحظات؟"
+msgstr "حدف الملاحظات المحددة"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:22
 #: packages/app-mobile/components/side-menu-content.tsx:159
 msgid ""
 "Delete the Inbox notebook?\n"
 "\n"
-"If you delete the inbox notebook, any email that's recently been sent to it "
-"may be lost."
+"If you delete the inbox notebook, any email that's recently been sent to it may be "
+"lost."
 msgstr ""
 
 #: packages/lib/models/Note.ts:780
@@ -1290,16 +1264,14 @@ msgstr "حذف ملاحظات %d هذه ؟"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:237
 msgid ""
-"Delete this invitation? The recipient will no longer have access to this "
-"shared notebook."
+"Delete this invitation? The recipient will no longer have access to this shared "
+"notebook."
 msgstr ""
-"أحذف هذه الدعوة؟ لن يتمكن المستلم من الوصول إلى دفتر الملاحظات المشترك هذا "
-"بعد الآن."
+"أحذف هذه الدعوة؟ لن يتمكن المستلم من الوصول إلى دفتر الملاحظات المشترك هذا بعد الآن."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
-#, fuzzy
 msgid "Delete this profile?"
-msgstr "حذف ملاحظات %d هذه ؟"
+msgstr "حذف هذا التعريف ؟"
 
 #: packages/lib/Synchronizer.ts:192
 msgid "Deleted local items: %d."
@@ -1365,12 +1337,11 @@ msgstr "معطَّل"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:211
 #: packages/app-mobile/components/screens/encryption-config.tsx:240
 msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
+"Disabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
-"تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"دون تشفير إلى وجهة المزامنة. هل ترغب الاستمرار؟"
+"تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل دون "
+"تشفير إلى وجهة المزامنة. هل ترغب الاستمرار؟"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:274
 #: packages/app-mobile/components/screens/Note.tsx:111
@@ -1438,19 +1409,17 @@ msgstr "لا تطلب التأكيد."
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 #, fuzzy
 msgid ""
-"Do not lose the password as, for security purposes, this will be the *only* "
-"way to decrypt the data! To enable encryption, please enter your password "
-"below."
+"Do not lose the password as, for security purposes, this will be the *only* way to "
+"decrypt the data! To enable encryption, please enter your password below."
 msgstr ""
-"تفعيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"مشفرة إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون "
-"هي الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه "
-"لتفعيل التشفير."
+"تفعيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل مشفرة "
+"إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون هي الطريقة "
+"*الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه لتفعيل التشفير."
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:149
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:116
 msgid "Done"
-msgstr ""
+msgstr "تم"
 
 #: packages/app-desktop/checkForUpdates.ts:107
 msgid "Download"
@@ -1477,9 +1446,8 @@ msgid "Downloading"
 msgstr "جاري التنزيل"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:90
-#, fuzzy
 msgid "Downloading %s language files..."
-msgstr "يجري تنزيل الموارد..."
+msgstr "جاري تحميل %s ملفات اللغات..."
 
 #: packages/app-cli/app/command-sync.ts:219
 msgid "Downloading resources..."
@@ -1512,17 +1480,16 @@ msgid "Duplicate line"
 msgstr "سطر مكرَّر"
 
 #: packages/app-mobile/components/ScreenHeader.tsx:456
-#, fuzzy
 msgid "Duplicate selected notes"
-msgstr "سطر مكرَّر"
+msgstr "نسخ الملاحظات المحددة"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the "
+"note is duplicated in the current notebook."
 msgstr ""
-"ينشئ نسخة من الملاحظات المطابقة لـ <note> (ملاحظة) في [notebook] (دفتر "
-"ملاحظات). إذا لم يحدد دفتر ملاحظات فستنسخ الملاحظة في دفتر الملاحظات الحالي."
+"ينشئ نسخة من الملاحظات المطابقة لـ <note> (ملاحظة) في [notebook] (دفتر ملاحظات). "
+"إذا لم يحدد دفتر ملاحظات فستنسخ الملاحظة في دفتر الملاحظات الحالي."
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:85
@@ -1537,9 +1504,8 @@ msgid "Edit in external editor"
 msgstr "التحرير في محرر خارجي"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:141
-#, fuzzy
 msgid "Edit link"
-msgstr "تحرير دفتر الملاحظات"
+msgstr "تحرير الرابط"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -1551,13 +1517,12 @@ msgid "Edit notebook"
 msgstr "تحرير دفتر الملاحظات"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
-#, fuzzy
 msgid "Edit profile"
-msgstr "تصديرملف التعريف"
+msgstr "تعديل التعريف"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "تعديل إعدادات التعريف"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:141
 #: packages/lib/models/Setting.ts:903 packages/lib/models/Setting.ts:904
@@ -1587,9 +1552,8 @@ msgstr "نوع خط المحرّر ذَو الأحرُف أحاديَة التف
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:102
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:106
-#, fuzzy
 msgid "Editor: %s"
-msgstr "محرر"
+msgstr "محرر: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1603,22 +1567,21 @@ msgstr "Emacs"
 #: packages/server/src/routes/admin/emails.ts:127
 #: packages/server/src/routes/admin/users.ts:134
 msgid "Email"
-msgstr ""
+msgstr "بريد إلكتروني"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:18
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:364
-#, fuzzy
 msgid "Email to note"
-msgstr "تحرير الملاحظة."
+msgstr "من بريد إلكتروني إلى ملاحظة"
 
 #: packages/lib/utils/joplinCloud.ts:165
 msgid "Email to Note"
-msgstr ""
+msgstr "من بريد إلكتروني إلى ملاحظة"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:128
 msgid "Emails"
-msgstr ""
+msgstr "رسائل البريد الإلكتروني"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:199
 msgid "emphasised text"
@@ -1739,13 +1702,12 @@ msgid "Enabled"
 msgstr "مفعَّل"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
-#, fuzzy
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target."
+"Enabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent encrypted to the sync target."
 msgstr ""
-"تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"دون تشفير إلى وجهة المزامنة. هل ترغب الاستمرار؟"
+"تخويل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل مشفرة "
+"إلى وجهة المزامنة."
 
 #: packages/lib/models/BaseItem.ts:842
 msgid "Encrypted"
@@ -1771,26 +1733,22 @@ msgstr "التشفير هو: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Encryption keys"
-msgstr "التشفير هو:"
+msgstr "رموز التشفير"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
-#, fuzzy
 msgid "Encryption:"
-msgstr "التشفير"
+msgstr "التشفير:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "تفعيل التشفير"
+msgstr "تشفير شامل"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
 msgstr "أدخل الرمز هنا"
 
-#: packages/app-cli/app/command-e2ee.ts:38
-#: packages/app-cli/app/command-e2ee.ts:84
+#: packages/app-cli/app/command-e2ee.ts:38 packages/app-cli/app/command-e2ee.ts:84
 msgid "Enter master password:"
 msgstr "أدخل كلمة المرور الرئيسة:"
 
@@ -1845,7 +1803,7 @@ msgstr "الخروج من التطبيق."
 
 #: packages/app-mobile/components/side-menu-content.tsx:355
 msgid "Expand"
-msgstr ""
+msgstr "تكبير"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:387
@@ -1878,7 +1836,7 @@ msgstr "تصديرملف التعريف"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:106
 msgid "Exported successfully!"
-msgstr ""
+msgstr "تم التصدير بنجاح"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "Exporting profile..."
@@ -1947,18 +1905,16 @@ msgid "File system"
 msgstr "نظام الملفات"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:193
-#, fuzzy
 msgid "Filter tags"
-msgstr "وسوم جديدة:"
+msgstr "تصفية العلامات"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:233
 msgid "Find and replace"
-msgstr ""
+msgstr "بحث و استبدال"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
-#, fuzzy
 msgid "Find: "
-msgstr "تم العثور عليها: %d."
+msgstr "بحث:"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:63
 msgid "Firefox Extension"
@@ -1995,12 +1951,11 @@ msgstr "مجلدات"
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:581
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
-"التصدير هذا لغرض التصحيح فقط: قم بتصدير ملف التعريف الخاص بك إلى بطاقة SD "
-"الخارجية."
+"التصدير هذا لغرض التصحيح فقط: قم بتصدير ملف التعريف الخاص بك إلى بطاقة SD الخارجية."
 
 #: packages/lib/models/Setting.ts:1506
 msgid "For example \"%s\""
-msgstr ""
+msgstr "مثل \"%s\""
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -2008,26 +1963,23 @@ msgstr "فضلاً زيارة %s لتحصل على معلومات عن كيفي�
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:291
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to enable "
+"it please check the documentation:"
 msgstr ""
-"لمزيد من المعلومات حول التشفير من طرف إلى طرف (E2EE) ونصيحة حول كيفية تمكينه "
-"يرجى مراجعة الوثائق:"
+"لمزيد من المعلومات حول التشفير من طرف إلى طرف (E2EE) ونصيحة حول كيفية تمكينه يرجى "
+"مراجعة الوثائق:"
 
 #: packages/app-cli/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"أكتب `help keymap` للحصول على قائمة اختصارات لوحة المفاتيح و خيارات الإعداد"
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "أكتب `help keymap` للحصول على قائمة اختصارات لوحة المفاتيح و خيارات الإعداد"
 
 #: packages/lib/models/Setting.ts:637
 msgid "Force path style"
 msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:292
-#, fuzzy
 msgid "Formatting"
-msgstr "معلومات"
+msgstr "تنسيق"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -2047,9 +1999,8 @@ msgid "Full changelog"
 msgstr "سجل التغيير بكامله"
 
 #: packages/server/src/routes/admin/users.ts:130
-#, fuzzy
 msgid "Full name"
-msgstr "سجل التغيير بكامله"
+msgstr "الإسم الكامل"
 
 #: packages/lib/models/Setting.ts:2525
 #: packages/server/src/services/MustacheService.ts:109
@@ -2057,9 +2008,8 @@ msgid "General"
 msgstr "عام"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
-#, fuzzy
 msgid "Generated"
-msgstr "عام"
+msgstr "تم إنشاء"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Generating link..."
@@ -2104,11 +2054,11 @@ msgstr "منح ال"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:50
 msgid "Header %d"
-msgstr ""
+msgstr "الرأس %d"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:296
 msgid "Headers"
-msgstr ""
+msgstr "الرؤوس"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:79
 msgid "Heading"
@@ -2163,7 +2113,7 @@ msgstr "تَمييز النَص"
 #: packages/server/src/services/MustacheService.ts:141
 #: packages/server/src/services/MustacheService.ts:273
 msgid "Home"
-msgstr ""
+msgstr "الرئيسية"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:84
 msgid "Horizontal Rule"
@@ -2183,7 +2133,7 @@ msgstr "ارتباط تشعبي"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
 msgid "Icon"
-msgstr ""
+msgstr "أيقونة"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
@@ -2342,9 +2292,8 @@ msgstr "إدراج ارتباط تشعبي"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:89
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:649
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:201
-#, fuzzy
 msgid "Insert time"
-msgstr "إدراج التاريخ والوقت"
+msgstr "إدراج الوقت"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 msgid "Install"
@@ -2383,9 +2332,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "قيمة خيار غير صحيحة: \"%s\". القيم الممكنة هي: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "إجابة غير صحيحة: %s"
+msgstr "كلمة سر غير صحيحة"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:44
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:152
@@ -2399,7 +2347,7 @@ msgstr "العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
 #: packages/server/src/services/MustacheService.ts:149
 #: packages/server/src/services/MustacheService.ts:275
 msgid "Items"
-msgstr ""
+msgstr "عناصر"
 
 #: packages/lib/services/ReportService.ts:211
 msgid "Items that cannot be decrypted"
@@ -2411,15 +2359,15 @@ msgstr "العناصر التي لا يمكن مزامنتها"
 
 #: packages/app-desktop/gui/MenuBar.tsx:794
 msgid "Join us on Twitter"
-msgstr ""
+msgstr "انضم إلينا على Twitter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:332
 msgid ""
-"Joplin can synchronise your notes using various providers. Select one from "
-"the list below."
+"Joplin can synchronise your notes using various providers. Select one from the list "
+"below."
 msgstr ""
-"Joplin يستطيع مزامنة ملاحظاتك باستخدام العديد من المزوّدين. اختر واحداً من "
-"القائمة أدناه."
+"Joplin يستطيع مزامنة ملاحظاتك باستخدام العديد من المزوّدين. اختر واحداً من القائمة "
+"أدناه."
 
 #: packages/lib/models/Setting.ts:2537 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
@@ -2516,9 +2464,8 @@ msgid "Keychain Supported: %s"
 msgstr "سلسلة المفاتيح المدعومة: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:71
-#, fuzzy
 msgid "Keys that need upgrading"
-msgstr "المفاتيح الرئيسية التي تحتاج إلى ترقية"
+msgstr "المفاتيح التي تحتاج إلى ترقية"
 
 #: packages/lib/models/Setting.ts:1402
 msgid "Landscape"
@@ -2570,14 +2517,12 @@ msgid "Lines"
 msgstr "خطوط"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:186
-#, fuzzy
 msgid "Link"
-msgstr "رابط"
+msgstr "ربط"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:95
-#, fuzzy
 msgid "Link description"
-msgstr "التشفير"
+msgstr "ربط الوصف"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Link has been copied to clipboard!"
@@ -2590,9 +2535,8 @@ msgstr[4] "تم نسخ الروابط إلى الحافظة!"
 msgstr[5] "تم نسخ الروابط إلى الحافظة!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
-#, fuzzy
 msgid "Link text"
-msgstr "رابط"
+msgstr "ربط النص"
 
 #: packages/app-mobile/components/screens/Note.tsx:206
 msgid "Links with protocol \"%s\" are not supported"
@@ -2614,9 +2558,8 @@ msgid "Loaded"
 msgstr "تم التنزيل"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:87
-#, fuzzy
 msgid "Loading..."
-msgstr "جارٍ التحديث..."
+msgstr "جارٍ التنزيل..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:54
 msgid "Location"
@@ -2655,7 +2598,7 @@ msgstr "تسجيل الدخول عبر OneDrive"
 
 #: packages/server/src/services/MustacheService.ts:279
 msgid "Logout"
-msgstr ""
+msgstr "تسجيل الخروج"
 
 #: packages/server/src/services/MustacheService.ts:153
 msgid "Logs"
@@ -2667,24 +2610,20 @@ msgid "Make a donation"
 msgstr "تبرَّع"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:220
-#, fuzzy
 msgid "Manage master password"
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "إدارة كلمة المرور الرئيسة"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "إدارة كلمة المرور الرئيسة..."
 
 #: packages/lib/utils/joplinCloud.ts:171
-#, fuzzy
 msgid "Manage multiple users"
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "إدارة العديد من المستخدمين"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:571
-#, fuzzy
 msgid "Manage profiles"
-msgstr "تصديرملف التعريف"
+msgstr "إدارة التعاريف"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:325
 msgid "Manage your plugins"
@@ -2734,15 +2673,13 @@ msgstr "المفتاح الرئيس %s"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
-#, fuzzy
 msgid "Master password"
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "كلمة المرور الرئيسة"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
-#, fuzzy
 msgid "Master password:"
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "كلمة المرور الرئيسة:"
 
 #: packages/lib/models/Setting.ts:765
 msgid "Max concurrent connections"
@@ -2957,9 +2894,8 @@ msgid "Not generated"
 msgstr ""
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:91
-#, fuzzy
 msgid "Not now"
-msgstr "إفعلها الآن"
+msgstr "ليس الآن"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:112
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:122
@@ -2994,9 +2930,8 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "الملاحظة: \"%s\" غير موجودة. تريد إنشائها؟"
 
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:84
-#, fuzzy
 msgid "Note editor"
-msgstr "تاريخ الملاحظة"
+msgstr "معدل الملاحظة"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -3042,9 +2977,8 @@ msgid "Note&book"
 msgstr "دفتر &ملاحظات"
 
 #: packages/lib/models/Setting.ts:2529
-#, fuzzy
 msgid "Notebook"
-msgstr "دفاتر ملاحظات"
+msgstr "دفتر ملاحظات"
 
 #: packages/lib/models/Setting.ts:1586
 msgid "Notebook list growth factor"
@@ -3144,9 +3078,8 @@ msgid "Open %s"
 msgstr "افتح %s"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
-#, fuzzy
 msgid "Open PDF viewer"
-msgstr "تمكين عارض PDF"
+msgstr "فتح عارض PDF"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -3182,9 +3115,8 @@ msgid "Ordered list"
 msgstr "الإنشاء في: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:412
-#, fuzzy
 msgid "Other applications..."
-msgstr "الخروج من التطبيق."
+msgstr "تطبيقات أخزى..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -3226,7 +3158,7 @@ msgstr "لصق"
 #: packages/app-desktop/gui/NoteEditor/commands/pasteAsText.ts:6
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:190
 msgid "Paste as text"
-msgstr ""
+msgstr "لصق على شكل نص"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:527
 msgid "Path:"
@@ -3569,8 +3501,7 @@ msgstr "إعادة تسمية الوسم:"
 
 #: packages/app-cli/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr ""
-"يعيد تسمية <item> (عنصر) معطى (ملاحظة أو دفتر ملاحظات) ليصبح <name> (اسم)."
+msgstr "يعيد تسمية <item> (عنصر) معطى (ملاحظة أو دفتر ملاحظات) ليصبح <name> (اسم)."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:146
 msgid "Renew token"
@@ -3833,8 +3764,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة "
-"هي:\n"
+"يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة هي:\n"
 "%s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:272
@@ -5205,11 +5135,11 @@ msgstr "نعم"
 #: packages/app-mobile/components/screens/Note.tsx:583
 #: packages/lib/shim-init-node.js:195
 msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to "
-"resize it down to %d pixels before attaching it?"
+"You are about to attach a large image (%dx%d pixels). Would you like to resize it "
+"down to %d pixels before attaching it?"
 msgstr ""
-"أنت على وشك إرفاق صورة كبيرة (% dx% d بكسل). هل ترغب في تغيّير حجمة إلى %d "
-"بكسل قبل إرفاقه؟"
+"أنت على وشك إرفاق صورة كبيرة (%dx%d بكسل). هل ترغب في تغيّير حجمة إلى %d بكسل قبل "
+"إرفاقه؟"
 
 #: packages/app-mobile/components/NoteList.tsx:94
 msgid "You currently have no notebooks."
