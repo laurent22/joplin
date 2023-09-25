@@ -1,10 +1,29 @@
 import { _ } from '@joplin/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useMemo } from 'react';
+import { extname } from 'path';
+import shim from '@joplin/lib/shim';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 export const editPopupClass = 'joplin-editPopup';
+
+const getEditIconSrc = (theme: Theme) => {
+	const iconUri = Icon.getImageSourceSync('pencil', 20, theme.color2).uri;
+
+	// Copy to a location that can be read within a WebView
+	// (necessary on iOS)
+	const destPath = `${Setting.value('resourceDir')}/edit-icon.${extname(iconUri)}`;
+
+	// Copy in the background -- the edit icon popover script doesn't need the
+	// icon immediately.
+	void (async () => {
+		await shim.fsDriver().copy(iconUri, destPath);
+	})();
+
+	return destPath;
+};
 
 // Creates JavaScript/CSS that can be used to create an "Edit" button.
 // Exported to facilitate testing.
@@ -79,8 +98,6 @@ export const getEditPopupSource = (theme: Theme) => {
 		}, ${fadeOutDelay});
 	}`;
 
-	const editIcon = Icon.getImageSourceSync('pencil', 20, theme.color2);
-
 	const createEditPopupSyntax = `(parent, resourceId, onclick) => {
 		if (window.editPopupTimeout) {
 			clearTimeout(window.editPopupTimeout);
@@ -101,7 +118,7 @@ export const getEditPopupSource = (theme: Theme) => {
 		const popupIcon = new Image();
 		popupIcon.alt = ${JSON.stringify(_('Edit'))};
 		popupIcon.title = popupIcon.alt;
-		popupIcon.src = ${JSON.stringify(editIcon.uri)};
+		popupIcon.src = ${JSON.stringify(getEditIconSrc(theme))};
 		popupButton.appendChild(popupIcon);
 
 		popupButton.onclick = onclick;
