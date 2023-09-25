@@ -57,6 +57,14 @@ const useCss = (editorTheme: Theme) => {
 				padding: 0;
 				margin: 0;
 			}
+
+			/* Hide the scrollbar. See scrollbar accessibility concerns
+			   (https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-width#accessibility_concerns)
+			   for why this isn't done in js-draw itself. */
+			.toolbar-tool-row::-webkit-scrollbar {
+				display: none;
+				height: 0;
+			}
 		`;
 	}, [editorTheme]);
 };
