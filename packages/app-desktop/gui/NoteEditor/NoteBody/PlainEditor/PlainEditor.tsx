@@ -47,7 +47,7 @@ const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEdito
 				style={{ width: '100%', height: '100%' }}
 				defaultValue={props.content}
 				onChange={onChange}
-			/>;
+			/>
 		</div>
 	);
 };

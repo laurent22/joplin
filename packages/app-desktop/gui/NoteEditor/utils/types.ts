@@ -95,15 +95,6 @@ export interface NoteBodyEditorProps {
 	useCustomPdfViewer: boolean;
 }
 
-export interface NoteBodyEditorRef {
-	content(): string|Promise<string>;
-	resetScroll(): void;
-	scrollTo(options: ScrollOptions): void;
-
-	supportsCommand(name: string): boolean;
-	execCommand(command: CommandValue): Promise<void>;
-}
-
 export interface FormNote {
 	id: string;
 	title: string;
