@@ -7,30 +7,21 @@ import { splitHtml } from '@joplin/renderer/HtmlToHtml';
 import Setting from '@joplin/lib/models/Setting';
 import usePrevious from '../../hooks/usePrevious';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
-import { MarkupToHtml } from '@joplin/renderer';
+
+const { MarkupToHtml } = require('@joplin/renderer');
 import Note from '@joplin/lib/models/Note';
+import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-import { NoteEntity } from '@joplin/lib/services/database/types';
-import Logger from '@joplin/utils/Logger';
-
-const logger = Logger.create('useFormNote');
 
 export interface OnLoadEvent {
 	formNote: FormNote;
-	updated_time: number;
-}
-
-export interface DbNote {
-	id: string;
-	updated_time: number;
 }
 
 export interface HookDependencies {
 	syncStarted: boolean;
 	decryptionStarted: boolean;
 	noteId: string;
-	dbNote: DbNote;
 	isProvisional: boolean;
 	titleInputRef: any;
 	editorRef: any;
@@ -72,7 +63,7 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 
 export default function useFormNote(dependencies: HookDependencies) {
 	const {
-		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad, dbNote,
+		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad,
 	} = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
@@ -86,7 +77,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	// a new refresh.
 	const [formNoteRefeshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
 
-	async function initNoteState(n: NoteEntity) {
+	async function initNoteState(n: any) {
 		let originalCss = '';
 
 		if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -94,7 +85,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			originalCss = splitted.css;
 		}
 
-		const newFormNote: FormNote = {
+		const newFormNote = {
 			id: n.id,
 			title: n.title,
 			body: n.body,
@@ -108,7 +99,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 			hasChanged: false,
 			user_updated_time: n.user_updated_time,
 			encryption_applied: n.encryption_applied,
-			updated_time: n.updated_time,
 		};
 
 		// Note that for performance reason,the call to setResourceInfos should
@@ -126,7 +116,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	useEffect(() => {
 		if (formNoteRefeshScheduled <= 0) return () => {};
 
-		logger.info('Sync has finished and note has never been changed - reloading it');
+		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
 		let cancelled = false;
 
@@ -138,7 +128,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			// it would not have been loaded in the editor (due to note selection changing
 			// on delete)
 			if (!n) {
-				logger.warn('Trying to reload note that has been deleted:', noteId);
+				reg.logger().warn('Trying to reload note that has been deleted:', noteId);
 				return;
 			}
 
@@ -160,37 +150,25 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}, [formNoteRefeshScheduled]);
 
 	useEffect(() => {
-		// Check that synchronisation has just finished - and if the note has
-		// never been changed, we reload it. If the note has already been
-		// changed, it's a conflict that's already been handled by the
-		// synchronizer.
+		// Check that synchronisation has just finished - and
+		// if the note has never been changed, we reload it.
+		// If the note has already been changed, it's a conflict
+		// that's already been handled by the synchronizer.
 		const decryptionJustEnded = prevDecryptionStarted && !decryptionStarted;
 		const syncJustEnded = prevSyncStarted && !syncStarted;
 
 		if (!decryptionJustEnded && !syncJustEnded) return;
 		if (formNote.hasChanged) return;
 
-		// Refresh the form note. This is kept separate from the above logic so
-		// that when prevSyncStarted is changed from true to false, it doesn't
-		// cancel the note from loading.
+		// Refresh the form note.
+		// This is kept separate from the above logic so that when prevSyncStarted is changed
+		// from true to false, it doesn't cancel the note from loading.
 		refreshFormNote();
 	}, [
 		prevSyncStarted, syncStarted,
 		prevDecryptionStarted, decryptionStarted,
 		formNote.hasChanged, refreshFormNote,
 	]);
-
-	useEffect(() => {
-		// Something's not fully initialised - we skip the check
-		if (!dbNote.id || !dbNote.updated_time || !formNote.updated_time) return;
-
-		// If the note in the database is more recent that the note in editor,
-		// it was modified outside the editor, so we refresh it.
-		if (dbNote.id === formNote.id && dbNote.updated_time > formNote.updated_time) {
-			logger.info('Note has been changed outside the editor - reloading it');
-			refreshFormNote();
-		}
-	}, [dbNote.id, dbNote.updated_time, formNote.updated_time, formNote.id, refreshFormNote]);
 
 	useEffect(() => {
 		if (!noteId) {
@@ -202,7 +180,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 		let cancelled = false;
 
-		logger.debug('Loading existing note', noteId);
+		reg.logger().debug('Loading existing note', noteId);
 
 		function handleAutoFocus(noteIsTodo: boolean) {
 			if (!isProvisional) return;
@@ -222,15 +200,15 @@ export default function useFormNote(dependencies: HookDependencies) {
 			const n = await Note.load(noteId);
 			if (cancelled) return;
 			if (!n) throw new Error(`Cannot find note with ID: ${noteId}`);
-			logger.debug('Loaded note:', n);
+			reg.logger().debug('Loaded note:', n);
 
-			await onBeforeLoad({ formNote, updated_time: 0 });
+			await onBeforeLoad({ formNote });
 
 			const newFormNote = await initNoteState(n);
 
 			setIsNewNote(isProvisional);
 
-			await onAfterLoad({ formNote: newFormNote, updated_time: n.updated_time });
+			await onAfterLoad({ formNote: newFormNote });
 
 			handleAutoFocus(!!n.is_todo);
 		}

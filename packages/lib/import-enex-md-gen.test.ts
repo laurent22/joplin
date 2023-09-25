@@ -182,4 +182,26 @@ describe('import-enex-md-gen', () => {
 		await expectThrow(async () => importEnex('', filePath));
 	});
 
+	it('should set resource extension correctly', async () => {
+		// Handle case where the resource has a certain extension, eg. "mscz"
+		// and a mime type that doesn't really match (application/zip). In that
+		// case we want to make sure that the file is not converted to a .zip
+		// file. Fixes https://discourse.joplinapp.org/t/import-issue-evernote-enex-containing-musescore-file-mscz/31394/1
+		await importEnexFile('invalid_resource_mime_type.enex');
+		const resource: ResourceEntity = (await Resource.all())[0];
+		expect(resource.file_extension).toBe('mscz');
+		expect(resource.mime).toBe('application/zip');
+		expect(Resource.fullPath(resource).endsWith('.mscz')).toBe(true);
+	});
+
+	it('should sanitize resource filenames with slashes', async () => {
+		await importEnexFile('resource_filename_with_slashes.enex');
+		const resource: ResourceEntity = (await Resource.all())[0];
+		expect(resource.filename).toBe('house_500.jpg.png');
+		expect(resource.file_extension).toBe('png');
+
+		// However we keep the title as it is
+		expect(resource.title).toBe('app_images/resizable/961b875f-24ac-402f-9b76-37e2d4f03a6c/house_500.jpg.png');
+	});
+
 });
