@@ -3,7 +3,7 @@
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
 import { execCommand, githubUsername } from './tool-utils';
-import * as compareVersions from 'compare-versions';
+import { compareVersions } from 'compare-versions';
 
 interface LogEntry {
 	message: string;
