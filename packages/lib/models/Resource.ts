@@ -5,7 +5,7 @@ import NoteResource from './NoteResource';
 import Setting from './Setting';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-import { ResourceEntity, ResourceLocalStateEntity } from '../services/database/types';
+import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus, ResourceOcrWord } from '../services/database/types';
 import ResourceLocalState from './ResourceLocalState';
 const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
@@ -15,6 +15,7 @@ import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
+import { LoadOptions } from './utils/types';
 
 export default class Resource extends BaseItem {
 
@@ -440,6 +441,35 @@ export default class Resource extends BaseItem {
 			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
 			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
+	}
+
+	public static async needOcr(options: LoadOptions): Promise<ResourceEntity[]> {
+		return await this.db().selectAll(`
+			SELECT ${this.selectFields(options)}
+			FROM resources
+			WHERE ocr_status = ? AND encryption_applied = 0
+			ORDER BY updated_time DESC
+			LIMIT 100
+		`, [ResourceOcrStatus.Todo]);
+	}
+
+	public static async saveOcr(resourceId: string, ocrStatus: ResourceOcrStatus, ocrText: string, ocrWords: ResourceOcrWord[], ocrError: Error|null) {
+		// TODO: replace by .save();
+
+		await this.db().exec(`
+			UPDATE resources SET
+				ocr_status = ?,
+				ocr_text = ?,
+				ocr_words = ?,
+				ocr_error = ?
+			WHERE id = ?
+		`, [
+			ocrStatus,
+			ocrText,
+			JSON.stringify(ocrWords),
+			ocrError ? ocrError.message : '',
+			resourceId,
+		]);
 	}
 
 }

@@ -354,7 +354,7 @@ export default class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -922,6 +922,13 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE `tags` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE `folders` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE `resources` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion === 44) {
+				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_text` TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_words` TEXT NOT NULL DEFAULT ""');
+				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_status` INT NOT NULL DEFAULT 0');
+				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_error` INT NOT NULL DEFAULT 0');
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

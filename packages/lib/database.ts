@@ -88,7 +88,10 @@ export default class Database {
 	}
 
 	public escapeFieldsToString(fields: string[] | string): string {
-		if (fields === '*') return '*';
+		if (typeof fields === 'string') {
+			if (fields === '*') return '*';
+			throw new Error(`Invalid field value (only "*" is supported): ${fields}`);
+		}
 
 		const output = [];
 		for (let i = 0; i < fields.length; i++) {

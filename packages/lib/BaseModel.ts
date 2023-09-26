@@ -356,6 +356,11 @@ class BaseModel {
 			});
 	}
 
+	protected static selectFields(options: LoadOptions): string {
+		if (!options || !options.fields) return '*';
+		return this.db().escapeFieldsToString(options.fields);
+	}
+
 	public static loadByField(fieldName: string, fieldValue: any, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;

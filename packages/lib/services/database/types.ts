@@ -44,6 +44,30 @@ export interface UserDataValue {
   d?: Number; // deleted - 0 or 1 (default = 0)
 }
 
+export interface ResourceOcrWord {
+	text: string;
+	baseline: {
+		has_baseline: boolean;
+		x0: number;
+		x1: number;
+		y0: number;
+		y1: number;
+	}
+	bbox: {
+		x0: number;
+		x1: number;
+		y0: number;
+		y1: number;
+	}
+}
+
+export enum ResourceOcrStatus {
+	Todo = 0,
+	Processing = 1,
+	Done = 2,
+	Error = 3,
+}
+
 export type UserData = Record<string, Record<string, UserDataValue>>;
 
 interface DatabaseTableColumn {
@@ -57,6 +81,8 @@ interface DatabaseTable {
 interface DatabaseTables {
 	[key: string]: DatabaseTable;
 }
+
+
 
 
 
@@ -139,6 +165,7 @@ export interface FolderEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -254,11 +281,16 @@ export interface ResourceEntity {
   'is_shared'?: number;
   'master_key_id'?: string;
   'mime'?: string;
+  'ocr_error'?: number;
+  'ocr_status'?: number;
+  'ocr_text'?: string;
+  'ocr_words'?: string;
   'share_id'?: string;
   'size'?: number;
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -319,6 +351,7 @@ export interface TagEntity {
   'title'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
+  'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
 }
@@ -352,6 +385,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
@@ -365,6 +399,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
@@ -461,11 +496,16 @@ export const databaseSchema: DatabaseTables = {
 		is_shared: { type: 'number' },
 		master_key_id: { type: 'string' },
 		mime: { type: 'string' },
+		ocr_error: { type: 'number' },
+		ocr_status: { type: 'number' },
+		ocr_text: { type: 'string' },
+		ocr_words: { type: 'string' },
 		share_id: { type: 'string' },
 		size: { type: 'number' },
 		title: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
+		user_data: { type: 'string' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},

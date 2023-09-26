@@ -29,7 +29,7 @@
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "npm run clean --workspaces --if-present && node packages/tools/clean && yarn cache clean",
     "dependencyTree": "madge",
-    "generateDatabaseTypes": "node packages/tools/generate-database-types",
+    "generateTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org",
     "linter-ci": "eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",

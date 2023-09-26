@@ -349,6 +349,47 @@ class Application extends BaseApplication {
 		Setting.setValue('wasClosedSuccessfully', false);
 	}
 
+	private async testTesseract() {
+		// const Tesseract = (window as any).Tesseract;
+
+		// const worker = await Tesseract.createWorker({
+		// 	workerPath: "./node_modules/tesseract.js/dist/worker.min.js",
+		// 	logger: m => console.log(m),
+		// 	workerBlobURL: false
+		//   });
+
+		//   (async () => {
+		// 	await worker.loadLanguage('eng');
+		// 	await worker.initialize('eng');
+		// 	const result = await worker.recognize("./images/testocr.png");
+		// 	console.log(result);
+		// 	await worker.terminate();
+		//   })();
+
+
+		// const { recognize } = require('tesseract.js');
+
+		// const result = await recognize(
+		// 	'https://tesseract.projectnaptha.com/img/eng_bw.png',
+		// 	'eng',
+		// 	{ logger: (m:any) => console.log(m) }
+		// );
+
+		// console.info('RRRRRRRRRRRRRRRRRRRRRR', result);
+
+
+		// // const worker = await createWorker();
+
+		// // (async () => {
+		// //   await worker.loadLanguage('eng');
+		// //   await worker.initialize('eng');
+		// //   const { data: { text } } = await worker.recognize('https://tesseract.projectnaptha.com/img/eng_bw.png');
+		// //   console.log(text);
+		// //   await worker.terminate();
+		// // })();
+
+	}
+
 	public async start(argv: string[]): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
@@ -593,6 +634,8 @@ class Application extends BaseApplication {
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 
 		this.startRotatingLogMaintenance(Setting.value('profileDir'));
+
+		await this.testTesseract();
 
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,

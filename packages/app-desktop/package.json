@@ -122,6 +122,7 @@
     "@types/react": "18.2.21",
     "@types/react-redux": "7.1.26",
     "@types/styled-components": "5.1.26",
+    "@types/tesseract.js": "2.0.0",
     "electron": "25.8.1",
     "electron-builder": "24.4.0",
     "glob": "10.3.4",
@@ -184,6 +185,7 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
+    "tesseract.js": "4.1.2",
     "tinymce": "5.10.6"
   }
 }

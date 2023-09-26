@@ -4651,6 +4651,7 @@ __metadata:
     "@types/react": 18.2.21
     "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.26
+    "@types/tesseract.js": 2.0.0
     async-mutex: 0.4.0
     codemirror: 5.65.9
     color: 3.2.1
@@ -4696,6 +4697,7 @@ __metadata:
     styled-components: 5.3.11
     styled-system: 5.1.5
     taboverride: 4.0.3
+    tesseract.js: 4.1.2
     tinymce: 5.10.6
     typescript: 5.1.6
   dependenciesMeta:
@@ -4920,6 +4922,7 @@ __metadata:
     "@types/node": 18.17.14
     "@types/node-rsa": 1.1.1
     "@types/react": 18.2.21
+    "@types/tesseract.js": 2.0.0
     "@types/uuid": 9.0.3
     async-mutex: 0.4.0
     base-64: 1.0.0
@@ -4972,6 +4975,7 @@ __metadata:
     string-to-stream: 3.0.1
     tar: 6.1.15
     tcp-port-used: 1.0.2
+    tesseract.js: 4.1.2
     typescript: 5.1.6
     uglifycss: 0.0.29
     url-parse: 1.5.10
@@ -8449,6 +8453,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/tesseract.js@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@types/tesseract.js@npm:2.0.0"
+  dependencies:
+    tesseract.js: "*"
+  checksum: c9cbba2d781559d565be24d3aa518d6a8356215b5a9a41cfc6be21330a35bd113b942be0c24c7d9fc440db06568e196034b5facef1ec52b3ca584199d040efa1
+  languageName: node
+  linkType: hard
+
 "@types/tough-cookie@npm:*":
   version: 4.0.1
   resolution: "@types/tough-cookie@npm:4.0.1"
@@ -10863,6 +10876,13 @@ __metadata:
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
+  languageName: node
+  linkType: hard
+
+"bmp-js@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "bmp-js@npm:0.1.0"
+  checksum: 2f6cf7eeabae2aa50eb768122f59e9752caa97248028cb8b5cf0d9db7cf8fb3a60262aeb2c6889dd21357ab061b2fb318f21f20d2b24963ba36ead8e264c6654
   languageName: node
   linkType: hard
 
@@ -19365,6 +19385,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"idb-keyval@npm:^6.2.0":
+  version: 6.2.1
+  resolution: "idb-keyval@npm:6.2.1"
+  checksum: 7c0836f832096086e99258167740181132a71dd2694c8b8454a4f5ec69114ba6d70983115153306f0b6de1c8d3bad04f67eed3dff8f50c96815b9985d6d78470
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:1.1.13":
   version: 1.1.13
   resolution: "ieee754@npm:1.1.13"
@@ -20177,6 +20204,13 @@ __metadata:
   bin:
     is-docker: cli.js
   checksum: b698118f04feb7eaf3338922bd79cba064ea54a1c3db6ec8c0c8d8ee7613e7e5854d802d3ef646812a8a3ace81182a085dfa0a71cc68b06f3fa794b9783b3c90
+  languageName: node
+  linkType: hard
+
+"is-electron@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "is-electron@npm:2.2.2"
+  checksum: de5aa8bd8d72c96675b8d0f93fab4cc21f62be5440f65bc05c61338ca27bd851a64200f31f1bf9facbaa01b3dbfed7997b2186741d84b93b63e0aff1db6a9494
   languageName: node
   linkType: hard
 
@@ -26087,6 +26121,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-fetch@npm:^2.6.9":
+  version: 2.7.0
+  resolution: "node-fetch@npm:2.7.0"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: d76d2f5edb451a3f05b15115ec89fc6be39de37c6089f1b6368df03b91e1633fd379a7e01b7ab05089a25034b2023d959b47e59759cb38d88341b2459e89d6e5
+  languageName: node
+  linkType: hard
+
 "node-gyp@npm:8.x":
   version: 8.4.1
   resolution: "node-gyp@npm:8.4.1"
@@ -27010,7 +27058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"opencollective-postinstall@npm:^2.0.2":
+"opencollective-postinstall@npm:^2.0.2, opencollective-postinstall@npm:^2.0.3":
   version: 2.0.3
   resolution: "opencollective-postinstall@npm:2.0.3"
   bin:
@@ -30187,7 +30235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.11":
+"regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.3":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
@@ -33526,6 +33574,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tesseract.js-core@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "tesseract.js-core@npm:4.0.4"
+  checksum: 5bd17315260d13af789a6f3288d35fd4d425234d10e48c548bfb91dd702259894091356941f30186f814832073cbe265abac12d9c5263dd62940504fcfecbd69
+  languageName: node
+  linkType: hard
+
+"tesseract.js@npm:*, tesseract.js@npm:4.1.2":
+  version: 4.1.2
+  resolution: "tesseract.js@npm:4.1.2"
+  dependencies:
+    bmp-js: ^0.1.0
+    idb-keyval: ^6.2.0
+    is-electron: ^2.2.2
+    is-url: ^1.2.4
+    node-fetch: ^2.6.9
+    opencollective-postinstall: ^2.0.3
+    regenerator-runtime: ^0.13.3
+    tesseract.js-core: ^4.0.4
+    wasm-feature-detect: ^1.2.11
+    zlibjs: ^0.3.1
+  checksum: 63cf607507394542e90e9816106f754f9a39ed946d6c3d5d18b6f63d9e13112ec2094c2e47ccc835046c32ad7477f5e2e3793044305d706f15be08278acf76fd
+  languageName: node
+  linkType: hard
+
 "test-exclude@npm:^6.0.0":
   version: 6.0.0
   resolution: "test-exclude@npm:6.0.0"
@@ -35510,6 +35583,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wasm-feature-detect@npm:^1.2.11":
+  version: 1.5.1
+  resolution: "wasm-feature-detect@npm:1.5.1"
+  checksum: a99be305a83530271e47212ef138644c75bc65bcf2b2c094b22fe4e13b9ca1a2c00fdd8a01d663b338e189459a5e1f27d9cbd71c8adca3c71957beea51606193
+  languageName: node
+  linkType: hard
+
 "watchpack@npm:^2.3.1":
   version: 2.3.1
   resolution: "watchpack@npm:2.3.1"
@@ -36634,6 +36714,13 @@ __metadata:
   bin:
     yosay: cli.js
   checksum: 7e0220ef1321a9f0db4632fb564ff0bad66523bd22bb5cd6435886145bba284a4c1f651f51d629f4a904c79b0bbf13940fee1e127746f9f20b3e5eae8336c6cb
+  languageName: node
+  linkType: hard
+
+"zlibjs@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "zlibjs@npm:0.3.1"
+  checksum: 91f3d28bb5925ac71565a1fd4d44303b6b876ed483c9c192864393811151b399f29d917c9118a5aca5a541d9dfc7c199460f86b489ea1f77b7217e0edc887c89
   languageName: node
   linkType: hard
 
