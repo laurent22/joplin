@@ -48,6 +48,15 @@ export interface NoteEditorProps {
 	syncUserId: string;
 }
 
+export interface NoteBodyEditorRef {
+	content(): string|Promise<string>;
+	resetScroll(): void;
+	scrollTo(options: ScrollOptions): void;
+
+	supportsCommand(name: string): boolean;
+	execCommand(command: CommandValue): Promise<void>;
+}
+
 export interface NoteBodyEditorProps {
 	style: any;
 	ref: any;
@@ -59,7 +68,7 @@ export interface NoteBodyEditorProps {
 	onChange(event: OnChangeEvent): void;
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
-	onScroll(event: any): void;
+	onScroll(event: { percent: number }): void;
 	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	htmlToMarkdown: Function;

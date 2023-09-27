@@ -4,6 +4,7 @@ import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
+import setupVim from './setupVim';
 
 export default function useKeymap(CodeMirror: any) {
 
@@ -17,14 +18,6 @@ export default function useKeymap(CodeMirror: any) {
 		CodeMirror.keyMap.emacs['Shift-Tab'] = 'smartListUnindent';
 	}
 
-	function setupVim() {
-		CodeMirror.Vim.defineAction('swapLineDown', CodeMirror.commands.swapLineDown);
-		CodeMirror.Vim.mapCommand('<A-j>', 'action', 'swapLineDown', {}, { context: 'normal', isEdit: true });
-		CodeMirror.Vim.defineAction('swapLineUp', CodeMirror.commands.swapLineUp);
-		CodeMirror.Vim.mapCommand('<A-k>', 'action', 'swapLineUp', {}, { context: 'normal', isEdit: true });
-		CodeMirror.Vim.defineAction('insertListElement', CodeMirror.commands.vimInsertListElement);
-		CodeMirror.Vim.mapCommand('o', 'action', 'insertListElement', { after: true }, { context: 'normal', isEdit: true, interlaceInsertRepeat: true });
-	}
 	function isEditorCommand(command: string) {
 		return command.startsWith('editor.');
 	}
@@ -184,7 +177,7 @@ export default function useKeymap(CodeMirror: any) {
 		keymapService.on('keymapChange', registerKeymap);
 
 		setupEmacs();
-		setupVim();
+		setupVim(CodeMirror);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

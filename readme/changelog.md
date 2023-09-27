@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v2.12.18](https://github.com/laurent22/joplin/releases/tag/v2.12.18) - 2023-09-22T14:37:24Z
+
+- Security: Upgrade to Electron 25.8.1 ([#8921](https://github.com/laurent22/joplin/issues/8921) by Henry Heino)
+
 ## [v2.12.17](https://github.com/laurent22/joplin/releases/tag/v2.12.17) - 2023-09-14T21:54:52Z
 
 - Fixed: Prevent application from being stuck when importing an invalid ENEX file ([#8699](https://github.com/laurent22/joplin/issues/8699))
@@ -12,7 +16,6 @@
 - Improved: Fetch release info from Joplin server ([39c118b](https://github.com/laurent22/joplin/commit/39c118b))
 - Improved: Improve pasting content from Word and Excel ([#8705](https://github.com/laurent22/joplin/issues/8705)) ([#8691](https://github.com/laurent22/joplin/issues/8691))
 - Improved: Refactor note list in preparation for plugin support ([#8624](https://github.com/laurent22/joplin/issues/8624))
-- Improved: Scrollbar thumb is barely visible in Light theme ([#8831](https://github.com/laurent22/joplin/issues/8831)) ([#8817](https://github.com/laurent22/joplin/issues/8817) by Shivam Gupta)
 - Improved: Updated packages markdown-it-multimd-table (v4.2.3), re-resizable (v6.9.11), react, react-redux (v8.1.2), sass (v1.64.2), sharp (v0.32.5), word-wrap (v1.2.5)
 - Fixed: Fix note editor blank after syncing an encrypted note with remote changes ([#8666](https://github.com/laurent22/joplin/issues/8666)) ([#8661](https://github.com/laurent22/joplin/issues/8661) by Henry Heino)
 - Fixed: Hide option to share a notebook when it is not available ([#8844](https://github.com/laurent22/joplin/issues/8844))

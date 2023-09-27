@@ -40,18 +40,17 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: rgba(150, 149, 149, 0.4);
+	background: rgba(100, 100, 100, 0.3);
 	border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	background: rgba(223, 223, 223, 0.6);
 }
 
 ::-webkit-scrollbar-track:hover {
 	background: rgba(0, 0, 0, 0.1);
 }
 
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 100, 100, 0.7);
+}
 
 .fade_out {
 	-webkit-transition: 0.15s;

@@ -3,7 +3,9 @@ on: [push, pull_request]
 jobs:
   pre_job:
     if: github.repository == 'laurent22/joplin'
-    runs-on: ubuntu-latest
+    # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
+    # https://github.com/actions/runner-images/issues/6709
+    runs-on: ubuntu-20.04
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
@@ -19,7 +21,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-2019]
+        # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
+        # https://github.com/actions/runner-images/issues/6709
+        os: [macos-latest, ubuntu-20.04, windows-2019]
     steps:
 
       # Trying to fix random networking issues on Windows
@@ -139,7 +143,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
+        # https://github.com/actions/runner-images/issues/6709
+        os: [ubuntu-20.04]
     steps:
 
       - name: Install Docker Engine

@@ -5,6 +5,7 @@
 				"exceptions": [
 					"@joplin/lib",
 					"@joplin/renderer",
+					"@joplin/editor",
 					"@joplin/pdf-viewer",
 					"@joplin/fork-htmlparser2",
 					"@joplin/fork-sax",

@@ -1,69 +1,53 @@
 // Types related to the NoteEditor
 
-import { Theme } from '@joplin/lib/themes/type';
-import { CodeMirrorControl } from './CodeMirror/types';
-
-// Controls for the entire editor (including dialogs)
-export interface EditorControl extends CodeMirrorControl {
-	showLinkDialog(): void;
-	hideLinkDialog(): void;
-	hideKeyboard(): void;
-}
-
-export interface EditorSettings {
-	// EditorSettings objects are deserialized within WebViews, where
-	// [themeStyle(themeId: number)] doesn't work. As such, we need both
-	// the [themeId] and [themeData].
-	themeId: number;
-	themeData: Theme;
-
-	katexEnabled: boolean;
-	spellcheckEnabled: boolean;
-	readOnly: boolean;
-}
-
-export interface ChangeEvent {
-	// New editor content
-	value: string;
-}
-
-export interface UndoRedoDepthChangeEvent {
-	undoDepth: number;
-	redoDepth: number;
-}
-
-export interface Selection {
-	start: number;
-	end: number;
-}
-
-export interface SelectionChangeEvent {
-	selection: Selection;
-}
+import { EditorControl as EditorBodyControl, EditorSettings as EditorBodySettings, SearchState } from '@joplin/editor/types';
 
 export interface SearchControl {
 	findNext(): void;
 	findPrevious(): void;
-	replaceCurrent(): void;
+	replaceNext(): void;
 	replaceAll(): void;
-	setSearchState(state: SearchState): void;
-
 	showSearch(): void;
 	hideSearch(): void;
+	setSearchState(state: SearchState): void;
 }
 
-export interface SearchState {
-	useRegex: boolean;
-	caseSensitive: boolean;
+// Controls for the entire editor (including dialogs)
+export interface EditorControl extends EditorBodyControl {
+	showLinkDialog(): void;
+	hideLinkDialog(): void;
+	hideKeyboard(): void;
 
-	searchText: string;
-	replaceText: string;
-	dialogVisible: boolean;
+	// Additional shortcut commands (equivalent to .execCommand
+	// with the corresponding type).
+	// This reduces the need for useCallbacks in many cases.
+	undo(): void;
+	redo(): void;
+
+	increaseIndent(): void;
+	decreaseIndent(): void;
+	toggleBolded(): void;
+	toggleItalicized(): void;
+	toggleCode(): void;
+	toggleMath(): void;
+	toggleOrderedList(): void;
+	toggleUnorderedList(): void;
+	toggleTaskList(): void;
+	toggleHeaderLevel(level: number): void;
+
+	scrollSelectionIntoView(): void;
+	showLinkDialog(): void;
+	hideLinkDialog(): void;
+	hideKeyboard(): void;
+
+	searchControl: SearchControl;
 }
 
-// Possible types of lists in the editor
-export enum ListType {
-	CheckList,
-	OrderedList,
-	UnorderedList,
+export interface EditorSettings extends EditorBodySettings {
+	themeId: number;
+}
+
+export interface SelectionRange {
+	start: number;
+	end: number;
 }

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
-import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import { htmlToMarkdown, formNoteToNote } from './utils';
@@ -46,6 +45,8 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
+import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
+import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -380,7 +381,7 @@ function NoteEditor(props: NoteEditorProps) {
 		};
 	}, [setShowRevisions]);
 
-	const onScroll = useCallback((event: any) => {
+	const onScroll = useCallback((event: { percent: number }) => {
 		props.dispatch({
 			type: 'EDITOR_SCROLL_PERCENT_SET',
 			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
@@ -462,7 +463,9 @@ function NoteEditor(props: NoteEditorProps) {
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror') {
-		editor = <CodeMirror {...editorProps}/>;
+		editor = <CodeMirror5 {...editorProps}/>;
+	} else if (props.bodyEditor === 'CodeMirror6') {
+		editor = <CodeMirror6 {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}
@@ -602,7 +605,7 @@ function NoteEditor(props: NoteEditorProps) {
 					disabled={isReadOnly}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
