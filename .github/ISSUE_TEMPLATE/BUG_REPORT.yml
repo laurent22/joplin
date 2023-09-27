@@ -1,0 +1,87 @@
+name: Bug Report
+description: Report a reproducible bug or regression in Joplin.
+labels: ['type: bug']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have used the search function for [open](https://github.com/laurent22/joplin/issues) **and** [closed](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aclosed) issues to see if someone else has already submitted the same bug report.
+          required: true
+        - label: I will describe the problem with as much detail as possible.
+          required: true
+        - label: I will update Joplin to the latest version before reporting a bug.
+          required: true
+        
+  - type: input
+    id: version
+    attributes:
+      label: Joplin version
+      description: We need the actual version number found in the `About Joplin` menu.
+      placeholder: x.y.z
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: false
+      options:
+        - MacOS
+        - Linux
+        - Windows
+        - Android
+        - iOS
+        - Terminal
+    validations:
+      required: true
+
+  - type: input
+    id: os_specifics
+    attributes:
+      label: OS specifics
+      description: e.g. OS version, Linux distribution, Android/iOS version...
+    validations:
+      required: true
+
+  - type: input
+    id: first
+    attributes:
+      label: First occurred
+      placeholder: about x days/weeks ago
+    
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. This
+        2. Then that
+        3. Then this
+        4. Etc.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: After following the steps, what did you think Joplin would do?
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behaviour
+      description: What did Infinity do instead? Include screenshots and video recordings for UI problems if needed. DO NOT create screenshots of text !!! Copy and paste the text into a code block. If you are reporting a clipper bug, please include an example URL that shows the issue. Without the URL the issue is likely to be closed.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: If you are experiencing a crash, including the stacktrace will likely get it fixed sooner.For information on how to collect a log file https://joplinapp.org/debugging/
