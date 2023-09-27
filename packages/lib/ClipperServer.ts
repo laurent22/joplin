@@ -1,5 +1,5 @@
 import Setting from './models/Setting';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import Api, { RequestFile } from './services/rest/Api';
 import ApiResponse from './services/rest/ApiResponse';
 const urlParser = require('url');
@@ -20,6 +20,7 @@ export default class ClipperServer {
 	private server_: any = null;
 	private port_: number = null;
 	private api_: Api = null;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
 
 	private static instance_: ClipperServer = null;
@@ -52,6 +53,7 @@ export default class ClipperServer {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setDispatch(d: Function) {
 		this.dispatch_ = d;
 	}
@@ -112,23 +114,21 @@ export default class ClipperServer {
 		} catch (error) {
 			this.setStartState(StartState.Idle);
 			this.logger().error(error);
-			return;
+			return null;
 		}
 
 		this.server_ = require('http').createServer();
 
 		this.server_.on('request', async (request: any, response: any) => {
 			const writeCorsHeaders = (code: any, contentType = 'application/json', additionalHeaders: any = null) => {
-				const headers = Object.assign(
-					{},
-					{
-						'Content-Type': contentType,
-						'Access-Control-Allow-Origin': '*',
-						'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-						'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
-					},
-					additionalHeaders ? additionalHeaders : {}
-				);
+				const headers = {
+
+					'Content-Type': contentType,
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+					'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
+					...(additionalHeaders ? additionalHeaders : {}),
+				};
 				response.writeHead(code, headers);
 			};
 

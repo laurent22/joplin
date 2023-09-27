@@ -3,7 +3,7 @@ import BaseModel from '../BaseModel';
 import MasterKey from '../models/MasterKey';
 import Resource from '../models/Resource';
 import ResourceService from './ResourceService';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import KvStore from './KvStore';
 import EncryptionService from './e2ee/EncryptionService';
@@ -21,8 +21,9 @@ export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
 
-	private state_: string = 'idle';
+	private state_ = 'idle';
 	private logger_: Logger;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = () => {};
 	private scheduleId_: any = null;
 	private eventEmitter_: any;
@@ -45,10 +46,12 @@ export default class DecryptionWorker {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
@@ -110,7 +113,7 @@ export default class DecryptionWorker {
 	}
 
 	public dispatchReport(report: any) {
-		const action = Object.assign({}, report);
+		const action = { ...report };
 		action.type = 'DECRYPTION_WORKER_SET';
 		this.dispatch(action);
 	}
@@ -280,7 +283,7 @@ export default class DecryptionWorker {
 			error: null,
 		};
 
-		this.dispatchReport(Object.assign({}, finalReport, { state: 'idle' }));
+		this.dispatchReport({ ...finalReport, state: 'idle' });
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);

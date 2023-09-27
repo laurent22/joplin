@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
@@ -86,13 +86,14 @@ class Registry {
 		}
 	};
 
-	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck: boolean = false) => {
+	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {
 			if (delay === null) delay = 1000 * 10;
 			if (syncOptions === null) syncOptions = {};
 
+			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 			let promiseResolve: Function = null;
 			const promise = new Promise((resolve) => {
 				promiseResolve = resolve;
@@ -154,7 +155,7 @@ class Registry {
 
 						try {
 							this.logger().info('Starting scheduled sync');
-							const options = Object.assign({}, syncOptions, { context: context });
+							const options = { ...syncOptions, context: context };
 							if (!options.saveContextHandler) {
 								options.saveContextHandler = (newContext: any) => {
 									Setting.setValue(contextKey, JSON.stringify(newContext));

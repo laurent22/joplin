@@ -6,7 +6,7 @@ import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Stripe } from 'stripe';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
@@ -30,7 +30,7 @@ async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 	return stripe.webhooks.constructEvent(
 		body,
 		req.headers['stripe-signature'],
-		stripeConfig().webhookSecret
+		stripeConfig().webhookSecret,
 	);
 }
 
@@ -44,7 +44,9 @@ interface CreateCheckoutSessionFields {
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
 interface PostHandlers {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	createCheckoutSession: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	webhook: Function;
 }
 
@@ -113,7 +115,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			customerName,
 			accountType,
 			stripeUserId,
-			stripeSubscriptionId
+			stripeSubscriptionId,
 		);
 	}
 };
@@ -218,7 +220,7 @@ export const postHandlers: PostHandlers = {
 		return { sessionId: session.id };
 	},
 
-	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
+	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
 
 		const models = ctx.joplin.models;
@@ -328,7 +330,7 @@ export const postHandlers: PostHandlers = {
 					customer.email,
 					accountType,
 					stripeUserId,
-					stripeSubscriptionId
+					stripeSubscriptionId,
 				);
 			},
 

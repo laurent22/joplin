@@ -1,10 +1,16 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 const RNFetchBlob = require('rn-fetch-blob').default;
-const RNFS = require('react-native-fs');
+import * as RNFS from 'react-native-fs';
 const DocumentPicker = require('react-native-document-picker').default;
 import { openDocument } from '@joplin/react-native-saf-x';
 import RNSAF, { Encoding, DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import { Platform } from 'react-native';
+import * as tar from 'tar-stream';
+import { resolve } from 'path';
+import { Buffer } from 'buffer';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
@@ -61,17 +67,13 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	public async isDirectory(path: string): Promise<boolean> {
-		return (await this.stat(path)).isDirectory();
-	}
-
 	public async readDirStats(path: string, options: any = null) {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
 
 		const isScoped = isScopedUri(path);
 
-		let stats = [];
+		let stats: any[] = [];
 		try {
 			if (isScoped) {
 				stats = await RNSAF.listFiles(path);
@@ -86,12 +88,15 @@ export default class FsDriverRN extends FsDriverBase {
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 			const relativePath = (isScoped ? stat.uri : stat.path).substr(path.length + 1);
-			output.push(this.rnfsStatToStd_(stat, relativePath));
+			const standardStat = this.rnfsStatToStd_(stat, relativePath);
+			output.push(standardStat);
 
 			if (isScoped) {
+				// readUriDirStatsHandleRecursion_ expects stat to have a URI property.
+				// Use the original stat.
 				output = await this.readUriDirStatsHandleRecursion_(stat, output, options);
 			} else {
-				output = await this.readDirStatsHandleRecursion_(path, stat, output, options);
+				output = await this.readDirStatsHandleRecursion_(path, standardStat, output, options);
 			}
 		}
 		return output;
@@ -116,6 +121,13 @@ export default class FsDriverRN extends FsDriverBase {
 		return RNFS.moveFile(source, dest);
 	}
 
+	public async rename(source: string, dest: string) {
+		if (isScopedUri(source) || isScopedUri(dest)) {
+			await RNSAF.rename(source, dest);
+		}
+		return RNFS.moveFile(source, dest);
+	}
+
 	public async exists(path: string) {
 		if (isScopedUri(path)) {
 			return RNSAF.exists(path);
@@ -128,6 +140,8 @@ export default class FsDriverRN extends FsDriverBase {
 			await RNSAF.mkdir(path);
 			return;
 		}
+
+		// Also creates parent directories: Works like mkdir -p
 		return RNFS.mkdir(path);
 	}
 
@@ -141,8 +155,9 @@ export default class FsDriverRN extends FsDriverBase {
 			}
 			return this.rnfsStatToStd_(r, path);
 		} catch (error) {
-			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
+			if (error && (error.code === 'ENOENT' || !(await this.exists(path)))) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
+				//     or   { [Error: The file {file} couldn’t be opened because there is no such file.], code: 'ENSCOCOAERRORDOMAIN260' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 				return null;
 			} else {
@@ -253,6 +268,53 @@ export default class FsDriverRN extends FsDriverBase {
 		throw new Error(`Not implemented: md5File(): ${path}`);
 	}
 
+	public async tarExtract(_options: any) {
+		throw new Error('Not implemented: tarExtract');
+	}
+
+	public async tarCreate(options: any, filePaths: string[]) {
+		// Choose a default cwd if not given
+		const cwd = options.cwd ?? RNFS.DocumentDirectoryPath;
+		const file = resolve(cwd, options.file);
+
+		if (await this.exists(file)) {
+			throw new Error('Error! Destination already exists');
+		}
+
+		const pack = tar.pack();
+
+		for (const path of filePaths) {
+			const absPath = resolve(cwd, path);
+			const stat = await this.stat(absPath);
+			const sizeBytes: number = stat.size;
+
+			const entry = pack.entry({ name: path, size: sizeBytes }, (error) => {
+				if (error) {
+					logger.error(`Tar error: ${error}`);
+				}
+			});
+
+			const chunkSize = 1024 * 100; // 100 KiB
+			for (let offset = 0; offset < sizeBytes; offset += chunkSize) {
+				// The RNFS documentation suggests using base64 for binary files.
+				const part = await RNFS.read(absPath, chunkSize, offset, 'base64');
+				entry.write(Buffer.from(part, 'base64'));
+			}
+			entry.end();
+		}
+
+		pack.finalize();
+
+		// The streams used by tar-stream seem not to support a chunk size
+		// (it seems despite the typings provided).
+		let data: number[]|null = null;
+		while ((data = pack.read()) !== null) {
+			const buff = Buffer.from(data);
+			const base64Data = buff.toString('base64');
+			await this.appendFile(file, base64Data, 'base64');
+		}
+	}
+
 	public async getExternalDirectoryPath(): Promise<string | undefined> {
 		let directory;
 		if (this.isUsingAndroidSAF()) {
@@ -289,7 +351,7 @@ export default class FsDriverRN extends FsDriverBase {
 			} else {
 				// the result is an array
 				if (multiple) {
-					result = await DocumentPicker.pickMultiple();
+					result = await DocumentPicker.pick({ allowMultiSelection: true });
 				} else {
 					result = [await DocumentPicker.pick()];
 				}

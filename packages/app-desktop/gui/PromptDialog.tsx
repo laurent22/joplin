@@ -12,6 +12,7 @@ interface Props {
 	visible: boolean;
 	style: any;
 	buttons: any[];
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	inputType: string;
 	description: string;
@@ -26,7 +27,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 	private focusInput_: boolean;
 	private styles_: any;
 	private styleKey_: string;
-	private menuIsOpened_: boolean = false;
+	private menuIsOpened_ = false;
 
 	public constructor(props: Props) {
 		super(props);
@@ -132,43 +133,49 @@ export default class PromptDialog extends React.Component<Props, any> {
 		};
 
 		this.styles_.select = {
-			control: (provided: any) =>
-				Object.assign(provided, {
+			control: (provided: any) => {
+				return { ...provided,
 					minWidth: width * 0.2,
 					maxWidth: width * 0.5,
 					fontFamily: theme.fontFamily,
-				}),
-			input: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			input: (provided: any) => {
+				return { ...provided,
 					minWidth: '20px',
 					color: theme.color,
-				}),
-			menu: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			menu: (provided: any) => {
+				return { ...provided,
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
-				}),
-			option: (provided: any, state: any) =>
-				Object.assign(provided, {
+				};
+			},
+			option: (provided: any, state: any) => {
+				return { ...provided,
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
-				}),
-			multiValueLabel: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			multiValueLabel: (provided: any) => {
+				return { ...provided,
 					fontFamily: theme.fontFamily,
-				}),
-			multiValueRemove: (provided: any) =>
-				Object.assign(provided, {
+				};
+			},
+			multiValueRemove: (provided: any) => {
+				return { ...provided,
 					color: theme.color,
-				}),
+				};
+			},
 		};
 
-		this.styles_.selectTheme = (tagTheme: any) =>
-			Object.assign(tagTheme, {
+		this.styles_.selectTheme = (tagTheme: any) => {
+			return { ...tagTheme,
 				borderRadius: 2,
-				colors: Object.assign(tagTheme.colors, {
+				colors: { ...tagTheme.colors,
 					primary: theme.raisedBackgroundColor,
 					primary25: theme.raisedBackgroundColor,
 					neutral0: theme.backgroundColor,
@@ -184,12 +191,11 @@ export default class PromptDialog extends React.Component<Props, any> {
 					neutral90: theme.color,
 					danger: theme.backgroundColor,
 					dangerLight: theme.colorError2,
-				}),
-			});
+				},
+			};
+		};
 
-		this.styles_.desc = Object.assign({}, theme.textStyle, {
-			marginTop: 10,
-		});
+		this.styles_.desc = { ...theme.textStyle, marginTop: 10 };
 
 		return this.styles_;
 	}
@@ -269,28 +275,28 @@ export default class PromptDialog extends React.Component<Props, any> {
 			buttonComps.push(
 				<button key="create" disabled={!this.state.answer} style={styles.button} onClick={() => onClose(true, 'create')}>
 					{_('Create')}
-				</button>
+				</button>,
 			);
 		}
 		if (buttonTypes.indexOf('ok') >= 0) {
 			buttonComps.push(
 				<button key="ok" disabled={!this.state.answer} style={styles.button} onClick={() => onClose(true, 'ok')}>
 					{_('OK')}
-				</button>
+				</button>,
 			);
 		}
 		if (buttonTypes.indexOf('cancel') >= 0) {
 			buttonComps.push(
 				<button key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>
 					{_('Cancel')}
-				</button>
+				</button>,
 			);
 		}
 		if (buttonTypes.indexOf('clear') >= 0) {
 			buttonComps.push(
 				<button key="clear" style={styles.button} onClick={() => onClose(false, 'clear')}>
 					{_('Clear')}
-				</button>
+				</button>,
 			);
 		}
 

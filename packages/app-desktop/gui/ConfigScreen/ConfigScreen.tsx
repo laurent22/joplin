@@ -12,12 +12,16 @@ const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+const shared = require('@joplin/lib/components/shared/config/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { getDefaultPluginsInstallState, updateDefaultPluginsInstallState } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
+import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
+import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -106,6 +110,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
@@ -135,7 +140,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const theme = themeStyle(this.props.themeId);
 		return (
-			<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
+			<div style={{ ...theme.textStyle, marginBottom: 15 }}>
 				{description}
 			</div>
 		);
@@ -177,7 +182,24 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
-			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
+			const statusStyle = { ...theme.textStyle, marginTop: 10 };
+			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
+
+			// Don't show the missing password warning if the user just changed the sync target (but hasn't
+			// saved yet).
+			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+				settingComps.push(
+					<p key='missing-password-warning' style={warningStyle}>
+						{_('%s: Missing password.', _('Warning'))}
+						{' '}
+						<MacOSMissingPasswordHelpLink
+							theme={theme}
+							text={_('Help')}
+						/>
+					</p>,
+				);
+			}
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
@@ -197,7 +219,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onClick={this.checkSyncConfig_}
 						/>
 						{statusComp}
-					</div>
+					</div>,
 				);
 			}
 		}
@@ -206,17 +228,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const advancedSettingsSectionStyle = { display: 'none' };
 
 		if (advancedSettingComps.length) {
-			const iconName = this.state.showAdvancedSettings ? 'fa fa-angle-down' : 'fa fa-angle-right';
-			// const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
 			advancedSettingsButton = (
-				<div style={{ marginBottom: 10 }}>
-					<Button
-						level={ButtonLevel.Secondary}
-						onClick={() => shared.advancedSettingsButton_click(this)}
-						iconName={iconName}
-						title={_('Show Advanced Settings')}
-					/>
-				</div>
+				<ToggleAdvancedSettingsButton
+					onClick={() => shared.advancedSettingsButton_click(this)}
+					advancedSettingsVisible={this.state.showAdvancedSettings}
+				/>
 			);
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
@@ -233,23 +249,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private labelStyle(themeId: number) {
 		const theme = themeStyle(themeId);
-		return Object.assign({}, theme.textStyle, {
-			display: 'block',
+		return { ...theme.textStyle, display: 'block',
 			color: theme.color,
 			fontSize: theme.fontSize * 1.083333,
 			fontWeight: 500,
-			marginBottom: theme.mainPadding / 2,
-		});
+			marginBottom: theme.mainPadding / 2 };
 	}
 
 	private descriptionStyle(themeId: number) {
 		const theme = themeStyle(themeId);
-		return Object.assign({}, theme.textStyle, {
-			color: theme.colorFaded,
+		return { ...theme.textStyle, color: theme.colorFaded,
 			fontStyle: 'italic',
 			maxWidth: '70em',
-			marginTop: 5,
-		});
+			marginTop: 5 };
 	}
 
 	private renderLabel(themeId: number, label: string) {
@@ -264,14 +276,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	private renderHeader(themeId: number, label: string, style: any = null) {
 		const theme = themeStyle(themeId);
 
-		const labelStyle = Object.assign({}, theme.textStyle, {
-			display: 'block',
+		const labelStyle = { ...theme.textStyle, display: 'block',
 			color: theme.color,
 			fontSize: theme.fontSize * 1.25,
 			fontWeight: 500,
 			marginBottom: theme.mainPadding,
-			...style,
-		});
+			...style };
 
 		return (
 			<div style={labelStyle}>
@@ -295,17 +305,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const labelStyle = this.labelStyle(this.props.themeId);
 
-		const subLabel = Object.assign({}, labelStyle, {
-			display: 'block',
+		const subLabel = { ...labelStyle, display: 'block',
 			opacity: 0.7,
-			marginBottom: labelStyle.marginBottom,
-		});
+			marginBottom: labelStyle.marginBottom };
 
-		const checkboxLabelStyle = Object.assign({}, labelStyle, {
-			marginLeft: 8,
+		const checkboxLabelStyle = { ...labelStyle, marginLeft: 8,
 			display: 'inline',
-			backgroundColor: 'transparent',
-		});
+			backgroundColor: 'transparent' };
 
 		const controlStyle = {
 			display: 'inline-block',
@@ -314,8 +320,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			backgroundColor: theme.backgroundColor,
 		};
 
-		const textInputBaseStyle = Object.assign({}, controlStyle, {
-			fontFamily: theme.fontFamily,
+		const textInputBaseStyle = { ...controlStyle, fontFamily: theme.fontFamily,
 			border: '1px solid',
 			padding: '4px 6px',
 			boxSizing: 'border-box',
@@ -324,8 +329,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			paddingLeft: 6,
 			paddingRight: 6,
 			paddingTop: 4,
-			paddingBottom: 4,
-		});
+			paddingBottom: 4 };
 
 		const updateSettingValue = (key: string, value: any) => {
 			const md = Setting.settingMetadata(key);
@@ -377,18 +381,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				items.push(
 					<option value={e.key.toString()} key={e.key}>
 						{settingOptions[e.key]}
-					</option>
+					</option>,
 				);
 			}
 
-			const selectStyle = Object.assign({}, controlStyle, {
-				paddingLeft: 6,
+			const selectStyle = { ...controlStyle, paddingLeft: 6,
 				paddingRight: 6,
 				paddingTop: 4,
 				paddingBottom: 4,
 				borderColor: theme.borderColor4,
-				borderRadius: 3,
-			});
+				borderRadius: 3 };
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -443,10 +445,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			const inputStyle: any = Object.assign({}, textInputBaseStyle, {
-				width: '50%',
-				minWidth: '20em',
-			});
+			const inputStyle: any = { ...textInputBaseStyle, width: '50%',
+				minWidth: '20em' };
 			const inputType = md.secure === true ? 'password' : 'text';
 
 			if (md.subType === 'file_path_and_args' || md.subType === 'file_path' || md.subType === 'directory_path') {
@@ -542,7 +542,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
 										<input
 											type={inputType}
-											style={Object.assign({}, inputStyle, { marginBottom: 0, marginRight: 5 })}
+											style={{ ...inputStyle, marginBottom: 0, marginRight: 5 }}
 											onChange={(event: any) => {
 												onPathChange(event);
 											}}
@@ -595,7 +595,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			const label = [md.label()];
 			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
 
-			const inputStyle: any = Object.assign({}, textInputBaseStyle);
+			const inputStyle: any = { ...textInputBaseStyle };
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -679,15 +679,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style = Object.assign({},
-			this.props.style,
-			{
-				overflow: 'hidden',
-				display: 'flex',
-				flexDirection: 'column',
-				backgroundColor: theme.backgroundColor3,
-			}
-		);
+		const style = {
+			...this.props.style,
+			overflow: 'hidden',
+			display: 'flex',
+			flexDirection: 'column',
+			backgroundColor: theme.backgroundColor3,
+		};
 
 		const settings = this.state.settings;
 

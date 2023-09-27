@@ -7,18 +7,19 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
-
+import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
-const bridge = require('@electron/remote').require('./bridge').default;
-const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
+import { Dispatch } from 'redux';
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 interface ContextMenuProps {
 	notes: any[];
-	dispatch: Function;
+	dispatch: Dispatch;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	inConflictFolder: boolean;
@@ -44,50 +45,27 @@ export default class NoteListUtils {
 
 		if (!hasEncrypted) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds))
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
 			);
 
 			menu.append(
-				new MenuItem({
-					label: _('Duplicate'),
-					click: async () => {
-						for (let i = 0; i < noteIds.length; i++) {
-							const note = await Note.load(noteIds[i]);
-							await Note.duplicate(noteIds[i], {
-								uniqueTitle: _('%s - Copy', note.title),
-							});
-						}
-					},
-				})
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
 			);
 
 			if (singleNoteId) {
 				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId)));
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
 			}
 
 			if (noteIds.length <= 1) {
 				menu.append(
-					new MenuItem({
-						label: _('Switch between note and to-do type'),
-						click: async () => {
-							for (let i = 0; i < noteIds.length; i++) {
-								const note = await Note.load(noteIds[i]);
-								const newNote = await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
-								const eventNote = {
-									id: newNote.id,
-									is_todo: newNote.is_todo,
-									todo_due: newNote.todo_due,
-									todo_completed: newNote.todo_completed,
-								};
-								eventManager.emit('noteTypeToggle', { noteId: note.id, note: eventNote });
-							}
-						},
-					})
+					new MenuItem(
+						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds) as any,
+					),
 				);
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
@@ -106,7 +84,7 @@ export default class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'note');
 						},
-					})
+					}),
 				);
 
 				menu.append(
@@ -115,7 +93,7 @@ export default class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'todo');
 						},
-					})
+					}),
 				);
 			}
 
@@ -130,7 +108,7 @@ export default class NoteListUtils {
 						}
 						clipboard.writeText(links.join(' '));
 					},
-				})
+				}),
 			);
 
 			if (noteIds.length === 1) {
@@ -140,15 +118,15 @@ export default class NoteListUtils {
 						click: () => {
 							clipboard.writeText(getNoteCallbackUrl(noteIds[0]));
 						},
-					})
+					}),
 				);
 			}
 
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
-					)
+						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice()) as any,
+					),
 				);
 			}
 
@@ -172,14 +150,14 @@ export default class NoteListUtils {
 								customCss: props.customCss,
 							});
 						},
-					})
+					}),
 				);
 			}
 
 			exportMenu.append(
 				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds)
-				)
+					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds) as any,
+				),
 			);
 
 			const exportMenuItem = new MenuItem({ label: _('Export'), submenu: exportMenu });
@@ -188,12 +166,9 @@ export default class NoteListUtils {
 		}
 
 		menu.append(
-			new MenuItem({
-				label: _('Delete'),
-				click: async () => {
-					await this.confirmDeleteNotes(noteIds);
-				},
-			})
+			new MenuItem(
+				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
+			),
 		);
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
@@ -204,27 +179,12 @@ export default class NoteListUtils {
 
 			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
+					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds) as any),
 				);
 			}
 		}
 
 		return menu;
-	}
-
-	public static async confirmDeleteNotes(noteIds: string[]) {
-		if (!noteIds.length) return;
-
-		const msg = await Note.deleteMessage(noteIds);
-		if (!msg) return;
-
-		const ok = bridge().showConfirmMessageBox(msg, {
-			buttons: [_('Delete'), _('Cancel')],
-			defaultId: 1,
-		});
-
-		if (!ok) return;
-		await Note.batchDelete(noteIds);
 	}
 
 }

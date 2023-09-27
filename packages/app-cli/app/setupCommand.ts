@@ -1,5 +1,6 @@
 import { _ } from '@joplin/lib/locale';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default (cmd: any, stdout: Function, store: Function, gui: Function) => {
 	cmd.setStdout((text: string) => {
 		return stdout(text);

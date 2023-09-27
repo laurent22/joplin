@@ -26,6 +26,7 @@ interface State {
 
 interface Props {
 	message?: string;
+	children: any;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -88,14 +89,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 					<section key="message">
 						<h2>Message</h2>
 						<p>{this.state.error.message}</p>
-					</section>
+					</section>,
 				);
 
 				output.push(
 					<section key="versionInfo">
 						<h2>Version info</h2>
 						<pre>{versionInfo(packageInfo, this.state.plugins).message}</pre>
-					</section>
+					</section>,
 				);
 
 				if (this.state.pluginInfos.length) {
@@ -103,7 +104,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 						<section key="pluginSettings">
 							<h2>Plugins</h2>
 							<pre>{JSON.stringify(this.state.pluginInfos, null, 4)}</pre>
-						</section>
+						</section>,
 					);
 				}
 
@@ -112,7 +113,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 						<section key="stacktrace">
 							<h2>Stack trace</h2>
 							<pre>{this.state.error.stack}</pre>
-						</section>
+						</section>,
 					);
 				}
 
@@ -122,7 +123,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 							<section key="componentStack">
 								<h2>Component stack</h2>
 								<pre>{this.state.errorInfo.componentStack}</pre>
-							</section>
+							</section>,
 						);
 					}
 				}

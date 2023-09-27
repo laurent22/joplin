@@ -4,11 +4,13 @@ const React = require('react');
 const { useMemo, useState, useEffect } = require('react');
 const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 
-import { SearchControl, SearchState, EditorSettings } from './types';
+import { EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler, TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Theme } from '@joplin/lib/themes/type';
 import CustomButton from '../CustomButton';
+import { SearchState } from '@joplin/editor/types';
+import { SearchControl } from './types';
 
 const buttonSize = 48;
 
@@ -25,9 +27,9 @@ export const defaultSearchState: SearchState = {
 };
 
 export interface SearchPanelProps {
-    searchControl: SearchControl;
-    searchState: SearchState;
-    editorSettings: EditorSettings;
+	searchControl: SearchControl;
+	searchState: SearchState;
+	editorSettings: EditorSettings;
 }
 
 interface ActionButtonProps {
@@ -39,7 +41,7 @@ interface ActionButtonProps {
 }
 
 const ActionButton = (
-	props: ActionButtonProps
+	props: ActionButtonProps,
 ) => {
 	return (
 		<CustomButton
@@ -148,13 +150,13 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	const control = props.searchControl;
 
 	const updateSearchState = (changedData: any) => {
-		const newState = Object.assign({}, state, changedData);
+		const newState = { ...state, ...changedData };
 		control.setSearchState(newState);
 	};
 
 	// Creates a TextInut with the given parameters
 	const createInput = (
-		placeholder: string, value: string, onChange: OnChangeCallback, autoFocus: boolean
+		placeholder: string, value: string, onChange: OnChangeCallback, autoFocus: boolean,
 	) => {
 		return (
 			<TextInput
@@ -229,7 +231,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		},
 
 		// Autofocus
-		true
+		true,
 	);
 
 	const replaceTextInput = createInput(
@@ -242,7 +244,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		},
 
 		// Don't autofocus
-		false
+		false,
 	);
 
 	const labeledSearchInput = (
@@ -284,7 +286,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 			themeId={themeId}
 			styles={styles}
 			iconName="swap-horizontal"
-			onPress={control.replaceCurrent}
+			onPress={control.replaceNext}
 			title={_('Replace')}
 		/>
 	);

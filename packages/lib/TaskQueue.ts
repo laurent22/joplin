@@ -1,9 +1,10 @@
 import time from './time';
 import Setting from './models/Setting';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 
 interface Task {
 	id: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	callback: Function;
 }
 
@@ -32,6 +33,7 @@ export default class TaskQueue {
 		return Setting.value('sync.maxConcurrentConnections');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public push(id: string, callback: Function) {
 		if (this.stopping_) throw new Error('Cannot push task when queue is stopping');
 

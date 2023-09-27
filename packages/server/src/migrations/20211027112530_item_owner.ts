@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { DbConnection } from '../db';
 import { msleep } from '../utils/time';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	if (!(await db.schema.hasColumn('items', 'owner_id'))) {
 		await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
 			table.string('owner_id', 32).defaultTo('').notNullable();
@@ -58,10 +58,10 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
 		table.string('owner_id', 32).notNullable().alter();
 	});
-}
+};
 
-export async function down(db: DbConnection): Promise<any> {
+export const down = async (db: DbConnection) => {
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
 		table.dropColumn('owner_id');
 	});
-}
+};

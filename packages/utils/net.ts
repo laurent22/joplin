@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { sleep } from './time';
+import { msleep } from './time';
 import fetch from 'node-fetch';
 
 export const fetchWithRetry = async (url: string, opts: any = null) => {
@@ -20,7 +20,7 @@ export const fetchWithRetry = async (url: string, opts: any = null) => {
 			}
 
 			if (opts && opts.pause) {
-				await sleep(opts.pause);
+				await msleep(opts.pause);
 			}
 		}
 	}

@@ -7,7 +7,7 @@ import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
 import time from '@joplin/lib/time';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -16,20 +16,20 @@ import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
-import reducer from '@joplin/lib/reducer';
+import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
-import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
+import { _, setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription } from 'react-native';
+const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
+import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -58,7 +58,7 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 import NotesScreen from './components/screens/Notes';
 const { TagsScreen } = require('./components/screens/tags.js');
-import ConfigScreen from './components/screens/ConfigScreen';
+import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
@@ -85,6 +85,7 @@ const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
+import initLib from '@joplin/lib/initLib';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -113,9 +114,15 @@ import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import { AppState } from './utils/types';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
-import sensorInfo from './components/biometrics/sensorInfo';
+import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
+import { ReactNode } from 'react';
+import { parseShareCache } from '@joplin/lib/services/share/reducer';
+import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
+
+type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
@@ -130,6 +137,10 @@ const logReducerAction = function(action: any) {
 	// reg.logger().debug('Reducer action', msg.join(', '));
 };
 
+const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
+	return !!sensorInfo && sensorInfo.enabled;
+};
+
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
@@ -142,7 +153,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -178,8 +189,21 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		void reg.scheduleSync(null, null, true);
 	}
 
+	if (
+		action.type === 'AUTODETECT_THEME'
+		|| action.type === 'SETTING_UPDATE_ALL'
+		|| (action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key))
+	) {
+		autodetectTheme();
+	}
+
 	if (action.type === 'NAV_GO' && action.routeName === 'Notes') {
 		Setting.setValue('activeFolderId', newState.selectedFolderId);
+		const notesParent: NotesParent = {
+			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
+			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
+		};
+		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 
 	if (action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
@@ -213,13 +237,11 @@ const DEFAULT_ROUTE = {
 	smartFilterId: 'c3176726992c11e9ac940492261af972',
 };
 
-const appDefaultState: AppState = Object.assign({}, defaultState, {
-	sideMenuOpenPercent: 0,
+const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
-	isOnMobileData: false,
-});
+	isOnMobileData: false };
 
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -228,26 +250,22 @@ const appReducer = (state = appDefaultState, action: any) => {
 	try {
 		switch (action.type) {
 
-		// @ts-ignore
 		case 'NAV_BACK':
-
-		{
-			if (!navHistory.length) break;
-
-			let newAction = null;
-			while (navHistory.length) {
-				newAction = navHistory.pop();
-				if (newAction.routeName !== state.route.routeName) break;
-			}
-
-			action = newAction ? newAction : navHistory.pop();
-
-			historyGoingBack = true;
-		}
-
-		// Fall throught
-
 		case 'NAV_GO':
+
+			if (action.type === 'NAV_BACK') {
+				if (!navHistory.length) break;
+
+				let newAction = null;
+				while (navHistory.length) {
+					newAction = navHistory.pop();
+					if (newAction.routeName !== state.route.routeName) break;
+				}
+
+				action = newAction ? newAction : navHistory.pop();
+
+				historyGoingBack = true;
+			}
 
 			{
 				const currentRoute = state.route;
@@ -272,11 +290,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 				for (let i = 0; i < navHistory.length; i++) {
 					const n = navHistory[i];
 					if (n.routeName === action.routeName) {
-						navHistory[i] = Object.assign({}, action);
+						navHistory[i] = { ...action };
 					}
 				}
 
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				newState.selectedNoteHash = '';
 
@@ -320,32 +338,32 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'SIDE_MENU_TOGGLE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = !newState.showSideMenu;
 			break;
 
 		case 'SIDE_MENU_OPEN':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = true;
 			break;
 
 		case 'SIDE_MENU_CLOSE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.showSideMenu = false;
 			break;
 
 		case 'SIDE_MENU_OPEN_PERCENT':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
 
 			{
-				newState = Object.assign({}, state);
+				newState = { ...state };
 
 				const noteId = action.id;
 				const newSelectedNoteIds = state.selectedNoteIds.slice();
@@ -365,7 +383,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'NOTE_SELECTION_START':
 
 			if (!state.noteSelectionEnabled) {
-				newState = Object.assign({}, state);
+				newState = { ...state };
 				newState.noteSelectionEnabled = true;
 				newState.selectedNoteIds = [action.id];
 			}
@@ -373,20 +391,20 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'NOTE_SELECTION_END':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSelectionEnabled = false;
 			newState.selectedNoteIds = [];
 			break;
 
 		case 'NOTE_SIDE_MENU_OPTIONS_SET':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.noteSideMenuOptions = action.options;
 			break;
 
 		case 'MOBILE_DATA_WARNING_UPDATE':
 
-			newState = Object.assign({}, state);
+			newState = { ...state };
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
@@ -412,6 +430,21 @@ function decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 	ResourceFetcher.instance().scheduleAutoAddResources();
 }
 
+const initializeTempDir = async () => {
+	const tempDir = `${getProfilesRootDir()}/tmp`;
+
+	// Re-create the temporary directory.
+	try {
+		await shim.fsDriver().remove(tempDir);
+	} catch (_error) {
+		// The logger may not exist yet. Do nothing.
+	}
+
+	await shim.fsDriver().mkdir(tempDir);
+	return tempDir;
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
 
@@ -424,10 +457,10 @@ async function initialize(dispatch: Function) {
 		value: profileConfig,
 	});
 
-	// @ts-ignore
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
+	Setting.setConstant('tempDir', await initializeTempDir());
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
 
@@ -447,6 +480,7 @@ async function initialize(dispatch: Function) {
 	}
 
 	Logger.initializeGlobalLogger(mainLogger);
+	initLib(mainLogger);
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
@@ -515,10 +549,12 @@ async function initialize(dispatch: Function) {
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		reg.logger().info(`Client ID: ${Setting.value('clientId')}`);
 
+		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
+
 		if (Setting.value('firstStart')) {
-			let locale = NativeModules.I18nManager.localeIdentifier;
-			if (!locale) locale = defaultLocale();
-			Setting.setValue('locale', closestSupportedLocale(locale));
+			const detectedLocale = shim.detectAndSetLocale(Setting);
+			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
+
 			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', 0);
 		} else {
@@ -618,7 +654,11 @@ async function initialize(dispatch: Function) {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		if (!folder) {
+		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+
+		if (notesParent && notesParent.type === 'SmartFilter') {
+			dispatch(DEFAULT_ROUTE);
+		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
 			dispatch({
@@ -635,6 +675,9 @@ async function initialize(dispatch: Function) {
 	}
 
 	reg.setupRecurrentSync();
+
+	initializeUserFetcher();
+	PoorManIntervals.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 
 	PoorManIntervals.setTimeout(() => {
 		void AlarmService.garbageCollect();
@@ -659,7 +702,7 @@ async function initialize(dispatch: Function) {
 	// doWifiConnectionCheck set to true so initial sync
 	// doesn't happen on mobile data
 	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	void reg.scheduleSync(1000, null, true).then(() => {
+	void reg.scheduleSync(100, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -708,6 +751,7 @@ class AppComponent extends React.Component {
 
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
+	private themeChangeListener_: NativeEventSubscription|null = null;
 
 	public constructor() {
 		super();
@@ -804,7 +848,21 @@ class AppComponent extends React.Component {
 
 			await initialize(this.props.dispatch);
 
-			this.setState({ sensorInfo: await sensorInfo() });
+			const loadedSensorInfo = await sensorInfo();
+			this.setState({ sensorInfo: loadedSensorInfo });
+
+			// If biometrics is disabled we set biometricsDone to `true`. We do
+			// it with a delay so that the component is properly mounted, and
+			// the componentDidUpdate gets triggered (which in turns will handle
+			// the share data, if any).
+			setTimeout(() => {
+				if (!biometricsEnabled(loadedSensorInfo)) {
+					this.props.dispatch({
+						type: 'BIOMETRICS_DONE_SET',
+						value: true,
+					});
+				}
+			}, 100);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -832,6 +890,11 @@ class AppComponent extends React.Component {
 		this.appStateChangeListener_ = RNAppState.addEventListener('change', this.onAppStateChange_);
 		this.unsubscribeScreenWidthChangeHandler_ = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
+		this.themeChangeListener_ = Appearance.addChangeListener(
+			({ colorScheme }) => onSystemColorSchemeChange(colorScheme),
+		);
+		onSystemColorSchemeChange(Appearance.getColorScheme());
+
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
@@ -851,6 +914,11 @@ class AppComponent extends React.Component {
 			this.urlOpenListener_ = null;
 		}
 
+		if (this.themeChangeListener_) {
+			this.themeChangeListener_.remove();
+			this.themeChangeListener_ = null;
+		}
+
 		if (this.unsubscribeScreenWidthChangeHandler_) {
 			this.unsubscribeScreenWidthChangeHandler_.remove();
 			this.unsubscribeScreenWidthChangeHandler_ = null;
@@ -864,14 +932,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	public componentDidUpdate(prevProps: any) {
-		if (this.props.showSideMenu !== prevProps.showSideMenu) {
-			Animated.timing(this.state.sideMenuContentOpacity, {
-				toValue: this.props.showSideMenu ? 0.5 : 0,
-				duration: 600,
-			}).start();
-		}
-
+	public async componentDidUpdate(prevProps: any) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -902,8 +963,6 @@ class AppComponent extends React.Component {
 	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
 
-		logger.info('Sharing: handleShareData:', sharedData);
-
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 			if (this.props.selectedFolderId) {
@@ -912,6 +971,8 @@ class AppComponent extends React.Component {
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
+		} else {
+			logger.info('Sharing: received empty share data.');
 		}
 	}
 
@@ -932,6 +993,9 @@ class AppComponent extends React.Component {
 		this.props.dispatch({
 			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
 		});
+		AccessibilityInfo.announceForAccessibility(
+			isOpen ? _('Side menu opened') : _('Side menu closed'),
+		);
 	}
 
 	private getSideMenuWidth = () => {
@@ -950,8 +1014,8 @@ class AppComponent extends React.Component {
 		if (this.props.appState !== 'ready') return null;
 		const theme: Theme = themeStyle(this.props.themeId);
 
-		let sideMenuContent = null;
-		let menuPosition = 'left';
+		let sideMenuContent: ReactNode = null;
+		let menuPosition: SideMenuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
@@ -981,10 +1045,10 @@ class AppComponent extends React.Component {
 		// const statusBarStyle = theme.appearance === 'light-content';
 		const statusBarStyle = 'light-content';
 
-		const biometricIsEnabled = !!this.state.sensorInfo && this.state.sensorInfo.enabled;
-		const shouldShowMainContent = !biometricIsEnabled || this.props.biometricsDone;
+		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
-		logger.info('root.biometrics: biometricIsEnabled', biometricIsEnabled);
+		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
+		logger.info('root.biometrics: biometricsEnabled', biometricsEnabled(this.state.sensorInfo));
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
 		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
@@ -992,7 +1056,7 @@ class AppComponent extends React.Component {
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
 					menu={sideMenuContent}
-					edgeHitWidth={5}
+					edgeHitWidth={20}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
@@ -1011,8 +1075,7 @@ class AppComponent extends React.Component {
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-							<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
-							{ this.state.sensorInfo && <BiometricPopup
+							{ !shouldShowMainContent && <BiometricPopup
 								dispatch={this.props.dispatch}
 								themeId={this.props.themeId}
 								sensorInfo={this.state.sensorInfo}
@@ -1058,6 +1121,7 @@ const mapStateToProps = (state: any) => {
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
 		biometricsDone: state.biometricsDone,
+		biometricsEnabled: state.settings['security.biometricsEnabled'],
 	};
 };
 

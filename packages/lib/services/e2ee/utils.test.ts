@@ -1,6 +1,6 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { migrateMasterPassword, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { activeMasterKeySanityCheck, migrateMasterPassword, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
 import { localSyncInfo, masterKeyById, masterKeyEnabled, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, ppkPasswordIsValid } from './ppk';
@@ -145,6 +145,43 @@ describe('e2ee/utils', () => {
 		expect(localSyncInfo().ppk.id).not.toBe(previousPpk.id);
 		expect(localSyncInfo().ppk.privateKey.ciphertext).not.toBe(previousPpk.privateKey.ciphertext);
 		expect(localSyncInfo().ppk.publicKey).not.toBe(previousPpk.publicKey);
+
+		// Also check that a new master key has been created, that it is active and enabled
+		expect(localSyncInfo().masterKeys.length).toBe(3);
+		expect(localSyncInfo().activeMasterKeyId).toBe(localSyncInfo().masterKeys[2].id);
+		expect(masterKeyEnabled(localSyncInfo().masterKeys[2])).toBe(true);
+	});
+
+	it('should fix active key selection issues - 1', async () => {
+		const masterPassword1 = '111111';
+		Setting.setValue('encryption.masterPassword', masterPassword1);
+		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		await msleep(1);
+		await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		await msleep(1);
+		const mk3 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		setActiveMasterKeyId(mk1.id);
+		setMasterKeyEnabled(mk1.id, false);
+
+		activeMasterKeySanityCheck();
+
+		const syncInfo = localSyncInfo();
+		expect(syncInfo.activeMasterKeyId).toBe(mk3.id);
+	});
+
+	it('should fix active key selection issues - 2', async () => {
+		// Should not do anything if the active key is already an enabled one.
+		const masterPassword1 = '111111';
+		Setting.setValue('encryption.masterPassword', masterPassword1);
+		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		await msleep(1);
+		await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		setActiveMasterKeyId(mk1.id);
+
+		activeMasterKeySanityCheck();
+
+		const syncInfo = localSyncInfo();
+		expect(syncInfo.activeMasterKeyId).toBe(mk1.id);
 	});
 
 });

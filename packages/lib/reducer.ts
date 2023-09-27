@@ -8,6 +8,7 @@ import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
+import { getListRendererIds } from './services/noteList/renderers';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -98,6 +99,7 @@ export interface State {
 	hasEncryptedItems: boolean;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
+	noteListRendererIds: string[];
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -170,6 +172,7 @@ export const defaultState: State = {
 	hasEncryptedItems: false,
 	needApiAuth: false,
 	profileConfig: null,
+	noteListRendererIds: getListRendererIds(),
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -211,12 +214,12 @@ const createShallowArrayEqualSelector = createSelectorCreator(
 			if (prev[i] !== next[i]) return false;
 		}
 		return true;
-	}
+	},
 );
 
 const selectArrayShallow = createCachedSelector(
 	(state: any) => state.array,
-	(array: any[]) => array
+	(array: any[]) => array,
 )({
 	keySelector: (_state: any, cacheKey: any) => {
 		return cacheKey;
@@ -406,7 +409,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	}
 }
 
-function updateOneItem(draft: Draft<State>, action: any, keyName: string = '') {
+function updateOneItem(draft: Draft<State>, action: any, keyName = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
@@ -421,7 +424,7 @@ function updateOneItem(draft: Draft<State>, action: any, keyName: string = '') {
 	for (let i = 0; i < newItems.length; i++) {
 		const n = newItems[i];
 		if (n.id === item.id) {
-			newItems[i] = Object.assign({}, newItems[i], item);
+			newItems[i] = { ...newItems[i], ...item };
 			found = true;
 			break;
 		}
@@ -461,6 +464,51 @@ function defaultNotesParentType(draft: Draft<State>, exclusion: string) {
 	return newNotesParentType;
 }
 
+export type NotesParentType = 'Folder' | 'Tag' | 'SmartFilter';
+
+export interface NotesParent {
+	type: NotesParentType;
+	selectedItemId: string;
+}
+
+export const serializeNotesParent = (n: NotesParent) => {
+	return JSON.stringify(n);
+};
+
+export const parseNotesParent = (s: string, activeFolderId: string): NotesParent => {
+	const defaultValue: NotesParent = {
+		type: 'Folder',
+		selectedItemId: activeFolderId,
+	};
+
+	if (!s) return defaultValue;
+
+	try {
+		const parsed = JSON.parse(s);
+		return parsed;
+	} catch (error) {
+		return defaultValue;
+	}
+};
+
+export const getNotesParent = (state: State): NotesParent => {
+	let type = state.notesParentType as NotesParentType;
+	let selectedItemId = '';
+
+	if (type === 'Folder') {
+		selectedItemId = state.selectedFolderId;
+	} else if (type === 'Tag') {
+		selectedItemId = state.selectedTagId;
+	} else if (type === 'SmartFilter') {
+		selectedItemId = state.selectedSmartFilterId;
+	} else {
+		type = 'Folder';
+		selectedItemId = state.selectedFolderId;
+	}
+
+	return { type, selectedItemId };
+};
+
 function changeSelectedFolder(draft: Draft<State>, action: any, options: any = null) {
 	if (!options) options = {};
 	draft.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
@@ -474,11 +522,11 @@ function changeSelectedFolder(draft: Draft<State>, action: any, options: any = n
 }
 
 function recordLastSelectedNoteIds(draft: Draft<State>, noteIds: string[]) {
-	const newOnes: any = Object.assign({}, draft.lastSelectedNotesIds);
+	const newOnes: any = { ...draft.lastSelectedNotesIds };
 	const parent = stateUtils.parentItem(draft);
 	if (!parent) return;
 
-	newOnes[parent.type] = Object.assign({}, newOnes[parent.type]);
+	newOnes[parent.type] = { ...newOnes[parent.type] };
 	newOnes[parent.type][parent.id] = noteIds.slice();
 
 	draft.lastSelectedNotesIds = newOnes;
@@ -491,6 +539,7 @@ function changeSelectedNotes(draft: Draft<State>, action: any, options: any = nu
 	if (action.id) noteIds = [action.id];
 	if (action.ids) noteIds = action.ids;
 	if (action.noteId) noteIds = [action.noteId];
+	if (action.index) noteIds = [draft.notes[action.index].id];
 
 	if (action.type === 'NOTE_SELECT') {
 		if (JSON.stringify(draft.selectedNoteIds) === JSON.stringify(noteIds)) return;
@@ -583,8 +632,8 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.forwardHistoryNotes = draft.forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		changeSelectedFolder(draft, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
-		changeSelectedNotes(draft, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		changeSelectedFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
+		changeSelectedNotes(draft, { ...action, type: 'NOTE_SELECT', noteId: note.id });
 
 		const ctx = draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1];
 		Object.assign(draft, getContextFromHistory(ctx));
@@ -599,8 +648,8 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		changeSelectedFolder(draft, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
-		changeSelectedNotes(draft, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		changeSelectedFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
+		changeSelectedNotes(draft, { ...action, type: 'NOTE_SELECT', noteId: note.id });
 
 		const ctx = draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1];
 		Object.assign(draft, getContextFromHistory(ctx));
@@ -633,14 +682,14 @@ function handleHistory(draft: Draft<State>, action: any) {
 
 		draft.backwardHistoryNotes = draft.backwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
 			}
 			return note;
 		});
 
 		draft.forwardHistoryNotes = draft.forwardHistoryNotes.map(note => {
 			if (note.id === modNote.id) {
-				return Object.assign({}, note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
+				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
 			}
 			return note;
 		});
@@ -763,7 +812,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
 				changeSelectedFolder(draft, action);
-				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
+				const noteSelectAction = { ...action, type: 'NOTE_SELECT' };
 				changeSelectedNotes(draft, noteSelectAction);
 			}
 			break;
@@ -774,7 +823,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SETTING_UPDATE_ONE':
 			{
-				const newSettings = Object.assign({}, draft.settings);
+				const newSettings = { ...draft.settings };
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
 			}
@@ -827,7 +876,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
-							newNotes[i] = Object.assign({}, newNotes[i]);
+							newNotes[i] = { ...newNotes[i] };
 
 							for (const n in modNote) {
 								if (!modNote.hasOwnProperty(n)) continue;
@@ -918,9 +967,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_TOGGLE':
 			if (draft.collapsedFolderIds.indexOf(action.id) >= 0) {
-				folderSetCollapsed(draft, Object.assign({ collapsed: false }, action));
+				folderSetCollapsed(draft, { collapsed: false, ...action });
 			} else {
-				folderSetCollapsed(draft, Object.assign({ collapsed: true }, action));
+				folderSetCollapsed(draft, { collapsed: true, ...action });
 			}
 			break;
 
@@ -1054,7 +1103,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
 					if (searches[i].id === action.search.id) {
-						searches[i] = Object.assign({}, action.search);
+						searches[i] = { ...action.search };
 						found = true;
 						break;
 					}
@@ -1102,7 +1151,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'CLIPPER_SERVER_SET':
 			{
-				const clipperServer = Object.assign({}, draft.clipperServer);
+				const clipperServer = { ...draft.clipperServer };
 				if ('startState' in action) clipperServer.startState = action.startState;
 				if ('port' in action) clipperServer.port = action.port;
 				draft.clipperServer = clipperServer;
@@ -1111,7 +1160,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'DECRYPTION_WORKER_SET':
 			{
-				const decryptionWorker = Object.assign({}, draft.decryptionWorker);
+				const decryptionWorker = { ...draft.decryptionWorker };
 				for (const n in action) {
 					if (!action.hasOwnProperty(n) || n === 'type') continue;
 					(decryptionWorker as any)[n] = action[n];
@@ -1122,7 +1171,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'RESOURCE_FETCHER_SET':
 			{
-				const rf = Object.assign({}, action);
+				const rf = { ...action };
 				delete rf.type;
 				draft.resourceFetcher = rf;
 			}
@@ -1141,8 +1190,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'PLUGINLEGACY_DIALOG_SET':
 			{
 				if (!action.pluginName) throw new Error('action.pluginName not specified');
-				const newPluginsLegacy = Object.assign({}, draft.pluginsLegacy);
-				const newPlugin = draft.pluginsLegacy[action.pluginName] ? Object.assign({}, draft.pluginsLegacy[action.pluginName]) : {};
+				const newPluginsLegacy = { ...draft.pluginsLegacy };
+				const newPlugin = draft.pluginsLegacy[action.pluginName] ? { ...draft.pluginsLegacy[action.pluginName] } : {};
 				if ('open' in action) newPlugin.dialogOpen = action.open;
 				if ('userData' in action) newPlugin.userData = action.userData;
 				newPluginsLegacy[action.pluginName] = newPlugin;
@@ -1156,6 +1205,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'PROFILE_CONFIG_SET':
 			draft.profileConfig = action.value;
+			break;
+
+		case 'NOTE_LIST_RENDERER_ADD':
+			{
+				const noteListRendererIds = draft.noteListRendererIds.slice();
+				if (noteListRendererIds.includes(action.value)) throw new Error(`Note list renderer is already registered: ${action.value}`);
+				noteListRendererIds.push(action.value);
+				draft.noteListRendererIds = noteListRendererIds;
+			}
 			break;
 
 		}

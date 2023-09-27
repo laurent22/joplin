@@ -6,8 +6,8 @@ import bridge from '../bridge';
 import Setting from '@joplin/lib/models/Setting';
 import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandlersToIds';
 import shim from '@joplin/lib/shim';
-import Logger from '@joplin/lib/Logger';
-import BackOffHandler from './BackOffHandler';
+import Logger from '@joplin/utils/Logger';
+// import BackOffHandler from './BackOffHandler';
 const ipcRenderer = require('electron').ipcRenderer;
 
 const logger = Logger.create('PluginRunner');
@@ -84,7 +84,7 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 export default class PluginRunner extends BasePluginRunner {
 
 	protected eventHandlers_: EventHandlers = {};
-	private backOffHandlers_: Record<string, BackOffHandler> = {};
+	// private backOffHandlers_: Record<string, BackOffHandler> = {};
 
 	public constructor() {
 		super();
@@ -97,13 +97,12 @@ export default class PluginRunner extends BasePluginRunner {
 		return cb(...args);
 	}
 
-	// @ts-ignore
-	private backOffHandler(pluginId: string): BackOffHandler {
-		if (!this.backOffHandlers_[pluginId]) {
-			this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
-		}
-		return this.backOffHandlers_[pluginId];
-	}
+	// private backOffHandler(pluginId: string): BackOffHandler {
+	// 	if (!this.backOffHandlers_[pluginId]) {
+	// 		this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
+	// 	}
+	// 	return this.backOffHandlers_[pluginId];
+	// }
 
 	public async run(plugin: Plugin, pluginApi: Global) {
 		const scriptPath = `${Setting.value('tempDir')}/plugin_${plugin.id}.js`;
@@ -129,7 +128,10 @@ export default class PluginRunner extends BasePluginRunner {
 
 		if (plugin.devMode) {
 			pluginWindow.webContents.once('dom-ready', () => {
-				pluginWindow.webContents.openDevTools({ mode: 'detach' });
+				// Need to open with a delay, otherwise it doesn't show up
+				setTimeout(() => {
+					pluginWindow.webContents.openDevTools({ mode: 'detach' });
+				}, 3000);
 			});
 		}
 
@@ -155,7 +157,7 @@ export default class PluginRunner extends BasePluginRunner {
 				const fullPath = `joplin.${message.path}`;
 
 				// Don't log complete HTML code, which can be long, for setHtml calls
-				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
+				const debugMappedArgs = fullPath.includes('setHtml') || fullPath.includes('imaging') ? '<hidden>' : mappedArgs;
 				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
 
 				this.recordCallStat(plugin.id);

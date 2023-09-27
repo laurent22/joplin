@@ -6,7 +6,7 @@ import { ErrorNotFound } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
 import { forgotPasswordUrl, resetPasswordUrl } from '../../utils/urlUtils';
 import { bodyFields } from '../../utils/requestUtils';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('index/password');
 

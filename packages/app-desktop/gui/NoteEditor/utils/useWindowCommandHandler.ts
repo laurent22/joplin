@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
-import editorCommandDeclarations from '../editorCommandDeclarations';
+import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
 import { reg } from '@joplin/lib/registry';
@@ -14,15 +14,20 @@ const commandsWithDependencies = [
 
 interface HookDependencies {
 	formNote: FormNote;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setShowLocalSearch: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	noteSearchBarRef: any;
 	editorRef: any;
 	titleInputRef: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	saveNoteAndWait: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setFormNote: Function;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, setFormNote: Function): CommandRuntime {
 	return {
 		execute: async (_context: CommandContext, ...args: any[]) => {
@@ -65,7 +70,7 @@ function editorCommandRuntime(declaration: CommandDeclaration, editorRef: any, s
 		// currently selected text.
 		//
 		// https://github.com/laurent22/joplin/issues/5707
-		enabledCondition: '(!modalDialogVisible || gotoAnythingVisible) && markdownEditorPaneVisible && oneNoteSelected && noteIsMarkdown',
+		enabledCondition: enabledCondition(declaration.name),
 	};
 }
 

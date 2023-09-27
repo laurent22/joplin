@@ -86,6 +86,7 @@ async function deleteAsset(oauthToken: string, id: number) {
 }
 
 async function uploadAsset(oauthToken: string, uploadUrl: string, pluginInfo: PluginInfo) {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	return new Promise((resolve: Function, reject: Function) => {
 		ghReleaseAssets({
 			url: uploadUrl,

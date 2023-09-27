@@ -38,7 +38,7 @@ export function helpUrl(): string {
 	return `${config().baseUrl}/help`;
 }
 
-export function confirmUrl(userId: Uuid, validationToken: string, autoConfirmEmail: boolean = true): string {
+export function confirmUrl(userId: Uuid, validationToken: string, autoConfirmEmail = true): string {
 	return `${config().baseUrl}/users/${userId}/confirm?token=${validationToken}${autoConfirmEmail ? '' : '&confirm_email=0'}`;
 }
 

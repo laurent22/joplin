@@ -18,12 +18,13 @@ export interface GitHubRelease {
 	html_url: string;
 	prerelease: boolean;
 	draft: boolean;
+	body: string;
 }
 
-async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl: string = '') {
+async function insertChangelog(tag: string, changelogPath: string, changelog: string, isPrerelease: boolean, repoTagUrl = '') {
 	repoTagUrl = repoTagUrl || 'https://github.com/laurent22/joplin/releases/tag';
 
-	const currentText = await readFile(changelogPath, 'UTF-8');
+	const currentText = await readFile(changelogPath, 'utf8');
 	const lines = currentText.split('\n');
 
 	const beforeLines = [];
@@ -334,7 +335,23 @@ export function githubOauthToken() {
 // says that nothing has changed on the API, although it used to work. So since
 // we can't use /latest anymore, we need to fetch all the releases to find the
 // latest published one.
+//
+// As of July 2023 /latest seems to be working again, so switching back to this
+// method, but let's keep the old method just in case they break the API again.
 export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
+	const response: any = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases/latest`, {
+		headers: {
+			'Content-Type': 'application/json',
+			'User-Agent': 'Joplin Readme Updater',
+		},
+	});
+
+	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+	return response.json();
+}
+
+export async function gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain(repoName: string): Promise<GitHubRelease> {
 	let pageNum = 1;
 
 	while (true) {
@@ -359,11 +376,25 @@ export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelea
 	}
 }
 
+export const gitHubLatestReleases = async (page: number, perPage: number) => {
+	const response = await fetch(`https://api.github.com/repos/laurent22/joplin/releases?page=${page}&per_page=${perPage}`, {
+		headers: {
+			'Content-Type': 'application/json',
+			'User-Agent': 'Joplin Forum Updater',
+		},
+	});
+
+	if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+	const releases: GitHubRelease[] = await response.json();
+	if (!releases.length) throw new Error('Cannot find latest release');
+
+	return releases;
+};
+
 export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
-	options = Object.assign({}, {
-		isDraft: false,
-		isPreRelease: false,
-	}, options);
+	options = { isDraft: false,
+		isPreRelease: false, ...options };
 
 	const oauthToken = await githubOauthToken();
 
@@ -390,6 +421,12 @@ export async function githubRelease(project: string, tagName: string, options: a
 
 	return responseJson;
 }
+
+export const gitHubLinkify = (markdown: string) => {
+	markdown = markdown.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
+	markdown = markdown.replace(/\(([a-f0-9]+)\)/g, '([$1](https://github.com/laurent22/joplin/commit/$1))');
+	return markdown;
+};
 
 export function readline(question: string) {
 	return new Promise((resolve) => {

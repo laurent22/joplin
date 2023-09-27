@@ -7,7 +7,7 @@ import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
 import { makeTableView, Row, Table } from '../../utils/views/table';
 import { yesOrNo } from '../../utils/strings';
-import { formatDateTime } from '../../utils/time';
+import { formatDateTime, isIso8601Duration } from '../../utils/time';
 import { createCsrfTag } from '../../utils/csrf';
 import { RunType } from '../../services/TaskService';
 import { NotificationKey } from '../../models/NotificationModel';
@@ -64,7 +64,7 @@ router.post('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 			user.id,
 			NotificationKey.Any,
 			NotificationLevel.Error,
-			`Some operations could not be performed: ${errors.join('. ')}`
+			`Some operations could not be performed: ${errors.join('. ')}`,
 		);
 	}
 
@@ -98,7 +98,7 @@ router.get('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 				},
 				{
 					value: task.schedule,
-					hint: prettyCron.toString(task.schedule),
+					hint: isIso8601Duration(task.schedule) ? null : prettyCron.toString(task.schedule),
 				},
 				{
 					value: yesOrNo(state.enabled),

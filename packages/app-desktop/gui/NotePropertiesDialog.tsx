@@ -13,7 +13,9 @@ const formatcoords = require('formatcoords');
 
 interface Props {
 	noteId: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onRevisionLinkClick: Function;
 	themeId: number;
 }
@@ -114,7 +116,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public formNoteToNote(formNote: any) {
-		const note = Object.assign({ id: formNote.id }, this.latLongFromLocation(formNote.location));
+		const note = { id: formNote.id, ...this.latLongFromLocation(formNote.location) };
 		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
 		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
 
@@ -208,10 +210,11 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async saveProperty() {
-		if (!this.state.editedKey) return;
+		if (!this.state.editedKey) return null;
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
-			const newFormNote = Object.assign({}, this.state.formNote);
+			const newFormNote = { ...this.state.formNote };
 
 			if (this.state.editedKey.indexOf('_time') >= 0) {
 				const dt = time.anythingToDateTime(this.state.editedValue, new Date());
@@ -228,12 +231,13 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				},
 				() => {
 					resolve();
-				}
+				},
 			);
 		});
 	}
 
 	public async cancelProperty() {
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
 			this.okButton.current.focus();
 			this.setState({
@@ -248,7 +252,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public createNoteField(key: string, value: any) {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
-		const labelComp = <label style={Object.assign({}, theme.textStyle, theme.controlBoxLabel)}>{this.formatLabel(key)}</label>;
+		const labelComp = <label style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{this.formatLabel(key)}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
@@ -317,7 +321,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					const ll = this.latLongFromLocation(value);
 					url = Note.geoLocationUrlFromLatLong(ll.latitude, ll.longitude);
 				}
-				const urlStyle = Object.assign({}, theme.urlStyle, { maxWidth: '180px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' });
+				const urlStyle = { ...theme.urlStyle, maxWidth: '180px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' };
 				controlComp = (
 					<a href="#" onClick={() => bridge().openExternal(url)} style={urlStyle}>
 						{displayedValue}
@@ -330,7 +334,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					</a>
 				);
 			} else {
-				controlComp = <div style={Object.assign({}, theme.textStyle, theme.controlBoxValue)}>{displayedValue}</div>;
+				controlComp = <div style={{ ...theme.textStyle, ...theme.controlBoxValue }}>{displayedValue}</div>;
 			}
 
 			if (['id', 'revisionsLink', 'markup_language'].indexOf(key) < 0) {

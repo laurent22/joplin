@@ -4,9 +4,13 @@ import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onNext: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onPrevious: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onChange: Function;
 	query: string;
 	searching: boolean;
@@ -37,10 +41,8 @@ class NoteSearchBar extends React.Component<Props> {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = {
-			root: Object.assign({}, theme.textStyle, {
-				backgroundColor: theme.backgroundColor,
-				color: theme.colorFaded,
-			}),
+			root: { ...theme.textStyle, backgroundColor: theme.backgroundColor,
+				color: theme.colorFaded },
 		};
 
 		return style;
@@ -150,12 +152,10 @@ class NoteSearchBar extends React.Component<Props> {
 		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click, buttonEnabled);
 		const nextButton = this.buttonIconComponent('fa-chevron-down', this.nextButton_click, buttonEnabled);
 
-		const textStyle = Object.assign({
-			fontSize: theme.fontSize,
+		const textStyle = { fontSize: theme.fontSize,
 			fontFamily: theme.fontFamily,
 			color: theme.colorFaded,
-			backgroundColor: theme.backgroundColor,
-		});
+			backgroundColor: theme.backgroundColor };
 
 		const matchesFoundString = (query.length > 0) ? (
 			<div style={textStyle}>

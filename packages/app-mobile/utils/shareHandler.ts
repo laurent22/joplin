@@ -7,6 +7,7 @@ const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
 const { Platform } = require('react-native');
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {
@@ -14,7 +15,11 @@ export default async (sharedData: SharedData, folderId: string, dispatch: Functi
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
-			if (response !== PermissionsAndroid.RESULTS.GRANTED) {
+			// Note that if the permission is NEVER_ASK_AGAIN, it might still
+			// work because of the way Android permissions work after Android
+			// 10. So it means in that case we give it a try anyway.
+			// https://stackoverflow.com/a/73630987/561309
+			if (response === PermissionsAndroid.RESULTS.DENIED) {
 				ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
 				ShareExtension.close();
 				return;

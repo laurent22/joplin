@@ -4,7 +4,7 @@ It is possible to get the apps to display or log more information that might hel
 
 ## Desktop application
 
-If the application starts with a white screen, open **Help &gt; Toggle Development Tools** in the menu. Then check in the console if there is any error or warning and please let us know about it.
+If the application starts with a white screen, open **Help &gt; Toggle Development Tools** or **View &gt; Toggle Development Tools** in the menu. Then check in the console if there is any error or warning and please let us know about it.
 
 Otherwise, follow these instructions:
 

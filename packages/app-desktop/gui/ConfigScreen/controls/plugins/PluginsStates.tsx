@@ -13,7 +13,7 @@ import { PluginItem } from './PluginBox';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
 import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
 const { space } = require('styled-system');
@@ -45,9 +45,13 @@ const RepoApiErrorMessage = styled(StyledMessage)<any>`
 interface Props {
 	value: any;
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onChange: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderLabel: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderDescription: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderHeader: Function;
 }
 
@@ -146,6 +150,7 @@ export default function(props: Props) {
 			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest), pluginService.appVersion);
 			if (cancelled) return;
 			const conv: Record<string, boolean> = {};
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			pluginIds.forEach(id => conv[id] = true);
 			setCanBeUpdatedPluginIds(conv);
 		}

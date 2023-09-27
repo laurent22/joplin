@@ -7,7 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 
 const testPluginDir = `${supportDir}/plugins`;
 
-function newPluginService(appVersion: string = '1.4') {
+function newPluginService(appVersion = '1.4') {
 	const runner = new PluginRunner();
 	const service = new PluginService();
 	service.initialize(
@@ -19,7 +19,7 @@ function newPluginService(appVersion: string = '1.4') {
 		{
 			dispatch: () => {},
 			getState: () => {},
-		}
+		},
 	);
 	return service;
 }

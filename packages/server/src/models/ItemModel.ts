@@ -3,23 +3,25 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorCode, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
-import { DbConnection, returningSupported } from '../db';
+import { DbConnection, isUniqueConstraintError, returningSupported } from '../db';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
 import { msleep } from '../utils/time';
-import Logger, { LoggerWrapper } from '@joplin/lib/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import prettyBytes = require('pretty-bytes');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
+
+const modelLogger = Logger.create('ItemModel');
 
 export interface DeleteOptions extends BaseDeleteOptions {
 	deleteChanges?: boolean;
@@ -66,7 +68,7 @@ export interface ItemLoadOptions extends LoadOptions {
 
 export default class ItemModel extends BaseModel<Item> {
 
-	private updatingTotalSizes_: boolean = false;
+	private updatingTotalSizes_ = false;
 	private storageDriverConfig_: StorageDriverConfig;
 	private storageDriverConfigFallback_: StorageDriverConfig;
 
@@ -309,7 +311,7 @@ export default class ItemModel extends BaseModel<Item> {
 			try {
 				content = await fromDriver.read(item.id, { models: this.models() });
 			} catch (error) {
-				if (error.code === ErrorCode.NotFound) {
+				if (error.code === CustomErrorCode.NotFound) {
 					logger.info(`Could not process item, because content was deleted: ${item.id}`);
 					return;
 				}
@@ -434,7 +436,7 @@ export default class ItemModel extends BaseModel<Item> {
 				.whereIn('id', this.db(this.tableName)
 					.select(['id'])
 					.where('content', '!=', Buffer.from(''))
-					.limit(options.batchSize)
+					.limit(options.batchSize),
 				);
 
 			totalDone += updatedRows.length;
@@ -458,7 +460,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return row.content;
 	}
 
-	public async sharedFolderChildrenItems(shareUserIds: Uuid[], folderId: string, includeResources: boolean = true): Promise<Item[]> {
+	public async sharedFolderChildrenItems(shareUserIds: Uuid[], folderId: string, includeResources = true): Promise<Item[]> {
 		if (!shareUserIds.length) throw new Error('User IDs must be specified');
 
 		let output: Item[] = [];
@@ -535,10 +537,10 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
+	public async saveFromRawContent(user: User, rawContentItemOrItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
 
-		if (!Array.isArray(rawContentItems)) rawContentItems = [rawContentItems];
+		const rawContentItems = !Array.isArray(rawContentItemOrItems) ? [rawContentItemOrItems] : rawContentItemOrItems;
 
 		// In this function, first we process the input items, which may be
 		// serialized Joplin items or actual buffers (for resources) and convert
@@ -553,73 +555,78 @@ export default class ItemModel extends BaseModel<Item> {
 			joplinItem?: any;
 		}
 
-		const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name));
-		const itemsToProcess: Record<string, ItemToProcess> = {};
-
-		for (const rawItem of rawContentItems) {
-			try {
-				const isJoplinItem = isJoplinItemName(rawItem.name);
-				let isNote = false;
-
-				const item: Item = {
-					name: rawItem.name,
-				};
-
-				let joplinItem: any = null;
-
-				let resourceIds: string[] = [];
-
-				if (isJoplinItem) {
-					joplinItem = await unserializeJoplinItem(rawItem.body.toString());
-					isNote = joplinItem.type_ === ModelType.Note;
-					resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
-
-					item.jop_id = joplinItem.id;
-					item.jop_parent_id = joplinItem.parent_id || '';
-					item.jop_type = joplinItem.type_;
-					item.jop_encryption_applied = joplinItem.encryption_applied || 0;
-					item.jop_share_id = joplinItem.share_id || '';
-					item.jop_updated_time = joplinItem.updated_time;
-
-					const joplinItemToSave = { ...joplinItem };
-
-					delete joplinItemToSave.id;
-					delete joplinItemToSave.parent_id;
-					delete joplinItemToSave.share_id;
-					delete joplinItemToSave.type_;
-					delete joplinItemToSave.encryption_applied;
-					delete joplinItemToSave.updated_time;
-
-					item.content = Buffer.from(JSON.stringify(joplinItemToSave));
-				} else {
-					item.content = rawItem.body;
-				}
-
-				const existingItem = existingItems.find(i => i.name === rawItem.name);
-				if (existingItem) item.id = existingItem.id;
-
-				if (options.shareId) item.jop_share_id = options.shareId;
-
-				await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
-
-				itemsToProcess[rawItem.name] = {
-					item: item,
-					error: null,
-					resourceIds,
-					isNote,
-					joplinItem,
-				};
-			} catch (error) {
-				itemsToProcess[rawItem.name] = {
-					item: null,
-					error: error,
-				};
-			}
+		interface ExistingItem {
+			id: Uuid;
+			name: string;
 		}
 
-		const output: SaveFromRawContentResult = {};
+		return this.withTransaction(async () => {
+			const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name), { fields: ['id', 'name'] }) as ExistingItem[];
+			const itemsToProcess: Record<string, ItemToProcess> = {};
 
-		await this.withTransaction(async () => {
+			for (const rawItem of rawContentItems) {
+				try {
+					const isJoplinItem = isJoplinItemName(rawItem.name);
+					let isNote = false;
+
+					const item: Item = {
+						name: rawItem.name,
+					};
+
+					let joplinItem: any = null;
+
+					let resourceIds: string[] = [];
+
+					if (isJoplinItem) {
+						joplinItem = await unserializeJoplinItem(rawItem.body.toString());
+						isNote = joplinItem.type_ === ModelType.Note;
+						resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
+
+						item.jop_id = joplinItem.id;
+						item.jop_parent_id = joplinItem.parent_id || '';
+						item.jop_type = joplinItem.type_;
+						item.jop_encryption_applied = joplinItem.encryption_applied || 0;
+						item.jop_share_id = joplinItem.share_id || '';
+						item.jop_updated_time = joplinItem.updated_time;
+
+						const joplinItemToSave = { ...joplinItem };
+
+						delete joplinItemToSave.id;
+						delete joplinItemToSave.parent_id;
+						delete joplinItemToSave.share_id;
+						delete joplinItemToSave.type_;
+						delete joplinItemToSave.encryption_applied;
+						delete joplinItemToSave.updated_time;
+
+						item.content = Buffer.from(JSON.stringify(joplinItemToSave));
+					} else {
+						item.content = rawItem.body;
+					}
+
+					const existingItem = existingItems.find(i => i.name === rawItem.name);
+					if (existingItem) item.id = existingItem.id;
+
+					if (options.shareId) item.jop_share_id = options.shareId;
+
+					await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
+
+					itemsToProcess[rawItem.name] = {
+						item: item,
+						error: null,
+						resourceIds,
+						isNote,
+						joplinItem,
+					};
+				} catch (error) {
+					itemsToProcess[rawItem.name] = {
+						item: null,
+						error: error,
+					};
+				}
+			}
+
+			const output: SaveFromRawContentResult = {};
+
 			for (const name of Object.keys(itemsToProcess)) {
 				const o = itemsToProcess[name];
 
@@ -688,9 +695,9 @@ export default class ItemModel extends BaseModel<Item> {
 					};
 				}
 			}
-		}, 'ItemModel::saveFromRawContent');
 
-		return output;
+			return output;
+		}, 'ItemModel::saveFromRawContent');
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {
@@ -708,7 +715,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 
-	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery = '', count = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.innerJoin('items', 'user_items.item_id', 'items.id')
@@ -738,13 +745,13 @@ export default class ItemModel extends BaseModel<Item> {
 		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: ItemLoadOptions = {}): Promise<PaginatedItems> {
+	public async children(userId: Uuid, pathQuery = '', pagination: Pagination = null, options: ItemLoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
 		const query = this.childrenQuery(userId, pathQuery, false, options);
 		return paginateDbQuery(query, pagination, 'items');
 	}
 
-	public async childrenCount(userId: Uuid, pathQuery: string = ''): Promise<number> {
+	public async childrenCount(userId: Uuid, pathQuery = ''): Promise<number> {
 		const query = this.childrenQuery(userId, pathQuery, true);
 		const r = await query.first();
 		return r ? r.total : 0;
@@ -782,7 +789,7 @@ export default class ItemModel extends BaseModel<Item> {
 	// that shared folder. It returns null otherwise.
 	public async joplinItemSharedRootInfo(jopId: string): Promise<SharedRootInfo | null> {
 		const path = await this.joplinItemPath(jopId);
-		if (!path.length) throw new ApiError(`Cannot retrieve path for item: ${jopId}`, null, 'noPathForItem');
+		if (!path.length) throw new ApiError(`Cannot retrieve path for item: ${jopId}`, null, ErrorCode.NoPathForItem);
 		const rootFolderItem = path[path.length - 1];
 		const share = await this.models().share().itemShare(ShareType.Folder, rootFolderItem.id);
 		if (!share) return null;
@@ -897,6 +904,44 @@ export default class ItemModel extends BaseModel<Item> {
 		}, 'ItemModel::makeTestItems');
 	}
 
+	// I hate that this hack is necessary but it seems certain items end up with
+	// no associated user_items in the database. Thus when the user tries to
+	// update the items, the system thinks it's a new one, but then the query
+	// fails due to the UNIQUE constraints. This is now mitigated by making
+	// these items as "rejectedByTarget", which move them out of the way so that
+	// the rest of the items can be synced.
+	//
+	// To be safe we should however fix these orphaned items and that's what
+	// this function is doing.
+	//
+	// Why this happens is unclear. It's probably related to sharing notes,
+	// maybe moving them from one folder to another, then unsharing, etc. It
+	// can't be replicated so far. On Joplin Cloud it happens on only 0.0008% of
+	// items, so a simple processing task like this one is sufficient for now
+	// but it would be nice to get to the bottom of this bug.
+	public processOrphanedItems = async () => {
+		await this.withTransaction(async () => {
+			const orphanedItems: Item[] = await this.db(this.tableName)
+				.select(['items.id', 'items.owner_id'])
+				.leftJoin('user_items', 'user_items.item_id', 'items.id')
+				.whereNull('user_items.user_id');
+
+			const userIds: string[] = orphanedItems.map(i => i.owner_id);
+			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
+
+			for (const orphanedItem of orphanedItems) {
+				if (!users.find(u => u.id)) {
+					// The user may have been deleted since then. In that case, we
+					// simply delete the orphaned item.
+					await this.delete(orphanedItem.id);
+				} else {
+					// Otherwise we add it back to the user's collection
+					await this.models().userItem().add(orphanedItem.owner_id, orphanedItem.id);
+				}
+			}
+		}, 'ItemModel::processOrphanedItems');
+	};
+
 	// This method should be private because items should only be saved using
 	// saveFromRawContent, which is going to deal with the content driver. But
 	// since it's used in various test units, it's kept public for now.
@@ -928,7 +973,16 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 
 		return this.withTransaction(async () => {
-			item = await super.save(item, options);
+			try {
+				item = await super.save(item, options);
+			} catch (error) {
+				if (isUniqueConstraintError(error)) {
+					modelLogger.error(`Unique constraint error on item: ${JSON.stringify({ id: item.id, name: item.name, jop_id: item.jop_id, owner_id: item.owner_id })}`, error);
+					throw new ErrorConflict(`This item is already present and cannot be added again: ${item.name}`);
+				} else {
+					throw error;
+				}
+			}
 
 			if (isNew) await this.models().userItem().add(userId, item.id);
 
@@ -983,7 +1037,7 @@ export default class ItemModel extends BaseModel<Item> {
 					const userIds: Uuid[] = unique(
 						userItems
 							.map(u => u.user_id)
-							.concat(changes.map(c => c.user_id))
+							.concat(changes.map(c => c.user_id)),
 					);
 
 					const totalSizes: TotalSizeRow[] = [];

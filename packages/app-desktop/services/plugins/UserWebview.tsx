@@ -7,7 +7,7 @@ import useSubmitHandler from './hooks/useSubmitHandler';
 import useHtmlLoader from './hooks/useHtmlLoader';
 import useWebviewToPluginMessages from './hooks/useWebviewToPluginMessages';
 import useScriptLoader from './hooks/useScriptLoader';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import styled from 'styled-components';
 
 const logger = Logger.create('UserWebview');
@@ -23,8 +23,11 @@ export interface Props {
 	fitToContent?: boolean;
 	borderBottom?: boolean;
 	theme?: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSubmit?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDismiss?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onReady?: Function;
 }
 
@@ -105,7 +108,7 @@ function UserWebview(props: Props, ref: any) {
 		frameWindow(),
 		isReady,
 		postMessage,
-		props.html
+		props.html,
 	);
 
 	const contentSize = useContentSize(
@@ -114,14 +117,14 @@ function UserWebview(props: Props, ref: any) {
 		minWidth,
 		minHeight,
 		props.fitToContent,
-		isReady
+		isReady,
 	);
 
 	useSubmitHandler(
 		frameWindow(),
 		props.onSubmit,
 		props.onDismiss,
-		htmlHash
+		htmlHash,
 	);
 
 	useWebviewToPluginMessages(
@@ -129,14 +132,14 @@ function UserWebview(props: Props, ref: any) {
 		isReady,
 		props.pluginId,
 		props.viewId,
-		postMessage
+		postMessage,
 	);
 
 	useScriptLoader(
 		postMessage,
 		isReady,
 		props.scripts,
-		cssFilePath
+		cssFilePath,
 	);
 
 	return <StyledFrame

@@ -9,7 +9,8 @@ import Note from '@joplin/lib/models/Note';
 import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
 import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
-const styled = require('styled-components').default;
+import styled from 'styled-components';
+import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 
 enum BaseBreakpoint {
 	Sm = 75,
@@ -26,7 +27,8 @@ interface Props {
 	notesParentType: string;
 	height: number;
 	width: number;
-	onContentHeightChange: (sameRow: boolean)=> void;
+	newNoteButtonEnabled: boolean;
+	newTodoButtonEnabled: boolean;
 }
 
 interface Breakpoints {
@@ -38,7 +40,6 @@ interface Breakpoints {
 
 const StyledRoot = styled.div`
 	box-sizing: border-box;
-	height: ${(props: any) => props.height}px;
 	display: flex;
 	flex-direction: column;
 	padding: ${(props: any) => props.theme.mainPadding}px;
@@ -181,13 +182,11 @@ function NoteListControls(props: Props) {
 	useEffect(() => {
 		if (breakpoint === dynamicBreakpoints.Xl) {
 			noteControlsRef.current.style.flexDirection = 'row';
-			searchAndSortRef.current.style.flex = '2 1 auto';
-			props.onContentHeightChange(true);
+			searchAndSortRef.current.style.flex = '2 1 50%';
 		} else {
 			noteControlsRef.current.style.flexDirection = 'column';
-			props.onContentHeightChange(false);
 		}
-	}, [breakpoint, dynamicBreakpoints, props.onContentHeightChange]);
+	}, [breakpoint, dynamicBreakpoints]);
 
 	useEffect(() => {
 		CommandService.instance().registerRuntime('focusSearch', focusSearchRuntime(searchBarRef));
@@ -255,6 +254,7 @@ function NoteListControls(props: Props) {
 					level={ButtonLevel.Primary}
 					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
+					disabled={!props.newNoteButtonEnabled}
 				/>
 				<StyledButton ref={newTodoRef}
 					className="new-todo-button"
@@ -264,6 +264,7 @@ function NoteListControls(props: Props) {
 					level={ButtonLevel.Secondary}
 					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
+					disabled={!props.newTodoButtonEnabled}
 				/>
 			</TopRow>
 		);
@@ -300,9 +301,13 @@ function NoteListControls(props: Props) {
 }
 
 const mapStateToProps = (state: AppState) => {
+	const whenClauseContext = stateToWhenClauseContext(state);
+
 	return {
 		// TODO: showNewNoteButtons and the logic associated is not needed anymore.
 		showNewNoteButtons: true,
+		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
+		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
 		sortOrderField: state.settings['notes.sortOrder.field'],
 		sortOrderReverse: state.settings['notes.sortOrder.reverse'],

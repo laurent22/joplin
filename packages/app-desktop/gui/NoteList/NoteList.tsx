@@ -5,7 +5,7 @@ import eventManager from '@joplin/lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import NoteListItem from '../NoteListItem';
@@ -17,8 +17,11 @@ import ItemList from '../ItemList';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { Props } from './types';
+import { Props } from './utils/types';
 import usePrevious from '../hooks/usePrevious';
+import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 const commands = [
 	require('./commands/focusElementNoteList'),
@@ -186,7 +189,7 @@ const NoteListComponent = (props: Props) => {
 		setDragOverTargetNoteIndex(null);
 
 		const targetNoteIndex = dragTargetNoteIndex_(event);
-		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+		const noteIds: string[] = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
 		void Note.insertNotesAt(props.selectedFolderId, noteIds, targetNoteIndex, props.uncompletedTodosOnTop, props.showCompletedTodos);
 	};
@@ -223,7 +226,9 @@ const NoteListComponent = (props: Props) => {
 		}
 	};
 
-	const noteItem_dragStart = (event: any) => {
+	const noteItem_dragStart = useCallback((event: any) => {
+		if (props.parentFolderIsReadOnly) return false;
+
 		let noteIds = [];
 
 		// Here there is two cases:
@@ -236,13 +241,17 @@ const NoteListComponent = (props: Props) => {
 			if (clickedNoteId) noteIds.push(clickedNoteId);
 		}
 
-		if (!noteIds.length) return;
+		if (!noteIds.length) return false;
 
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
 		event.dataTransfer.setData('text/x-jop-note-ids', JSON.stringify(noteIds));
-		event.dataTransfer.effectAllowed = 'move';
-	};
+		// While setting
+		//   event.dataTransfer.effectAllowed = 'move';
+		// causes the drag cursor to have a "move", rather than an "add", icon,
+		// this breaks note drag and drop into the markdown editor.
+		return true;
+	}, [props.parentFolderIsReadOnly, props.selectedNoteIds]);
 
 	const renderItem = useCallback((item: any, index: number) => {
 		const highlightedWords = () => {
@@ -278,6 +287,7 @@ const NoteListComponent = (props: Props) => {
 			onNoteDragOver={noteItem_noteDragOver}
 			onTitleClick={noteItem_titleClick}
 			onContextMenu={itemContextMenu}
+			draggable={!props.parentFolderIsReadOnly}
 		/>;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [style, props.themeId, width, itemHeight, dragOverTargetNoteIndex, props.provisionalNoteIds, props.selectedNoteIds, props.watchedNoteFiles,
@@ -286,6 +296,7 @@ const NoteListComponent = (props: Props) => {
 		props.searches,
 		props.selectedSearchId,
 		props.highlightedWords,
+		props.parentFolderIsReadOnly,
 	]);
 
 	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
@@ -393,7 +404,8 @@ const NoteListComponent = (props: Props) => {
 		if (noteIds.length && (keyCode === 46 || (keyCode === 8 && event.metaKey))) {
 			// DELETE / CMD+Backspace
 			event.preventDefault();
-			await NoteListUtils.confirmDeleteNotes(noteIds);
+			void CommandService.instance().execute('deleteNote', noteIds);
+			// await NoteListUtils.confirmDeleteNotes(noteIds);
 		}
 
 		if (noteIds.length && keyCode === 32) {
@@ -541,6 +553,9 @@ const NoteListComponent = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState) => {
+	const selectedFolder: FolderEntity = state.notesParentType === 'Folder' ? BaseModel.byId(state.folders, state.selectedFolderId) : null;
+	const userId = state.settings['sync.userId'];
+
 	return {
 		notes: state.notes,
 		folders: state.folders,
@@ -560,6 +575,7 @@ const mapStateToProps = (state: AppState) => {
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
 		focusedField: state.focusedField,
+		parentFolderIsReadOnly: state.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
 	};
 };
 

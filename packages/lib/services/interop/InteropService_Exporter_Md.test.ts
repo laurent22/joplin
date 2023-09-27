@@ -10,6 +10,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { NoteEntity, ResourceEntity } from '../database/types.js';
 import InteropService from './InteropService.js';
 import { fileExtension } from '../../path-utils.js';
+import { readdir } from 'fs/promises';
 
 describe('interop/InteropService_Exporter_Md', () => {
 
@@ -445,6 +446,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
 		expect(fileExtension(resourceFilename)).toBe('jpg');
 	}));
+
 	it('should url encode resource links', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
@@ -462,6 +464,25 @@ describe('interop/InteropService_Exporter_Md', () => {
 
 		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
+	}));
+
+	it('should handle filenames that contain slashes', (async () => {
+		const folder = await Folder.save({ title: 'testing' });
+		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		const resource: ResourceEntity = (await Resource.all())[0];
+		await Resource.save({ id: resource.id, filename: 'a/b/c/test.jpg', title: 'name with spaces.jpg' });
+
+		const service = InteropService.instance();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+		});
+
+		const files = await readdir(`${exportDir()}/_resources`);
+		expect(files).toEqual(['a_b_c_test.jpg']);
 	}));
 
 });

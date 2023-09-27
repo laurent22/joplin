@@ -40,25 +40,23 @@ markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 
 	mark.mark(
 		[value],
-		Object.assign(
-			{},
-			{
-				accuracy: accuracy,
-				filter: (node, _term, _totalCounter, _counter) => {
-					// We exclude SVG because it creates a "<mark>" tag inside
-					// the document, which is not a valid SVG tag. As a result
-					// the content within that tag disappears.
-					//
-					// mark.js has an "exclude" parameter, but it doesn't work
-					// so we use "filter" instead.
-					//
-					// https://github.com/joplin/plugin-abc-sheet-music
-					if (isInsideContainer(node, 'SVG')) return false;
-					return true;
-				},
+		{
+
+			accuracy: accuracy,
+			filter: (node, _term, _totalCounter, _counter) => {
+				// We exclude SVG because it creates a "<mark>" tag inside
+				// the document, which is not a valid SVG tag. As a result
+				// the content within that tag disappears.
+				//
+				// mark.js has an "exclude" parameter, but it doesn't work
+				// so we use "filter" instead.
+				//
+				// https://github.com/joplin/plugin-abc-sheet-music
+				if (isInsideContainer(node, 'SVG')) return false;
+				return true;
 			},
-			extraOptions
-		)
+			...extraOptions,
+		},
 	);
 };
 

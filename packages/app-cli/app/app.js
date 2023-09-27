@@ -146,6 +146,7 @@ class Application extends BaseApplication {
 
 	commands(uiType = null) {
 		if (!this.allCommandsLoaded_) {
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			fs.readdirSync(__dirname).forEach(path => {
 				if (path.indexOf('command-') !== 0) return;
 				if (path.endsWith('.test.js')) return;
@@ -192,7 +193,7 @@ class Application extends BaseApplication {
 		let output = await this.cache_.getItem('metadata');
 		if (output) {
 			this.commandMetadata_ = output;
-			return Object.assign({}, this.commandMetadata_);
+			return { ...this.commandMetadata_ };
 		}
 
 		const commands = this.commands();
@@ -207,7 +208,7 @@ class Application extends BaseApplication {
 		await this.cache_.setItem('metadata', output, 1000 * 60 * 60 * 24);
 
 		this.commandMetadata_ = output;
-		return Object.assign({}, this.commandMetadata_);
+		return { ...this.commandMetadata_ };
 	}
 
 	hasGui() {
@@ -451,6 +452,8 @@ class Application extends BaseApplication {
 				type: 'FOLDER_SELECT',
 				id: Setting.value('activeFolderId'),
 			});
+
+			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		}
 	}
 }

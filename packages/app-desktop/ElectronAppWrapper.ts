@@ -1,4 +1,4 @@
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -26,7 +26,7 @@ export default class ElectronAppWrapper {
 	private isDebugMode_: boolean;
 	private profilePath_: string;
 	private win_: BrowserWindow = null;
-	private willQuitApp_: boolean = false;
+	private willQuitApp_ = false;
 	private tray_: any = null;
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
@@ -100,7 +100,10 @@ export default class ElectronAppWrapper {
 			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
 			// https://github.com/laurent22/joplin/issues/2031
-			show: debugEarlyBugs,
+			//
+			// On Linux/GNOME, however, the window doesn't show correctly if show is false initially:
+			// https://github.com/laurent22/joplin/issues/8256
+			show: debugEarlyBugs || shim.isGNOME(),
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
@@ -171,7 +174,7 @@ export default class ElectronAppWrapper {
 					// so that it can tell us if we can really close the app or not.
 					// Search for "appClose" event for closing logic on renderer side.
 					event.preventDefault();
-					this.win_.webContents.send('appClose');
+					if (this.win_) this.win_.webContents.send('appClose');
 				} else {
 					// If the renderer process has responded, check if we can close or not
 					if (this.rendererProcessQuitReply_.canClose) {

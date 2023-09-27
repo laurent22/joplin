@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 
 const fs = require('fs-extra');
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const { dirname } = require('@joplin/lib/path-utils');
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 const JoplinDatabase = require('@joplin/lib/JoplinDatabase').default;

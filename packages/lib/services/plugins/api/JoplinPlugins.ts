@@ -1,5 +1,7 @@
+/* eslint-disable multiline-comment-style */
+
 import Plugin from '../Plugin';
-import Logger from '../../../Logger';
+import Logger from '@joplin/utils/Logger';
 import { ContentScriptType, Script } from './types';
 
 const logger = Logger.create('joplin.plugins');

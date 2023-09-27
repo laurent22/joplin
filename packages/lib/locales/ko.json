@@ -301,7 +301,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암호화되어 전송됩니다.",
  "Encrypted": "암호화됨",
  "Encrypted items cannot be modified": "암호화된 항목은 변경될 수 없습니다",
- "Encrypted notebooks cannot be renamed": "암호화된 노트북은 이름을 변경할 수 없습니다",
  "Encryption": "암호화",
  "Encryption Config": "암호화 설정",
  "Encryption is: %s": "암호화: %s",

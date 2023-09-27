@@ -265,7 +265,6 @@
  "Enabled": "Đã bật",
  "Encrypted": "Đã mã hóa",
  "Encrypted items cannot be modified": "Các mục đã mã hóa không thể chỉnh sửa",
- "Encrypted notebooks cannot be renamed": "Notebooks đã được mã hóa không thể đổi tên",
  "Encryption": "Mã hóa",
  "Encryption Config": "Cấu hình mã hóa",
  "Encryption is: %s": "Mã hóa là: %s",

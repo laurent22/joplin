@@ -16,7 +16,7 @@ class DatabaseDriverReactNative {
 				},
 				error => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
@@ -35,7 +35,7 @@ class DatabaseDriverReactNative {
 				},
 				error => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
@@ -66,7 +66,7 @@ class DatabaseDriverReactNative {
 				},
 				error => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}

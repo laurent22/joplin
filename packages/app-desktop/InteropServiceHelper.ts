@@ -1,7 +1,8 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/interop/types';
+import { ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModule } from '@joplin/lib/services/interop/Module';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -29,13 +30,11 @@ export default class InteropServiceHelper {
 	private static async exportNoteToHtmlFile(noteId: string, exportOptions: ExportNoteOptions) {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
 
-		const fullExportOptions: ExportOptions = Object.assign({}, {
-			path: tempFile,
+		const fullExportOptions: ExportOptions = { path: tempFile,
 			format: 'html',
 			target: FileSystemItem.File,
 			sourceNoteIds: [noteId],
-			customCss: '',
-		}, exportOptions);
+			customCss: '', ...exportOptions };
 
 		const service = InteropService.instance();
 
@@ -153,7 +152,8 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	public static async export(_dispatch: Function, module: Module, options: ExportNoteOptions = null) {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	public static async export(_dispatch: Function, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;

@@ -19,9 +19,13 @@ interface Props {
 	noteResources: any;
 	paddingBottom: number;
 	noteHash: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onJoplinLinkClick: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onCheckboxChange?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onMarkForDownload?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onLoadEnd?: Function;
 }
 
@@ -39,12 +43,12 @@ export default function NoteBodyViewer(props: Props) {
 		props.highlightedKeywords,
 		props.noteResources,
 		props.paddingBottom,
-		props.noteHash
+		props.noteHash,
 	);
 
 	const onResourceLongPress = useOnResourceLongPress(
 		props.onJoplinLinkClick,
-		dialogBoxRef
+		dialogBoxRef,
 	);
 
 	const onMessage = useOnMessage(
@@ -52,7 +56,7 @@ export default function NoteBodyViewer(props: Props) {
 		props.noteBody,
 		props.onMarkForDownload,
 		props.onJoplinLinkClick,
-		onResourceLongPress
+		onResourceLongPress,
 	);
 
 	const onLoadEnd = useCallback(() => {

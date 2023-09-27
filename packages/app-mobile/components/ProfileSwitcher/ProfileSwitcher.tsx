@@ -14,6 +14,7 @@ const { themeStyle } = require('../global-style');
 
 interface Props {
 	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 
@@ -70,7 +71,7 @@ export default (props: Props) => {
 					onPress: () => {},
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, []);
 
@@ -107,7 +108,7 @@ export default (props: Props) => {
 					onPress: () => {},
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, [profileConfig]);
 
@@ -143,7 +144,7 @@ export default (props: Props) => {
 								onPress: () => {},
 								style: 'cancel',
 							},
-						]
+						],
 					);
 				}}
 			/>

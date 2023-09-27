@@ -3,7 +3,8 @@ import BaseItem from '../../models/BaseItem';
 import Note from '../../models/Note';
 import { expectNotThrow, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import time from '../../time';
-import ItemUploader, { ApiCallFunction } from './ItemUploader';
+import ItemUploader from './ItemUploader';
+import { ApiCallFunction } from './utils/types';
 
 interface ApiCall {
 	name: string;
@@ -18,6 +19,7 @@ function newFakeApi(): FileApi {
 	return { supportsMultiPut: true } as any;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = null): ApiCallFunction {
 	const apiCall = async (callName: string, ...args: any[]): Promise<any> => {
 		callRecorder.push({ name: callName, args });
@@ -159,7 +161,7 @@ describe('synchronizer/ItemUploader', () => {
 		await itemUploader.preUploadItems(notes);
 
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[0]), notes[0]));
-		await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]));
+		await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]), null);
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[2]), notes[2]));
 	}));
 

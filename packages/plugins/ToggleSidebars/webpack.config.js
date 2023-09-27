@@ -25,9 +25,7 @@ const distDir = path.resolve(rootDir, 'dist');
 const srcDir = path.resolve(rootDir, 'src');
 const publishDir = path.resolve(rootDir, 'publish');
 
-const userConfig = Object.assign({}, {
-	extraScripts: [],
-}, fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {});
+const userConfig = { extraScripts: [], ...(fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {}) };
 
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
@@ -91,7 +89,7 @@ function createPluginArchive(sourceDir, destPath) {
 			cwd: sourceDir,
 			sync: true,
 		},
-		distFiles
+		distFiles,
 	);
 
 	console.info(chalk.cyan(`Plugin archive has been created in ${destPath}`));
@@ -131,8 +129,7 @@ const baseConfig = {
 	},
 };
 
-const pluginConfig = Object.assign({}, baseConfig, {
-	entry: './src/index.ts',
+const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 	resolve: {
 		alias: {
 			api: path.resolve(__dirname, 'api'),
@@ -161,17 +158,14 @@ const pluginConfig = Object.assign({}, baseConfig, {
 				},
 			],
 		}),
-	],
-});
+	] };
 
-const extraScriptConfig = Object.assign({}, baseConfig, {
-	resolve: {
-		alias: {
-			api: path.resolve(__dirname, 'api'),
-		},
-		extensions: ['.tsx', '.ts', '.js'],
+const extraScriptConfig = { ...baseConfig, resolve: {
+	alias: {
+		api: path.resolve(__dirname, 'api'),
 	},
-});
+	extensions: ['.tsx', '.ts', '.js'],
+} };
 
 const createArchiveConfig = {
 	stats: 'errors-only',
@@ -212,10 +206,8 @@ function buildExtraScriptConfigs(userConfig) {
 
 	for (const scriptName of userConfig.extraScripts) {
 		const scriptPaths = resolveExtraScriptPath(scriptName);
-		output.push(Object.assign({}, extraScriptConfig, {
-			entry: scriptPaths.entry,
-			output: scriptPaths.output,
-		}));
+		output.push({ ...extraScriptConfig, entry: scriptPaths.entry,
+			output: scriptPaths.output });
 	}
 
 	return output;

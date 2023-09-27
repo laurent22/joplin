@@ -9,8 +9,7 @@
 // the code.
 
 function plugin(markdownIt: any) {
-	// @ts-ignore: Keep the function signature as-is despite unusued arguments
-	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, slf: any) {
+	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, _env: any, slf: any) {
 		let token = tokens[idx],
 			info = token.info ? markdownIt.utils.unescapeAll(token.info).trim() : '',
 			langName = '',

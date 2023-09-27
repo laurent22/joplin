@@ -33,9 +33,7 @@ export default class EmailModel extends BaseModel<Email> {
 			if (existingEmail) return null; // noop - the email has already been sent
 		}
 
-		const output = await super.save({ ...email });
-		EmailModel.eventEmitter.emit('queued');
-		return output;
+		return super.save({ ...email });
 	}
 
 	private async byRecipientAndKey(recipientEmail: string, key: string): Promise<Email> {

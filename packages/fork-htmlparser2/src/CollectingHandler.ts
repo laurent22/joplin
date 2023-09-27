@@ -8,8 +8,7 @@ export class CollectingHandler extends MultiplexHandler {
     constructor(cbs: Partial<Handler> = {}) {
         super((name, ...args) => {
             this.events.push([name, ...args]);
-            // @ts-ignore
-            if (this._cbs[name]) this._cbs[name](...args);
+            if (this._cbs[name]) (this._cbs as any)[name](...args);
         });
 
         this._cbs = cbs;
@@ -31,8 +30,7 @@ export class CollectingHandler extends MultiplexHandler {
                 continue;
             }
 
-            // @ts-ignore
-            this._cbs[name](...args);
+            (this._cbs as any)[name](...args);
         }
     }
 }

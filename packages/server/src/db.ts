@@ -2,7 +2,7 @@ import { knex, Knex } from 'knex';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
 
 // Make sure bigInteger values are numbers and not strings
@@ -18,9 +18,9 @@ require('pg').types.setTypeParser(20, (val: any) => {
 // Also need this to get integers for count() queries.
 // https://knexjs.org/#Builder-count
 declare module 'knex/types/result' {
-    interface Registry {
-        Count: number;
-    }
+	interface Registry {
+		Count: number;
+	}
 }
 
 const logger = Logger.create('db');
@@ -277,7 +277,7 @@ export async function migrateUnlock(db: DbConnection) {
 	await db.migrate.forceFreeMigrationsLock();
 }
 
-export async function migrateList(db: DbConnection, asString: boolean = true) {
+export async function migrateList(db: DbConnection, asString = true) {
 	const migrations: any = await db.migrate.list({
 		directory: migrationDir,
 	});
@@ -337,6 +337,11 @@ export async function migrateList(db: DbConnection, asString: boolean = true) {
 	return output.map(l => `${l.done ? '✓' : '✗'} ${l.name}`).join('\n');
 }
 
+export const needsMigration = async (db: DbConnection) => {
+	const list = await migrateList(db, false) as Migration[];
+	return !!list.find(m => !m.done);
+};
+
 export async function nextMigration(db: DbConnection): Promise<string> {
 	const list = await migrateList(db, false) as Migration[];
 
@@ -369,8 +374,10 @@ export async function dropTables(db: DbConnection): Promise<void> {
 	}
 }
 
-export async function truncateTables(db: DbConnection): Promise<void> {
+export async function truncateTables(db: DbConnection, includedTables: string[] = []): Promise<void> {
 	for (const tableName of allTableNames()) {
+		if (includedTables.length && !includedTables.includes(tableName)) continue;
+
 		try {
 			await db(tableName).truncate();
 		} catch (error) {

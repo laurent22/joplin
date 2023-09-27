@@ -1,5 +1,5 @@
 import Note from '../../models/Note';
-import { encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient } from '../../testing/test-utils';
 import ShareService from './ShareService';
 import reducer, { defaultState } from '../../reducer';
 import { createStore } from 'redux';
@@ -10,11 +10,14 @@ import { generateKeyPair } from '../e2ee/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
-import Logger, { LogLevel } from '../../Logger';
+import Logger, { LogLevel } from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Resource from '../../models/Resource';
 import { readFile } from 'fs-extra';
 import BaseItem from '../../models/BaseItem';
+import ResourceService from '../ResourceService';
+import Setting from '../../models/Setting';
+import { ModelType } from '../../BaseModel';
 
 interface TestShareFolderServiceOptions {
 	master_key_id?: string;
@@ -43,7 +46,7 @@ describe('ShareService', () => {
 	it('should not change the note user timestamps when sharing or unsharing', async () => {
 		let note = await Note.save({});
 		const service = mockService({
-			exec: (method: string, path: string = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
+			exec: (method: string, path = '', _query: Record<string, any> = null, _body: any = null, _headers: any = null, _options: any = null): Promise<any> => {
 				if (method === 'GET' && path === 'api/shares') return { items: [] } as any;
 				return null;
 			},
@@ -79,6 +82,7 @@ describe('ShareService', () => {
 		}
 	});
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}, options: TestShareFolderServiceOptions = {}) {
 		return mockService({
 			exec: async (method: string, path: string, query: Record<string, any>, body: any) => {
@@ -209,7 +213,7 @@ describe('ShareService', () => {
 
 		const { share } = await testShareFolder(service);
 
-		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com');
+		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com', { can_read: 1, can_write: 1 });
 
 		expect(uploadedEmail).toBe('toto@example.com');
 
@@ -238,5 +242,40 @@ describe('ShareService', () => {
 		Logger.globalLogger.setLevel(previousLogLevel);
 	});
 
+	it('should leave a shared folder', async () => {
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'note 1',
+					},
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
+
+		const resourceService = new ResourceService();
+		await Folder.save({ id: folder1.id, share_id: '123456789' });
+		await Folder.updateAllShareIds(resourceService);
+
+		const cleanup = simulateReadOnlyShareEnv('123456789');
+
+		const shareService = testShareFolderService();
+		await shareService.leaveSharedFolder(folder1.id, 'somethingrandom');
+
+		expect(await Folder.count()).toBe(0);
+		expect(await Note.count()).toBe(0);
+
+		const deletedItems = await BaseItem.deletedItems(Setting.value('sync.target'));
+
+		expect(deletedItems.length).toBe(1);
+		expect(deletedItems[0].item_type).toBe(ModelType.Folder);
+		expect(deletedItems[0].item_id).toBe(folder1.id);
+
+		cleanup();
+	});
 
 });

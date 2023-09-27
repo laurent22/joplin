@@ -5,16 +5,16 @@ import { DbConnection } from '../db';
 // it to an empty string by default, and update all rows that have "0" as
 // recipient_id.
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('emails', (table: Knex.CreateTableBuilder) => {
 		table.string('recipient_id', 32).defaultTo('').notNullable().alter();
 	});
 
 	await db('emails').update({ recipient_id: '' }).where('recipient_id', '=', '0');
-}
+};
 
-export async function down(db: DbConnection): Promise<any> {
+export const down = async (db: DbConnection) => {
 	await db.schema.alterTable('emails', (table: Knex.CreateTableBuilder) => {
 		table.string('recipient_id', 32).defaultTo(0).notNullable().alter();
 	});
-}
+};

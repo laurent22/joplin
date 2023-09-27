@@ -6,7 +6,7 @@ const { reg } = require('@joplin/lib/registry.js');
 const { ScreenHeader } = require('../ScreenHeader');
 const time = require('@joplin/lib/time').default;
 const { themeStyle } = require('../global-style.js');
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const { BaseScreenComponent } = require('../base-screen.js');
 const { _ } = require('@joplin/lib/locale');
 
@@ -50,10 +50,10 @@ class LogScreenComponent extends BaseScreenComponent {
 			styles.rowText.fontFamily = 'monospace';
 		}
 
-		styles.rowTextError = Object.assign({}, styles.rowText);
+		styles.rowTextError = { ...styles.rowText };
 		styles.rowTextError.color = theme.colorError;
 
-		styles.rowTextWarn = Object.assign({}, styles.rowText);
+		styles.rowTextWarn = { ...styles.rowText };
 		styles.rowTextWarn.color = theme.colorWarn;
 
 		this.styles_[this.props.themeId] = StyleSheet.create(styles);

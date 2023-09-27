@@ -1,4 +1,4 @@
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import Alarm from '../models/Alarm';
 
 import Note from '../models/Note';
@@ -50,7 +50,7 @@ export default class AlarmService {
 
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
-	public static async updateNoteNotification(noteOrId: any, isDeleted: boolean = false) {
+	public static async updateNoteNotification(noteOrId: any, isDeleted = false) {
 		try {
 			let note = null;
 			let noteId = null;

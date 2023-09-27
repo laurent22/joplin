@@ -4,10 +4,9 @@ import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models, NewModelFactoryHandler } from './factory';
-import * as EventEmitter from 'events';
 import { Config, Env } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import dbuuid from '../utils/dbuuid';
 import { defaultPagination, PaginatedResults, Pagination } from './utils/pagination';
 import { Knex } from 'knex';
@@ -63,7 +62,6 @@ export default abstract class BaseModel<T> {
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
 	private modelFactory_: NewModelFactoryHandler;
-	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
 	private savePoints_: SavePoint[] = [];
 
@@ -118,18 +116,11 @@ export default abstract class BaseModel<T> {
 		return this.defaultFields_.slice();
 	}
 
-	public static get eventEmitter(): EventEmitter {
-		if (!this.eventEmitter_) {
-			this.eventEmitter_ = new EventEmitter();
-		}
-		return this.eventEmitter_;
-	}
-
 	public async checkIfAllowed(_user: User, _action: AclAction, _resource: T = null): Promise<void> {
 		throw new Error('Must be overriden');
 	}
 
-	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = '', requiredFields: string[] = []): string[] {
+	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable = '', requiredFields: string[] = []): string[] {
 		let output: string[] = [];
 		if (options && options.fields) {
 			output = options.fields;
@@ -205,6 +196,7 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
 		const debugSteps = false;
 		const debugTimeout = true;
@@ -324,7 +316,7 @@ export default abstract class BaseModel<T> {
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
-		const toSave = Object.assign({}, object);
+		const toSave = { ...object };
 
 		const isNew = await this.isNew(object, options);
 

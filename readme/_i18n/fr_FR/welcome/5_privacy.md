@@ -1,4 +1,4 @@
-# Joplin Politique de confidentialité
+# Politique de confidentialité
 
 Les applications Joplin, y compris les applications Android, iOS, Windows, macOS et Linux, n'envoient aucune donnée à aucun service sans votre autorisation. Toutes les données enregistrées par Joplin, telles que les notes ou les images, sont enregistrées sur votre propre appareil et vous êtes libre de supprimer ces données à tout moment.
 
@@ -16,6 +16,6 @@ Afin de fournir certaines fonctionnalités, Joplin peut avoir besoin de se conne
 | Référentiel de plugins | L'application de bureau télécharge la liste des plugins disponibles depuis le [référentiel GitHub officiel](https://github.com/joplin/plugins). Si ce référentiel n'est pas accessible (par exemple en Chine), l'application essaiera d'obtenir la liste des plugins à partir de [divers miroirs](https://github.com/laurent22/joplin/blob/8ac6017c02017b6efd59f5fcab7e0b07f8d44164/packages/lib/services/plugins/RepositoryApi.ts#L22), auquel cas l'écran du plugin [fonctionne légèrement différemment](https://github.com/laurent22/joplin/issues/5161#issuecomment-925226975). | Activé | Non
 
 <sup>(1) https://github.com/laurent22/joplin/issues/5705</sup><br/>
-<sup>(2) Si le correcteur orthographique est désactivé, [il ne téléchargera pas le dictionnaire](https://discourse.joplinapp.org/t/new-version-of-joplin-contacting-google-servers-on-startup /23000/40?u=laurent).</sup>
+<sup>(2) Si le correcteur orthographique est désactivé, [il ne téléchargera pas le dictionnaire](https://discourse.joplinapp.org/t/new-version-of-joplin-contacting-google-servers-on-startup/23000/40?u=laurent).</sup>
 
 Pour toute question concernant la politique de confidentialité de Joplin, merci de laisser un message [sur le forum](https://discourse.joplinapp.org/).

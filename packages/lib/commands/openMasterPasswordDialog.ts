@@ -9,7 +9,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, isOpen: boolean = true) => {
+		execute: async (context: CommandContext, isOpen = true) => {
 			context.dispatch({
 				type: 'DIALOG_OPEN',
 				name: 'masterPassword',

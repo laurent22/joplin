@@ -4,7 +4,7 @@ import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import FakeCookies from './koa/FakeCookies';
 import FakeRequest from './koa/FakeRequest';
 import FakeResponse from './koa/FakeResponse';
@@ -25,6 +25,7 @@ import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import { parseEnv } from '../../env';
 import { URL } from 'url';
+import initLib from '@joplin/lib/initLib';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -64,6 +65,7 @@ export async function makeTempFileWithContent(content: string | Buffer): Promise
 function initGlobalLogger() {
 	const globalLogger = new Logger();
 	Logger.initializeGlobalLogger(globalLogger);
+	initLib(globalLogger);
 }
 
 let createdDbPath_: string = null;
@@ -259,7 +261,7 @@ interface CreateUserAndSessionOptions {
 	password?: string;
 }
 
-export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
+export const createUserAndSession = async function(index = 1, isAdmin = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
 	const password = uuidgen();
 
 	options = {
@@ -278,7 +280,7 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 	};
 };
 
-export const createUser = async function(index: number = 1, isAdmin: boolean = false): Promise<User> {
+export const createUser = async function(index = 1, isAdmin = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
@@ -435,6 +437,7 @@ export function readCredentialFileSync(filename: string, defaultValue: string = 
 	return r.toString();
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {
 		await asyncFn();
@@ -444,6 +447,7 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
@@ -466,7 +470,8 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
-export async function expectHttpError(asyncFn: Function, expectedHttpCode: number): Promise<void> {
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -479,9 +484,14 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 		expect('not throw').toBe('throw');
 	} else {
 		expect(thrownError.httpCode).toBe(expectedHttpCode);
+
+		if (expectedErrorCode !== null) {
+			expect(thrownError.code).toBe(expectedErrorCode);
+		}
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectNoHttpError(asyncFn: Function): Promise<void> {
 	let thrownError = null;
 
@@ -529,6 +539,7 @@ is_shared: 1
 share_id: ${note.share_id || ''}
 conflict_original_id: 
 master_key_id: 
+user_data: 
 type_: 1`;
 }
 
@@ -545,6 +556,7 @@ encryption_applied: 0
 parent_id: ${folder.parent_id || ''}
 is_shared: 0
 share_id: ${folder.share_id || ''}
+user_data: 
 type_: 2`;
 }
 
@@ -568,6 +580,7 @@ is_shared: 0
 type_: 4`;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export async function expectNotThrow(asyncFn: Function) {
 	let thrownError = null;
 	try {

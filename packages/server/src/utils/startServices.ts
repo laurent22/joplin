@@ -1,7 +1,8 @@
 import { Services } from '../services/types';
+import { Config } from './types';
 
-export default async function startServices(services: Services) {
-	void services.share.runInBackground();
-	void services.email.runInBackground();
-	void services.tasks.runInBackground();
+export default async function startServices(config: Config, services: Services) {
+	if (config.IS_ADMIN_INSTANCE) {
+		void services.tasks.runInBackground();
+	}
 }

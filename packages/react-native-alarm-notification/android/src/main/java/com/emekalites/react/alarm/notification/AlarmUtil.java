@@ -329,7 +329,7 @@ class AlarmUtil {
             intent.putExtra(Constants.NOTIFICATION_ID, alarm.getId());
             intent.putExtra("data", alarm.getData());
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, defaultFlags | PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelID)
                     .setSmallIcon(smallIconResId)

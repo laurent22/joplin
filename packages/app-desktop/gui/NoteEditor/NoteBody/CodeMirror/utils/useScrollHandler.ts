@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
 	const scrollTimeoutId_ = useRef<any>(null);
 	const scrollPercent_ = useRef(0);
@@ -140,7 +141,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
-	const editor_resize = useCallback((cm) => {
+	const editor_resize = useCallback((cm: any) => {
 		if (isCodeMirrorReady(cm)) {
 			// This handler is called when resized and refreshed.
 			// Only when resized, the scroll position is restored.

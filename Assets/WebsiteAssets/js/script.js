@@ -9,7 +9,9 @@ function getOs() {
 function getFilename(path) {
 	if (!path) return '';
 	const s = path.split('/');
-	return s.pop();
+	const urlWithParams = s.pop();
+	const s2 = urlWithParams.split('?');
+	return s2[0];
 }
 
 function getMobileOs() {

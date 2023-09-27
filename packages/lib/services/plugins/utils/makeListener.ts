@@ -1,6 +1,7 @@
 import { EventManager } from '../../../eventManager';
 import { Disposable } from '../api/types';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(eventManager: EventManager, eventName: string, callback: Function): Disposable {
 	eventManager.on(eventName, callback);
 

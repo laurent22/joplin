@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import Plugin from '../Plugin';
 import JoplinData from './JoplinData';
 import JoplinPlugins from './JoplinPlugins';
@@ -11,6 +13,7 @@ import JoplinContentScripts from './JoplinContentScripts';
 import JoplinClipboard from './JoplinClipboard';
 import JoplinWindow from './JoplinWindow';
 import BasePlatformImplementation from '../BasePlatformImplementation';
+import JoplinImaging from './JoplinImaging';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -28,6 +31,7 @@ export default class Joplin {
 
 	private data_: JoplinData = null;
 	private plugins_: JoplinPlugins = null;
+	private imaging_: JoplinImaging = null;
 	private workspace_: JoplinWorkspace = null;
 	private filters_: JoplinFilters = null;
 	private commands_: JoplinCommands = null;
@@ -41,8 +45,9 @@ export default class Joplin {
 
 	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any) {
 		this.implementation_ = implementation;
-		this.data_ = new JoplinData();
+		this.data_ = new JoplinData(plugin);
 		this.plugins_ = new JoplinPlugins(plugin);
+		this.imaging_ = new JoplinImaging(implementation.imaging);
 		this.workspace_ = new JoplinWorkspace(store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
@@ -60,6 +65,10 @@ export default class Joplin {
 
 	public get clipboard(): JoplinClipboard {
 		return this.clipboard_;
+	}
+
+	public get imaging(): JoplinImaging {
+		return this.imaging_;
 	}
 
 	public get window(): JoplinWindow {

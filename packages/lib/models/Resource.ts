@@ -48,7 +48,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static isSupportedImageMimeType(type: string) {
-		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp', 'image/avif'];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
@@ -157,7 +157,7 @@ export default class Resource extends BaseItem {
 	public static async decrypt(item: ResourceEntity) {
 		// The item might already be decrypted but not the blob (for instance if it crashes while
 		// decrypting the blob or was otherwise interrupted).
-		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : Object.assign({}, item);
+		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : { ...item };
 		if (!decryptedItem.encryption_blob_encrypted) return decryptedItem;
 
 		const localState = await this.localState(item);
@@ -225,7 +225,7 @@ export default class Resource extends BaseItem {
 			throw error;
 		}
 
-		const resourceCopy = Object.assign({}, resource);
+		const resourceCopy = { ...resource };
 		resourceCopy.encryption_blob_encrypted = 1;
 		return { path: encryptedPath, resource: resourceCopy };
 	}
@@ -271,9 +271,14 @@ export default class Resource extends BaseItem {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
+	public static setLocalStateQueries(resourceOrId: any, state: ResourceLocalStateEntity) {
+		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
+		return ResourceLocalState.saveQueries({ ...state, resource_id: id });
+	}
+
 	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
-		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
+		await ResourceLocalState.save({ ...state, resource_id: id });
 	}
 
 	public static async needFileSizeSet() {
@@ -288,17 +293,18 @@ export default class Resource extends BaseItem {
 	}
 
 	public static async batchDelete(ids: string[], options: any = null) {
-		// For resources, there's not really batch deleting since there's the file data to delete
-		// too, so each is processed one by one with the item being deleted last (since the db
-		// call is the less likely to fail).
+		// For resources, there's not really batch deletion since there's the
+		// file data to delete too, so each is processed one by one with the
+		// file data being deleted last since the metadata deletion call may
+		// throw (for example if trying to delete a read-only item).
 		for (let i = 0; i < ids.length; i++) {
 			const id = ids[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 
 			const path = Resource.fullPath(resource);
-			await this.fsDriver().remove(path);
 			await super.batchDelete([id], options);
+			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
 		}
 
@@ -362,12 +368,20 @@ export default class Resource extends BaseItem {
 		await this.requireIsReady(resource);
 
 		const fileStat = await this.fsDriver().stat(newBlobFilePath);
-		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
 
-		return await Resource.save({
+		// We first save the resource metadata because this can throw, for
+		// example if modifying a resource that is read-only
+
+		const result = await Resource.save({
 			id: resource.id,
 			size: fileStat.size,
 		});
+
+		// If the above call has succeeded, we save the data blob
+
+		await this.fsDriver().copy(newBlobFilePath, Resource.fullPath(resource));
+
+		return result;
 	}
 
 	public static async resourceBlobContent(resourceId: string, encoding = 'Buffer') {
@@ -380,8 +394,10 @@ export default class Resource extends BaseItem {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
-		let newResource = { ...resource };
+		let newResource: ResourceEntity = { ...resource };
 		delete newResource.id;
+		delete newResource.is_shared;
+		delete newResource.share_id;
 		newResource = await Resource.save(newResource);
 
 		const newLocalState = { ...localState };

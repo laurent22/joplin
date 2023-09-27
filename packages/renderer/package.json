@@ -1,6 +1,6 @@
 {
   "name": "@joplin/renderer",
-  "version": "2.11.0",
+  "version": "2.13.0",
   "description": "The Joplin note renderer, used the mobile and desktop application",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/renderer",
   "main": "index.js",
@@ -18,19 +18,20 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
-    "@types/jest": "29.2.6",
-    "@types/node": "18.11.18",
-    "jest": "29.4.3",
-    "jest-environment-jsdom": "29.4.3",
-    "ts-jest": "29.0.5",
-    "typescript": "4.9.4"
+    "@types/jest": "29.5.4",
+    "@types/node": "18.17.14",
+    "jest": "29.6.4",
+    "jest-environment-jsdom": "29.6.4",
+    "ts-jest": "29.1.1",
+    "typescript": "5.1.6"
   },
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.43",
-    "@joplin/fork-uslug": "^1.0.8",
+    "@joplin/fork-htmlparser2": "^4.1.46",
+    "@joplin/fork-uslug": "^1.0.11",
+    "@joplin/utils": "~2.13",
     "font-awesome-filetypes": "2.1.0",
     "fs-extra": "11.1.1",
-    "highlight.js": "11.7.0",
+    "highlight.js": "11.8.0",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
     "katex": "0.13.24",
@@ -43,12 +44,12 @@
     "markdown-it-footnote": "3.0.3",
     "markdown-it-ins": "3.0.1",
     "markdown-it-mark": "3.0.1",
-    "markdown-it-multimd-table": "4.2.1",
+    "markdown-it-multimd-table": "4.2.3",
     "markdown-it-sub": "1.0.0",
     "markdown-it-sup": "1.0.0",
     "markdown-it-toc-done-right": "4.2.0",
     "md5": "2.3.0",
-    "mermaid": "9.2.2"
+    "mermaid": "10.4.0"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }

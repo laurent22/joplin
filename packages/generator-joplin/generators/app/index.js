@@ -12,7 +12,12 @@ module.exports = class extends Generator {
 
 		this.option('silent');
 		this.option('update');
-		this.option('nodePackageManager', 'npm');
+
+		// This appears to be deprecated and undocumented
+		// Maybe need this instead?
+		// https://github.com/yeoman/generator/issues/1294#issuecomment-841668595
+
+		// this.option('nodePackageManager', 'npm');
 
 		if (this.options.update) {
 			// When updating, overwrite files without prompting
@@ -100,7 +105,7 @@ module.exports = class extends Generator {
 
 			if (!derivedProps.packageName) derivedProps.packageName = defaultPackageName;
 
-			this.props = Object.assign({}, initialProps, derivedProps);
+			this.props = { ...initialProps, ...derivedProps };
 		}
 	}
 
@@ -145,7 +150,7 @@ module.exports = class extends Generator {
 							const newContent = mergePackageKey(null, sourceContent, destContent);
 							return JSON.stringify(newContent, null, 2);
 						},
-					}
+					},
 				);
 			} else if (this.options.update && destFile === 'plugin.config.json' && this.fs.exists(destFilePath)) {
 				// Keep existing content for now. Maybe later we could merge the configs.
@@ -158,20 +163,20 @@ module.exports = class extends Generator {
 						process: (sourceBuffer) => {
 							return mergeIgnoreFile(sourceBuffer.toString(), destContent);
 						},
-					}
+					},
 				);
 			} else {
 				this.fs.copyTpl(
 					this.templatePath(file),
 					destFilePath,
-					this.props
+					this.props,
 				);
 			}
 		}
 
 		this.fs.copy(
 			this.templatePath('api'),
-			this.destinationPath('api')
+			this.destinationPath('api'),
 		);
 	}
 

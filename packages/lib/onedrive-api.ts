@@ -1,6 +1,6 @@
 import shim from './shim';
 import time from './time';
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import { _ } from './locale';
 
 const { stringify } = require('query-string');
@@ -44,6 +44,7 @@ export default class OneDriveApi {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		this.listeners_[eventName].push(callback);
 	}
@@ -141,7 +142,7 @@ export default class OneDriveApi {
 	}
 
 	public async uploadChunk(url: string, handle: any, buffer: any, options: any) {
-		options = Object.assign({}, options);
+		options = { ...options };
 		if (!options.method) { options.method = 'POST'; }
 
 		if (!options.contentLength) throw new Error('uploadChunk: contentLength is missing');

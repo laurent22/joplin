@@ -1,5 +1,5 @@
 import { PositionalOptions, Options } from 'yargs';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import BaseCommand, { RunContext } from './BaseCommand';
 import parseStorageConnectionString from '../models/items/storage/parseStorageConnectionString';
 import storageConnectionCheck from '../utils/storageConnectionCheck';
@@ -67,6 +67,7 @@ export default class StorageCommand extends BaseCommand {
 	public async run(argv: Argv, runContext: RunContext): Promise<void> {
 		const batchSize = argv.batchSize || 1000;
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const commands: Record<ArgvCommand, Function> = {
 			[ArgvCommand.Import]: async () => {
 				if (!argv.connection) throw new Error('--connection option is required');

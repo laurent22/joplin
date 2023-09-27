@@ -42,6 +42,8 @@ module.exports = {
 		'zxcvbn': 'readonly',
 
 		'tinymce': 'readonly',
+
+		'JSX': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
@@ -97,6 +99,7 @@ module.exports = {
 
 		'promise/prefer-await-to-then': 'error',
 		'no-unneeded-ternary': 'error',
+		'github/array-foreach': ['error'],
 
 		// -------------------------------
 		// Formatting
@@ -107,13 +110,16 @@ module.exports = {
 		'semi': ['error', 'always'],
 		'eol-last': ['error', 'always'],
 		'quotes': ['error', 'single'],
+
+		// Note that "indent" only applies to JavaScript files. See
+		// https://github.com/laurent22/joplin/issues/8360
 		'indent': ['error', 'tab'],
 		'comma-dangle': ['error', {
 			'arrays': 'always-multiline',
 			'objects': 'always-multiline',
 			'imports': 'always-multiline',
 			'exports': 'always-multiline',
-			'functions': 'never',
+			'functions': 'always-multiline',
 		}],
 		'comma-spacing': ['error', { 'before': false, 'after': true }],
 		'no-trailing-spaces': 'error',
@@ -136,11 +142,13 @@ module.exports = {
 			'named': 'never',
 			'asyncArrow': 'always',
 		}],
-		'multiline-comment-style': ['error', 'separate-lines'],
+		'multiline-comment-style': ['error', 'separate-lines', { checkJSDoc: true }],
 		'space-before-blocks': 'error',
 		'spaced-comment': ['error', 'always'],
 		'keyword-spacing': ['error', { 'before': true, 'after': true }],
 		'no-multi-spaces': ['error'],
+		'prefer-object-spread': ['error'],
+		'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
 
 		// Regarding the keyword blacklist:
 		// - err: We generally avoid using too many abbreviations, so it should
@@ -160,6 +168,7 @@ module.exports = {
 		'import',
 		'promise',
 		'jest',
+		'github',
 	],
 	'overrides': [
 		{
@@ -180,9 +189,18 @@ module.exports = {
 				'project': './tsconfig.eslint.json',
 			},
 			'rules': {
+				'@typescript-eslint/indent': ['error', 'tab', {
+					'ignoredNodes': [
+						// See https://github.com/typescript-eslint/typescript-eslint/issues/1824
+						'TSUnionType',
+					],
+				}],
+				'@typescript-eslint/ban-ts-comment': ['error'],
+				'@typescript-eslint/ban-types': 'error',
 				'@typescript-eslint/explicit-member-accessibility': ['error'],
 				'@typescript-eslint/type-annotation-spacing': ['error', { 'before': false, 'after': true }],
-				'@typescript-eslint/no-inferrable-types': ['error', { 'ignoreParameters': true, 'ignoreProperties': true }],
+				'@typescript-eslint/array-type': 'error',
+				'@typescript-eslint/no-inferrable-types': ['error'],
 				'@typescript-eslint/comma-dangle': ['error', {
 					'arrays': 'always-multiline',
 					'objects': 'always-multiline',
@@ -191,7 +209,7 @@ module.exports = {
 					'enums': 'always-multiline',
 					'generics': 'always-multiline',
 					'tuples': 'always-multiline',
-					'functions': 'never',
+					'functions': 'always-multiline',
 				}],
 				'@typescript-eslint/object-curly-spacing': ['error', 'always'],
 				'@typescript-eslint/semi': ['error', 'always'],

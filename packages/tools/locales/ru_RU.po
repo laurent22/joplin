@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Титан <fignin@ya.ru>
 #
 msgid ""
 msgstr ""
@@ -960,7 +960,6 @@ msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Скопировать общедоступную ссылку"
 msgstr[1] "Скопировать общедоступные ссылки"
-msgstr[2] "Скопировать общедоступные ссылки"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:21
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:370
@@ -1233,7 +1232,7 @@ msgstr "Удалить локальные данные и перегрузить
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
 msgid "Delete note"
-msgstr "Удаление заметки"
+msgstr "Удалить заметку"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1246,7 +1245,7 @@ msgstr "Удалить заметку?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
 msgid "Delete notebook"
-msgstr "Удаление блокнота"
+msgstr "Удалить блокнот"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -1854,7 +1853,11 @@ msgstr "Экспорт"
 #: packages/app-desktop/gui/MenuBar.tsx:552
 #: packages/app-desktop/gui/MenuBar.tsx:608
 msgid "Export all"
-msgstr "Экспорт"
+msgstr "Экспортировать все"
+
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
+msgid "Export all notes as JEX"
+msgstr "Экспортировать все заметки в формате JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
 msgid "Export all notes as JEX"
@@ -2055,7 +2058,6 @@ msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Создание ссылки..."
 msgstr[1] "Создание ссылок..."
-msgstr[2] "Создание ссылок..."
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:91
 msgid "Get it now:"
@@ -2565,7 +2567,6 @@ msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Ссылка скопирована в буфер обмена!"
 msgstr[1] "Ссылки скопированы в буфер обмена!"
-msgstr[2] "Ссылки скопированы в буфер обмена!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link text"
@@ -3810,8 +3811,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
-"Предоставьте копию всех заметок в формате файла, который может быть "
-"импортирован программой Joplin на компьютере."
+"Поделиться копией всех заметок в формате файла, который может быть "
+"импортирован в Joplin на компьютере."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -4669,7 +4670,7 @@ msgstr "заголовок"
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:135
 #: packages/app-desktop/gui/ResourceScreen.tsx:93
 msgid "Title"
-msgstr "Заглавие"
+msgstr "Заголовок"
 
 #: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
@@ -4746,8 +4747,9 @@ msgid "to-do"
 msgstr "задача"
 
 #: packages/app-mobile/components/note-item.js:143
+#, fuzzy
 msgid "to-do: %s"
-msgstr "задание: %s"
+msgstr "задачи: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 msgid "Toggle comment"
@@ -5102,7 +5104,7 @@ msgid ""
 "Warnings:\n"
 "%s"
 msgstr ""
-"Предупреждение:\n"
+"Предупреждения:\n"
 "%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153

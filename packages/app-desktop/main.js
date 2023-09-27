@@ -4,7 +4,7 @@ const electronApp = require('electron').app;
 require('@electron/remote/main').initialize();
 const ElectronAppWrapper = require('./ElectronAppWrapper').default;
 const { initBridge } = require('./bridge');
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const envFromArgs = require('@joplin/lib/envFromArgs');
 const packageInfo = require('./packageInfo.js');

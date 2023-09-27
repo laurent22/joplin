@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import eventManager from '../../../eventManager';
 import Setting, { SettingItem as InternalSettingItem, SettingSectionSource } from '../../../models/Setting';
 import Plugin from '../Plugin';
@@ -138,7 +140,7 @@ export default class JoplinSettings {
 		this.plugin_.deprecationNotice(
 			'1.8',
 			'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()',
-			!registerSettingAllowedPluginIds.includes(this.plugin_.id)
+			!registerSettingAllowedPluginIds.includes(this.plugin_.id),
 		);
 
 		await this.registerSettings({ [key]: settingItem });

@@ -4,6 +4,7 @@ import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import { EditorCommand } from '../../../utils/types';
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
+import setupVim from './setupVim';
 
 export default function useKeymap(CodeMirror: any) {
 
@@ -17,20 +18,12 @@ export default function useKeymap(CodeMirror: any) {
 		CodeMirror.keyMap.emacs['Shift-Tab'] = 'smartListUnindent';
 	}
 
-	function setupVim() {
-		CodeMirror.Vim.defineAction('swapLineDown', CodeMirror.commands.swapLineDown);
-		CodeMirror.Vim.mapCommand('<A-j>', 'action', 'swapLineDown', {}, { context: 'normal', isEdit: true });
-		CodeMirror.Vim.defineAction('swapLineUp', CodeMirror.commands.swapLineUp);
-		CodeMirror.Vim.mapCommand('<A-k>', 'action', 'swapLineUp', {}, { context: 'normal', isEdit: true });
-		CodeMirror.Vim.defineAction('insertListElement', CodeMirror.commands.vimInsertListElement);
-		CodeMirror.Vim.mapCommand('o', 'action', 'insertListElement', { after: true }, { context: 'normal', isEdit: true, interlaceInsertRepeat: true });
-	}
 	function isEditorCommand(command: string) {
 		return command.startsWith('editor.');
 	}
 
 	// Converts a command of the form editor.command to just command
-	function editorCommandToCodeMirror(command: String) {
+	function editorCommandToCodeMirror(command: string) {
 		return command.slice(7); // 7 is the length of editor.
 	}
 
@@ -38,7 +31,7 @@ export default function useKeymap(CodeMirror: any) {
 	// CodeMirror requires a - between keys while Electron want's a +
 	// CodeMirror doesn't recognize Option (it uses Alt instead)
 	// CodeMirror requires Shift to be first
-	function normalizeAccelerator(accelerator: String) {
+	function normalizeAccelerator(accelerator: string) {
 		const command = accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
 		// From here is taken out of codemirror/lib/codemirror.js
 		const parts = command.split(/-(?!$)/);
@@ -89,6 +82,7 @@ export default function useKeymap(CodeMirror: any) {
 	function registerKeymap() {
 		const keymapItems = KeymapService.instance().getKeymapItems();
 		// Register all commands with the codemirror editor
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		keymapItems.forEach((key) => { registerJoplinCommand(key); });
 	}
 
@@ -183,7 +177,7 @@ export default function useKeymap(CodeMirror: any) {
 		keymapService.on('keymapChange', registerKeymap);
 
 		setupEmacs();
-		setupVim();
+		setupVim(CodeMirror);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

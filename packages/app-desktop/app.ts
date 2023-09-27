@@ -8,7 +8,7 @@ import PlatformImplementation from './services/plugins/PlatformImplementation';
 import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
-import Logger, { TargetType } from '@joplin/lib/Logger';
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
@@ -66,7 +66,8 @@ import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
 import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
-// import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
+import { parseNotesParent } from '@joplin/lib/reducer';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -74,12 +75,13 @@ const pluginClasses = [
 
 const appDefaultState = createAppDefaultState(
 	bridge().windowContentSize(),
-	resourceEditWatcherDefaultState
+	resourceEditWatcherDefaultState,
 );
 
 class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
+	private initPluginServiceDone_ = false;
 
 	public constructor() {
 		super();
@@ -191,7 +193,7 @@ class Application extends BaseApplication {
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
 
-		const css = `.CodeMirror * { font-family: ${fontFamilies.join(', ')} !important; }`;
+		const css = `.CodeMirror *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
@@ -258,6 +260,9 @@ class Application extends BaseApplication {
 	}
 
 	private async initPluginService() {
+		if (this.initPluginServiceDone_) return;
+		this.initPluginServiceDone_ = true;
+
 		const service = PluginService.instance();
 
 		const pluginRunner = new PluginRunner();
@@ -443,10 +448,35 @@ class Application extends BaseApplication {
 		// 	items: masterKeys,
 		// });
 
-		this.store().dispatch({
-			type: 'FOLDER_SELECT',
-			id: Setting.value('activeFolderId'),
-		});
+		const getNotesParent = async () => {
+			let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				notesParent = {
+					type: 'Folder',
+					selectedItemId: Setting.value('activeFolderId'),
+				};
+			}
+			return notesParent;
+		};
+
+		const notesParent = await getNotesParent();
+
+		if (notesParent.type === 'SmartFilter') {
+			this.store().dispatch({
+				type: 'SMART_FILTER_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		} else if (notesParent.type === 'Tag') {
+			this.store().dispatch({
+				type: 'TAG_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		} else {
+			this.store().dispatch({
+				type: 'FOLDER_SELECT',
+				id: notesParent.selectedItemId,
+			});
+		}
 
 		this.store().dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
@@ -483,6 +513,9 @@ class Application extends BaseApplication {
 			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
 		}
 
+		initializeUserFetcher();
+		shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
+
 		this.updateTray();
 
 		shim.setTimeout(() => {
@@ -490,7 +523,7 @@ class Application extends BaseApplication {
 		}, 1000 * 60 * 60);
 
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
-			// Keep it hidden
+			bridge().window().hide();
 		} else {
 			bridge().window().show();
 		}
@@ -558,6 +591,8 @@ class Application extends BaseApplication {
 		this.setupContextMenu();
 
 		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
+
+		this.startRotatingLogMaintenance(Setting.value('profileDir'));
 
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,

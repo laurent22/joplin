@@ -36,7 +36,7 @@ index 6afcbbf0cc8ca2d69dd78077d61e59a90b2136bb..9f8d72b4ec5b2b3d290975d6a255917c
  def kotlin_version = getExtOrDefault('kotlinVersion')
  
 diff --git a/android/src/main/java/com/reactnativevosk/VoskModule.kt b/android/src/main/java/com/reactnativevosk/VoskModule.kt
-index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..f3da440bc2863a59db6d2d1691c54d8d4870cb3f 100644
+index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..5a8539b9cce8951967640dba755e29a4e3ff404a 100644
 --- a/android/src/main/java/com/reactnativevosk/VoskModule.kt
 +++ b/android/src/main/java/com/reactnativevosk/VoskModule.kt
 @@ -19,13 +19,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
@@ -66,7 +66,25 @@ index 0e2b6595b1b2cf1ee01c6c64239c4b0ea37fce19..f3da440bc2863a59db6d2d1691c54d8d
        sendEvent("onResult", text)
      }
    }
-@@ -153,6 +165,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
+@@ -93,12 +105,11 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
+   @ReactMethod
+   fun loadModel(path: String, promise: Promise) {
+     cleanModel();
+-    StorageService.unpack(context, path, "models",
+-      { model: Model? ->
+-        this.model = model
+-        promise.resolve("Model successfully loaded")
+-      }
+-    ) { e: IOException ->
++    
++    try {
++      this.model = Model(path);
++      promise.resolve("Model successfully loaded")
++    } catch (e: IOException) {
+       this.model = null
+       promise.reject(e)
+     }
+@@ -153,6 +164,25 @@ class VoskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
      cleanRecognizer();
    }
  
@@ -105,6 +123,70 @@ index 441e41cc402cca3a60b34978ef4fea976076259c..a173acebb4b314402550442ad471e0f7
      unload: () => void;
      onResult: (onResult: (e: VoskEvent) => void) => EventSubscription;
      onFinalResult: (onFinalResult: (e: VoskEvent) => void) => EventSubscription;
+diff --git a/package.json b/package.json
+index 707eddb8d68007f93071ac659c5b087c935c5f01..90ebe20f224eeec472c377df1fef9b15f2ff8200 100644
+--- a/package.json
++++ b/package.json
+@@ -11,12 +11,9 @@
+     "src",
+     "lib",
+     "android",
+-    "ios",
+     "cpp",
+-    "react-native-vosk.podspec",
+     "!lib/typescript/example",
+     "!android/build",
+-    "!ios/build",
+     "!**/__tests__",
+     "!**/__fixtures__",
+     "!**/__mocks__"
+diff --git a/react-native-vosk.podspec b/react-native-vosk.podspec
+deleted file mode 100644
+index e3d41b90c5eef890c7a5108aaf16ac07d34a698b..0000000000000000000000000000000000000000
+--- a/react-native-vosk.podspec
++++ /dev/null
+@@ -1,41 +0,0 @@
+-require "json"
+-
+-package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+-folly_version = '2021.06.28.00-v2'
+-folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
+-
+-Pod::Spec.new do |s|
+-  s.name         = "react-native-vosk"
+-  s.version      = package["version"]
+-  s.summary      = package["description"]
+-  s.homepage     = package["homepage"]
+-  s.license      = package["license"]
+-  s.authors      = package["author"]
+-
+-  s.platforms    = { :ios => "10.0" }
+-  s.source       = { :git => "https://github.com/riderodd/react-native-vosk.git", :tag => "#{s.version}" }
+-
+-  s.source_files = "ios/**/*.{h,m,mm,swift}"
+-  s.resource_bundles = { 'Vosk' => ['ios/Vosk/*'] }
+-
+-  s.dependency "React-Core"
+-  s.frameworks = "Accelerate"
+-  s.library = "c++"
+-  s.vendored_frameworks = "ios/libvosk.xcframework"
+-  s.requires_arc = true
+-
+-  # Don't install the dependencies when we run `pod install` in the old architecture.
+-  if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
+-    s.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
+-    s.pod_target_xcconfig    = {
+-        "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
+-        "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+-    }
+-
+-    s.dependency "React-Codegen"
+-    s.dependency "RCT-Folly", folly_version
+-    s.dependency "RCTRequired"
+-    s.dependency "RCTTypeSafety"
+-    s.dependency "ReactCommon/turbomodule/core"
+-  end
+-end
 diff --git a/src/index.tsx b/src/index.tsx
 index d9f90c921d89b1b4d85e145443ed3376546a368a..29e4068dbd7500828a73145bd25497a52c9bf638 100644
 --- a/src/index.tsx

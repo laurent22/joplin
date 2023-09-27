@@ -1,3 +1,4 @@
+import Logger from '@joplin/utils/Logger';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
@@ -5,6 +6,8 @@ import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 const fastDeepEqual = require('fast-deep-equal');
+
+const logger = Logger.create('syncInfoUtils');
 
 export interface SyncInfoValueBoolean {
 	value: boolean;
@@ -75,15 +78,25 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 		if (oldVersion) output = { version: 1 };
 	}
 
-	return new SyncInfo(JSON.stringify(output));
+	return fixSyncInfo(new SyncInfo(JSON.stringify(output)));
 }
 
 export function saveLocalSyncInfo(syncInfo: SyncInfo) {
 	Setting.setValue('syncInfoCache', syncInfo.serialize());
 }
 
+const fixSyncInfo = (syncInfo: SyncInfo) => {
+	if (syncInfo.activeMasterKeyId) {
+		if (!syncInfo.masterKeys || !syncInfo.masterKeys.find(mk => mk.id === syncInfo.activeMasterKeyId)) {
+			logger.warn(`Sync info is using a non-existent key as the active key - clearing it: ${syncInfo.activeMasterKeyId}`);
+			syncInfo.activeMasterKeyId = '';
+		}
+	}
+	return syncInfo;
+};
+
 export function localSyncInfo(): SyncInfo {
-	return new SyncInfo(Setting.value('syncInfoCache'));
+	return fixSyncInfo(new SyncInfo(Setting.value('syncInfoCache')));
 }
 
 export function localSyncInfoFromState(state: State): SyncInfo {
@@ -115,13 +128,20 @@ export function localSyncInfoFromState(state: State): SyncInfo {
 // has already been used to encrypt data. In this case, at the moment we compare
 // local and remote sync info (before synchronising the data), key1.hasBeenUsed
 // is true, but key2.hasBeenUsed is false.
+//
+// 2023-05-30: Additionally, if one key is enabled and the other is not, we
+// always pick the enabled one regardless of usage.
 const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => {
 	const activeMasterKey1 = getActiveMasterKey(s1);
 	const activeMasterKey2 = getActiveMasterKey(s2);
 	let doDefaultAction = false;
 
 	if (activeMasterKey1 && activeMasterKey2) {
-		if (activeMasterKey1.hasBeenUsed && !activeMasterKey2.hasBeenUsed) {
+		if (masterKeyEnabled(activeMasterKey1) && !masterKeyEnabled(activeMasterKey2)) {
+			output.setWithTimestamp(s1, 'activeMasterKeyId');
+		} else if (!masterKeyEnabled(activeMasterKey1) && masterKeyEnabled(activeMasterKey2)) {
+			output.setWithTimestamp(s2, 'activeMasterKeyId');
+		} else if (activeMasterKey1.hasBeenUsed && !activeMasterKey2.hasBeenUsed) {
 			output.setWithTimestamp(s1, 'activeMasterKeyId');
 		} else if (!activeMasterKey1.hasBeenUsed && activeMasterKey2.hasBeenUsed) {
 			output.setWithTimestamp(s2, 'activeMasterKeyId');
@@ -167,7 +187,7 @@ export function syncInfoEquals(s1: SyncInfo, s2: SyncInfo): boolean {
 
 export class SyncInfo {
 
-	private version_: number = 0;
+	private version_ = 0;
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
@@ -289,7 +309,7 @@ export function getEncryptionEnabled() {
 	return localSyncInfo().e2ee;
 }
 
-export function setEncryptionEnabled(v: boolean, activeMasterKeyId: string = '') {
+export function setEncryptionEnabled(v: boolean, activeMasterKeyId = '') {
 	const s = localSyncInfo();
 	s.e2ee = v;
 	if (activeMasterKeyId) s.activeMasterKeyId = activeMasterKeyId;
@@ -312,7 +332,7 @@ export function getActiveMasterKey(s: SyncInfo = null): MasterKeyEntity | null {
 	return s.masterKeys.find(mk => mk.id === s.activeMasterKeyId);
 }
 
-export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
+export function setMasterKeyEnabled(mkId: string, enabled = true) {
 	const s = localSyncInfo();
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);

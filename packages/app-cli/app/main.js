@@ -20,7 +20,7 @@ const NoteTag = require('@joplin/lib/models/NoteTag').default;
 const MasterKey = require('@joplin/lib/models/MasterKey').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const Revision = require('@joplin/lib/models/Revision').default;
-const Logger = require('@joplin/lib/Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const sharp = require('sharp');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -30,6 +30,7 @@ const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
 const envFromArgs = require('@joplin/lib/envFromArgs');
 const nodeSqlite = require('sqlite3');
+const initLib = require('@joplin/lib/initLib').default;
 
 const env = envFromArgs(process.argv);
 
@@ -66,6 +67,10 @@ function appVersion() {
 }
 
 shimInit({ sharp, keytar, appVersion, nodeSqlite });
+
+const logger = new Logger();
+Logger.initializeGlobalLogger(logger);
+initLib(logger);
 
 const application = app();
 

@@ -26,7 +26,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		this.onAppStateChange_ = async () => {
 			// Force an update to the notes list when app state changes
-			const newProps = Object.assign({}, this.props);
+			const newProps = { ...this.props };
 			newProps.notesSource = '';
 			await this.refreshNotes(newProps);
 		};
@@ -150,16 +150,20 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 	}
 
 	public newNoteNavigate = async (folderId: string, isTodo: boolean) => {
-		const newNote = await Note.save({
-			parent_id: folderId,
-			is_todo: isTodo ? 1 : 0,
-		}, { provisional: true });
+		try {
+			const newNote = await Note.save({
+				parent_id: folderId,
+				is_todo: isTodo ? 1 : 0,
+			}, { provisional: true });
 
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Note',
-			noteId: newNote.id,
-		});
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: newNote.id,
+			});
+		} catch (error) {
+			alert(_('Cannot create a new note: %s', error.message));
+		}
 	};
 
 	public parentItem(props: any = null) {
@@ -251,8 +255,18 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
+		// Ensure that screen readers can't focus the notes list when it isn't visible.
+		// accessibilityElementsHidden is used on iOS and importantForAccessibility is used
+		// on Android.
+		const accessibilityHidden = !this.props.visible;
+
 		return (
-			<View style={rootStyle}>
+			<View
+				style={rootStyle}
+
+				accessibilityElementsHidden={accessibilityHidden}
+				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+			>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />
 				{actionButtonComp}

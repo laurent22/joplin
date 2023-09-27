@@ -1,11 +1,12 @@
-const Logger = require('./Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const shim = require('./shim').default;
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('./JoplinError').default;
 const URL = require('url-parse');
+const { _ } = require('./locale');
 const { rtrimSlashes } = require('./path-utils');
 const base64 = require('base-64');
-
+const { ltrimSlashes } = require('./path-utils');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -24,12 +25,12 @@ class WebDavApi {
 		if (this.lastRequests_.length > 10) this.lastRequests_.splice(0, 1);
 
 		const serializeRequest = (r) => {
-			const options = Object.assign({}, r.options);
+			const options = { ...r.options };
 			if (typeof options.body === 'string') options.body = options.body.substr(0, 4096);
 			const output = [];
 			output.push(options.method ? options.method : 'GET');
 			output.push(r.url);
-			options.headers = Object.assign({}, options.headers);
+			options.headers = { ...options.headers };
 			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
 			delete options.method;
 			delete options.agent;
@@ -335,8 +336,8 @@ class WebDavApi {
 	//  </d:propfind>'
 
 	async exec(method, path = '', body = null, headers = null, options = null) {
-		headers = Object.assign({}, headers);
-		options = Object.assign({}, options);
+		headers = { ...headers };
+		options = { ...options };
 
 		if (!options.responseFormat) options.responseFormat = 'json';
 		if (!options.target) options.target = 'string';
@@ -377,7 +378,7 @@ class WebDavApi {
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 		fetchOptions.ignoreTlsErrors = this.options_.ignoreTlsErrors();
-		const url = `${this.baseUrl()}/${path}`;
+		const url = `${this.baseUrl()}/${ltrimSlashes(path)}`;
 
 		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
 
@@ -441,7 +442,17 @@ class WebDavApi {
 				throw newError(`${message} (Exception ${code})`, response.status);
 			}
 
-			throw newError('Unknown error 2', response.status);
+			let message = 'Unknown error 2';
+			if (response.status === 401 || response.status === 403) {
+				// No auth token means an empty username or password
+				if (!authToken) {
+					message = _('Access denied: Please re-enter your password and/or username');
+				} else {
+					message = _('Access denied: Please check your username and password');
+				}
+			}
+
+			throw newError(message, response.status);
 		}
 
 		if (options.responseFormat === 'text') return responseText;

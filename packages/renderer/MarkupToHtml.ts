@@ -2,6 +2,7 @@ import MdToHtml from './MdToHtml';
 import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
+import { AllHtmlEntities } from 'html-entities';
 const MarkdownIt = require('markdown-it');
 
 export enum MarkupLanguage {
@@ -39,6 +40,9 @@ export interface Options {
 	customCss?: string;
 	extraRendererRules?: any[];
 	resourceBaseUrl?: string;
+	pluginOptions?: any; // Not sure if needed
+	tempDir?: string; // Not sure if needed
+	fsDriver?: any; // Not sure if needed
 }
 
 export default class MarkupToHtml {
@@ -80,9 +84,7 @@ export default class MarkupToHtml {
 	public stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: any = null) {
 		if (!markup) return '';
 
-		options = Object.assign({}, {
-			collapseWhiteSpaces: false,
-		}, options);
+		options = { collapseWhiteSpaces: false, ...options };
 
 		let output = markup;
 
@@ -112,8 +114,9 @@ export default class MarkupToHtml {
 
 	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
 		if (this.options_.isSafeMode) {
+			const htmlentities = new AllHtmlEntities();
 			return {
-				html: `<pre>${markup}</pre>`,
+				html: `<pre>${htmlentities.encode(markup)}</pre>`,
 				cssStrings: [],
 				pluginAssets: [],
 			};

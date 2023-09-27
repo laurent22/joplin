@@ -1,3 +1,5 @@
+/* eslint-disable multiline-comment-style */
+
 import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '../../CommandService';
 import { Command } from './types';
 

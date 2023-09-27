@@ -1,12 +1,12 @@
 import { ModelType } from '../../BaseModel';
 import { FileApi, MultiPutItem } from '../../file-api';
-import Logger from '../../Logger';
+import JoplinError from '../../JoplinError';
+import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../models/BaseItem';
 import { BaseItemEntity } from '../database/types';
+import { ApiCallFunction } from './utils/types';
 
 const logger = Logger.create('ItemUploader');
-
-export type ApiCallFunction = (fnName: string, ...args: any[])=> Promise<any>;
 
 interface BatchItem extends MultiPutItem {
 	localItemUpdatedTime: number;
@@ -45,7 +45,8 @@ export default class ItemUploader {
 				// the regular upload.
 				logger.warn(`Pre-uploaded item updated_time has changed. It is going to be re-uploaded again: ${path} (From ${this.preUploadedItemUpdatedTimes_[path]} to ${local.updated_time})`);
 			} else {
-				if (preUploadItem.error) throw new Error(preUploadItem.error.message ? preUploadItem.error.message : 'Unknown pre-upload error');
+				const error = preUploadItem.error;
+				if (error) throw new JoplinError(error.message ? error.message : 'Unknown pre-upload error', error.code);
 				return;
 			}
 		}

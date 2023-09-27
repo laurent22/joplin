@@ -15,6 +15,14 @@ let engine: any = null;
 
 const ids = (array: NoteEntity[]) => array.map(a => a.id);
 
+const dateStringToTimestamp = (dateString: string) => {
+	const localTimestamp = new Date(dateString);
+
+	// Without getTimezoneOffset(), .getTime() doesn't account for the timezone offset.
+	const minutesToMilliseconds = 1000 * 60;
+	return localTimestamp.getTime() + localTimestamp.getTimezoneOffset() * minutesToMilliseconds;
+};
+
 describe('services_SearchFilter', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -437,9 +445,9 @@ describe('services_SearchFilter', () => {
 
 			it('should support filtering by created date', (async () => {
 				let rows;
-				const n1 = await Note.save({ title: 'I made this on', body: 'May 20 2020', user_created_time: Date.parse('2020-05-20') });
-				const n2 = await Note.save({ title: 'I made this on', body: 'May 19 2020', user_created_time: Date.parse('2020-05-19') });
-				const n3 = await Note.save({ title: 'I made this on', body: 'May 18 2020', user_created_time: Date.parse('2020-05-18') });
+				const n1 = await Note.save({ title: 'I made this on', body: 'May 20 2020', user_created_time: dateStringToTimestamp('2020-05-20') });
+				const n2 = await Note.save({ title: 'I made this on', body: 'May 19 2020', user_created_time: dateStringToTimestamp('2020-05-19') });
+				const n3 = await Note.save({ title: 'I made this on', body: 'May 18 2020', user_created_time: dateStringToTimestamp('2020-05-18') });
 
 				await engine.syncTables();
 
@@ -460,26 +468,26 @@ describe('services_SearchFilter', () => {
 
 			it('should support filtering by between two dates', (async () => {
 				let rows;
-				const n1 = await Note.save({ title: 'January 01 2020', body: 'January 01 2020', user_created_time: Date.parse('2020-01-01') });
-				const n2 = await Note.save({ title: 'February 15 2020', body: 'February 15 2020', user_created_time: Date.parse('2020-02-15') });
-				const n3 = await Note.save({ title: 'March 25 2019', body: 'March 25 2019', user_created_time: Date.parse('2019-03-25') });
-				const n4 = await Note.save({ title: 'March 01 2018', body: 'March 01 2018', user_created_time: Date.parse('2018-03-01') });
+				const n1 = await Note.save({ title: 'January 01 2020', body: 'January 01 2020', user_created_time: dateStringToTimestamp('2020-01-01') });
+				const n2 = await Note.save({ title: 'February 15 2020', body: 'February 15 2020', user_created_time: dateStringToTimestamp('2020-02-15') });
+				const n3 = await Note.save({ title: 'March 25 2019', body: 'March 25 2019', user_created_time: dateStringToTimestamp('2019-03-25') });
+				const n4 = await Note.save({ title: 'March 01 2018', body: 'March 01 2018', user_created_time: dateStringToTimestamp('2018-03-01') });
 
 				await engine.syncTables();
 
-				rows = await engine.search('created:20200101 -created:20200220', { searchType });
-				expect(rows.length).toBe(2);
-				expect(ids(rows)).toContain(n1.id);
-				expect(ids(rows)).toContain(n2.id);
+				rows = await engine.search('created:2018 -created:2019', { searchType });
+				expect(rows.length).toBe(1);
+				expect(ids(rows)).toContain(n4.id);
 
 				rows = await engine.search('created:201901 -created:202002', { searchType });
 				expect(rows.length).toBe(2);
 				expect(ids(rows)).toContain(n3.id);
 				expect(ids(rows)).toContain(n1.id);
 
-				rows = await engine.search('created:2018 -created:2019', { searchType });
-				expect(rows.length).toBe(1);
-				expect(ids(rows)).toContain(n4.id);
+				rows = await engine.search('created:20200101 -created:20200220', { searchType });
+				expect(rows.length).toBe(2);
+				expect(ids(rows)).toContain(n1.id);
+				expect(ids(rows)).toContain(n2.id);
 			}));
 
 			it('should support filtering by created with smart value: day', (async () => {
@@ -580,8 +588,8 @@ describe('services_SearchFilter', () => {
 
 			it('should support filtering by updated date', (async () => {
 				let rows;
-				const n1 = await Note.save({ title: 'I updated this on', body: 'May 20 2020', updated_time: Date.parse('2020-05-20'), user_updated_time: Date.parse('2020-05-20') }, { autoTimestamp: false });
-				const n2 = await Note.save({ title: 'I updated this on', body: 'May 19 2020', updated_time: Date.parse('2020-05-19'), user_updated_time: Date.parse('2020-05-19') }, { autoTimestamp: false });
+				const n1 = await Note.save({ title: 'I updated this on', body: 'May 20 2020', updated_time: dateStringToTimestamp('2020-05-20'), user_updated_time: dateStringToTimestamp('2020-05-20') }, { autoTimestamp: false });
+				const n2 = await Note.save({ title: 'I updated this on', body: 'May 19 2020', updated_time: dateStringToTimestamp('2020-05-19'), user_updated_time: dateStringToTimestamp('2020-05-19') }, { autoTimestamp: false });
 
 				await engine.syncTables();
 
@@ -668,8 +676,8 @@ describe('services_SearchFilter', () => {
 
 			it('should support filtering by due date', (async () => {
 				let rows;
-				const toDo1 = await Note.save({ title: 'ToDo 1', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-04-27') });
-				const toDo2 = await Note.save({ title: 'ToDo 2', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-03-17') });
+				const toDo1 = await Note.save({ title: 'ToDo 1', body: 'todo', is_todo: 1, todo_due: dateStringToTimestamp('2021-04-27') });
+				const toDo2 = await Note.save({ title: 'ToDo 2', body: 'todo', is_todo: 1, todo_due: dateStringToTimestamp('2021-03-17') });
 				await Note.save({ title: 'Note 1', body: 'Note' });
 
 				await engine.syncTables();

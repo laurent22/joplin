@@ -24,7 +24,7 @@ The overall architecture for each application is as such:
 
 - Configuration: The application is configured using a `settings.json` file. Its schema is available online: https://joplinapp.org/schema/settings.json
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/architecture/Application.png" style="max-width: 100%;"></div>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/architecture/Application.png" style="max-width: 100%;"/>
 
 ### Desktop application
 
@@ -56,7 +56,7 @@ A typical Joplin Server installation will use the following elements:
 
 This is a typical Joplin Server installation, but many of its components can be configured - for example it is possible to use a different database engine, or to use the filesystem instead of AWS S3. Any reverse proxy would also work - using Nginx is not required.
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/architecture/JoplinServer.png" style="max-width: 100%;"></div>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/architecture/JoplinServer.png" style="max-width: 100%;"/>
 
 ## Web Clipper
 

@@ -7,7 +7,7 @@ import { AppState } from '../app.reducer';
 class TagItemComponent extends React.Component {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
-		const style = Object.assign({}, theme.tagStyle);
+		const style = { ...theme.tagStyle };
 		const { title, id } = this.props;
 
 		return <button style={style} onClick={() => CommandService.instance().execute('openTag', id)}>{title}</button>;

@@ -29,7 +29,7 @@ export default async function(modelType: number, request: Request, id: string = 
 
 	if (request.method === 'PUT' && id) {
 		const model = await getOneModel();
-		const newModel = Object.assign({}, model, request.bodyJson(readonlyProperties('PUT')));
+		const newModel = { ...model, ...request.bodyJson(readonlyProperties('PUT')) };
 		return ModelClass.save(newModel, { userSideValidation: true });
 	}
 

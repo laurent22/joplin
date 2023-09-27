@@ -9,7 +9,7 @@ import shim from '../shim';
 import BaseService from './BaseService';
 import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage } from '../../renderer';
 const { substrWithEllipsis } = require('../string-utils');
 const { sprintf } = require('sprintf-js');
@@ -126,7 +126,7 @@ export default class RevisionService extends BaseService {
 					ORDER BY id ASC
 					LIMIT 10
 				`,
-					[BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')]
+					[BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')],
 				);
 
 				if (!changes.length) break;
@@ -224,13 +224,11 @@ export default class RevisionService extends BaseService {
 		const rev = revisions[index];
 		const merged = await Revision.mergeDiffs(rev, revisions);
 
-		const output: NoteEntity = Object.assign(
-			{
-				title: merged.title,
-				body: merged.body,
-			},
-			merged.metadata
-		);
+		const output: NoteEntity = {
+			title: merged.title,
+			body: merged.body,
+			...merged.metadata,
+		};
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
 		(output as any).type_ = BaseModel.TYPE_NOTE;
@@ -268,7 +266,7 @@ export default class RevisionService extends BaseService {
 	}
 
 	public async importRevisionNote(note: NoteEntity): Promise<NoteEntity> {
-		const toImport = Object.assign({}, note);
+		const toImport = { ...note };
 		delete toImport.id;
 		delete toImport.updated_time;
 		delete toImport.created_time;

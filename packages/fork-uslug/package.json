@@ -1,6 +1,6 @@
 {
   "name": "@joplin/fork-uslug",
-  "version": "1.0.8",
+  "version": "1.0.11",
   "description": "A permissive slug generator that works with unicode.",
   "author": "Jeremy Selier <jerem.selier@gmail.com>",
   "publishConfig": {
