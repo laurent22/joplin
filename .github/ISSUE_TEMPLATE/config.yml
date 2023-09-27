@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-    - name: "\U0001F914 Feature requests and support"
-      url: https://discourse.joplinapp.org/
-      about: I have a question or feature request …
+    - name: Feature Requests
+      url: https://discourse.joplinapp.org/c/features/
+      about: Discuss ideas for new features or changes
+    - name: Support
+      url: https://discourse.joplinapp.org/c/support/
+      about: Please ask for help here
