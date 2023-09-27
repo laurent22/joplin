@@ -78,7 +78,7 @@ body:
     id: current
     attributes:
       label: Current behaviour
-      description: What did Infinity do instead? Include screenshots and video recordings for UI problems if needed. DO NOT create screenshots of text !!! Copy and paste the text into a code block. If you are reporting a clipper bug, please include an example URL that shows the issue. Without the URL the issue is likely to be closed.
+      description: What did Joplin do instead? Include screenshots and video recordings for UI problems if needed. DO NOT create screenshots of text !!! Copy and paste the text into a code block. If you are reporting a clipper bug, please include an example URL that shows the issue. Without the URL the issue is likely to be closed.
 
   - type: textarea
     id: logs
