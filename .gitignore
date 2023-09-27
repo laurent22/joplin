@@ -710,7 +710,10 @@ packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
 packages/lib/services/noteList/renderers.js
+packages/lib/services/ocr/OcrDriverBase.js
 packages/lib/services/ocr/OcrService.js
+packages/lib/services/ocr/drivers/OcrDriverTesseract.js
+packages/lib/services/ocr/utils/types.js
 packages/lib/services/plugins/BasePlatformImplementation.js
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/MenuController.js

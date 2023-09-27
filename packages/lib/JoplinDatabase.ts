@@ -928,7 +928,7 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_text` TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_words` TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_status` INT NOT NULL DEFAULT 0');
-				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_error` INT NOT NULL DEFAULT 0');
+				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_error` TEXT NOT NULL DEFAULT ""');
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

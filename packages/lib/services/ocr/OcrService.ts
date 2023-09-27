@@ -1,8 +1,9 @@
-import * as TesseractNamespace from 'tesseract.js';
-import { Worker } from 'tesseract.js';
+import { iso639_1to2 } from '../../locale';
 import Resource from '../../models/Resource';
-import { ResourceEntity, ResourceOcrWord } from '../database/types';
-type Tesseract = typeof TesseractNamespace;
+import Setting from '../../models/Setting';
+import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import OcrDriverBase from './OcrDriverBase';
+import { RecognizeResult } from './utils/types';
 
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md
 const supportedMimeTypes = [
@@ -14,66 +15,24 @@ const supportedMimeTypes = [
 	'image/webp',
 ];
 
-export interface RecognizeResult {
-	text: string;
-	words: ResourceOcrWord[];
-}
-
 export default class OcrService {
 
-	private tesseract_: Tesseract = null;
-	private workerPath_: string;
-	private workers_: Record<string, Worker> = {};
+	private driver_: OcrDriverBase;
 
-	public constructor(tesseract: Tesseract, workerPath: string) {
-		this.tesseract_ = tesseract;
-		this.workerPath_ = workerPath;
+	public constructor(driver: OcrDriverBase) {
+		this.driver_ = driver;
 	}
 
-	private async getWorker(language: string) {
-		if (this.workers_[language]) return this.workers_[language];
-
-		const worker = await this.tesseract_.createWorker({
-			workerPath: this.workerPath_,
-			// logger: m => console.log(m),
-			workerBlobURL: false,
-		});
-
-		await worker.loadLanguage(language);
-		await worker.initialize(language);
-
-		this.workers_[language] = worker;
-
-		return worker;
-	}
-
-	public async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult|null> {
+	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult> {
 		if (resource.encryption_applied) throw new Error(`Cannot OCR encrypted resource: ${resource.id}`);
-		if (supportedMimeTypes.includes(resource.mime)) return null;
-
-		const worker = await this.getWorker(language);
-		const result = await worker.recognize(Resource.fullPath(resource));
-
-		let words: ResourceOcrWord[] = [];
-		for (const line of result.data.lines) {
-			words = words.concat(line.words.map(w => {
-				return {
-					text: w.text,
-					bbox: w.bbox,
-					baseline: w.baseline,
-				};
-			}));
-		}
-
-		return {
-			text: result.data.text,
-			words,
-		};
+		return this.driver_.recognize(language, Resource.fullPath(resource));
 	}
 
 	public async processResources() {
+		const language = iso639_1to2(Setting.value('locale'));
+
 		while (true) {
-			const resources = await Resource.needOcr({
+			const resources = await Resource.needOcr(supportedMimeTypes, {
 				fields: [
 					'id',
 					'mime',
@@ -84,15 +43,23 @@ export default class OcrService {
 
 			if (!resources.length) break;
 
-			// for (const resource of resources) {
-			// 	try {
+			for (const resource of resources) {
+				const toSave: ResourceEntity = {
+					id: resource.id,
+				};
+				try {
+					const result = await this.recognize(language, resource);
+					toSave.ocr_status = ResourceOcrStatus.Done;
+					toSave.ocr_text = result.text;
+					toSave.ocr_words = JSON.stringify(result.words);
+					toSave.ocr_error = '';
+				} catch (error) {
+					toSave.ocr_error = error.message;
+					toSave.ocr_status = ResourceOcrStatus.Error;
+				}
 
-			// 	} catch (error) {
-
-			// 	}
-			// }
-
-
+				await Resource.save(resource);
+			}
 		}
 	}
 

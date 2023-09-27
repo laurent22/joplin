@@ -443,11 +443,14 @@ export default class Resource extends BaseItem {
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
-	public static async needOcr(options: LoadOptions): Promise<ResourceEntity[]> {
+	public static async needOcr(supportedMimeTypes: string[], options: LoadOptions): Promise<ResourceEntity[]> {
 		return await this.db().selectAll(`
 			SELECT ${this.selectFields(options)}
 			FROM resources
-			WHERE ocr_status = ? AND encryption_applied = 0
+			WHERE
+				ocr_status = ? AND
+				encryption_applied = 0 AND
+				mime IN ("${supportedMimeTypes.join('","')}")
 			ORDER BY updated_time DESC
 			LIMIT 100
 		`, [ResourceOcrStatus.Todo]);
