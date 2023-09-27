@@ -46,7 +46,7 @@
     "builtin-modules": "3.3.0",
     "chokidar": "3.5.3",
     "color": "3.2.1",
-    "compare-versions": "6.0.0",
+    "compare-versions": "6.1.0",
     "css": "3.0.0",
     "diff-match-patch": "1.0.5",
     "es6-promise-pool": "2.5.0",
