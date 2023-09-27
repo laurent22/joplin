@@ -44,7 +44,7 @@
     "nanoid": "2.1.11",
     "node-cron": "3.0.2",
     "nodemailer": "6.9.5",
-    "nodemon": "3.0.0",
+    "nodemon": "3.0.1",
     "pg": "8.11.3",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",

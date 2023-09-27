@@ -93,7 +93,7 @@
     "eslint-plugin-github": "4.9.2",
     "http-server": "14.1.1",
     "node-gyp": "9.4.0",
-    "nodemon": "3.0.0"
+    "nodemon": "3.0.1"
   },
   "packageManager": "yarn@3.6.3",
   "resolutions": {
