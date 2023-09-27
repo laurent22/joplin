@@ -14,31 +14,67 @@ export function repeat (character, count) {
   return Array(count + 1).join(character)
 }
 
+export function trimLeadingNewlines (string) {
+  return string.replace(/^\n*/, '')
+}
+
+export function trimTrailingNewlines (string) {
+  // avoid match-at-end regexp bottleneck, see #370
+  var indexEnd = string.length
+  while (indexEnd > 0 && string[indexEnd - 1] === '\n') indexEnd--
+  return string.substring(0, indexEnd)
+}
+
 export var blockElements = [
-  'address', 'article', 'aside', 'audio', 'blockquote', 'body', 'canvas',
-  'center', 'dd', 'dir', 'div', 'dl', 'dt', 'fieldset', 'figcaption',
-  'figure', 'footer', 'form', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-  'header', 'hgroup', 'hr', 'html', 'isindex', 'li', 'main', 'menu', 'nav',
-  'noframes', 'noscript', 'ol', 'output', 'p', 'pre', 'section', 'table',
-  'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'ul'
+  'ADDRESS', 'ARTICLE', 'ASIDE', 'AUDIO', 'BLOCKQUOTE', 'BODY', 'CANVAS',
+  'CENTER', 'DD', 'DIR', 'DIV', 'DL', 'DT', 'FIELDSET', 'FIGCAPTION', 'FIGURE',
+  'FOOTER', 'FORM', 'FRAMESET', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HEADER',
+  'HGROUP', 'HR', 'HTML', 'ISINDEX', 'LI', 'MAIN', 'MENU', 'NAV', 'NOFRAMES',
+  'NOSCRIPT', 'OL', 'OUTPUT', 'P', 'PRE', 'SECTION', 'TABLE', 'TBODY', 'TD',
+  'TFOOT', 'TH', 'THEAD', 'TR', 'UL'
 ]
 
 export function isBlock (node) {
-  return blockElements.indexOf(node.nodeName.toLowerCase()) !== -1
+  return is(node, blockElements)
 }
 
 export var voidElements = [
-  'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input',
-  'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'
+  'AREA', 'BASE', 'BR', 'COL', 'COMMAND', 'EMBED', 'HR', 'IMG', 'INPUT',
+  'KEYGEN', 'LINK', 'META', 'PARAM', 'SOURCE', 'TRACK', 'WBR'
 ]
 
 export function isVoid (node) {
-  return voidElements.indexOf(node.nodeName.toLowerCase()) !== -1
+  return is(node, voidElements)
 }
 
-var voidSelector = voidElements.join()
 export function hasVoid (node) {
-  return node.querySelector && node.querySelector(voidSelector)
+  return has(node, voidElements)
+}
+
+var meaningfulWhenBlankElements = [
+  'A', 'TABLE', 'THEAD', 'TBODY', 'TFOOT', 'TH', 'TD', 'IFRAME', 'SCRIPT',
+  'AUDIO', 'VIDEO', 'P'
+]
+
+export function isMeaningfulWhenBlank (node) {
+  return is(node, meaningfulWhenBlankElements)
+}
+
+export function hasMeaningfulWhenBlank (node) {
+  return has(node, meaningfulWhenBlankElements)
+}
+
+function is (node, tagNames) {
+  return tagNames.indexOf(node.nodeName) >= 0
+}
+
+function has (node, tagNames) {
+  return (
+    node.getElementsByTagName &&
+    tagNames.some(function (tagName) {
+      return node.getElementsByTagName(tagName).length
+    })
+  )
 }
 
 // To handle code that is presented as below (see https://github.com/laurent22/joplin/issues/573)

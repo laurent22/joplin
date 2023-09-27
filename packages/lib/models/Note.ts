@@ -1,4 +1,4 @@
-import BaseModel, { ModelType } from '../BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
@@ -14,6 +14,7 @@ import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 import { pull, unique } from '../ArrayUtils';
+import { LoadOptions, SaveOptions } from './utils/types';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -62,7 +63,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static minimalSerializeForDisplay(note: NoteEntity) {
-		const n = Object.assign({}, note);
+		const n = { ...note };
 
 		const fieldNames = this.fieldNames();
 
@@ -146,9 +147,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static async replaceResourceInternalToExternalLinks(body: string, options: any = null) {
-		options = Object.assign({}, {
-			useAbsolutePaths: false,
-		}, options);
+		options = { useAbsolutePaths: false, ...options };
 
 		// this.logger().debug('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
 
@@ -176,9 +175,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static async replaceResourceExternalToInternalLinks(body: string, options: any = null) {
-		options = Object.assign({}, {
-			useAbsolutePaths: false,
-		}, options);
+		options = { useAbsolutePaths: false, ...options };
 
 		const resourceDir = toForwardSlashes(Setting.value('resourceDir'));
 
@@ -313,11 +310,9 @@ export default class Note extends BaseItem {
 	}
 
 	public static previewFields(options: any = null) {
-		options = Object.assign({
-			includeTimestamps: true,
-		}, options);
+		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -400,7 +395,7 @@ export default class Note extends BaseItem {
 			let cond = options.conditions.slice();
 			cond.push('is_todo = 1');
 			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
-			let tempOptions = Object.assign({}, options);
+			let tempOptions = { ...options };
 			tempOptions.conditions = cond;
 
 			const uncompletedTodos = await this.search(tempOptions);
@@ -413,7 +408,7 @@ export default class Note extends BaseItem {
 				cond.push('(is_todo = 1 AND todo_completed > 0)');
 			}
 
-			tempOptions = Object.assign({}, options);
+			tempOptions = { ...options };
 			tempOptions.conditions = cond;
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
@@ -485,7 +480,7 @@ export default class Note extends BaseItem {
 
 		let geoData = null;
 		if (this.geolocationCache_ && this.geolocationCache_.timestamp + 1000 * 60 * 10 > time.unixMs()) {
-			geoData = Object.assign({}, this.geolocationCache_);
+			geoData = { ...this.geolocationCache_ };
 		} else {
 			this.geolocationUpdating_ = true;
 
@@ -564,7 +559,7 @@ export default class Note extends BaseItem {
 
 		if (Number(note.is_todo) === newIsTodo) return note;
 
-		const output = Object.assign({}, note);
+		const output = { ...note };
 		output.is_todo = newIsTodo;
 		output.todo_due = 0;
 		output.todo_completed = 0;
@@ -579,7 +574,7 @@ export default class Note extends BaseItem {
 	public static toggleTodoCompleted(note: NoteEntity) {
 		if (!('todo_completed' in note)) throw new Error('Missing "todo_completed" property');
 
-		note = Object.assign({}, note);
+		note = { ...note };
 		if (note.todo_completed) {
 			note.todo_completed = 0;
 		} else {
@@ -627,8 +622,15 @@ export default class Note extends BaseItem {
 		const originalNote: NoteEntity = await Note.load(noteId);
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
-		const newNote = Object.assign({}, originalNote);
-		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
+		const newNote = { ...originalNote };
+		const fieldsToReset = [
+			'id',
+			'created_time',
+			'updated_time',
+			'user_created_time',
+			'user_updated_time',
+			'is_shared',
+		];
 
 		for (const field of fieldsToReset) {
 			delete (newNote as any)[field];
@@ -661,7 +663,11 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
+	public static load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
+		return super.load(id, options);
+	}
+
+	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
@@ -677,6 +683,8 @@ export default class Note extends BaseItem {
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 		if (isNew && !('order' in o)) o.order = Date.now();
+
+		const changeSource = options && options.changeSource ? options.changeSource : null;
 
 		// We only keep the previous note content for "old notes" (see Revision Service for more info)
 		// In theory, we could simply save all the previous note contents, and let the revision service
@@ -704,7 +712,7 @@ export default class Note extends BaseItem {
 		if (oldNote) {
 			for (const field in o) {
 				if (!o.hasOwnProperty(field)) continue;
-				if ((o as any)[field] !== oldNote[field]) {
+				if ((o as any)[field] !== (oldNote as any)[field]) {
 					changedFields.push(field);
 				}
 			}
@@ -714,7 +722,6 @@ export default class Note extends BaseItem {
 
 		const note = await super.save(o, options);
 
-		const changeSource = options && options.changeSource ? options.changeSource : null;
 		void ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		if (dispatchUpdateAction) {
@@ -737,7 +744,7 @@ export default class Note extends BaseItem {
 		return note;
 	}
 
-	public static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		ids = ids.slice();
 
 		while (ids.length) {
@@ -825,11 +832,9 @@ export default class Note extends BaseItem {
 	// Update the note "order" field without changing the user timestamps,
 	// which is generally what we want.
 	private static async updateNoteOrder_(note: NoteEntity, order: any) {
-		return Note.save(Object.assign({}, note, {
-			order: order,
+		return Note.save({ ...note, order: order,
 			user_updated_time: note.user_updated_time,
-			updated_time: time.unixMs(),
-		}), { autoTimestamp: false, dispatchUpdateAction: false });
+			updated_time: time.unixMs() }, { autoTimestamp: false, dispatchUpdateAction: false });
 	}
 
 	// This method will disable the NOTE_UPDATE_ONE action to prevent a lot
@@ -957,7 +962,7 @@ export default class Note extends BaseItem {
 						if (n.order <= previousOrder) {
 							const o = previousOrder + defaultIntevalBetweeNotes;
 							const updatedNote = await this.updateNoteOrder_(n, o);
-							notes[i] = Object.assign({}, n, updatedNote);
+							notes[i] = { ...n, ...updatedNote };
 							previousOrder = o;
 						} else {
 							previousOrder = n.order;
@@ -1001,10 +1006,11 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
-
 	public static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
-		const conflictNote = Object.assign({}, sourceNote);
+		const conflictNote = { ...sourceNote };
 		delete conflictNote.id;
+		delete conflictNote.is_shared;
+		delete conflictNote.share_id;
 		conflictNote.is_conflict = 1;
 		conflictNote.conflict_original_id = sourceNote.id;
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });

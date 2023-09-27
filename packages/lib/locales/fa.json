@@ -191,7 +191,6 @@
  "Enabled": "فعال",
  "Encrypted": "رمزنگاری شده",
  "Encrypted items cannot be modified": "موارد رمزنگاری شده نمی‌توانند تغییر پیدا کنند",
- "Encrypted notebooks cannot be renamed": "دفترچه‌های رمزگذاری شده نمی‌توانند تغییر نام داده شوند",
  "Encryption": "رمزنگاری",
  "Encryption Config": "تنظیمات رمزنگاری",
  "Encryption is: %s": "رمزنگاری: %s",

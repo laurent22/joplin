@@ -7,7 +7,7 @@ import { ErrorMethodNotAllowed } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
 import { AccountType, accountTypeToString } from '../../models/UserModel';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
-import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
+import { getCanReceiveFolder, getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import config from '../../config';
 import { escapeHtml } from '../../utils/htmlUtils';
 import { betaStartSubUrl, betaUserTrialPeriodDays, isBetaUser } from '../../utils/stripe';
@@ -33,39 +33,44 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 		view.content = {
 			userProps: [
 				{
-					label: 'Account Type',
+					label: 'Account type',
 					value: accountTypeToString(user.account_type),
 					show: true,
 				},
 				{
-					label: 'Is Admin',
+					label: 'Is admin',
 					value: yesOrNo(user.is_admin),
 					show: !!user.is_admin,
 				},
 				{
-					label: 'Max Item Size',
+					label: 'Max item size',
 					value: formatMaxItemSize(user),
 					show: true,
 				},
 				{
-					label: 'Total Size',
+					label: 'Total size',
 					classes: [totalSizeClass(user)],
 					value: `${formatTotalSize(user)} (${formatTotalSizePercent(user)})`,
 					show: true,
 				},
 				{
-					label: 'Max Total Size',
+					label: 'Max total size',
 					value: formatMaxTotalSize(user),
 					show: true,
 				},
 				{
-					label: 'Can Publish Note',
+					label: 'Can publish notes',
 					value: yesOrNo(true),
 					show: true,
 				},
 				{
-					label: 'Can Share Notebook',
+					label: 'Can share notebooks',
 					value: yesOrNo(getCanShareFolder(user)),
+					show: true,
+				},
+				{
+					label: 'Can receive notebooks',
+					value: yesOrNo(getCanReceiveFolder(user)),
 					show: true,
 				},
 			],

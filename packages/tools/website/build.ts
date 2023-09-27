@@ -15,6 +15,7 @@ import { setLocale } from '@joplin/lib/locale';
 import applyTranslations from './utils/applyTranslations';
 import { loadSponsors } from '../utils/loadSponsors';
 import convertLinksToLocale from './utils/convertLinksToLocale';
+import { copyFile } from 'fs/promises';
 
 interface BuildConfig {
 	env: Env;
@@ -42,6 +43,7 @@ const readmeDir = `${rootDir}/readme`;
 const mainTemplateHtml = readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
+const brandTemplateHtml = readFileSync(`${websiteAssetDir}/templates/brand.mustache`, 'utf8');
 const stripeConfig = loadStripeConfig(buildConfig.env, `${rootDir}/packages/server/stripeConfig.json`);
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
@@ -88,6 +90,38 @@ const jsBasePath = `${websiteAssetDir}/js`;
 const jsBaseUrl = `${baseUrl}/js`;
 
 async function getAssetUrls(): Promise<AssetUrls> {
+	const scriptsToImport: any[] = [
+		// {
+		// 	id: 'tippy',
+		// 	sourcePath: rootDir + '/packages/tools/node_modules/tippy.js/dist/tippy-bundle.umd.min.js',
+		// 	md5: '',
+		// 	filename: '',
+		// },
+		// {
+		// 	id: 'popper',
+		// 	sourcePath: rootDir + '/packages/tools/node_modules/@popperjs/core/dist/umd/popper.min.js',
+		// 	md5: '',
+		// 	filename: '',
+		// },
+	];
+
+	for (const s of scriptsToImport) {
+		const filename = basename(s.sourcePath);
+		const sourceMd5 = await md5File(s.sourcePath);
+		const targetPath = `${websiteAssetDir}/js/${filename}`;
+		const targetMd5 = await md5File(targetPath);
+		s.md5 = sourceMd5;
+		s.filename = filename;
+
+		// We check the MD5, otherwise it makes nodemon goes into an infinite building loop
+		if (sourceMd5 !== targetMd5) await copyFile(s.sourcePath, targetPath);
+	}
+
+	const importedJs: Record<string, string> = {};
+	for (const s of scriptsToImport) {
+		importedJs[s.id] = `${jsBaseUrl}/${s.filename}?h=${await md5File(`${websiteAssetDir}/js/${s.filename}`)}`;
+	}
+
 	return {
 		css: {
 			fontawesome: `${cssBaseUrl}/fontawesome-all.min.css?h=${await md5File(`${cssBasePath}/fontawesome-all.min.css`)}`,
@@ -95,6 +129,7 @@ async function getAssetUrls(): Promise<AssetUrls> {
 		},
 		js: {
 			script: `${jsBaseUrl}/script.js?h=${await md5File(`${jsBasePath}/script.js`)}`,
+			...importedJs,
 		},
 	};
 }
@@ -248,12 +283,15 @@ async function main() {
 		},
 	};
 
+	// delete supportedLocales['zh_CN'];
+	// delete supportedLocales['fr_FR'];
+
 	setLocale('en_GB');
 
 	await remove(`${docDir}`);
 	await copy(websiteAssetDir, `${docDir}`);
 
-	const sponsors = await loadSponsors();
+	const sponsors = process.env.SKIP_SPONSOR_PROCESSING ? { github: [], orgs: [] } : await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
 	const assetUrls = await getAssetUrls();
 
@@ -364,6 +402,44 @@ async function main() {
 		templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
 
 		renderPageToHtml('', `${docDir}${pathPrefix}/plans/index.html`, templateParams);
+
+		// =============================================================
+		// BRAND GUIDELINES PAGE
+		// =============================================================
+
+		{
+			const brandAssetUrls: AssetUrls = {
+				css: {
+					...assetUrls.css,
+					brand: `${cssBaseUrl}/brand.css?h=${await md5File(`${cssBasePath}/brand.css`)}`,
+				},
+				js: {
+					...assetUrls.js,
+				},
+			};
+
+			const brandPageParams: TemplateParams = {
+				...defaultTemplateParams(brandAssetUrls, locale),
+				partials: translatePartials(partials, localeName, locale.htmlTranslations),
+				templateHtml: applyTranslations(brandTemplateHtml, localeName, locale.htmlTranslations),
+			};
+
+			const brandPageContentHtml = renderMustache('', brandPageParams);
+
+			const templateParams = {
+				...defaultTemplateParams(brandAssetUrls, locale),
+				pageName: 'plans',
+				partials,
+				showToc: false,
+				showImproveThisDoc: false,
+				contentHtml: brandPageContentHtml,
+				title: 'Joplin Brand Guidelines',
+			};
+
+			templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
+
+			renderPageToHtml('', `${docDir}${pathPrefix}/brand/index.html`, templateParams);
+		}
 	}
 
 	setLocale('en_GB');

@@ -7,6 +7,7 @@ const styled = require('styled-components').default;
 
 interface Props {
 	selection: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSelectionChange: Function;
 	sections: any[];
 }
@@ -29,6 +30,7 @@ export const StyledListItem = styled.a`
 	text-decoration: none;
 	cursor: default;
 	opacity: ${(props: any) => props.selected ? 1 : 0.8};
+	padding-left: ${(props: any) => props.isSubSection ? '35' : props.theme.mainPadding}px;
 
 	&:hover {
 		background-color: ${(props: any) => props.theme.backgroundColorHover2};
@@ -90,7 +92,7 @@ export default function Sidebar(props: Props) {
 	function renderButton(section: any) {
 		const selected = props.selection === section.name;
 		return (
-			<StyledListItem key={section.name} selected={selected} onClick={() => { props.onSelectionChange({ section: section }); }}>
+			<StyledListItem key={section.name} isSubSection={Setting.isSubSection(section.name)} selected={selected} onClick={() => { props.onSelectionChange({ section: section }); }}>
 				<StyledListItemIcon className={Setting.sectionNameToIcon(section.name)} />
 				<StyledListItemLabel>
 					{Setting.sectionNameToLabel(section.name)}

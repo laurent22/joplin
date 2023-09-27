@@ -3,8 +3,6 @@ import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
 import shim from '../../shim';
 
-const fs = require('fs-extra');
-
 export default class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 
 	private tempDir_: string;
@@ -41,6 +39,6 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 			cwd: this.tempDir_,
 		}, filePaths);
 
-		await fs.remove(this.tempDir_);
+		await shim.fsDriver().remove(this.tempDir_);
 	}
 }

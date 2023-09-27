@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import PluginService, { defaultPluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import produce from 'immer';
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { ItemEvent } from './PluginBox';
 
 const logger = Logger.create('useOnInstallHandler');
@@ -13,6 +13,7 @@ export interface OnPluginSettingChangeEvent {
 
 type OnPluginSettingChangeHandler = (event: OnPluginSettingChangeEvent)=> void;
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(setInstallingPluginIds: Function, pluginSettings: PluginSettings, repoApi: Function, onPluginSettingsChange: OnPluginSettingChangeHandler, isUpdate: boolean) {
 	return useCallback(async (event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;

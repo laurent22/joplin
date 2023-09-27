@@ -1,7 +1,9 @@
 const URL = require('url-parse');
 
 export function isCallbackUrl(s: string) {
-	return s.startsWith('joplin://x-callback-url/');
+	return s.startsWith('joplin://x-callback-url/openNote?') ||
+		s.startsWith('joplin://x-callback-url/openFolder?') ||
+		s.startsWith('joplin://x-callback-url/openTag?');
 }
 
 export function getNoteCallbackUrl(noteId: string) {
@@ -17,14 +19,14 @@ export function getTagCallbackUrl(tagId: string) {
 }
 
 export const enum CallbackUrlCommand {
-    OpenNote = 'openNote',
-    OpenFolder = 'openFolder',
-    OpenTag = 'openTag',
+	OpenNote = 'openNote',
+	OpenFolder = 'openFolder',
+	OpenTag = 'openTag',
 }
 
 export interface CallbackUrlInfo {
-    command: CallbackUrlCommand;
-    params: Record<string, string>;
+	command: CallbackUrlCommand;
+	params: Record<string, string>;
 }
 
 export function parseCallbackUrl(s: string): CallbackUrlInfo {

@@ -7,10 +7,13 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
+import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
+import Setting from '@joplin/lib/models/Setting';
+import ItemChange from '@joplin/lib/models/ItemChange';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -30,7 +33,8 @@ async function saveFileData(data: any, filename: string) {
 	await writeFile(newFilePath, data);
 }
 
-export async function openItemById(itemId: string, dispatch: Function, hash: string = '') {
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+export async function openItemById(itemId: string, dispatch: Function, hash = '') {
 
 	const item = await BaseItem.loadItemById(itemId);
 
@@ -49,7 +53,11 @@ export async function openItemById(itemId: string, dispatch: Function, hash: str
 		}
 
 		try {
-			await ResourceEditWatcher.instance().openAndWatch(resource.id);
+			if (itemIsReadOnlySync(ModelType.Resource, ItemChange.SOURCE_UNSPECIFIED, resource as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache)) {
+				await ResourceEditWatcher.instance().openAsReadOnly(resource.id);
+			} else {
+				await ResourceEditWatcher.instance().openAndWatch(resource.id);
+			}
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(error.message);
@@ -68,6 +76,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash: str
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export function menuItems(dispatch: Function): ContextMenuItems {
 	return {
 		open: {
@@ -194,6 +203,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 

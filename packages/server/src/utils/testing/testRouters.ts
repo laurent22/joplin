@@ -6,7 +6,7 @@ require('source-map-support').install();
 
 const { stringify } = require('query-string');
 
-const execCommand = function(command: string, returnStdErr: boolean = false): Promise<string> {
+const execCommand = function(command: string, returnStdErr = false): Promise<string> {
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
@@ -28,6 +28,7 @@ const execCommand = function(command: string, returnStdErr: boolean = false): Pr
 };
 
 async function sleep(seconds: number) {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	return new Promise((resolve: Function) => {
 		setTimeout(() => {
 			resolve();
@@ -124,7 +125,6 @@ async function main() {
 	serverProcess = spawn('node', serverCommandParams, {
 		detached: true,
 		stdio: 'inherit',
-		// env: Object.assign({}, process.env, { NODE_ENV: 'testing' }),
 	});
 
 	const cleanUp = () => {

@@ -53,16 +53,16 @@
 		"prices": [
 			{
 				"accountType": 1,
-				"id": "price_1JAzWBLx4fybOTqJw64zxJRJ",
+				"id": "price_1NjjR0Lx4fybOTqJG91l9DpW",
 				"period": "monthly",
-				"amount": "1.99",
+				"amount": "2.99",
 				"currency": "EUR"
 			},
 			{
 				"accountType": 1,
-				"id": "price_1JJIPZLx4fybOTqJHvxiQ7bV",
+				"id": "price_1NjjSJLx4fybOTqJMoLokCo3",
 				"period": "yearly",
-				"amount": "17.88",
+				"amount": "28.69",
 				"currency": "EUR"
 			},
 			{

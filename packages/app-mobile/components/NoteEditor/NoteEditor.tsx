@@ -5,32 +5,33 @@ import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
 import ExtendedWebView from '../ExtendedWebView';
 
-const React = require('react');
+import * as React from 'react';
 import { forwardRef, RefObject, useImperativeHandle } from 'react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import { View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 const { editorFont } = require('../global-style');
 
-import SelectionFormatting from './SelectionFormatting';
-import {
-	EditorSettings, EditorControl,
-	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent, ListType, SearchState,
-} from './types';
+import { EditorControl, EditorSettings, SelectionRange } from './types';
 import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
+import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { EditorCommandType, EditorKeymap, EditorLanguageType, PluginData, SearchState } from '@joplin/editor/types';
+import supportsCommand from '@joplin/editor/CodeMirror/editorCommands/supportsCommand';
+import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
-type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
+type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
 type OnAttachCallback = ()=> void;
 
 interface Props {
 	themeId: number;
 	initialText: string;
-	initialSelection?: Selection;
+	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
 	toolbarEnabled: boolean;
+	readOnly: boolean;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -109,6 +110,11 @@ function editorTheme(themeId: number) {
 
 	return {
 		...themeStyle(themeId),
+
+		// To allow accessibility font scaling, we also need to set the
+		// fontSize to a value in `em`s (relative scaling relative to
+		// parent font size).
+		fontSizeUnits: 'em',
 		fontSize: estimatedFontSizeInEm,
 		fontFamily: fontFamilyFromSettings(),
 	};
@@ -119,48 +125,92 @@ type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
 	injectJS: OnInjectJSCallback, setLinkDialogVisible: OnSetVisibleCallback,
-	setSearchState: OnSearchStateChangeCallback, searchStateRef: RefObject<SearchState>
+	setSearchState: OnSearchStateChangeCallback,
+	searchStateRef: RefObject<SearchState>,
 ): EditorControl => {
 	return useMemo(() => {
-		return {
+		const execCommand = (command: EditorCommandType) => {
+			injectJS(`cm.execCommand(${JSON.stringify(command)})`);
+		};
+
+		const setSearchStateCallback = (state: SearchState) => {
+			injectJS(`cm.setSearchState(${JSON.stringify(state)})`);
+			setSearchState(state);
+		};
+
+		const control: EditorControl = {
+			supportsCommand(command: EditorCommandType) {
+				return supportsCommand(command);
+			},
+			execCommand,
+
 			undo() {
-				injectJS('cm.undo();');
+				injectJS('cm.undo()');
 			},
 			redo() {
-				injectJS('cm.redo();');
+				injectJS('cm.redo()');
 			},
 			select(anchor: number, head: number) {
 				injectJS(
-					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
+					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`,
 				);
+			},
+			setScrollPercent(fraction: number) {
+				injectJS(`cm.setScrollFraction(${JSON.stringify(fraction)})`);
 			},
 			insertText(text: string) {
 				injectJS(`cm.insertText(${JSON.stringify(text)});`);
 			},
+			updateBody(newBody: string) {
+				injectJS(`cm.updateBody(${JSON.stringify(newBody)});`);
+			},
+			updateSettings(newSettings: EditorSettings) {
+				injectJS(`cm.updateSettings(${JSON.stringify(newSettings)})`);
+			},
 
 			toggleBolded() {
-				injectJS('cm.toggleBolded();');
+				execCommand(EditorCommandType.ToggleBolded);
 			},
 			toggleItalicized() {
-				injectJS('cm.toggleItalicized();');
+				execCommand(EditorCommandType.ToggleItalicized);
 			},
-			toggleList(listType: ListType) {
-				injectJS(`cm.toggleList(${JSON.stringify(listType)});`);
+			toggleOrderedList() {
+				execCommand(EditorCommandType.ToggleNumberedList);
+			},
+			toggleUnorderedList() {
+				execCommand(EditorCommandType.ToggleBulletedList);
+			},
+			toggleTaskList() {
+				execCommand(EditorCommandType.ToggleCheckList);
 			},
 			toggleCode() {
-				injectJS('cm.toggleCode();');
+				execCommand(EditorCommandType.ToggleCode);
 			},
 			toggleMath() {
-				injectJS('cm.toggleMath();');
+				execCommand(EditorCommandType.ToggleMath);
 			},
 			toggleHeaderLevel(level: number) {
-				injectJS(`cm.toggleHeaderLevel(${level});`);
+				const levelToCommand = [
+					EditorCommandType.ToggleHeading1,
+					EditorCommandType.ToggleHeading2,
+					EditorCommandType.ToggleHeading3,
+					EditorCommandType.ToggleHeading4,
+					EditorCommandType.ToggleHeading5,
+				];
+
+				const index = level - 1;
+
+				if (index < 0 || index >= levelToCommand.length) {
+					throw new Error(`Unsupported header level ${level}`);
+				}
+
+				execCommand(levelToCommand[index]);
 			},
 			increaseIndent() {
-				injectJS('cm.increaseIndent();');
+				execCommand(EditorCommandType.IndentMore);
 			},
 			decreaseIndent() {
-				injectJS('cm.decreaseIndent();');
+				execCommand(EditorCommandType.IndentLess);
 			},
 			updateLink(label: string, url: string) {
 				injectJS(`cm.updateLink(
@@ -169,7 +219,7 @@ const useEditorControl = (
 				);`);
 			},
 			scrollSelectionIntoView() {
-				injectJS('cm.scrollSelectionIntoView();');
+				execCommand(EditorCommandType.ScrollSelectionIntoView);
 			},
 			showLinkDialog() {
 				setLinkDialogVisible(true);
@@ -180,23 +230,27 @@ const useEditorControl = (
 			hideKeyboard() {
 				injectJS('document.activeElement?.blur();');
 			},
+
+			setPlugins: async (plugins: PluginData[]) => {
+				injectJS(`cm.setPlugins(${JSON.stringify(plugins)});`);
+			},
+
+			setSearchState: setSearchStateCallback,
+
 			searchControl: {
 				findNext() {
-					injectJS('cm.searchControl.findNext();');
+					execCommand(EditorCommandType.FindNext);
 				},
 				findPrevious() {
-					injectJS('cm.searchControl.findPrevious();');
+					execCommand(EditorCommandType.FindPrevious);
 				},
-				replaceCurrent() {
-					injectJS('cm.searchControl.replaceCurrent();');
+				replaceNext() {
+					execCommand(EditorCommandType.ReplaceNext);
 				},
 				replaceAll() {
-					injectJS('cm.searchControl.replaceAll();');
+					execCommand(EditorCommandType.ReplaceAll);
 				},
-				setSearchState(state: SearchState) {
-					injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
-					setSearchState(state);
-				},
+
 				showSearch() {
 					setSearchState({
 						...searchStateRef.current,
@@ -209,8 +263,12 @@ const useEditorControl = (
 						dialogVisible: false,
 					});
 				},
+
+				setSearchState: setSearchStateCallback,
 			},
 		};
+
+		return control;
 	}, [injectJS, searchStateRef, setLinkDialogVisible, setSearchState]);
 };
 
@@ -226,6 +284,16 @@ function NoteEditor(props: Props, ref: any) {
 		themeData: editorTheme(props.themeId),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
+		language: EditorLanguageType.Markdown,
+		useExternalSearch: true,
+		readOnly: props.readOnly,
+
+		keymap: EditorKeymap.Default,
+
+		automatchBraces: false,
+		ignoreModifiers: false,
+
+		indentWithTabs: false,
 	};
 
 	const injectedJavaScript = `
@@ -250,6 +318,12 @@ function NoteEditor(props: Props, ref: any) {
 			);
 		};
 
+		window.onunhandledrejection = (event) => {
+			window.ReactNativeWebView.postMessage(
+				"error: Unhandled promise rejection: " + event
+			);
+		};
+
 		if (!window.cm) {
 			// This variable is not used within this script
 			// but is called using "injectJavaScript" from
@@ -267,7 +341,7 @@ function NoteEditor(props: Props, ref: any) {
 				${setInitialSelectionJS}
 
 				window.onresize = () => {
-					cm.scrollSelectionIntoView();
+					cm.execCommand('scrollSelectionIntoView');
 				};
 			} catch (e) {
 				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
@@ -278,7 +352,7 @@ function NoteEditor(props: Props, ref: any) {
 
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
-	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
+	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
@@ -291,13 +365,13 @@ function NoteEditor(props: Props, ref: any) {
 		searchStateRef.current = searchState;
 	}, [searchState]);
 
-	// / Runs [js] in the context of the CodeMirror frame.
+	// Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
 		webviewRef.current.injectJS(js);
 	};
 
 	const editorControl = useEditorControl(
-		injectJS, setLinkDialogVisible, setSearchState, searchStateRef
+		injectJS, setLinkDialogVisible, setSearchState, searchStateRef,
 	);
 
 	useImperativeHandle(ref, () => {
@@ -314,42 +388,48 @@ function NoteEditor(props: Props, ref: any) {
 
 		const msg = JSON.parse(data);
 
+		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		const handlers: Record<string, Function> = {
 			onLog: (event: any) => {
 				// eslint-disable-next-line no-console
 				console.info('CodeMirror:', ...event.value);
 			},
 
-			onChange: (event: ChangeEvent) => {
-				props.onChange(event);
-			},
+			onEditorEvent: (event: EditorEvent) => {
+				let exhaustivenessCheck: never;
+				switch (event.kind) {
+				case EditorEventType.Change:
+					props.onChange(event);
+					break;
+				case EditorEventType.UndoRedoDepthChange:
+					props.onUndoRedoDepthChange(event);
+					break;
+				case EditorEventType.SelectionRangeChange:
+					props.onSelectionChange(event);
+					break;
+				case EditorEventType.SelectionFormattingChange:
+					setSelectionState(event.formatting);
+					break;
+				case EditorEventType.EditLink:
+					editorControl.showLinkDialog();
+					break;
+				case EditorEventType.UpdateSearchDialog:
+					setSearchState(event.searchState);
 
-			onUndoRedoDepthChange: (event: UndoRedoDepthChangeEvent) => {
-				props.onUndoRedoDepthChange(event);
-			},
-
-			onSelectionChange: (event: SelectionChangeEvent) => {
-				props.onSelectionChange(event);
-			},
-
-			onSelectionFormattingChange(data: string) {
-				// We want a SelectionFormatting object, so are
-				// instantiating it from JSON.
-				const formatting = SelectionFormatting.fromJSON(data);
-				setSelectionState(formatting);
-			},
-
-			onRequestLinkEdit() {
-				editorControl.showLinkDialog();
-			},
-
-			onRequestShowSearch(data: SearchState) {
-				setSearchState(data);
-				editorControl.searchControl.showSearch();
-			},
-
-			onRequestHideSearch() {
-				editorControl.searchControl.hideSearch();
+					if (event.searchState.dialogVisible) {
+						editorControl.searchControl.showSearch();
+					} else {
+						editorControl.searchControl.hideSearch();
+					}
+					break;
+				case EditorEventType.Scroll:
+					// Not handled
+					break;
+				default:
+					exhaustivenessCheck = event;
+					return exhaustivenessCheck;
+				}
+				return;
 			},
 		};
 
@@ -365,6 +445,19 @@ function NoteEditor(props: Props, ref: any) {
 		console.error('NoteEditor: webview error');
 	}, []);
 
+	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
+	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
+
+	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
+		const containerHeight = event.nativeEvent.layout.height;
+
+		if (containerHeight < 140) {
+			setHasSpaceForToolbar(false);
+		} else {
+			setHasSpaceForToolbar(true);
+		}
+	}, []);
+
 	const toolbar = <MarkdownToolbar
 		style={{
 			// Don't show the markdown toolbar if there isn't enough space
@@ -376,15 +469,20 @@ function NoteEditor(props: Props, ref: any) {
 		selectionState={selectionState}
 		searchState={searchState}
 		onAttach={props.onAttach}
+		readOnly={props.readOnly}
 	/>;
 
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
 	//    when an editable region (e.g. a the full-screen NoteEditor) is focused.
 	return (
-		<View style={{
-			...props.style,
-			flexDirection: 'column',
-		}}>
+		<View
+			testID='note-editor-root'
+			onLayout={onContainerLayout}
+			style={{
+				...props.style,
+				flexDirection: 'column',
+			}}
+		>
 			<EditLinkDialog
 				visible={linkDialogVisible}
 				themeId={props.themeId}
@@ -415,7 +513,7 @@ function NoteEditor(props: Props, ref: any) {
 				searchState={searchState}
 			/>
 
-			{props.toolbarEnabled ? toolbar : null}
+			{toolbarEnabled ? toolbar : null}
 		</View>
 	);
 }

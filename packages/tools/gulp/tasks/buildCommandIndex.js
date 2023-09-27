@@ -7,6 +7,8 @@ async function processDirectory(dir) {
 		cwd: dir,
 	}).filter(f => f !== 'index.ts');
 
+	tsFiles.sort();
+
 	const fileContent = [];
 
 	for (const tsFile of tsFiles) {
@@ -37,7 +39,7 @@ async function processDirectory(dir) {
 		destFile,
 		'// AUTO-GENERATED using `gulp buildCommandIndex`',
 		fileContent.join('\n'),
-		true
+		true,
 	);
 }
 

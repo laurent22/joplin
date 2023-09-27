@@ -52,6 +52,28 @@ const config: Config = {
 }	
 ```
 
+### Don't set the type when it can be inferred
+
+TypeScript can automatically detect the type so setting it explicitely in many cases is not needed, and makes the code unecessary verbose. We already have enabled the eslint rule `no-inferrable-types`, however it only applies to simple types such as string, number, etc. but not to function calls.
+
+**BAD:**
+```ts
+const getSomething():string => {
+	return 'something';
+}
+
+const timestamp:number = Date.now();
+```
+
+**Good:**
+```ts
+const getSomething() => {
+	return 'something';
+}
+
+const timestamp = Date.now();
+```
+
 ## Filenames
 
  * `camelCase.ts`: Files that export multiple things.
@@ -196,6 +218,10 @@ As much as possible, avoid default parameters in **function definitions** and op
 
 If you search for ["XSS" in the Joplin git log](https://github.com/laurent22/joplin/search?q=xss&type=commits) you'll find several security vulnerabilities that have been fixed over the year, and that happened in various places that are hard to predict. So we need to be careful with this and make sure we correctly escape user content.
 
+We should do so even if we think we control the input or that it will always have a certain format. That may change in the future, or that could be exploited via another bug.
+
+Finally, escaping data is often required to prevent markup code from breaking. For example quotes or angled brackets have to be escaped in HTML or else the markup is likely to break.
+
 How you escape the data depends on where you are going to insert it so there's no single function that's going to cover all cases.
 
 ### To insert into a JS script
@@ -232,6 +258,18 @@ If you want to encode a full URL, use `encodeURI`:
 ```ts
 encodeURI('https://domain.com/path to a document.pdf');
 // 'https://domain.com/path%20to%20a%20document.pdf'
+```
+
+### To insert into Markdown code
+
+Use the provided escape functions in `lib/markdownUtils`:
+
+- `escapeTableCell()` for tables
+- `escapeInlineCode()` for inline code
+- `escapeTitleText()`and `escapeLinkUrl()` for links:
+
+```ts
+const markdown = `[${markdownUtils.escapeTitleText(linkTitle)}](${markdownUtils.escapeLinkUrl(linkUrl)})`;
 ```
 
 ### Escape as late as possible

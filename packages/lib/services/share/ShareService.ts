@@ -1,7 +1,7 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
@@ -13,7 +13,7 @@ import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
-import { ShareInvitation, State, stateRootKey, StateShare } from './reducer';
+import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
 
@@ -173,14 +173,21 @@ export default class ShareService {
 
 	// This is when a share recipient decides to leave the shared folder.
 	//
-	// In that case, we should only delete the folder but none of its children.
-	// Deleting the folder tells the server that we want to leave the share. The
-	// server will then proceed to delete all associated user_items. So
-	// eventually all the notebook content will also be deleted for the current
-	// user.
+	// In that case we delete the root folder. Deleting the folder tells the
+	// server that we want to leave the share.
 	//
-	// We don't delete the children here because that would delete them for the
-	// other share participants too.
+	// We also immediately delete the children, but we do not sync the changes
+	// otherwise it would delete the items for other users too.
+	//
+	// If we do not delete them now it would also cause all kind of issues with
+	// read-only shares, because the read-only status will be lost after the
+	// deletion of the root folder, which means various services may modify the
+	// data. The changes will then be rejected by the sync target and cause
+	// conflicts.
+	//
+	// We do not need to sync the children deletion, because the server will
+	// take care of deleting all associated user_items. So eventually all the
+	// notebook content will also be deleted for the current user.
 	//
 	// If `folderShareUserId` is provided, the function will check that the user
 	// does not own the share. It would be an error to leave such a folder
@@ -191,7 +198,14 @@ export default class ShareService {
 			if (folderShareUserId === userId) throw new Error('Cannot leave own notebook');
 		}
 
-		await Folder.delete(folderId, { deleteChildren: false });
+		const folder = await Folder.load(folderId);
+
+		// We call this to make sure all items are correctly linked before we
+		// call deleteAllByShareId()
+		await Folder.updateAllShareIds(ResourceService.instance());
+
+		await Folder.delete(folderId, { deleteChildren: false, disableReadOnlyCheck: true });
+		await Folder.deleteAllByShareId(folder.share_id, { disableReadOnlyCheck: true, trackDeleted: false });
 	}
 
 	// Finds any folder that is associated with a share, but the user no longer
@@ -306,7 +320,7 @@ export default class ShareService {
 		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
 	}
 
-	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string) {
+	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string, permissions: SharePermissions) {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
@@ -323,13 +337,14 @@ export default class ShareService {
 				this.encryptionService_,
 				masterKey,
 				getMasterPassword(),
-				recipientPublicKey
+				recipientPublicKey,
 			);
 		}
 
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
 			master_key: JSON.stringify(recipientMasterKey),
+			...permissions,
 		});
 	}
 
@@ -360,6 +375,25 @@ export default class ShareService {
 		});
 	}
 
+	public async setPermissions(shareId: string, shareUserId: string, permissions: SharePermissions) {
+		logger.info('setPermissions: ', shareUserId, permissions);
+
+		await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, {
+			can_read: 1,
+			can_write: permissions.can_write,
+		});
+
+		this.store.dispatch({
+			type: 'SHARE_USER_UPDATE_ONE',
+			shareId: shareId,
+			shareUser: {
+				id: shareUserId,
+				...permissions,
+			},
+		});
+	}
+
+
 	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
 		logger.info('respondInvitation: ', shareUserId, accept);
 
@@ -370,7 +404,7 @@ export default class ShareService {
 					masterKey,
 					localSyncInfo().ppk,
 					getMasterPassword(),
-					getMasterPassword()
+					getMasterPassword(),
 				);
 
 				logger.info('respondInvitation: Key has been reencrypted using master password', reencryptedMasterKey);
@@ -466,14 +500,22 @@ export default class ShareService {
 	public async maintenance() {
 		if (this.enabled) {
 			let hasError = false;
+
 			try {
 				await this.refreshShareInvitations();
-				await this.refreshShares();
-				Setting.setValue('sync.userId', this.api().userId);
 			} catch (error) {
 				hasError = true;
-				logger.error('Failed to run maintenance:', error);
+				logger.error('Maintenance: Failed to update share invitations:', error);
 			}
+
+			try {
+				await this.refreshShares();
+			} catch (error) {
+				hasError = true;
+				logger.error('Maintenance: Failed to refresh shares:', error);
+			}
+
+			Setting.setValue('sync.userId', this.api().userId);
 
 			// If there was no errors, it means we have all the share objects,
 			// so we can run the clean up function.

@@ -1,9 +1,9 @@
 import Setting, { Env } from './models/Setting';
-import Logger, { TargetType, LoggerWrapper } from './Logger';
+import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
-import reducer, { setStore } from './reducer';
+import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
 import { _, setLocale } from './locale';
@@ -58,6 +58,8 @@ import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
+import { parseShareCache } from './services/share/reducer';
+import RotatingLogs from './RotatingLogs';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -66,6 +68,7 @@ const appLogger: LoggerWrapper = Logger.create('App');
 
 interface StartOptions {
 	keychainEnabled?: boolean;
+	setupGlobalLogger?: boolean;
 }
 
 export default class BaseApplication {
@@ -75,8 +78,8 @@ export default class BaseApplication {
 	private database_: any = null;
 	private profileConfig_: ProfileConfig = null;
 
-	protected showStackTraces_: boolean = false;
-	protected showPromptString_: boolean = false;
+	protected showStackTraces_ = false;
+	protected showPromptString_ = false;
 
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
@@ -84,6 +87,8 @@ export default class BaseApplication {
 	private currentFolder_: any = null;
 
 	protected store_: Store<any> = null;
+
+	private rotatingLogs: RotatingLogs;
 
 	public constructor() {
 		this.eventEmitter_ = new EventEmitter();
@@ -145,7 +150,7 @@ export default class BaseApplication {
 
 	public switchCurrentFolder(folder: any) {
 		if (!this.hasGui()) {
-			this.currentFolder_ = Object.assign({}, folder);
+			this.currentFolder_ = { ...folder };
 			Setting.setValue('activeFolderId', folder ? folder.id : '');
 		} else {
 			this.dispatch({
@@ -157,7 +162,7 @@ export default class BaseApplication {
 
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
-	private async handleStartFlags_(argv: string[], setDefaults: boolean = true) {
+	private async handleStartFlags_(argv: string[], setDefaults = true) {
 		const matched: any = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
@@ -309,6 +314,7 @@ export default class BaseApplication {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
@@ -318,7 +324,7 @@ export default class BaseApplication {
 		process.exit(code);
 	}
 
-	public async refreshNotes(state: any, useSelectedNoteId: boolean = false, noteHash: string = '') {
+	public async refreshNotes(state: any, useSelectedNoteId = false, noteHash = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -538,10 +544,10 @@ export default class BaseApplication {
 		let refreshNotesHash = '';
 
 		await reduxSharedMiddleware(store, next, action);
-		const newState = store.getState();
+		const newState = store.getState() as State;
 
 		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+			if (!(await reg.syncTarget().syncStarted())) void reg.scheduleSync(15 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
@@ -565,6 +571,10 @@ export default class BaseApplication {
 				refreshNotesUseSelectedNoteId = true;
 				refreshNotesHash = action.hash;
 			}
+		}
+
+		if (['HISTORY_BACKWARD', 'HISTORY_FORWARD', 'FOLDER_SELECT', 'TAG_SELECT', 'SMART_FILTER_SELECT', 'FOLDER_DELETE', 'FOLDER_AND_NOTE_SELECT'].includes(action.type) || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+			Setting.setValue('notesParent', serializeNotesParent(getNotesParent(newState)));
 		}
 
 		if (this.hasGui() && (action.type === 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
@@ -729,9 +739,24 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
+	protected startRotatingLogMaintenance(profileDir: string) {
+		this.rotatingLogs = new RotatingLogs(profileDir);
+		const processLogs = async () => {
+			try {
+				await this.rotatingLogs.cleanActiveLogFile();
+				await this.rotatingLogs.deleteNonActiveLogFiles();
+			} catch (error) {
+				appLogger.error(error);
+			}
+		};
+		shim.setTimeout(() => { void processLogs(); }, 60000);
+		shim.setInterval(() => { void processLogs(); }, 24 * 60 * 60 * 1000);
+	}
+
 	public async start(argv: string[], options: StartOptions = null): Promise<any> {
 		options = {
 			keychainEnabled: true,
+			setupGlobalLogger: true,
 			...options,
 		};
 
@@ -792,20 +817,17 @@ export default class BaseApplication {
 		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
 
 		const extraFlags = await this.readFlagsFromFile(`${profileDir}/flags.txt`);
-		initArgs = Object.assign(initArgs, extraFlags);
+		initArgs = { ...initArgs, ...extraFlags };
 
+		const globalLogger = Logger.globalLogger;
 
-
-
-		const globalLogger = new Logger();
-		globalLogger.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
-		if (Setting.value('appType') === 'desktop') {
-			globalLogger.addTarget(TargetType.Console);
+		if (options.setupGlobalLogger) {
+			globalLogger.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
+			if (Setting.value('appType') === 'desktop') {
+				globalLogger.addTarget(TargetType.Console);
+			}
+			globalLogger.setLevel(initArgs.logLevel);
 		}
-		globalLogger.setLevel(initArgs.logLevel);
-		Logger.initializeGlobalLogger(globalLogger);
-
-
 
 		reg.setLogger(Logger.create('') as Logger);
 		// reg.dispatch = () => {};
@@ -834,6 +856,8 @@ export default class BaseApplication {
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
+
+		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
 
 		if (initArgs?.isSafeMode) {
 			Setting.setValue('isSafeMode', true);

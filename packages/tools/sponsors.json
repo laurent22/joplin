@@ -19,9 +19,6 @@
 			"name": "dbrandonjohnson"
 		},
 		{
-			"name": "mcejp"
-		},
-		{
 			"name": "chr15m"
 		},
 		{
@@ -31,19 +28,10 @@
 			"name": "konishi-t"
 		},
 		{
-			"name": "iamwillbar"
-		},
-		{
 			"name": "marcdw1289"
 		},
 		{
-			"name": "kianenigma"
-		},
-		{
 			"name": "taskcruncher"
-		},
-		{
-			"name": "fourstepper"
 		},
 		{
 			"name": "sif"
@@ -56,6 +44,15 @@
 		},
 		{
 			"name": "jknowles"
+		},
+		{
+			"name": "fats"
+		},
+		{
+			"name": "dchecks"
+		},
+		{
+			"name": "Galliver7"
 		}
 	],
 	"orgs": [
@@ -79,6 +76,16 @@
 			"url": "https://grundstueckspreise.info/",
 			"title": "SP Software GmbH",
 			"imageName": "Grundstueckspreise.png"
+		},
+		{
+			"url": "https://tranio.com/spain/",
+			"title": "Property for sale in Spain",
+			"imageName": "TranioOverseasProperty.jpg"
+		},
+		{
+			"url": "https://citricsheep.com",
+			"title": "Citric Sheep",
+			"imageName": "CitricSheep.png"
 		}
 	],
 	"orgsOld": [

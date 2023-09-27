@@ -10,6 +10,7 @@ type EnabledCondition = string;
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
 	state: State;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 
@@ -41,11 +42,6 @@ export interface CommandDeclaration {
 
 	// All free Font Awesome icons are available: https://fontawesome.com/icons?d=gallery&m=free
 	iconName?: string;
-
-	// Will be used by TinyMCE (which doesn't support Font Awesome icons).
-	// Defaults to the "preferences" icon (a cog) if not specified.
-	// https://www.tiny.cloud/docs/advanced/editor-icon-identifiers/
-	tinymceIconName?: string;
 
 	// Same as `role` key in Electron MenuItem:
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
@@ -102,8 +98,10 @@ export default class CommandService extends BaseService {
 	private commands_: Commands = {};
 	private store_: any;
 	private devMode_: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private stateToWhenClauseContext_: Function;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public initialize(store: any, devMode: boolean, stateToWhenClauseContext: Function) {
 		utils.store = store;
 		this.store_ = store;
@@ -111,15 +109,17 @@ export default class CommandService extends BaseService {
 		this.stateToWhenClauseContext_ = stateToWhenClauseContext;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		eventManager.off(eventName, callback);
 	}
 
-	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel: boolean = true): SearchResult[] {
+	public searchCommands(query: string, returnAllWhenEmpty: boolean, excludeWithoutLabel = true): SearchResult[] {
 		query = query.toLowerCase();
 
 		const output = [];
@@ -148,7 +148,7 @@ export default class CommandService extends BaseService {
 		return output;
 	}
 
-	public commandNames(publicOnly: boolean = false) {
+	public commandNames(publicOnly = false) {
 		if (publicOnly) {
 			const output = [];
 			for (const name in this.commands_) {
@@ -182,7 +182,7 @@ export default class CommandService extends BaseService {
 	public registerDeclaration(declaration: CommandDeclaration) {
 		declaration = { ...declaration };
 		if (!declaration.label) declaration.label = '';
-		if (!declaration.iconName) declaration.iconName = '';
+		if (!declaration.iconName) declaration.iconName = 'fas fa-cog';
 
 		this.commands_[declaration.name] = {
 			declaration: declaration,
@@ -194,7 +194,7 @@ export default class CommandService extends BaseService {
 
 		const command = this.commandByName(commandName);
 
-		runtime = Object.assign({}, runtime);
+		runtime = { ...runtime };
 		if (!runtime.enabledCondition) runtime.enabledCondition = 'true';
 		command.runtime = runtime;
 	}
@@ -291,14 +291,14 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	public iconName(commandName: string, variant: string = null): string {
+	public iconName(commandName: string): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`No such command: ${commandName}`);
-		if (variant === 'tinymce') return command.declaration.tinymceIconName ? command.declaration.tinymceIconName : 'preferences';
+
 		return command.declaration.iconName;
 	}
 
-	public label(commandName: string, fullLabel: boolean = false): string {
+	public label(commandName: string, fullLabel = false): string {
 		const command = this.commandByName(commandName);
 		if (!command) throw new Error(`Command: ${commandName} is not declared`);
 		const output = [];

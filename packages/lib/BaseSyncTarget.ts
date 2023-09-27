@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import Synchronizer from './Synchronizer';
 import EncryptionService from './services/e2ee/EncryptionService';
 import shim from './shim';
@@ -7,6 +7,7 @@ import ShareService from './services/share/ShareService';
 
 export default class BaseSyncTarget {
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static dispatch: Function = () => {};
 
 	private synchronizer_: Synchronizer = null;
@@ -22,6 +23,12 @@ export default class BaseSyncTarget {
 	}
 
 	public static supportsConfigCheck() {
+		return false;
+	}
+
+	// Returns true if the sync target expects a non-empty sync.{id}.password
+	// setting.
+	public static requiresPassword() {
 		return false;
 	}
 

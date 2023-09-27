@@ -17,25 +17,25 @@ jobs:
           concurrent_skipping: 'same_content_newer'
 
   BuildAndroidDebug:
-    if: github.repository == 'laurent22/joplin'
     needs: pre_job
-    if: needs.pre_job.outputs.should_skip != 'true'
+    if: github.repository == 'laurent22/joplin' && needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update || true
           sudo apt-get install -y libsecret-1-dev
+          
+      - uses: actions/checkout@v2
 
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
+          cache: 'yarn'
 
       - name: Install Yarn
         run: |
           corepack enable
-
-      - uses: actions/checkout@v2
 
       - name: Install
         run:  yarn install

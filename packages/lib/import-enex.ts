@@ -6,9 +6,10 @@ import Resource from './models/Resource';
 import Setting from './models/Setting';
 import time from './time';
 import shim from './shim';
-import { NoteEntity } from './services/database/types';
+import { NoteEntity, ResourceEntity } from './services/database/types';
 import { enexXmlToMd } from './import-enex-md-gen';
 import { MarkupToHtml } from '@joplin/renderer';
+import { fileExtension, friendlySafeFilename } from './path-utils';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
@@ -138,8 +139,15 @@ interface ExtractedResource {
 	title?: string;
 }
 
+interface ExtractedTask {
+	title: string;
+	completed: boolean;
+	groupId: string;
+}
+
 interface ExtractedNote extends NoteEntity {
 	resources?: ExtractedResource[];
+	tasks: ExtractedTask[];
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
@@ -175,7 +183,7 @@ async function processNoteResource(resource: ExtractedResource) {
 		}
 
 		if (!resource.id || !resource.size) {
-			const debugTemp = Object.assign({}, resource);
+			const debugTemp = { ...resource };
 			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
 			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
 		}
@@ -189,10 +197,16 @@ async function saveNoteResources(note: ExtractedNote) {
 	for (let i = 0; i < note.resources.length; i++) {
 		const resource = note.resources[i];
 
-		const toSave = Object.assign({}, resource);
-		delete toSave.dataFilePath;
-		delete toSave.dataEncoding;
-		delete toSave.hasData;
+		const toSave: ResourceEntity = { ...resource };
+		delete (toSave as any).dataFilePath;
+		delete (toSave as any).dataEncoding;
+		delete (toSave as any).hasData;
+		toSave.file_extension = resource.filename ? fileExtension(resource.filename) : '';
+
+		// ENEX resource filenames can contain slashes, which may confuse other
+		// parts of the app, which expect this `filename` field to be safe.
+		// Fixes https://github.com/laurent22/joplin/issues/8823
+		toSave.filename = toSave.filename ? friendlySafeFilename(toSave.filename, 255, true) : '';
 
 		// The same resource sometimes appear twice in the same enex (exact same ID and file).
 		// In that case, just skip it - it means two different notes might be linked to the
@@ -224,15 +238,15 @@ async function saveNoteTags(note: ExtractedNote) {
 
 interface ImportOptions {
 	fuzzyMatching?: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onProgress?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onError?: Function;
 	outputFormat?: string;
 }
 
 async function saveNoteToStorage(note: ExtractedNote, importOptions: ImportOptions) {
-	importOptions = Object.assign({}, {
-		fuzzyMatching: false,
-	}, importOptions);
+	importOptions = { fuzzyMatching: false, ...importOptions };
 
 	note = Note.filter(note as any);
 
@@ -328,6 +342,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function handleSaxStreamEvent(fn: Function) {
 		return function(...args: any[]) {
 			// Pass the parser to the wrapped function for debugging purposes
@@ -348,7 +363,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	const fileToProcess = await preProcessFile(filePath);
 	const needToDeleteFileToProcess = fileToProcess !== filePath;
 
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		const progressState = {
 			loaded: 0,
 			created: 0,
@@ -368,6 +383,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 		let note: ExtractedNote = null;
 		let noteAttributes: Record<string, any> = null;
 		let noteResource: ExtractedResource = null;
+		let noteTask: ExtractedTask = null;
 		let noteResourceAttributes: Record<string, any> = null;
 		let noteResourceRecognition: NoteResourceRecognition = null;
 		const notes: ExtractedNote[] = [];
@@ -431,7 +447,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 
 					const body = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
-						await enexXmlToMd(note.bodyXml, note.resources);
+						await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
 					delete note.bodyXml;
 
 					note.markup_language = importOptions.outputFormat === 'html' ?
@@ -482,6 +498,11 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 
 		saxStream.on('error', function(error: any) {
 			importOptions.onError(createErrorWithNoteTitle(this, error));
+
+			// We need to reject the promise here, or parsing will get stuck
+			// ("end" handler will never be called).
+			// https://github.com/laurent22/joplin/issues/8699
+			reject(error);
 		});
 
 		saxStream.on('text', handleSaxStreamEvent(function(text: string) {
@@ -509,6 +530,14 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 					if (!(n in noteResource)) (noteResource as any)[n] = '';
 					(noteResource as any)[n] += text;
 				}
+			} else if (noteTask) {
+				if (n === 'title') {
+					noteTask.title = text;
+				} else if (n === 'taskStatus') {
+					noteTask.completed = text === 'completed';
+				} else if (n === 'taskGroupNoteLevelID') {
+					noteTask.groupId = text;
+				}
 			} else if (note) {
 				if (n === 'title') {
 					note.title = text;
@@ -535,6 +564,7 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			if (n === 'note') {
 				note = {
 					resources: [],
+					tasks: [],
 					tags: [],
 					bodyXml: '',
 				};
@@ -547,6 +577,12 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 			} else if (n === 'resource') {
 				noteResource = {
 					hasData: false,
+				};
+			} else if (n === 'task') {
+				noteTask = {
+					title: '',
+					completed: false,
+					groupId: '',
 				};
 			}
 		}));
@@ -601,6 +637,9 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'].trim() : '';
 
 				noteAttributes = null;
+			} else if (n === 'task') {
+				note.tasks.push(noteTask);
+				noteTask = null;
 			} else if (n === 'resource') {
 				let mimeType = noteResource.mime ? noteResource.mime.trim() : '';
 

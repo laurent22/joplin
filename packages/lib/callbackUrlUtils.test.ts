@@ -3,13 +3,14 @@ import * as callbackUrlUtils from './callbackUrlUtils';
 describe('callbackUrlUtils', () => {
 
 	it('should identify valid callback urls', () => {
-		const url = 'joplin://x-callback-url/123?a=b';
+		const url = 'joplin://x-callback-url/openFolder?a=b';
 		expect(callbackUrlUtils.isCallbackUrl(url)).toBe(true);
 	});
 
 	it('should identify invalid callback urls', () => {
 		expect(callbackUrlUtils.isCallbackUrl('not-joplin://x-callback-url/123?a=b')).toBe(false);
 		expect(callbackUrlUtils.isCallbackUrl('joplin://xcallbackurl/123?a=b')).toBe(false);
+		expect(callbackUrlUtils.isCallbackUrl('joplin://x-callback-url/invalidCommand?a=b')).toBe(false);
 	});
 
 	it('should build valid note callback urls', () => {

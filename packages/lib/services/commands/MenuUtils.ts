@@ -9,6 +9,7 @@ const { createCachedSelector } = require('re-reselect');
 export interface MenuItem {
 	id?: string;
 	label?: string;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	click?: Function;
 	role?: any;
 	type?: string;
@@ -41,14 +42,14 @@ const createShallowObjectEqualSelector = createSelectorCreator(
 			if (prev[n] !== next[n]) return false;
 		}
 		return true;
-	}
+	},
 );
 
 // This selector ensures that for the given command names, the same toolbar
 // button array is returned if the underlying toolbar buttons have not changed.
 const selectObjectByCommands = createCachedSelector(
 	(state: any) => state.array,
-	(array: any[]) => array
+	(array: any[]) => array,
 )({
 	keySelector: (_state: any, commandNames: string[]) => {
 		return commandNames.join('_');
@@ -74,6 +75,7 @@ export default class MenuUtils {
 		return KeymapService.instance();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public commandToMenuItem(commandName: string, onClick: Function): MenuItem {
 		const command = this.service.commandByName(commandName);
 
@@ -94,11 +96,16 @@ export default class MenuUtils {
 	}
 
 	public commandToStatefulMenuItem(commandName: string, ...args: any[]): MenuItem {
-		return this.commandToMenuItem(commandName, () => {
+		const whenClauseContext = this.service.currentWhenClauseContext();
+
+		const menuItem = this.commandToMenuItem(commandName, () => {
 			return this.service.execute(commandName, ...args);
 		});
+		menuItem.enabled = this.service.isEnabled(commandName, whenClauseContext);
+		return menuItem;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public commandsToMenuItems(commandNames: string[], onClick: Function, locale: string): MenuItems {
 		const key = `${this.keymapService.lastSaveTime}_${commandNames.join('_')}_${locale}`;
 		if (this.menuItemCache_[key]) return this.menuItemCache_[key];

@@ -332,7 +332,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-synkroniseret og sendt ukrypteret til synk-modtageren.",
  "Encrypted": "Krypteret",
  "Encrypted items cannot be modified": "Krypteret emner kan ikke rettes",
- "Encrypted notebooks cannot be renamed": "Krypterede notesbøger kan ikke omdøbes",
  "Encryption": "Kryptering",
  "Encryption Config": "Krypteringsindstillinger",
  "Encryption is: %s": "Kryptering er: %s",

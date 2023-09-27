@@ -10,12 +10,14 @@ import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
+import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
+import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
 
 interface Props {
 	themeId: any;
@@ -62,7 +64,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<tr key={mk.id}>
 					<td style={theme.textStyle}>{mk.id}</td>
 					<td><button onClick={() => onUpgradeMasterKey(mk)} style={theme.buttonStyle}>Upgrade</button></td>
-				</tr>
+				</tr>,
 			);
 		}
 
@@ -83,34 +85,6 @@ const EncryptionConfigScreen = (props: Props) => {
 		);
 	};
 
-	const renderReencryptData = () => {
-		if (!shim.isElectron()) return null;
-		if (!props.shouldReencrypt) return null;
-
-		const theme = themeStyle(props.themeId);
-		const buttonLabel = _('Re-encrypt data');
-
-		const intro = props.shouldReencrypt ? _('The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.') : _('You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.');
-
-		let t = `${intro}\n\n${_('In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click "%s".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.', buttonLabel)}`;
-
-		t = t.replace(/\n\n/g, '</p><p>');
-		t = t.replace(/\n/g, '<br>');
-		t = `<p>${t}</p>`;
-
-		return (
-			<div>
-				<h2>{_('Re-encryption')}</h2>
-				<p style={theme.textStyle} dangerouslySetInnerHTML={{ __html: t }}></p>
-				<span style={{ marginRight: 10 }}>
-					<button onClick={() => void reencryptData()} style={theme.buttonStyle}>{buttonLabel}</button>
-				</span>
-
-				{ !props.shouldReencrypt ? null : <button onClick={() => dontReencryptData()} style={theme.buttonStyle}>{_('Ignore')}</button> }
-			</div>
-		);
-	};
-
 	const renderMasterKey = (mk: MasterKeyEntity) => {
 		const theme = themeStyle(props.themeId);
 
@@ -119,6 +93,12 @@ const EncryptionConfigScreen = (props: Props) => {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+		};
+
+		const missingPasswordCellStyle = {
+			...theme.textStyle,
+			border: '3px solid',
+			borderColor: theme.colorError,
 		};
 
 		const password = inputPasswords[mk.id] ? inputPasswords[mk.id] : '';
@@ -135,8 +115,15 @@ const EncryptionConfigScreen = (props: Props) => {
 				);
 			} else {
 				return (
-					<td style={theme.textStyle}>
-						<input type="password" style={passwordStyle} value={password} onChange={event => onInputPasswordChange(mk, event.target.value)} />{' '}
+					<td style={missingPasswordCellStyle}>
+						<input
+							type="password"
+							placeholder={_('Enter password')}
+							style={passwordStyle}
+							value={password}
+							onChange={event => onInputPasswordChange(mk, event.target.value)}
+						/>
+						{' '}
 						<button style={theme.buttonStyle} onClick={() => onSavePasswordClick(mk, { ...props.passwords, ...inputPasswords })}>
 							{_('Save')}
 						</button>
@@ -239,7 +226,6 @@ const EncryptionConfigScreen = (props: Props) => {
 			/>
 		);
 		const needUpgradeSection = renderNeedUpgradeSection();
-		const reencryptDataSection = renderReencryptData();
 
 		return (
 			<div className="section">
@@ -254,7 +240,6 @@ const EncryptionConfigScreen = (props: Props) => {
 					{decryptedItemsInfo}
 					{toggleButton}
 					{needUpgradeSection}
-					{props.shouldReencrypt ? reencryptDataSection : null}
 				</div>
 			</div>
 		);
@@ -268,7 +253,16 @@ const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">{_('Your password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}</p>
+			<p className="needpassword">
+				{_('Your password is needed to decrypt some of your data.')}
+				<br/>
+				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
+				<br/>
+				<MacOSMissingPasswordHelpLink
+					theme={theme}
+					text={_('%s: Missing password', _('Help'))}
+				/>
+			</p>
 		);
 
 		return (
@@ -315,7 +309,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				rows.push(
 					<tr key={id}>
 						<td style={theme.textStyle}>{id}</td>
-					</tr>
+					</tr>,
 				);
 			}
 
@@ -338,6 +332,56 @@ const EncryptionConfigScreen = (props: Props) => {
 		return nonExistingMasterKeySection;
 	};
 
+	const renderReencryptData = () => {
+		if (!shim.isElectron()) return null;
+		if (!props.encryptionEnabled) return null;
+
+		const theme = themeStyle(props.themeId);
+		const buttonLabel = _('Re-encrypt data');
+
+		const intro = props.shouldReencrypt ? _('The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.') : _('You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.');
+
+		let t = `${intro}\n\n${_('In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click "%s".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.', buttonLabel)}`;
+
+		t = t.replace(/\n\n/g, '</p><p>');
+		t = t.replace(/\n/g, '<br>');
+		t = `<p>${t}</p>`;
+
+		return (
+			<div>
+				<h2>{_('Re-encryption')}</h2>
+				<p style={theme.textStyle} dangerouslySetInnerHTML={{ __html: t }}></p>
+				<span style={{ marginRight: 10 }}>
+					<button onClick={() => void reencryptData()} style={theme.buttonStyle}>{buttonLabel}</button>
+				</span>
+
+				{ !props.shouldReencrypt ? null : <button onClick={() => dontReencryptData()} style={theme.buttonStyle}>{_('Ignore')}</button> }
+			</div>
+		);
+	};
+
+	// If the user should re-encrypt, ensure that the section is visible initially.
+	const [showAdvanced, setShowAdvanced] = useState<boolean>(props.shouldReencrypt);
+	const toggleAdvanced = useCallback(() => {
+		setShowAdvanced(!showAdvanced);
+	}, [showAdvanced]);
+
+	const renderAdvancedSection = () => {
+		const reEncryptSection = renderReencryptData();
+
+		if (!reEncryptSection) return null;
+
+
+		return (
+			<div>
+				<ToggleAdvancedSettingsButton
+					onClick={toggleAdvanced}
+					advancedSettingsVisible={showAdvanced}/>
+				{ showAdvanced ? reEncryptSection : null }
+			</div>
+		);
+	};
+
 	return (
 		<div className="config-screen-content">
 			{renderDebugSection()}
@@ -346,6 +390,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
 			{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
 			{renderNonExistingMasterKeysSection()}
+			{renderAdvancedSection()}
 		</div>
 	);
 };

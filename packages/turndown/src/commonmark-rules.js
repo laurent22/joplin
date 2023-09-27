@@ -25,6 +25,19 @@ rules.paragraph = {
   filter: 'p',
 
   replacement: function (content) {
+    // If the line starts with a nonbreaking space, replace it. By default, the
+    // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
+    // because the space is nonbreaking, we want to keep it.
+    // \u00A0 is a nonbreaking space.
+    const leadingNonbreakingSpace = /^\u{00A0}/ug;
+    content = content.replace(leadingNonbreakingSpace, '&nbsp;');
+
+    // Paragraphs that are truly empty (not even containing nonbreaking spaces)
+    // take up by default no space. Output nothing.
+    if (content === '') {
+      return '';
+    }
+
     return '\n\n' + content + '\n\n'
   }
 }
@@ -33,7 +46,10 @@ rules.lineBreak = {
   filter: 'br',
 
   replacement: function (content, node, options) {
-    return options.br + '\n'
+    // Code blocks may include <br/>s -- replacing them should not be necessary
+    // in code blocks.
+    const brReplacement = node.isCode ? '' : options.br;
+    return brReplacement + '\n'
   }
 }
 
@@ -215,11 +231,25 @@ rules.fencedCodeBlock = {
 
     var className = handledNode.className || ''
     var language = (className.match(/language-(\S+)/) || [null, ''])[1]
+    var code = content
+
+    var fenceChar = options.fence.charAt(0)
+    var fenceSize = 3
+    var fenceInCodeRegex = new RegExp('^' + fenceChar + '{3,}', 'gm')
+
+    var match
+    while ((match = fenceInCodeRegex.exec(code))) {
+      if (match[0].length >= fenceSize) {
+        fenceSize = match[0].length + 1
+      }
+    }
+
+    var fence = repeat(fenceChar, fenceSize)
 
     return (
-      '\n\n' + options.fence + language + '\n' +
-      content + 
-      '\n' + options.fence + '\n\n'
+      '\n\n' + fence + language + '\n' +
+      code.replace(/\n$/, '') +
+      '\n' + fence + '\n\n'
     )
   }
 }
@@ -281,6 +311,12 @@ rules.inlineLink = {
       node.nodeName === 'A' &&
       (node.getAttribute('href') || node.getAttribute('name') || node.getAttribute('id'))
     )
+  },
+
+  escapeContent: function (node, _options) {
+    // Disable escaping content (including '_'s) when the link has the same URL and href.
+    // This prevents links from being broken by added escapes.
+    return node.getAttribute('href') !== node.textContent;
   },
 
   replacement: function (content, node, options) {
@@ -407,19 +443,15 @@ rules.code = {
   },
 
   replacement: function (content) {
-    if (!content.trim()) return ''
+    if (!content) return ''
+    content = content.replace(/\r?\n|\r/g, ' ')
 
+    var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'
-    var leadingSpace = ''
-    var trailingSpace = ''
-    var matches = content.match(/`+/gm)
-    if (matches) {
-      if (/^`/.test(content)) leadingSpace = ' '
-      if (/`$/.test(content)) trailingSpace = ' '
-      while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`'
-    }
+    var matches = content.match(/`+/gm) || []
+    while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`'
 
-    return delimiter + leadingSpace + content + trailingSpace + delimiter
+    return delimiter + extraSpace + content + extraSpace + delimiter
   }
 }
 
@@ -591,7 +623,9 @@ rules.mathjaxScriptBlock = {
 
 rules.joplinHtmlInMarkdown = {
   filter: function (node) {
-    return node && node.classList && node.classList.contains('jop-noMdConv');
+    // Tables are special because they may be entirely kept as HTML depending on
+    // the logic in table.js, for example if they contain code.
+    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
   },
 
   replacement: function (content, node) {

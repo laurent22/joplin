@@ -184,38 +184,42 @@ function shimInit(options = null) {
 		if (shim.isElectron()) {
 			// For Electron
 			const nativeImage = require('electron').nativeImage;
-			let image = nativeImage.createFromPath(filePath);
+			const image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error(`Image is invalid or does not exist: ${filePath}`);
-
 			const size = image.getSize();
 
-			let mustResize = size.width > maxDim || size.height > maxDim;
-
-			if (mustResize && resizeLargeImages === 'ask') {
-				const answer = shim.showMessageBox(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim), {
-					buttons: [_('Yes'), _('No'), _('Cancel')],
-				});
-
-				if (answer === 2) return false;
-
-				mustResize = answer === 0;
-			}
-
-			if (!mustResize) {
+			const saveOriginalImage = async () => {
 				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
+			};
+			const saveResizedImage = async () => {
+				const options = {};
+				if (size.width > size.height) {
+					options.width = maxDim;
+				} else {
+					options.height = maxDim;
+				}
+				const resizedImage = image.resize(options);
+				await shim.writeImageToFile(resizedImage, mime, targetPath);
+				return true;
+			};
+
+			const canResize = size.width > maxDim || size.height > maxDim;
+			if (canResize) {
+				if (resizeLargeImages === 'alwaysAsk') {
+					const Yes = 0, No = 1, Cancel = 2;
+					const userAnswer = shim.showMessageBox(`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim)}\n\n${_('(You may disable this prompt in the options)')}`, {
+						buttons: [_('Yes'), _('No'), _('Cancel')],
+					});
+					if (userAnswer === Yes) return await saveResizedImage();
+					if (userAnswer === No) return await saveOriginalImage();
+					if (userAnswer === Cancel) return false;
+				} else if (resizeLargeImages === 'alwaysResize') {
+					return await saveResizedImage();
+				}
 			}
 
-			const options = {};
-			if (size.width > size.height) {
-				options.width = maxDim;
-			} else {
-				options.height = maxDim;
-			}
-
-			image = image.resize(options);
-
-			await shim.writeImageToFile(image, mime, targetPath);
+			return await saveOriginalImage();
 		} else {
 			// For the CLI tool
 			const image = sharp(filePath);
@@ -241,8 +245,6 @@ function shimInit(options = null) {
 					});
 			});
 		}
-
-		return true;
 	};
 
 	// This is a bit of an ugly method that's used to both create a new resource
@@ -250,11 +252,9 @@ function shimInit(options = null) {
 	// destinationResourceId option. This method is indirectly tested in
 	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
-		options = Object.assign({
-			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
+		options = { resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
-			destinationResourceId: '',
-		}, options);
+			destinationResourceId: '', ...options };
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
@@ -332,9 +332,7 @@ function shimInit(options = null) {
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
-		options = Object.assign({}, {
-			createFileURL: false,
-		}, options);
+		options = { createFileURL: false, ...options };
 
 		const { basename } = require('path');
 		const { escapeTitleText } = require('./markdownUtils').default;
@@ -371,9 +369,7 @@ function shimInit(options = null) {
 		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
 		if (!newBody) return null;
 
-		const newNote = Object.assign({}, note, {
-			body: newBody,
-		});
+		const newNote = { ...note, body: newBody };
 		return Note.save(newNote);
 	};
 
@@ -570,9 +566,7 @@ function shimInit(options = null) {
 	shim.uploadBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
 		const content = await fs.readFile(options.path);
-		options = Object.assign({}, options, {
-			body: content,
-		});
+		options = { ...options, body: content };
 		return shim.fetch(url, options);
 	};
 

@@ -88,6 +88,7 @@ export class Bridge {
 	// Perhaps the easiest would be to patch electron-context-menu to
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
 		require('electron-context-menu')({
 			allWindows: [this.window()],
@@ -95,11 +96,7 @@ export class Bridge {
 			electronApp: this.electronApp(),
 
 			shouldShowMenu: (_event: any, params: any) => {
-				// params.inputFieldType === 'none' when right-clicking the text
-				// editor. This is a bit of a hack to detect it because in this
-				// case we don't want to use the built-in context menu but a
-				// custom one.
-				return params.isEditable && params.inputFieldType !== 'none';
+				return params.isEditable;
 			},
 
 			// menu: (actions: any, props: any) => {
@@ -201,12 +198,10 @@ export class Bridge {
 			...options,
 		};
 
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'question',
+		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,
 			cancelId: 1,
-			buttons: options.buttons,
-		}, options));
+			buttons: options.buttons, ...options });
 
 		return result === 0;
 	}
@@ -215,21 +210,17 @@ export class Bridge {
 	public showMessageBox(message: string, options: any = null) {
 		if (options === null) options = {};
 
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'question',
+		const result = this.showMessageBox_(this.window(), { type: 'question',
 			message: message,
-			buttons: [_('OK'), _('Cancel')],
-		}, options));
+			buttons: [_('OK'), _('Cancel')], ...options });
 
 		return result;
 	}
 
 	public showInfoMessageBox(message: string, options: any = {}) {
-		const result = this.showMessageBox_(this.window(), Object.assign({}, {
-			type: 'info',
+		const result = this.showMessageBox_(this.window(), { type: 'info',
 			message: message,
-			buttons: [_('OK')],
-		}, options));
+			buttons: [_('OK')], ...options });
 		return result === 0;
 	}
 
@@ -261,6 +252,7 @@ export class Bridge {
 		return nativeTheme.shouldUseDarkColors;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public addEventListener(name: string, fn: Function) {
 		if (name === 'nativeThemeUpdated') {
 			nativeTheme.on('updated', fn);

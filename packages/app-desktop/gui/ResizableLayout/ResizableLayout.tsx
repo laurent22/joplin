@@ -20,6 +20,7 @@ interface Props {
 	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	renderItem: Function;
 	onMoveButtonClick(event: MoveButtonClickEvent): void;
 	moveMode: boolean;
@@ -32,6 +33,7 @@ function itemVisible(item: LayoutItem, moveMode: boolean) {
 	return item.visible !== false;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, resizedItemMaxSize: Size | null, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
 	const style: any = {
 		display: itemVisible(item, moveMode) ? 'flex' : 'none',

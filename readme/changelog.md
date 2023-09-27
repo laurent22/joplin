@@ -1,5 +1,187 @@
 # Joplin changelog
 
+## [v2.12.18](https://github.com/laurent22/joplin/releases/tag/v2.12.18) - 2023-09-22T14:37:24Z
+
+- Security: Upgrade to Electron 25.8.1 ([#8921](https://github.com/laurent22/joplin/issues/8921) by Henry Heino)
+
+## [v2.12.17](https://github.com/laurent22/joplin/releases/tag/v2.12.17) - 2023-09-14T21:54:52Z
+
+- Fixed: Prevent application from being stuck when importing an invalid ENEX file ([#8699](https://github.com/laurent22/joplin/issues/8699))
+
+## [v2.13.1](https://github.com/laurent22/joplin/releases/tag/v2.13.1) (Pre-release) - 2023-09-13T09:31:50Z
+
+- Improved: Add option to import HTML and TXT file ([#8729](https://github.com/laurent22/joplin/issues/8729)) ([#8722](https://github.com/laurent22/joplin/issues/8722) by [@hubert](https://github.com/hubert))
+- Improved: Allow more special content within tables in the Rich Text editor ([#8579](https://github.com/laurent22/joplin/issues/8579))
+- Improved: Apply correct size to images imported from ENEX files ([#8684](https://github.com/laurent22/joplin/issues/8684))
+- Improved: Fetch release info from Joplin server ([39c118b](https://github.com/laurent22/joplin/commit/39c118b))
+- Improved: Improve pasting content from Word and Excel ([#8705](https://github.com/laurent22/joplin/issues/8705)) ([#8691](https://github.com/laurent22/joplin/issues/8691))
+- Improved: Refactor note list in preparation for plugin support ([#8624](https://github.com/laurent22/joplin/issues/8624))
+- Improved: Updated packages markdown-it-multimd-table (v4.2.3), re-resizable (v6.9.11), react, react-redux (v8.1.2), sass (v1.64.2), sharp (v0.32.5), word-wrap (v1.2.5)
+- Fixed: Fix note editor blank after syncing an encrypted note with remote changes ([#8666](https://github.com/laurent22/joplin/issues/8666)) ([#8661](https://github.com/laurent22/joplin/issues/8661) by Henry Heino)
+- Fixed: Hide option to share a notebook when it is not available ([#8844](https://github.com/laurent22/joplin/issues/8844))
+- Fixed: Prevent application from being stuck when importing an invalid ENEX file ([#8699](https://github.com/laurent22/joplin/issues/8699))
+- Fixed: Rich Text editor toolbar doesn't show all buttons even when there's enough space ([#8754](https://github.com/laurent22/joplin/issues/8754)) ([#8726](https://github.com/laurent22/joplin/issues/8726) by [@hubert](https://github.com/hubert))
+- Fixed: Update CSS variables in user iframes on theme change ([#8724](https://github.com/laurent22/joplin/issues/8724)) ([#8723](https://github.com/laurent22/joplin/issues/8723) by Henry Heino)
+
+## [v2.12.16](https://github.com/laurent22/joplin/releases/tag/v2.12.16) - 2023-09-11T22:33:37Z
+
+- Fixed: Fix AppImage launch on older Linux distros ([#8780](https://github.com/laurent22/joplin/issues/8780)) ([#8777](https://github.com/laurent22/joplin/issues/8777) by Henry Heino)
+
+## [v2.12.15](https://github.com/laurent22/joplin/releases/tag/v2.12.15) - 2023-08-27T11:35:39Z
+
+- Fixed: Pasting a resource in Rich Text editor breaks the resource link ([#8706](https://github.com/laurent22/joplin/issues/8706))
+- Fixed: Handling of macOS ARM-64 version
+
+**Note:** This release does **not** support Windows 7, 8, or 8.1. See [the release notes for version 2.12.7](https://github.com/laurent22/joplin/releases/tag/v2.12.7).
+
+## [v2.12.12](https://github.com/laurent22/joplin/releases/tag/v2.12.12) (Pre-release) - 2023-08-19T22:44:56Z
+
+- Improved: Draw red border around missing encryption key passwords ([#8636](https://github.com/laurent22/joplin/issues/8636)) ([#8493](https://github.com/laurent22/joplin/issues/8493) by Henry Heino)
+- Improved: Fetch release info from Joplin server ([f0c1042](https://github.com/laurent22/joplin/commit/f0c1042))
+- Improved: Link to FAQ when encryption password may have been reset by an update ([#8667](https://github.com/laurent22/joplin/issues/8667)) ([#8493](https://github.com/laurent22/joplin/issues/8493) by Henry Heino)
+- Improved: Show missing sync password warning and link to FAQ ([#8644](https://github.com/laurent22/joplin/issues/8644)) ([#8625](https://github.com/laurent22/joplin/issues/8625) by Henry Heino)
+- Improved: Temporarily revert to AES-128 as encryption method due to severe performance issues ([#8657](https://github.com/laurent22/joplin/issues/8657))
+- Improved: Add an option to disable the image resizing prompt ([#8575](https://github.com/laurent22/joplin/issues/8575)) ([#8566](https://github.com/laurent22/joplin/issues/8566) by [@hubert](https://github.com/hubert))
+- Improved: Always show reencrypt button ([#8555](https://github.com/laurent22/joplin/issues/8555)) ([#8380](https://github.com/laurent22/joplin/issues/8380) by Henry Heino)
+- Improved: Auto-update to ARM64 version on Apple M1 hardware ([#8467](https://github.com/laurent22/joplin/issues/8467))
+- Improved: Improved sharing error handling ([95ca89b](https://github.com/laurent22/joplin/commit/95ca89b))
+- Improved: Sync 15 seconds after changing a note ([807384c](https://github.com/laurent22/joplin/commit/807384c))
+- Improved: Updated packages @rmp135/sql-ts (v1.18.0), buildTools, glob (v10.3.3), react-select (v5.7.4), sharp (v0.32.3), word-wrap (v1.2.4)
+- Fixed: Fix editor not refreshed when the current note changes during sync ([#8654](https://github.com/laurent22/joplin/issues/8654)) ([#8652](https://github.com/laurent22/joplin/issues/8652) by Henry Heino)
+- Fixed: Error while quitting the app ([#8612](https://github.com/laurent22/joplin/issues/8612)) ([#8591](https://github.com/laurent22/joplin/issues/8591) by [@hubert](https://github.com/hubert))
+- Fixed: Fix toggle external editing button always disabled in rich text editor ([#8595](https://github.com/laurent22/joplin/issues/8595)) ([#8541](https://github.com/laurent22/joplin/issues/8541) by Henry Heino)
+
+## [v2.12.10](https://github.com/laurent22/joplin/releases/tag/v2.12.10) (Pre-release) - 2023-07-30T18:25:58Z
+
+- Improved: Adding support for plugin icons ([#8499](https://github.com/laurent22/joplin/issues/8499)) ([#8408](https://github.com/laurent22/joplin/issues/8408) by [@hubert](https://github.com/hubert))
+- Improved: Updated packages gettext-parser (v7.0.1), react-redux (v8.1.1)
+- Fixed: [#8370](https://github.com/laurent22/joplin/issues/8370): Fix note drag-drop into markdown editor ([#8571](https://github.com/laurent22/joplin/issues/8571)) ([#8370](https://github.com/laurent22/joplin/issues/8370) by Henry Heino)
+- Fixed: Fix CodeMirror context menu not containing correct items ([#8543](https://github.com/laurent22/joplin/issues/8543)) ([#8535](https://github.com/laurent22/joplin/issues/8535) by Henry Heino)
+- Fixed: Note imported from Web Clipper is broken after being saved from the Rich Text editor ([#8485](https://github.com/laurent22/joplin/issues/8485))
+- Fixed: Preserve empty newlines created by pressing Enter repeatedly in the rich text editor ([#8549](https://github.com/laurent22/joplin/issues/8549)) ([#6055](https://github.com/laurent22/joplin/issues/6055) by Henry Heino)
+- Fixed: Text that is pasted in Rich Text editor had extra new lines ([#8476](https://github.com/laurent22/joplin/issues/8476))
+- Fixed: Upgrade to electron 25.3.1 ([#8550](https://github.com/laurent22/joplin/issues/8550)) ([#8535](https://github.com/laurent22/joplin/issues/8535) by Henry Heino)
+- Security: Fix XSS: Sanitize HTML pasted into the rich text editor.
+
+## [v2.12.9](https://github.com/laurent22/joplin/releases/tag/v2.12.9) (Pre-release) - 2023-07-25T16:06:08Z
+
+- New: Add support for Joplin Cloud email to note functionality ([[#8460](https://github.com/laurent22/joplin/issues/8460)](https://github.com/laurent22/joplin/issues/8460) by [@pedr](https://github.com/pedr))
+- New: Enable share permission handling for Joplin Cloud ([c88b6b6](https://github.com/laurent22/joplin/commit/c88b6b6))
+- Improved: Rotating log files ([#8376](https://github.com/laurent22/joplin/issues/8376)) ([#5521](https://github.com/laurent22/joplin/issues/5521) by [@hubert](https://github.com/hubert))
+- Improved: Rich text editor: Disable spellcheck in inline code blocks ([[#8532](https://github.com/laurent22/joplin/issues/8532)](https://github.com/laurent22/joplin/issues/8532) by Henry Heino)
+- Improved: Updated packages dayjs (v1.11.9), jsdom (v22.1.0), react-redux (v8.1.0), sass (v1.63.6), ts-loader (v9.4.4)
+- Improved: WebDAV: Show a more descriptive error message when the password is empty ([[#8477](https://github.com/laurent22/joplin/issues/8477)](https://github.com/laurent22/joplin/issues/8477)) ([[#8466](https://github.com/laurent22/joplin/issues/8466)](https://github.com/laurent22/joplin/issues/8466) by Henry Heino)
+- Fixed: Add "insert*before" buttons for tables in the rich text editor ([[#8393](https://github.com/laurent22/joplin/issues/8393)](https://github.com/laurent22/joplin/issues/8393)) ([[#8382](https://github.com/laurent22/joplin/issues/8382)](https://github.com/laurent22/joplin/issues/8382) by [@Marph](https://github.com/Marph))
+- Fixed: Fix Rich Text theme not matching the system theme after several global theme changes ([[#8521](https://github.com/laurent22/joplin/issues/8521)](https://github.com/laurent22/joplin/issues/8521)) ([[#8520](https://github.com/laurent22/joplin/issues/8520)](https://github.com/laurent22/joplin/issues/8520) by Henry Heino)
+- Fixed: Make HTML &lt;br/&gt; tags convert to markdown compatible with the softbreaks setting ([[#8469](https://github.com/laurent22/joplin/issues/8469)](https://github.com/laurent22/joplin/issues/8469)) ([[#8430](https://github.com/laurent22/joplin/issues/8430)](https://github.com/laurent22/joplin/issues/8430) by Henry Heino)
+- Fixed: Merge changes from upstream turndown project ([[#8468](https://github.com/laurent22/joplin/issues/8468)](https://github.com/laurent22/joplin/issues/8468)) ([[#8448](https://github.com/laurent22/joplin/issues/8448)](https://github.com/laurent22/joplin/issues/8448) by Henry Heino)
+- Fixed: Rich text editor: Use fewer `&nbsp;`s in markdown while still preserving initial paragraph indentation ([[#8529](https://github.com/laurent22/joplin/issues/8529)](https://github.com/laurent22/joplin/issues/8529)) ([[#8530](https://github.com/laurent22/joplin/issues/8530)](https://github.com/laurent22/joplin/issues/8530) by Henry Heino)
+- Fixed: Support plugin toolbar icons in the Rich Text editor toolbar ([[#8519](https://github.com/laurent22/joplin/issues/8519)](https://github.com/laurent22/joplin/issues/8519)) ([[#8504](https://github.com/laurent22/joplin/issues/8504)](https://github.com/laurent22/joplin/issues/8504) by Henry Heino)
+- Security: Fix XSS: Sanitize rendered output in safe mode ([[#8507](https://github.com/laurent22/joplin/issues/8507)](https://github.com/laurent22/joplin/issues/8507) by Henry Heino)
+- Security: Close root electron window before unload: Prevent top-level redirection ([[#8478](https://github.com/laurent22/joplin/issues/8478)](https://github.com/laurent22/joplin/issues/8478) by Henry Heino)
+- Security: Disallow map and area tags ([#8479](https://github.com/laurent22/joplin/issues/8479) by Henry Heino)
+
+
+## [v2.12.7](https://github.com/laurent22/joplin/releases/tag/v2.12.7) (Pre-release) - 2023-07-13T12:55:31Z
+
+- Improved: Updated packages css-loader (v6.8.1)
+- Improved: Upgrade to Electron 25. Note that it means that [Windows 7/8/8.1 are no longer supported](https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice) ([#8451](https://github.com/laurent22/joplin/issues/8451)) ([#8258](https://github.com/laurent22/joplin/issues/8258) by Henry Heino)
+- Fixed: Fix issue with Apple Silicon version ([#8452](https://github.com/laurent22/joplin/issues/8452)) ([#6052](https://github.com/laurent22/joplin/issues/6052) by Noah Nash)
+
+## [v2.12.5](https://github.com/laurent22/joplin/releases/tag/v2.12.5) (Pre-release) - 2023-07-12T15:03:46Z
+
+- Improved: Allow importing Evernote task lists ([#8440](https://github.com/laurent22/joplin/issues/8440) by Rob Moffat)
+- Improved: Prevent app from crashing when changing screens ([4c5837b](https://github.com/laurent22/joplin/commit/4c5837b))
+- Improved: Quickly synchronise immediately after changing a note ([004d2a1](https://github.com/laurent22/joplin/commit/004d2a1))
+- Improved: Updated packages standard (v17.1.0)
+- Fixed: Don't start window minimized in GNOME ([#8441](https://github.com/laurent22/joplin/issues/8441)) ([#8256](https://github.com/laurent22/joplin/issues/8256) by Henry Heino)
+- Fixed: Fix extra lines added to KaTeX source when toggling the rich text editor ([#8442](https://github.com/laurent22/joplin/issues/8442)) ([#6822](https://github.com/laurent22/joplin/issues/6822) by Henry Heino)
+- Fixed: Fixed macOS version check so that it does not return the ARM64 version ([1abfb1c](https://github.com/laurent22/joplin/commit/1abfb1c))
+
+## [v2.12.4](https://github.com/laurent22/joplin/releases/tag/v2.12.4) (Pre-release) - 2023-07-07T22:36:53Z
+
+- Improved: Build macOS app as Universal binary ([[#8423](https://github.com/laurent22/joplin/issues/8423)](https://github.com/laurent22/joplin/issues/8423)) ([[#6052](https://github.com/laurent22/joplin/issues/6052)](https://github.com/laurent22/joplin/issues/6052))
+
+## [v2.12.3](https://github.com/laurent22/joplin/releases/tag/v2.12.3) (Pre-release) - 2023-07-07T10:16:55Z
+
+- Improved: Build macOS app as Universal binary ([#8423](https://github.com/laurent22/joplin/issues/8423)) ([#6052](https://github.com/laurent22/joplin/issues/6052))
+- Improved: Updated packages @electron/remote (v2.0.10), @rmp135/sql-ts (v1.17.0), clean-html (v2), glob (v10.2.7)
+- Fixed: Removing Markdown when using 'Paste as Text' ([#8351](https://github.com/laurent22/joplin/issues/8351)) ([#8317](https://github.com/laurent22/joplin/issues/8317) by [@pedr](https://github.com/pedr))
+
+## [v2.11.11](https://github.com/laurent22/joplin/releases/tag/v2.11.11) - 2023-06-23T15:16:37Z
+
+- Improved: Add support for plugin user data ([#8312](https://github.com/laurent22/joplin/issues/8312)) ([#8080](https://github.com/laurent22/joplin/issues/8080))
+- Improved: Configure Rich Text editor to handle the first table row as header ([#8163](https://github.com/laurent22/joplin/issues/8163)) ([#3535](https://github.com/laurent22/joplin/issues/3535) by [@Marph](https://github.com/Marph))
+- Improved: Updated packages css-loader (v6.7.4), dayjs (v1.11.8), domhandler (v5), domutils (v3.1.0), highlight.js (v11.8.0), react-redux (v8.0.7), style-loader (v3.3.3), styled-components (v5.3.11), ts-loader (v9.4.3)
+- Improved: Upgrade E2EE encryption method to AES-256 ([#7686](https://github.com/laurent22/joplin/issues/7686))
+- Fixed: Allow certain HTML anchor tags ([#8286](https://github.com/laurent22/joplin/issues/8286))
+- Fixed: Display plugin console in dev mode ([#8210](https://github.com/laurent22/joplin/issues/8210))
+- Fixed: Duplicated published notes retain the published note's label's color ([#8287](https://github.com/laurent22/joplin/issues/8287))
+- Fixed: Include more Rich Text editor commands in the menu ([#8316](https://github.com/laurent22/joplin/issues/8316))
+- Security: Prevent XSS when passing specially encoded string to a link (PoC by lin@UCCU Hacker) ([57b4198](https://github.com/laurent22/joplin/commit/57b4198))
+- Security: Prevent calling arbitrary commands via x-callback-url (PoC by lin@UCCU Hacker) ([6982661](https://github.com/laurent22/joplin/commit/6982661))
+
+## [v2.11.9](https://github.com/laurent22/joplin/releases/tag/v2.11.9) (Pre-release) - 2023-06-06T16:23:27Z
+
+- Improved: Add support for AVIF image format ([#8175](https://github.com/laurent22/joplin/issues/8175))
+- Improved: Improved word count when em-dash is used ([#8083](https://github.com/laurent22/joplin/issues/8083))
+- Improved: Fix white screen issue ([8b578c5](https://github.com/laurent22/joplin/commit/8b578c5))
+- Improved: Updated packages aws, buildTools, tar (v6.1.15)
+- Fixed: "New note" buttons so large they occlude Search ([#8249](https://github.com/laurent22/joplin/issues/8249)) ([#8159](https://github.com/laurent22/joplin/issues/8159) by Rio Sinnott)
+
+## [v2.11.6](https://github.com/laurent22/joplin/releases/tag/v2.11.6) (Pre-release) - 2023-05-31T20:13:08Z
+
+- Improved: When resetting the master password, also create a new master key with that password ([e647775](https://github.com/laurent22/joplin/commit/e647775))
+- Fixed: Don't display "obsolete encryption method" message if the key is disabled ([#8025](https://github.com/laurent22/joplin/issues/8025)) ([#7933](https://github.com/laurent22/joplin/issues/7933) by [@gitstart](https://github.com/gitstart))
+- Fixed: Improve selection of active E2EE key ([#8254](https://github.com/laurent22/joplin/issues/8254))
+- Fixed: Improve sidebar workaround for Linux w/Intel GPU ([#8126](https://github.com/laurent22/joplin/issues/8126)) ([#7506](https://github.com/laurent22/joplin/issues/7506) by Calum Lind)
+- Fixed: Preserve Table Alignment When Editing a Note With the Rich Text Editor  ([#8214](https://github.com/laurent22/joplin/issues/8214)) ([#6431](https://github.com/laurent22/joplin/issues/6431) by Christopher O'Toole)
+
+## [v2.11.5](https://github.com/laurent22/joplin/releases/tag/v2.11.5) (Pre-release) - 2023-05-28T00:41:40Z
+
+- Improved: Updated packages jsdom (v21.1.2), markdown-it-multimd-table (v4.2.2), react-select (v5.7.3), sass (v1.62.1), sharp (v0.32.1), tar (v6.1.14), yargs (v17.7.2)
+- Fixed: Fix slow startup time ([#8087](https://github.com/laurent22/joplin/issues/8087))
+- Security: Disable SVG tag support in editor to prevent XSS ([caf6606](https://github.com/laurent22/joplin/commit/caf6606)) (Vulnerability discovered by [RyotaK](https://ryotak.net/))
+- Security: Prevent XSS by sanitizing certain HTML attributes ([9e90d90](https://github.com/laurent22/joplin/commit/9e90d90)) (Vulnerability discovered by [RyotaK](https://ryotak.net/))
+
+## [v2.10.19](https://github.com/laurent22/joplin/releases/tag/v2.10.19) - 2023-05-17T12:25:41Z
+
+- Improved: Improved handling of items with duplicate IDs when synchronising with Joplin Cloud or Server ([d4c43a8](https://github.com/laurent22/joplin/commit/d4c43a8))
+- Security: Fixed possible XSS injection (CVE-2023-33726) ([b26bc9e](https://github.com/laurent22/joplin/commit/b26bc9e)) (Discovery and PoC by [@maple3142](https://twitter.com/maple3142))
+- Security: Prevent XSS and potential RCE when using a special HTML tag (CVE-2023-33727) ([19bdda2](https://github.com/laurent22/joplin/commit/19bdda2)) (Discovery and PoC by [Yaniv Nizry](https://twitter.com/YNizry) ([SonarSource](https://www.sonarsource.com/)))
+
+## [v2.11.4](https://github.com/laurent22/joplin/releases/tag/v2.11.4) (Pre-release) - 2023-05-16T10:02:21Z
+
+- Fixed: Fix slow startup time ([#8087](https://github.com/laurent22/joplin/issues/8087))
+
+## [v2.11.3](https://github.com/laurent22/joplin/releases/tag/v2.11.3) (Pre-release) - 2023-05-16T09:09:57Z
+
+- Improved: Add support for `--safe-mode` command line flag ([#7919](https://github.com/laurent22/joplin/issues/7919)) ([#7889](https://github.com/laurent22/joplin/issues/7889) by Arun Kumar)
+- Improved: Added export graph button for Mermaid ([#7958](https://github.com/laurent22/joplin/issues/7958)) ([#6101](https://github.com/laurent22/joplin/issues/6101) by Arun Kumar)
+- Improved: Auto-detect locale on startup ([052a829](https://github.com/laurent22/joplin/commit/052a829))
+- Improved: Cache code blocks in notes to speed up rendering ([#7867](https://github.com/laurent22/joplin/issues/7867))
+- Improved: Compress installer to reduce size ([#8068](https://github.com/laurent22/joplin/issues/8068)) ([#8028](https://github.com/laurent22/joplin/issues/8028) by Arun Kumar)
+- Improved: Improved handling of items with duplicate IDs ([a0b707c](https://github.com/laurent22/joplin/commit/a0b707c))
+- Improved: Remove custom PDF viewer to reduce application size ([#8028](https://github.com/laurent22/joplin/issues/8028))
+- Improved: Translate Welcome notes ([#8154](https://github.com/laurent22/joplin/issues/8154))
+- Improved: Updated packages aws, fs-extra (v11.1.1), jsdom (v21.1.1), markdown-it-multimd-table (v4.2.1), nanoid (v3.3.6), node-persist (v3.1.3), react-select (v5.7.2), reselect (v4.1.8), sass (v1.60.0), sharp (v0.32.0), sqlite3 (v5.1.6), style-loader (v3.3.2), styled-components (v5.3.9), turndown (v7.1.2), yargs (v17.7.1)
+- Fixed: Application cannot be installed on Windows 10 in some cases ([#8149](https://github.com/laurent22/joplin/issues/8149))
+- Fixed: Do not allow update for plugins incompatible with current version ([#7936](https://github.com/laurent22/joplin/issues/7936)) ([#4801](https://github.com/laurent22/joplin/issues/4801) by [@julien](https://github.com/julien))
+- Fixed: Encode the non-ASCII characters in OneDrive URI ([#7868](https://github.com/laurent22/joplin/issues/7868)) ([#7851](https://github.com/laurent22/joplin/issues/7851) by Self Not Found)
+- Fixed: Enter Key No Longer Saves and Closes The Tag Dialog ([#8072](https://github.com/laurent22/joplin/issues/8072))
+- Fixed: Fix OneDrive sync attempting to call method on `null` variable ([#7987](https://github.com/laurent22/joplin/issues/7987)) ([#7986](https://github.com/laurent22/joplin/issues/7986) by Henry Heino)
+- Fixed: Fix issue where search bar can randomly lose focus while searching ([489d677](https://github.com/laurent22/joplin/commit/489d677))
+- Fixed: Fix note list blank space display problems ([#7888](https://github.com/laurent22/joplin/issues/7888)) ([#4124](https://github.com/laurent22/joplin/issues/4124) by Arun Kumar)
+- Fixed: Fixed Linux tag display issues ([#8002](https://github.com/laurent22/joplin/issues/8002)) ([#8000](https://github.com/laurent22/joplin/issues/8000) by Arun Kumar)
+- Fixed: Fixed icon when note is dragged across notebooks ([#7924](https://github.com/laurent22/joplin/issues/7924)) ([#7881](https://github.com/laurent22/joplin/issues/7881) by Arun Kumar)
+- Fixed: Fixed issue with text disappearing within plugin-created zones when searching for text ([0c8de68](https://github.com/laurent22/joplin/commit/0c8de68))
+- Fixed: Fixes crash when using multiple profiles along with certain plugins ([#8143](https://github.com/laurent22/joplin/issues/8143))
+- Fixed: Removed `MasterKey` from Sync Status report ([#8026](https://github.com/laurent22/joplin/issues/8026)) ([#7940](https://github.com/laurent22/joplin/issues/7940) by Arun Kumar)
+- Fixed: Skip the resources which haven't been downloaded yet when exporting ([#7843](https://github.com/laurent22/joplin/issues/7843)) ([#7831](https://github.com/laurent22/joplin/issues/7831) by Self Not Found)
+- Fixed: With Custom Sort, new notes appear at bottom and later randomly "pop" to the top ([#7765](https://github.com/laurent22/joplin/issues/7765)) ([#7741](https://github.com/laurent22/joplin/issues/7741) by Tao Klerks)
+- Security: Fixed possible XSS injection ([b26bc9e](https://github.com/laurent22/joplin/commit/b26bc9e)) (Discovery and PoC by [@maple3142](https://twitter.com/maple3142))
+- Security: Prevent XSS and potential RCE when using a special HTML tag ([19bdda2](https://github.com/laurent22/joplin/commit/19bdda2)) (Discovery and PoC by [Yaniv Nizry](https://twitter.com/YNizry) ([SonarSource](https://www.sonarsource.com/)))
+
 ## [v2.10.18](https://github.com/laurent22/joplin/releases/tag/v2.10.18) - 2023-05-09T13:27:43Z
 
 - Fixed: Application cannot be installed on Windows 10 in some cases ([#8149](https://github.com/laurent22/joplin/issues/8149))
@@ -81,6 +263,15 @@
 - Fixed: Markdown editor not surrounding highlighted text with backticks ([#7697](https://github.com/laurent22/joplin/issues/7697)) ([#7694](https://github.com/laurent22/joplin/issues/7694) by Helmut K. C. Tessarek)
 - Fixed: Mermaid images are incorrectly sized when exported as PNG ([#7546](https://github.com/laurent22/joplin/issues/7546)) ([#7521](https://github.com/laurent22/joplin/issues/7521) by Adarsh Singh)
 - Fixed: Note editor scrolls back to top when editing certain notes ([#7617](https://github.com/laurent22/joplin/issues/7617))
+
+## [v2.10.5](https://github.com/laurent22/joplin/releases/tag/v2.10.5) - 2023-01-16T15:00:53Z
+
+- Fixed: Api: Fixes [#6862](https://github.com/laurent22/joplin/issues/6862) set todo related fields when adding or changing a todo ([#7395](https://github.com/laurent22/joplin/issues/7395) by [@Wartijn](https://github.com/Wartijn))
+- Fixed: Fixed crash when loading certain plugins ([#7598](https://github.com/laurent22/joplin/issues/7598))
+- Fixed: Fixes crash when changing note time from properties dialog ([6b9a270](https://github.com/laurent22/joplin/commit/6b9a270))
+- Fixed: Hyperlink insertion no longer works in Markdown editor ([#7605](https://github.com/laurent22/joplin/issues/7605))
+- Fixed: Optimise sidebar rendering speed ([#7610](https://github.com/laurent22/joplin/issues/7610))
+- Fixed: Try to replace the external link with internal link when attachment file is pasted in Markdown editor ([#6865](https://github.com/laurent22/joplin/issues/6865)) ([#6211](https://github.com/laurent22/joplin/issues/6211) by Self Not Found)
 
 ## [v2.10.4](https://github.com/laurent22/joplin/releases/tag/v2.10.4) (Pre-release) - 2023-01-05T13:09:20Z
 

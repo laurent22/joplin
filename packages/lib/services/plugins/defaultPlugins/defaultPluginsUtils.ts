@@ -3,14 +3,14 @@ import path = require('path');
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, PluginSettings } from '../PluginService';
-import Logger from '../../../Logger';
+import Logger from '@joplin/utils/Logger';
 import * as React from 'react';
-const shared = require('../../../components/shared/config-shared.js');
+const shared = require('../../../components/shared/config/config-shared.js');
 
 const logger = Logger.create('defaultPluginsUtils');
 
 export function checkPreInstalledDefaultPlugins(defaultPluginsId: string[], pluginSettings: PluginSettings) {
-	const installedDefaultPlugins: Array<string> = Setting.value('installedDefaultPlugins');
+	const installedDefaultPlugins: string[] = Setting.value('installedDefaultPlugins');
 	for (const pluginId of defaultPluginsId) {
 		// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
 		// then its either pre-installed by user or just uninstalled

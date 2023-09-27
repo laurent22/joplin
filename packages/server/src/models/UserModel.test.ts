@@ -1,6 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
-import { ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
 import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
@@ -423,6 +423,15 @@ describe('UserModel', () => {
 
 		await models().userFlag().add(user1.id, UserFlagType.ManuallyDisabled);
 		expect((await models().user().load(user1.id)).enabled).toBe(0);
+	});
+
+	test('should throw an error if the password being saved seems to be hashed', async () => {
+		const passwordSimilarToHash = '$2a$10';
+
+		const error = await checkThrowAsync(async () => await models().user().save({ password: passwordSimilarToHash }));
+
+		expect(error.message).toBe('Unable to save user because password already seems to be hashed. User id: undefined');
+		expect(error instanceof ErrorBadRequest).toBe(true);
 	});
 
 });

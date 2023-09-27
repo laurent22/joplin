@@ -6,11 +6,11 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-import { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/types';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+const { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
@@ -25,7 +25,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
 const { Checkbox } = require('../checkbox.js');
@@ -36,16 +36,18 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle, editorFont } = require('../global-style.js');
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const ImageResizer = require('react-native-image-resizer').default;
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
+import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import { ChangeEvent as EditorChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 // import Vosk from 'react-native-vosk';
@@ -136,7 +138,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				Keyboard.dismiss();
 
 				this.setState({
-					note: Object.assign({}, this.state.lastSavedNote),
+					note: { ...this.state.lastSavedNote },
 					mode: 'view',
 				});
 
@@ -253,7 +255,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.props.useEditorBeta;
 	}
 
-	private onBodyChange(event: ChangeEvent) {
+	private onBodyChange(event: EditorChangeEvent) {
 		shared.noteComponent_change(this, 'body', event.value);
 		this.scheduleSave();
 	}
@@ -281,7 +283,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (!undoState) return;
 
 		this.setState((state: any) => {
-			const newNote = Object.assign({}, state.note);
+			const newNote = { ...state.note };
 			newNote.body = undoState.body;
 			return {
 				note: newNote,
@@ -380,7 +382,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			borderBottomWidth: 1,
 		};
 
-		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+		styles.titleContainerTodo = { ...styles.titleContainer };
 		styles.titleContainerTodo.paddingLeft = 0;
 
 		styles.titleTextInput = {
@@ -564,41 +566,37 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 				(error: any) => {
 					reject(error);
-				}
+				},
 			);
 		});
 	}
 
 	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
-
 		const dimensions: any = await this.imageDimensions(localFilePath);
-
 		reg.logger().info('Original dimensions ', dimensions);
 
-		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
-
-		if (mustResize) {
-			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
-				{ text: _('Yes'), id: 'yes' },
-				{ text: _('No'), id: 'no' },
-				{ text: _('Cancel'), id: 'cancel' },
-			]);
-
-			if (buttonId === 'cancel') return false;
-
-			mustResize = buttonId === 'yes';
-		}
-
-		if (mustResize) {
+		const saveOriginalImage = async () => {
+			await shim.fsDriver().copy(localFilePath, targetPath);
+			return true;
+		};
+		const saveResizedImage = async () => {
 			dimensions.width = maxSize;
 			dimensions.height = maxSize;
-
 			reg.logger().info('New dimensions ', dimensions);
 
 			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
 			reg.logger().info(`Resizing image ${localFilePath}`);
-			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
+			const resizedImage = await ImageResizer.createResizedImage(
+				localFilePath,
+				dimensions.width,
+				dimensions.height,
+				format,
+				85, // quality
+				undefined, // rotation
+				undefined, // outputPath
+				true, // keep metadata
+			);
 
 			const resizedImagePath = resizedImage.uri;
 			reg.logger().info('Resized image ', resizedImagePath);
@@ -611,11 +609,27 @@ class NoteScreenComponent extends BaseScreenComponent {
 			} catch (error) {
 				reg.logger().warn('Error when unlinking cached file: ', error);
 			}
-		} else {
-			await shim.fsDriver().copy(localFilePath, targetPath);
+			return true;
+		};
+
+		const canResize = dimensions.width > maxSize || dimensions.height > maxSize;
+		if (canResize) {
+			const resizeLargeImages = Setting.value('imageResizing');
+			if (resizeLargeImages === 'alwaysAsk') {
+				const userAnswer = await dialogs.pop(this, `${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize)}\n\n${_('(You may disable this prompt in the options)')}`, [
+					{ text: _('Yes'), id: 'yes' },
+					{ text: _('No'), id: 'no' },
+					{ text: _('Cancel'), id: 'cancel' },
+				]);
+				if (userAnswer === 'yes') return await saveResizedImage();
+				if (userAnswer === 'no') return await saveOriginalImage();
+				if (userAnswer === 'cancel') return false;
+			} else if (resizeLargeImages === 'alwaysResize') {
+				return await saveResizedImage();
+			}
 		}
 
-		return true;
+		return await saveOriginalImage();
 	}
 
 	public async attachFile(pickerResponse: any, fileType: string) {
@@ -692,14 +706,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const resourceTag = Resource.markdownTag(resource);
 
-		const newNote = Object.assign({}, this.state.note);
+		const newNote = { ...this.state.note };
 
-		if (this.state.mode === 'edit' && !!this.selection) {
-			const newText = `\n${resourceTag}\n`;
+		if (this.state.mode === 'edit') {
+			let newText = '';
 
-			const prefix = newNote.body.substring(0, this.selection.start);
-			const suffix = newNote.body.substring(this.selection.end);
-			newNote.body = `${prefix}${newText}${suffix}`;
+			if (this.selection) {
+				newText = `\n${resourceTag}\n`;
+				const prefix = newNote.body.substring(0, this.selection.start);
+				const suffix = newNote.body.substring(this.selection.end);
+				newNote.body = `${prefix}${newText}${suffix}`;
+			} else {
+				newText = `\n${resourceTag}`;
+				newNote.body = `${newNote.body}\n${newText}`;
+			}
 
 			if (this.useEditorBeta()) {
 				// The beta editor needs to be explicitly informed of changes
@@ -746,7 +766,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				uri: data.uri,
 				type: 'image/jpg',
 			},
-			'image'
+			'image',
 		);
 
 		this.setState({ showCamera: false });
@@ -787,7 +807,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
-		const newNote = Object.assign({}, this.state.note);
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+		// (If unsupported, returns NEVER_ASK_AGAIN).
+		// On earlier releases, notifications should work without this permission.
+		if (response === PermissionsAndroid.RESULTS.DENIED) {
+			logger.warn('POST_NOTIFICATIONS permission was not granted');
+			return;
+		}
+
+		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -860,6 +890,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	public async showAttachMenu() {
+		// If the keyboard is editing a WebView, the standard Keyboard.dismiss()
+		// may not work. As such, we also need to call hideKeyboard on the editorRef
+		this.editorRef.current?.hideKeyboard();
+
 		const buttons = [];
 
 		// On iOS, it will show "local files", which means certain files saved from the browser
@@ -947,13 +981,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
+		const readOnly = this.state.readOnly;
 
 		const cacheKey = md5([isTodo, isSaved].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
 
-		const output = [];
+		const output: MenuOptionType[] = [];
 
 		// The file attachement modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
@@ -968,6 +1003,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: () => this.showAttachMenu(),
+				disabled: readOnly,
 			});
 		}
 
@@ -977,6 +1013,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				onPress: () => {
 					this.setState({ alarmDialogShown: true });
 				},
+				disabled: readOnly,
 			});
 		}
 
@@ -985,16 +1022,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 			onPress: () => {
 				void this.share_onPress();
 			},
+			disabled: readOnly,
 		});
 
 		// Voice typing is enabled only for French language and on Android for now
-		if (voskEnabled && shim.mobilePlatform() === 'android' && currentLocale() === 'fr_FR') {
+		if (voskEnabled && shim.mobilePlatform() === 'android' && isSupportedLanguage(currentLocale())) {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {
 					// this.voiceRecording_onPress();
 					this.setState({ voiceTypingDialogShown: true });
 				},
+				disabled: readOnly,
 			});
 		}
 
@@ -1011,6 +1050,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			onPress: () => {
 				this.toggleIsTodo_onPress();
 			},
+			disabled: readOnly,
 		});
 		if (isSaved) {
 			output.push({
@@ -1031,6 +1071,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			onPress: () => {
 				void this.deleteNote_onPress();
 			},
+			disabled: readOnly,
 		});
 
 		this.menuOptionsCache_ = {};
@@ -1085,7 +1126,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const folder = await Folder.load(note.parent_id);
 
 		this.setState({
-			lastSavedNote: Object.assign({}, note),
+			lastSavedNote: { ...note },
 			note: note,
 			folder: folder,
 		});
@@ -1093,7 +1134,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	public folderPickerOptions() {
 		const options = {
-			enabled: true,
+			enabled: !this.state.readOnly,
 			selectedFolderId: this.state.folder ? this.state.folder.id : null,
 			onValueChange: this.folderPickerOptions_valueChanged,
 		};
@@ -1125,7 +1166,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.scheduleSave();
 		} else {
 			if (this.useEditorBeta()) {
-				this.editorRef.current.insertText(text);
+				// We add a space so that if the feature is used twice in a row,
+				// the sentences are not stuck to each others.
+				this.editorRef.current.insertText(`${text} `);
 			} else {
 				logger.warn('Voice typing is not supported in plaintext editor');
 			}
@@ -1229,6 +1272,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
+					readOnly={this.state.readOnly}
 					style={{
 						...editorStyle,
 						paddingLeft: 0,
@@ -1244,6 +1288,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
+			if (this.state.voiceTypingDialogShown) return null;
+
 			const editButton = {
 				label: _('Edit'),
 				icon: 'md-create',
@@ -1258,8 +1304,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return <ActionButton mainButton={editButton} />;
 		};
-
-		const actionButtonComp = renderActionButton();
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1285,6 +1329,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
+					editable={!this.state.readOnly}
 				/>
 			</View>
 		);
@@ -1293,7 +1338,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const renderVoiceTypingDialog = () => {
 			if (!this.state.voiceTypingDialogShown) return null;
-			return <VoiceTypingDialog onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
 		};
 
 		return (
@@ -1311,10 +1356,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
+					title={this.state.folder ? this.state.folder.title : ''}
 				/>
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{renderActionButton()}
+				{renderVoiceTypingDialog()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1324,7 +1371,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 				/>
 				{noteTagDialog}
-				{renderVoiceTypingDialog()}
 			</View>
 		);
 	}

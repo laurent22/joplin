@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 import { SqliteMaxVariableNum } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
@@ -391,9 +391,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	}
 
 	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {
-		const savedChange = await super.save(change, options);
-		ChangeModel.eventEmitter.emit('saved');
-		return savedChange;
+		return super.save(change, options);
 	}
 
 	public async deleteByItemIds(itemIds: Uuid[]) {

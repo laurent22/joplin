@@ -1,4 +1,4 @@
-const Logger = require('./Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const time = require('./time').default;

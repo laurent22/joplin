@@ -1,0 +1,14 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.TestListPlugin",
+	"app_min_version": "2.12",
+	"version": "1.0.0",
+	"name": "Test List Plugin",
+	"description": "",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": [],
+	"categories": [],
+	"screenshots": []
+}

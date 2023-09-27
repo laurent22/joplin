@@ -45,8 +45,8 @@ class SideMenuContentNoteComponent extends Component {
 			},
 		};
 
-		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
-		styles.sideButtonDisabled = Object.assign({}, styles.sideButton, { opacity: 0.6 });
+		styles.sideButton = { ...styles.button, flex: 0 };
+		styles.sideButtonDisabled = { ...styles.sideButton, opacity: 0.6 };
 
 		this.styles_[this.props.themeId] = StyleSheet.create(styles);
 		return this.styles_[this.props.themeId];

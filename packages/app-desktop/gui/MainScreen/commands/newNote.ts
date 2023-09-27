@@ -11,17 +11,15 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, body: string = '', isTodo: boolean = false) => {
+		execute: async (_context: CommandContext, body = '', isTodo = false) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
-			let newNote = Object.assign({}, defaultValues, {
-				parent_id: folderId,
+			let newNote = { ...defaultValues, parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
-				body: body,
-			});
+				body: body };
 
 			newNote = await Note.save(newNote, { provisional: true });
 
@@ -32,6 +30,6 @@ export const runtime = (): CommandRuntime => {
 				id: newNote.id,
 			});
 		},
-		enabledCondition: 'oneFolderSelected && !inConflictFolder',
+		enabledCondition: 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly',
 	};
 };

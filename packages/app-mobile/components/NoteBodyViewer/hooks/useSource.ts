@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 const { themeStyle } = require('../../global-style.js');
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
-import Logger from '@joplin/lib/Logger';
+import Logger from '@joplin/utils/Logger';
 const { assetsToHeaders } = require('@joplin/renderer');
 
 const logger = Logger.create('NoteBodyViewer/useSource');
@@ -125,7 +125,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 				noteMarkupLanguage,
 				bodyToRender,
 				rendererTheme,
-				mdOptions
+				mdOptions,
 			);
 
 			if (cancelled) return;
@@ -194,6 +194,12 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 					padding: 0;
 				}
 			`;
+			const defaultCss = `
+				code {
+					white-space: pre-wrap;
+					overflow-x: hidden;
+				}
+			`;
 
 			html =
 				`
@@ -203,7 +209,7 @@ export default function useSource(noteBody: string, noteMarkupLanguage: number, 
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
 						<style>
-							${shim.mobilePlatform() === 'ios' ? iOSSpecificCss : ''}
+							${shim.mobilePlatform() === 'ios' ? `${iOSSpecificCss}\n${defaultCss}` : defaultCss}
 						</style>
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 					</head>

@@ -3,11 +3,12 @@
 import { ImportExportResult } from './types';
 
 import Setting from '../../models/Setting';
+import shim from '../../shim';
 
 export default class InteropService_Importer_Base {
 
 	private metadata_: any = null;
-	protected sourcePath_: string = '';
+	protected sourcePath_ = '';
 	protected options_: any = {};
 
 	public setMetadata(md: any) {
@@ -23,13 +24,12 @@ export default class InteropService_Importer_Base {
 		this.options_ = options;
 	}
 
-	// @ts-ignore
-	public async exec(result: ImportExportResult): Promise<ImportExportResult> {}
+	public async exec(_result: ImportExportResult): Promise<ImportExportResult> { return null; }
 
 	protected async temporaryDirectory_(createIt: boolean) {
 		const md5 = require('md5');
 		const tempDir = `${Setting.value('tempDir')}/${md5(Math.random() + Date.now())}`;
-		if (createIt) await require('fs-extra').mkdirp(tempDir);
+		if (createIt) await shim.fsDriver().mkdir(tempDir);
 		return tempDir;
 	}
 }

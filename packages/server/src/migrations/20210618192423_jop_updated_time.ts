@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
 
-export async function up(db: DbConnection): Promise<any> {
+export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
 		table.bigInteger('jop_updated_time').defaultTo(0).notNullable();
 	});
@@ -22,8 +22,8 @@ export async function up(db: DbConnection): Promise<any> {
 			}
 		});
 	}
-}
+};
 
-export async function down(_db: DbConnection): Promise<any> {
+export const down = async (_db: DbConnection) => {
 
-}
+};

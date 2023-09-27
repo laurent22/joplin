@@ -18,6 +18,7 @@ import { pathExists, writeFile } from 'fs-extra';
 class Command extends BaseCommand {
 
 	private syncTargetId_: number = null;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private releaseLockFn_: Function = null;
 	private oneDriveApiUtils_: any = null;
 
@@ -172,7 +173,7 @@ class Command extends BaseCommand {
 						reg.db(),
 						sync.lockHandler(),
 						appTypeToLockType(Setting.value('appType')),
-						Setting.value('clientId')
+						Setting.value('clientId'),
 					);
 
 					migrationHandler.setLogger(cliUtils.stdoutLogger(this.stdout.bind(this)));

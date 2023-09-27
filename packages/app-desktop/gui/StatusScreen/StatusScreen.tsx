@@ -15,6 +15,7 @@ import styled from 'styled-components';
 interface Props {
 	themeId: string;
 	style: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 
@@ -56,15 +57,13 @@ function StatusScreen(props: Props) {
 		flexDirection: 'column',
 	};
 
-	const retryStyle = Object.assign({}, theme.urlStyle, { marginLeft: 5 });
-	const retryAllStyle = Object.assign({}, theme.urlStyle, { marginTop: 5, display: 'inline-block' });
+	const retryStyle = { ...theme.urlStyle, marginLeft: 5 };
+	const retryAllStyle = { ...theme.urlStyle, marginTop: 5, display: 'inline-block' };
 
 	const containerPadding = theme.configScreenPadding;
 
-	const containerStyle = Object.assign({}, theme.containerStyle, {
-		padding: containerPadding,
-		flex: 1,
-	});
+	const containerStyle = { ...theme.containerStyle, padding: containerPadding,
+		flex: 1 };
 
 	function renderSectionTitleHtml(key: string, title: string) {
 		return (
@@ -134,14 +133,14 @@ function StatusScreen(props: Props) {
 					<li style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
-					</li>
+					</li>,
 				);
 			} else {
 				itemsHtml.push(
 					<div style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
-					</div>
+					</div>,
 				);
 			}
 		}

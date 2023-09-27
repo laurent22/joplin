@@ -9,6 +9,7 @@ interface Props {
 	themeId: number;
 	style: any;
 	items: any[];
+	disabled: boolean;
 }
 
 class ToolbarBaseComponent extends React.Component<Props, any> {
@@ -16,14 +17,12 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style: any = Object.assign({
-			display: 'flex',
+		const style: any = { display: 'flex',
 			flexDirection: 'row',
 			boxSizing: 'border-box',
 			backgroundColor: theme.backgroundColor3,
 			padding: theme.toolbarPadding,
-			paddingRight: theme.mainPadding,
-		}, this.props.style);
+			paddingRight: theme.mainPadding, ...this.props.style };
 
 		const groupStyle: any = {
 			display: 'flex',
@@ -45,13 +44,12 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 
 				if (!key) key = `${o.type}_${i}`;
 
-				const props = Object.assign(
-					{
-						key: key,
-						themeId: this.props.themeId,
-					},
-					o
-				);
+				const props = {
+					key: key,
+					themeId: this.props.themeId,
+					disabled: this.props.disabled,
+					...o,
+				};
 
 				if (o.name === 'toggleEditors') {
 					rightItemComps.push(<ToggleEditorsButton
@@ -77,7 +75,7 @@ class ToolbarBaseComponent extends React.Component<Props, any> {
 				<div style={groupStyle}>
 					{centerItemComps}
 				</div>
-				<div style={Object.assign({}, groupStyle, { flex: 1, justifyContent: 'flex-end' })}>
+				<div style={{ ...groupStyle, flex: 1, justifyContent: 'flex-end' }}>
 					{rightItemComps}
 				</div>
 			</div>

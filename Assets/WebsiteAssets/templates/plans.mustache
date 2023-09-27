@@ -96,6 +96,8 @@
 
 			console.info('Creating Stripe session for price:', priceId, 'Promotion code:', promotionCode);
 
+			const source = localStorage.getItem('source');
+
 			return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
 				method: "POST",
 				headers: {
@@ -105,11 +107,12 @@
 					priceId,
 					promotionCode,
 					email: checkoutSessionUser ? checkoutSessionUser.email : '',
+					source,
 				})
 			}).then(async function(result) {
 				if (!result.ok) {
 					console.error('Could not create Stripe checkout session', await result.text());
-					alert('The checkout session could not be created. Please contact support@joplincloud.com for support.');
+					alert('The checkout session could not be created. Please contact us on the forum for support.');
 				} else {
 					return result.json();
 				}
@@ -135,6 +138,14 @@
 			} else {
 				applyPeriod('yearly');
 			}
+
+			$('.feature-description').hide();
+
+			$('.feature-title').click((event) => {
+				event.preventDefault();
+				const featureId = event.currentTarget.getAttribute('data-id');
+				$('.feature-description-' + featureId).toggle(200);
+			});
 		});
 	</script>
 </div>

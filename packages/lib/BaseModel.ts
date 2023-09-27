@@ -4,6 +4,7 @@ import Database from './database';
 import uuid from './uuid';
 import time from './time';
 import JoplinDatabase, { TableField } from './JoplinDatabase';
+import { LoadOptions, SaveOptions } from './models/utils/types';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -37,6 +38,8 @@ export interface DeleteOptions {
 	// sync, we don't need to track the deletion, because the operation doesn't
 	// need to applied again on next sync.
 	trackDeleted?: boolean;
+
+	disableReadOnlyCheck?: boolean;
 }
 
 class BaseModel {
@@ -80,6 +83,7 @@ class BaseModel {
 	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
 	public static TYPE_COMMAND = ModelType.Command;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static dispatch: Function = function() {};
 	private static saveMutexes_: any = {};
 
@@ -107,7 +111,7 @@ class BaseModel {
 			}
 			return output;
 		} else {
-			model = Object.assign({}, model);
+			model = { ...model };
 			model.type_ = this.modelType();
 			return model;
 		}
@@ -184,7 +188,7 @@ class BaseModel {
 		return fields.indexOf(name) >= 0;
 	}
 
-	public static fieldNames(withPrefix: boolean = false) {
+	public static fieldNames(withPrefix = false) {
 		const output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
 
@@ -234,7 +238,7 @@ class BaseModel {
 		if (!options) {
 			options = {};
 		} else {
-			options = Object.assign({}, options);
+			options = { ...options };
 		}
 		if (!('isNew' in options)) options.isNew = 'auto';
 		if (!('autoTimestamp' in options)) options.autoTimestamp = true;
@@ -254,7 +258,7 @@ class BaseModel {
 			});
 	}
 
-	public static load(id: string, options: any = null) {
+	public static load(id: string, options: LoadOptions = null) {
 		return this.loadByField('id', id, options);
 	}
 
@@ -352,7 +356,7 @@ class BaseModel {
 			});
 	}
 
-	public static loadByField(fieldName: string, fieldValue: any, options: any = null) {
+	public static loadByField(fieldName: string, fieldValue: any, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -361,7 +365,7 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	public static loadByFields(fields: any, options: any = null) {
+	public static loadByFields(fields: any, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -429,6 +433,7 @@ class BaseModel {
 		return mutex;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static releaseSaveMutex(modelOrId: any, release: Function) {
 		if (!release) return;
 		if (!modelOrId) return release();
@@ -509,7 +514,7 @@ class BaseModel {
 			query = Database.insertQuery(this.tableName(), o);
 		} else {
 			const where = { id: o.id };
-			const temp = Object.assign({}, o);
+			const temp = { ...o };
 			delete temp.id;
 
 			query = Database.updateQuery(this.tableName(), temp, where);
@@ -532,7 +537,7 @@ class BaseModel {
 		}
 	}
 
-	public static async save(o: any, options: any = null) {
+	public static async save(o: any, options: SaveOptions = null) {
 		// When saving, there's a mutex per model ID. This is because the model returned from this function
 		// is basically its input `o` (instead of being read from the database, for performance reasons).
 		// This works well in general except if that model is saved simultaneously in two places. In that
@@ -543,7 +548,8 @@ class BaseModel {
 		const mutexRelease = await this.saveMutex(o).acquire();
 
 		options = this.modOptions(options);
-		options.isNew = this.isNew(o, options);
+		const isNew = this.isNew(o, options);
+		options.isNew = isNew;
 
 		// Diff saving is an optimisation which takes a new version of the item and an old one,
 		// do a diff and save only this diff. IMPORTANT: When using this make sure that both
@@ -578,7 +584,7 @@ class BaseModel {
 		try {
 			await this.db().transactionExecBatch(queries);
 
-			o = Object.assign({}, o);
+			o = { ...o };
 			if (modelId) o.id = modelId;
 			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
 			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
@@ -623,7 +629,7 @@ class BaseModel {
 	public static filter(model: any) {
 		if (!model) return model;
 
-		const output = Object.assign({}, model);
+		const output = { ...model };
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 

@@ -300,7 +300,6 @@
  "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Het inschakelen van codering betekent dat * al uw * notities en bijlagen opnieuw worden gesynchroniseerd en gecodeerd naar het synchronisatiedoel worden verzonden.",
  "Encrypted": "Versleuteld",
  "Encrypted items cannot be modified": "Versleutelde items kunnen niet worden bewerkt",
- "Encrypted notebooks cannot be renamed": "Versleutelde notitieboeken kunnen niet worden hernoemd",
  "Encryption": "Encryptie",
  "Encryption Config": "Encryptie-configuratie",
  "Encryption is: %s": "Gebruikte encryptie: %s",

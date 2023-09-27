@@ -6,8 +6,9 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
-import Logger from '@joplin/lib/Logger';
-const { fileUriToPath } = require('@joplin/lib/urlUtils');
+import rendererHtmlUtils, { extractHtmlBody } from '@joplin/renderer/htmlUtils';
+import Logger from '@joplin/utils/Logger';
+import { fileUriToPath } from '@joplin/utils/url';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -77,7 +78,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 			logger.info(`Attaching ${filePath}`);
 			const newBody = await shim.attachFileToNoteBody(body, filePath, options.position, {
 				createFileURL: options.createFileURL,
-				resizeLargeImages: 'ask',
+				resizeLargeImages: Setting.value('imageResizing'),
 			});
 
 			if (!newBody) {
@@ -106,7 +107,7 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
-export async function handlePasteEvent(event: any) {
+export async function getResourcesFromPasteEvent(event: any) {
 	const output = [];
 	const formats = clipboard.availableFormats();
 	for (let i = 0; i < formats.length; i++) {
@@ -159,6 +160,8 @@ export async function processPastedHtml(html: string) {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 					}
+				} else if (imageSrc.startsWith('data:')) { // Data URIs
+					mappedResources[imageSrc] = imageSrc;
 				} else {
 					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
 					await shim.fetchBlob(imageSrc, { path: filePath });
@@ -173,7 +176,11 @@ export async function processPastedHtml(html: string) {
 		}
 	}
 
-	return htmlUtils.replaceImageUrls(html, (src: string) => {
-		return mappedResources[src];
-	});
+	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(
+		htmlUtils.replaceImageUrls(html, (src: string) => {
+			return mappedResources[src];
+		}), {
+			allowedFilePrefixes: [Setting.value('resourceDir')],
+		},
+	));
 }

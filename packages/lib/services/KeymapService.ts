@@ -262,6 +262,7 @@ export default class KeymapService extends BaseService {
 
 	public getCustomKeymapItems() {
 		const customkeymapItems: KeymapItem[] = [];
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
 			const currentAccelerator = this.getAccelerator(command);
 
@@ -349,7 +350,7 @@ export default class KeymapService extends BaseService {
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
 					itemAccelerator,
 					originalItem.command,
-					itemCommand
+					itemCommand,
 				));
 			} else if (itemAccelerator) {
 				usedAccelerators.add(itemAccelerator);
@@ -409,10 +410,12 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		eventManager.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		eventManager.off(eventName, callback);
 	}

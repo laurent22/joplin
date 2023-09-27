@@ -14,13 +14,14 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import { useEffect } from 'react';
 import { Keyboard, ViewStyle } from 'react-native';
-import { EditorControl, EditorSettings, ListType, SearchState } from '../types';
-import SelectionFormatting from '../SelectionFormatting';
+import { EditorControl, EditorSettings } from '../types';
 import { ButtonSpec, StyleSheetData } from './types';
 import Toolbar from './Toolbar';
 import { buttonSize } from './ToolbarButton';
 import { Theme } from '@joplin/lib/themes/type';
 import ToggleSpaceButton from './ToggleSpaceButton';
+import { SearchState } from '@joplin/editor/types';
+import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 
 type OnAttachCallback = ()=> void;
 
@@ -31,6 +32,7 @@ interface MarkdownToolbarProps {
 	editorSettings: EditorSettings;
 	onAttach: OnAttachCallback;
 	style?: ViewStyle;
+	readOnly: boolean;
 }
 
 const MarkdownToolbar = (props: MarkdownToolbarProps) => {
@@ -38,6 +40,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 	const styles = useStyles(props.style, themeData);
 	const selState = props.selectionState;
 	const editorControl = props.editorControl;
+	const readOnly = props.readOnly;
 
 	const headerButtons: ButtonSpec[] = [];
 	for (let level = 1; level <= 5; level++) {
@@ -58,6 +61,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			// Make it likely for the first three header buttons to show, less likely for
 			// the others.
 			priority: level < 3 ? 2 : 0,
+			disabled: readOnly,
 		});
 	}
 
@@ -68,11 +72,10 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Unordered list'),
 		active: selState.inUnorderedList,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.UnorderedList);
-		}, [editorControl]),
+		onPress: editorControl.toggleUnorderedList,
 
 		priority: -2,
+		disabled: readOnly,
 	});
 
 	listButtons.push({
@@ -81,11 +84,10 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Ordered list'),
 		active: selState.inOrderedList,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.OrderedList);
-		}, [editorControl]),
+		onPress: editorControl.toggleOrderedList,
 
 		priority: -2,
+		disabled: readOnly,
 	});
 
 	listButtons.push({
@@ -94,11 +96,10 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		),
 		description: _('Task list'),
 		active: selState.inChecklist,
-		onPress: useCallback(() => {
-			editorControl.toggleList(ListType.CheckList);
-		}, [editorControl]),
+		onPress: editorControl.toggleTaskList,
 
 		priority: -2,
+		disabled: readOnly,
 	});
 
 
@@ -110,6 +111,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.decreaseIndent,
 
 		priority: -1,
+		disabled: readOnly,
 	});
 
 	listButtons.push({
@@ -120,6 +122,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.increaseIndent,
 
 		priority: -1,
+		disabled: readOnly,
 	});
 
 
@@ -134,6 +137,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.toggleBolded,
 
 		priority: 3,
+		disabled: readOnly,
 	});
 
 	inlineFormattingBtns.push({
@@ -145,6 +149,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.toggleItalicized,
 
 		priority: 2,
+		disabled: readOnly,
 	});
 
 	inlineFormattingBtns.push({
@@ -154,6 +159,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.toggleCode,
 
 		priority: 2,
+		disabled: readOnly,
 	});
 
 	if (props.editorSettings.katexEnabled) {
@@ -164,6 +170,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			onPress: editorControl.toggleMath,
 
 			priority: 1,
+			disabled: readOnly,
 		});
 	}
 
@@ -176,6 +183,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: editorControl.showLinkDialog,
 
 		priority: -3,
+		disabled: readOnly,
 	});
 
 
@@ -189,6 +197,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		onPress: useCallback(() => {
 			editorControl.insertText(time.formatDateToLocal(new Date()));
 		}, [editorControl]),
+		disabled: readOnly,
 	});
 
 	const onDismissKeyboard = useCallback(() => {
@@ -208,6 +217,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			onDismissKeyboard();
 			props.onAttach();
 		}, [props.onAttach, onDismissKeyboard]),
+		disabled: readOnly,
 	});
 
 	actionButtons.push({
@@ -227,6 +237,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		}, [editorControl, props.searchState.dialogVisible]),
 
 		priority: -3,
+		disabled: readOnly,
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);

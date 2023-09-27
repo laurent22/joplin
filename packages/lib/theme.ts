@@ -1,5 +1,3 @@
-import { Theme } from './themes/type';
-
 import theme_light from './themes/light';
 import theme_dark from './themes/dark';
 import theme_dracula from './themes/dracula';
@@ -25,7 +23,7 @@ const themes: any = {
 
 export function themeById(themeId: string) {
 	if (!themes[themeId]) throw new Error(`Invalid theme ID: ${themeId}`);
-	const output = Object.assign({}, themes[themeId]);
+	const output = { ...themes[themeId] };
 
 	if (!output.headerBackgroundColor) {
 		output.headerBackgroundColor = output.appearance === 'light' ? '#F0F0F0' : '#2D3136';
@@ -113,31 +111,20 @@ globalStyle.buttonStyle = {
 	borderRadius: 4,
 };
 
-function addMissingProperties(theme: Theme) {
-	// if (!('backgroundColor3' in theme)) theme.backgroundColor3 = theme.backgroundColor;
-	// if (!('color3' in theme)) theme.color3 = theme.color;
-	// if (!('selectionBackgroundColor3' in theme)) {
-	// 	if (theme.appearance === 'dark') {
-	// 		theme.selectionBackgroundColor3 = '#ffffff77';
-	// 	} else {
-	// 		theme.selectionBackgroundColor3 = '#00000077';
-	// 	}
-	// }
-	// if (!('backgroundColorHover3' in theme)) theme.backgroundColorHover3 = Color(theme.selectionBackgroundColor3).alpha(0.5).rgb();
-	// if (!('selectionBorderColor3' in theme)) theme.selectionBorderColor3 = theme.backgroundColor3;
+export function addExtraStyles(style: any) {
+	const zoomRatio = 1;
 
-	// TODO: pick base theme based on appearence
+	const fontSizes: any = {
+		fontSize: Math.round(12 * zoomRatio),
+		toolbarIconSize: 18,
+	};
 
-	// const lightTheme = themes[Setting.THEME_LIGHT];
+	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
 
-	// for (const n in lightTheme) {
-	// 	if (!(n in theme)) theme[n] = lightTheme[n];
-	// }
+	style.zoomRatio = zoomRatio;
 
-	return theme;
-}
+	style = { ...fontSizes, ...style };
 
-function addExtraStyles(style: any) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
 	style.iconColor = Color(style.color).alpha(0.8);
 
@@ -164,54 +151,45 @@ function addExtraStyles(style: any) {
 
 	style.configScreenPadding = style.mainPadding * 2;
 
-	style.icon = Object.assign({},
-		style.icon,
-		{ color: style.color }
-	);
+	style.icon = {
+		...style.icon,
+		color: style.color,
+	};
 
-	style.lineInput = Object.assign({},
-		style.lineInput,
-		{
-			color: style.color,
-			backgroundColor: style.backgroundColor,
-		}
-	);
+	style.lineInput = {
+		...style.lineInput,
+		color: style.color,
+		backgroundColor: style.backgroundColor,
+	};
 
-	style.headerStyle = Object.assign({},
-		style.headerStyle,
-		{
-			color: style.color,
-			backgroundColor: style.backgroundColor,
-		}
-	);
+	style.headerStyle = {
+		...style.headerStyle,
+		color: style.color,
+		backgroundColor: style.backgroundColor,
+	};
 
-	style.inputStyle = Object.assign({},
-		style.inputStyle,
-		{
-			color: style.color,
-			backgroundColor: style.backgroundColor,
-			borderColor: style.dividerColor,
-		}
-	);
+	style.inputStyle = {
+		...style.inputStyle,
+		color: style.color,
+		backgroundColor: style.backgroundColor,
+		borderColor: style.dividerColor,
+	};
 
-	style.containerStyle = Object.assign({},
-		style.containerStyle,
-		{
-			color: style.color,
-			backgroundColor: style.backgroundColor,
-		}
-	);
+	style.containerStyle = {
+		...style.containerStyle,
+		color: style.color,
+		backgroundColor: style.backgroundColor,
+	};
 
-	style.buttonStyle = Object.assign({},
-		style.buttonStyle,
-		{
-			color: style.color4,
-			backgroundColor: style.backgroundColor4,
-			borderColor: style.borderColor4,
-			userSelect: 'none',
-			// cursor: 'pointer',
-		}
-	);
+	style.buttonStyle = {
+		...style.buttonStyle,
+		color: style.color4,
+		backgroundColor: style.backgroundColor4,
+		borderColor: style.borderColor4,
+		userSelect: 'none',
+		// cursor: 'pointer',
+
+	};
 
 	style.tagStyle = {
 		fontSize: style.fontSize,
@@ -254,45 +232,35 @@ function addExtraStyles(style: any) {
 		color: style.color,
 	};
 
-	style.clickableTextStyle = Object.assign({}, style.textStyle, {
-		userSelect: 'none',
-	});
+	style.clickableTextStyle = { ...style.textStyle, userSelect: 'none' };
 
-	style.textStyle2 = Object.assign({}, style.textStyle,
-		{ color: style.color2 }
-	);
+	style.textStyle2 = { ...style.textStyle,
+		color: style.color2,
+	};
 
-	style.textStyleMinor = Object.assign({}, style.textStyle,
-		{
-			color: style.colorFaded,
-			fontSize: style.fontSize * 0.8,
-		}
-	);
+	style.textStyleMinor = { ...style.textStyle,
+		color: style.colorFaded,
+		fontSize: style.fontSize * 0.8,
+	};
 
-	style.urlStyle = Object.assign({}, style.textStyle,
-		{
-			textDecoration: 'underline',
-			color: style.urlColor,
-		}
-	);
+	style.urlStyle = { ...style.textStyle,
+		textDecoration: 'underline',
+		color: style.urlColor,
+	};
 
-	style.h1Style = Object.assign({},
-		style.textStyle,
-		{
-			color: style.color,
-			fontSize: style.textStyle.fontSize * 1.5,
-			fontWeight: 'bold',
-		}
-	);
+	style.h1Style = {
+		...style.textStyle,
+		color: style.color,
+		fontSize: style.textStyle.fontSize * 1.5,
+		fontWeight: 'bold',
+	};
 
-	style.h2Style = Object.assign({},
-		style.textStyle,
-		{
-			color: style.color,
-			fontSize: style.textStyle.fontSize * 1.3,
-			fontWeight: 'bold',
-		}
-	);
+	style.h2Style = {
+		...style.textStyle,
+		color: style.color,
+		fontSize: style.textStyle.fontSize * 1.3,
+		fontWeight: 'bold',
+	};
 
 	style.dialogModalLayer = {
 		zIndex: 9999,
@@ -349,9 +317,9 @@ function addExtraStyles(style: any) {
 		fontSize: style.fontSize,
 	};
 
-	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
+	style.dialogTitle = { ...style.h1Style, marginBottom: '1.2em' };
 
-	style.dropdownList = Object.assign({}, style.inputStyle);
+	style.dropdownList = { ...style.inputStyle };
 
 	style.colorHover = style.color;
 	style.backgroundHover = `${style.selectedColor2}44`;
@@ -369,28 +337,14 @@ const themeCache_: any = {};
 export function themeStyle(themeId: number) {
 	if (!themeId) throw new Error('Theme must be specified');
 
-	const zoomRatio = 1;
-
 	const cacheKey = themeId;
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
-	// Font size are not theme specific, but they must be referenced
-	// and computed here to allow them to respond to settings changes
-	// without the need to restart
-	const fontSizes: any = {
-		fontSize: Math.round(12 * zoomRatio),
-		toolbarIconSize: 18,
-	};
-
-	fontSizes.noteViewerFontSize = Math.round(fontSizes.fontSize * 1.25);
-
 	let output: any = {};
-	output.zoomRatio = zoomRatio;
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
-	output = Object.assign({}, globalStyle, fontSizes, themes[themeId]);
-	output = addMissingProperties(output);
+	output = { ...globalStyle, ...themes[themeId] };
 	output = addExtraStyles(output);
 	output.cacheKey = cacheKey;
 
@@ -406,6 +360,7 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export function buildStyle(cacheKey: any, themeId: number, callback: Function) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 

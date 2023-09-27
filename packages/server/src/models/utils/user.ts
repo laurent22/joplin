@@ -7,6 +7,12 @@ export function getCanShareFolder(user: User): number {
 	return user.can_share_folder !== null ? user.can_share_folder : account.can_share_folder;
 }
 
+export function getCanReceiveFolder(user: User): number {
+	if (!('account_type' in user) || !('can_receive_folder' in user)) throw new Error('Missing account_type or can_receive_folder property');
+	const account = accountByType(user.account_type);
+	return user.can_receive_folder !== null ? user.can_receive_folder : account.can_receive_folder;
+}
+
 export function getMaxItemSize(user: User): number {
 	if (!('account_type' in user) || !('max_item_size' in user)) throw new Error('Missing account_type or max_item_size property');
 	const account = accountByType(user.account_type);

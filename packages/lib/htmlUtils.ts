@@ -85,6 +85,7 @@ class HtmlUtils {
 		return html.replace(htmlReg, `:/${id}`);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceImageUrls(html: string, callback: Function) {
 		return this.processImageTags(html, (data: any) => {
 			const newSrc = callback(data.src);
@@ -95,6 +96,7 @@ class HtmlUtils {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceEmbedUrls(html: string, callback: Function) {
 		if (!html) return '';
 		// We are adding the link as <a> since joplin disabled <embed>, <object> tags due to security reasons.
@@ -110,6 +112,7 @@ class HtmlUtils {
 		return html;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public replaceMediaUrls(html: string, callback: Function) {
 		html = this.replaceImageUrls(html, callback);
 		html = this.replaceEmbedUrls(html, callback);
@@ -121,6 +124,7 @@ class HtmlUtils {
 	// file path is going to be used, it will need to be unescaped first. The
 	// transformed SRC, must also be escaped before being sent back to this
 	// function.
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: Function) {
 		if (!html) return '';
 
@@ -172,13 +176,60 @@ export default new HtmlUtils();
 
 export function plainTextToHtml(plainText: string): string {
 	const lines = plainText
-		.replace(/[\n\r]/g, '\n')
+		.replace(/\r\n/g, '\n')
 		.split('\n');
 
-	const lineOpenTag = lines.length > 1 ? '<p>' : '';
-	const lineCloseTag = lines.length > 1 ? '</p>' : '';
+	if (lines.length === 1) return escapeHtml(lines[0]);
 
-	return lines
-		.map(line => lineOpenTag + escapeHtml(line) + lineCloseTag)
-		.join('');
+	// Step 1: Merge adjacent lines into paragraphs, with each line separated by
+	// '<br/>'. So 'one\ntwo' will become '<p>one</br>two</p>'
+
+	const step1: string[] = [];
+	let currentLine = '';
+
+	for (let line of lines) {
+		line = line.trim();
+		if (!line) {
+			if (currentLine) {
+				step1.push(`<p>${currentLine}</p>`);
+				currentLine = '';
+			}
+			step1.push(line);
+		} else {
+			if (currentLine) {
+				currentLine += `<br/>${escapeHtml(line)}`;
+			} else {
+				currentLine = escapeHtml(line);
+			}
+		}
+	}
+
+	if (currentLine) step1.push(`<p>${currentLine}</p>`);
+
+	// Step 2: Convert the remaining empty lines to <br/> tags. Note that `n`
+	// successive empty lines should produced `n-1` <br/> tags. This makes more
+	// sense when looking at the tests.
+
+	const step2: string[] = [];
+	let newLineCount = 0;
+	for (let i = 0; i < step1.length; i++) {
+		const line = step1[i];
+
+		if (!line) {
+			newLineCount++;
+			if (newLineCount >= 2) step2.push('');
+		} else {
+			newLineCount = 0;
+			step2.push(line);
+		}
+	}
+
+	// Step 3: Actually convert the empty lines to <br/> tags
+
+	const step3: string[] = [];
+	for (const line of step2) {
+		step3.push(line ? line : '<br/>');
+	}
+
+	return step3.join('');
 }

@@ -9,8 +9,8 @@ interface Term {
 }
 
 enum Relation {
-    OR = 'OR',
-    AND = 'AND',
+	OR = 'OR',
+	AND = 'AND',
 }
 
 enum Operation {
@@ -91,7 +91,7 @@ const filterByTableName = (
 	requirement: Requirement,
 	withs: string[],
 	tableName: string,
-	useFts: boolean
+	useFts: boolean,
 ) => {
 	const operator: Operation = getOperator(requirement, relation);
 
@@ -237,6 +237,7 @@ const genericFilter = (terms: Term[], conditions: string[], params: string[], re
 		}
 	};
 
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	terms.forEach(term => {
 		conditions.push(`
 		${relation} ( ${term.name === 'due' ? 'is_todo IS 1 AND ' : ''} ROWID IN (
@@ -263,6 +264,7 @@ const biConditionalFilter = (terms: Term[], conditions: string[], relation: Rela
 	const values = terms.map(x => x.value);
 
 	// AND and OR are handled differently because FTS restricts how OR can be used.
+	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 	values.forEach(value => {
 		if (relation === 'AND') {
 			conditions.push(`
@@ -369,6 +371,7 @@ const textFilter = (terms: Term[], conditions: string[], params: string[], relat
 				params.push(excludedTerms.map(x => x.value).join(' OR '));
 			}
 			if (relation === 'OR') {
+				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 				excludedTerms.forEach(term => {
 					conditions.push(`
 					OR ROWID IN (
@@ -386,6 +389,7 @@ const textFilter = (terms: Term[], conditions: string[], params: string[], relat
 				});
 			}
 		} else {
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			excludedTerms.forEach(term => {
 				createLikeMatch(term, true);
 			});
@@ -405,6 +409,7 @@ const textFilter = (terms: Term[], conditions: string[], params: string[], relat
 			const matchQuery = (relation === 'OR') ? termsToMatch.join(' OR ') : termsToMatch.join(' ');
 			params.push(matchQuery);
 		} else {
+			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			includedTerms.forEach(term => {
 				createLikeMatch(term, false);
 			});

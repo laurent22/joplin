@@ -59,14 +59,12 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 
 		delete options.replaceResourceInternalToExternalLinks;
 
-		const result = await markupToHtml.render(markupLanguage, md, theme, Object.assign({}, {
-			codeTheme: theme.codeThemeCss,
+		const result = await markupToHtml.render(markupLanguage, md, theme, { codeTheme: theme.codeThemeCss,
 			resources: resources,
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,
 			externalAssetsOnly: true,
-			codeHighlightCacheKey: 'useMarkupToHtml',
-		}, options));
+			codeHighlightCacheKey: 'useMarkupToHtml', ...options });
 
 		return result;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied

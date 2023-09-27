@@ -2,7 +2,7 @@
 
 import config from '../../../config';
 import { Item } from '../../../services/database/types';
-import { ErrorCode } from '../../../utils/errors';
+import { CustomErrorCode } from '../../../utils/errors';
 import { createUserAndSession, db, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
 import newModelFactory from '../../factory';
@@ -291,6 +291,6 @@ export function shouldThrowNotFoundIfNotExist(driverConfig: StorageDriverConfig)
 		}
 
 		expect(error).toBeTruthy();
-		expect(error.code).toBe(ErrorCode.NotFound);
+		expect(error.code).toBe(CustomErrorCode.NotFound);
 	});
 }

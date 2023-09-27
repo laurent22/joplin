@@ -13,8 +13,8 @@ const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
 
-	public static isRunningInBackground_: boolean = false;
-	private isIndexing_: boolean = false;
+	public static isRunningInBackground_ = false;
+	private isIndexing_ = false;
 
 	private maintenanceCalls_: boolean[] = [];
 	private maintenanceTimer1_: any = null;
@@ -44,7 +44,7 @@ export default class ResourceService extends BaseService {
 					AND id > ?
 					ORDER BY id ASC
 					LIMIT 10
-					`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]
+					`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')],
 				);
 
 				if (!changes.length) break;
@@ -134,7 +134,7 @@ export default class ResourceService extends BaseService {
 		}
 	}
 
-	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists: boolean = true) {
+	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists = true) {
 		const itDoes = await shim.fsDriver().waitTillExists(filePath, waitTillExists ? 10000 : 0);
 		if (!itDoes) {
 			// this.logger().warn('Trying to set file size on non-existent resource:', resourceId, filePath);

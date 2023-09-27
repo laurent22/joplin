@@ -1,4 +1,4 @@
-import Logger from './Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from './shim';
 import BaseItem from './models/BaseItem';
 import time from './time';
@@ -44,12 +44,12 @@ export interface PaginatedList {
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
-	// Unauthorized error - means username or password is incorrect or other
+	// Unauthorized/forbidden error - means username or password is incorrect or other
 	// permission issue, which won't be fixed by repeating the request.
-	if (errorCode === 403) return false;
+	if (errorCode === 403 || errorCode === 401) return false;
 
 	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
-	if (errorCode === 'rejectedByTarget') return false;
+	if (errorCode === 'rejectedByTarget' || errorCode === 'isReadOnly') return false;
 
 	// We don't repeat failSafe errors because it's an indication of an issue at the
 	// server-level issue which usually cannot be fixed by repeating the request.
@@ -60,6 +60,7 @@ function requestCanBeRepeated(error: any) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function tryAndRepeat(fn: Function, count: number) {
 	let retryCount = 0;
 
@@ -99,6 +100,7 @@ class FileApi {
 	private remoteDateMutex_ = new Mutex();
 	private initialized_ = false;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public constructor(baseDir: string | Function, driver: any) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
@@ -397,6 +399,7 @@ function basicDeltaContextFromOptions_(options: any) {
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function basicDelta(path: string, getDirStatFn: Function, options: any) {
 	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();

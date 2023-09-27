@@ -20,7 +20,8 @@ const { clipboard } = require('electron');
 
 interface Props {
 	themeId: number;
-	noteIds: Array<string>;
+	noteIds: string[];
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	shares: StateShare[];
 	syncTargetId: number;
@@ -234,4 +235,4 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-export default connect(mapStateToProps)(ShareNoteDialog as any);
+export default connect(mapStateToProps)(ShareNoteDialog);

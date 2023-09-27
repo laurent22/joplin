@@ -10,7 +10,31 @@ describe('htmlUtils', () => {
 			],
 			[
 				'line 1\nline 2',
-				'<p>line 1</p><p>line 2</p>',
+				'<p>line 1<br/>line 2</p>',
+			],
+			[
+				'one\n\ntwo\nthree\n\nfour',
+				'<p>one</p><p>two<br/>three</p><p>four</p>',
+			],
+			[
+				'\n\n',
+				'<br/><br/>',
+			],
+			[
+				'\n\none',
+				'<br/><p>one</p>',
+			],
+			[
+				'\none\ntwo\n',
+				'<p>one<br/>two</p>',
+			],
+			[
+				'one\n\n\ntwo',
+				'<p>one</p><br/><p>two</p>',
+			],
+			[
+				'one\n\n\n\ntwo',
+				'<p>one</p><br/><br/><p>two</p>',
 			],
 			[
 				'<img onerror="http://downloadmalware.com"/>',

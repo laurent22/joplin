@@ -1,4 +1,4 @@
-const Logger = require('../Logger').default;
+const Logger = require('@joplin/utils/Logger').default;
 
 class PluginManager {
 	constructor() {
@@ -65,7 +65,7 @@ class PluginManager {
 
 			return {
 				Dialog: Class.Dialog,
-				props: Object.assign({}, this.dialogProps_(name), { userData: p.userData }),
+				props: { ...this.dialogProps_(name), userData: p.userData },
 			};
 		}
 
@@ -86,7 +86,7 @@ class PluginManager {
 			if (!menuItems) continue;
 
 			for (let i = 0; i < menuItems.length; i++) {
-				const item = Object.assign({}, menuItems[i]);
+				const item = { ...menuItems[i] };
 
 				item.click = () => {
 					this.onPluginMenuItemTrigger_({

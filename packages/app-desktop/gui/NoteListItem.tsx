@@ -58,6 +58,7 @@ interface NoteListItemProps {
 	onNoteDragOver: any;
 	onTitleClick: any;
 	onContextMenu(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void;
+	draggable: boolean;
 }
 
 function NoteListItem(props: NoteListItemProps, ref: any) {
@@ -83,11 +84,11 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		dragItemPosition = 'bottom';
 	}
 
-	const onTitleClick = useCallback((event) => {
+	const onTitleClick = useCallback((event: any) => {
 		props.onTitleClick(event, props.item);
 	}, [props.onTitleClick, props.item]);
 
-	const onCheckboxClick = useCallback((event) => {
+	const onCheckboxClick = useCallback((event: any) => {
 		props.onCheckboxClick(event, props.item);
 	}, [props.onCheckboxClick, props.item]);
 
@@ -108,10 +109,10 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 		);
 	}
 
-	let listItemTitleStyle = Object.assign({}, props.style.listItemTitle);
+	let listItemTitleStyle = { ...props.style.listItemTitle };
 	listItemTitleStyle.paddingLeft = !item.is_todo ? hPadding : 4;
 	if (item.is_shared) listItemTitleStyle.color = theme.colorWarn3;
-	if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, props.style.listItemTitleCompleted);
+	if (item.is_todo && !!item.todo_completed) listItemTitleStyle = { ...listItemTitleStyle, ...props.style.listItemTitleCompleted };
 
 	const displayTitle = Note.displayTitle(item);
 	let titleComp = null;
@@ -185,7 +186,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 				ref={anchorRef}
 				onContextMenu={props.onContextMenu}
 				href="#"
-				draggable={true}
+				draggable={props.draggable}
 				style={listItemTitleStyle}
 				onClick={onTitleClick}
 				onDragStart={props.onDragStart}

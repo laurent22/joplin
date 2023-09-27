@@ -776,7 +776,10 @@ const mimeTypes = [
 	{ t: 'x-conference/x-cooltalk', e: ['ice'] },
 ];
 
-// Note: if the list above is ever updated, make sure Markdown doesn't appear twice
+// Note: if the list above is ever updated, make sure Markdown doesn't appear
+// twice. In general, put any change here, so that we know what differs from the
+// original list.
 mimeTypes.push({ t: 'text/markdown', e: ['md', 'markdown'] });
+mimeTypes.push({ t: 'image/avif', e: ['avif'] });
 
 module.exports = mimeTypes;

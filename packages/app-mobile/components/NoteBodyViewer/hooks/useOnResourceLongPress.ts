@@ -8,6 +8,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { copyToCache } from '../../../utils/ShareUtils';
 const Share = require('react-native-share').default;
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function useOnResourceLongPress(onJoplinLinkClick: Function, dialogBoxRef: any) {
 	return useCallback(async (msg: string) => {
 		try {

@@ -86,7 +86,7 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	# Allocation failed - JavaScript heap out of memory
 	#
 	# https://stackoverflow.com/questions/38558989
-	export NODE_OPTIONS="--max-old-space-size=4096"
+	export NODE_OPTIONS="--max-old-space-size=32768"
 	yarn run test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
@@ -154,6 +154,39 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 fi
 
 # =============================================================================
+# Check .gitignore and .eslintignore files - they should be updated when
+# new TypeScript files are added by running `yarn run updateIgnored`.
+# See coding_style.md
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Checking for files that should have been ignored..."
+
+		node packages/tools/checkIgnoredFiles.js 
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
+# Check that the website still builds
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+	echo "Step: Check that the website still builds..."
+
+	mkdir -p ../joplin-website/docs
+	SKIP_SPONSOR_PROCESSING=1 yarn run buildWebsite
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
+fi
+
+# =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
 # building PRs so we disable it in this case. The Linux build should provide
 # enough info if the app builds or not.
@@ -194,7 +227,12 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 		# It can be removed once we upgrade to electron-builder@23, however we
 		# cannot currently do this due to this error:
 		# https://github.com/laurent22/joplin/issues/8149
-		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist
+		#
+		# electron-builder@24, however, still expects the python binary to be named
+		# "python" and seems to no longer respect the PYTHON_PATH environment variable.
+		# We work around this by aliasing python.
+		alias python=$(which python3)
+		USE_HARD_LINKS=false yarn run dist
 	else
 		USE_HARD_LINKS=false yarn run dist
 	fi	
@@ -207,7 +245,15 @@ else
 	
 	if [ "$IS_MACOS" == "1" ]; then
 		# See above why we need to specify Python
-		PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn run dist --publish=never
+		alias python=$(which python3)
+
+		# We also want to disable signing the app in this case, because
+		# it randomly fails and we don't even need it
+		# https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+		export CSC_IDENTITY_AUTO_DISCOVERY=false
+		npm pkg set 'build.mac.identity'=null --json
+		
+		USE_HARD_LINKS=false yarn run dist --publish=never
 	else
 		USE_HARD_LINKS=false yarn run dist --publish=never
 	fi

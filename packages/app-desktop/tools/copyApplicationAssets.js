@@ -147,6 +147,8 @@ async function main() {
 		return s[0];
 	});
 
+	supportedLocales.sort();
+
 	const content = `module.exports = ${JSON.stringify(supportedLocales, null, 2)}`;
 
 	await writeFile(`${__dirname}/../gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js`, content, 'utf8');

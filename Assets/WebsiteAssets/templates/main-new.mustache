@@ -40,6 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			onload="this.media='all'; this.onload = null"
 		/>
 		<link rel="stylesheet" href="{{{assetUrls.css.site}}}" as="style" />
+		{{#assetUrls.css.brand}}<link rel="stylesheet" href="{{{assetUrls.css.brand}}}" as="style" />{{/assetUrls.css.brand}}
 		<title>{{pageTitle}}</title>
 
 		<script
@@ -85,11 +86,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			{{> footer}}
 		</div>
 
-		<script
-			src="{{jsBaseUrl}}/bootstrap5.0.2.bundle.min.js"
-			rel="preload"
-			as="script"
-		></script>
+		<script src="{{jsBaseUrl}}/bootstrap5.0.2.bundle.min.js" rel="preload" as="script"></script>
 		<script src="{{{assetUrls.js.script}}}"></script>
 
 		{{> analytics}}

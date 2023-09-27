@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
-import CodeMirror from './NoteBody/CodeMirror/CodeMirror';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
 import { htmlToMarkdown, formNoteToNote } from './utils';
@@ -31,7 +30,7 @@ import usePrevious from '../hooks/usePrevious';
 import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
-
+import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
 const { themeStyle } = require('@joplin/lib/theme');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 import NoteSearchBar from '../NoteSearchBar';
@@ -40,6 +39,14 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 const bridge = require('@electron/remote').require('./bridge').default;
 import NoteRevisionViewer from '../NoteRevisionViewer';
+import { parseShareCache } from '@joplin/lib/services/share/reducer';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { ModelType } from '@joplin/lib/BaseModel';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ErrorCode } from '@joplin/lib/errors';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
+import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -51,6 +58,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
+	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
 	const editorRef = useRef<any>();
 	const titleInputRef = useRef<any>();
@@ -71,6 +79,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
+		decryptionStarted: props.decryptionStarted,
 		noteId: effectiveNoteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
@@ -279,6 +288,27 @@ function NoteEditor(props: NoteEditorProps) {
 	// 	}
 	// }, [props.dispatch]);
 
+	const shareCache = useMemo(() => {
+		return parseShareCache(props.shareCacheSetting);
+	}, [props.shareCacheSetting]);
+
+	useAsyncEffect(async event => {
+		if (!formNote.id) return;
+
+		try {
+			const result = await itemIsReadOnly(BaseItem, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, formNote.id, props.syncUserId, shareCache);
+			if (event.cancelled) return;
+			setIsReadOnly(result);
+		} catch (error) {
+			if (error.code === ErrorCode.NotFound) {
+				// Can happen if the note has been deleted but a render is
+				// triggered anyway. It can be ignored.
+			} else {
+				throw error;
+			}
+		}
+	}, [formNote.id, props.syncUserId, shareCache]);
+
 	const onBodyWillChange = useCallback((event: any) => {
 		handleProvisionalFlag();
 
@@ -300,7 +330,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const onMessage = useMessageHandler(scrollWhenReady, setScrollWhenReady, editorRef, setLocalSearchResultCount, props.dispatch, formNote);
 
-	const externalEditWatcher_noteChange = useCallback((event) => {
+	const externalEditWatcher_noteChange = useCallback((event: any) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
 				...formNote,
@@ -313,7 +343,7 @@ function NoteEditor(props: NoteEditorProps) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [formNote]);
 
-	const onNotePropertyChange = useCallback((event) => {
+	const onNotePropertyChange = useCallback((event: any) => {
 		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
 
@@ -351,7 +381,7 @@ function NoteEditor(props: NoteEditorProps) {
 		};
 	}, [setShowRevisions]);
 
-	const onScroll = useCallback((event: any) => {
+	const onScroll = useCallback((event: { percent: number }) => {
 		props.dispatch({
 			type: 'EDITOR_SCROLL_PERCENT_SET',
 			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
@@ -364,13 +394,11 @@ function NoteEditor(props: NoteEditorProps) {
 	}, [props.dispatch, formNote]);
 
 	function renderNoNotes(rootStyle: any) {
-		const emptyDivStyle = Object.assign(
-			{
-				backgroundColor: 'black',
-				opacity: 0.1,
-			},
-			rootStyle
-		);
+		const emptyDivStyle = {
+			backgroundColor: 'black',
+			opacity: 0.1,
+			...rootStyle,
+		};
 		return <div style={emptyDivStyle}></div>;
 	}
 
@@ -408,7 +436,7 @@ function NoteEditor(props: NoteEditorProps) {
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
-		disabled: false,
+		disabled: isReadOnly,
 		themeId: props.themeId,
 		dispatch: props.dispatch,
 		noteToolbar: null,
@@ -435,7 +463,9 @@ function NoteEditor(props: NoteEditorProps) {
 	if (props.bodyEditor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror') {
-		editor = <CodeMirror {...editorProps}/>;
+		editor = <CodeMirror5 {...editorProps}/>;
+	} else if (props.bodyEditor === 'CodeMirror6') {
+		editor = <CodeMirror6 {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}
@@ -572,9 +602,10 @@ function NoteEditor(props: NoteEditorProps) {
 					noteTitle={formNote.title}
 					noteUserUpdatedTime={formNote.user_updated_time}
 					onTitleChange={onTitleChange}
+					disabled={isReadOnly}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -606,6 +637,7 @@ const mapStateToProps = (state: AppState) => {
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,
+		decryptionStarted: state.decryptionWorker?.state !== 'idle',
 		themeId: state.settings.theme,
 		richTextBannerDismissed: state.settings.richTextBannerDismissed,
 		watchedNoteFiles: state.watchedNoteFiles,
@@ -631,7 +663,9 @@ const mapStateToProps = (state: AppState) => {
 		], whenClauseContext)[0],
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		isSafeMode: state.settings.isSafeMode,
-		useCustomPdfViewer: false, // state.settings.useCustomPdfViewer,
+		useCustomPdfViewer: false,
+		syncUserId: state.settings['sync.userId'],
+		shareCacheSetting: state.settings['sync.shareCache'],
 	};
 };
 

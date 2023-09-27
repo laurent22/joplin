@@ -480,6 +480,7 @@ describe('services_rest_Api', () => {
 				result: [],
 			},
 		];
+		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		tests.forEach((test) => {
 			const urls = extractMediaUrls(test.language, test.body);
 			expect(urls).toEqual(test.result);

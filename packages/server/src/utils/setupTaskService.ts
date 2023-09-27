@@ -53,6 +53,27 @@ export default async function(env: Env, models: Models, config: Config, services
 			schedule: '0 */6 * * *',
 			run: (models: Models) => models.session().deleteExpiredSessions(),
 		},
+
+		{
+			id: TaskId.ProcessOrphanedItems,
+			description: taskIdToLabel(TaskId.ProcessOrphanedItems),
+			schedule: '15 * * * *',
+			run: (models: Models) => models.item().processOrphanedItems(),
+		},
+
+		{
+			id: TaskId.ProcessShares,
+			description: taskIdToLabel(TaskId.ProcessShares),
+			schedule: 'PT10S',
+			run: (models: Models) => models.share().updateSharedItems3(),
+		},
+
+		{
+			id: TaskId.ProcessEmails,
+			description: taskIdToLabel(TaskId.ProcessEmails),
+			schedule: '* * * * *',
+			run: (_models: Models, services: Services) => services.email.runMaintenance(),
+		},
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
@@ -82,6 +103,8 @@ export default async function(env: Env, models: Models, config: Config, services
 	}
 
 	await taskService.registerTasks(tasks);
+
+	await taskService.resetInterruptedTasks();
 
 	return taskService;
 }

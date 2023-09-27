@@ -2,7 +2,7 @@
 
 import { splitCommandString } from '@joplin/utils';
 import { spawn } from 'child_process';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import { fileExtension } from '../../path-utils';
 import shim from '../../shim';

@@ -1,7 +1,11 @@
+/* eslint-disable multiline-comment-style */
+
 import { ModelType } from '../../../BaseModel';
 import BaseItem from '../../../models/BaseItem';
 import Resource from '../../../models/Resource';
+import { getItemUserData, setItemUserData, deleteItemUserData } from '../../../models/utils/userData';
 import Api from '../../rest/Api';
+import Plugin from '../Plugin';
 import { Path } from './types';
 
 /**
@@ -44,6 +48,11 @@ export default class JoplinData {
 
 	private api_: any = new Api();
 	private pathSegmentRegex_: RegExp;
+	private plugin: Plugin;
+
+	public constructor(plugin: Plugin) {
+		this.plugin = plugin;
+	}
 
 	private serializeApiBody(body: any) {
 		if (typeof body !== 'string') { return JSON.stringify(body); }
@@ -92,6 +101,35 @@ export default class JoplinData {
 		const item = await Resource.load(resourceId);
 		if (!item) throw new Error(`No such resource: ${resourceId}`);
 		return Resource.fullPath(item);
+	}
+
+	/**
+	 * Gets an item user data. User data are key/value pairs. The `key` can be any
+	 * arbitrary string, while the `value` can be of any type supported by
+	 * [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description)
+	 *
+	 * User data is synchronised across devices, and each value wil be merged based on their timestamp:
+	 *
+	 * - If value is modified by client 1, then modified by client 2, it will take the value from client 2
+	 * - If value is modified by client 1, then deleted by client 2, the value will be deleted after merge
+	 * - If value is deleted by client 1, then updated by client 2, the value will be restored and set to the value from client 2 after merge
+	 */
+	public async userDataGet<T>(itemType: ModelType, itemId: string, key: string) {
+		return getItemUserData<T>(itemType, itemId, this.plugin.id, key);
+	}
+
+	/**
+	 * Sets a note user data. See {@link JoplinData.userDataGet} for more details.
+	 */
+	public async userDataSet<T>(itemType: ModelType, itemId: string, key: string, value: T) {
+		await setItemUserData<T>(itemType, itemId, this.plugin.id, key, value);
+	}
+
+	/**
+	 * Deletes a note user data. See {@link JoplinData.userDataGet} for more details.
+	 */
+	public async userDataDelete(itemType: ModelType, itemId: string, key: string) {
+		await deleteItemUserData(itemType, itemId, this.plugin.id, key);
 	}
 
 }

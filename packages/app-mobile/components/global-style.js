@@ -100,7 +100,7 @@ function themeStyle(theme) {
 	const cacheKey = [theme].join('-');
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
-	const output = Object.assign({}, baseStyle, themeById(theme));
+	const output = { ...baseStyle, ...themeById(theme) };
 	themeCache_[cacheKey] = addExtraStyles(output);
 	return themeCache_[cacheKey];
 }

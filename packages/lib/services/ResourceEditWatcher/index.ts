@@ -2,9 +2,10 @@ import AsyncActionQueue from '../../AsyncActionQueue';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import { toSystemSlashes } from '../../path-utils';
-import Logger from '../../Logger';
+import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
+import { ResourceEntity } from '../database/types';
 const EventEmitter = require('events');
 const chokidar = require('chokidar');
 
@@ -28,12 +29,13 @@ export default class ResourceEditWatcher {
 	private static instance_: ResourceEditWatcher;
 
 	private logger_: any;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch: Function;
 	private watcher_: any;
 	private chokidar_: any;
 	private watchedItems_: WatchedItems = {};
 	private eventEmitter_: any;
-	private tempDir_: string = '';
+	private tempDir_ = '';
 	private openItem_: OpenItemFn;
 
 	public constructor() {
@@ -44,6 +46,7 @@ export default class ResourceEditWatcher {
 		this.eventEmitter_ = new EventEmitter();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public initialize(logger: any, dispatch: Function, openItem: OpenItemFn) {
 		this.logger_ = logger;
 		this.dispatch = dispatch;
@@ -69,10 +72,12 @@ export default class ResourceEditWatcher {
 		return this.logger_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
@@ -192,8 +197,7 @@ export default class ResourceEditWatcher {
 			// that event is not event triggered.
 			// https://github.com/laurent22/joplin/issues/3407
 			//
-			// @ts-ignore Leave unused path variable
-			this.watcher_.on('raw', (event: string, path: string, options: any) => {
+			this.watcher_.on('raw', (event: string, _path: string, options: any) => {
 				const watchedPath = options.watchedPath ? toSystemSlashes(options.watchedPath, 'linux') : '';
 
 				this.logger().debug(`ResourceEditWatcher: Raw event: ${event}: ${watchedPath}`);
@@ -208,6 +212,20 @@ export default class ResourceEditWatcher {
 		}
 
 		return this.watcher_;
+	}
+
+	private async makeEditPath(resource: ResourceEntity) {
+		const tempDir = await this.tempDir();
+		return toSystemSlashes(await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`), 'linux');
+	}
+
+	private async copyResourceToEditablePath(resourceId: string) {
+		const resource = await Resource.load(resourceId);
+		if (!(await Resource.isReady(resource))) throw new Error(_('This attachment is not downloaded or not decrypted yet'));
+		const sourceFilePath = Resource.fullPath(resource);
+		const editFilePath = await this.makeEditPath(resource);
+		await shim.fsDriver().copy(sourceFilePath, editFilePath);
+		return { resource, editFilePath };
 	}
 
 	private async watch(resourceId: string): Promise<WatchedItem> {
@@ -226,13 +244,7 @@ export default class ResourceEditWatcher {
 			};
 
 			this.watchedItems_[resourceId] = watchedItem;
-
-			const resource = await Resource.load(resourceId);
-			if (!(await Resource.isReady(resource))) throw new Error(_('This attachment is not downloaded or not decrypted yet'));
-			const sourceFilePath = Resource.fullPath(resource);
-			const tempDir = await this.tempDir();
-			const editFilePath = toSystemSlashes(await shim.fsDriver().findUniqueFilename(`${tempDir}/${Resource.friendlySafeFilename(resource)}`), 'linux');
-			await shim.fsDriver().copy(sourceFilePath, editFilePath);
+			const { resource, editFilePath } = await this.copyResourceToEditablePath(resourceId);
 			const stat = await shim.fsDriver().stat(editFilePath);
 
 			watchedItem.path = editFilePath;
@@ -256,8 +268,16 @@ export default class ResourceEditWatcher {
 
 	public async openAndWatch(resourceId: string) {
 		const watchedItem = await this.watch(resourceId);
-		// bridge().openItem(watchedItem.path);
 		this.openItem_(watchedItem.path);
+	}
+
+	// This call simply copies the resource file to a separate path and opens it.
+	// That way, even if it is changed, the real resource file on drive won't be
+	// affected.
+	public async openAsReadOnly(resourceId: string) {
+		const { editFilePath } = await this.copyResourceToEditablePath(resourceId);
+		await shim.fsDriver().chmod(editFilePath, 0o0666);
+		this.openItem_(editFilePath);
 	}
 
 	public async stopWatching(resourceId: string) {

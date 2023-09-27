@@ -1,10 +1,9 @@
-import { LoggerWrapper } from '@joplin/lib/Logger';
+import { LoggerWrapper } from '@joplin/utils/Logger';
 import config from '../config';
 import { DbConnection } from '../db';
 import newModelFactory, { Models } from '../models/factory';
 import { AppContext, Config, Env } from './types';
 import routes from '../routes/routes';
-import ShareService from '../services/ShareService';
 import { Services } from '../services/types';
 import EmailService from '../services/EmailService';
 import MustacheService from '../services/MustacheService';
@@ -13,16 +12,18 @@ import UserDeletionService from '../services/UserDeletionService';
 
 async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
 	const output: Services = {
-		share: new ShareService(env, models, config),
 		email: new EmailService(env, models, config),
 		mustache: new MustacheService(config.viewDir, config.baseUrl),
 		userDeletion: new UserDeletionService(env, models, config),
 		tasks: null,
 	};
 
-	output.tasks = await setupTaskService(env, models, config, output),
-
 	await output.mustache.loadPartials();
+
+	if (config.IS_ADMIN_INSTANCE) {
+		await output.email.checkConfiguration();
+		output.tasks = await setupTaskService(env, models, config, output);
+	}
 
 	return output;
 }

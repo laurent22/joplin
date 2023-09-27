@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const execa = require('execa');
+const glob = require('glob');
 
 const utils = {};
 
@@ -95,10 +96,8 @@ utils.replaceFileText = async function(filePath, regex, toInsert) {
 };
 
 utils.copyDir = async function(src, dest, options) {
-	options = Object.assign({}, {
-		excluded: [],
-		delete: true,
-	}, options);
+	options = { excluded: [],
+		delete: true, ...options };
 
 	src = utils.toSystemSlashes(src);
 	dest = utils.toSystemSlashes(dest);
@@ -217,6 +216,13 @@ utils.msleep = (ms) => {
 			resolve();
 		}, ms);
 	});
+};
+
+utils.globSync = (pattern, options = {}) => {
+	let output = glob.sync(pattern, options);
+	output = output.map(f => f.replace(/\\/g, '/'));
+	output.sort();
+	return output;
 };
 
 module.exports = utils;

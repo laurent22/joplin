@@ -2,7 +2,7 @@ import Resource from '../models/Resource';
 import Setting from '../models/Setting';
 import BaseService from './BaseService';
 import ResourceService from './ResourceService';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 const { Dirnames } = require('./synchronizer/utils/types');
 const EventEmitter = require('events');
@@ -11,6 +11,7 @@ export default class ResourceFetcher extends BaseService {
 
 	public static instance_: ResourceFetcher;
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_: Logger = new Logger();
 	private queue_: any[] = [];
@@ -35,10 +36,12 @@ export default class ResourceFetcher extends BaseService {
 		return ResourceFetcher.instance_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public on(eventName: string, callback: Function) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public off(eventName: string, callback: Function) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}

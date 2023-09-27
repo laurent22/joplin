@@ -16,6 +16,7 @@ interface Style {
 interface Props {
 	themeId: number;
 	style: Style;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 }
 
@@ -110,7 +111,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 						<td style={cellStyle} className="dataCell">
 							<button style={theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
 						</td>
-					</tr>
+					</tr>,
 				)}
 			</tbody>
 		</table>

@@ -5,7 +5,7 @@ import markdownUtils from '../../markdownUtils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity, ResourceEntity } from '../database/types';
-import { basename, dirname, friendlySafeFilename } from '../../path-utils';
+import { basename, dirname, friendlySafeFilename, safeFilename } from '../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
@@ -23,7 +23,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename: boolean = true) {
+	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -66,6 +66,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: any, fn_createRelativePath: Function) {
 		let newBody = noteBody;
 
@@ -130,7 +131,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 			const noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
 
 			const noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
-			const modNote = Object.assign({}, item, { body: noteBody });
+			const modNote = { ...item, body: noteBody };
 			const noteContent = await this.getNoteExportContent_(modNote);
 			await shim.fsDriver().mkdir(dirname(noteFilePath));
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');
@@ -141,7 +142,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		let fileName = basename(filePath);
 
 		if (resource.filename) {
-			fileName = resource.filename;
+			fileName = safeFilename(resource.filename);
 		} else if (resource.title) {
 			fileName = friendlySafeFilename(resource.title, null, true);
 		}

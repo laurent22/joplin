@@ -6,7 +6,7 @@ export default class KeychainService extends BaseService {
 
 	private driver: KeychainServiceDriverBase;
 	private static instance_: KeychainService;
-	private enabled_: boolean = true;
+	private enabled_ = true;
 
 	public static instance(): KeychainService {
 		if (!this.instance_) this.instance_ = new KeychainService();

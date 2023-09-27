@@ -1,5 +1,5 @@
 import { unique } from '@joplin/lib/ArrayUtils';
-import htmlUtils from '@joplin/renderer/htmlUtils';
+import { attributesHtml, isSelfClosingTag } from '@joplin/renderer/htmlUtils';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
@@ -106,9 +106,9 @@ export default (html: string, _languageCode: string, translations: Record<string
 				state.translateStack.push(name);
 			}
 
-			let attrHtml = htmlUtils.attributesHtml(attrs);
+			let attrHtml = attributesHtml(attrs);
 			if (attrHtml) attrHtml = ` ${attrHtml}`;
-			const closingSign = htmlUtils.isSelfClosingTag(name) ? '/>' : '>';
+			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 
 			pushContent(state, `<${name}${attrHtml}${closingSign}`);
 			state.translateIsOpening = false;
@@ -133,7 +133,7 @@ export default (html: string, _languageCode: string, translations: Record<string
 
 			if (name === 'script') state.inScript = false;
 
-			if (htmlUtils.isSelfClosingTag(name)) return;
+			if (isSelfClosingTag(name)) return;
 			pushContent(state, `</${name}>`);
 		},
 

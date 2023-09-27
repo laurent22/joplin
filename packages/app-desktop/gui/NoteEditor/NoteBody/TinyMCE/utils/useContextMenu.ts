@@ -41,6 +41,7 @@ interface ContextMenuActionOptions {
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(editor: any, plugins: PluginStates, dispatch: Function) {
 	useEffect(() => {
 		if (!editor) return () => {};

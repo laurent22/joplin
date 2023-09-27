@@ -64,14 +64,14 @@ async function main() {
 		readmePath,
 		'<!-- SPONSORS-GITHUB -->\n',
 		'\n<!-- SPONSORS-GITHUB -->',
-		await createGitHubSponsorTable(sponsors.github)
+		await createGitHubSponsorTable(sponsors.github),
 	);
 
 	await insertContentIntoFile(
 		readmePath,
 		'<!-- SPONSORS-ORG -->\n',
 		'\n<!-- SPONSORS-ORG -->',
-		await createOrgSponsorTable(sponsors.orgs)
+		await createOrgSponsorTable(sponsors.orgs),
 	);
 }
 

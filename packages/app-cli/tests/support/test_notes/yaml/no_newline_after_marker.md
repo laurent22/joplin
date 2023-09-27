@@ -1,0 +1,4 @@
+---
+title: Example
+---
+note body

@@ -1,5 +1,11 @@
 import { CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
+import { joplinCommandToTinyMceCommands } from './NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands';
+
+export const enabledCondition = (commandName: string) => {
+	const markdownEditorOnly = !Object.keys(joplinCommandToTinyMceCommands).includes(commandName);
+	return `(!modalDialogVisible || gotoAnythingVisible) ${markdownEditorOnly ? '&& markdownEditorPaneVisible' : ''} && oneNoteSelected && noteIsMarkdown && !noteIsReadOnly`;
+};
 
 const declarations: CommandDeclaration[] = [
 	{

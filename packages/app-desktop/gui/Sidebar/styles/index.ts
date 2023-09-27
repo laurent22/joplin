@@ -100,9 +100,8 @@ export const StyledExpandLink = styled.a`
 `;
 
 export const StyledNoteCount = styled.div`
-	color: ${(props: any) => props.theme.color2};
+	color: ${(props: any) => props.theme.colorFaded2};
 	padding-left: 8px;
-	opacity: 0.5;
 	user-select: none;
 `;
 

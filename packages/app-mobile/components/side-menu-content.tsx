@@ -23,6 +23,8 @@ Icon.loadFont().catch((error: any) => { console.info(error); });
 interface Props {
 	syncStarted: boolean;
 	themeId: number;
+	sideMenuVisible: boolean;
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
 	syncReport: any;
@@ -34,6 +36,7 @@ interface Props {
 	folders: FolderEntity[];
 	opacity: number;
 	profileConfig: ProfileConfig;
+	inboxJopId: string;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -85,18 +88,18 @@ const SideMenuContentComponent = (props: Props) => {
 			},
 		};
 
-		styles.folderButton = Object.assign({}, styles.button);
+		styles.folderButton = { ...styles.button };
 		styles.folderButton.paddingLeft = 0;
-		styles.folderButtonText = Object.assign({}, styles.buttonText, { paddingLeft: 0 });
-		styles.folderButtonSelected = Object.assign({}, styles.folderButton);
+		styles.folderButtonText = { ...styles.buttonText, paddingLeft: 0 };
+		styles.folderButtonSelected = { ...styles.folderButton };
 		styles.folderButtonSelected.backgroundColor = theme.selectedColor;
-		styles.folderIcon = Object.assign({}, theme.icon);
+		styles.folderIcon = { ...theme.icon };
 		styles.folderIcon.color = theme.colorFaded; // '#0072d5';
 		styles.folderIcon.paddingTop = 3;
 
-		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
-		styles.sideButtonSelected = Object.assign({}, styles.sideButton, { backgroundColor: theme.selectedColor });
-		styles.sideButtonText = Object.assign({}, styles.buttonText);
+		styles.sideButton = { ...styles.button, flex: 0 };
+		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
+		styles.sideButtonText = { ...styles.buttonText };
 
 		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 20 };
 
@@ -110,7 +113,7 @@ const SideMenuContentComponent = (props: Props) => {
 					toValue: 1,
 					duration: 3000,
 					easing: Easing.linear,
-				})
+				}),
 			);
 
 			syncIconAnimation.start();
@@ -135,18 +138,38 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
+		const generateFolderDeletion = () => {
+			const folderDeletion = (message: string) => {
+				Alert.alert('', message, [
+					{
+						text: _('OK'),
+						onPress: () => {
+							void Folder.delete(folder.id);
+						},
+					},
+					{
+						text: _('Cancel'),
+						onPress: () => { },
+						style: 'cancel',
+					},
+				]);
+			};
+
+			if (folder.id === props.inboxJopId) {
+				return folderDeletion(
+					_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
+				);
+			}
+			return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title));
+		};
+
 		Alert.alert(
 			'',
 			_('Notebook: %s', folder.title),
 			[
 				{
-					text: _('Rename'),
+					text: _('Edit'),
 					onPress: () => {
-						if (folder.encryption_applied) {
-							alert(_('Encrypted notebooks cannot be renamed'));
-							return;
-						}
-
 						props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 						props.dispatch({
@@ -158,21 +181,7 @@ const SideMenuContentComponent = (props: Props) => {
 				},
 				{
 					text: _('Delete'),
-					onPress: () => {
-						Alert.alert('', _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title), [
-							{
-								text: _('OK'),
-								onPress: () => {
-									void Folder.delete(folder.id);
-								},
-							},
-							{
-								text: _('Cancel'),
-								onPress: () => {},
-								style: 'cancel',
-							},
-						]);
-					},
+					onPress: generateFolderDeletion,
 					style: 'destructive',
 				},
 				{
@@ -183,7 +192,7 @@ const SideMenuContentComponent = (props: Props) => {
 			],
 			{
 				cancelable: false,
-			}
+			},
 		);
 	};
 
@@ -376,6 +385,7 @@ const SideMenuContentComponent = (props: Props) => {
 		);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: Function = null, selected = false) => {
 		let icon = <Icon name={iconName} style={styles_.sidebarIcon} />;
 
@@ -447,7 +457,7 @@ const SideMenuContentComponent = (props: Props) => {
 			items.push(
 				<Text key="sync_report" style={styles_.syncStatus}>
 					{fullReport.join('\n')}
-				</Text>
+				</Text>,
 			);
 		}
 
@@ -455,7 +465,7 @@ const SideMenuContentComponent = (props: Props) => {
 			items.push(
 				<Text key="net_info" style={styles_.syncStatus}>
 					{ _('Mobile data - auto-sync disabled') }
-				</Text>
+				</Text>,
 			);
 		}
 
@@ -482,15 +492,29 @@ const SideMenuContentComponent = (props: Props) => {
 		items = items.concat(folderItems);
 	}
 
+	const isHidden = !props.sideMenuVisible;
+
 	const style = {
 		flex: 1,
 		borderRightWidth: 1,
 		borderRightColor: theme.dividerColor,
 		backgroundColor: theme.backgroundColor,
+
+		// Have the UI reflect whether the View is hidden to the screen reader.
+		// This way, there will be visual feedback if isHidden is incorrect.
+		opacity: isHidden ? 0.5 : undefined,
 	};
 
+	// Note: iOS uses accessibilityElementsHidden and Android uses importantForAccessibility
+	//       to hide elements from the screenreader.
+
 	return (
-		<View style={style}>
+		<View
+			style={style}
+
+			accessibilityElementsHidden={isHidden}
+			importantForAccessibility={isHidden ? 'no-hide-descendants' : undefined}
+		>
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
 					{items}
@@ -511,6 +535,7 @@ export default connect((state: AppState) => {
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,
+		sideMenuVisible: state.showSideMenu,
 		// Don't do the opacity animation as it means re-rendering the list multiple times
 		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,
@@ -519,5 +544,6 @@ export default connect((state: AppState) => {
 		isOnMobileData: state.isOnMobileData,
 		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
 		profileConfig: state.profileConfig,
+		inboxJopId: state.settings['sync.10.inboxId'],
 	};
 })(SideMenuContentComponent);

@@ -1,7 +1,7 @@
 import Setting, { SettingItemType, SettingSectionSource, SettingStorage } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
-import Logger from '../Logger';
+import Logger from '@joplin/utils/Logger';
 import { defaultProfileConfig } from '../services/profileConfig/types';
 import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
