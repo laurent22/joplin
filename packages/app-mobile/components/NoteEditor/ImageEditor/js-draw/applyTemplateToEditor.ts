@@ -18,9 +18,7 @@ const applyTemplateToEditor = async (editor: Editor, templateData: string) => {
 				'zIndex': 0,
 				'data': {
 					'mainColor': '#ffffff',
-					'backgroundType': BackgroundComponentBackgroundType.Grid,
-					'gridSize': 25,
-					'gridStrokeWidth': 0.7,
+					'backgroundType': BackgroundComponentBackgroundType.SolidColor,
 				},
 			};
 		}
