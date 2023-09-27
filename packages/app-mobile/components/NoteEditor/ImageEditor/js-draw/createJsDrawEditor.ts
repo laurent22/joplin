@@ -4,7 +4,7 @@ import { MaterialIconProvider } from '@js-draw/material-icons';
 import 'js-draw/bundledStyles';
 import applyTemplateToEditor from './applyTemplateToEditor';
 import watchEditorForTemplateChanges from './watchEditorForTemplateChanges';
-import { ImageEditorCallbacks } from './types';
+import { ImageEditorCallbacks, LocalizedStrings } from './types';
 import startAutosaveLoop from './startAutosaveLoop';
 
 declare namespace ReactNativeWebView {
@@ -39,6 +39,7 @@ export const createJsDrawEditor = (
 	callbacks: ImageEditorCallbacks,
 	initialToolbarState: string,
 	locale: string,
+	defaultLocalizations: LocalizedStrings,
 
 	// Intended for automated tests.
 	editorSettings: Partial<EditorSettings> = {},
@@ -47,7 +48,10 @@ export const createJsDrawEditor = (
 	const editor = new Editor(parentElement, {
 		// Try to use the Joplin locale, but fall back to the system locale if
 		// js-draw doesn't support it.
-		localization: getLocalizationTable([locale, ...navigator.languages]),
+		localization: {
+			...getLocalizationTable([locale, ...navigator.languages]),
+			...defaultLocalizations,
+		},
 		iconProvider: new MaterialIconProvider(),
 		...editorSettings,
 	});
@@ -60,7 +64,12 @@ export const createJsDrawEditor = (
 		maxSize: maxSpacerSize,
 	});
 
-	toolbar.addExitButton(() => callbacks.closeEditor(true));
+	// Override the default "Exit" label:
+	toolbar.addExitButton(
+		() => callbacks.closeEditor(true), {
+			label: defaultLocalizations.close,
+		},
+	);
 
 	toolbar.addSpacer({
 		grow: 1,

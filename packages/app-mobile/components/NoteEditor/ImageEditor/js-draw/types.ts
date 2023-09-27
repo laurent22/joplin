@@ -9,3 +9,12 @@ export interface ImageEditorCallbacks {
 	closeEditor: (promptIfUnsaved: boolean)=> void;
 	setImageHasChanges: (hasChanges: boolean)=> void;
 }
+
+// Overrides translations in js-draw -- as of the time of this writing,
+// Joplin has many common strings localized better than js-draw.
+export interface LocalizedStrings {
+	save: string;
+	close: string;
+	undo: string;
+	redo: string;
+}

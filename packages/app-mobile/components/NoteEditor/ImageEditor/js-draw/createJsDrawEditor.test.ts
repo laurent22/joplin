@@ -33,7 +33,14 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 		renderingMode: RenderingMode.DummyRenderer,
 	};
 
-	return createJsDrawEditor(allCallbacks, toolbarState, locale, editorOptions);
+	const localizations = {
+		save: 'Save',
+		close: 'Close',
+		undo: 'Undo',
+		redo: 'Redo',
+	};
+
+	return createJsDrawEditor(allCallbacks, toolbarState, locale, localizations, editorOptions);
 };
 
 describe('createJsDrawEditor', () => {

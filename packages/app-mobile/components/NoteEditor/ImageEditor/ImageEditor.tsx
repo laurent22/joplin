@@ -10,6 +10,7 @@ import { Alert, BackHandler } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
+import { LocalizedStrings } from './js-draw/types';
 
 const logger = Logger.create('ImageEditor');
 
@@ -133,6 +134,16 @@ const ImageEditor = (props: Props) => {
 		</html>
 	`, [css]);
 
+	// A set of localization overrides (Joplin is better localized than js-draw).
+	// All localizable strings (some unused?) can be found at
+	// https://github.com/personalizedrefrigerator/js-draw/blob/main/.github/ISSUE_TEMPLATE/translation-js-draw-new.yml
+	const localizedStrings: LocalizedStrings = useMemo(() => ({
+		save: _('Save'),
+		close: _('Close'),
+		undo: _('Undo'),
+		redo: _('Redo'),
+	}), []);
+
 	const injectedJavaScript = useMemo(() => `
 		window.onerror = (message, source, lineno) => {
 			window.ReactNativeWebView.postMessage(
@@ -195,6 +206,7 @@ const ImageEditor = (props: Props) => {
 					},
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 					${JSON.stringify(Setting.value('locale'))},
+					${JSON.stringify(localizedStrings)},
 				);
 
 				// Start loading the SVG file (if present) after loading the editor.
@@ -208,7 +220,7 @@ const ImageEditor = (props: Props) => {
 			);
 		}
 		true;
-	`, []);
+	`, [localizedStrings]);
 
 	useEffect(() => {
 		webviewRef.current?.injectJS(`
