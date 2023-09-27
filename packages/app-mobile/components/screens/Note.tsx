@@ -1006,14 +1006,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 		// because that's only way to browse photos from the camera roll.
 		if (Platform.OS === 'ios') buttons.push({ text: _('Attach photo'), id: 'attachPhoto' });
 		buttons.push({ text: _('Take photo'), id: 'takePhoto' });
-		buttons.push({ text: _('Draw picture'), id: 'drawPicture' });
 
 		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
 
 		if (buttonId === 'takePhoto') this.takePhoto_onPress();
 		if (buttonId === 'attachFile') void this.attachFile_onPress();
 		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
-		if (buttonId === 'drawPicture') void this.drawPicture_onPress();
 	}
 
 	// private vosk_:Vosk;
@@ -1108,6 +1106,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 				disabled: readOnly,
 			});
 		}
+
+		output.push({
+			title: _('Draw picture'),
+			onPress: () => this.drawPicture_onPress(),
+			disabled: readOnly,
+		});
 
 		if (isTodo) {
 			output.push({
