@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.UriPermission;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
@@ -97,17 +98,17 @@ public class EfficientDocumentHelper {
       return uri;
     } else if (UriHelper.isDocumentUri(uri) || !DocumentsContract.isTreeUri(uri)) {
       // It's a document picked by user, nothing much we can do. operations limited.
-      DocumentStat stat = null;
+      boolean documentExists = false;
 
       try {
-        stat = getStat(uri);
+        documentExists = checkIfExists(uri);
       } catch (Exception ignored) {
         if (createIfDirectoryNotExist) {
           throw new IOExceptionFast("Unsupported uri: " + unknownUriStr);
         }
       }
 
-      if (stat == null) {
+      if (!documentExists) {
         throw new FileNotFoundExceptionFast("file does not exist at: " + unknownUriStr);
       }
 
@@ -146,7 +147,7 @@ public class EfficientDocumentHelper {
 
       int pathSegmentsToTraverseLength = includeLastSegment ? strings.length : strings.length - 1;
       if (pathSegmentsToTraverseLength == 0) {
-        if (getStat(uri) == null) {
+        if (!checkIfExists(uri)) {
           throw new FileNotFoundExceptionFast("file does not exist at: " + unknownUriStr);
         }
       }
@@ -248,6 +249,39 @@ public class EfficientDocumentHelper {
     return null;
   }
 
+  @Nullable
+  private boolean checkIfExists(@NonNull Uri uri) {
+    if (uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+      File file = new File(uri.getPath());
+      return file.exists();
+    }
+
+    final ContentResolver resolver = context.getContentResolver();
+    // query single column(COLUMN_DOCUMENT_ID) for best performance
+    try (Cursor c =
+           resolver.query(
+             uri,
+             queryIfExistsColumn,
+             null,
+             null,
+             null)) {
+      if (c != null && c.moveToNext()) {
+        return true;
+      }
+    } catch (SQLiteException ignored) {
+      // fallback:
+      // some ContentProvider doesn't provide COLUMN_DOCUMENT_ID
+      // try to query all column(a bit slower)
+      try (Cursor c = resolver.query(uri, null, null, null, null)) {
+        if (c != null && c.moveToNext()) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   private Uri createDirectory(@NonNull Uri parentTreeUri, @NonNull String name) throws IOException {
     Uri createdDir = DocumentsContract.createDocument(
       context.getContentResolver(), buildDocumentUriUsingTree(parentTreeUri), DocumentsContract.Document.MIME_TYPE_DIR,
@@ -265,6 +299,10 @@ public class EfficientDocumentHelper {
     DocumentsContract.Document.COLUMN_MIME_TYPE,
     DocumentsContract.Document.COLUMN_SIZE,
     DocumentsContract.Document.COLUMN_LAST_MODIFIED,
+  };
+
+  private static final String[] queryIfExistsColumn = new String[]{
+    DocumentsContract.Document.COLUMN_DOCUMENT_ID,
   };
 
   private Uri getChildrenDocumentFromTreeUri(@NonNull Uri treeUri) {
@@ -635,8 +673,7 @@ public class EfficientDocumentHelper {
       public Object doAsync() {
         try {
           Uri uri = getDocumentUri(unknownStr, false, true);
-          DocumentStat stats = getStat(uri);
-          if (stats == null) {
+          if (!checkIfExists(uri)) {
             throw new FileNotFoundExceptionFast("'" + unknownStr + "' does not exist");
           }
 
@@ -741,25 +778,33 @@ public class EfficientDocumentHelper {
       public Object doAsync() {
         try {
           Uri srcUri = getDocumentUri(unknownSrcUri, false, true);
-          DocumentStat srcStats = getStat(srcUri);
-
-          if (srcStats == null) {
-            throw new FileNotFoundExceptionFast("Document at given Uri does not exist: " + unknownDestUri);
+          DocumentStat srcStats = null;
+          try {
+            srcStats = getStat(srcUri);
+          } catch (Exception e) {
+            if(!checkIfExists(srcUri)) {
+              throw new FileNotFoundExceptionFast("Document at given Uri does not exist: " + unknownDestUri);
+            }
           }
 
           Uri destUri;
           try {
             destUri = getDocumentUri(unknownDestUri, false, true);
             if (!replaceIfDestExists) {
-              DocumentStat destStat = getStat(destUri);
-              if (destStat != null) {
+              if (!checkIfExists(destUri)) {
                 throw new IOExceptionFast("a document with the same name already exists in destination");
               } else {
                 throw new FileNotFoundExceptionFast();
               }
             }
           } catch (FileNotFoundException e) {
-            destUri = createFile(unknownDestUri, srcStats.getMimeType());
+            if (srcStats != null) {
+              destUri = createFile(unknownDestUri, srcStats.getMimeType());
+            } else {
+              // createFile() will treat mimetype null as "*/*"
+              destUri = createFile(unknownDestUri, null);
+            }
+
           }
 
           try (InputStream inStream =
