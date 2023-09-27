@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Dmitriy K <dmitry@atsip.ru>\n"
+"Last-Translator: Dmitriy Q <dmitry@atsip.ru>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -1217,11 +1217,11 @@ msgstr "Удалить вложение \"%s\"?"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
-msgstr "Удаление истекших сессий"
+msgstr "Удалить истекшие сессии"
 
 #: packages/server/src/services/TaskService.ts:22
 msgid "Delete expired tokens"
-msgstr "Удаление просроченных токенов"
+msgstr "Удалить просроченные токены"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:94
 msgid "Delete line"
@@ -1233,7 +1233,7 @@ msgstr "Удалить локальные данные и перегрузить
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:8
 msgid "Delete note"
-msgstr "Удаление заметки"
+msgstr "Удалить заметку"
 
 #: packages/lib/models/Note.ts:778
 msgid "Delete note \"%s\"?"
@@ -1246,7 +1246,7 @@ msgstr "Удалить заметку?"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:9
 msgid "Delete notebook"
-msgstr "Удаление блокнота"
+msgstr "Удалить блокнот"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:162
@@ -3810,8 +3810,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
-"Предоставьте копию всех заметок в формате файла, который может быть "
-"импортирован программой Joplin на компьютере."
+"Поделиться копией всех заметок в формате файла, который может быть "
+"импортирован в Joplin на компьютере."
 
 #: packages/lib/utils/joplinCloud.ts:159
 msgid "Share and collaborate on a notebook"
@@ -5102,7 +5102,7 @@ msgid ""
 "Warnings:\n"
 "%s"
 msgstr ""
-"Предупреждение:\n"
+"Предупреждения:\n"
 "%s"
 
 #: packages/lib/models/Setting.ts:2535 packages/lib/utils/joplinCloud.ts:153
