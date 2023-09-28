@@ -4669,7 +4669,7 @@ msgstr "заголовок"
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:135
 #: packages/app-desktop/gui/ResourceScreen.tsx:93
 msgid "Title"
-msgstr "Заглавие"
+msgstr "Заголовок"
 
 #: packages/app-cli/app/command-sync.ts:74
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
