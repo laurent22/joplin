@@ -4747,7 +4747,7 @@ msgstr "задача"
 
 #: packages/app-mobile/components/note-item.js:143
 msgid "to-do: %s"
-msgstr "задание: %s"
+msgstr "задача: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 msgid "Toggle comment"
