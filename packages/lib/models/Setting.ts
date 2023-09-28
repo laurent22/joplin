@@ -1480,6 +1480,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				show: (settings: any) => {
 					return [
+						SyncTargetRegistry.nameToId('amazon_s3'),
 						SyncTargetRegistry.nameToId('nextcloud'),
 						SyncTargetRegistry.nameToId('webdav'),
 						SyncTargetRegistry.nameToId('joplinServer'),
@@ -1499,6 +1500,7 @@ class Setting extends BaseModel {
 				show: (settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 						[
+							SyncTargetRegistry.nameToId('amazon_s3'),
 							SyncTargetRegistry.nameToId('nextcloud'),
 							SyncTargetRegistry.nameToId('webdav'),
 							SyncTargetRegistry.nameToId('joplinServer'),
