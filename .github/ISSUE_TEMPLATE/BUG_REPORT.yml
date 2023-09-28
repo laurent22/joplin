@@ -58,6 +58,19 @@ body:
       label: First occurred
       placeholder: about x days/weeks ago
     
+  
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behaviour
+      description: What did Joplin do instead? Include screenshots and video recordings for UI problems if needed. DO NOT create screenshots of text !!! Copy and paste the text into a code block. If you are reporting a clipper bug, please include an example URL that shows the issue. Without the URL the issue is likely to be closed.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: After following the steps, what did you think Joplin would do?
+
   - type: textarea
     id: steps
     attributes:
@@ -69,19 +82,7 @@ body:
         4. Etc.
 
   - type: textarea
-    id: expected
-    attributes:
-      label: Expected behaviour
-      description: After following the steps, what did you think Joplin would do?
-
-  - type: textarea
-    id: current
-    attributes:
-      label: Current behaviour
-      description: What did Joplin do instead? Include screenshots and video recordings for UI problems if needed. DO NOT create screenshots of text !!! Copy and paste the text into a code block. If you are reporting a clipper bug, please include an example URL that shows the issue. Without the URL the issue is likely to be closed.
-
-  - type: textarea
     id: logs
     attributes:
       label: Logs
-      description: If you are experiencing a crash, including the stacktrace will likely get it fixed sooner.For information on how to collect a log file https://joplinapp.org/debugging/
+      description: Please include a debug log. For information on how to collect a log file https://joplinapp.org/debugging/
