@@ -101,9 +101,9 @@ describe('createJsDrawEditor', () => {
 
 		expect(editor.image.getBackgroundComponents()).toHaveLength(1);
 
-		// Should have a white, grid background
+		// Should have a white, solid background
 		const background = editor.image.getBackgroundComponents()[0] as BackgroundComponent;
 		expect(editor.estimateBackgroundColor().eq(Color4.white)).toBe(true);
-		expect(background.getBackgroundType()).toBe(BackgroundComponentBackgroundType.Grid);
+		expect(background.getBackgroundType()).toBe(BackgroundComponentBackgroundType.SolidColor);
 	});
 });
