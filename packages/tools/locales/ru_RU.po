@@ -1854,7 +1854,7 @@ msgstr "Экспорт"
 #: packages/app-desktop/gui/MenuBar.tsx:552
 #: packages/app-desktop/gui/MenuBar.tsx:608
 msgid "Export all"
-msgstr "Экспорт"
+msgstr "Экспортировать всё"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:87
 msgid "Export all notes as JEX"
