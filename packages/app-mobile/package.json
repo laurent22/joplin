@@ -109,7 +109,7 @@
     "jsdom": "22.1.0",
     "md5-file": "5.0.0",
     "metro-react-native-babel-preset": "0.73.9",
-    "nodemon": "2.0.22",
+    "nodemon": "3.0.1",
     "react-test-renderer": "18.2.0",
     "sqlite3": "5.1.6",
     "ts-jest": "29.1.1",
