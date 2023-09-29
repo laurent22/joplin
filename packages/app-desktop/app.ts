@@ -68,6 +68,8 @@ import path = require('path');
 import { checkPreInstalledDefaultPlugins, installDefaultPlugins, setSettingsForDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
+import OcrService from '@joplin/lib/services/ocr/OcrService';
+import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -82,6 +84,7 @@ class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
 	private initPluginServiceDone_ = false;
+	private ocrService_: OcrService;
 
 	public constructor() {
 		super();
@@ -349,45 +352,14 @@ class Application extends BaseApplication {
 		Setting.setValue('wasClosedSuccessfully', false);
 	}
 
-	private async testTesseract() {
-		// const Tesseract = (window as any).Tesseract;
+	private async setupOcrService() {
+		const Tesseract = (window as any).Tesseract;
 
-		// const worker = await Tesseract.createWorker({
-		// 	workerPath: "./node_modules/tesseract.js/dist/worker.min.js",
-		// 	logger: m => console.log(m),
-		// 	workerBlobURL: false
-		//   });
+		const driver = new OcrDriverTesseract({ createWorker: Tesseract.createWorker }, './node_modules/tesseract.js/dist/worker.min.js');
 
-		//   (async () => {
-		// 	await worker.loadLanguage('eng');
-		// 	await worker.initialize('eng');
-		// 	const result = await worker.recognize("./images/testocr.png");
-		// 	console.log(result);
-		// 	await worker.terminate();
-		//   })();
-
-
-		// const { recognize } = require('tesseract.js');
-
-		// const result = await recognize(
-		// 	'https://tesseract.projectnaptha.com/img/eng_bw.png',
-		// 	'eng',
-		// 	{ logger: (m:any) => console.log(m) }
-		// );
-
-		// console.info('RRRRRRRRRRRRRRRRRRRRRR', result);
-
-
-		// // const worker = await createWorker();
-
-		// // (async () => {
-		// //   await worker.loadLanguage('eng');
-		// //   await worker.initialize('eng');
-		// //   const { data: { text } } = await worker.recognize('https://tesseract.projectnaptha.com/img/eng_bw.png');
-		// //   console.log(text);
-		// //   await worker.terminate();
-		// // })();
-
+		this.ocrService_ = new OcrService(driver);
+		void this.ocrService_.maintenance(); // TODO: remove
+		this.ocrService_.runInBackground();
 	}
 
 	public async start(argv: string[]): Promise<any> {
@@ -635,7 +607,7 @@ class Application extends BaseApplication {
 
 		this.startRotatingLogMaintenance(Setting.value('profileDir'));
 
-		await this.testTesseract();
+		await this.setupOcrService();
 
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,

@@ -54,7 +54,7 @@ export default class OcrService {
 				],
 			});
 
-			logger.info(`Found ${resources.length} to process`);
+			logger.info(`Found ${resources.length} resources to process`);
 
 			if (!resources.length) break;
 
@@ -98,7 +98,7 @@ export default class OcrService {
 		this.maintenanceTimer_ = shim.setTimeout(async () => {
 			await this.maintenance();
 			this.maintenanceTimer_ = null;
-		}, 10 * Minute);
+		}, 2 * Minute);
 	}
 
 }

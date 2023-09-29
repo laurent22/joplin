@@ -221,6 +221,7 @@ const iso639Map_ = [
 	['fao', 'fo'],
 	['fij', 'fj'],
 	['fin', 'fi'],
+	['fra', 'fr'],
 	['fry', 'fy'],
 	['ful', 'ff'],
 	['gla', 'gd'],
