@@ -4647,7 +4647,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.4
     "@types/mustache": 4.2.2
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/react": 18.2.21
     "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.26
@@ -4851,7 +4851,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
     coveralls: 3.1.1
@@ -4917,7 +4917,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/node-rsa": 1.1.1
     "@types/react": 18.2.21
     "@types/uuid": 9.0.3
@@ -5021,7 +5021,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     fs-extra: 11.1.1
     gh-release-assets: 2.0.1
     jest: 29.6.4
@@ -5075,7 +5075,7 @@ __metadata:
     "@joplin/fork-uslug": ^1.0.11
     "@joplin/utils": ~2.13
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.1
     highlight.js: 11.8.0
@@ -5179,7 +5179,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/markdown-it": 13.0.1
     "@types/mustache": 4.2.2
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/node-fetch": 2.6.4
     "@types/yargs": 17.0.24
     compare-versions: 6.1.0
@@ -8190,10 +8190,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.14":
-  version: 18.17.14
-  resolution: "@types/node@npm:18.17.14"
-  checksum: f96ce1e588426a26cf82440193084f8bbab47bfb3c2e668cf174095f99ce808a20654b2137448c7e88cfd7b6c2b8521ffb6f714f521b3502ac595a0df0bff679
+"@types/node@npm:18.17.15":
+  version: 18.17.15
+  resolution: "@types/node@npm:18.17.15"
+  checksum: eed11d4398ccdb999a4c65658ee75de621a4ad57aece48ed2fb8803b1e2711fadf58d8aefbdb0a447d69cf3cba602ca32fe0fc92077575950a796e1dc13baa0f
   languageName: node
   linkType: hard
 
@@ -22113,7 +22113,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
