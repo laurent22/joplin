@@ -2,7 +2,7 @@ import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
 import { gitHubLatestReleases, gitHubLinkify } from './tool-utils';
 import { config, createPost, createTopic, getForumTopPostByExternalId, getTopicByExternalId, updatePost } from './utils/discourse';
-import * as compareVersions from 'compare-versions';
+import { compareVersions } from 'compare-versions';
 import dayjs = require('dayjs');
 
 interface State {

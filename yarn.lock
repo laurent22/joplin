@@ -4647,7 +4647,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.4
     "@types/mustache": 4.2.2
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/react": 18.2.21
     "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.26
@@ -4655,7 +4655,7 @@ __metadata:
     async-mutex: 0.4.0
     codemirror: 5.65.9
     color: 3.2.1
-    compare-versions: 3.6.0
+    compare-versions: 6.1.0
     countable: 3.0.1
     debounce: 1.2.1
     electron: 25.8.1
@@ -4761,7 +4761,7 @@ __metadata:
     md5: 2.3.0
     md5-file: 5.0.0
     metro-react-native-babel-preset: 0.73.9
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.0
@@ -4810,7 +4810,7 @@ __metadata:
     ts-node: 10.9.1
     typescript: 5.1.6
     uglify-js: 3.17.4
-    url: 0.11.1
+    url: 0.11.2
     webpack: 5.74.0
   languageName: unknown
   linkType: soft
@@ -4853,7 +4853,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
     coveralls: 3.1.1
@@ -4919,7 +4919,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/node-rsa": 1.1.1
     "@types/react": 18.2.21
     "@types/tesseract.js": 2.0.0
@@ -4931,7 +4931,7 @@ __metadata:
     chokidar: 3.5.3
     clean-html: 1.5.0
     color: 3.2.1
-    compare-versions: 3.6.0
+    compare-versions: 6.1.0
     css: 3.0.0
     diff-match-patch: 1.0.5
     es6-promise-pool: 2.5.0
@@ -5025,7 +5025,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     fs-extra: 11.1.1
     gh-release-assets: 2.0.1
     jest: 29.6.4
@@ -5079,7 +5079,7 @@ __metadata:
     "@joplin/fork-uslug": ^1.0.11
     "@joplin/utils": ~2.13
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.1
     highlight.js: 11.8.0
@@ -5135,7 +5135,7 @@ __metadata:
     bcryptjs: 2.4.3
     bulma: 0.9.4
     bulma-prefers-dark: 0.1.0-beta.1
-    compare-versions: 3.6.0
+    compare-versions: 6.1.0
     dayjs: 1.11.9
     formidable: 3.5.1
     fs-extra: 11.1.1
@@ -5153,7 +5153,7 @@ __metadata:
     node-cron: 3.0.2
     node-mocks-http: 1.13.0
     nodemailer: 6.9.5
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     pg: 8.11.3
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
@@ -5183,10 +5183,10 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/markdown-it": 13.0.1
     "@types/mustache": 4.2.2
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/node-fetch": 2.6.4
     "@types/yargs": 17.0.24
-    compare-versions: 3.6.0
+    compare-versions: 6.1.0
     dayjs: 1.11.9
     execa: 4.1.0
     fs-extra: 11.1.1
@@ -5204,7 +5204,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.65.1
+    sass: 1.66.1
     sharp: 0.32.5
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -8194,10 +8194,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.14":
-  version: 18.17.14
-  resolution: "@types/node@npm:18.17.14"
-  checksum: f96ce1e588426a26cf82440193084f8bbab47bfb3c2e668cf174095f99ce808a20654b2137448c7e88cfd7b6c2b8521ffb6f714f521b3502ac595a0df0bff679
+"@types/node@npm:18.17.15":
+  version: 18.17.15
+  resolution: "@types/node@npm:18.17.15"
+  checksum: eed11d4398ccdb999a4c65658ee75de621a4ad57aece48ed2fb8803b1e2711fadf58d8aefbdb0a447d69cf3cba602ca32fe0fc92077575950a796e1dc13baa0f
   languageName: node
   linkType: hard
 
@@ -12658,10 +12658,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compare-versions@npm:3.6.0":
-  version: 3.6.0
-  resolution: "compare-versions@npm:3.6.0"
-  checksum: 7492a50cdaa2c27f5254eee7c4b38856e1c164991bab3d98d7fd067fe4b570d47123ecb92523b78338be86aa221668fd3868bfe8caa5587dc3ebbe1a03d52b5d
+"compare-versions@npm:6.1.0":
+  version: 6.1.0
+  resolution: "compare-versions@npm:6.1.0"
+  checksum: d4e2a45706a023d8d0b6680338b66b79e20bd02d1947f0ac6531dab634cbed89fa373b3f03d503c5e489761194258d6e1bae67a07f88b1efc61648454f2d47e7
   languageName: node
   linkType: hard
 
@@ -22147,7 +22147,7 @@ __metadata:
     "@joplin/utils": ~2.13
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.4
-    "@types/node": 18.17.14
+    "@types/node": 18.17.15
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -26293,23 +26293,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:2.0.22":
-  version: 2.0.22
-  resolution: "nodemon@npm:2.0.22"
+"nodemon@npm:3.0.1":
+  version: 3.0.1
+  resolution: "nodemon@npm:3.0.1"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
     ignore-by-default: ^1.0.1
     minimatch: ^3.1.2
     pstree.remy: ^1.1.8
-    semver: ^5.7.1
-    simple-update-notifier: ^1.0.7
+    semver: ^7.5.3
+    simple-update-notifier: ^2.0.0
     supports-color: ^5.5.0
     touch: ^3.1.0
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 9c987e139748f5b5c480c6c9080bdc97304ee7d29172b7b3da1a7db590b1323ad57b96346304e9b522b0e445c336dc393ccd3f9f45c73b20d476d2347890dcd0
+  checksum: 6a5d81855760d6617049eccce10ccf02bddb482dab13ceea5280ae595ec7004eee13e7b934368e3f46c37fe4d970342a8c38c99cae7e93e4d7a3ed1c1ecb6acf
   languageName: node
   linkType: hard
 
@@ -28887,7 +28887,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.11.0":
+"qs@npm:^6.11.2":
   version: 6.11.2
   resolution: "qs@npm:6.11.2"
   dependencies:
@@ -30956,7 +30956,7 @@ __metadata:
     lint-staged: 13.3.0
     madge: 6.1.0
     node-gyp: 9.4.0
-    nodemon: 2.0.22
+    nodemon: 3.0.1
     npm-package-json-lint: 7.0.0
     typescript: 5.1.6
   languageName: unknown
@@ -31120,16 +31120,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.65.1":
-  version: 1.65.1
-  resolution: "sass@npm:1.65.1"
+"sass@npm:1.66.1":
+  version: 1.66.1
+  resolution: "sass@npm:1.66.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 33e325fc80cd07489992e0814cd4929496f87493ffe78c423c2dbafa5746a574e6f3bde20c2a3e4ea47b16ee3d6bc5afcf1d36b405227b829d6c4c9ddcc7f8e2
+  checksum: 74fc11d0fcd5e16c5331b57dd59865705a299c64e89f2b99646869caeb011dc8d0b6144a6c74a90c264e9ef70654207dbf44fc9b7e3393f8bd14809b904c8a52
   languageName: node
   linkType: hard
 
@@ -31227,7 +31227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:2.x || 3.x || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0, semver@npm:^5.7.0, semver@npm:^5.7.1":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:2.x || 3.x || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0, semver@npm:^5.7.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:
@@ -31722,21 +31722,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-update-notifier@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "simple-update-notifier@npm:1.0.7"
-  dependencies:
-    semver: ~7.0.0
-  checksum: aaadc1f158ad5101b363d1c7aed1f30fc1cac59a760aa31702633e0e6fe423348f07d0e78185aef0aad29130a7b7f0f188c21c7bc7353f897a0ea3682e051a70
-  languageName: node
-  linkType: hard
-
 "simple-update-notifier@npm:^1.1.0":
   version: 1.1.0
   resolution: "simple-update-notifier@npm:1.1.0"
   dependencies:
     semver: ~7.0.0
   checksum: 1012e9b6c504e559a948078177b3eedbb9d7e4d15878e2bda56314d08db609ca5da485be4ac9f838759faae8057935ee0246fcdf63f1233c86bd9fecb2a5544b
+  languageName: node
+  linkType: hard
+
+"simple-update-notifier@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "simple-update-notifier@npm:2.0.0"
+  dependencies:
+    semver: ^7.5.3
+  checksum: 9ba00d38ce6a29682f64a46213834e4eb01634c2f52c813a9a7b8873ca49cdbb703696f3290f3b27dc067de6d9418b0b84bef22c3eb074acf352529b2d6c27fd
   languageName: node
   linkType: hard
 
@@ -35132,13 +35132,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:0.11.1":
-  version: 0.11.1
-  resolution: "url@npm:0.11.1"
+"url@npm:0.11.2":
+  version: 0.11.2
+  resolution: "url@npm:0.11.2"
   dependencies:
     punycode: ^1.4.1
-    qs: ^6.11.0
-  checksum: a7de4b37bbcbe60ef199acda4ce437ef843c0ef3a4b34ec3e3d97e0446a5f50dc7bfeafbe33ad118cf4e5aa04805e1328f0d0126e254f2b77bb8498fa395c596
+    qs: ^6.11.2
+  checksum: da5943ab43f4df75af5ed96d8465e3084fc2ea0f01bc73e98fb60899777a644541ea0022451371a419283a27a8bbd1809292212fb4c78a0b4a70f15fd89b8205
   languageName: node
   linkType: hard
 
