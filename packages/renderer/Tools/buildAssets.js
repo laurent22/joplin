@@ -47,6 +47,9 @@ async function main() {
 
 	await copyFile(`${rootDir}/node_modules/mermaid/dist/mermaid.min.js`, 'mermaid/mermaid.min.js');
 	await copyFile(`${rootDir}/MdToHtml/rules/mermaid_render.js`, 'mermaid/mermaid_render.js');
+
+	await copyFile(`${rootDir}/node_modules/jquery/dist/jquery.min.js`, 'table_open/jquery.min.js');
+	await copyFile(`${rootDir}/MdToHtml/rules/jquery.ba-floatingscrollbar.js`, 'table_open/jquery.ba-floatingscrollbar.js');
 }
 
 main().catch((error) => {

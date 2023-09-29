@@ -5082,6 +5082,7 @@ __metadata:
     html-entities: 1.4.0
     jest: 29.6.4
     jest-environment-jsdom: 29.6.4
+    jquery: 3.7.1
     json-stringify-safe: 5.0.1
     katex: 0.13.24
     markdown-it: 13.0.1

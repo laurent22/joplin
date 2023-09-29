@@ -51,6 +51,7 @@ lerna-debug.log
 .env
 docs/**/*.mustache
 .idea
+packages/app-mobile/pluginAssets/table_open/
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
@@ -914,6 +915,10 @@ packages/renderer/MdToHtml/rules/link_open.js
 packages/renderer/MdToHtml/rules/mermaid.js
 packages/renderer/MdToHtml/rules/sanitize_html.js
 packages/renderer/MdToHtml/rules/source_map.js
+packages/renderer/MdToHtml/rules/table_close.js
+packages/renderer/MdToHtml/rules/table_open.js
+packages/renderer/MdToHtml/rules/tmp/table_close.js
+packages/renderer/MdToHtml/rules/tmp/table_open.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/headerAnchor.js
