@@ -102,6 +102,7 @@ const oldTestDir = `${__dirname}/../../app-cli/tests`;
 const logDir = `${oldTestDir}/logs`;
 const baseTempDir = `${oldTestDir}/tmp/${suiteName_}`;
 const supportDir = `${oldTestDir}/support`;
+export const ocrSampleDir = `${oldTestDir}/ocr_samples`;
 
 // We add a space in the data directory path as that will help uncover
 // various space-in-path issues.
@@ -421,6 +422,23 @@ function pluginDir(id: number = null) {
 	if (id === null) id = currentClient_;
 	return `${dataDir}/plugins-${id}`;
 }
+
+export interface CreateNoteAndResourceOptions {
+	path?: string;
+}
+
+const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
+	options = {
+		path: `${supportDir}/photo.jpg`,
+		...options,
+	};
+
+	let note = await Note.save({});
+	note = await shim.attachFileToNote(note, options.path);
+	const resourceIds = await Note.linkedItemIds(note.body);
+	const resource = await Resource.load(resourceIds[0]);
+	return { note, resource };
+};
 
 async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	if (id === null) id = currentClient_;
@@ -1009,4 +1027,4 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 	};
 };
 
-export { supportDir, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

@@ -456,23 +456,41 @@ export default class Resource extends BaseItem {
 		`, [ResourceOcrStatus.Todo]);
 	}
 
-	public static async saveOcr(resourceId: string, ocrStatus: ResourceOcrStatus, ocrText: string, ocrWords: ResourceOcrWord[], ocrError: Error|null) {
-		// TODO: replace by .save();
-
-		await this.db().exec(`
-			UPDATE resources SET
-				ocr_status = ?,
-				ocr_text = ?,
-				ocr_words = ?,
-				ocr_error = ?
-			WHERE id = ?
-		`, [
-			ocrStatus,
-			ocrText,
-			JSON.stringify(ocrWords),
-			ocrError ? ocrError.message : '',
-			resourceId,
-		]);
+	public static serializeOcrWords(words: ResourceOcrWord[]) {
+		if (!words.length) return '';
+		return JSON.stringify(words);
 	}
+
+	public static parseOcrWords(s: string): ResourceOcrWord[] {
+		if (!s) return [];
+
+		try {
+			const result = JSON.parse(s);
+			if (!result || !result.length) return [];
+			return result;
+		} catch (error) {
+			this.logger().warn(`Could not parse OCR words: ${s}`);
+			return [];
+		}
+	}
+
+	// public static async saveOcr(resourceId: string, ocrStatus: ResourceOcrStatus, ocrText: string, ocrWords: ResourceOcrWord[], ocrError: Error|null) {
+	// 	// TODO: replace by .save();
+
+	// 	await this.db().exec(`
+	// 		UPDATE resources SET
+	// 			ocr_status = ?,
+	// 			ocr_text = ?,
+	// 			ocr_words = ?,
+	// 			ocr_error = ?
+	// 		WHERE id = ?
+	// 	`, [
+	// 		ocrStatus,
+	// 		ocrText,
+	// 		JSON.stringify(ocrWords),
+	// 		ocrError ? ocrError.message : '',
+	// 		resourceId,
+	// 	]);
+	// }
 
 }

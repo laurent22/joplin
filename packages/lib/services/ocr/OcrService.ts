@@ -1,4 +1,4 @@
-import { iso639_1to2 } from '../../locale';
+import { toIso639 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import { ResourceEntity, ResourceOcrStatus } from '../database/types';
@@ -28,8 +28,12 @@ export default class OcrService {
 		return this.driver_.recognize(language, Resource.fullPath(resource));
 	}
 
+	public async dispose() {
+		await this.driver_.dispose();
+	}
+
 	public async processResources() {
-		const language = iso639_1to2(Setting.value('locale'));
+		const language = toIso639(Setting.value('locale'));
 
 		while (true) {
 			const resources = await Resource.needOcr(supportedMimeTypes, {
@@ -51,14 +55,14 @@ export default class OcrService {
 					const result = await this.recognize(language, resource);
 					toSave.ocr_status = ResourceOcrStatus.Done;
 					toSave.ocr_text = result.text;
-					toSave.ocr_words = JSON.stringify(result.words);
+					toSave.ocr_words = Resource.serializeOcrWords(result.words);
 					toSave.ocr_error = '';
 				} catch (error) {
 					toSave.ocr_error = error.message;
 					toSave.ocr_status = ResourceOcrStatus.Error;
 				}
 
-				await Resource.save(resource);
+				await Resource.save(toSave);
 			}
 		}
 	}

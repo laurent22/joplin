@@ -46,8 +46,7 @@ export interface UserDataValue {
 
 export interface ResourceOcrWord {
 	text: string;
-	baseline: {
-		has_baseline: boolean;
+	baseline?: {
 		x0: number;
 		x1: number;
 		y0: number;

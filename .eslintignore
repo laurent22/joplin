@@ -725,6 +725,7 @@ packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
 packages/lib/services/noteList/renderers.js
 packages/lib/services/ocr/OcrDriverBase.js
+packages/lib/services/ocr/OcrService.test.js
 packages/lib/services/ocr/OcrService.js
 packages/lib/services/ocr/drivers/OcrDriverTesseract.js
 packages/lib/services/ocr/utils/types.js

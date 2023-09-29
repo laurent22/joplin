@@ -6,4 +6,6 @@ export default class OcrDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public async dispose(): Promise<void> {}
+
 }
