@@ -21,6 +21,7 @@ describe('OcrService', () => {
 		const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/testocr.png` });
 		const { resource: resource2 } = await createNoteAndResource({ path: `${supportDir}/photo.jpg` });
 		const { resource: resource3 } = await createNoteAndResource({ path: `${ocrSampleDir}/with_bullets.png` });
+
 		const service = newService();
 		await service.processResources();
 
