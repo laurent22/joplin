@@ -609,6 +609,8 @@ class Application extends BaseApplication {
 
 		await this.setupOcrService();
 
+		// await shim.pdfToImages('/Users/laurent/Downloads/A-4F1A6B8B-72170738-1.pdf', '/Users/laurent/Temp/api');
+
 		// await populateDatabase(reg.db(), {
 		// 	clearDatabase: true,
 		// 	folderCount: 1000,

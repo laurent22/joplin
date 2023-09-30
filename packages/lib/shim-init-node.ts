@@ -1,14 +1,16 @@
-'use strict';
+import shim from './shim';
+import GeolocationNode from './geolocation-node';
+import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
+import FsDriverNode from './fs-driver-node';
+import Note from './models/Note';
+import Resource from './models/Resource';
+import { basename, fileExtension, safeFileExtension } from './path-utils';
+import * as fs from 'fs-extra';
+import * as pdfJsNamespace from 'pdfjs-dist';
+import { writeFile } from 'fs/promises';
 
-const fs = require('fs-extra');
-const shim = require('./shim').default;
-const GeolocationNode = require('./geolocation-node').default;
 const { FileApiDriverLocal } = require('./file-api-driver-local');
-const { setLocale, defaultLocale, closestSupportedLocale } = require('./locale');
-const FsDriverNode = require('./fs-driver-node').default;
 const mimeUtils = require('./mime-utils.js').mime;
-const Note = require('./models/Note').default;
-const Resource = require('./models/Resource').default;
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
@@ -17,11 +19,10 @@ const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
-const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
-const proxySettings = {};
+const proxySettings: any = {};
 
-function fileExists(filePath) {
+function fileExists(filePath: string) {
 	try {
 		return fs.statSync(filePath).isFile();
 	} catch (error) {
@@ -29,11 +30,11 @@ function fileExists(filePath) {
 	}
 }
 
-function isUrlHttps(url) {
+function isUrlHttps(url: string) {
 	return url.startsWith('https');
 }
 
-function resolveProxyUrl(proxyUrl) {
+function resolveProxyUrl(proxyUrl: string) {
 	return (
 		proxyUrl ||
 		process.env['http_proxy'] ||
@@ -52,7 +53,7 @@ function callsites() {
 	return stack;
 }
 
-const gunzipFile = function(source, destination) {
+const gunzipFile = function(source: string, destination: string) {
 	if (!fileExists(source)) {
 		throw new Error(`No such file: ${source}`);
 	}
@@ -67,7 +68,7 @@ const gunzipFile = function(source, destination) {
 
 		// callback on extract completion
 		dest.on('close', () => {
-			resolve();
+			resolve(null);
 		});
 
 		src.on('error', () => {
@@ -80,14 +81,24 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function setupProxySettings(options) {
+function setupProxySettings(options: any) {
 	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
 	proxySettings.proxyTimeout = options.proxyTimeout;
 	proxySettings.proxyEnabled = options.proxyEnabled;
 	proxySettings.proxyUrl = options.proxyUrl;
 }
 
-function shimInit(options = null) {
+interface ShimInitOptions {
+	sharp: any;
+	keytar: any;
+	React: any;
+	appVersion: any;
+	electronBridge: any;
+	nodeSqlite: any;
+	pdfJs: typeof pdfJsNamespace;
+}
+
+function shimInit(options: ShimInitOptions = null) {
 	options = {
 		sharp: null,
 		keytar: null,
@@ -95,13 +106,14 @@ function shimInit(options = null) {
 		appVersion: null,
 		electronBridge: null,
 		nodeSqlite: null,
+		pdfJs: null,
 		...options,
 	};
 
 	const sharp = options.sharp;
 	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
 	const appVersion = options.appVersion;
-
+	const pdfJs = options.pdfJs;
 
 	shim.setNodeSqlite(options.nodeSqlite);
 
@@ -138,7 +150,7 @@ function shimInit(options = null) {
 		return Array.from(buffer);
 	};
 
-	shim.detectAndSetLocale = function(Setting) {
+	shim.detectAndSetLocale = function(Setting: any) {
 		let locale = shim.isElectron() ? shim.electronBridge().getLocale() : process.env.LANG;
 		if (!locale) locale = defaultLocale();
 		locale = locale.split('.');
@@ -178,7 +190,7 @@ function shimInit(options = null) {
 		}
 	};
 
-	const handleResizeImage_ = async function(filePath, targetPath, mime, resizeLargeImages) {
+	const handleResizeImage_ = async function(filePath: string, targetPath: string, mime: string, resizeLargeImages: string) {
 		const maxDim = Resource.IMAGE_MAX_DIMENSION;
 
 		if (shim.isElectron()) {
@@ -193,7 +205,7 @@ function shimInit(options = null) {
 				return true;
 			};
 			const saveResizedImage = async () => {
-				const options = {};
+				const options: any = {};
 				if (size.width > size.height) {
 					options.width = maxDim;
 				} else {
@@ -236,7 +248,7 @@ function shimInit(options = null) {
 						fit: 'inside',
 						withoutEnlargement: true,
 					})
-					.toFile(targetPath, (error, info) => {
+					.toFile(targetPath, (error: any, info: any) => {
 						if (error) {
 							reject(error);
 						} else {
@@ -315,7 +327,7 @@ function shimInit(options = null) {
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 
-		const saveOptions = { isNew: true };
+		const saveOptions: any = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
 
 		if (isUpdate) {
@@ -365,7 +377,7 @@ function shimInit(options = null) {
 		return newBody.join('\n\n');
 	};
 
-	shim.attachFileToNote = async function(note, filePath, position = null, options = null) {
+	shim.attachFileToNote = async function(note, filePath, position: any = null, options: any = null) {
 		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
 		if (!newBody) return null;
 
@@ -388,7 +400,7 @@ function shimInit(options = null) {
 				if (size.width > maxSize || size.height > maxSize) {
 					console.warn(`Image is over ${maxSize}px - resizing it: ${filePath}`);
 
-					const options = {};
+					const options: any = {};
 					if (size.width > size.height) {
 						options.width = maxSize;
 					} else {
@@ -453,7 +465,7 @@ function shimInit(options = null) {
 		}, options);
 	};
 
-	shim.fetchBlob = async function(url, options) {
+	shim.fetchBlob = async function(url: any, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
@@ -466,7 +478,7 @@ function shimInit(options = null) {
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 
-		function makeResponse(response) {
+		function makeResponse(response: any) {
 			return {
 				ok: response.statusCode < 400,
 				path: filePath,
@@ -481,7 +493,7 @@ function shimInit(options = null) {
 			};
 		}
 
-		const requestOptions = {
+		const requestOptions: any = {
 			protocol: url.protocol,
 			host: url.hostname,
 			port: url.port,
@@ -495,11 +507,11 @@ function shimInit(options = null) {
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
-				let file = null;
+				let file: any = null;
 
-				const cleanUpOnError = error => {
+				const cleanUpOnError = (error: any) => {
 					// We ignore any unlink error as we only want to report on the main error
-					fs.unlink(filePath)
+					void fs.unlink(filePath)
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 						.catch(() => {})
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
@@ -519,11 +531,11 @@ function shimInit(options = null) {
 					// Note: relative paths aren't supported
 					file = fs.createWriteStream(filePath);
 
-					file.on('error', (error) => {
+					file.on('error', (error: any) => {
 						cleanUpOnError(error);
 					});
 
-					const request = http.request(requestOptions, (response) => {
+					const request = http.request(requestOptions, (response: any) => {
 						response.pipe(file);
 
 						const isGzipped = response.headers['content-encoding'] === 'gzip';
@@ -549,7 +561,7 @@ function shimInit(options = null) {
 						});
 					});
 
-					request.on('error', (error) => {
+					request.on('error', (error: any) => {
 						cleanUpOnError(error);
 					});
 
@@ -599,7 +611,7 @@ function shimInit(options = null) {
 		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
 	};
 
-	shim.proxyAgent = (serverUrl, proxyUrl) => {
+	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {
 		const proxyAgentConfig = {
 			keepAlive: true,
 			maxSockets: proxySettings.maxConcurrentConnections,
@@ -673,7 +685,7 @@ function shimInit(options = null) {
 
 	shim.requireDynamic = (path) => {
 		if (path.indexOf('.') === 0) {
-			const sites = callsites();
+			const sites: any = callsites();
 			if (sites.length <= 1) throw new Error(`Cannot require file (1) ${path}`);
 			const filename = sites[1].getFileName();
 			if (!filename) throw new Error(`Cannot require file (2) ${path}`);
@@ -683,6 +695,43 @@ function shimInit(options = null) {
 		} else {
 			return require(path);
 		}
+	};
+
+	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string): Promise<string[]> => {
+		if (!shim.isElectron()) throw new Error('Only Electron is supported');
+
+		const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
+			return new Promise(resolve => {
+				canvas.toBlob(blob => resolve(blob), 'image/jpg', 0.8);
+			});
+		};
+
+		const filePrefix = `page_${Date.now()}`;
+		const output: string[] = [];
+		const loadingTask = pdfJs.getDocument(pdfPath);
+		const doc = await loadingTask.promise;
+
+		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
+			const page = await doc.getPage(pageNum);
+			const viewport = page.getViewport({ scale: 2 });
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+
+			canvas.height = viewport.height;
+			canvas.width = viewport.width;
+
+			const renderTask = page.render({ canvasContext: ctx, viewport: viewport });
+			await renderTask.promise;
+
+			const blob = await canvasToBlob(canvas);
+			const buffer = Buffer.from(await blob.arrayBuffer());
+			const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
+			output.push(filePath);
+			await writeFile(filePath, buffer, 'binary');
+			if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+		}
+
+		return output;
 	};
 }
 

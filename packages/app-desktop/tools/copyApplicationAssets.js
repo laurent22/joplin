@@ -62,6 +62,7 @@ const withRetry = async (fn) => {
 async function main() {
 	const langSourceDir = resolve(__dirname, '../../../Assets/TinyMCE/langs');
 	const buildLibDir = resolve(__dirname, '../vendor/lib');
+	const buildDir = resolve(__dirname, '../build');
 
 	const dirs = [
 		'tinymce',
@@ -92,6 +93,10 @@ async function main() {
 		{
 			src: resolve(__dirname, '../../lib/services/plugins/sandboxProxy.js'),
 			dest: `${buildLibDir}/@joplin/lib/services/plugins/sandboxProxy.js`,
+		},
+		{
+			src: `${nodeModulesDir}/pdfjs-dist/build/pdf.worker.min.js`,
+			dest: `${buildDir}/pdf.worker.min.js`,
 		},
 		// {
 		// 	src: resolve(__dirname, '../../pdf-viewer/index.html'),

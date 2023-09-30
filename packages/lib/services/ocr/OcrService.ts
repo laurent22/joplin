@@ -2,7 +2,7 @@ import { toIso639 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import { ResourceEntity, ResourceOcrStatus, ResourceOcrWord } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
 import { RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
@@ -12,12 +12,13 @@ const logger = Logger.create('OcrService');
 
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md
 const supportedMimeTypes = [
+	'application/pdf',
 	'image/bmp',
 	'image/jpeg',
 	'image/jpg',
 	'image/png',
-	'image/x-portable-bitmap',
 	'image/webp',
+	'image/x-portable-bitmap',
 ];
 
 export default class OcrService {
@@ -25,14 +26,48 @@ export default class OcrService {
 	private driver_: OcrDriverBase;
 	private isRunningInBackground_ = false;
 	private maintenanceTimer_: any = null;
+	private pdfExtractDir_: string = null;
 
 	public constructor(driver: OcrDriverBase) {
 		this.driver_ = driver;
 	}
 
+	private async pdfExtractDir(): Promise<string> {
+		if (this.pdfExtractDir_ !== null) return this.pdfExtractDir_;
+		const p = `${Setting.value('tempDir')}/ocr_pdf_extract`;
+		await shim.fsDriver().mkdir(p);
+		this.pdfExtractDir_ = p;
+		return this.pdfExtractDir_;
+	}
+
 	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult> {
 		if (resource.encryption_applied) throw new Error(`Cannot OCR encrypted resource: ${resource.id}`);
-		return this.driver_.recognize(language, Resource.fullPath(resource));
+
+		const resourceFilePath = Resource.fullPath(resource);
+
+		if (resource.mime === 'application/pdf') {
+			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
+			const results: RecognizeResult[] = [];
+			for (const imageFilePath of imageFilePaths) {
+				results.push(await this.driver_.recognize(language, imageFilePath));
+			}
+
+			for (const imageFilePath of imageFilePaths) {
+				await shim.fsDriver().remove(imageFilePath);
+			}
+
+			let mergedWords: ResourceOcrWord[] = [];
+			for (const r of results) {
+				mergedWords = mergedWords.concat(r.words);
+			}
+
+			return {
+				text: results.map(r => r.text).join('\n'),
+				words: mergedWords,
+			};
+		} else {
+			return this.driver_.recognize(language, resourceFilePath);
+		}
 	}
 
 	public async dispose() {
@@ -62,6 +97,7 @@ export default class OcrService {
 				const toSave: ResourceEntity = {
 					id: resource.id,
 				};
+
 				try {
 					const result = await this.recognize(language, resource);
 					toSave.ocr_status = ResourceOcrStatus.Done;

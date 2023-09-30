@@ -30,6 +30,7 @@ const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 const React = require('react');
 const nodeSqlite = require('sqlite3');
 const initLib = require('@joplin/lib/initLib').default;
+const pdfJs = require('pdfjs-dist');
 
 // Security: If we attempt to navigate away from the root HTML page, it's likely because
 // of an improperly sanitized link. Prevent this by closing the window before we can
@@ -104,12 +105,15 @@ function appVersion() {
 	return p.version;
 }
 
+pdfJs.GlobalWorkerOptions.workerSrc = `${bridge().electronApp().buildDir()}/pdf.worker.min.js`;
+
 shimInit({
 	keytar,
 	React,
 	appVersion,
 	electronBridge: bridge(),
 	nodeSqlite,
+	pdfJs,
 });
 
 // Disable drag and drop of links inside application (which would
