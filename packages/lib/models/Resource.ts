@@ -474,23 +474,15 @@ export default class Resource extends BaseItem {
 		}
 	}
 
-	// public static async saveOcr(resourceId: string, ocrStatus: ResourceOcrStatus, ocrText: string, ocrWords: ResourceOcrWord[], ocrError: Error|null) {
-	// 	// TODO: replace by .save();
-
-	// 	await this.db().exec(`
-	// 		UPDATE resources SET
-	// 			ocr_status = ?,
-	// 			ocr_text = ?,
-	// 			ocr_words = ?,
-	// 			ocr_error = ?
-	// 		WHERE id = ?
-	// 	`, [
-	// 		ocrStatus,
-	// 		ocrText,
-	// 		JSON.stringify(ocrWords),
-	// 		ocrError ? ocrError.message : '',
-	// 		resourceId,
-	// 	]);
-	// }
+	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
+		return this.modelSelectAll<ResourceEntity>(`
+			SELECT ${this.selectFields(options)} FROM resources
+			WHERE (updated_time, id) > (?, ?)
+			AND ocr_text != ""
+			AND ocr_status = ?
+			ORDER BY updated_time ASC, id ASC
+			LIMIT ?
+		`, [updatedTime, id, ResourceOcrStatus.Done, limit]);
+	}
 
 }

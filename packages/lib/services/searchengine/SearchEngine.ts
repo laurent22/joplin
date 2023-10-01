@@ -2,12 +2,15 @@ import Logger from '@joplin/utils/Logger';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
 import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
+import Resource from '../../models/Resource';
+import JoplinDatabase from '../../JoplinDatabase';
+import { SqlQuery } from '../../database';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -53,7 +56,7 @@ export default class SearchEngine {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
-	private db_: any = null;
+	private db_: JoplinDatabase = null;
 	private isIndexing_ = false;
 	private syncCalls_: any[] = [];
 	private scheduleSyncTablesIID_: any;
@@ -93,8 +96,8 @@ export default class SearchEngine {
 	}
 
 	private async rebuildIndex_() {
-		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-		noteIds = noteIds.map((n: any) => n.id);
+		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		const noteIds = notes.map(n => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
 
@@ -141,6 +144,7 @@ export default class SearchEngine {
 	public async rebuildIndex() {
 		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
 		Setting.setValue('searchEngine.initialIndexingDone', false);
+		Setting.setValue('searchEngine.lastChangeTime', 0);
 		return this.syncTables();
 	}
 
@@ -226,6 +230,66 @@ export default class SearchEngine {
 		}
 
 		await ItemChangeUtils.deleteProcessedChanges();
+
+		interface LastProcessedResource {
+			id: string;
+			updated_time: number;
+		}
+
+		const lastProcessedResource: LastProcessedResource = !Setting.value('searchEngine.lastProcessedResource') ? [0, ''] : JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
+
+		try {
+			while (true) {
+				const resources = await Resource.allForNormalization(
+					lastProcessedResource.updated_time,
+					lastProcessedResource.id,
+					100,
+					{
+						fields: ['id', 'title', 'ocr_text', 'updated_time'],
+					},
+				);
+
+				if (!resources.length) break;
+
+				const queries: SqlQuery[] = [];
+
+				for (const resource of resources) {
+					const normalizedTitle = this.normalizeText_(resource.title);
+					const normalizedBody = this.normalizeText_(resource.ocr_text);
+
+					queries.push({
+						sql: 'DELETE FROM items_normalized WHERE id = ? AND item_type = ?',
+						params: [
+							resource.id,
+							ModelType.Resource,
+						],
+					});
+
+					queries.push({
+						sql: `
+							INSERT INTO items_normalized(item_id, item_type, title, body)
+							VALUES (?, ?, ?, ?)`,
+						params: [
+							resource.id,
+							ModelType.Resource,
+							normalizedTitle,
+							normalizedBody,
+						],
+					});
+
+					report.inserted++;
+
+					lastProcessedResource.id = resource.id;
+					lastProcessedResource.updated_time = resource.updated_time;
+				}
+
+				await this.db().transactionExecBatch(queries);
+				Setting.setValue('searchEngine.lastProcessedResource', JSON.stringify(lastProcessedResource));
+				await Setting.saveAll();
+			}
+		} catch (error) {
+			this.logger().error('SearchEngine: Error while processing resources:', error);
+		}
 
 		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
 

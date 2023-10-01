@@ -301,6 +301,7 @@ export default class JoplinDatabase extends Database {
 					if (tableName === 'table_fields') continue;
 					if (tableName === 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
+					if (tableName.indexOf('items_fts') === 0) continue;
 					if (tableName === 'notes_spellfix') continue;
 					if (tableName === 'search_aux') continue;
 					chain.push(() => {
@@ -929,6 +930,51 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_words` TEXT NOT NULL DEFAULT ""');
 				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_status` INT NOT NULL DEFAULT 0');
 				queries.push('ALTER TABLE `resources` ADD COLUMN `ocr_error` TEXT NOT NULL DEFAULT ""');
+
+				const itemsNormalized = `
+					CREATE TABLE items_normalized (
+						id INTEGER PRIMARY KEY AUTOINCREMENT, 
+						item_id TEXT NOT NULL,
+						item_type INT NOT NULL,
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT ""
+					);
+				`;
+
+				queries.push(this.sqlStringToLines(itemsNormalized)[0]);
+
+				queries.push('CREATE INDEX items_normalized_id ON items_normalized (id)');
+
+				const tableFields = 'id, item_id, item_type, title, body';
+
+				const newVirtualTableSql = `
+					CREATE VIRTUAL TABLE items_fts USING fts4(
+						content="items_normalized",
+						notindexed="id",
+						notindexed="item_id",
+						notindexed="item_type",
+						${tableFields}
+					);`
+				;
+
+				queries.push(this.sqlStringToLines(newVirtualTableSql)[0]);
+
+				queries.push(`
+					CREATE TRIGGER items_fts_before_update BEFORE UPDATE ON items_normalized BEGIN
+						DELETE FROM items_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER items_fts_before_delete BEFORE DELETE ON items_normalized BEGIN
+						DELETE FROM items_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER items_after_update AFTER UPDATE ON items_normalized BEGIN
+						INSERT INTO items_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM items_normalized WHERE new.rowid = items_normalized.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER items_after_insert AFTER INSERT ON items_normalized BEGIN
+						INSERT INTO items_fts(docid, ${tableFields}) SELECT rowid, ${tableFields} FROM items_normalized WHERE new.rowid = items_normalized.rowid;
+					END;`);
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

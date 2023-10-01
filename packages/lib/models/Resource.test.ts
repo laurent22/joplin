@@ -118,4 +118,41 @@ describe('models/Resource', () => {
 		cleanup();
 	});
 
+	it('should return resources since a certain time and ID', async () => {
+		expect((await Resource.allForNormalization(0, '')).length).toBe(0);
+
+		const testData = [
+			['00000000000000000000000000000001', 1536700000000],
+			['ddddddddddddddddddddddddddddddd1', 1536700000001],
+			['ddddddddddddddddddddddddddddddd3', 1536700000001],
+			['ddddddddddddddddddddddddddddddd2', 1536700000001],
+			['bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1', 1536700000002],
+		];
+
+		for (const [id, updatedTime] of testData) {
+			await Resource.save({
+				id,
+				created_time: updatedTime,
+				updated_time: updatedTime,
+				user_updated_time: updatedTime,
+				user_created_time: updatedTime,
+				mime: 'application/octet-stream',
+			}, { isNew: true, autoTimestamp: false });
+		}
+
+		expect((await Resource.allForNormalization(0, '')).length).toBe(testData.length);
+
+		{
+			const resources = await Resource.allForNormalization(1536700000001, 'ddddddddddddddddddddddddddddddd2');
+			expect(resources.length).toBe(2);
+			expect(resources.map(r => r.id)).toEqual(['ddddddddddddddddddddddddddddddd3', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1']);
+		}
+
+		{
+			const resources = await Resource.allForNormalization(1536700000000, '00000000000000000000000000000001');
+			expect(resources.length).toBe(4);
+			expect(resources.map(r => r.id)).toEqual(['ddddddddddddddddddddddddddddddd1', 'ddddddddddddddddddddddddddddddd2', 'ddddddddddddddddddddddddddddddd3', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1']);
+		}
+	});
+
 });

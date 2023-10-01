@@ -346,13 +346,13 @@ class BaseModel {
 			});
 	}
 
-	public static modelSelectAll(sql: string, params: any[] = null) {
+	public static modelSelectAll<T = any>(sql: string, params: any[] = null): Promise<T[]> {
 		if (params === null) params = [];
 		return this.db()
 			.selectAll(sql, params)
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			.then((models: any[]) => {
-				return this.filterArray(this.addModelMd(models));
+				return this.filterArray(this.addModelMd(models)) as T[];
 			});
 	}
 

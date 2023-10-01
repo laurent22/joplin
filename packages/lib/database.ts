@@ -176,7 +176,7 @@ export default class Database {
 		// }
 	}
 
-	public async selectAll(sql: string, params: SqlParams = null): Promise<Row[]> {
+	public async selectAll<T = Row>(sql: string, params: SqlParams = null): Promise<T[]> {
 		return this.tryCall('selectAll', sql, params);
 	}
 
