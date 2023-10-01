@@ -358,6 +358,7 @@ export default function(theme: any, options: Options = null) {
 
 		.mce-content-body .joplin-editable {
 			cursor: pointer !important;
+			overflow: hidden;
 		}
 
 		.mce-content-body.mce-content-readonly {
@@ -390,12 +391,26 @@ export default function(theme: any, options: Options = null) {
 			padding: 0;
 			color: inherit;
 			font-size: inherit;
+			overflow: hidden;
+		}
+
+		#rendered-md {
+			overflow-x: hidden;
+		}
+
+		.joplin-table-div{
+			overflow-x: overlay;
+			overflow-y: hidden;
 		}
 
 		/* To make code blocks horizontally scrollable */
 		/* https://github.com/laurent22/joplin/issues/5740 */
 		pre.hljs {
-			overflow-x: auto;
+			overflow: hidden;
+		}
+		
+		code {
+			overflow: hidden;
 		}
 
 		/* =============================================== */

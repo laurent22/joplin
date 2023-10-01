@@ -47,6 +47,9 @@ async function main() {
 
 	await copyFile(`${rootDir}/node_modules/mermaid/dist/mermaid.min.js`, 'mermaid/mermaid.min.js');
 	await copyFile(`${rootDir}/MdToHtml/rules/mermaid_render.js`, 'mermaid/mermaid_render.js');
+
+	await copyFile(`${rootDir}/node_modules/handy-scroll/dist/handy-scroll.css`, 'table_open/handy-scroll.css');
+	await copyFile(`${rootDir}/node_modules/handy-scroll/dist/handy-scroll.min.js`, 'table_open/handy-scroll.min.js');
 }
 
 main().catch((error) => {

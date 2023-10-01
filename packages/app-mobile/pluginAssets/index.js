@@ -1,5 +1,5 @@
 module.exports = {
-hash:"5ff17e40ffa32867404a4e20c6c80099", files: {
+hash:"28341d0e851cf5624cecc71be37aa5b9", files: {
 'highlight.js/atom-one-dark-reasonable.css': { data: require('./highlight.js/atom-one-dark-reasonable.css.base64.js'), mime: 'text/css', encoding: 'base64' },
 'highlight.js/atom-one-light.css': { data: require('./highlight.js/atom-one-light.css.base64.js'), mime: 'text/css', encoding: 'base64' },
 'katex/fonts/KaTeX_AMS-Regular.woff2': { data: require('./katex/fonts/KaTeX_AMS-Regular.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },
@@ -25,5 +25,7 @@ hash:"5ff17e40ffa32867404a4e20c6c80099", files: {
 'katex/katex.css': { data: require('./katex/katex.css.base64.js'), mime: 'text/css', encoding: 'base64' },
 'mermaid/mermaid.min.js': { data: require('./mermaid/mermaid.min.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 'mermaid/mermaid_render.js': { data: require('./mermaid/mermaid_render.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
+'table_open/handy-scroll.css': { data: require('./table_open/handy-scroll.css.base64.js'), mime: 'text/css', encoding: 'base64' },
+'table_open/handy-scroll.min.js': { data: require('./table_open/handy-scroll.min.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 }
 };

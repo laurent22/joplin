@@ -5078,6 +5078,7 @@ __metadata:
     "@types/node": 18.17.15
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.1
+    handy-scroll: 1.1.4
     highlight.js: 11.8.0
     html-entities: 1.4.0
     jest: 29.6.4
@@ -18675,6 +18676,13 @@ __metadata:
   bin:
     handlebars: bin/handlebars
   checksum: 1e79a43f5e18d15742977cb987923eab3e2a8f44f2d9d340982bcb69e1735ed049226e534d7c1074eaddaf37e4fb4f471a8adb71cddd5bc8cf3f894241df5cee
+  languageName: node
+  linkType: hard
+
+"handy-scroll@npm:1.1.4":
+  version: 1.1.4
+  resolution: "handy-scroll@npm:1.1.4"
+  checksum: fb24dc86c9d5e60d93793c08204b232b22bd9196148fe47f859fd88a89360d199e7e791e004f87a67bf96e6c819d4502613584004936c8bb4fc079303d54a71a
   languageName: node
   linkType: hard
 
