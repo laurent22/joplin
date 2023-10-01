@@ -121,7 +121,7 @@
     "@types/node": "18.17.15",
     "@types/react": "18.2.21",
     "@types/react-redux": "7.1.26",
-    "@types/styled-components": "5.1.26",
+    "@types/styled-components": "5.1.27",
     "@types/tesseract.js": "2.0.0",
     "electron": "25.8.1",
     "electron-builder": "24.4.0",
