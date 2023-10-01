@@ -4650,7 +4650,7 @@ __metadata:
     "@types/node": 18.17.15
     "@types/react": 18.2.21
     "@types/react-redux": 7.1.26
-    "@types/styled-components": 5.1.26
+    "@types/styled-components": 5.1.27
     async-mutex: 0.4.0
     codemirror: 5.65.9
     color: 3.2.1
@@ -4838,7 +4838,7 @@ __metadata:
     "@types/jest": 29.5.4
     "@types/react": 18.0.24
     "@types/react-redux": 7.1.26
-    "@types/styled-components": 5.1.26
+    "@types/styled-components": 5.1.27
     jest: 29.6.3
     jest-environment-jsdom: 29.6.3
     ts-jest: 29.1.1
@@ -4993,7 +4993,7 @@ __metadata:
     "@types/pdfjs-dist": 2.10.378
     "@types/react": 18.2.21
     "@types/react-dom": 18.2.7
-    "@types/styled-components": 5.1.26
+    "@types/styled-components": 5.1.27
     async-mutex: 0.4.0
     babel-jest: 29.6.4
     css-loader: 6.8.1
@@ -8419,14 +8419,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:5.1.26":
-  version: 5.1.26
-  resolution: "@types/styled-components@npm:5.1.26"
+"@types/styled-components@npm:5.1.27":
+  version: 5.1.27
+  resolution: "@types/styled-components@npm:5.1.27"
   dependencies:
     "@types/hoist-non-react-statics": "*"
     "@types/react": "*"
     csstype: ^3.0.2
-  checksum: 84f53b3101739b20d1731554fb7735bc2f3f5d050a8b392e9845403c8c8bbd729737d033978649f9195a97b557875b010d46e35a4538564a2d0dbcce661dbf76
+  checksum: 6f8d99642f09f28a233a5bf93d3139389c3bf5e4c643620881cb286f581d6844f3c1c43be5bd9405d3b199b6a858bd8b0ec6ccbb17b2304a88d70e2a6f91a996
   languageName: node
   linkType: hard
 
