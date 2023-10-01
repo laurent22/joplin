@@ -4995,7 +4995,6 @@ __metadata:
     "@fortawesome/react-fontawesome": 0.2.0
     "@joplin/lib": ~2.13
     "@types/jest": 29.5.4
-    "@types/pdfjs-dist": 2.10.378
     "@types/react": 18.2.21
     "@types/react-dom": 18.2.7
     "@types/styled-components": 5.1.26
@@ -8236,15 +8235,6 @@ __metadata:
   version: 5.0.3
   resolution: "@types/parse5@npm:5.0.3"
   checksum: d6b7495cb1850f9f2e9c5e103ede9f2d30a5320669707b105c403868adc9e4bf8d3a7ff314cc23f67826bbbbbc0e6147346ce9062ab429f099dba7a01f463919
-  languageName: node
-  linkType: hard
-
-"@types/pdfjs-dist@npm:2.10.378":
-  version: 2.10.378
-  resolution: "@types/pdfjs-dist@npm:2.10.378"
-  dependencies:
-    pdfjs-dist: "*"
-  checksum: 36dd6010f7d23a995efdf11ea4ecb56f371f8bfb3e83a5c311666726e13238597ed1519701d0e2e6fb297270d01ad6aece9582b036fd4cb3aa301e61ea364978
   languageName: node
   linkType: hard
 
@@ -15062,13 +15052,6 @@ __metadata:
   version: 2.1.6
   resolution: "domino@npm:2.1.6"
   checksum: 9b1b6d2661efd8bf942b70d5e11ac0de6a63f17e49b7eb227d9a612fa7b7c12b7775520d64f498988a8ee334ea9c59a463c84ea510b0af17dd3e13fdce120410
-  languageName: node
-  linkType: hard
-
-"dommatrix@npm:^1.0.1, dommatrix@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "dommatrix@npm:1.0.3"
-  checksum: 8ac727c1a14cf8de30a5b49a3bd6b2622a661b391fe1ac54e855eaa14a857ed86d63492150b5f70f912acc24fa3acc31d750259c47e9b5801de237624b0a319f
   languageName: node
   linkType: hard
 
@@ -27909,36 +27892,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdfjs-dist@npm:*":
-  version: 2.14.305
-  resolution: "pdfjs-dist@npm:2.14.305"
-  dependencies:
-    dommatrix: ^1.0.1
-    web-streams-polyfill: ^3.2.1
-  peerDependencies:
-    worker-loader: ^3.0.8
-  peerDependenciesMeta:
-    worker-loader:
-      optional: true
-  checksum: b75443f81e500856e3a7b61303d1f621f81e82b19fc6216f74d33a70d1ef392bb8b2ca4cfa39f11e7c0a877e6d6d74b474768988dcf3299d5d8a1d996d48f856
-  languageName: node
-  linkType: hard
-
-"pdfjs-dist@npm:2.16.105":
-  version: 2.16.105
-  resolution: "pdfjs-dist@npm:2.16.105"
-  dependencies:
-    dommatrix: ^1.0.3
-    web-streams-polyfill: ^3.2.1
-  peerDependencies:
-    worker-loader: ^3.0.8
-  peerDependenciesMeta:
-    worker-loader:
-      optional: true
-  checksum: 16ad2fa0ff8404fefd1a3e83f92ef1a594fcc4d3ff65512f801365c8f06d300d4a38023a867994f0b964a8e146773e6dcc9988c7c1a791917eb6371d5bd72863
-  languageName: node
-  linkType: hard
-
 "pdfjs-dist@npm:3.11.174":
   version: 3.11.174
   resolution: "pdfjs-dist@npm:3.11.174"
@@ -27951,6 +27904,21 @@ __metadata:
     path2d-polyfill:
       optional: true
   checksum: 62f5a64ca0b2dbc855701ebf9a65c3e48c3c9aa5d64c50eb42bb9ff50a326f3eddab7f2a134ef0398398b1ccff9d842935b9f31358c9103bdc71406632d1a7fa
+  languageName: node
+  linkType: hard
+
+"pdfjs-dist@patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch::locator=root%40workspace%3A.":
+  version: 3.11.174
+  resolution: "pdfjs-dist@patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch::version=3.11.174&hash=4ecadb&locator=root%40workspace%3A."
+  dependencies:
+    canvas: ^2.11.2
+    path2d-polyfill: ^2.0.1
+  dependenciesMeta:
+    canvas:
+      optional: true
+    path2d-polyfill:
+      optional: true
+  checksum: bc7597789b13b3ea59ee4ff29db40a15f0a20094ef8f6fa9ba59a80db0501a9b94d0fb3602515666057ebe9c92e59d938ac157f4d2852a125ccc1511c9d8adf6
   languageName: node
   linkType: hard
 
@@ -35687,13 +35655,6 @@ __metadata:
   dependencies:
     defaults: ^1.0.3
   checksum: 814e9d1ddcc9798f7377ffa448a5a3892232b9275ebb30a41b529607691c0491de47cba426e917a4d08ded3ee7e9ba2f3fe32e62ee3cd9c7d3bafb7754bd553c
-  languageName: node
-  linkType: hard
-
-"web-streams-polyfill@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "web-streams-polyfill@npm:3.2.1"
-  checksum: b119c78574b6d65935e35098c2afdcd752b84268e18746606af149e3c424e15621b6f1ff0b42b2676dc012fc4f0d313f964b41a4b5031e525faa03997457da02
   languageName: node
   linkType: hard
 
