@@ -31,6 +31,17 @@ interface SearchOptions {
 	appendWildCards?: boolean;
 }
 
+interface ProcessResultsRow {
+	offsets: string;
+	user_updated_time: number;
+	matchinfo: Buffer;
+	item_type?: ModelType;
+	fields?: string[];
+	weight?: number;
+	is_todo?: number;
+	todo_completed?: number;
+}
+
 export interface ComplexTerm {
 	type: 'regex' | 'text';
 	value: string;
@@ -144,7 +155,7 @@ export default class SearchEngine {
 	public async rebuildIndex() {
 		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
 		Setting.setValue('searchEngine.initialIndexingDone', false);
-		Setting.setValue('searchEngine.lastChangeTime', 0);
+		Setting.setValue('searchEngine.lastProcessedResource', '');
 		return this.syncTables();
 	}
 
@@ -236,7 +247,7 @@ export default class SearchEngine {
 			updated_time: number;
 		}
 
-		const lastProcessedResource: LastProcessedResource = !Setting.value('searchEngine.lastProcessedResource') ? [0, ''] : JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
+		const lastProcessedResource: LastProcessedResource = !Setting.value('searchEngine.lastProcessedResource') ? { updated_time: 0, id: '' } : JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
 
 		try {
 			while (true) {
@@ -254,9 +265,6 @@ export default class SearchEngine {
 				const queries: SqlQuery[] = [];
 
 				for (const resource of resources) {
-					const normalizedTitle = this.normalizeText_(resource.title);
-					const normalizedBody = this.normalizeText_(resource.ocr_text);
-
 					queries.push({
 						sql: 'DELETE FROM items_normalized WHERE id = ? AND item_type = ?',
 						params: [
@@ -267,13 +275,14 @@ export default class SearchEngine {
 
 					queries.push({
 						sql: `
-							INSERT INTO items_normalized(item_id, item_type, title, body)
-							VALUES (?, ?, ?, ?)`,
+							INSERT INTO items_normalized(item_id, item_type, title, body, user_updated_time)
+							VALUES (?, ?, ?, ?, ?)`,
 						params: [
 							resource.id,
 							ModelType.Resource,
-							normalizedTitle,
-							normalizedBody,
+							this.normalizeText_(resource.title),
+							this.normalizeText_(resource.ocr_text),
+							resource.updated_time,
 						],
 					});
 
@@ -356,7 +365,7 @@ export default class SearchEngine {
 
 
 
-	private calculateWeightBM25_(rows: any[]) {
+	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -382,7 +391,6 @@ export default class SearchEngine {
 		const TITLE_COLUMN = 1;
 		const BODY_COLUMN = 2;
 		const columns = [TITLE_COLUMN, BODY_COLUMN];
-		// const NUM_COLS = 12;
 
 		const numPhrases = generalInfo[0]; // p
 		const numColumns = generalInfo[1]; // c
@@ -396,21 +404,23 @@ export default class SearchEngine {
 		const numBodyTokens = matchInfo.map(m => m[5 + numColumns]);
 		const numTokens = [null, numTitleTokens, numBodyTokens];
 
-		const X = matchInfo.map(m => m.slice(27)); // x
+		// In byte size, we have for notes_normalized:
+		//
+		// p 1
+		// c 1
+		// n 1
+		// a 12
+		// l 12
+		const X = matchInfo.map(m => m.slice(1 + 1 + 1 + numColumns + numColumns)); // x
 
 		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
 		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
 
-
-		// if a term occurs in over half the documents in the collection
-		// then this model gives a negative term weight, which is presumably undesirable.
-		// But, assuming the use of a stop list, this normally doesn't happen,
-		// and the value for each summand can be given a floor of 0.
-		const IDF = (n: number, N: number) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+		const IDF = (n: number, N: number) => Math.max(Math.log(((N - n + 0.5) / (n + 0.5)) + 1), 0);
 
 		// https://en.wikipedia.org/wiki/Okapi_BM25
-		const BM25 = (idf: any, freq: any, numTokens: number, avgTokens: any) => {
+		const BM25 = (idf: number, freq: number, numTokens: number, avgTokens: number) => {
 			if (avgTokens === 0) {
 				return 0; // To prevent division by zero
 			}
@@ -419,7 +429,7 @@ export default class SearchEngine {
 
 		const msSinceEpoch = Math.round(new Date().getTime());
 		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row: any) => {
+		const weightForDaysSinceLastUpdate = (row: ProcessResultsRow) => {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
@@ -469,7 +479,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -482,12 +492,19 @@ export default class SearchEngine {
 		}
 
 		rows.sort((a, b) => {
+			const aIsNote = !('item_type' in a);
+			const bIsNote = !('item_type' in b);
+
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
 			if (a.weight < b.weight) return +1;
 			if (a.weight > b.weight) return -1;
-			if (a.is_todo && a.todo_completed) return +1;
-			if (b.is_todo && b.todo_completed) return -1;
+
+			if (aIsNote && bIsNote) {
+				if (a.is_todo && a.todo_completed) return +1;
+				if (b.is_todo && b.todo_completed) return -1;
+			}
+
 			if (a.user_updated_time < b.user_updated_time) return +1;
 			if (a.user_updated_time > b.user_updated_time) return -1;
 			return 0;
@@ -705,7 +722,25 @@ export default class SearchEngine {
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				const rows = await this.db().selectAll(query, params);
+				let rows = await this.db().selectAll<ProcessResultsRow>(query, params);
+				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text');
+
+				if (!queryHasFilters) {
+					const itemRows = await this.db().selectAll<ProcessResultsRow>(`
+						SELECT
+							id,
+							title,
+							body,
+							user_updated_time,
+							offsets(items_fts) AS offsets,
+							matchinfo(items_fts, 'pcnalx') AS matchinfo
+						FROM items_fts
+						WHERE title MATCH ? OR body MATCH ?
+					`, [searchString, searchString]);
+
+					rows = rows.concat(itemRows);
+				}
+
 				this.processResults_(rows, parsedQuery, !useFts);
 				return rows;
 			} catch (error) {

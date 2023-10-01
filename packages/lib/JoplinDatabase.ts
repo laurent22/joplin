@@ -934,10 +934,11 @@ export default class JoplinDatabase extends Database {
 				const itemsNormalized = `
 					CREATE TABLE items_normalized (
 						id INTEGER PRIMARY KEY AUTOINCREMENT, 
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT "",
 						item_id TEXT NOT NULL,
 						item_type INT NOT NULL,
-						title TEXT NOT NULL DEFAULT "",
-						body TEXT NOT NULL DEFAULT ""
+						user_updated_time INT NOT NULL DEFAULT 0
 					);
 				`;
 
@@ -945,7 +946,7 @@ export default class JoplinDatabase extends Database {
 
 				queries.push('CREATE INDEX items_normalized_id ON items_normalized (id)');
 
-				const tableFields = 'id, item_id, item_type, title, body';
+				const tableFields = 'id, title, body, item_id, item_type, user_updated_time';
 
 				const newVirtualTableSql = `
 					CREATE VIRTUAL TABLE items_fts USING fts4(
@@ -953,6 +954,7 @@ export default class JoplinDatabase extends Database {
 						notindexed="id",
 						notindexed="item_id",
 						notindexed="item_type",
+						notindexed="user_updated_time",
 						${tableFields}
 					);`
 				;
