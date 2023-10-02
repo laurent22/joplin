@@ -6,5 +6,6 @@ export interface AppState extends State {
 	route: any;
 	smartFilterId: string;
 	noteSideMenuOptions: any;
+	disableSideMenuGestures: boolean;
 	themeId: number;
 }
