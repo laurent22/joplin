@@ -4970,7 +4970,7 @@ __metadata:
     reselect: 4.1.8
     server-destroy: 1.0.1
     sharp: 0.32.5
-    sprintf-js: 1.1.2
+    sprintf-js: 1.1.3
     sqlite3: 5.1.6
     string-padding: 1.0.2
     string-to-stream: 3.0.1
@@ -5087,7 +5087,7 @@ __metadata:
     jest: 29.6.4
     jest-environment-jsdom: 29.6.4
     json-stringify-safe: 5.0.1
-    katex: 0.13.24
+    katex: 0.16.8
     markdown-it: 13.0.1
     markdown-it-abbr: 1.0.4
     markdown-it-anchor: 5.3.0
@@ -5273,7 +5273,7 @@ __metadata:
     jest: 29.6.4
     moment: 2.29.4
     node-fetch: 2.6.7
-    sprintf-js: 1.1.2
+    sprintf-js: 1.1.3
     ts-jest: 29.1.1
   languageName: unknown
   linkType: soft
@@ -12583,7 +12583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.0.0":
+"commander@npm:^8.3.0":
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
@@ -22178,7 +22178,7 @@ __metadata:
     read-chunk: 2.1.0
     server-destroy: 1.0.1
     sharp: 0.32.5
-    sprintf-js: 1.1.2
+    sprintf-js: 1.1.3
     sqlite3: 5.1.6
     string-padding: 1.0.2
     strip-ansi: 6.0.1
@@ -22689,14 +22689,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:0.13.24":
-  version: 0.13.24
-  resolution: "katex@npm:0.13.24"
+"katex@npm:0.16.8":
+  version: 0.16.8
+  resolution: "katex@npm:0.16.8"
   dependencies:
-    commander: ^8.0.0
+    commander: ^8.3.0
   bin:
     katex: cli.js
-  checksum: 1b7c8295867073d0db4f6fb41ef1c0e3418b8e23924ff61b446b36134cb74cdadc7242dfbfb922d9c32f0b15eda6160a08cd30948c4e78141966ca2991a1726b
+  checksum: 4e75b4786101cc5eca0404bb814b2985bec506846f9015e9bf00207a3af14215e341ee62b6e7af2455a1032f8244e47a754642f250eea43d7b8007146ac01fae
   languageName: node
   linkType: hard
 
@@ -32246,6 +32246,13 @@ __metadata:
   version: 1.1.2
   resolution: "sprintf-js@npm:1.1.2"
   checksum: d4bb46464632b335e5faed381bd331157e0af64915a98ede833452663bc672823db49d7531c32d58798e85236581fb7342fd0270531ffc8f914e186187bf1c90
+  languageName: node
+  linkType: hard
+
+"sprintf-js@npm:1.1.3":
+  version: 1.1.3
+  resolution: "sprintf-js@npm:1.1.3"
+  checksum: a3fdac7b49643875b70864a9d9b469d87a40dfeaf5d34d9d0c5b1cda5fd7d065531fcb43c76357d62254c57184a7b151954156563a4d6a747015cfb41021cad0
   languageName: node
   linkType: hard
 

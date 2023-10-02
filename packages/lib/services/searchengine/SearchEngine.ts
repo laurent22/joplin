@@ -741,7 +741,7 @@ export default class SearchEngine {
 					rows = rows.concat(itemRows);
 				}
 
-				this.processResults_(rows, parsedQuery, !useFts);
+				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
