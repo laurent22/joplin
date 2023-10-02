@@ -462,6 +462,7 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExport
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/exportAllFolders.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
+packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
@@ -480,6 +481,7 @@ packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
+packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/autodetectTheme.js
