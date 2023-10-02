@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
 
-const { setupDatabaseAndSynchronizer, db, sleep, switchClient } = require('../../testing/test-utils.js');
+const { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } = require('../../testing/test-utils.js');
 const SearchEngine = require('../../services/searchengine/SearchEngine').default;
 const Note = require('../../models/Note').default;
 const ItemChange = require('../../models/ItemChange').default;
@@ -147,6 +147,21 @@ describe('services_SearchEngine', () => {
 		expect(rows[0].id).toBe(n1.id); // shorter note; also 'efgh' is more rare than 'abcd'.
 		expect(rows[1].id).toBe(n2.id);
 	}));
+
+	it('should order search results by relevance BM25 - 2', async () => {
+		// This simple test case didn't even work before due to a bug in the IDF
+		// calculation, and would just order by timestamp.
+		const n1 = await Note.save({ title: 'abcd abcd' }); // 1
+		await msleep(1);
+		const n2 = await Note.save({ title: 'abcd' }); // 2
+
+		await engine.syncTables();
+
+		const rows = await engine.search('abcd');
+
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n2.id);
+	});
 
 	// TODO: Need to update and replace jasmine.mockDate() calls with Jest
 	// equivalent
