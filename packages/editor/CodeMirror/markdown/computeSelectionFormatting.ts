@@ -20,7 +20,10 @@ const computeSelectionFormatting = (state: EditorState, globalSpellcheck: boolea
 			};
 		}
 
-		return null;
+		return {
+			linkText: null,
+			linkURL: null,
+		};
 	};
 
 	// Find nodes that overlap/are within the selected region
