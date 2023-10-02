@@ -4739,7 +4739,7 @@ __metadata:
     "@types/react": 18.2.21
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.26
-    "@types/tar-stream": 2.2.2
+    "@types/tar-stream": 2.2.3
     assert-browserify: 2.0.0
     babel-jest: 29.6.4
     babel-plugin-module-resolver: 4.1.0
@@ -8464,12 +8464,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tar-stream@npm:2.2.2":
-  version: 2.2.2
-  resolution: "@types/tar-stream@npm:2.2.2"
+"@types/tar-stream@npm:2.2.3":
+  version: 2.2.3
+  resolution: "@types/tar-stream@npm:2.2.3"
   dependencies:
     "@types/node": "*"
-  checksum: 4b33bc0d53770e952d6e2e8acb8889190510326a3e255d0c6edd94136d6027ecae939a7b49188d1d02d774328d9a3742ff633d505709d1a1200b3413c88d793d
+  checksum: f4b58c9dfc540d8a314b58626348a33f5d5b54bba8c38234355b0410f8b9c0bbee44564ae9aa7ad62f7a8fc0dc1f37e2d2e68bdcf2247c127c998ac7be32aadb
   languageName: node
   linkType: hard
 
