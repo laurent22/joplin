@@ -241,7 +241,9 @@ const appDefaultState: AppState = { ...defaultState, sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
-	isOnMobileData: false };
+	isOnMobileData: false,
+	disableSideMenuGestures: false,
+};
 
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -400,6 +402,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = { ...state };
 			newState.noteSideMenuOptions = action.options;
+			break;
+
+		case 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED':
+			newState = { ...state };
+			newState.disableSideMenuGestures = action.disableSideMenuGestures;
 			break;
 
 		case 'MOBILE_DATA_WARNING_UPDATE':
@@ -1060,6 +1067,7 @@ class AppComponent extends React.Component {
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
+					disableGestures={this.props.disableSideMenuGestures}
 					onSliding={(percent: number) => {
 						this.props.dispatch({
 							type: 'SIDE_MENU_OPEN_PERCENT',
@@ -1120,6 +1128,7 @@ const mapStateToProps = (state: any) => {
 		routeName: state.route.routeName,
 		themeId: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
+		disableSideMenuGestures: state.disableSideMenuGestures,
 		biometricsDone: state.biometricsDone,
 		biometricsEnabled: state.settings['security.biometricsEnabled'],
 	};
