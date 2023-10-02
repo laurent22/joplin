@@ -4787,7 +4787,7 @@ __metadata:
     react-native-share: 9.2.4
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
-    react-native-url-polyfill: 1.3.0
+    react-native-url-polyfill: 2.0.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
@@ -29434,14 +29434,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-url-polyfill@npm:1.3.0":
-  version: 1.3.0
-  resolution: "react-native-url-polyfill@npm:1.3.0"
+"react-native-url-polyfill@npm:2.0.0":
+  version: 2.0.0
+  resolution: "react-native-url-polyfill@npm:2.0.0"
   dependencies:
     whatwg-url-without-unicode: 8.0.0-3
   peerDependencies:
     react-native: "*"
-  checksum: 24ef81493a642b9359c1e8048de4da84fb554ffcf35677f9d8b11956d700faa4b9ac9d74f56aee67dd8d8b4ef6d9879e7431848785880ada657f8bec0211b00a
+  checksum: 1a2e1030a62fd093764b5330ce0ff34d72246e581dd2892cddc347d8621931aeb2c9ea3e054960484a1259230e8461e569e1890f1ff452d3c5c0adef70190fc3
   languageName: node
   linkType: hard
 
