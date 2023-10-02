@@ -698,12 +698,30 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 
 	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string): Promise<string[]> => {
-		if (!shim.isElectron()) throw new Error('Only Electron is supported');
+		// We handle both the Electron app and testing framework. Potentially
+		// the same code could be use to support the CLI app.
+		const isTesting = !shim.isElectron();
 
-		const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
-			return new Promise(resolve => {
-				canvas.toBlob(blob => resolve(blob), 'image/jpg', 0.8);
-			});
+		const createCanvas = () => {
+			if (isTesting) {
+				return require('canvas').createCanvas();
+			}
+			return document.createElement('canvas');
+		};
+
+		const canvasToBuffer = async (canvas: any): Promise<Buffer> => {
+			if (isTesting) {
+				return canvas.toBuffer('image/jpeg', { quality: 0.8 });
+			} else {
+				const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
+					return new Promise(resolve => {
+						canvas.toBlob(blob => resolve(blob), 'image/jpg', 0.8);
+					});
+				};
+
+				const blob = await canvasToBlob(canvas);
+				return Buffer.from(await blob.arrayBuffer());
+			}
 		};
 
 		const filePrefix = `page_${Date.now()}`;
@@ -714,7 +732,7 @@ function shimInit(options: ShimInitOptions = null) {
 		for (let pageNum = 1; pageNum <= doc.numPages; pageNum++) {
 			const page = await doc.getPage(pageNum);
 			const viewport = page.getViewport({ scale: 2 });
-			const canvas = document.createElement('canvas');
+			const canvas = createCanvas();
 			const ctx = canvas.getContext('2d');
 
 			canvas.height = viewport.height;
@@ -723,8 +741,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const renderTask = page.render({ canvasContext: ctx, viewport: viewport });
 			await renderTask.promise;
 
-			const blob = await canvasToBlob(canvas);
-			const buffer = Buffer.from(await blob.arrayBuffer());
+			const buffer = await canvasToBuffer(canvas);
 			const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
 			output.push(filePath);
 			await writeFile(filePath, buffer, 'binary');

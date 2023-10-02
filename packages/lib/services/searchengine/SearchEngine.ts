@@ -333,38 +333,6 @@ export default class SearchEngine {
 		return output;
 	}
 
-	// protected calculateWeight_(offsets: any[], termCount: number) {
-	// 	// Offset doc: https://www.sqlite.org/fts3.html#offsets
-
-	// 	// - If there's only one term in the query string, the content with the most matches goes on top
-	// 	// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
-	// 	//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
-
-	// 	const occurenceCount = Math.floor(offsets.length / 4);
-
-	// 	if (termCount === 1) return occurenceCount;
-
-	// 	let spread = 0;
-	// 	let previousDist = null;
-	// 	for (let i = 0; i < occurenceCount; i++) {
-	// 		const dist = offsets[i * 4 + 2];
-
-	// 		if (previousDist !== null) {
-	// 			const delta = dist - previousDist;
-	// 			spread += delta;
-	// 		}
-
-	// 		previousDist = dist;
-	// 	}
-
-	// 	// Divide the number of occurences by the spread so even if a note has many times the searched terms
-	// 	// but these terms are very spread appart, they'll be given a lower weight than a note that has the
-	// 	// terms once or twice but just next to each others.
-	// 	return occurenceCount / spread;
-	// }
-
-
-
 	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo

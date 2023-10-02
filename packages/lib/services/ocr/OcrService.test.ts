@@ -66,4 +66,19 @@ describe('OcrService', () => {
 		await service.dispose();
 	});
 
+	it('should process PDF resources', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+		const service = newService();
+
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text).toBe('Dummy PDF file');
+		expect(processedResource.ocr_status).toBe(ResourceOcrStatus.Done);
+		expect(processedResource.ocr_error).toBe('');
+
+		await service.dispose();
+	});
+
 });

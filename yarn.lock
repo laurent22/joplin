@@ -4928,6 +4928,7 @@ __metadata:
     base-64: 1.0.0
     base64-stream: 1.0.0
     builtin-modules: 3.3.0
+    canvas: 2.11.2
     chokidar: 3.5.3
     clean-html: 1.5.0
     color: 3.2.1
@@ -11764,7 +11765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"canvas@npm:^2.11.2":
+"canvas@npm:2.11.2, canvas@npm:^2.11.2":
   version: 2.11.2
   resolution: "canvas@npm:2.11.2"
   dependencies:

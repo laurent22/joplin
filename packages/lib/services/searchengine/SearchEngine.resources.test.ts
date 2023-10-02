@@ -1,5 +1,5 @@
 import Resource from '../../models/Resource';
-import { db, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { db, msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { ResourceOcrStatus } from '../database/types';
 import SearchEngine from './SearchEngine';
 
@@ -52,6 +52,7 @@ describe('SearchEngine.resources', () => {
 				ocr_status: ResourceOcrStatus.Done,
 				ocr_text: body,
 			});
+			await msleep(1);
 		}
 
 		await engine.syncTables();
