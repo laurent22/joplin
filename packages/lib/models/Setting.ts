@@ -1459,6 +1459,24 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'imageeditor.jsdrawToolbar': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => '',
+				storage: SettingStorage.File,
+			},
+
+			'imageeditor.imageTemplate': {
+				value: '{ }',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => 'Template for the image editor',
+				storage: SettingStorage.File,
+			},
+
 			// 2023-09-07: This setting is now used to track the desktop beta editor. It
 			// was used to track the mobile beta editor previously.
 			'editor.beta': {

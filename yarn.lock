@@ -4726,6 +4726,7 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
+    "@js-draw/material-icons": 1.5.0
     "@lezer/highlight": 1.1.4
     "@react-native-community/clipboard": 1.5.1
     "@react-native-community/datetimepicker": 7.4.2
@@ -4741,7 +4742,7 @@ __metadata:
     "@types/react": 18.2.21
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.26
-    "@types/tar-stream": 2.2.2
+    "@types/tar-stream": 2.2.3
     assert-browserify: 2.0.0
     babel-jest: 29.6.4
     babel-plugin-module-resolver: 4.1.0
@@ -4756,6 +4757,7 @@ __metadata:
     jest: 29.6.4
     jest-environment-jsdom: 29.6.4
     jetifier: 2.0.0
+    js-draw: 1.5.0
     jsc-android: 241213.1.0
     jsdom: 22.1.0
     lodash: 4.17.21
@@ -4790,7 +4792,7 @@ __metadata:
     react-native-share: 9.2.4
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
-    react-native-url-polyfill: 1.3.0
+    react-native-url-polyfill: 2.0.0
     react-native-vector-icons: 9.2.0
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
@@ -4981,7 +4983,7 @@ __metadata:
     typescript: 5.1.6
     uglifycss: 0.0.29
     url-parse: 1.5.10
-    uuid: 9.0.0
+    uuid: 9.0.1
     word-wrap: 1.2.5
     xml2js: 0.4.23
   languageName: unknown
@@ -5165,7 +5167,7 @@ __metadata:
     sqlite3: 5.1.6
     stripe: 8.222.0
     typescript: 5.1.6
-    uuid: 9.0.0
+    uuid: 9.0.1
     yargs: 17.7.2
     zxcvbn: 4.4.2
   languageName: unknown
@@ -5393,6 +5395,24 @@ __metadata:
     "@jridgewell/resolve-uri": ^3.1.0
     "@jridgewell/sourcemap-codec": ^1.4.14
   checksum: 956a6f0f6fec060fb48c6bf1f5ec2064e13cd38c8be3873877d4b92b4a27ba58289a34071752671262a3e3c202abcc3fa2aac64d8447b4b0fa1ba3c9047f1c20
+  languageName: node
+  linkType: hard
+
+"@js-draw/material-icons@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@js-draw/material-icons@npm:1.5.0"
+  peerDependencies:
+    js-draw: ^1.0.1
+  checksum: 7aafd02b2c0bf6a0765698279271564fd5f8b1bce6987ac14a0c81e8f3d88b123a3b7da46367c28a043aa8af717c48f825b5f89a4d085976d7e0e8339737bb50
+  languageName: node
+  linkType: hard
+
+"@js-draw/math@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@js-draw/math@npm:1.4.0"
+  dependencies:
+    bezier-js: 6.1.3
+  checksum: b56ee2e3b4fd415a7f27a9d175a37db2a24b59cbd6aeb296fe4bac6f40db8eaf34c4674a21958233bdde2739309a8af644ee7feb107a62304314394080851b4b
   languageName: node
   linkType: hard
 
@@ -6369,6 +6389,13 @@ __metadata:
   bin:
     node-pre-gyp: bin/node-pre-gyp
   checksum: 1a98db05d955b74dad3814679593df293b9194853698f3f5f1ed00ecd93128cdd4b14fb8767fe44ac6981ef05c23effcfdc88710e7c1de99ccb6f647890597c8
+  languageName: node
+  linkType: hard
+
+"@melloware/coloris@npm:0.21.0":
+  version: 0.21.0
+  resolution: "@melloware/coloris@npm:0.21.0"
+  checksum: d8f23ba23fbc557c6fb82fb5f27eda9f163d440f0bc11b6993d89d9db289982c809627184105a1e2e5fbae55f4daa122e549835608d5135905c5e700d89a6388
   languageName: node
   linkType: hard
 
@@ -8433,12 +8460,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tar-stream@npm:2.2.2":
-  version: 2.2.2
-  resolution: "@types/tar-stream@npm:2.2.2"
+"@types/tar-stream@npm:2.2.3":
+  version: 2.2.3
+  resolution: "@types/tar-stream@npm:2.2.3"
   dependencies:
     "@types/node": "*"
-  checksum: 4b33bc0d53770e952d6e2e8acb8889190510326a3e255d0c6edd94136d6027ecae939a7b49188d1d02d774328d9a3742ff633d505709d1a1200b3413c88d793d
+  checksum: f4b58c9dfc540d8a314b58626348a33f5d5b54bba8c38234355b0410f8b9c0bbee44564ae9aa7ad62f7a8fc0dc1f37e2d2e68bdcf2247c127c998ac7be32aadb
   languageName: node
   linkType: hard
 
@@ -10787,6 +10814,13 @@ __metadata:
   version: 2.2.3
   resolution: "before-after-hook@npm:2.2.3"
   checksum: a1a2430976d9bdab4cd89cb50d27fa86b19e2b41812bf1315923b0cba03371ebca99449809226425dd3bcef20e010db61abdaff549278e111d6480034bebae87
+  languageName: node
+  linkType: hard
+
+"bezier-js@npm:6.1.3":
+  version: 6.1.3
+  resolution: "bezier-js@npm:6.1.3"
+  checksum: 5ca3317b00c844c15b4b179f1b54638bc943d393d17dd1551777c7178017663f3d61e469e56c2c2cc5b28459380706ccc12e46d80677b9375970ca55f48b5338
   languageName: node
   linkType: hard
 
@@ -22217,6 +22251,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-draw@npm:1.5.0":
+  version: 1.5.0
+  resolution: "js-draw@npm:1.5.0"
+  dependencies:
+    "@js-draw/math": ^1.4.0
+    "@melloware/coloris": 0.21.0
+  checksum: 9491fac7ecf904e4a0568cdf37d5a5291afd66928063f20f942e50c7f0f803784f3722aa870c697f2368719e255d719dbfda7bbc1072f164a3e7b9e2a1a243fc
+  languageName: node
+  linkType: hard
+
 "js-sha512@npm:0.8.0":
   version: 0.8.0
   resolution: "js-sha512@npm:0.8.0"
@@ -29511,14 +29555,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-url-polyfill@npm:1.3.0":
-  version: 1.3.0
-  resolution: "react-native-url-polyfill@npm:1.3.0"
+"react-native-url-polyfill@npm:2.0.0":
+  version: 2.0.0
+  resolution: "react-native-url-polyfill@npm:2.0.0"
   dependencies:
     whatwg-url-without-unicode: 8.0.0-3
   peerDependencies:
     react-native: "*"
-  checksum: 24ef81493a642b9359c1e8048de4da84fb554ffcf35677f9d8b11956d700faa4b9ac9d74f56aee67dd8d8b4ef6d9879e7431848785880ada657f8bec0211b00a
+  checksum: 1a2e1030a62fd093764b5330ce0ff34d72246e581dd2892cddc347d8621931aeb2c9ea3e054960484a1259230e8461e569e1890f1ff452d3c5c0adef70190fc3
   languageName: node
   linkType: hard
 
@@ -35329,12 +35373,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.0, uuid@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "uuid@npm:9.0.0"
+"uuid@npm:9.0.1":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
   bin:
     uuid: dist/bin/uuid
-  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
+  checksum: 39931f6da74e307f51c0fb463dc2462807531dc80760a9bff1e35af4316131b4fc3203d16da60ae33f07fdca5b56f3f1dd662da0c99fea9aaeab2004780cc5f4
   languageName: node
   linkType: hard
 
@@ -35353,6 +35397,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: f5b7b5cc28accac68d5c083fd51cca64896639ebd4cca88c6cfb363801aaa83aa439c86dfc8446ea250a7a98d17afd2ad9e88d9d4958c79a412eccb93bae29de
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
