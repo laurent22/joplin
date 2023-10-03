@@ -791,7 +791,7 @@ public class EfficientDocumentHelper {
           try {
             destUri = getDocumentUri(unknownDestUri, false, true);
             if (!replaceIfDestExists) {
-              if (!checkIfExists(destUri)) {
+              if (checkIfExists(destUri)) {
                 throw new IOExceptionFast("a document with the same name already exists in destination");
               } else {
                 throw new FileNotFoundExceptionFast();
