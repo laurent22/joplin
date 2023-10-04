@@ -27,7 +27,7 @@
 		"typescript": "5.1.6"
 	},
 	"dependencies": {
-		"@codemirror/autocomplete": "6.9.0",
+		"@codemirror/autocomplete": "6.9.1",
 		"@codemirror/commands": "6.2.5",
 		"@codemirror/lang-cpp": "6.0.2",
 		"@codemirror/lang-html": "6.4.6",
