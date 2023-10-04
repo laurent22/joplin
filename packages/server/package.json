@@ -61,7 +61,7 @@
     "@joplin/tools": "~2.13",
     "@rmp135/sql-ts": "1.18.0",
     "@types/formidable": "3.4.3",
-    "@types/fs-extra": "11.0.1",
+    "@types/fs-extra": "11.0.2",
     "@types/jest": "29.5.4",
     "@types/jest-expect-message": "1.0.4",
     "@types/jsdom": "21.1.2",

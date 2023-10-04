@@ -4751,7 +4751,7 @@ __metadata:
     "@testing-library/jest-native": 5.4.3
     "@testing-library/react-native": 12.2.2
     "@tsconfig/react-native": 2.0.2
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/react": 18.2.21
     "@types/react-native": 0.70.6
@@ -4910,7 +4910,7 @@ __metadata:
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.46
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     css: 3.0.0
     datauri: 4.1.0
     fs-extra: 11.1.1
@@ -4932,7 +4932,7 @@ __metadata:
     "@joplin/turndown": ^4.0.68
     "@joplin/turndown-plugin-gfm": ^1.0.50
     "@joplin/utils": ~2.13
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/js-yaml": 4.0.5
     "@types/nanoid": 3.0.0
@@ -5038,7 +5038,7 @@ __metadata:
     "@joplin/lib": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/node": 18.17.15
     fs-extra: 11.1.1
@@ -5136,7 +5136,7 @@ __metadata:
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.0
     "@types/formidable": 3.4.3
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.2
@@ -5194,7 +5194,7 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/utils": ~2.13
     "@rmp135/sql-ts": 1.18.0
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/markdown-it": 13.0.1
     "@types/mustache": 4.2.2
@@ -5277,7 +5277,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/node-fetch": 2.6.5
     async-mutex: 0.4.0
@@ -7865,13 +7865,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:11.0.1":
-  version: 11.0.1
-  resolution: "@types/fs-extra@npm:11.0.1"
+"@types/fs-extra@npm:11.0.2":
+  version: 11.0.2
+  resolution: "@types/fs-extra@npm:11.0.2"
   dependencies:
     "@types/jsonfile": "*"
     "@types/node": "*"
-  checksum: 3e930346e5d84f419deb8ced1c582beef8cb20d0bd8a0eb145a37d75bab0572a1895f0e48a0d681d386b3a58b9a992b2d2acecc464bcaec2548f53ea00718651
+  checksum: 5b3e30343ee62d2e393e1029355f13f64bab6f3416226e22492483f99da840e2e53ca22cbfa4ac3749f2f83f7086d19c009005c8fa175da01df0fae59c2d73e1
   languageName: node
   linkType: hard
 
@@ -22170,7 +22170,7 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/node": 18.17.15
     "@types/proper-lockfile": ^4.1.2
@@ -30956,7 +30956,7 @@ __metadata:
   dependencies:
     "@joplin/utils": ~2.12
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@typescript-eslint/eslint-plugin": 6.0.0
     "@typescript-eslint/parser": 6.0.0
     cspell: 5.21.2
