@@ -56,6 +56,12 @@ jobs:
           sudo apt-get install -y translate-toolkit
           sudo apt-get install -y rsync
 
+      - name: Install macOs dependencies
+        if: runner.os == 'macOS'
+        run: |
+          # Required for building the canvas package
+          brew install pango
+
       - name: Install Docker Engine
         # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
         if: runner.os == 'Linux'

@@ -33,6 +33,12 @@ jobs:
           # https://yarnpkg.com/getting-started/install
           corepack enable
 
+      - name: Install macOs dependencies
+        if: runner.os == 'macOS'
+        run: |
+          # Required for building the canvas package
+          brew install pango
+
       - name: Build macOS M1 app
         env:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
