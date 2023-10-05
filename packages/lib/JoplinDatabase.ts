@@ -1,8 +1,6 @@
 import Resource from './models/Resource';
 import shim from './shim';
 import Database, { SqlQuery } from './database';
-
-const { promiseChain } = require('./promise-utils.js');
 const { sprintf } = require('sprintf-js');
 
 const structureSql = `
@@ -286,53 +284,54 @@ export default class JoplinDatabase extends Database {
 		return d && d[fieldName] ? d[fieldName] : '';
 	}
 
-	public refreshTableFields(newVersion: number) {
+	private async countFields(tableName: string): Promise<number> {
+		const pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
+		if (!pragmas) throw new Error(`No such table: ${tableName}`);
+		return pragmas.length;
+	}
+
+	public async refreshTableFields(newVersion: number) {
 		this.logger().info('Initializing tables...');
 		const queries: SqlQuery[] = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
-		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"')
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then(tableRows => {
-				const chain = [];
-				for (let i = 0; i < tableRows.length; i++) {
-					const tableName = tableRows[i].name;
-					if (tableName === 'android_metadata') continue;
-					if (tableName === 'table_fields') continue;
-					if (tableName === 'sqlite_sequence') continue;
-					if (tableName.indexOf('notes_fts') === 0) continue;
-					if (tableName.indexOf('items_fts') === 0) continue;
-					if (tableName === 'notes_spellfix') continue;
-					if (tableName === 'search_aux') continue;
-					chain.push(() => {
-						// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
-							for (let i = 0; i < pragmas.length; i++) {
-								const item = pragmas[i];
-								// In SQLite, if the default value is a string it has double quotes around it, so remove them here
-								let defaultValue = item.dflt_value;
-								if (typeof defaultValue === 'string' && defaultValue.length >= 2 && defaultValue[0] === '"' && defaultValue[defaultValue.length - 1] === '"') {
-									defaultValue = defaultValue.substr(1, defaultValue.length - 2);
-								}
-								const q = Database.insertQuery('table_fields', {
-									table_name: tableName,
-									field_name: item.name,
-									field_type: Database.enumId('fieldType', item.type),
-									field_default: defaultValue,
-								});
-								queries.push(q);
-							}
-						});
-					});
-				}
+		if (await this.countFields('notes_fts') !== await this.countFields('items_fts')) {
+			throw new Error('`notes_fts` must have the same number of fields than `items_fts` for the search engine BM25 algorithm to work');
+		}
 
-				return promiseChain(chain);
-			})
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			.then(() => {
-				queries.push({ sql: 'UPDATE version SET table_fields_version = ?', params: [newVersion] });
-				return this.transactionExecBatch(queries);
-			});
+		const tableRows = await this.selectAll('SELECT name FROM sqlite_master WHERE type="table"');
+
+		for (let i = 0; i < tableRows.length; i++) {
+			const tableName = tableRows[i].name;
+			if (tableName === 'android_metadata') continue;
+			if (tableName === 'table_fields') continue;
+			if (tableName === 'sqlite_sequence') continue;
+			if (tableName.indexOf('notes_fts') === 0) continue;
+			if (tableName.indexOf('items_fts') === 0) continue;
+			if (tableName === 'notes_spellfix') continue;
+			if (tableName === 'search_aux') continue;
+
+			const pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
+
+			for (let i = 0; i < pragmas.length; i++) {
+				const item = pragmas[i];
+				// In SQLite, if the default value is a string it has double quotes around it, so remove them here
+				let defaultValue = item.dflt_value;
+				if (typeof defaultValue === 'string' && defaultValue.length >= 2 && defaultValue[0] === '"' && defaultValue[defaultValue.length - 1] === '"') {
+					defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+				}
+				const q = Database.insertQuery('table_fields', {
+					table_name: tableName,
+					field_name: item.name,
+					field_type: Database.enumId('fieldType', item.type),
+					field_default: defaultValue,
+				});
+				queries.push(q);
+			}
+		}
+
+		queries.push({ sql: 'UPDATE version SET table_fields_version = ?', params: [newVersion] });
+		await this.transactionExecBatch(queries);
 	}
 
 	public addMigrationFile(num: number) {
