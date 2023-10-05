@@ -4827,7 +4827,7 @@ __metadata:
     ts-node: 10.9.1
     typescript: 5.1.6
     uglify-js: 3.17.4
-    url: 0.11.2
+    url: 0.11.3
     webpack: 5.74.0
   languageName: unknown
   linkType: soft
@@ -35115,13 +35115,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:0.11.2":
-  version: 0.11.2
-  resolution: "url@npm:0.11.2"
+"url@npm:0.11.3":
+  version: 0.11.3
+  resolution: "url@npm:0.11.3"
   dependencies:
     punycode: ^1.4.1
     qs: ^6.11.2
-  checksum: da5943ab43f4df75af5ed96d8465e3084fc2ea0f01bc73e98fb60899777a644541ea0022451371a419283a27a8bbd1809292212fb4c78a0b4a70f15fd89b8205
+  checksum: f9e7886f46a16f96d2e42fbcc5d682c231c55ef5442c1ff66150c0f6556f6e3a97d094a84f51be15ec2432711d212eb60426659ce418f5fcadeaa3f601532c4e
   languageName: node
   linkType: hard
 
