@@ -9,6 +9,7 @@ import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
+import { SearchResult } from './services/searchengine/types';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -77,6 +78,7 @@ export interface State {
 	syncStarted: boolean;
 	syncReport: any;
 	searchQuery: string;
+	searchResults: SearchResult[];
 	settings: any;
 	sharedData: any;
 	appState: string;
@@ -134,6 +136,7 @@ export const defaultState: State = {
 	syncStarted: false,
 	syncReport: {},
 	searchQuery: '',
+	searchResults: [],
 	settings: {},
 	sharedData: null,
 	appState: 'starting',
@@ -703,6 +706,11 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 		break;
+
+	case 'SEARCH_RESULTS_SET':
+		draft.searchResults = action.value;
+		break;
+
 	case 'FOLDER_DELETE':
 		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.parent_id !== action.id);
 		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.parent_id !== action.id);

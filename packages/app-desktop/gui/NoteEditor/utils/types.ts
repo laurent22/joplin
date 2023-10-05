@@ -5,6 +5,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
 import { Dispatch } from 'redux';
+import { SearchResult } from '@joplin/lib/services/searchengine/types';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -46,6 +47,7 @@ export interface NoteEditorProps {
 	useCustomPdfViewer: boolean;
 	shareCacheSetting: string;
 	syncUserId: string;
+	searchResults: SearchResult[];
 }
 
 export interface NoteBodyEditorRef {

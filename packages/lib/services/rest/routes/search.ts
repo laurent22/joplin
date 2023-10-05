@@ -6,6 +6,7 @@ import requestFields from '../utils/requestFields';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import BaseItem from '../../../models/BaseItem';
 import SearchEngineUtils from '../../searchengine/SearchEngineUtils';
+import { NoteEntity } from '../../database/types';
 
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
@@ -15,7 +16,7 @@ export default async function(request: Request) {
 
 	const modelType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
 
-	let results = [];
+	let results: NoteEntity[] = [];
 
 	if (modelType !== BaseItem.TYPE_NOTE) {
 		const ModelClass = BaseItem.getClassByItemType(modelType);
@@ -28,7 +29,7 @@ export default async function(request: Request) {
 		options.caseInsensitive = true;
 		results = await ModelClass.all(options);
 	} else {
-		results = await SearchEngineUtils.notesForQuery(query, false, defaultLoadOptions(request, ModelType.Note));
+		results = (await SearchEngineUtils.notesForQuery(query, false, defaultLoadOptions(request, ModelType.Note))).notes;
 	}
 
 	return collectionToPaginatedResults(modelType, results, request);

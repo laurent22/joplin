@@ -25,7 +25,7 @@ const logger = Logger.create('GotoAnything');
 
 const PLUGIN_NAME = 'gotoAnything';
 
-interface SearchResult {
+interface GotoAnythingSearchResult {
 	id: string;
 	title: string;
 	parent_id: string;
@@ -46,7 +46,7 @@ interface Props {
 
 interface State {
 	query: string;
-	results: SearchResult[];
+	results: GotoAnythingSearchResult[];
 	selectedItemId: string;
 	keywords: string[];
 	listType: number;
@@ -266,7 +266,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
 		} else {
-			let results: SearchResult[] = [];
+			let results: GotoAnythingSearchResult[] = [];
 			let listType = null;
 			let searchQuery = '';
 			let keywords = null;
@@ -307,7 +307,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery);
+				results = (await SearchEngine.instance().search(searchQuery)) as any;
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
@@ -475,7 +475,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	public renderItem(item: SearchResult) {
+	public renderItem(item: GotoAnythingSearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const isSelected = item.id === this.state.selectedItemId;

@@ -70,6 +70,7 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -594,6 +595,7 @@ class Application extends BaseApplication {
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
 				resourceService: ResourceService.instance(),
+				searchEngine: SearchEngine.instance(),
 			};
 		}
 

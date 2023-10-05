@@ -76,6 +76,17 @@ export default class NoteResource extends BaseModel {
 		return rows.map((r: any) => r.note_id);
 	}
 
+	public static async associatedResourceNoteIds(resourceIds: string[]) {
+		if (!resourceIds.length) return {};
+		const rows = await this.modelSelectAll(`SELECT note_id, resource_id FROM note_resources WHERE resource_id IN ("${resourceIds.join('", "')}") AND is_associated = 1`);
+		const output: Record<string, string[]> = {};
+		for (const row of rows) {
+			if (!output[row.resource_id]) output[row.resource_id] = [];
+			output[row.resource_id].push(row.note_id);
+		}
+		return output;
+	}
+
 	public static async setAssociatedResources(noteId: string, resourceIds: string[]) {
 		const existingRows = await this.modelSelectAll('SELECT * FROM note_resources WHERE note_id = ?', [noteId]);
 

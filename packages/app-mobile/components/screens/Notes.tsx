@@ -16,6 +16,7 @@ const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('../base-screen.js');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
@@ -133,7 +134,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		if (source === props.notesSource) return;
 
-		let notes = [];
+		let notes: NoteEntity[] = [];
 		if (props.notesParentType === 'Folder') {
 			notes = await Note.previews(props.selectedFolderId, options);
 		} else if (props.notesParentType === 'Tag') {

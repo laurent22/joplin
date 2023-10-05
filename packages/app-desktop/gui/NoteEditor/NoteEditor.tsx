@@ -47,6 +47,7 @@ import { ErrorCode } from '@joplin/lib/errors';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
+import { openItemById } from './utils/contextMenu';
 
 const commands = [
 	require('./commands/showRevisions'),
@@ -490,6 +491,12 @@ function NoteEditor(props: NoteEditorProps) {
 		setShowRevisions(false);
 	}, []);
 
+	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		const resourceId = event.currentTarget.getAttribute('data-resource-id');
+		await openItemById(resourceId, props.dispatch);
+	}, [props.dispatch]);
+
 	if (showRevisions) {
 		const theme = themeStyle(props.themeId);
 
@@ -559,6 +566,24 @@ function NoteEditor(props: NoteEditorProps) {
 		);
 	}
 
+	const renderResourceInSearchResultsNotification = () => {
+		const resourceResults = props.searchResults.filter(r => r.id === props.noteId && r.item_type === ModelType.Resource);
+		if (!resourceResults.length) return null;
+
+		const renderResource = (id: string, title: string) => {
+			return <li key={id}><a data-resource-id={id} onClick={onBannerResourceClick} href="#">{title}</a></li>;
+		};
+
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p style={styles.resourceWatchBannerLine}>{_('Search found the following attachments:')}</p>
+				<ul>
+					{resourceResults.map(r => renderResource(r.item_id, r.title))}
+				</ul>
+			</div>
+		);
+	};
+
 	function renderSearchInfo() {
 		const theme = themeStyle(props.themeId);
 		if (formNoteFolder && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
@@ -594,6 +619,7 @@ function NoteEditor(props: NoteEditorProps) {
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
+				{renderResourceInSearchResultsNotification()}
 				<NoteTitleBar
 					titleInputRef={titleInputRef}
 					themeId={props.themeId}
@@ -666,6 +692,7 @@ const mapStateToProps = (state: AppState) => {
 		useCustomPdfViewer: false,
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
+		searchResults: state.searchResults,
 	};
 };
 

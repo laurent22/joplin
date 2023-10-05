@@ -11,6 +11,8 @@ import { ItemChangeEntity, NoteEntity } from '../database/types';
 import Resource from '../../models/Resource';
 import JoplinDatabase from '../../JoplinDatabase';
 import { SqlQuery } from '../../database';
+import NoteResource from '../../models/NoteResource';
+import { SearchResult } from './types';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -29,17 +31,6 @@ interface SearchOptions {
 	// allows returning results quickly, in particular on mobile, and it seems
 	// to be what users generally expect.
 	appendWildCards?: boolean;
-}
-
-interface ProcessResultsRow {
-	offsets: string;
-	user_updated_time: number;
-	matchinfo: Buffer;
-	item_type?: ModelType;
-	fields?: string[];
-	weight?: number;
-	is_todo?: number;
-	todo_completed?: number;
 }
 
 export interface ComplexTerm {
@@ -249,6 +240,8 @@ export default class SearchEngine {
 
 		const lastProcessedResource: LastProcessedResource = !Setting.value('searchEngine.lastProcessedResource') ? { updated_time: 0, id: '' } : JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
 
+		this.logger().info('Updating items_normalized from', lastProcessedResource);
+
 		try {
 			while (true) {
 				const resources = await Resource.allForNormalization(
@@ -333,7 +326,7 @@ export default class SearchEngine {
 		return output;
 	}
 
-	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
+	private calculateWeightBM25_(rows: SearchResult[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -397,7 +390,7 @@ export default class SearchEngine {
 
 		const msSinceEpoch = Math.round(new Date().getTime());
 		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row: ProcessResultsRow) => {
+		const weightForDaysSinceLastUpdate = (row: SearchResult) => {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
@@ -447,7 +440,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: SearchResult[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -648,7 +641,7 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	public async search(searchString: string, options: SearchOptions = null) {
+	public async search(searchString: string, options: SearchOptions = null): Promise<SearchResult[]> {
 		if (!searchString) return [];
 
 		options = {
@@ -664,8 +657,8 @@ export default class SearchEngine {
 			searchString = this.normalizeText_(searchString);
 			const rows = await this.basicSearch(searchString);
 
-			this.processResults_(rows, parsedQuery, true);
-			return rows;
+			this.processResults_(rows as SearchResult[], parsedQuery, true);
+			return rows as SearchResult[];
 		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
@@ -690,26 +683,44 @@ export default class SearchEngine {
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-				let rows = await this.db().selectAll<ProcessResultsRow>(query, params);
+				let rows = await this.db().selectAll<SearchResult>(query, params);
 				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text');
 
+				rows = rows.map(r => {
+					return {
+						...r,
+						item_type: ModelType.Note,
+					};
+				});
+
 				if (!queryHasFilters) {
-					const itemRows = await this.db().selectAll<ProcessResultsRow>(`
+					let itemRows = await this.db().selectAll<SearchResult>(`
 						SELECT
 							id,
 							title,
-							body,
 							user_updated_time,
 							offsets(items_fts) AS offsets,
-							matchinfo(items_fts, 'pcnalx') AS matchinfo
+							matchinfo(items_fts, 'pcnalx') AS matchinfo,
+							item_id,
+							item_type
 						FROM items_fts
 						WHERE title MATCH ? OR body MATCH ?
 					`, [searchString, searchString]);
 
+					const resourceToNoteIds = await NoteResource.associatedResourceNoteIds(itemRows.map(r => r.item_id));
+
+					for (const itemRow of itemRows) {
+						const r = resourceToNoteIds[itemRow.item_id];
+						itemRow.id = r && r.length ? r[0] : null;
+					}
+
+					// Remove resources not associated with any notes
+					itemRows = itemRows.filter(r => !!r.id);
+
 					rows = rows.concat(itemRows);
 				}
 
-				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
+				this.processResults_(rows as SearchResult[], parsedQuery, !useFts);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);

@@ -938,7 +938,13 @@ export default class JoplinDatabase extends Database {
 						body TEXT NOT NULL DEFAULT "",
 						item_id TEXT NOT NULL,
 						item_type INT NOT NULL,
-						user_updated_time INT NOT NULL DEFAULT 0
+						user_updated_time INT NOT NULL DEFAULT 0,
+						reserved1 INT NULL,
+						reserved2 INT NULL,
+						reserved3 INT NULL,
+						reserved4 INT NULL,
+						reserved5 INT NULL,
+						reserved6 INT NULL
 					);
 				`;
 
@@ -946,7 +952,7 @@ export default class JoplinDatabase extends Database {
 
 				queries.push('CREATE INDEX items_normalized_id ON items_normalized (id)');
 
-				const tableFields = 'id, title, body, item_id, item_type, user_updated_time';
+				const tableFields = 'id, title, body, item_id, item_type, user_updated_time, reserved1, reserved2, reserved3, reserved4, reserved5, reserved6';
 
 				const newVirtualTableSql = `
 					CREATE VIRTUAL TABLE items_fts USING fts4(
@@ -955,6 +961,12 @@ export default class JoplinDatabase extends Database {
 						notindexed="item_id",
 						notindexed="item_type",
 						notindexed="user_updated_time",
+						notindexed="reserved1",
+						notindexed="reserved2",
+						notindexed="reserved3",
+						notindexed="reserved4",
+						notindexed="reserved5",
+						notindexed="reserved6",
 						${tableFields}
 					);`
 				;
