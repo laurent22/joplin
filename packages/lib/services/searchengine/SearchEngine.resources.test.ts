@@ -29,7 +29,6 @@ describe('SearchEngine.resources', () => {
 		}, { isNew: true });
 
 		await engine.syncTables();
-		await engine.syncTables();
 
 		const normalized = await db().selectAll('select * from items_normalized');
 		expect(normalized[0].title).toBe('bonjour ca va ?');
@@ -47,7 +46,6 @@ describe('SearchEngine.resources', () => {
 			ocr_text: 'hi',
 		}, { isNew: true });
 
-		await engine.syncTables();
 		await engine.syncTables();
 
 		expect((await db().selectAll('select * from items_normalized')).length).toBe(1);
@@ -76,7 +74,6 @@ describe('SearchEngine.resources', () => {
 			await msleep(1);
 		}
 
-		await engine.syncTables();
 		await engine.syncTables();
 
 		const results = await engine.search('abcd', { includeOrphanedResources: true });

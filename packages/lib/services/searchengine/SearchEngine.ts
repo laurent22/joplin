@@ -100,7 +100,7 @@ export default class SearchEngine {
 		return null;
 	}
 
-	private async rebuildIndex_() {
+	private async doInitialNoteIndexing_() {
 		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		const noteIds = notes.map(n => n.id);
 
@@ -163,10 +163,8 @@ export default class SearchEngine {
 		await ItemChange.waitForAllSaved();
 
 		if (!Setting.value('searchEngine.initialIndexingDone')) {
-			await this.rebuildIndex_();
+			await this.doInitialNoteIndexing_();
 			Setting.setValue('searchEngine.initialIndexingDone', true);
-			this.isIndexing_ = false;
-			return;
 		}
 
 		const startTime = Date.now();
@@ -456,8 +454,8 @@ export default class SearchEngine {
 		}
 
 		rows.sort((a, b) => {
-			const aIsNote = !('item_type' in a);
-			const bIsNote = !('item_type' in b);
+			const aIsNote = a.item_type === ModelType.Note;
+			const bIsNote = b.item_type === ModelType.Note;
 
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
