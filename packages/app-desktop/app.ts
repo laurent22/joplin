@@ -363,7 +363,6 @@ class Application extends BaseApplication {
 		);
 
 		this.ocrService_ = new OcrService(driver);
-		void this.ocrService_.maintenance(); // TODO: remove
 		this.ocrService_.runInBackground();
 	}
 

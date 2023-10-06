@@ -83,11 +83,13 @@ export default class OcrService {
 				],
 			});
 
-			logger.info(`Found ${resources.length} resources to process`);
+			logger.info(`Found ${resources.length} resources to process...`);
 
 			if (!resources.length) break;
 
 			for (const resource of resources) {
+				logger.info(`Processing resource ${resource.id} (type ${resource.mime})...`);
+
 				const toSave: ResourceEntity = {
 					id: resource.id,
 				};
@@ -98,7 +100,7 @@ export default class OcrService {
 					toSave.ocr_text = result.text;
 					toSave.ocr_error = '';
 				} catch (error) {
-					logger.warn(`Could not process a resource: ${error.message}`);
+					logger.warn(`Could not process resource ${resource.id}: ${error.message}`);
 					toSave.ocr_error = error.message;
 					toSave.ocr_status = ResourceOcrStatus.Error;
 				}
@@ -108,7 +110,7 @@ export default class OcrService {
 			}
 		}
 
-		logger.info(`${totalProcesed} resources have been processed`);
+		logger.info(`${totalProcesed} resources have been processed.`);
 	}
 
 	public async maintenance() {
@@ -127,7 +129,7 @@ export default class OcrService {
 		this.maintenanceTimer_ = shim.setTimeout(async () => {
 			await this.maintenance();
 			this.maintenanceTimer_ = null;
-		}, 2 * Minute);
+		}, 5 * Minute);
 	}
 
 }
