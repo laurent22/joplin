@@ -64,7 +64,7 @@
     "@types/fs-extra": "11.0.2",
     "@types/jest": "29.5.4",
     "@types/jest-expect-message": "1.0.4",
-    "@types/jsdom": "21.1.2",
+    "@types/jsdom": "21.1.3",
     "@types/koa": "2.13.9",
     "@types/markdown-it": "12.2.3",
     "@types/mustache": "4.2.2",
