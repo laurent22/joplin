@@ -2,7 +2,7 @@ import { toIso639 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { ResourceEntity, ResourceOcrStatus, ResourceOcrWord } from '../database/types';
+import { ResourceEntity, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
 import { RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
@@ -56,14 +56,8 @@ export default class OcrService {
 				await shim.fsDriver().remove(imageFilePath);
 			}
 
-			let mergedWords: ResourceOcrWord[] = [];
-			for (const r of results) {
-				mergedWords = mergedWords.concat(r.words);
-			}
-
 			return {
 				text: results.map(r => r.text).join('\n'),
-				words: mergedWords,
 			};
 		} else {
 			return this.driver_.recognize(language, resourceFilePath);
@@ -102,7 +96,6 @@ export default class OcrService {
 					const result = await this.recognize(language, resource);
 					toSave.ocr_status = ResourceOcrStatus.Done;
 					toSave.ocr_text = result.text;
-					toSave.ocr_words = Resource.serializeOcrWords(result.words);
 					toSave.ocr_error = '';
 				} catch (error) {
 					logger.warn(`Could not process a resource: ${error.message}`);

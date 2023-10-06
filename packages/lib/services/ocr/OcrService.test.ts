@@ -38,13 +38,11 @@ describe('OcrService', () => {
 		);
 		expect(processedResource1.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource1.ocr_error).toBe('');
-		expect(Resource.parseOcrWords(processedResource1.ocr_words).length).toBe(60);
 
 		const processedResource2: ResourceEntity = await Resource.load(resource2.id);
 		expect(processedResource2.ocr_text).toBe('');
 		expect(processedResource2.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource2.ocr_error).toBe('');
-		expect(Resource.parseOcrWords(processedResource2.ocr_words).length).toBe(0);
 
 		const processedResource3: ResourceEntity = await Resource.load(resource3.id);
 		expect(processedResource3.ocr_text).toBe('Declaration\n' +
@@ -61,7 +59,6 @@ describe('OcrService', () => {
 		);
 		expect(processedResource3.ocr_status).toBe(ResourceOcrStatus.Done);
 		expect(processedResource3.ocr_error).toBe('');
-		expect(Resource.parseOcrWords(processedResource3.ocr_words).length).toBe(114);
 
 		await service.dispose();
 	});

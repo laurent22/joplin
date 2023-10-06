@@ -1,6 +1,5 @@
 import { RecognizeResult } from '../utils/types';
 import { Worker, WorkerOptions, createWorker } from 'tesseract.js';
-import { ResourceOcrWord } from '../../database/types';
 import OcrDriverBase from '../OcrDriverBase';
 
 interface Tesseract {
@@ -56,8 +55,6 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 		result.data.paragraphs;
 
-		let words: ResourceOcrWord[] = [];
-
 		interface GoodParagraph {
 			lines: string[];
 			text: string;
@@ -72,23 +69,10 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 				if (line.confidence < minConfidence) continue;
 
 				const goodWords = line.words.map(w => {
-					const baseline = w.baseline.has_baseline ? {
-						x0: w.baseline.x0,
-						x1: w.baseline.x1,
-						y0: w.baseline.y0,
-						y1: w.baseline.y1,
-					} : null;
-
-					const output: ResourceOcrWord = {
+					return {
 						text: w.text,
-						bbox: w.bbox,
 					};
-
-					if (baseline) output.baseline = baseline;
-
-					return output;
 				});
-				words = words.concat(goodWords);
 
 				goodLines.push(goodWords.map(w => w.text).join(' '));
 			}
@@ -104,7 +88,6 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			// concatenation of all lines, even those with a low confidence
 			// score, so we recreate it here based on the good lines.
 			text: goodParagraphs.map(p => p.text).join('\n'),
-			words,
 		};
 	}
 

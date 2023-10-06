@@ -44,22 +44,6 @@ export interface UserDataValue {
   d?: Number; // deleted - 0 or 1 (default = 0)
 }
 
-export interface ResourceOcrWord {
-	text: string;
-	baseline?: {
-		x0: number;
-		x1: number;
-		y0: number;
-		y1: number;
-	}
-	bbox: {
-		x0: number;
-		x1: number;
-		y0: number;
-		y1: number;
-	}
-}
-
 export enum ResourceOcrStatus {
 	Todo = 0,
 	Processing = 1,

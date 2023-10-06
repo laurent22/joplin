@@ -5,7 +5,7 @@ import NoteResource from './NoteResource';
 import Setting from './Setting';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus, ResourceOcrWord } from '../services/database/types';
+import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus } from '../services/database/types';
 import ResourceLocalState from './ResourceLocalState';
 const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
@@ -454,24 +454,6 @@ export default class Resource extends BaseItem {
 			ORDER BY updated_time DESC
 			LIMIT 100
 		`, [ResourceOcrStatus.Todo]);
-	}
-
-	public static serializeOcrWords(words: ResourceOcrWord[]) {
-		if (!words.length) return '';
-		return JSON.stringify(words);
-	}
-
-	public static parseOcrWords(s: string): ResourceOcrWord[] {
-		if (!s) return [];
-
-		try {
-			const result = JSON.parse(s);
-			if (!result || !result.length) return [];
-			return result;
-		} catch (error) {
-			this.logger().warn(`Could not parse OCR words: ${s}`);
-			return [];
-		}
 	}
 
 	public static allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
