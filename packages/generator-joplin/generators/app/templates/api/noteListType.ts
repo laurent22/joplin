@@ -61,7 +61,7 @@ export interface ListRenderer {
 	 * Can be top to bottom or left to right. Left to right gives you more
 	 * option to set the size of the items since you set both its width and
 	 * height.
-	 */​
+	 */
 	flow: ItemFlow;
 
 	/**
@@ -69,7 +69,7 @@ export interface ListRenderer {
 	 * reasons, and cannot be changed afterwards. If the item flow is top to
 	 * bottom, you only need to specificy the item height (the width will be
 	 * ignored).
-	 */​
+	 */
 	itemSize: Size;
 
 	/**
@@ -77,17 +77,17 @@ export interface ListRenderer {
 	 * page is essentially `.note-list-item { YOUR_CSS; }`. It means you can use
 	 * child combinator with guarantee it will only apply to your own items. In
 	 * this example, the styling will apply to `.note-list-item > .content`:
-	 * 
+	 *
 	 * ```css
 	 * > .content {
 	 *     padding: 10px;
 	 * }
 	 * ```
-	 * 
+	 *
 	 * In order to get syntax highlighting working here, it's recommended
 	 * installing an editor extension such as [es6-string-html VSCode
 	 * extension](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
-	 */​
+	 */
 	itemCss?: string;
 
 	/**
@@ -95,7 +95,7 @@ export interface ListRenderer {
 	 * items. Only these will be passed to your `onRenderNote` handler. Ensure
 	 * that you do not add more than what you need since there is a performance
 	 * penalty for each property.
-	 */​
+	 */
 	dependencies: ListRendererDepependency[];
 
 	/**
@@ -105,17 +105,17 @@ export interface ListRenderer {
 	 * example, if you return a property named `formattedDate` from
 	 * `onRenderNote`, you can insert it in the template using `Created date:
 	 * {{formattedDate}}`.
-	 * 
+	 *
 	 * In order to get syntax highlighting working here, it's recommended
 	 * installing an editor extension such as [es6-string-html VSCode
 	 * extension](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
-	 */​
+	 */
 	itemTemplate: string;
 
 	/**
 	 * This user-facing text is used for example in the View menu, so that your
 	 * renderer can be selected.
-	 */​
+	 */
 	label: ()=> Promise<string>;
 
 	/**
@@ -125,13 +125,13 @@ export interface ListRenderer {
 	 * then process them, load any additional data you need, and once done you
 	 * need to return the properties that are needed in the `itemTemplate` HTML.
 	 * Again, to use the formatted date example, you could have such a renderer:
-	 * 
+	 *
 	 * ```typescript
 	 * dependencies: [
 	 *     'note.title',
 	 *     'note.created_time',
 	 * ],
-	 * 
+	 *
 	 * itemTemplate: // html
 	 *     `
 	 *     <div>
@@ -139,7 +139,7 @@ export interface ListRenderer {
 	 *         Date: {{formattedDate}}
 	 *     </div>
 	 * `,
-	 * 
+	 *
 	 * onRenderNote: async (props: any) => {
 	 *     const formattedDate = dayjs(props.note.created_time).format();
 	 *     return {
@@ -150,7 +150,7 @@ export interface ListRenderer {
 	 *     }
 	 * },
 	 * ```
-	 */​
+	 */
 	onRenderNote: OnRenderNoteHandler;
 
 	/**
@@ -158,24 +158,24 @@ export interface ListRenderer {
 	 * whenever an input element within the item is changed (for example, when a
 	 * checkbox is clicked, or a text input is changed), this `onChange` handler
 	 * is going to be called.
-	 * 
+	 *
 	 * You can inspect `event.elementId` to know which element had some changes,
 	 * and `event.value` to know the new value. `event.noteId` also tells you
 	 * what note is affected, so that you can potentially apply changes to it.
-	 * 
+	 *
 	 * You specify the element ID, by setting a `data-id` attribute on the
 	 * input.
-	 * 
+	 *
 	 * For example, if you have such a template:
-	 * 
+	 *
 	 * ```html
 	 * <div>
 	 *     <input type="text" value="{{note.title}}" data-id="noteTitleInput"/>
 	 * </div>
 	 * ```
-	 * 
+	 *
 	 * The event handler will receive an event with `elementId` set to
 	 * `noteTitleInput`.
-	 */​
+	 */
 	onChange?: OnChangeHandler;
 }
