@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/fs-extra": "11.0.2",
     "@types/jest": "29.5.4",
-    "@types/js-yaml": "4.0.5",
+    "@types/js-yaml": "4.0.6",
     "@types/node": "18.17.16",
     "@types/node-rsa": "1.1.1",
     "@types/react": "18.2.21",
