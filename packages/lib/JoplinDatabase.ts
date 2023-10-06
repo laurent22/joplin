@@ -949,6 +949,8 @@ export default class JoplinDatabase extends Database {
 				queries.push(this.sqlStringToLines(itemsNormalized)[0]);
 
 				queries.push('CREATE INDEX items_normalized_id ON items_normalized (id)');
+				queries.push('CREATE INDEX items_normalized_item_id ON items_normalized (item_id)');
+				queries.push('CREATE INDEX items_normalized_item_type ON items_normalized (item_type)');
 
 				const tableFields = 'id, title, body, item_id, item_type, user_updated_time, reserved1, reserved2, reserved3, reserved4, reserved5, reserved6';
 

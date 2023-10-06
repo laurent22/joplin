@@ -262,7 +262,7 @@ export default class SearchEngine {
 
 				for (const resource of resources) {
 					queries.push({
-						sql: 'DELETE FROM items_normalized WHERE id = ? AND item_type = ?',
+						sql: 'DELETE FROM items_normalized WHERE item_id = ? AND item_type = ?',
 						params: [
 							resource.id,
 							ModelType.Resource,
