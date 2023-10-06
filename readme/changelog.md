@@ -1,5 +1,37 @@
 # Joplin changelog
 
+## [v2.13.2](https://github.com/laurent22/joplin/releases/tag/v2.13.2) (Pre-release) - 2023-10-06T17:00:07Z
+
+- New: Add new beta Markdown editor based on CodeMirror 6 ([#8793](https://github.com/laurent22/joplin/issues/8793) by Henry Heino)
+- New: Add support for plugin imaging API ([#8900](https://github.com/laurent22/joplin/issues/8900))
+- New: Add support for note list plugins ([#8897](https://github.com/laurent22/joplin/issues/8897)) ([#5389](https://github.com/laurent22/joplin/issues/5389))
+- Improved: Api: Allow accessing revision data ([e49ca26](https://github.com/laurent22/joplin/commit/e49ca26))
+- Improved: Bump mermaid version to 10.4.0 to support new chart types ([#8890](https://github.com/laurent22/joplin/issues/8890)) ([#8728](https://github.com/laurent22/joplin/issues/8728) by [@oj-lappi](https://github.com/oj-lappi))
+- Improved: Enable ignoreTlsErrors and custom certificates for S3 sync ([#8980](https://github.com/laurent22/joplin/issues/8980) by Jens Böttge)
+- Improved: Improved handling of invalid sync info ([#6978](https://github.com/laurent22/joplin/issues/6978))
+- Improved: Indent sub-sections in config screen ([2cb3857](https://github.com/laurent22/joplin/commit/2cb3857))
+- Improved: No strikethrough on completed to-dos in note list to improve readability ([#8225](https://github.com/laurent22/joplin/issues/8225))
+- Improved: Remember whether "All notes", a notebook or a tag was opened when re-opening the app ([#8021](https://github.com/laurent22/joplin/issues/8021))
+- Improved: Significantly improve performance when displaying large tables in Rich Text editor ([#6736](https://github.com/laurent22/joplin/issues/6736))
+- Improved: Updated packages @electron/notarize (v2.1.0), @electron/remote (v2.0.11), compare-versions (v6.1.0), glob (v10.3.4), katex (v0.16.8), sass (v1.66.1), sprintf-js (v1.1.3), uuid (v9.0.1)
+- Improved: Upgrade to Electron 25.8.1 ([#8921](https://github.com/laurent22/joplin/issues/8921) by Henry Heino)
+- Fixed: Changing the currently opened note from plugins or the data API does not refresh the note content ([#5955](https://github.com/laurent22/joplin/issues/5955))
+- Fixed: Do no automatically set focus when switching layout to fix certain plugin issues ([#6514](https://github.com/laurent22/joplin/issues/6514))
+- Fixed: ENEX files that contain resources with invalid mime types are imported correctly ([#8363](https://github.com/laurent22/joplin/issues/8363))
+- Fixed: Enable translation for "Reveal file in folder" command ([#8852](https://github.com/laurent22/joplin/issues/8852)) ([#6440](https://github.com/laurent22/joplin/issues/6440) by [@CptMeetKat](https://github.com/CptMeetKat))
+- Fixed: Ensure that ENEX resources with invalid filenames are imported correctly ([#8823](https://github.com/laurent22/joplin/issues/8823))
+- Fixed: Ensure that notes that contain invalid links can still be exported as HTML or PDF ([#8305](https://github.com/laurent22/joplin/issues/8305))
+- Fixed: Fix escapes breaking linkified URLs ([#8873](https://github.com/laurent22/joplin/issues/8873)) ([#8743](https://github.com/laurent22/joplin/issues/8743) by Henry Heino)
+- Fixed: Fix search engine ranking algorithm ([f504cf1](https://github.com/laurent22/joplin/commit/f504cf1))
+- Fixed: Improved import of invalid Markdown+FrontMatter files ([#8802](https://github.com/laurent22/joplin/issues/8802))
+- Fixed: Modified placeholder text on note title input field ([#8850](https://github.com/laurent22/joplin/issues/8850)) ([#8643](https://github.com/laurent22/joplin/issues/8643) by [@CptMeetKat](https://github.com/CptMeetKat))
+- Fixed: Preserve previous values when updating a note's date fields ([#8948](https://github.com/laurent22/joplin/issues/8948)) ([#8937](https://github.com/laurent22/joplin/issues/8937) by [@CptMeetKat](https://github.com/CptMeetKat))
+- Fixed: Prevent application from being stuck when importing an invalid ENEX file ([#8699](https://github.com/laurent22/joplin/issues/8699))
+- Fixed: Regression: Fixes [#8877](https://github.com/laurent22/joplin/issues/8877): After a note is decrypted, the note list is not updated ([#8877](https://github.com/laurent22/joplin/issues/8877))
+- Fixed: Remove dead area at the end of the note list ([#8825](https://github.com/laurent22/joplin/issues/8825)) ([#8194](https://github.com/laurent22/joplin/issues/8194) by [@CptMeetKat](https://github.com/CptMeetKat))
+- Fixed: Show a gear when a plugin doesn't specify an icon ([#8909](https://github.com/laurent22/joplin/issues/8909)) ([#8898](https://github.com/laurent22/joplin/issues/8898) by Henry Heino)
+- Fixed: Whitelisted Joplin markdown links for copy pasting in WYSIWYG mode ([#8972](https://github.com/laurent22/joplin/issues/8972)) ([#8946](https://github.com/laurent22/joplin/issues/8946) by [@CptMeetKat](https://github.com/CptMeetKat))
+
 ## [v2.12.18](https://github.com/laurent22/joplin/releases/tag/v2.12.18) - 2023-09-22T14:37:24Z
 
 - Security: Upgrade to Electron 25.8.1 ([#8921](https://github.com/laurent22/joplin/issues/8921) by Henry Heino)
