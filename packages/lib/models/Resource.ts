@@ -307,6 +307,7 @@ export default class Resource extends BaseItem {
 			await super.batchDelete([id], options);
 			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
+			await this.db().exec('DELETE FROM items_normalized WHERE item_id = ?', [id]);
 		}
 
 		await ResourceLocalState.batchDelete(ids);

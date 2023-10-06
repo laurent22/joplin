@@ -15,12 +15,14 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 	private tesseract_: Tesseract = null;
 	private workerPath_: string|null = null;
+	private corePath_: string|null = null;
 	private workers_: Record<string, Worker> = {};
 
-	public constructor(tesseract: Tesseract, workerPath: string|null = null) {
+	public constructor(tesseract: Tesseract, workerPath: string|null = null, corePath: string|null = null) {
 		super();
 		this.tesseract_ = tesseract;
 		this.workerPath_ = workerPath;
+		this.corePath_ = corePath;
 	}
 
 	private async getWorker(language: string) {
@@ -31,6 +33,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		};
 
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;
+		if (this.corePath_) createWorkerOptions.corePath = this.corePath_;
 
 		const worker = await this.tesseract_.createWorker(createWorkerOptions);
 

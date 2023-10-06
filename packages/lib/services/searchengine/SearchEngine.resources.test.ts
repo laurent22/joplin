@@ -36,6 +36,27 @@ describe('SearchEngine.resources', () => {
 		expect(normalized[0].body).toBe('hello, how are you ?');
 	});
 
+	it('should delete normalized data when a resource is deleted', async () => {
+		const engine = newSearchEngine();
+
+		const resource = await Resource.save({
+			id: '00000000000000000000000000000001',
+			mime: 'image/jpeg',
+			title: 'hello',
+			ocr_status: ResourceOcrStatus.Done,
+			ocr_text: 'hi',
+		}, { isNew: true });
+
+		await engine.syncTables();
+		await engine.syncTables();
+
+		expect((await db().selectAll('select * from items_normalized')).length).toBe(1);
+
+		await Resource.delete(resource.id);
+
+		expect((await db().selectAll('select * from items_normalized')).length).toBe(0);
+	});
+
 	it('should sort resources', async () => {
 		const engine = newSearchEngine();
 
@@ -58,7 +79,7 @@ describe('SearchEngine.resources', () => {
 		await engine.syncTables();
 		await engine.syncTables();
 
-		const results = await engine.search('abcd');
+		const results = await engine.search('abcd', { includeOrphanedResources: true });
 		expect(results[0].title).toBe('abcd abcd abcd');
 		expect(results[1].title).toBe('abcd');
 	});

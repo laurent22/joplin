@@ -356,7 +356,11 @@ class Application extends BaseApplication {
 	private async setupOcrService() {
 		const Tesseract = (window as any).Tesseract;
 
-		const driver = new OcrDriverTesseract({ createWorker: Tesseract.createWorker }, './node_modules/tesseract.js/dist/worker.min.js');
+		const driver = new OcrDriverTesseract(
+			{ createWorker: Tesseract.createWorker },
+			'./node_modules/tesseract.js/dist/worker.min.js',
+			'./node_modules/tesseract.js-core',
+		);
 
 		this.ocrService_ = new OcrService(driver);
 		void this.ocrService_.maintenance(); // TODO: remove

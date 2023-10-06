@@ -24,13 +24,16 @@ enum SearchType {
 }
 
 interface SearchOptions {
-	searchType: SearchType;
+	searchType?: SearchType;
 
 	// When this is on, the search engine automatically appends "*" to each word
 	// of the query. So "hello world" is turned into "hello* world*". This
 	// allows returning results quickly, in particular on mobile, and it seems
 	// to be what users generally expect.
 	appendWildCards?: boolean;
+
+	// Include resources that are not associated with any notes.
+	includeOrphanedResources?: boolean;
 }
 
 export interface ComplexTerm {
@@ -647,6 +650,7 @@ export default class SearchEngine {
 		options = {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
 			appendWildCards: false,
+			includeOrphanedResources: false,
 			...options,
 		};
 
@@ -714,8 +718,7 @@ export default class SearchEngine {
 						itemRow.id = r && r.length ? r[0] : null;
 					}
 
-					// Remove resources not associated with any notes
-					itemRows = itemRows.filter(r => !!r.id);
+					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);
 
 					rows = rows.concat(itemRows);
 				}
