@@ -181,6 +181,13 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			pro: true,
 			teams: true,
 		},
+		customBanner: {
+			title: _('Customise the note publishing banner'),
+			description: 'You can customise the banner that appears on top of your published notes, for example by adding a custom logo and text, and changing the banner colour.',
+			basic: false,
+			pro: true,
+			teams: true,
+		},
 		multiUsers: {
 			title: _('Manage multiple users'),
 			basic: false,
@@ -193,12 +200,6 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			pro: false,
 			teams: true,
 		},
-		// sharingAccessControl: {
-		// 	title: _('Sharing access control'),
-		// 	basic: false,
-		// 	pro: false,
-		// 	teams: true,
-		// },
 		sharePermissions: {
 			title: _('Share permissions'),
 			description: 'With this feature you can define whether a notebook you share with someone can be edited or is read-only. It can be useful for example to share documentation that you do not want to be modified.',
@@ -240,7 +241,7 @@ export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): 
 };
 
 export const getAllFeatureIds = (): FeatureId[] => {
-	return Object.keys(features);
+	return Object.keys(features());
 };
 
 export const getFeatureById = (featureId: FeatureId): PlanFeature => {
