@@ -418,6 +418,45 @@ Deletes the tag with ID :id
 
 Remove the tag from the note.
 
+# Revisions
+
+## Properties
+
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | text  |       |
+| parent_id | text  |       |
+| item_type | int   |       |
+| item_id | text  |       |
+| item_updated_time | int   |       |
+| title_diff | text  |       |
+| body_diff | text  |       |
+| metadata_diff | text  |       |
+| encryption_cipher_text | text  |       |
+| encryption_applied | int   |       |
+| updated_time | int   |       |
+| created_time | int   |       |
+
+## GET /revisions
+
+Gets all revisions
+
+## GET /revisions/:id
+
+Gets revision with ID :id
+
+## POST /revisions
+
+Creates a new revision
+
+## PUT /revisions/:id
+
+Sets the properties of the revision with ID :id
+
+## DELETE /revisions/:id
+
+Deletes the revision with ID :id
+
 # Events
 
 This end point can be used to retrieve the latest note changes. Currently only note changes are tracked.
@@ -440,7 +479,7 @@ Returns a paginated list of recent events. A `cursor` property should be provide
 
 If no `cursor` property is provided, the API will respond with the latest change ID. That can be used to retrieve future events later on.
 
-The results are paginated so will need to may multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.
+The results are paginated so you may need multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.
 
 ## GET /events/:id
 

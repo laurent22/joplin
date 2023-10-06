@@ -10,6 +10,7 @@ import route_search from './routes/search';
 import route_ping from './routes/ping';
 import route_auth from './routes/auth';
 import route_events from './routes/events';
+import route_revisions from './routes/revisions';
 
 const { ltrimSlashes } = require('../../path-utils');
 const md5 = require('md5');
@@ -113,6 +114,7 @@ export default class Api {
 			services: this.action_services.bind(this),
 			auth: route_auth,
 			events: route_events,
+			revisions: route_revisions,
 		};
 
 		this.dispatch = this.dispatch.bind(this);

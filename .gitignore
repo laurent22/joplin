@@ -491,6 +491,7 @@ packages/editor/CodeMirror/editorCommands/editorCommands.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
+packages/editor/CodeMirror/markdown/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.js
 packages/editor/CodeMirror/markdown/decoratorExtension.js
 packages/editor/CodeMirror/markdown/markdownCommands.bulletedVsChecklist.test.js
@@ -793,6 +794,7 @@ packages/lib/services/rest/routes/master_keys.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
+packages/lib/services/rest/routes/revisions.js
 packages/lib/services/rest/routes/search.js
 packages/lib/services/rest/routes/tags.js
 packages/lib/services/rest/utils/collectionToPaginatedResults.js

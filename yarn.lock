@@ -2814,7 +2814,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:6.9.0, @codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
+"@codemirror/autocomplete@npm:6.9.1":
+  version: 6.9.1
+  resolution: "@codemirror/autocomplete@npm:6.9.1"
+  dependencies:
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.17.0
+    "@lezer/common": ^1.0.0
+  peerDependencies:
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+  checksum: 96dad7a12429bf61e6f1bf75da731bf0dcbfeb56c33400b60a0de22049226e0926a53a174e84701812a235f8f144595ce53f0928054481bdf9cdc2ed3b8be20f
+  languageName: node
+  linkType: hard
+
+"@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
   version: 6.9.0
   resolution: "@codemirror/autocomplete@npm:6.9.0"
   dependencies:
@@ -4647,7 +4664,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.4
     "@types/mustache": 4.2.2
-    "@types/node": 18.17.15
+    "@types/node": 18.17.17
     "@types/react": 18.2.21
     "@types/react-redux": 7.1.26
     "@types/styled-components": 5.1.27
@@ -4737,7 +4754,7 @@ __metadata:
     "@testing-library/jest-native": 5.4.3
     "@testing-library/react-native": 12.2.2
     "@tsconfig/react-native": 2.0.2
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/react": 18.2.21
     "@types/react-native": 0.70.6
@@ -4793,10 +4810,10 @@ __metadata:
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
-    react-native-vector-icons: 9.2.0
+    react-native-vector-icons: 10.0.0
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
-    react-native-webview: 13.3.1
+    react-native-webview: 13.4.0
     react-native-zip-archive: 6.0.9
     react-redux: 8.1.2
     react-test-renderer: 18.2.0
@@ -4813,7 +4830,7 @@ __metadata:
     ts-node: 10.9.1
     typescript: 5.1.6
     uglify-js: 3.17.4
-    url: 0.11.2
+    url: 0.11.3
     webpack: 5.74.0
   languageName: unknown
   linkType: soft
@@ -4822,7 +4839,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
-    "@codemirror/autocomplete": 6.9.0
+    "@codemirror/autocomplete": 6.9.1
     "@codemirror/commands": 6.2.5
     "@codemirror/lang-cpp": 6.0.2
     "@codemirror/lang-html": 6.4.6
@@ -4856,7 +4873,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.4
-    "@types/node": 18.17.15
+    "@types/node": 18.17.17
     "@typescript-eslint/eslint-plugin": 6.0.0
     "@typescript-eslint/parser": 6.0.0
     coveralls: 3.1.1
@@ -4896,7 +4913,7 @@ __metadata:
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.46
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     css: 3.0.0
     datauri: 4.1.0
     fs-extra: 11.1.1
@@ -4918,14 +4935,14 @@ __metadata:
     "@joplin/turndown": ^4.0.68
     "@joplin/turndown-plugin-gfm": ^1.0.50
     "@joplin/utils": ~2.13
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/js-yaml": 4.0.5
+    "@types/js-yaml": 4.0.6
     "@types/nanoid": 3.0.0
-    "@types/node": 18.17.15
+    "@types/node": 18.17.17
     "@types/node-rsa": 1.1.1
     "@types/react": 18.2.21
-    "@types/uuid": 9.0.3
+    "@types/uuid": 9.0.4
     async-mutex: 0.4.0
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -5026,9 +5043,9 @@ __metadata:
     "@joplin/lib": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/node": 18.17.15
+    "@types/node": 18.17.17
     fs-extra: 11.1.1
     gh-release-assets: 2.0.1
     jest: 29.6.4
@@ -5082,7 +5099,7 @@ __metadata:
     "@joplin/fork-uslug": ^1.0.11
     "@joplin/utils": ~2.13
     "@types/jest": 29.5.4
-    "@types/node": 18.17.15
+    "@types/node": 18.17.17
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.1.1
     highlight.js: 11.8.0
@@ -5124,15 +5141,15 @@ __metadata:
     "@koa/cors": 3.4.3
     "@rmp135/sql-ts": 1.18.0
     "@types/formidable": 3.4.3
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/jest-expect-message": 1.0.4
-    "@types/jsdom": 21.1.2
-    "@types/koa": 2.13.8
+    "@types/jsdom": 21.1.3
+    "@types/koa": 2.13.9
     "@types/markdown-it": 12.2.3
     "@types/mustache": 4.2.2
     "@types/nodemailer": 6.4.10
-    "@types/uuid": 9.0.3
+    "@types/uuid": 9.0.4
     "@types/yargs": 17.0.24
     "@types/zxcvbn": 4.4.2
     bcryptjs: 2.4.3
@@ -5182,12 +5199,12 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/utils": ~2.13
     "@rmp135/sql-ts": 1.18.0
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
     "@types/markdown-it": 13.0.1
     "@types/mustache": 4.2.2
-    "@types/node": 18.17.15
-    "@types/node-fetch": 2.6.4
+    "@types/node": 18.17.17
+    "@types/node-fetch": 2.6.5
     "@types/yargs": 17.0.24
     compare-versions: 6.1.0
     dayjs: 1.11.9
@@ -5265,9 +5282,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/node-fetch": 2.6.4
+    "@types/node-fetch": 2.6.5
     async-mutex: 0.4.0
     execa: 5.1.1
     fs-extra: 11.1.1
@@ -7853,13 +7870,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:11.0.1":
-  version: 11.0.1
-  resolution: "@types/fs-extra@npm:11.0.1"
+"@types/fs-extra@npm:11.0.2":
+  version: 11.0.2
+  resolution: "@types/fs-extra@npm:11.0.2"
   dependencies:
     "@types/jsonfile": "*"
     "@types/node": "*"
-  checksum: 3e930346e5d84f419deb8ced1c582beef8cb20d0bd8a0eb145a37d75bab0572a1895f0e48a0d681d386b3a58b9a992b2d2acecc464bcaec2548f53ea00718651
+  checksum: 5b3e30343ee62d2e393e1029355f13f64bab6f3416226e22492483f99da840e2e53ca22cbfa4ac3749f2f83f7086d19c009005c8fa175da01df0fae59c2d73e1
   languageName: node
   linkType: hard
 
@@ -7976,21 +7993,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:4.0.5":
-  version: 4.0.5
-  resolution: "@types/js-yaml@npm:4.0.5"
-  checksum: 7dcac8c50fec31643cc9d6444b5503239a861414cdfaa7ae9a38bc22597c4d850c4b8cec3d82d73b3fbca408348ce223b0408d598b32e094470dfffc6d486b4d
+"@types/js-yaml@npm:4.0.6":
+  version: 4.0.6
+  resolution: "@types/js-yaml@npm:4.0.6"
+  checksum: d4439ec2cc830d355c2a1d7508f49888931b2cfe59d786d27621edd530bf06314b1dceeaa759e21f9b035a0ff623a0ca306752ebb73df9485c02abe045bd962c
   languageName: node
   linkType: hard
 
-"@types/jsdom@npm:21.1.2":
-  version: 21.1.2
-  resolution: "@types/jsdom@npm:21.1.2"
+"@types/jsdom@npm:21.1.3":
+  version: 21.1.3
+  resolution: "@types/jsdom@npm:21.1.3"
   dependencies:
     "@types/node": "*"
     "@types/tough-cookie": "*"
     parse5: ^7.0.0
-  checksum: 62513fc82afa0234034919dee37d3f82425245e1794c58bac55fabbd00de10b3c384992db1cdd53d35a0af58540e2733730f22dbeb57f5b76bca90bca8c368a8
+  checksum: be8e42eb2d24db8abd3a19a229ce2c2e5d0809351765d9053272604ddf1df04fd16ff193eee9a2d79130952c4f91ee995148deae836a4d43451e64db8a698281
   languageName: node
   linkType: hard
 
@@ -8090,9 +8107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.13.8":
-  version: 2.13.8
-  resolution: "@types/koa@npm:2.13.8"
+"@types/koa@npm:2.13.9":
+  version: 2.13.9
+  resolution: "@types/koa@npm:2.13.9"
   dependencies:
     "@types/accepts": "*"
     "@types/content-disposition": "*"
@@ -8102,7 +8119,7 @@ __metadata:
     "@types/keygrip": "*"
     "@types/koa-compose": "*"
     "@types/node": "*"
-  checksum: 76a2a6d219c65f242a43efca42970d864701c58319c346a91dd8c3b4df2021786fd0d600a88dfb098358c9085f9f4a2dfe62563641441cf21e11e2bfe04f4fdf
+  checksum: af9cd599c8e17e2ae0f4168a61d964e343f713d002b65fd995658d7addc6551ccadecfd32b3405cf44e4d360178ee4f972d6881533548261ae1f636a655d24b1
   languageName: node
   linkType: hard
 
@@ -8193,13 +8210,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:2.6.4":
-  version: 2.6.4
-  resolution: "@types/node-fetch@npm:2.6.4"
+"@types/node-fetch@npm:2.6.5":
+  version: 2.6.5
+  resolution: "@types/node-fetch@npm:2.6.5"
   dependencies:
     "@types/node": "*"
-    form-data: ^3.0.0
-  checksum: f3e1d881bb42269e676ecaf49f0e096ab345e22823a2b2d071d60619414817fe02df48a31a8d05adb23054028a2a65521bdb3906ceb763ab6d3339c8d8775058
+    form-data: ^4.0.0
+  checksum: 686ee0d52bb82d73f82c0da0bb025d4af1ba7bd8df4edd09336f6179eb838b6d4b5f0a524677a8faec2b00918d1b08a1690d50fa592c9741a5df6a8041a52495
   languageName: node
   linkType: hard
 
@@ -8219,10 +8236,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.15":
-  version: 18.17.15
-  resolution: "@types/node@npm:18.17.15"
-  checksum: eed11d4398ccdb999a4c65658ee75de621a4ad57aece48ed2fb8803b1e2711fadf58d8aefbdb0a447d69cf3cba602ca32fe0fc92077575950a796e1dc13baa0f
+"@types/node@npm:18.17.17":
+  version: 18.17.17
+  resolution: "@types/node@npm:18.17.17"
+  checksum: ff28f347c77723780836f9bb2ffa6db0cd72490bfd7604397c03db31db34f1f2899e82f0aaf3e825efeb09c15bd94d076ea9aca19a1407e1b56cb4603318936c
   languageName: node
   linkType: hard
 
@@ -8499,10 +8516,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.3":
-  version: 9.0.3
-  resolution: "@types/uuid@npm:9.0.3"
-  checksum: 3dde198defd71c067dd14b3050a8fe6d1ead5fe94ec318472e2c30a399d13f18941fe66cffabdcac7267177c9de2f975fdee6f0cc87cde610a2578e1ce4cc3af
+"@types/uuid@npm:9.0.4":
+  version: 9.0.4
+  resolution: "@types/uuid@npm:9.0.4"
+  checksum: 356e2504456eaebbc43a5af5ca6c07d71f5ae5520b5767cb1c62cd0ec55475fc4ee3d16a2874f4a5fce78e40e8583025afd3a7d9ba41f82939de310665f53f0e
   languageName: node
   linkType: hard
 
@@ -22193,9 +22210,9 @@ __metadata:
     "@joplin/renderer": ~2.13
     "@joplin/tools": ~2.13
     "@joplin/utils": ~2.13
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@types/jest": 29.5.4
-    "@types/node": 18.17.15
+    "@types/node": 18.17.17
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -29566,16 +29583,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:9.2.0":
-  version: 9.2.0
-  resolution: "react-native-vector-icons@npm:9.2.0"
+"react-native-vector-icons@npm:10.0.0":
+  version: 10.0.0
+  resolution: "react-native-vector-icons@npm:10.0.0"
   dependencies:
     prop-types: ^15.7.2
     yargs: ^16.1.1
   bin:
+    fa-upgrade.sh: bin/fa-upgrade.sh
     fa5-upgrade: bin/fa5-upgrade.sh
+    fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
-  checksum: 222baf88c3f269234c08a41680e6400a4bf1f4c170f7c2ffac34b2c1c089cdb1084223db2a7d9cc54ee212eec20ff1478f3f482df19062e3057c328642da0be2
+  checksum: c4e39deb5218b6ba047c378217bbc7f24c1db153d2171e42176703a775049ed24f2a140f35d962d215265032722a24cba8acc83397ef6e14bd300db470609bf5
   languageName: node
   linkType: hard
 
@@ -29608,16 +29627,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:13.3.1":
-  version: 13.3.1
-  resolution: "react-native-webview@npm:13.3.1"
+"react-native-webview@npm:13.4.0":
+  version: 13.4.0
+  resolution: "react-native-webview@npm:13.4.0"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: c455279ccc42f4787e75c5c0e4609b535bb417eb35536c978079f23474c1135f39f5b8aed32445dd5422913c07651db77343e3c348e193c0b17329fdaa35e1a7
+  checksum: fb2b6f936d4f29eeda44e8d1187833c9ffe5a16183600e7b160a9d30052e8eaa8d604182b5e778b99c60d6247160c86dc2ee878b2073f1f775efdec89a058b1d
   languageName: node
   linkType: hard
 
@@ -31016,7 +31035,7 @@ __metadata:
   dependencies:
     "@joplin/utils": ~2.12
     "@seiyab/eslint-plugin-react-hooks": 4.5.1-beta.0
-    "@types/fs-extra": 11.0.1
+    "@types/fs-extra": 11.0.2
     "@typescript-eslint/eslint-plugin": 6.0.0
     "@typescript-eslint/parser": 6.0.0
     cspell: 5.21.2
@@ -35211,13 +35230,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:0.11.2":
-  version: 0.11.2
-  resolution: "url@npm:0.11.2"
+"url@npm:0.11.3":
+  version: 0.11.3
+  resolution: "url@npm:0.11.3"
   dependencies:
     punycode: ^1.4.1
     qs: ^6.11.2
-  checksum: da5943ab43f4df75af5ed96d8465e3084fc2ea0f01bc73e98fb60899777a644541ea0022451371a419283a27a8bbd1809292212fb4c78a0b4a70f15fd89b8205
+  checksum: f9e7886f46a16f96d2e42fbcc5d682c231c55ef5442c1ff66150c0f6556f6e3a97d094a84f51be15ec2432711d212eb60426659ce418f5fcadeaa3f601532c4e
   languageName: node
   linkType: hard
 
