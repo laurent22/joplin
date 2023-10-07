@@ -101,7 +101,7 @@ const SideMenuContentComponent = (props: Props) => {
 		styles.sideButtonSelected = { ...styles.sideButton, backgroundColor: theme.selectedColor };
 		styles.sideButtonText = { ...styles.buttonText };
 
-		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 20 };
+		styles.emptyFolderIcon = { ...styles.sidebarIcon, marginRight: folderIconRightMargin, width: 21 };
 
 		return StyleSheet.create(styles);
 	}, [props.themeId]);
