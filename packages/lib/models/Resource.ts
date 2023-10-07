@@ -444,6 +444,19 @@ export default class Resource extends BaseItem {
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
+	public static async needOcrCount(supportedMimeTypes: string[]): Promise<number> {
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resources
+			WHERE
+				ocr_status = ? AND
+				encryption_applied = 0 AND
+				mime IN ("${supportedMimeTypes.join('","')}")
+		`, [ResourceOcrStatus.Todo]);
+
+		return r ? r['total'] : 0;
+	}
+
 	public static async needOcr(supportedMimeTypes: string[], options: LoadOptions): Promise<ResourceEntity[]> {
 		return await this.db().selectAll(`
 			SELECT ${this.selectFields(options)}

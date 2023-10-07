@@ -11,7 +11,7 @@ import Logger from '@joplin/utils/Logger';
 const logger = Logger.create('OcrService');
 
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md
-const supportedMimeTypes = [
+export const supportedMimeTypes = [
 	'application/pdf',
 	'image/bmp',
 	'image/jpeg',
@@ -27,6 +27,7 @@ export default class OcrService {
 	private isRunningInBackground_ = false;
 	private maintenanceTimer_: any = null;
 	private pdfExtractDir_: string = null;
+	private isProcessingResources_ = false;
 
 	public constructor(driver: OcrDriverBase) {
 		this.driver_ = driver;
@@ -69,48 +70,56 @@ export default class OcrService {
 	}
 
 	public async processResources() {
-		const language = toIso639(Setting.value('locale'));
+		if (this.isProcessingResources_) return;
 
-		let totalProcesed = 0;
+		this.isProcessingResources_ = true;
 
-		while (true) {
-			const resources = await Resource.needOcr(supportedMimeTypes, {
-				fields: [
-					'id',
-					'mime',
-					'file_extension',
-					'encryption_applied',
-				],
-			});
+		try {
+			const language = toIso639(Setting.value('locale'));
 
-			logger.info(`Found ${resources.length} resources to process...`);
+			let totalProcesed = 0;
 
-			if (!resources.length) break;
+			while (true) {
+				const resources = await Resource.needOcr(supportedMimeTypes, {
+					fields: [
+						'id',
+						'mime',
+						'file_extension',
+						'encryption_applied',
+					],
+				});
 
-			for (const resource of resources) {
-				logger.info(`Processing resource ${resource.id} (type ${resource.mime})...`);
+				logger.info(`Found ${resources.length} resources to process...`);
 
-				const toSave: ResourceEntity = {
-					id: resource.id,
-				};
+				if (!resources.length) break;
 
-				try {
-					const result = await this.recognize(language, resource);
-					toSave.ocr_status = ResourceOcrStatus.Done;
-					toSave.ocr_text = result.text;
-					toSave.ocr_error = '';
-				} catch (error) {
-					logger.warn(`Could not process resource ${resource.id}: ${error.message}`);
-					toSave.ocr_error = error.message;
-					toSave.ocr_status = ResourceOcrStatus.Error;
+				for (const resource of resources) {
+					logger.info(`Processing resource ${resource.id} (type ${resource.mime})...`);
+
+					const toSave: ResourceEntity = {
+						id: resource.id,
+					};
+
+					try {
+						const result = await this.recognize(language, resource);
+						toSave.ocr_status = ResourceOcrStatus.Done;
+						toSave.ocr_text = result.text;
+						toSave.ocr_error = '';
+					} catch (error) {
+						logger.warn(`Could not process resource ${resource.id}: ${error.message}`);
+						toSave.ocr_error = error.message;
+						toSave.ocr_status = ResourceOcrStatus.Error;
+					}
+
+					await Resource.save(toSave);
+					totalProcesed++;
 				}
-
-				await Resource.save(toSave);
-				totalProcesed++;
 			}
-		}
 
-		logger.info(`${totalProcesed} resources have been processed.`);
+			logger.info(`${totalProcesed} resources have been processed.`);
+		} finally {
+			this.isProcessingResources_ = false;
+		}
 	}
 
 	public async maintenance() {
@@ -126,10 +135,20 @@ export default class OcrService {
 
 		if (this.maintenanceTimer_) return;
 
-		this.maintenanceTimer_ = shim.setTimeout(async () => {
+		logger.info('Starting background service...');
+
+		this.maintenanceTimer_ = shim.setInterval(async () => {
 			await this.maintenance();
 			this.maintenanceTimer_ = null;
 		}, 5 * Minute);
+	}
+
+	public stopRunInBackground() {
+		logger.info('Stopping background service...');
+
+		if (this.maintenanceTimer_) shim.clearInterval(this.maintenanceTimer_);
+		this.maintenanceTimer_ = null;
+		this.isRunningInBackground_ = false;
 	}
 
 }

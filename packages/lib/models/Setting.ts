@@ -829,6 +829,17 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'ocr.enabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Enable optical character recognition (OCR)'),
+				description: () => _('When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.'),
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: SettingItemType.Int,

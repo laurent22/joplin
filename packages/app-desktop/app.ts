@@ -124,6 +124,10 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
+			this.setupOcrService();
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
 		}
@@ -353,17 +357,25 @@ class Application extends BaseApplication {
 		Setting.setValue('wasClosedSuccessfully', false);
 	}
 
-	private async setupOcrService() {
-		const Tesseract = (window as any).Tesseract;
+	private setupOcrService() {
+		if (Setting.value('ocr.enabled')) {
+			if (!this.ocrService_) {
+				const Tesseract = (window as any).Tesseract;
 
-		const driver = new OcrDriverTesseract(
-			{ createWorker: Tesseract.createWorker },
-			'./node_modules/tesseract.js/dist/worker.min.js',
-			'./node_modules/tesseract.js-core',
-		);
+				const driver = new OcrDriverTesseract(
+					{ createWorker: Tesseract.createWorker },
+					'./node_modules/tesseract.js/dist/worker.min.js',
+					'./node_modules/tesseract.js-core',
+				);
 
-		this.ocrService_ = new OcrService(driver);
-		this.ocrService_.runInBackground();
+				this.ocrService_ = new OcrService(driver);
+			}
+
+			this.ocrService_.runInBackground();
+		} else {
+			if (!this.ocrService_) return;
+			this.ocrService_.stopRunInBackground();
+		}
 	}
 
 	public async start(argv: string[]): Promise<any> {

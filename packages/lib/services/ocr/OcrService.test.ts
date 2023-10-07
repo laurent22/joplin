@@ -1,6 +1,7 @@
 import { createNoteAndResource, ocrSampleDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import OcrDriverTesseract from './drivers/OcrDriverTesseract';
 import OcrService from './OcrService';
+import { supportedMimeTypes } from './OcrService';
 import { createWorker } from 'tesseract.js';
 import Resource from '../../models/Resource';
 import { ResourceEntity, ResourceOcrStatus } from '../database/types';
@@ -21,6 +22,8 @@ describe('OcrService', () => {
 		const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/testocr.png` });
 		const { resource: resource2 } = await createNoteAndResource({ path: `${supportDir}/photo.jpg` });
 		const { resource: resource3 } = await createNoteAndResource({ path: `${ocrSampleDir}/with_bullets.png` });
+
+		expect(await Resource.needOcrCount(supportedMimeTypes)).toBe(3);
 
 		const service = newService();
 		await service.processResources();
