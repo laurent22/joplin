@@ -73,10 +73,10 @@ async function main() {
 			src: langSourceDir,
 			dest: `${buildLibDir}/tinymce/langs`,
 		},
-		// {
-		// 	src: resolve(__dirname, '../../pdf-viewer/dist'),
-		// 	dest: `${buildLibDir}/@joplin/pdf-viewer`,
-		// },
+		{
+			src: `${nodeModulesDir}/tesseract.js-core`,
+			dest: `${buildDir}/tesseract.js-core`,
+		},
 	];
 
 	const files = [
@@ -98,10 +98,10 @@ async function main() {
 			src: `${nodeModulesDir}/pdfjs-dist/build/pdf.worker.min.js`,
 			dest: `${buildDir}/pdf.worker.min.js`,
 		},
-		// {
-		// 	src: resolve(__dirname, '../../pdf-viewer/index.html'),
-		// 	dest: `${buildLibDir}/@joplin/pdf-viewer/index.html`,
-		// },
+		{
+			src: `${nodeModulesDir}/tesseract.js/dist/worker.min.js`,
+			dest: `${buildDir}/tesseract.js/worker.min.js`,
+		},
 	];
 
 	// First we delete all the destination directories, then we copy the files.

@@ -74,6 +74,14 @@ export default class OcrService {
 
 		this.isProcessingResources_ = true;
 
+		const totalResourcesToProcess = await Resource.needOcrCount(supportedMimeTypes);
+
+		const resourceInfo = (resource: ResourceEntity) => {
+			return `${resource.id} (type ${resource.mime})`;
+		};
+
+		logger.info(`Found ${totalResourcesToProcess} resources to process...`);
+
 		try {
 			const language = toIso639(Setting.value('locale'));
 
@@ -89,12 +97,10 @@ export default class OcrService {
 					],
 				});
 
-				logger.info(`Found ${resources.length} resources to process...`);
-
 				if (!resources.length) break;
 
 				for (const resource of resources) {
-					logger.info(`Processing resource ${resource.id} (type ${resource.mime})...`);
+					logger.info(`Processing resource ${resourceInfo(resource)}...`);
 
 					const toSave: ResourceEntity = {
 						id: resource.id,
@@ -106,14 +112,17 @@ export default class OcrService {
 						toSave.ocr_text = result.text;
 						toSave.ocr_error = '';
 					} catch (error) {
-						logger.warn(`Could not process resource ${resource.id}: ${error.message}`);
-						toSave.ocr_error = error.message;
+						const errorMessage = typeof error === 'string' ? error : error.message;
+						logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
+						toSave.ocr_error = errorMessage || 'Unknown error';
 						toSave.ocr_status = ResourceOcrStatus.Error;
 					}
 
 					await Resource.save(toSave);
 					totalProcesed++;
 				}
+
+				logger.info(`Processed ${totalProcesed} / ${totalResourcesToProcess} resources...`);
 			}
 
 			logger.info(`${totalProcesed} resources have been processed.`);

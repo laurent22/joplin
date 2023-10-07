@@ -364,8 +364,8 @@ class Application extends BaseApplication {
 
 				const driver = new OcrDriverTesseract(
 					{ createWorker: Tesseract.createWorker },
-					'./node_modules/tesseract.js/dist/worker.min.js',
-					'./node_modules/tesseract.js-core',
+					`${bridge().buildDir()}/tesseract.js/worker.min.js`,
+					`${bridge().buildDir()}/tesseract.js-core`,
 				);
 
 				this.ocrService_ = new OcrService(driver);
@@ -611,6 +611,7 @@ class Application extends BaseApplication {
 				debug: new DebugService(reg.db()),
 				resourceService: ResourceService.instance(),
 				searchEngine: SearchEngine.instance(),
+				ocrService: () => this.ocrService_,
 			};
 		}
 
