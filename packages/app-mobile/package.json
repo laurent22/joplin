@@ -46,7 +46,7 @@
     "react": "18.2.0",
     "react-native": "0.71.10",
     "react-native-camera": "4.2.1",
-    "react-native-device-info": "10.8.0",
+    "react-native-device-info": "10.9.0",
     "react-native-dialogbox": "0.6.10",
     "react-native-document-picker": "9.0.1",
     "react-native-dropdownalert": "4.5.1",
