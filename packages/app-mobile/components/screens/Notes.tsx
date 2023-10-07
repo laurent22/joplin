@@ -237,7 +237,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
-					icon: 'md-checkbox-outline',
+					icon: 'checkbox-outline',
 				});
 
 				buttons.push({
@@ -247,7 +247,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
-					icon: 'md-document',
+					icon: 'document',
 				});
 				return <ActionButton buttons={buttons}/>;
 			}

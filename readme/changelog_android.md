@@ -1,5 +1,25 @@
 # Joplin Android app changelog
 
+## [android-v2.13.2](https://github.com/laurent22/joplin/releases/tag/android-v2.13.2) (Pre-release) - 2023-10-07T16:42:16Z
+
+- New: Add share button to log screen (#8364 by Henry Heino)
+- New: Add support for drawing pictures (#7588 by Henry Heino)
+- Improved: Apply correct size to images imported from ENEX files (#8684)
+- Improved: Bump mermaid version to 10.4.0 to support new chart types (#8890) (#8728 by [@oj-lappi](https://github.com/oj-lappi))
+- Improved: Enable ignoreTlsErrors and custom certificates for S3 sync (#8980 by Jens Böttge)
+- Improved: Fix random crash due to sidebar animation (#8792) (#8791 by Henry Heino)
+- Improved: Improved handling of invalid sync info (#6978)
+- Improved: Remember whether "All notes", a notebook or a tag was opened when re-opening the app (#8021)
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.7), @react-native-community/datetimepicker (v7.4.2), @react-native-community/slider (v4.4.3), @testing-library/jest-native (v5.4.3), @testing-library/react-native (v12.2.2), compare-versions (v6.1.0), deprecated-react-native-prop-types (v4.2.1), glob (v10.3.4), katex (v0.16.8), markdown-it-multimd-table (v4.2.3), nodemon (v3.0.1), react, react-native-device-info (v10.8.0), react-native-exit-app (v2), react-native-gesture-handler (v2.12.1), react-native-image-picker (v5.6.1), react-native-modal-datetime-picker (v17.1.0), react-native-paper (v5.10.4), react-native-safe-area-context (v4.7.2), react-native-share (v9.2.4), react-native-url-polyfill (v2), react-native-vector-icons (v10), react-native-webview (v13.4.0), sass (v1.66.1), sharp (v0.32.5), sprintf-js (v1.1.3), url (v0.11.3), uuid (v9.0.1)
+- Fixed: Fix complex queries that contain quotes or filters (#8050)
+- Fixed: Fix not all dropdown items focusable with VoiceOver (#8714) (#8707 by Henry Heino)
+- Fixed: Fix search engine ranking algorithm (f504cf1)
+- Fixed: Fix sharing image to Joplin (#8970) (#8533 by Self Not Found)
+- Fixed: Fix unordered list button creates checklists (#8957) (#8956 by Henry Heino)
+- Fixed: Fixed code block not default line wrap in pdf view (#8626) (#8517 by [@wljince007](https://github.com/wljince007))
+- Fixed: Hide the keyboard when showing the attach dialog (#8911) (#8774 by Henry Heino)
+- Fixed: Prevent accessibility tools from focusing the notes list when it's invisible (#8799) (#8798 by Henry Heino)
+
 ## [android-v2.12.3](https://github.com/laurent22/joplin/releases/tag/android-v2.12.3) (Pre-release) - 2023-09-11T20:01:44Z
 
 - Improved: Add screen reader labels to search/note actions buttons (#8797) (#8796 by Henry Heino)

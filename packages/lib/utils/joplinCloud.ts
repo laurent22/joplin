@@ -65,6 +65,7 @@ export interface StripePublicConfigPrice {
 export interface StripePublicConfig {
 	publishableKey: string;
 	prices: StripePublicConfigPrice[];
+	archivedPrices: StripePublicConfigPrice[];
 	webhookBaseUrl: string;
 }
 
@@ -86,26 +87,33 @@ export function loadStripeConfig(env: string, filePath: string): StripePublicCon
 	const config: StripePublicConfig = JSON.parse(fs.readFileSync(filePath, 'utf8'))[env];
 	if (!config) throw new Error(`Invalid env: ${env}`);
 
-	config.prices = config.prices.map(p => {
+	const decoratePrices = (p: StripePublicConfigPrice) => {
 		return {
 			...p,
 			formattedAmount: formatPrice(p.amount, p.currency),
 			formattedMonthlyAmount: p.period === PricePeriod.Monthly ? formatPrice(p.amount, p.currency) : formatPrice(Number(p.amount) / 12, p.currency),
 		};
-	});
+	};
+
+	config.prices = config.prices.map(decoratePrices);
+	config.archivedPrices = config.archivedPrices.map(decoratePrices);
 
 	return config;
 }
 
-export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQuery): StripePublicConfigPrice {
+export function findPrice(config: StripePublicConfig, query: FindPriceQuery): StripePublicConfigPrice {
 	let output: StripePublicConfigPrice = null;
 
-	if (query.accountType && query.period) {
-		output = prices.filter(p => p.accountType === query.accountType).find(p => p.period === query.period);
-	} else if (query.priceId) {
-		output = prices.find(p => p.id === query.priceId);
-	} else {
-		throw new Error(`Invalid query: ${JSON.stringify(query)}`);
+	for (const prices of [config.prices, config.archivedPrices]) {
+		if (query.accountType && query.period) {
+			output = prices.filter(p => p.accountType === query.accountType).find(p => p.period === query.period);
+		} else if (query.priceId) {
+			output = prices.find(p => p.id === query.priceId);
+		} else {
+			throw new Error(`Invalid query: ${JSON.stringify(query)}`);
+		}
+
+		if (output) break;
 	}
 
 	if (!output) throw new Error(`Not found: ${JSON.stringify(query)}`);
@@ -181,6 +189,13 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			pro: true,
 			teams: true,
 		},
+		customBanner: {
+			title: _('Customise the note publishing banner'),
+			description: 'You can customise the banner that appears on top of your published notes, for example by adding a custom logo and text, and changing the banner colour.',
+			basic: false,
+			pro: true,
+			teams: true,
+		},
 		multiUsers: {
 			title: _('Manage multiple users'),
 			basic: false,
@@ -193,12 +208,6 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			pro: false,
 			teams: true,
 		},
-		// sharingAccessControl: {
-		// 	title: _('Sharing access control'),
-		// 	basic: false,
-		// 	pro: false,
-		// 	teams: true,
-		// },
 		sharePermissions: {
 			title: _('Share permissions'),
 			description: 'With this feature you can define whether a notebook you share with someone can be edited or is read-only. It can be useful for example to share documentation that you do not want to be modified.',
@@ -240,7 +249,7 @@ export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): 
 };
 
 export const getAllFeatureIds = (): FeatureId[] => {
-	return Object.keys(features);
+	return Object.keys(features());
 };
 
 export const getFeatureById = (featureId: FeatureId): PlanFeature => {
@@ -331,11 +340,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 		basic: {
 			name: 'basic',
 			title: _('Basic'),
-			priceMonthly: findPrice(stripeConfig.prices, {
+			priceMonthly: findPrice(stripeConfig, {
 				accountType: 1,
 				period: PricePeriod.Monthly,
 			}),
-			priceYearly: findPrice(stripeConfig.prices, {
+			priceYearly: findPrice(stripeConfig, {
 				accountType: 1,
 				period: PricePeriod.Yearly,
 			}),
@@ -353,11 +362,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 		pro: {
 			name: 'pro',
 			title: _('Pro'),
-			priceMonthly: findPrice(stripeConfig.prices, {
+			priceMonthly: findPrice(stripeConfig, {
 				accountType: 2,
 				period: PricePeriod.Monthly,
 			}),
-			priceYearly: findPrice(stripeConfig.prices, {
+			priceYearly: findPrice(stripeConfig, {
 				accountType: 2,
 				period: PricePeriod.Yearly,
 			}),
@@ -375,11 +384,11 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 		teams: {
 			name: 'teams',
 			title: _('Teams'),
-			priceMonthly: findPrice(stripeConfig.prices, {
+			priceMonthly: findPrice(stripeConfig, {
 				accountType: 3,
 				period: PricePeriod.Monthly,
 			}),
-			priceYearly: findPrice(stripeConfig.prices, {
+			priceYearly: findPrice(stripeConfig, {
 				accountType: 3,
 				period: PricePeriod.Yearly,
 			}),

@@ -1406,7 +1406,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			const editButton = {
 				label: _('Edit'),
-				icon: 'md-create',
+				icon: 'create',
 				onPress: () => {
 					this.setState({ mode: 'edit' });
 

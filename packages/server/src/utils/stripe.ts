@@ -22,12 +22,12 @@ export function initStripe(): Stripe {
 }
 
 export function priceIdToAccountType(priceId: string): AccountType {
-	const price = findPrice(stripeConfig().prices, { priceId });
+	const price = findPrice(stripeConfig(), { priceId });
 	return price.accountType;
 }
 
 export function accountTypeToPriceId(accountType: AccountType): string {
-	const price = findPrice(stripeConfig().prices, { accountType, period: PricePeriod.Monthly });
+	const price = findPrice(stripeConfig(), { accountType, period: PricePeriod.Monthly });
 	return price.id;
 }
 
@@ -68,8 +68,8 @@ export async function updateSubscriptionType(models: Models, userId: Uuid, newAc
 
 	const { sub, stripeSub } = await subscriptionInfoByUserId(models, userId);
 
-	const currentPrice = findPrice(stripeConfig().prices, { priceId: stripePriceIdByStripeSub(stripeSub) });
-	const upgradePrice = findPrice(stripeConfig().prices, { accountType: newAccountType, period: currentPrice.period });
+	const currentPrice = findPrice(stripeConfig(), { priceId: stripePriceIdByStripeSub(stripeSub) });
+	const upgradePrice = findPrice(stripeConfig(), { accountType: newAccountType, period: currentPrice.period });
 
 	const items: Stripe.SubscriptionUpdateParams.Item[] = [];
 

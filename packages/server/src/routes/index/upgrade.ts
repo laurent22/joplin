@@ -49,8 +49,8 @@ router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 	}
 
 	const priceId = await stripePriceIdByUserId(ctx.joplin.models, ctx.joplin.owner.id);
-	const currentPrice = findPrice(stripeConfig().prices, { priceId });
-	const upgradePrice = findPrice(stripeConfig().prices, {
+	const currentPrice = findPrice(stripeConfig(), { priceId });
+	const upgradePrice = findPrice(stripeConfig(), {
 		accountType: AccountType.Pro,
 		period: currentPrice.period,
 	});
