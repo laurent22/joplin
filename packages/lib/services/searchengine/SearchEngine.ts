@@ -2,12 +2,13 @@ import Logger from '@joplin/utils/Logger';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import ItemChangeUtils from '../ItemChangeUtils';
 import shim from '../../shim';
 import filterParser, { Term } from './filterParser';
 import queryBuilder from './queryBuilder';
 import { ItemChangeEntity, NoteEntity } from '../database/types';
+import JoplinDatabase from '../../JoplinDatabase';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
 
@@ -26,6 +27,17 @@ interface SearchOptions {
 	// allows returning results quickly, in particular on mobile, and it seems
 	// to be what users generally expect.
 	appendWildCards?: boolean;
+}
+
+interface ProcessResultsRow {
+	offsets: string;
+	user_updated_time: number;
+	matchinfo: Buffer;
+	item_type?: ModelType;
+	fields?: string[];
+	weight?: number;
+	is_todo?: number;
+	todo_completed?: number;
 }
 
 export interface ComplexTerm {
@@ -53,7 +65,7 @@ export default class SearchEngine {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = (_o: any) => {};
 	private logger_ = new Logger();
-	private db_: any = null;
+	private db_: JoplinDatabase = null;
 	private isIndexing_ = false;
 	private syncCalls_: any[] = [];
 	private scheduleSyncTablesIID_: any;
@@ -93,8 +105,8 @@ export default class SearchEngine {
 	}
 
 	private async rebuildIndex_() {
-		let noteIds: string[] = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
-		noteIds = noteIds.map((n: any) => n.id);
+		const notes = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
+		const noteIds = notes.map(n => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
 
@@ -292,7 +304,7 @@ export default class SearchEngine {
 
 
 
-	private calculateWeightBM25_(rows: any[]) {
+	private calculateWeightBM25_(rows: ProcessResultsRow[]) {
 		// https://www.sqlite.org/fts3.html#matchinfo
 		// pcnalx are the arguments passed to matchinfo
 		// p - The number of matchable phrases in the query.
@@ -318,7 +330,6 @@ export default class SearchEngine {
 		const TITLE_COLUMN = 1;
 		const BODY_COLUMN = 2;
 		const columns = [TITLE_COLUMN, BODY_COLUMN];
-		// const NUM_COLS = 12;
 
 		const numPhrases = generalInfo[0]; // p
 		const numColumns = generalInfo[1]; // c
@@ -332,21 +343,23 @@ export default class SearchEngine {
 		const numBodyTokens = matchInfo.map(m => m[5 + numColumns]);
 		const numTokens = [null, numTitleTokens, numBodyTokens];
 
-		const X = matchInfo.map(m => m.slice(27)); // x
+		// In byte size, we have for notes_normalized:
+		//
+		// p 1
+		// c 1
+		// n 1
+		// a 12
+		// l 12
+		const X = matchInfo.map(m => m.slice(1 + 1 + 1 + numColumns + numColumns)); // x
 
 		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
 		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
 
-
-		// if a term occurs in over half the documents in the collection
-		// then this model gives a negative term weight, which is presumably undesirable.
-		// But, assuming the use of a stop list, this normally doesn't happen,
-		// and the value for each summand can be given a floor of 0.
-		const IDF = (n: number, N: number) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);
+		const IDF = (n: number, N: number) => Math.max(Math.log(((N - n + 0.5) / (n + 0.5)) + 1), 0);
 
 		// https://en.wikipedia.org/wiki/Okapi_BM25
-		const BM25 = (idf: any, freq: any, numTokens: number, avgTokens: any) => {
+		const BM25 = (idf: number, freq: number, numTokens: number, avgTokens: number) => {
 			if (avgTokens === 0) {
 				return 0; // To prevent division by zero
 			}
@@ -355,7 +368,7 @@ export default class SearchEngine {
 
 		const msSinceEpoch = Math.round(new Date().getTime());
 		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row: any) => {
+		const weightForDaysSinceLastUpdate = (row: ProcessResultsRow) => {
 			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
 			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
 			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
@@ -405,7 +418,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processResults_(rows: any[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
@@ -642,7 +655,7 @@ export default class SearchEngine {
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
 				const rows = await this.db().selectAll(query, params);
-				this.processResults_(rows, parsedQuery, !useFts);
+				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);

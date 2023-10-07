@@ -20,7 +20,7 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/jest": "29.5.4",
-    "@types/node": "18.17.15",
+    "@types/node": "18.17.17",
     "jest": "29.6.4",
     "jest-environment-jsdom": "29.6.4",
     "ts-jest": "29.1.1",
@@ -36,7 +36,7 @@
     "highlight.js": "11.8.0",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
-    "katex": "0.13.24",
+    "katex": "0.16.8",
     "markdown-it": "13.0.1",
     "markdown-it-abbr": "1.0.4",
     "markdown-it-anchor": "5.3.0",

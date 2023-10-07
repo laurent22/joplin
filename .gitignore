@@ -400,12 +400,24 @@ packages/app-mobile/components/ExtendedWebView.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.test.js
+packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnMessage.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js
 packages/app-mobile/components/NoteEditor/CodeMirror/webviewLogger.js
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js
+packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js
+packages/app-mobile/components/NoteEditor/ImageEditor/isEditableResource.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/applyTemplateToEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.test.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/startAutosaveLoop.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/types.js
+packages/app-mobile/components/NoteEditor/ImageEditor/js-draw/watchEditorForTemplateChanges.js
+packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleSpaceButton.js
@@ -437,6 +449,7 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExport
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/exportAllFolders.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
+packages/app-mobile/components/screens/LogScreen.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Notes.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
@@ -455,6 +468,7 @@ packages/app-mobile/services/voiceTyping/vosk.ios.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
+packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/autodetectTheme.js
@@ -478,6 +492,7 @@ packages/editor/CodeMirror/editorCommands/editorCommands.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
+packages/editor/CodeMirror/markdown/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/markdown/computeSelectionFormatting.js
 packages/editor/CodeMirror/markdown/decoratorExtension.js
 packages/editor/CodeMirror/markdown/markdownCommands.bulletedVsChecklist.test.js
@@ -775,6 +790,7 @@ packages/lib/services/rest/routes/master_keys.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
+packages/lib/services/rest/routes/revisions.js
 packages/lib/services/rest/routes/search.js
 packages/lib/services/rest/routes/tags.js
 packages/lib/services/rest/utils/collectionToPaginatedResults.js

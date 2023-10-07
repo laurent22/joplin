@@ -50,6 +50,9 @@ class Command extends BaseCommand {
 			{
 				type: BaseModel.TYPE_TAG,
 			},
+			{
+				type: BaseModel.TYPE_REVISION,
+			},
 		];
 
 		const lines = [];
@@ -411,7 +414,7 @@ async function fetchAllNotes() {
 			lines.push('');
 			lines.push('If no `cursor` property is provided, the API will respond with the latest change ID. That can be used to retrieve future events later on.');
 			lines.push('');
-			lines.push('The results are paginated so will need to may multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.');
+			lines.push('The results are paginated so you may need multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.');
 			lines.push('');
 			lines.push('## GET /events/:id');
 			lines.push('');

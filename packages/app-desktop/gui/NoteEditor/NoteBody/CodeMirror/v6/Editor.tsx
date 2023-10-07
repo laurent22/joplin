@@ -14,7 +14,7 @@ interface Props extends EditorProps {
 	style: React.CSSProperties;
 	pluginStates: PluginStates;
 
-	onEditorPaste: ()=> void;
+	onEditorPaste: (event: Event)=> void;
 }
 
 const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
@@ -37,8 +37,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		}
 
 		const pasteEventHandler = (_editor: any, event: Event) => {
-			event.preventDefault();
-			props.onEditorPaste();
+			props.onEditorPaste(event);
 		};
 
 		editor.on('paste', pasteEventHandler);

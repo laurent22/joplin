@@ -202,6 +202,10 @@ const bundledFiles: BundledFile[] = [
 		'codeMirrorBundle',
 		`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`,
 	),
+	new BundledFile(
+		'svgEditorBundle',
+		`${mobileDir}/components/NoteEditor/ImageEditor/js-draw/createJsDrawEditor.ts`,
+	),
 ];
 
 export async function buildInjectedJS() {

@@ -6,7 +6,7 @@ import readonlyProperties from './readonlyProperties';
 import requestFields from './requestFields';
 import BaseItem from '../../../models/BaseItem';
 
-export default async function(modelType: number, request: Request, id: string = null, link: string = null) {
+export default async function(modelType: number, request: Request, id: string = null, link: string = null, defaultFields: string[] = null) {
 	if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now
 
 	const ModelClass = BaseItem.getClassByItemType(modelType);
@@ -20,10 +20,10 @@ export default async function(modelType: number, request: Request, id: string = 
 	if (request.method === 'GET') {
 		if (id) {
 			return getOneModel({
-				fields: requestFields(request, modelType),
+				fields: requestFields(request, modelType, defaultFields),
 			});
 		} else {
-			return paginatedResults(modelType, request);
+			return paginatedResults(modelType, request, null, defaultFields);
 		}
 	}
 

@@ -16,6 +16,7 @@ const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/li
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
 	codeMirrorBundle: require('../lib/rnInjectedJs/CodeMirror.bundle'),
+	svgEditorBundle: require('../lib/rnInjectedJs/createJsDrawEditor.bundle'),
 };
 
 function shimInit() {

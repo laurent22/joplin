@@ -45,7 +45,8 @@
 				"amount": "80.28",
 				"currency": "EUR"
 			}
-		]		
+		],
+		"archivedPrices": []
 	},
 	"prod": {
 		"publishableKey": "pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C",
@@ -91,6 +92,22 @@
 				"id": "price_1Kl9nLLx4fybOTqJYTtts35z",
 				"period": "yearly",
 				"amount": "80.28",
+				"currency": "EUR"
+			}
+		],
+		"archivedPrices": [
+			{
+				"accountType": 1,
+				"id": "price_1JAzWBLx4fybOTqJw64zxJRJ",
+				"period": "monthly",
+				"amount": "1.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 1,
+				"id": "price_1JJIPZLx4fybOTqJHvxiQ7bV",
+				"period": "yearly",
+				"amount": "17.88",
 				"currency": "EUR"
 			}
 		]

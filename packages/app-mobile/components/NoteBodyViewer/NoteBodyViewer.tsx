@@ -1,7 +1,7 @@
 import { useRef, useCallback } from 'react';
 
 import useSource from './hooks/useSource';
-import useOnMessage from './hooks/useOnMessage';
+import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 
 const React = require('react');
@@ -19,14 +19,11 @@ interface Props {
 	noteResources: any;
 	paddingBottom: number;
 	noteHash: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onJoplinLinkClick: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onCheckboxChange?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onMarkForDownload?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onLoadEnd?: Function;
+	onJoplinLinkClick: HandleMessageCallback;
+	onCheckboxChange?: HandleMessageCallback;
+	onRequestEditResource?: HandleMessageCallback;
+	onMarkForDownload?: OnMarkForDownloadCallback;
+	onLoadEnd?: ()=> void;
 }
 
 const webViewStyle = {
@@ -47,16 +44,22 @@ export default function NoteBodyViewer(props: Props) {
 	);
 
 	const onResourceLongPress = useOnResourceLongPress(
-		props.onJoplinLinkClick,
+		{
+			onJoplinLinkClick: props.onJoplinLinkClick,
+			onRequestEditResource: props.onRequestEditResource,
+		},
 		dialogBoxRef,
 	);
 
 	const onMessage = useOnMessage(
-		props.onCheckboxChange,
 		props.noteBody,
-		props.onMarkForDownload,
-		props.onJoplinLinkClick,
-		onResourceLongPress,
+		{
+			onCheckboxChange: props.onCheckboxChange,
+			onMarkForDownload: props.onMarkForDownload,
+			onJoplinLinkClick: props.onJoplinLinkClick,
+			onRequestEditResource: props.onRequestEditResource,
+			onResourceLongPress,
+		},
 	);
 
 	const onLoadEnd = useCallback(() => {

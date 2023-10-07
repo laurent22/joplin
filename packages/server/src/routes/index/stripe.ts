@@ -455,8 +455,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	checkoutTest: async (_stripe: Stripe, _path: SubPath, ctx: AppContext) => {
 		if (globalConfig().env === Env.Prod) throw new ErrorForbidden();
 
-		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
-		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
+		const basicPrice = findPrice(stripeConfig(), { accountType: 1, period: PricePeriod.Monthly });
+		const proPrice = findPrice(stripeConfig(), { accountType: 2, period: PricePeriod.Monthly });
 
 		const customPriceId = ctx.request.query.price_id;
 

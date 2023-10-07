@@ -1459,6 +1459,24 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'imageeditor.jsdrawToolbar': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => '',
+				storage: SettingStorage.File,
+			},
+
+			'imageeditor.imageTemplate': {
+				value: '{ }',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => 'Template for the image editor',
+				storage: SettingStorage.File,
+			},
+
 			// 2023-09-07: This setting is now used to track the desktop beta editor. It
 			// was used to track the mobile beta editor previously.
 			'editor.beta': {
@@ -1480,6 +1498,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				show: (settings: any) => {
 					return [
+						SyncTargetRegistry.nameToId('amazon_s3'),
 						SyncTargetRegistry.nameToId('nextcloud'),
 						SyncTargetRegistry.nameToId('webdav'),
 						SyncTargetRegistry.nameToId('joplinServer'),
@@ -1499,6 +1518,7 @@ class Setting extends BaseModel {
 				show: (settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 						[
+							SyncTargetRegistry.nameToId('amazon_s3'),
 							SyncTargetRegistry.nameToId('nextcloud'),
 							SyncTargetRegistry.nameToId('webdav'),
 							SyncTargetRegistry.nameToId('joplinServer'),
