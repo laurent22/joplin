@@ -308,7 +308,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={_('Show/hide the sidebar')}
 					accessibilityRole="button">
 					<View style={styles.sideMenuButton}>
-						<Icon name="md-menu" style={styles.topIcon} />
+						<Icon name="menu" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -324,7 +324,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityRole="button">
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
 						<Icon
-							name="md-arrow-back"
+							name="arrow-back"
 							style={styles.topIcon}
 						/>
 					</View>
@@ -337,7 +337,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		) {
 			if (!show) return null;
 
-			const icon = disabled ? <Icon name="md-checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
+			const icon = disabled ? <Icon name="checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
 
 			return (
 				<TouchableOpacity
@@ -407,7 +407,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					description={_('Select all')}
 					contentStyle={styles.iconButton}
 				>
-					<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
+					<Icon name="checkmark-circle-outline" style={styles.topIcon} />
 				</CustomButton>
 			);
 		}
@@ -421,7 +421,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					themeId={themeId}
 					contentStyle={styles.iconButton}
 				>
-					<Icon name="md-search" style={styles.topIcon} />
+					<Icon name="search" style={styles.topIcon} />
 				</CustomButton>
 			);
 		}
@@ -439,7 +439,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					}
 					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
 				>
-					<Icon name="md-trash" style={styles.topIcon} />
+					<Icon name="trash" style={styles.topIcon} />
 				</CustomButton>
 			);
 		}
@@ -457,7 +457,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					}
 					contentStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
 				>
-					<Icon name="md-copy" style={styles.topIcon} />
+					<Icon name="copy" style={styles.topIcon} />
 				</CustomButton>
 			);
 		}
@@ -602,7 +602,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
 					<MenuTrigger style={contextMenuStyle}>
 						<View accessibilityLabel={_('Actions')}>
-							<Icon name="md-ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+							<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
 						</View>
 					</MenuTrigger>
 					<MenuOptions>
