@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.13.1](https://github.com/laurent22/joplin/releases/tag/android-v2.13.1) (Pre-release) - 2023-10-07T13:20:47Z
+## [android-v2.13.2](https://github.com/laurent22/joplin/releases/tag/android-v2.13.2) (Pre-release) - 2023-10-07T16:42:16Z
 
 - New: Add share button to log screen (#8364 by Henry Heino)
 - New: Add support for drawing pictures (#7588 by Henry Heino)
