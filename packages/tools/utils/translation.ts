@@ -8,6 +8,7 @@ export interface TranslationStatus {
 	translatorName: string;
 	percentDone: number;
 	untranslatedCount: number;
+	pluralForms?: string;
 }
 
 export type Translations = Record<string, string[]>;
@@ -79,28 +80,4 @@ export const parseTranslations = (gettextTranslations: any) => {
 	}
 
 	return output;
-};
-
-type ParsePluralFormFunction = (n: number)=> number;
-
-// Copied from https://github.com/eugeny-dementev/parse-gettext-plural-form
-// along with the tests
-export const parsePluralForm = (form: string): ParsePluralFormFunction => {
-	const pluralFormRegex = /^(\s*nplurals\s*=\s*[0-9]+\s*;\s*plural\s*=\s*(?:\s|[-?|&=!<>+*/%:;a-zA-Z0-9_()])+)$/m;
-
-	if (!pluralFormRegex.test(form)) throw new Error(`Plural-Forms is invalid: ${form}`);
-
-	if (!/;\s*$/.test(form)) {
-		form += ';';
-	}
-
-	const code = [
-		'var plural;',
-		'var nplurals;',
-		form,
-		'return (plural === true ? 1 : plural ? plural : 0);',
-	].join('\n');
-
-	// eslint-disable-next-line no-new-func
-	return (new Function('n', code)) as ParsePluralFormFunction;
 };

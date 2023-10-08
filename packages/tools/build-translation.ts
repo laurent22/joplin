@@ -31,6 +31,7 @@ async function buildLocale(inputFile: string, outputFile: string) {
 	const r = await parsePoFile(inputFile);
 	const translation = serializeTranslation(r);
 	saveToFile(outputFile, translation);
+	return { headers: r.headers };
 }
 
 async function createPotFile(potFilePath: string) {
@@ -391,9 +392,10 @@ async function main() {
 		const poFilePäth = `${localesDir}/${locale}.po`;
 		const jsonFilePath = `${jsonLocalesDir}/${locale}.json`;
 		if (locale !== defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
-		await buildLocale(poFilePäth, jsonFilePath);
+		const { headers } = await buildLocale(poFilePäth, jsonFilePath);
 
 		const stat = await translationStatus(defaultLocale === locale, poFilePäth);
+		stat.pluralForms = headers['Plural-Forms'];
 		stat.locale = locale;
 		stat.languageName = countryDisplayName(locale);
 		stats.push(stat);
