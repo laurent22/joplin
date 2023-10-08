@@ -85,7 +85,7 @@ export default class OcrService {
 		try {
 			const language = toIso639(Setting.value('locale'));
 
-			let totalProcesed = 0;
+			let totalProcessed = 0;
 
 			while (true) {
 				const resources = await Resource.needOcr(supportedMimeTypes, {
@@ -100,7 +100,7 @@ export default class OcrService {
 				if (!resources.length) break;
 
 				for (const resource of resources) {
-					logger.info(`Processing resource ${resourceInfo(resource)}...`);
+					logger.info(`Processing resource ${totalProcessed + 1} / ${totalResourcesToProcess}: ${resourceInfo(resource)}...`);
 
 					const toSave: ResourceEntity = {
 						id: resource.id,
@@ -119,22 +119,20 @@ export default class OcrService {
 					}
 
 					await Resource.save(toSave);
-					totalProcesed++;
+					totalProcessed++;
 				}
 
-				logger.info(`Processed ${totalProcesed} / ${totalResourcesToProcess} resources...`);
+				logger.info(`Processed ${totalProcessed} / ${totalResourcesToProcess} resources...`);
 			}
 
-			logger.info(`${totalProcesed} resources have been processed.`);
+			logger.info(`${totalProcessed} resources have been processed.`);
 		} finally {
 			this.isProcessingResources_ = false;
 		}
 	}
 
 	public async maintenance() {
-		logger.info('Processing resources...');
 		await this.processResources();
-		logger.info('Done processing resources');
 	}
 
 	public runInBackground() {
