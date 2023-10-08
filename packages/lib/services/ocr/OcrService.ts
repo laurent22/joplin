@@ -7,6 +7,7 @@ import OcrDriverBase from './OcrDriverBase';
 import { RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
+import filterOcrText from './utils/filterOcrText';
 
 const logger = Logger.create('OcrService');
 
@@ -49,6 +50,9 @@ export default class OcrService {
 		if (resource.mime === 'application/pdf') {
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
 			const results: RecognizeResult[] = [];
+
+			logger.info(`Processing ${imageFilePaths.length} PDF pages...`);
+
 			for (const imageFilePath of imageFilePaths) {
 				results.push(await this.driver_.recognize(language, imageFilePath));
 			}
@@ -109,13 +113,14 @@ export default class OcrService {
 					try {
 						const result = await this.recognize(language, resource);
 						toSave.ocr_status = ResourceOcrStatus.Done;
-						toSave.ocr_text = result.text;
+						toSave.ocr_text = filterOcrText(result.text);
 						toSave.ocr_error = '';
 					} catch (error) {
 						const errorMessage = typeof error === 'string' ? error : error.message;
 						logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
-						toSave.ocr_error = errorMessage || 'Unknown error';
 						toSave.ocr_status = ResourceOcrStatus.Error;
+						toSave.ocr_text = '';
+						toSave.ocr_error = errorMessage || 'Unknown error';
 					}
 
 					await Resource.save(toSave);

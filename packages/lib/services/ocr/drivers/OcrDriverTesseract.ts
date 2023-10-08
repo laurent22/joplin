@@ -54,7 +54,13 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 	public async recognize(language: string, filePath: string): Promise<RecognizeResult> {
 		const worker = await this.getWorker(language);
-		const result = await worker.recognize(filePath);
+
+		const result = await worker.recognize(filePath, {}, {
+			text: false,
+			blocks: true,
+			hocr: false,
+			tsv: false,
+		});
 
 		result.data.paragraphs;
 

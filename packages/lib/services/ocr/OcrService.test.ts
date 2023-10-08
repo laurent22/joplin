@@ -81,4 +81,15 @@ describe('OcrService', () => {
 		await service.dispose();
 	});
 
+	// Use this to quickly test with specific images:
+
+	// it('should process resources 2', async () => {
+	// 	const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/fed30c574db04d548b98631449f99727.png` });
+
+	// 	const service = newService();
+	// 	await service.processResources();
+
+	// 	await service.dispose();
+	// });
+
 });
