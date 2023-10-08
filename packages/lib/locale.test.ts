@@ -27,6 +27,14 @@ describe('locale', () => {
 		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 2)).toBe('Copier liens partageables');
 	});
 
+	it('should translate plurals - pl_PL', () => {
+		setLocale('pl_PL');
+		// Not the best test since 5 is the same as 2, but it's all I could find
+		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 1)).toBe('Kopiuj udostępnialny link');
+		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 2)).toBe('Kopiuj udostępnialne linki');
+		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 5)).toBe('Kopiuj udostępnialne linki');
+	});
+
 	it('should parse the plural form', async () => {
 		const pluralForms = [
 			'nplurals=1; plural=0;',
