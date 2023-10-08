@@ -10,7 +10,7 @@ export interface TranslationStatus {
 	untranslatedCount: number;
 }
 
-export type Translations = Record<string, string>;
+export type Translations = Record<string, string[]>;
 
 export const removePoHeaderDate = async (filePath: string) => {
 	let sedPrefix = 'sed -i';
@@ -67,16 +67,40 @@ export const parseTranslations = (gettextTranslations: any) => {
 			if (!translations.hasOwnProperty(n)) continue;
 			if (n === '') continue;
 			const t = translations[n];
-			let translated = '';
+			let translated: string[] = [];
 			if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
 				// Don't include fuzzy translations
 			} else {
-				translated = t['msgstr'][0];
+				translated = t['msgstr'];
 			}
 
-			if (translated) output[n] = translated;
+			if (translated.length) output[n] = translated;
 		}
 	}
 
 	return output;
+};
+
+type ParsePluralFormFunction = (n: number)=> number;
+
+// Copied from https://github.com/eugeny-dementev/parse-gettext-plural-form
+// along with the tests
+export const parsePluralForm = (form: string): ParsePluralFormFunction => {
+	const pluralFormRegex = /^(\s*nplurals\s*=\s*[0-9]+\s*;\s*plural\s*=\s*(?:\s|[-?|&=!<>+*/%:;a-zA-Z0-9_()])+)$/m;
+
+	if (!pluralFormRegex.test(form)) throw new Error(`Plural-Forms is invalid: ${form}`);
+
+	if (!/;\s*$/.test(form)) {
+		form += ';';
+	}
+
+	const code = [
+		'var plural;',
+		'var nplurals;',
+		form,
+		'return (plural === true ? 1 : plural ? plural : 0);',
+	].join('\n');
+
+	// eslint-disable-next-line no-new-func
+	return (new Function('n', code)) as ParsePluralFormFunction;
 };

@@ -436,7 +436,7 @@ const codeToCountry_: CodeToCountryMap = {
 let supportedLocales_: any = null;
 let localeStats_: any = null;
 
-const loadedLocales_: any = {};
+const loadedLocales_: Record<string, Record<string, string[]>> = {};
 
 const defaultLocale_ = 'en_GB';
 
@@ -595,12 +595,19 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 
 const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	const strings = localeStrings(locale);
-	let result = strings[s];
-	if (result === '' || result === undefined) result = s;
+	const result = strings[s];
+	let translatedString = '';
+
+	if (result === undefined || !result.join('')) {
+		translatedString = s;
+	} else {
+		translatedString = result[0];
+	}
+
 	try {
-		return sprintf(result, ...args);
+		return sprintf(translatedString, ...args);
 	} catch (error) {
-		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
+		return `${translatedString} ${args.join(', ')} (Translation error: ${error.message})`;
 	}
 };
 
