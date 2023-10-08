@@ -116,7 +116,7 @@ export default class OcrService {
 						toSave.ocr_text = filterOcrText(result.text);
 						toSave.ocr_error = '';
 					} catch (error) {
-						const errorMessage = typeof error === 'string' ? error : error.message;
+						const errorMessage = typeof error === 'string' ? error : error?.message;
 						logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
 						toSave.ocr_status = ResourceOcrStatus.Error;
 						toSave.ocr_text = '';

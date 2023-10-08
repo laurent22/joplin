@@ -35,7 +35,10 @@
     "extraResources": [
       "build/icons/**",
       "build/images/**",
-      "build/defaultPlugins/**"
+      "build/defaultPlugins/**",
+      "build/pdf.worker.min.js",
+      "build/tesseract.js/**",
+      "build/tesseract.js-core/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
