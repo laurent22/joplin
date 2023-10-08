@@ -1,5 +1,3 @@
-'use strict';
-
 // Dependencies:
 //
 // sudo apt install gettext sudo apt install translate-toolkit
@@ -7,34 +5,35 @@
 // gettext v21+ is required as versions before that have bugs when parsing
 // JavaScript template strings which means we would lose translations.
 
-const rootDir = `${__dirname}/../..`;
-
-const markdownUtils = require('@joplin/lib/markdownUtils').default;
-const fs = require('fs-extra');
-const { translationExecutablePath, removePoHeaderDate, mergePotToPo, parsePoFile, parseTranslations } = require('./utils/translation');
-const localesDir = `${__dirname}/locales`;
-const libDir = `${rootDir}/packages/lib`;
-const { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } = require('./tool-utils.js');
-const { countryDisplayName, countryCodeOnly } = require('@joplin/lib/locale');
-
+import markdownUtils from '@joplin/lib/markdownUtils';
+import { translationExecutablePath, removePoHeaderDate, mergePotToPo, parsePoFile, parseTranslations, TranslationStatus } from './utils/translation';
+import { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } from './tool-utils.js';
+import { countryDisplayName, countryCodeOnly } from '@joplin/lib/locale';
+import { readdirSync, writeFileSync } from 'fs';
+import { readFile } from 'fs/promises';
+import { copy, mkdirpSync, remove } from 'fs-extra';
 const { GettextExtractor, JsExtractors } = require('gettext-extractor');
 
-function serializeTranslation(translation) {
+const rootDir = `${__dirname}/../..`;
+const localesDir = `${__dirname}/locales`;
+const libDir = `${rootDir}/packages/lib`;
+
+function serializeTranslation(translation: string) {
 	const output = parseTranslations(translation);
 	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), ' ');
 }
 
-function saveToFile(filePath, data) {
-	fs.writeFileSync(filePath, data);
+function saveToFile(filePath: string, data: string) {
+	writeFileSync(filePath, data);
 }
 
-async function buildLocale(inputFile, outputFile) {
+async function buildLocale(inputFile: string, outputFile: string) {
 	const r = await parsePoFile(inputFile);
 	const translation = serializeTranslation(r);
 	saveToFile(outputFile, translation);
 }
 
-async function createPotFile(potFilePath) {
+async function createPotFile(potFilePath: string) {
 	const excludedDirs = [
 		'./.git/*',
 		'./.github/*',
@@ -82,7 +81,7 @@ async function createPotFile(potFilePath) {
 	// basename, such as "exmaple.js", and "example.ts", we only keep the file
 	// with ".ts" extension (since the .js should be the compiled file).
 
-	const toProcess = {};
+	const toProcess: Record<string, string> = {};
 
 	for (const file of files) {
 		if (!file) continue;
@@ -172,7 +171,7 @@ async function createPotFile(potFilePath) {
 	await removePoHeaderDate(potFilePath);
 }
 
-function buildIndex(locales, stats) {
+function buildIndex(locales: string[], stats: TranslationStatus[]) {
 	const output = [];
 	output.push('var locales = {};');
 	output.push('var stats = {};');
@@ -196,10 +195,10 @@ function buildIndex(locales, stats) {
 	return output.join('\n');
 }
 
-function availableLocales(defaultLocale) {
+function availableLocales(defaultLocale: string) {
 	const output = [defaultLocale];
 	// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-	fs.readdirSync(localesDir).forEach((path) => {
+	readdirSync(localesDir).forEach((path) => {
 		if (fileExtension(path) !== 'po') return;
 		const locale = filename(path);
 		if (locale === defaultLocale) return;
@@ -208,7 +207,7 @@ function availableLocales(defaultLocale) {
 	return output;
 }
 
-function extractTranslator(regex, poContent) {
+function extractTranslator(regex: RegExp, poContent: string) {
 	const translatorMatch = poContent.match(regex);
 	let translatorName = '';
 
@@ -225,13 +224,13 @@ function extractTranslator(regex, poContent) {
 	return translatorName;
 }
 
-function translatorNameToMarkdown(translatorName) {
+function translatorNameToMarkdown(translatorName: string) {
 	const matches = translatorName.match(/^(.*?)\s*\((.*)\)$/);
 	if (!matches) return translatorName;
 	return `[${markdownUtils.escapeTitleText(matches[1])}](mailto:${markdownUtils.escapeLinkUrl(matches[2])})`;
 }
 
-async function translationStatus(isDefault, poFile) {
+async function translationStatus(isDefault: boolean, poFile: string): Promise<TranslationStatus> {
 	// "apt install translate-toolkit" to have pocount
 	let pocountPath = 'pocount';
 	if (isMac()) pocountPath = translationExecutablePath('pocount');
@@ -248,7 +247,7 @@ async function translationStatus(isDefault, poFile) {
 	const untranslatedCount = Number(untranslatedMatches[1]);
 
 	let translatorName = '';
-	const content = await fs.readFile(poFile, 'utf-8');
+	const content = await readFile(poFile, 'utf-8');
 
 	translatorName = extractTranslator(/Last-Translator:\s*?(.*)/, content);
 	if (!translatorName) {
@@ -276,7 +275,7 @@ async function translationStatus(isDefault, poFile) {
 	};
 }
 
-function flagImageUrl(locale) {
+function flagImageUrl(locale: string) {
 	const baseUrl = 'https://joplinapp.org/images/flags';
 	if (locale === 'ar') return `${baseUrl}/country-4x3/arableague.png`;
 	if (locale === 'eu') return `${baseUrl}/es/basque_country.png`;
@@ -292,11 +291,11 @@ function flagImageUrl(locale) {
 	return `${baseUrl}/country-4x3/${countryCodeOnly(locale).toLowerCase()}.png`;
 }
 
-function poFileUrl(locale) {
+function poFileUrl(locale: string) {
 	return `https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/${locale}.po`;
 }
 
-function translationStatusToMdTable(status) {
+function translationStatusToMdTable(status: TranslationStatus[]) {
 	const output = [];
 	output.push(['&nbsp;', 'Language', 'Po File', 'Last translator', 'Percent done'].join('  |  '));
 	output.push(['---', '---', '---', '---', '---'].join('|'));
@@ -308,7 +307,7 @@ function translationStatusToMdTable(status) {
 	return output.join('\n');
 }
 
-async function updateReadmeWithStats(stats) {
+async function updateReadmeWithStats(stats: TranslationStatus[]) {
 	await insertContentIntoFile(
 		`${rootDir}/README.md`,
 		'<!-- LOCALE-TABLE-AUTO-GENERATED -->\n',
@@ -317,12 +316,12 @@ async function updateReadmeWithStats(stats) {
 	);
 }
 
-async function translationStrings(poFilePath) {
+async function translationStrings(poFilePath: string) {
 	const r = await parsePoFile(poFilePath);
 	return Object.keys(r.translations['']);
 }
 
-function deletedStrings(oldStrings, newStrings) {
+function deletedStrings(oldStrings: string[], newStrings: string[]) {
 	const output = [];
 	for (const s1 of oldStrings) {
 		if (newStrings.includes(s1)) continue;
@@ -342,7 +341,7 @@ async function main() {
 
 	if (missingStringsCheckOnly) {
 		tempPotFilePath = `${localesDir}/joplin-temp-${Math.floor(Math.random() * 10000000)}.pot`;
-		await fs.copy(potFilePath, tempPotFilePath);
+		await copy(potFilePath, tempPotFilePath);
 		potFilePath = tempPotFilePath;
 	}
 
@@ -359,7 +358,7 @@ async function main() {
 
 	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
 
-	if (tempPotFilePath) await fs.remove(tempPotFilePath);
+	if (tempPotFilePath) await remove(tempPotFilePath);
 
 	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
 	if (deletedCount >= 5) {
@@ -379,7 +378,7 @@ async function main() {
 
 	await execCommand(`cp "${potFilePath}" ` + `"${localesDir}/${defaultLocale}.po"`);
 
-	fs.mkdirpSync(jsonLocalesDir, 0o755);
+	mkdirpSync(jsonLocalesDir, 0o755);
 
 	const stats = [];
 
