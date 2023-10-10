@@ -14,7 +14,8 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --open-dev-tools",
     "test": "jest",
-    "test-ci": "yarn test",
+    "test-ui": "playwright test",
+    "test-ci": "yarn test && yarn test-ui",
     "renameReleaseAssets": "node tools/renameReleaseAssets.js"
   },
   "repository": {
