@@ -25,7 +25,7 @@ export const test = base.extend<JoplinFixtures>({
 		const profileSubdir = join(profilePath, uuid.createNano());
 		await mkdirp(profileSubdir);
 
-		const startupArgs = ['main.js', '--profile', profileSubdir];
+		const startupArgs = ['main.js', '--env', 'dev', '--profile', profileSubdir];
 		const electronApp = await electron.launch({ args: startupArgs });
 
 		await use(electronApp);
@@ -37,6 +37,11 @@ export const test = base.extend<JoplinFixtures>({
 
 	mainWindow: async ({ electronApp }, use) => {
 		const window = await electronApp.firstWindow();
+
+		// Redirect console output to the nodejs terminal
+		// eslint-disable-next-line no-console
+		window.on('console', console.log);
+
 		await use(window);
 	},
 });
