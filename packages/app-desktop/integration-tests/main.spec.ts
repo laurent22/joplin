@@ -24,10 +24,11 @@ test.describe('main', () => {
 		await mainWindow.locator('input[placeholder^="Creating new note"]').waitFor();
 
 		// Fill the title
+		await editor.noteTitleInput.click();
 		await editor.noteTitleInput.fill('Test note');
 
 		// Note list should contain the new note
-		await mainScreen.noteListContainer.getByText('Test note').waitFor();
+		await expect(mainScreen.noteListContainer.getByText('Test note')).toBeVisible();
 
 		// Focus the editor
 		await editor.codeMirrorEditor.click();
